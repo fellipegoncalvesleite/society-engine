@@ -18,6 +18,7 @@ try {
   const plant = await server.ssrLoadModule("/sim/agents/plantStock.ts");
   const fauna = await server.ssrLoadModule("/sim/agents/faunaStock.ts");
   const food = await server.ssrLoadModule("/sim/agents/humanFoodSupport.ts");
+  const seasonalReceipts = await server.ssrLoadModule("/sim/agents/seasonalFoodReceipts.ts");
 
   const resultA = runAudit();
   const resultB = runAudit();
@@ -75,18 +76,33 @@ try {
 
     const plantReceipt = receipt("plant_patch", plantHarvest, 0.03, 0.04);
     const faunaReceipt = receipt("fauna_stock", faunaHarvest, 0.04, 0.06);
-    const positiveBand = withReceipts(band, [plantReceipt, faunaReceipt]);
-    const absentPlantBand = withReceipts(band, [zeroReceipt("plant_patch", "physical_source_absent")]);
-    const absentFaunaBand = withReceipts(band, [zeroReceipt("fauna_stock", "physical_source_absent")]);
-    const noFoodBand = withReceipts(band, [
+    // RECOVERY-12 — the ledger now reads the authoritative per-period accumulator under the
+    // prospective freshness rule: food harvested in the season that ended (periodTick =
+    // readTick - 1) is current for the boundary decision at readTick. So date the synthetic
+    // receipts to (world.time.tick - 1) and read the ledger at world.time.tick — the same
+    // tick deriveCarryingCapacity uses internally, so the carrying vs direct comparison
+    // stays exact. `recentIntraSeasonTrips` is still populated but is non-authoritative.
+    const readTick = world.time.tick;
+    const depositTick = readTick - 1;
+    const bandWith = (receiptList) => {
+      const withTrips = withReceipts(band, receiptList, depositTick);
+      return {
+        ...withTrips,
+        seasonalFoodReceipts: seasonalReceipts.depositFoodReceipts(undefined, withTrips.recentIntraSeasonTrips),
+      };
+    };
+    const positiveBand = bandWith([plantReceipt, faunaReceipt]);
+    const absentPlantBand = bandWith([zeroReceipt("plant_patch", "physical_source_absent")]);
+    const absentFaunaBand = bandWith([zeroReceipt("fauna_stock", "physical_source_absent")]);
+    const noFoodBand = bandWith([
       zeroReceipt("plant_patch", "physical_source_absent"),
       zeroReceipt("fauna_stock", "physical_source_absent"),
     ]);
     const demand = 20;
-    const positiveLedger = food.deriveHumanFoodSupportLedger(positiveBand, demand);
-    const plantAbsentLedger = food.deriveHumanFoodSupportLedger(absentPlantBand, demand);
-    const faunaAbsentLedger = food.deriveHumanFoodSupportLedger(absentFaunaBand, demand);
-    const noFoodLedger = food.deriveHumanFoodSupportLedger(noFoodBand, demand);
+    const positiveLedger = food.deriveHumanFoodSupportLedger(positiveBand, demand, readTick);
+    const plantAbsentLedger = food.deriveHumanFoodSupportLedger(absentPlantBand, demand, readTick);
+    const faunaAbsentLedger = food.deriveHumanFoodSupportLedger(absentFaunaBand, demand, readTick);
+    const noFoodLedger = food.deriveHumanFoodSupportLedger(noFoodBand, demand, readTick);
 
     const cache = buildTickContextCache(world);
     const carryingInput = {
@@ -213,7 +229,7 @@ function zeroReceipt(sourceKind, failureReason) {
   };
 }
 
-function withReceipts(band, receipts) {
+function withReceipts(band, receipts, tick = 777) {
   return {
     ...band,
     recentIntraSeasonTrips: receipts.map((physicalFoodHarvest, index) => {
@@ -223,7 +239,7 @@ function withReceipts(band, receipts) {
         physicalFoodHarvest.sourceKind === "fauna_stock" ? "hunted_fauna_food" :
         "harvested_aquatic_food";
       return {
-        tick: 777,
+        tick,
         day: index + 1,
         physicalFoodHarvest,
         resourceReturn: { returnedResourceKind, consumedByEconomy: positive },

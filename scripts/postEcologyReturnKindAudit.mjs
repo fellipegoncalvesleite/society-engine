@@ -13,8 +13,9 @@ try {
   const plant = await server.ssrLoadModule("/sim/agents/plantStock.ts");
   const fauna = await server.ssrLoadModule("/sim/agents/faunaStock.ts");
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
-  const first = run(returns, food, plant, fauna, runner);
-  const second = run(returns, food, plant, fauna, runner);
+  const seasonalReceipts = await server.ssrLoadModule("/sim/agents/seasonalFoodReceipts.ts");
+  const first = run(returns, food, plant, fauna, runner, seasonalReceipts);
+  const second = run(returns, food, plant, fauna, runner, seasonalReceipts);
   const checks = { ...first.checks, deterministic: JSON.stringify(first.fingerprint) === JSON.stringify(second.fingerprint) };
   const pass = Object.values(checks).every(Boolean);
   console.log(JSON.stringify({
@@ -33,7 +34,7 @@ try {
   await server.close();
 }
 
-function run(returns, food, plant, fauna, runner) {
+function run(returns, food, plant, fauna, runner, seasonalReceipts) {
   const classify = (resourceClassId, taskGroupType, outcome) =>
     returns.classifyActivityReturnKind({ resourceClassId, taskGroupType, outcome });
   const fixtureWorld = runner.initSimWorld({ kind: "map2" });
@@ -84,7 +85,18 @@ function run(returns, food, plant, fauna, runner) {
     },
     ...(physicalFoodHarvest === undefined ? {} : { physicalFoodHarvest }),
   });
-  const ledgerFor = (trip) => food.deriveHumanFoodSupportLedger({ id: "band:return-audit", recentIntraSeasonTrips: [trip] }, 20);
+  // RECOVERY-12 — feed the authoritative accumulator (a no-op for non-food/failed trips)
+  // and read it at the boundary tick (trip.tick + 1), matching the prospective freshness
+  // rule. Non-credited kinds yield an undefined accumulator, so the ledger credits zero.
+  const ledgerFor = (trip) => food.deriveHumanFoodSupportLedger(
+    {
+      id: "band:return-audit",
+      recentIntraSeasonTrips: [trip],
+      seasonalFoodReceipts: seasonalReceipts.depositFoodReceipts(undefined, [trip]),
+    },
+    20,
+    Number(trip.tick) + 1,
+  );
   const physicalLedger = ledgerFor(makeTrip("gathered_plant_food", true, receipt));
   const discoveryLedger = ledgerFor(makeTrip("food_observation_only", false, undefined, 0.5));
   const materialLedger = ledgerFor(makeTrip("gathered_fiber_material", true, receipt, 0.5));

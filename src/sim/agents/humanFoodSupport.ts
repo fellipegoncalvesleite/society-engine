@@ -1,8 +1,6 @@
 import type { ReasonId, TickNumber } from "../core/types";
-import type { Band, HumanFoodSupportLedger, PhysicalFoodHarvestRecord } from "./types";
-import { isPhysicalFoodReturnKind } from "./physicalFoodReturn";
-
-const RECEIPT_CAP = 16;
+import type { Band, HumanFoodSupportLedger } from "./types";
+import { readFreshAccumulator } from "./seasonalFoodReceipts";
 
 // Harvest-unit → adult-equivalent-support conversion (checkpoint ECO-TROPHIC-1).
 //
@@ -48,45 +46,31 @@ export const HUMAN_FOOD_SUPPORT_UNIT = "adult_equivalent_season" as const;
 export function deriveHumanFoodSupportLedger(
   band: Band,
   populationDemand: number,
+  currentTick: TickNumber,
   harvestToSupportScale = HARVEST_TO_SUPPORT_SCALE,
 ): HumanFoodSupportLedger {
-  const trips = (band.recentIntraSeasonTrips ?? []).filter((trip) =>
-    trip.physicalFoodHarvest !== undefined &&
-    trip.resourceReturn !== undefined &&
-    trip.resourceReturn.consumedByEconomy === true &&
-    isPhysicalFoodReturnKind(trip.resourceReturn.returnedResourceKind),
-  );
-  const sourceSeasonTick = trips.length === 0
-    ? undefined
-    : trips.reduce((latest, trip) => Math.max(latest, Number(trip.tick)), Number(trips[0].tick)) as TickNumber;
-  const allReceipts = sourceSeasonTick === undefined
-    ? []
-    : trips
-        .filter((trip) => Number(trip.tick) === Number(sourceSeasonTick))
-        .map((trip) => trip.physicalFoodHarvest)
-        .filter((receipt): receipt is PhysicalFoodHarvestRecord => receipt !== undefined)
-        .sort(compareReceipts);
-  const receipts = allReceipts.slice(0, RECEIPT_CAP);
+  // LOST-LINEAGE RECOVERY-12 — read the authoritative bounded per-period accumulator under
+  // the one-current-period freshness rule, instead of reconstructing food from the bounded
+  // `recentIntraSeasonTrips` UI window (which evicted early receipts even after the stock
+  // was depleted) and instead of trusting the newest retained receipt regardless of period
+  // (which re-served stale food across zero-harvest seasons). The food current for a decision
+  // at `currentTick` is the season that just ended (`periodTick === currentTick - 1`, the
+  // project's prospective ordering — see readFreshAccumulator); a stale accumulator (a
+  // zero-harvest season) reads as absent, so current support is exactly zero. The sums are
+  // already the running totals of every credited receipt this period, so seasonal capture is
+  // complete and each receipt counts once. `sourceReceipts` remains a bounded display
+  // projection. `sourceSeasonTick` continues to report the harvest tick, preserving the
+  // `sourceSeasonTick + 1 === decision.tick` relationship downstream consumers rely on.
+  const accumulator = readFreshAccumulator(band.seasonalFoodReceipts, currentTick);
+  const sourceSeasonTick = accumulator?.periodTick;
+  const receipts = accumulator?.topReceipts ?? [];
 
-  let physicalPlantHarvest = 0;
-  let physicalFaunaHarvest = 0;
-  let aquaticHarvest = 0;
-  let transportLoss = 0;
-  let processingLoss = 0;
-  let totalUsableSupport = 0;
-
-  for (const receipt of allReceipts) {
-    if (receipt.sourceKind === "plant_patch") {
-      physicalPlantHarvest += receipt.harvestedAmount;
-    } else if (receipt.sourceKind === "fauna_stock") {
-      physicalFaunaHarvest += receipt.harvestedAmount;
-    } else {
-      aquaticHarvest += receipt.harvestedAmount;
-    }
-    transportLoss += receipt.transportLoss;
-    processingLoss += receipt.processingLoss;
-    totalUsableSupport += receipt.usableSupport;
-  }
+  const physicalPlantHarvest = accumulator?.physicalPlantHarvest ?? 0;
+  const physicalFaunaHarvest = accumulator?.physicalFaunaHarvest ?? 0;
+  const aquaticHarvest = accumulator?.aquaticHarvest ?? 0;
+  const transportLoss = accumulator?.transportLoss ?? 0;
+  const processingLoss = accumulator?.processingLoss ?? 0;
+  const totalUsableSupport = accumulator?.totalUsableSupport ?? 0;
 
   const rawUsableHarvest = totalUsableSupport;
   const conversionScale = Math.max(0, harvestToSupportScale);
@@ -123,14 +107,6 @@ export function deriveHumanFoodSupportLedger(
     residualRemovalPath: "none",
     reasonIds,
   };
-}
-
-function compareReceipts(left: PhysicalFoodHarvestRecord, right: PhysicalFoodHarvestRecord): number {
-  const usableDelta = right.usableSupport - left.usableSupport;
-  if (usableDelta !== 0) return usableDelta;
-  const sourceDelta = left.sourceKind.localeCompare(right.sourceKind);
-  if (sourceDelta !== 0) return sourceDelta;
-  return String(left.sourceId ?? "").localeCompare(String(right.sourceId ?? ""));
 }
 
 function clamp01(value: number): number {

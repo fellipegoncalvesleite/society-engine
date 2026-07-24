@@ -306,7 +306,7 @@ function sampleWorld(world, acc, survival, food, carrying) {
   for (const band of Object.values(world.bands)) {
     if (band.demography.population <= 0 || band.viability?.status === "extinct") continue;
     const demand = carrying.derivePopulationDemand(band).adultEquivalentDemand;
-    const physical = food.deriveHumanFoodSupportLedger(band, demand);
+    const physical = food.deriveHumanFoodSupportLedger(band, demand, world.time.tick);
     const effective = band.carryingCapacity?.perCapitaReturn?.supportDebug?.humanFoodLedger ?? physical;
     const nutrition = survival.deriveCanonicalNutritionState(band.seasonalSupport);
     add(acc, "physicalUsableSupport", physical.totalUsableSupport);
@@ -405,7 +405,7 @@ function runWaterfalls(runner, survival, food, carrying, catchment, projection, 
       const band = world.bands[bandId];
       if (band === undefined || band.demography.population <= 0) continue;
       const demand = carrying.derivePopulationDemand(band).adultEquivalentDemand;
-      const ledger = food.deriveHumanFoodSupportLedger(band, demand);
+      const ledger = food.deriveHumanFoodSupportLedger(band, demand, world.time.tick);
       const nutrition = survival.deriveCanonicalNutritionState(band.seasonalSupport);
       const footprint = catchment.getBandForagingFootprint(world, band);
       const footprintTileIds = footprint.map((entry) => entry.tileId);

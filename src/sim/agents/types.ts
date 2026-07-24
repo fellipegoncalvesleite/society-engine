@@ -418,6 +418,34 @@ export interface PhysicalFoodHarvestRecord {
   readonly reasonIds: readonly ReasonId[];
 }
 
+// LOST-LINEAGE RECOVERY-12 — bounded, per-accounting-period food-receipt accumulator.
+// This is the AUTHORITATIVE source of current seasonal food support, replacing the
+// former derivation from `recentIntraSeasonTrips` (a bounded 24-record behaviour/UI
+// memory that evicted early physical receipts even after the ecology stock was depleted,
+// and could re-serve a stale receipt across zero-harvest seasons). It is written ONLY on
+// a successful physical food return/deposit — a same-day trip return or an expedition
+// cargo deposit — never from attempts, projections, verification, observations, candidate
+// scores, hidden stock, or UI summaries, and it CREATES NO FOOD: it sums the SAME
+// `PhysicalFoodHarvestRecord.usableSupport` (plus per-source-kind harvest and
+// transport/processing losses) the ledger already trusted, preserving every existing loss
+// and resource-class attribution. `periodTick` binds the receipts to one accounting period
+// (the season tick); the canonical ledger credits them ONLY while `periodTick` equals the
+// current tick, so a zero-harvest season credits zero and no previous-season receipt
+// persists. Running sums keep it O(1) per receipt and per read and bounded independently of
+// simulation age; `topReceipts` is a bounded display projection only (never re-summed).
+export interface SeasonalFoodReceiptAccumulator {
+  readonly periodTick: TickNumber;
+  readonly receiptCount: number;
+  readonly physicalPlantHarvest: number;
+  readonly physicalFaunaHarvest: number;
+  readonly aquaticHarvest: number;
+  readonly transportLoss: number;
+  readonly processingLoss: number;
+  readonly totalUsableSupport: number;
+  readonly topReceipts: readonly PhysicalFoodHarvestRecord[];
+  readonly reasonIds: readonly ReasonId[];
+}
+
 // ACTIVITY-GROUPS-10 — SHADOW subsistence. A normalized, support-LIKE estimate of
 // what each activity group's deterministic return would contribute to band
 // subsistence IF activity groups fed the band. It is strictly shadow/debug: it is
@@ -6090,6 +6118,12 @@ export interface Band {
   readonly movementHistory: readonly BandMovementRecord[];
   readonly lastIntraSeasonTrip?: IntraSeasonTripRecord;
   readonly recentIntraSeasonTrips?: readonly IntraSeasonTripRecord[];
+  // LOST-LINEAGE RECOVERY-12 — authoritative bounded current-period food receipts.
+  // `recentIntraSeasonTrips` above remains for behaviour/UI but is NON-authoritative for
+  // food accounting; the canonical food ledger reads THIS accumulator under a
+  // one-current-period freshness rule. Undefined until the band's first successful physical
+  // food return this period, and reset (never inherited) for fission daughters.
+  readonly seasonalFoodReceipts?: SeasonalFoodReceiptAccumulator;
   // EXPEDITIONARY-1: parties currently AWAY from this residential camp (bounded,
   // cap EXPEDITION_ACTIVE_CAP). Their workers are committed exactly once and are
   // unavailable to same-day trips until they physically return. Terminal records

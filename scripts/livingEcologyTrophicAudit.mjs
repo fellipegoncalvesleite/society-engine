@@ -16,6 +16,7 @@ try {
   const demography = await server.ssrLoadModule("/sim/agents/demography.ts");
   const decision = await server.ssrLoadModule("/sim/rules/bandDecision.ts");
   const food = await server.ssrLoadModule("/sim/agents/humanFoodSupport.ts");
+  const seasonalReceipts = await server.ssrLoadModule("/sim/agents/seasonalFoodReceipts.ts");
   const fauna = await server.ssrLoadModule("/sim/agents/faunaStock.ts");
   const plant = await server.ssrLoadModule("/sim/agents/plantStock.ts");
 
@@ -49,8 +50,10 @@ try {
     const labels = ["zero", "low", "demand_matching", "moderate_surplus"];
     const controlledFood = rawLevels.map((raw, index) => controlledRow(afterOne, baseBand, templateTrip, raw, labels[index]));
     const unitSensitivity = [80, 100, 120].map((scale) => {
-      const band = withRawReceipt(baseBand, templateTrip, 0.25);
-      const ledger = food.deriveHumanFoodSupportLedger(band, 25, scale);
+      // withRawReceipt dates the receipt to baseBand's harvest tick; read at the boundary
+      // (afterOne.time.tick) under the prospective freshness rule, with `scale` as the 4th arg.
+      const band = withRawReceipt(baseBand, templateTrip, 0.25, Number(afterOne.time.tick) - 1);
+      const ledger = food.deriveHumanFoodSupportLedger(band, 25, Number(afterOne.time.tick), scale);
       return { scale, usableSupport: ledger.totalUsableSupport, ratio: ledger.rawSupportRatio, stress: ledger.foodStress };
     });
 
@@ -90,6 +93,7 @@ try {
     const trophic = trophicRun(initial);
     const pressureSource = readFileSync("src/sim/agents/pressure.ts", "utf8");
     const foodSource = readFileSync("src/sim/agents/humanFoodSupport.ts", "utf8");
+    const receiptSource = readFileSync("src/sim/agents/seasonalFoodReceipts.ts", "utf8");
     const tripSource = readFileSync("src/sim/agents/intraSeasonTrips.ts", "utf8");
     const advanceSource = readFileSync("src/sim/tick/advance.ts", "utf8");
     const stresses = controlledFood.map((row) => row.foodStress);
@@ -134,7 +138,7 @@ try {
       behaviorNotByteIdentical: new Set(controlledFood.map((row) => JSON.stringify([row.action, row.foodMovementPressure, row.topScore]))).size > 1,
       waterIndependent: independentPressures.dryWaterStress > independentPressures.calmWaterStress,
       injuryIndependent: independentPressures.injuredWellFedMortality > independentPressures.wellFedMortality,
-      conversionZeroSafe: food.deriveHumanFoodSupportLedger(withRawReceipt(baseBand, templateTrip, 0), 25, 100).totalUsableSupport === 0,
+      conversionZeroSafe: food.deriveHumanFoodSupportLedger(withRawReceipt(baseBand, templateTrip, 0, Number(afterOne.time.tick) - 1), 25, Number(afterOne.time.tick), 100).totalUsableSupport === 0,
       conversionMonotonic: strictlyIncreasing(unitSensitivity.map((row) => row.usableSupport)),
       receiptsReachSameSeasonDecision: live.receiptSeasonsWithDecision > 0 && live.receiptTickMismatch === 0,
       successfulCampCanStay: live.stays > 0,
@@ -151,7 +155,13 @@ try {
       waterfowlStockBacked: trophic.waterfowlCount > 0,
       seasonalRunClaimHonest: trophic.seasonalRunCount > 0 || trophic.seasonalRunStatus === "taxonomy_only_in_actual_defaults",
       noLegacyFoodEstimateOverride: !pressureSource.includes("getKnownFoodEstimate") && pressureSource.includes("deriveCanonicalNutritionState"),
-      ledgerConsumesReceiptsOnly: foodSource.includes("trip.physicalFoodHarvest") && !foodSource.includes("foodEstimate"),
+      // RECOVERY-12 — receipt reading moved from the ledger into the authoritative per-period
+      // accumulator. The invariant "only physical receipts feed the ledger, never an estimate"
+      // now spans two files: the accumulator is fed from `physicalFoodHarvest`, and the ledger
+      // reads that accumulator (readFreshAccumulator) rather than any projected estimate.
+      ledgerConsumesReceiptsOnly: receiptSource.includes("physicalFoodHarvest") &&
+        foodSource.includes("readFreshAccumulator") && foodSource.includes("seasonalFoodReceipts") &&
+        !foodSource.includes("foodEstimate"),
       noPlaceholderSuffixFoodGate: !tripSource.includes("endsWith(\"_placeholder\")") && !tripSource.includes("food_placeholder"),
       productionOrderingExplicit: advanceSource.indexOf("runDailyActions") < advanceSource.indexOf("runSeasonalCompatibilityTick"),
     };
@@ -183,20 +193,34 @@ try {
   }
 
   function withHistory(world, baseBand, templateTrip, raw) {
-    let band = withRawReceipt(baseBand, templateTrip, raw);
+    let band = withRawReceipt(baseBand, templateTrip, raw, Number(world.time.tick) - 1);
     let support;
     for (let index = 0; index < 8; index += 1) {
       const timedWorld = { ...world, time: { ...world.time, tick: Number(world.time.tick) + index, year: world.time.year + index / 4 } };
-      const carrying = deriveCarryingCapacity(timedWorld, band, buildTickContextCache(timedWorld), {
-        localUsePressure: 0, nearbyCrowding: 0, localPopulationEstimate: band.demography.population, riskPenalty: 0,
+      // RECOVERY-12 — re-date the controlled receipt to THIS warm-in period so the band is
+      // fed at level `raw` every season (freshness credits periodTick = tick - 1). Without
+      // re-dating, only the first period would read fresh and the rest would starve.
+      const fedBand = {
+        ...band,
+        seasonalFoodReceipts: withRawReceipt(baseBand, templateTrip, raw, Number(timedWorld.time.tick) - 1).seasonalFoodReceipts,
+      };
+      const carrying = deriveCarryingCapacity(timedWorld, fedBand, buildTickContextCache(timedWorld), {
+        localUsePressure: 0, nearbyCrowding: 0, localPopulationEstimate: fedBand.demography.population, riskPenalty: 0,
       });
-      support = survival.updateSeasonalSupportState(support, carrying?.state, band, timedWorld.time);
-      band = { ...band, seasonalSupport: support, carryingCapacity: carrying?.state, perCapitaReturn: carrying?.state.perCapitaReturn };
+      support = survival.updateSeasonalSupportState(support, carrying?.state, fedBand, timedWorld.time);
+      band = { ...fedBand, seasonalSupport: support, carryingCapacity: carrying?.state, perCapitaReturn: carrying?.state.perCapitaReturn };
     }
+    // Return the band dated to the EVALUATION period (world.time.tick), so controlledRow's
+    // demography/decision, evaluated at `world`, read the same fresh food.
+    band = {
+      ...band,
+      seasonalFoodReceipts: withRawReceipt(baseBand, templateTrip, raw, Number(world.time.tick) - 1).seasonalFoodReceipts,
+    };
     return { band, support };
   }
 
-  function withRawReceipt(band, trip, raw) {
+  function withRawReceipt(band, trip, raw, tick) {
+    const receiptTick = tick ?? band.recentIntraSeasonTrips?.[0]?.tick ?? trip.tick;
     const receipt = {
       ...trip.physicalFoodHarvest,
       sourceKind: "plant_patch", sourceFound: raw > 0,
@@ -213,7 +237,15 @@ try {
       noCarryingCapacityCoupling: raw <= 0,
       noSupportChange: raw <= 0,
     };
-    return { ...band, recentIntraSeasonTrips: [{ ...trip, resourceReturn, physicalFoodHarvest: receipt, tick: band.recentIntraSeasonTrips?.[0]?.tick ?? trip.tick }] };
+    // RECOVERY-12 — the ledger reads the authoritative accumulator, so build it from the same
+    // controlled receipt (a no-op for raw=0, which is not credited). The receipt is dated to
+    // `receiptTick`; the ledger reads it at receiptTick + 1 under the prospective freshness rule.
+    const built = { ...trip, resourceReturn, physicalFoodHarvest: receipt, tick: receiptTick };
+    return {
+      ...band,
+      recentIntraSeasonTrips: [built],
+      seasonalFoodReceipts: seasonalReceipts.depositFoodReceipts(undefined, [built]),
+    };
   }
 
   function liveRun(initial, seasons) {

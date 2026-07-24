@@ -181,6 +181,43 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### LOST-LINEAGE RECOVERY — FOOD RECEIPT ACCOUNTING (RECOVERY-12) — PASS CANDIDATE (2026-07-24)
+
+Branch `checkpoint/recover-food-receipt-accounting-12` from public `main`
+`e539813ab40f14075b3701f56566a9f3095e4291`. The former local lineage ending at `f27f3f1`
+(CORRECTION-10/11) was unavailable and treated as **lost** — not fetched, referenced, or
+cherry-picked. This checkpoint reconstructs only its two already-measured production fixes.
+Evidence: `docs/evidence/recovery-food-accounting-12/` (FINDINGS.md + all decisive outputs).
+
+**Defect (single root):** `deriveHumanFoodSupportLedger` reconstructed a season's food from
+`Band.recentIntraSeasonTrips`, a bounded 24-record behaviour/UI window. A season runs 28 trip-days
+(> 24 cap) and most trips are non-food, so early physical food receipts were **evicted** before the
+end-of-season ledger read even though the stock was already depleted (Defect 1); and the ledger
+selected the newest retained receipt with **no current-period proof**, so old food could feed a band
+across zero-harvest seasons (Defect 2).
+
+**Fix:** new authoritative `src/sim/agents/seasonalFoodReceipts.ts` bounded per-accounting-period
+accumulator (`Band.seasonalFoodReceipts`). Written only on a successful physical food return
+(same-day trip in `intraSeasonTrips.applyTripDay` + expedition cargo deposit in `expedition.ts`);
+O(1) running sums of the SAME `usableSupport`/losses (creates no food, preserves attribution).
+`deriveHumanFoodSupportLedger(band, demand, currentTick)` reads it under a one-current-period
+freshness rule (`periodTick === currentTick − 1`, the prospective ordering: season-N food deposited
+at tick N feeds the boundary decision at N+1). Zero-harvest season ⇒ credits exactly zero.
+`recentIntraSeasonTrips` unchanged, now non-authoritative for food. Fission daughters reset it.
+
+**Evidence:** `recoveryFoodAccountingAudit` PASS — capture = 1.000 for all Map 1 founders
+(receipt counts reconcile; conservation holds); the old algorithm reproduces the loss on the same
+history (Dry Margin 0.49). Freshness/zero-harvest/reset and both deposit paths proven.
+Before/after 150y (main worktree vs branch, 3 seeds): **Dry Margin 0/0/10 → 15/12/12**, Delta Reed
+s3 rescued (0 → 40); Map 2 **Estuary grows above founding** (29→33.7), **North Frontier rescued**
+(0 → 9), **Upper/Yellow Corridor stay extinct** (no floor). Step-mode invariance daily≡seasonal both
+maps (`band.demography.population`). Regression: food pipeline / return-kind / terminal extinction /
+food-demography separation / persistence / import+decision+adaptation boundary / trophic / graph /
+tsc / build / fresh-process determinism (`matched: true`) all PASS. Perf ~22.1 → ~23.4 ms/tick
+(bounded O(1) constant). **Out of scope, unchanged:** demographic growth compression, fertility,
+mortality, clamps, fission, ecology density, yields/demand, movement, adaptation, storage, migration.
+Ecology/human-survival NOT marked complete.
+
 ### ECOLOGY VIABILITY ADAPTATION CORRECTION-8 — PASS (2026-07-19)
 
 Branch `checkpoint/ecology-viability-adaptation-correction-8` from `6fe9cf2`.
@@ -7577,6 +7614,21 @@ exception; daughter colours related-but-distinct and never visually confusing.
 
 ## Checkpoint Log
 
+- **LOST-LINEAGE RECOVERY — FOOD RECEIPT ACCOUNTING (RECOVERY-12)** —
+  *2026-07-24, PASS CANDIDATE.* Reconstructed the lost CORRECTION-10/11 food-receipt
+  fixes on a fresh branch off public `main` `e539813` (the local lineage ending at
+  `f27f3f1` was unavailable/lost). New authoritative bounded per-period accumulator
+  `src/sim/agents/seasonalFoodReceipts.ts` (`Band.seasonalFoodReceipts`) replaces the
+  ledger's derivation from the bounded 24-record `recentIntraSeasonTrips` UI window,
+  which evicted early physical receipts (28 trip-days/season > 24 cap) and could
+  re-serve a stale receipt across zero-harvest seasons. Written only on same-day +
+  expedition physical food returns; O(1) running sums; read under a one-current-period
+  freshness rule (`periodTick === currentTick − 1`). Receipt capture 1.000 for all Map 1
+  founders; old algorithm reproduces the loss on the same history (Dry Margin 0.49).
+  Before/after 150y: Dry Margin 0/0/10 → 15/12/12; Map 2 Estuary grows above founding,
+  North Frontier rescued (0→9), corridors stay extinct. Step-mode invariance, full
+  regression, determinism, tsc/build all PASS; perf bounded (~+6%). Demographic growth
+  compression explicitly out of scope. See `docs/evidence/recovery-food-accounting-12/`.
 - **CORE PIPELINE CONSOLIDATION / SEASON RESOLUTION / DECISION ORCHESTRATION
   DECOMPOSITION-1** — *2026-07-15, PROGRESS / FAIL → DECOMPOSITION-2.* Rigorous
   architecture audit of the six hypotheses. Proved the two correctness concerns

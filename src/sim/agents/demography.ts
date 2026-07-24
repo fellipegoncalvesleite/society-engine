@@ -680,6 +680,7 @@ const DAUGHTER_NON_CLONEABLE_FIELDS = [
   "movementHistory", // reset
   "lastIntraSeasonTrip", // reset: task-group trip history is parent's own in-season activity
   "recentIntraSeasonTrips", // reset: daughters earn their own trip cadence
+  "seasonalFoodReceipts", // reset: a daughter earns its own current-period food receipts (RECOVERY-12)
   "seasonalEcologyMemory", // reset: a daughter learns its own seasonal ecology by observation (ECO-SEASON-1)
   "seasonalSupport", // reset/recompute: a daughter earns its own seasonal support history
   "deathMemory", // reset: recent death/caution memory is parent-specific
@@ -878,6 +879,7 @@ function createDaughterBand(
     movementHistory: [],
     lastIntraSeasonTrip: undefined,
     recentIntraSeasonTrips: undefined,
+    seasonalFoodReceipts: undefined,
     seasonalEcologyMemory: undefined,
     seasonalSupport: undefined,
     deathMemory: undefined,

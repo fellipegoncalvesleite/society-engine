@@ -56,6 +56,7 @@ import {
   isPhysicalFoodReturnKind,
   isPhysicalMaterialReturnKind,
 } from "./physicalFoodReturn";
+import { depositFoodReceipt } from "./seasonalFoodReceipts";
 import { effectiveResourceConfidence, updateResourceKnowledgeFromObservation } from "./resourceKnowledge";
 import {
   deriveSeasonalEcologyFactor,
@@ -282,6 +283,10 @@ function applyTripDay(world: WorldState, day: number): WorldState {
       resourceKnowledgeState: memoryApplication.resourceKnowledgeState,
       lastIntraSeasonTrip: record,
       recentIntraSeasonTrips,
+      // LOST-LINEAGE RECOVERY-12 — authoritative same-day food capture. This deposits the
+      // freshly returned receipt (a no-op for non-food trips) into the bounded per-period
+      // accumulator, independent of the `recentIntraSeasonTrips` UI window that can evict it.
+      seasonalFoodReceipts: depositFoodReceipt(band.seasonalFoodReceipts, record),
       seasonalEcologyMemory,
       activityLaborSummary,
       activityOutcomeSummary: buildActivityOutcomeSummary(activityBand, record, recentIntraSeasonTrips),

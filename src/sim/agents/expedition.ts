@@ -49,6 +49,7 @@ import {
   type ResourcePatchMemory,
   type VerificationObservationKind,
 } from "./resourceKnowledge";
+import { depositFoodReceipts } from "./seasonalFoodReceipts";
 import { observeTileAndNearby } from "./tileObservation";
 import {
   SIGNAL_ATTEMPT_CAP,
@@ -1622,10 +1623,14 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       ...(deposits.length === 0
         ? {}
         : {
-            // The ONE place an expedition's food becomes the band's food: the canonical
-            // trip ledger, at the return tick, once.
+            // The ONE place an expedition's food becomes the band's food: at the return
+            // tick, once. `recentIntraSeasonTrips` remains the behaviour/UI record, while
+            // the authoritative food credit goes to the bounded per-period accumulator
+            // (LOST-LINEAGE RECOVERY-12) so carried-home cargo can never be evicted from the
+            // 24-record UI window before the ledger reads it. Each deposit is counted once.
             recentIntraSeasonTrips: [...deposits, ...(currentBand.recentIntraSeasonTrips ?? [])].slice(0, 24),
             lastIntraSeasonTrip: deposits[0],
+            seasonalFoodReceipts: depositFoodReceipts(currentBand.seasonalFoodReceipts, deposits),
           }),
     };
     changed = true;

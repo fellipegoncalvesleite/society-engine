@@ -352,7 +352,7 @@ export function deriveCarryingCapacity(
   });
   const projectedCatchmentSupport =
     preliminarySupportFloor * (1 - nomadicScalePressure.logisticalInefficiencyPenalty);
-  const physicalHumanFoodLedger = deriveHumanFoodSupportLedger(band, adultEquivalentDemand);
+  const physicalHumanFoodLedger = deriveHumanFoodSupportLedger(band, adultEquivalentDemand, time.tick);
   // Diagnostic counterfactual only: hold support at the canonical neutral seam
   // (ratio exactly 1, maintenance rather than surplus). Physical receipts and
   // losses remain visible on the ledger, while the audit excludes an eight-season

@@ -66,12 +66,13 @@ Technology, exact package versions, current directory structure, and public setu
 
 ```text
 Last verified against:
-  branch checkpoint/expeditionary-logistical-mobility-4, branched from 4b49a75
-  (dynamic mobility, Option B). Accepted expeditionary ancestry:
-  6231357 (spine evidence) → cc4d6df (mobility brainstorm) → 4b49a75 →
-  04e4c14 (taxonomy + mobility authority + pools) → b944ee2 (information
-  tasks + knowledge latency + fire-signal scaffolding). Final EXPEDITIONARY-4
-  hash is recorded in the checkpoint report.
+  branch checkpoint/recover-food-receipt-accounting-12, branched from PUBLIC main
+  e539813ab40f14075b3701f56566a9f3095e4291 ("checkpoint: complete ecology viability
+  correction"). RECOVERY-12 was a deliberate lost-lineage recovery: the local lineage
+  ending at f27f3f1 (CORRECTION-10/11) was UNAVAILABLE and treated as lost — commits
+  fe0a788/301fc11/f27f3f1 and branches checkpoint/ecology-human-food-conversion-10 /
+  checkpoint/demographic-surplus-growth-correction-11 were NOT fetched or referenced.
+  Only the two already-measured food-accounting fixes were reconstructed.
 
 Backup checkpoint supplied:
   branch: checkpoint/all-map-ecology-f33bebc
@@ -80,23 +81,30 @@ Backup checkpoint supplied:
 Implemented checkpoint:
   FOOD–DEMOGRAPHY SEPARATION / DEMOGRAPHIC PERSISTENCE-1 and -2 — PASS
   CORE PIPELINE CONSOLIDATION / DECOMPOSITION-1..3 — PASS
-  EXPEDITIONARY LOGISTICAL MOBILITY / TASK CAMPS / VIEWSHED / FIRE SIGNALS-1
-  — COMPLETE (MOBILITY-1..4 implementation + MOBILITY-5 validation closure:
-  isolated performance matrix P1–P10 and dedicated rich/ordinary/marginal
-  habitat cases both PASS; see docs/HANDOFF.md Current Status).
+  EXPEDITIONARY LOGISTICAL MOBILITY / TASK CAMPS / VIEWSHED / FIRE SIGNALS-1 — COMPLETE
+  LOST-LINEAGE RECOVERY — FOOD RECEIPT ACCOUNTING (RECOVERY-12) — PASS CANDIDATE
+  (2026-07-24): the human food ledger no longer derives current food from the bounded
+  24-record recentIntraSeasonTrips UI window (which evicted early receipts and could
+  re-serve stale ones). A new authoritative bounded per-accounting-period accumulator
+  src/sim/agents/seasonalFoodReceipts.ts (Band.seasonalFoodReceipts) captures every
+  physical food return once (same-day + expedition), read under a one-current-period
+  freshness rule. Receipt capture 1.000; Dry Margin/North Frontier rescued; Estuary grows;
+  corridors stay extinct; step-mode invariance, full regression, determinism all PASS.
+  See docs/evidence/recovery-food-accounting-12/.
 
 Current blocker:
-  None expedition-side. The standing upstream limitation (single founders on
-  ordinary/marginal ground can still starve out within 100y) is the known
-  reach/variability problem the CLIMATE checkpoint addresses next — do not
-  respond to it with expedition or food tuning.
+  None. The standing upstream limitation (single founders on ordinary/marginal ground can
+  still finish below founding population) is now partly relieved by honest receipt capture,
+  but the demographic net-rate growth response remains the next target — RECOVERY-12
+  explicitly did NOT investigate demographic growth compression and changed no
+  fertility/mortality/clamp/yield code.
 
 Current active roadmap item:
-  CLIMATE / WEATHER / REGIONAL SEASONALITY FOUNDATION-1 — foundational,
-  BEFORE seasonal-route migration. Attach at the terrain/hydrography→ecology
-  seam; `src/sim/agents/environmentBoundary.ts` is the ready expedition-side
-  seam its authority replaces/extends. Deterministic, bounded, never a hidden
-  food multiplier.
+  DEMOGRAPHIC RESPONSE (growth compression) is the natural next checkpoint (separate from
+  this one); CLIMATE / WEATHER / REGIONAL SEASONALITY FOUNDATION remains the standing
+  roadmap foundational item. Attach climate at the terrain/hydrography→ecology seam;
+  src/sim/agents/environmentBoundary.ts is the ready expedition-side seam its authority
+  replaces/extends. Deterministic, bounded, never a hidden food multiplier.
 ```
 
 Before any implementation, resolve and report:
@@ -302,6 +310,9 @@ No `test` script exists — verification is entirely the audit scripts below plu
 | Purpose | File |
 | --- | --- |
 | Canonical food-pipeline audit | `livingEcologyFoodPipelineAudit.mjs` |
+| **Food-receipt accounting (RECOVERY-12): capture=1.000, 24-window eviction reproduced, one-current-period freshness, conservation, same-day+expedition paths** | `recoveryFoodAccountingAudit.mjs` |
+| **Step-mode invariance (daily ≡ seasonal, both maps, `band.demography.population`; one fresh child process per map)** | `stepModeInvarianceAudit.mjs` |
+| **Founder trajectory before/after (start/min/final population, births/deaths, surplus/deficit seasons; `--map --years --seeds`; runnable against a main worktree)** | `founderTrajectoryAudit.mjs` |
 | Trophic-coupling audit | `livingEcologyTrophicAudit.mjs`, `livingEcologyTrophicCoupling1bFocusedAudit.mjs` |
 | Living-ecology world audit | `livingEcologyWorldAudit.mjs` |
 | All-map ecology audit | `allMapLivingEcologyAudit.mjs` |
