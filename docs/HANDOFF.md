@@ -181,6 +181,43 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### DEMOGRAPHIC RESPONSE COMPRESSION CORRECTION-13 — PASS CANDIDATE (2026-07-25)
+
+Branch `checkpoint/demographic-response-compression-13` from current public `main` `22123aa`
+(which contains RECOVERY-12 as `022f213`; RECOVERY-12 was integrated into main at `32c6b90`, then
+a maintainer metadata commit `22123aa` was added — byte-identical tracked tree). Narrow demographic
+checkpoint. Evidence: `docs/evidence/correction13/` (FINDINGS.md + composition arms, founder
+before/after, performance).
+
+**Measured first compression point (nutrition state):** `deriveCanonicalNutritionState`'s
+`foodDemographicPressure = clamp01(... − recoveryRelief×0.14)` is floored at 0 and
+`foodStress = clamp01(1 − rawSupportRatio) = 0` for any ratio ≥ 1, so the food→demography signal is
+**one-sided** — it penalizes deficit but has no representation of surplus. Controlled arms proved
+strong surplus (ratio 1.5) was **byte-identical** to bare maintenance (ratio 1.0): same nutrition,
+fertility (0.54), net rate (+0.0074), trajectory (34→94). `strongGtMaintenance: false`. Demography
+runs annually (spring); reconciliation (`advancePopulationAccounting`, sign-gated single net rate,
+fractional accumulators preserved) is correct and was NOT the defect.
+
+**Fix (only the measured defect):** added the symmetric positive counterpart — a bounded
+`nutritionalSurplus ∈ [0,1]` on the canonical nutrition state (uncapped rolling mean raw support
+above `SURPLUS_ONSET=1.12`, gated on the existing recovery streak so one good season can't spike
+it; cached as `rolling8SeasonRawSupport` for O(1) reads), driving `foodFertilitySurplusBonus =
+nutritionalSurplus × 0.22` (symmetric with `foodFertilitySuppression`) into `fertilityPressure`.
+**Exactly 0 at maintenance and below** — maintenance and all deficit arms are unchanged. No
+arbitrary fertility/mortality tuning, no floors, no founder/habitat rules, no food-yield/demand change.
+
+**After fix (controlled arms):** ordered response strong(+0.0062, 34→80) > maintenance(+0.0045,
+34→64) > moderate(−0.0006, 34→32) > severe(−0.0102, 34→7); severe materially faster than moderate;
+one bad season not fatal; one good season not explosive; surplus+hazard grows less than surplus
+(attributed to the hazard). **Production preserved:** Dry Margin 13/12/12 (RECOVERY-12 resilience),
+Estuary 35/33/33 (grows above founding), North Frontier 9/9/9 (rescue), corridors 0/0/0 (extinct).
+Real default founders are genuinely food-limited (meanFoodPress 0.40–0.99), not genuinely surplus,
+so they correctly stay marginal — that reach/ecology limit is OUT OF SCOPE. Regression (recovery
+capture 1.000, freshness, food pipeline, food-demography sep, persistence, terminal extinction,
+step-mode both maps, boundaries, trophic, graph, tsc, build), determinism (`matched:true`), and
+reconciliation (`reconciles:true`) all PASS. Perf ~23.55→~25.49 ms/tick (bounded O(1)). Ecology/
+human-survival NOT marked complete.
+
 ### LOST-LINEAGE RECOVERY — FOOD RECEIPT ACCOUNTING (RECOVERY-12) — PASS CANDIDATE (2026-07-24)
 
 Branch `checkpoint/recover-food-receipt-accounting-12` from public `main`
@@ -7614,6 +7651,18 @@ exception; daughter colours related-but-distinct and never visually confusing.
 
 ## Checkpoint Log
 
+- **DEMOGRAPHIC RESPONSE COMPRESSION CORRECTION-13** — *2026-07-25, PASS CANDIDATE.*
+  Measured the demographic composition (annual net rate) and found the first compression point in
+  the NUTRITION STATE: `foodDemographicPressure` is `clamp01`-floored at 0 with no surplus term, so
+  strong surplus (ratio 1.5) was byte-identical to bare maintenance (ratio 1.0) — surplus could not
+  produce growth beyond maintenance. Fix: added the symmetric `nutritionalSurplus` signal (bounded,
+  gated on sustained recovery, 0 at maintenance and below) driving `foodFertilitySurplusBonus =
+  nutritionalSurplus × 0.22` into fertility. Controlled arms now order strong > maintenance >
+  moderate > severe with visible surplus growth, stable maintenance, gradual moderate decline, and
+  materially faster severe decline; transients robust. Production founders preserved (Estuary grows,
+  corridors extinct, North Frontier rescued, Dry Margin resilient). Receipt capture 1.000, step-mode
+  invariance, reconciliation, full regression, determinism all PASS; perf bounded (~+8%). Reconciliation
+  and food pipeline unchanged. Based on public main `22123aa`. See `docs/evidence/correction13/`.
 - **LOST-LINEAGE RECOVERY — FOOD RECEIPT ACCOUNTING (RECOVERY-12)** —
   *2026-07-24, PASS CANDIDATE.* Reconstructed the lost CORRECTION-10/11 food-receipt
   fixes on a fresh branch off public `main` `e539813` (the local lineage ending at

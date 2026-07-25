@@ -214,6 +214,10 @@ export interface FoodDemographyRateTerms {
   readonly foodPerPersonStress: number;
   readonly foodFertilityBaseBonus: number;
   readonly foodFertilitySuppression: number;
+  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — bounded fertility recovery bonus from sustained
+  // nutritional surplus. Symmetric with `foodFertilitySuppression` (same 0.22 weight); 0 at
+  // maintenance and below. This is the term that lets honest surplus grow beyond maintenance.
+  readonly foodFertilitySurplusBonus: number;
   readonly severeChronicFoodHazard: number;
   readonly foodMortalityContribution: number;
   readonly survivalBaseline: number;
@@ -270,6 +274,14 @@ export function deriveFoodDemographyRateTerms(
           chronicFoodStress * 0.2 +
           recentFoodStress * 0.1,
       );
+  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — the positive counterpart to
+  // `foodFertilitySuppression` (same 0.22 weight): sustained nutritional surplus recovers
+  // fertility above the maintenance baseline. 0 at maintenance and below, so it never rescues
+  // a deficit band or lifts a stable one — it only decompresses the surplus end that the
+  // clamp-at-zero food pressure could not represent. Diagnostic legacy mode leaves it 0.
+  const foodFertilitySurplusBonus = useDeStackedFoodDemography
+    ? nutrition.nutritionalSurplus * 0.22
+    : 0;
   const foodMortalityContribution = useDeStackedFoodDemography
     ? clamp01(foodPerPersonStress * 0.36)
     : clamp01(foodPerPersonStress * 0.36 + chronicFoodStress * 0.28);
@@ -300,6 +312,7 @@ export function deriveFoodDemographyRateTerms(
     foodPerPersonStress,
     foodFertilityBaseBonus,
     foodFertilitySuppression,
+    foodFertilitySurplusBonus,
     severeChronicFoodHazard,
     foodMortalityContribution,
     survivalBaseline,
@@ -410,6 +423,7 @@ function computeBandDemography(
   const fertilityPressure = clamp01(
     0.34 +
       foodTerms.foodFertilityBaseBonus +
+      foodTerms.foodFertilitySurplusBonus +
       (1 - waterStress) * 0.12 -
       riskStress * 0.14 -
       householdCrowdingPressure * 0.1 -
@@ -569,6 +583,7 @@ function computeBandDemography(
     foodPerPersonStress: round2(foodPerPersonStress),
     foodMortalityContribution: round2(foodMortalityContribution),
     foodFertilitySuppression: round2(foodFertilitySuppression),
+    foodFertilitySurplusBonus: round2(foodTerms.foodFertilitySurplusBonus),
     foodSevereChronicHazard: round2(foodTerms.severeChronicFoodHazard),
     foodSevereChronicRatePenalty: round4(foodTerms.severeChronicFoodRatePenalty),
     baselineFertilityBasis: round2(0.34 + foodTerms.foodFertilityBaseBonus),

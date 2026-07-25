@@ -10,12 +10,27 @@ import type { ReasonId, WorldTime } from "../core/types";
 
 const SEASONAL_MEMORY_WINDOW = 8;
 const SHORT_WINDOW = 4;
+// DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — nutritional-surplus deadband and span. Surplus is
+// counted only once mean raw support exceeds demand by a margin (a band exactly at demand is
+// stable, not growing), and reaches full magnitude at a generous, sustainable surplus.
+const SURPLUS_ONSET = 1.12;
+const SURPLUS_SPAN = 0.6;
 
 export interface CanonicalNutritionState {
   readonly currentFoodStress: number;
   readonly recentFoodStress: number;
   readonly chronicFoodStress: number;
   readonly recoveryRelief: number;
+  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — the symmetric positive counterpart to
+  // `foodDemographicPressure`. That pressure is a non-negative deficit signal (clamp01,
+  // floored at 0), so genuine sustained surplus was demographically identical to bare
+  // maintenance — the ledger's `foodStress = clamp01(1 - rawSupportRatio)` is 0 for any
+  // ratio >= 1, giving no path from surplus to recovery-driven growth. `nutritionalSurplus`
+  // is a bounded [0,1] measure of SUSTAINED genuine surplus (mean raw support ratio above a
+  // deadband, gated on the real recovery streak so a single good season cannot spike it). It
+  // is 0 at maintenance and below, and drives a bounded fertility recovery bonus in
+  // demography. It never adds food/support and never reduces mortality directly.
+  readonly nutritionalSurplus: number;
   readonly foodMovementPressure: number;
   readonly foodDemographicPressure: number;
   // False ONLY when nutrition has not yet been measured (no physical-food interval
@@ -44,6 +59,7 @@ export function deriveCanonicalNutritionState(
       recentFoodStress: 0,
       chronicFoodStress: 0,
       recoveryRelief: 0,
+      nutritionalSurplus: 0,
       foodMovementPressure: 0,
       foodDemographicPressure: 0,
       nutritionStateAvailable: false,
@@ -57,12 +73,29 @@ export function deriveCanonicalNutritionState(
       (support.deficitSeasonsLast8 / SEASONAL_MEMORY_WINDOW) * 0.42,
   );
   const recoveryRelief = clamp01(support.seasonalRecoveryStreak / SHORT_WINDOW);
+  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — sustained genuine surplus. The rolling support
+  // fields (`rolling4/8SeasonSupport`) use the CLAMPED ratio (<=1), so surplus was invisible;
+  // the raw ratios in `recentSamples` are the only uncapped record of support above demand.
+  // A deadband (`SURPLUS_ONSET`) keeps maintenance (ratio ~1.0) at 0; `SURPLUS_SPAN` sets how
+  // far above it reaches full magnitude; the `recoveryRelief` gate requires the surplus to be
+  // SUSTAINED (a real recovery streak), so a single good season cannot manufacture growth.
+  // O(1) read of the season-cached uncapped mean raw support. Falls back to the recentSamples
+  // mean only if the cache is absent (audit fixtures / legacy snapshots), then to neutral.
+  const meanRawSupport = support.rolling8SeasonRawSupport
+    ?? (support.recentSamples !== undefined && support.recentSamples.length > 0
+      ? support.recentSamples.reduce((sum, entry) => sum + Math.max(0, entry.rawSupportRatio), 0) /
+          support.recentSamples.length
+      : 1);
+  const nutritionalSurplus = clamp01(
+    clamp01((meanRawSupport - SURPLUS_ONSET) / SURPLUS_SPAN) * recoveryRelief,
+  );
 
   return {
     currentFoodStress: round2(currentFoodStress),
     recentFoodStress: round2(recentFoodStress),
     chronicFoodStress: round2(chronicFoodStress),
     recoveryRelief: round2(recoveryRelief),
+    nutritionalSurplus: round2(nutritionalSurplus),
     foodMovementPressure: round2(clamp01(
       currentFoodStress * 0.42 + recentFoodStress * 0.34 + chronicFoodStress * 0.34 - recoveryRelief * 0.16,
     )),
@@ -148,6 +181,9 @@ export function updateSeasonalSupportState(
   const waterStressSeasonsLast8 = recentSamples.filter((entry) => entry.waterStress >= 0.5).length;
   const rolling4SeasonSupport = round2(mean(last4.map((entry) => entry.clampedSupportRatio)));
   const rolling8SeasonSupport = round2(mean(recentSamples.map((entry) => entry.clampedSupportRatio)));
+  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — uncapped mean raw support, computed once per season
+  // here so the demographic surplus read is O(1) (see deriveCanonicalNutritionState).
+  const rolling8SeasonRawSupport = round2(mean(recentSamples.map((entry) => Math.max(0, entry.rawSupportRatio))));
   const rolling4SeasonReturn = round2(mean(last4.map((entry) => entry.perCapitaReturn)));
   const rolling8SeasonReturn = round2(mean(recentSamples.map((entry) => entry.perCapitaReturn)));
   const hungerClassification = classifyHunger({
@@ -175,6 +211,7 @@ export function updateSeasonalSupportState(
     ...(lastSeasonSupport === undefined ? {} : { lastSeasonSupport }),
     rolling4SeasonSupport,
     rolling8SeasonSupport,
+    rolling8SeasonRawSupport,
     rolling4SeasonReturn,
     rolling8SeasonReturn,
     returnTrend4Season: round2(sample.perCapitaReturn - rolling4SeasonReturn),

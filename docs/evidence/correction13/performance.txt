@@ -1,0 +1,4 @@
+CORRECTION-13 performance (npm run sim:benchmark -- --json, baseline 100y=400 ticks, avgMsPerTick):
+BEFORE (32c6b90 = RECOVERY-12/main): 23.49 / 23.32 / 23.84  (mean ~23.55)
+AFTER  (CORRECTION-13):               25.25 / 25.59 / 25.62  (mean ~25.49)
+Delta ~+1.9 ms/tick (~+8%): a bounded O(1) constant. The nutritional-surplus term is O(1) per band per demographic read (rolling raw support cached once per season in updateSeasonalSupportState); no full-map scans, no unbounded history, deterministic. Some cost is legitimately higher populations where surplus now fuels growth.

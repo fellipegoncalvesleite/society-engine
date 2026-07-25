@@ -1449,6 +1449,9 @@ export interface BandDemography extends PopulationAccountingState {
   // injury, crowding, and movement hardship for Technical causal proof.
   readonly foodMortalityContribution?: NormalizedIntensity;
   readonly foodFertilitySuppression?: NormalizedIntensity;
+  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — bounded fertility recovery bonus from sustained
+  // nutritional surplus (0 at maintenance and below). Surfaced for Technical/audit attribution.
+  readonly foodFertilitySurplusBonus?: NormalizedIntensity;
   readonly foodSevereChronicHazard?: NormalizedIntensity;
   readonly foodSevereChronicRatePenalty?: number;
   readonly baselineFertilityBasis?: NormalizedIntensity;
@@ -1527,6 +1530,10 @@ export interface SeasonalSupportState {
   readonly lastSeasonSupport?: SeasonalSupportSample;
   readonly rolling4SeasonSupport: NormalizedIntensity;
   readonly rolling8SeasonSupport: NormalizedIntensity;
+  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — mean UNCAPPED raw support ratio over the window
+  // (the rolling*SeasonSupport fields use the clamped ratio <=1, so surplus is invisible in
+  // them). Cached here so `deriveCanonicalNutritionState`'s surplus read stays O(1).
+  readonly rolling8SeasonRawSupport?: number;
   readonly rolling4SeasonReturn: NormalizedIntensity;
   readonly rolling8SeasonReturn: NormalizedIntensity;
   readonly returnTrend4Season: number;

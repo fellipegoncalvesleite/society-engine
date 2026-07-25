@@ -66,13 +66,12 @@ Technology, exact package versions, current directory structure, and public setu
 
 ```text
 Last verified against:
-  branch checkpoint/recover-food-receipt-accounting-12, branched from PUBLIC main
-  e539813ab40f14075b3701f56566a9f3095e4291 ("checkpoint: complete ecology viability
-  correction"). RECOVERY-12 was a deliberate lost-lineage recovery: the local lineage
-  ending at f27f3f1 (CORRECTION-10/11) was UNAVAILABLE and treated as lost — commits
-  fe0a788/301fc11/f27f3f1 and branches checkpoint/ecology-human-food-conversion-10 /
-  checkpoint/demographic-surplus-growth-correction-11 were NOT fetched or referenced.
-  Only the two already-measured food-accounting fixes were reconstructed.
+  branch checkpoint/demographic-response-compression-13, branched from current PUBLIC main
+  22123aa ("chore: refresh repository metadata"), which contains RECOVERY-12 as 022f213
+  (RECOVERY-12 was integrated into main at 32c6b90 = e539813 + the food-accounting fixes;
+  a maintainer metadata commit 22123aa was then added, byte-identical tracked tree). The
+  demographic-surplus-growth-correction lost lineage (ending at f27f3f1) remains UNAVAILABLE
+  and was NOT referenced; RECOVERY-12 reconstructed only the food-accounting fixes.
 
 Backup checkpoint supplied:
   branch: checkpoint/all-map-ecology-f33bebc
@@ -82,15 +81,19 @@ Implemented checkpoint:
   FOOD–DEMOGRAPHY SEPARATION / DEMOGRAPHIC PERSISTENCE-1 and -2 — PASS
   CORE PIPELINE CONSOLIDATION / DECOMPOSITION-1..3 — PASS
   EXPEDITIONARY LOGISTICAL MOBILITY / TASK CAMPS / VIEWSHED / FIRE SIGNALS-1 — COMPLETE
-  LOST-LINEAGE RECOVERY — FOOD RECEIPT ACCOUNTING (RECOVERY-12) — PASS CANDIDATE
+  LOST-LINEAGE RECOVERY — FOOD RECEIPT ACCOUNTING (RECOVERY-12) — integrated into main
   (2026-07-24): the human food ledger no longer derives current food from the bounded
-  24-record recentIntraSeasonTrips UI window (which evicted early receipts and could
-  re-serve stale ones). A new authoritative bounded per-accounting-period accumulator
-  src/sim/agents/seasonalFoodReceipts.ts (Band.seasonalFoodReceipts) captures every
-  physical food return once (same-day + expedition), read under a one-current-period
-  freshness rule. Receipt capture 1.000; Dry Margin/North Frontier rescued; Estuary grows;
-  corridors stay extinct; step-mode invariance, full regression, determinism all PASS.
-  See docs/evidence/recovery-food-accounting-12/.
+  24-record recentIntraSeasonTrips UI window; authoritative bounded per-period accumulator
+  src/sim/agents/seasonalFoodReceipts.ts, read under a one-current-period freshness rule.
+  Receipt capture 1.000. See docs/evidence/recovery-food-accounting-12/.
+  DEMOGRAPHIC RESPONSE COMPRESSION CORRECTION-13 — PASS CANDIDATE (2026-07-25): the
+  food->demography signal was one-sided (foodDemographicPressure clamp01-floored at 0, no
+  surplus term), so strong surplus was byte-identical to bare maintenance. Fix: a symmetric
+  bounded nutritionalSurplus signal (seasonalSurvival.ts, gated on sustained recovery, 0 at
+  maintenance and below) drives foodFertilitySurplusBonus = nutritionalSurplus x 0.22 into
+  fertility (demography.ts). Controlled arms now order strong > maintenance > moderate >
+  severe; production founders preserved. Reconciliation, receipt capture, step-mode, full
+  regression, determinism all PASS. See docs/evidence/correction13/.
 
 Current blocker:
   None. The standing upstream limitation (single founders on ordinary/marginal ground can
@@ -311,6 +314,7 @@ No `test` script exists — verification is entirely the audit scripts below plu
 | --- | --- |
 | Canonical food-pipeline audit | `livingEcologyFoodPipelineAudit.mjs` |
 | **Food-receipt accounting (RECOVERY-12): capture=1.000, 24-window eviction reproduced, one-current-period freshness, conservation, same-day+expedition paths** | `recoveryFoodAccountingAudit.mjs` |
+| **Demographic composition + controlled arms (CORRECTION-13): full state→fertility→mortality→cadence/clamp→realized waterfall; A/B/C/D/E surplus/maintenance/moderate/severe/hazard arms; ordered net-rate response; one-bad/one-good-season transients** | `demographicCompositionAudit.mjs` |
 | **Step-mode invariance (daily ≡ seasonal, both maps, `band.demography.population`; one fresh child process per map)** | `stepModeInvarianceAudit.mjs` |
 | **Founder trajectory before/after (start/min/final population, births/deaths, surplus/deficit seasons; `--map --years --seeds`; runnable against a main worktree)** | `founderTrajectoryAudit.mjs` |
 | Trophic-coupling audit | `livingEcologyTrophicAudit.mjs`, `livingEcologyTrophicCoupling1bFocusedAudit.mjs` |
