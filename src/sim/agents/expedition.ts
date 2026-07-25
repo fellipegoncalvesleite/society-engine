@@ -1575,11 +1575,21 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       resourceKnowledgeState = application.resourceKnowledgeState;
     }
 
+    // REPEATED-BAND-EXPANSION-FISSION-14 — step-mode invariance. `observeTileAndNearby`
+    // stamps `firstObservedAt`/`lastObservedAt`/`observedAt` from the world it is given.
+    // `currentWorld.time` is the time at the START of the daily-action batch, so under
+    // seasonal stepping (one 90-day batch) a return recorded the season-boundary day while
+    // under daily stepping (90 one-day batches) the same return recorded its own day —
+    // identical tick and season, divergent `day`/`dayOfSeason`. A party physically returned
+    // on THIS day, so the day's own time is the correct stamp and it is identical under both
+    // step modes. (Latent before this checkpoint: route-reconnaissance returns were rare
+    // enough that no audited run exercised the path.)
+    const observationWorld = { ...currentWorld, time: getWorldTimeForDay(day) };
     const knowledge =
       returnedReconRouteTiles.length === 0
         ? currentBand.knowledge
         : observeTileAndNearby(
-            currentWorld,
+            observationWorld,
             currentBand.knowledge,
             [...new Set(returnedReconRouteTiles)]
               .map((tileId) => currentWorld.tiles[tileId])

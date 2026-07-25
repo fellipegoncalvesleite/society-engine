@@ -1,0 +1,306 @@
+{
+ "check": "CORRECTION-14-HABITAT-TIERS",
+ "map1": {
+  "map": "map1",
+  "reachRadiusTiles": 10,
+  "escapeRangeTiles": [
+   12,
+   28
+  ],
+  "gridCenters": 569,
+  "stockPercentiles": {
+   "p12": 1.6,
+   "p50": 4.41,
+   "p85": 13.08,
+   "max": 35.64
+  },
+  "sites": {
+   "exceptionally_rich": {
+    "tileId": "tile:124:64",
+    "coord": {
+     "x": 124,
+     "y": 64
+    },
+    "stock": 35.64,
+    "meanWater": 0.7276,
+    "waterTiles": 154,
+    "passableShare": 1,
+    "bestEscapeStock": 30.06,
+    "bestEscapeTileId": "tile:128:56"
+   },
+   "good": {
+    "tileId": "tile:80:56",
+    "coord": {
+     "x": 80,
+     "y": 56
+    },
+    "stock": 17.49,
+    "meanWater": 0.5095,
+    "waterTiles": 79,
+    "passableShare": 1,
+    "bestEscapeStock": 20.31,
+    "bestEscapeTileId": "tile:88:52"
+   },
+   "ordinary": {
+    "tileId": "tile:108:64",
+    "coord": {
+     "x": 108,
+     "y": 64
+    },
+    "stock": 13.13,
+    "meanWater": 0.3536,
+    "waterTiles": 56,
+    "passableShare": 1,
+    "bestEscapeStock": 35.64,
+    "bestEscapeTileId": "tile:124:64"
+   },
+   "marginal_escapable": {
+    "tileId": "tile:140:32",
+    "coord": {
+     "x": 140,
+     "y": 32
+    },
+    "stock": 0.48,
+    "meanWater": 0.6824,
+    "waterTiles": 141,
+    "passableShare": 1,
+    "bestEscapeStock": 18.87,
+    "bestEscapeTileId": "tile:132:52"
+   },
+   "isolated_marginal": {
+    "tileId": "tile:140:16",
+    "coord": {
+     "x": 140,
+     "y": 16
+    },
+    "stock": 1.1,
+    "meanWater": 0.5828,
+    "waterTiles": 110,
+    "passableShare": 1,
+    "bestEscapeStock": 5.26,
+    "bestEscapeTileId": "tile:124:12"
+   },
+   "hostile": {
+    "tileId": "tile:96:20",
+    "coord": {
+     "x": 96,
+     "y": 20
+    },
+    "stock": 0.29,
+    "meanWater": 0.0037,
+    "waterTiles": 0,
+    "passableShare": 1,
+    "bestEscapeStock": 13.03,
+    "bestEscapeTileId": "tile:96:48"
+   }
+  },
+  "tierEvidence": {
+   "exceptionally_rich": {
+    "tileId": "tile:124:64",
+    "reachableLivePlantStock": 35.64,
+    "meanWaterAccess": 0.7276,
+    "reliableWaterTiles": 154,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 30.06,
+    "bestAlternativeRegionTileId": "tile:128:56"
+   },
+   "good": {
+    "tileId": "tile:80:56",
+    "reachableLivePlantStock": 17.49,
+    "meanWaterAccess": 0.5095,
+    "reliableWaterTiles": 79,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 20.31,
+    "bestAlternativeRegionTileId": "tile:88:52"
+   },
+   "ordinary": {
+    "tileId": "tile:108:64",
+    "reachableLivePlantStock": 13.13,
+    "meanWaterAccess": 0.3536,
+    "reliableWaterTiles": 56,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 35.64,
+    "bestAlternativeRegionTileId": "tile:124:64"
+   },
+   "marginal_escapable": {
+    "tileId": "tile:140:32",
+    "reachableLivePlantStock": 0.48,
+    "meanWaterAccess": 0.6824,
+    "reliableWaterTiles": 141,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 18.87,
+    "bestAlternativeRegionTileId": "tile:132:52"
+   },
+   "isolated_marginal": {
+    "tileId": "tile:140:16",
+    "reachableLivePlantStock": 1.1,
+    "meanWaterAccess": 0.5828,
+    "reliableWaterTiles": 110,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 5.26,
+    "bestAlternativeRegionTileId": "tile:124:12"
+   },
+   "hostile": {
+    "tileId": "tile:96:20",
+    "reachableLivePlantStock": 0.29,
+    "meanWaterAccess": 0.0037,
+    "reliableWaterTiles": 0,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 13.03,
+    "bestAlternativeRegionTileId": "tile:96:48"
+   }
+  }
+ },
+ "map2": {
+  "map": "map2",
+  "reachRadiusTiles": 10,
+  "escapeRangeTiles": [
+   12,
+   28
+  ],
+  "gridCenters": 1299,
+  "stockPercentiles": {
+   "p12": 2.36,
+   "p50": 5.81,
+   "p85": 13.8,
+   "max": 36.6
+  },
+  "sites": {
+   "exceptionally_rich": {
+    "tileId": "tile:188:92",
+    "coord": {
+     "x": 188,
+     "y": 92
+    },
+    "stock": 36.6,
+    "meanWater": 0.8168,
+    "waterTiles": 184,
+    "passableShare": 1,
+    "bestEscapeStock": 31,
+    "bestEscapeTileId": "tile:192:100"
+   },
+   "good": {
+    "tileId": "tile:136:64",
+    "coord": {
+     "x": 136,
+     "y": 64
+    },
+    "stock": 17.47,
+    "meanWater": 0.4516,
+    "waterTiles": 85,
+    "passableShare": 1,
+    "bestEscapeStock": 19.93,
+    "bestEscapeTileId": "tile:144:72"
+   },
+   "ordinary": {
+    "tileId": "tile:140:124",
+    "coord": {
+     "x": 140,
+     "y": 124
+    },
+    "stock": 12.66,
+    "meanWater": 0.2906,
+    "waterTiles": 25,
+    "passableShare": 1,
+    "bestEscapeStock": 27.68,
+    "bestEscapeTileId": "tile:160:116"
+   },
+   "marginal_escapable": {
+    "tileId": "tile:204:72",
+    "coord": {
+     "x": 204,
+     "y": 72
+    },
+    "stock": 1.91,
+    "meanWater": 0.5455,
+    "waterTiles": 98,
+    "passableShare": 1,
+    "bestEscapeStock": 36.26,
+    "bestEscapeTileId": "tile:192:88"
+   },
+   "isolated_marginal": {
+    "tileId": "tile:92:112",
+    "coord": {
+     "x": 92,
+     "y": 112
+    },
+    "stock": 1.24,
+    "meanWater": 0.2256,
+    "waterTiles": 21,
+    "passableShare": 1,
+    "bestEscapeStock": 4.04,
+    "bestEscapeTileId": "tile:80:128"
+   },
+   "hostile": {
+    "tileId": "tile:112:104",
+    "coord": {
+     "x": 112,
+     "y": 104
+    },
+    "stock": 0.2,
+    "meanWater": 0.0034,
+    "waterTiles": 0,
+    "passableShare": 1,
+    "bestEscapeStock": 8.93,
+    "bestEscapeTileId": "tile:140:104"
+   }
+  },
+  "tierEvidence": {
+   "exceptionally_rich": {
+    "tileId": "tile:188:92",
+    "reachableLivePlantStock": 36.6,
+    "meanWaterAccess": 0.8168,
+    "reliableWaterTiles": 184,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 31,
+    "bestAlternativeRegionTileId": "tile:192:100"
+   },
+   "good": {
+    "tileId": "tile:136:64",
+    "reachableLivePlantStock": 17.47,
+    "meanWaterAccess": 0.4516,
+    "reliableWaterTiles": 85,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 19.93,
+    "bestAlternativeRegionTileId": "tile:144:72"
+   },
+   "ordinary": {
+    "tileId": "tile:140:124",
+    "reachableLivePlantStock": 12.66,
+    "meanWaterAccess": 0.2906,
+    "reliableWaterTiles": 25,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 27.68,
+    "bestAlternativeRegionTileId": "tile:160:116"
+   },
+   "marginal_escapable": {
+    "tileId": "tile:204:72",
+    "reachableLivePlantStock": 1.91,
+    "meanWaterAccess": 0.5455,
+    "reliableWaterTiles": 98,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 36.26,
+    "bestAlternativeRegionTileId": "tile:192:88"
+   },
+   "isolated_marginal": {
+    "tileId": "tile:92:112",
+    "reachableLivePlantStock": 1.24,
+    "meanWaterAccess": 0.2256,
+    "reliableWaterTiles": 21,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 4.04,
+    "bestAlternativeRegionTileId": "tile:80:128"
+   },
+   "hostile": {
+    "tileId": "tile:112:104",
+    "reachableLivePlantStock": 0.2,
+    "meanWaterAccess": 0.0034,
+    "reliableWaterTiles": 0,
+    "passableShare": 1,
+    "bestAlternativeRegionStockWithinRange": 8.93,
+    "bestAlternativeRegionTileId": "tile:140:104"
+   }
+  }
+ },
+ "fingerprint": "48ca72c22ffbdf70d4d92a1440eb30d624d07c4f6df7cd2ec92148fb6b7bf89e"
+}

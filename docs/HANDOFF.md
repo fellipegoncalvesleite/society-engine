@@ -181,6 +181,83 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### REPEATED BAND EXPANSION + HABITAT VIABILITY CORRECTION-14 — PROGRESS, DO NOT MERGE (2026-07-25)
+
+Branch `checkpoint/repeated-band-expansion-fission-14` from public `main`
+`668763ffc33d80d102d25ac97e94c8a4e965fbf2` (CORRECTION-13, integrated into `main` at the start of
+this checkpoint; local and remote `main` both equal `668763f`). Evidence:
+`docs/evidence/correction14/` (FINDINGS.md, habitat tier evidence, pre/post tier ladder and both
+default maps, Arm A and Arm B).
+
+**Reproduced failure.** 500 years, 5 seeds, isolated 34-person founders on physically scored map 2
+tiers: the richest habitat (reachable live plant stock 36.6) produced **0 median successful
+fissions** and shrank 34 → 23; `good` 34 → 15; `ordinary` survived in 3 of 5 seeds; everything
+below died. Map 1 defaults finished at 3 living bands / 65 people / **0 fissions** with 2 of 5
+founders extinct.
+
+**First binding blocker — the annual demographic step read the seasonal trough.** Demography runs
+once a year (spring) and integrates a year, but read the INSTANTANEOUS
+`deriveCanonicalNutritionState`. Because the annual step always lands on the same season, it
+sampled the same phase every year — the lean one. Richest catchment, one year: seasonal support
+ratios 2.03 / 1.65 / 1.06 / **0.09** (physical harvest spring 61, summer 46, autumn 31, winter 2.8).
+Over 500 years its mean annual support was **1.73×** demand while the demographic read logged mean
+food stress **0.79**, with **359 physically-surplus years and 1 surplus-signal year** (`recoveryRelief`
+is a trailing streak, which a lean trailing season zeroes, and it gates CORRECTION-13's
+`nutritionalSurplus`).
+
+**Second and third — food access.** (a) `applyTripDay` discards a candidate that does not fit the
+same-day budget, but `selectTripCandidate` ran its argmax over every distance, so an out-of-budget
+winner wasted the band's ONE candidate for that day (the mirror of CORRECTION-4's expedition fix).
+(b) Local reconnaissance bootstrapped only when a band had NO patch memory at all, and once the
+48-slot `RESOURCE_KNOWLEDGE_CAP` was full, retention ranking evicted every newly observed patch on
+the spot — a permanent learning lock. Measured: runs of **17 consecutive seasons with `trips: 0`**
+standing in the highest-stock country on the map; **141 of 480 seasons at exactly zero support** →
+**1 of 480** after the repairs.
+
+**Corrections (3, all in-chain).** `deriveAnnualNutritionState` (seasonalSurvival.ts) consumed by
+the single annual demography call site — the seasonal read is retained for every behavioral
+consumer; `requireSameDay` selection domain + domain-aware `hasReachablePatchMemory`
+(intraSeasonTrips.ts); `enforceResourceKnowledgeCap` protects just-observed patch ids
+(resourceKnowledge.ts). Plus a step-mode correctness repair in `expedition.ts` (recon returns
+stamped observations from the batch-start world time). No multiplier, floor, timer, founder rule,
+or demographic coefficient changed. Two further fission-target corrections were written, measured,
+and **reverted** for lack of demonstrable effect.
+
+**Result.** Rich: **4 median successful fissions**, 5 living bands, **149 people** from 34, all 5
+seeds fission, mean net rate −0.0008 → **+0.0044**, surplus-signal years 1 → 480. Ordinary founder
+survival 0.6 → **1.0**. Map 1 defaults 3 → **13 living bands**, 65 → **337 people**, 0 → **8
+fissions (6 successful)**, 2 → **0 extinct founders**. Map 2 defaults 4 → **10 living bands**,
+98 → **277 people**, 0 → **4 successful fissions**; corridors stay honestly extinct. Fission and
+cohort conservation: **0 mismatches** everywhere.
+
+**Why it is PROGRESS, not PASS.** Five behavioral gates unmet: no rich seed reaches 6 successful
+fissions (max 4); **no second-generation fission**; only 2 of 5 `good` lineages fission
+successfully; marginal-but-escapable never escapes; hostile does not go extinct. Four of the five
+have one measured cause — **a band's known-tile horizon never exceeds 9 tiles**
+(`destinationKnowledgeHorizonProbe`: 0 known tiles beyond 10 at every 50-year sample to y300), so
+every daughter is founded inside the parent's own catchment, both halves draw on the same patches,
+and the lineage saturates one region (mean support 0.87 by Year 500) instead of populating country.
+That is exploration/logistical reach, upstream of fission, and was deliberately not redesigned
+here. The hostile control fails differently: tiers are defined by the STARTING catchment and a
+mobile band legitimately drifts out of one (hostile founders reached 0.92 mean support and declined
+34 → 12–14 at −0.0017/yr — no floor, but not extinction).
+
+**Regression.** tsc, build, graph, `deterministic=true`, fresh-process determinism, diagnostics-off
+byte identity vs the parent commit, step-mode invariance (both maps), receipt capture **1.000**,
+CORRECTION-13 arms preserved exactly (80/64/32/7), and the food/ecology/lifecycle/boundary matrix
+all PASS. `demographicPerLineageAudit`'s world equation was **completed** (it counted a daughter's
+transferred founding population as new people; the gap was exactly 36 = 2 × 18) and passes on both
+this branch and the parent commit. `demographicDeathMemoryPathAudit` **FAILS 2 of 11** checks —
+isolated to the annual read; both are ceteris-paribus net-rate orderings across independently
+diverging 40-year cells whose confound (mean food stress differing by 0.011–0.029) exceeds the
+measured effect (0.00013–0.00027). The audit was left unchanged. Expedition
+lifecycle/latency/fire-signal/acute-risk and all-map-ecology failures are **pre-existing**,
+identical on the parent commit.
+
+**Next.** The destination knowledge horizon — bands must be able to learn country beyond their own
+foraging catchment before repeated multi-generation expansion is reachable.
+
+
 ### DEMOGRAPHIC RESPONSE COMPRESSION CORRECTION-13 — PASS CANDIDATE (2026-07-25)
 
 Branch `checkpoint/demographic-response-compression-13` from current public `main` `22123aa`
@@ -7650,6 +7727,24 @@ exception; daughter colours related-but-distinct and never visually confusing.
 ---
 
 ## Checkpoint Log
+
+- **REPEATED BAND EXPANSION + HABITAT VIABILITY CORRECTION-14** — *2026-07-25, PROGRESS — DO NOT
+  MERGE.* Built the 500-year lineage expansion-chain audit and physically-scored habitat tiers, and
+  reproduced the reported failure (richest habitat: 0 median successful fissions, 34 → 23). Located
+  three in-chain defects: the ANNUAL demographic step read the INSTANTANEOUS nutrition state and so
+  sampled the same seasonal trough every year (mean annual support 1.73× demand read as 0.79 food
+  stress; 359 physically-surplus years, 1 surplus-signal year); the same-day trip argmax ran over
+  every distance while the caller discards out-of-budget winners, wasting the band's one candidate
+  per day; and a saturated 48-slot resource-memory cap evicted every newly observed patch, making
+  new country unlearnable (17-season `trips: 0` runs, 141/480 zero-support seasons → 1/480). Fixed
+  with `deriveAnnualNutritionState` (one annual call site; seasonal read retained for behavior), a
+  `requireSameDay` selection domain with domain-aware reachability, and cap protection for
+  just-observed patches; plus a step-mode timestamp repair in `expedition.ts`. Rich lineages now
+  reach 4 median successful fissions / 5 living bands / 149 people; Map 1 defaults 0 → 8 fissions
+  and 65 → 337 people with no founder extinct. NOT accepted: no second-generation fission and four
+  other gates unmet, all traced to a measured 9-tile destination-knowledge horizon that confines
+  every daughter to the parent's own catchment. Two further fission-target corrections were
+  measured and reverted for lack of effect. Evidence: `docs/evidence/correction14/`.
 
 - **DEMOGRAPHIC RESPONSE COMPRESSION CORRECTION-13** — *2026-07-25, PASS CANDIDATE.*
   Measured the demographic composition (annual net rate) and found the first compression point in

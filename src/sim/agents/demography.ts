@@ -64,7 +64,7 @@ import { FISSION_TIEBREAK_EPSILON, seededTieBreakJitter } from "../core/seededVa
 import { getDepletionAdjustedRichness } from "../world/depletion";
 import { getNomadicScaleClass, NOMADIC_MAX_MOBILE_BANDS_WARNING_COUNT } from "./nomadicScale";
 import {
-  deriveCanonicalNutritionState,
+  deriveAnnualNutritionState,
   type CanonicalNutritionState,
 } from "./seasonalSurvival";
 import type {
@@ -72,6 +72,10 @@ import type {
   DiagnosticDemographyMode,
   FoodDemographyDiagnostics,
 } from "../diagnostics/foodDemographyDiagnostics";
+import {
+  getFissionEvaluationObserver,
+  isFissionSuppressedForAudit,
+} from "../diagnostics/fissionDiagnostics";
 import {
   getRiverCrossingForMovement,
   makeRiverCrossingKey,
@@ -349,7 +353,12 @@ function computeBandDemography(
   const logisticalInefficiency = band.nomadicScalePressure?.logisticalInefficiencyPenalty ?? getPopulationLogisticalPressure(population);
   const largeBandFissionPressure = band.nomadicScalePressure?.largeBandFissionPressure ?? getPopulationScalePressure(population);
   const seasonalSupport = band.seasonalSupport;
-  const nutrition = deriveCanonicalNutritionState(seasonalSupport);
+  // REPEATED-BAND-EXPANSION-FISSION-14 — demography is an ANNUAL step
+  // (`shouldRunAnnualDemography`, spring) and must read the YEAR it integrates, not
+  // the single season it happens to land on. The seasonal read is retained for every
+  // behavioral consumer (movement, pressure, hardship, social readability); only the
+  // annual vital-rate step reads the annual state. See `deriveAnnualNutritionState`.
+  const nutrition = deriveAnnualNutritionState(seasonalSupport);
   const foodTerms = deriveFoodDemographyRateTerms(
     nutrition,
     seasonalSupport,
@@ -630,6 +639,74 @@ function computeBandDemography(
     viableFrontier !== undefined &&
     demographicState.splitPressure >= 0.48 &&
     hasFissionCooldownElapsed(world.time, band, population);
+  const eligible =
+    deferredReason === undefined &&
+    (demographicState.splitPressure >= SPLIT_PRESSURE_THRESHOLD || crisisBreakawayCreatesDaughter) &&
+    hasFissionCooldownElapsed(world.time, band, population);
+  const fissionObserver = getFissionEvaluationObserver();
+
+  if (fissionObserver !== undefined) {
+    // AUDIT-ONLY (CORRECTION-14). Reports the gate values the decision above already
+    // computed. Never reached in production/UI/worker runs; creates no state.
+    const latestFission = band.fissionEvents[band.fissionEvents.length - 1];
+    fissionObserver({
+      tick: world.time.tick,
+      year: world.time.year,
+      bandId: band.id,
+      ...(band.parentBandId === undefined ? {} : { parentBandId: band.parentBandId }),
+      population: roundedPopulation,
+      dependents: cohorts.dependents,
+      workingAdults: cohorts.workingAdults,
+      elders: cohorts.elders,
+      rawSupportRatio: seasonalSupport?.currentSeasonSupport.rawSupportRatio ?? 0,
+      annualMeanRawSupport: getAnnualMeanRawSupport(seasonalSupport),
+      currentFoodStress: nutrition.currentFoodStress,
+      recentFoodStress: nutrition.recentFoodStress,
+      chronicFoodStress: nutrition.chronicFoodStress,
+      recoveryRelief: nutrition.recoveryRelief,
+      nutritionalSurplus: nutrition.nutritionalSurplus,
+      foodDemographicPressure: nutrition.foodDemographicPressure,
+      chronicDeficitStreak: seasonalSupport?.chronicDeficitStreak ?? 0,
+      sustainedRecoveryStreak: seasonalSupport?.seasonalRecoveryStreak ?? 0,
+      fertilityPressure: round2(fertilityPressure),
+      mortalityPressure: round2(mortalityPressure),
+      netDemographicRate: round4(growthRate),
+      uncappedDemographicRate: round4(uncappedDemographicRate),
+      births: populationAccounting.births,
+      deaths: populationAccounting.deaths,
+      comfortablePopulation,
+      householdCrowdingPressure: round2(householdCrowdingPressure),
+      localUsePressure: round2(currentUsePressure),
+      nomadicScalePressure: round2(nomadicScalePressure),
+      largeBandFissionPressure: round2(largeBandFissionPressure),
+      rangeSaturation: round2(band.rangeSaturation?.saturationPressure ?? 0),
+      knowledgeSaturation: round2(knowledgeSaturation),
+      frontierOpportunity: round2(frontierOpportunity),
+      pressureSignal: round2(pressureSignal),
+      dangerPenalty: round2(dangerPenalty),
+      splitPressure: demographicState.splitPressure,
+      splitPressureThreshold: SPLIT_PRESSURE_THRESHOLD,
+      minimumSplitPopulation: MINIMUM_SPLIT_POPULATION,
+      cooldownElapsed: hasFissionCooldownElapsed(world.time, band, population),
+      ticksSinceLastFission: latestFission === undefined
+        ? undefined
+        : Number(world.time.tick) - Number(latestFission.tick),
+      requiredCooldownTicks: getRequiredFissionCooldownTicks(population),
+      bandCount: Object.keys(world.bands).length,
+      maxBands: MAX_BANDS,
+      fissionTargetEvaluated: shouldEvaluateFissionTarget,
+      fissionTargetCandidatesConsidered: shouldEvaluateFissionTarget
+        ? getFissionTargetRecordIds(band, contextCache).length
+        : 0,
+      viableFrontierTileId: viableFrontier?.tileId,
+      viableFrontierScore: viableFrontier?.score,
+      crisisBreakawayEligible,
+      deferredReasonType: deferredReason === undefined ? undefined : String(deferredReason.type),
+      projectedDaughterPopulation: getDaughterPopulation(roundedPopulation),
+      daughterMinPopulation: DAUGHTER_MIN_POPULATION,
+      eligible,
+    });
+  }
 
   return {
     demography: demographicState,
@@ -638,10 +715,7 @@ function computeBandDemography(
     localUsePressure: currentUsePressure,
     comfortablePopulation,
     viableFrontier,
-    shouldCreateDaughter:
-      deferredReason === undefined &&
-      (demographicState.splitPressure >= SPLIT_PRESSURE_THRESHOLD || crisisBreakawayCreatesDaughter) &&
-      hasFissionCooldownElapsed(world.time, band, population),
+    shouldCreateDaughter: eligible && !isFissionSuppressedForAudit(),
     deferredReason,
   };
 }
@@ -2227,16 +2301,36 @@ function makeFissionTrace(
   };
 }
 
+function getRequiredFissionCooldownTicks(population: number): number {
+  return population >= 300
+    ? MEGA_BAND_FISSION_COOLDOWN_TICKS
+    : population >= 150
+      ? LARGE_BAND_FISSION_COOLDOWN_TICKS
+      : FISSION_COOLDOWN_TICKS;
+}
+
 function hasFissionCooldownElapsed(time: WorldTime, band: Band, population: number): boolean {
   const latestFission = band.fissionEvents[band.fissionEvents.length - 1];
-  const requiredCooldown =
-    population >= 300
-      ? MEGA_BAND_FISSION_COOLDOWN_TICKS
-      : population >= 150
-        ? LARGE_BAND_FISSION_COOLDOWN_TICKS
-        : FISSION_COOLDOWN_TICKS;
+  const requiredCooldown = getRequiredFissionCooldownTicks(population);
 
   return latestFission === undefined || time.tick - latestFission.tick >= requiredCooldown;
+}
+
+// CORRECTION-14 audit helper: the uncapped mean raw support over the last four
+// seasons — the YEAR the annual demographic step integrates. Read-only; used by
+// the audit record and by the annual nutrition read (see seasonalSurvival.ts).
+function getAnnualMeanRawSupport(support: SeasonalSupportState | undefined): number {
+  const samples = support?.recentSamples;
+
+  if (samples === undefined || samples.length === 0) {
+    return 1;
+  }
+
+  const window = samples.slice(-4);
+
+  return round4(
+    window.reduce((sum, entry) => sum + Math.max(0, entry.rawSupportRatio), 0) / window.length,
+  );
 }
 
 function getComfortablePopulation(
