@@ -281,6 +281,19 @@ export interface WorldAuditOptions {
   // conservative path. The bias only scores band-known underused-habitat opportunities
   // with route/ford/edge/side-country evidence. Never reads truth richness.
   readonly daughterColonizationFissionBiasEnabled?: boolean;
+  // CORRECTION-17 §17 — control-arm switches for the frontier-exploration matrix. BOTH
+  // are undefined in every normal world, and both are read at exactly one place each in
+  // `expedition.ts`, so with them undefined the production path is byte-identical to a
+  // build without them (the §22 "audit hooks inert when disabled" requirement).
+  //
+  // false => the band never raises an exploratory party. This is the control arm that
+  // isolates whether the enabled arm's advantage comes from RETURNED KNOWLEDGE: nothing
+  // else about the world, the yields, the demography or the fission thresholds differs.
+  readonly frontierExplorationEnabled?: boolean;
+  // true => every exploratory party is declared lost at the moment it would otherwise
+  // begin its return. It walked, it observed, and none of it ever reaches the band. This
+  // is the §11 control proving that a lost party transfers no knowledge.
+  readonly frontierExplorationAlwaysLost?: boolean;
 }
 
 export interface WorldState {

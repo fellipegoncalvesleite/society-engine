@@ -1,0 +1,69 @@
+{
+  "audit": "annualNutritionLikeForLike",
+  "checkpoint": "CORRECTION-17 §4",
+  "supersedes": {
+    "script": "scripts/candidateRepairIsolationAudit.mjs",
+    "claim": "A_annualNutritionSampling",
+    "why": "That claim compares annual mean seasonal food stress (one term) against foodDemographicPressure (a four-term composite). The two are different quantities by construction, so their numeric difference is NOT evidence of demographic overstatement and must not be cited as such."
+  },
+  "likeForLikeClaim": "stored annual nutrition output == exact reconstruction from the same four intended seasonal samples",
+  "measuredIndependently": [
+    "annual mean currentFoodStress",
+    "annual mean raw support ratio",
+    "recovery share over the same four samples",
+    "nutritional surplus over the same four samples",
+    "chronic food stress under the exact production formula",
+    "foodDemographicPressure reconstructed from those exact components"
+  ],
+  "perSeed": [
+    {
+      "seed": "map2_rich",
+      "map": "map2",
+      "comparisons": 166,
+      "mismatches": 0,
+      "exactMatch": true
+    },
+    {
+      "seed": "map2_rich_small",
+      "map": "map2",
+      "comparisons": 124,
+      "mismatches": 0,
+      "exactMatch": true
+    },
+    {
+      "seed": "map1_default",
+      "map": "map1",
+      "comparisons": 615,
+      "mismatches": 0,
+      "exactMatch": true
+    }
+  ],
+  "totalComparisons": 905,
+  "totalMismatches": 0,
+  "reconstructionExact": true,
+  "mismatchExamples": [],
+  "behavioralConsumerSeparation": {
+    "claim": "every behavioral consumer still uses SEASONAL nutrition",
+    "annualConsumers": [
+      "src/sim/agents/demography.ts"
+    ],
+    "annualIsDemographyOnly": true,
+    "behavioralLeak": [],
+    "seasonalConsumerCount": 11,
+    "seasonalConsumers": [
+      "src/sim/agents/adaptiveHuman.ts",
+      "src/sim/agents/campMovement.ts",
+      "src/sim/agents/chronicHardship.ts",
+      "src/sim/agents/dryMargin.ts",
+      "src/sim/agents/foragingAdaptation.ts",
+      "src/sim/agents/pressure.ts",
+      "src/sim/agents/socialContext.ts",
+      "src/sim/rules/bandDecision.ts",
+      "src/sim/rules/candidates/resourceScoutCandidate.ts",
+      "src/sim/rules/mobilityIntent.ts",
+      "src/ui/band/Technical.tsx"
+    ]
+  },
+  "productionCoefficientsChanged": false,
+  "verdict": "PASS"
+}

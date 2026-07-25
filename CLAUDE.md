@@ -68,6 +68,55 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-07-25 (DESTINATION KNOWLEDGE HORIZON / FRONTIER EXPLORATION CORRECTION-17: PROGRESS —
+  NOT ACCEPTED / DO NOT MERGE, branch checkpoint/frontier-exploration-knowledge-horizon-17
+  from CORRECTION-16's 1faa7c9 (parent d41c973, public-main ancestor 668763f verified).
+  main untouched at 668763f.
+
+  **THE ~9-TILE DESTINATION-KNOWLEDGE HORIZON IS NO LONGER THE BINDING LIMIT.** A new
+  expedition task family `frontier_exploration` (src/sim/agents/frontierExploration.ts, new;
+  lifecycle in expedition.ts) sends a party out on a BAND-KNOWN DIRECTIONAL HYPOTHESIS with
+  no destination tile, no remembered patch and no precomputed route. It discovers its route
+  one 4-adjacent physical step at a time, reserves return capacity at EVERY step, keeps its
+  observations party-local until it physically walks home, and writes residential knowledge
+  only through the canonical observeTileAndNearby writer. Measured: residential max known
+  distance 40.4 tiles ENABLED vs 28.8 DISABLED on identical seeds (baseline single-founder
+  probe was 7-11 tiles across 300 years). No existing cap was raised; no demography,
+  nutrition, yield, carrying-capacity or fission coefficient was touched.
+
+  **THE CHAIN DOES NOT CLOSE.** It breaks at exactly one link on 5/5 controlled seeds: L09,
+  opportunity evaluation over the newly known country. §15 was answered with measurement,
+  not assertion: non-overlapping candidates ARE known, ARE admitted to the candidate domain
+  and DO survive the candidate slice (795/795 band-years, stages S1-S3), but never win the
+  score. Across 7,186 non-overlapping candidates, the number that held a habitat advantage
+  exceeding their travel+risk penalty and lost anyway is ZERO (max advantage 0.094). A
+  strictly superior synthetic region (richness 1.0, water 1.0, risk 0) placed at distance
+  9-11 and 18-24 still did not win, because the winner's OWN observed richness is 0.93-1.0 —
+  the parent catchment is already at the ecological ceiling. Conclusion recorded as
+  `no_alternatives_materially_better_scoring_not_at_fault`. The travel-cost term was
+  therefore NOT tuned.
+
+  A REAL but UNREPAIRED defect was isolated and documented: collectOpportunityCandidates
+  appends knownFrontierTileIds (the only uncapped-distance path) into the same set as the
+  <=8-tile path and slices the union; the <=8 path alone supplies a mean 15.99 candidates
+  against the budget. A reserved-slot repair was implemented, measured to change NO outcome,
+  and REVERTED rather than merged on speculation.
+
+  ONE band field added: lastFrontierExplorationTick (the suppression window cannot be read
+  off the 6-slot recentExpeditionOutcomes LRU; 288 -> 153 explorations/300y once exact).
+  Two audit-only WorldAuditOptions added (frontierExplorationEnabled,
+  frontierExplorationAlwaysLost), both undefined in every normal world.
+
+  PASSED: build, TypeScript, graph 217/754 0 dup 0 dangling, import boundary, adaptation
+  boundary, context lifecycle, season-order invariance, deterministic benchmark,
+  fresh-process determinism, step-mode invariance on BOTH maps (fullCanonicalStateMatch),
+  food-receipt capture 1.000, annual-nutrition like-for-like (905 comparisons / 0
+  mismatches), C16 death-memory 5/5, C16 social exact-seam preserved, anti-omniscience
+  (622 breadcrumb steps all 4-adjacent, 0 leaks, 0 unknown anchors).
+  OPEN: a default-map population A/B effect under multi-seed re-measurement — blocking for
+  merge. NOT BUILT: everything in §3 scope exclusions. See docs/evidence/correction17/.)
+
+Previously updated:
   2026-07-25 (HUMAN VIABILITY / CAUSAL CLOSURE CORRECTION-16: PROGRESS — NOT ACCEPTED / DO NOT
   MERGE, branch checkpoint/human-viability-causal-closure-16 from CORRECTION-15's d41c973.
   main untouched at 668763f. This checkpoint completed the EVIDENCE-REPAIR half of its scope and

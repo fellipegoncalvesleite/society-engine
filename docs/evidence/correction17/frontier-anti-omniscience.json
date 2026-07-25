@@ -1,0 +1,63 @@
+{
+  "audit": "frontierAntiOmniscience",
+  "checkpoint": "CORRECTION-17 §7/§8/§11/§12, gate 24.17",
+  "staticA_forbiddenHiddenTruthReadsInTriggerAndHeading": {
+    "checked": [
+      "resourceProfile.foragingPotential",
+      "resourceProfile.baseRichness",
+      "resourceProfile.waterAccess",
+      "resourceProfile.aquaticPotential",
+      "plantPatches",
+      "faunaStock",
+      "aquaticStock",
+      "plantStock",
+      "getDepletionAdjustedRichness",
+      "computeTileYield",
+      "deriveSeasonalEffectiveYield",
+      "deriveBaseHabitatPotential",
+      "effectiveYield",
+      "carryingCapacity",
+      "shouldCreateDaughter",
+      "fissionTarget"
+    ],
+    "violations": [],
+    "pass": true
+  },
+  "staticB_forbiddenStockOrYieldImports": {
+    "checked": [
+      "./plantStock",
+      "./faunaStock",
+      "./plantPatches",
+      "./habitatYield",
+      "./carryingCapacity",
+      "./humanFoodSupport",
+      "./seasonalFoodReceipts",
+      "../world/depletion",
+      "./resourceEcologyFoundation"
+    ],
+    "violations": [],
+    "pass": true,
+    "note": "The module imports only core types, world generate/passability and agent types. It cannot read a stock or a yield because it cannot reach one."
+  },
+  "runtimeInvariants": {
+    "C1_plan_names_unobserved_tile": 0,
+    "C2_party_local_tile_leaked_to_residential": 0,
+    "C3_lost_party_knowledge_transferred": 0,
+    "C4_exploration_created_resource_memory": 0,
+    "C5_exploration_created_food_receipt": 0,
+    "D_non_adjacent_breadcrumb_step": 0
+  },
+  "anchorProvenance": {
+    "observed": 28,
+    "inferred": 28,
+    "self": 0,
+    "unknown": []
+  },
+  "observed": {
+    "plansInspected": 56,
+    "awayPartySamples": 56,
+    "breadcrumbStepsChecked": 622,
+    "lostPartiesObserved": 0
+  },
+  "verdict": "PASS"
+}

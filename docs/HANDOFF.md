@@ -181,6 +181,67 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### DESTINATION KNOWLEDGE HORIZON / FRONTIER EXPLORATION — CORRECTION-17 — PROGRESS, DO NOT MERGE
+
+**Branch** `checkpoint/frontier-exploration-knowledge-horizon-17`, from CORRECTION-16's
+`1faa7c9` (parent `d41c973`, public-main ancestor `668763f` verified present). `main`
+untouched at `668763f`. **Not pushed** — only PASS checkpoints are published.
+
+**The ~9-tile destination-knowledge horizon is no longer the binding limit.** Three
+consecutive checkpoints named it as the terminal blocker on multi-generation expansion.
+A fifth expedition task family, `frontier_exploration`
+(`src/sim/agents/frontierExploration.ts`, new; lifecycle in `expedition.ts`), removes it.
+
+The other four families all aim at a *remembered place*, so none can enter unknown country.
+This one sets out on a **band-known directional hypothesis** — heading, broad sector,
+band-known anchor, return budget — with **no destination tile, no remembered patch and no
+precomputed route.** It discovers its route one 4-adjacent physical step at a time from
+where its feet actually are, re-derives its remaining outward budget against the cost of
+retracing its own trail *at every step*, keeps every observation party-local until it
+physically walks home, and then writes residential knowledge only through the canonical
+`observeTileAndNearby` writer.
+
+Measured, identical seeds, `frontierExplorationEnabled` undefined vs `false`:
+
+```text
+residential max known distance  ENABLED 40.4 tiles   DISABLED 28.8 tiles
+single-founder baseline probe (unchanged code)      7-11 tiles across 300 years
+```
+
+**Anti-omniscience PASS.** 622 walked breadcrumb steps, every one 4-adjacent to its
+predecessor (no teleportation). 56 plans inspected: 28 anchored on observed tiles, 28 on the
+band's own bounded corridor *inference*, **0 unknown**. Zero party-local leaks, zero
+lost-party transfers, zero resource memories or food receipts created by observation. The
+module imports no stock, yield or harvest authority at all.
+
+**The lost-party control is the strongest evidence here.** Identical worlds, identical
+journeys, the only difference being whether anyone walked home: 129–152 parties lost,
+0 completed, 0 observations ever applied, residential horizon collapses to 21–31.
+
+**The chain does NOT close.** It breaks at exactly one link on 5/5 controlled seeds —
+**L09, opportunity evaluation over the newly known country.** §15 was answered with
+measurement rather than assertion:
+
+- non-overlapping candidates **are** known, **are** admitted to the candidate domain, and
+  **do** survive the candidate slice — 795/795 band-years (stages S1–S3);
+- but across **7,186** non-overlapping candidates, the number that held a habitat advantage
+  exceeding their travel+risk penalty and lost anyway is **zero** (max advantage 0.094);
+- a *strictly superior* synthetic region (richness 1.0, water 1.0, risk 0) placed at both
+  distance 18–24 and 9–11 still never won — because the winner's own observed richness is
+  0.93–1.0. **The parent catchment is already at the ecological ceiling.**
+
+Recorded verdict: `no_alternatives_materially_better_scoring_not_at_fault`. **Do not tune
+the travel-cost term on this evidence.**
+
+A genuine defect was isolated but deliberately **left unrepaired**:
+`collectOpportunityCandidates` appends `knownFrontierTileIds` (the only uncapped-distance
+path) into the same set as the ≤8-tile path and slices the union; the ≤8 path alone supplies
+a mean 15.99 candidates against the budget. A reserved-slot repair was written, measured to
+change **no** outcome, and reverted rather than merged on speculation. It is documented debt.
+
+**Open and blocking for merge:** a default-map A/B population effect (map1 consistently
+8 bands enabled vs 10 disabled across seeds). See `docs/evidence/correction17/FINDINGS.md` §9.
+
 ### HUMAN VIABILITY / CAUSAL CLOSURE — CORRECTION-16 — PROGRESS, DO NOT MERGE
 
 **Branch** `checkpoint/human-viability-causal-closure-16`, from CORRECTION-15's `d41c973`
@@ -7771,6 +7832,27 @@ exception; daughter colours related-but-distinct and never visually confusing.
 
 ## Checkpoint Log
 
+- **DESTINATION KNOWLEDGE HORIZON / FRONTIER EXPLORATION CORRECTION-17** — *2026-07-25,
+  PROGRESS — NOT ACCEPTED / DO NOT MERGE.* From CORRECTION-16's `1faa7c9`; `main` untouched at
+  `668763f`. Built the fifth expedition task family, `frontier_exploration`: a party that sets
+  out on a band-known **direction** instead of a destination, with no target tile, no remembered
+  patch and no precomputed route, discovering its route one 4-adjacent physical step at a time
+  and reserving the cost of retracing its own trail at every step. **The ~9-tile
+  destination-knowledge horizon that CORRECTION-14/15/16 all named as the terminal blocker is
+  removed as a limit** — residential max known distance 40.4 tiles enabled vs 28.8 disabled on
+  identical seeds, against a 7–11 tile single-founder baseline. Anti-omniscience PASS: 622
+  breadcrumb steps all 4-adjacent, 0 leaks, 0 unknown heading anchors, no stock/yield import in
+  the module at all. Lost-party control (129–152 lost, 0 completed) transfers nothing. Closed the
+  §4 annual-nutrition measurement debt with a like-for-like reconstruction: 905 comparisons,
+  0 mismatches, exact — and established that the superseded claim compared a one-term mean against
+  a four-term composite. **Chain does not close**: breaks at L09 on 5/5 seeds. Answered §15 with
+  measurement — non-overlapping candidates are known, admitted and survive the slice (795/795),
+  but of 7,186 such candidates **zero** held a habitat advantage exceeding their travel penalty
+  and lost; a strictly superior synthetic region still lost because the parent catchment is
+  already at the ecological ceiling. Isolated a real candidate-budget defect in
+  `collectOpportunityCandidates`, implemented a repair, measured it to change nothing, and
+  **reverted it** rather than merge on speculation. Open and blocking: a default-map A/B
+  population effect. See `docs/evidence/correction17/`.
 - **HUMAN VIABILITY, RECOVERY, ADAPTIVE RESILIENCE CORRECTION-15** — *2026-07-25, PROGRESS — DO
   NOT MERGE.* From `668763f`, with `222d3ec` as evidence/patch donor only. Independently
   re-proved all four CORRECTION-14 candidate repairs on this branch before porting them (annual

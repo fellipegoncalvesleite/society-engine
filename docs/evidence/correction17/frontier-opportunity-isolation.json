@@ -1,0 +1,1738 @@
+{
+  "audit": "frontierOpportunityIsolation",
+  "checkpoint": "CORRECTION-17 §15",
+  "question": "Does fission selection prefer destinations inside the parent catchment because NO ALTERNATIVES EXIST, or because the SCORING overvalues overlap?",
+  "bandYearTotals": {
+    "S1_knows_non_overlapping_tiles": 795,
+    "S2_non_overlapping_in_frontier_candidate_ids": 795,
+    "S3_survives_candidate_slice": 795,
+    "S4_passes_considered_as_target": 0,
+    "S5_wins_score": 0
+  },
+  "firstLossStage": "S5_scoring",
+  "headToHeadSamples": [
+    {
+      "year": 2,
+      "overlapping": {
+        "tileId": "tile:185:94",
+        "distance": 2,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.191,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.033,
+        "riskTerm": -0.054,
+        "total": 0.704
+      },
+      "nonOverlapping": {
+        "tileId": "tile:191:96",
+        "distance": 10,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.167,
+        "riskTerm": -0.084,
+        "total": 0.589
+      },
+      "winner": "overlapping",
+      "margin": -0.115,
+      "travelCostGap": -0.134,
+      "habitatGap": 0.049
+    },
+    {
+      "year": 3,
+      "overlapping": {
+        "tileId": "tile:185:94",
+        "distance": 4,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.191,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.067,
+        "riskTerm": -0.054,
+        "total": 0.671
+      },
+      "nonOverlapping": {
+        "tileId": "tile:192:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.089,
+        "total": 0.601
+      },
+      "winner": "overlapping",
+      "margin": -0.07,
+      "travelCostGap": -0.083,
+      "habitatGap": 0.049
+    },
+    {
+      "year": 4,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 4,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.067,
+        "riskTerm": -0.09,
+        "total": 0.683
+      },
+      "nonOverlapping": {
+        "tileId": "tile:193:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.091,
+        "total": 0.599
+      },
+      "winner": "overlapping",
+      "margin": -0.084,
+      "travelCostGap": -0.083,
+      "habitatGap": 0
+    },
+    {
+      "year": 5,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 8,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.133,
+        "riskTerm": -0.09,
+        "total": 0.616
+      },
+      "nonOverlapping": {
+        "tileId": "tile:191:94",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.09,
+        "total": 0.6
+      },
+      "winner": "overlapping",
+      "margin": -0.016,
+      "travelCostGap": -0.017,
+      "habitatGap": 0
+    },
+    {
+      "year": 6,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 6,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.1,
+        "riskTerm": -0.09,
+        "total": 0.65
+      },
+      "nonOverlapping": {
+        "tileId": "tile:191:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.084,
+        "total": 0.606
+      },
+      "winner": "overlapping",
+      "margin": -0.044,
+      "travelCostGap": -0.05,
+      "habitatGap": 0
+    },
+    {
+      "year": 7,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.09,
+        "total": 0.7
+      },
+      "nonOverlapping": {
+        "tileId": "tile:194:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.093,
+        "total": 0.597
+      },
+      "winner": "overlapping",
+      "margin": -0.103,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 2,
+      "overlapping": {
+        "tileId": "tile:185:94",
+        "distance": 2,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.191,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.033,
+        "riskTerm": -0.054,
+        "total": 0.704
+      },
+      "nonOverlapping": {
+        "tileId": "tile:191:96",
+        "distance": 10,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.167,
+        "riskTerm": -0.084,
+        "total": 0.589
+      },
+      "winner": "overlapping",
+      "margin": -0.115,
+      "travelCostGap": -0.134,
+      "habitatGap": 0.049
+    },
+    {
+      "year": 3,
+      "overlapping": {
+        "tileId": "tile:185:94",
+        "distance": 4,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.191,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.067,
+        "riskTerm": -0.054,
+        "total": 0.671
+      },
+      "nonOverlapping": {
+        "tileId": "tile:192:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.089,
+        "total": 0.601
+      },
+      "winner": "overlapping",
+      "margin": -0.07,
+      "travelCostGap": -0.083,
+      "habitatGap": 0.049
+    },
+    {
+      "year": 4,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.09,
+        "total": 0.7
+      },
+      "nonOverlapping": {
+        "tileId": "tile:194:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.093,
+        "total": 0.597
+      },
+      "winner": "overlapping",
+      "margin": -0.103,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 5,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.09,
+        "total": 0.7
+      },
+      "nonOverlapping": {
+        "tileId": "tile:194:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.093,
+        "total": 0.597
+      },
+      "winner": "overlapping",
+      "margin": -0.103,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 6,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.09,
+        "total": 0.7
+      },
+      "nonOverlapping": {
+        "tileId": "tile:194:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.093,
+        "total": 0.597
+      },
+      "winner": "overlapping",
+      "margin": -0.103,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 7,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.09,
+        "total": 0.7
+      },
+      "nonOverlapping": {
+        "tileId": "tile:194:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.093,
+        "total": 0.597
+      },
+      "winner": "overlapping",
+      "margin": -0.103,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 2,
+      "overlapping": {
+        "tileId": "tile:185:94",
+        "distance": 2,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.191,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.033,
+        "riskTerm": -0.054,
+        "total": 0.704
+      },
+      "nonOverlapping": {
+        "tileId": "tile:191:96",
+        "distance": 10,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.167,
+        "riskTerm": -0.084,
+        "total": 0.589
+      },
+      "winner": "overlapping",
+      "margin": -0.115,
+      "travelCostGap": -0.134,
+      "habitatGap": 0.049
+    },
+    {
+      "year": 3,
+      "overlapping": {
+        "tileId": "tile:185:94",
+        "distance": 4,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.191,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.067,
+        "riskTerm": -0.054,
+        "total": 0.671
+      },
+      "nonOverlapping": {
+        "tileId": "tile:192:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.089,
+        "total": 0.601
+      },
+      "winner": "overlapping",
+      "margin": -0.07,
+      "travelCostGap": -0.083,
+      "habitatGap": 0.049
+    },
+    {
+      "year": 4,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.09,
+        "total": 0.7
+      },
+      "nonOverlapping": {
+        "tileId": "tile:194:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.093,
+        "total": 0.597
+      },
+      "winner": "overlapping",
+      "margin": -0.103,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 5,
+      "overlapping": {
+        "tileId": "tile:184:93",
+        "distance": 2,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.2,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.033,
+        "riskTerm": -0.05,
+        "total": 0.717
+      },
+      "nonOverlapping": {
+        "tileId": "tile:192:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.089,
+        "total": 0.601
+      },
+      "winner": "overlapping",
+      "margin": -0.116,
+      "travelCostGap": -0.117,
+      "habitatGap": 0.04
+    },
+    {
+      "year": 6,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.09,
+        "total": 0.7
+      },
+      "nonOverlapping": {
+        "tileId": "tile:194:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.093,
+        "total": 0.597
+      },
+      "winner": "overlapping",
+      "margin": -0.103,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 7,
+      "overlapping": {
+        "tileId": "tile:184:93",
+        "distance": 2,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.2,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.033,
+        "riskTerm": -0.05,
+        "total": 0.717
+      },
+      "nonOverlapping": {
+        "tileId": "tile:192:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.089,
+        "total": 0.601
+      },
+      "winner": "overlapping",
+      "margin": -0.116,
+      "travelCostGap": -0.117,
+      "habitatGap": 0.04
+    },
+    {
+      "year": 2,
+      "overlapping": {
+        "tileId": "tile:185:94",
+        "distance": 2,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.191,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.033,
+        "riskTerm": -0.054,
+        "total": 0.704
+      },
+      "nonOverlapping": {
+        "tileId": "tile:191:96",
+        "distance": 10,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.167,
+        "riskTerm": -0.084,
+        "total": 0.589
+      },
+      "winner": "overlapping",
+      "margin": -0.115,
+      "travelCostGap": -0.134,
+      "habitatGap": 0.049
+    },
+    {
+      "year": 3,
+      "overlapping": {
+        "tileId": "tile:185:94",
+        "distance": 4,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.191,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.067,
+        "riskTerm": -0.054,
+        "total": 0.671
+      },
+      "nonOverlapping": {
+        "tileId": "tile:192:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.089,
+        "total": 0.601
+      },
+      "winner": "overlapping",
+      "margin": -0.07,
+      "travelCostGap": -0.083,
+      "habitatGap": 0.049
+    },
+    {
+      "year": 4,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.09,
+        "total": 0.7
+      },
+      "nonOverlapping": {
+        "tileId": "tile:194:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.093,
+        "total": 0.597
+      },
+      "winner": "overlapping",
+      "margin": -0.103,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 5,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.09,
+        "total": 0.7
+      },
+      "nonOverlapping": {
+        "tileId": "tile:194:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.093,
+        "total": 0.597
+      },
+      "winner": "overlapping",
+      "margin": -0.103,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 6,
+      "overlapping": {
+        "tileId": "tile:191:96",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.084,
+        "total": 0.706
+      },
+      "nonOverlapping": {
+        "tileId": "tile:197:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.094,
+        "total": 0.596
+      },
+      "winner": "overlapping",
+      "margin": -0.11,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 7,
+      "overlapping": {
+        "tileId": "tile:192:97",
+        "distance": 2,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.033,
+        "riskTerm": -0.084,
+        "total": 0.723
+      },
+      "nonOverlapping": {
+        "tileId": "tile:198:98",
+        "distance": 9,
+        "potentialTerm": 0.399,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.084,
+        "total": 0.605
+      },
+      "winner": "overlapping",
+      "margin": -0.118,
+      "travelCostGap": -0.117,
+      "habitatGap": -0.001
+    },
+    {
+      "year": 2,
+      "overlapping": {
+        "tileId": "tile:185:94",
+        "distance": 2,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.191,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.033,
+        "riskTerm": -0.054,
+        "total": 0.704
+      },
+      "nonOverlapping": {
+        "tileId": "tile:191:96",
+        "distance": 10,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.167,
+        "riskTerm": -0.084,
+        "total": 0.589
+      },
+      "winner": "overlapping",
+      "margin": -0.115,
+      "travelCostGap": -0.134,
+      "habitatGap": 0.049
+    },
+    {
+      "year": 3,
+      "overlapping": {
+        "tileId": "tile:185:94",
+        "distance": 4,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.191,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.067,
+        "riskTerm": -0.054,
+        "total": 0.671
+      },
+      "nonOverlapping": {
+        "tileId": "tile:192:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.089,
+        "total": 0.601
+      },
+      "winner": "overlapping",
+      "margin": -0.07,
+      "travelCostGap": -0.083,
+      "habitatGap": 0.049
+    },
+    {
+      "year": 4,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.09,
+        "total": 0.7
+      },
+      "nonOverlapping": {
+        "tileId": "tile:194:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.093,
+        "total": 0.597
+      },
+      "winner": "overlapping",
+      "margin": -0.103,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 5,
+      "overlapping": {
+        "tileId": "tile:191:93",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.09,
+        "total": 0.7
+      },
+      "nonOverlapping": {
+        "tileId": "tile:194:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.093,
+        "total": 0.597
+      },
+      "winner": "overlapping",
+      "margin": -0.103,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 6,
+      "overlapping": {
+        "tileId": "tile:191:96",
+        "distance": 3,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.05,
+        "riskTerm": -0.084,
+        "total": 0.706
+      },
+      "nonOverlapping": {
+        "tileId": "tile:197:96",
+        "distance": 9,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.094,
+        "total": 0.596
+      },
+      "winner": "overlapping",
+      "margin": -0.11,
+      "travelCostGap": -0.1,
+      "habitatGap": 0
+    },
+    {
+      "year": 7,
+      "overlapping": {
+        "tileId": "tile:192:97",
+        "distance": 2,
+        "potentialTerm": 0.4,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.033,
+        "riskTerm": -0.084,
+        "total": 0.723
+      },
+      "nonOverlapping": {
+        "tileId": "tile:198:98",
+        "distance": 9,
+        "potentialTerm": 0.399,
+        "waterTerm": 0.24,
+        "usePressureTerm": 0.2,
+        "travelCostTerm": -0.15,
+        "riskTerm": -0.084,
+        "total": 0.605
+      },
+      "winner": "overlapping",
+      "margin": -0.118,
+      "travelCostGap": -0.117,
+      "habitatGap": -0.001
+    }
+  ],
+  "headToHeadNonOverlappingWins": 0,
+  "headToHeadTotal": 30,
+  "nonOverlappingCandidatesExamined": 7186,
+  "frontierCandidateShouldHaveWon": 0,
+  "maxHabitatAdvantageObserved": 0.094,
+  "overlapVerdict": "no_alternatives_materially_better_scoring_not_at_fault",
+  "perSeed": [
+    {
+      "seed": "c17:chain:s1",
+      "stages": {
+        "S1_knows_non_overlapping_tiles": 159,
+        "S2_non_overlapping_in_frontier_candidate_ids": 159,
+        "S3_survives_candidate_slice": 159,
+        "S4_passes_considered_as_target": 0,
+        "S5_wins_score": 0
+      },
+      "headToHead": [
+        {
+          "year": 2,
+          "overlapping": {
+            "tileId": "tile:185:94",
+            "distance": 2,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.191,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.033,
+            "riskTerm": -0.054,
+            "total": 0.704
+          },
+          "nonOverlapping": {
+            "tileId": "tile:191:96",
+            "distance": 10,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.167,
+            "riskTerm": -0.084,
+            "total": 0.589
+          },
+          "winner": "overlapping",
+          "margin": -0.115,
+          "travelCostGap": -0.134,
+          "habitatGap": 0.049
+        },
+        {
+          "year": 3,
+          "overlapping": {
+            "tileId": "tile:185:94",
+            "distance": 4,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.191,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.067,
+            "riskTerm": -0.054,
+            "total": 0.671
+          },
+          "nonOverlapping": {
+            "tileId": "tile:192:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.089,
+            "total": 0.601
+          },
+          "winner": "overlapping",
+          "margin": -0.07,
+          "travelCostGap": -0.083,
+          "habitatGap": 0.049
+        },
+        {
+          "year": 4,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 4,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.067,
+            "riskTerm": -0.09,
+            "total": 0.683
+          },
+          "nonOverlapping": {
+            "tileId": "tile:193:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.091,
+            "total": 0.599
+          },
+          "winner": "overlapping",
+          "margin": -0.084,
+          "travelCostGap": -0.083,
+          "habitatGap": 0
+        },
+        {
+          "year": 5,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 8,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.133,
+            "riskTerm": -0.09,
+            "total": 0.616
+          },
+          "nonOverlapping": {
+            "tileId": "tile:191:94",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.09,
+            "total": 0.6
+          },
+          "winner": "overlapping",
+          "margin": -0.016,
+          "travelCostGap": -0.017,
+          "habitatGap": 0
+        },
+        {
+          "year": 6,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 6,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.1,
+            "riskTerm": -0.09,
+            "total": 0.65
+          },
+          "nonOverlapping": {
+            "tileId": "tile:191:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.084,
+            "total": 0.606
+          },
+          "winner": "overlapping",
+          "margin": -0.044,
+          "travelCostGap": -0.05,
+          "habitatGap": 0
+        },
+        {
+          "year": 7,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.09,
+            "total": 0.7
+          },
+          "nonOverlapping": {
+            "tileId": "tile:194:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.093,
+            "total": 0.597
+          },
+          "winner": "overlapping",
+          "margin": -0.103,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        }
+      ],
+      "distribution": {
+        "samples": 1630,
+        "maxHabitatGap": 0.049,
+        "maxNetGap": -0.016,
+        "frontierCandidateShouldHaveWon": 0,
+        "worstMaskedGap": null
+      }
+    },
+    {
+      "seed": "c17:chain:s2",
+      "stages": {
+        "S1_knows_non_overlapping_tiles": 159,
+        "S2_non_overlapping_in_frontier_candidate_ids": 159,
+        "S3_survives_candidate_slice": 159,
+        "S4_passes_considered_as_target": 0,
+        "S5_wins_score": 0
+      },
+      "headToHead": [
+        {
+          "year": 2,
+          "overlapping": {
+            "tileId": "tile:185:94",
+            "distance": 2,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.191,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.033,
+            "riskTerm": -0.054,
+            "total": 0.704
+          },
+          "nonOverlapping": {
+            "tileId": "tile:191:96",
+            "distance": 10,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.167,
+            "riskTerm": -0.084,
+            "total": 0.589
+          },
+          "winner": "overlapping",
+          "margin": -0.115,
+          "travelCostGap": -0.134,
+          "habitatGap": 0.049
+        },
+        {
+          "year": 3,
+          "overlapping": {
+            "tileId": "tile:185:94",
+            "distance": 4,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.191,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.067,
+            "riskTerm": -0.054,
+            "total": 0.671
+          },
+          "nonOverlapping": {
+            "tileId": "tile:192:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.089,
+            "total": 0.601
+          },
+          "winner": "overlapping",
+          "margin": -0.07,
+          "travelCostGap": -0.083,
+          "habitatGap": 0.049
+        },
+        {
+          "year": 4,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.09,
+            "total": 0.7
+          },
+          "nonOverlapping": {
+            "tileId": "tile:194:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.093,
+            "total": 0.597
+          },
+          "winner": "overlapping",
+          "margin": -0.103,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        },
+        {
+          "year": 5,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.09,
+            "total": 0.7
+          },
+          "nonOverlapping": {
+            "tileId": "tile:194:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.093,
+            "total": 0.597
+          },
+          "winner": "overlapping",
+          "margin": -0.103,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        },
+        {
+          "year": 6,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.09,
+            "total": 0.7
+          },
+          "nonOverlapping": {
+            "tileId": "tile:194:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.093,
+            "total": 0.597
+          },
+          "winner": "overlapping",
+          "margin": -0.103,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        },
+        {
+          "year": 7,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.09,
+            "total": 0.7
+          },
+          "nonOverlapping": {
+            "tileId": "tile:194:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.093,
+            "total": 0.597
+          },
+          "winner": "overlapping",
+          "margin": -0.103,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        }
+      ],
+      "distribution": {
+        "samples": 1474,
+        "maxHabitatGap": 0.094,
+        "maxNetGap": -0.029,
+        "frontierCandidateShouldHaveWon": 0,
+        "worstMaskedGap": null
+      }
+    },
+    {
+      "seed": "c17:chain:s3",
+      "stages": {
+        "S1_knows_non_overlapping_tiles": 159,
+        "S2_non_overlapping_in_frontier_candidate_ids": 159,
+        "S3_survives_candidate_slice": 159,
+        "S4_passes_considered_as_target": 0,
+        "S5_wins_score": 0
+      },
+      "headToHead": [
+        {
+          "year": 2,
+          "overlapping": {
+            "tileId": "tile:185:94",
+            "distance": 2,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.191,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.033,
+            "riskTerm": -0.054,
+            "total": 0.704
+          },
+          "nonOverlapping": {
+            "tileId": "tile:191:96",
+            "distance": 10,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.167,
+            "riskTerm": -0.084,
+            "total": 0.589
+          },
+          "winner": "overlapping",
+          "margin": -0.115,
+          "travelCostGap": -0.134,
+          "habitatGap": 0.049
+        },
+        {
+          "year": 3,
+          "overlapping": {
+            "tileId": "tile:185:94",
+            "distance": 4,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.191,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.067,
+            "riskTerm": -0.054,
+            "total": 0.671
+          },
+          "nonOverlapping": {
+            "tileId": "tile:192:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.089,
+            "total": 0.601
+          },
+          "winner": "overlapping",
+          "margin": -0.07,
+          "travelCostGap": -0.083,
+          "habitatGap": 0.049
+        },
+        {
+          "year": 4,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.09,
+            "total": 0.7
+          },
+          "nonOverlapping": {
+            "tileId": "tile:194:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.093,
+            "total": 0.597
+          },
+          "winner": "overlapping",
+          "margin": -0.103,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        },
+        {
+          "year": 5,
+          "overlapping": {
+            "tileId": "tile:184:93",
+            "distance": 2,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.2,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.033,
+            "riskTerm": -0.05,
+            "total": 0.717
+          },
+          "nonOverlapping": {
+            "tileId": "tile:192:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.089,
+            "total": 0.601
+          },
+          "winner": "overlapping",
+          "margin": -0.116,
+          "travelCostGap": -0.117,
+          "habitatGap": 0.04
+        },
+        {
+          "year": 6,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.09,
+            "total": 0.7
+          },
+          "nonOverlapping": {
+            "tileId": "tile:194:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.093,
+            "total": 0.597
+          },
+          "winner": "overlapping",
+          "margin": -0.103,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        },
+        {
+          "year": 7,
+          "overlapping": {
+            "tileId": "tile:184:93",
+            "distance": 2,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.2,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.033,
+            "riskTerm": -0.05,
+            "total": 0.717
+          },
+          "nonOverlapping": {
+            "tileId": "tile:192:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.089,
+            "total": 0.601
+          },
+          "winner": "overlapping",
+          "margin": -0.116,
+          "travelCostGap": -0.117,
+          "habitatGap": 0.04
+        }
+      ],
+      "distribution": {
+        "samples": 1240,
+        "maxHabitatGap": 0.049,
+        "maxNetGap": -0.035,
+        "frontierCandidateShouldHaveWon": 0,
+        "worstMaskedGap": null
+      }
+    },
+    {
+      "seed": "c17:chain:s4",
+      "stages": {
+        "S1_knows_non_overlapping_tiles": 159,
+        "S2_non_overlapping_in_frontier_candidate_ids": 159,
+        "S3_survives_candidate_slice": 159,
+        "S4_passes_considered_as_target": 0,
+        "S5_wins_score": 0
+      },
+      "headToHead": [
+        {
+          "year": 2,
+          "overlapping": {
+            "tileId": "tile:185:94",
+            "distance": 2,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.191,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.033,
+            "riskTerm": -0.054,
+            "total": 0.704
+          },
+          "nonOverlapping": {
+            "tileId": "tile:191:96",
+            "distance": 10,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.167,
+            "riskTerm": -0.084,
+            "total": 0.589
+          },
+          "winner": "overlapping",
+          "margin": -0.115,
+          "travelCostGap": -0.134,
+          "habitatGap": 0.049
+        },
+        {
+          "year": 3,
+          "overlapping": {
+            "tileId": "tile:185:94",
+            "distance": 4,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.191,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.067,
+            "riskTerm": -0.054,
+            "total": 0.671
+          },
+          "nonOverlapping": {
+            "tileId": "tile:192:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.089,
+            "total": 0.601
+          },
+          "winner": "overlapping",
+          "margin": -0.07,
+          "travelCostGap": -0.083,
+          "habitatGap": 0.049
+        },
+        {
+          "year": 4,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.09,
+            "total": 0.7
+          },
+          "nonOverlapping": {
+            "tileId": "tile:194:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.093,
+            "total": 0.597
+          },
+          "winner": "overlapping",
+          "margin": -0.103,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        },
+        {
+          "year": 5,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.09,
+            "total": 0.7
+          },
+          "nonOverlapping": {
+            "tileId": "tile:194:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.093,
+            "total": 0.597
+          },
+          "winner": "overlapping",
+          "margin": -0.103,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        },
+        {
+          "year": 6,
+          "overlapping": {
+            "tileId": "tile:191:96",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.084,
+            "total": 0.706
+          },
+          "nonOverlapping": {
+            "tileId": "tile:197:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.094,
+            "total": 0.596
+          },
+          "winner": "overlapping",
+          "margin": -0.11,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        },
+        {
+          "year": 7,
+          "overlapping": {
+            "tileId": "tile:192:97",
+            "distance": 2,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.033,
+            "riskTerm": -0.084,
+            "total": 0.723
+          },
+          "nonOverlapping": {
+            "tileId": "tile:198:98",
+            "distance": 9,
+            "potentialTerm": 0.399,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.084,
+            "total": 0.605
+          },
+          "winner": "overlapping",
+          "margin": -0.118,
+          "travelCostGap": -0.117,
+          "habitatGap": -0.001
+        }
+      ],
+      "distribution": {
+        "samples": 1372,
+        "maxHabitatGap": 0.049,
+        "maxNetGap": -0.016,
+        "frontierCandidateShouldHaveWon": 0,
+        "worstMaskedGap": null
+      }
+    },
+    {
+      "seed": "c17:chain:s5",
+      "stages": {
+        "S1_knows_non_overlapping_tiles": 159,
+        "S2_non_overlapping_in_frontier_candidate_ids": 159,
+        "S3_survives_candidate_slice": 159,
+        "S4_passes_considered_as_target": 0,
+        "S5_wins_score": 0
+      },
+      "headToHead": [
+        {
+          "year": 2,
+          "overlapping": {
+            "tileId": "tile:185:94",
+            "distance": 2,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.191,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.033,
+            "riskTerm": -0.054,
+            "total": 0.704
+          },
+          "nonOverlapping": {
+            "tileId": "tile:191:96",
+            "distance": 10,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.167,
+            "riskTerm": -0.084,
+            "total": 0.589
+          },
+          "winner": "overlapping",
+          "margin": -0.115,
+          "travelCostGap": -0.134,
+          "habitatGap": 0.049
+        },
+        {
+          "year": 3,
+          "overlapping": {
+            "tileId": "tile:185:94",
+            "distance": 4,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.191,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.067,
+            "riskTerm": -0.054,
+            "total": 0.671
+          },
+          "nonOverlapping": {
+            "tileId": "tile:192:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.089,
+            "total": 0.601
+          },
+          "winner": "overlapping",
+          "margin": -0.07,
+          "travelCostGap": -0.083,
+          "habitatGap": 0.049
+        },
+        {
+          "year": 4,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.09,
+            "total": 0.7
+          },
+          "nonOverlapping": {
+            "tileId": "tile:194:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.093,
+            "total": 0.597
+          },
+          "winner": "overlapping",
+          "margin": -0.103,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        },
+        {
+          "year": 5,
+          "overlapping": {
+            "tileId": "tile:191:93",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.09,
+            "total": 0.7
+          },
+          "nonOverlapping": {
+            "tileId": "tile:194:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.093,
+            "total": 0.597
+          },
+          "winner": "overlapping",
+          "margin": -0.103,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        },
+        {
+          "year": 6,
+          "overlapping": {
+            "tileId": "tile:191:96",
+            "distance": 3,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.05,
+            "riskTerm": -0.084,
+            "total": 0.706
+          },
+          "nonOverlapping": {
+            "tileId": "tile:197:96",
+            "distance": 9,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.094,
+            "total": 0.596
+          },
+          "winner": "overlapping",
+          "margin": -0.11,
+          "travelCostGap": -0.1,
+          "habitatGap": 0
+        },
+        {
+          "year": 7,
+          "overlapping": {
+            "tileId": "tile:192:97",
+            "distance": 2,
+            "potentialTerm": 0.4,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.033,
+            "riskTerm": -0.084,
+            "total": 0.723
+          },
+          "nonOverlapping": {
+            "tileId": "tile:198:98",
+            "distance": 9,
+            "potentialTerm": 0.399,
+            "waterTerm": 0.24,
+            "usePressureTerm": 0.2,
+            "travelCostTerm": -0.15,
+            "riskTerm": -0.084,
+            "total": 0.605
+          },
+          "winner": "overlapping",
+          "margin": -0.118,
+          "travelCostGap": -0.117,
+          "habitatGap": -0.001
+        }
+      ],
+      "distribution": {
+        "samples": 1470,
+        "maxHabitatGap": 0.049,
+        "maxNetGap": -0.027,
+        "frontierCandidateShouldHaveWon": 0,
+        "worstMaskedGap": null
+      }
+    }
+  ]
+}

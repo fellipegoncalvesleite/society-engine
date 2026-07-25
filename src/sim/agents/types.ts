@@ -905,7 +905,19 @@ export type ExpeditionTaskKind =
   // Verify a remembered but stale/uncertain distant patch (information only).
   | "distant_patch_verification"
   // Read a route/crossing toward distant country (information only).
-  | "route_reconnaissance";
+  //
+  // CORRECTION-17 §6 — this task VERIFIES OR RE-WALKS COUNTRY THE BAND ALREADY KNOWS.
+  // Both its candidate families are band-known targets: a tile a previous party failed
+  // to reach, or a remembered patch whose ACCESS evidence is weak. It can therefore
+  // never extend the knowledge horizon, which is why `frontier_exploration` below is a
+  // distinct family and not a rename of this one.
+  | "route_reconnaissance"
+  // CORRECTION-17 §6 — walk out along a band-known DIRECTIONAL HYPOTHESIS into country
+  // the residential band does not yet know, discovering the route one physical step at a
+  // time, and bring home whatever was actually seen. Distinct from every task above:
+  // it has NO destination tile, NO remembered patch, and NO precomputed route. It is the
+  // only task family permitted to enter unknown country.
+  | "frontier_exploration";
 
 /** Bounded physical lifecycle of a party that is away from the residential camp. */
 export type ExpeditionPhase =
@@ -948,7 +960,19 @@ export type ExpeditionOutcomeReason =
   | "route_impassable"
   | "injury_forced_return"
   | "season_window_closed"
-  | "party_lost";
+  | "party_lost"
+  // CORRECTION-17 §9/§10 — frontier-exploration terminations. Every one is a physical
+  // reason a party stopped going outward; none of them is "success by timeout".
+  //
+  // The party reached the point where one more outward step would leave it unable to
+  // reserve a plausible walk home. It turned back deliberately, with whatever it had.
+  | "frontier_return_budget_reached"
+  // The party stood at its deepest point and every onward step was physically
+  // impassable or already walked — a barrier, not a budget.
+  | "frontier_barrier_blocked"
+  // The party walked out, saw only ordinary/poor country, and came home saying so.
+  // This is an HONEST NULL RESULT, not a failure of the machinery.
+  | "frontier_returned_ordinary_country";
 
 /**
  * EXPEDITIONARY-4 §8 — aggregate mobility-role counts a party was drawn from.
@@ -1044,6 +1068,19 @@ export interface ExpeditionRecord {
   readonly pendingKnowledgeRecord?: IntraSeasonTripRecord;
   /** Information the party is physically carrying home; unavailable to the band until return. */
   readonly carriedObservations: readonly ExpeditionObservation[];
+  /**
+   * CORRECTION-17 §8 — present ONLY on `frontier_exploration`. The directional
+   * hypothesis the party set out on. For this task family `targetTileId` is the plan's
+   * band-known ANCHOR and is explicitly NOT a destination; `routeTileIds` is not a
+   * precomputed path but the breadcrumb trail of tiles the party has ALREADY walked,
+   * appended one physical step at a time.
+   */
+  readonly frontierPlan?: FrontierExplorationPlan;
+  /**
+   * CORRECTION-17 §10 — the greatest grid distance from the origin camp this party has
+   * physically reached. Used for the return reserve and reported by the horizon audit.
+   */
+  readonly frontierDeepestReachTiles?: number;
   /** §13 — deliberate smoke-signal attempts this party made (bounded; may fail). */
   readonly signalAttempts?: readonly ExpeditionSignalAttempt[];
   readonly reasonIds: readonly ReasonId[];
@@ -1062,9 +1099,75 @@ export interface ExpeditionObservation {
     | "target_depleted"
     | "route_hazard"
     | "route_passable"
-    | "distant_feature";
+    | "distant_feature"
+    // CORRECTION-17 §12 — a frontier party physically stood on a tile the residential
+    // band did not know and looked around. It teaches EXISTENCE, broad terrain, broad
+    // water/relief visibility, passability experience and approximate risk — and
+    // nothing else. It never teaches stock quantity, plant classes, exploitation
+    // competence, food safety, recovery rates, future yield, seasonal calendars, or
+    // other bands. Resource knowledge still requires the existing observe/test/use path.
+    | "frontier_country_seen"
+    // The onward direction is physically blocked from a tile the party stood on.
+    | "frontier_barrier";
   readonly confidence: number;
   readonly observedDay: DayNumber;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CORRECTION-17 §8 — the frontier-exploration PLAN. A direction, not a destination.
+//
+// This is the whole anti-omniscience contract of the new task family. The plan is
+// built exclusively from band-known evidence (a remembered corridor heading, the edge
+// of known terrain, a broad relief/water cue physically visible from camp, inherited
+// directional memory, or bounded second-hand direction). It carries a HEADING, a broad
+// SECTOR, the band-known tile the heading was read FROM, and a return budget.
+//
+// It deliberately carries NO target tile, NO unseen resource tile, NO rich-habitat
+// tile and NO daughter target. The party discovers its route incrementally, one
+// physical step at a time, and may come home having found nothing.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Which band-known evidence produced the heading. Never hidden world truth. */
+export type FrontierExplorationBasis =
+  // Continuation of a remembered/inferred travel corridor.
+  | "corridor_continuation"
+  // The outer edge of the band's own known country (a known tile with unknown neighbours).
+  | "known_edge"
+  // A broad relief/vegetation band physically visible from the camp's viewshed.
+  | "visible_relief"
+  // A visible valley or water-margin direction.
+  | "water_margin"
+  // Directional memory inherited from a parent band (degraded, never a map).
+  | "inherited_heading"
+  // Bounded second-hand direction (a heading someone else reported, low confidence).
+  | "second_hand_direction";
+
+/** Broad 8-way sector label. A sector, never a tile. */
+export type FrontierExplorationSector = "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
+
+export interface FrontierExplorationPlan {
+  /** Unit heading derived from band-known directional evidence. */
+  readonly headingX: number;
+  readonly headingY: number;
+  /** The broad sector the party set out into. */
+  readonly sector: FrontierExplorationSector;
+  readonly basis: FrontierExplorationBasis;
+  /**
+   * The band-KNOWN tile the heading was read from (a corridor head, a known edge tile,
+   * or the camp itself). It is an ANCHOR, not a destination: the party normally walks
+   * straight past it into country nobody in the band has seen.
+   */
+  readonly anchorTileId: TileId;
+  /** Confidence in the directional hypothesis itself (not in what lies out there). */
+  readonly headingConfidence: number;
+  /** Outward tiles the party may walk before the return reserve binds. */
+  readonly outboundBudgetTiles: number;
+  /** Tiles of walking capacity held back so the party can plausibly get home. */
+  readonly returnReserveTiles: number;
+  /** Literal non-claims — asserted by construction, checked by the anti-omniscience audit. */
+  readonly noHiddenDestination: true;
+  readonly noUnseenTargetTile: true;
+  readonly noHiddenRichness: true;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -6144,6 +6247,13 @@ export interface Band {
   // EXPEDITIONARY-1: bounded terminal history (cap EXPEDITION_OUTCOME_CAP) — what
   // came back, what failed and why. Read by the candidate family as lived evidence.
   readonly recentExpeditionOutcomes?: readonly ExpeditionOutcomeSummary[];
+  // CORRECTION-17 §20: the tick this band last SENT an exploratory party. One scalar, so
+  // the "one honest look per window" suppression is exact. It cannot be read off
+  // `recentExpeditionOutcomes`, which is an LRU capped at EXPEDITION_OUTCOME_CAP entries:
+  // six ordinary expeditions concluding inside the window silently evict the frontier
+  // record and the band explores again early. Storing the tick makes the window a real
+  // bound rather than a probabilistic one, at O(1) state.
+  readonly lastFrontierExplorationTick?: TickNumber;
   // EXPEDITIONARY-4 §13: smoke signals the RESIDENTIAL camp physically received
   // (bounded, capped, expiring). The only pre-return channel from an away party.
   readonly receivedSmokeSignals?: readonly ReceivedSmokeSignal[];

@@ -50,6 +50,15 @@ import {
   type VerificationObservationKind,
 } from "./resourceKnowledge";
 import { depositFoodReceipts } from "./seasonalFoodReceipts";
+import {
+  buildFrontierCountryObservation,
+  buildFrontierPlan,
+  chooseNextFrontierStep,
+  deriveFrontierExplorationEligibility,
+  deriveFrontierHeading,
+  deriveOutwardTilesRemaining,
+  retainFrontierObservations,
+} from "./frontierExploration";
 import { observeTileAndNearby } from "./tileObservation";
 import {
   SIGNAL_ATTEMPT_CAP,
@@ -187,7 +196,14 @@ function deriveTilesPerDay(band: Band, expedition: ExpeditionRecord, currentTick
       ? "delayed_or_injured_party"
       : loadRatio > 0
         ? "loaded_return_party"
-        : expedition.taskKind === "distant_patch_verification" || expedition.taskKind === "route_reconnaissance"
+        : expedition.taskKind === "distant_patch_verification" ||
+            expedition.taskKind === "route_reconnaissance" ||
+            // CORRECTION-17 §7 — a frontier party travels light and carries no cargo, so
+            // it uses the SAME reconnaissance pace every other information party uses. It
+            // is not faster because the band is hungry: `urgency` enters the shared pace
+            // authority identically for all five task families, and this checkpoint adds
+            // no frontier-specific speed, stamina, or duration term anywhere.
+            expedition.taskKind === "frontier_exploration"
           ? "selected_reconnaissance_party"
           : "resource_expedition";
   const pace = deriveTravelPace(band, context, {
@@ -427,6 +443,135 @@ interface AdvanceResult {
   readonly receivedSignal?: ReceivedSmokeSignal;
 }
 
+/**
+ * CORRECTION-17 §9/§10/§13 — ONE outbound day of a frontier exploration.
+ *
+ * The party takes up to `tilesPerDay` SUCCESSIVE physical steps. Before each step it
+ * re-derives how much outward walking it may still afford while RESERVING enough
+ * capacity to retrace its own trail home (§10). The moment that reserve binds — or the
+ * ground ahead is impassable, or the bounded trail is full — it turns for home. There is
+ * no branch anywhere in this function that walks outward until the duration cap and then
+ * declares success: every termination below names a physical reason.
+ *
+ * `tilesPerDay` is the party's real physical pace, produced by the same canonical
+ * travel-pace authority every other party uses. Nothing here consults food stress.
+ */
+function advanceFrontierExplorationOutboundDay(
+  world: WorldState,
+  expedition: ExpeditionRecord,
+  tilesPerDay: number,
+  day: DayNumber,
+): AdvanceResult {
+  const plan = expedition.frontierPlan;
+
+  if (plan === undefined) {
+    // A frontier party with no plan is a construction error, not a physical state: it
+    // turns for home rather than inventing a destination.
+    return {
+      world,
+      expedition: { ...expedition, phase: "returning", outcomeReason: "frontier_barrier_blocked" },
+    };
+  }
+
+  const daysElapsed = Number(day) - Number(expedition.departedDay);
+  let trail = [...expedition.routeTileIds];
+  let observations: readonly ExpeditionObservation[] = expedition.carriedObservations;
+  let positionTileId = expedition.positionTileId;
+  let deepest = expedition.frontierDeepestReachTiles ?? 0;
+  let stepsTaken = 0;
+  let terminal: ExpeditionOutcomeReason | undefined;
+
+  for (let step = 0; step < tilesPerDay; step += 1) {
+    const outwardRemaining = deriveOutwardTilesRemaining({
+      trailLength: trail.length,
+      tilesPerDay,
+      daysElapsed,
+      maxDurationDays: EXPEDITION_MAX_DURATION_DAYS,
+      outboundBudgetTiles: plan.outboundBudgetTiles,
+    });
+    const outcome = chooseNextFrontierStep(
+      world,
+      { ...expedition, routeTileIds: trail, positionTileId },
+      outwardRemaining,
+    );
+
+    if (outcome.kind === "budget_reached") {
+      terminal = "frontier_return_budget_reached";
+      break;
+    }
+
+    if (outcome.kind === "blocked") {
+      // A physical barrier at the party's deepest point is real evidence about the
+      // country, and it is what distinguishes a blocked direction from a walkable one.
+      const barrier = buildFrontierCountryObservation(world, positionTileId, Number(day));
+
+      if (barrier !== undefined) {
+        observations = [...observations, { ...barrier, kind: "frontier_barrier", confidence: 0.75 }];
+      }
+
+      terminal = "frontier_barrier_blocked";
+      break;
+    }
+
+    // The party physically stepped onto a tile the residential band may never have seen.
+    positionTileId = outcome.tileId;
+    trail = [...trail, outcome.tileId];
+    stepsTaken += 1;
+
+    const originTile = world.tiles[expedition.originTileId];
+    const standTile = world.tiles[outcome.tileId];
+
+    if (originTile !== undefined && standTile !== undefined) {
+      deepest = Math.max(
+        deepest,
+        Math.abs(standTile.coord.x - originTile.coord.x) + Math.abs(standTile.coord.y - originTile.coord.y),
+      );
+    }
+
+    // §11/§12 — the party LOOKS from where it stands. The record is PARTY-LOCAL: it is
+    // appended to `carriedObservations` and reaches residential knowledge only if this
+    // party physically walks home (see the return handler in `applyExpeditionDay`).
+    const seen = buildFrontierCountryObservation(world, outcome.tileId, Number(day));
+
+    if (seen !== undefined) {
+      observations = retainFrontierObservations([...observations, seen]);
+    }
+  }
+
+  // §17/§11 control arm — the party that never came home. It walked and it observed;
+  // at the moment it would have turned for home it is declared lost instead, so its
+  // `carriedObservations` die with it and the residential band learns nothing. Undefined
+  // in every normal world => this branch is never taken.
+  const lostBeforeReturn =
+    terminal !== undefined && world.auditOptions?.frontierExplorationAlwaysLost === true;
+
+  const walkedKm = stepsTaken * KM_PER_TILE;
+  const moved: ExpeditionRecord = {
+    ...expedition,
+    routeTileIds: trail,
+    // The trail is also the way home: the party stands at its end.
+    routeIndex: trail.length - 1,
+    positionTileId,
+    travelDaysElapsed: expedition.travelDaysElapsed + 1,
+    frontierDeepestReachTiles: deepest,
+    carriedObservations: retainFrontierObservations(observations),
+    phase: lostBeforeReturn ? "lost" : terminal === undefined ? "outbound" : "returning",
+    ...(lostBeforeReturn
+      ? { outcomeReason: "party_lost" as ExpeditionOutcomeReason }
+      : terminal === undefined
+        ? {}
+        : { outcomeReason: terminal }),
+  };
+
+  return {
+    world,
+    expedition: moved,
+    ...(walkedKm <= 0
+      ? {}
+      : { walkedKm, walkedLoadedKm: 0, walkSource: "expedition_outbound" as const }),
+  };
+}
+
 /** Advance ONE expedition by ONE physical day. Pure; the caller threads the world. */
 function advanceExpeditionOneDay(
   world: WorldState,
@@ -489,6 +634,15 @@ function advanceExpeditionOneDay(
       world,
       expedition: { ...withProvisions, phase: "outbound" },
     };
+  }
+
+  // CORRECTION-17 §9 — FRONTIER EXPLORATION walks a route it does not have. Every other
+  // task family follows a `routeTileIds` path computed at launch; this one DISCOVERS its
+  // route, choosing one 4-adjacent step at a time from where its feet actually are, and
+  // appends each step to the trail it will later retrace home. It therefore takes its own
+  // outbound branch here rather than indexing into a precomputed path.
+  if (withProvisions.phase === "outbound" && withProvisions.taskKind === "frontier_exploration") {
+    return advanceFrontierExplorationOutboundDay(world, withProvisions, tilesPerDay, day);
   }
 
   if (withProvisions.phase === "outbound") {
@@ -1158,6 +1312,121 @@ function selectReconnaissanceCandidate(
 }
 
 /**
+ * CORRECTION-17 §20 — ticks within which a band that already sent an exploratory party
+ * does not send another. This is what keeps exploration from becoming expedition spam:
+ * a band gets one honest look per window, and a null result costs it that window.
+ */
+const FRONTIER_EXPLORATION_SUPPRESSION_TICKS = 12;
+/**
+ * §10 — outward tiles a frontier party may plan for. This is NOT a raised cap: it is
+ * strictly below the existing `EXPEDITION_MAX_ROUTE_TILES` (36) physical envelope, and
+ * the return reserve in `deriveOutwardTilesRemaining` normally binds long before it. It
+ * exists so a party does not set out intending to walk to the very edge of what the
+ * duration window could theoretically permit.
+ */
+const FRONTIER_OUTBOUND_BUDGET_TILES = 18;
+
+/**
+ * CORRECTION-17 §6/§7/§8 — raise an exploratory party, or do not.
+ *
+ * Returns `undefined` (no launch) whenever the band has no band-known REASON to look
+ * beyond its country, no band-known DIRECTION to look in, no spare people, or has
+ * already had its look this window. Nothing in this function reads unseen country: the
+ * eligibility comes from the band's own pressure/return/opportunity state, and the
+ * heading comes from its own corridor memory, viewshed, known edge or inherited
+ * direction. No destination tile is selected, here or anywhere downstream.
+ */
+function maybeLaunchFrontierExploration(
+  world: WorldState,
+  band: Band,
+  day: DayNumber,
+  currentTick: number,
+  partyWorkers: number,
+): Band | undefined {
+  // §20 — one honest look per window, whatever it found. The window is measured from
+  // the band's own `lastFrontierExplorationTick` scalar rather than from
+  // `recentExpeditionOutcomes`, because that list is an LRU capped at six entries: six
+  // ordinary expeditions concluding inside the window would evict the frontier record
+  // and let the band explore again early.
+  const lastExplorationTick = band.lastFrontierExplorationTick;
+  const recentlyExplored =
+    lastExplorationTick !== undefined &&
+    currentTick - Number(lastExplorationTick) <= FRONTIER_EXPLORATION_SUPPRESSION_TICKS;
+
+  if (recentlyExplored || partyWorkers < 2) {
+    return undefined;
+  }
+
+  // §17 control arm. Undefined in every normal world => this branch is never taken and
+  // the production path is unchanged.
+  if (world.auditOptions?.frontierExplorationEnabled === false) {
+    return undefined;
+  }
+
+  const eligibility = deriveFrontierExplorationEligibility(world, band);
+
+  if (!eligibility.eligible) {
+    return undefined;
+  }
+
+  const heading = deriveFrontierHeading(world, band);
+
+  // No band-known direction to go in => the band does not go. It never picks a heading
+  // by scanning the world for the best unseen country.
+  if (heading === undefined) {
+    return undefined;
+  }
+
+  // Information wants speed, not hands: the same small fast party the other two
+  // information families use.
+  const availablePools = deriveAvailableMobilityPools(band);
+  const partyComposition = selectPartyComposition(availablePools, 2, "fast");
+
+  if (partyComposition === undefined) {
+    return undefined;
+  }
+
+  const plan = buildFrontierPlan({
+    heading: { x: heading.heading.x, y: heading.heading.y },
+    basis: heading.basis,
+    anchorTileId: heading.anchorTileId,
+    headingConfidence: heading.headingConfidence,
+    outboundBudgetTiles: FRONTIER_OUTBOUND_BUDGET_TILES,
+    // The reserve is re-derived physically every step; this records the intent.
+    returnReserveTiles: FRONTIER_OUTBOUND_BUDGET_TILES,
+  });
+
+  const prepared = createPreparedExpedition({
+    band,
+    taskKind: "frontier_exploration",
+    // §8 — for this family `targetTileId` is the plan's band-KNOWN anchor and is
+    // explicitly NOT a destination. The party normally walks straight past it into
+    // country nobody in the band has seen. It is carried only so the shared record shape,
+    // the id derivation and the outcome summary keep working unchanged.
+    targetTileId: plan.anchorTileId,
+    targetPatchId: `frontier:${plan.sector}:${plan.basis}`,
+    // §9 — the trail starts as the origin tile ALONE. There is no precomputed route:
+    // every later entry is a tile the party has physically walked to.
+    routeTileIds: [band.position],
+    partyWorkers: 2,
+    partyComposition,
+    day,
+  });
+
+  return attachExpedition(
+    // §20 — stamp the window the moment the party is raised, so a party that is still
+    // walking already suppresses the next launch.
+    { ...band, lastFrontierExplorationTick: getWorldTimeForDay(day).tick },
+    {
+      ...prepared,
+      frontierPlan: plan,
+      frontierDeepestReachTiles: 0,
+      reasonIds: [...prepared.reasonIds, ...eligibility.reasonIds],
+    },
+  );
+}
+
+/**
  * EXPEDITIONARY-2 §1/Slice C — consider sending a party to band-known country that the
  * same-day path can no longer reach. The target comes from the trip authority's own
  * bounded patch-memory selection, so an expedition can never aim at hidden country.
@@ -1239,6 +1508,20 @@ function maybeLaunchExpedition(world: WorldState, band: Band, day: DayNumber): B
     noUsefulRetrieval && verification === undefined
       ? selectReconnaissanceCandidate(world, band, currentTick)
       : undefined;
+
+  // CORRECTION-17 §6/§7 — the FIFTH candidate family, and the only one that may enter
+  // country the band does not know. It competes LAST, on purpose: a band that still has
+  // a worthwhile remembered target to retrieve, a stale memory worth verifying, or a
+  // route worth reading does that instead. Exploration is what a band does when its own
+  // known country has stopped answering — which is exactly the band-known state
+  // `deriveFrontierExplorationEligibility` measures.
+  if (noUsefulRetrieval && verification === undefined && reconnaissance === undefined) {
+    const explored = maybeLaunchFrontierExploration(world, band, day, currentTick, partyWorkers);
+
+    if (explored !== undefined) {
+      return explored;
+    }
+  }
 
   const chosen =
     retrieval !== undefined && retrievalWorthwhile && !verifyBeforeRetrieving && !(retrievalEvidenceDegraded && foodStress < 0.35)
@@ -1508,6 +1791,22 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
           }
 
           if (result.expedition.taskKind === "route_reconnaissance") {
+            returnedReconRouteTiles.push(...result.expedition.routeTileIds);
+          }
+
+          // CORRECTION-17 §11/§12 — a frontier party that PHYSICALLY WALKED HOME hands
+          // over the corridor it walked. Until this line executed, none of it existed
+          // for the residential band: no KnownTileRecord, no resource memory, no
+          // daughter target. A `lost` party never reaches this branch and therefore
+          // transfers nothing, which is the §11 control.
+          //
+          // The tiles go through the SAME canonical `observeTileAndNearby` writer the
+          // residential decision path uses (applied once, below). That writer records
+          // existence, broad terrain, water access, relief/movement cost, observed risk
+          // and the season physically experienced — and creates NO resource memory and
+          // NO food receipt. Learning that a place exists is not learning what can be
+          // eaten there: that still requires the existing observe/test/use paths.
+          if (result.expedition.taskKind === "frontier_exploration") {
             returnedReconRouteTiles.push(...result.expedition.routeTileIds);
           }
         }
