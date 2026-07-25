@@ -181,6 +181,56 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### HUMAN VIABILITY, RECOVERY, ADAPTIVE RESILIENCE CORRECTION-15 — PROGRESS, DO NOT MERGE (2026-07-25)
+
+Branch `checkpoint/human-viability-adaptive-resilience-15` from public `main` `668763f`.
+CORRECTION-14's `222d3ec` was used ONLY as an evidence/patch donor — not merged, not wholesale
+cherry-picked. Evidence: `docs/evidence/correction15/` (RESEARCH_CONSTRAINTS.md, FINDINGS.md,
+candidate-repair isolation before/after, recovery basin, social causality, tier ladder).
+
+**This checkpoint is PARTIALLY COMPLETE.** What was done is measured; what was not reached is
+named in FINDINGS.md §9 — the §6/§7 whole-viability cause taxonomy, the §9 adaptation cascade,
+and the §12 dedicated extinction arms were NOT built, so gates 9/10/11/19/26 are not met.
+
+**All four CORRECTION-14 candidate repairs were independently re-proven on this branch before
+being ported** (`scripts/candidateRepairIsolationAudit.mjs`, before evidence taken on `668763f`):
+(A) the annual demographic step consumed mean food pressure 0.555 against a year that actually
+held 0.335 — overstating hardship by +0.220, with 89 physically-surplus years producing ZERO
+surplus-signal years; after: 0.129 vs 0.206 and 111 → 114. (B) 31 of 480 seasons had zero trips
+while the band held a remembered patch inside the 10-tile radius but none inside the same-day
+budget; after: 0. (C) unit proof — a saturated 48-slot cap evicts the just-observed local patch;
+after it survives and the list is still bounded at 48. (D) proven by construction: `668763f`
+passes step-mode because the recon path is never exercised; with B+C but without D map2 FAILS on
+`day`/`dayOfSeason` only; with D both maps PASS. D is required BY B and C.
+
+**Recovery basin is sound (new result).** `scripts/recoveryBasinAudit.mjs` — no absorbing
+collapse spiral exists. One bad year recovers in 1 year; three bad years in 1; five SEVERE years
+cost population and 12 years but still recover. Chronic hunger clears within 2 years of sustained
+physical recovery. Heavy prior death memory depresses the first post-shock year then washes out.
+33 vs 34 vs 35 starting people produce a 3-person spread after 150 years — no destiny bifurcation.
+
+**Two honest negative results.** (1) Cohort arms had to be moved into the FULL simulation because
+the scripted harness bypasses the only path cohort composition has; measured there, halving
+working adults changes task-group party size 4.66 → 4.47 and support ratio by **0.01**. A
+labor-collapse extinction cause is NOT reachable. (2) The social layer is **readability-only in
+practice**: clamped every tick for six years, `cohesion` at 0.02 AND at 0.99, `innerFission` at
+near_split, and `socialTension` at 0.95 all leave canonical state byte-identical. Only
+`socialPressure` is causal, and it is written by `applyDemographyToSocialPressure` — demography
+restated socially. No cohesion bonus and no fake social fission were added.
+
+**Regression.** tsc/build/graph/`deterministic=true`/fresh-process determinism/step-mode
+invariance/receipt capture 1.000/CORRECTION-13 arms preserved exactly (80/64/32/7) and the
+food/ecology/lifecycle/boundary matrix all PASS. `demographicPerLineageAudit`'s world equation was
+COMPLETED (it counted a daughter's transferred founding population as new people; gap was exactly
+36 = 2 x 18) and passes on both this branch and `668763f`. `demographicDeathMemoryPathAudit`
+FAILS 2 of 11 — reproduced as PASS on `668763f`, so it is a REAL new failure, isolated to the
+annual read, and left unchanged rather than tuned away.
+
+**Next.** The destination knowledge horizon remains the binding limit on multi-generation
+expansion; the unbuilt cause taxonomy / adaptation cascade / extinction arms are the rest of this
+checkpoint.
+
+
 ### DEMOGRAPHIC RESPONSE COMPRESSION CORRECTION-13 — PASS CANDIDATE (2026-07-25)
 
 Branch `checkpoint/demographic-response-compression-13` from current public `main` `22123aa`
@@ -7650,6 +7700,25 @@ exception; daughter colours related-but-distinct and never visually confusing.
 ---
 
 ## Checkpoint Log
+
+- **HUMAN VIABILITY, RECOVERY, ADAPTIVE RESILIENCE CORRECTION-15** — *2026-07-25, PROGRESS — DO
+  NOT MERGE.* From `668763f`, with `222d3ec` as evidence/patch donor only. Independently
+  re-proved all four CORRECTION-14 candidate repairs on this branch before porting them (annual
+  demography consumed 0.555 food pressure against a year holding 0.335, with 89 physically-surplus
+  years producing 0 surplus-signal years; 31/480 zero-trip seasons where only out-of-budget
+  memories existed; a unit proof that a saturated 48-slot cap evicts the just-observed patch; and
+  step-mode invariance proving the expedition timestamp repair is required BY the other two).
+  Built the recovery-basin matrix and found NO absorbing collapse spiral — one, three and five
+  severe bad years all recover, chronic hunger clears in 2 years, bereavement washes out, and
+  33/34/35 starting people do not bifurcate. Two honest negatives: cohort composition is causal
+  only through task-group party size and is worth 0.01 of support ratio (labor collapse cannot
+  cause extinction), and the social layer is readability-only — cohesion clamped to 0.02 or 0.99
+  for six years changes nothing, as do innerFission and socialTension; only socialPressure is
+  causal and it is demography restated socially. Completed `demographicPerLineageAudit`'s world
+  equation (it counted transferred daughter population as new people; gap exactly 36 = 2x18) and
+  reported `demographicDeathMemoryPathAudit`'s 2/11 failure as a real new regression rather than
+  tuning it away. NOT COMPLETED: the §6/§7 cause taxonomy, the §9 adaptation cascade, and the §12
+  extinction arms — gates 9/10/11/19/26 unmet. Evidence: `docs/evidence/correction15/`.
 
 - **DEMOGRAPHIC RESPONSE COMPRESSION CORRECTION-13** — *2026-07-25, PASS CANDIDATE.*
   Measured the demographic composition (annual net rate) and found the first compression point in

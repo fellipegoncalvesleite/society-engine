@@ -1,0 +1,120 @@
+{
+ "check": "CORRECTION-15 candidate repair isolation",
+ "years": 120,
+ "tile": "tile:188:92",
+ "A_annualNutritionSampling": {
+  "claim": "The annual demographic step reads ONE seasonal phase, and it is systematically the same one.",
+  "demographyReadSeasons": {
+   "spring": 120
+  },
+  "readsExactlyOneSeason": true,
+  "demographySeason": "spring",
+  "seasonMeanSupportRatio": {
+   "spring": {
+    "n": 120,
+    "meanRatio": 0.173
+   },
+   "summer": {
+    "n": 120,
+    "meanRatio": 2.275
+   },
+   "autumn": {
+    "n": 120,
+    "meanRatio": 1.801
+   },
+   "winter": {
+    "n": 120,
+    "meanRatio": 1.13
+   }
+  },
+  "leanestSeason": "spring",
+  "demographyLandsOnLeanestSeason": true,
+  "meanRatioSeenByDemography": 0.173,
+  "meanRatioAcrossWholeYear": 1.345,
+  "seasonalSampleBias": -1.172,
+  "demographyYears": 120,
+  "annualGroundTruthMeanFoodStress": 0.335,
+  "annualGroundTruthMeanSupportRatio": 1.345,
+  "demographyConsumedMeanFoodPressure": 0.555,
+  "consumedMinusGroundTruth": 0.22,
+  "physicallySurplusYears": 89,
+  "surplusSignalYears": 0,
+  "meanSurplusFertilityBonus": 0,
+  "defectPresent": true
+ },
+ "B_sameDaySelectionDomain": {
+  "claim": "Selection can win a candidate the same-day executor must reject, wasting the band's one candidate that day.",
+  "seasonsTotal": 480,
+  "seasonsWithZeroTrips": 44,
+  "zeroTripSeasonsWithReachableMemory": 44,
+  "zeroTripSeasonsWithSameDayMemory": 13,
+  "zeroTripSeasonsWithOnlyOutOfBudgetMemory": 31,
+  "zeroTripExamples": [
+   {
+    "season": 149,
+    "position": "tile:198:98",
+    "memoryCount": 48,
+    "reachableWithin10": 1,
+    "sameDayReachable": 0,
+    "nearestDistance": 6
+   },
+   {
+    "season": 150,
+    "position": "tile:198:97",
+    "memoryCount": 48,
+    "reachableWithin10": 2,
+    "sameDayReachable": 0,
+    "nearestDistance": 5
+   },
+   {
+    "season": 151,
+    "position": "tile:198:96",
+    "memoryCount": 48,
+    "reachableWithin10": 2,
+    "sameDayReachable": 0,
+    "nearestDistance": 6
+   },
+   {
+    "season": 152,
+    "position": "tile:197:96",
+    "memoryCount": 48,
+    "reachableWithin10": 2,
+    "sameDayReachable": 0,
+    "nearestDistance": 5
+   },
+   {
+    "season": 155,
+    "position": "tile:198:98",
+    "memoryCount": 48,
+    "reachableWithin10": 1,
+    "sameDayReachable": 0,
+    "nearestDistance": 6
+   },
+   {
+    "season": 156,
+    "position": "tile:198:99",
+    "memoryCount": 48,
+    "reachableWithin10": 1,
+    "sameDayReachable": 0,
+    "nearestDistance": 7
+   }
+  ],
+  "defectPresent": true
+ },
+ "C_newlyObservedResourceKnowledge": {
+  "claim": "A saturated bounded cap evicts the patch the band has just physically observed here.",
+  "cap": 48,
+  "inputMemories": 49,
+  "capEnforcedLength": 48,
+  "justObservedSurvivesWithoutProtection": false,
+  "justObservedSurvivesWithProtection": false,
+  "capStillBoundedWithProtection": true,
+  "protectionArgumentSupported": false,
+  "defectPresent": true
+ },
+ "D_expeditionTimestamp": {
+  "claim": "Expedition recon returns stamp observations from the batch-start world time, so daily and seasonal stepping disagree on the recorded day.",
+  "provenBy": "scripts/stepModeInvarianceAudit.mjs (fullCanonicalStateMatch) — observable only once recon returns actually occur, i.e. after B and C",
+  "note": "Reported here as a pointer; this script does not exercise the expedition return path."
+ }
+}

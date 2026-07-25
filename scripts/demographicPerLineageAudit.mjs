@@ -119,6 +119,8 @@ function execute(runner, map, yearsToRun) {
   const lineages = [...founders.values()].map((l) => finishLineage(l));
   const startPopulation = lineages.reduce((s, l) => s + l.startPopulation, 0);
   const endPopulation = Object.values(world.bands).reduce((s, b) => s + b.demography.population, 0);
+  const founderStartPopulation = lineages.reduce((s, l) => s + (l.daughter ? 0 : l.startPopulation), 0);
+  const daughterTransferredPopulation = lineages.reduce((s, l) => s + (l.daughter ? l.startPopulation : 0), 0);
   const totalBirths = lineages.reduce((s, l) => s + l.births, 0);
   const totalDeaths = lineages.reduce((s, l) => s + l.uniqueDeaths, 0);
   return {
@@ -130,8 +132,18 @@ function execute(runner, map, yearsToRun) {
       extinctBands: Object.values(world.bands).filter((b) => b.viability?.status === "extinct").length,
     },
     accounting: {
-      equation: `${startPopulation} + ${totalBirths} - ${totalDeaths} = ${endPopulation}`,
-      reconciles: startPopulation + totalBirths - totalDeaths === endPopulation,
+      // REPEATED-BAND-EXPANSION-FISSION-14 — a daughter's founding population is
+      // TRANSFERRED out of its parent, not created, so it must not enter the world
+      // equation as new people. `startPopulation` for a mid-run lineage is exactly that
+      // transfer. The term was silently zero before this checkpoint because the default
+      // maps produced no fissions in this run; with fission active it is the entire
+      // discrepancy (measured: LHS − endPopulation = 36 = 2 daughters × 18, to the
+      // person), which is itself proof that fission conserves population exactly.
+      // Subtracting it makes the equation complete, not laxer: a genuine leak still fails.
+      founderStartPopulation,
+      daughterTransferredPopulation,
+      equation: `${founderStartPopulation} + ${totalBirths} - ${totalDeaths} = ${endPopulation}`,
+      reconciles: founderStartPopulation + totalBirths - totalDeaths === endPopulation,
     },
     runtimeMs: round(performance.now() - started),
     fingerprint: hash(runner.takeDynamicSnapshot(world)),

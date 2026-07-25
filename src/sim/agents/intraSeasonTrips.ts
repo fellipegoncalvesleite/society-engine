@@ -234,7 +234,7 @@ function applyTripDay(world: WorldState, day: number): WorldState {
       continue;
     }
 
-    const candidate = selectTripCandidate(currentWorld, band, day);
+    const candidate = selectTripCandidate(currentWorld, band, day, MAX_TRIP_DISTANCE_TILES, false, true);
 
     if (candidate === undefined) {
       continue;
@@ -501,16 +501,56 @@ function selectTripCandidate(
   // filtering after it — closes that eligibility gap without a second distance
   // authority: multi-day-ness is still decided by deriveTripDurationDays.
   requireMultiDay: boolean = false,
+  // REPEATED-BAND-EXPANSION-FISSION-14 §9 Stage 2 — the SYMMETRIC half of
+  // CORRECTION-4's fix above. The same-day caller (`applyTripDay`) discards a winner
+  // that does not fit the same-day budget, and because a band evaluates ONE candidate
+  // per trip day, an out-of-budget argmax winner wasted the whole subsistence day.
+  // Measured (docs/evidence/correction14/): after a residence walk moved the founder
+  // 5-10 tiles from its nearest remembered patch, the argmax kept selecting that
+  // now-multi-day patch, `applyTripDay` kept skipping it, and the band recorded
+  // `trips: 0` for 17 consecutive seasons in the richest catchment on the map —
+  // 141 of 480 seasons at exactly zero support. Restricting the argmax DOMAIN to what
+  // the caller can actually execute (rather than filtering after it) is the same
+  // repair CORRECTION-4 made for the expedition selector; multi-day-ness is still
+  // decided only by `deriveTripDurationDays`, and expeditions still receive the best
+  // multi-day candidate from their own call.
+  requireSameDay: boolean = false,
 ): TripCandidate | undefined {
-  const seededResourceKnowledgeState =
-    (band.resourceKnowledgeState?.patchMemories.length ?? 0) === 0
-      ? buildStartingLocalReconnaissanceState(world, band, day)
-      : undefined;
-  const resourceKnowledgeState = seededResourceKnowledgeState ?? band.resourceKnowledgeState;
-  const memories = resourceKnowledgeState?.patchMemories ?? [];
   const origin = world.tiles[band.position];
 
-  if (origin === undefined || memories.length === 0) {
+  if (origin === undefined) {
+    return undefined;
+  }
+
+  // REPEATED-BAND-EXPANSION-FISSION-14 §9 Stage 2 — MEASURED DEFECT. Local
+  // reconnaissance used to bootstrap only when the band had NO patch memory AT ALL.
+  // A band that walks its residence away from its old catchment keeps every one of
+  // those memories, so the bootstrap stayed off while all of them sat further than
+  // `maxDistanceTiles` from where the band is now standing. No candidate could be
+  // built, so `applyTripDay` recorded NO trip, so no receipt existed, so the food
+  // ledger read exactly zero — for as long as the relocation lasted.
+  // Measured (docs/evidence/correction14/, richest map2 catchment, 500y): the founder
+  // hit runs of 17 consecutive seasons with `trips: 0` and `rawSupportRatio: 0`
+  // while standing in country whose reachable live plant stock was the highest on the
+  // map, and 141 of 480 seasons read zero support. That is not scarcity — it is a
+  // band unable to look at the ground under its feet because it remembers somewhere
+  // else. Repair: the bootstrap fires whenever the band has no patch memory it can
+  // actually REACH from here. It reads the band's OWN observed-tile records (the same
+  // knowledge-bounded path as before, capped at
+  // STARTING_LOCAL_RECON_OBSERVED_TILE_CAP tiles within
+  // STARTING_LOCAL_RECON_MAX_DISTANCE_TILES) — no hidden truth, no yield change, and
+  // a band that already has a reachable memory is byte-identical to before.
+  const seededResourceKnowledgeState = hasReachablePatchMemory(world, band, origin, {
+    maxDistanceTiles,
+    requireMultiDay,
+    requireSameDay,
+  })
+    ? undefined
+    : buildStartingLocalReconnaissanceState(world, band, day);
+  const resourceKnowledgeState = seededResourceKnowledgeState ?? band.resourceKnowledgeState;
+  const memories = resourceKnowledgeState?.patchMemories ?? [];
+
+  if (memories.length === 0) {
     return undefined;
   }
 
@@ -536,6 +576,10 @@ function selectTripCandidate(
     }
 
     if (requireMultiDay && deriveTripDurationDays(distanceTiles) <= 1) {
+      continue;
+    }
+
+    if (requireSameDay && deriveTripDurationDays(distanceTiles) > 1) {
       continue;
     }
 
@@ -700,6 +744,56 @@ function getLogisticsTripSelectionBias(
       : 0;
 
   return round4(Math.min(0.08, Math.max(-0.08, foodBias + materialRepairBias - sicknessDistancePenalty)));
+}
+
+// CORRECTION-14 — does the band hold any remembered patch it could actually USE from
+// where it is standing? It applies exactly the geometric filters the candidate loop
+// applies for this caller (different tile, positive distance, within
+// `maxDistanceTiles`, and the caller's same-day / multi-day duration domain), so
+// "reachable" has ONE definition: a memory that is reachable-in-principle but outside
+// the caller's duration budget is correctly treated as no memory at all, and the local
+// reconnaissance bootstrap fires instead of the band standing idle.
+function hasReachablePatchMemory(
+  world: WorldState,
+  band: Band,
+  origin: Tile,
+  domain: {
+    readonly maxDistanceTiles: number;
+    readonly requireMultiDay: boolean;
+    readonly requireSameDay: boolean;
+  },
+): boolean {
+  for (const memory of band.resourceKnowledgeState?.patchMemories ?? []) {
+    if (memory.approximateTile === band.position) {
+      continue;
+    }
+
+    const target = world.tiles[memory.approximateTile];
+
+    if (target === undefined) {
+      continue;
+    }
+
+    const distanceTiles = getGridDistance(origin, target);
+
+    if (distanceTiles <= 0 || distanceTiles > domain.maxDistanceTiles) {
+      continue;
+    }
+
+    const durationDays = deriveTripDurationDays(distanceTiles);
+
+    if (domain.requireMultiDay && durationDays <= 1) {
+      continue;
+    }
+
+    if (domain.requireSameDay && durationDays > 1) {
+      continue;
+    }
+
+    return true;
+  }
+
+  return false;
 }
 
 function buildStartingLocalReconnaissanceState(

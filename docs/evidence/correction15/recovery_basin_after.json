@@ -1,0 +1,774 @@
+{
+ "check": "CORRECTION-15 recovery-basin matrix",
+ "verdict": "PASS",
+ "years": 150,
+ "regimes": {
+  "good": {
+   "ratio": 1.35,
+   "perCapitaReturn": 0.68
+  },
+  "bad": {
+   "ratio": 0.45,
+   "perCapitaReturn": 0.24
+  },
+  "severe": {
+   "ratio": 0.16,
+   "perCapitaReturn": 0.1
+  }
+ },
+ "note": "Physical support is scripted; ALL downstream demography (nutrition history, fertility, mortality, cohorts, clamp, accumulators, surplus signal) is production.",
+ "checks": {
+  "healthyBaselineGrows": true,
+  "oneBadYearRecovers": true,
+  "oneBadYearRecoveryBounded": true,
+  "threeBadYearsRecover": true,
+  "fiveSevereYearsOutcome": "recovered",
+  "adultLaborShockChangesPartySize": true,
+  "adultLaborShockChangesSupport": true,
+  "adultLaborShockIsCausal": true,
+  "adultLaborSupportPenalty": 0.01,
+  "dependentHeavyNotAutomaticallyExtinct": true,
+  "dependentHeavyIsABurden": true,
+  "cohortsConvergeRegardlessOfStart": false,
+  "deathMemoryMattersInitially": true,
+  "deathMemoryDoesNotPermanentlyCurse": true,
+  "chronicHungerClears": true,
+  "smallDifferencesDoNotBifurcate": true
+ },
+ "failing": [],
+ "results": [
+  {
+   "arm": "A_healthy_baseline",
+   "description": "Healthy 34-person founder, good country throughout",
+   "startPopulation": 34,
+   "shockYears": 0,
+   "shockRegimeRatio": 1.35,
+   "startWorkingAdults": 19,
+   "shockEndPopulation": null,
+   "populationLostToShock": 0,
+   "nutritionAtShockEnd": {},
+   "finalPopulation": 74,
+   "minPopulation": 34,
+   "maxPopulation": 74,
+   "extinctYear": null,
+   "recoveredToPreShockInYears": 1,
+   "firstPositiveRateYearAfterShock": 1,
+   "chronicHungerClearedAfterYears": 1,
+   "deathMemoryClearedAfterYears": 1,
+   "births": 171,
+   "deaths": 131,
+   "finalChronicFoodStress": 0,
+   "finalNutritionalSurplus": 0.38,
+   "finalRate": 0.0045,
+   "recovered": true,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 25,
+     "population": 38,
+     "rate": 0.0055,
+     "workingAdults": 22
+    },
+    {
+     "year": 50,
+     "population": 44,
+     "rate": 0.0055,
+     "workingAdults": 25
+    },
+    {
+     "year": 75,
+     "population": 51,
+     "rate": 0.0055,
+     "workingAdults": 29
+    },
+    {
+     "year": 100,
+     "population": 58,
+     "rate": 0.0052,
+     "workingAdults": 33
+    },
+    {
+     "year": 125,
+     "population": 65,
+     "rate": 0.0049,
+     "workingAdults": 37
+    },
+    {
+     "year": 150,
+     "population": 74,
+     "rate": 0.0045,
+     "workingAdults": 42
+    }
+   ]
+  },
+  {
+   "arm": "B_one_bad_year",
+   "description": "One physically real bad year, then the same good country",
+   "startPopulation": 34,
+   "shockYears": 1,
+   "shockRegimeRatio": 0.45,
+   "startWorkingAdults": 19,
+   "shockEndPopulation": 34,
+   "populationLostToShock": 0,
+   "nutritionAtShockEnd": {
+    "currentFoodStress": 0.55,
+    "chronicFoodStress": 1,
+    "recoveryRelief": 0
+   },
+   "finalPopulation": 73,
+   "minPopulation": 34,
+   "maxPopulation": 73,
+   "extinctYear": null,
+   "recoveredToPreShockInYears": 1,
+   "firstPositiveRateYearAfterShock": 1,
+   "chronicHungerClearedAfterYears": 2,
+   "deathMemoryClearedAfterYears": 1,
+   "births": 170,
+   "deaths": 131,
+   "finalChronicFoodStress": 0,
+   "finalNutritionalSurplus": 0.38,
+   "finalRate": 0.0045,
+   "recovered": true,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 1,
+     "population": 34,
+     "rate": -0.0061,
+     "workingAdults": 19
+    },
+    {
+     "year": 25,
+     "population": 38,
+     "rate": 0.0055,
+     "workingAdults": 22
+    },
+    {
+     "year": 50,
+     "population": 44,
+     "rate": 0.0055,
+     "workingAdults": 25
+    },
+    {
+     "year": 75,
+     "population": 50,
+     "rate": 0.0055,
+     "workingAdults": 29
+    },
+    {
+     "year": 100,
+     "population": 57,
+     "rate": 0.0052,
+     "workingAdults": 33
+    },
+    {
+     "year": 125,
+     "population": 65,
+     "rate": 0.0049,
+     "workingAdults": 38
+    },
+    {
+     "year": 150,
+     "population": 73,
+     "rate": 0.0045,
+     "workingAdults": 42
+    }
+   ]
+  },
+  {
+   "arm": "C_three_bad_years",
+   "description": "Three bad years, then good country",
+   "startPopulation": 34,
+   "shockYears": 3,
+   "shockRegimeRatio": 0.45,
+   "startWorkingAdults": 19,
+   "shockEndPopulation": 34,
+   "populationLostToShock": 0,
+   "nutritionAtShockEnd": {
+    "currentFoodStress": 0.55,
+    "chronicFoodStress": 1,
+    "recoveryRelief": 0
+   },
+   "finalPopulation": 72,
+   "minPopulation": 34,
+   "maxPopulation": 72,
+   "extinctYear": null,
+   "recoveredToPreShockInYears": 1,
+   "firstPositiveRateYearAfterShock": 1,
+   "chronicHungerClearedAfterYears": 2,
+   "deathMemoryClearedAfterYears": 1,
+   "births": 167,
+   "deaths": 129,
+   "finalChronicFoodStress": 0,
+   "finalNutritionalSurplus": 0.38,
+   "finalRate": 0.0046,
+   "recovered": true,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 3,
+     "population": 34,
+     "rate": -0.0061,
+     "workingAdults": 20
+    },
+    {
+     "year": 25,
+     "population": 38,
+     "rate": 0.0055,
+     "workingAdults": 22
+    },
+    {
+     "year": 50,
+     "population": 43,
+     "rate": 0.0055,
+     "workingAdults": 25
+    },
+    {
+     "year": 75,
+     "population": 50,
+     "rate": 0.0055,
+     "workingAdults": 29
+    },
+    {
+     "year": 100,
+     "population": 57,
+     "rate": 0.0053,
+     "workingAdults": 32
+    },
+    {
+     "year": 125,
+     "population": 64,
+     "rate": 0.0049,
+     "workingAdults": 37
+    },
+    {
+     "year": 150,
+     "population": 72,
+     "rate": 0.0046,
+     "workingAdults": 41
+    }
+   ]
+  },
+  {
+   "arm": "D_five_severe_years",
+   "description": "Five severe years, then good country",
+   "startPopulation": 34,
+   "shockYears": 5,
+   "shockRegimeRatio": 0.16,
+   "startWorkingAdults": 19,
+   "shockEndPopulation": 32,
+   "populationLostToShock": 2,
+   "nutritionAtShockEnd": {
+    "currentFoodStress": 0.84,
+    "chronicFoodStress": 1,
+    "recoveryRelief": 0
+   },
+   "finalPopulation": 68,
+   "minPopulation": 32,
+   "maxPopulation": 68,
+   "extinctYear": null,
+   "recoveredToPreShockInYears": 12,
+   "firstPositiveRateYearAfterShock": 1,
+   "chronicHungerClearedAfterYears": 2,
+   "deathMemoryClearedAfterYears": 1,
+   "births": 157,
+   "deaths": 123,
+   "finalChronicFoodStress": 0,
+   "finalNutritionalSurplus": 0.38,
+   "finalRate": 0.0047,
+   "recovered": true,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 5,
+     "population": 32,
+     "rate": -0.0138,
+     "workingAdults": 18
+    },
+    {
+     "year": 25,
+     "population": 35,
+     "rate": 0.0055,
+     "workingAdults": 21
+    },
+    {
+     "year": 50,
+     "population": 40,
+     "rate": 0.0055,
+     "workingAdults": 23
+    },
+    {
+     "year": 75,
+     "population": 46,
+     "rate": 0.0055,
+     "workingAdults": 27
+    },
+    {
+     "year": 100,
+     "population": 53,
+     "rate": 0.0053,
+     "workingAdults": 31
+    },
+    {
+     "year": 125,
+     "population": 60,
+     "rate": 0.0051,
+     "workingAdults": 34
+    },
+    {
+     "year": 150,
+     "population": 68,
+     "rate": 0.0047,
+     "workingAdults": 40
+    }
+   ]
+  },
+  {
+   "arm": "G0_no_death_memory",
+   "description": "Identical recovery, no prior death history",
+   "startPopulation": 34,
+   "shockYears": 3,
+   "shockRegimeRatio": 0.45,
+   "startWorkingAdults": 19,
+   "shockEndPopulation": 34,
+   "populationLostToShock": 0,
+   "nutritionAtShockEnd": {
+    "currentFoodStress": 0.55,
+    "chronicFoodStress": 1,
+    "recoveryRelief": 0
+   },
+   "finalPopulation": 72,
+   "minPopulation": 34,
+   "maxPopulation": 72,
+   "extinctYear": null,
+   "recoveredToPreShockInYears": 1,
+   "firstPositiveRateYearAfterShock": 1,
+   "chronicHungerClearedAfterYears": 2,
+   "deathMemoryClearedAfterYears": 1,
+   "births": 167,
+   "deaths": 129,
+   "finalChronicFoodStress": 0,
+   "finalNutritionalSurplus": 0.38,
+   "finalRate": 0.0046,
+   "recovered": true,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 3,
+     "population": 34,
+     "rate": -0.0061,
+     "workingAdults": 20
+    },
+    {
+     "year": 25,
+     "population": 38,
+     "rate": 0.0055,
+     "workingAdults": 22
+    },
+    {
+     "year": 50,
+     "population": 43,
+     "rate": 0.0055,
+     "workingAdults": 25
+    },
+    {
+     "year": 75,
+     "population": 50,
+     "rate": 0.0055,
+     "workingAdults": 29
+    },
+    {
+     "year": 100,
+     "population": 57,
+     "rate": 0.0053,
+     "workingAdults": 32
+    },
+    {
+     "year": 125,
+     "population": 64,
+     "rate": 0.0049,
+     "workingAdults": 37
+    },
+    {
+     "year": 150,
+     "population": 72,
+     "rate": 0.0046,
+     "workingAdults": 41
+    }
+   ]
+  },
+  {
+   "arm": "G1_heavy_death_memory",
+   "description": "Identical recovery, heavy prior death history",
+   "startPopulation": 34,
+   "shockYears": 3,
+   "shockRegimeRatio": 0.45,
+   "startWorkingAdults": 19,
+   "shockEndPopulation": 34,
+   "populationLostToShock": 0,
+   "nutritionAtShockEnd": {
+    "currentFoodStress": 0.55,
+    "chronicFoodStress": 1,
+    "recoveryRelief": 0
+   },
+   "finalPopulation": 66,
+   "minPopulation": 34,
+   "maxPopulation": 66,
+   "extinctYear": null,
+   "recoveredToPreShockInYears": 1,
+   "firstPositiveRateYearAfterShock": 1,
+   "chronicHungerClearedAfterYears": 2,
+   "deathMemoryClearedAfterYears": null,
+   "births": 155,
+   "deaths": 123,
+   "finalChronicFoodStress": 0,
+   "finalNutritionalSurplus": 0.38,
+   "finalRate": 0.0041,
+   "recovered": true,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 3,
+     "population": 34,
+     "rate": -0.0068,
+     "workingAdults": 20
+    },
+    {
+     "year": 25,
+     "population": 37,
+     "rate": 0.0048,
+     "workingAdults": 22
+    },
+    {
+     "year": 50,
+     "population": 42,
+     "rate": 0.0048,
+     "workingAdults": 24
+    },
+    {
+     "year": 75,
+     "population": 47,
+     "rate": 0.0048,
+     "workingAdults": 27
+    },
+    {
+     "year": 100,
+     "population": 53,
+     "rate": 0.0046,
+     "workingAdults": 31
+    },
+    {
+     "year": 125,
+     "population": 59,
+     "rate": 0.0044,
+     "workingAdults": 34
+    },
+    {
+     "year": 150,
+     "population": 66,
+     "rate": 0.0041,
+     "workingAdults": 38
+    }
+   ]
+  },
+  {
+   "arm": "I0_population_33",
+   "description": "Small initial difference: 33 people",
+   "startPopulation": 33,
+   "shockYears": 0,
+   "shockRegimeRatio": 1.35,
+   "startWorkingAdults": 18,
+   "shockEndPopulation": null,
+   "populationLostToShock": 0,
+   "nutritionAtShockEnd": {},
+   "finalPopulation": 72,
+   "minPopulation": 33,
+   "maxPopulation": 72,
+   "extinctYear": null,
+   "recoveredToPreShockInYears": 1,
+   "firstPositiveRateYearAfterShock": 1,
+   "chronicHungerClearedAfterYears": 1,
+   "deathMemoryClearedAfterYears": 1,
+   "births": 166,
+   "deaths": 127,
+   "finalChronicFoodStress": 0,
+   "finalNutritionalSurplus": 0.38,
+   "finalRate": 0.0046,
+   "recovered": true,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 25,
+     "population": 37,
+     "rate": 0.0055,
+     "workingAdults": 21
+    },
+    {
+     "year": 50,
+     "population": 43,
+     "rate": 0.0055,
+     "workingAdults": 24
+    },
+    {
+     "year": 75,
+     "population": 49,
+     "rate": 0.0055,
+     "workingAdults": 28
+    },
+    {
+     "year": 100,
+     "population": 56,
+     "rate": 0.0053,
+     "workingAdults": 32
+    },
+    {
+     "year": 125,
+     "population": 64,
+     "rate": 0.0049,
+     "workingAdults": 37
+    },
+    {
+     "year": 150,
+     "population": 72,
+     "rate": 0.0046,
+     "workingAdults": 41
+    }
+   ]
+  },
+  {
+   "arm": "I1_population_34",
+   "description": "Small initial difference: 34 people",
+   "startPopulation": 34,
+   "shockYears": 0,
+   "shockRegimeRatio": 1.35,
+   "startWorkingAdults": 19,
+   "shockEndPopulation": null,
+   "populationLostToShock": 0,
+   "nutritionAtShockEnd": {},
+   "finalPopulation": 74,
+   "minPopulation": 34,
+   "maxPopulation": 74,
+   "extinctYear": null,
+   "recoveredToPreShockInYears": 1,
+   "firstPositiveRateYearAfterShock": 1,
+   "chronicHungerClearedAfterYears": 1,
+   "deathMemoryClearedAfterYears": 1,
+   "births": 171,
+   "deaths": 131,
+   "finalChronicFoodStress": 0,
+   "finalNutritionalSurplus": 0.38,
+   "finalRate": 0.0045,
+   "recovered": true,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 25,
+     "population": 38,
+     "rate": 0.0055,
+     "workingAdults": 22
+    },
+    {
+     "year": 50,
+     "population": 44,
+     "rate": 0.0055,
+     "workingAdults": 25
+    },
+    {
+     "year": 75,
+     "population": 51,
+     "rate": 0.0055,
+     "workingAdults": 29
+    },
+    {
+     "year": 100,
+     "population": 58,
+     "rate": 0.0052,
+     "workingAdults": 33
+    },
+    {
+     "year": 125,
+     "population": 65,
+     "rate": 0.0049,
+     "workingAdults": 37
+    },
+    {
+     "year": 150,
+     "population": 74,
+     "rate": 0.0045,
+     "workingAdults": 42
+    }
+   ]
+  },
+  {
+   "arm": "I2_population_35",
+   "description": "Small initial difference: 35 people",
+   "startPopulation": 35,
+   "shockYears": 0,
+   "shockRegimeRatio": 1.35,
+   "startWorkingAdults": 19,
+   "shockEndPopulation": null,
+   "populationLostToShock": 0,
+   "nutritionAtShockEnd": {},
+   "finalPopulation": 75,
+   "minPopulation": 35,
+   "maxPopulation": 75,
+   "extinctYear": null,
+   "recoveredToPreShockInYears": 1,
+   "firstPositiveRateYearAfterShock": 1,
+   "chronicHungerClearedAfterYears": 1,
+   "deathMemoryClearedAfterYears": 1,
+   "births": 176,
+   "deaths": 136,
+   "finalChronicFoodStress": 0,
+   "finalNutritionalSurplus": 0.38,
+   "finalRate": 0.0044,
+   "recovered": true,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 25,
+     "population": 40,
+     "rate": 0.0055,
+     "workingAdults": 22
+    },
+    {
+     "year": 50,
+     "population": 45,
+     "rate": 0.0055,
+     "workingAdults": 26
+    },
+    {
+     "year": 75,
+     "population": 52,
+     "rate": 0.0054,
+     "workingAdults": 30
+    },
+    {
+     "year": 100,
+     "population": 59,
+     "rate": 0.0051,
+     "workingAdults": 34
+    },
+    {
+     "year": 125,
+     "population": 67,
+     "rate": 0.0048,
+     "workingAdults": 39
+    },
+    {
+     "year": 150,
+     "population": 75,
+     "rate": 0.0044,
+     "workingAdults": 44
+    }
+   ]
+  }
+ ],
+ "fullSimulationArms": [
+  {
+   "arm": "E_adult_labor_shock",
+   "description": "Same total population, sharply fewer working adults",
+   "instrument": "full production simulation (real food pipeline)",
+   "startPopulation": 34,
+   "startWorkingAdults": 10,
+   "finalPopulation": 48,
+   "finalWorkingAdults": 28,
+   "minPopulation": 34,
+   "meanSupportRatio": 1.52,
+   "meanTaskGroupPeople": 4.47,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 0,
+     "population": 34,
+     "workingAdults": 10
+    },
+    {
+     "year": 25,
+     "population": 37,
+     "workingAdults": 21
+    },
+    {
+     "year": 50,
+     "population": 42,
+     "workingAdults": 24
+    },
+    {
+     "year": 75,
+     "population": 47,
+     "workingAdults": 27
+    }
+   ]
+  },
+  {
+   "arm": "F_dependent_heavy",
+   "description": "Dependent-heavy band, identical ground",
+   "instrument": "full production simulation (real food pipeline)",
+   "startPopulation": 34,
+   "startWorkingAdults": 12,
+   "finalPopulation": 38,
+   "finalWorkingAdults": 22,
+   "minPopulation": 34,
+   "meanSupportRatio": 1.23,
+   "meanTaskGroupPeople": 4.15,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 0,
+     "population": 34,
+     "workingAdults": 12
+    },
+    {
+     "year": 25,
+     "population": 37,
+     "workingAdults": 21
+    },
+    {
+     "year": 50,
+     "population": 38,
+     "workingAdults": 22
+    },
+    {
+     "year": 75,
+     "population": 37,
+     "workingAdults": 21
+    }
+   ]
+  },
+  {
+   "arm": "H_healthy_shape_control",
+   "description": "Canonical cohort split, identical ground (control)",
+   "instrument": "full production simulation (real food pipeline)",
+   "startPopulation": 34,
+   "startWorkingAdults": 19,
+   "finalPopulation": 29,
+   "finalWorkingAdults": 16,
+   "minPopulation": 29,
+   "meanSupportRatio": 1.53,
+   "meanTaskGroupPeople": 4.66,
+   "survived": true,
+   "trajectory": [
+    {
+     "year": 0,
+     "population": 34,
+     "workingAdults": 19
+    },
+    {
+     "year": 25,
+     "population": 38,
+     "workingAdults": 22
+    },
+    {
+     "year": 50,
+     "population": 42,
+     "workingAdults": 25
+    },
+    {
+     "year": 75,
+     "population": 47,
+     "workingAdults": 28
+    }
+   ]
+  }
+ ]
+}

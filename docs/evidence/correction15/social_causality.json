@@ -1,0 +1,356 @@
+{
+ "check": "CORRECTION-15 social causality",
+ "horizonYears": 6,
+ "method": "static reader/writer map (production vs projection modules) + dynamic extreme-value perturbation CLAMPED EVERY TICK on a real map1 world (these fields are derived and recomputed per tick, so a one-shot perturbation would be overwritten)",
+ "controlFingerprint": "5f6fd366d55bb910220013fb9d8d2333addbdeaf05ba6dfa43397288d5a7987b",
+ "classification": {
+  "cohesion": {
+   "staticClass": "causal_or_intermediary_static_read",
+   "decisionOrPhysicalReaders": [
+    "bandDecision.ts",
+    "simRunner.ts"
+   ],
+   "uiReaderCount": 0
+  },
+  "socialPressure": {
+   "staticClass": "causal_or_intermediary_static_read",
+   "decisionOrPhysicalReaders": [
+    "demography.ts",
+    "bandDecision.ts",
+    "simRunner.ts"
+   ],
+   "uiReaderCount": 0
+  },
+  "innerFission": {
+   "staticClass": "causal_or_intermediary_static_read",
+   "decisionOrPhysicalReaders": [
+    "foragingAdaptation.ts",
+    "pressure.ts",
+    "protoCamps.ts"
+   ],
+   "uiReaderCount": 2
+  },
+  "socialTension": {
+   "staticClass": "causal_or_intermediary_static_read",
+   "decisionOrPhysicalReaders": [
+    "protoCamps.ts"
+   ],
+   "uiReaderCount": 2
+  },
+  "disposition": {
+   "staticClass": "causal_or_intermediary_static_read",
+   "decisionOrPhysicalReaders": [
+    "simRunner.ts"
+   ],
+   "uiReaderCount": 3
+  },
+  "relationshipMemory": {
+   "staticClass": "causal_or_intermediary_static_read",
+   "decisionOrPhysicalReaders": [
+    "memoryReferents.ts",
+    "pressure.ts"
+   ],
+   "uiReaderCount": 5
+  },
+  "contactMemories": {
+   "staticClass": "causal_or_intermediary_static_read",
+   "decisionOrPhysicalReaders": [
+    "accessNorms.ts",
+    "adaptiveHuman.ts",
+    "crowding.ts",
+    "demography.ts",
+    "dryMargin.ts",
+    "problemPractice.ts",
+    "protoCamps.ts",
+    "relationshipMemory.ts",
+    "reportedKnowledge.ts",
+    "socialEcologicalDiffusion.ts",
+    "viability.ts"
+   ],
+   "uiReaderCount": 1
+  },
+  "encounterResponses": {
+   "staticClass": "causal_or_intermediary_static_read",
+   "decisionOrPhysicalReaders": [
+    "bandDecision.ts"
+   ],
+   "uiReaderCount": 1
+  },
+  "reportedKnowledge": {
+   "staticClass": "causal_or_intermediary_static_read",
+   "decisionOrPhysicalReaders": [
+    "accessNorms.ts",
+    "adaptiveHuman.ts",
+    "problemPractice.ts",
+    "reportedKnowledge.ts",
+    "socialEcologicalDiffusion.ts",
+    "bandDecision.ts",
+    "simRunner.ts"
+   ],
+   "uiReaderCount": 4
+  }
+ },
+ "dynamic": {
+  "cohesion_low": {
+   "identicalToControl": true,
+   "behaviorallyInertOverHorizon": true
+  },
+  "cohesion_high": {
+   "identicalToControl": true,
+   "behaviorallyInertOverHorizon": true
+  },
+  "socialPressure_high": {
+   "identicalToControl": false,
+   "behaviorallyInertOverHorizon": false
+  },
+  "innerFission_nearSplit": {
+   "identicalToControl": true,
+   "behaviorallyInertOverHorizon": true
+  },
+  "socialTension_high": {
+   "identicalToControl": true,
+   "behaviorallyInertOverHorizon": true
+  }
+ },
+ "staticMap": {
+  "cohesion": {
+   "simReaders": [
+    "innerFission.ts",
+    "socialContext.ts",
+    "bandDecision.ts",
+    "simRunner.ts"
+   ],
+   "uiReaders": [],
+   "writers": [
+    "demography.ts",
+    "innerFission.ts",
+    "socialContext.ts",
+    "spawn.ts",
+    "types.ts",
+    "types.ts",
+    "simRunner.ts"
+   ],
+   "decisionOrPhysicalReaders": [
+    "bandDecision.ts",
+    "simRunner.ts"
+   ],
+   "readByDecisionOrPhysicalModule": true
+  },
+  "socialPressure": {
+   "simReaders": [
+    "demography.ts",
+    "innerFission.ts",
+    "bandDecision.ts",
+    "simRunner.ts"
+   ],
+   "uiReaders": [],
+   "writers": [
+    "demography.ts",
+    "spawn.ts",
+    "types.ts",
+    "simRunner.ts"
+   ],
+   "decisionOrPhysicalReaders": [
+    "demography.ts",
+    "bandDecision.ts",
+    "simRunner.ts"
+   ],
+   "readByDecisionOrPhysicalModule": true
+  },
+  "innerFission": {
+   "simReaders": [
+    "bandChronicle.ts",
+    "bandEvents.ts",
+    "foragingAdaptation.ts",
+    "innerFission.ts",
+    "pressure.ts",
+    "protoCamps.ts",
+    "socialContext.ts"
+   ],
+   "uiReaders": [
+    "People.tsx",
+    "sections.tsx"
+   ],
+   "writers": [
+    "demography.ts",
+    "socialContext.ts"
+   ],
+   "decisionOrPhysicalReaders": [
+    "foragingAdaptation.ts",
+    "pressure.ts",
+    "protoCamps.ts"
+   ],
+   "readByDecisionOrPhysicalModule": true
+  },
+  "socialTension": {
+   "simReaders": [
+    "bandChronicle.ts",
+    "bandEvents.ts",
+    "protoCamps.ts",
+    "socialContext.ts"
+   ],
+   "uiReaders": [
+    "People.tsx",
+    "sections.tsx"
+   ],
+   "writers": [
+    "demography.ts",
+    "socialContext.ts"
+   ],
+   "decisionOrPhysicalReaders": [
+    "protoCamps.ts"
+   ],
+   "readByDecisionOrPhysicalModule": true
+  },
+  "disposition": {
+   "simReaders": [
+    "innerFission.ts",
+    "simRunner.ts"
+   ],
+   "uiReaders": [
+    "Overview.tsx",
+    "People.tsx",
+    "sections.tsx"
+   ],
+   "writers": [
+    "reportedKnowledge.ts",
+    "socialContext.ts",
+    "simRunner.ts"
+   ],
+   "decisionOrPhysicalReaders": [
+    "simRunner.ts"
+   ],
+   "readByDecisionOrPhysicalModule": true
+  },
+  "relationshipMemory": {
+   "simReaders": [
+    "bandChronicle.ts",
+    "bandEvents.ts",
+    "bandIdentity.ts",
+    "memoryReferents.ts",
+    "pressure.ts"
+   ],
+   "uiReaders": [
+    "Nature.tsx",
+    "People.tsx",
+    "Place.tsx",
+    "Technical.tsx",
+    "sections.tsx"
+   ],
+   "writers": [
+    "demography.ts",
+    "relationshipMemory.ts"
+   ],
+   "decisionOrPhysicalReaders": [
+    "memoryReferents.ts",
+    "pressure.ts"
+   ],
+   "readByDecisionOrPhysicalModule": true
+  },
+  "contactMemories": {
+   "simReaders": [
+    "accessNorms.ts",
+    "adaptiveHuman.ts",
+    "crowding.ts",
+    "demography.ts",
+    "dryMargin.ts",
+    "innerFission.ts",
+    "knowledgeEcology.ts",
+    "lineageIdentity.ts",
+    "problemPractice.ts",
+    "protoCamps.ts",
+    "relationshipMemory.ts",
+    "reportedKnowledge.ts",
+    "socialContext.ts",
+    "socialEcologicalDiffusion.ts",
+    "viability.ts"
+   ],
+   "uiReaders": [
+    "sections.tsx"
+   ],
+   "writers": [
+    "demography.ts",
+    "socialEcologicalDiffusion.ts",
+    "spawn.ts",
+    "types.ts"
+   ],
+   "decisionOrPhysicalReaders": [
+    "accessNorms.ts",
+    "adaptiveHuman.ts",
+    "crowding.ts",
+    "demography.ts",
+    "dryMargin.ts",
+    "problemPractice.ts",
+    "protoCamps.ts",
+    "relationshipMemory.ts",
+    "reportedKnowledge.ts",
+    "socialEcologicalDiffusion.ts",
+    "viability.ts"
+   ],
+   "readByDecisionOrPhysicalModule": true
+  },
+  "encounterResponses": {
+   "simReaders": [
+    "socialContext.ts",
+    "bandDecision.ts"
+   ],
+   "uiReaders": [
+    "sections.tsx"
+   ],
+   "writers": [
+    "demography.ts",
+    "socialContext.ts",
+    "spawn.ts",
+    "types.ts"
+   ],
+   "decisionOrPhysicalReaders": [
+    "bandDecision.ts"
+   ],
+   "readByDecisionOrPhysicalModule": true
+  },
+  "reportedKnowledge": {
+   "simReaders": [
+    "accessNorms.ts",
+    "adaptiveHuman.ts",
+    "innerFission.ts",
+    "knowledgeCarriers.ts",
+    "knowledgeEcology.ts",
+    "problemPractice.ts",
+    "reportedKnowledge.ts",
+    "socialEcologicalDiffusion.ts",
+    "bandDecision.ts",
+    "simRunner.ts"
+   ],
+   "uiReaders": [
+    "People.tsx",
+    "Technical.tsx",
+    "sections.tsx",
+    "reportedKnowledgeView.ts"
+   ],
+   "writers": [
+    "demography.ts",
+    "reportedKnowledge.ts",
+    "simRunner.ts"
+   ],
+   "decisionOrPhysicalReaders": [
+    "accessNorms.ts",
+    "adaptiveHuman.ts",
+    "problemPractice.ts",
+    "reportedKnowledge.ts",
+    "socialEcologicalDiffusion.ts",
+    "bandDecision.ts",
+    "simRunner.ts"
+   ],
+   "readByDecisionOrPhysicalModule": true
+  }
+ },
+ "checks": {
+  "everyFieldClassified": true,
+  "cohesionLowInert": true,
+  "cohesionHighInert": true,
+  "innerFissionInert": true,
+  "socialTensionInert": true,
+  "socialPressureInert": false
+ },
+ "conclusion": "A field is treated as an explanation for viability ONLY if it has a production reader AND perturbing it changes canonical state."
+}
