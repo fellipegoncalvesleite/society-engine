@@ -1,0 +1,360 @@
+{
+ "check": "CORRECTION-16 §7 social causality (replaces the CORRECTION-15 audit)",
+ "supersedes": "docs/evidence/correction15/social_causality.json",
+ "horizonYears": 6,
+ "seeds": [
+  "c15-social-causality"
+ ],
+ "retraction": {
+  "withdrawnClaims": [
+   "The social layer is readability-only.",
+   "Only socialPressure is causal.",
+   "cohesion / innerFission / socialTension were proven inert by clamping.",
+   "Canonical state was byte-identical in the social perturbation."
+  ],
+  "reasonWithdrawn": [
+   "§4.3 WRONG SEAM: innerFission/socialTension are recomputed by their canonical writer at position 7 of updateBandContextStates while their production readers run at positions 8 and 12 of the SAME call, so a between-tick mutation was overwritten before any reader executed.",
+   "§4.4 NARROW FINGERPRINT: the 10-field projection called 'canonical state' omitted proto-camp behaviour, foraging-adaptation behaviour and pressure state — the exact surfaces these fields feed.",
+   "The CORRECTION-15 audit's own static half classified cohesion, innerFission and socialTension as causal_or_intermediary_static_read, contradicting its documented conclusion."
+  ]
+ },
+ "fingerprintGroups": [
+  "movementAndPosition",
+  "decisionAndSelectedAction",
+  "activityAndPhysicalReceipts",
+  "pressureState",
+  "knowledgeAndMemories",
+  "demographyAndFission",
+  "viability",
+  "protoCampBehavior",
+  "foragingAdaptationBehavior",
+  "relationalSocialState"
+ ],
+ "fingerprintExclusions": {
+  "band.name / band.color / band.size": "presentation-only; no production decision reads them",
+  "band.causalTraces / lineageReadability / deepHistory / eventHistory / bandChronicle output": "read-model projections built FOR the UI and Chronicle; no production reader",
+  "band.innerFission / band.socialTension (the fields themselves)": "these ARE the perturbed variables; hashing them would trivially report a difference"
+ },
+ "fingerprintNamingNote": "No group is named 'canonical state'; each is named after exactly the fields it hashes.",
+ "staticChains": {
+  "cohesion": {
+   "class": "authoritative_causal_state",
+   "recomputedPerTick": false,
+   "writers": [
+    "spawn.ts:915 — founding value 0.78",
+    "demography.ts:955 — daughter inherits clamp01(parent.cohesion*0.94 + 0.04)"
+   ],
+   "chains": [
+    {
+     "writer": "spawn.ts / demography.ts (stored band field)",
+     "propertyRead": "band.cohesion",
+     "consumer": "innerFission.ts:160 deriveSocialTensionReadabilityState",
+     "changedIntermediate": "socialTension.socialTensionPressure ((1-cohesion)*0.28); AND socialTension.tolerance, which EQUALS band.cohesion when the band has no contact memories (innerFission.ts:143 meanTolerance fallback)",
+     "downstreamProductionReader": "protoCamps.ts:500 (tolerance <= 0.05 -> 'hostile social tension' factor 0.1); protoCamps.ts:159/492 (crowdedKinResourcePressure)",
+     "physicalResult": "proto-camp place scoring -> which place is retained / returned to"
+    },
+    {
+     "writer": "spawn.ts / demography.ts (stored band field)",
+     "propertyRead": "band.cohesion",
+     "consumer": "socialContext.ts:1374 / :1394 / :1425",
+     "changedIntermediate": "wait = (1-cohesion)*0.16 + fatigueStress*0.12; splitRisk = dissent*(1-cohesion) + ...; reuniteIntent = cohesion*0.62 + 0.18",
+     "downstreamProductionReader": "temporary-separation / reunite pathway in socialContext",
+     "physicalResult": "separation and reunion timing"
+    }
+   ]
+  },
+  "innerFission": {
+   "class": "causal_intermediary",
+   "recomputedPerTick": true,
+   "writers": [
+    "socialContext.ts:420 applyInnerFissionSocialReadabilityContext"
+   ],
+   "note": "deriveInnerFissionState does NOT read band.cohesion — innerFission is independent of cohesion.",
+   "chains": [
+    {
+     "writer": "socialContext.ts:420 -> innerFission.ts:12 deriveInnerFissionState",
+     "propertyRead": "band.innerFission.residentialDebatePressure, .scoutingPressure",
+     "consumer": "pressure.ts:157-158",
+     "changedIntermediate": "band pressure terms feeding netMovePressure / scouting propensity",
+     "downstreamProductionReader": "bandDecision.ts:1218 writes pressureState from pressureUpdate",
+     "physicalResult": "residential move pressure and scouting -> movement"
+    },
+    {
+     "writer": "socialContext.ts:420",
+     "propertyRead": "band.innerFission.hungerTension",
+     "consumer": "foragingAdaptation.ts:1352 (additive 0.08) and :1418 (subtractive 0.08)",
+     "changedIntermediate": "foragingAdaptation.behavior.* terms",
+     "downstreamProductionReader": "pressure.ts:168-173 reads foragingAdaptation.behavior",
+     "physicalResult": "risk tolerance, fallback expansion, trip abandonment -> trips taken"
+    },
+    {
+     "writer": "socialContext.ts:420",
+     "propertyRead": "band.innerFission.splitDelayed",
+     "consumer": "protoCamps.ts:451",
+     "changedIntermediate": "proto-camp reason factor 0.05",
+     "downstreamProductionReader": "proto-camp candidate scoring",
+     "physicalResult": "place retention under delayed split pressure"
+    }
+   ]
+  },
+  "socialTension": {
+   "class": "causal_intermediary",
+   "recomputedPerTick": true,
+   "writers": [
+    "socialContext.ts:421 applyInnerFissionSocialReadabilityContext"
+   ],
+   "chains": [
+    {
+     "writer": "socialContext.ts:421 -> innerFission.ts:137 deriveSocialTensionReadabilityState",
+     "propertyRead": "band.socialTension.tolerance, .crowdedKinResourcePressure",
+     "consumer": "protoCamps.ts:159, :492, :500",
+     "changedIntermediate": "socialCrowdingPressureNearby; 'hostile social tension' reason factor",
+     "downstreamProductionReader": "proto-camp candidate scoring",
+     "physicalResult": "which proto-camp place is chosen or abandoned"
+    }
+   ]
+  },
+  "socialPressure": {
+   "class": "causal_intermediary_but_demography_derived",
+   "recomputedPerTick": true,
+   "writers": [
+    "demography.ts:2233 applyDemographyToSocialPressure"
+   ],
+   "note": "Largely demography restated socially, so a positive result here is NOT independent evidence that SOCIAL state is causal.",
+   "chains": [
+    {
+     "writer": "demography.ts:2233",
+     "propertyRead": "band.socialPressure.fissionPressure",
+     "consumer": "innerFission.ts:74 fissionScaleTension (weight 0.8)",
+     "changedIntermediate": "innerFission.pressureScore",
+     "downstreamProductionReader": "pressure.ts via residentialDebatePressure",
+     "physicalResult": "movement pressure; fission evaluation"
+    }
+   ]
+  },
+  "relationshipMemory": {
+   "class": "UNRESOLVED_pending_per_property_trace",
+   "recomputedPerTick": true,
+   "writers": [
+    "relationshipMemory.ts applyRelationshipMemorySocialEcologyContext"
+   ],
+   "note": "§7.1 requires the per-property behavior trace in pressure.ts. NOT completed in this pass.",
+   "chains": [
+    {
+     "writer": "relationshipMemory.ts",
+     "propertyRead": "band.relationshipMemory.behavior.* (exact properties NOT yet enumerated)",
+     "consumer": "pressure.ts (confirmed reader by grep; per-property trace NOT done)",
+     "changedIntermediate": "UNRESOLVED",
+     "downstreamProductionReader": "UNRESOLVED",
+     "physicalResult": "UNRESOLVED"
+    }
+   ]
+  },
+  "reportedKnowledge": {
+   "class": "UNRESOLVED_pending_target_bias_trace",
+   "recomputedPerTick": true,
+   "writers": [
+    "reportedKnowledge.ts advanceReportedKnowledge"
+   ],
+   "note": "§7.1 requires the decision-edge target-bias isolation. NOT completed in this pass.",
+   "chains": [
+    {
+     "writer": "reportedKnowledge.ts",
+     "propertyRead": "band.reportedKnowledge.reports[*]",
+     "consumer": "bandDecision.ts; accessNorms.ts; adaptiveHuman.ts; socialEcologicalDiffusion.ts",
+     "changedIntermediate": "UNRESOLVED — decision-edge target bias not isolated",
+     "downstreamProductionReader": "UNRESOLVED",
+     "physicalResult": "UNRESOLVED"
+    }
+   ]
+  }
+ },
+ "perSeed": {
+  "c15-social-causality": {
+   "controlFingerprints": {
+    "movementAndPosition": "4217c3c7368c0225",
+    "decisionAndSelectedAction": "a93709900f263a51",
+    "activityAndPhysicalReceipts": "56d16503ab179465",
+    "pressureState": "faa71583f113f48f",
+    "knowledgeAndMemories": "41e884a20f7ba04d",
+    "demographyAndFission": "e0fc9777aa92cecb",
+    "viability": "12ba8e5027a59017",
+    "protoCampBehavior": "740a177e1b8cba8a",
+    "foragingAdaptationBehavior": "022ff2bfabae7484",
+    "relationalSocialState": "8ffa2729ee587e44"
+   },
+   "arms": {
+    "cohesion_low": {
+     "seam": "between-tick clamp of the AUTHORITATIVE stored field band.cohesion (not recomputed per tick, so the clamp survives to its reader)",
+     "changedFingerprints": []
+    },
+    "cohesion_high": {
+     "seam": "between-tick clamp of the AUTHORITATIVE stored field band.cohesion (not recomputed per tick, so the clamp survives to its reader)",
+     "changedFingerprints": []
+    },
+    "innerFission_highPressure": {
+     "seam": "audit hook BETWEEN applyInnerFissionSocialReadabilityContext (canonical writer) and applyProtoCampContext (first production reader)",
+     "seamHookInvocations": 240,
+     "seamSawDefinedInnerFission": 240,
+     "seamSawDefinedSocialTension": 240,
+     "changedFingerprints": [
+      "movementAndPosition",
+      "activityAndPhysicalReceipts",
+      "pressureState",
+      "knowledgeAndMemories",
+      "demographyAndFission",
+      "viability",
+      "protoCampBehavior",
+      "foragingAdaptationBehavior"
+     ]
+    },
+    "innerFission_zeroPressure": {
+     "seam": "audit hook BETWEEN applyInnerFissionSocialReadabilityContext (canonical writer) and applyProtoCampContext (first production reader)",
+     "seamHookInvocations": 240,
+     "seamSawDefinedInnerFission": 240,
+     "seamSawDefinedSocialTension": 240,
+     "changedFingerprints": [
+      "movementAndPosition",
+      "activityAndPhysicalReceipts",
+      "pressureState",
+      "knowledgeAndMemories",
+      "demographyAndFission",
+      "viability",
+      "protoCampBehavior",
+      "foragingAdaptationBehavior"
+     ]
+    },
+    "socialTension_hostile": {
+     "seam": "audit hook BETWEEN applyInnerFissionSocialReadabilityContext (canonical writer) and applyProtoCampContext (first production reader)",
+     "seamHookInvocations": 240,
+     "seamSawDefinedInnerFission": 240,
+     "seamSawDefinedSocialTension": 240,
+     "changedFingerprints": [
+      "pressureState",
+      "demographyAndFission"
+     ]
+    },
+    "socialTension_harmonious": {
+     "seam": "audit hook BETWEEN applyInnerFissionSocialReadabilityContext (canonical writer) and applyProtoCampContext (first production reader)",
+     "seamHookInvocations": 240,
+     "seamSawDefinedInnerFission": 240,
+     "seamSawDefinedSocialTension": 240,
+     "changedFingerprints": [
+      "pressureState"
+     ]
+    }
+   }
+  }
+ },
+ "aggregate": {
+  "cohesion_low": {
+   "changedOnAnySeed": false,
+   "seedsWithChange": [],
+   "unionOfChangedFingerprints": [],
+   "changedBySeed": {
+    "c15-social-causality": []
+   }
+  },
+  "cohesion_high": {
+   "changedOnAnySeed": false,
+   "seedsWithChange": [],
+   "unionOfChangedFingerprints": [],
+   "changedBySeed": {
+    "c15-social-causality": []
+   }
+  },
+  "innerFission_highPressure": {
+   "changedOnAnySeed": true,
+   "seedsWithChange": [
+    "c15-social-causality"
+   ],
+   "unionOfChangedFingerprints": [
+    "activityAndPhysicalReceipts",
+    "demographyAndFission",
+    "foragingAdaptationBehavior",
+    "knowledgeAndMemories",
+    "movementAndPosition",
+    "pressureState",
+    "protoCampBehavior",
+    "viability"
+   ],
+   "changedBySeed": {
+    "c15-social-causality": [
+     "movementAndPosition",
+     "activityAndPhysicalReceipts",
+     "pressureState",
+     "knowledgeAndMemories",
+     "demographyAndFission",
+     "viability",
+     "protoCampBehavior",
+     "foragingAdaptationBehavior"
+    ]
+   }
+  },
+  "innerFission_zeroPressure": {
+   "changedOnAnySeed": true,
+   "seedsWithChange": [
+    "c15-social-causality"
+   ],
+   "unionOfChangedFingerprints": [
+    "activityAndPhysicalReceipts",
+    "demographyAndFission",
+    "foragingAdaptationBehavior",
+    "knowledgeAndMemories",
+    "movementAndPosition",
+    "pressureState",
+    "protoCampBehavior",
+    "viability"
+   ],
+   "changedBySeed": {
+    "c15-social-causality": [
+     "movementAndPosition",
+     "activityAndPhysicalReceipts",
+     "pressureState",
+     "knowledgeAndMemories",
+     "demographyAndFission",
+     "viability",
+     "protoCampBehavior",
+     "foragingAdaptationBehavior"
+    ]
+   }
+  },
+  "socialTension_hostile": {
+   "changedOnAnySeed": true,
+   "seedsWithChange": [
+    "c15-social-causality"
+   ],
+   "unionOfChangedFingerprints": [
+    "demographyAndFission",
+    "pressureState"
+   ],
+   "changedBySeed": {
+    "c15-social-causality": [
+     "pressureState",
+     "demographyAndFission"
+    ]
+   }
+  },
+  "socialTension_harmonious": {
+   "changedOnAnySeed": true,
+   "seedsWithChange": [
+    "c15-social-causality"
+   ],
+   "unionOfChangedFingerprints": [
+    "pressureState"
+   ],
+   "changedBySeed": {
+    "c15-social-causality": [
+     "pressureState"
+    ]
+   }
+  }
+ },
+ "unresolved": [
+  "relationshipMemory: per-property behavior reader trace in pressure.ts NOT completed (§7.1).",
+  "reportedKnowledge: decision-edge target-bias isolation NOT completed (§7.1).",
+  "contactMemories / encounterResponses / disposition / protoAccessMemory / campRumors NOT perturbed in this pass.",
+  "Longer-horizon physical consequences of confirmed local effects NOT measured.",
+  "No cooperation mechanism was added or assessed (§7.3)."
+ ]
+}

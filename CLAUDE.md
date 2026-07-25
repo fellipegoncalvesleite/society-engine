@@ -68,6 +68,47 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-07-25 (HUMAN VIABILITY / CAUSAL CLOSURE CORRECTION-16: PROGRESS — NOT ACCEPTED / DO NOT
+  MERGE, branch checkpoint/human-viability-causal-closure-16 from CORRECTION-15's d41c973.
+  main untouched at 668763f. This checkpoint completed the EVIDENCE-REPAIR half of its scope and
+  did NOT complete the CONSTRUCTION half.
+
+  **TWO CORRECTION-15 CLAIMS ARE RETRACTED. Do not carry them forward.**
+
+  (1) "The social layer is readability-only; only socialPressure is causal" is FALSE. Under an
+  admissible instrument every social field changes physical outcomes. innerFission perturbed at
+  the correct seam moves movement, physical food receipts, knowledge, demography and viability on
+  5/5 seeds; socialTension on 4/5 and 3/5; cohesion on 4/5 and 2/5. CORRECTION-15's null had two
+  independent causes, separated on its OWN seed: innerFission/socialTension are DERIVED and their
+  canonical writer applyInnerFissionSocialReadabilityContext runs at position 7 of the
+  updateBandContextStates chain while their readers applyProtoCampContext (8) and
+  applyForagingLearningAdaptationContext (12) run later IN THE SAME CALL, so a between-tick clamp
+  was destroyed before any reader executed (wrong seam); and the cohesion null was a single seed
+  plus a 10-field projection wrongly called "canonical state" that omitted protoCampMemory.behavior,
+  foragingAdaptation.behavior and pressureState. CORRECTION-15's own STATIC half had classified
+  every one of these fields as causal_or_intermediary_static_read — the documented conclusion
+  contradicted its own evidence.
+
+  (2) "demographicDeathMemoryPathAudit's 2/11 failure is a production regression" is FALSE. Both
+  failing checks assert orderings on 40-YEAR TRAJECTORY MEANS of arms that moved independently;
+  mean currentFoodStress rises monotonically as suppression falls (R0 0.4233 → R1 0.4347 → R3
+  0.4526), so density-dependent food feedback reverses the asserted sign. A same-snapshot
+  counterfactual (one identical spring pre-demography snapshot, arms differing ONLY in
+  band.deathMemory, exactly one production annual update) passes 6/6 checks on 5/5 seeds, with the
+  measured fertility delta 0.070 matching the production formula recentDeathSuppression*0.18 =
+  0.072 exactly. Classification: INVALID AUDIT EXPECTATION. Production not changed, not tuned.
+
+  Also downgraded to UNRESOLVED: "cohort composition is worth exactly 0.01 of support ratio" and
+  "age structure is close to decorative" — measured by the same class of instrument and NOT
+  re-proven here. relationshipMemory and reportedKnowledge are UNRESOLVED, not classified.
+
+  NEW instrumentation: src/sim/diagnostics/socialReadSeamHook.ts, an audit-only non-persisted
+  read-seam hook; diagnostics-off output is byte-identical to d41c973 on map1 and map2 at 40y.
+  NOT BUILT: cohort arms, viability cause taxonomy, adaptation cascade, extinction arms, frontier
+  exploration, fresh performance. The ~9-tile destination-knowledge horizon remains the binding
+  blocker. See docs/evidence/correction16/FINDINGS.md and AUDIT_ADMISSIBILITY.md.)
+
+Previously updated:
   2026-07-25 (HUMAN VIABILITY / RECOVERY / ADAPTIVE RESILIENCE CORRECTION-15: PROGRESS — NOT
   ACCEPTED / DO NOT MERGE, branch checkpoint/human-viability-adaptive-resilience-15 from public
   main 668763f, with CORRECTION-14's 222d3ec as evidence/patch donor only (not merged, not
@@ -79,13 +120,13 @@ Last updated:
   the just-observed local patch; and the expedition timestamp repair proven REQUIRED BY the other
   two. NEW RESULTS: the recovery basin is sound (no absorbing collapse spiral — one/three/five
   severe bad years all recover, chronic hunger clears in 2 years, bereavement washes out, 33/34/35
-  people do not bifurcate); cohort composition is causal ONLY through task-group party size and
-  worth 0.01 of support ratio, so labor collapse cannot cause extinction; and the SOCIAL LAYER IS
-  READABILITY-ONLY — cohesion clamped to 0.02 or 0.99 for six years, innerFission at near_split
-  and socialTension at 0.95 all leave canonical state byte-identical, and the one causal field,
-  socialPressure, is written by applyDemographyToSocialPressure (demography restated socially).
-  NOT BUILT: the whole-viability cause taxonomy, the adaptation cascade, the dedicated extinction
-  arms. See docs/evidence/correction15/.)
+  people do not bifurcate). RETRACTED BY CORRECTION-16 — this checkpoint's social and cohort
+  conclusions are NOT valid evidence and must not be cited: "the social layer is readability-only"
+  is disproven (wrong perturbation seam + narrow fingerprint + single seed), and "cohort
+  composition is worth 0.01 of support ratio / age structure is close to decorative" is downgraded
+  to UNRESOLVED pending a re-measurement with an admissible instrument. NOT BUILT: the
+  whole-viability cause taxonomy, the adaptation cascade, the dedicated extinction
+  arms. See docs/evidence/correction15/ and, for the retractions, docs/evidence/correction16/.)
 
 Previously updated:
   2026-07-25 (DEMOGRAPHIC RESPONSE COMPRESSION CORRECTION-13: PASS CANDIDATE, branch
@@ -146,16 +187,23 @@ Implemented checkpoint:
       (context lifecycle 4→2 rebuilds). See §25.2.
 
 Current active checkpoint:
-  HUMAN VIABILITY / RECOVERY / ADAPTIVE RESILIENCE (CORRECTION-15, PARTIAL) then DESTINATION
-  KNOWLEDGE HORIZON / EXPLORATION REACH. Two architecture facts established by measurement and
-  binding on future work:
-    - The SOCIAL LAYER IS READABILITY-ONLY. cohesion / innerFission / socialTension are inert
-      when clamped to extremes for six years; only socialPressure is causal and it is derived
-      from demography. Do NOT cite them as explanations for survival or fission, and do NOT add
-      a generic cohesion bonus. Real cooperation needs the relationship/household substrate.
-    - COHORT COMPOSITION is causal only through working adults -> task-group party size ->
-      per-trip return, worth 0.01 of support ratio. Age structure is close to decorative; a
-      labor-collapse extinction cause is not reachable without independent age hazards.
+  HUMAN VIABILITY / CAUSAL CLOSURE (CORRECTION-16, PROGRESS) then DESTINATION KNOWLEDGE HORIZON /
+  EXPLORATION REACH. The two "architecture facts" CORRECTION-15 recorded here are RETRACTED:
+    - The social layer is NOT readability-only. cohesion, innerFission and socialTension all have
+      real production readers (pressure.ts:157-158, protoCamps.ts:159/451/492/500,
+      foragingAdaptation.ts:1352/1418) and, perturbed at the correct seam, change movement,
+      physical food receipts, knowledge, demography and viability. innerFission does so on 5/5
+      seeds. They MAY be cited as causes, with the specific traced path named. The prohibition
+      that DOES survive: still do NOT add a generic cohesion/cooperation scalar — real cooperation
+      must move labor, goods or information in the subsystem where those physically move.
+    - COHORT COMPOSITION magnitude is UNRESOLVED. The "worth 0.01 of support ratio / age structure
+      is close to decorative" figure came from the same class of instrument as the retracted social
+      claim and has NOT been re-proven. Do not rely on it in either direction until paired-seed
+      cohort arms with a full mediation waterfall are run (CORRECTION-16 §8, not built).
+  Binding method rule from CORRECTION-16: docs/evidence/correction16/AUDIT_ADMISSIBILITY.md. A
+  derived field must be perturbed at its read seam, never between ticks; a narrow projection must
+  never be called "canonical state"; a mechanism claim needs a same-snapshot counterfactual, not a
+  trajectory-mean ordering; and an empty arm/seed set must report failure, not a vacuous pass.
   Demography reads deriveAnnualNutritionState; every behavioral consumer keeps
   deriveCanonicalNutritionState. Adaptation is reached ONLY through adaptationBoundary.ts; the
   seasonal read-model rebuild budget is 2 full buildTickContextCache + 1 partial refresh per tick;
@@ -1806,8 +1854,22 @@ Demographic persistence is implemented (persistence-1 and persistence-2 both PAS
 9. **SMALL-SCALE CONFLICT / FEUD / RETALIATION-1**, followed later by alliances, raids, and organized war.
 10. **EMERGENT TRAILS / ROUTES / ROADS / SEDENTISM.**
 11. **Major missing human biological and social systems** — now explicitly includes the **DEMOGRAPHIC SEX-COMPOSITION prerequisite**: EXPEDITIONARY-3 chose §6 Option B (mobility-role cohorts, no sex state) because canonical population state has NO sex composition and adding it means sex-aware aging/mortality/birth/fission/absorption/extinction surgery on the single-net-rate core (§10.3). Any sex-specific reporting — mobility, labor, culture, or kinship — REQUIRES that demographic checkpoint FIRST. Do not fabricate `adultMen = adults / 2` in a downstream checkpoint.
-12. **WHOLE-SIM CAUSAL CONNECTIVITY / DECORATIVE SYSTEMS AUDIT.**
-13. **PUBLIC POLISH + MVP CLOSURE.**
+    **CORRECTION-16 §15 — the human-system sequence inside item 11, in order. Recorded only;
+    none of these is implemented, and CORRECTION-16 implemented none of them:**
+    1. adaptation-authority consolidation;
+    2. physical landscape referents and meaningful places;
+    3. knowledge carriers and internal subgroup foundation;
+    4. semantic communication and real transmission;
+    5. plural views and interpretive ecology;
+    6. culture, identity, customs, norms and taboos;
+    7. temporary segmentation, factional fission and selective daughter inheritance;
+    8. religion, myth, ritual and sacred landscapes;
+    9. population genetics, heritable variation and inbreeding consequences;
+    10. learned incest avoidance and kin-distance heuristics.
+12. **PUBLIC EXPERIENCE POLISH / RELEASE CANDIDATE.**
+13. **WHOLE-SIM CAUSAL CONNECTIVITY / MISSING THREADS / DECORATIVE SYSTEMS AUDIT.** Do NOT pull
+    this forward — CORRECTION-16 deliberately did not execute it. It stays at the end.
+14. **MVP CLOSURE — only if the final audit in item 13 passes.**
 
 Roadmap rules:
 
@@ -2440,7 +2502,8 @@ Keep this bounded to the latest 10–15 accepted architecture changes. Condense 
 
 | Checkpoint/commit | Architecture change | Remaining caveat |
 | --- | --- | --- |
-| HUMAN VIABILITY / RECOVERY / ADAPTIVE RESILIENCE CORRECTION-15 (2026-07-25; branch `checkpoint/human-viability-adaptive-resilience-15` from public main `668763f`; **PROGRESS — DO NOT MERGE**; `222d3ec` used as evidence/patch donor only) | **Four ported repairs, each independently re-proven on this branch first** (`candidateRepairIsolationAudit.mjs`, before evidence taken on `668763f`): (A) the ANNUAL demographic step consumed mean food pressure **0.555** against a year that actually held **0.335** — overstating hardship by +0.220, with **89 physically-surplus years producing 0 surplus-signal years** (after: 0.129 vs 0.206, 111 → 114); repaired by `deriveAnnualNutritionState` consumed at the single annual call site, seasonal read retained for all behavior. (B) **31 of 480 seasons had zero trips** while the band held remembered patches inside the 10-tile radius but NONE inside the same-day budget (after: 0); repaired by a `requireSameDay` argmax domain. (C) unit proof that a saturated 48-slot `RESOURCE_KNOWLEDGE_CAP` **evicts the just-observed local patch**; repaired by protecting just-observed patch ids, list still bounded at 48. (D) the expedition observation timestamp is **required BY B and C** — `668763f` passes step-mode only because the recon path is never exercised; with B+C and without D map2 fails on `day`/`dayOfSeason` alone. **NEW: the recovery basin is sound** (`recoveryBasinAudit.mjs`) — no absorbing collapse spiral: one bad year recovers in 1 y, three bad years in 1 y, five SEVERE years in 12 y; chronic hunger clears within 2 y of sustained recovery; heavy prior death memory depresses one year then washes out; 33/34/35 starting people give a 3-person spread at 150 y. **NEW: the social layer is READABILITY-ONLY** (`socialCausalityAudit.mjs`, extremes clamped EVERY tick because these fields are derived and recomputed per tick) — `cohesion` at 0.02 AND 0.99, `innerFission` at near_split, `socialTension` at 0.95 all leave canonical state byte-identical over six years; only `socialPressure` is causal and it is written by `applyDemographyToSocialPressure`, i.e. demography restated socially. **NEW: cohort composition** is causal only via working adults → task-group party size (4.66 → 4.47) → support, worth **0.01** of support ratio; labor collapse cannot cause extinction. Added `candidateRepairIsolationAudit.mjs`, `recoveryBasinAudit.mjs`, `socialCausalityAudit.mjs` | **NOT ACCEPTED and PARTIAL.** Not built: the §6/§7 whole-viability cause taxonomy, the §9 adaptation cascade, the §12 dedicated multi-cause extinction arms — so gates 9/10/11/19/26 are unmet and "adaptation appears before collapse" is unproven in either direction. Habitat-ladder gates unchanged from CORRECTION-14 and with the same measured cause (9-tile destination-knowledge horizon): max 4 successful rich fissions, no second-generation fission, 3/5 `good` lineages fission, marginal never escapes, hostile never goes extinct. `demographicDeathMemoryPathAudit` FAILS 2/11 — reproduced as PASS on `668763f`, so a REAL new failure, isolated to the annual read, left unchanged rather than tuned away. `demographicPerLineageAudit`'s world equation was COMPLETED (transferred daughter population counted as new people; gap exactly 36 = 2×18) and passes on both commits. Performance not re-measured on this branch |
+| HUMAN VIABILITY / CAUSAL CLOSURE CORRECTION-16 (2026-07-25; branch `checkpoint/human-viability-causal-closure-16` from CORRECTION-15's `d41c973`; **PROGRESS — DO NOT MERGE**) | **Evidence repair, not construction.** Two CORRECTION-15 conclusions are RETRACTED and one instrument was added. (1) **The social layer is NOT readability-only.** `socialCausalityAudit.mjs` was rewritten: derived fields are now perturbed through a new audit-only read seam, effects are reported against ELEVEN separately named fingerprints (none called "canonical state"), and every arm runs on 5 predeclared shared seeds. `innerFission` moves movement, physical receipts, knowledge, demography and viability on **5/5 seeds**; `socialTension` on 4/5 and 3/5; `cohesion` on 4/5 and 2/5. Re-running C15's OWN seed separates the two defects: innerFission/socialTension nulls were purely the WRONG SEAM, the cohesion null was single-seed + narrow fingerprint. (2) **The 2/11 `demographicDeathMemoryPathAudit` failure is an INVALID AUDIT EXPECTATION, not a regression** — new `demographicDeathMemoryCounterfactualAudit.mjs` clones ONE spring pre-demography snapshot into arms differing only in `band.deathMemory` and runs exactly one production annual update: fertility and net rate are monotone non-increasing in death memory, mortality is unchanged (no mortality path consumes it), and the measured fertility delta **0.070** matches `recentDeathSuppression*0.18 = 0.072`. 6/6 checks × 5/5 seeds. Added `src/sim/diagnostics/socialReadSeamHook.ts` (audit-only, non-persisted; one boolean check when unregistered) and `docs/evidence/correction16/AUDIT_ADMISSIBILITY.md`. Diagnostics-off output byte-identical to `d41c973` on map1 and map2 at 40y | **NOT ACCEPTED and largely UNBUILT.** Not built: §5A's §4.1-compliant annual-nutrition comparisons, §6.3 death-memory decay, §7.1 relationshipMemory / reportedKnowledge traces (both **UNRESOLVED**, not classified), §8 cohort arms and mediation waterfall, §9 viability cause taxonomy, §10 adaptation cascade (**no family proven in either direction**), §11 frontier exploration, §12 extinction arms, §13 fresh performance. Gates 4, 9, 11–19 and 25 unmet. `candidateRepairIsolationAudit`'s A metric still subtracts a component (`annualGroundTruthMeanFoodStress`) from a composite (`foodDemographicPressure`) — a §4.1 violation; **do not cite `consumedMinusGroundTruth = -0.077`**. The ~9-tile destination-knowledge horizon remains the binding blocker |
+| HUMAN VIABILITY / RECOVERY / ADAPTIVE RESILIENCE CORRECTION-15 (2026-07-25; branch `checkpoint/human-viability-adaptive-resilience-15` from public main `668763f`; **PROGRESS — DO NOT MERGE**; `222d3ec` used as evidence/patch donor only) | **Four ported repairs, each independently re-proven on this branch first** (`candidateRepairIsolationAudit.mjs`, before evidence taken on `668763f`): (A) the ANNUAL demographic step consumed mean food pressure **0.555** against a year that actually held **0.335** — overstating hardship by +0.220, with **89 physically-surplus years producing 0 surplus-signal years** (after: 0.129 vs 0.206, 111 → 114); repaired by `deriveAnnualNutritionState` consumed at the single annual call site, seasonal read retained for all behavior. (B) **31 of 480 seasons had zero trips** while the band held remembered patches inside the 10-tile radius but NONE inside the same-day budget (after: 0); repaired by a `requireSameDay` argmax domain. (C) unit proof that a saturated 48-slot `RESOURCE_KNOWLEDGE_CAP` **evicts the just-observed local patch**; repaired by protecting just-observed patch ids, list still bounded at 48. (D) the expedition observation timestamp is **required BY B and C** — `668763f` passes step-mode only because the recon path is never exercised; with B+C and without D map2 fails on `day`/`dayOfSeason` alone. **NEW: the recovery basin is sound** (`recoveryBasinAudit.mjs`) — no absorbing collapse spiral: one bad year recovers in 1 y, three bad years in 1 y, five SEVERE years in 12 y; chronic hunger clears within 2 y of sustained recovery; heavy prior death memory depresses one year then washes out; 33/34/35 starting people give a 3-person spread at 150 y. ~~NEW: the social layer is READABILITY-ONLY~~ — **RETRACTED BY CORRECTION-16.** The clamp was applied BETWEEN ticks, but `innerFission`/`socialTension` are rewritten by `applyInnerFissionSocialReadabilityContext` at position 7 of the `updateBandContextStates` chain BEFORE their readers at positions 8 (`applyProtoCampContext`) and 12 (`applyForagingLearningAdaptationContext`) execute, so the perturbation never reached a reader; the "canonical state" compared was a 10-field projection omitting `protoCampMemory.behavior`, `foragingAdaptation.behavior` and `pressureState`; and only ONE seed was used. Perturbed at the correct seam, `innerFission` moves movement, receipts, knowledge, demography and viability on 5/5 seeds. ~~NEW: cohort composition is worth 0.01 of support ratio~~ — **DOWNGRADED TO UNRESOLVED** (same instrument class, not re-proven). Added `candidateRepairIsolationAudit.mjs`, `recoveryBasinAudit.mjs`, `socialCausalityAudit.mjs` | **NOT ACCEPTED and PARTIAL.** Not built: the §6/§7 whole-viability cause taxonomy, the §9 adaptation cascade, the §12 dedicated multi-cause extinction arms — so gates 9/10/11/19/26 are unmet and "adaptation appears before collapse" is unproven in either direction. Habitat-ladder gates unchanged from CORRECTION-14 and with the same measured cause (9-tile destination-knowledge horizon): max 4 successful rich fissions, no second-generation fission, 3/5 `good` lineages fission, marginal never escapes, hostile never goes extinct. `demographicDeathMemoryPathAudit` FAILS 2/11 — ~~a REAL new failure~~ **RECLASSIFIED BY CORRECTION-16 as an INVALID AUDIT EXPECTATION**: both checks assert orderings on 40-year trajectory means of independently moving arms, and density-dependent food feedback reverses the sign (mean currentFoodStress R0 0.4233 → R1 0.4347 → R3 0.4526). A same-snapshot counterfactual passes 6/6 on 5/5 seeds. Production unchanged and untuned. `demographicPerLineageAudit`'s world equation was COMPLETED (transferred daughter population counted as new people; gap exactly 36 = 2×18) and passes on both commits. Performance not re-measured on this branch |
 | DEMOGRAPHIC RESPONSE COMPRESSION CORRECTION-13 (2026-07-25; branch `checkpoint/demographic-response-compression-13` from public main `22123aa`, which contains RECOVERY-12 as `022f213`) | **The food→demography signal was one-sided.** Measured via `demographicCompositionAudit.mjs`: demography runs annually (`shouldRunAnnualDemography`, spring); `growthRate = clamp(survivalBaseline(0.002) + fertilityPressure×0.012 − mortalityPressure×0.014 − penalties, maxDecline, maxGrowth)`; reconciliation (`advancePopulationAccounting`, sign-gated single net rate, fractional accumulators preserved) is correct and NOT the defect. The FIRST compression point is the NUTRITION STATE: `deriveCanonicalNutritionState`'s `foodDemographicPressure = clamp01(… − recoveryRelief×0.14)` is floored at 0, and `foodStress = clamp01(1−rawSupportRatio)=0` for any ratio ≥1 — so genuine surplus (ratio 1.5) was **byte-identical** to bare maintenance (ratio 1.0): same nutrition, fertility 0.54, net rate +0.0074, trajectory 34→94 (`strongGtMaintenance:false`). Fix (only the measured defect): a symmetric bounded `nutritionalSurplus ∈ [0,1]` on the canonical nutrition state = `clamp01(clamp01((meanRawSupport − SURPLUS_ONSET=1.12)/SURPLUS_SPAN=0.6) × recoveryRelief)`, where `meanRawSupport` is the UNCAPPED rolling raw support (the `rolling*SeasonSupport` fields use the clamped ratio ≤1, so surplus was invisible; cached once/season as `rolling8SeasonRawSupport` for O(1) reads) and the recovery-streak gate blocks one-season spikes. It drives `foodFertilitySurplusBonus = nutritionalSurplus × 0.22` (symmetric with `foodFertilitySuppression`) into `fertilityPressure`, surfaced on `BandDemography`. **Exactly 0 at maintenance and below** — maintenance and every deficit arm unchanged. Post-fix arms order strong(+0.0062,34→80) > maintenance(+0.0045,34→64) > moderate(−0.0006,34→32) > severe(−0.0102,34→7); one bad season not fatal, one good season not explosive. Production preserved: Dry Margin 13/12/12, Estuary 35/33/33 (grows), North Frontier 9/9/9 (rescue), corridors 0/0/0 (extinct). Added `demographicCompositionAudit.mjs` | No arbitrary fertility/mortality tuning, no floors, no founder/habitat rules, no food-yield/demand change. Real default founders are genuinely food-limited (meanFoodPress 0.40–0.99), NOT genuinely surplus, so they correctly stay marginal — that food-reach/ecology-adequacy limit is OUT OF SCOPE (Layer B / logistical range / climate). Single net-rate model + reconciled age cohorts remain; fission/migration/adaptation/culture remain roadmap. Perf ~+8% bounded O(1). Ecology/human-survival NOT complete |
 | LOST-LINEAGE RECOVERY — FOOD RECEIPT ACCOUNTING (RECOVERY-12) (2026-07-24; branch `checkpoint/recover-food-receipt-accounting-12` from public main `e539813`) | **The human food ledger no longer derives current food from `Band.recentIntraSeasonTrips`.** New authoritative bounded per-accounting-period accumulator `src/sim/agents/seasonalFoodReceipts.ts` (`Band.seasonalFoodReceipts`): written ONLY on a successful physical food return — same-day trip (`intraSeasonTrips.applyTripDay`) + expedition cargo deposit (`expedition.ts`) — as O(1) running sums of the SAME `usableSupport`/harvest/losses (creates no food; preserves loss + resource-class attribution; `topReceipts` ≤16 display-only). `deriveHumanFoodSupportLedger(band, demand, currentTick)` reads it via `readFreshAccumulator` under a **one-current-period freshness rule** `periodTick === currentTick − 1` (season-N food deposited at tick N feeds the boundary decision at N+1; a zero-harvest season credits exactly zero; stale receipts cannot persist). Reproduced defect: the bounded 24-record `recentIntraSeasonTrips` window (`RECENT_TRIP_RECORD_CAP=24`) evicted early physical receipts because a season runs 28 trip-days (`FIRST_TRIP_DAY_OF_SEASON=6`,`TRIP_DAY_CADENCE=3`) and most trips are non-food — measured mainline capture 0.49–0.80 on the same history; new capture **1.000** for all Map 1 founders (`recoveryFoodAccountingAudit`). `recentIntraSeasonTrips` unchanged, now non-authoritative for food; fission daughters reset the accumulator (clone guard + explicit undefined). Before/after 150y: Dry Margin 0/0/10→15/12/12, Delta Reed s3 0→40; Map 2 Estuary grows above founding, North Frontier rescued 0→9, Upper/Yellow Corridor stay extinct. Added `recoveryFoodAccountingAudit.mjs`, `stepModeInvarianceAudit.mjs`, `founderTrajectoryAudit.mjs`; graph node `seasonalFoodReceipts` | Improvement is proportional to food previously lost to eviction — several founders still finish below founding population and corridors remain honestly extinct. Demographic growth compression was **explicitly out of scope**: no fertility/mortality/clamp/fission/ecology-density/yield/demand/movement/adaptation/storage/migration change. Perf ~+6% (bounded O(1) constant; ≤16-receipt display list per band). The demographic net-rate growth response is the next checkpoint |
 | ECOLOGY VIABILITY ADAPTATION CORRECTION-8 (2026-07-19; from 6fe9cf2) | **The ~97% same-day failure gate is SELECTION, not harvest.** Terminal-classifying every attempted trip (`scripts/sameDayFailureGateProbe.mjs`, reading only fields production already writes) showed 89.4% of ordinary and 90.7% of marginal trips were `cause=water_check` and never reached the physical resolver — rich: 1 trip in 160 seasons. Root cause measured, not inferred: `waterStress` (`pressure.ts:209`) derives from tile `waterAccess` + seasonal/acute terms and has **no term for water actually fetched**, while a water_check returns `returned_with_information` and creates nothing — so the trigger could not be released by the action it triggered. With ONE candidate per day and the water branch evaluated ahead of every food cause, any habitat below ~0.6 waterAccess starved permanently (ordinary waterStress 0.35–0.52 across all 160 seasons, never < the 0.32 trigger; foodStress pinned at 1.0 from season 8; 9 distinct tiles re-checked, top one **1073x** at mean confidence 0.76). Repair: one predicate in `getTripCause` (`intraSeasonTrips.ts`) — an information action fires only when the band's OWN knowledge is deficient (`isDormant \|\| effectivePresenceConfidence < OBSERVATION_CONFIDENCE_THRESHOLD`, the existing 0.42 constant). Band knowledge only; no hidden state; no global coefficient raised. Result: ordinary **extinct y90 → survives 100y at pop 11** (receipts 8.29 → 27.56), marginal 0.72 → 2.97 (still correctly extinct), rich byte-identical at 134.0164. Added `sameDayFailureGateProbe.mjs` + `waterCheckLoopProbe.mjs` | Ordinary is rescued from extinction but **NOT at replacement** (34–44% of the 0.1875 break-even across 4 seeds, declining 22 → 11 over a century). Newly exposed and deliberately unfixed: `route_time_infeasible` = 18.1% of ordinary trips vs **0% of rich** — selection uses straight-line `getGridDistance` (`:527`) while execution needs a passable path within `MAX_TRIP_DISTANCE_TILES=10`, so fragmented terrain wastes the day. Whether that is defective or honest terrain is **unproven** (code reading, not a controlled arm) — CORRECTION-9. `depleted_below_threshold` is now 38.7% ordinary vs 41.2% rich = honest depletion |

@@ -181,6 +181,69 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### HUMAN VIABILITY / CAUSAL CLOSURE — CORRECTION-16 — PROGRESS, DO NOT MERGE
+
+**Branch** `checkpoint/human-viability-causal-closure-16`, from CORRECTION-15's `d41c973`
+(itself from public main `668763f`). `main` untouched. Tree clean. **Not pushed** — the
+standing rule is that only PASS checkpoints are published.
+
+**This checkpoint did the EVIDENCE REPAIR and did not do the CONSTRUCTION.** Say that plainly:
+§8 cohort arms, §9 viability cause taxonomy, §10 adaptation cascade, §11 frontier exploration,
+§12 extinction arms and §13 fresh performance were **not built**, and no evidence for them is
+claimed. Gates 4, 9, 11–19 and 25 are unmet.
+
+**Two CORRECTION-15 conclusions are RETRACTED — do not carry them forward.**
+
+1. **"The social layer is readability-only" is FALSE.** `socialCausalityAudit.mjs` was
+   rewritten. The old test clamped `innerFission`/`socialTension` BETWEEN ticks, but their
+   canonical writer `applyInnerFissionSocialReadabilityContext` runs at position 7 of the
+   `updateBandContextStates` chain and their readers `applyProtoCampContext` (8) and
+   `applyForagingLearningAdaptationContext` (12) run later IN THE SAME CALL — the perturbation
+   was destroyed before any reader executed. Perturbed at the correct seam over 5 seeds,
+   `innerFission` changes movement, physical receipts, knowledge, demography and viability on
+   **5/5 seeds**; `socialTension` on 4/5 and 3/5; `cohesion` on 4/5 and 2/5. Re-run on C15's OWN
+   seed, innerFission/socialTension still move — so their null was purely the seam, while the
+   cohesion null was a single seed plus a 10-field projection wrongly called "canonical state".
+   CORRECTION-15's own static half had already classified all of these as causal.
+
+2. **The 2/11 `demographicDeathMemoryPathAudit` failure is an INVALID AUDIT EXPECTATION, not a
+   production regression.** Both checks assert orderings on 40-year trajectory means of arms that
+   moved independently; mean `currentFoodStress` rises as suppression falls (R0 0.4233 → R1
+   0.4347 → R3 0.4526), so density-dependent food feedback reverses the asserted sign. New
+   `demographicDeathMemoryCounterfactualAudit.mjs` clones ONE spring pre-demography snapshot into
+   arms differing only in `band.deathMemory` and runs exactly one production annual update:
+   6/6 checks pass on 5/5 seeds, mortality is unchanged (nothing consumes death memory on the
+   mortality side), and the fertility delta **0.070** matches `recentDeathSuppression*0.18 =
+   0.072`. Production was not changed and not tuned.
+
+Also **downgraded to UNRESOLVED**: "cohort composition is worth 0.01 of support ratio" and "age
+structure is close to decorative". `relationshipMemory` and `reportedKnowledge` are UNRESOLVED,
+not classified.
+
+**New instrumentation.** `src/sim/diagnostics/socialReadSeamHook.ts` — audit-only, non-persisted,
+module-level slot cleared in `finally`; one boolean check when unregistered. Diagnostics-off
+output is **byte-identical to `d41c973`** on map1 and map2 at 40 years.
+
+**Binding method rules** are now in `docs/evidence/correction16/AUDIT_ADMISSIBILITY.md`: perturb
+derived fields at the read seam and prove the perturbation survived; never name a narrow
+projection "canonical state"; use ≥5 shared seeds; prove mechanisms with same-snapshot
+counterfactuals, not trajectory-mean orderings; and never let an empty arm/seed set produce a
+vacuous pass (that bug occurred and was caught during this checkpoint).
+
+**Regression.** build/tsc/graph/import-boundary/adaptation-boundary/context-lifecycle/
+season-order/step-mode/food-receipt-capture-1.000/`deterministic=true`/fresh-process determinism
+and candidate repairs A–D all PASS. Caveat: `candidateRepairIsolationAudit`'s A metric still
+subtracts a component from a composite (§4.1 violation) — **do not cite
+`consumedMinusGroundTruth = -0.077`**.
+
+**Next.** The ~9-tile destination-knowledge horizon is still the binding blocker on
+multi-generation dispersal. §11's bounded frontier-exploration family is the right next
+construction — and it must not be solved by widening a radius constant or granting hidden
+destination quality.
+
+---
+
+
 ### HUMAN VIABILITY, RECOVERY, ADAPTIVE RESILIENCE CORRECTION-15 — PROGRESS, DO NOT MERGE (2026-07-25)
 
 Branch `checkpoint/human-viability-adaptive-resilience-15` from public `main` `668763f`.
@@ -209,22 +272,29 @@ cost population and 12 years but still recover. Chronic hunger clears within 2 y
 physical recovery. Heavy prior death memory depresses the first post-shock year then washes out.
 33 vs 34 vs 35 starting people produce a 3-person spread after 150 years — no destiny bifurcation.
 
-**Two honest negative results.** (1) Cohort arms had to be moved into the FULL simulation because
-the scripted harness bypasses the only path cohort composition has; measured there, halving
-working adults changes task-group party size 4.66 → 4.47 and support ratio by **0.01**. A
-labor-collapse extinction cause is NOT reachable. (2) The social layer is **readability-only in
-practice**: clamped every tick for six years, `cohesion` at 0.02 AND at 0.99, `innerFission` at
-near_split, and `socialTension` at 0.95 all leave canonical state byte-identical. Only
-`socialPressure` is causal, and it is written by `applyDemographyToSocialPressure` — demography
-restated socially. No cohesion bonus and no fake social fission were added.
+**Two claimed negative results — BOTH RETRACTED BY CORRECTION-16.** (1) The cohort figure
+(halving working adults moves party size 4.66 → 4.47 and support ratio by 0.01, so labor-collapse
+extinction is unreachable) is **DOWNGRADED TO UNRESOLVED** — same instrument class as (2), not
+re-proven. (2) "The social layer is readability-only" is **FALSE**. The clamp was applied BETWEEN
+ticks, but `innerFission`/`socialTension` are rewritten by
+`applyInnerFissionSocialReadabilityContext` at position 7 of the `updateBandContextStates` chain
+BEFORE their readers `applyProtoCampContext` (8) and `applyForagingLearningAdaptationContext` (12)
+execute in the SAME call — the perturbation never reached a reader. The "canonical state" compared
+was a 10-field projection omitting `protoCampMemory.behavior`, `foragingAdaptation.behavior` and
+`pressureState`, and only one seed was used. Perturbed at the correct seam over 5 seeds,
+`innerFission` changes movement, physical receipts, knowledge, demography and viability on **5/5
+seeds**. No cohesion bonus and no fake social fission were added, and that prohibition still
+stands.
 
 **Regression.** tsc/build/graph/`deterministic=true`/fresh-process determinism/step-mode
 invariance/receipt capture 1.000/CORRECTION-13 arms preserved exactly (80/64/32/7) and the
 food/ecology/lifecycle/boundary matrix all PASS. `demographicPerLineageAudit`'s world equation was
 COMPLETED (it counted a daughter's transferred founding population as new people; gap was exactly
 36 = 2 x 18) and passes on both this branch and `668763f`. `demographicDeathMemoryPathAudit`
-FAILS 2 of 11 — reproduced as PASS on `668763f`, so it is a REAL new failure, isolated to the
-annual read, and left unchanged rather than tuned away.
+FAILS 2 of 11 — **RECLASSIFIED BY CORRECTION-16 as an INVALID AUDIT EXPECTATION, not a
+regression**: both checks assert orderings on 40-year trajectory means of independently moving
+arms, and density-dependent food feedback reverses the asserted sign (mean currentFoodStress R0
+0.4233 → R1 0.4347 → R3 0.4526). A same-snapshot counterfactual passes 6/6 checks on 5/5 seeds.
 
 **Next.** The destination knowledge horizon remains the binding limit on multi-generation
 expansion; the unbuilt cause taxonomy / adaptation cascade / extinction arms are the rest of this

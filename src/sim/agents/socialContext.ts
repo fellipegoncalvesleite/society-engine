@@ -37,6 +37,7 @@ import { applyVisibleNatureContext } from "./visibleNature";
 import { applyForagingLearningAdaptationContext } from "./foragingAdaptation";
 import { applyBodyCampSurvivalLogisticsContext } from "./bodyCampLogistics";
 import { applyRelationshipMemorySocialEcologyContext } from "./relationshipMemory";
+import { applySocialReadSeam, hasSocialReadSeamHook } from "../diagnostics/socialReadSeamHook";
 // 2K.8 — second deliberate src/sim consumer of the patch-return/skill view (after the 2K.5
 // resourceScout selection hook): the band-known learned-support term for the candidate-vs-current
 // opportunity comparison. DECISION-SIDE ONLY — it feeds opportunity scoring, never realized
@@ -122,12 +123,29 @@ function countContext(
   profiler?.count?.(name, amount);
 }
 
+// CORRECTION-16 §4.3 — audit-only seam between the canonical writer of
+// `innerFission`/`socialTension` and their first production reader (`applyProtoCampContext`;
+// `applyForagingLearningAdaptationContext` and `pressure.ts` read them later still).
+// Unregistered — every production, worker and UI path — this is one boolean check and the
+// world reference is returned untouched, so diagnostics-off output is byte-identical.
+function applySocialReadSeamContext(world: WorldState): WorldState {
+  if (!hasSocialReadSeamHook()) return world;
+
+  const bands = Object.entries(world.bands)
+    .reduce<Record<string, Band>>((bandsById, [id, band]) => {
+      bandsById[id] = applySocialReadSeam(band);
+      return bandsById;
+    }, {});
+
+  return { ...world, bands: bands as Readonly<Record<BandId, Band>> };
+}
+
 export function updateBandContextStates(
   world: WorldState,
   cache = buildTickContextCache(world),
   diagnostics?: FoodDemographyDiagnostics,
 ): WorldState {
-  const updated = applyBandReadabilityContext(applyRelationshipMemorySocialEcologyContext(applyBodyCampSurvivalLogisticsContext(applyForagingLearningAdaptationContext(applyProtoAccessContext(applyVisibleNatureContext(applyResourceEcologyContext(applyProtoCampContext(applyInnerFissionSocialReadabilityContext(
+  const updated = applyBandReadabilityContext(applyRelationshipMemorySocialEcologyContext(applyBodyCampSurvivalLogisticsContext(applyForagingLearningAdaptationContext(applyProtoAccessContext(applyVisibleNatureContext(applyResourceEcologyContext(applyProtoCampContext(applySocialReadSeamContext(applyInnerFissionSocialReadabilityContext(
     advanceRangeFriction(
       advanceReportedKnowledge(
         applyEncounterContext(
@@ -145,7 +163,7 @@ export function updateBandContextStates(
       cache,
     ),
     cache,
-  )))))))));
+  ))))))))));
   return preserveTerminalBandSnapshots(world, updated);
 }
 
