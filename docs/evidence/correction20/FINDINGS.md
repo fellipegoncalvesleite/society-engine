@@ -2,10 +2,15 @@
 
 **Verdict: PROGRESS — NOT ACCEPTED / DO NOT MERGE.**
 
-This checkpoint delivered the §8 semantic contracts, the §9 distance term ledger, and the
-§6 reader-isolation instrumentation. The two mandatory measurement runs (§5 cross-seed
-completion and §6 arm matrix) were **still executing when this report was written** and
-their results are recorded as pending, not inferred. No production behaviour was changed.
+This checkpoint delivered the §8 semantic contracts, the §9 distance term ledger, the §6
+reader-isolation instrumentation, and the **completed §5 cross-seed decomposition**. The §6
+arm matrix was still executing at write time and its results are recorded as pending, not
+inferred. **No production behaviour was changed.**
+
+The headline result is that the two default maps are driven by quantitatively different
+mechanisms — map 1 is **88.8% descendant amplification**, map 2 is **95.7% direct
+within-band effect** — and that a claim I made in the previous checkpoint from a single
+seed does not survive the full seed set (see §5b).
 
 ---
 
@@ -131,23 +136,84 @@ when this report was written.** Results are not stated because they are not yet 
 is the experiment §6 calls mandatory and it is the only thing that can explain map 2, whose
 band count is unchanged while its population per band falls.
 
-## 5. §5 — Cross-seed completion (pending)
+## 5. §5 — Cross-seed completion: COMPLETE, and the two maps differ quantitatively
 
-The CORRECTION-19 waterfall (20 runs, 5 seeds × 2 maps × enabled/disabled) was also still
-executing. Partial results available at write time, map 1 only:
+All 20 runs finished (5 seeds x 2 maps x enabled/disabled, 300 years).
 
 ```text
-map1 c18:a  ON pop 204 bands 7  pop/band 29.14  food/AY 0.0050  support 0.3019  fis 2 @ y102
-            OFF pop 265 bands 10 pop/band 26.50 food/AY 0.0049  support 0.2686  fis 5 @ y80
-map1 c18:b  ON pop 206 bands 8  pop/band 25.75  food/AY 0.0039  support 0.2209  fis 3 @ y70
-            OFF pop 217 bands 8  pop/band 27.13 food/AY 0.0050  support 0.2420  fis 3 @ y78
+map1   population       ON 188.4   OFF 244.6   (-22.98%)
+       bands            ON 7.0     OFF 8.8
+       pop / band       ON 27.082  OFF 27.748  (-2.4%)
+       raw support      ON 0.2529  OFF 0.2537  (-0.33%)
+       fissions         ON 2.0     OFF 3.8     first @ y107.6 vs y79.8
+       DECOMPOSITION    gap 56.2 = amplification 49.92 (88.8%) + direct 6.28 (11.2%)
+
+map2   population       ON 196.4   OFF 226.0   (-13.10%)
+       bands            ON 11.0    OFF 11.0    (IDENTICAL)
+       pop / band       ON 17.970  OFF 20.546  (-12.54%)
+       raw support      ON 0.1487  OFF 0.1636  (-9.09%)
+       fissions         ON 2.0     OFF 2.0     first @ y151.4 vs y110.4
+       DECOMPOSITION    gap 29.6 = amplification 1.27 (4.3%) + direct 28.33 (95.7%)
 ```
 
-Seed `c18:a` is first-fission-delay dominated (y102 vs y80, 2 vs 5 fissions, bands larger
-and better supported). Seed `c18:b` shows equal band counts and equal fission counts with a
-lower per-band population — a different mechanism on the same map. **Two seeds on one map
-already disagree**, which is itself a result: the §5 per-seed classification cannot be
-collapsed to one mechanism per map, let alone one overall.
+**map1 is 88.8% descendant amplification.** Bands are the same size (-2.4%) and equally
+well supported (-0.33%); there are simply fewer of them, and the first fission arrives 28
+years late.
+
+**map2 is 95.7% direct within-band effect.** Band count and fission count are identical,
+but every band is 12.5% smaller and 9.1% worse supported. Amplification explains almost
+nothing there.
+
+Expedition labour is 0.39% (map1) and 0.28% (map2) of working-adult days, and the
+terminal-phase labour leak is **0** on both maps — confirming CORRECTION-19's accounting
+result on the full seed set.
+
+**First fission is delayed on BOTH maps** — +27.8 years on map1, +41.0 years on map2 — even
+where the eventual fission count is unchanged. That is the one signal common to both, and
+it is consistent with the T1→T2 split-motivation suspicion, though still not proof.
+
+### Per-seed classification (§5)
+
+| map1 seed | mechanism |
+| --- | --- |
+| `c18:a` | first-fission delay + missing daughters (2@y102 vs 5@y80; bands larger, better supported) |
+| `c18:b` | within-band (equal bands and fissions; pop/band 25.75 vs 27.13) |
+| `c18:c` | missing daughters (1@y156 vs 4@y54) — the most extreme delay measured |
+| `c18:d` | mixed — both fewer bands AND much lower pop/band (19.71 vs 30.78) |
+| `c18:e` | fission-count only; pop/band HIGHER with exploration (29.14 vs 25.0), population effectively equal (204 vs 200) |
+
+| map2 seed | mechanism |
+| --- | --- |
+| `c18:a` | within-band (11/11 bands, 2/2 fissions, support 0.1397 vs 0.1713) |
+| `c18:b` | within-band despite MORE bands and MORE fissions with exploration (12/11, 3/2) |
+| `c18:c` | within-band, mild; fission slightly EARLIER with exploration (y94 vs y99) |
+| `c18:d` | within-band; support essentially equal (0.1585 vs 0.1571) yet pop/band lower |
+| `c18:e` | mixed; support HIGHER with exploration (0.1538 vs 0.1360) yet population lower |
+
+**Seeds disagree within each map.** `c18:e` on map1 shows essentially no population effect
+and larger bands; `c18:b` on map2 shows more bands and more fissions with exploration
+enabled. No single mechanism describes either map, which is exactly why §5 requires
+per-seed classification rather than a per-map verdict.
+
+## 5b. CORRECTION to my earlier single-seed claim
+
+My CORRECTION-19 report stated, from map1 seed `c18:a` alone, that "exploring bands are
+better fed — raw support ratio +12.4%". **That does not survive the full seed set and is
+withdrawn.** Across five seeds:
+
+```text
+map1 support ratio  ON 0.2529  OFF 0.2537   -0.33%   (essentially identical)
+map2 support ratio  ON 0.1487  OFF 0.1636   -9.09%   (meaningfully WORSE)
+```
+
+`c18:a` was the most favourable seed on the most favourable map. Generalizing it was
+precisely the single-seed over-reach §5 exists to prevent, and I made it. The corrected
+statement is: **exploration leaves support unchanged on map1 and degrades it ~9% on map2.**
+
+The parts of the CORRECTION-19 conclusion that DO survive: labour accounting is singular
+(leak 0 across all seeds), expedition person-days are well under half a percent of
+working-adult time, and the map1 gap is overwhelmingly amplification rather than
+subsistence.
 
 ## 6. What was NOT done
 
