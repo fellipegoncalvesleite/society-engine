@@ -52,6 +52,9 @@ try {
     viableCandidatesDiscardedByMasking: 0,
     // (c) honest loss
     ledgersWhereWinnerPassed: 0,
+    // §11 repair effect: how often a viable candidate replaced a non-viable score winner.
+    ledgersWhereRepairRescuedAViableCandidate: 0,
+    ledgersWhereSelectedPassedViability: 0,
     frontierDerivedThatWouldPassViability: 0,
     frontierDerivedThatWonScore: 0,
     // distance reach
@@ -85,6 +88,9 @@ try {
         totals.maxWinnerDistance = Math.max(totals.maxWinnerDistance, c.distanceTiles);
       }
     }
+
+    if (ledger.viableRescuedNonViableWinner) totals.ledgersWhereRepairRescuedAViableCandidate += 1;
+    if (ledger.selectedPassedViability) totals.ledgersWhereSelectedPassedViability += 1;
 
     if (ledger.winnerPassedViability) {
       totals.ledgersWhereWinnerPassed += 1;
@@ -170,6 +176,8 @@ try {
       meanCandidatesEvaluated: r3(totals.candidatesEvaluated / Math.max(1, totals.ledgers)),
       winnerFailedViabilityRate: r3(totals.ledgersWhereWinnerFailedViability / Math.max(1, totals.ledgers)),
       maskingRate: r3(maskingRate),
+      selectedPassedViabilityRate: r3(totals.ledgersWhereSelectedPassedViability / Math.max(1, totals.ledgers)),
+      repairRescueRate: r3(totals.ledgersWhereRepairRescuedAViableCandidate / Math.max(1, totals.ledgers)),
       frontierDerivedShareOfEvaluated: r3(
         totals.frontierDerivedCandidatesSeen / Math.max(1, totals.candidatesEvaluated),
       ),
@@ -196,7 +204,9 @@ try {
   console.log(`  ... while a viable candidate existed    : ${totals.ledgersWhereWinnerFailedButAViableCandidateExisted}`);
   console.log(`viable candidates discarded by masking    : ${totals.viableCandidatesDiscardedByMasking}`);
   console.log(`max distance  evaluated/viable/winner     : ${totals.maxEvaluatedCandidateDistance} / ${totals.maxViableCandidateDistance} / ${totals.maxWinnerDistance}`);
-  console.log(`DIAGNOSIS: ${diagnosis}`);
+  console.log(`SELECTED passed viability (post-repair) : ${result.derived.selectedPassedViabilityRate}`);
+  console.log(`repair RESCUED a viable candidate       : ${totals.ledgersWhereRepairRescuedAViableCandidate} (${result.derived.repairRescueRate})`);
+  console.log(`DIAGNOSIS (score-winner structure)      : ${diagnosis}`);
 } finally {
   if (diagnostics !== undefined) diagnostics.setOpportunityCandidateObserver(undefined);
   await server.close();

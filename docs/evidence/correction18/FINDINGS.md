@@ -221,13 +221,43 @@ working: 26.7 frontier-derived tiles per band in production, 0.0 in Arm A.
 
 It is a typed field, not a reason-id substring search, as §8 requires.
 
-## 8. Post-repair measurements
+## 8. Post-repair measurements — the repair works, and it is SMALL
 
-See `candidate-ordering-post.json` and the post-repair default-map A/B in this directory.
-These determine whether the §11 repair reduces masking and whether it moves the population
-regression. **If the regression is unchanged, that is the expected result** — §7 attributes
-it to expedition labour, not to destination selection, and the §11 repair targets
-destination selection.
+Re-run with the repair in place, and with the instrument corrected. (The first post-repair
+run still reported the *score* winner while the function now returns `bestViable ?? best`,
+so the repair was invisible; the ledger now also reports what is actually selected.)
+
+```text
+50,462 ledgers, map1+map2, 2 seeds, 150 years
+
+score winner FAILS viability            0.620   (unchanged — the repair does not touch scoring)
+SELECTED passed viability (post-repair) 0.396   (was 0.380)
+repair RESCUED a viable candidate         813 ledgers  (0.016)
+```
+
+So in 813 of 50,462 band-derivations a viable destination is now selected where a
+non-viable one was selected before. That is a **real, correct, and modest** effect. It is
+small because in most ledgers where the score winner fails viability, no candidate in the
+set is viable either — the masking-with-an-available-alternative case is only ~2% of
+ledgers.
+
+**This repair does not, and should not be expected to, fix the population regression.** §7
+attributes that to expedition labour, not to destination selection. Reporting the two
+together would be the kind of conflation §21 forbids.
+
+Post-repair default-map A/B (PARTIAL — 5 of 12 runs completed before this report; the
+remainder are still in flight and the JSON must be regenerated):
+
+```text
+map1  c18:a   ON 204 / OFF 265
+map1  c18:b   ON 206 / OFF 217
+map1  c18:c   ON 190 / OFF (pending)
+```
+
+Against the pre-repair map1 enabled mean of 190.8, the enabled arm is slightly higher
+(~200), but the regression is clearly still present at roughly −17%. That is the expected
+result and is stated as such rather than as a partial success: **the population regression
+is unrepaired.**
 
 ## 9. Scope NOT completed
 

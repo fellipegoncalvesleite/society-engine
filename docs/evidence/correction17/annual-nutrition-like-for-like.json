@@ -19,26 +19,26 @@
     {
       "seed": "map2_rich",
       "map": "map2",
-      "comparisons": 166,
+      "comparisons": 136,
       "mismatches": 0,
       "exactMatch": true
     },
     {
       "seed": "map2_rich_small",
       "map": "map2",
-      "comparisons": 124,
+      "comparisons": 120,
       "mismatches": 0,
       "exactMatch": true
     },
     {
       "seed": "map1_default",
       "map": "map1",
-      "comparisons": 615,
+      "comparisons": 600,
       "mismatches": 0,
       "exactMatch": true
     }
   ],
-  "totalComparisons": 905,
+  "totalComparisons": 856,
   "totalMismatches": 0,
   "reconstructionExact": true,
   "mismatchExamples": [],

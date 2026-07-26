@@ -973,6 +973,9 @@ function deriveKnownUnusedHabitat(
 
   // CORRECTION-18 §11 — hand the full evaluated ledger to the audit observer, once, after
   // the production decision is complete and unchanged. Audit-only.
+  // §11 — what the function actually returns after the repair.
+  const selected = bestViable ?? best;
+
   if (candidateObserver !== undefined && candidateLedger !== undefined) {
     candidateObserver({
       tick: input.time.tick,
@@ -988,6 +991,10 @@ function deriveKnownUnusedHabitat(
       ),
       ...(best === undefined ? {} : { winnerTileId: best.candidateTileId }),
       winnerPassedViability: best?.consideredAsTarget === true,
+      ...(selected === undefined ? {} : { selectedTileId: selected.candidateTileId }),
+      selectedPassedViability: selected?.consideredAsTarget === true,
+      viableRescuedNonViableWinner:
+        bestViable !== undefined && best !== undefined && best.consideredAsTarget !== true,
     });
   }
 

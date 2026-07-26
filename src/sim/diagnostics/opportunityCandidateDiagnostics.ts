@@ -59,9 +59,18 @@ export interface OpportunityCandidateLedger {
   readonly candidateIdsCollected: number;
   readonly candidatesEvaluated: number;
   readonly candidates: readonly OpportunityCandidateRecord[];
-  /** The production outcome: which tile won, and whether it passed viability. */
+  /** The best-by-SCORE candidate — the slot production used before the §11 repair. */
   readonly winnerTileId?: TileId;
   readonly winnerPassedViability: boolean;
+  /**
+   * What `deriveKnownUnusedHabitat` ACTUALLY RETURNS after the §11 repair
+   * (`bestViable ?? best`). Reporting only `winnerTileId` would measure the pre-repair
+   * semantics and make the repair invisible.
+   */
+  readonly selectedTileId?: TileId;
+  readonly selectedPassedViability: boolean;
+  /** True when the repair changed the outcome: a viable candidate replaced a non-viable winner. */
+  readonly viableRescuedNonViableWinner: boolean;
 }
 
 export type OpportunityCandidateObserver = (ledger: OpportunityCandidateLedger) => void;
