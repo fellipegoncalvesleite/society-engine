@@ -55,9 +55,10 @@ export function observeTileAndNearby(
   const tileObservationHistory: TileObservation[] = [
     ...knowledge.tileObservationHistory.slice(-RECENT_TILE_OBSERVATION_HISTORY_LIMIT),
   ];
+  const restore = deriveShallowRestore(world);
 
   for (const target of targets) {
-    observeTile(world, observedTiles, tileObservationHistory, knowledge.selfBandId, target, acquisition);
+    observeTile(world, observedTiles, tileObservationHistory, knowledge.selfBandId, target, acquisition, restore);
   }
 
   return {
@@ -200,6 +201,33 @@ function visibleAquaticPresence(tile: Tile): number {
   );
 }
 
+/**
+ * CORRECTION-22 §6 — AUDIT-ONLY component isolation. Names which components of the
+ * CORRECTION-21 shallow-traversal repair to switch back OFF, so a habitat-tier loss can be
+ * attributed to a specific field rather than to "the repair" as a whole. Every flag is
+ * false in every normal world; the object is built once from `world.auditOptions`.
+ */
+interface ShallowRestoreSwitches {
+  readonly richness: boolean;
+  readonly water: boolean;
+  readonly seasonal: boolean;
+  readonly storage: boolean;
+  readonly confidence: boolean;
+}
+
+function deriveShallowRestore(world: WorldState): ShallowRestoreSwitches {
+  const which = world.auditOptions?.shallowObservationRestore;
+  const all = which === "all";
+
+  return {
+    richness: all || which === "richness",
+    water: all || which === "water",
+    seasonal: all || which === "seasonal",
+    storage: all || which === "storage",
+    confidence: all || which === "confidence",
+  };
+}
+
 function observeTile(
   world: WorldState,
   observedTiles: Record<string, KnownTileRecord>,
@@ -207,6 +235,7 @@ function observeTile(
   observerBandId: BandId,
   target: ObservationTarget,
   acquisition: KnowledgeAcquisitionKind,
+  restore: ShallowRestoreSwitches,
 ): void {
   const existingRecord = observedTiles[target.tile.id];
   // CORRECTION-21 §14 — a traversal is treated shallowly ONLY while the band has nothing
@@ -220,7 +249,7 @@ function observeTile(
   // visits rather than being pinned at 1.0 by one walk-past.
   const baseConfidence = target.distance === 0 ? 1 : target.distance === 1 ? 0.68 : 0.34;
   const priorVisits = existingRecord?.visits ?? 0;
-  const confidence = shallow
+  const confidence = shallow && !restore.confidence
     ? Math.min(0.72, 0.4 + priorVisits * 0.08) * (target.distance === 0 ? 1 : baseConfidence)
     : baseConfidence;
   const existingSeasons = existingRecord?.seasonsObserved ?? [];
@@ -237,24 +266,24 @@ function observeTile(
     visits,
     // §14 resource contract — a walker sees broad terrain, not stock. Coarsened to quarter
     // buckets for a traversal; exact for real observation.
-    observedRichness: shallow
+    observedRichness: shallow && !restore.richness
       ? Math.max(
           existingRecord?.observedRichness ?? 0,
           coarseRichnessImpression(getDepletionAdjustedRichness(world, target.tile)),
         )
       : getDepletionAdjustedRichness(world, target.tile),
     // §14 water contract — visible presence for a traversal; reliability must be earned.
-    observedWaterAccess: shallow
+    observedWaterAccess: shallow && !restore.water
       ? Math.max(existingRecord?.observedWaterAccess ?? 0, visibleWaterPresence(target.tile))
       : target.tile.resourceProfile.waterAccess,
-    observedAquaticPotential: shallow
+    observedAquaticPotential: shallow && !restore.water
       ? Math.max(existingRecord?.observedAquaticPotential ?? 0, visibleAquaticPresence(target.tile))
       : target.tile.resourceProfile.aquaticPotential,
     // Passability IS established by walking.
     observedMovementCost: target.tile.movementCost,
     observedRisk,
     // §14 — storage suitability is not observable in passing. Preserved if already known.
-    ...(shallow
+    ...(shallow && !restore.storage
       ? existingRecord?.observedStorageSuitability === undefined
         ? {}
         : { observedStorageSuitability: existingRecord.observedStorageSuitability }
@@ -270,7 +299,7 @@ function observeTile(
     // no seasonal reliability" — a stronger claim than the evidence supports, and worse
     // than saying nothing (modifier 0.75, reliability 0). Writing absence instead of
     // uncertainty is what extinguished the habitat ladder's `marginal_escapable` tier.
-    ...(shallow
+    ...(shallow && !restore.seasonal
       ? existingRecord?.observedSeasonalPattern === undefined
         ? {}
         : { observedSeasonalPattern: existingRecord.observedSeasonalPattern }

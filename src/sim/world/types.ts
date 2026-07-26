@@ -315,6 +315,16 @@ export interface WorldAuditOptions {
   // unchanged, which a fission-only story cannot explain on its own.
   // Undefined in every normal world; read at exactly two seams.
   readonly frontierKnowledgeHiddenFromFission?: boolean;
+  // CORRECTION-22 §6 — audit-only. Switches ONE component of the CORRECTION-21
+  // shallow-traversal repair back off so a habitat-tier loss can be attributed to a
+  // specific field. Undefined in every normal world.
+  readonly shallowObservationRestore?:
+    | "richness"
+    | "water"
+    | "seasonal"
+    | "storage"
+    | "confidence"
+    | "all";
 }
 
 export interface WorldState {
