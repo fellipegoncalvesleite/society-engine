@@ -1,0 +1,72 @@
+{
+  "audit": "expeditionLaborAccounting",
+  "checkpoint": "CORRECTION-19 §9/§12",
+  "staticTrace": {
+    "adultEquivalentDemand": {
+      "writer": "carryingCapacity.derivePopulationDemand",
+      "countsAwayAdults": true,
+      "verdict": "CORRECT AND SINGLE — an adult on a journey still eats"
+    },
+    "laborCapacity": {
+      "writer": "carryingCapacity.derivePopulationDemand",
+      "countsAwayAdults": true,
+      "verdict": "UNDER-CHARGE — the carrying-capacity labor term does not fall when the party leaves"
+    },
+    "sameDayPartySizing": {
+      "writer": "intraSeasonTrips.deriveTaskGroupPeople",
+      "formula": "adults = max(1, workingAdults - awayWorkers); party = max(1, min(cap, round(adults * baseShare)))",
+      "verdict": "SINGLE DEDUCTION, scales the PARTY not the band"
+    },
+    "mobilityPools": {
+      "writer": "bandMobility.deriveCommittedMobilityPools / deriveAvailableMobilityPools",
+      "gatedOnAwayPhase": true,
+      "verdict": "SINGLE DEDUCTION, releases on terminal phase"
+    },
+    "provisions": {
+      "readers": [
+        "acuteRisk (risk factor)",
+        "expedition.buildReturnedRecord (subtracted from DELIVERED harvest)"
+      ],
+      "deductedFromBandFoodLedger": false,
+      "verdict": "ZERO BAND-FOOD COST for information-only tasks — buildReturnedRecord never runs without a pendingReturnRecord, so a frontier party's provisions are notional"
+    },
+    "bandFatigue": {
+      "writer": "pressure.getRecentMovementFatigue",
+      "reads": "band.movementHistory (RESIDENTIAL relocations)",
+      "expeditionKilometresFeedIt": false,
+      "verdict": "ABSENT — a two-person party's walking imposes no whole-band fatigue penalty"
+    }
+  },
+  "violations": {
+    "reservedMoreThanPartyContains": 0,
+    "workerDoubleCommitted": 0,
+    "terminalPartyStillReservingLabor": 0,
+    "reservationExceedsWorkingAdults": 0,
+    "reservationInconsistentWithPartySize": 0,
+    "labourNotReleasedOnTerminal": 0
+  },
+  "observed": {
+    "daysSampled": 9600,
+    "bandDaysWithAnAwayParty": 1147,
+    "maxSimultaneousAwayParties": 2,
+    "maxReservedWorkers": 8,
+    "frontierPartySizes": {
+      "2": 399
+    },
+    "personDaysByStepMode": {
+      "map1": {
+        "seasonal": 8807,
+        "daily": 8807,
+        "identical": true
+      },
+      "map2": {
+        "seasonal": 10343,
+        "daily": 10343,
+        "identical": true
+      }
+    }
+  },
+  "stepModeInvariant": true,
+  "classification": "CORRECT_AND_SINGULAR",
+  "interpretation": "Every physical cost is charged exactly once, reservation matches party size, labor releases on terminal phase, and person-days are step-mode invariant. Two of the accounting paths UNDER-charge rather than double-charge. Per §12 and §14 this forbids tuning the cost away: the population difference must be explained elsewhere (see the §10/§11 waterfall and amplification audit)."
+}
