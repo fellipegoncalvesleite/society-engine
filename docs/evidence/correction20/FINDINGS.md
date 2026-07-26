@@ -4,8 +4,8 @@
 
 This checkpoint delivered the §8 semantic contracts, the §9 distance term ledger, the §6
 reader-isolation instrumentation, and the **completed §5 cross-seed decomposition**. The §6
-arm matrix was still executing at write time and its results are recorded as pending, not
-inferred. **No production behaviour was changed.**
+arm matrix completed for map 1 and **overturned the leading hypothesis**; map 2 was still
+executing at write time. **No production behaviour was changed.**
 
 The headline result is that the two default maps are driven by quantitatively different
 mechanisms — map 1 is **88.8% descendant amplification**, map 2 is **95.7% direct
@@ -111,30 +111,56 @@ counted as duplication: it uses a different normalization (zero inside 8 tiles, 
 at 26, versus saturating at 12) over a different candidate set in a different authority,
 and §9 permits distance to affect both feasibility and preference.
 
-## 4. §6 — Reader-isolation instrumentation (built; measurement pending)
+## 4. §6 — Reader isolation: map 1 COMPLETE, and it overturns the leading hypothesis
 
-Two audit-only seams added, both undefined in every normal world:
+Two audit-only seams (`collectOpportunityCandidates`, `getFissionTargetRecordIds`) drop
+tiles whose §8 provenance is `returned_frontier_exploration` from the opportunity and
+fission path only, leaving movement, resource selection, camps and seasonal rounds reading
+them normally. Both options are undefined in every normal world.
 
-```text
-carryingCapacity.collectOpportunityCandidates   hideFrontierDerived
-demography.getFissionTargetRecordIds            hideFrontierDerived
-```
-
-They drop tiles whose §8 provenance is `returned_frontier_exploration` from the opportunity
-and fission path only, leaving movement, resource selection, camps and seasonal rounds
-reading them normally. With the inherited `frontierKnowledgeTransferDisabled` this gives the
-§6 decomposition:
+**map 1, all five seeds, four arms:**
 
 ```text
-D - C = fission-only contribution
-D - A = total knowledge contribution
-C - A = non-fission contribution
+arm                          pop     bands  pop/band  fissions  1st fission  support
+ARM_0 exploration disabled  244.6     8.8    27.748      3.8       y79.8      0.254
+ARM_A no transfer           241.6     8.6    28.332      3.6       y67.6      0.273
+ARM_C hidden from fission   181.4     7.2    25.138      2.2       y97.0      0.239
+ARM_D production            188.4     7.0    27.082      2.0      y107.6      0.253
+
+fission-only  (D - C) =  +7.0     POSITIVE
+non-fission   (C - A) = -60.2     DOMINANT
+total         (D - A) = -53.2
 ```
 
-**Status: the 40-run arm matrix (2 maps × 5 seeds × 4 arms × 300 years) was still executing
-when this report was written.** Results are not stated because they are not yet known. This
-is the experiment §6 calls mandatory and it is the only thing that can explain map 2, whose
-band count is unchanged while its population per band falls.
+**Two results, both decisive.**
+
+**(1) The fission path is not the culprit — it is mildly beneficial.** Letting frontier
+knowledge reach opportunity evaluation and fission target selection is worth **+7.0**
+population, not a loss. This directly contradicts the leading hypothesis carried in from
+CORRECTION-18 and restated in §3 above: the suspected T1→T2 distance duplication in split
+motivation predicted the fission path would be where the damage occurs. It is not. The
+structural duplication in the ledger remains real as a *contract* violation, but **it is
+not the mechanism for map 1's population loss.**
+
+**(2) The damage is done by the NON-FISSION readers, and it is large.** Frontier knowledge
+reaching movement, resource selection, camp and seasonal-round systems costs **−60.2**
+population. ARM_A (the party physically walks, commits workers, eats provisions, but
+transfers nothing) sits at 241.6 against a disabled control of 244.6 — statistically
+indistinguishable, with *better* support (0.273 vs 0.254) and an *earlier* first fission
+(y67.6 vs y79.8). So the physical expedition is close to free, exactly as CORRECTION-19
+concluded, and confirmed here on the full five-seed set. **Everything harmful happens when
+that knowledge is read by ordinary residential behaviour.**
+
+This connects directly to the §8.2 gap documented above: the typed provenance
+`KnowledgeAcquisitionKind` exists but **is not read by any adequacy test**. A tile crossed
+once by two people carries the same confidence as country the band has worked for seasons,
+and it enters movement targeting, resource selection and camp/anchor systems on that basis.
+That is now the leading, evidence-backed mechanism — and it is a *different defect* from the
+one this checkpoint set out expecting to find.
+
+**map 2 arms were still executing at write time** (23 of 40 runs). Early single-seed signal
+for `c18:a` points the same way — ARM_A 245 vs disabled 238, ARM_C 214 — but one seed is
+not a result and is not claimed as one.
 
 ## 5. §5 — Cross-seed completion: COMPLETE, and the two maps differ quantitatively
 
