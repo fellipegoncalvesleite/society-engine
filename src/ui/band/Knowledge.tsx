@@ -10,6 +10,7 @@ import {
   type KnowledgePracticalStatus,
 } from "../../sim/agents/knowledgeEcology";
 import { deriveBandChronicle } from "../../sim/agents/bandChronicle";
+import { derivePlaceEvidenceProjection } from "../../sim/agents/placeEvidenceProjection";
 import type { Band } from "../../sim/agents/types";
 import type { WorldState } from "../../sim/world/types";
 
@@ -65,6 +66,8 @@ export function Knowledge({
       <p className="condition-note">
         What the band knows, who carries it, and whether it comes from practice, returning parties, older memory, or inheritance.
       </p>
+
+      <PlaceEvidence band={band} world={world} />
 
       <article className="knowledge-overview">
         <span className="knowledge-kicker">Learning record</span>
@@ -294,4 +297,90 @@ function iconForEvidence(kind: KnowledgeEvidenceKind): IconName {
     case "route_memory":
       return "route";
   }
+}
+
+
+/**
+ * CORRECTION-21 continuation §13 — PLACE EVIDENCE.
+ *
+ * Renders the epistemic distinctions the observation writer now makes, so they are visible
+ * in the selected-band panel rather than living only in audit JSON. Pure projection: it
+ * reads canonical band state through `derivePlaceEvidenceProjection`, never world ecology,
+ * and changes no behaviour.
+ *
+ * Normal mode stays a one-line summary. The per-place evidence table — including the uses a
+ * record does NOT authorise and why — is technical detail and is rendered inside a
+ * collapsed <details>, matching how the rest of this panel treats deep state.
+ */
+function PlaceEvidence({
+  band,
+  world,
+}: {
+  readonly band: Band;
+  readonly world: WorldState | null;
+}) {
+  const evidence = useMemo(
+    () => (world === null ? null : derivePlaceEvidenceProjection(world, band)),
+    [world, band],
+  );
+
+  if (evidence === null || evidence.totalKnownPlaces === 0) {
+    return null;
+  }
+
+  return (
+    <article className="knowledge-overview">
+      <span className="knowledge-kicker">Place evidence</span>
+      <p>
+        {evidence.totalKnownPlaces} known place{evidence.totalKnownPlaces === 1 ? "" : "s"}
+        {evidence.shallowTraversalPlaces > 0
+          ? ` — ${evidence.shallowTraversalPlaces} known only from walking through, ${evidence.residentiallyKnownPlaces} from living or working there.`
+          : ` — all from living or working there.`}
+      </p>
+      {evidence.shallowTraversalPlaces > 0 ? (
+        <p className="condition-note">
+          Country a party only crossed is remembered as terrain and a route. It does not carry
+          resource, seasonal or camp knowledge until someone goes back and finds out.
+        </p>
+      ) : null}
+
+      <details className="knowledge-technical">
+        <summary>Evidence by place (technical)</summary>
+        <ul className="knowledge-evidence-list">
+          {evidence.entries.map((entry) => (
+            <li key={String(entry.tileId)}>
+              <div className="knowledge-evidence-head">
+                <strong>{String(entry.tileId)}</strong>
+                {entry.distanceTiles === undefined ? null : <Chip>{entry.distanceTiles} tiles</Chip>}
+                <Chip>{entry.provenance}</Chip>
+                <Chip>
+                  {entry.visits} visit{entry.visits === 1 ? "" : "s"}
+                </Chip>
+                <Chip>{entry.seasonsObserved} season(s)</Chip>
+              </div>
+              <ul className="knowledge-evidence-domains">
+                {entry.domains.map((domain) => (
+                  <li key={domain.domain}>
+                    <span className="knowledge-domain-name">{domain.domain.replace(/_/g, " ")}</span>
+                    <Chip>{domain.strength}</Chip>
+                    <span className="knowledge-domain-basis">{domain.basis}</span>
+                  </li>
+                ))}
+              </ul>
+              {entry.blockedUses.length > 0 ? (
+                <ul className="knowledge-evidence-blocked">
+                  {entry.blockedUses.map((blocked) => (
+                    <li key={blocked.use}>
+                      <span className="knowledge-blocked-use">not used for {blocked.use}</span>
+                      <span className="knowledge-domain-basis">{blocked.reason}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      </details>
+    </article>
+  );
 }
