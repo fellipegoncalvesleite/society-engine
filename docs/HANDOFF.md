@@ -181,6 +181,65 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### FRONTIER EXPEDITION PHYSICAL-COST AND LABOR ACCOUNTING — CORRECTION-19 — NO REPAIR WARRANTED
+
+**Branch** `checkpoint/frontier-expedition-labor-accounting-19`, from `8504b76` (`4b1f363`
+is a verified ancestor; the two intervening commits are documentation-only). `main`
+untouched at `668763f`. **Not pushed.**
+
+**The conclusion is a null result, and it is the important kind.** The expedition labour
+accounting is **correct and singular**, so no production repair was made — §12 and §14
+forbid tuning a correctly-charged cost away merely because the population is lower.
+
+**§12 invariants, 9,600 sampled days, zero violations:** no double-commitment, no
+over-reservation, no reservation outliving the journey, no labour retained on a terminal
+party, no reservation exceeding working adults. Every frontier party is exactly two workers
+(399/399). Maximum simultaneous away parties is 2, matching the cap. **Person-days are
+step-mode invariant**: map1 8,807 = 8,807, map2 10,343 = 10,343.
+
+**Two accounting paths UNDER-charge; none double-charges.** `adultEquivalentDemand` counts
+away adults in full — correct, an adult on a journey still eats. `laborCapacity` counts them
+too, which is an under-charge. Same-day party sizing subtracts `awayWorkers` exactly once
+and scales the PARTY, not the band. Mobility pools gate on away-phase and release on
+terminal.
+
+Two costs that a naive reading assumes exist do not:
+- **Provisions cost the band zero food.** `provisionUnitsConsumed` is read only by
+  `acuteRisk` and by `buildReturnedRecord` (which subtracts it from the *delivered
+  harvest*). It never touches `seasonalFoodReceipts`. An information-only task has no
+  `pendingReturnRecord`, so that path never runs at all.
+- **Expedition walking imposes no whole-band fatigue.** `getRecentMovementFatigue` reads
+  `band.movementHistory` — residential relocations, where the whole group walks. Expedition
+  kilometres go elsewhere and do not feed `fatiguePressure`.
+
+**THE REGRESSION IS NOT A FOOD OR LABOUR COST. Do not describe it as one.** Normalizing per
+§5 shows the two default maps have *opposite* mechanisms:
+
+```text
+map1  pop/band ON 28.85 vs OFF 27.65   bands 7,8,6 vs 10,8,9   -> gap is FEWER BANDS
+map2  band counts IDENTICAL (11,12,11 vs 11,11,11)             -> gap is PER-BAND
+```
+
+And exploring bands are **better fed**: on map1 `c18:a`, food per working-adult-year is
+0.0050 ON vs 0.0049 OFF (identical), the raw support ratio is 0.3019 ON vs 0.2686 OFF
+(**+12.4%**), and expedition labour is 0.32% of working-adult days (frontier-specific share
+~0.12%). The gap is fissions: **2 @ year 102 ON vs 5 @ year 80 OFF** — fewer, and 22 years
+later.
+
+**Leading mechanism, recorded not repaired** (fission is out of scope here): CORRECTION-18's
+§9.3 distance double-count. `travelCost` is subtracted both in destination ranking and in
+split motivation, so a band that discovers good distant country becomes *less* willing to
+divide.
+
+**Not run:** the Arms 0–7 counterfactual matrix (Arms 3–7 not built; Arm 2 is one seed), the
+§7 successor external-divergence audit, and most of the §16 regression matrix.
+
+**Inherited authorship exceptions, reported not altered:** `d41c973` carries author and
+committer name "Claude" plus a `Co-Authored-By` trailer; `1faa7c9` carries the trailer. Both
+predate this rule. Every commit authored in CORRECTION-17/-18/-19 is clean. They were not
+rewritten because that changes every descendant hash and destroys the exact ancestry the
+checkpoint requires be verified — removing them is the human developer's decision.
+
 ### FRONTIER KNOWLEDGE CONSUMPTION / DAUGHTER-DESTINATION VIABILITY — CORRECTION-18 — PROGRESS, DO NOT MERGE
 
 **Branch** `checkpoint/frontier-knowledge-consumption-destination-18`, from CORRECTION-17's
@@ -7892,6 +7951,23 @@ exception; daughter colours related-but-distinct and never visually confusing.
 
 ## Checkpoint Log
 
+- **FRONTIER EXPEDITION PHYSICAL-COST AND LABOR ACCOUNTING CORRECTION-19** — *2026-07-25,
+  NO REPAIR WARRANTED; feature branch stays PROGRESS — DO NOT MERGE.* Tested all six §12
+  accounting invariants over 9,600 sampled days and found **zero violations**: labour is
+  charged once, reservation matches party size (every frontier party exactly two workers,
+  399/399), it releases on terminal phase, and person-days are step-mode invariant.
+  Traced every reader of expedition worker commitment and found that two paths
+  **under-charge** and none double-charges — provisions never touch the food ledger at all,
+  and expedition kilometres never feed band fatigue. Classification: CORRECT_AND_SINGULAR,
+  so §12/§14 forbid tuning the cost away. Normalizing the population gap per §5 showed the
+  two default maps have **opposite mechanisms** (map1: fewer but larger bands; map2:
+  identical band counts, smaller bands) and that exploring bands are **better fed** — food
+  per working-adult-year identical, raw support ratio +12.4%, expedition labour ~0.12% of
+  working-adult days — with the gap being fissions (2 @ y102 vs 5 @ y80). The regression is
+  therefore **not** a food or labour cost. Named the leading mechanism as CORRECTION-18's
+  unrepaired §9.3 distance double-count between destination ranking and split motivation.
+  NOT RUN: Arms 0–7 matrix, §7 external-divergence successor, most of §16. See
+  `docs/evidence/correction19/`.
 - **FRONTIER KNOWLEDGE CONSUMPTION / DAUGHTER-DESTINATION VIABILITY CORRECTION-18** —
   *2026-07-25, PROGRESS — NOT ACCEPTED / DO NOT MERGE.* From `febbdc2`; `main` untouched.
   Reproduced the population regression on five predeclared seeds per map (map1 −23.98%,

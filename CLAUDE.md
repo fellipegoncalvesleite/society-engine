@@ -68,6 +68,51 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-07-25 (FRONTIER EXPEDITION PHYSICAL-COST AND LABOR ACCOUNTING CORRECTION-19: the
+  expedition labour accounting is CORRECT AND SINGULAR — NO REPAIR WARRANTED at the labour
+  seam. Branch checkpoint/frontier-expedition-labor-accounting-19 from 8504b76 (4b1f363 is
+  a verified ancestor; the two extra commits are documentation-only). main untouched at
+  668763f. The FEATURE BRANCH overall remains PROGRESS — NOT ACCEPTED / DO NOT MERGE
+  because destination semantics and expansion-chain closure are unfinished.
+
+  **§12 INVARIANTS: ZERO VIOLATIONS over 9,600 sampled days.** No double-commitment, no
+  over-reservation, no reservation outliving the journey, no labour retained on terminal
+  phase, no reservation exceeding working adults. Every frontier party is exactly two
+  workers (399/399). Person-days are STEP-MODE INVARIANT (map1 8807=8807, map2
+  10343=10343). Classification: CORRECT_AND_SINGULAR.
+
+  **TWO PATHS UNDER-CHARGE; NONE DOUBLE-CHARGES.** adultEquivalentDemand counts away adults
+  in full (correct — they still eat). laborCapacity ALSO counts them in full, which is an
+  under-charge. Same-day party sizing subtracts awayWorkers once and scales the PARTY not
+  the band. Mobility pools gate on away-phase and release on terminal.
+  **Provisions cost the band ZERO food**: provisionUnitsConsumed is read only by acuteRisk
+  and buildReturnedRecord (which subtracts from the DELIVERED harvest), and an
+  information-only task has no pendingReturnRecord so that path never runs.
+  **Expedition walking imposes NO whole-band fatigue**: getRecentMovementFatigue reads
+  RESIDENTIAL movementHistory, not expedition kilometres.
+
+  **NORMALIZATION REFRAMES THE REGRESSION — THE TWO MAPS DIFFER.** map1 pop/band ON 28.85 vs
+  OFF 27.65 with bands 7,8,6 vs 10,8,9: bands are individually LARGER and the whole gap is
+  FEWER BANDS. map2 band counts are IDENTICAL (11,12,11 vs 11,11,11) with pop/band ON 17.09
+  vs OFF 20.24: a genuine per-band effect. A cross-map average conceals both.
+
+  **EXPLORING BANDS ARE BETTER FED, NOT WORSE.** map1 c18:a: food per working-adult-year
+  0.0050 ON vs 0.0049 OFF (identical), raw support ratio 0.3019 ON vs 0.2686 OFF (+12.4%),
+  expedition person-days 0.32% of working-adult days (frontier-specific share ~0.12%). The
+  gap is fissions: 2 @ y102 ON vs 5 @ y80 OFF — fewer, and 22 years later.
+  **Do NOT describe the regression as a food or labour cost.**
+
+  Leading mechanism, recorded not repaired (fission is out of scope here): CORRECTION-18's
+  §9.3 distance DOUBLE-COUNT — travelCost is subtracted both in destination ranking and in
+  split motivation, so discovering good distant country makes a band LESS willing to divide.
+
+  NOT RUN: Arms 0-7 matrix (Arms 3-7 not built; Arm 2 is one seed), the §7 successor
+  external-divergence audit, most of the §16 matrix. INHERITED AUTHORSHIP EXCEPTIONS
+  REPORTED NOT ALTERED: d41c973 has author/committer name "Claude" plus a Co-Authored-By
+  trailer, and 1faa7c9 has the trailer; both predate this rule; rewriting them would destroy
+  the exact ancestry §2 requires. See docs/evidence/correction19/.)
+
+Previously updated:
   2026-07-25 (FRONTIER KNOWLEDGE CONSUMPTION / DAUGHTER-DESTINATION VIABILITY CORRECTION-18:
   PROGRESS — NOT ACCEPTED / DO NOT MERGE, branch
   checkpoint/frontier-knowledge-consumption-destination-18 from CORRECTION-17's febbdc2
