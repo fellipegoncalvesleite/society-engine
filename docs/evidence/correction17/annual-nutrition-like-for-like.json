@@ -19,7 +19,7 @@
     {
       "seed": "map2_rich",
       "map": "map2",
-      "comparisons": 136,
+      "comparisons": 163,
       "mismatches": 0,
       "exactMatch": true
     },
@@ -33,12 +33,12 @@
     {
       "seed": "map1_default",
       "map": "map1",
-      "comparisons": 600,
+      "comparisons": 610,
       "mismatches": 0,
       "exactMatch": true
     }
   ],
-  "totalComparisons": 856,
+  "totalComparisons": 893,
   "totalMismatches": 0,
   "reconstructionExact": true,
   "mismatchExamples": [],
