@@ -11,6 +11,10 @@ import { deriveNomadicScalePressure, getNomadicScaleDemandMultiplier } from "./n
 import { getLocalUsePressureValue } from "./pressure";
 import { getSalientMemorySummary, type TickContextCache } from "./contextCache";
 import {
+  getOpportunityCandidateObserver,
+  type OpportunityCandidateRecord,
+} from "../diagnostics/opportunityCandidateDiagnostics";
+import {
   getBandForagingFootprint,
   getOverlappingBandIds,
   getSharedCatchmentIndex,
@@ -793,6 +797,30 @@ function deriveKnownUnusedHabitat(
   const currentTile = getTile(world, band.position);
   let best: KnownUnusedHabitatOpportunity | undefined;
   let bestScore = -Infinity;
+  // CORRECTION-18 §11 — audit-only candidate ledger. `undefined` on every production,
+  // worker and UI path, in which case nothing below it executes and behaviour is
+  // byte-identical. It exists to separate candidate STARVATION from candidate MASKING
+  // from an honest loss; see opportunityCandidateDiagnostics.ts.
+  const candidateObserver = getOpportunityCandidateObserver();
+  const candidateLedger: OpportunityCandidateRecord[] | undefined =
+    candidateObserver === undefined ? undefined : [];
+  // CORRECTION-18 §11 — ELIGIBILITY BEFORE RANKING.
+  //
+  // The loop below keeps a best-by-SCORE winner (`best`/`bestScore`) and only tests the
+  // viability predicate (`consideredAsTarget`) on whichever candidate happens to hold that
+  // slot. Measured on production ledgers (docs/evidence/correction18/candidate-ordering.json,
+  // 50,579 ledgers): the score winner FAILS viability 63.7% of the time, and in 1,336
+  // ledgers a viable candidate was sitting in the same evaluated set and was discarded
+  // untested — 6,413 viable candidates lost that way. Frontier-derived candidates are not
+  // starved (62,544 reached the list, 19,773 of them viable); they are MASKED.
+  //
+  // The repair keeps a SECOND slot for the best candidate that actually passed viability.
+  // Ranking among viable candidates uses the same unchanged score, so no threshold, margin
+  // or coefficient moves; the only change is that a viable candidate is no longer thrown
+  // away because a non-viable one scored higher. When the score winner IS viable both
+  // slots hold the same candidate and behaviour is identical to before.
+  let bestViable: KnownUnusedHabitatOpportunity | undefined;
+  let bestViableScore = -Infinity;
 
   for (const tileId of candidateIds) {
     const record = band.knowledge.observedTiles[tileId];
@@ -819,6 +847,50 @@ function deriveKnownUnusedHabitat(
     const score = base.foragingPotential * 0.4 + waterReliability * 0.24 + (1 - usePressure) * 0.2 -
       travelCost * 0.2 - riskPenalty * 0.18;
 
+    // CORRECTION-18 §11 — AUDIT-ONLY, and deliberately placed BEFORE the score gate
+    // below. That gate (`if (score <= bestScore) continue`) is exactly the structure under
+    // investigation: production keeps a single best-by-score winner and only ever tests
+    // the VIABILITY predicate on that winner, so a lower-scoring but perfectly viable
+    // candidate is discarded here without being evaluated at all. Recording the ledger
+    // after the gate would have hidden precisely the candidates §11 asks about.
+    //
+    // The viability terms are recomputed inside this audit-gated block rather than hoisted
+    // out of the production path, so production arithmetic and ordering are untouched.
+    if (candidateLedger !== undefined) {
+      const auditConfidence = clamp01(record.confidence * 0.8 + 0.1);
+      const auditSideRelax =
+        sideCountryEvidence > 0 && waterReliability > 0.36 && riskPenalty < 0.48
+          ? Math.min(0.1, 0.04 + sideCountryEvidence * 0.06 + input.sustainedOverCapacity * 0.08)
+          : 0;
+      const auditPressureRelax = Math.min(
+        0.12,
+        input.nomadicScalePressure * 0.08 + input.resourcePressure * 0.08,
+      );
+      const auditMargin =
+        0.08 -
+        Math.min(0.13, input.sustainedOverCapacity * 0.2) -
+        auditSideRelax -
+        auditPressureRelax;
+
+      candidateLedger.push({
+        tileId,
+        distanceTiles: distance,
+        acquisition: record.acquisition ?? "residential_observation",
+        confidence: round2(auditConfidence),
+        score: round2(score),
+        expectedPerCapita: round2(expectedPerCapita),
+        waterReliability: round2(waterReliability),
+        riskPenalty: round2(riskPenalty),
+        usePressure: round2(usePressure),
+        travelCost: round2(travelCost),
+        wouldPassViability:
+          expectedPerCapita > input.currentPerCapita + auditMargin &&
+          waterReliability > 0.32 &&
+          riskPenalty < 0.55,
+        isScoreWinner: false,
+      });
+    }
+
     if (score <= bestScore) {
       continue;
     }
@@ -844,6 +916,7 @@ function deriveKnownUnusedHabitat(
       sideCountryMarginRelaxation -
       pressureMarginRelaxation;
     const consideredAsTarget = expectedPerCapita > input.currentPerCapita + competitionMargin && waterReliability > 0.32 && riskPenalty < 0.55;
+
     const rejectionReason = consideredAsTarget
       ? undefined
       : waterReliability <= 0.32
@@ -860,8 +933,7 @@ function deriveKnownUnusedHabitat(
       riskPenalty < 0.4 &&
       usePressure < 0.3;
 
-    bestScore = score;
-    best = {
+    const opportunity: KnownUnusedHabitatOpportunity = {
       bandId: band.id,
       candidateTileId: tileId,
       opportunityKind: kind,
@@ -881,9 +953,49 @@ function deriveKnownUnusedHabitat(
       basis,
       reasonIds: [makeReasonId(input.time, band.id, consideredAsTarget ? "known_unused_habitat_detected" : rejectionReasonId(rejectionReason))],
     };
+
+    // Unchanged best-by-score bookkeeping (the diagnostic fallback).
+    bestScore = score;
+    best = opportunity;
+
+    // §11 — and, separately, the best candidate that actually PASSED viability. Ranked by
+    // the same unchanged score; ties broken deterministically on tile id.
+    if (
+      consideredAsTarget &&
+      (bestViable === undefined ||
+        score > bestViableScore ||
+        (score === bestViableScore && String(tileId) < String(bestViable.candidateTileId)))
+    ) {
+      bestViableScore = score;
+      bestViable = opportunity;
+    }
   }
 
-  return best;
+  // CORRECTION-18 §11 — hand the full evaluated ledger to the audit observer, once, after
+  // the production decision is complete and unchanged. Audit-only.
+  if (candidateObserver !== undefined && candidateLedger !== undefined) {
+    candidateObserver({
+      tick: input.time.tick,
+      bandId: band.id,
+      currentPerCapita: round2(input.currentPerCapita),
+      competitionMargin: round2(0.08 - Math.min(0.13, input.sustainedOverCapacity * 0.2)),
+      candidateIdsCollected: candidateIds.length,
+      candidatesEvaluated: candidateLedger.length,
+      candidates: candidateLedger.map((entry) =>
+        best !== undefined && entry.tileId === best.candidateTileId
+          ? { ...entry, isScoreWinner: true }
+          : entry,
+      ),
+      ...(best === undefined ? {} : { winnerTileId: best.candidateTileId }),
+      winnerPassedViability: best?.consideredAsTarget === true,
+    });
+  }
+
+  // §11 — "retain best viable plus best rejected diagnostics". A viable candidate always
+  // wins over a non-viable one regardless of raw score; when none is viable the
+  // best-scoring rejected candidate is still returned so `rejectionReason`,
+  // `suspiciousOpportunityIgnored` and the pressure terms keep working exactly as before.
+  return bestViable ?? best;
 }
 
 function deriveDaughterColonization(

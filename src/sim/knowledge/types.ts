@@ -48,6 +48,35 @@ export type KnowledgeSourceKind =
   | "inherited_rumor"
   | "inherited_route_hint";
 
+/**
+ * CORRECTION-18 §8 — HOW a known tile record was acquired.
+ *
+ * Distinct from `KnowledgeSourceKind`, which answers "whose knowledge is this" (mine vs
+ * inherited vs rumour). This answers "by what physical act did it enter the band's
+ * knowledge", which `KnowledgeSourceKind` cannot express: a residential observation and a
+ * tile glimpsed once by a returning exploratory party are BOTH `personally_observed`, yet
+ * they are epistemically very different — one is lived country the band works every
+ * season, the other is a single traversal by two people who walked past it.
+ *
+ * It is a typed field rather than a reason-id substring search (§8 forbids the latter
+ * where a typed field will do). It carries NO physical truth and never changes what a
+ * tile is; it exists to
+ *   - audit which downstream consumers read shallow-traversal knowledge,
+ *   - let confidence and retention treat traversal and residence differently,
+ *   - support bounded, purpose-aware memory compression (§14).
+ */
+export type KnowledgeAcquisitionKind =
+  // Observed from the residential camp / ordinary same-day range. Lived country.
+  | "residential_observation"
+  // Walked once by a returning frontier-exploration party (§12 shallow traversal).
+  | "returned_frontier_exploration"
+  // Walked by a returning route-reconnaissance party (a known route, re-read).
+  | "returned_route_reconnaissance"
+  // Carried from a parent band at fission.
+  | "inherited_memory"
+  // Second-hand report or bounded inference; never personally stood upon.
+  | "reported_or_inferred";
+
 export interface KnownTileRecord {
   readonly tileId: TileId;
   readonly firstObservedAt: WorldTime;
@@ -63,6 +92,12 @@ export interface KnownTileRecord {
   readonly observedSeasonalPattern?: ObservedSeasonalPattern;
   readonly confidence: number;
   readonly knowledgeSource: KnowledgeSourceKind;
+  /**
+   * CORRECTION-18 §8 — how this record was physically acquired. Optional so every
+   * pre-existing record and every snapshot written before this checkpoint stays valid;
+   * absent is read as `residential_observation` (the historical default).
+   */
+  readonly acquisition?: KnowledgeAcquisitionKind;
 }
 
 export type MemoryInfluenceMode = "decision_relevant" | "ui_debug_only";

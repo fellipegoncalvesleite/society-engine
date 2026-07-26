@@ -181,6 +181,66 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### FRONTIER KNOWLEDGE CONSUMPTION / DAUGHTER-DESTINATION VIABILITY — CORRECTION-18 — PROGRESS, DO NOT MERGE
+
+**Branch** `checkpoint/frontier-knowledge-consumption-destination-18`, from CORRECTION-17's
+`febbdc2` (parent `1faa7c9`; `d41c973` and `668763f` verified ancestors). `main` untouched
+at `668763f`. **Not pushed.** No AI authorship or co-author metadata anywhere.
+
+**This checkpoint did the DIAGNOSTIC half and part of the repair half.** Say that plainly:
+§12 synthetic cases, §13 regression repair, §14 memory bounds and the 100/500/1,000-year
+state proofs, §15 chain re-run, §16 acceptance matrix, §17 acceptance and §19 fresh
+performance were **not built**, and no evidence is claimed for them.
+
+**1. The regression reproduces, and is larger than reported.** Five predeclared shared
+seeds per map, 300 years, identical world and run seed: **map1 −23.98%, map2 −15.13%, 5/5
+seeds lower on both maps.** The trip loss (−8,068 on map1) is a *consequence*: per-band
+trips are HIGHER with exploration enabled (5,642 vs 5,071); totals fall only because there
+are fewer bands (7 vs 10). Any account starting from "the band forages less" reads the
+aggregate backwards.
+
+**2. First divergence is EXPEDITION LABOUR, 6/6 runs.** Both arms stepped in lockstep
+**daily from tick zero** — an earlier 40-year seasonal warm-up reported every category
+diverging on day 1, which was a pure sampling artefact, since the arms had already fully
+diverged before sampling began. Ordering, identical on all six runs: party raised t96 →
+walks t97 → knowledge home t106 → resource memory t180 → support t192 → fission pressure
+t360 → pressure t450 → position t630 → demography t720. Physical divergence precedes
+knowledge by 9–10 days, exactly the outbound leg.
+
+**3. §11 MASKING confirmed — and this CORRECTS CORRECTION-17.** An audit-only candidate
+ledger placed *before* the score gate shows, over **50,579 production ledgers**:
+frontier-derived candidates are **not** starved (62,544 reach the list, 19,773 of them
+viable, distances to 41 tiles evaluated and sometimes winning) — but the score winner
+**fails viability 63.7%** of the time, and **6,413 viable candidates were discarded**
+because a non-viable one scored higher. CORRECTION-17 measured only the score winner's
+distance; its conclusion "no alternatives are materially better / the scoring is not at
+fault / the blocker is ecological" is **NOT SUPPORTED and must not be cited**.
+
+**Repair applied at the authoritative seam:** `deriveKnownUnusedHabitat` now keeps a second
+slot for the best candidate that actually passed viability, ranked by the **same unchanged
+score**, returning `bestViable ?? best`. No threshold, margin or coefficient moved.
+Step-mode invariance still passes on both maps with full canonical state match.
+
+**4. §9 units are invalid but are NOT the blocking gate.** `expectedPerCapita` is a
+normalized per-tile yield fraction (the same module multiplies it by `TILE_SUPPORT = 12.5`
+to get adult-equivalents); `currentPerCapita` is whole-catchment support ÷ whole-band
+demand. Like-for-like the candidate side is understated ~5–6×. A hypothesis derived from
+this — that `clamp01` makes the test unsatisfiable for well-fed bands — was **refuted by
+measurement**: `consideredAsTarget` is true in **87.5%** of 4,337 band-years. The error
+makes the gate *too permissive*, not impassable.
+
+**5. §9.3 distance is double-counted** — the same `travelCost` discounts distance in
+destination ranking *and* subtracts from split motivation, so a band that discovers good
+distant country becomes **less** willing to divide. Structural violation confirmed;
+magnitude unmeasured; unrepaired.
+
+**6. §8 typed provenance implemented.** `KnowledgeAcquisitionKind` on `KnownTileRecord`,
+stamped at the return seam, upgrading but never downgrading.
+
+**First remaining blocker:** the regression is attributable to expedition labour (one seed,
+~112% of the gap) but is **not repaired**, and the five-seed Arm A decomposition that would
+confirm the attribution was not completed.
+
 ### DESTINATION KNOWLEDGE HORIZON / FRONTIER EXPLORATION — CORRECTION-17 — PROGRESS, DO NOT MERGE
 
 **Branch** `checkpoint/frontier-exploration-knowledge-horizon-17`, from CORRECTION-16's
@@ -7832,6 +7892,26 @@ exception; daughter colours related-but-distinct and never visually confusing.
 
 ## Checkpoint Log
 
+- **FRONTIER KNOWLEDGE CONSUMPTION / DAUGHTER-DESTINATION VIABILITY CORRECTION-18** —
+  *2026-07-25, PROGRESS — NOT ACCEPTED / DO NOT MERGE.* From `febbdc2`; `main` untouched.
+  Reproduced the population regression on five predeclared seeds per map (map1 −23.98%,
+  map2 −15.13%, 5/5 seeds lower on both) and showed the trip loss is a consequence of
+  fewer bands, not a cause. Located the first divergence by stepping both arms **daily
+  from tick zero** — attribution EXPEDITION LABOUR on 6/6 runs, with the physical
+  divergence preceding returned knowledge by exactly the outbound leg. Built the Arm A
+  quarantine control (party runs physically, only the return hand-off suppressed); on one
+  seed labour accounts for ~112% of the gap and returned knowledge is slightly positive.
+  **Confirmed and repaired the §11 masking defect**: over 50,579 production ledgers the
+  score winner fails viability 63.7% of the time and 6,413 viable candidates were
+  discarded because a non-viable one scored higher — which **corrects CORRECTION-17's**
+  "the blocker is ecological" conclusion, since that measured only the score winner.
+  Repair keeps a best-viable slot ranked by the same unchanged score. Proved the §9
+  opportunity comparison dimensionally invalid (candidate side understated ~5–6×) while
+  **refuting** the derived hypothesis that it blocks well-fed bands (87.5% pass). Recorded
+  §9.3 distance double-counting between destination ranking and split motivation. Added
+  typed `KnowledgeAcquisitionKind` provenance. NOT BUILT: synthetic cases, the regression
+  repair itself, memory bounds, the acceptance matrix, fresh performance. See
+  `docs/evidence/correction18/`.
 - **DESTINATION KNOWLEDGE HORIZON / FRONTIER EXPLORATION CORRECTION-17** — *2026-07-25,
   PROGRESS — NOT ACCEPTED / DO NOT MERGE.* From CORRECTION-16's `1faa7c9`; `main` untouched at
   `668763f`. Built the fifth expedition task family, `frontier_exploration`: a party that sets

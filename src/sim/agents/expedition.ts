@@ -1676,6 +1676,9 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       readonly verificationObservation?: ExpeditionObservation & { readonly kind: VerificationObservationKind };
     }[] = [];
     const returnedReconRouteTiles: TileId[] = [];
+    // CORRECTION-18 §8 — kept SEPARATE from the reconnaissance list so the two returning
+    // families can be stamped with their own acquisition provenance.
+    const returnedFrontierRouteTiles: TileId[] = [];
     // §13 — smoke the residential camp physically received today (bounded meaning only).
     const receivedSignalsToday: ReceivedSmokeSignal[] = [];
     let outcomes = [...(currentBand.recentExpeditionOutcomes ?? [])];
@@ -1807,7 +1810,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
           // NO food receipt. Learning that a place exists is not learning what can be
           // eaten there: that still requires the existing observe/test/use paths.
           if (result.expedition.taskKind === "frontier_exploration") {
-            returnedReconRouteTiles.push(...result.expedition.routeTileIds);
+            returnedFrontierRouteTiles.push(...result.expedition.routeTileIds);
           }
         }
         // Terminal parties are compacted into bounded history and dropped from the
@@ -1884,17 +1887,39 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     // step modes. (Latent before this checkpoint: route-reconnaissance returns were rare
     // enough that no audited run exercised the path.)
     const observationWorld = { ...currentWorld, time: getWorldTimeForDay(day) };
-    const knowledge =
-      returnedReconRouteTiles.length === 0
-        ? currentBand.knowledge
-        : observeTileAndNearby(
-            observationWorld,
-            currentBand.knowledge,
-            [...new Set(returnedReconRouteTiles)]
-              .map((tileId) => currentWorld.tiles[tileId])
-              .filter((tile): tile is NonNullable<typeof tile> => tile !== undefined)
-              .map((tile) => ({ tile, distance: 0 })),
-          );
+    const toTargets = (tileIds: readonly TileId[]) =>
+      [...new Set(tileIds)]
+        .map((tileId) => currentWorld.tiles[tileId])
+        .filter((tile): tile is NonNullable<typeof tile> => tile !== undefined)
+        .map((tile) => ({ tile, distance: 0 }));
+    // CORRECTION-18 §7 ARM A — physical exploration WITHOUT residential transfer. The
+    // party still departs, still commits its workers, still eats its provisions and still
+    // walks every step; only the knowledge hand-off is suppressed. That isolates the
+    // DIRECT EXPEDITION COST from everything the returned knowledge later causes.
+    // Undefined in every normal world, so production is unchanged.
+    const transferSuppressed = currentWorld.auditOptions?.frontierKnowledgeTransferDisabled === true;
+    // §8 — the two returning information families are stamped with DIFFERENT provenance:
+    // a reconnaissance party re-reads country the band already knows, a frontier party
+    // brings back shallow single-traversal knowledge of country it did not.
+    let knowledge = currentBand.knowledge;
+
+    if (returnedReconRouteTiles.length > 0) {
+      knowledge = observeTileAndNearby(
+        observationWorld,
+        knowledge,
+        toTargets(returnedReconRouteTiles),
+        "returned_route_reconnaissance",
+      );
+    }
+
+    if (returnedFrontierRouteTiles.length > 0 && !transferSuppressed) {
+      knowledge = observeTileAndNearby(
+        observationWorld,
+        knowledge,
+        toTargets(returnedFrontierRouteTiles),
+        "returned_frontier_exploration",
+      );
+    }
 
     // §13 — smoke the camp saw today enters the band's bounded, expiring record.
     let receivedSmokeSignals = currentBand.receivedSmokeSignals;

@@ -6,7 +6,12 @@
 //     latency: those observations become band knowledge only at return).
 // Behaviour is byte-identical to the pre-extraction bandDecision implementation.
 import type { BandId, TileId } from "../core/types";
-import type { KnownTileRecord, KnowledgeState, TileObservation } from "../knowledge/types";
+import type {
+  KnowledgeAcquisitionKind,
+  KnownTileRecord,
+  KnowledgeState,
+  TileObservation,
+} from "../knowledge/types";
 import { getDepletionAdjustedRichness } from "../world/depletion";
 import type { Tile, WorldState } from "../world/types";
 
@@ -40,6 +45,9 @@ export function observeTileAndNearby(
   world: WorldState,
   knowledge: KnowledgeState,
   targets: readonly ObservationTarget[],
+  // CORRECTION-18 §8 — how these observations were acquired. Defaults to the historical
+  // behaviour (a residential observation) so every existing caller is unchanged.
+  acquisition: KnowledgeAcquisitionKind = "residential_observation",
 ): KnowledgeState {
   const observedTiles: Record<string, KnownTileRecord> = {
     ...knowledge.observedTiles,
@@ -49,7 +57,7 @@ export function observeTileAndNearby(
   ];
 
   for (const target of targets) {
-    observeTile(world, observedTiles, tileObservationHistory, knowledge.selfBandId, target);
+    observeTile(world, observedTiles, tileObservationHistory, knowledge.selfBandId, target, acquisition);
   }
 
   return {
@@ -65,6 +73,7 @@ function observeTile(
   tileObservationHistory: TileObservation[],
   observerBandId: BandId,
   target: ObservationTarget,
+  acquisition: KnowledgeAcquisitionKind,
 ): void {
   const existingRecord = observedTiles[target.tile.id];
   const confidence = target.distance === 0 ? 1 : target.distance === 1 ? 0.68 : 0.34;
@@ -94,6 +103,13 @@ function observeTile(
     },
     confidence: Math.max(existingRecord?.confidence ?? 0, confidence),
     knowledgeSource: "personally_observed",
+    // CORRECTION-18 §8 — provenance UPGRADES but never downgrades: once a band has
+    // actually lived in a place, a later traversal by a passing party must not relabel it
+    // as shallow. Residential observation therefore always wins over traversal.
+    acquisition:
+      existingRecord?.acquisition === "residential_observation"
+        ? "residential_observation"
+        : acquisition,
   };
 
   tileObservationHistory.push({

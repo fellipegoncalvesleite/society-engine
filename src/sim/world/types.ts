@@ -294,6 +294,12 @@ export interface WorldAuditOptions {
   // begin its return. It walked, it observed, and none of it ever reaches the band. This
   // is the §11 control proving that a lost party transfers no knowledge.
   readonly frontierExplorationAlwaysLost?: boolean;
+  // CORRECTION-18 §7 ARM A — run frontier exploration PHYSICALLY but suppress the
+  // residential knowledge hand-off at return. The party departs, commits its workers, eats
+  // its provisions and walks every step; only the transfer is withheld. This isolates the
+  // DIRECT EXPEDITION COST from everything the returned knowledge subsequently causes.
+  // Undefined in every normal world; read at exactly one seam in `expedition.ts`.
+  readonly frontierKnowledgeTransferDisabled?: boolean;
 }
 
 export interface WorldState {

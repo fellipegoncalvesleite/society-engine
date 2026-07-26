@@ -68,6 +68,69 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-07-25 (FRONTIER KNOWLEDGE CONSUMPTION / DAUGHTER-DESTINATION VIABILITY CORRECTION-18:
+  PROGRESS — NOT ACCEPTED / DO NOT MERGE, branch
+  checkpoint/frontier-knowledge-consumption-destination-18 from CORRECTION-17's febbdc2
+  (parent 1faa7c9; d41c973 and 668763f verified ancestors). main untouched at 668763f.
+  DIAGNOSTIC half done, CONSTRUCTION half largely NOT done — see §9 of the findings.
+
+  **THE POPULATION REGRESSION REPRODUCES AND IS LARGER THAN REPORTED.** Five predeclared
+  seeds per map, 300y, identical seed and world: map1 -23.98%, map2 -15.13%, 5/5 seeds
+  lower on BOTH maps. The trip loss (-8068 on map1) is a CONSEQUENCE not a cause —
+  per-band trips are HIGHER with exploration on (5642 vs 5071); totals fall only because
+  there are fewer bands (7 vs 10).
+
+  **§6 FIRST DIVERGENCE = EXPEDITION LABOUR, 6/6 runs.** Stepped in lockstep DAILY FROM
+  TICK ZERO (an earlier 40-year seasonal warm-up reported everything diverging on day 1 —
+  a sampling artefact). Ordering, identical on all six: party raised t96 -> walks t97 ->
+  knowledge returns t106 -> resource memory t180 -> support t192 -> fission pressure t360
+  -> pressure t450 -> position t630 -> demography t720. Physical divergence precedes
+  knowledge by 9-10 days, exactly the outbound leg.
+
+  **§7 Arm A built and PARTIALLY measured (one seed, not the matrix).**
+  frontierKnowledgeTransferDisabled runs the party physically and suppresses only the
+  return hand-off. map1 seed a: production 215, armA 209, disabled 264 => labour ~112% of
+  the gap, returned knowledge slightly POSITIVE (-6). Reader-release arms C1-C9 NOT built.
+
+  **§11 MASKING CONFIRMED AND REPAIRED — this corrects CORRECTION-17.** An audit-only
+  candidate-ledger observer placed BEFORE the score gate shows, over 50,579 production
+  ledgers: 62,544 frontier-derived candidates DO reach the list (not starvation), 19,773
+  of them viable, distant candidates to 41 tiles evaluated and sometimes winning — but the
+  score winner FAILS viability 63.7% of the time and 6,413 viable candidates were
+  discarded because a non-viable one scored higher. CORRECTION-17's "no alternatives are
+  materially better / the blocker is ecological" measured only the score winner and is NOT
+  SUPPORTED. REPAIR: deriveKnownUnusedHabitat keeps a second slot for the best candidate
+  that passed viability, ranked by the SAME unchanged score, returning bestViable ?? best.
+  No threshold, margin or coefficient moved. Step-mode invariance still PASSES on both
+  maps with fullCanonicalStateMatch.
+
+  **§9 units ARE invalid but are NOT the blocking gate.** expectedPerCapita is a
+  normalized PER-TILE yield fraction (the same module multiplies it by TILE_SUPPORT=12.5
+  to get adult-equivalents); currentPerCapita is whole-catchment support / whole-band
+  demand. Like-for-like, the candidate side is understated ~5-6x. But a derived hypothesis
+  — that clamp01 makes the test unsatisfiable for well-fed bands — was REFUTED by
+  measurement: consideredAsTarget is TRUE in 87.5% of 4,337 band-years and the threshold
+  exceeds the clamp ceiling in only 2.9%. The error makes the gate TOO PERMISSIVE in the
+  common low-support regime. Repair the units on correctness grounds, not to unblock
+  destinations.
+
+  **§9.3 DISTANCE IS DOUBLE-COUNTED (structural, unrepaired, magnitude unmeasured).**
+  travelCost = clamp01(distance/12) is subtracted BOTH in destination ranking
+  (score -= travelCost*0.2) AND in split motivation (travelRiskPenalty -> pressure -=
+  ...*0.2). A band that DISCOVERS good distant country therefore becomes LESS willing to
+  divide. Max motivation swing 0.10 against SPLIT_PRESSURE_THRESHOLD 0.64.
+
+  **§8 typed provenance implemented.** KnowledgeAcquisitionKind on KnownTileRecord
+  (optional; absent = residential_observation), stamped at the expedition return seam,
+  upgrading but never downgrading. Verified: 26.7 frontier-derived tiles/band in
+  production, 0.0 in Arm A.
+
+  NOT BUILT: §12 synthetic cases A-F, §13 regression repair, §14 memory bounds and the
+  100/500/1000-year proofs, §15 chain re-run, §16 eight-arm matrix, §17 acceptance, §19
+  fresh performance, most of §20. Births/deaths in the §5 ledger read 0 (wrong field path,
+  fixed in-script, NOT re-run). See docs/evidence/correction18/.)
+
+Previously updated:
   2026-07-25 (DESTINATION KNOWLEDGE HORIZON / FRONTIER EXPLORATION CORRECTION-17: PROGRESS —
   NOT ACCEPTED / DO NOT MERGE, branch checkpoint/frontier-exploration-knowledge-horizon-17
   from CORRECTION-16's 1faa7c9 (parent d41c973, public-main ancestor 668763f verified).
