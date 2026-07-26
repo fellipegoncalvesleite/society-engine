@@ -112,19 +112,24 @@ export function observeTileAndNearby(
 
 /** A traversal-quality acquisition: the party walked through, it did not live there. */
 function isShallowTraversal(acquisition: KnowledgeAcquisitionKind): boolean {
-  // ONLY frontier exploration. `returned_route_reconnaissance` is deliberately NOT shallow:
-  // that family selects its target from the band's own remembered patches or from a tile a
-  // previous party failed to reach, so by construction it re-reads country the band ALREADY
-  // KNOWS rather than entering unknown ground. A shallow-first-crossing rule does not
-  // describe it.
+  // CORRECTION-21 continuation §3 — this returned to including route reconnaissance after
+  // the narrowing was classified CATEGORY C (introduced while chasing a single-seed habitat
+  // ladder result that cannot attribute causality). The narrowing had no deterministic
+  // seam-level proof, so it does not survive the cleanup.
   //
-  // This exclusion rests on that architectural argument ALONE. An earlier revision of this
-  // comment also cited the habitat ladder's `marginal_escapable` tier going extinct. That
-  // citation was withdrawn: `lineageExpansionAudit` runs ONE seed per tier, so tier survival
-  // is a single Bernoulli outcome that a chaotic simulator reshuffles under any
-  // perturbation. It cannot attribute causality, and treating it as evidence was the same
-  // single-seed over-reach this project has had to retract before.
-  return acquisition === "returned_frontier_exploration";
+  // §5 KNOWN LIMITATION, recorded rather than hidden: classifying a whole acquisition FAMILY
+  // as shallow is itself name-based, which §5 forbids ("its output must depend on what was
+  // actually done"). Neither including nor excluding reconnaissance satisfies that. A
+  // reconnaissance party aims at country the band already remembers, but the tiles it walks
+  // THROUGH en route may be entirely new, and the record carries no dwell time to tell them
+  // apart. Including it is the non-leaking choice, and the existing-record guard below means
+  // a tile that already carries better evidence is never downgraded by a party walking past.
+  // The evidence-based replacement (per-observation dwell//purpose rather than family name)
+  // is unbuilt debt.
+  return (
+    acquisition === "returned_frontier_exploration" ||
+    acquisition === "returned_route_reconnaissance"
+  );
 }
 
 /**
@@ -160,9 +165,39 @@ function coarseRichnessImpression(richness: number): number {
  * observe. Real use or repeated seasonal observation lifts the cap.
  */
 const TRAVERSAL_WATER_CONFIDENCE_CEILING = 0.5;
+/**
+ * CORRECTION-21 continuation §4 — coarse buckets for everything a walker only GLIMPSES.
+ *
+ * The first revision of this repair capped water at a ceiling but otherwise passed the
+ * exact hydrological figure through. The full field-content audit measured the
+ * consequence: 33 exact `observedWaterAccess` copies and 36 exact
+ * `observedAquaticPotential` copies of hidden truth across 12 sampled tiles, because the
+ * cap only bit on high-water tiles and every low-water tile leaked its precise value. A
+ * ceiling is not a coarsening.
+ */
+function coarseImpression(value: number): number {
+  return Math.round(clamp01(value) * 4) / 4;
+}
 
 function visibleWaterPresence(tile: Tile): number {
-  return Math.min(TRAVERSAL_WATER_CONFIDENCE_CEILING, clamp01(tile.resourceProfile.waterAccess));
+  // A walker sees "there is water here" or "this is dry", not a hydrological measurement.
+  // Coarsened first, then capped: presence may be noted, reliability may not be claimed.
+  return Math.min(
+    TRAVERSAL_WATER_CONFIDENCE_CEILING,
+    coarseImpression(tile.resourceProfile.waterAccess),
+  );
+}
+
+/** Visible open water only, and only as a coarse impression. */
+function visibleAquaticPresence(tile: Tile): number {
+  if (tile.isAquatic !== true && tile.isRiver !== true) {
+    return 0;
+  }
+
+  return Math.min(
+    TRAVERSAL_WATER_CONFIDENCE_CEILING,
+    coarseImpression(tile.resourceProfile.aquaticPotential),
+  );
 }
 
 function observeTile(
@@ -213,12 +248,7 @@ function observeTile(
       ? Math.max(existingRecord?.observedWaterAccess ?? 0, visibleWaterPresence(target.tile))
       : target.tile.resourceProfile.waterAccess,
     observedAquaticPotential: shallow
-      ? Math.max(
-          existingRecord?.observedAquaticPotential ?? 0,
-          target.tile.isAquatic === true || target.tile.isRiver === true
-            ? target.tile.resourceProfile.aquaticPotential
-            : 0,
-        )
+      ? Math.max(existingRecord?.observedAquaticPotential ?? 0, visibleAquaticPresence(target.tile))
       : target.tile.resourceProfile.aquaticPotential,
     // Passability IS established by walking.
     observedMovementCost: target.tile.movementCost,

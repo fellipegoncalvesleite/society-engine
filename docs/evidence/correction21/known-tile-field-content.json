@@ -1,0 +1,234 @@
+{
+  "audit": "knownTileFieldContent",
+  "checkpoint": "CORRECTION-21 continuation §4/§7",
+  "tilesSampled": 12,
+  "leakDefinition": "after a SHALLOW traversal, a field carrying PRECISION the coarse channel cannot express: it equals hidden tile truth while that truth is not quarter-bucket aligned. Identity, movement cost and visible terrain hazard are exempt. A coarsened value coinciding with a bucket-aligned truth is NOT a leak.",
+  "unsupportedHiddenTruthCopies": 0,
+  "perFieldLeakCount": {},
+  "leaks": [],
+  "sectionSevenConclusions": {
+    "shallowDiffersFromResidence": true,
+    "repeatedTraversalRaisesConfidence": true,
+    "repeatedTraversalInventsNoCalendar": true,
+    "repeatedTraversalInventsNoStorage": true,
+    "realObservationUpgradesFully": true,
+    "residentialNeverDowngradedByPassingParty": true,
+    "passabilityPreservedOnShallow": true
+  },
+  "evidenceMatrixSample": [
+    {
+      "tileId": "tile:0:0",
+      "hiddenTruth": {
+        "depletionAdjustedRichness": 0.17629759512086066,
+        "waterAccess": 0.05044188519012413,
+        "aquaticPotential": 0,
+        "storageSuitability": 0.3949377225960138,
+        "peakSeasons": [
+          "autumn"
+        ],
+        "reliability": 0.44162986946718075
+      },
+      "records": {
+        "frontierOnce": {
+          "observedRichness": 0.25,
+          "observedWaterAccess": 0,
+          "observedAquaticPotential": 0,
+          "seasonalReliability": null,
+          "seasonalPeak": null,
+          "confidence": 0.4,
+          "visits": 1,
+          "acquisition": "returned_frontier_exploration"
+        },
+        "frontierRepeated": {
+          "observedRichness": 0.25,
+          "observedWaterAccess": 0,
+          "observedAquaticPotential": 0,
+          "seasonalReliability": null,
+          "seasonalPeak": null,
+          "confidence": 0.72,
+          "visits": 5,
+          "acquisition": "returned_frontier_exploration"
+        },
+        "routeRecon": {
+          "observedRichness": 0.25,
+          "observedWaterAccess": 0,
+          "observedAquaticPotential": 0,
+          "seasonalReliability": null,
+          "seasonalPeak": null,
+          "confidence": 0.4,
+          "visits": 1,
+          "acquisition": "returned_route_reconnaissance"
+        },
+        "residentialOnce": {
+          "observedRichness": 0.17629759512086066,
+          "observedWaterAccess": 0.05044188519012413,
+          "observedAquaticPotential": 0,
+          "observedStorageSuitability": 0.3949377225960138,
+          "seasonalReliability": 0.44162986946718075,
+          "seasonalPeak": [
+            "autumn"
+          ],
+          "confidence": 1,
+          "visits": 1,
+          "acquisition": "residential_observation"
+        },
+        "residentialRepeated": {
+          "observedRichness": 0.17629759512086066,
+          "observedWaterAccess": 0.05044188519012413,
+          "observedAquaticPotential": 0,
+          "observedStorageSuitability": 0.3949377225960138,
+          "seasonalReliability": 0.44162986946718075,
+          "seasonalPeak": [
+            "autumn"
+          ],
+          "confidence": 1,
+          "visits": 20,
+          "acquisition": "residential_observation"
+        }
+      }
+    },
+    {
+      "tileId": "tile:105:85",
+      "hiddenTruth": {
+        "depletionAdjustedRichness": 0.26047676928787705,
+        "waterAccess": 0.09271280277284531,
+        "aquaticPotential": 0,
+        "storageSuitability": 0.3764145872924264,
+        "peakSeasons": [
+          "autumn"
+        ],
+        "reliability": 0.45881092685619784
+      },
+      "records": {
+        "frontierOnce": {
+          "observedRichness": 0.25,
+          "observedWaterAccess": 0,
+          "observedAquaticPotential": 0,
+          "seasonalReliability": null,
+          "seasonalPeak": null,
+          "confidence": 0.4,
+          "visits": 1,
+          "acquisition": "returned_frontier_exploration"
+        },
+        "frontierRepeated": {
+          "observedRichness": 0.25,
+          "observedWaterAccess": 0,
+          "observedAquaticPotential": 0,
+          "seasonalReliability": null,
+          "seasonalPeak": null,
+          "confidence": 0.72,
+          "visits": 5,
+          "acquisition": "returned_frontier_exploration"
+        },
+        "routeRecon": {
+          "observedRichness": 0.25,
+          "observedWaterAccess": 0,
+          "observedAquaticPotential": 0,
+          "seasonalReliability": null,
+          "seasonalPeak": null,
+          "confidence": 0.4,
+          "visits": 1,
+          "acquisition": "returned_route_reconnaissance"
+        },
+        "residentialOnce": {
+          "observedRichness": 0.26047676928787705,
+          "observedWaterAccess": 0.09271280277284531,
+          "observedAquaticPotential": 0,
+          "observedStorageSuitability": 0.3764145872924264,
+          "seasonalReliability": 0.45881092685619784,
+          "seasonalPeak": [
+            "autumn"
+          ],
+          "confidence": 1,
+          "visits": 1,
+          "acquisition": "residential_observation"
+        },
+        "residentialRepeated": {
+          "observedRichness": 0.26047676928787705,
+          "observedWaterAccess": 0.09271280277284531,
+          "observedAquaticPotential": 0,
+          "observedStorageSuitability": 0.3764145872924264,
+          "seasonalReliability": 0.45881092685619784,
+          "seasonalPeak": [
+            "autumn"
+          ],
+          "confidence": 1,
+          "visits": 20,
+          "acquisition": "residential_observation"
+        }
+      }
+    },
+    {
+      "tileId": "tile:114:32",
+      "hiddenTruth": {
+        "depletionAdjustedRichness": 0.3809770602826895,
+        "waterAccess": 0.10743147897045724,
+        "aquaticPotential": 0,
+        "storageSuitability": 0.3645092615290858,
+        "peakSeasons": [
+          "autumn"
+        ],
+        "reliability": 0.46605988475393734
+      },
+      "records": {
+        "frontierOnce": {
+          "observedRichness": 0.5,
+          "observedWaterAccess": 0,
+          "observedAquaticPotential": 0,
+          "seasonalReliability": null,
+          "seasonalPeak": null,
+          "confidence": 0.4,
+          "visits": 1,
+          "acquisition": "returned_frontier_exploration"
+        },
+        "frontierRepeated": {
+          "observedRichness": 0.5,
+          "observedWaterAccess": 0,
+          "observedAquaticPotential": 0,
+          "seasonalReliability": null,
+          "seasonalPeak": null,
+          "confidence": 0.72,
+          "visits": 5,
+          "acquisition": "returned_frontier_exploration"
+        },
+        "routeRecon": {
+          "observedRichness": 0.5,
+          "observedWaterAccess": 0,
+          "observedAquaticPotential": 0,
+          "seasonalReliability": null,
+          "seasonalPeak": null,
+          "confidence": 0.4,
+          "visits": 1,
+          "acquisition": "returned_route_reconnaissance"
+        },
+        "residentialOnce": {
+          "observedRichness": 0.3809770602826895,
+          "observedWaterAccess": 0.10743147897045724,
+          "observedAquaticPotential": 0,
+          "observedStorageSuitability": 0.3645092615290858,
+          "seasonalReliability": 0.46605988475393734,
+          "seasonalPeak": [
+            "autumn"
+          ],
+          "confidence": 1,
+          "visits": 1,
+          "acquisition": "residential_observation"
+        },
+        "residentialRepeated": {
+          "observedRichness": 0.3809770602826895,
+          "observedWaterAccess": 0.10743147897045724,
+          "observedAquaticPotential": 0,
+          "observedStorageSuitability": 0.3645092615290858,
+          "seasonalReliability": 0.46605988475393734,
+          "seasonalPeak": [
+            "autumn"
+          ],
+          "confidence": 1,
+          "visits": 20,
+          "acquisition": "residential_observation"
+        }
+      }
+    }
+  ],
+  "verdict": "PASS — zero unsupported hidden-truth copies"
+}
