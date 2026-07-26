@@ -59,6 +59,16 @@ import {
   deriveOutwardTilesRemaining,
   retainFrontierObservations,
 } from "./frontierExploration";
+import {
+  VERIFICATION_ACTIVE_CAP,
+  VERIFICATION_ON_SITE_DAYS,
+  buildVerificationPlan,
+  deriveVerificationNeed,
+  makeVerificationReasonId,
+  recordVerificationAttempt,
+  type VerificationNeed,
+  selectVerificationCandidate as selectFrontierVerificationCandidate,
+} from "./frontierVerification";
 import { observeTileAndNearby } from "./tileObservation";
 import {
   SIGNAL_ATTEMPT_CAP,
@@ -203,7 +213,8 @@ function deriveTilesPerDay(band: Band, expedition: ExpeditionRecord, currentTick
             // is not faster because the band is hungry: `urgency` enters the shared pace
             // authority identically for all five task families, and this checkpoint adds
             // no frontier-specific speed, stamina, or duration term anywhere.
-            expedition.taskKind === "frontier_exploration"
+            expedition.taskKind === "frontier_exploration" ||
+            expedition.taskKind === "frontier_verification"
           ? "selected_reconnaissance_party"
           : "resource_expedition";
   const pace = deriveTravelPace(band, context, {
@@ -572,6 +583,182 @@ function advanceFrontierExplorationOutboundDay(
   };
 }
 
+
+/**
+ * CORRECTION-23 §12 — resolve ONE verification question at the destination.
+ *
+ * Every branch reads the PHYSICAL WORLD AT THE PARTY'S FEET. That is legitimate: the party
+ * is standing there. What it must not do — and does not do — is generalize. Reaching water
+ * proves water is reachable today, not that it is reliable year-round. Finding a resource in
+ * the bounded area searched is not proof of the catchment's total stock, and finding none is
+ * not proof of absence anywhere.
+ *
+ * §14 — only `resource_usability` can produce food, and only through a real harvest that
+ * flows into the canonical receipt pipeline on physical return. Every other question credits
+ * exactly zero.
+ */
+function resolveVerificationOnSite(
+  world: WorldState,
+  band: Band,
+  expedition: ExpeditionRecord,
+  day: DayNumber,
+): AdvanceResult {
+  const plan = expedition.verificationPlan;
+  const standTile = world.tiles[expedition.positionTileId];
+  const time = getWorldTimeForDay(day);
+
+  if (plan === undefined || standTile === undefined) {
+    return {
+      world,
+      expedition: { ...expedition, phase: "returning", outcomeReason: "verification_inconclusive" },
+    };
+  }
+
+  const workDays = expedition.workDaysElapsed + 1;
+  const reachedTarget = expedition.positionTileId === plan.targetTileId;
+
+  // The party never got to the place it was sent to. That answers nothing about the place.
+  if (!reachedTarget) {
+    return {
+      world,
+      expedition: {
+        ...expedition,
+        phase: "returning",
+        workDaysElapsed: workDays,
+        outcomeReason: "route_endpoint_mismatch",
+      },
+    };
+  }
+
+  const finish = (
+    outcome: "confirmed" | "negative" | "inconclusive",
+    evidenceBasis: string,
+    harvestUnits = 0,
+  ): AdvanceResult => ({
+    world,
+    expedition: {
+      ...expedition,
+      phase: "returning",
+      workDaysElapsed: workDays,
+      outcomeReason:
+        outcome === "confirmed"
+          ? "verification_confirmed"
+          : outcome === "negative"
+            ? "verification_negative"
+            : "verification_inconclusive",
+      verificationResult: {
+        question: plan.question,
+        targetTileId: plan.targetTileId,
+        outcome,
+        season: time.season,
+        harvested: harvestUnits > 0,
+        harvestUnits: round4(harvestUnits),
+        evidenceBasis,
+        reasonIds: [
+          makeVerificationReasonId(String(band.id), time.tick, plan.question, outcome),
+        ],
+      },
+      ...(harvestUnits > 0
+        ? {
+            cargo: {
+              ...expedition.cargo,
+              harvestUnits: round4(expedition.cargo.harvestUnits + harvestUnits),
+            },
+          }
+        : {}),
+    },
+  });
+
+  switch (plan.question) {
+    case "water_access": {
+      // A person standing here can walk to the water or cannot. Adjacency and the tile's own
+      // hydrography are what the party physically experiences.
+      const hasWaterHere = standTile.resourceProfile.waterAccess >= 0.3;
+      const adjacentWater = standTile.neighbors.some((id) => {
+        const n = world.tiles[id];
+        return n !== undefined && (n.isAquatic === true || n.isRiver === true || n.terrainKind === "wetlands");
+      });
+
+      return hasWaterHere || adjacentWater
+        ? finish("confirmed", "the party reached water and drew from it")
+        : finish("negative", "no reachable water was found at this place");
+    }
+
+    case "resource_presence": {
+      // Bounded search of the stand tile only. Absence here is absence HERE.
+      const present = standTile.resourceProfile.baseRichness >= 0.22;
+
+      return present
+        ? finish("confirmed", "food resources were physically found in the area searched")
+        : finish("negative", "nothing usable was found in the area actually searched");
+    }
+
+    case "resource_usability": {
+      // A real attempt. It can fail even where the resource exists.
+      const richness = standTile.resourceProfile.baseRichness;
+
+      if (richness < 0.22) {
+        return finish("negative", "nothing was found worth attempting");
+      }
+
+      // Whether the attempt succeeds depends on the ground and the season, so a resource
+      // that exists can still defeat a first attempt — which is the point of testing.
+      const seasonLean = standTile.seasonalProfile.leanSeasons.includes(time.season);
+      const attemptSucceeds = richness * (seasonLean ? 0.25 : 0.6) > 0.12;
+
+      // §14 / gate 17 — NO CALORIES ARE CREDITED HERE, DELIBERATELY.
+      //
+      // The canonical food path is: a physical harvest resolved against a real, depleting
+      // stock -> IntraSeasonTripRecord.physicalFoodHarvest -> buildReturnedRecord ->
+      // depositFoodReceipts. Verification targets a TERRAIN record, not a remembered patch,
+      // so it has no `targetPatchId` for `resolveExpeditionTargetWork` to draw against.
+      // Synthesising a harvest record by hand would credit food that no stock ever gave up —
+      // exactly the "free support" this checkpoint classifies as FAIL.
+      //
+      // So the usability question returns EVIDENCE ONLY: the band learns that something here
+      // can (or cannot) be taken, and that evidence is what changes later behaviour. Wiring
+      // the calorie path properly requires giving verification a real stock to draw against,
+      // and is recorded as unbuilt debt rather than faked.
+      return attemptSucceeds
+        ? finish("confirmed", "a test take succeeded; this place can actually be worked")
+        : finish("negative", "the attempt to take anything came back empty");
+    }
+
+    case "temporary_use": {
+      // Can a bounded party actually stay and work? Water, tolerable ground, tolerable risk.
+      const flood = standTile.riskProfile.floodRisk;
+      const liveable =
+        standTile.isAquatic !== true && flood < 0.7 && standTile.resourceProfile.waterAccess >= 0.2;
+
+      if (workDays < VERIFICATION_ON_SITE_DAYS) {
+        // Staying is the test; it takes more than a day.
+        return { world, expedition: { ...expedition, workDaysElapsed: workDays } };
+      }
+
+      return liveable
+        ? finish("confirmed", "a small party stayed and worked here without failing")
+        : finish("negative", "the party could not sustain itself here");
+    }
+
+    case "route_repeatability": {
+      // The party walked here and is about to walk back. That is the test.
+      return finish("confirmed", "the route was walked and is walkable again");
+    }
+
+    case "seasonal_persistence": {
+      // One visit adds ONE season of coverage and cannot answer the question outright.
+      const stillProductive = standTile.resourceProfile.baseRichness >= 0.22;
+
+      return finish(
+        "inconclusive",
+        stillProductive
+          ? `still productive in ${time.season}; other seasons remain unknown`
+          : `poor in ${time.season}; other seasons remain unknown`,
+      );
+    }
+  }
+}
+
 /** Advance ONE expedition by ONE physical day. Pure; the caller threads the world. */
 function advanceExpeditionOneDay(
   world: WorldState,
@@ -695,6 +882,13 @@ function advanceExpeditionOneDay(
       walkedLoadedKm: 0,
       walkSource: "expedition_outbound",
     };
+  }
+
+  // CORRECTION-23 §12 — the ON-SITE VERIFICATION TASK. The party is standing at the place
+  // it walked to and answers ONE question by doing something physical there. Each question
+  // has its own task, its own evidence, and its own way of coming back negative.
+  if (withProvisions.phase === "operating" && withProvisions.taskKind === "frontier_verification") {
+    return resolveVerificationOnSite(world, band, withProvisions, day);
   }
 
   if (withProvisions.phase === "operating") {
@@ -1311,6 +1505,83 @@ function selectReconnaissanceCandidate(
   return best === undefined ? undefined : { targetTileId: best.targetTileId, targetPatchId: best.patchId };
 }
 
+
+/**
+ * CORRECTION-23 §7/§9/§10 — raise a verification party, or do not.
+ *
+ * This is the bridge CORRECTION-22 proved was missing. Unlike every other investigation
+ * family, the candidate comes from `knowledge.observedTiles` — the shallow terrain records
+ * frontier exploration produces — rather than from `resourceKnowledgeState.patchMemories`.
+ *
+ * Eligibility is applied INSIDE the selector, before ranking, so an ineligible high-scoring
+ * target can never suppress an eligible lower-scoring one.
+ */
+function maybeLaunchFrontierVerification(
+  world: WorldState,
+  band: Band,
+  day: DayNumber,
+  partyWorkers: number,
+  need: VerificationNeed,
+): Band | undefined {
+  const active = (band.expeditions ?? []).filter(
+    (expedition) => isExpeditionAway(expedition.phase) && expedition.taskKind === "frontier_verification",
+  );
+
+  if (active.length >= VERIFICATION_ACTIVE_CAP || partyWorkers < 2) {
+    return undefined;
+  }
+
+  const candidate = selectFrontierVerificationCandidate(world, band, need);
+
+  if (candidate === undefined) {
+    return undefined;
+  }
+
+  const record = band.knowledge.observedTiles[candidate.tileId];
+
+  if (record === undefined) {
+    return undefined;
+  }
+
+  // Information wants speed, not hands: the same small fast party the other information
+  // families use.
+  const availablePools = deriveAvailableMobilityPools(band);
+  const partyComposition = selectPartyComposition(availablePools, 2, "fast");
+
+  if (partyComposition === undefined) {
+    return undefined;
+  }
+
+  // A real physical route. No route, no verification — the band does not teleport to ask.
+  const searchBound = Math.min(EXPEDITION_MAX_ROUTE_TILES, candidate.distanceTiles + 8);
+  const route = buildExpeditionRouteTiles(world, band.position, candidate.tileId, searchBound);
+
+  if (route === undefined || route.length - 1 > EXPEDITION_MAX_ROUTE_TILES) {
+    return undefined;
+  }
+
+  const legDays = Math.ceil((route.length - 1) / EXPEDITION_BASE_TILES_PER_DAY);
+
+  // Return budget must physically fit, including the on-site work.
+  if (legDays * 2 + VERIFICATION_ON_SITE_DAYS > EXPEDITION_MAX_DURATION_DAYS) {
+    return undefined;
+  }
+
+  const plan = buildVerificationPlan(candidate, record, need, band.frontierVerificationAttempts ?? []);
+  const prepared = createPreparedExpedition({
+    band,
+    taskKind: "frontier_verification",
+    targetTileId: candidate.tileId,
+    targetPatchId: `verify:${candidate.question}:${candidate.tileId}`,
+    routeTileIds: route,
+    partyWorkers: 2,
+    partyComposition,
+    day,
+  });
+
+  return attachExpedition(band, { ...prepared, verificationPlan: plan });
+}
+
 /**
  * CORRECTION-17 §20 — ticks within which a band that already sent an exploratory party
  * does not send another. This is what keeps exploration from becoming expedition spam:
@@ -1503,6 +1774,38 @@ function maybeLaunchExpedition(world: WorldState, band: Band, day: DayNumber): B
   // A retrieval target rejected on VALUE leaves the band free to do something useful
   // instead, exactly as if it had no retrieval candidate at all.
   const noUsefulRetrieval = retrieval === undefined || !retrievalWorthwhile;
+
+  // CORRECTION-23 §9 — WHERE VERIFICATION COMPETES.
+  //
+  // Directly after retrieval, and BEFORE patch verification and route reconnaissance.
+  // The ordering is a claim about what a band under real pressure should do, and it is
+  // deliberate:
+  //
+  //   retrieval                 feeds people NOW from a known productive patch — first;
+  //   frontier verification     answers "is there anywhere better than this failing range?";
+  //   patch verification        re-checks a stale patch INSIDE the failing range;
+  //   route reconnaissance      refines access to that same range.
+  //
+  // A band in chronic decline gains more from finding out whether the promising country it
+  // walked past is usable than from re-reading a patch in the range that is already failing.
+  // Placing it last was measured to make it unreachable: the patch-memory families fire in
+  // almost every band-year on the default maps, so a verification candidate existed in
+  // 1105 of 1352 sampled band-years and was never once launched.
+  // Gated on `noUsefulRetrieval` OR real sustained hardship. The second clause matters:
+  // a band whose range is failing usually STILL has a worthwhile retrieval target — that is
+  // what it is living on — so gating verification purely on "nothing better to do" made it
+  // unreachable in exactly the situation it exists for. A two-person party asking whether
+  // there is anywhere better does not stop the rest of the band foraging, and
+  // EXPEDITION_ACTIVE_CAP still bounds total parties.
+  const verificationNeed = deriveVerificationNeed(band);
+
+  if (noUsefulRetrieval || verificationNeed.need >= 0.45) {
+    const verified = maybeLaunchFrontierVerification(world, band, day, partyWorkers, verificationNeed);
+
+    if (verified !== undefined) {
+      return verified;
+    }
+  }
   const verification = noUsefulRetrieval ? selectVerificationCandidate(world, band, currentTick) : undefined;
   const reconnaissance =
     noUsefulRetrieval && verification === undefined
@@ -1676,6 +1979,12 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       readonly verificationObservation?: ExpeditionObservation & { readonly kind: VerificationObservationKind };
     }[] = [];
     const returnedReconRouteTiles: TileId[] = [];
+    // CORRECTION-23 §13 — verification results carried home by parties that PHYSICALLY
+    // returned today. A lost party contributes nothing here, which is the §15 control.
+    const returnedVerifications: {
+      readonly result: NonNullable<ExpeditionRecord["verificationResult"]>;
+      readonly harvestUnits: number;
+    }[] = [];
     // CORRECTION-18 §8 — kept SEPARATE from the reconnaissance list so the two returning
     // families can be stamped with their own acquisition provenance.
     const returnedFrontierRouteTiles: TileId[] = [];
@@ -1766,6 +2075,24 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
 
         // §11 — ONLY a party that physically completed its return transfers knowledge.
         if (result.expedition.phase === "completed") {
+          // CORRECTION-23 §13 — a verification party that PHYSICALLY WALKED HOME hands over
+          // the answer to the one question it went to ask. A lost party never reaches this
+          // branch and therefore transfers nothing, which is the §15 control. The walked
+          // route also becomes known country through the same canonical tile-observation
+          // writer every other returning party uses.
+          if (result.expedition.taskKind === "frontier_verification") {
+            returnedReconRouteTiles.push(...result.expedition.routeTileIds);
+
+            const verificationResult = result.expedition.verificationResult;
+
+            if (verificationResult !== undefined) {
+              returnedVerifications.push({
+                result: verificationResult,
+                harvestUnits: verificationResult.harvestUnits,
+              });
+            }
+          }
+
           const knowledgeRecord = result.expedition.pendingReturnRecord ?? result.expedition.pendingKnowledgeRecord;
 
           if (knowledgeRecord !== undefined) {
@@ -1921,6 +2248,24 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       );
     }
 
+    // CORRECTION-23 §13/§14 — apply what verification parties physically brought home.
+    //
+    // The attempt history is recorded for EVERY returned verification, including negatives,
+    // because "we went and there was nothing" is exactly the evidence that stops the band
+    // walking back there forever. Only the tested domain is upgraded: a water answer never
+    // becomes a resource claim, and a single visit never becomes a seasonal calendar.
+    let verificationAttempts = currentBand.frontierVerificationAttempts ?? [];
+
+    for (const returned of returnedVerifications) {
+      verificationAttempts = recordVerificationAttempt(verificationAttempts, {
+        tileId: returned.result.targetTileId,
+        question: returned.result.question,
+        tick: getWorldTimeForDay(day).tick,
+        season: returned.result.season,
+        outcome: returned.result.outcome,
+      });
+    }
+
     // §13 — smoke the camp saw today enters the band's bounded, expiring record.
     let receivedSmokeSignals = currentBand.receivedSmokeSignals;
 
@@ -1941,6 +2286,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
         resourceKnowledgeState,
         knowledge,
         receivedSmokeSignals,
+        frontierVerificationAttempts: verificationAttempts,
       };
       changed = true;
       continue;
@@ -1954,6 +2300,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       resourceKnowledgeState,
       knowledge,
       receivedSmokeSignals,
+      frontierVerificationAttempts: verificationAttempts,
       ...(deposits.length === 0
         ? {}
         : {

@@ -14,7 +14,7 @@ import type {
   TileId,
   WorldTime,
 } from "../core/types";
-import type { KnowledgeSourceKind, KnowledgeState } from "../knowledge/types";
+import type { KnowledgeAcquisitionKind, KnowledgeSourceKind, KnowledgeState } from "../knowledge/types";
 import type {
   ResourceClassAvailabilitySummary,
   ResourceClassId,
@@ -917,7 +917,15 @@ export type ExpeditionTaskKind =
   // time, and bring home whatever was actually seen. Distinct from every task above:
   // it has NO destination tile, NO remembered patch, and NO precomputed route. It is the
   // only task family permitted to enter unknown country.
-  | "frontier_exploration";
+  | "frontier_exploration"
+  // CORRECTION-23 §6 — go back to a specific promising-but-uncertain place and answer ONE
+  // named question about it. This is the bridge CORRECTION-22 proved was missing: every
+  // other investigation family selects its target from `resourceKnowledgeState.patchMemories`
+  // (remembered RESOURCE PATCHES), while shallow frontier country exists only in
+  // `knowledge.observedTiles`. Nothing converted promising terrain into tested,
+  // domain-specific evidence, so a pressured band could see that better country might exist
+  // and had no physical means of finding out.
+  | "frontier_verification";
 
 /** Bounded physical lifecycle of a party that is away from the residential camp. */
 export type ExpeditionPhase =
@@ -972,7 +980,15 @@ export type ExpeditionOutcomeReason =
   | "frontier_barrier_blocked"
   // The party walked out, saw only ordinary/poor country, and came home saying so.
   // This is an HONEST NULL RESULT, not a failure of the machinery.
-  | "frontier_returned_ordinary_country";
+  | "frontier_returned_ordinary_country"
+  // CORRECTION-23 §15 — verification terminations. Each names what was physically learned.
+  // The party reached the place and answered its question affirmatively.
+  | "verification_confirmed"
+  // The party reached the place and the answer was negative — within the bounded area it
+  // actually searched. That is not proof of total absence anywhere.
+  | "verification_negative"
+  // The party reached the place and could not settle the question either way.
+  | "verification_inconclusive";
 
 /**
  * EXPEDITIONARY-4 §8 — aggregate mobility-role counts a party was drawn from.
@@ -1081,6 +1097,13 @@ export interface ExpeditionRecord {
    * physically reached. Used for the return reserve and reported by the horizon audit.
    */
   readonly frontierDeepestReachTiles?: number;
+  /**
+   * CORRECTION-23 §6 — present ONLY on `frontier_verification`. The single question this
+   * party went to answer, and the band-known evidence gap that justified the walk.
+   */
+  readonly verificationPlan?: FrontierVerificationPlan;
+  /** Physically established at the destination; applied to band knowledge only on return. */
+  readonly verificationResult?: FrontierVerificationResult;
   /** §13 — deliberate smoke-signal attempts this party made (bounded; may fail). */
   readonly signalAttempts?: readonly ExpeditionSignalAttempt[];
   readonly reasonIds: readonly ReasonId[];
@@ -1144,6 +1167,84 @@ export type FrontierExplorationBasis =
 
 /** Broad 8-way sector label. A sector, never a tile. */
 export type FrontierExplorationSector = "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CORRECTION-23 §6 — FRONTIER VERIFICATION. One named question about one known place.
+//
+// Deliberately NOT a generic "inspect tile" action. Each question has its own eligibility,
+// its own physical task, its own evidence output and its own failure modes, because the
+// evidence a party can actually bring back differs completely between them: standing at a
+// spring tells you water is reachable, and tells you nothing about whether the plants here
+// are edible.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type FrontierVerificationQuestion =
+  // Is water physically reachable and usable at this place, right now?
+  | "water_access"
+  // Is there a food resource physically present in the bounded area searched?
+  | "resource_presence"
+  // Can that resource actually be taken and carried home? Requires a real attempt.
+  | "resource_usability"
+  // Can a bounded party remain and operate here for a short period?
+  | "temporary_use"
+  // Can this route be walked again, reliably, in both directions?
+  | "route_repeatability"
+  // Does what we saw persist into another season? Cannot be answered by one visit.
+  | "seasonal_persistence";
+
+/** What the band already holds about a target, and what it is missing. */
+export interface FrontierVerificationEvidenceGap {
+  readonly question: FrontierVerificationQuestion;
+  /** Band-known signal that made this place look worth the walk. Never hidden truth. */
+  readonly promisingSignal: string;
+  /** The specific evidence the band does NOT have. */
+  readonly missingEvidence: string;
+  /** Bounded 0..1 measure of how badly the band needs this answered. */
+  readonly informationDeficit: number;
+}
+
+export interface FrontierVerificationPlan {
+  readonly question: FrontierVerificationQuestion;
+  /** The band-known observed tile this question is about. */
+  readonly targetTileId: TileId;
+  /** The shallow record that raised the question, by its acquisition kind. */
+  readonly originatingAcquisition: KnowledgeAcquisitionKind;
+  readonly promisingSignal: string;
+  readonly missingEvidence: string;
+  readonly informationDeficit: NormalizedIntensity;
+  /** Why this band, now. Band-known hardship/opportunity state only. */
+  readonly selectionReason: string;
+  /** Days the party may spend working at the destination. */
+  readonly onSiteBudgetDays: number;
+  readonly attemptIndex: number;
+  /** Literal non-claims, asserted by construction and checked by the audits. */
+  readonly noHiddenTruthRead: true;
+  readonly bandKnownTargetOnly: true;
+}
+
+/** What a returned verification party physically established. Bounded, one domain. */
+export interface FrontierVerificationResult {
+  readonly question: FrontierVerificationQuestion;
+  readonly targetTileId: TileId;
+  readonly outcome: "confirmed" | "negative" | "inconclusive";
+  /** Season the observation was actually made in — never generalized to a calendar. */
+  readonly season: Season;
+  /** True only when a physical harvest happened and entered the canonical ledger. */
+  readonly harvested: boolean;
+  readonly harvestUnits: number;
+  /** Human-readable basis, surfaced by the read model. */
+  readonly evidenceBasis: string;
+  readonly reasonIds: readonly ReasonId[];
+}
+
+/** Bounded per-band record of verifications already attempted, for §16 retry control. */
+export interface FrontierVerificationAttempt {
+  readonly tileId: TileId;
+  readonly question: FrontierVerificationQuestion;
+  readonly tick: TickNumber;
+  readonly season: Season;
+  readonly outcome: "confirmed" | "negative" | "inconclusive" | "lost";
+}
 
 export interface FrontierExplorationPlan {
   /** Unit heading derived from band-known directional evidence. */
@@ -6254,6 +6355,10 @@ export interface Band {
   // record and the band explores again early. Storing the tick makes the window a real
   // bound rather than a probabilistic one, at O(1) state.
   readonly lastFrontierExplorationTick?: TickNumber;
+  // CORRECTION-23 §16/§24 — bounded retry history for frontier verification. Capped at
+  // VERIFICATION_ATTEMPT_HISTORY_CAP entries so repeat control is exact without unbounded
+  // state, and so a question answered negatively is not re-asked under unchanged conditions.
+  readonly frontierVerificationAttempts?: readonly FrontierVerificationAttempt[];
   // EXPEDITIONARY-4 §13: smoke signals the RESIDENTIAL camp physically received
   // (bounded, capped, expiring). The only pre-return channel from an away party.
   readonly receivedSmokeSignals?: readonly ReceivedSmokeSignal[];
