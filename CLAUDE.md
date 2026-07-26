@@ -68,6 +68,49 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-07-26 (FRONTIER OPPORTUNITY / DAUGHTER FISSION CAUSAL CLOSURE CORRECTION-20: PROGRESS
+  — NOT ACCEPTED / DO NOT MERGE, branch checkpoint/frontier-opportunity-fission-closure-20
+  from 4d20c98. main untouched at 668763f. NO PRODUCTION BEHAVIOUR CHANGED.
+
+  **THE FISSION HYPOTHESIS IS REFUTED. BOTH MAPS ARE NON_FISSION_DOMINATED.** The §6 reader
+  isolation ran all five seeds on both maps with four arms (disabled / no-transfer /
+  hidden-from-fission / production), using two audit-only seams that drop
+  returned_frontier_exploration tiles from collectOpportunityCandidates and
+  getFissionTargetRecordIds only:
+      map1  disabled 244.6  noTransfer 241.6  hiddenFromFission 181.4  production 188.4
+            fission-only +7.0   non-fission -60.2   total -53.2
+      map2  disabled 226.0  noTransfer 231.6  hiddenFromFission 201.2  production 196.4
+            fission-only -4.8   non-fission -30.4   total -35.2
+  Letting frontier knowledge reach opportunity/fission is worth +7.0 on map1 and -4.8 on
+  map2 — neither is close to the -30/-60 caused by the NON-FISSION readers (movement,
+  resource selection, camps, seasonal rounds). **Do NOT change the travelCost/split-motivation
+  coupling on the strength of the 'distance double-count' label** — the §9 ledger records it
+  as a real CONTRACT violation (T2 re-consumes T1's normalized value with no physical
+  quantity of its own, swing 0.10 vs threshold 0.64) but it is NOT the mechanism.
+
+  **THE EXPEDITION IS CLOSE TO COSTLESS.** ARM_A (party walks, commits workers, eats
+  provisions, transfers nothing) matches or BEATS the disabled control: 241.6 vs 244.6 on
+  map1 and 231.6 vs 226.0 on map2. Band counts under ARM_A return to disabled levels
+  (8.6 vs 8.8; 11.2 vs 11.0). Confirms CORRECTION-19 across both maps and all ten seeds.
+
+  **§5 CROSS-SEED DECOMPOSITION COMPLETED (20 runs).** map1 gap 56.2 = 88.8% amplification
+  + 11.2% direct; map2 gap 29.6 = 4.3% amplification + 95.7% direct. These describe WHERE
+  the difference materialises; §6 describes WHICH READER causes it. Consistent: on map1
+  hiding knowledge from fission does NOT restore band count (7.2 vs 7.0 vs 8.8 disabled)
+  but withholding transfer entirely does (8.6).
+
+  **RETRACTED: my CORRECTION-19 claim that 'exploring bands are better fed, support +12.4%'.**
+  That came from map1 seed c18:a alone. Across five seeds support is -0.33% (map1) and
+  -9.09% (map2). Seeds disagree WITHIN each map, so no single mechanism describes either.
+
+  LEADING MECHANISM, unrepaired: the epistemic-adequacy gap. KnowledgeAcquisitionKind
+  provenance exists but NO adequacy test reads it, so a tile crossed once by two people
+  carries the same confidence as country worked for seasons and enters movement, resource
+  and camp decisions on that basis. NOT BUILT: §7 pipeline waterfall, §10 D0-D5, §11 P1-P6,
+  §12 projection model, §14 fission-gate audit, §18/§20/§21, most of §22.
+  See docs/evidence/correction20/.)
+
+Previously updated:
   2026-07-25 (FRONTIER EXPEDITION PHYSICAL-COST AND LABOR ACCOUNTING CORRECTION-19: the
   expedition labour accounting is CORRECT AND SINGULAR — NO REPAIR WARRANTED at the labour
   seam. Branch checkpoint/frontier-expedition-labor-accounting-19 from 8504b76 (4b1f363 is

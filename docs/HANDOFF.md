@@ -181,6 +181,57 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### FRONTIER OPPORTUNITY / DAUGHTER FISSION CAUSAL CLOSURE — CORRECTION-20 — PROGRESS, DO NOT MERGE
+
+**Branch** `checkpoint/frontier-opportunity-fission-closure-20`, from `4d20c98`. `main`
+untouched at `668763f`. **Not pushed. No production behaviour changed.**
+
+**The fission hypothesis is refuted. Both maps are NON_FISSION_DOMINATED.**
+
+The §6 reader isolation ran all five seeds on both maps with four arms, using two
+audit-only seams that withhold `returned_frontier_exploration` tiles from
+`collectOpportunityCandidates` and `getFissionTargetRecordIds` only:
+
+```text
+map1  disabled 244.6  noTransfer 241.6  hiddenFromFission 181.4  production 188.4
+      fission-only  +7.0   non-fission -60.2   total -53.2
+map2  disabled 226.0  noTransfer 231.6  hiddenFromFission 201.2  production 196.4
+      fission-only  -4.8   non-fission -30.4   total -35.2
+```
+
+Letting frontier knowledge reach opportunity evaluation and fission target selection is
+worth **+7.0** on map 1 and **−4.8** on map 2. Neither is close to the −30/−60 caused by
+the **non-fission** readers — movement, resource selection, camps, seasonal rounds.
+
+**Do not tune the `travelCost` / split-motivation coupling.** The §9 ledger records it as a
+genuine contract violation (T2 re-consumes T1's normalized value with no physical quantity
+of its own; swing 0.10 against a 0.64 threshold) — but the counterfactual shows it is *not*
+the mechanism. This is exactly the trap the checkpoint warned about.
+
+**The expedition is close to costless.** ARM_A — party walks, commits workers, eats
+provisions, transfers nothing — matches or **beats** the disabled control: 241.6 vs 244.6
+on map 1, **231.6 vs 226.0** on map 2. Band counts under ARM_A return to disabled levels.
+This confirms CORRECTION-19 across both maps and all ten seeds.
+
+**§5 completed (20 runs).** map 1 gap 56.2 = 88.8% amplification + 11.2% direct; map 2 gap
+29.6 = 4.3% amplification + 95.7% direct. Those describe **where** the difference
+materialises; §6 describes **which reader** causes it. Consistent: on map 1, hiding
+knowledge from fission does *not* restore band count (7.2 vs 7.0 production, against 8.8
+disabled) but withholding transfer entirely does (8.6).
+
+**Retraction.** The CORRECTION-19 claim that "exploring bands are better fed, support
++12.4%" came from map 1 seed `c18:a` alone. Across five seeds support is −0.33% (map 1) and
+**−9.09%** (map 2). Seeds disagree *within* each map, so no single mechanism describes
+either one.
+
+**Leading mechanism, unrepaired:** the epistemic-adequacy gap. `KnowledgeAcquisitionKind`
+provenance exists but **no adequacy test reads it**, so a tile crossed once by two people
+carries the same confidence as country the band has worked for seasons, and enters
+movement, resource and camp decisions on that basis.
+
+**Not built:** §7 pipeline waterfall, §10 D0–D5, §11 P1–P6, §12 projection model, §14
+fission-gate audit, §18/§20/§21, most of §22.
+
 ### FRONTIER EXPEDITION PHYSICAL-COST AND LABOR ACCOUNTING — CORRECTION-19 — NO REPAIR WARRANTED
 
 **Branch** `checkpoint/frontier-expedition-labor-accounting-19`, from `8504b76` (`4b1f363`
@@ -7951,6 +8002,19 @@ exception; daughter colours related-but-distinct and never visually confusing.
 
 ## Checkpoint Log
 
+- **FRONTIER OPPORTUNITY / DAUGHTER FISSION CAUSAL CLOSURE CORRECTION-20** — *2026-07-26,
+  PROGRESS — DO NOT MERGE. No production change.* Completed the unfinished cross-seed
+  decomposition (20 runs) and ran the mandatory reader-isolation matrix (5 seeds x 2 maps x
+  4 arms). **Refuted the fission hypothesis**: both maps are NON_FISSION_DOMINATED, with
+  frontier knowledge reaching opportunity/fission worth +7.0 on map 1 and −4.8 on map 2
+  against −60.2 / −30.4 from the non-fission readers. Recorded the distance term ledger,
+  which finds the split-motivation coupling a real contract violation but **not** the
+  mechanism — and did not tune it. Confirmed the expedition is close to costless (ARM_A
+  matches or beats the disabled control on both maps). Wrote the five §8 semantic contracts
+  against what production actually does, finding physical feasibility honoured, epistemic
+  adequacy ignoring its own provenance field, and daughter viability testing parent
+  superiority in incommensurable units. **Retracted** the previous checkpoint's single-seed
+  claim that exploring bands are better fed. See `docs/evidence/correction20/`.
 - **FRONTIER EXPEDITION PHYSICAL-COST AND LABOR ACCOUNTING CORRECTION-19** — *2026-07-25,
   NO REPAIR WARRANTED; feature branch stays PROGRESS — DO NOT MERGE.* Tested all six §12
   accounting invariants over 9,600 sampled days and found **zero violations**: labour is
