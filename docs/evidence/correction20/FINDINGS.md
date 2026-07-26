@@ -4,8 +4,8 @@
 
 This checkpoint delivered the §8 semantic contracts, the §9 distance term ledger, the §6
 reader-isolation instrumentation, and the **completed §5 cross-seed decomposition**. The §6
-arm matrix completed for map 1 and **overturned the leading hypothesis**; map 2 was still
-executing at write time. **No production behaviour was changed.**
+arm matrix **completed on both maps** and **overturned the leading hypothesis**: both maps
+are NON_FISSION_DOMINATED. **No production behaviour was changed.**
 
 The headline result is that the two default maps are driven by quantitatively different
 mechanisms — map 1 is **88.8% descendant amplification**, map 2 is **95.7% direct
@@ -111,7 +111,7 @@ counted as duplication: it uses a different normalization (zero inside 8 tiles, 
 at 26, versus saturating at 12) over a different candidate set in a different authority,
 and §9 permits distance to affect both feasibility and preference.
 
-## 4. §6 — Reader isolation: map 1 COMPLETE, and it overturns the leading hypothesis
+## 4. §6 — Reader isolation: COMPLETE on both maps, and it overturns the leading hypothesis
 
 Two audit-only seams (`collectOpportunityCandidates`, `getFissionTargetRecordIds`) drop
 tiles whose §8 provenance is `returned_frontier_exploration` from the opportunity and
@@ -158,9 +158,40 @@ and it enters movement targeting, resource selection and camp/anchor systems on 
 That is now the leading, evidence-backed mechanism — and it is a *different defect* from the
 one this checkpoint set out expecting to find.
 
-**map 2 arms were still executing at write time** (23 of 40 runs). Early single-seed signal
-for `c18:a` points the same way — ARM_A 245 vs disabled 238, ARM_C 214 — but one seed is
-not a result and is not claimed as one.
+**map 2, all five seeds, four arms — the same answer:**
+
+```text
+arm                          pop     bands  pop/band  fissions
+ARM_0 exploration disabled  226.0    11.0    20.546      2.0
+ARM_A no transfer           231.6    11.2    20.680      2.2
+ARM_C hidden from fission   201.2    11.0    18.360      2.0
+ARM_D production            196.4    11.0    17.970      2.0
+
+fission-only  (D - C) =  -4.8
+non-fission   (C - A) = -30.4     DOMINANT
+total         (D - A) = -35.2
+```
+
+**Both maps classify as NON_FISSION_DOMINATED.** §16 required map 2 to be traced separately
+rather than assumed to match map 1; it was, and it reaches the same conclusion by its own
+evidence. On map 2 the fission contribution is a small negative (-4.8) rather than map 1's
+small positive (+7.0), but on neither map is it the mechanism.
+
+**ARM_A beats or matches the disabled control on both maps** — 241.6 vs 244.6 on map 1, and
+**231.6 vs 226.0 on map 2**, i.e. physically exploring while transferring nothing is
+*better* than not exploring at all there. Band counts under ARM_A also return to the
+disabled level (8.6 vs 8.8 on map 1; 11.2 vs 11.0 on map 2). The expedition itself is not
+merely cheap, it is close to costless, across both maps and all ten seeds.
+
+### How this reconciles with the §5 decomposition
+
+§5 found map 1 is 88.8% *amplification* (fewer bands) and map 2 is 95.7% *direct* (smaller
+bands). §6 finds both are caused by *non-fission readers*. These answer different questions
+and are consistent: §5 describes **where the population difference materialises**, §6
+describes **which reader causes it**. On map 1, hiding knowledge from fission does not
+restore the band count (7.2 under ARM_C vs 7.0 production, against 8.8 disabled) — but
+withholding transfer entirely does (8.6). So the band-count loss is produced upstream, by
+the non-fission readers, and only *shows up* as missing daughters.
 
 ## 5. §5 — Cross-seed completion: COMPLETE, and the two maps differ quantitatively
 
