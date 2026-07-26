@@ -2,10 +2,12 @@
 
 **Verdict: PROGRESS — NOT ACCEPTED / DO NOT MERGE.**
 
-A proven anti-omniscience defect was repaired at its exact seam, and the repair **does**
+A proven anti-omniscience defect was repaired at its exact seam. The repair **does**
 materially reduce the population regression — 75% of the harm removed on map 1, 39% on
-map 2. But two of ten seeds got *worse*, the §11 mediation chain was not traced, and a
-habitat-tier question raised by the repair was still resolving at write time.
+map 2 — but it is **not uniformly beneficial**: two of ten seeds got worse, and a five-seed
+before/after comparison shows it **extinguishes the `marginal_escapable` habitat tier**
+(survival 0.8 → 0.0). The §11 mediation chain was not traced. The seam repair is correct
+and proven; its behavioural consequences are a genuine trade-off, not a clean win.
 
 ---
 
@@ -154,11 +156,42 @@ isolated_marginal   survival 0.0   median pop   0   median bands 0
 hostile             survival 1.0   median pop  19   median bands 1
 ```
 
-`marginal_escapable` at **0/5** is not noise. Whether the repair caused it, or whether that
-tier was always fragile and the old single-seed draw was lucky, requires the pre-repair
-five-seed baseline — which was **still running at write time** and is therefore **not
-claimed in either direction**. `isolated_marginal` remaining extinct is the intended honest
-extinction.
+### The pre-repair baseline: this IS a real regression caused by the repair
+
+The same five-seed ladder run against `6eec641` in a worktree settles it:
+
+```text
+tier                   PRE survival   POST survival   PRE pop   POST pop
+exceptionally_rich          1.0            1.0          122       107
+good                        1.0            1.0           64        66
+ordinary                    1.0            1.0           20        24
+marginal_escapable          0.8            0.0           88         0     <-- REGRESSION
+isolated_marginal           0.0            0.0            0         0
+hostile                     1.0            1.0           23        19
+```
+
+**`marginal_escapable` falls from 4/5 survival to 0/5.** Every other tier is unchanged in
+survival, with population differences inside ordinary run-to-run variation.
+
+This must be stated precisely, because an earlier section of this document dismissed the
+single-seed version of this signal as noise. **That dismissal was right about the method and
+wrong about the substance.** One seed genuinely cannot attribute a Bernoulli outcome — the
+two production edits made on that basis were still unjustified, and reverting one was still
+correct. But the underlying effect was real, and only the multi-seed test could show it.
+
+The mechanism is coherent with the repair's design: the `marginal_escapable` founder's whole
+survival strategy is to *locate and move to better land*. Degrading the ecological content of
+knowledge returned by exploring parties degrades exactly the evidence that escape depends on.
+
+**Classification: the repair is a net improvement on the default maps and a clear regression
+on escapable-marginal habitat.** It is not a uniformly good change, and §17's warning that
+"a fix that merely quarantines all frontier knowledge permanently is a failure" is close to
+binding here — a band that can only survive by finding better country must still be able to
+find it.
+
+No further fix was attempted. Two speculative production edits were already made in this
+checkpoint chasing an unattributed signal; the disciplined response to a newly-attributed
+one is to report the trade-off and stop, not to guess a third time.
 
 ## 7. Preservation (§14) — proven
 
