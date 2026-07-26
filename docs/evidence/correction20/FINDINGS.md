@@ -272,6 +272,34 @@ The parts of the CORRECTION-19 conclusion that DO survive: labour accounting is 
 working-adult time, and the map1 gap is overwhelmingly amplification rather than
 subsistence.
 
+## 5c. Regression matrix executed on this branch (§22 subset)
+
+| Check | Result |
+| --- | --- |
+| build | PASS |
+| TypeScript | PASS (clean) |
+| graph validation | PASS — 220/761, 0 dup, 0 dangling |
+| import boundary | PASS — `simLayerViolations: []` |
+| adaptation boundary | PASS — `boundaryMatchesInternal`, `adaptationObserverParity` |
+| step-mode invariance map1 | PASS — `fullCanonicalStateMatch: true`, `firstDivergence: null` |
+| step-mode invariance map2 | PASS — `fullCanonicalStateMatch: true`, `firstDivergence: null` |
+| food-receipt capture | PASS — capture ratio **1.000** |
+| annual nutrition like-for-like | PASS |
+| fission population conservation | PASS — 0 mismatches (5 fissions checked) |
+| fission cohort conservation | PASS — 0 cohort mismatches, 0 world-population mismatches |
+| habitat ladder | PASS — gradient intact; `isolated_marginal` survival **0** (honest extinction preserved), `hostile` caps at 28 |
+| fresh-process determinism | PASS — identical across separate processes (timing excluded) |
+| performance | 24.71 ms/tick mean, 9.88 s total benchmark; audit hooks inert when unset |
+
+The two audit-only seams added here (`hideFrontierDerived` on
+`collectOpportunityCandidates` and `getFissionTargetRecordIds`) are undefined in every
+normal world, and step-mode invariance with full canonical state match confirms production
+output is unchanged.
+
+**Not run:** candidate repairs A–D, social exact-seam, death-memory same-snapshot,
+anti-omniscience, lost-party no-transfer, breadcrumb adjacency, season-order invariance,
+default-map long runs, and the §20 500/1,000-year state-bound runs.
+
 ## 6. What was NOT done
 
 - §5 and §6 measurement runs incomplete at write time.
