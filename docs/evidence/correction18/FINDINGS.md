@@ -246,31 +246,40 @@ attributes that to expedition labour, not to destination selection. Reporting th
 together would be the kind of conflation §21 forbids.
 
 Post-repair default-map A/B, compared LIKE-FOR-LIKE against the same three seeds
-pre-repair (an earlier draft of this section quoted "roughly −17%" from a five-run partial
-against a five-seed pre-repair mean — different seed subsets, so not a valid comparison;
-these are the same seeds on both sides).
+pre-repair. (An earlier draft quoted "roughly −17%" from a five-run partial against a
+five-seed pre-repair mean — different seed subsets, not a valid comparison.) All twelve
+runs complete:
 
 ```text
-map1        PRE ON   POST ON      PRE OFF   POST OFF
-c18:a         215      204          264        265
-c18:b         178      206          230        217
-c18:c         174      190          265        264
-mean        189.0    200.0        253.0      248.7
+map1          PRE ON   POST ON      PRE OFF   POST OFF
+c18:a           215      204          264        265
+c18:b           178      206          230        217
+c18:c           174      190          265        264
+mean          189.0    200.0        253.0      248.7
+regression    -64.0 (-25.30%)  ->  -48.7 (-19.57%)      3/3 seeds lower
 
-PRE  regression  189.0 - 253.0 = -64.0  (-25.3%)
-POST regression  200.0 - 248.7 = -48.7  (-19.6%)
-
-map2 (2 of 3 seeds complete at time of writing)
-c18:a         213      210          229        238
-c18:b         197      167          206        210
+map2          PRE ON   POST ON      PRE OFF   POST OFF
+c18:a           213      210          229        238
+c18:b           197      167          206        210
+c18:c           180      201          224        220
+mean          196.7    192.7        219.7      222.7
+regression    -23.0 (-10.47%)  ->  -30.0 (-13.47%)      3/3 seeds lower
 ```
 
-On map1 the enabled arm rises by 11 and the regression narrows from −25.3% to −19.6%. On
-the two completed map2 seeds it goes the other way. **The regression is not repaired**, and
-the improvement on map1 must not be read as a clean measurement of the repair, because the
-DISABLED arm also moved (230→217, 229→238, 206→210): the §11 change affects every band's
-destination selection, not only exploring bands, so pre/post is not a controlled isolation
-of it. A proper isolation would need the repair behind its own audit flag.
+**The result is mixed and the repair does not reliably reduce the regression.** map1
+narrows from −25.30% to −19.57%; map2 *widens* from −10.47% to −13.47%. Averaged over both
+maps the delta moves only −43.5 → −39.4.
+
+Two things must be said about this rather than glossed:
+
+1. **It is not a controlled isolation of the repair.** The DISABLED arm also moved
+   (230→217, 229→238, 206→210, 224→220), because eligibility-before-ranking changes every
+   band's destination selection, not only exploring bands. Pre/post therefore confounds the
+   repair with a global shift. Isolating it would require putting the repair behind its own
+   audit flag — a method defect in this checkpoint, not a property of the repair.
+2. **The regression stands: −19.57% and −13.47%, 3/3 seeds lower on both maps.** §7
+   attributes it to expedition labour, and the §11 repair targets destination selection, so
+   this is the expected outcome. It is reported as a null result, not as partial success.
 
 ## 9. Scope NOT completed
 
