@@ -1159,7 +1159,11 @@ function selectFissionTarget(
     return undefined;
   }
 
-  return getFissionTargetRecordIds(band, contextCache)
+  return getFissionTargetRecordIds(
+    band,
+    contextCache,
+    world.auditOptions?.frontierKnowledgeHiddenFromFission === true,
+  )
     .map((tileId) => band.knowledge.observedTiles[tileId])
     .filter((record): record is KnownTileRecord =>
       record !== undefined &&
@@ -1214,11 +1218,17 @@ function compareFissionTargetsSeeded(
 function getFissionTargetRecordIds(
   band: Band,
   contextCache?: TickContextCache,
+  // CORRECTION-20 §6 — audit-only. Withhold frontier-derived tiles from FISSION TARGET
+  // selection specifically, leaving them readable by movement, resource and camp systems.
+  hideFrontierDerived = false,
 ): readonly TileId[] {
+  const keep = (tileId: TileId): boolean =>
+    !hideFrontierDerived ||
+    band.knowledge.observedTiles[tileId]?.acquisition !== "returned_frontier_exploration";
   const salient = getSalientMemorySummary(contextCache, band.id);
 
   if (salient === undefined) {
-    return Object.keys(band.knowledge.observedTiles) as TileId[];
+    return (Object.keys(band.knowledge.observedTiles) as TileId[]).filter(keep);
   }
 
   return [...new Set<TileId>([
@@ -1226,7 +1236,7 @@ function getFissionTargetRecordIds(
     ...salient.knownOpportunityCandidateIds,
     ...salient.topAnchorPlaceIds,
     ...salient.topReturnPlaceIds,
-  ])].slice(0, 72);
+  ])].filter(keep).slice(0, 72);
 }
 
 // RANGE-3B: founder-style daughter colonization fission bias constants

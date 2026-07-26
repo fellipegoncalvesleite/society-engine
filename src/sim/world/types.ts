@@ -300,6 +300,21 @@ export interface WorldAuditOptions {
   // DIRECT EXPEDITION COST from everything the returned knowledge subsequently causes.
   // Undefined in every normal world; read at exactly one seam in `expedition.ts`.
   readonly frontierKnowledgeTransferDisabled?: boolean;
+  // CORRECTION-20 §6 — FRONTIER READER ISOLATION. Frontier-derived knowledge is written
+  // and retained normally (so residential movement, resource selection, camps and seasonal
+  // rounds all still read it), but tiles whose `acquisition` is
+  // `returned_frontier_exploration` are withheld from the OPPORTUNITY and FISSION path
+  // only. Combined with `frontierKnowledgeTransferDisabled` (which withholds it from
+  // everything) this decomposes the knowledge effect:
+  //
+  //   production - hiddenFromFission = the fission-only contribution
+  //   production - transferDisabled  = the total knowledge contribution
+  //   hiddenFromFission - transferDisabled = the non-fission contribution
+  //
+  // §6 requires this because map 2 loses population while its final band count is
+  // unchanged, which a fission-only story cannot explain on its own.
+  // Undefined in every normal world; read at exactly two seams.
+  readonly frontierKnowledgeHiddenFromFission?: boolean;
 }
 
 export interface WorldState {

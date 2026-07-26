@@ -1,0 +1,80 @@
+{
+  "audit": "distanceTermLedger",
+  "checkpoint": "CORRECTION-20 §9",
+  "method": "Static trace of every distance-derived term reaching the opportunity or fission decision, recorded as physical quantity -> normalized value -> conceptual role -> coefficient -> consuming formula -> downstream result.",
+  "rule": "§9 — a repeated term is NOT automatically defective; it may represent distinct costs. It is defective only when the SAME physical consequence is charged repeatedly under different names. Mediation must be proven by counterfactual before double-counting is declared.",
+  "terms": [
+    {
+      "id": "T1_opportunity_ranking_travelCost",
+      "site": "carryingCapacity.deriveKnownUnusedHabitat",
+      "lines": "841-849",
+      "physicalQuantity": "gridDistance(currentTile, candidateTile) in tiles",
+      "normalization": "travelCost = clamp01(distance / 12)  — saturates at 12 tiles",
+      "conceptualRole": "DESTINATION PREFERENCE — which known place is the better destination",
+      "coefficient": -0.2,
+      "consumingFormula": "score = foragingPotential*0.4 + water*0.24 + (1-usePressure)*0.2 - travelCost*0.2 - risk*0.18",
+      "downstreamResult": "selects the single best-by-score candidate, which becomes bestKnownUnusedHabitatOpportunity",
+      "verdict": "LEGITIMATE for its stated role"
+    },
+    {
+      "id": "T2_split_motivation_travelRiskPenalty",
+      "site": "carryingCapacity.deriveDaughterColonization",
+      "lines": "1033, 1052",
+      "physicalQuantity": "NONE OF ITS OWN — it reads input.opportunity.travelCost, the value T1 already computed",
+      "normalization": "travelRiskPenalty = clamp01(travelCost * 0.6 + riskPenalty * 0.4)",
+      "conceptualRole": "SPLIT MOTIVATION — whether a subgroup has reason to leave at all",
+      "coefficient": -0.2,
+      "consumingFormula": "pressure = saturation*0.35 + perCapitaStress*0.25 + opportunityScore*0.25 + riskTolerance*0.1 + sharedSaturation*0.12 + boosts - attachment*0.2 - travelRiskPenalty*0.2",
+      "downstreamResult": "daughterColonization.pressure, compared against SPLIT_PRESSURE_THRESHOLD = 0.64",
+      "maximumMotivationSwing": 0.1,
+      "verdict": "SUSPECTED DUPLICATION — this consumes the SAME normalized number T1 already used to discount the destination, and applies it to a DIFFERENT conceptual stage (motivation, not preference). A band that discovers good distant country is penalised once in choosing it and again in wanting to split at all. NOT YET PROVEN: §9 requires counterfactual mediation (arm D2) before declaring double-counting."
+    },
+    {
+      "id": "T3_fission_target_distancePenalty",
+      "site": "demography.scoreFissionTarget",
+      "lines": "1557, 1626",
+      "physicalQuantity": "getGridDistance(currentTile, candidateTile) — recomputed independently of T1",
+      "normalization": "distancePenalty = clamp01(max(0, distance - 8) / 18)  — zero inside 8 tiles, saturates at 26",
+      "conceptualRole": "DESTINATION PREFERENCE, in a DIFFERENT subsystem and over a DIFFERENT candidate set",
+      "coefficient": "-0.34, relaxed by frontier-intent alignment and founder distance relax",
+      "consumingFormula": "score -= distancePenalty * 0.34 * (1 - 0.7*frontierIntentAlignment - founderDistanceRelax)",
+      "downstreamResult": "selects the actual fission target tile",
+      "verdict": "DISTINCT FORMULA AND DISTINCT CANDIDATE SET — a different normalization (threshold 8, span 18 vs saturating at 12) applied by a different authority to a different question. This is a duplicated CONCEPT rather than a duplicated charge, and §9 explicitly permits distance to affect both feasibility and preference. Not classified as a defect."
+    },
+    {
+      "id": "T4_parent_core_proximity",
+      "site": "demography.scoreFissionTarget",
+      "lines": "1558",
+      "physicalQuantity": "same distance as T3",
+      "normalization": "parentCoreProximityPenalty = clamp01(max(0, 3 - distance) / 3)",
+      "conceptualRole": "NON-OVERLAP — penalises being too CLOSE, opposite in sign to T3",
+      "downstreamResult": "fission target score",
+      "verdict": "LEGITIMATE and conceptually distinct — this is the separation motive, not a travel cost"
+    },
+    {
+      "id": "T5_catchment_accessibility",
+      "site": "carryingCapacity (support derivation)",
+      "lines": "327, 465",
+      "physicalQuantity": "footprint size, not candidate distance",
+      "normalization": "travelCost = clamp01(footprint.length > 8 ? 0.12 : 0.06)",
+      "conceptualRole": "the PARENT's own foraging accessibility inside its existing range",
+      "verdict": "UNRELATED to destination distance — shares a variable name only. Recorded so a later reader does not mistake it for a fourth destination penalty."
+    }
+  ],
+  "roleMatrix": {
+    "candidateCollection": "NO distance term (the <=8 proximity rule in contextCache.isKnownOpportunityRecord is a DOMAIN filter, not a scored penalty)",
+    "candidateRanking": "T1 (opportunity) and T3 (fission target) — two different subsystems, two different normalizations",
+    "viability": "NO distance term — consideredAsTarget tests expectedPerCapita, water and risk only",
+    "daughterColonizationPressure": "T2 — consumes T1's value",
+    "splitMotivation": "T2 (same term; colonization pressure IS the motivation signal)",
+    "finalActionSelection": "T3 + T4",
+    "physicalMovementFeasibility": "route construction only; no scored penalty"
+  },
+  "conclusion": {
+    "provenDuplication": false,
+    "suspectedDuplication": "T1 -> T2",
+    "reason": "T2 has no physical quantity of its own; it re-consumes T1's normalized travelCost in a different conceptual stage. That is the pattern §9 describes as likely-invalid ('distance lowers destination score AND then lowers the underlying reason to split'). But §9 forbids declaring it without proving mediation.",
+    "requiredProof": "Arm D2 — neutralize distance in the colonization-pressure term ONLY, leaving T1 ranking and T3/T4 final selection intact, and measure whether selected opportunity, pressure, fission recommendation, actual fission and fission year move.",
+    "notRun": "D0-D5 counterfactual arms were NOT executed in this checkpoint. The duplication remains SUSPECTED, not proven, and no production change was made on the strength of it."
+  }
+}

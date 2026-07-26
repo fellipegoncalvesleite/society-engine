@@ -788,6 +788,7 @@ function deriveKnownUnusedHabitat(
 ): KnownUnusedHabitatOpportunity | undefined {
   const candidateIds = collectOpportunityCandidates(band, cache, {
     includeSideCountryCandidates: world.auditOptions?.daughterColonizationFissionBiasEnabled !== false,
+    hideFrontierDerived: world.auditOptions?.frontierKnowledgeHiddenFromFission === true,
   });
 
   if (candidateIds.length === 0) {
@@ -1151,8 +1152,16 @@ function computeTileYield(
 function collectOpportunityCandidates(
   band: Band,
   cache: TickContextCache | undefined,
-  options?: { readonly includeSideCountryCandidates?: boolean },
+  options?: {
+    readonly includeSideCountryCandidates?: boolean;
+    // CORRECTION-20 §6 — audit-only. Withhold frontier-derived tiles from the OPPORTUNITY
+    // and FISSION path while leaving them readable by every other consumer.
+    readonly hideFrontierDerived?: boolean;
+  },
 ): readonly TileId[] {
+  const hideFrontierDerived = options?.hideFrontierDerived === true;
+  const isFrontierDerived = (tileId: TileId): boolean =>
+    band.knowledge.observedTiles[tileId]?.acquisition === "returned_frontier_exploration";
   const candidates = new Set<TileId>();
   const sideCountryCandidates =
     options?.includeSideCountryCandidates === true ? collectSideCountryOpportunityCandidates(band) : [];
@@ -1180,6 +1189,7 @@ function collectOpportunityCandidates(
 
   return [...new Set<TileId>([...sideCountryCandidates, ...candidates])]
     .filter((tileId) => tileId !== band.position)
+    .filter((tileId) => !hideFrontierDerived || !isFrontierDerived(tileId))
     .slice(0, MAX_OPPORTUNITY_CANDIDATES);
 }
 
