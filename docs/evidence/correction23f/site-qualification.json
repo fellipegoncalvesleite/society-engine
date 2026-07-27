@@ -1,0 +1,51 @@
+{
+  "map": "map2",
+  "reference": {
+    "tileId": "tile:204:72",
+    "coord": {
+      "x": 204,
+      "y": 72
+    },
+    "localRichness": 0.427,
+    "localWater": 0.299,
+    "betterCountryCount": 9,
+    "bestReachableRichness": 0.737,
+    "bestReachableWater": 0.849,
+    "bestReachableDistance": 14,
+    "corridorPassableShare": 1,
+    "terrainKind": "coast"
+  },
+  "candidatesConsidered": 1627,
+  "chosen": [
+    {
+      "tileId": "tile:10:34",
+      "coord": {
+        "x": 10,
+        "y": 34
+      },
+      "localRichness": 0.341,
+      "localWater": 0.069,
+      "betterCountryCount": 8,
+      "bestReachableRichness": 0.552,
+      "bestReachableWater": 0.656,
+      "bestReachableDistance": 14,
+      "corridorPassableShare": 0.929,
+      "terrainKind": "plains"
+    },
+    {
+      "tileId": "tile:100:23",
+      "coord": {
+        "x": 100,
+        "y": 23
+      },
+      "localRichness": 0.455,
+      "localWater": 0.108,
+      "betterCountryCount": 19,
+      "bestReachableRichness": 0.655,
+      "bestReachableWater": 0.697,
+      "bestReachableDistance": 12,
+      "corridorPassableShare": 0.833,
+      "terrainKind": "plains"
+    }
+  ]
+}

@@ -60,6 +60,21 @@ const ARM_OPTIONS = {
   K3: { placeRetentionArm: "protect_active_route_verified" },
   K4: { placeRetentionArm: "capacity_only", placeRetentionCapacity: 288 },
   K5: { placeRetentionArm: "no_inherited_mandatory" },
+  // CORRECTION-23F §6-§10 — seasonal-retraversal benefit decomposition. F1 is the accepted
+  // positive control (the one restored season term); every F3-F10 arm carries F1 so the
+  // decomposition is measured against the behaviour that actually works.
+  F0: undefined,
+  F1: { verificationRetryArm: "legacy_season_comparison" },
+  F2: { verificationRetryArm: "legacy_season_comparison", verificationPartyRouteObservationDisabled: true },
+  F3: { verificationRetryArm: "legacy_season_comparison", verificationObservationPolicy: "target_only" },
+  F4: { verificationRetryArm: "legacy_season_comparison", verificationObservationPolicy: "route_only" },
+  F5: { verificationRetryArm: "legacy_season_comparison", verificationObservationPolicy: "new_tiles_only" },
+  F6: { verificationRetryArm: "legacy_season_comparison", verificationObservationPolicy: "existing_only" },
+  F7: { verificationRetryArm: "legacy_season_comparison", verificationObservationPolicy: "content_no_recency" },
+  F8: { verificationRetryArm: "legacy_season_comparison", verificationObservationPolicy: "recency_no_content" },
+  F9: { verificationRetryArm: "legacy_season_comparison", verificationObservationPolicy: "no_season_identity" },
+  F10: { verificationRetryArm: "legacy_season_comparison", verificationObservationPolicy: "season_identity_only" },
+  F13: { verificationRetryArm: "legacy_season_comparison", verificationTargetArm: "no_verification_question" },
 };
 
 const r2 = (v) => (v === undefined || v === null ? null : Math.round(v * 100) / 100);

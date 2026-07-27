@@ -2040,6 +2040,9 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       readonly verificationObservation?: ExpeditionObservation & { readonly kind: VerificationObservationKind };
     }[] = [];
     const returnedReconRouteTiles: TileId[] = [];
+    // CORRECTION-23F §7 — the verification family's own route tiles, tracked separately so an
+    // audit policy can reach verification travel without touching route reconnaissance.
+    const returnedVerificationRouteTiles: TileId[] = [];
     // CORRECTION-23 §13 — verification results carried home by parties that PHYSICALLY
     // returned today. A lost party contributes nothing here, which is the §15 control.
     const returnedVerifications: {
@@ -2150,6 +2153,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
             // VERIFICATION value of the answer. Undefined in every normal world.
             if (currentWorld.auditOptions?.verificationPartyRouteObservationDisabled !== true) {
               returnedReconRouteTiles.push(...result.expedition.routeTileIds);
+              returnedVerificationRouteTiles.push(...result.expedition.routeTileIds);
             }
 
             const verificationResult = result.expedition.verificationResult;
@@ -2157,8 +2161,16 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
             // CORRECTION-23 CONTINUATION §9 E4 — audit-only. The party walked, worked and
             // came home; only the answer is withheld at the hand-off. Undefined in every
             // normal world.
+            // CORRECTION-23F §10 F13 — THE ARCHITECTURAL COUNTERFACTUAL. The party is raised
+            // on the same schedule, walks to the same target along the same physical route,
+            // and its walked route becomes ordinary known country exactly as before — but it
+            // carries no question, records no result and writes no disposition. If this
+            // reproduces F1, the useful behaviour belongs to exploration and re-observation,
+            // not to verification, and the production seam is not in this module's question
+            // machinery at all. Audit-only; undefined in every normal world.
             if (
               verificationResult !== undefined &&
+              currentWorld.auditOptions?.verificationTargetArm !== "no_verification_question" &&
               currentWorld.auditOptions?.frontierVerificationKnowledgeDisabled !== true
             ) {
               returnedVerifications.push({
@@ -2307,13 +2319,58 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     // brings back shallow single-traversal knowledge of country it did not.
     let knowledge = currentBand.knowledge;
 
-    if (returnedReconRouteTiles.length > 0) {
-      knowledge = observeTileAndNearby(
-        observationWorld,
-        knowledge,
-        toTargets(returnedReconRouteTiles),
-        "returned_route_reconnaissance",
+    // CORRECTION-23F §7 — OBSERVATION-CONTENT ISOLATION.
+    //
+    // Production observes the verification party's route through the same call as a route
+    // reconnaissance party's, and that is preserved exactly: with no policy set, the single
+    // combined call below is the production path, byte for byte. Only when an audit policy
+    // is set do the two families separate, so the policy reaches verification travel alone.
+    const observationPolicy = currentWorld.auditOptions?.verificationObservationPolicy;
+
+    if (observationPolicy === undefined) {
+      if (returnedReconRouteTiles.length > 0) {
+        knowledge = observeTileAndNearby(
+          observationWorld,
+          knowledge,
+          toTargets(returnedReconRouteTiles),
+          "returned_route_reconnaissance",
+        );
+      }
+    } else {
+      const verificationTargets = new Set(
+        returnedVerifications.map((returned) => String(returned.result.targetTileId)),
       );
+      // §7 F3/F4 — the destination is a different epistemic object from the country crossed
+      // to reach it, so they are separated here rather than inside the writer.
+      const verificationRouteTiles = returnedVerificationRouteTiles.filter((tileId) =>
+        observationPolicy === "target_only"
+          ? verificationTargets.has(String(tileId))
+          : observationPolicy === "route_only"
+            ? !verificationTargets.has(String(tileId))
+            : true,
+      );
+      const otherReconTiles = returnedReconRouteTiles.filter(
+        (tileId) => !returnedVerificationRouteTiles.includes(tileId),
+      );
+
+      if (verificationRouteTiles.length > 0) {
+        knowledge = observeTileAndNearby(
+          observationWorld,
+          knowledge,
+          toTargets(verificationRouteTiles),
+          "returned_route_reconnaissance",
+          observationPolicy,
+        );
+      }
+
+      if (otherReconTiles.length > 0) {
+        knowledge = observeTileAndNearby(
+          observationWorld,
+          knowledge,
+          toTargets(otherReconTiles),
+          "returned_route_reconnaissance",
+        );
+      }
     }
 
     if (returnedFrontierRouteTiles.length > 0 && !transferSuppressed) {

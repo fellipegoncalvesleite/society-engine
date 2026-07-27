@@ -68,6 +68,53 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-07-27 (SEASONAL RETRAVERSAL BENEFIT DECOMPOSITION CORRECTION-23F: PROGRESS — THE
+  CORRECTION-23E GENERALISATION IS REFUTED / GATES 9, 10, 11 AND 16 UNMET, branch
+  checkpoint/physical-frontier-verification-23 from a5b67a0. main untouched at 668763f.
+  DIAGNOSTIC ONLY — NO PRODUCTION BEHAVIOUR CHANGED; canonical-state fingerprint identical to
+  a5b67a0 on both maps at 40y with every switch unset.
+
+  **THE 23E RESULT DOES NOT REPLICATE ACROSS TERRAIN, AND ITS GENERAL CLAIM IS WITHDRAWN.**
+  CORRECTION-23E reported, as a property of the marginal tier, that restoring one season term
+  restores survival (0.70/21.5 -> 1.00/36.9) and that suppressing the walked-route observation
+  collapses it. Both hold on terrain A (tile:204:72, coast) and on NEITHER of two further
+  qualified marginal_escapable terrains. On terrain C (tile:100:23, dry plains) EVERY arm
+  survives 10/10 and F1 is the WORST of them (21.4 against production 24.6). On terrain B
+  (tile:10:34, dry plains) every arm except F0 and F7 survives 5/5 inside 8.4-13.8. Only
+  terrain A discriminates at all. 23E rested on ten runSeed values on ONE site — near-tie
+  ordering jitter, never terrain — which is the first canonical mistake in its own rule list.
+  **Do not cite the 23E season-term or route-observation result as a general property of the
+  marginal tier, and do not build a production seam from it.**
+
+  **ON TERRAIN A THE BENEFIT IS AN INTERACTION, NOT A COMPONENT.** It lives in the ROUTE
+  country, not the destination: F4 (route tiles only) reproduces F1 at 1.00/34.6 while F3
+  (target tile only) collapses to 0.30/6.5, BELOW the no-observation control F2 (0.40/12.1).
+  Neither discovery nor maintenance alone works (F5 new-tiles-only 0.00/0.0; F6
+  existing-only 0.30/10.5). Neither content nor recency alone works (F7 content-no-recency
+  0.80/23.4; F8 recency-no-content 0.10/3.5). Season identity is NECESSARY but nowhere near
+  SUFFICIENT: removing it (F9) lands exactly back on production (0.70/20.1), while season
+  identity alone (F10) is 0.10/1.8.
+
+  **F13 IS INVALID AS RUN — do not cite its 0.00.** It was meant to be F1's target schedule and
+  routes with the question removed; the implemented seam suppresses the returned RESULT, which
+  also suppresses the durable DISPOSITION, so mayAskAgain answers "never asked here" forever
+  and selection collapses onto one place: 5,081 parties raised (most of any arm) but 55.6
+  unique tiles and 7.0 frontier tiles (fewest). It measures lost retry memory, not the absence
+  of a question. A valid arm needs a target-schedule replay seam, NOT BUILT.
+
+  **MEMORY-COMPRESSION DEBT IS INTERACTION-DEPENDENT, NOT THE PRINCIPAL MECHANISM.** The same
+  161%-of-capacity mandatory set and the same inert salience scoring are present on all three
+  terrains, yet only terrain A is sensitive to what travel does to records. A defect constant
+  across terrains cannot by itself explain an effect appearing on one of three.
+
+  NOT BUILT: F11, F12, F14, F16 (gates 9, 11, 16 unmet); F13 invalid (gate 10 unmet). F15 is
+  subsumed by F7 — lastObservedAt/visits are the only liveness fields the writer touches.
+  PASSED: tsc, build, graph 221/764, boundaries, anti-omniscience all-zero, hidden-truth zero
+  copies, lost-party no-transfer, food capture 1.000, conservation, step-mode both maps,
+  determinism true, diagnostics-off parity. 31.8 ms/tick.
+  See docs/evidence/correction23f/FINDINGS.md.)
+
+Previously updated:
   2026-07-27 (RETRY-SUPPRESSION POPULATION MEDIATION / PLACE-MEMORY RETENTION AUTHORITY
   CORRECTION-23E: PROGRESS — DIAGNOSIS ACCEPTED / CORRECTION-23 PARENT STILL NOT MERGEABLE,
   branch checkpoint/physical-frontier-verification-23 from 6258c97. main untouched at 668763f.
