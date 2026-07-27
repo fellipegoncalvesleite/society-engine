@@ -466,10 +466,22 @@ function GoingBackToFindOut({
                 <Chip>{attempt.question.replace(/_/g, " ")}</Chip>
                 <Chip>{attempt.outcome}</Chip>
                 <Chip>{attempt.season}</Chip>
+                <Chip>
+                  {attempt.behaviourallyActionable ? "changes a decision" : "not actionable yet"}
+                </Chip>
+                {attempt.seasonsAnswered.length > 1 ? (
+                  <Chip>{attempt.seasonsAnswered.length} seasons</Chip>
+                ) : null}
               </div>
               <span className="knowledge-domain-basis">
                 now permitted: {attempt.nowPermitted}; still missing: {attempt.stillMissing}
               </span>
+              <span className="knowledge-domain-basis">read by: {attempt.consumedBy}</span>
+              {attempt.repeatBlockedReason === undefined ? null : (
+                <span className="knowledge-domain-basis">
+                  will not ask again: {attempt.repeatBlockedReason}
+                </span>
+              )}
             </li>
           ))}
         </ul>

@@ -69,6 +69,12 @@ try {
       );
       const activeAll = living.map((b) => (b.expeditions ?? []).length);
       const repeats = [...repeatTargets.values()];
+      // CORRECTION-23B §11 — the AUTHORITATIVE retry memory, which is what now gates a
+      // repeat. The 12-entry ring above is a display bound only.
+      const evidenceRows = living.map((b) => (b.verificationEvidence ?? []).length);
+      const evidenceAttempts = living.flatMap((b) =>
+        (b.verificationEvidence ?? []).map((e) => e.attempts),
+      );
       // Serialized size of the verification-owned state only, then the whole band.
       const verificationBytes = living.reduce(
         (acc, b) => acc + JSON.stringify(b.frontierVerificationAttempts ?? []).length,
@@ -94,6 +100,9 @@ try {
         verificationBytesPerBand: r2(verificationBytes / Math.max(1, living.length)),
         totalBandBytes: bandBytes,
         verificationShareOfBandState: r2((verificationBytes / Math.max(1, bandBytes)) * 100),
+        evidenceRowsMax: evidenceRows.length === 0 ? 0 : Math.max(...evidenceRows),
+        evidenceRowsCap: 48,
+        maxAttemptsOnOneEvidenceRow: evidenceAttempts.length === 0 ? 0 : Math.max(...evidenceAttempts),
         msPerTick: r2(elapsedMs / Math.max(1, ticks)),
       });
 

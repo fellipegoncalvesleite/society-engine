@@ -991,6 +991,11 @@ function createDaughterBand(
     activityOutcomeSummary: undefined,
     activityShadowSubsistenceSummary: undefined,
     activityMemoryUpdateSummary: undefined,
+    // CORRECTION-23B §4/§11 — a daughter inherits no verification evidence and no retry
+    // memory. It did not walk to those places and did not draw that water, so it must
+    // establish its own answers rather than acting on its parent's.
+    verificationEvidence: undefined,
+    frontierVerificationAttempts: undefined,
     probeMemory: undefined, // 2K.1G: a daughter starts with no probe history of its own
     recentScoutLearning: undefined, // 2K.1I-A: do not clone the parent's debug learning ring
     lastResourceScout: undefined, // 2K.5: the parent's last scout debug (incl. patch-return guidance) resets on fission

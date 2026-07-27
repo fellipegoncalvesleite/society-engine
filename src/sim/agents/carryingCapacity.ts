@@ -1,4 +1,5 @@
 import { deriveBaseHabitatPotential, deriveSeasonalEffectiveYield } from "./habitatYield";
+import { applyVerifiedWaterAccess } from "./verificationEvidence";
 import {
   applyResourceClassPressure,
   deriveResourceClassAvailability,
@@ -772,6 +773,19 @@ function deriveActivitySubsistenceSupplement(
   };
 }
 
+/**
+ * CORRECTION-23B §13 — audit-only accessor. Lets the R1-R12 seam tests call the REAL
+ * production destination evaluation instead of reimplementing it, which is the whole point
+ * of an exact-seam test. Pure; never used by simulation behaviour.
+ */
+export function deriveKnownUnusedHabitatForAudit(
+  world: WorldState,
+  band: Band,
+  input: Parameters<typeof deriveKnownUnusedHabitat>[3],
+): KnownUnusedHabitatOpportunity | undefined {
+  return deriveKnownUnusedHabitat(world, band, undefined, input);
+}
+
 function deriveKnownUnusedHabitat(
   world: WorldState,
   band: Band,
@@ -837,7 +851,21 @@ function deriveKnownUnusedHabitat(
     const yieldState = computeTileYield(world, band, tileId, record, input.time, input.biomeCompetence);
     // Underused = good potential, low local use. Supportable per-capita estimate.
     const expectedPerCapita = clamp01(yieldState.effectiveYield * (1 - usePressure * 0.5));
-    const waterReliability = clamp01(record.observedWaterAccess ?? 0.3);
+    // CORRECTION-23B §5 — THE WATER-ACCESS READER, and the one place it applies.
+    //
+    // A shallow crossing may note that water is THERE; it may not claim the water can be
+    // reached and used, so `observedWaterAccess` is coarsened and capped at 0.5 by the
+    // observation writer. A verification party that physically walked to this tile and drew
+    // from the water has earned the stronger claim, and one that walked there and found
+    // nothing reachable has earned the weaker one.
+    //
+    // This is deliberately narrow. It touches the WATER term of THIS tile only — not
+    // richness, not yield, not risk, not confidence, not any other place — and a confirmed
+    // result still asserts nothing about seasonal dependability: the floor sits far below
+    // certainty, and `waterReliability` is only ever a physical-access gate here.
+    const waterReliability = clamp01(
+      applyVerifiedWaterAccess(band, tileId, record.observedWaterAccess ?? 0.3),
+    );
     const distance = currentTile === undefined ? 4 : gridDistance(currentTile.coord, tile.coord);
     const travelCost = clamp01(distance / 12);
     const riskPenalty = clamp01(record.observedRisk ?? 0.3);

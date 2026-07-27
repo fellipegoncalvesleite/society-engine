@@ -89,6 +89,13 @@ try {
     let supportN = 0;
     let verificationAttempts = 0;
     const outcomeCounts = { confirmed: 0, negative: 0, inconclusive: 0, lost: 0 };
+    // CORRECTION-23B §14 — the BEHAVIOURAL divergence measure. Counts the evidence rows a
+    // production reader can actually consume, so E2 vs E5 is comparable at the reader rather
+    // than only at the population.
+    let peakWaterConfirmations = 0;
+    let peakEvidenceRows = 0;
+    let peakTempUseRefusals = 0;
+    let peakResourceEligible = 0;
     const trajectory = [];
     const seenAttempts = new Set();
     let positionsAfterVerification = new Map();
@@ -122,6 +129,21 @@ try {
           );
           if (shallow) firstShallowOpportunityYear = year;
         }
+
+        const evidence = band.verificationEvidence ?? [];
+        peakEvidenceRows = Math.max(peakEvidenceRows, evidence.length);
+        peakWaterConfirmations = Math.max(
+          peakWaterConfirmations,
+          evidence.filter((e) => e.question === "water_access" && e.outcome === "confirmed").length,
+        );
+        peakTempUseRefusals = Math.max(
+          peakTempUseRefusals,
+          evidence.filter((e) => e.question === "temporary_use" && e.outcome === "negative").length,
+        );
+        peakResourceEligible = Math.max(
+          peakResourceEligible,
+          evidence.filter((e) => e.question === "resource_presence" && e.outcome === "confirmed").length,
+        );
 
         for (const attempt of band.frontierVerificationAttempts ?? []) {
           const key = `${band.id}|${attempt.tileId}|${attempt.question}|${String(attempt.tick)}`;
@@ -177,6 +199,10 @@ try {
       firstVerificationOutcome,
       verificationAttempts,
       outcomeCounts,
+      peakEvidenceRows,
+      peakWaterConfirmations,
+      peakTempUseRefusals,
+      peakResourceEligible,
       laterMovementAfterVerification,
       laterResourceActionAfterVerification,
       trajectory,
@@ -211,6 +237,9 @@ try {
           Math.floor(armRows.filter((r) => r.extinctionYear !== null).length / 2)
         ] ?? null,
       totalVerificationAttempts: armRows.reduce((a, r) => a + r.verificationAttempts, 0),
+      totalWaterConfirmations: armRows.reduce((a, r) => a + (r.peakWaterConfirmations ?? 0), 0),
+      totalEvidenceRows: armRows.reduce((a, r) => a + (r.peakEvidenceRows ?? 0), 0),
+      totalTempUseRefusals: armRows.reduce((a, r) => a + (r.peakTempUseRefusals ?? 0), 0),
       meanSupport: r2(armRows.reduce((a, r) => a + (r.meanSupport ?? 0), 0) / Math.max(1, armRows.length)),
       totalReceipts: r2(armRows.reduce((a, r) => a + r.physicalFoodReceipts, 0)),
     };

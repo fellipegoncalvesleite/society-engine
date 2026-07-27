@@ -17,6 +17,7 @@
 // It takes the world only for tile identity/coordinates so distances can be reported; it
 // reads no resource, seasonal or hydrological truth from it.
 import type { TileId } from "../core/types";
+import { findVerificationEvidence, mayAskAgain } from "./verificationEvidence";
 import {
   VERIFICATION_ATTEMPT_HISTORY_CAP,
   VERIFICATION_MAX_DISTANCE_TILES,
@@ -111,6 +112,18 @@ export interface PlaceVerificationAttemptView {
   readonly nowPermitted: string;
   /** What is still not established about this place. */
   readonly stillMissing: string;
+  /**
+   * CORRECTION-23B §17 — which production decision consumes this answer, or an explicit
+   * statement that none does yet. An answer no reader consumes must SAY so rather than
+   * appearing to matter.
+   */
+  readonly consumedBy: string;
+  /** Whether this answer currently enables a next action at all. */
+  readonly behaviourallyActionable: boolean;
+  /** §17 — why the band will not go back and ask this again. */
+  readonly repeatBlockedReason?: string;
+  /** Seasons this exact question has actually been answered in at this place. */
+  readonly seasonsAnswered: readonly string[];
 }
 
 export interface PlaceVerificationProjection {
@@ -153,22 +166,31 @@ const QUESTION_MEANING: Readonly<
     permits: "food resources were found in the bounded area actually searched",
     stillMissing: "how much there is, and whether it can be taken",
   },
-  resource_usability: {
-    permits: "a test attempt showed this place can (or cannot) be worked",
-    stillMissing: "a real harvest against a real stock — no calories have been taken",
+  resource_test_possible: {
+    permits: "a real, stock-backed attempt is worth making here",
+    stillMissing: "the take itself — no stock has been drawn against and no food taken",
   },
   temporary_use: {
     permits: "a small party stayed and worked here for a short period",
     stillMissing: "whether the whole band could live here",
   },
-  route_repeatability: {
-    permits: "the route was walked out and back",
-    stillMissing: "whether it holds in other seasons or under load",
-  },
   seasonal_persistence: {
     permits: "one more season of coverage",
     stillMissing: "the seasons still unvisited",
   },
+};
+
+/**
+ * CORRECTION-23B §17 — the production decision each answer actually reaches, in plain words.
+ * `undefined` means NOTHING reads it yet, and the panel says exactly that rather than
+ * implying an effect the simulation does not have.
+ */
+const QUESTION_CONSUMER: Readonly<Record<FrontierVerificationQuestion, string | undefined>> = {
+  water_access: "whether this place can be considered as somewhere to move to",
+  resource_presence: "whether a real, stock-backed test here is worth attempting",
+  resource_test_possible: undefined,
+  temporary_use: "whether a party may set up a bounded working camp here",
+  seasonal_persistence: undefined,
 };
 
 const PROVENANCE_LABEL: Readonly<Record<string, string>> = {
@@ -303,9 +325,8 @@ function describeUses(record: KnownTileRecord): {
 const VERIFICATION_QUESTIONS: readonly FrontierVerificationQuestion[] = [
   "water_access",
   "resource_presence",
-  "resource_usability",
+  "resource_test_possible",
   "temporary_use",
-  "route_repeatability",
   "seasonal_persistence",
 ];
 
@@ -322,6 +343,8 @@ function deriveVerificationProjection(
   distanceOf: (tileId: TileId) => number | undefined,
 ): PlaceVerificationProjection {
   const attempts = band.frontierVerificationAttempts ?? [];
+  const currentTick = Number(world.time.tick);
+  const currentSeason = world.time.season;
   const records = Object.values(band.knowledge.observedTiles);
   const promising: PlaceVerificationTarget[] = [];
   const poor: PlaceVerificationTarget[] = [];
@@ -405,19 +428,40 @@ function deriveVerificationProjection(
     })
     .filter((party): party is PlaceVerificationParty => party !== undefined);
 
-  const asView = (attempt: (typeof attempts)[number]): PlaceVerificationAttemptView => ({
-    tileId: attempt.tileId,
-    question: attempt.question,
-    outcome: attempt.outcome,
-    season: attempt.season,
-    nowPermitted:
-      attempt.outcome === "confirmed"
-        ? QUESTION_MEANING[attempt.question].permits
-        : attempt.outcome === "negative"
-          ? "nothing — the band learned this place does not answer that question"
-          : "nothing yet — the question is still open",
-    stillMissing: QUESTION_MEANING[attempt.question].stillMissing,
-  });
+  const asView = (attempt: (typeof attempts)[number]): PlaceVerificationAttemptView => {
+    const consumer = QUESTION_CONSUMER[attempt.question];
+    const evidence = findVerificationEvidence(band, attempt.tileId, attempt.question);
+    const settled = attempt.outcome === "confirmed" || attempt.outcome === "negative";
+    const retry =
+      evidence === undefined
+        ? undefined
+        : mayAskAgain(band, attempt.tileId, attempt.question, {
+            currentTick,
+            currentSeason,
+            hardship: evidence.hardshipAtLastAttempt,
+            routeTiles: evidence.routeTilesAtLastAttempt,
+          });
+
+    return {
+      tileId: attempt.tileId,
+      question: attempt.question,
+      outcome: attempt.outcome,
+      season: attempt.season,
+      nowPermitted:
+        attempt.outcome === "confirmed"
+          ? QUESTION_MEANING[attempt.question].permits
+          : attempt.outcome === "negative"
+            ? "nothing — the band learned this place does not answer that question"
+            : "nothing yet — the question is still open",
+      stillMissing: QUESTION_MEANING[attempt.question].stillMissing,
+      consumedBy:
+        consumer ??
+        "nothing yet — this answer is recorded but no decision reads it, because the system that would does not exist",
+      behaviourallyActionable: consumer !== undefined && settled,
+      ...(retry === undefined || retry.allowed ? {} : { repeatBlockedReason: retry.reason }),
+      seasonsAnswered: evidence?.seasonsAnswered ?? [attempt.season],
+    };
+  };
 
   return {
     promisingUnverified: [...promising].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),

@@ -1183,14 +1183,27 @@ export type FrontierVerificationQuestion =
   | "water_access"
   // Is there a food resource physically present in the bounded area searched?
   | "resource_presence"
-  // Can that resource actually be taken and carried home? Requires a real attempt.
-  | "resource_usability"
+  // CORRECTION-23B §7 — RENAMED from `resource_usability`, which claimed more than the
+  // question physically establishes. The on-site test reads terrain, not a stock: it draws
+  // against no patch, applies no depletion and produces no receipt. What it can honestly
+  // report is whether a real, stock-backed test is worth attempting here at all.
+  | "resource_test_possible"
   // Can a bounded party remain and operate here for a short period?
   | "temporary_use"
-  // Can this route be walked again, reliably, in both directions?
-  | "route_repeatability"
   // Does what we saw persist into another season? Cannot be answered by one visit.
   | "seasonal_persistence";
+
+/**
+ * CORRECTION-23B §8 — `route_repeatability` was REMOVED as a question rather than repaired.
+ *
+ * It returned `confirmed` unconditionally, read no world state, and accounted for 32% of all
+ * verification traffic. §8 authorises removal where a successful round trip already proves
+ * repeatability: every completed verification party IS a successful round trip, so the answer
+ * was already established by the journey and did not need a party of its own. Route evidence
+ * is still recorded — as a by-product of any completed party, below — but it no longer
+ * consumes the one verification slot a band has.
+ */
+export type RouteRepeatabilityEvidence = "walked_out_and_back" | "not_established";
 
 /** What the band already holds about a target, and what it is missing. */
 export interface FrontierVerificationEvidenceGap {
@@ -1235,6 +1248,38 @@ export interface FrontierVerificationResult {
   /** Human-readable basis, surfaced by the read model. */
   readonly evidenceBasis: string;
   readonly reasonIds: readonly ReasonId[];
+}
+
+/**
+ * CORRECTION-23B §11 — AUTHORITATIVE VERIFICATION EVIDENCE, and the band's retry memory.
+ *
+ * CORRECTION-23's continuation proved the answers were inert: no production reader consumed
+ * them, and destroying every affirmative result reproduced production seed for seed. It also
+ * proved retry control was broken, because `mayRetry` could only see what was still inside
+ * the 12-entry display ring, so one band re-verified one place 1,186 times in 500 years.
+ *
+ * This record fixes both. It is keyed by (place, question) and UPSERTED, so a repeat attempt
+ * updates a row rather than appending one — retries cannot grow state. It is what the domain
+ * readers consume, and what the retry gate consults.
+ *
+ * `frontierVerificationAttempts` remains the bounded DISPLAY history and is no longer load
+ * bearing for behaviour.
+ */
+export interface VerificationEvidenceRecord {
+  readonly tileId: TileId;
+  readonly question: FrontierVerificationQuestion;
+  readonly outcome: "confirmed" | "negative" | "inconclusive";
+  /** Seasons in which THIS question was physically answered at THIS place. Never a calendar. */
+  readonly seasonsAnswered: readonly Season[];
+  readonly lastSeason: Season;
+  readonly lastTick: TickNumber;
+  readonly attempts: number;
+  /** Band-known hardship at the last attempt — a materially changed situation reopens it. */
+  readonly hardshipAtLastAttempt: number;
+  /** Route length actually walked last time — changed route evidence reopens it. */
+  readonly routeTilesAtLastAttempt: number;
+  /** §8 — recorded as a by-product of the journey, never as a question of its own. */
+  readonly routeEvidence: RouteRepeatabilityEvidence;
 }
 
 /** Bounded per-band record of verifications already attempted, for §16 retry control. */
@@ -6359,6 +6404,9 @@ export interface Band {
   // VERIFICATION_ATTEMPT_HISTORY_CAP entries so repeat control is exact without unbounded
   // state, and so a question answered negatively is not re-asked under unchanged conditions.
   readonly frontierVerificationAttempts?: readonly FrontierVerificationAttempt[];
+  // CORRECTION-23B §11 — authoritative verification evidence AND retry memory, keyed by
+  // (place, question) and upserted. Bounded; daughters reset. This is what readers consume.
+  readonly verificationEvidence?: readonly VerificationEvidenceRecord[];
   // EXPEDITIONARY-4 §13: smoke signals the RESIDENTIAL camp physically received
   // (bounded, capped, expiring). The only pre-return channel from an away party.
   readonly receivedSmokeSignals?: readonly ReceivedSmokeSignal[];

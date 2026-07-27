@@ -39,6 +39,7 @@ import type {
   FrontierVerificationPlan,
   FrontierVerificationQuestion,
 } from "./types";
+import { mayAskAgain, resourceTestEligible } from "./verificationEvidence";
 
 // ── Bounds. Hard caps on state and search. ───────────────────────────────────────
 
@@ -120,7 +121,7 @@ export function classifyPlaceForQuestion(
       return water < 0.12 ? "known_poor" : "promising_unverified";
     }
     case "resource_presence":
-    case "resource_usability": {
+    case "resource_test_possible": {
       const richness = record.observedRichness;
       if (richness === undefined) return "unknown";
       return richness < 0.2 ? "known_poor" : "promising_unverified";
@@ -132,9 +133,6 @@ export function classifyPlaceForQuestion(
       }
       const risk = record.observedRisk ?? 0.3;
       return risk > 0.62 ? "known_poor" : "promising_unverified";
-    }
-    case "route_repeatability": {
-      return record.observedMovementCost === undefined ? "unknown" : "promising_unverified";
     }
     case "seasonal_persistence": {
       // One season of coverage is exactly the state this question exists to improve.
@@ -200,47 +198,6 @@ export function deriveVerificationNeed(band: Band): VerificationNeed {
     saturation: round2(saturation),
     reason,
   };
-}
-
-/**
- * §16 — may this band ask this question about this place again?
- *
- * Not a bare timer. A repeat is justified by a CHANGED SITUATION: a different season can
- * answer a different question, and an inconclusive result is not an answer. The same
- * question, answered negatively, under unchanged conditions, is not re-asked.
- */
-function mayRetry(
-  attempts: readonly FrontierVerificationAttempt[],
-  tileId: TileId,
-  question: FrontierVerificationQuestion,
-  currentTick: number,
-  currentSeason: Season,
-): boolean {
-  const prior = attempts.filter(
-    (attempt) => attempt.tileId === tileId && attempt.question === question,
-  );
-
-  if (prior.length === 0) {
-    return true;
-  }
-
-  const latest = prior[prior.length - 1];
-  const elapsed = currentTick - Number(latest.tick);
-
-  // A definite negative stands until something changes.
-  if (latest.outcome === "negative") {
-    // Seasonal persistence is the one question a new season genuinely re-opens.
-    return question === "seasonal_persistence" && latest.season !== currentSeason;
-  }
-
-  // A lost party answered nothing at all; the question is still open, but do not send a
-  // second party straight after the first was lost.
-  if (latest.outcome === "lost") {
-    return elapsed >= VERIFICATION_RETRY_TICKS;
-  }
-
-  // Inconclusive: worth another attempt once, after a real interval.
-  return elapsed >= VERIFICATION_RETRY_TICKS && prior.length < 3;
 }
 
 export interface VerificationCandidate {
@@ -323,7 +280,25 @@ export function selectVerificationCandidate(
         continue;
       }
 
-      if (!mayRetry(attempts, record.tileId, question, currentTick, season)) {
+      // CORRECTION-23B §11 — RETRY MEMORY, not the display ring. The 12-entry
+      // `frontierVerificationAttempts` history is a read-model bound and turned over in
+      // under two years, which is why one band re-verified one place 1,186 times in 500
+      // years. The gate now consults the upserted evidence store, keyed by real conditions.
+      if (
+        !mayAskAgain(band, record.tileId, question, {
+          currentTick,
+          currentSeason: season,
+          hardship: need.need,
+          routeTiles: distance,
+        }).allowed
+      ) {
+        continue;
+      }
+
+      // §7 Option A — a stock-backed test is only worth attempting where food was
+      // physically found. This is eligibility, never support: it authorises asking a
+      // harder question, and creates no patch, stock, yield or receipt.
+      if (question === "resource_test_possible" && !resourceTestEligible(band, record.tileId)) {
         continue;
       }
 
@@ -377,9 +352,8 @@ export function selectVerificationCandidate(
 const QUESTION_PRIORITY: readonly FrontierVerificationQuestion[] = [
   "water_access",
   "resource_presence",
-  "resource_usability",
+  "resource_test_possible",
   "temporary_use",
-  "route_repeatability",
   "seasonal_persistence",
 ];
 
@@ -416,13 +390,13 @@ export function describeVerificationGap(
         informationDeficit: 1 - clamp01(record.confidence),
       };
     }
-    case "resource_usability": {
+    case "resource_test_possible": {
       const richness = record.observedRichness ?? 0;
       if (richness < VERIFICATION_MIN_PROMISE) return undefined;
       return {
         promise: clamp01(richness) * 0.9,
-        promisingSignal: "resource signs were seen here",
-        missingEvidence: "whether anything can actually be taken and carried home",
+        promisingSignal: "food was physically found here",
+        missingEvidence: "whether a real take is worth attempting at all",
         informationDeficit: 1 - clamp01(record.confidence),
       };
     }
@@ -435,15 +409,6 @@ export function describeVerificationGap(
         promise,
         promisingSignal: "the place looked liveable in passing",
         missingEvidence: "whether a party can actually stay and work here",
-        informationDeficit: 1 - clamp01(record.confidence),
-      };
-    }
-    case "route_repeatability": {
-      if (record.observedMovementCost === undefined) return undefined;
-      return {
-        promise: 0.4,
-        promisingSignal: "a party walked this way once",
-        missingEvidence: "whether the route can be relied on repeatedly",
         informationDeficit: 1 - clamp01(record.confidence),
       };
     }

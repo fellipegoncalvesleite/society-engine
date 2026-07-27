@@ -78,10 +78,10 @@
       "title": "resource present but unusable this season",
       "expectation": "presence confirmed; usability rejected or unresolved",
       "observed": {
-        "question": "resource_usability",
+        "question": "resource_test_possible",
         "outcome": "negative",
         "allAttempts": [
-          "resource_usability:negative"
+          "resource_test_possible:negative"
         ]
       },
       "pass": true,
@@ -94,7 +94,7 @@
       "title": "usable resource with real ecological stock",
       "expectation": "IF food is credited it must deplete a real stock and enter receipts exactly once",
       "observed": {
-        "question": "resource_usability",
+        "question": "resource_test_possible",
         "outcome": "confirmed",
         "harvestUnitsCredited": 0
       },
@@ -114,13 +114,13 @@
           "known_poor",
           "promising_unverified"
         ],
-        "selectedQuestion": "route_repeatability",
+        "selectedQuestion": "seasonal_persistence",
         "selectedThisTile": true
       },
       "pass": true,
       "target": "tile:86:4",
       "truthRichness": 0.089,
-      "note": "route_repeatability / seasonal_persistence still admit a known-poor place — recorded as a semantic finding."
+      "note": "route_repeatability was REMOVED (§8). seasonal_persistence still admits a known-poor place — recorded as a semantic finding."
     },
     {
       "id": "V9",
@@ -218,7 +218,7 @@
         ],
         "questionsLaunched": [
           "resource_presence",
-          "route_repeatability"
+          "seasonal_persistence"
         ],
         "attemptsRecorded": 0
       },

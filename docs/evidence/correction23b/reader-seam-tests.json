@@ -1,0 +1,182 @@
+{
+  "passed": 13,
+  "failed": 0,
+  "cases": [
+    {
+      "id": "R1",
+      "title": "confirmed water access changes the water reader",
+      "expectation": "the same glimpse fails the 0.32 access gate without the answer and passes with it",
+      "observed": {
+        "withoutEvidence": 0.25,
+        "withConfirmed": 0.55,
+        "passesGateWithout": false,
+        "passesGateWith": true
+      },
+      "pass": true,
+      "target": "tile:100:0"
+    },
+    {
+      "id": "R12",
+      "title": "destroying the result reproduces the pre-reader decision",
+      "expectation": "removing the evidence row returns the water term to exactly the observed value",
+      "observed": {
+        "observed": 0.25,
+        "withoutEvidence": 0.25,
+        "identical": true
+      },
+      "pass": true
+    },
+    {
+      "id": "R2",
+      "title": "negative water result suppresses this target only",
+      "expectation": "the negative caps THIS tile below the gate and leaves every other tile untouched",
+      "observed": {
+        "withNegative": 0.25,
+        "cappedBelowGate": true,
+        "otherTileUnaffected": 0.9,
+        "inconclusiveIsNeutral": true
+      },
+      "pass": true
+    },
+    {
+      "id": "R5",
+      "title": "a non-water answer changes nothing in the water reader",
+      "expectation": "only the water_access question may move the water term",
+      "observed": {
+        "withTemporaryUseConfirmed": 0.25,
+        "unchanged": true
+      },
+      "pass": true,
+      "note": "route_repeatability was REMOVED as a question (§8); route evidence is a by-product of any completed party."
+    },
+    {
+      "id": "R1b",
+      "title": "same-snapshot production counterfactual through the real tick",
+      "expectation": "one evidence row changes the band's own recorded destination verdict",
+      "observed": {
+        "withoutEvidence": {
+          "candidateTileId": "tile:100:0",
+          "consideredAsTarget": false,
+          "rejectionReason": "insufficient_water_reliability",
+          "waterReliability": 0.25
+        },
+        "withConfirmedWaterAccess": {
+          "candidateTileId": "tile:100:0",
+          "consideredAsTarget": false,
+          "rejectionReason": "not_better_than_current",
+          "waterReliability": 0.55
+        },
+        "diverged": true
+      },
+      "pass": true,
+      "target": "tile:100:0"
+    },
+    {
+      "id": "R3",
+      "title": "resource presence enables a later test candidate",
+      "expectation": "eligibility flips; NO support or food is created",
+      "observed": {
+        "eligibleWithConfirmedPresence": true,
+        "eligibleWithout": false,
+        "receiptsWith": 0,
+        "receiptsWithout": 0,
+        "receiptsUnchanged": true
+      },
+      "pass": true,
+      "target": "tile:100:0"
+    },
+    {
+      "id": "R4",
+      "title": "destroying the resource result removes eligibility",
+      "expectation": "the exact reader counterfactual, and a negative does not enable either",
+      "observed": {
+        "eligibleWithout": false,
+        "eligibleNegative": false
+      },
+      "pass": true
+    },
+    {
+      "id": "R11",
+      "title": "a negative bounded search is not global absence",
+      "expectation": "the negative blocks this place and this question only; other places stay eligible",
+      "observed": {
+        "thisPlaceEligible": false,
+        "otherPlaceStillPromising": "promising_unverified"
+      },
+      "pass": true
+    },
+    {
+      "id": "R6",
+      "title": "an unwalked route remains unconfirmed",
+      "expectation": "route repeatability is no longer a question a party can 'pass' by definition",
+      "observed": {
+        "productionQuestions": [
+          "water_access",
+          "resource_presence",
+          "resource_test_possible",
+          "temporary_use",
+          "seasonal_persistence"
+        ],
+        "routeRepeatabilityStillAQuestion": false,
+        "waterUnchangedWithNoEvidence": true
+      },
+      "pass": true,
+      "note": "§8 removal: any completed party is a successful round trip, so the question was a tautology."
+    },
+    {
+      "id": "R7",
+      "title": "temporary-use result changes only bounded-use eligibility",
+      "expectation": "a failure blocks a task camp there; it moves no water and no resource state",
+      "observed": {
+        "campRefusedAfterNegative": true,
+        "campRefusedAfterConfirmed": false,
+        "campRefusedWithNoEvidence": false,
+        "waterUntouched": true,
+        "resourceUntouched": true
+      },
+      "pass": true
+    },
+    {
+      "id": "R8",
+      "title": "same-season attempts do not create seasonal persistence",
+      "expectation": "four spring visits give ONE season of coverage; a real new season gives two",
+      "observed": {
+        "rowsAfterFourAttempts": 1,
+        "attemptsRecorded": 4,
+        "seasonsAfterFourSpringVisits": [
+          "spring"
+        ],
+        "seasonsAfterAnAutumnVisit": [
+          "spring",
+          "autumn"
+        ]
+      },
+      "pass": true,
+      "note": "state does not grow with repeats — the row is upserted, which is the §11 bound."
+    },
+    {
+      "id": "R9",
+      "title": "repeated identical confirmed verification is suppressed",
+      "expectation": "500 ticks later, unchanged conditions, the same question is NOT re-asked",
+      "observed": {
+        "sameConditionsAllowed": false,
+        "sameConditionsReason": "already established here, and nothing has changed",
+        "settledNegativeAlsoSuppressed": false,
+        "differentQuestionStillAllowed": true
+      },
+      "pass": true,
+      "note": "the 12-entry display ring is NOT consulted — this is the separate retry memory."
+    },
+    {
+      "id": "R10",
+      "title": "a changed season permits a relevant retry",
+      "expectation": "season, route and hardship changes each legitimately reopen the question",
+      "observed": {
+        "newSeason": "true (a different season may give a different answer)",
+        "movedHardship": "true (the band's situation has materially changed)",
+        "movedRoute": "true (the way there has changed)"
+      },
+      "pass": true
+    }
+  ]
+}

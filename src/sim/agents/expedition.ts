@@ -60,6 +60,10 @@ import {
   retainFrontierObservations,
 } from "./frontierExploration";
 import {
+  recordVerificationEvidence,
+  taskCampRefusedByEvidence,
+} from "./verificationEvidence";
+import {
   VERIFICATION_ACTIVE_CAP,
   VERIFICATION_ON_SITE_DAYS,
   buildVerificationPlan,
@@ -257,6 +261,17 @@ function deriveTaskCampForOperating(
 
   // §16 — no dry, tolerable ground: no camp. The party pays the nightly shuttle instead.
   if (standTile === undefined || standTile.isAquatic === true || standTile.riskProfile.floodRisk > 0.75) {
+    return undefined;
+  }
+
+  // CORRECTION-23B §9 — THE TEMPORARY-USE READER. Bounded operation evidence gates bounded
+  // operation, and nothing wider: a party that already tried to stay here and could not
+  // does not camp here again. This authorises no residence, anchor, storage or claim — the
+  // task-camp record asserts all three non-claims below — and it reads only the band's own
+  // physically established answer to the temporary-use question at THIS tile.
+  const campingBand = world.bands[expedition.bandId];
+
+  if (campingBand !== undefined && taskCampRefusedByEvidence(campingBand, expedition.positionTileId)) {
     return undefined;
   }
 
@@ -593,9 +608,8 @@ function advanceFrontierExplorationOutboundDay(
  * the bounded area searched is not proof of the catchment's total stock, and finding none is
  * not proof of absence anywhere.
  *
- * §14 — only `resource_usability` can produce food, and only through a real harvest that
- * flows into the canonical receipt pipeline on physical return. Every other question credits
- * exactly zero.
+ * CORRECTION-23B §7 — NO question produces food. `resource_test_possible` reports whether a
+ * real take is worth attempting; it does not make one. Every branch credits exactly zero.
  */
 function resolveVerificationOnSite(
   world: WorldState,
@@ -703,8 +717,11 @@ function resolveVerificationOnSite(
         : finish("negative", "nothing usable was found in the area actually searched");
     }
 
-    case "resource_usability": {
-      // A real attempt. It can fail even where the resource exists.
+    case "resource_test_possible": {
+      // CORRECTION-23B §7 — this question was called `resource_usability`, which claimed
+      // more than it establishes. What the party can honestly report is whether a real,
+      // stock-backed take is worth attempting here: it reads the ground it is standing on,
+      // draws against no patch, applies no depletion and produces no receipt.
       const richness = standTile.resourceProfile.baseRichness;
 
       if (richness < 0.22) {
@@ -716,22 +733,20 @@ function resolveVerificationOnSite(
       const seasonLean = standTile.seasonalProfile.leanSeasons.includes(time.season);
       const attemptSucceeds = richness * (seasonLean ? 0.25 : 0.6) > 0.12;
 
-      // §14 / gate 17 — NO CALORIES ARE CREDITED HERE, DELIBERATELY.
+      // CORRECTION-23B §7 Option A — NO CALORIES ARE CREDITED, DELIBERATELY.
       //
-      // The canonical food path is: a physical harvest resolved against a real, depleting
-      // stock -> IntraSeasonTripRecord.physicalFoodHarvest -> buildReturnedRecord ->
-      // depositFoodReceipts. Verification targets a TERRAIN record, not a remembered patch,
-      // so it has no `targetPatchId` for `resolveExpeditionTargetWork` to draw against.
-      // Synthesising a harvest record by hand would credit food that no stock ever gave up —
-      // exactly the "free support" this checkpoint classifies as FAIL.
+      // `plantStock.resolvePlantFoodHarvest` can resolve a real patch at an arbitrary TILE
+      // and would be the legal seam for a stock-backed take, so the architecture exists.
+      // But the only activity that legally reaches it — the same-day intra-season trip —
+      // selects its target from patch memories, so giving verification its own call would
+      // duplicate that path rather than reuse it. §7 says prefer eligibility-only unless an
+      // authoritative task can consume the evidence without architectural duplication.
       //
-      // So the usability question returns EVIDENCE ONLY: the band learns that something here
-      // can (or cannot) be taken, and that evidence is what changes later behaviour. Wiring
-      // the calorie path properly requires giving verification a real stock to draw against,
-      // and is recorded as unbuilt debt rather than faked.
+      // So this returns EVIDENCE ONLY, under a name that says exactly that. The take itself
+      // is recorded as unbuilt debt rather than faked or shortcut.
       return attemptSucceeds
-        ? finish("confirmed", "a test take succeeded; this place can actually be worked")
-        : finish("negative", "the attempt to take anything came back empty");
+        ? finish("confirmed", "the ground here is worth a real attempt")
+        : finish("negative", "there is nothing here worth attempting");
     }
 
     case "temporary_use": {
@@ -748,11 +763,6 @@ function resolveVerificationOnSite(
       return liveable
         ? finish("confirmed", "a small party stayed and worked here without failing")
         : finish("negative", "the party could not sustain itself here");
-    }
-
-    case "route_repeatability": {
-      // The party walked here and is about to walk back. That is the test.
-      return finish("confirmed", "the route was walked and is walkable again");
     }
 
     case "seasonal_persistence": {
@@ -2006,6 +2016,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     // CORRECTION-23 §13 — verification results carried home by parties that PHYSICALLY
     // returned today. A lost party contributes nothing here, which is the §15 control.
     const returnedVerifications: {
+      readonly routeTiles: number;
       readonly result: NonNullable<ExpeditionRecord["verificationResult"]>;
       readonly harvestUnits: number;
     }[] = [];
@@ -2117,6 +2128,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
               currentWorld.auditOptions?.frontierVerificationKnowledgeDisabled !== true
             ) {
               returnedVerifications.push({
+                routeTiles: result.expedition.routeTileIds.length,
                 result: verificationResult,
                 harvestUnits: verificationResult.harvestUnits,
               });
@@ -2285,6 +2297,11 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     // walking back there forever. Only the tested domain is upgraded: a water answer never
     // becomes a resource claim, and a single visit never becomes a seasonal calendar.
     let verificationAttempts = currentBand.frontierVerificationAttempts ?? [];
+    // CORRECTION-23B §4/§11 — the AUTHORITATIVE record the domain readers consume, kept
+    // separate from the bounded display ring above. Keyed by (place, question) and upserted,
+    // so repeated attempts update a row instead of appending one.
+    let verificationEvidence = currentBand.verificationEvidence;
+    const verificationHardship = deriveVerificationNeed(currentBand).need;
 
     for (const returned of returnedVerifications) {
       verificationAttempts = recordVerificationAttempt(verificationAttempts, {
@@ -2293,6 +2310,19 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
         tick: getWorldTimeForDay(day).tick,
         season: returned.result.season,
         outcome: returned.result.outcome,
+      });
+      verificationEvidence = recordVerificationEvidence(verificationEvidence, {
+        tileId: returned.result.targetTileId,
+        question: returned.result.question,
+        outcome: returned.result.outcome,
+        season: returned.result.season,
+        tick: getWorldTimeForDay(day).tick,
+        hardship: verificationHardship,
+        routeTiles: returned.routeTiles,
+        // CORRECTION-23B §8 — route repeatability, recorded as a BY-PRODUCT of the journey
+        // rather than as a question that consumes a party. This party walked out and walked
+        // home, which is the whole test the removed question used to claim to perform.
+        routeEvidence: "walked_out_and_back",
       });
     }
 
@@ -2317,6 +2347,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
         knowledge,
         receivedSmokeSignals,
         frontierVerificationAttempts: verificationAttempts,
+        ...(verificationEvidence === undefined ? {} : { verificationEvidence }),
       };
       changed = true;
       continue;
@@ -2331,6 +2362,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       knowledge,
       receivedSmokeSignals,
       frontierVerificationAttempts: verificationAttempts,
+      ...(verificationEvidence === undefined ? {} : { verificationEvidence }),
       ...(deposits.length === 0
         ? {}
         : {

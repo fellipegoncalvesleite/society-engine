@@ -33,6 +33,9 @@ const ARM_OPTIONS = {
   M3: undefined,
   M4: undefined,
   M5: { frontierVerificationDisabled: true },
+  // CORRECTION-23B §16 — results destroyed: parties run, answers are downgraded, so every
+  // reader loses its input while the physical cost stays. The safety arm.
+  M6: { frontierVerificationConfirmationDisabled: true },
 };
 
 const r2 = (v) => (v === undefined || v === null ? null : Math.round(v * 100) / 100);

@@ -59,12 +59,29 @@ try {
 
   const templateBand = Object.values(spring.bands)[0];
 
-  const makeWorld = (base, targetTile, record, seededAttempts = [], auditOptions) => {
+  // CORRECTION-23B — `resource_test_possible` is gated on a CONFIRMED resource_presence in
+  // the authoritative evidence store, so a fixture that wants to exercise it must seed the
+  // evidence, not just the display ring.
+  const evidenceRow = (base, tile, question, outcome) => ({
+    tileId: tile.id,
+    question,
+    outcome,
+    seasonsAnswered: [base.time.season],
+    lastSeason: base.time.season,
+    lastTick: base.time.tick,
+    attempts: 1,
+    hardshipAtLastAttempt: 0.5,
+    routeTilesAtLastAttempt: 8,
+    routeEvidence: "walked_out_and_back",
+  });
+
+  const makeWorld = (base, targetTile, record, seededAttempts = [], auditOptions, seededEvidence) => {
     const band = {
       ...templateBand,
       position: home.id,
       expeditions: [],
       frontierVerificationAttempts: seededAttempts,
+      ...(seededEvidence === undefined ? {} : { verificationEvidence: seededEvidence }),
       recentExpeditionOutcomes: [],
       resourceKnowledgeState:
         templateBand.resourceKnowledgeState === undefined
@@ -302,8 +319,8 @@ try {
         t.resourceProfile.waterAccess < 0.12,
     );
     const rec = mkRecord(winter, target, { observedRichness: 0.5, observedWaterAccess: 0.15 });
-    const out = run(makeWorld(winter, target, rec, answered(winter, target, ["resource_presence"])));
-    const attempt = out.attempts.find((a) => a.question === "resource_usability");
+    const out = run(makeWorld(winter, target, rec, answered(winter, target, ["resource_presence"]), undefined, [evidenceRow(winter, target, "resource_presence", "confirmed")]));
+    const attempt = out.attempts.find((a) => a.question === "resource_test_possible");
     record(
       "V6",
       "resource present but unusable this season",
@@ -325,11 +342,11 @@ try {
       (t) => t.resourceProfile.baseRichness >= 0.35 && !t.seasonalProfile.leanSeasons.includes("spring") && t.resourceProfile.waterAccess < 0.12,
     );
     const rec = mkRecord(spring, target, { observedRichness: 0.5, observedWaterAccess: 0.15 });
-    const world = makeWorld(spring, target, rec, answered(spring, target, ["resource_presence"]));
+    const world = makeWorld(spring, target, rec, answered(spring, target, ["resource_presence"]), undefined, [evidenceRow(spring, target, "resource_presence", "confirmed")]);
     const bandId = Object.keys(world.bands)[0];
     const receiptsBefore = world.bands[bandId].seasonalFoodReceipts;
     const out = run(world);
-    const attempt = out.attempts.find((a) => a.question === "resource_usability");
+    const attempt = out.attempts.find((a) => a.question === "resource_test_possible");
     const receiptsAfter = out.band?.seasonalFoodReceipts;
     record(
       "V7",
@@ -359,7 +376,7 @@ try {
     const band = world.bands[Object.keys(world.bands)[0]];
     const need = verification.deriveVerificationNeed(band);
     const candidate = verification.selectVerificationCandidate(world, band, need);
-    const states = ["water_access", "resource_presence", "resource_usability", "temporary_use"].map((q) =>
+    const states = ["water_access", "resource_presence", "resource_test_possible", "temporary_use"].map((q) =>
       verification.classifyPlaceForQuestion(rec, q, []),
     );
     record(
@@ -374,13 +391,11 @@ try {
       states[0] === "known_poor" &&
         states[1] === "known_poor" &&
         states[2] === "known_poor" &&
-        (candidate === undefined ||
-          candidate.question === "route_repeatability" ||
-          candidate.question === "seasonal_persistence"),
+        (candidate === undefined || candidate.question === "seasonal_persistence"),
       {
         target: target.id,
         truthRichness: r3(target.resourceProfile.baseRichness),
-        note: "route_repeatability / seasonal_persistence still admit a known-poor place — recorded as a semantic finding.",
+        note: "route_repeatability was REMOVED (§8). seasonal_persistence still admits a known-poor place — recorded as a semantic finding.",
       },
     );
   }
@@ -437,7 +452,7 @@ try {
     );
     const rec = mkRecord(spring, target, { observedRichness: 0.5, observedWaterAccess: 0.15, observedRisk: 0.3 });
     const out = run(
-      makeWorld(spring, target, rec, answered(spring, target, ["resource_presence", "resource_usability"])),
+      makeWorld(spring, target, rec, answered(spring, target, ["resource_presence", "resource_test_possible"])),
     );
     const attempt = out.attempts.find((a) => a.question === "temporary_use");
     const after = out.band?.knowledge?.observedTiles?.[target.id];
@@ -464,7 +479,7 @@ try {
     const target = findTarget(spring, (t) => t.resourceProfile.waterAccess < 0.15 && t.resourceProfile.baseRichness > 0.3);
     const rec = mkRecord(spring, target, { observedRichness: 0.5, observedWaterAccess: 0.15, observedRisk: 0.3 });
     const out = run(
-      makeWorld(spring, target, rec, answered(spring, target, ["resource_presence", "resource_usability"])),
+      makeWorld(spring, target, rec, answered(spring, target, ["resource_presence", "resource_test_possible"])),
     );
     const attempt = out.attempts.find((a) => a.question === "temporary_use");
     record(
@@ -493,7 +508,7 @@ try {
         spring,
         target,
         { ...rec, seasonsObserved: ["spring", "summer"] },
-        answered(spring, target, ["resource_presence", "resource_usability", "temporary_use", "route_repeatability"]),
+        answered(spring, target, ["resource_presence", "resource_test_possible", "temporary_use", "route_repeatability"]),
       ),
     );
     const seasonalAttempts = out.attempts.filter((a) => a.question === "seasonal_persistence");
