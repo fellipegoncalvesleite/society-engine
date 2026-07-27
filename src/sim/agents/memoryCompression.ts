@@ -14,6 +14,12 @@ import type {
 } from "../knowledge/types";
 import { getNeighborTiles, getTile } from "../world/generate";
 import type { Tile, WorldAuditOptions, WorldState } from "../world/types";
+// CORRECTION-23G §11 — audit-only. Both return `false` when no audit has registered a
+// donor-place set, which is every production, worker and UI path.
+import {
+  hasProtectedDonorPlaces,
+  isProtectedDonorPlace,
+} from "../diagnostics/verificationScheduleReplay";
 
 const MAX_EXACT_KNOWN_TILES = 72;
 const MAX_EXACT_PLACE_MEMORIES = 72;
@@ -138,6 +144,21 @@ function selectRetainedKnownTileIds(
           memory?.valences.includes("risky") === true ||
           memory?.valences.includes("depleted") === true)
       ) {
+        mandatory.add(record.tileId);
+      }
+    }
+  }
+
+  // CORRECTION-23G §11 G6 — SPARSE DONOR-PLACE RETENTION, WITHOUT LAUNCHING ANYTHING.
+  //
+  // The question this answers is narrow: can RETAINING the same places substitute for
+  // repeatedly WALKING to them? The protected set is exactly the places the F1 donor schedule
+  // selected — a list the donor BAND itself chose from its own knowledge, not a list derived
+  // from hidden ecology — and nothing else. It is audit-only, absent in every normal world,
+  // and it does not touch capacity, the scored ordering, or the inherited mandatory set.
+  if (hasProtectedDonorPlaces()) {
+    for (const record of records) {
+      if (isProtectedDonorPlace(record.tileId)) {
         mandatory.add(record.tileId);
       }
     }

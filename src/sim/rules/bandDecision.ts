@@ -422,6 +422,8 @@ import {
   scoreDecision,
   sortCandidatesWithSeededTieBreak,
 } from "./decisionScoring";
+// CORRECTION-23G §8 — audit-only read counter; a no-op when no audit is counting.
+import { countSeasonIdentityRead } from "../diagnostics/verificationScheduleReplay";
 
 interface KnownTileCandidate {
   readonly tile: Tile;
@@ -4138,6 +4140,10 @@ function buildKnownTileScoreBreakdown(
 ): ScoreBreakdown {
   const seasonalPattern = record.observedSeasonalPattern;
   const seasonWasObserved = record.seasonsObserved.includes(world.time.season);
+  // CORRECTION-23G §8 — the ONE direct movement-scoring consumer of a place record's season
+  // identity: not knowing this place in this season costs it 0.06 of its seasonal food
+  // modifier. Counted only while an audit is counting; a no-op everywhere else.
+  countSeasonIdentityRead("destination_season_modifier", record.seasonsObserved.length, seasonWasObserved);
   const isPeakSeason = seasonalPattern?.peakSeasons.includes(world.time.season) ?? false;
   const isLeanSeason = seasonalPattern?.leanSeasons.includes(world.time.season) ?? false;
   const seasonalFoodModifier = clamp01(

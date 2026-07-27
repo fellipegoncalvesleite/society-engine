@@ -1104,6 +1104,22 @@ export interface ExpeditionRecord {
   readonly verificationPlan?: FrontierVerificationPlan;
   /** Physically established at the destination; applied to band knowledge only on return. */
   readonly verificationResult?: FrontierVerificationResult;
+  /**
+   * CORRECTION-23G §5 — AUDIT-ONLY. Marks a party raised by the schedule-replay seam
+   * (`sim/diagnostics/verificationScheduleReplay.ts`) rather than by the production
+   * verification selector. Undefined in every normal world: nothing in production writes it,
+   * and it is reachable only while an audit runner has registered a replay. Its presence is
+   * what tells the on-site task that this party carries no question, so it spends the donor's
+   * on-site days and comes home with nothing to record.
+   */
+  readonly auditScheduleReplay?: {
+    readonly arm: string;
+    readonly donorLaunchDay: number;
+    /** True only when the donor's own planned route was replayed tile for tile. */
+    readonly exactRoute: boolean;
+    /** On-site days the donor party's own question class required. */
+    readonly onSiteDays: number;
+  };
   /** §13 — deliberate smoke-signal attempts this party made (bounded; may fail). */
   readonly signalAttempts?: readonly ExpeditionSignalAttempt[];
   readonly reasonIds: readonly ReasonId[];

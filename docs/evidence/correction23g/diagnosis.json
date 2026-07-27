@@ -1,0 +1,2850 @@
+{
+  "matrix": "docs/evidence/correction23g/g-matrix.json",
+  "phenotypes": "docs/evidence/correction23g/site-phenotypes.json",
+  "sites": {
+    "tile:204:72": {
+      "label": "A",
+      "structureClass": "coastal_aquatic",
+      "terrainKind": "coast",
+      "qualifies": false,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": false
+      },
+      "arms": {
+        "F0": {
+          "survival": 0.6,
+          "meanFinalPopulation": 19,
+          "meanSupport": 0.86
+        },
+        "F1": {
+          "survival": 1,
+          "meanFinalPopulation": 34,
+          "meanSupport": 1.29
+        },
+        "G1": {
+          "survival": 1,
+          "meanFinalPopulation": 34,
+          "meanSupport": 1.29
+        },
+        "G2": {
+          "survival": 1,
+          "meanFinalPopulation": 34,
+          "meanSupport": 1.29
+        },
+        "G3": {
+          "survival": 0.2,
+          "meanFinalPopulation": 5.4,
+          "meanSupport": 0.39
+        },
+        "G4": {
+          "survival": 0.4,
+          "meanFinalPopulation": 13.6,
+          "meanSupport": 0.5
+        },
+        "G5": {
+          "survival": 0.4,
+          "meanFinalPopulation": 19.6,
+          "meanSupport": 0.61
+        },
+        "G6": {
+          "survival": 0.8,
+          "meanFinalPopulation": 22,
+          "meanSupport": 1.23
+        }
+      },
+      "f1EffectVsProduction": "strongly beneficial",
+      "comparisons": {
+        "F1 vs G1 (verification semantics + disposition)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            34,
+            34
+          ]
+        },
+        "G1 vs G2 (target rotation alone)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            34,
+            34
+          ],
+          "rotationRetargetsFired": 0
+        },
+        "F1 vs G3 (cadence held, broad-exploration targets)": {
+          "material": true,
+          "survival": [
+            1,
+            0.2
+          ],
+          "population": [
+            34,
+            5.4
+          ]
+        },
+        "F1 vs G4 (cadence held, nearest uncertain target)": {
+          "material": true,
+          "survival": [
+            1,
+            0.4
+          ],
+          "population": [
+            34,
+            13.6
+          ]
+        },
+        "F1 vs G5 (cadence held, rotating sectors)": {
+          "material": true,
+          "survival": [
+            1,
+            0.4
+          ],
+          "population": [
+            34,
+            19.6
+          ]
+        },
+        "F0 vs G6 (retain donor places, no travel)": {
+          "material": true,
+          "survival": [
+            0.6,
+            0.8
+          ],
+          "population": [
+            19,
+            22
+          ]
+        },
+        "F1 vs G6 (travel beyond retention)": {
+          "material": true,
+          "survival": [
+            1,
+            0.8
+          ],
+          "population": [
+            34,
+            22
+          ]
+        }
+      },
+      "mechanism": "target family (route-country observation), partly substitutable by memory retention",
+      "seasonInformationAccounting": {
+        "F0": {
+          "existingRecordSeasonAdditions": 1865.4,
+          "newRecordCreations": 266.6,
+          "newRecordsWithBaseContent": 266.6,
+          "newRecordShareOfObservations": 0.0098,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 31114,
+              "consequential": 29704
+            },
+            "place_memory_merge": {
+              "reads": 32828,
+              "consequential": 432
+            },
+            "verification_classification": {
+              "reads": 192962,
+              "consequential": 192962
+            },
+            "verification_gap": {
+              "reads": 6125,
+              "consequential": 6125
+            }
+          }
+        },
+        "F1": {
+          "existingRecordSeasonAdditions": 1316.8,
+          "newRecordCreations": 337,
+          "newRecordsWithBaseContent": 337,
+          "newRecordShareOfObservations": 0.012,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 41473,
+              "consequential": 39069
+            },
+            "place_memory_merge": {
+              "reads": 37355,
+              "consequential": 609
+            },
+            "verification_classification": {
+              "reads": 69896,
+              "consequential": 69896
+            },
+            "verification_gap": {
+              "reads": 2409,
+              "consequential": 2409
+            }
+          }
+        },
+        "G1": {
+          "existingRecordSeasonAdditions": 1316.8,
+          "newRecordCreations": 337,
+          "newRecordsWithBaseContent": 337,
+          "newRecordShareOfObservations": 0.012,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 41473,
+              "consequential": 39069
+            },
+            "place_memory_merge": {
+              "reads": 37355,
+              "consequential": 609
+            }
+          }
+        },
+        "G2": {
+          "existingRecordSeasonAdditions": 1316.8,
+          "newRecordCreations": 337,
+          "newRecordsWithBaseContent": 337,
+          "newRecordShareOfObservations": 0.012,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 41473,
+              "consequential": 39069
+            },
+            "place_memory_merge": {
+              "reads": 37355,
+              "consequential": 609
+            }
+          }
+        },
+        "G3": {
+          "existingRecordSeasonAdditions": 1428,
+          "newRecordCreations": 239.8,
+          "newRecordsWithBaseContent": 239.8,
+          "newRecordShareOfObservations": 0.0067,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 20808,
+              "consequential": 18798
+            },
+            "place_memory_merge": {
+              "reads": 28804,
+              "consequential": 193
+            }
+          }
+        },
+        "G4": {
+          "existingRecordSeasonAdditions": 1009.6,
+          "newRecordCreations": 250.4,
+          "newRecordsWithBaseContent": 250.4,
+          "newRecordShareOfObservations": 0.0227,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 26221,
+              "consequential": 25169
+            },
+            "place_memory_merge": {
+              "reads": 30358,
+              "consequential": 350
+            }
+          }
+        },
+        "G5": {
+          "existingRecordSeasonAdditions": 1117.8,
+          "newRecordCreations": 302.8,
+          "newRecordsWithBaseContent": 302.8,
+          "newRecordShareOfObservations": 0.0139,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 28181,
+              "consequential": 26712
+            },
+            "place_memory_merge": {
+              "reads": 30849,
+              "consequential": 386
+            }
+          }
+        },
+        "G6": {
+          "existingRecordSeasonAdditions": 1763.4,
+          "newRecordCreations": 316,
+          "newRecordsWithBaseContent": 316,
+          "newRecordShareOfObservations": 0.0109,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 36182,
+              "consequential": 34251
+            },
+            "place_memory_merge": {
+              "reads": 35631,
+              "consequential": 500
+            },
+            "verification_classification": {
+              "reads": 222816,
+              "consequential": 222816
+            },
+            "verification_gap": {
+              "reads": 4878,
+              "consequential": 4878
+            }
+          }
+        }
+      },
+      "mediation": [
+        {
+          "arm": "F1",
+          "material": true,
+          "links": {
+            "launchSchedule": {
+              "base": 2954.2,
+              "arm": 3153.4
+            },
+            "target": {
+              "base": 154.6,
+              "arm": 163.2
+            },
+            "actualRoute": {
+              "base": 259.4,
+              "arm": 323.8
+            },
+            "newRecords": {
+              "base": 266.6,
+              "arm": 337
+            },
+            "refreshedRecords": {
+              "base": 28641.4,
+              "arm": 27960.8
+            },
+            "seasonsAdded": {
+              "base": 1865.4,
+              "arm": 1316.8
+            },
+            "recordsRetained": {
+              "base": 1067.2,
+              "arm": 841.4
+            },
+            "laterReader": {
+              "base": 29704,
+              "arm": 39069
+            },
+            "changedMovementAction": {
+              "base": 462,
+              "arm": 526.8
+            },
+            "physicalReceipt": {
+              "base": 138.54,
+              "arm": 230.91
+            },
+            "support": {
+              "base": 0.86,
+              "arm": 1.29
+            },
+            "demography": {
+              "base": 19,
+              "arm": 34
+            }
+          },
+          "movedLinks": [
+            "actualRoute",
+            "newRecords",
+            "seasonsAdded",
+            "recordsRetained",
+            "laterReader",
+            "changedMovementAction",
+            "physicalReceipt",
+            "support",
+            "demography"
+          ],
+          "complete": true
+        },
+        {
+          "arm": "G1",
+          "material": false
+        },
+        {
+          "arm": "G3",
+          "material": true,
+          "links": {
+            "launchSchedule": {
+              "base": 3153.4,
+              "arm": 2810.6
+            },
+            "target": {
+              "base": 163.2,
+              "arm": 25
+            },
+            "actualRoute": {
+              "base": 323.8,
+              "arm": 202.4
+            },
+            "newRecords": {
+              "base": 337,
+              "arm": 239.8
+            },
+            "refreshedRecords": {
+              "base": 27960.8,
+              "arm": 37302
+            },
+            "seasonsAdded": {
+              "base": 1316.8,
+              "arm": 1428
+            },
+            "recordsRetained": {
+              "base": 841.4,
+              "arm": 1201.2
+            },
+            "laterReader": {
+              "base": 39069,
+              "arm": 18798
+            },
+            "changedMovementAction": {
+              "base": 526.8,
+              "arm": 424.6
+            },
+            "physicalReceipt": {
+              "base": 230.91,
+              "arm": 50.67
+            },
+            "support": {
+              "base": 1.29,
+              "arm": 0.39
+            },
+            "demography": {
+              "base": 34,
+              "arm": 5.4
+            }
+          },
+          "movedLinks": [
+            "launchSchedule",
+            "target",
+            "actualRoute",
+            "newRecords",
+            "refreshedRecords",
+            "recordsRetained",
+            "laterReader",
+            "changedMovementAction",
+            "physicalReceipt",
+            "support",
+            "demography"
+          ],
+          "complete": true
+        },
+        {
+          "arm": "G4",
+          "material": true,
+          "links": {
+            "launchSchedule": {
+              "base": 3153.4,
+              "arm": 756
+            },
+            "target": {
+              "base": 163.2,
+              "arm": 140.2
+            },
+            "actualRoute": {
+              "base": 323.8,
+              "arm": 218.4
+            },
+            "newRecords": {
+              "base": 337,
+              "arm": 250.4
+            },
+            "refreshedRecords": {
+              "base": 27960.8,
+              "arm": 10744
+            },
+            "seasonsAdded": {
+              "base": 1316.8,
+              "arm": 1009.6
+            },
+            "recordsRetained": {
+              "base": 841.4,
+              "arm": 686.4
+            },
+            "laterReader": {
+              "base": 39069,
+              "arm": 25169
+            },
+            "changedMovementAction": {
+              "base": 526.8,
+              "arm": 429
+            },
+            "physicalReceipt": {
+              "base": 230.91,
+              "arm": 92.08
+            },
+            "support": {
+              "base": 1.29,
+              "arm": 0.5
+            },
+            "demography": {
+              "base": 34,
+              "arm": 13.6
+            }
+          },
+          "movedLinks": [
+            "launchSchedule",
+            "target",
+            "actualRoute",
+            "newRecords",
+            "refreshedRecords",
+            "seasonsAdded",
+            "recordsRetained",
+            "laterReader",
+            "changedMovementAction",
+            "physicalReceipt",
+            "support",
+            "demography"
+          ],
+          "complete": true
+        },
+        {
+          "arm": "G5",
+          "material": true,
+          "links": {
+            "launchSchedule": {
+              "base": 3153.4,
+              "arm": 2773.2
+            },
+            "target": {
+              "base": 163.2,
+              "arm": 160.4
+            },
+            "actualRoute": {
+              "base": 323.8,
+              "arm": 257.6
+            },
+            "newRecords": {
+              "base": 337,
+              "arm": 302.8
+            },
+            "refreshedRecords": {
+              "base": 27960.8,
+              "arm": 21128.8
+            },
+            "seasonsAdded": {
+              "base": 1316.8,
+              "arm": 1117.8
+            },
+            "recordsRetained": {
+              "base": 841.4,
+              "arm": 730.8
+            },
+            "laterReader": {
+              "base": 39069,
+              "arm": 26712
+            },
+            "changedMovementAction": {
+              "base": 526.8,
+              "arm": 434.6
+            },
+            "physicalReceipt": {
+              "base": 230.91,
+              "arm": 144.54
+            },
+            "support": {
+              "base": 1.29,
+              "arm": 0.61
+            },
+            "demography": {
+              "base": 34,
+              "arm": 19.6
+            }
+          },
+          "movedLinks": [
+            "launchSchedule",
+            "actualRoute",
+            "newRecords",
+            "refreshedRecords",
+            "seasonsAdded",
+            "recordsRetained",
+            "laterReader",
+            "changedMovementAction",
+            "physicalReceipt",
+            "support",
+            "demography"
+          ],
+          "complete": true
+        },
+        {
+          "arm": "G6",
+          "material": true,
+          "links": {
+            "launchSchedule": {
+              "base": 2954.2,
+              "arm": 2784.6
+            },
+            "target": {
+              "base": 154.6,
+              "arm": 169.2
+            },
+            "actualRoute": {
+              "base": 259.4,
+              "arm": 295.2
+            },
+            "newRecords": {
+              "base": 266.6,
+              "arm": 316
+            },
+            "refreshedRecords": {
+              "base": 28641.4,
+              "arm": 29946.2
+            },
+            "seasonsAdded": {
+              "base": 1865.4,
+              "arm": 1763.4
+            },
+            "recordsRetained": {
+              "base": 1067.2,
+              "arm": 946
+            },
+            "laterReader": {
+              "base": 29704,
+              "arm": 34251
+            },
+            "changedMovementAction": {
+              "base": 462,
+              "arm": 485.2
+            },
+            "physicalReceipt": {
+              "base": 138.54,
+              "arm": 169.78
+            },
+            "support": {
+              "base": 0.86,
+              "arm": 1.23
+            },
+            "demography": {
+              "base": 19,
+              "arm": 22
+            }
+          },
+          "movedLinks": [
+            "actualRoute",
+            "newRecords",
+            "recordsRetained",
+            "laterReader",
+            "physicalReceipt",
+            "support",
+            "demography"
+          ],
+          "complete": true
+        }
+      ],
+      "semanticSuppressionProof": {
+        "F0": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 1962
+        },
+        "F1": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 2266
+        },
+        "G1": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G2": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G3": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G4": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G5": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G6": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 2421
+        }
+      }
+    },
+    "tile:10:34": {
+      "label": "B",
+      "structureClass": "dry_plains",
+      "terrainKind": "plains",
+      "qualifies": true,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": true
+      },
+      "arms": {
+        "F0": {
+          "survival": 1,
+          "meanFinalPopulation": 15,
+          "meanSupport": 0.66
+        },
+        "F1": {
+          "survival": 1,
+          "meanFinalPopulation": 15,
+          "meanSupport": 0.66
+        },
+        "G1": {
+          "survival": 1,
+          "meanFinalPopulation": 15,
+          "meanSupport": 0.66
+        },
+        "G2": {
+          "survival": 1,
+          "meanFinalPopulation": 15,
+          "meanSupport": 0.66
+        },
+        "G3": {
+          "survival": 1,
+          "meanFinalPopulation": 13,
+          "meanSupport": 0.63
+        },
+        "G4": {
+          "survival": 1,
+          "meanFinalPopulation": 13.2,
+          "meanSupport": 0.63
+        },
+        "G5": {
+          "survival": 1,
+          "meanFinalPopulation": 15.2,
+          "meanSupport": 0.62
+        },
+        "G6": {
+          "survival": 1,
+          "meanFinalPopulation": 15,
+          "meanSupport": 0.67
+        }
+      },
+      "f1EffectVsProduction": "neutral",
+      "comparisons": {
+        "F1 vs G1 (verification semantics + disposition)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15,
+            15
+          ]
+        },
+        "G1 vs G2 (target rotation alone)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15,
+            15
+          ],
+          "rotationRetargetsFired": 0
+        },
+        "F1 vs G3 (cadence held, broad-exploration targets)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15,
+            13
+          ]
+        },
+        "F1 vs G4 (cadence held, nearest uncertain target)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15,
+            13.2
+          ]
+        },
+        "F1 vs G5 (cadence held, rotating sectors)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15,
+            15.2
+          ]
+        },
+        "F0 vs G6 (retain donor places, no travel)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15,
+            15
+          ]
+        },
+        "F1 vs G6 (travel beyond retention)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15,
+            15
+          ]
+        }
+      },
+      "mechanism": "no effect to attribute",
+      "seasonInformationAccounting": {
+        "F0": {
+          "existingRecordSeasonAdditions": 1480.4,
+          "newRecordCreations": 236,
+          "newRecordsWithBaseContent": 236,
+          "newRecordShareOfObservations": 0.0299,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 35878,
+              "consequential": 26824
+            },
+            "place_memory_merge": {
+              "reads": 35194,
+              "consequential": 150
+            },
+            "verification_classification": {
+              "reads": 552698,
+              "consequential": 552698
+            },
+            "verification_gap": {
+              "reads": 1513,
+              "consequential": 1513
+            }
+          }
+        },
+        "F1": {
+          "existingRecordSeasonAdditions": 1956,
+          "newRecordCreations": 262.4,
+          "newRecordsWithBaseContent": 262.4,
+          "newRecordShareOfObservations": 0.0276,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 35715,
+              "consequential": 26584
+            },
+            "place_memory_merge": {
+              "reads": 35382,
+              "consequential": 250
+            },
+            "verification_classification": {
+              "reads": 272066,
+              "consequential": 272066
+            },
+            "verification_gap": {
+              "reads": 3970,
+              "consequential": 3970
+            }
+          }
+        },
+        "G1": {
+          "existingRecordSeasonAdditions": 1956,
+          "newRecordCreations": 262.4,
+          "newRecordsWithBaseContent": 262.4,
+          "newRecordShareOfObservations": 0.0276,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 35715,
+              "consequential": 26584
+            },
+            "place_memory_merge": {
+              "reads": 35382,
+              "consequential": 250
+            }
+          }
+        },
+        "G2": {
+          "existingRecordSeasonAdditions": 1956,
+          "newRecordCreations": 262.4,
+          "newRecordsWithBaseContent": 262.4,
+          "newRecordShareOfObservations": 0.0276,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 35715,
+              "consequential": 26584
+            },
+            "place_memory_merge": {
+              "reads": 35382,
+              "consequential": 250
+            }
+          }
+        },
+        "G3": {
+          "existingRecordSeasonAdditions": 1712.6,
+          "newRecordCreations": 226.8,
+          "newRecordsWithBaseContent": 226.8,
+          "newRecordShareOfObservations": 0.0249,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 35168,
+              "consequential": 27134
+            },
+            "place_memory_merge": {
+              "reads": 35811,
+              "consequential": 188
+            }
+          }
+        },
+        "G4": {
+          "existingRecordSeasonAdditions": 1352.6,
+          "newRecordCreations": 189.6,
+          "newRecordsWithBaseContent": 189.6,
+          "newRecordShareOfObservations": 0.0265,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 35276,
+              "consequential": 26408
+            },
+            "place_memory_merge": {
+              "reads": 34636,
+              "consequential": 220
+            }
+          }
+        },
+        "G5": {
+          "existingRecordSeasonAdditions": 1639.4,
+          "newRecordCreations": 272.8,
+          "newRecordsWithBaseContent": 272.8,
+          "newRecordShareOfObservations": 0.0263,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 35608,
+              "consequential": 27383
+            },
+            "place_memory_merge": {
+              "reads": 36106,
+              "consequential": 545
+            }
+          }
+        },
+        "G6": {
+          "existingRecordSeasonAdditions": 1484.6,
+          "newRecordCreations": 234,
+          "newRecordsWithBaseContent": 234,
+          "newRecordShareOfObservations": 0.031,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 35746,
+              "consequential": 26045
+            },
+            "place_memory_merge": {
+              "reads": 35927,
+              "consequential": 159
+            },
+            "verification_classification": {
+              "reads": 593744,
+              "consequential": 593744
+            },
+            "verification_gap": {
+              "reads": 532,
+              "consequential": 532
+            }
+          }
+        }
+      },
+      "mediation": [
+        {
+          "arm": "F1",
+          "material": false
+        },
+        {
+          "arm": "G1",
+          "material": false
+        },
+        {
+          "arm": "G3",
+          "material": false
+        },
+        {
+          "arm": "G4",
+          "material": false
+        },
+        {
+          "arm": "G5",
+          "material": false
+        },
+        {
+          "arm": "G6",
+          "material": false
+        }
+      ],
+      "semanticSuppressionProof": {
+        "F0": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 266
+        },
+        "F1": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 190,
+          "dispositionRows": 186
+        },
+        "G1": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G2": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G3": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G4": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G5": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G6": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 306
+        }
+      }
+    },
+    "tile:100:23": {
+      "label": "C",
+      "structureClass": "dry_plains",
+      "terrainKind": "plains",
+      "qualifies": true,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": true
+      },
+      "arms": {
+        "F0": {
+          "survival": 1,
+          "meanFinalPopulation": 21,
+          "meanSupport": 0.73
+        },
+        "F1": {
+          "survival": 1,
+          "meanFinalPopulation": 22.2,
+          "meanSupport": 0.76
+        },
+        "G1": {
+          "survival": 1,
+          "meanFinalPopulation": 22.2,
+          "meanSupport": 0.76
+        },
+        "G2": {
+          "survival": 1,
+          "meanFinalPopulation": 22.2,
+          "meanSupport": 0.76
+        },
+        "G3": {
+          "survival": 1,
+          "meanFinalPopulation": 23.2,
+          "meanSupport": 0.78
+        },
+        "G4": {
+          "survival": 1,
+          "meanFinalPopulation": 18.8,
+          "meanSupport": 0.73
+        },
+        "G5": {
+          "survival": 1,
+          "meanFinalPopulation": 20.4,
+          "meanSupport": 0.76
+        },
+        "G6": {
+          "survival": 1,
+          "meanFinalPopulation": 23,
+          "meanSupport": 0.76
+        }
+      },
+      "f1EffectVsProduction": "neutral",
+      "comparisons": {
+        "F1 vs G1 (verification semantics + disposition)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            22.2,
+            22.2
+          ]
+        },
+        "G1 vs G2 (target rotation alone)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            22.2,
+            22.2
+          ],
+          "rotationRetargetsFired": 0
+        },
+        "F1 vs G3 (cadence held, broad-exploration targets)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            22.2,
+            23.2
+          ]
+        },
+        "F1 vs G4 (cadence held, nearest uncertain target)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            22.2,
+            18.8
+          ]
+        },
+        "F1 vs G5 (cadence held, rotating sectors)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            22.2,
+            20.4
+          ]
+        },
+        "F0 vs G6 (retain donor places, no travel)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            21,
+            23
+          ]
+        },
+        "F1 vs G6 (travel beyond retention)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            22.2,
+            23
+          ]
+        }
+      },
+      "mechanism": "no effect to attribute",
+      "seasonInformationAccounting": {
+        "F0": {
+          "existingRecordSeasonAdditions": 1735.6,
+          "newRecordCreations": 216.8,
+          "newRecordsWithBaseContent": 216.8,
+          "newRecordShareOfObservations": 0.0118,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 38059,
+              "consequential": 28689
+            },
+            "place_memory_merge": {
+              "reads": 40082,
+              "consequential": 642
+            },
+            "verification_classification": {
+              "reads": 674856,
+              "consequential": 674856
+            },
+            "verification_gap": {
+              "reads": 240,
+              "consequential": 240
+            }
+          }
+        },
+        "F1": {
+          "existingRecordSeasonAdditions": 3596.8,
+          "newRecordCreations": 217.6,
+          "newRecordsWithBaseContent": 217.6,
+          "newRecordShareOfObservations": 0.004,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 38138,
+              "consequential": 30546
+            },
+            "place_memory_merge": {
+              "reads": 39710,
+              "consequential": 1640
+            },
+            "verification_classification": {
+              "reads": 272599,
+              "consequential": 272599
+            },
+            "verification_gap": {
+              "reads": 1095,
+              "consequential": 1095
+            }
+          }
+        },
+        "G1": {
+          "existingRecordSeasonAdditions": 3596.8,
+          "newRecordCreations": 217.6,
+          "newRecordsWithBaseContent": 217.6,
+          "newRecordShareOfObservations": 0.004,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 38138,
+              "consequential": 30546
+            },
+            "place_memory_merge": {
+              "reads": 39710,
+              "consequential": 1640
+            }
+          }
+        },
+        "G2": {
+          "existingRecordSeasonAdditions": 3596.8,
+          "newRecordCreations": 217.6,
+          "newRecordsWithBaseContent": 217.6,
+          "newRecordShareOfObservations": 0.004,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 38138,
+              "consequential": 30546
+            },
+            "place_memory_merge": {
+              "reads": 39710,
+              "consequential": 1640
+            }
+          }
+        },
+        "G3": {
+          "existingRecordSeasonAdditions": 2294.6,
+          "newRecordCreations": 215.6,
+          "newRecordsWithBaseContent": 215.6,
+          "newRecordShareOfObservations": 0.0021,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 38361,
+              "consequential": 30634
+            },
+            "place_memory_merge": {
+              "reads": 39936,
+              "consequential": 321
+            }
+          }
+        },
+        "G4": {
+          "existingRecordSeasonAdditions": 1832.4,
+          "newRecordCreations": 241.8,
+          "newRecordsWithBaseContent": 241.8,
+          "newRecordShareOfObservations": 0.0128,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 38594,
+              "consequential": 29344
+            },
+            "place_memory_merge": {
+              "reads": 39526,
+              "consequential": 659
+            }
+          }
+        },
+        "G5": {
+          "existingRecordSeasonAdditions": 3378.2,
+          "newRecordCreations": 255.6,
+          "newRecordsWithBaseContent": 255.6,
+          "newRecordShareOfObservations": 0.0059,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 38068,
+              "consequential": 30205
+            },
+            "place_memory_merge": {
+              "reads": 39182,
+              "consequential": 1175
+            }
+          }
+        },
+        "G6": {
+          "existingRecordSeasonAdditions": 1767.2,
+          "newRecordCreations": 211.8,
+          "newRecordsWithBaseContent": 211.8,
+          "newRecordShareOfObservations": 0.0097,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 38649,
+              "consequential": 29331
+            },
+            "place_memory_merge": {
+              "reads": 39195,
+              "consequential": 677
+            },
+            "verification_classification": {
+              "reads": 624391,
+              "consequential": 624391
+            },
+            "verification_gap": {
+              "reads": 157,
+              "consequential": 157
+            }
+          }
+        }
+      },
+      "mediation": [
+        {
+          "arm": "F1",
+          "material": false
+        },
+        {
+          "arm": "G1",
+          "material": false
+        },
+        {
+          "arm": "G3",
+          "material": false
+        },
+        {
+          "arm": "G4",
+          "material": false
+        },
+        {
+          "arm": "G5",
+          "material": false
+        },
+        {
+          "arm": "G6",
+          "material": false
+        }
+      ],
+      "semanticSuppressionProof": {
+        "F0": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 657
+        },
+        "F1": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 658
+        },
+        "G1": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G2": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G3": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G4": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G5": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G6": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 732
+        }
+      }
+    },
+    "tile:119:116": {
+      "label": "D",
+      "structureClass": "coastal_aquatic",
+      "terrainKind": "plains",
+      "qualifies": true,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": true
+      },
+      "arms": {
+        "F0": {
+          "survival": 0.8,
+          "meanFinalPopulation": 9.2,
+          "meanSupport": 0.58
+        },
+        "F1": {
+          "survival": 0.8,
+          "meanFinalPopulation": 9.8,
+          "meanSupport": 0.58
+        },
+        "G1": {
+          "survival": 0.8,
+          "meanFinalPopulation": 9.8,
+          "meanSupport": 0.58
+        },
+        "G2": {
+          "survival": 0.8,
+          "meanFinalPopulation": 9.8,
+          "meanSupport": 0.58
+        },
+        "G3": {
+          "survival": 0.8,
+          "meanFinalPopulation": 9,
+          "meanSupport": 0.6
+        },
+        "G4": {
+          "survival": 0.8,
+          "meanFinalPopulation": 9.4,
+          "meanSupport": 0.61
+        },
+        "G5": {
+          "survival": 1,
+          "meanFinalPopulation": 14.2,
+          "meanSupport": 0.69
+        },
+        "G6": {
+          "survival": 0.8,
+          "meanFinalPopulation": 8.2,
+          "meanSupport": 0.53
+        }
+      },
+      "f1EffectVsProduction": "neutral",
+      "comparisons": {
+        "F1 vs G1 (verification semantics + disposition)": {
+          "material": false,
+          "survival": [
+            0.8,
+            0.8
+          ],
+          "population": [
+            9.8,
+            9.8
+          ]
+        },
+        "G1 vs G2 (target rotation alone)": {
+          "material": false,
+          "survival": [
+            0.8,
+            0.8
+          ],
+          "population": [
+            9.8,
+            9.8
+          ],
+          "rotationRetargetsFired": 0
+        },
+        "F1 vs G3 (cadence held, broad-exploration targets)": {
+          "material": false,
+          "survival": [
+            0.8,
+            0.8
+          ],
+          "population": [
+            9.8,
+            9
+          ]
+        },
+        "F1 vs G4 (cadence held, nearest uncertain target)": {
+          "material": false,
+          "survival": [
+            0.8,
+            0.8
+          ],
+          "population": [
+            9.8,
+            9.4
+          ]
+        },
+        "F1 vs G5 (cadence held, rotating sectors)": {
+          "material": true,
+          "survival": [
+            0.8,
+            1
+          ],
+          "population": [
+            9.8,
+            14.2
+          ]
+        },
+        "F0 vs G6 (retain donor places, no travel)": {
+          "material": false,
+          "survival": [
+            0.8,
+            0.8
+          ],
+          "population": [
+            9.2,
+            8.2
+          ]
+        },
+        "F1 vs G6 (travel beyond retention)": {
+          "material": false,
+          "survival": [
+            0.8,
+            0.8
+          ],
+          "population": [
+            9.8,
+            8.2
+          ]
+        }
+      },
+      "mechanism": "no effect to attribute",
+      "seasonInformationAccounting": {
+        "F0": {
+          "existingRecordSeasonAdditions": 938.8,
+          "newRecordCreations": 130.2,
+          "newRecordsWithBaseContent": 130.2,
+          "newRecordShareOfObservations": 0.0223,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 32649,
+              "consequential": 25990
+            },
+            "place_memory_merge": {
+              "reads": 32614,
+              "consequential": 139
+            },
+            "verification_classification": {
+              "reads": 878921,
+              "consequential": 878921
+            },
+            "verification_gap": {
+              "reads": 181575,
+              "consequential": 181575
+            }
+          }
+        },
+        "F1": {
+          "existingRecordSeasonAdditions": 962.2,
+          "newRecordCreations": 127,
+          "newRecordsWithBaseContent": 127,
+          "newRecordShareOfObservations": 0.0221,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 32297,
+              "consequential": 24749
+            },
+            "place_memory_merge": {
+              "reads": 33161,
+              "consequential": 129
+            },
+            "verification_classification": {
+              "reads": 815818,
+              "consequential": 815818
+            },
+            "verification_gap": {
+              "reads": 225459,
+              "consequential": 225459
+            }
+          }
+        },
+        "G1": {
+          "existingRecordSeasonAdditions": 962.2,
+          "newRecordCreations": 127,
+          "newRecordsWithBaseContent": 127,
+          "newRecordShareOfObservations": 0.0221,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 32297,
+              "consequential": 24749
+            },
+            "place_memory_merge": {
+              "reads": 33161,
+              "consequential": 129
+            }
+          }
+        },
+        "G2": {
+          "existingRecordSeasonAdditions": 962.2,
+          "newRecordCreations": 127,
+          "newRecordsWithBaseContent": 127,
+          "newRecordShareOfObservations": 0.0221,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 32297,
+              "consequential": 24749
+            },
+            "place_memory_merge": {
+              "reads": 33161,
+              "consequential": 129
+            }
+          }
+        },
+        "G3": {
+          "existingRecordSeasonAdditions": 989.8,
+          "newRecordCreations": 130.2,
+          "newRecordsWithBaseContent": 130.2,
+          "newRecordShareOfObservations": 0.0219,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 34443,
+              "consequential": 27796
+            },
+            "place_memory_merge": {
+              "reads": 34331,
+              "consequential": 112
+            }
+          }
+        },
+        "G4": {
+          "existingRecordSeasonAdditions": 830.8,
+          "newRecordCreations": 128.4,
+          "newRecordsWithBaseContent": 128.4,
+          "newRecordShareOfObservations": 0.0211,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 34045,
+              "consequential": 28523
+            },
+            "place_memory_merge": {
+              "reads": 34693,
+              "consequential": 156
+            }
+          }
+        },
+        "G5": {
+          "existingRecordSeasonAdditions": 1085,
+          "newRecordCreations": 188.2,
+          "newRecordsWithBaseContent": 188.2,
+          "newRecordShareOfObservations": 0.026,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 34007,
+              "consequential": 27719
+            },
+            "place_memory_merge": {
+              "reads": 37219,
+              "consequential": 215
+            }
+          }
+        },
+        "G6": {
+          "existingRecordSeasonAdditions": 881.8,
+          "newRecordCreations": 108.2,
+          "newRecordsWithBaseContent": 108.2,
+          "newRecordShareOfObservations": 0.0175,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 31790,
+              "consequential": 26209
+            },
+            "place_memory_merge": {
+              "reads": 32796,
+              "consequential": 137
+            },
+            "verification_classification": {
+              "reads": 893587,
+              "consequential": 893587
+            },
+            "verification_gap": {
+              "reads": 205669,
+              "consequential": 205669
+            }
+          }
+        }
+      },
+      "mediation": [
+        {
+          "arm": "F1",
+          "material": false
+        },
+        {
+          "arm": "G1",
+          "material": false
+        },
+        {
+          "arm": "G3",
+          "material": false
+        },
+        {
+          "arm": "G4",
+          "material": false
+        },
+        {
+          "arm": "G5",
+          "material": true,
+          "links": {
+            "launchSchedule": {
+              "base": 161,
+              "arm": 239.2
+            },
+            "target": {
+              "base": 35.2,
+              "arm": 43.4
+            },
+            "actualRoute": {
+              "base": 60.2,
+              "arm": 141.4
+            },
+            "newRecords": {
+              "base": 127,
+              "arm": 188.2
+            },
+            "refreshedRecords": {
+              "base": 5789,
+              "arm": 7017.4
+            },
+            "seasonsAdded": {
+              "base": 962.2,
+              "arm": 1085
+            },
+            "recordsRetained": {
+              "base": 921.6,
+              "arm": 1096
+            },
+            "laterReader": {
+              "base": 24749,
+              "arm": 27719
+            },
+            "changedMovementAction": {
+              "base": 287.6,
+              "arm": 426
+            },
+            "physicalReceipt": {
+              "base": 47.21,
+              "arm": 75.53
+            },
+            "support": {
+              "base": 0.58,
+              "arm": 0.69
+            },
+            "demography": {
+              "base": 9.8,
+              "arm": 14.2
+            }
+          },
+          "movedLinks": [
+            "launchSchedule",
+            "target",
+            "actualRoute",
+            "newRecords",
+            "refreshedRecords",
+            "seasonsAdded",
+            "recordsRetained",
+            "laterReader",
+            "changedMovementAction",
+            "physicalReceipt",
+            "support",
+            "demography"
+          ],
+          "complete": true
+        },
+        {
+          "arm": "G6",
+          "material": false
+        }
+      ],
+      "semanticSuppressionProof": {
+        "F0": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 205,
+          "dispositionRows": 188
+        },
+        "F1": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 205,
+          "dispositionRows": 170
+        },
+        "G1": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G2": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G3": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G4": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G5": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G6": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 228,
+          "dispositionRows": 233
+        }
+      }
+    },
+    "tile:139:41": {
+      "label": "E",
+      "structureClass": "other_structure",
+      "terrainKind": "hills",
+      "qualifies": true,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": true
+      },
+      "arms": {
+        "F0": {
+          "survival": 1,
+          "meanFinalPopulation": 15.6,
+          "meanSupport": 0.65
+        },
+        "F1": {
+          "survival": 1,
+          "meanFinalPopulation": 15.4,
+          "meanSupport": 0.67
+        },
+        "G1": {
+          "survival": 1,
+          "meanFinalPopulation": 15.4,
+          "meanSupport": 0.67
+        },
+        "G2": {
+          "survival": 1,
+          "meanFinalPopulation": 15.4,
+          "meanSupport": 0.67
+        },
+        "G3": {
+          "survival": 1,
+          "meanFinalPopulation": 17,
+          "meanSupport": 0.68
+        },
+        "G4": {
+          "survival": 1,
+          "meanFinalPopulation": 14.6,
+          "meanSupport": 0.64
+        },
+        "G5": {
+          "survival": 1,
+          "meanFinalPopulation": 15,
+          "meanSupport": 0.65
+        },
+        "G6": {
+          "survival": 1,
+          "meanFinalPopulation": 15.2,
+          "meanSupport": 0.65
+        }
+      },
+      "f1EffectVsProduction": "neutral",
+      "comparisons": {
+        "F1 vs G1 (verification semantics + disposition)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15.4,
+            15.4
+          ]
+        },
+        "G1 vs G2 (target rotation alone)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15.4,
+            15.4
+          ],
+          "rotationRetargetsFired": 0
+        },
+        "F1 vs G3 (cadence held, broad-exploration targets)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15.4,
+            17
+          ]
+        },
+        "F1 vs G4 (cadence held, nearest uncertain target)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15.4,
+            14.6
+          ]
+        },
+        "F1 vs G5 (cadence held, rotating sectors)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15.4,
+            15
+          ]
+        },
+        "F0 vs G6 (retain donor places, no travel)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15.6,
+            15.2
+          ]
+        },
+        "F1 vs G6 (travel beyond retention)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            15.4,
+            15.2
+          ]
+        }
+      },
+      "mechanism": "no effect to attribute",
+      "seasonInformationAccounting": {
+        "F0": {
+          "existingRecordSeasonAdditions": 2559.2,
+          "newRecordCreations": 283,
+          "newRecordsWithBaseContent": 283,
+          "newRecordShareOfObservations": 0.0069,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 40395,
+              "consequential": 34854
+            },
+            "place_memory_merge": {
+              "reads": 32641,
+              "consequential": 295
+            },
+            "verification_classification": {
+              "reads": 769810,
+              "consequential": 769810
+            },
+            "verification_gap": {
+              "reads": 25011,
+              "consequential": 25011
+            }
+          }
+        },
+        "F1": {
+          "existingRecordSeasonAdditions": 2195.4,
+          "newRecordCreations": 256,
+          "newRecordsWithBaseContent": 256,
+          "newRecordShareOfObservations": 0.0031,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 41245,
+              "consequential": 36000
+            },
+            "place_memory_merge": {
+              "reads": 33629,
+              "consequential": 287
+            },
+            "verification_classification": {
+              "reads": 200732,
+              "consequential": 200732
+            },
+            "verification_gap": {
+              "reads": 16566,
+              "consequential": 16566
+            }
+          }
+        },
+        "G1": {
+          "existingRecordSeasonAdditions": 2195.4,
+          "newRecordCreations": 256,
+          "newRecordsWithBaseContent": 256,
+          "newRecordShareOfObservations": 0.0031,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 41245,
+              "consequential": 36000
+            },
+            "place_memory_merge": {
+              "reads": 33629,
+              "consequential": 287
+            }
+          }
+        },
+        "G2": {
+          "existingRecordSeasonAdditions": 2195.4,
+          "newRecordCreations": 256,
+          "newRecordsWithBaseContent": 256,
+          "newRecordShareOfObservations": 0.0031,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 41245,
+              "consequential": 36000
+            },
+            "place_memory_merge": {
+              "reads": 33629,
+              "consequential": 287
+            }
+          }
+        },
+        "G3": {
+          "existingRecordSeasonAdditions": 5152.2,
+          "newRecordCreations": 320.6,
+          "newRecordsWithBaseContent": 320.6,
+          "newRecordShareOfObservations": 0.0028,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 38902,
+              "consequential": 32373
+            },
+            "place_memory_merge": {
+              "reads": 35636,
+              "consequential": 492
+            }
+          }
+        },
+        "G4": {
+          "existingRecordSeasonAdditions": 1560.6,
+          "newRecordCreations": 291.8,
+          "newRecordsWithBaseContent": 291.8,
+          "newRecordShareOfObservations": 0.0124,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 39995,
+              "consequential": 35395
+            },
+            "place_memory_merge": {
+              "reads": 33470,
+              "consequential": 478
+            }
+          }
+        },
+        "G5": {
+          "existingRecordSeasonAdditions": 2283.4,
+          "newRecordCreations": 278.2,
+          "newRecordsWithBaseContent": 278.2,
+          "newRecordShareOfObservations": 0.0057,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 39919,
+              "consequential": 35841
+            },
+            "place_memory_merge": {
+              "reads": 33645,
+              "consequential": 808
+            }
+          }
+        },
+        "G6": {
+          "existingRecordSeasonAdditions": 1486.2,
+          "newRecordCreations": 262.2,
+          "newRecordsWithBaseContent": 262.2,
+          "newRecordShareOfObservations": 0.013,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 39481,
+              "consequential": 33355
+            },
+            "place_memory_merge": {
+              "reads": 33060,
+              "consequential": 363
+            },
+            "verification_classification": {
+              "reads": 985980,
+              "consequential": 985980
+            },
+            "verification_gap": {
+              "reads": 3888,
+              "consequential": 3888
+            }
+          }
+        }
+      },
+      "mediation": [
+        {
+          "arm": "F1",
+          "material": false
+        },
+        {
+          "arm": "G1",
+          "material": false
+        },
+        {
+          "arm": "G3",
+          "material": false
+        },
+        {
+          "arm": "G4",
+          "material": false
+        },
+        {
+          "arm": "G5",
+          "material": false
+        },
+        {
+          "arm": "G6",
+          "material": false
+        }
+      ],
+      "semanticSuppressionProof": {
+        "F0": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 676
+        },
+        "F1": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 616
+        },
+        "G1": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G2": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G3": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G4": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G5": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G6": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 886
+        }
+      }
+    },
+    "tile:45:28": {
+      "label": "F",
+      "structureClass": "other_structure",
+      "terrainKind": "hills",
+      "qualifies": true,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": true
+      },
+      "arms": {
+        "F0": {
+          "survival": 1,
+          "meanFinalPopulation": 32.4,
+          "meanSupport": 0.82
+        },
+        "F1": {
+          "survival": 1,
+          "meanFinalPopulation": 32.6,
+          "meanSupport": 0.83
+        },
+        "G1": {
+          "survival": 1,
+          "meanFinalPopulation": 32.6,
+          "meanSupport": 0.83
+        },
+        "G2": {
+          "survival": 1,
+          "meanFinalPopulation": 32.6,
+          "meanSupport": 0.83
+        },
+        "G3": {
+          "survival": 1,
+          "meanFinalPopulation": 29,
+          "meanSupport": 0.82
+        },
+        "G4": {
+          "survival": 1,
+          "meanFinalPopulation": 30,
+          "meanSupport": 0.8
+        },
+        "G5": {
+          "survival": 1,
+          "meanFinalPopulation": 32,
+          "meanSupport": 0.82
+        },
+        "G6": {
+          "survival": 1,
+          "meanFinalPopulation": 32.2,
+          "meanSupport": 0.81
+        }
+      },
+      "f1EffectVsProduction": "neutral",
+      "comparisons": {
+        "F1 vs G1 (verification semantics + disposition)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            32.6,
+            32.6
+          ]
+        },
+        "G1 vs G2 (target rotation alone)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            32.6,
+            32.6
+          ],
+          "rotationRetargetsFired": 0
+        },
+        "F1 vs G3 (cadence held, broad-exploration targets)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            32.6,
+            29
+          ]
+        },
+        "F1 vs G4 (cadence held, nearest uncertain target)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            32.6,
+            30
+          ]
+        },
+        "F1 vs G5 (cadence held, rotating sectors)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            32.6,
+            32
+          ]
+        },
+        "F0 vs G6 (retain donor places, no travel)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            32.4,
+            32.2
+          ]
+        },
+        "F1 vs G6 (travel beyond retention)": {
+          "material": false,
+          "survival": [
+            1,
+            1
+          ],
+          "population": [
+            32.6,
+            32.2
+          ]
+        }
+      },
+      "mechanism": "no effect to attribute",
+      "seasonInformationAccounting": {
+        "F0": {
+          "existingRecordSeasonAdditions": 597.4,
+          "newRecordCreations": 193,
+          "newRecordsWithBaseContent": 193,
+          "newRecordShareOfObservations": 0.0136,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 36804,
+              "consequential": 29823
+            },
+            "place_memory_merge": {
+              "reads": 25105,
+              "consequential": 236
+            },
+            "verification_classification": {
+              "reads": 472237,
+              "consequential": 472237
+            },
+            "verification_gap": {
+              "reads": 1442,
+              "consequential": 1442
+            }
+          }
+        },
+        "F1": {
+          "existingRecordSeasonAdditions": 629,
+          "newRecordCreations": 196.6,
+          "newRecordsWithBaseContent": 196.6,
+          "newRecordShareOfObservations": 0.0087,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 36423,
+              "consequential": 29801
+            },
+            "place_memory_merge": {
+              "reads": 24962,
+              "consequential": 206
+            },
+            "verification_classification": {
+              "reads": 406643,
+              "consequential": 406643
+            },
+            "verification_gap": {
+              "reads": 2546,
+              "consequential": 2546
+            }
+          }
+        },
+        "G1": {
+          "existingRecordSeasonAdditions": 629,
+          "newRecordCreations": 196.6,
+          "newRecordsWithBaseContent": 196.6,
+          "newRecordShareOfObservations": 0.0087,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 36423,
+              "consequential": 29801
+            },
+            "place_memory_merge": {
+              "reads": 24962,
+              "consequential": 206
+            }
+          }
+        },
+        "G2": {
+          "existingRecordSeasonAdditions": 629,
+          "newRecordCreations": 196.6,
+          "newRecordsWithBaseContent": 196.6,
+          "newRecordShareOfObservations": 0.0087,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 36423,
+              "consequential": 29801
+            },
+            "place_memory_merge": {
+              "reads": 24962,
+              "consequential": 206
+            }
+          }
+        },
+        "G3": {
+          "existingRecordSeasonAdditions": 1634.2,
+          "newRecordCreations": 229.6,
+          "newRecordsWithBaseContent": 229.6,
+          "newRecordShareOfObservations": 0.0054,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 38363,
+              "consequential": 29069
+            },
+            "place_memory_merge": {
+              "reads": 25947,
+              "consequential": 177
+            }
+          }
+        },
+        "G4": {
+          "existingRecordSeasonAdditions": 823.2,
+          "newRecordCreations": 245,
+          "newRecordsWithBaseContent": 245,
+          "newRecordShareOfObservations": 0.0236,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 36474,
+              "consequential": 31091
+            },
+            "place_memory_merge": {
+              "reads": 25460,
+              "consequential": 324
+            }
+          }
+        },
+        "G5": {
+          "existingRecordSeasonAdditions": 864.4,
+          "newRecordCreations": 211.6,
+          "newRecordsWithBaseContent": 211.6,
+          "newRecordShareOfObservations": 0.0108,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 35973,
+              "consequential": 32130
+            },
+            "place_memory_merge": {
+              "reads": 25709,
+              "consequential": 322
+            }
+          }
+        },
+        "G6": {
+          "existingRecordSeasonAdditions": 704.6,
+          "newRecordCreations": 192,
+          "newRecordsWithBaseContent": 192,
+          "newRecordShareOfObservations": 0.0175,
+          "seasonIdentityReaders": {
+            "destination_season_modifier": {
+              "reads": 36511,
+              "consequential": 29285
+            },
+            "place_memory_merge": {
+              "reads": 25282,
+              "consequential": 230
+            },
+            "verification_classification": {
+              "reads": 504910,
+              "consequential": 504910
+            },
+            "verification_gap": {
+              "reads": 1540,
+              "consequential": 1540
+            }
+          }
+        }
+      },
+      "mediation": [
+        {
+          "arm": "F1",
+          "material": false
+        },
+        {
+          "arm": "G1",
+          "material": false
+        },
+        {
+          "arm": "G3",
+          "material": false
+        },
+        {
+          "arm": "G4",
+          "material": false
+        },
+        {
+          "arm": "G5",
+          "material": false
+        },
+        {
+          "arm": "G6",
+          "material": false
+        }
+      ],
+      "semanticSuppressionProof": {
+        "F0": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 681
+        },
+        "F1": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 553
+        },
+        "G1": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G2": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G3": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G4": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G5": {
+          "verificationAttemptRows": 0,
+          "verificationEvidenceRows": 0,
+          "dispositionRows": 0
+        },
+        "G6": {
+          "verificationAttemptRows": 60,
+          "verificationEvidenceRows": 240,
+          "dispositionRows": 719
+        }
+      }
+    }
+  },
+  "matchedComparisons": [
+    {
+      "axis": "similar baseline survival, different terrain structure",
+      "pair": [
+        "B",
+        "D"
+      ],
+      "tiles": [
+        "tile:10:34",
+        "tile:119:116"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar baseline survival, different terrain structure",
+      "pair": [
+        "B",
+        "E"
+      ],
+      "tiles": [
+        "tile:10:34",
+        "tile:139:41"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar baseline survival, different terrain structure",
+      "pair": [
+        "B",
+        "F"
+      ],
+      "tiles": [
+        "tile:10:34",
+        "tile:45:28"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar baseline survival, different terrain structure",
+      "pair": [
+        "C",
+        "D"
+      ],
+      "tiles": [
+        "tile:100:23",
+        "tile:119:116"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar baseline survival, different terrain structure",
+      "pair": [
+        "C",
+        "E"
+      ],
+      "tiles": [
+        "tile:100:23",
+        "tile:139:41"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar baseline survival, different terrain structure",
+      "pair": [
+        "C",
+        "F"
+      ],
+      "tiles": [
+        "tile:100:23",
+        "tile:45:28"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar baseline survival, different terrain structure",
+      "pair": [
+        "D",
+        "E"
+      ],
+      "tiles": [
+        "tile:119:116",
+        "tile:139:41"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar baseline survival, different terrain structure",
+      "pair": [
+        "D",
+        "F"
+      ],
+      "tiles": [
+        "tile:119:116",
+        "tile:45:28"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar opportunity distance, different route branching",
+      "pair": [
+        "A",
+        "C"
+      ],
+      "tiles": [
+        "tile:204:72",
+        "tile:100:23"
+      ],
+      "f1EffectA": "strongly beneficial",
+      "f1EffectB": "neutral",
+      "mechanismA": "target family (route-country observation), partly substitutable by memory retention",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar opportunity distance, different route branching",
+      "pair": [
+        "C",
+        "F"
+      ],
+      "tiles": [
+        "tile:100:23",
+        "tile:45:28"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar seasonal pressure, different aquatic contribution",
+      "pair": [
+        "A",
+        "B"
+      ],
+      "tiles": [
+        "tile:204:72",
+        "tile:10:34"
+      ],
+      "f1EffectA": "strongly beneficial",
+      "f1EffectB": "neutral",
+      "mechanismA": "target family (route-country observation), partly substitutable by memory retention",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar seasonal pressure, different aquatic contribution",
+      "pair": [
+        "A",
+        "C"
+      ],
+      "tiles": [
+        "tile:204:72",
+        "tile:100:23"
+      ],
+      "f1EffectA": "strongly beneficial",
+      "f1EffectB": "neutral",
+      "mechanismA": "target family (route-country observation), partly substitutable by memory retention",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar seasonal pressure, different aquatic contribution",
+      "pair": [
+        "A",
+        "E"
+      ],
+      "tiles": [
+        "tile:204:72",
+        "tile:139:41"
+      ],
+      "f1EffectA": "strongly beneficial",
+      "f1EffectB": "neutral",
+      "mechanismA": "target family (route-country observation), partly substitutable by memory retention",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar seasonal pressure, different aquatic contribution",
+      "pair": [
+        "A",
+        "F"
+      ],
+      "tiles": [
+        "tile:204:72",
+        "tile:45:28"
+      ],
+      "f1EffectA": "strongly beneficial",
+      "f1EffectB": "neutral",
+      "mechanismA": "target family (route-country observation), partly substitutable by memory retention",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar seasonal pressure, different aquatic contribution",
+      "pair": [
+        "B",
+        "D"
+      ],
+      "tiles": [
+        "tile:10:34",
+        "tile:119:116"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar seasonal pressure, different aquatic contribution",
+      "pair": [
+        "C",
+        "D"
+      ],
+      "tiles": [
+        "tile:100:23",
+        "tile:119:116"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar seasonal pressure, different aquatic contribution",
+      "pair": [
+        "D",
+        "E"
+      ],
+      "tiles": [
+        "tile:119:116",
+        "tile:139:41"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    },
+    {
+      "axis": "similar seasonal pressure, different aquatic contribution",
+      "pair": [
+        "D",
+        "F"
+      ],
+      "tiles": [
+        "tile:119:116",
+        "tile:45:28"
+      ],
+      "f1EffectA": "neutral",
+      "f1EffectB": "neutral",
+      "mechanismA": "no effect to attribute",
+      "mechanismB": "no effect to attribute"
+    }
+  ],
+  "conditional": {
+    "sensitiveSites": [
+      "A (tile:204:72)"
+    ],
+    "insensitiveSites": [
+      "B (tile:10:34)",
+      "C (tile:100:23)",
+      "D (tile:119:116)",
+      "E (tile:139:41)",
+      "F (tile:45:28)"
+    ],
+    "harmedSites": [],
+    "replicatesWithinAClass": false,
+    "candidateAxes": {
+      "aquaticFoodShare": {
+        "sensitive": 0.25,
+        "insensitive": 0.07
+      },
+      "waterAccess": {
+        "sensitive": 0.3,
+        "insensitive": 0.15
+      },
+      "distinctViableAlternatives": {
+        "sensitive": 2,
+        "insensitive": 6
+      },
+      "distanceToBestAlternative": {
+        "sensitive": 14,
+        "insensitive": 11.6
+      },
+      "corridorObstacles": {
+        "sensitive": 0,
+        "insensitive": 1.4
+      },
+      "baselineSurvival": {
+        "sensitive": 0.6,
+        "insensitive": 0.96
+      },
+      "memoryMandatoryPressure": {
+        "sensitive": 1.74,
+        "insensitive": 1.06
+      }
+    }
+  }
+}

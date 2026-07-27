@@ -1,0 +1,506 @@
+{
+  "map": "map2",
+  "qualificationRule": "marginal local support within [-0.10,+0.06] of the reference; >=8 better-country tiles in reach; reachable advantage >=0.18; corridor passable share in [0.55,0.98]; >=1 physical obstacle on the corridor",
+  "qualifiedCandidates": 1660,
+  "composition": {
+    "coastal_aquatic": 2,
+    "dry_plains": 2,
+    "other_structure": 2
+  },
+  "unmetClassQuota": {},
+  "sites": [
+    {
+      "label": "A",
+      "tileId": "tile:204:72",
+      "coord": {
+        "x": 204,
+        "y": 72
+      },
+      "terrainKind": "coast",
+      "biomeKind": "coastal",
+      "biomeMix": {
+        "temperate_grassland": 0.76,
+        "coastal": 0.233,
+        "marsh": 0.007
+      },
+      "structure": {
+        "isCoastal": true,
+        "isRiver": false,
+        "isEstuary": false,
+        "isFloodplain": false,
+        "isRiverbank": false,
+        "isMarshChannel": false,
+        "isConfluence": false
+      },
+      "nearby": {
+        "aquaticTilesInReach": 184,
+        "riverTilesInReach": 0,
+        "lakeTilesInReach": 0,
+        "wetlandTilesInReach": 3,
+        "coastTilesInReach": 98
+      },
+      "startingPhysicalSupport": {
+        "localRichness": 0.427,
+        "localWater": 0.299,
+        "foragingFoodPerTick": 7.691,
+        "sustainablePopulation": 30
+      },
+      "seasonal": {
+        "seasonalVariance": 0.2,
+        "leanSeasonSeverity": 0.284,
+        "reliability": 0.528,
+        "leanSeasons": [
+          "winter"
+        ],
+        "peakSeasons": [
+          "autumn"
+        ]
+      },
+      "waterProfile": {
+        "waterAccess": 0.303,
+        "ringWater": 0.299,
+        "droughtRisk": 0.153,
+        "floodRisk": 0
+      },
+      "aquaticContribution": {
+        "aquaticPotential": 0.123,
+        "ringAquatic": 0.119,
+        "aquaticFoodShare": 0.246
+      },
+      "opportunity": {
+        "betterCountryCount": 9,
+        "distinctViableAlternatives": 2,
+        "bestReachableRichness": 0.737,
+        "bestReachableWater": 0.849,
+        "reachableAdvantage": 0.31,
+        "distanceToBestAlternative": 14
+      },
+      "route": {
+        "corridorPassableShare": 1,
+        "obstacleCount": 0,
+        "routeBranching": 3.857,
+        "corridorWidth": 0.964
+      },
+      "structureClass": "coastal_aquatic",
+      "qualifies": false,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": false
+      },
+      "provenance": "correction23f"
+    },
+    {
+      "label": "B",
+      "tileId": "tile:10:34",
+      "coord": {
+        "x": 10,
+        "y": 34
+      },
+      "terrainKind": "plains",
+      "biomeKind": "temperate_grassland",
+      "biomeMix": {
+        "temperate_grassland": 0.983,
+        "floodplain": 0.017
+      },
+      "structure": {
+        "isCoastal": false,
+        "isRiver": false,
+        "isEstuary": false,
+        "isFloodplain": false,
+        "isRiverbank": false,
+        "isMarshChannel": false,
+        "isConfluence": false
+      },
+      "nearby": {
+        "aquaticTilesInReach": 6,
+        "riverTilesInReach": 6,
+        "lakeTilesInReach": 0,
+        "wetlandTilesInReach": 0,
+        "coastTilesInReach": 0
+      },
+      "startingPhysicalSupport": {
+        "localRichness": 0.341,
+        "localWater": 0.069,
+        "foragingFoodPerTick": 6.137,
+        "sustainablePopulation": 26
+      },
+      "seasonal": {
+        "seasonalVariance": 0.207,
+        "leanSeasonSeverity": 0.32,
+        "reliability": 0.452,
+        "leanSeasons": [
+          "winter"
+        ],
+        "peakSeasons": [
+          "autumn"
+        ]
+      },
+      "waterProfile": {
+        "waterAccess": 0.068,
+        "ringWater": 0.069,
+        "droughtRisk": 0.286,
+        "floodRisk": 0
+      },
+      "aquaticContribution": {
+        "aquaticPotential": 0,
+        "ringAquatic": 0,
+        "aquaticFoodShare": 0
+      },
+      "opportunity": {
+        "betterCountryCount": 8,
+        "distinctViableAlternatives": 2,
+        "bestReachableRichness": 0.552,
+        "bestReachableWater": 0.656,
+        "reachableAdvantage": 0.211,
+        "distanceToBestAlternative": 14
+      },
+      "route": {
+        "corridorPassableShare": 0.929,
+        "obstacleCount": 1,
+        "routeBranching": 3.692,
+        "corridorWidth": 0.893
+      },
+      "structureClass": "dry_plains",
+      "qualifies": true,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": true
+      },
+      "provenance": "correction23f"
+    },
+    {
+      "label": "C",
+      "tileId": "tile:100:23",
+      "coord": {
+        "x": 100,
+        "y": 23
+      },
+      "terrainKind": "plains",
+      "biomeKind": "temperate_grassland",
+      "biomeMix": {
+        "temperate_grassland": 0.836,
+        "floodplain": 0.15,
+        "temperate_forest": 0.014
+      },
+      "structure": {
+        "isCoastal": false,
+        "isRiver": false,
+        "isEstuary": false,
+        "isFloodplain": false,
+        "isRiverbank": false,
+        "isMarshChannel": false,
+        "isConfluence": false
+      },
+      "nearby": {
+        "aquaticTilesInReach": 30,
+        "riverTilesInReach": 30,
+        "lakeTilesInReach": 0,
+        "wetlandTilesInReach": 0,
+        "coastTilesInReach": 0
+      },
+      "startingPhysicalSupport": {
+        "localRichness": 0.455,
+        "localWater": 0.108,
+        "foragingFoodPerTick": 8.189,
+        "sustainablePopulation": 31
+      },
+      "seasonal": {
+        "seasonalVariance": 0.206,
+        "leanSeasonSeverity": 0.308,
+        "reliability": 0.465,
+        "leanSeasons": [
+          "winter"
+        ],
+        "peakSeasons": [
+          "autumn"
+        ]
+      },
+      "waterProfile": {
+        "waterAccess": 0.095,
+        "ringWater": 0.108,
+        "droughtRisk": 0.25,
+        "floodRisk": 0
+      },
+      "aquaticContribution": {
+        "aquaticPotential": 0,
+        "ringAquatic": 0,
+        "aquaticFoodShare": 0
+      },
+      "opportunity": {
+        "betterCountryCount": 19,
+        "distinctViableAlternatives": 5,
+        "bestReachableRichness": 0.655,
+        "bestReachableWater": 0.697,
+        "reachableAdvantage": 0.2,
+        "distanceToBestAlternative": 12
+      },
+      "route": {
+        "corridorPassableShare": 0.833,
+        "obstacleCount": 2,
+        "routeBranching": 3.6,
+        "corridorWidth": 0.833
+      },
+      "structureClass": "dry_plains",
+      "qualifies": true,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": true
+      },
+      "provenance": "correction23f"
+    },
+    {
+      "label": "D",
+      "tileId": "tile:119:116",
+      "coord": {
+        "x": 119,
+        "y": 116
+      },
+      "terrainKind": "plains",
+      "biomeKind": "temperate_grassland",
+      "biomeMix": {
+        "arid": 0.426,
+        "temperate_grassland": 0.419,
+        "floodplain": 0.155
+      },
+      "structure": {
+        "isCoastal": false,
+        "isRiver": false,
+        "isEstuary": false,
+        "isFloodplain": false,
+        "isRiverbank": false,
+        "isMarshChannel": false,
+        "isConfluence": false
+      },
+      "nearby": {
+        "aquaticTilesInReach": 51,
+        "riverTilesInReach": 51,
+        "lakeTilesInReach": 0,
+        "wetlandTilesInReach": 0,
+        "coastTilesInReach": 0
+      },
+      "startingPhysicalSupport": {
+        "localRichness": 0.339,
+        "localWater": 0.585,
+        "foragingFoodPerTick": 6.094,
+        "sustainablePopulation": 27
+      },
+      "seasonal": {
+        "seasonalVariance": 0.313,
+        "leanSeasonSeverity": 0.364,
+        "reliability": 0.622,
+        "leanSeasons": [
+          "winter"
+        ],
+        "peakSeasons": [
+          "autumn"
+        ]
+      },
+      "waterProfile": {
+        "waterAccess": 0.367,
+        "ringWater": 0.585,
+        "droughtRisk": 0.431,
+        "floodRisk": 0.007
+      },
+      "aquaticContribution": {
+        "aquaticPotential": 0,
+        "ringAquatic": 0.168,
+        "aquaticFoodShare": 0.367
+      },
+      "opportunity": {
+        "betterCountryCount": 12,
+        "distinctViableAlternatives": 5,
+        "bestReachableRichness": 0.613,
+        "bestReachableWater": 0.681,
+        "reachableAdvantage": 0.275,
+        "distanceToBestAlternative": 14
+      },
+      "route": {
+        "corridorPassableShare": 0.929,
+        "obstacleCount": 1,
+        "routeBranching": 3.692,
+        "corridorWidth": 0.893
+      },
+      "structureClass": "coastal_aquatic",
+      "qualifies": true,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": true
+      },
+      "provenance": "correction23g"
+    },
+    {
+      "label": "E",
+      "tileId": "tile:139:41",
+      "coord": {
+        "x": 139,
+        "y": 41
+      },
+      "terrainKind": "hills",
+      "biomeKind": "shrubland",
+      "biomeMix": {
+        "temperate_grassland": 0.6,
+        "alpine": 0.236,
+        "shrubland": 0.126,
+        "temperate_forest": 0.019
+      },
+      "structure": {
+        "isCoastal": false,
+        "isRiver": false,
+        "isEstuary": false,
+        "isFloodplain": false,
+        "isRiverbank": false,
+        "isMarshChannel": false,
+        "isConfluence": false
+      },
+      "nearby": {
+        "aquaticTilesInReach": 8,
+        "riverTilesInReach": 8,
+        "lakeTilesInReach": 0,
+        "wetlandTilesInReach": 0,
+        "coastTilesInReach": 0
+      },
+      "startingPhysicalSupport": {
+        "localRichness": 0.335,
+        "localWater": 0.095,
+        "foragingFoodPerTick": 6.023,
+        "sustainablePopulation": 26
+      },
+      "seasonal": {
+        "seasonalVariance": 0.245,
+        "leanSeasonSeverity": 0.324,
+        "reliability": 0.452,
+        "leanSeasons": [
+          "winter"
+        ],
+        "peakSeasons": [
+          "autumn"
+        ]
+      },
+      "waterProfile": {
+        "waterAccess": 0.095,
+        "ringWater": 0.095,
+        "droughtRisk": 0.269,
+        "floodRisk": 0
+      },
+      "aquaticContribution": {
+        "aquaticPotential": 0,
+        "ringAquatic": 0,
+        "aquaticFoodShare": 0
+      },
+      "opportunity": {
+        "betterCountryCount": 72,
+        "distinctViableAlternatives": 9,
+        "bestReachableRichness": 0.732,
+        "bestReachableWater": 0.642,
+        "reachableAdvantage": 0.398,
+        "distanceToBestAlternative": 7
+      },
+      "route": {
+        "corridorPassableShare": 0.857,
+        "obstacleCount": 1,
+        "routeBranching": 3.5,
+        "corridorWidth": 0.893
+      },
+      "structureClass": "other_structure",
+      "qualifies": true,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": true
+      },
+      "provenance": "correction23g"
+    },
+    {
+      "label": "F",
+      "tileId": "tile:45:28",
+      "coord": {
+        "x": 45,
+        "y": 28
+      },
+      "terrainKind": "hills",
+      "biomeKind": "temperate_grassland",
+      "biomeMix": {
+        "temperate_grassland": 0.602,
+        "alpine": 0.193,
+        "shrubland": 0.124,
+        "floodplain": 0.064
+      },
+      "structure": {
+        "isCoastal": false,
+        "isRiver": false,
+        "isEstuary": false,
+        "isFloodplain": false,
+        "isRiverbank": false,
+        "isMarshChannel": false,
+        "isConfluence": false
+      },
+      "nearby": {
+        "aquaticTilesInReach": 8,
+        "riverTilesInReach": 8,
+        "lakeTilesInReach": 0,
+        "wetlandTilesInReach": 0,
+        "coastTilesInReach": 0
+      },
+      "startingPhysicalSupport": {
+        "localRichness": 0.345,
+        "localWater": 0.113,
+        "foragingFoodPerTick": 6.207,
+        "sustainablePopulation": 26
+      },
+      "seasonal": {
+        "seasonalVariance": 0.242,
+        "leanSeasonSeverity": 0.314,
+        "reliability": 0.458,
+        "leanSeasons": [
+          "winter"
+        ],
+        "peakSeasons": [
+          "autumn"
+        ]
+      },
+      "waterProfile": {
+        "waterAccess": 0.113,
+        "ringWater": 0.113,
+        "droughtRisk": 0.233,
+        "floodRisk": 0
+      },
+      "aquaticContribution": {
+        "aquaticPotential": 0,
+        "ringAquatic": 0,
+        "aquaticFoodShare": 0
+      },
+      "opportunity": {
+        "betterCountryCount": 79,
+        "distinctViableAlternatives": 9,
+        "bestReachableRichness": 0.731,
+        "bestReachableWater": 0.789,
+        "reachableAdvantage": 0.386,
+        "distanceToBestAlternative": 11
+      },
+      "route": {
+        "corridorPassableShare": 0.818,
+        "obstacleCount": 2,
+        "routeBranching": 3.333,
+        "corridorWidth": 0.773
+      },
+      "structureClass": "other_structure",
+      "qualifies": true,
+      "qualifyConditions": {
+        "startingRangeMarginal": true,
+        "viableAlternativeExists": true,
+        "escapePhysicallyPossible": true,
+        "escapeNotTrivial": true
+      },
+      "provenance": "correction23g"
+    }
+  ]
+}

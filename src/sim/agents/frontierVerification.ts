@@ -40,6 +40,8 @@ import type {
   FrontierVerificationQuestion,
 } from "./types";
 import { mayAskAgain, resourceTestEligible } from "./verificationEvidence";
+// CORRECTION-23G §8 — audit-only read counter; a no-op when no audit is counting.
+import { countSeasonIdentityRead, selectorRotationAllows } from "../diagnostics/verificationScheduleReplay";
 
 // ── Bounds. Hard caps on state and search. ───────────────────────────────────────
 
@@ -137,6 +139,9 @@ export function classifyPlaceForQuestion(
     case "seasonal_persistence": {
       // One season of coverage is exactly the state this question exists to improve.
       const seasons = record.seasonsObserved?.length ?? 0;
+      // CORRECTION-23G §8 — consequential whenever the count moves the place off `unknown`,
+      // which is the only way this question ever becomes askable.
+      countSeasonIdentityRead("verification_classification", seasons, seasons > 0);
       return seasons === 0 ? "unknown" : seasons >= 3 ? "verified_usable" : "promising_unverified";
     }
   }
@@ -300,6 +305,12 @@ export function selectVerificationCandidate(
         continue;
       }
 
+      // CORRECTION-23G §6 supplement — audit-only rotation gate. Off in every normal world,
+      // in which case `selectorRotationAllows` returns true and this is one boolean test.
+      if (!selectorRotationAllows(String(band.id), record.tileId)) {
+        continue;
+      }
+
       // §7 Option A — a stock-backed test is only worth attempting where food was
       // physically found. This is eligibility, never support: it authorises asking a
       // harder question, and creates no patch, stock, yield or receipt.
@@ -419,6 +430,8 @@ export function describeVerificationGap(
     }
     case "seasonal_persistence": {
       const seasons = record.seasonsObserved?.length ?? 0;
+      // CORRECTION-23G §8 — consequential when the count leaves a real gap to describe.
+      countSeasonIdentityRead("verification_gap", seasons, seasons > 0 && seasons < 3);
       if (seasons === 0 || seasons >= 3) return undefined;
       return {
         promise: clamp01(record.observedRichness ?? 0) * 0.8,
