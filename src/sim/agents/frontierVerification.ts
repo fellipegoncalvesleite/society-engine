@@ -290,6 +290,11 @@ export function selectVerificationCandidate(
           currentSeason: season,
           hardship: need.need,
           routeTiles: distance,
+          // CORRECTION-23E §5 — audit-only component isolation; undefined in every normal
+          // world, in which case the gate is exactly the one described above.
+          ...(world.auditOptions?.verificationRetryArm === undefined
+            ? {}
+            : { retryArm: world.auditOptions.verificationRetryArm }),
         }).allowed
       ) {
         continue;

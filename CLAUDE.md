@@ -68,6 +68,75 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-07-27 (RETRY-SUPPRESSION POPULATION MEDIATION / PLACE-MEMORY RETENTION AUTHORITY
+  CORRECTION-23E: PROGRESS — DIAGNOSIS ACCEPTED / CORRECTION-23 PARENT STILL NOT MERGEABLE,
+  branch checkpoint/physical-frontier-verification-23 from 6258c97. main untouched at 668763f.
+  DIAGNOSTIC ONLY — NO PRODUCTION BEHAVIOUR CHANGED. Every new switch is an audit-only
+  WorldAuditOptions field, undefined in every normal world.
+
+  **THE MARGINAL REGRESSION IS ONE DELETED LINE.** CORRECTION-23D's marginal loss
+  (survival 0.9 -> 0.7, mean population 35.6 -> 21.5 on ten shared seeds) is caused ENTIRELY by
+  removing ONE term from `mayAskAgain`: `seasonChanged && (water_access || resource_presence)`.
+  Arm R2 (durable disposition still WRITTEN, pre-23D eligibility READ) reproduces 76893be
+  EXACTLY, seed for seed, on every metric — so the storage/authority change, the daughter reset
+  and the observeTile carry-forward are all innocent. Arm R4 (23D gate + that one season term)
+  gives 1.00 / 36.9, restoring and slightly exceeding R0. Hardship removal is NOT the cause
+  (R3 0.60/18.7, worse than production). Disabling settled-answer suppression entirely gives the
+  MOST launches (4,634) and the SECOND WORST population (0.70/14.1) — **more verification is not
+  better**; seasonal rotation over a bounded place set is what matters.
+
+  **VERIFICATION'S SURVIVAL VALUE IS ITS WALK, NOT ITS ANSWER.** Arm R6 keeps the party, the
+  route and the returned answer and suppresses ONLY the ordinary tile observation of the walked
+  route: survival 0.70 -> 0.10, population 21.5 -> 2.1, place refreshes 29,124 -> 4,572. Arm R7
+  (exploration offered the same single slot first, budget unchanged) is 0.70/24.0 — verification
+  does not meaningfully crowd exploration out.
+
+  **THE RETENTION SCORING IN memoryCompression.ts IS INERT IN PRODUCTION.** Measured through
+  the production scorer: the MANDATORY set (band position + full 2-ring + crossing endpoints +
+  important water + valenced places) averages **161% of the 72-record capacity** on the marginal
+  fixture and 113% on default map2. Mandatory records carry +10 and sort first, so
+  `retained.size < capacity` is never true for a scored record — the retained set IS the
+  mandatory set, and recency/visits/confidence/water/provenance/attachment change NOTHING.
+  Route relevance, candidate relevance and verification evidence are not terms at all. A verified
+  place survives only by accident of falling in the mandatory set.
+
+  **FORGETTING HERE IS NOT LEGITIMATE BY THE SPEC'S OWN TEST.** 862 of 890 evicted records
+  (96.9%) had been observed within the previous year; 821 (92.2%) were reacquired, median gap
+  540 days; 299 carried a verification disposition and **250 verification questions were re-asked
+  after reacquisition**. Default map2 over 100 years: 1,493 questions re-asked after
+  reacquisition. Median completed place-record lifetime 324 days = 3.6 seasons = 0.9 years.
+  §9 TIME UNIT VERIFIED IN-RUN: one daily step = 1 day, 90 daily steps = 1 tick = 1 season,
+  360 days = 1 year, compression runs once per YEAR. CORRECTION-23D's "282 days" label was
+  correct as a unit.
+
+  **DO NOT REPAIR THIS BY ADDING MEMORY.** K4 (capacity 72 -> 288, priorities untouched)
+  collapses the marginal tier to 0.20 / 7.6 despite producing the LEAST forgetting of any arm
+  (57 evictions vs 1,039). K5 (no inherited mandatory set) is worse: 0.10 / 3.7. K1/K2/K3
+  (protect verified places, three definitions) remove 96-97% of the forget-relearn-reverify loop
+  (verified reacquisitions 299 -> 9, repeats 250 -> 7) and buy **+2 people**. Neither capacity nor
+  prioritisation is the population lever. K4/K5 are NOT attributed — no mediation trace was run.
+
+  **THE REGRESSION IS CONFINED TO marginal_escapable.** map1 default 188.2/184.8/183.4,
+  map2 default 200.0/200.6/198.2, ordinary 31.1/31.8/30.3, hostile 17.3/15.5/17.1 (R0/R1/R4),
+  all 5/5 or 10/10 survival. Isolated marginal is 0.1/1.1 in ALL THREE arms, IDENTICAL.
+  **CORRECTED: the isolated survivor is at population ELEVEN, not one** — CORRECTION-23D's
+  report called it "one seed at population 1"; 1.1 was the ten-seed MEAN. It is deterministic,
+  it has real receipts and movement, and verification did not cause it.
+
+  **CORRECTED: the ten "shared seeds" are ten runSeed values on ONE site.** VAR-1's runSeed
+  perturbs only near-tie decision ordering, never terrain (simRunner.ts:83-86). Habitat variation
+  comes from the tier/default-map runs, not from the seed list.
+
+  PASSED: tsc, build, graph 221/764 0 dup 0 dangling, import/adaptation/decision boundary,
+  anti-omniscience (C1-C5 and D all 0), hidden-truth 0 copies, lost-party no-transfer, food
+  capture 1.000, per-lineage conservation, step-mode invariance both maps with
+  fullCanonicalStateMatch, determinism true, 23B R1-R12 13/13, 23C W1-W10 10/10, 23D B1-B15
+  15/15. State size bounded (disposition rows peak ~415/band at 100y, 316 at 300y; evidence rows
+  pinned at 48, display ring at 12). Performance 42.9/43.1 ms/tick over two 100-year reps.
+  NOT DONE, deliberately: no production retention policy selected, no capacity raised, no
+  eviction weight changed, no retry restored. See docs/evidence/correction23e/FINDINGS.md.)
+
+Previously updated:
   2026-07-26 (FRONTIER OPPORTUNITY / DAUGHTER FISSION CAUSAL CLOSURE CORRECTION-20: PROGRESS
   — NOT ACCEPTED / DO NOT MERGE, branch checkpoint/frontier-opportunity-fission-closure-20
   from 4d20c98. main untouched at 668763f. NO PRODUCTION BEHAVIOUR CHANGED.
@@ -1954,6 +2023,43 @@ Sickness/risk exists in some form according to the project description, but full
 **Status: PARTIAL or UNCERTAIN.**
 
 Chronicle exists conceptually, but exact bounds, grounding, post-extinction freeze, and future cultural use require verification.
+
+### 12.13 Place-memory retention: the scoring is inert and the forgetting is not legitimate
+
+**Status: MEASURED, UNREPAIRED (CORRECTION-23E).**
+
+`memoryCompression.ts` retains at most `MAX_EXACT_KNOWN_TILES = 72` exact `KnownTileRecord`s per
+band, once per simulated year. Its mandatory-retention set — band position, the **full 2-ring**
+around it, every crossing endpoint, every "important water" record, and every place memory
+valenced `isReturnPlace`/`avoid_place`/`risky`/`depleted` — averages **161% of that capacity** on
+a controlled marginal founder and **113%** on default map 2. Mandatory records score `+10` and
+sort first, so the loop
+
+```ts
+if (mandatory.has(record.tileId) || retained.size < capacity) retained.add(record.tileId);
+```
+
+never reaches its second clause for a scored record. **The retained set IS the mandatory set.**
+Recency, visits, confidence, water value, provenance and place attachment are computed and then
+have no effect. Route relevance, candidate relevance and verification evidence are not terms at
+all.
+
+Consequences, all measured over 100 years:
+
+- median completed place-record lifetime **324 days (0.9 years)**; 96.9% of evicted records had
+  been observed within the previous year;
+- 92.2% of evictions are followed by reacquisition (median gap 540 days);
+- 299 evicted places carried a settled verification disposition and **250 verification questions
+  were re-asked after the place was re-learned** (1,493 on default map 2).
+
+**Do not repair this by raising the capacity or by protecting verified places on population
+grounds.** Audit arms K1–K5 measured both: protecting verified places removes 96–97% of the
+forget-relearn-reverify loop and buys +2 people; raising capacity to 288 *collapses* the marginal
+tier (0.20 survival / 7.6 people) and removing the mandatory set is worse (0.10 / 3.7). Why the
+two capacity arms hurt is **not attributed** — no mediation trace was run for them.
+
+The read-only `PlaceRetentionProjection` on the Knowledge panel now shows salience, retention
+rank, eviction reason, and whether a settled conclusion will disappear with its record.
 
 ### 12.12 Cache and projection limits
 

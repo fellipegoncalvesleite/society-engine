@@ -34,6 +34,7 @@ import {
 import type { KnownTileRecord, KnowledgeAcquisitionKind } from "../knowledge/types";
 import { getTile } from "../world/generate";
 import type { WorldState } from "../world/types";
+import { deriveKnownRetentionAuditView } from "./memoryCompression";
 import type { Band, FrontierVerificationQuestion } from "./types";
 
 /** How well a single evidence domain is established for one place. */
@@ -178,6 +179,55 @@ export interface PlaceVerificationProjection {
   readonly projectionOnly: true;
 }
 
+/**
+ * CORRECTION-23E §17 — DEBUG-ONLY RETENTION VISIBILITY.
+ *
+ * The diagnostic found that a place record is forgotten wholesale on a capacity rule whose
+ * ranking never actually executes (the mandatory set is ~161% of the 72-record capacity), and
+ * that a settled verification conclusion disappears with the place that carries it. None of
+ * that was visible anywhere. These rows make it visible, read-only, derived entirely from
+ * canonical band knowledge and the production scorer — no hidden tile truth, no new authority.
+ */
+export interface PlaceRetentionView {
+  readonly tileId: TileId;
+  readonly distanceTiles?: number;
+  /** The production retention score, from `memoryCompression`'s own scorer. */
+  readonly salience: number;
+  /** Rank by that score among this band's known places (1 = most salient). */
+  readonly retentionPriorityRank: number;
+  /** Kept unconditionally — the local ring, a crossing, important water, or a valenced place. */
+  readonly mandatory: boolean;
+  /** Whether the next compression would keep it. */
+  readonly wouldBeRetained: boolean;
+  /** Why it would be dropped, in the terms the algorithm actually uses. */
+  readonly evictionReason?: string;
+  /** Which evidence classes this record carries. */
+  readonly evidenceClasses: readonly string[];
+  readonly activeRoute: boolean;
+  readonly currentCandidate: boolean;
+  /** Seasons since the band last observed it. */
+  readonly seasonsSinceLastUse: number;
+  /** §17 — a settled conclusion is lost with the record; say so before it happens. */
+  readonly dispositionWillDisappearWithRecord: boolean;
+  readonly settledQuestionsHeld: readonly string[];
+}
+
+export interface PlaceRetentionProjection {
+  readonly capacity: number;
+  readonly knownPlaces: number;
+  readonly mandatoryPlaces: number;
+  /** Above 100% the scored ranking cannot retain anything — the kept set IS the mandatory set. */
+  readonly mandatoryShareOfCapacityPercent: number;
+  readonly overCapacity: boolean;
+  readonly compressionRunsThisTick: boolean;
+  readonly scoredRankingHasEffect: boolean;
+  /** Bounded sample: the places closest to being forgotten. */
+  readonly atRisk: readonly PlaceRetentionView[];
+  readonly settledConclusionsAtRisk: number;
+  readonly noHiddenTruthRead: true;
+  readonly projectionOnly: true;
+}
+
 export interface PlaceEvidenceProjection {
   readonly totalKnownPlaces: number;
   readonly byAcquisition: Readonly<Record<string, number>>;
@@ -186,12 +236,15 @@ export interface PlaceEvidenceProjection {
   /** Bounded sample, farthest-first, so frontier country is what the panel shows. */
   readonly entries: readonly PlaceEvidenceEntry[];
   readonly verification: PlaceVerificationProjection;
+  /** CORRECTION-23E §17 — what this band is about to forget, and why. */
+  readonly retention: PlaceRetentionProjection;
   readonly noHiddenTruthRead: true;
   readonly projectionOnly: true;
 }
 
 const MAX_ENTRIES = 24;
 const MAX_VERIFICATION_ROWS = 12;
+const MAX_RETENTION_ROWS = 12;
 const ALL_SEASONS = ["spring", "summer", "autumn", "winter"] as const;
 
 /** What each answer establishes, and what it still leaves open. §4's semantic contract. */
@@ -627,6 +680,85 @@ function deriveVerificationProjection(
 }
 
 /**
+ * CORRECTION-23E §17 — what this band is about to forget, and why.
+ *
+ * Everything here comes from `deriveKnownRetentionAuditView`, which runs the SAME scorer and
+ * the SAME mandatory predicate `compressBandMemoryState` uses. Nothing is recomputed here, so
+ * the panel cannot drift from the algorithm it describes.
+ */
+function deriveRetentionProjection(
+  world: WorldState,
+  band: Band,
+  distanceOf: (tileId: TileId) => number | undefined,
+): PlaceRetentionProjection {
+  const view = deriveKnownRetentionAuditView(world, band);
+  const records = band.knowledge.observedTiles;
+  const activeRouteTiles = new Set<TileId>(
+    (band.expeditions ?? []).flatMap((expedition) => expedition.routeTileIds ?? []),
+  );
+  const candidateTileId = band.carryingCapacity?.knownUnusedHabitat?.candidateTileId;
+  const mandatoryShare = Math.round((view.mandatoryCount / Math.max(1, view.capacity)) * 1000) / 10;
+
+  const rows = view.rows
+    .filter((row) => !row.retained || !row.mandatory)
+    .sort((left, right) => left.score - right.score)
+    .slice(0, MAX_RETENTION_ROWS)
+    .map((row): PlaceRetentionView => {
+      const record = records[row.tileId];
+      const disposition = record?.verificationDisposition ?? [];
+      const settled = disposition.filter(
+        (entry) => entry.outcome === "confirmed" || entry.outcome === "negative",
+      );
+      const distance = distanceOf(row.tileId);
+      const classes: string[] = [];
+
+      if (disposition.length > 0) classes.push("verified");
+      if (record?.acquisition === "returned_frontier_exploration") classes.push("walked past once");
+      if (record?.acquisition === "residential_observation") classes.push("lived around");
+      if ((record?.visits ?? 0) <= 1 && disposition.length === 0) classes.push("crossed once");
+
+      return {
+        tileId: row.tileId,
+        ...(distance === undefined ? {} : { distanceTiles: distance }),
+        salience: row.score,
+        retentionPriorityRank: row.rank,
+        mandatory: row.mandatory,
+        wouldBeRetained: row.retained,
+        ...(row.retained
+          ? {}
+          : {
+              evictionReason:
+                mandatoryShare >= 100
+                  ? "the places kept unconditionally already fill the whole memory, so nothing else is kept whatever it is worth"
+                  : "ranked below the memory limit",
+            }),
+        evidenceClasses: classes,
+        activeRoute: activeRouteTiles.has(row.tileId),
+        currentCandidate: candidateTileId === row.tileId,
+        seasonsSinceLastUse: row.ticksSinceLastObserved,
+        dispositionWillDisappearWithRecord: !row.retained && disposition.length > 0,
+        settledQuestionsHeld: settled.map((entry) => entry.question),
+      };
+    });
+
+  return {
+    capacity: view.capacity,
+    knownPlaces: view.knownCount,
+    mandatoryPlaces: view.mandatoryCount,
+    mandatoryShareOfCapacityPercent: mandatoryShare,
+    overCapacity: view.knownCount > view.capacity,
+    compressionRunsThisTick: view.compressionWouldRun,
+    // Above 100% every retained slot is spent before a scored record is considered, so the
+    // salience ranking cannot change what is kept.
+    scoredRankingHasEffect: mandatoryShare < 100,
+    atRisk: rows,
+    settledConclusionsAtRisk: rows.filter((row) => row.dispositionWillDisappearWithRecord).length,
+    noHiddenTruthRead: true,
+    projectionOnly: true,
+  };
+}
+
+/**
  * Build the selected-band place-evidence projection. Pure, bounded, and behaviourally inert.
  */
 export function derivePlaceEvidenceProjection(
@@ -696,6 +828,7 @@ export function derivePlaceEvidenceProjection(
     residentiallyKnownPlaces: residentialCount,
     entries,
     verification: deriveVerificationProjection(world, band, distanceOf),
+    retention: deriveRetentionProjection(world, band, distanceOf),
     noHiddenTruthRead: true,
     projectionOnly: true,
   };

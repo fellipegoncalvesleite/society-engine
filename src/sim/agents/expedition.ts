@@ -1847,6 +1847,19 @@ function maybeLaunchExpedition(world: WorldState, band: Band, day: DayNumber): B
         ? verificationNeed.need >= 0.45
         : noUsefulRetrieval || verificationNeed.need >= 0.45;
 
+  // CORRECTION-23E §5 arm R7 — audit-only. Broad exploration is offered the slot on its OWN
+  // eligibility rather than only when no verification candidate exists. THE PARTY BUDGET IS
+  // UNCHANGED: still one task per call, still `EXPEDITION_ACTIVE_CAP` — only the order in
+  // which two families are offered the same single slot differs. This measures whether
+  // verification crowds exploration out. Undefined in every normal world.
+  if (world.auditOptions?.explorationSchedulingIndependent === true) {
+    const exploredFirst = maybeLaunchFrontierExploration(world, band, day, currentTick, partyWorkers);
+
+    if (exploredFirst !== undefined) {
+      return exploredFirst;
+    }
+  }
+
   if (verificationGateOpen) {
     const verified = maybeLaunchFrontierVerification(world, band, day, partyWorkers, verificationNeed);
 
@@ -2131,7 +2144,13 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
           // route also becomes known country through the same canonical tile-observation
           // writer every other returning party uses.
           if (result.expedition.taskKind === "frontier_verification") {
-            returnedReconRouteTiles.push(...result.expedition.routeTileIds);
+            // CORRECTION-23E §5 arm R6 — audit-only. The party still walks the same route and
+            // still hands over its ANSWER; only the ordinary tile observation of the route is
+            // withheld, so the EXPLORATION value of the walk can be separated from the
+            // VERIFICATION value of the answer. Undefined in every normal world.
+            if (currentWorld.auditOptions?.verificationPartyRouteObservationDisabled !== true) {
+              returnedReconRouteTiles.push(...result.expedition.routeTileIds);
+            }
 
             const verificationResult = result.expedition.verificationResult;
 

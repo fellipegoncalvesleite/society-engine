@@ -1,0 +1,2160 @@
+{
+  "map": "map2",
+  "site": "tile:92:112",
+  "fixture": "controlled",
+  "label": "isolated",
+  "years": 150,
+  "seedPrefix": "c23e:isolated",
+  "rows": [
+    {
+      "arm": "R1",
+      "seed": "s1",
+      "survived": false,
+      "extinctionYear": 91,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1443,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 8.03,
+      "foodTripDays": 854,
+      "verificationParties": 239,
+      "uniqueVerificationTargets": 89,
+      "repeatedVerificationPairs": 64,
+      "maxAttemptsOnOnePair": 8,
+      "broadExplorationParties": 25,
+      "totalParties": 324,
+      "partyMix": {
+        "frontier_exploration": 25,
+        "frontier_verification": 239,
+        "distant_plant_gathering": 24,
+        "distant_patch_verification": 36
+      },
+      "localResourceActivities": 9721,
+      "residentialMoves": 260,
+      "residentialDestinations": 28,
+      "uniqueTilesVisited": 204,
+      "repeatedTilesVisited": 204,
+      "frontierTilesFirstObserved": 127,
+      "uniqueRoutes": 299,
+      "peakKnownTiles": 125,
+      "peakDispositionRows": 50,
+      "placeRecordEvictions": 814,
+      "verifiedPlaceEvictions": 69,
+      "placeRecordRefreshes": 5474,
+      "meanCandidateSetSize": 2.41,
+      "knownUnusedConsideredBandDays": 26820,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R1",
+      "seed": "s2",
+      "survived": false,
+      "extinctionYear": 90,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1518,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 7.96,
+      "foodTripDays": 835,
+      "verificationParties": 179,
+      "uniqueVerificationTargets": 77,
+      "repeatedVerificationPairs": 50,
+      "maxAttemptsOnOnePair": 7,
+      "broadExplorationParties": 25,
+      "totalParties": 242,
+      "partyMix": {
+        "frontier_exploration": 25,
+        "frontier_verification": 179,
+        "distant_plant_gathering": 13,
+        "distant_patch_verification": 25
+      },
+      "localResourceActivities": 9988,
+      "residentialMoves": 266,
+      "residentialDestinations": 22,
+      "uniqueTilesVisited": 214,
+      "repeatedTilesVisited": 214,
+      "frontierTilesFirstObserved": 173,
+      "uniqueRoutes": 242,
+      "peakKnownTiles": 111,
+      "peakDispositionRows": 53,
+      "placeRecordEvictions": 796,
+      "verifiedPlaceEvictions": 50,
+      "placeRecordRefreshes": 5224,
+      "meanCandidateSetSize": 2.48,
+      "knownUnusedConsideredBandDays": 25740,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 21,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 11,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 0,
+          "bands": 0
+        }
+      ]
+    },
+    {
+      "arm": "R1",
+      "seed": "s3",
+      "survived": false,
+      "extinctionYear": 91,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1199,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 6.57,
+      "foodTripDays": 729,
+      "verificationParties": 124,
+      "uniqueVerificationTargets": 62,
+      "repeatedVerificationPairs": 36,
+      "maxAttemptsOnOnePair": 6,
+      "broadExplorationParties": 7,
+      "totalParties": 194,
+      "partyMix": {
+        "frontier_exploration": 7,
+        "frontier_verification": 124,
+        "distant_plant_gathering": 11,
+        "distant_patch_verification": 40,
+        "route_reconnaissance": 12
+      },
+      "localResourceActivities": 8784,
+      "residentialMoves": 277,
+      "residentialDestinations": 48,
+      "uniqueTilesVisited": 151,
+      "repeatedTilesVisited": 146,
+      "frontierTilesFirstObserved": 73,
+      "uniqueRoutes": 181,
+      "peakKnownTiles": 166,
+      "peakDispositionRows": 49,
+      "placeRecordEvictions": 518,
+      "verifiedPlaceEvictions": 15,
+      "placeRecordRefreshes": 4528,
+      "meanCandidateSetSize": 2.48,
+      "knownUnusedConsideredBandDays": 27900,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 11,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R1",
+      "seed": "s4",
+      "survived": false,
+      "extinctionYear": 89,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.084,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 6.29,
+      "foodTripDays": 463,
+      "verificationParties": 389,
+      "uniqueVerificationTargets": 158,
+      "repeatedVerificationPairs": 111,
+      "maxAttemptsOnOnePair": 10,
+      "broadExplorationParties": 20,
+      "totalParties": 453,
+      "partyMix": {
+        "frontier_exploration": 20,
+        "frontier_verification": 389,
+        "distant_plant_gathering": 15,
+        "distant_patch_verification": 29
+      },
+      "localResourceActivities": 8488,
+      "residentialMoves": 249,
+      "residentialDestinations": 55,
+      "uniqueTilesVisited": 346,
+      "repeatedTilesVisited": 345,
+      "frontierTilesFirstObserved": 215,
+      "uniqueRoutes": 397,
+      "peakKnownTiles": 209,
+      "peakDispositionRows": 71,
+      "placeRecordEvictions": 712,
+      "verifiedPlaceEvictions": 122,
+      "placeRecordRefreshes": 6718,
+      "meanCandidateSetSize": 2.64,
+      "knownUnusedConsideredBandDays": 28620,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 11,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R1",
+      "seed": "s5",
+      "survived": false,
+      "extinctionYear": 93,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1482,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 8.02,
+      "foodTripDays": 935,
+      "verificationParties": 250,
+      "uniqueVerificationTargets": 118,
+      "repeatedVerificationPairs": 66,
+      "maxAttemptsOnOnePair": 7,
+      "broadExplorationParties": 26,
+      "totalParties": 348,
+      "partyMix": {
+        "frontier_exploration": 26,
+        "frontier_verification": 250,
+        "distant_plant_gathering": 19,
+        "distant_patch_verification": 53
+      },
+      "localResourceActivities": 9465,
+      "residentialMoves": 280,
+      "residentialDestinations": 33,
+      "uniqueTilesVisited": 289,
+      "repeatedTilesVisited": 289,
+      "frontierTilesFirstObserved": 214,
+      "uniqueRoutes": 357,
+      "peakKnownTiles": 108,
+      "peakDispositionRows": 61,
+      "placeRecordEvictions": 936,
+      "verifiedPlaceEvictions": 70,
+      "placeRecordRefreshes": 5722,
+      "meanCandidateSetSize": 2.47,
+      "knownUnusedConsideredBandDays": 26010,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 14,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R1",
+      "seed": "s6",
+      "survived": false,
+      "extinctionYear": 92,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1539,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 8.08,
+      "foodTripDays": 776,
+      "verificationParties": 117,
+      "uniqueVerificationTargets": 64,
+      "repeatedVerificationPairs": 34,
+      "maxAttemptsOnOnePair": 7,
+      "broadExplorationParties": 25,
+      "totalParties": 182,
+      "partyMix": {
+        "frontier_exploration": 25,
+        "frontier_verification": 117,
+        "distant_plant_gathering": 14,
+        "distant_patch_verification": 26
+      },
+      "localResourceActivities": 10238,
+      "residentialMoves": 242,
+      "residentialDestinations": 19,
+      "uniqueTilesVisited": 159,
+      "repeatedTilesVisited": 159,
+      "frontierTilesFirstObserved": 113,
+      "uniqueRoutes": 175,
+      "peakKnownTiles": 102,
+      "peakDispositionRows": 52,
+      "placeRecordEvictions": 811,
+      "verifiedPlaceEvictions": 22,
+      "placeRecordRefreshes": 4328,
+      "meanCandidateSetSize": 2.59,
+      "knownUnusedConsideredBandDays": 24480,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 21,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 15,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R1",
+      "seed": "s7",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 11,
+      "finalBands": 1,
+      "peakPopulation": 34,
+      "meanSupport": 0.5308,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 39.84,
+      "foodTripDays": 2204,
+      "verificationParties": 85,
+      "uniqueVerificationTargets": 46,
+      "repeatedVerificationPairs": 25,
+      "maxAttemptsOnOnePair": 4,
+      "broadExplorationParties": 7,
+      "totalParties": 115,
+      "partyMix": {
+        "frontier_exploration": 7,
+        "frontier_verification": 85,
+        "distant_plant_gathering": 4,
+        "distant_patch_verification": 17,
+        "route_reconnaissance": 2
+      },
+      "localResourceActivities": 13834,
+      "residentialMoves": 267,
+      "residentialDestinations": 53,
+      "uniqueTilesVisited": 124,
+      "repeatedTilesVisited": 115,
+      "frontierTilesFirstObserved": 35,
+      "uniqueRoutes": 122,
+      "peakKnownTiles": 167,
+      "peakDispositionRows": 37,
+      "placeRecordEvictions": 1089,
+      "verifiedPlaceEvictions": 11,
+      "placeRecordRefreshes": 4624,
+      "meanCandidateSetSize": 2.83,
+      "knownUnusedConsideredBandDays": 29880,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 19,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 17,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 15,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 14,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 110,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 120,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 130,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 140,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 11,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R1",
+      "seed": "s8",
+      "survived": false,
+      "extinctionYear": 95,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1751,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 9.84,
+      "foodTripDays": 917,
+      "verificationParties": 562,
+      "uniqueVerificationTargets": 215,
+      "repeatedVerificationPairs": 169,
+      "maxAttemptsOnOnePair": 9,
+      "broadExplorationParties": 26,
+      "totalParties": 665,
+      "partyMix": {
+        "frontier_exploration": 26,
+        "frontier_verification": 562,
+        "distant_plant_gathering": 29,
+        "distant_patch_verification": 48
+      },
+      "localResourceActivities": 9479,
+      "residentialMoves": 275,
+      "residentialDestinations": 42,
+      "uniqueTilesVisited": 332,
+      "repeatedTilesVisited": 331,
+      "frontierTilesFirstObserved": 135,
+      "uniqueRoutes": 551,
+      "peakKnownTiles": 233,
+      "peakDispositionRows": 107,
+      "placeRecordEvictions": 873,
+      "verifiedPlaceEvictions": 190,
+      "placeRecordRefreshes": 9385,
+      "meanCandidateSetSize": 2.64,
+      "knownUnusedConsideredBandDays": 23130,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 19,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 14,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R1",
+      "seed": "s9",
+      "survived": false,
+      "extinctionYear": 97,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.171,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 8.82,
+      "foodTripDays": 1045,
+      "verificationParties": 171,
+      "uniqueVerificationTargets": 83,
+      "repeatedVerificationPairs": 49,
+      "maxAttemptsOnOnePair": 6,
+      "broadExplorationParties": 26,
+      "totalParties": 239,
+      "partyMix": {
+        "frontier_exploration": 26,
+        "frontier_verification": 171,
+        "distant_plant_gathering": 12,
+        "distant_patch_verification": 30
+      },
+      "localResourceActivities": 10786,
+      "residentialMoves": 293,
+      "residentialDestinations": 16,
+      "uniqueTilesVisited": 197,
+      "repeatedTilesVisited": 197,
+      "frontierTilesFirstObserved": 137,
+      "uniqueRoutes": 211,
+      "peakKnownTiles": 108,
+      "peakDispositionRows": 43,
+      "placeRecordEvictions": 818,
+      "verifiedPlaceEvictions": 60,
+      "placeRecordRefreshes": 5242,
+      "meanCandidateSetSize": 2.65,
+      "knownUnusedConsideredBandDays": 24840,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 21,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 15,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R1",
+      "seed": "s10",
+      "survived": false,
+      "extinctionYear": 93,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1357,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 7.29,
+      "foodTripDays": 735,
+      "verificationParties": 111,
+      "uniqueVerificationTargets": 49,
+      "repeatedVerificationPairs": 26,
+      "maxAttemptsOnOnePair": 6,
+      "broadExplorationParties": 25,
+      "totalParties": 194,
+      "partyMix": {
+        "frontier_exploration": 25,
+        "frontier_verification": 111,
+        "distant_plant_gathering": 10,
+        "distant_patch_verification": 48
+      },
+      "localResourceActivities": 9621,
+      "residentialMoves": 274,
+      "residentialDestinations": 38,
+      "uniqueTilesVisited": 235,
+      "repeatedTilesVisited": 235,
+      "frontierTilesFirstObserved": 175,
+      "uniqueRoutes": 190,
+      "peakKnownTiles": 130,
+      "peakDispositionRows": 45,
+      "placeRecordEvictions": 776,
+      "verifiedPlaceEvictions": 13,
+      "placeRecordRefreshes": 4655,
+      "meanCandidateSetSize": 2.7,
+      "knownUnusedConsideredBandDays": 27360,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 11,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R4",
+      "seed": "s1",
+      "survived": false,
+      "extinctionYear": 93,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1661,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 9.09,
+      "foodTripDays": 903,
+      "verificationParties": 284,
+      "uniqueVerificationTargets": 99,
+      "repeatedVerificationPairs": 68,
+      "maxAttemptsOnOnePair": 17,
+      "broadExplorationParties": 26,
+      "totalParties": 361,
+      "partyMix": {
+        "frontier_exploration": 26,
+        "frontier_verification": 284,
+        "distant_plant_gathering": 23,
+        "distant_patch_verification": 28
+      },
+      "localResourceActivities": 9890,
+      "residentialMoves": 277,
+      "residentialDestinations": 35,
+      "uniqueTilesVisited": 237,
+      "repeatedTilesVisited": 237,
+      "frontierTilesFirstObserved": 146,
+      "uniqueRoutes": 347,
+      "peakKnownTiles": 134,
+      "peakDispositionRows": 52,
+      "placeRecordEvictions": 804,
+      "verifiedPlaceEvictions": 76,
+      "placeRecordRefreshes": 5937,
+      "meanCandidateSetSize": 2.66,
+      "knownUnusedConsideredBandDays": 24480,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R4",
+      "seed": "s2",
+      "survived": false,
+      "extinctionYear": 92,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.172,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 9.08,
+      "foodTripDays": 957,
+      "verificationParties": 175,
+      "uniqueVerificationTargets": 79,
+      "repeatedVerificationPairs": 45,
+      "maxAttemptsOnOnePair": 9,
+      "broadExplorationParties": 25,
+      "totalParties": 230,
+      "partyMix": {
+        "frontier_exploration": 25,
+        "frontier_verification": 175,
+        "distant_plant_gathering": 14,
+        "distant_patch_verification": 16
+      },
+      "localResourceActivities": 10249,
+      "residentialMoves": 282,
+      "residentialDestinations": 19,
+      "uniqueTilesVisited": 196,
+      "repeatedTilesVisited": 196,
+      "frontierTilesFirstObserved": 156,
+      "uniqueRoutes": 229,
+      "peakKnownTiles": 111,
+      "peakDispositionRows": 53,
+      "placeRecordEvictions": 831,
+      "verifiedPlaceEvictions": 44,
+      "placeRecordRefreshes": 5077,
+      "meanCandidateSetSize": 2.59,
+      "knownUnusedConsideredBandDays": 21420,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 21,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R4",
+      "seed": "s3",
+      "survived": false,
+      "extinctionYear": 91,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.12,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 6.58,
+      "foodTripDays": 729,
+      "verificationParties": 108,
+      "uniqueVerificationTargets": 60,
+      "repeatedVerificationPairs": 27,
+      "maxAttemptsOnOnePair": 6,
+      "broadExplorationParties": 7,
+      "totalParties": 178,
+      "partyMix": {
+        "frontier_exploration": 7,
+        "frontier_verification": 108,
+        "distant_plant_gathering": 11,
+        "distant_patch_verification": 40,
+        "route_reconnaissance": 12
+      },
+      "localResourceActivities": 8784,
+      "residentialMoves": 277,
+      "residentialDestinations": 48,
+      "uniqueTilesVisited": 151,
+      "repeatedTilesVisited": 146,
+      "frontierTilesFirstObserved": 73,
+      "uniqueRoutes": 177,
+      "peakKnownTiles": 166,
+      "peakDispositionRows": 49,
+      "placeRecordEvictions": 517,
+      "verifiedPlaceEvictions": 13,
+      "placeRecordRefreshes": 4446,
+      "meanCandidateSetSize": 2.48,
+      "knownUnusedConsideredBandDays": 27900,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 11,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R4",
+      "seed": "s4",
+      "survived": false,
+      "extinctionYear": 93,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1484,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 8.49,
+      "foodTripDays": 774,
+      "verificationParties": 296,
+      "uniqueVerificationTargets": 116,
+      "repeatedVerificationPairs": 80,
+      "maxAttemptsOnOnePair": 14,
+      "broadExplorationParties": 25,
+      "totalParties": 378,
+      "partyMix": {
+        "frontier_exploration": 25,
+        "frontier_verification": 296,
+        "distant_plant_gathering": 17,
+        "distant_patch_verification": 40
+      },
+      "localResourceActivities": 9507,
+      "residentialMoves": 273,
+      "residentialDestinations": 39,
+      "uniqueTilesVisited": 261,
+      "repeatedTilesVisited": 261,
+      "frontierTilesFirstObserved": 150,
+      "uniqueRoutes": 344,
+      "peakKnownTiles": 168,
+      "peakDispositionRows": 48,
+      "placeRecordEvictions": 760,
+      "verifiedPlaceEvictions": 124,
+      "placeRecordRefreshes": 6295,
+      "meanCandidateSetSize": 2.57,
+      "knownUnusedConsideredBandDays": 24840,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 21,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R4",
+      "seed": "s5",
+      "survived": false,
+      "extinctionYear": 93,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.148,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 8.01,
+      "foodTripDays": 937,
+      "verificationParties": 257,
+      "uniqueVerificationTargets": 115,
+      "repeatedVerificationPairs": 67,
+      "maxAttemptsOnOnePair": 10,
+      "broadExplorationParties": 26,
+      "totalParties": 356,
+      "partyMix": {
+        "frontier_exploration": 26,
+        "frontier_verification": 257,
+        "distant_plant_gathering": 19,
+        "distant_patch_verification": 54
+      },
+      "localResourceActivities": 9460,
+      "residentialMoves": 282,
+      "residentialDestinations": 33,
+      "uniqueTilesVisited": 289,
+      "repeatedTilesVisited": 289,
+      "frontierTilesFirstObserved": 214,
+      "uniqueRoutes": 354,
+      "peakKnownTiles": 108,
+      "peakDispositionRows": 61,
+      "placeRecordEvictions": 936,
+      "verifiedPlaceEvictions": 67,
+      "placeRecordRefreshes": 5705,
+      "meanCandidateSetSize": 2.46,
+      "knownUnusedConsideredBandDays": 26100,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 14,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R4",
+      "seed": "s6",
+      "survived": false,
+      "extinctionYear": 92,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1571,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 8.23,
+      "foodTripDays": 790,
+      "verificationParties": 107,
+      "uniqueVerificationTargets": 52,
+      "repeatedVerificationPairs": 30,
+      "maxAttemptsOnOnePair": 8,
+      "broadExplorationParties": 25,
+      "totalParties": 169,
+      "partyMix": {
+        "frontier_exploration": 25,
+        "frontier_verification": 107,
+        "distant_plant_gathering": 12,
+        "distant_patch_verification": 25
+      },
+      "localResourceActivities": 10271,
+      "residentialMoves": 243,
+      "residentialDestinations": 17,
+      "uniqueTilesVisited": 174,
+      "repeatedTilesVisited": 174,
+      "frontierTilesFirstObserved": 131,
+      "uniqueRoutes": 166,
+      "peakKnownTiles": 102,
+      "peakDispositionRows": 49,
+      "placeRecordEvictions": 783,
+      "verifiedPlaceEvictions": 7,
+      "placeRecordRefreshes": 4274,
+      "meanCandidateSetSize": 2.62,
+      "knownUnusedConsideredBandDays": 23940,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 21,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 15,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 11,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R4",
+      "seed": "s7",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 11,
+      "finalBands": 1,
+      "peakPopulation": 34,
+      "meanSupport": 0.5308,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 39.84,
+      "foodTripDays": 2204,
+      "verificationParties": 85,
+      "uniqueVerificationTargets": 46,
+      "repeatedVerificationPairs": 25,
+      "maxAttemptsOnOnePair": 4,
+      "broadExplorationParties": 7,
+      "totalParties": 115,
+      "partyMix": {
+        "frontier_exploration": 7,
+        "frontier_verification": 85,
+        "distant_plant_gathering": 4,
+        "distant_patch_verification": 17,
+        "route_reconnaissance": 2
+      },
+      "localResourceActivities": 13834,
+      "residentialMoves": 267,
+      "residentialDestinations": 53,
+      "uniqueTilesVisited": 124,
+      "repeatedTilesVisited": 115,
+      "frontierTilesFirstObserved": 35,
+      "uniqueRoutes": 122,
+      "peakKnownTiles": 167,
+      "peakDispositionRows": 37,
+      "placeRecordEvictions": 1089,
+      "verifiedPlaceEvictions": 11,
+      "placeRecordRefreshes": 4624,
+      "meanCandidateSetSize": 2.83,
+      "knownUnusedConsideredBandDays": 29880,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 19,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 17,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 15,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 14,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 110,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 120,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 130,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 140,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 11,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R4",
+      "seed": "s8",
+      "survived": false,
+      "extinctionYear": 100,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1818,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 9.99,
+      "foodTripDays": 951,
+      "verificationParties": 289,
+      "uniqueVerificationTargets": 83,
+      "repeatedVerificationPairs": 63,
+      "maxAttemptsOnOnePair": 19,
+      "broadExplorationParties": 27,
+      "totalParties": 366,
+      "partyMix": {
+        "frontier_exploration": 27,
+        "frontier_verification": 289,
+        "distant_plant_gathering": 20,
+        "distant_patch_verification": 30
+      },
+      "localResourceActivities": 10830,
+      "residentialMoves": 305,
+      "residentialDestinations": 36,
+      "uniqueTilesVisited": 191,
+      "repeatedTilesVisited": 191,
+      "frontierTilesFirstObserved": 88,
+      "uniqueRoutes": 299,
+      "peakKnownTiles": 152,
+      "peakDispositionRows": 50,
+      "placeRecordEvictions": 706,
+      "verifiedPlaceEvictions": 79,
+      "placeRecordRefreshes": 6615,
+      "meanCandidateSetSize": 2.7,
+      "knownUnusedConsideredBandDays": 24390,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 0,
+          "bands": 0
+        }
+      ]
+    },
+    {
+      "arm": "R4",
+      "seed": "s9",
+      "survived": false,
+      "extinctionYear": 94,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1702,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 8.58,
+      "foodTripDays": 1050,
+      "verificationParties": 160,
+      "uniqueVerificationTargets": 78,
+      "repeatedVerificationPairs": 43,
+      "maxAttemptsOnOnePair": 5,
+      "broadExplorationParties": 25,
+      "totalParties": 235,
+      "partyMix": {
+        "frontier_exploration": 25,
+        "frontier_verification": 160,
+        "distant_plant_gathering": 15,
+        "distant_patch_verification": 35
+      },
+      "localResourceActivities": 10383,
+      "residentialMoves": 285,
+      "residentialDestinations": 19,
+      "uniqueTilesVisited": 192,
+      "repeatedTilesVisited": 192,
+      "frontierTilesFirstObserved": 137,
+      "uniqueRoutes": 206,
+      "peakKnownTiles": 108,
+      "peakDispositionRows": 43,
+      "placeRecordEvictions": 792,
+      "verifiedPlaceEvictions": 62,
+      "placeRecordRefreshes": 5141,
+      "meanCandidateSetSize": 2.65,
+      "knownUnusedConsideredBandDays": 24660,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 21,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 15,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 11,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "R4",
+      "seed": "s10",
+      "survived": false,
+      "extinctionYear": 93,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "meanSupport": 0.1357,
+      "births": 0,
+      "deaths": 0,
+      "physicalFoodReceipts": 7.29,
+      "foodTripDays": 735,
+      "verificationParties": 143,
+      "uniqueVerificationTargets": 49,
+      "repeatedVerificationPairs": 26,
+      "maxAttemptsOnOnePair": 9,
+      "broadExplorationParties": 25,
+      "totalParties": 226,
+      "partyMix": {
+        "frontier_exploration": 25,
+        "frontier_verification": 143,
+        "distant_plant_gathering": 10,
+        "distant_patch_verification": 48
+      },
+      "localResourceActivities": 9621,
+      "residentialMoves": 274,
+      "residentialDestinations": 38,
+      "uniqueTilesVisited": 235,
+      "repeatedTilesVisited": 235,
+      "frontierTilesFirstObserved": 175,
+      "uniqueRoutes": 197,
+      "peakKnownTiles": 131,
+      "peakDispositionRows": 45,
+      "placeRecordEvictions": 779,
+      "verifiedPlaceEvictions": 18,
+      "placeRecordRefreshes": 4906,
+      "meanCandidateSetSize": 2.7,
+      "knownUnusedConsideredBandDays": 27360,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 10,
+          "population": 30,
+          "bands": 1
+        },
+        {
+          "year": 20,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 30,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 40,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 16,
+          "bands": 1
+        },
+        {
+          "year": 60,
+          "population": 13,
+          "bands": 1
+        },
+        {
+          "year": 70,
+          "population": 11,
+          "bands": 1
+        },
+        {
+          "year": 80,
+          "population": 10,
+          "bands": 1
+        },
+        {
+          "year": 90,
+          "population": 9,
+          "bands": 1
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "R1": {
+      "seeds": 10,
+      "survival": 0.1,
+      "meanFinalPopulation": 1.1,
+      "meanPeakPopulation": 34,
+      "meanExtinctionYear": 92.33,
+      "meanSupport": 0.18,
+      "meanReceipts": 11.07,
+      "meanVerificationParties": 222.7,
+      "meanRepeatedPairs": 63,
+      "meanExplorationParties": 21.2,
+      "meanTotalParties": 295.6,
+      "meanUniqueTilesVisited": 225.1,
+      "meanFrontierTilesObserved": 139.7,
+      "meanUniqueRoutes": 272.5,
+      "meanPlaceEvictions": 814.3,
+      "meanVerifiedPlaceEvictions": 62.2,
+      "meanPlaceRefreshes": 5590,
+      "meanResidentialMoves": 268.3,
+      "meanLocalResourceActivities": 10040.4,
+      "meanKnownTiles": 145.9
+    },
+    "R4": {
+      "seeds": 10,
+      "survival": 0.1,
+      "meanFinalPopulation": 1.1,
+      "meanPeakPopulation": 34,
+      "meanExtinctionYear": 93.44,
+      "meanSupport": 0.19,
+      "meanReceipts": 11.52,
+      "meanVerificationParties": 190.4,
+      "meanRepeatedPairs": 47.4,
+      "meanExplorationParties": 21.8,
+      "meanTotalParties": 261.4,
+      "meanUniqueTilesVisited": 205,
+      "meanFrontierTilesObserved": 130.5,
+      "meanUniqueRoutes": 244.1,
+      "meanPlaceEvictions": 799.7,
+      "meanVerifiedPlaceEvictions": 50.1,
+      "meanPlaceRefreshes": 5302,
+      "meanResidentialMoves": 276.5,
+      "meanLocalResourceActivities": 10282.9,
+      "meanKnownTiles": 134.7
+    }
+  }
+}

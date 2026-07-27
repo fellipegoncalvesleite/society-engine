@@ -13,7 +13,7 @@ import type {
   KnownTileRecord,
 } from "../knowledge/types";
 import { getNeighborTiles, getTile } from "../world/generate";
-import type { Tile, WorldState } from "../world/types";
+import type { Tile, WorldAuditOptions, WorldState } from "../world/types";
 
 const MAX_EXACT_KNOWN_TILES = 72;
 const MAX_EXACT_PLACE_MEMORIES = 72;
@@ -90,30 +90,92 @@ export function compressBandMemoryState(world: WorldState, band: Band): Band {
   };
 }
 
+/**
+ * CORRECTION-23E §12 — AUDIT-ONLY retention counterfactuals (K1-K5).
+ *
+ * These exist to separate bad PRIORITISATION from raw CAPACITY pressure. They are read only
+ * here, are undefined in every normal world, and §16 forbids promoting any of them to
+ * production in this pass. K0 is production: no arm set.
+ */
+function isSettledVerifiedRecord(record: KnownTileRecord): boolean {
+  return (record.verificationDisposition ?? []).some(
+    (entry) => entry.outcome === "confirmed" || entry.outcome === "negative",
+  );
+}
+
 function selectRetainedKnownTileIds(
   world: WorldState,
   band: Band,
   records: readonly KnownTileRecord[],
 ): Set<TileId> {
-  const mandatory = new Set<TileId>([
-    band.position,
-    ...getLocalTileIds(world, band.position),
-    ...getCrossingEndpointIds(band),
-  ]);
+  const arm = world.auditOptions?.placeRetentionArm;
+  const capacity =
+    arm === "capacity_only"
+      ? Math.max(MAX_EXACT_KNOWN_TILES, Math.floor(world.auditOptions?.placeRetentionCapacity ?? 288))
+      : MAX_EXACT_KNOWN_TILES;
+  // K5 — the inherited mandatory set (local ring, crossing endpoints, important water,
+  // valenced places) stops consuming capacity, so scored records compete for all of it. The
+  // band's own position is still kept: forgetting where you are standing is not forgetting.
+  const mandatory =
+    arm === "no_inherited_mandatory"
+      ? new Set<TileId>([band.position])
+      : new Set<TileId>([
+          band.position,
+          ...getLocalTileIds(world, band.position),
+          ...getCrossingEndpointIds(band),
+        ]);
 
-  for (const record of records) {
-    const tile = getTile(world, record.tileId);
-    const memory = band.placeMemory[record.tileId];
+  if (arm !== "no_inherited_mandatory") {
+    for (const record of records) {
+      const tile = getTile(world, record.tileId);
+      const memory = band.placeMemory[record.tileId];
 
-    if (
-      tile !== undefined &&
-      (isImportantWaterRecord(record, tile) ||
-        memory?.isReturnPlace === true ||
-        memory?.valences.includes("avoid_place") === true ||
-        memory?.valences.includes("risky") === true ||
-        memory?.valences.includes("depleted") === true)
-    ) {
-      mandatory.add(record.tileId);
+      if (
+        tile !== undefined &&
+        (isImportantWaterRecord(record, tile) ||
+          memory?.isReturnPlace === true ||
+          memory?.valences.includes("avoid_place") === true ||
+          memory?.valences.includes("risky") === true ||
+          memory?.valences.includes("depleted") === true)
+      ) {
+        mandatory.add(record.tileId);
+      }
+    }
+  }
+
+  // K1-K3 — three DIFFERENT answers to "which verified place deserves protection", so the
+  // §11 question (is this forgetting legitimate?) is tested rather than assumed.
+  if (arm === "protect_settled_verification") {
+    for (const record of records) {
+      if (isSettledVerifiedRecord(record)) {
+        mandatory.add(record.tileId);
+      }
+    }
+  } else if (arm === "protect_actionable_verified") {
+    for (const record of records) {
+      // Only a verified place that is still a live destination candidate: promising enough
+      // to be chosen, not already exhausted.
+      if (
+        isSettledVerifiedRecord(record) &&
+        (record.observedRichness ?? 0) >= 0.3 &&
+        (record.observedWaterAccess ?? 0) >= 0.2
+      ) {
+        mandatory.add(record.tileId);
+      }
+    }
+  } else if (arm === "protect_active_route_verified") {
+    const activeRouteTiles = new Set<TileId>(
+      band.expeditions?.flatMap((expedition) => expedition.routeTileIds ?? []) ?? [],
+    );
+
+    for (const record of records) {
+      if (
+        isSettledVerifiedRecord(record) &&
+        (activeRouteTiles.has(record.tileId) ||
+          world.time.tick - Number(record.lastObservedAt.tick) <= RECENT_MEMORY_TICK_WINDOW)
+      ) {
+        mandatory.add(record.tileId);
+      }
     }
   }
 
@@ -129,12 +191,130 @@ function selectRetainedKnownTileIds(
   const retained = new Set<TileId>();
 
   for (const record of sorted) {
-    if (mandatory.has(record.tileId) || retained.size < MAX_EXACT_KNOWN_TILES) {
+    if (mandatory.has(record.tileId) || retained.size < capacity) {
       retained.add(record.tileId);
     }
   }
 
   return retained;
+}
+
+/**
+ * CORRECTION-23E §10/§17 — READ-ONLY VIEW OF THE RETENTION AUTHORITY.
+ *
+ * §10 requires the eviction algorithm's priorities to be INVENTORIED rather than described,
+ * and the §3 rules forbid trusting a name or a comment as proof of behaviour. This returns
+ * exactly what `selectRetainedKnownTileIds` would decide right now, computed by the same
+ * functions production uses — no reimplementation, no second copy of the scoring.
+ *
+ * It reads only band knowledge and world tiles, writes nothing, and is never called from a
+ * decision path. The projection layer and the audits are its only consumers.
+ */
+export interface KnownRetentionAuditRow {
+  readonly tileId: TileId;
+  readonly score: number;
+  readonly mandatory: boolean;
+  readonly rank: number;
+  readonly retained: boolean;
+  readonly visits: number;
+  readonly confidence: number;
+  readonly ticksSinceLastObserved: number;
+  readonly observedWaterAccess: number;
+  readonly knowledgeSource: KnowledgeSourceKind;
+  readonly acquisition?: KnownTileRecord["acquisition"];
+  readonly verificationDispositionCount: number;
+  readonly hasSettledDisposition: boolean;
+}
+
+export interface KnownRetentionAuditView {
+  readonly capacity: number;
+  readonly knownCount: number;
+  readonly mandatoryCount: number;
+  readonly retainedCount: number;
+  readonly compressionWouldRun: boolean;
+  readonly rows: readonly KnownRetentionAuditRow[];
+}
+
+export function deriveKnownRetentionAuditView(
+  world: WorldState,
+  band: Band,
+): KnownRetentionAuditView {
+  const records = Object.values(band.knowledge.observedTiles);
+  const retained = selectRetainedKnownTileIds(world, band, records);
+  const arm = world.auditOptions?.placeRetentionArm;
+  const capacity =
+    arm === "capacity_only"
+      ? Math.max(MAX_EXACT_KNOWN_TILES, Math.floor(world.auditOptions?.placeRetentionCapacity ?? 288))
+      : MAX_EXACT_KNOWN_TILES;
+
+  const scored = records
+    .map((record) => {
+      const mandatory = isMandatoryForAudit(world, band, record, arm);
+      const disposition = record.verificationDisposition ?? [];
+
+      return {
+        tileId: record.tileId,
+        score: round2(getKnownRetentionScore(world, band, record, mandatory)),
+        mandatory,
+        retained: retained.has(record.tileId),
+        visits: record.visits,
+        confidence: round2(record.confidence),
+        ticksSinceLastObserved: Number(world.time.tick) - Number(record.lastObservedAt.tick),
+        observedWaterAccess: round2(record.observedWaterAccess ?? 0),
+        knowledgeSource: record.knowledgeSource,
+        ...(record.acquisition === undefined ? {} : { acquisition: record.acquisition }),
+        verificationDispositionCount: disposition.length,
+        hasSettledDisposition: disposition.some(
+          (entry) => entry.outcome === "confirmed" || entry.outcome === "negative",
+        ),
+      };
+    })
+    .sort((left, right) =>
+      right.score === left.score
+        ? String(left.tileId).localeCompare(String(right.tileId))
+        : right.score - left.score,
+    );
+
+  return {
+    capacity,
+    knownCount: records.length,
+    mandatoryCount: scored.filter((row) => row.mandatory).length,
+    retainedCount: retained.size,
+    compressionWouldRun: world.time.tick % 4 === 0 && records.length > MAX_EXACT_KNOWN_TILES,
+    rows: scored.map((row, index) => ({ ...row, rank: index + 1 })),
+  };
+}
+
+/** The mandatory predicate, in exactly the composition `selectRetainedKnownTileIds` applies. */
+function isMandatoryForAudit(
+  world: WorldState,
+  band: Band,
+  record: KnownTileRecord,
+  arm: WorldAuditOptions["placeRetentionArm"],
+): boolean {
+  if (arm === "no_inherited_mandatory") {
+    return record.tileId === band.position;
+  }
+
+  if (
+    record.tileId === band.position ||
+    getLocalTileIds(world, band.position).includes(record.tileId) ||
+    getCrossingEndpointIds(band).includes(record.tileId)
+  ) {
+    return true;
+  }
+
+  const tile = getTile(world, record.tileId);
+  const memory = band.placeMemory[record.tileId];
+
+  return (
+    tile !== undefined &&
+    (isImportantWaterRecord(record, tile) ||
+      memory?.isReturnPlace === true ||
+      memory?.valences.includes("avoid_place") === true ||
+      memory?.valences.includes("risky") === true ||
+      memory?.valences.includes("depleted") === true)
+  );
 }
 
 function selectRetainedPlaceMemoryIds(

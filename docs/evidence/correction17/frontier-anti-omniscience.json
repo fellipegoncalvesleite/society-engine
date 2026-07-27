@@ -48,15 +48,15 @@
     "D_non_adjacent_breadcrumb_step": 0
   },
   "anchorProvenance": {
-    "observed": 58,
+    "observed": 62,
     "inferred": 0,
     "self": 0,
     "unknown": []
   },
   "observed": {
-    "plansInspected": 58,
-    "awayPartySamples": 58,
-    "breadcrumbStepsChecked": 607,
+    "plansInspected": 62,
+    "awayPartySamples": 62,
+    "breadcrumbStepsChecked": 704,
     "lostPartiesObserved": 0
   },
   "verdict": "PASS"

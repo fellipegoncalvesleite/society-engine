@@ -383,7 +383,85 @@ function PlaceEvidence({
       </details>
 
       <GoingBackToFindOut verification={evidence.verification} />
+      <WhatThisBandIsAboutToForget retention={evidence.retention} />
     </article>
+  );
+}
+
+/**
+ * CORRECTION-23E §17 — what this band is about to forget, and why.
+ *
+ * The diagnostic found that place records are dropped wholesale on a capacity rule whose
+ * salience ranking never actually runs, and that a settled verification conclusion disappears
+ * with the place that carries it. Neither was visible anywhere. This section is read-only and
+ * derives entirely from canonical band knowledge and the production retention scorer.
+ */
+function WhatThisBandIsAboutToForget({
+  retention,
+}: {
+  readonly retention: ReturnType<typeof derivePlaceEvidenceProjection>["retention"];
+}) {
+  if (retention.atRisk.length === 0 && !retention.overCapacity) {
+    return null;
+  }
+
+  return (
+    <>
+      <span className="knowledge-kicker">What this band is about to forget</span>
+      <p className="condition-note">
+        The band can hold {retention.capacity} places in detail and currently holds{" "}
+        {retention.knownPlaces}. {retention.mandatoryPlaces} of them are kept unconditionally —
+        where it is standing, the ground immediately around it, river crossings, water it depends
+        on, and places it has learned to return to or avoid. That is{" "}
+        {retention.mandatoryShareOfCapacityPercent}% of what it can hold.
+      </p>
+      {retention.scoredRankingHasEffect ? null : (
+        <p className="condition-note">
+          Those unconditional places already fill the whole memory, so nothing else survives the
+          next compression however useful it is — how recently a place was used, how often it was
+          visited, and what was established there make no difference while this holds.
+        </p>
+      )}
+      {retention.settledConclusionsAtRisk === 0 ? null : (
+        <p className="condition-note">
+          {retention.settledConclusionsAtRisk} of the places below carry a settled answer that will
+          be lost with the place itself. If the band goes back there later, it will have to ask
+          again.
+        </p>
+      )}
+      <ul className="knowledge-evidence-list">
+        {retention.atRisk.map((place) => (
+          <li key={`r:${String(place.tileId)}`}>
+            <div className="knowledge-evidence-head">
+              <strong>{String(place.tileId)}</strong>
+              {place.distanceTiles === undefined ? null : (
+                <Chip>{place.distanceTiles} tiles away</Chip>
+              )}
+              <Chip>{place.wouldBeRetained ? "kept" : "dropped next compression"}</Chip>
+              {place.evidenceClasses.map((className) => (
+                <Chip key={className}>{className}</Chip>
+              ))}
+              {place.activeRoute ? <Chip>on a route being walked now</Chip> : null}
+              {place.currentCandidate ? <Chip>current destination candidate</Chip> : null}
+            </div>
+            <span className="knowledge-domain-basis">
+              salience {place.salience} (rank {place.retentionPriorityRank} of{" "}
+              {retention.knownPlaces}); last seen {place.seasonsSinceLastUse} seasons ago
+            </span>
+            {place.evictionReason === undefined ? null : (
+              <span className="knowledge-domain-basis">why: {place.evictionReason}</span>
+            )}
+            {place.dispositionWillDisappearWithRecord ? (
+              <span className="knowledge-domain-basis">
+                will forget what it established here: {place.settledQuestionsHeld
+                  .map((question) => question.replace(/_/g, " "))
+                  .join(", ")}
+              </span>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 

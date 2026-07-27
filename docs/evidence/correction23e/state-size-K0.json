@@ -1,0 +1,53 @@
+{
+  "arm": "K0",
+  "samples": [
+    {
+      "years": 25,
+      "bands": 1,
+      "population": 24,
+      "observedTilesPerBand": 82,
+      "dispositionRowsPerBand": 174,
+      "dispositionKbPerBand": 30.04,
+      "knowledgeKbPerBand": 198,
+      "bandKbTotal": 1536.67,
+      "chronologicalEvidenceRowsPerBand": 48,
+      "displayRingRowsPerBand": 12
+    },
+    {
+      "years": 50,
+      "bands": 1,
+      "population": 18,
+      "observedTilesPerBand": 156,
+      "dispositionRowsPerBand": 397,
+      "dispositionKbPerBand": 67.7,
+      "knowledgeKbPerBand": 332.65,
+      "bandKbTotal": 1815.97,
+      "chronologicalEvidenceRowsPerBand": 48,
+      "displayRingRowsPerBand": 12
+    },
+    {
+      "years": 100,
+      "bands": 1,
+      "population": 23,
+      "observedTilesPerBand": 203,
+      "dispositionRowsPerBand": 415,
+      "dispositionKbPerBand": 70.98,
+      "knowledgeKbPerBand": 374.37,
+      "bandKbTotal": 1899.28,
+      "chronologicalEvidenceRowsPerBand": 48,
+      "displayRingRowsPerBand": 12
+    },
+    {
+      "years": 300,
+      "bands": 2,
+      "population": 58,
+      "observedTilesPerBand": 167,
+      "dispositionRowsPerBand": 315.5,
+      "dispositionKbPerBand": 53.18,
+      "knowledgeKbPerBand": 330.29,
+      "bandKbTotal": 1981.38,
+      "chronologicalEvidenceRowsPerBand": 48,
+      "displayRingRowsPerBand": 12
+    }
+  ]
+}

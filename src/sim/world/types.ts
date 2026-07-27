@@ -348,6 +348,58 @@ export interface WorldAuditOptions {
   // withheld from the feasibility reader, so the access effect can be isolated from the cost
   // and displacement of the journey. Undefined in every normal world; read at one seam.
   readonly waterAccessEvidenceHiddenFromDestination?: boolean;
+  // ───────────────────────────────────────────────────────────────────────────────────────
+  // CORRECTION-23E — DIAGNOSTIC ISOLATION ARMS. Every one is undefined in every normal
+  // world and read at exactly one seam. This checkpoint is a DIAGNOSIS: none of these may
+  // become a production default, and none of them is selected by any production code path.
+  // ───────────────────────────────────────────────────────────────────────────────────────
+  //
+  // §5 R2-R5 — decompose the CORRECTION-23D retry repair into its components so the
+  // marginal regression can be attributed to one of them rather than to "the repair".
+  //
+  //   legacy_eligibility        R2 — durable disposition is still WRITTEN, but eligibility
+  //                                  is read from the capped chronological collection with
+  //                                  the pre-23D gate. Isolates STORAGE from SUPPRESSION.
+  //   hardship_reopens          R3 — 23D gate, but hardship movement reopens a settled
+  //                                  question again (§8's removed term).
+  //   legacy_season_comparison  R4 — 23D gate, but `lastSeason !== currentSeason` reopens
+  //                                  water/resource questions again (§7's removed term).
+  //   suppression_disabled      R5 — 23D gate, but a settled confirmed/negative answer no
+  //                                  longer blocks a repeat.
+  readonly verificationRetryArm?:
+    | "legacy_eligibility"
+    | "hardship_reopens"
+    | "legacy_season_comparison"
+    | "suppression_disabled";
+  // §5 R6 — a returning frontier-verification party hands over its ANSWER but not its
+  // walked route, so the route never becomes ordinary known country. Isolates how much of
+  // verification's value was EXPLORATION rather than verification.
+  readonly verificationPartyRouteObservationDisabled?: boolean;
+  // §5 R7 — broad exploration is scheduled on its OWN eligibility instead of only when no
+  // verification candidate exists. The party budget is unchanged (one task per call,
+  // EXPEDITION_ACTIVE_CAP unchanged): only the order in which the two families are offered
+  // the same single slot changes. Isolates whether verification CROWDS OUT exploration.
+  readonly explorationSchedulingIndependent?: boolean;
+  // §12 K1-K5 — place-retention counterfactuals, read only by `memoryCompression`. They
+  // distinguish bad PRIORITISATION from raw CAPACITY pressure. §16 forbids selecting any of
+  // them as production in this pass.
+  //
+  //   protect_settled_verification  K1 — any record carrying a settled disposition is kept.
+  //   protect_actionable_verified   K2 — only currently promising/candidate verified places.
+  //   protect_active_route_verified K3 — only verified places on an active route or used
+  //                                      recently.
+  //   capacity_only                 K4 — priorities untouched; capacity raised.
+  //   no_inherited_mandatory        K5 — the inherited mandatory-retention set (local ring,
+  //                                      crossings, important water) stops consuming
+  //                                      capacity, so scored records compete for all of it.
+  readonly placeRetentionArm?:
+    | "protect_settled_verification"
+    | "protect_actionable_verified"
+    | "protect_active_route_verified"
+    | "capacity_only"
+    | "no_inherited_mandatory";
+  // K4 — exact known-tile capacity for the capacity arm. Undefined ⇒ the production 72.
+  readonly placeRetentionCapacity?: number;
 }
 
 export interface WorldState {

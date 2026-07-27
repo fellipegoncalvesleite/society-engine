@@ -1,0 +1,661 @@
+{
+  "map": "map2",
+  "fixture": "marginal",
+  "arm": "K4",
+  "years": 100,
+  "clock": {
+    "SEASON_LENGTH_DAYS": 90,
+    "SEASONS_PER_YEAR": 4,
+    "DAYS_PER_YEAR": 360,
+    "conversionFunction": "getWorldTimeForDay(day): tick = floor(day / SEASON_LENGTH_DAYS)",
+    "startDay": 0,
+    "startTick": 0,
+    "dayAfterOneDailyStep": 1,
+    "tickAfterOneDailyStep": 0,
+    "dayAfter90DailySteps": 90,
+    "tickAfter90DailySteps": 1,
+    "oneLoopIterationIs": "one calendar DAY",
+    "oneTickIs": "90 days = 1 season",
+    "compressionCadence": "compressBandMemoryState runs when tick % 4 === 0 → once per simulated YEAR",
+    "dailyStepAdvancesOneDay": true,
+    "ninetyDailyStepsAdvanceOneTick": true
+  },
+  "totals": {
+    "completedLifetimes": 316,
+    "stillAliveAtEnd": 293,
+    "censoredAgeDays": {
+      "n": 293,
+      "min": 450,
+      "q1": 18679,
+      "median": 20481,
+      "q3": 27704,
+      "p90": 35550,
+      "max": 35999
+    },
+    "bandTicks": 35639,
+    "overCapBandTickShare": 92.9,
+    "compressionEventsObserved": 92,
+    "meanMandatoryShareOfCapacity": 30.8,
+    "lowValueRecordDisplacedVerifiedPlace": 0,
+    "verifiedPlacesEvictedWhileNotRecentlyUsed": 0
+  },
+  "allRecords": {
+    "lifetimeDays": {
+      "n": 316,
+      "min": 89,
+      "q1": 269,
+      "median": 359,
+      "q3": 809,
+      "p90": 14489,
+      "max": 20339
+    },
+    "lifetime": {
+      "days": 359,
+      "ticks": 3.99,
+      "seasons": 3.99,
+      "years": 1
+    }
+  },
+  "reacquisition": {
+    "evictedThenReacquired": 282,
+    "ofThoseCarryingADisposition": 4,
+    "gapDays": {
+      "n": 282,
+      "min": 15,
+      "q1": 360,
+      "median": 630,
+      "q3": 1170,
+      "p90": 1710,
+      "max": 13860
+    },
+    "gapDaysForVerifiedPlaces": {
+      "n": 4,
+      "min": 15,
+      "q1": 15,
+      "median": 825,
+      "q3": 1197,
+      "p90": 1197,
+      "max": 1197
+    },
+    "verificationQuestionsRepeatedAfterReacquisition": 3,
+    "daysToRepeatAfterReacquisition": {
+      "n": 3,
+      "min": 12,
+      "q1": 12,
+      "median": 12,
+      "q3": 12,
+      "p90": 12,
+      "max": 48
+    }
+  },
+  "byClass": {
+    "traversed_only": {
+      "recordsEverInClass": 327,
+      "evictions": 301,
+      "lifetimeDays": {
+        "n": 301,
+        "min": 89,
+        "q1": 269,
+        "median": 359,
+        "q3": 809,
+        "p90": 14759,
+        "max": 20339
+      },
+      "lifetime": {
+        "min": {
+          "days": 89,
+          "ticks": 0.99,
+          "seasons": 0.99,
+          "years": 0.25
+        },
+        "q1": {
+          "days": 269,
+          "ticks": 2.99,
+          "seasons": 2.99,
+          "years": 0.75
+        },
+        "median": {
+          "days": 359,
+          "ticks": 3.99,
+          "seasons": 3.99,
+          "years": 1
+        },
+        "q3": {
+          "days": 809,
+          "ticks": 8.99,
+          "seasons": 8.99,
+          "years": 2.25
+        },
+        "p90": {
+          "days": 14759,
+          "ticks": 163.99,
+          "seasons": 163.99,
+          "years": 41
+        },
+        "max": {
+          "days": 20339,
+          "ticks": 225.99,
+          "seasons": 225.99,
+          "years": 56.5
+        }
+      },
+      "evictionCauses": {
+        "memory_compression": 301
+      },
+      "behaviourallyRelevantAtEviction": 267,
+      "settledDispositionLost": 0
+    },
+    "frontier_exploration": {
+      "recordsEverInClass": 144,
+      "evictions": 0,
+      "lifetimeDays": {
+        "n": 0,
+        "min": null,
+        "q1": null,
+        "median": null,
+        "q3": null,
+        "p90": null,
+        "max": null
+      },
+      "lifetime": {
+        "min": null,
+        "q1": null,
+        "median": null,
+        "q3": null,
+        "p90": null,
+        "max": null
+      },
+      "evictionCauses": {},
+      "behaviourallyRelevantAtEviction": 0,
+      "settledDispositionLost": 0
+    },
+    "verification_target": {
+      "recordsEverInClass": 149,
+      "evictions": 9,
+      "lifetimeDays": {
+        "n": 9,
+        "min": 191,
+        "q1": 242,
+        "median": 341,
+        "q3": 470,
+        "p90": 518,
+        "max": 614
+      },
+      "lifetime": {
+        "min": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "q1": {
+          "days": 242,
+          "ticks": 2.69,
+          "seasons": 2.69,
+          "years": 0.67
+        },
+        "median": {
+          "days": 341,
+          "ticks": 3.79,
+          "seasons": 3.79,
+          "years": 0.95
+        },
+        "q3": {
+          "days": 470,
+          "ticks": 5.22,
+          "seasons": 5.22,
+          "years": 1.31
+        },
+        "p90": {
+          "days": 518,
+          "ticks": 5.76,
+          "seasons": 5.76,
+          "years": 1.44
+        },
+        "max": {
+          "days": 614,
+          "ticks": 6.82,
+          "seasons": 6.82,
+          "years": 1.71
+        }
+      },
+      "evictionCauses": {
+        "memory_compression": 9
+      },
+      "behaviourallyRelevantAtEviction": 9,
+      "settledDispositionLost": 3
+    },
+    "confirmed_water_access": {
+      "recordsEverInClass": 30,
+      "evictions": 0,
+      "lifetimeDays": {
+        "n": 0,
+        "min": null,
+        "q1": null,
+        "median": null,
+        "q3": null,
+        "p90": null,
+        "max": null
+      },
+      "lifetime": {
+        "min": null,
+        "q1": null,
+        "median": null,
+        "q3": null,
+        "p90": null,
+        "max": null
+      },
+      "evictionCauses": {},
+      "behaviourallyRelevantAtEviction": 0,
+      "settledDispositionLost": 0
+    },
+    "negative_verification": {
+      "recordsEverInClass": 75,
+      "evictions": 2,
+      "lifetimeDays": {
+        "n": 2,
+        "min": 191,
+        "q1": 191,
+        "median": 191,
+        "q3": 191,
+        "p90": 191,
+        "max": 614
+      },
+      "lifetime": {
+        "min": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "q1": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "median": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "q3": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "p90": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "max": {
+          "days": 614,
+          "ticks": 6.82,
+          "seasons": 6.82,
+          "years": 1.71
+        }
+      },
+      "evictionCauses": {
+        "memory_compression": 2
+      },
+      "behaviourallyRelevantAtEviction": 2,
+      "settledDispositionLost": 2
+    },
+    "resource_presence": {
+      "recordsEverInClass": 122,
+      "evictions": 2,
+      "lifetimeDays": {
+        "n": 2,
+        "min": 191,
+        "q1": 191,
+        "median": 191,
+        "q3": 191,
+        "p90": 191,
+        "max": 614
+      },
+      "lifetime": {
+        "min": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "q1": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "median": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "q3": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "p90": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "max": {
+          "days": 614,
+          "ticks": 6.82,
+          "seasons": 6.82,
+          "years": 1.71
+        }
+      },
+      "evictionCauses": {
+        "memory_compression": 2
+      },
+      "behaviourallyRelevantAtEviction": 2,
+      "settledDispositionLost": 2
+    },
+    "temporary_use": {
+      "recordsEverInClass": 93,
+      "evictions": 2,
+      "lifetimeDays": {
+        "n": 2,
+        "min": 191,
+        "q1": 191,
+        "median": 191,
+        "q3": 191,
+        "p90": 191,
+        "max": 614
+      },
+      "lifetime": {
+        "min": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "q1": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "median": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "q3": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "p90": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "max": {
+          "days": 614,
+          "ticks": 6.82,
+          "seasons": 6.82,
+          "years": 1.71
+        }
+      },
+      "evictionCauses": {
+        "memory_compression": 2
+      },
+      "behaviourallyRelevantAtEviction": 2,
+      "settledDispositionLost": 2
+    },
+    "residentially_experienced": {
+      "recordsEverInClass": 278,
+      "evictions": 12,
+      "lifetimeDays": {
+        "n": 12,
+        "min": 191,
+        "q1": 242,
+        "median": 254,
+        "q3": 518,
+        "p90": 614,
+        "max": 1958
+      },
+      "lifetime": {
+        "min": {
+          "days": 191,
+          "ticks": 2.12,
+          "seasons": 2.12,
+          "years": 0.53
+        },
+        "q1": {
+          "days": 242,
+          "ticks": 2.69,
+          "seasons": 2.69,
+          "years": 0.67
+        },
+        "median": {
+          "days": 254,
+          "ticks": 2.82,
+          "seasons": 2.82,
+          "years": 0.71
+        },
+        "q3": {
+          "days": 518,
+          "ticks": 5.76,
+          "seasons": 5.76,
+          "years": 1.44
+        },
+        "p90": {
+          "days": 614,
+          "ticks": 6.82,
+          "seasons": 6.82,
+          "years": 1.71
+        },
+        "max": {
+          "days": 1958,
+          "ticks": 21.76,
+          "seasons": 21.76,
+          "years": 5.44
+        }
+      },
+      "evictionCauses": {
+        "memory_compression": 12
+      },
+      "behaviourallyRelevantAtEviction": 11,
+      "settledDispositionLost": 2
+    },
+    "active_route": {
+      "recordsEverInClass": 289,
+      "evictions": 0,
+      "lifetimeDays": {
+        "n": 0,
+        "min": null,
+        "q1": null,
+        "median": null,
+        "q3": null,
+        "p90": null,
+        "max": null
+      },
+      "lifetime": {
+        "min": null,
+        "q1": null,
+        "median": null,
+        "q3": null,
+        "p90": null,
+        "max": null
+      },
+      "evictionCauses": {},
+      "behaviourallyRelevantAtEviction": 0,
+      "settledDispositionLost": 0
+    },
+    "current_candidate": {
+      "recordsEverInClass": 21,
+      "evictions": 0,
+      "lifetimeDays": {
+        "n": 0,
+        "min": null,
+        "q1": null,
+        "median": null,
+        "q3": null,
+        "p90": null,
+        "max": null
+      },
+      "lifetime": {
+        "min": null,
+        "q1": null,
+        "median": null,
+        "q3": null,
+        "p90": null,
+        "max": null
+      },
+      "evictionCauses": {},
+      "behaviourallyRelevantAtEviction": 0,
+      "settledDispositionLost": 0
+    },
+    "recently_used_production_window": {
+      "recordsEverInClass": 327,
+      "evictions": 316,
+      "lifetimeDays": {
+        "n": 316,
+        "min": 89,
+        "q1": 269,
+        "median": 359,
+        "q3": 809,
+        "p90": 14489,
+        "max": 20339
+      },
+      "lifetime": {
+        "min": {
+          "days": 89,
+          "ticks": 0.99,
+          "seasons": 0.99,
+          "years": 0.25
+        },
+        "q1": {
+          "days": 269,
+          "ticks": 2.99,
+          "seasons": 2.99,
+          "years": 0.75
+        },
+        "median": {
+          "days": 359,
+          "ticks": 3.99,
+          "seasons": 3.99,
+          "years": 1
+        },
+        "q3": {
+          "days": 809,
+          "ticks": 8.99,
+          "seasons": 8.99,
+          "years": 2.25
+        },
+        "p90": {
+          "days": 14489,
+          "ticks": 160.99,
+          "seasons": 160.99,
+          "years": 40.25
+        },
+        "max": {
+          "days": 20339,
+          "ticks": 225.99,
+          "seasons": 225.99,
+          "years": 56.5
+        }
+      },
+      "evictionCauses": {
+        "memory_compression": 316
+      },
+      "behaviourallyRelevantAtEviction": 280,
+      "settledDispositionLost": 3
+    },
+    "used_within_one_year": {
+      "recordsEverInClass": 327,
+      "evictions": 280,
+      "lifetimeDays": {
+        "n": 280,
+        "min": 89,
+        "q1": 179,
+        "median": 344,
+        "q3": 629,
+        "p90": 1079,
+        "max": 20069
+      },
+      "lifetime": {
+        "min": {
+          "days": 89,
+          "ticks": 0.99,
+          "seasons": 0.99,
+          "years": 0.25
+        },
+        "q1": {
+          "days": 179,
+          "ticks": 1.99,
+          "seasons": 1.99,
+          "years": 0.5
+        },
+        "median": {
+          "days": 344,
+          "ticks": 3.82,
+          "seasons": 3.82,
+          "years": 0.96
+        },
+        "q3": {
+          "days": 629,
+          "ticks": 6.99,
+          "seasons": 6.99,
+          "years": 1.75
+        },
+        "p90": {
+          "days": 1079,
+          "ticks": 11.99,
+          "seasons": 11.99,
+          "years": 3
+        },
+        "max": {
+          "days": 20069,
+          "ticks": 222.99,
+          "seasons": 222.99,
+          "years": 55.75
+        }
+      },
+      "evictionCauses": {
+        "memory_compression": 280
+      },
+      "behaviourallyRelevantAtEviction": 280,
+      "settledDispositionLost": 3
+    },
+    "inherited_or_reported": {
+      "recordsEverInClass": 0,
+      "evictions": 0,
+      "lifetimeDays": {
+        "n": 0,
+        "min": null,
+        "q1": null,
+        "median": null,
+        "q3": null,
+        "p90": null,
+        "max": null
+      },
+      "lifetime": {
+        "min": null,
+        "q1": null,
+        "median": null,
+        "q3": null,
+        "p90": null,
+        "max": null
+      },
+      "evictionCauses": {},
+      "behaviourallyRelevantAtEviction": 0,
+      "settledDispositionLost": 0
+    }
+  }
+}
