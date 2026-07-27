@@ -17,7 +17,13 @@
 // It takes the world only for tile identity/coordinates so distances can be reported; it
 // reads no resource, seasonal or hydrological truth from it.
 import type { TileId } from "../core/types";
-import { deriveDirectWaterAccess, findVerificationEvidence, mayAskAgain } from "./verificationEvidence";
+import {
+  deriveDirectWaterAccess,
+  describeReopeningConditions,
+  findPlaceDisposition,
+  findVerificationEvidence,
+  mayAskAgain,
+} from "./verificationEvidence";
 import {
   VERIFICATION_ATTEMPT_HISTORY_CAP,
   VERIFICATION_MAX_DISTANCE_TILES,
@@ -122,6 +128,11 @@ export interface PlaceVerificationAttemptView {
   readonly behaviourallyActionable: boolean;
   /** §17 — why the band will not go back and ask this again. */
   readonly repeatBlockedReason?: string;
+  /** CORRECTION-23D §17 — what material change could reopen this question. */
+  readonly mayReopenOn: string;
+  /** §17 — the authoritative conclusion survives even when the display ring drops the row. */
+  readonly settled: boolean;
+  readonly stillInRecentHistory: boolean;
   /** Seasons this exact question has actually been answered in at this place. */
   readonly seasonsAnswered: readonly string[];
 }
@@ -149,6 +160,12 @@ export interface PlaceWaterEvidenceView {
 export interface PlaceVerificationProjection {
   /** §13 — presence / access / reliability / seasons, stated separately. */
   readonly water: readonly PlaceWaterEvidenceView[];
+  /**
+   * CORRECTION-23D §17 — conclusions the band still holds whose chronological row has aged
+   * out of the display ring. Their presence here is the visible proof that eviction from a
+   * capped list is not forgetting.
+   */
+  readonly retainedBeyondHistory: readonly PlaceVerificationAttemptView[];
   /** Places the band's own record marks promising for a question it has not answered. */
   readonly promisingUnverified: readonly PlaceVerificationTarget[];
   /** Places the band's own record marks as poor — a reason NOT to go. */
@@ -454,6 +471,7 @@ function deriveVerificationProjection(
   const asView = (attempt: (typeof attempts)[number]): PlaceVerificationAttemptView => {
     const consumer = QUESTION_CONSUMER[attempt.question];
     const evidence = findVerificationEvidence(band, attempt.tileId, attempt.question);
+    const durable = findPlaceDisposition(band, attempt.tileId, attempt.question);
     const settled = attempt.outcome === "confirmed" || attempt.outcome === "negative";
     const retry =
       evidence === undefined
@@ -482,6 +500,12 @@ function deriveVerificationProjection(
         "nothing yet — this answer is recorded but no decision reads it, because the system that would does not exist",
       behaviourallyActionable: consumer !== undefined && settled,
       ...(retry === undefined || retry.allowed ? {} : { repeatBlockedReason: retry.reason }),
+      mayReopenOn: describeReopeningConditions(
+        attempt.question,
+        attempt.outcome === "lost" ? "inconclusive" : attempt.outcome,
+      ),
+      settled: settled && durable !== undefined,
+      stillInRecentHistory: true,
       seasonsAnswered: evidence?.seasonsAnswered ?? [attempt.season],
     };
   };
@@ -535,8 +559,59 @@ function deriveVerificationProjection(
     });
   }
 
+  // CORRECTION-23D §17 — conclusions the band still HOLDS but whose chronological row has
+  // aged out of the 12-entry display ring. Without this the panel would imply the band had
+  // forgotten something it has not forgotten — the exact confusion this correction removes.
+  const retainedBeyondHistory: PlaceVerificationAttemptView[] = [];
+
+  for (const record of records) {
+    for (const entry of record.verificationDisposition ?? []) {
+      const inHistory = attempts.some(
+        (a) => a.tileId === record.tileId && a.question === entry.question,
+      );
+
+      if (inHistory) {
+        continue;
+      }
+
+      const retry = mayAskAgain(band, record.tileId, entry.question, {
+        currentTick,
+        currentSeason,
+        hardship: 0,
+        routeTiles: entry.routeTilesAtLastAttempt,
+      });
+
+      retainedBeyondHistory.push({
+        tileId: record.tileId,
+        question: entry.question,
+        outcome: entry.outcome,
+        season: entry.lastSeason,
+        nowPermitted:
+          entry.outcome === "confirmed"
+            ? QUESTION_MEANING[entry.question].permits
+            : entry.outcome === "negative"
+              ? "nothing — the band learned this place does not answer that question"
+              : "nothing yet — the question is still open",
+        stillMissing: QUESTION_MEANING[entry.question].stillMissing,
+        consumedBy:
+          QUESTION_CONSUMER[entry.question] ??
+          "nothing yet — this answer is recorded but no decision reads it, because the system that would does not exist",
+        behaviourallyActionable:
+          QUESTION_CONSUMER[entry.question] !== undefined && entry.outcome !== "inconclusive",
+        ...(retry.allowed ? {} : { repeatBlockedReason: retry.reason }),
+        mayReopenOn: describeReopeningConditions(entry.question, entry.outcome),
+        settled: !retry.allowed,
+        // The point of this list: the row left the recent-history display, and the
+        // authoritative result was retained anyway.
+        stillInRecentHistory: false,
+        seasonsAnswered: entry.seasonsAnswered,
+      });
+    }
+  }
+
   return {
     water: [...water].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),
+    retainedBeyondHistory: retainedBeyondHistory.slice(0, MAX_VERIFICATION_ROWS),
     promisingUnverified: [...promising].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),
     knownPoor: [...poor].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),
     activeParties,

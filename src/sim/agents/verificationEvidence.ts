@@ -26,7 +26,7 @@
 //
 // Nothing here reads world truth. Every input is band state.
 import type { Season, TickNumber, TileId } from "../core/types";
-import type { KnowledgeAcquisitionKind } from "../knowledge/types";
+import type { KnowledgeAcquisitionKind, PlaceQuestionDisposition } from "../knowledge/types";
 import type {
   Band,
   DirectWaterAccessEvidence,
@@ -42,22 +42,113 @@ export const VERIFICATION_EVIDENCE_CAP = 48;
 const RETRY_INTERVAL_TICKS = 24;
 /** An inconclusive question is not asked forever. */
 const MAX_INCONCLUSIVE_ATTEMPTS = 3;
-/** Hardship must move by at least this much to count as a materially changed situation. */
-const MATERIAL_HARDSHIP_DELTA = 0.2;
 /** A route materially differs when its length changes by at least this many tiles. */
 const MATERIAL_ROUTE_DELTA = 4;
 
 const key = (tileId: TileId, question: FrontierVerificationQuestion): string =>
   `${String(tileId)}|${question}`;
 
+/**
+ * CORRECTION-23D §4/§9 — THE AUTHORITY IS THE PLACE RECORD.
+ *
+ * `band.verificationEvidence` is a bounded chronological collection and is NO LONGER
+ * authoritative: its 48-row cap was under pressure on 75.3% of band-days, and eviction
+ * accounted for 18.1% of all verification launches — a settled question becoming "never
+ * asked" because unrelated evidence filled a cap. §9 forbids exactly that.
+ *
+ * The durable conclusion lives on `KnownTileRecord.verificationDisposition`: sparse, one
+ * entry per attempted question, and forgotten only when the band forgets the place.
+ */
+function findDisposition(
+  band: Band,
+  tileId: TileId,
+  question: FrontierVerificationQuestion,
+): PlaceQuestionDisposition | undefined {
+  return band.knowledge.observedTiles[tileId]?.verificationDisposition?.find(
+    (entry) => entry.question === question,
+  );
+}
+
 function find(
   band: Band,
   tileId: TileId,
   question: FrontierVerificationQuestion,
 ): VerificationEvidenceRecord | undefined {
+  const durable = findDisposition(band, tileId, question);
+
+  if (durable !== undefined) {
+    // Presented through the existing shape so every CORRECTION-23B/C domain reader keeps its
+    // exact contract while reading from the durable home.
+    return {
+      tileId,
+      question,
+      outcome: durable.outcome,
+      seasonsAnswered: durable.seasonsAnswered,
+      lastSeason: durable.lastSeason,
+      lastTick: durable.lastTick,
+      attempts: durable.attempts,
+      hardshipAtLastAttempt: 0,
+      routeTilesAtLastAttempt: durable.routeTilesAtLastAttempt,
+      routeEvidence: "walked_out_and_back",
+      acquisition: band.knowledge.observedTiles[tileId]?.acquisition,
+      ...(durable.accessFailureKind === undefined
+        ? {}
+        : { accessFailureKind: durable.accessFailureKind }),
+    };
+  }
+
   return (band.verificationEvidence ?? []).find(
     (record) => record.tileId === tileId && record.question === question,
   );
+}
+
+/**
+ * §6 — upsert the durable disposition onto the place record. Bounded by the question count,
+ * so a repeat updates an entry and never appends one.
+ */
+export function recordPlaceDisposition(
+  existing: readonly PlaceQuestionDisposition[] | undefined,
+  next: {
+    readonly question: FrontierVerificationQuestion;
+    readonly outcome: "confirmed" | "negative" | "inconclusive";
+    readonly season: Season;
+    readonly tick: TickNumber;
+    readonly routeTiles: number;
+    readonly accessFailureKind?: WaterAccessFailureKind;
+  },
+): readonly PlaceQuestionDisposition[] {
+  const rows = existing ?? [];
+  const prior = rows.find((entry) => entry.question === next.question);
+  const seasonsAnswered =
+    prior === undefined
+      ? [next.season]
+      : prior.seasonsAnswered.includes(next.season)
+        ? prior.seasonsAnswered
+        : [...prior.seasonsAnswered, next.season];
+
+  const updated: PlaceQuestionDisposition = {
+    question: next.question,
+    outcome: next.outcome,
+    seasonsAnswered,
+    attempts: (prior?.attempts ?? 0) + 1,
+    lastSeason: next.season,
+    lastTick: next.tick,
+    routeTilesAtLastAttempt: next.routeTiles,
+    ...(next.outcome === "negative" && next.accessFailureKind !== undefined
+      ? { accessFailureKind: next.accessFailureKind }
+      : {}),
+  };
+
+  return [...rows.filter((entry) => entry.question !== next.question), updated];
+}
+
+/** Read model / audit accessor for the durable disposition. */
+export function findPlaceDisposition(
+  band: Band,
+  tileId: TileId,
+  question: FrontierVerificationQuestion,
+): PlaceQuestionDisposition | undefined {
+  return findDisposition(band, tileId, question);
 }
 
 /**
@@ -158,25 +249,27 @@ export function mayAskAgain(
     return { allowed: true, reason: "never asked here" };
   }
 
-  const seasonChanged = prior.lastSeason !== conditions.currentSeason;
+  // CORRECTION-23D §7 — A SEASON ALREADY COVERED REOPENS NOTHING.
+  //
+  // The previous gate compared `lastSeason !== currentSeason`, which is true three seasons
+  // out of four FOREVER — so a fully covered question re-fired every season for the life of
+  // the band. That single comparison was 45.8% of all verification launches, and it is the
+  // linear-growth engine the 648-repeat measurement recorded. What can justify another visit
+  // is a season this place has NOT been answered in.
   const seasonNew = !prior.seasonsAnswered.includes(conditions.currentSeason);
-  const hardshipMoved =
-    Math.abs(conditions.hardship - prior.hardshipAtLastAttempt) >= MATERIAL_HARDSHIP_DELTA;
   const routeMoved =
     conditions.routeTiles !== undefined &&
     Math.abs(conditions.routeTiles - prior.routeTilesAtLastAttempt) >= MATERIAL_ROUTE_DELTA;
 
-  // Seasonal persistence is the one question a genuinely new season re-opens on its own —
-  // that is the question. Repeats within a season it already covers answer nothing.
-  if (question === "seasonal_persistence") {
-    return seasonNew
-      ? { allowed: true, reason: "a season this place has not been seen in" }
-      : { allowed: false, reason: "this season is already covered here" };
-  }
-
+  // §7.5 — an inconclusive attempt settled nothing, so it may be retried; bounded, and only
+  // after a real interval.
   if (prior.outcome === "inconclusive") {
     if (prior.attempts >= MAX_INCONCLUSIVE_ATTEMPTS) {
       return { allowed: false, reason: "asked and left unresolved too many times" };
+    }
+
+    if (seasonNew || routeMoved) {
+      return { allowed: true, reason: "unresolved, and something about the attempt has changed" };
     }
 
     return conditions.currentTick - Number(prior.lastTick) >= RETRY_INTERVAL_TICKS
@@ -184,26 +277,62 @@ export function mayAskAgain(
       : { allowed: false, reason: "asked too recently" };
   }
 
-  // A settled answer — confirmed or negative — stands until the situation moves.
-  if (seasonChanged && (question === "water_access" || question === "resource_presence")) {
-    return { allowed: true, reason: "a different season may give a different answer" };
+  // §7.3 — once a stock-backed test is known to be worth attempting, the next behaviour is
+  // the test, not another confirmation of the prerequisite.
+  if (question === "resource_test_possible" && prior.outcome === "confirmed") {
+    return { allowed: false, reason: "already established; the next step is the test itself" };
+  }
+
+  // §7.1/§7.2/§7.4 — a settled answer stands. It is reopened by a question the previous
+  // visit could not have answered: a season it was never seen in, or a materially different
+  // way there. Seasonal persistence is season-scoped by definition.
+  if (question === "seasonal_persistence") {
+    return seasonNew
+      ? { allowed: true, reason: "a season this place has not been seen in" }
+      : { allowed: false, reason: "this season is already covered here" };
+  }
+
+  if (seasonNew) {
+    return { allowed: true, reason: "a season this place has not been answered in" };
   }
 
   if (routeMoved) {
-    return { allowed: true, reason: "the way there has changed" };
+    return { allowed: true, reason: "the way there has materially changed" };
   }
 
-  if (hardshipMoved) {
-    return { allowed: true, reason: "the band's situation has materially changed" };
-  }
-
+  // CORRECTION-23D §8 — HARDSHIP IS MOTIVATION, NOT EPISTEMIC INVALIDATION.
+  //
+  // The previous gate reopened a settled question whenever hardship moved by 0.2. Hardship
+  // oscillates, so that term was a permanent oscillator: 0.3 -> 0.5 reopened it, 0.5 -> 0.3
+  // reopened it again, forever, and it accounted for 2.5% of launches on its own. A hungry
+  // band has more reason to go and look at something ELSE; it has no reason to have
+  // forgotten what happened at this exact place. The term is gone, and `hardship` survives
+  // in `RetryConditions` only because the launch policy still reads it as motivation.
   return {
     allowed: false,
     reason:
       prior.outcome === "confirmed"
-        ? "already established here, and nothing has changed"
-        : "already found wanting here, and nothing has changed",
+        ? "already established here, and nothing about the question has changed"
+        : "already found wanting here, and nothing about the question has changed",
   };
+}
+
+/**
+ * §17 — what material change could reopen this question, in words, for the read model.
+ */
+export function describeReopeningConditions(
+  question: FrontierVerificationQuestion,
+  outcome: "confirmed" | "negative" | "inconclusive",
+): string {
+  if (question === "resource_test_possible" && outcome === "confirmed") {
+    return "nothing — the next step is a real test, not another check";
+  }
+
+  if (outcome === "inconclusive") {
+    return "a season it has not been seen in, a materially different route, or a later attempt";
+  }
+
+  return "a season it has not been answered in, or a materially different route";
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

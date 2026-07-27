@@ -60,6 +60,7 @@ import {
   retainFrontierObservations,
 } from "./frontierExploration";
 import {
+  recordPlaceDisposition,
   recordVerificationEvidence,
   taskCampRefusedByEvidence,
 } from "./verificationEvidence";
@@ -2326,6 +2327,34 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
         season: returned.result.season,
         outcome: returned.result.outcome,
       });
+      // CORRECTION-23D §6/§9 — the DURABLE conclusion goes on the place record, which is
+      // written AFTER `observeTileAndNearby` above so the walked-route observation cannot
+      // overwrite it. It survives every cap in this subsystem and is forgotten only when the
+      // band forgets the place itself.
+      const targetRecord = knowledge.observedTiles[returned.result.targetTileId];
+
+      if (targetRecord !== undefined) {
+        knowledge = {
+          ...knowledge,
+          observedTiles: {
+            ...knowledge.observedTiles,
+            [returned.result.targetTileId]: {
+              ...targetRecord,
+              verificationDisposition: recordPlaceDisposition(targetRecord.verificationDisposition, {
+                question: returned.result.question,
+                outcome: returned.result.outcome,
+                season: returned.result.season,
+                tick: getWorldTimeForDay(day).tick,
+                routeTiles: returned.routeTiles,
+                ...(returned.result.accessFailureKind === undefined
+                  ? {}
+                  : { accessFailureKind: returned.result.accessFailureKind }),
+              }),
+            },
+          },
+        };
+      }
+
       verificationEvidence = recordVerificationEvidence(verificationEvidence, {
         tileId: returned.result.targetTileId,
         question: returned.result.question,

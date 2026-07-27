@@ -156,7 +156,7 @@
       "expectation": "500 ticks later, unchanged conditions, the same question is NOT re-asked",
       "observed": {
         "sameConditionsAllowed": false,
-        "sameConditionsReason": "already established here, and nothing has changed",
+        "sameConditionsReason": "already established here, and nothing about the question has changed",
         "settledNegativeAlsoSuppressed": false,
         "differentQuestionStillAllowed": true
       },
@@ -166,13 +166,14 @@
     {
       "id": "R10",
       "title": "a changed season permits a relevant retry",
-      "expectation": "season, route and hardship changes each legitimately reopen the question",
+      "expectation": "an unanswered season or a materially different route reopens it; hardship does NOT",
       "observed": {
-        "newSeason": "true (a different season may give a different answer)",
-        "movedHardship": "true (the band's situation has materially changed)",
-        "movedRoute": "true (the way there has changed)"
+        "newSeason": "true (a season this place has not been answered in)",
+        "movedRoute": "true (the way there has materially changed)",
+        "movedHardship": "false (already established here, and nothing about the question has changed)"
       },
-      "pass": true
+      "pass": true,
+      "note": "hardship survives in RetryConditions only because the launch policy reads it as motivation."
     }
   ]
 }

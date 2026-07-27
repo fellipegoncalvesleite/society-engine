@@ -72,6 +72,29 @@ try {
       // CORRECTION-23B §11 — the AUTHORITATIVE retry memory, which is what now gates a
       // repeat. The 12-entry ring above is a display bound only.
       const evidenceRows = living.map((b) => (b.verificationEvidence ?? []).length);
+      // CORRECTION-23D §14 — the DURABLE disposition, which is what now gates a retry.
+      const dispositionRows = living.map((b) =>
+        Object.values(b.knowledge?.observedTiles ?? {}).reduce(
+          (acc, r) => acc + (r.verificationDisposition?.length ?? 0),
+          0,
+        ),
+      );
+      const placesWithDisposition = living.map((b) =>
+        Object.values(b.knowledge?.observedTiles ?? {}).filter(
+          (r) => (r.verificationDisposition?.length ?? 0) > 0,
+        ).length,
+      );
+      const knownTiles = living.map((b) => Object.keys(b.knowledge?.observedTiles ?? {}).length);
+      const dispositionBytes = living.reduce(
+        (acc, b) =>
+          acc +
+          Object.values(b.knowledge?.observedTiles ?? {}).reduce(
+            (inner, r) =>
+              inner + (r.verificationDisposition === undefined ? 0 : JSON.stringify(r.verificationDisposition).length),
+            0,
+          ),
+        0,
+      );
       const evidenceAttempts = living.flatMap((b) =>
         (b.verificationEvidence ?? []).map((e) => e.attempts),
       );
@@ -103,6 +126,11 @@ try {
         evidenceRowsMax: evidenceRows.length === 0 ? 0 : Math.max(...evidenceRows),
         evidenceRowsCap: 48,
         maxAttemptsOnOneEvidenceRow: evidenceAttempts.length === 0 ? 0 : Math.max(...evidenceAttempts),
+        dispositionRowsMax: dispositionRows.length === 0 ? 0 : Math.max(...dispositionRows),
+        dispositionRowsMedian: dispositionRows.sort((a, b) => a - b)[Math.floor(dispositionRows.length / 2)] ?? 0,
+        placesWithDispositionMax: placesWithDisposition.length === 0 ? 0 : Math.max(...placesWithDisposition),
+        knownTilesMax: knownTiles.length === 0 ? 0 : Math.max(...knownTiles),
+        dispositionBytesPerBand: r2(dispositionBytes / Math.max(1, living.length)),
         msPerTick: r2(elapsedMs / Math.max(1, ticks)),
       });
 

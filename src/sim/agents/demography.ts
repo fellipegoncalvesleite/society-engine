@@ -1903,6 +1903,10 @@ function inheritKnowledgeState(
       visits: 0,
       confidence,
       knowledgeSource: "inherited_memory",
+      // CORRECTION-23D §6 — a daughter inherits the PLACE, not the verification conclusions
+      // about it. It did not walk there, did not draw that water and did not run that search,
+      // so it holds no settled question and no retry suppression of its own.
+      verificationDisposition: undefined,
       observedSeasonalPattern:
         record.observedSeasonalPattern === undefined
           ? undefined

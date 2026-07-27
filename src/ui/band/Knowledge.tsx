@@ -399,11 +399,19 @@ function GoingBackToFindOut({
 }: {
   readonly verification: ReturnType<typeof derivePlaceEvidenceProjection>["verification"];
 }) {
-  const { water, promisingUnverified, knownPoor, activeParties, answered, failedOrInconclusive } =
-    verification;
+  const {
+    water,
+    retainedBeyondHistory,
+    promisingUnverified,
+    knownPoor,
+    activeParties,
+    answered,
+    failedOrInconclusive,
+  } = verification;
 
   if (
     water.length === 0 &&
+    retainedBeyondHistory.length === 0 &&
     promisingUnverified.length === 0 &&
     knownPoor.length === 0 &&
     activeParties.length === 0 &&
@@ -503,14 +511,53 @@ function GoingBackToFindOut({
               </span>
               <span className="knowledge-domain-basis">read by: {attempt.consumedBy}</span>
               {attempt.repeatBlockedReason === undefined ? null : (
-                <span className="knowledge-domain-basis">
-                  will not ask again: {attempt.repeatBlockedReason}
-                </span>
+                <>
+                  <span className="knowledge-domain-basis">
+                    will not ask again: {attempt.repeatBlockedReason}
+                  </span>
+                  <span className="knowledge-domain-basis">
+                    may reopen on: {attempt.mayReopenOn}
+                  </span>
+                </>
               )}
             </li>
           ))}
         </ul>
       </details>
+
+      {retainedBeyondHistory.length === 0 ? null : (
+        <details className="knowledge-technical">
+          <summary>
+            Still known, no longer in recent history ({retainedBeyondHistory.length})
+          </summary>
+          <p className="condition-note">
+            These attempts have aged out of the recent list above. The band has not forgotten
+            them — the conclusion is held against the place itself.
+          </p>
+          <ul className="knowledge-evidence-list">
+            {retainedBeyondHistory.map((attempt) => (
+              <li key={`h:${String(attempt.tileId)}:${attempt.question}`}>
+                <div className="knowledge-evidence-head">
+                  <strong>{String(attempt.tileId)}</strong>
+                  <Chip>{attempt.question.replace(/_/g, " ")}</Chip>
+                  <Chip>{attempt.outcome}</Chip>
+                  <Chip>{attempt.season}</Chip>
+                  <Chip>{attempt.settled ? "settled" : "open"}</Chip>
+                </div>
+                <span className="knowledge-domain-basis">
+                  recent attempt no longer displayed: authoritative result retained
+                </span>
+                {attempt.repeatBlockedReason === undefined ? null : (
+                  <span className="knowledge-domain-basis">
+                    repeat blocked: {attempt.repeatBlockedReason}
+                  </span>
+                )}
+                <span className="knowledge-domain-basis">may reopen on: {attempt.mayReopenOn}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
     </>
   );
 }

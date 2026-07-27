@@ -398,13 +398,18 @@ try {
     record(
       "R10",
       "a changed season permits a relevant retry",
-      "season, route and hardship changes each legitimately reopen the question",
+      // CORRECTION-23D §8 REVISED THIS EXPECTATION. 23B let hardship reopen a settled
+      // question; that made hardship an epistemic invalidator and, because hardship
+      // oscillates, a permanent retry oscillator. A hungry band has more reason to look
+      // somewhere ELSE — none to have forgotten what happened at this exact place.
+      "an unanswered season or a materially different route reopens it; hardship does NOT",
       {
         newSeason: `${newSeason.allowed} (${newSeason.reason})`,
-        movedHardship: `${movedHardship.allowed} (${movedHardship.reason})`,
         movedRoute: `${movedRoute.allowed} (${movedRoute.reason})`,
+        movedHardship: `${movedHardship.allowed} (${movedHardship.reason})`,
       },
-      newSeason.allowed === true && movedHardship.allowed === true && movedRoute.allowed === true,
+      newSeason.allowed === true && movedRoute.allowed === true && movedHardship.allowed === false,
+      { note: "hardship survives in RetryConditions only because the launch policy reads it as motivation." },
     );
   }
 

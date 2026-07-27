@@ -318,6 +318,16 @@ function observeTile(
       existingRecord?.acquisition === "residential_observation"
         ? "residential_observation"
         : acquisition,
+    // CORRECTION-23D §6/§9 — CARRY THE DURABLE VERIFICATION DISPOSITION FORWARD.
+    //
+    // This writer rebuilds the record as a fresh literal on every observation, so any field
+    // not named here is silently dropped. Walking past a place must not delete what a party
+    // physically established there: without this line the conclusion vanished the next time
+    // any route crossed the tile, and the settled question reopened — the same class of
+    // defect as the capped-list eviction this correction exists to remove.
+    ...(existingRecord?.verificationDisposition === undefined
+      ? {}
+      : { verificationDisposition: existingRecord.verificationDisposition }),
   };
 
   tileObservationHistory.push({

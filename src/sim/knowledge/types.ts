@@ -4,9 +4,11 @@ import type {
   RouteId,
   Season,
   SettlementId,
+  TickNumber,
   TileId,
   WorldTime,
 } from "../core/types";
+import type { FrontierVerificationQuestion, WaterAccessFailureKind } from "../agents/types";
 
 export type ContactKind =
   | "direct"
@@ -84,6 +86,21 @@ export interface KnownTileRecord {
   readonly seasonsObserved: readonly Season[];
   readonly visits: number;
   readonly observedRichness: number;
+  /**
+   * CORRECTION-23D §6 — THE DURABLE VERIFICATION DISPOSITION, attached to the place it is
+   * about.
+   *
+   * Retry memory lived on the band before this: first a 12-entry display ring, then a
+   * 48-entry evidence collection. Both were CAPS, and a cap that evicts silently turns
+   * "we settled this" back into "we have never asked" — measured at 18.1% of all launches,
+   * with the cap under pressure on 75.3% of band-days.
+   *
+   * A conclusion about a PLACE belongs to the band's record OF that place. This is sparse
+   * (only attempted places carry it), bounded (at most one entry per question), and it is
+   * forgotten exactly when the place itself is forgotten — which is the only thing that
+   * should ever make a settled question genuinely unknown again.
+   */
+  readonly verificationDisposition?: readonly PlaceQuestionDisposition[];
   readonly observedWaterAccess?: number;
   readonly observedAquaticPotential: number;
   readonly observedMovementCost?: number;
@@ -201,4 +218,24 @@ export interface KnowledgeState {
   readonly placeAttachments: readonly PlaceAttachment[];
   readonly tileObservationHistory: readonly TileObservation[];
   readonly rumors: readonly RumorRecord[];
+}
+
+/**
+ * CORRECTION-23D §6 — the minimum causal summary a future eligibility decision needs.
+ *
+ * Deliberately NOT a log. One entry per question actually attempted at this place, upserted,
+ * so repetition cannot grow state and no dense band x tile x question matrix exists.
+ */
+export interface PlaceQuestionDisposition {
+  readonly question: FrontierVerificationQuestion;
+  readonly outcome: "confirmed" | "negative" | "inconclusive";
+  /** Seasons this question was PHYSICALLY answered in here. Never a calendar. */
+  readonly seasonsAnswered: readonly Season[];
+  readonly attempts: number;
+  readonly lastSeason: Season;
+  readonly lastTick: TickNumber;
+  /** Route length walked last time — a materially different way there is a real change. */
+  readonly routeTilesAtLastAttempt: number;
+  /** §7.2 — the physical scope of a negative, so it never becomes global absence. */
+  readonly accessFailureKind?: WaterAccessFailureKind;
 }

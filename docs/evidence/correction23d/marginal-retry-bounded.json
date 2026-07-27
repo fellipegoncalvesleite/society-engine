@@ -1,0 +1,936 @@
+{
+  "site": "tile:204:72",
+  "map": "map2",
+  "years": 150,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5",
+    "s6",
+    "s7",
+    "s8",
+    "s9",
+    "s10"
+  ],
+  "label": "marginal_escapable",
+  "summary": {
+    "E2": {
+      "seeds": 10,
+      "survival": 0.7,
+      "medianFinalPopulation": 24,
+      "meanFinalPopulation": 17.4,
+      "medianExtinctionYear": 98,
+      "totalVerificationAttempts": 8870,
+      "totalWaterConfirmations": 182,
+      "totalEvidenceRows": 480,
+      "totalTempUseRefusals": 126,
+      "totalDestinationEvaluations": 1341,
+      "totalAccessGatePasses": 1341,
+      "totalAccessGateBlocks": 0,
+      "totalConsideredTargets": 1341,
+      "meanRankingWaterTerm": 0.81,
+      "totalResidentialMoves": 1218,
+      "meanSupport": 0.09,
+      "totalReceipts": 74.55
+    }
+  },
+  "rows": [
+    {
+      "arm": "E2",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 24,
+      "finalBands": 1,
+      "peakPopulation": 34,
+      "peakBands": 1,
+      "meanSupport": 0.15,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 7.66,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 781,
+      "outcomeCounts": {
+        "confirmed": 606,
+        "negative": 137,
+        "inconclusive": 38,
+        "lost": 0
+      },
+      "peakEvidenceRows": 48,
+      "peakWaterConfirmations": 23,
+      "peakTempUseRefusals": 15,
+      "peakResourceEligible": 27,
+      "destinationEvaluations": 150,
+      "accessGatePasses": 150,
+      "accessGateBlocks": 0,
+      "consideredTargets": 150,
+      "meanRankingWaterTerm": 0.89,
+      "laterMovementAfterVerification": 139,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 19,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 24,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s2",
+      "survived": false,
+      "extinctionYear": 98,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "peakBands": 1,
+      "meanSupport": 0,
+      "births": 0,
+      "deaths": 1,
+      "physicalFoodReceipts": 9.06,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 937,
+      "outcomeCounts": {
+        "confirmed": 708,
+        "negative": 181,
+        "inconclusive": 48,
+        "lost": 0
+      },
+      "peakEvidenceRows": 48,
+      "peakWaterConfirmations": 13,
+      "peakTempUseRefusals": 12,
+      "peakResourceEligible": 24,
+      "destinationEvaluations": 97,
+      "accessGatePasses": 97,
+      "accessGateBlocks": 0,
+      "consideredTargets": 97,
+      "meanRankingWaterTerm": 0.62,
+      "laterMovementAfterVerification": 81,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 17,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 12,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s3",
+      "survived": false,
+      "extinctionYear": 98,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "peakBands": 1,
+      "meanSupport": 0,
+      "births": 0,
+      "deaths": 1,
+      "physicalFoodReceipts": 7.83,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 1008,
+      "outcomeCounts": {
+        "confirmed": 685,
+        "negative": 254,
+        "inconclusive": 69,
+        "lost": 0
+      },
+      "peakEvidenceRows": 48,
+      "peakWaterConfirmations": 13,
+      "peakTempUseRefusals": 14,
+      "peakResourceEligible": 28,
+      "destinationEvaluations": 97,
+      "accessGatePasses": 97,
+      "accessGateBlocks": 0,
+      "consideredTargets": 97,
+      "meanRankingWaterTerm": 0.62,
+      "laterMovementAfterVerification": 80,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 17,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 12,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 21,
+      "finalBands": 1,
+      "peakPopulation": 34,
+      "peakBands": 1,
+      "meanSupport": 0.13,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 8.1,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 817,
+      "outcomeCounts": {
+        "confirmed": 608,
+        "negative": 158,
+        "inconclusive": 51,
+        "lost": 0
+      },
+      "peakEvidenceRows": 48,
+      "peakWaterConfirmations": 19,
+      "peakTempUseRefusals": 13,
+      "peakResourceEligible": 25,
+      "destinationEvaluations": 150,
+      "accessGatePasses": 150,
+      "accessGateBlocks": 0,
+      "consideredTargets": 150,
+      "meanRankingWaterTerm": 0.86,
+      "laterMovementAfterVerification": 134,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 17,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 15,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 17,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 19,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 21,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 31,
+      "finalBands": 1,
+      "peakPopulation": 34,
+      "peakBands": 1,
+      "meanSupport": 0.17,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 8.92,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 643,
+      "outcomeCounts": {
+        "confirmed": 538,
+        "negative": 71,
+        "inconclusive": 34,
+        "lost": 0
+      },
+      "peakEvidenceRows": 48,
+      "peakWaterConfirmations": 26,
+      "peakTempUseRefusals": 12,
+      "peakResourceEligible": 21,
+      "destinationEvaluations": 150,
+      "accessGatePasses": 150,
+      "accessGateBlocks": 0,
+      "consideredTargets": 150,
+      "meanRankingWaterTerm": 0.9,
+      "laterMovementAfterVerification": 141,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 20,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 21,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 27,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 31,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s6",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 26,
+      "finalBands": 1,
+      "peakPopulation": 34,
+      "peakBands": 1,
+      "meanSupport": 0.1,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 6.89,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 863,
+      "outcomeCounts": {
+        "confirmed": 717,
+        "negative": 105,
+        "inconclusive": 41,
+        "lost": 0
+      },
+      "peakEvidenceRows": 48,
+      "peakWaterConfirmations": 22,
+      "peakTempUseRefusals": 13,
+      "peakResourceEligible": 22,
+      "destinationEvaluations": 150,
+      "accessGatePasses": 150,
+      "accessGateBlocks": 0,
+      "consideredTargets": 150,
+      "meanRankingWaterTerm": 0.91,
+      "laterMovementAfterVerification": 140,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 32,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 20,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 21,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 22,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 26,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s7",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 14,
+      "finalBands": 1,
+      "peakPopulation": 34,
+      "peakBands": 1,
+      "meanSupport": 0.06,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 5.43,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 1193,
+      "outcomeCounts": {
+        "confirmed": 841,
+        "negative": 268,
+        "inconclusive": 84,
+        "lost": 0
+      },
+      "peakEvidenceRows": 48,
+      "peakWaterConfirmations": 19,
+      "peakTempUseRefusals": 13,
+      "peakResourceEligible": 26,
+      "destinationEvaluations": 150,
+      "accessGatePasses": 150,
+      "accessGateBlocks": 0,
+      "consideredTargets": 150,
+      "meanRankingWaterTerm": 0.79,
+      "laterMovementAfterVerification": 135,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 18,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 11,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 12,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 14,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s8",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 26,
+      "finalBands": 1,
+      "peakPopulation": 34,
+      "peakBands": 1,
+      "meanSupport": 0.1,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 6.08,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 824,
+      "outcomeCounts": {
+        "confirmed": 662,
+        "negative": 115,
+        "inconclusive": 47,
+        "lost": 0
+      },
+      "peakEvidenceRows": 48,
+      "peakWaterConfirmations": 17,
+      "peakTempUseRefusals": 13,
+      "peakResourceEligible": 27,
+      "destinationEvaluations": 150,
+      "accessGatePasses": 150,
+      "accessGateBlocks": 0,
+      "consideredTargets": 150,
+      "meanRankingWaterTerm": 0.9,
+      "laterMovementAfterVerification": 142,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 19,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 19,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 21,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 23,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 26,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s9",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 32,
+      "finalBands": 1,
+      "peakPopulation": 34,
+      "peakBands": 1,
+      "meanSupport": 0.16,
+      "births": 1,
+      "deaths": 1,
+      "physicalFoodReceipts": 8.75,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 811,
+      "outcomeCounts": {
+        "confirmed": 700,
+        "negative": 75,
+        "inconclusive": 36,
+        "lost": 0
+      },
+      "peakEvidenceRows": 48,
+      "peakWaterConfirmations": 18,
+      "peakTempUseRefusals": 9,
+      "peakResourceEligible": 21,
+      "destinationEvaluations": 150,
+      "accessGatePasses": 150,
+      "accessGateBlocks": 0,
+      "consideredTargets": 150,
+      "meanRankingWaterTerm": 0.94,
+      "laterMovementAfterVerification": 136,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 23,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 100,
+          "population": 25,
+          "bands": 1
+        },
+        {
+          "year": 125,
+          "population": 28,
+          "bands": 1
+        },
+        {
+          "year": 150,
+          "population": 32,
+          "bands": 1
+        }
+      ]
+    },
+    {
+      "arm": "E2",
+      "seed": "s10",
+      "survived": false,
+      "extinctionYear": 98,
+      "finalPopulation": 0,
+      "finalBands": 0,
+      "peakPopulation": 34,
+      "peakBands": 1,
+      "meanSupport": 0,
+      "births": 0,
+      "deaths": 1,
+      "physicalFoodReceipts": 5.83,
+      "firstHardshipYear": 1,
+      "firstShallowOpportunityYear": 1,
+      "firstVerificationYear": 1,
+      "firstVerificationQuestion": "resource_presence",
+      "firstVerificationOutcome": "confirmed",
+      "verificationAttempts": 993,
+      "outcomeCounts": {
+        "confirmed": 660,
+        "negative": 260,
+        "inconclusive": 73,
+        "lost": 0
+      },
+      "peakEvidenceRows": 48,
+      "peakWaterConfirmations": 12,
+      "peakTempUseRefusals": 12,
+      "peakResourceEligible": 23,
+      "destinationEvaluations": 97,
+      "accessGatePasses": 97,
+      "accessGateBlocks": 0,
+      "consideredTargets": 97,
+      "meanRankingWaterTerm": 0.62,
+      "laterMovementAfterVerification": 90,
+      "laterResourceActionAfterVerification": 0,
+      "trajectory": [
+        {
+          "year": 1,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 2,
+          "population": 34,
+          "bands": 1
+        },
+        {
+          "year": 3,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 4,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 5,
+          "population": 33,
+          "bands": 1
+        },
+        {
+          "year": 25,
+          "population": 24,
+          "bands": 1
+        },
+        {
+          "year": 50,
+          "population": 17,
+          "bands": 1
+        },
+        {
+          "year": 75,
+          "population": 12,
+          "bands": 1
+        }
+      ]
+    }
+  ]
+}
