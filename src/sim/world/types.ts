@@ -344,6 +344,10 @@ export interface WorldAuditOptions {
   // `noUsefulRetrieval || need >= 0.45`; these arms run exactly one disjunct so the two
   // launch causes can be counted separately instead of inferred.
   readonly frontierVerificationLaunchArm?: "no_useful_retrieval_only" | "need_only";
+  // CORRECTION-23C §11 — arm C2. Water-access evidence is written and displayed normally but
+  // withheld from the feasibility reader, so the access effect can be isolated from the cost
+  // and displacement of the journey. Undefined in every normal world; read at one seam.
+  readonly waterAccessEvidenceHiddenFromDestination?: boolean;
 }
 
 export interface WorldState {

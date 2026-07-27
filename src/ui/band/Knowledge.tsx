@@ -399,9 +399,11 @@ function GoingBackToFindOut({
 }: {
   readonly verification: ReturnType<typeof derivePlaceEvidenceProjection>["verification"];
 }) {
-  const { promisingUnverified, knownPoor, activeParties, answered, failedOrInconclusive } = verification;
+  const { water, promisingUnverified, knownPoor, activeParties, answered, failedOrInconclusive } =
+    verification;
 
   if (
+    water.length === 0 &&
     promisingUnverified.length === 0 &&
     knownPoor.length === 0 &&
     activeParties.length === 0 &&
@@ -425,6 +427,29 @@ function GoingBackToFindOut({
             {party.selectionReason}.
           </p>
         ))
+      )}
+
+      {water.length === 0 ? null : (
+        <details className="knowledge-technical">
+          <summary>Water: presence, physical access and reliability ({water.length} places)</summary>
+          <ul className="knowledge-evidence-list">
+            {water.map((row) => (
+              <li key={`w:${String(row.tileId)}`}>
+                <div className="knowledge-evidence-head">
+                  <strong>{String(row.tileId)}</strong>
+                  {row.distanceTiles === undefined ? null : <Chip>{row.distanceTiles} tiles</Chip>}
+                </div>
+                <span className="knowledge-domain-basis">Water presence: {row.presence}</span>
+                <span className="knowledge-domain-basis">Physical access: {row.physicalAccess}</span>
+                <span className="knowledge-domain-basis">Reliability: {row.reliability}</span>
+                <span className="knowledge-domain-basis">Other seasons: {row.otherSeasons}</span>
+                <span className="knowledge-domain-basis">
+                  Destination effect: {row.destinationEffect}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </details>
       )}
 
       <details className="knowledge-technical">

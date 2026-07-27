@@ -41,6 +41,11 @@ const ARM_OPTIONS = {
   E3: { frontierVerificationDisabled: true },
   E4: { frontierVerificationKnowledgeDisabled: true },
   E5: { frontierVerificationConfirmationDisabled: true },
+  // CORRECTION-23C §11 — C0 is measured on a2e7abb in a worktree; C1 is HEAD; C2 is HEAD with
+  // the water answer withheld from the destination reader only.
+  C0: undefined,
+  C1: undefined,
+  C2: { waterAccessEvidenceHiddenFromDestination: true },
 };
 
 const r2 = (v) => (v === undefined || v === null ? null : Math.round(v * 100) / 100);
@@ -96,6 +101,13 @@ try {
     let peakEvidenceRows = 0;
     let peakTempUseRefusals = 0;
     let peakResourceEligible = 0;
+    // CORRECTION-23C §11 — feasibility versus ranking, counted separately.
+    let destinationEvaluations = 0;
+    let accessGatePasses = 0;
+    let accessGateBlocks = 0;
+    let consideredTargets = 0;
+    let rankingWaterSum = 0;
+    let rankingWaterN = 0;
     const trajectory = [];
     const seenAttempts = new Set();
     let positionsAfterVerification = new Map();
@@ -140,6 +152,15 @@ try {
           peakTempUseRefusals,
           evidence.filter((e) => e.question === "temporary_use" && e.outcome === "negative").length,
         );
+        const opp = band.carryingCapacity?.knownUnusedHabitat;
+        if (opp !== undefined) {
+          destinationEvaluations += 1;
+          if (opp.waterAccessFeasible === true) accessGatePasses += 1;
+          if (opp.rejectionReason === "insufficient_water_reliability") accessGateBlocks += 1;
+          if (opp.consideredAsTarget === true) consideredTargets += 1;
+          rankingWaterSum += opp.waterReliability ?? 0;
+          rankingWaterN += 1;
+        }
         peakResourceEligible = Math.max(
           peakResourceEligible,
           evidence.filter((e) => e.question === "resource_presence" && e.outcome === "confirmed").length,
@@ -203,6 +224,11 @@ try {
       peakWaterConfirmations,
       peakTempUseRefusals,
       peakResourceEligible,
+      destinationEvaluations,
+      accessGatePasses,
+      accessGateBlocks,
+      consideredTargets,
+      meanRankingWaterTerm: r2(rankingWaterN === 0 ? null : rankingWaterSum / rankingWaterN),
       laterMovementAfterVerification,
       laterResourceActionAfterVerification,
       trajectory,
@@ -240,6 +266,14 @@ try {
       totalWaterConfirmations: armRows.reduce((a, r) => a + (r.peakWaterConfirmations ?? 0), 0),
       totalEvidenceRows: armRows.reduce((a, r) => a + (r.peakEvidenceRows ?? 0), 0),
       totalTempUseRefusals: armRows.reduce((a, r) => a + (r.peakTempUseRefusals ?? 0), 0),
+      totalDestinationEvaluations: armRows.reduce((a, r) => a + (r.destinationEvaluations ?? 0), 0),
+      totalAccessGatePasses: armRows.reduce((a, r) => a + (r.accessGatePasses ?? 0), 0),
+      totalAccessGateBlocks: armRows.reduce((a, r) => a + (r.accessGateBlocks ?? 0), 0),
+      totalConsideredTargets: armRows.reduce((a, r) => a + (r.consideredTargets ?? 0), 0),
+      meanRankingWaterTerm: r2(
+        armRows.reduce((a, r) => a + (r.meanRankingWaterTerm ?? 0), 0) / Math.max(1, armRows.length),
+      ),
+      totalResidentialMoves: armRows.reduce((a, r) => a + (r.laterMovementAfterVerification ?? 0), 0),
       meanSupport: r2(armRows.reduce((a, r) => a + (r.meanSupport ?? 0), 0) / Math.max(1, armRows.length)),
       totalReceipts: r2(armRows.reduce((a, r) => a + r.physicalFoodReceipts, 0)),
     };

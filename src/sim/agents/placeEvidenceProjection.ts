@@ -17,7 +17,7 @@
 // It takes the world only for tile identity/coordinates so distances can be reported; it
 // reads no resource, seasonal or hydrological truth from it.
 import type { TileId } from "../core/types";
-import { findVerificationEvidence, mayAskAgain } from "./verificationEvidence";
+import { deriveDirectWaterAccess, findVerificationEvidence, mayAskAgain } from "./verificationEvidence";
 import {
   VERIFICATION_ATTEMPT_HISTORY_CAP,
   VERIFICATION_MAX_DISTANCE_TILES,
@@ -126,7 +126,29 @@ export interface PlaceVerificationAttemptView {
   readonly seasonsAnswered: readonly string[];
 }
 
+/**
+ * CORRECTION-23C §13 — water stated as three separate facts, because they ARE three separate
+ * facts. CORRECTION-23B rendered a confirmed access as a reliability number, which is exactly
+ * the conflation this correction removes. The panel must never show
+ * "Water reliability: 0.55" because a party once drew water.
+ */
+export interface PlaceWaterEvidenceView {
+  readonly tileId: TileId;
+  readonly distanceTiles?: number;
+  /** What the band saw. Presence is an observation, not an access claim. */
+  readonly presence: "unknown" | "none observed" | "observed";
+  /** What a party physically established, and in which season. */
+  readonly physicalAccess: string;
+  /** Deliberately qualitative: the band has no reliability measurement to show. */
+  readonly reliability: string;
+  readonly otherSeasons: string;
+  /** What the answer does to a destination decision, in the narrowest true terms. */
+  readonly destinationEffect: string;
+}
+
 export interface PlaceVerificationProjection {
+  /** §13 — presence / access / reliability / seasons, stated separately. */
+  readonly water: readonly PlaceWaterEvidenceView[];
   /** Places the band's own record marks promising for a question it has not answered. */
   readonly promisingUnverified: readonly PlaceVerificationTarget[];
   /** Places the band's own record marks as poor — a reason NOT to go. */
@@ -153,6 +175,7 @@ export interface PlaceEvidenceProjection {
 
 const MAX_ENTRIES = 24;
 const MAX_VERIFICATION_ROWS = 12;
+const ALL_SEASONS = ["spring", "summer", "autumn", "winter"] as const;
 
 /** What each answer establishes, and what it still leaves open. §4's semantic contract. */
 const QUESTION_MEANING: Readonly<
@@ -463,7 +486,57 @@ function deriveVerificationProjection(
     };
   };
 
+  // §13 — one row per place the band has a water answer or a water observation for.
+  const water: PlaceWaterEvidenceView[] = [];
+
+  for (const record of records) {
+    const direct = deriveDirectWaterAccess(band, record.tileId);
+    const observed = record.observedWaterAccess;
+
+    if (direct.state === "unasked" && observed === undefined) {
+      continue;
+    }
+
+    const distance = distanceOf(record.tileId);
+    const seasons = direct.seasonsObserved;
+    const unobserved = ALL_SEASONS.filter((season) => !seasons.includes(season));
+
+    water.push({
+      tileId: record.tileId,
+      ...(distance === undefined ? {} : { distanceTiles: distance }),
+      presence:
+        observed === undefined ? "unknown" : observed < 0.12 ? "none observed" : "observed",
+      physicalAccess:
+        direct.state === "accessed"
+          ? `confirmed in ${String(direct.season)}`
+          : direct.state === "refuted"
+            ? direct.failureKind === "absent_in_bounded_search"
+              ? `nothing reachable in the area searched, in ${String(direct.season)}`
+              : `the way there failed, in ${String(direct.season)}`
+            : direct.state === "inconclusive"
+              ? "attempted, settled nothing"
+              : "never attempted",
+      // No number. The band holds no reliability measurement, and saying "0.55" would be
+      // inventing one out of a single access event.
+      reliability:
+        seasons.length >= 3
+          ? "supported by evidence in most seasons"
+          : direct.state === "accessed"
+            ? "uncertain — reaching water once says nothing about how dependable it is"
+            : "uncertain",
+      otherSeasons:
+        unobserved.length === 0 ? "all seasons observed" : `unobserved: ${unobserved.join(", ")}`,
+      destinationEffect:
+        direct.state === "accessed"
+          ? "physical-access requirement satisfied; ranking unchanged"
+          : direct.state === "refuted" && direct.failureKind === "absent_in_bounded_search"
+            ? "physical-access requirement not satisfied here"
+            : "no effect — the destination gate still reads what the band observed",
+    });
+  }
+
   return {
+    water: [...water].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),
     promisingUnverified: [...promising].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),
     knownPoor: [...poor].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),
     activeParties,

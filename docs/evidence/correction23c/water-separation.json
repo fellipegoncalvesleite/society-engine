@@ -1,0 +1,273 @@
+{
+  "ledger": [
+    {
+      "field": "tile.resourceProfile.waterAccess",
+      "writer": "world generation (hydrography)",
+      "physicalMeaning": "how reachable water is at this tile",
+      "epistemicMeaning": "HIDDEN TRUTH — never read by a decision",
+      "range": "0..1",
+      "readers": "tileObservation (coarsened), on-site verification (party is standing there)",
+      "oneVisitMayChange": false,
+      "drives": "neither — it is truth, not knowledge"
+    },
+    {
+      "field": "KnownTileRecord.observedWaterAccess",
+      "writer": "tileObservation.observeTile",
+      "physicalMeaning": "the band's impression of water at a place",
+      "epistemicMeaning": "coarsened to quarter buckets and capped at 0.5 for a shallow traversal; exact for residential observation",
+      "range": "0..1, optional (undefined = never observed)",
+      "readers": "carryingCapacity, habitatYield, mobilityIntent, bandDecision, campMovement, dryMargin, pressure, memory, crowding, residentialAnchor, seasonalRound, contextCache, socialContext, foragingAdaptation, demography, migrationWalk, memoryCompression, ecologicalProjection",
+      "oneVisitMayChange": true,
+      "drives": "RANKING in most readers; the destination FEASIBILITY gate reads it only as a fallback"
+    },
+    {
+      "field": "KnownTileRecord.observedAquaticPotential",
+      "writer": "tileObservation.observeTile",
+      "physicalMeaning": "visible open water as a food context",
+      "epistemicMeaning": "0 unless the tile is visibly aquatic/river; coarsened and capped for a traversal",
+      "range": "0..1",
+      "readers": "foragingAdaptation, memoryCompression, habitatYield",
+      "oneVisitMayChange": true,
+      "drives": "RANKING"
+    },
+    {
+      "field": "KnownTileRecord.confidence",
+      "writer": "tileObservation.observeTile",
+      "physicalMeaning": "n/a",
+      "epistemicMeaning": "general strength of the record; rises with repeat visits, capped at 0.72 for shallow",
+      "range": "0..1",
+      "readers": "carryingCapacity (rejection reason), campMovement, many scorers",
+      "oneVisitMayChange": true,
+      "drives": "RANKING and a low-confidence rejection reason"
+    },
+    {
+      "field": "KnownTileRecord.seasonsObserved",
+      "writer": "tileObservation.observeTile",
+      "physicalMeaning": "seasons the place was physically experienced in",
+      "epistemicMeaning": "coverage, never a calendar",
+      "range": "list of seasons",
+      "readers": "frontierVerification (seasonal_persistence), placeEvidenceProjection",
+      "oneVisitMayChange": true,
+      "drives": "neither"
+    },
+    {
+      "field": "KnownTileRecord.observedSeasonalPattern.reliability",
+      "writer": "tileObservation.observeTile (residential/scout only; NEVER a shallow traversal)",
+      "physicalMeaning": "how dependable the place is across seasons",
+      "epistemicMeaning": "left UNDEFINED by a traversal so readers use a neutral default",
+      "range": "0..1, optional",
+      "readers": "habitatYield",
+      "oneVisitMayChange": false,
+      "drives": "RANKING"
+    },
+    {
+      "field": "KnownUnusedHabitatOpportunity.waterReliability",
+      "writer": "carryingCapacity.deriveKnownUnusedHabitat",
+      "physicalMeaning": "the band's observed water level at a candidate",
+      "epistemicMeaning": "AFTER 23C: exactly `observedWaterAccess`. BEFORE: floored at 0.55 by a confirmed access",
+      "range": "0..1",
+      "readers": "score term (x0.24), side-country margin relaxation (>0.36), suspicious-ignored diagnostic (>0.4), UI",
+      "oneVisitMayChange": false,
+      "drives": "RANKING ONLY (23C removed its feasibility role)"
+    },
+    {
+      "field": "KnownUnusedHabitatOpportunity.waterAccessFeasible",
+      "writer": "carryingCapacity.deriveKnownUnusedHabitat via verificationEvidence.isWaterAccessFeasible",
+      "physicalMeaning": "is reaching water here physically possible",
+      "epistemicMeaning": "direct physical answer if one exists, else the observation against the 0.32 threshold",
+      "range": "boolean",
+      "readers": "consideredAsTarget gate, rejectionReason, audit ledger wouldPassViability",
+      "oneVisitMayChange": true,
+      "drives": "FEASIBILITY ONLY — a boolean has no magnitude to leak into a score"
+    },
+    {
+      "field": "VerificationEvidenceRecord (question = water_access)",
+      "writer": "expedition return seam via verificationEvidence.recordVerificationEvidence",
+      "physicalMeaning": "a party stood at the place and did or did not reach water",
+      "epistemicMeaning": "season-scoped, route-scoped, acquisition-tagged; proves neither reliability nor other seasons",
+      "range": "confirmed | negative | inconclusive",
+      "readers": "isWaterAccessFeasible, deriveDirectWaterAccess, the read model, the retry gate",
+      "oneVisitMayChange": true,
+      "drives": "FEASIBILITY ONLY"
+    },
+    {
+      "field": "seasonalRound REFUGE_VIABLE_MIN_WATER gate",
+      "writer": "n/a (reader)",
+      "physicalMeaning": "whether a refuge has enough water",
+      "epistemicMeaning": "reads `provenReliable` OR observedWaterAccess",
+      "range": "boolean",
+      "readers": "seasonalRound",
+      "oneVisitMayChange": true,
+      "drives": "FEASIBILITY — untouched by this pass; it already had its own proven-reliability path"
+    }
+  ],
+  "passed": 10,
+  "failed": 0,
+  "cases": [
+    {
+      "id": "W1",
+      "title": "confirmed access removes the access blocker",
+      "expectation": "without evidence the gate rejects on water; with evidence the physical-access gate passes",
+      "observed": {
+        "withoutEvidence": {
+          "feasible": false,
+          "rejection": "insufficient_water_reliability"
+        },
+        "withConfirmed": {
+          "feasible": true,
+          "rejection": null
+        }
+      },
+      "pass": true,
+      "target": "tile:100:0"
+    },
+    {
+      "id": "W2",
+      "title": "the ranking term remains unchanged",
+      "expectation": "waterReliability is identical with and without the access answer",
+      "observed": {
+        "withoutEvidence": 0.25,
+        "withConfirmed": 0.25,
+        "withNegative": 0.25,
+        "identical": true,
+        "previousBehaviour": "CORRECTION-23B floored this at 0.55 on a confirmed access"
+      },
+      "pass": true
+    },
+    {
+      "id": "W3",
+      "title": "confirmed access does not floor reliability",
+      "expectation": "the reported reliability equals the band's observation, not a floor",
+      "observed": {
+        "observedWaterAccess": 0.25,
+        "reportedReliabilityWithConfirmedAccess": 0.25,
+        "flooredAt055": false
+      },
+      "pass": true
+    },
+    {
+      "id": "W4",
+      "title": "evidence destroyed restores the exact prior feasibility decision",
+      "expectation": "removing the row reproduces the no-evidence verdict field for field",
+      "observed": {
+        "first": {
+          "candidateTileId": "tile:100:0",
+          "consideredAsTarget": false,
+          "rejectionReason": "insufficient_water_reliability",
+          "waterReliability": 0.25,
+          "waterAccessFeasible": false,
+          "directWaterAccessState": "unasked",
+          "directWaterAccessSeason": null
+        },
+        "restored": {
+          "candidateTileId": "tile:100:0",
+          "consideredAsTarget": false,
+          "rejectionReason": "insufficient_water_reliability",
+          "waterReliability": 0.25,
+          "waterAccessFeasible": false,
+          "directWaterAccessState": "unasked",
+          "directWaterAccessSeason": null
+        },
+        "identical": true
+      },
+      "pass": true
+    },
+    {
+      "id": "W5",
+      "title": "a negative blocks the searched place only",
+      "expectation": "the failure keeps its physical scope and no other place is claimed dry",
+      "observed": {
+        "failureKind": "absent_in_bounded_search",
+        "thisPlaceFeasible": false,
+        "otherPlaceFeasible": true,
+        "otherPlaceObservedUnchanged": true
+      },
+      "pass": true,
+      "note": "a party that never reaches its target writes NO row at all — a route failure cannot become a destination claim."
+    },
+    {
+      "id": "W6",
+      "title": "an inconclusive result is neutral",
+      "expectation": "no feasibility confirmation, no permanent failure, no reliability change, no ranking change",
+      "observed": {
+        "feasible": false,
+        "sameAsNoEvidence": true,
+        "reliability": 0.25,
+        "reliabilityUnchanged": true,
+        "rejection": "insufficient_water_reliability"
+      },
+      "pass": true
+    },
+    {
+      "id": "W7",
+      "title": "one-season confirmation does not establish annual reliability",
+      "expectation": "the evidence asserts its own season and refuses reliability by construction",
+      "observed": {
+        "season": "spring",
+        "seasonsObserved": [
+          "spring"
+        ],
+        "provesReliability": false,
+        "provesOtherSeasons": false,
+        "rankingTermWithConfirmedAccess": 0.25
+      },
+      "pass": true
+    },
+    {
+      "id": "W8",
+      "title": "repeated same-season confirmation still proves no other season",
+      "expectation": "four confirmations in one season give one season of coverage and four attempts",
+      "observed": {
+        "attempts": 4,
+        "seasonsObserved": [
+          "spring"
+        ],
+        "provesOtherSeasons": false
+      },
+      "pass": true
+    },
+    {
+      "id": "W9",
+      "title": "water access changes no ecology, resource or residential field",
+      "expectation": "every other field of the record is byte-identical with and without the answer",
+      "observed": {
+        "with": {
+          "observedRichness": 0.6,
+          "observedAquaticPotential": 0,
+          "observedSeasonalPattern": "undefined",
+          "acquisition": "returned_frontier_exploration",
+          "visits": 1,
+          "confidence": 0.5
+        },
+        "without": {
+          "observedRichness": 0.6,
+          "observedAquaticPotential": 0,
+          "observedSeasonalPattern": "undefined",
+          "acquisition": "returned_frontier_exploration",
+          "visits": 1,
+          "confidence": 0.5
+        }
+      },
+      "pass": true
+    },
+    {
+      "id": "W10",
+      "title": "UI truth safety",
+      "expectation": "presence, physical access, reliability and unobserved seasons are separate statements; no reliability number is shown",
+      "observed": {
+        "row": {
+          "tileId": "tile:100:0",
+          "distanceTiles": 6,
+          "presence": "observed",
+          "physicalAccess": "confirmed in spring",
+          "reliability": "uncertain — reaching water once says nothing about how dependable it is",
+          "otherSeasons": "unobserved: summer, autumn, winter",
+          "destinationEffect": "physical-access requirement satisfied; ranking unchanged"
+        },
+        "showsNoReliabilityNumber": true,
+        "noHiddenTruthRead": true
+      },
+      "pass": true
+    }
+  ]
+}

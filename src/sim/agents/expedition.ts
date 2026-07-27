@@ -80,6 +80,7 @@ import {
   findUnderstoodSignal,
   resolveSmokeSignal,
 } from "./fireSignals";
+import type { KnowledgeAcquisitionKind } from "../knowledge/types";
 import type {
   Band,
   ExpeditionCargo,
@@ -648,6 +649,10 @@ function resolveVerificationOnSite(
     rawOutcome: "confirmed" | "negative" | "inconclusive",
     evidenceBasis: string,
     harvestUnits = 0,
+    // CORRECTION-23C §7 — the PHYSICAL SCOPE of a negative answer. Only causes the model
+    // actually represents are encoded; a party that never reached the target does not
+    // arrive here at all, so it can never produce a claim about the destination.
+    accessFailureKind?: "absent_in_bounded_search" | "route_blocked",
   ): AdvanceResult => {
     // CORRECTION-23 CONTINUATION §9 E5 — audit-only. An affirmative answer is downgraded to
     // "we could not tell", isolating the value of confirmation from the value of asking.
@@ -677,6 +682,7 @@ function resolveVerificationOnSite(
         harvested: harvestUnits > 0,
         harvestUnits: round4(harvestUnits),
         evidenceBasis,
+        ...(outcome === "negative" && accessFailureKind !== undefined ? { accessFailureKind } : {}),
         reasonIds: [
           makeVerificationReasonId(String(band.id), time.tick, plan.question, outcome),
         ],
@@ -705,7 +711,14 @@ function resolveVerificationOnSite(
 
       return hasWaterHere || adjacentWater
         ? finish("confirmed", "the party reached water and drew from it")
-        : finish("negative", "no reachable water was found at this place");
+        : finish(
+            "negative",
+            "no reachable water was found in the area the party searched",
+            0,
+            // §7 — scoped to the bounded area actually searched. It is NOT a claim that the
+            // destination is dry, and NOT a route failure: the party got here.
+            "absent_in_bounded_search",
+          );
     }
 
     case "resource_presence": {
@@ -2017,6 +2030,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     // returned today. A lost party contributes nothing here, which is the §15 control.
     const returnedVerifications: {
       readonly routeTiles: number;
+      readonly acquisition?: KnowledgeAcquisitionKind;
       readonly result: NonNullable<ExpeditionRecord["verificationResult"]>;
       readonly harvestUnits: number;
     }[] = [];
@@ -2129,6 +2143,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
             ) {
               returnedVerifications.push({
                 routeTiles: result.expedition.routeTileIds.length,
+                acquisition: result.expedition.verificationPlan?.originatingAcquisition,
                 result: verificationResult,
                 harvestUnits: verificationResult.harvestUnits,
               });
@@ -2323,6 +2338,10 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
         // rather than as a question that consumes a party. This party walked out and walked
         // home, which is the whole test the removed question used to claim to perform.
         routeEvidence: "walked_out_and_back",
+        ...(returned.acquisition === undefined ? {} : { acquisition: returned.acquisition }),
+        ...(returned.result.accessFailureKind === undefined
+          ? {}
+          : { accessFailureKind: returned.result.accessFailureKind }),
       });
     }
 

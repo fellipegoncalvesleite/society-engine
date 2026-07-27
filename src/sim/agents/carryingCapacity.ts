@@ -1,5 +1,5 @@
 import { deriveBaseHabitatPotential, deriveSeasonalEffectiveYield } from "./habitatYield";
-import { applyVerifiedWaterAccess } from "./verificationEvidence";
+import { deriveDirectWaterAccess, isWaterAccessFeasible } from "./verificationEvidence";
 import {
   applyResourceClassPressure,
   deriveResourceClassAvailability,
@@ -786,6 +786,13 @@ export function deriveKnownUnusedHabitatForAudit(
   return deriveKnownUnusedHabitat(world, band, undefined, input);
 }
 
+/**
+ * CORRECTION-23C §6 — the observed-water level that supports a destination WITHOUT anyone
+ * having gone to check. Unchanged from the value this gate has always used; it is named here
+ * only so the feasibility question and the ranking term stop sharing a literal.
+ */
+const WATER_ACCESS_OBSERVED_THRESHOLD = 0.32;
+
 function deriveKnownUnusedHabitat(
   world: WorldState,
   band: Band,
@@ -851,21 +858,30 @@ function deriveKnownUnusedHabitat(
     const yieldState = computeTileYield(world, band, tileId, record, input.time, input.biomeCompetence);
     // Underused = good potential, low local use. Supportable per-capita estimate.
     const expectedPerCapita = clamp01(yieldState.effectiveYield * (1 - usePressure * 0.5));
-    // CORRECTION-23B §5 — THE WATER-ACCESS READER, and the one place it applies.
+    // CORRECTION-23C §6 — RELIABILITY IS OBSERVATION AND EXPERIENCE, AND ONLY THAT.
     //
-    // A shallow crossing may note that water is THERE; it may not claim the water can be
-    // reached and used, so `observedWaterAccess` is coarsened and capped at 0.5 by the
-    // observation writer. A verification party that physically walked to this tile and drew
-    // from the water has earned the stronger claim, and one that walked there and found
-    // nothing reachable has earned the weaker one.
+    // CORRECTION-23B floored this field at 0.55 when a party physically drew water here. That
+    // was wrong in two ways at once: the field feeds the destination RANKING term below
+    // (`score += waterReliability * 0.24`) and the side-country margin relaxation, so an
+    // access answer silently made the place SCORE better; and a confirmation needs only
+    // `waterAccess >= 0.3` or an adjacent water tile, so the floor could sit above the
+    // physical value. Reaching water once is not a reliability measurement.
     //
-    // This is deliberately narrow. It touches the WATER term of THIS tile only — not
-    // richness, not yield, not risk, not confidence, not any other place — and a confirmed
-    // result still asserts nothing about seasonal dependability: the floor sits far below
-    // certainty, and `waterReliability` is only ever a physical-access gate here.
-    const waterReliability = clamp01(
-      applyVerifiedWaterAccess(band, tileId, record.observedWaterAccess ?? 0.3),
+    // So this term is back to exactly what the band observed, and direct access is consumed
+    // separately below, as the boolean physical question it actually answers.
+    const waterReliability = clamp01(record.observedWaterAccess ?? 0.3);
+    // §6 — the PHYSICAL-ACCESS question, kept apart from the number above. A party that
+    // stood here and drew water satisfies it; a party that stood here and found nothing
+    // reachable in the area it searched fails it; anything else falls back to the
+    // observation. This is a boolean on purpose — there is no magnitude to leak into a score.
+    const waterAccessFeasible = isWaterAccessFeasible(
+      band,
+      tileId,
+      waterReliability,
+      WATER_ACCESS_OBSERVED_THRESHOLD,
+      world.auditOptions?.waterAccessEvidenceHiddenFromDestination === true,
     );
+    const directWaterAccess = deriveDirectWaterAccess(band, tileId);
     const distance = currentTile === undefined ? 4 : gridDistance(currentTile.coord, tile.coord);
     const travelCost = clamp01(distance / 12);
     const riskPenalty = clamp01(record.observedRisk ?? 0.3);
@@ -914,7 +930,7 @@ function deriveKnownUnusedHabitat(
         travelCost: round2(travelCost),
         wouldPassViability:
           expectedPerCapita > input.currentPerCapita + auditMargin &&
-          waterReliability > 0.32 &&
+          waterAccessFeasible &&
           riskPenalty < 0.55,
         isScoreWinner: false,
       });
@@ -944,11 +960,14 @@ function deriveKnownUnusedHabitat(
       Math.min(0.13, input.sustainedOverCapacity * 0.2) -
       sideCountryMarginRelaxation -
       pressureMarginRelaxation;
-    const consideredAsTarget = expectedPerCapita > input.currentPerCapita + competitionMargin && waterReliability > 0.32 && riskPenalty < 0.55;
+    const consideredAsTarget =
+      expectedPerCapita > input.currentPerCapita + competitionMargin &&
+      waterAccessFeasible &&
+      riskPenalty < 0.55;
 
     const rejectionReason = consideredAsTarget
       ? undefined
-      : waterReliability <= 0.32
+      : !waterAccessFeasible
         ? "insufficient_water_reliability"
         : riskPenalty >= 0.55
           ? "risk_too_high"
@@ -972,6 +991,12 @@ function deriveKnownUnusedHabitat(
       currentUsePressure: round2(usePressure),
       currentCrowding: round2(crowding),
       waterReliability: round2(waterReliability),
+      // §6/§13 — reported separately so nothing downstream can confuse "a party drew water
+      // here" with "the water here is dependable".
+      waterAccessFeasible,
+      directWaterAccessState: directWaterAccess.state,
+      ...(directWaterAccess.season === undefined ? {} : { directWaterAccessSeason: directWaterAccess.season }),
+      directWaterAccessSeasonsObserved: directWaterAccess.seasonsObserved,
       travelCost: round2(travelCost),
       riskPenalty: round2(riskPenalty),
       confidence: round2(confidence),

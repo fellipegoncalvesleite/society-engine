@@ -5,7 +5,7 @@
 //   deriveKnownUnusedHabitat  the destination decision that consumes water evidence
 //   classifyPlaceForQuestion  the eligibility state the selector acts on
 //   mayAskAgain               the retry gate
-//   applyVerifiedWaterAccess  the domain-locked water reader
+//   isWaterAccessFeasible     the domain-locked, BOOLEAN water-access reader (23C)
 //   taskCampRefusedByEvidence the bounded-use reader
 //
 // The decisive shape is the RESULT-DESTRUCTION COUNTERFACTUAL: one identical band, one
@@ -83,93 +83,68 @@ try {
     ...(evidence === undefined ? {} : { verificationEvidence: evidence }),
   });
 
-  // ── R1 / R12 — the exact reader counterfactual at the destination seam. ─────────
-  // A tile whose GLIMPSED water sits below the 0.32 physical-access gate: with the
-  // verification answer it must pass, without it it must not.
+  // ── R1 / R2 / R5 / R12 — the reader counterfactual, MIGRATED BY CORRECTION-23C. ──
+  //
+  // 23B's reader was a scalar floor on `waterReliability`. 23C replaced it with a boolean
+  // feasibility question, because that one field also fed the destination ranking term. The
+  // cases below assert the FEASIBILITY verdict; that the ranking term no longer moves at all
+  // is asserted separately by W2 in waterAccessSeparationAudit.
   {
     const target = Object.values(world.tiles)
       .filter((t) => t.isAquatic !== true && t.movementCost < 3)
       .filter((t) => dist(t, home) >= 4 && dist(t, home) <= 10)
       .sort((a, b) => String(a.id).localeCompare(String(b.id)))[0];
     const rec = mkRecord(target, { observedWaterAccess: 0.25, observedRichness: 0.5 });
+    const negativeRow = {
+      ...mkEvidence(target, "water_access", "negative"),
+      accessFailureKind: "absent_in_bounded_search",
+    };
+    const feasible = (evidence, tileId = target.id, observed = 0.25) =>
+      evidenceMod.isWaterAccessFeasible(mkBand([rec], evidence), tileId, observed, 0.32);
 
-    const without = evidenceMod.applyVerifiedWaterAccess(mkBand([rec]), target.id, 0.25);
-    const withConfirmed = evidenceMod.applyVerifiedWaterAccess(
-      mkBand([rec], [mkEvidence(target, "water_access", "confirmed")]),
-      target.id,
-      0.25,
-    );
-    const withNegative = evidenceMod.applyVerifiedWaterAccess(
-      mkBand([rec], [mkEvidence(target, "water_access", "negative")]),
-      target.id,
-      0.25,
-    );
-    const withInconclusive = evidenceMod.applyVerifiedWaterAccess(
-      mkBand([rec], [mkEvidence(target, "water_access", "inconclusive")]),
-      target.id,
-      0.25,
-    );
+    const without = feasible(undefined);
+    const withConfirmed = feasible([mkEvidence(target, "water_access", "confirmed")]);
+    const withNegative = feasible([negativeRow]);
+    const withInconclusive = feasible([mkEvidence(target, "water_access", "inconclusive")]);
+    const withTemporaryUse = feasible([mkEvidence(target, "temporary_use", "confirmed")]);
 
-    // The gate carryingCapacity applies is `waterReliability > 0.32`.
     record(
       "R1",
-      "confirmed water access changes the water reader",
-      "the same glimpse fails the 0.32 access gate without the answer and passes with it",
-      {
-        withoutEvidence: r3(without),
-        withConfirmed: r3(withConfirmed),
-        passesGateWithout: without > 0.32,
-        passesGateWith: withConfirmed > 0.32,
-      },
-      without <= 0.32 && withConfirmed > 0.32,
+      "confirmed access changes the feasibility verdict",
+      "an observation below the 0.32 threshold fails the gate; a physical answer passes it",
+      { passesGateWithout: without, passesGateWith: withConfirmed },
+      without === false && withConfirmed === true,
       { target: target.id },
     );
 
     record(
       "R12",
       "destroying the result reproduces the pre-reader decision",
-      "removing the evidence row returns the water term to exactly the observed value",
-      { observed: 0.25, withoutEvidence: r3(without), identical: without === 0.25 },
-      without === 0.25,
+      "with no row the gate falls back to exactly the band's observation",
+      { feasibleWithoutEvidence: without, fallsBackToObservation: without === false },
+      without === false,
     );
 
     record(
       "R2",
-      "negative water result suppresses this target only",
-      "the negative caps THIS tile below the gate and leaves every other tile untouched",
+      "a negative suppresses this target only",
+      "the refutation blocks this place; another place with good observation still passes",
       {
-        withNegative: r3(withNegative),
-        cappedBelowGate: withNegative <= 0.32,
-        otherTileUnaffected: r3(
-          evidenceMod.applyVerifiedWaterAccess(
-            mkBand([rec], [mkEvidence(target, "water_access", "negative")]),
-            home.id,
-            0.9,
-          ),
-        ),
-        inconclusiveIsNeutral: withInconclusive === 0.25,
+        withNegative,
+        otherPlaceStillFeasible: feasible([negativeRow], home.id, 0.9),
+        inconclusiveIsNeutral: withInconclusive === without,
       },
-      withNegative <= 0.32 &&
-        evidenceMod.applyVerifiedWaterAccess(
-          mkBand([rec], [mkEvidence(target, "water_access", "negative")]),
-          home.id,
-          0.9,
-        ) === 0.9 &&
-        withInconclusive === 0.25,
+      withNegative === false &&
+        feasible([negativeRow], home.id, 0.9) === true &&
+        withInconclusive === without,
     );
 
-    // R5 — a route answer must not move ecology or water at all.
-    const routeOnly = evidenceMod.applyVerifiedWaterAccess(
-      mkBand([rec], [mkEvidence(target, "temporary_use", "confirmed")]),
-      target.id,
-      0.25,
-    );
     record(
       "R5",
       "a non-water answer changes nothing in the water reader",
-      "only the water_access question may move the water term",
-      { withTemporaryUseConfirmed: r3(routeOnly), unchanged: routeOnly === 0.25 },
-      routeOnly === 0.25,
+      "only the water_access question may move the access verdict",
+      { withTemporaryUseConfirmed: withTemporaryUse, unchanged: withTemporaryUse === without },
+      withTemporaryUse === without,
       { note: "route_repeatability was REMOVED as a question (§8); route evidence is a by-product of any completed party." },
     );
   }
@@ -306,11 +281,11 @@ try {
       {
         productionQuestions: questions,
         routeRepeatabilityStillAQuestion: anyRouteQuestion,
-        waterUnchangedWithNoEvidence:
-          evidenceMod.applyVerifiedWaterAccess(bandNoEvidence, target.id, 0.4) === 0.4,
+        waterFeasibilityFallsBackToObservation:
+          evidenceMod.isWaterAccessFeasible(bandNoEvidence, target.id, 0.4, 0.32) === true,
       },
       anyRouteQuestion === false &&
-        evidenceMod.applyVerifiedWaterAccess(bandNoEvidence, target.id, 0.4) === 0.4,
+        evidenceMod.isWaterAccessFeasible(bandNoEvidence, target.id, 0.4, 0.32) === true,
       { note: "§8 removal: any completed party is a successful round trip, so the question was a tautology." },
     );
   }
@@ -330,12 +305,12 @@ try {
         campRefusedAfterNegative: evidenceMod.taskCampRefusedByEvidence(bandNegative, target.id),
         campRefusedAfterConfirmed: evidenceMod.taskCampRefusedByEvidence(bandConfirmed, target.id),
         campRefusedWithNoEvidence: evidenceMod.taskCampRefusedByEvidence(bandNone, target.id),
-        waterUntouched: evidenceMod.applyVerifiedWaterAccess(bandNegative, target.id, 0.45) === 0.45,
+        waterAccessUntouched: evidenceMod.isWaterAccessFeasible(bandNegative, target.id, 0.45, 0.32) === true,
         resourceUntouched: evidenceMod.resourceTestEligible(bandNegative, target.id) === false,
       },
       evidenceMod.taskCampRefusedByEvidence(bandNegative, target.id) === true &&
         evidenceMod.taskCampRefusedByEvidence(bandConfirmed, target.id) === false &&
-        evidenceMod.applyVerifiedWaterAccess(bandNegative, target.id, 0.45) === 0.45,
+        evidenceMod.isWaterAccessFeasible(bandNegative, target.id, 0.45, 0.32) === true,
     );
   }
 

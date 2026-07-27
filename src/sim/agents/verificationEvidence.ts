@@ -26,11 +26,14 @@
 //
 // Nothing here reads world truth. Every input is band state.
 import type { Season, TickNumber, TileId } from "../core/types";
+import type { KnowledgeAcquisitionKind } from "../knowledge/types";
 import type {
   Band,
+  DirectWaterAccessEvidence,
   FrontierVerificationQuestion,
   RouteRepeatabilityEvidence,
   VerificationEvidenceRecord,
+  WaterAccessFailureKind,
 } from "./types";
 
 /** Bounded evidence store. One row per (place, question); oldest row evicted first. */
@@ -43,19 +46,6 @@ const MAX_INCONCLUSIVE_ATTEMPTS = 3;
 const MATERIAL_HARDSHIP_DELTA = 0.2;
 /** A route materially differs when its length changes by at least this many tiles. */
 const MATERIAL_ROUTE_DELTA = 4;
-
-/**
- * §5 — a party that physically reached water and drew from it has earned a stronger claim
- * than a walker who saw it from a distance. This is the floor that claim establishes: enough
- * to clear the physical-access gate, and deliberately well short of certainty, because
- * reaching water once says nothing about whether it is there every season.
- */
-export const VERIFIED_WATER_ACCESS_FLOOR = 0.55;
-/**
- * §5 — a party that walked there and found nothing reachable. That is real evidence and it
- * must bite: the ceiling sits below `carryingCapacity`'s 0.32 physical-access gate.
- */
-export const REFUTED_WATER_ACCESS_CEILING = 0.28;
 
 const key = (tileId: TileId, question: FrontierVerificationQuestion): string =>
   `${String(tileId)}|${question}`;
@@ -88,6 +78,8 @@ export function recordVerificationEvidence(
     readonly hardship: number;
     readonly routeTiles: number;
     readonly routeEvidence: RouteRepeatabilityEvidence;
+    readonly acquisition?: KnowledgeAcquisitionKind;
+    readonly accessFailureKind?: WaterAccessFailureKind;
   },
 ): readonly VerificationEvidenceRecord[] {
   const rows = existing ?? [];
@@ -112,6 +104,11 @@ export function recordVerificationEvidence(
     hardshipAtLastAttempt: Math.round(Math.max(0, Math.min(1, next.hardship)) * 100) / 100,
     routeTilesAtLastAttempt: next.routeTiles,
     routeEvidence: next.routeEvidence,
+    ...(next.acquisition === undefined ? {} : { acquisition: next.acquisition }),
+    // §7 — the failure scope belongs to a negative answer and only to a negative answer.
+    ...(next.outcome === "negative" && next.accessFailureKind !== undefined
+      ? { accessFailureKind: next.accessFailureKind }
+      : {}),
   };
 
   const others = rows.filter(
@@ -210,34 +207,102 @@ export function mayAskAgain(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// §5 — WATER-ACCESS READER. The only reader that changes a destination decision.
+// CORRECTION-23C §5/§6 — DIRECT WATER ACCESS: FEASIBILITY ONLY.
+//
+// What CORRECTION-23B did, and why it was wrong: a confirmed access floored
+// `waterReliability` at 0.55. That single field is read by a physical-ACCESS gate
+// (`> 0.32`), by the destination RANKING term (`score += waterReliability * 0.24`) and by a
+// margin relaxation (`> 0.36`) — so evidence that answered "a party reached water here once"
+// also made the place score better and relax its own comparison margin. Worse, a
+// confirmation needs only `waterAccess >= 0.3` or an adjacent water tile, so 0.55 could sit
+// ABOVE the physical value.
+//
+// The repair is a separation, not a smaller number. Direct access now answers exactly one
+// question — is reaching water here physically possible — and reliability is left entirely
+// to observation and experience.
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Apply physically established water evidence to ONE tile's water-access term.
+ * Read the band's own direct water-access evidence for one place.
  *
- * A confirmed result means a party walked there and drew water: the band knows the water is
- * physically reachable, which is more than a glimpse from a crossing establishes and less
- * than seasonal dependability. A negative result means a party walked there and found
- * nothing reachable, which must bite.
- *
- * Domain-locked by construction: the observed value is the only input, the question is
- * hard-coded, and no other field of the record is consulted or returned.
+ * Returns the full bounded statement rather than a scalar, so a caller cannot accidentally
+ * use it as a magnitude. `provesReliability` and `provesOtherSeasons` are `false` by
+ * construction and are asserted by W3/W7/W8.
  */
-export function applyVerifiedWaterAccess(
+export function deriveDirectWaterAccess(band: Band, tileId: TileId): DirectWaterAccessEvidence {
+  const evidence = find(band, tileId, "water_access");
+
+  if (evidence === undefined) {
+    return {
+      state: "unasked",
+      seasonsObserved: [],
+      attempts: 0,
+      provesReliability: false,
+      provesOtherSeasons: false,
+    };
+  }
+
+  return {
+    state:
+      evidence.outcome === "confirmed"
+        ? "accessed"
+        : evidence.outcome === "negative"
+          ? "refuted"
+          : "inconclusive",
+    season: evidence.lastSeason,
+    seasonsObserved: evidence.seasonsAnswered,
+    routeTiles: evidence.routeTilesAtLastAttempt,
+    routeEvidence: evidence.routeEvidence,
+    acquisition: evidence.acquisition,
+    attempts: evidence.attempts,
+    ...(evidence.accessFailureKind === undefined ? {} : { failureKind: evidence.accessFailureKind }),
+    provesReliability: false,
+    provesOtherSeasons: false,
+  };
+}
+
+/**
+ * §6 — the physical-access question, and ONLY that question.
+ *
+ *   accessFeasible = directly confirmed access
+ *                    OR sufficiently supported observed access
+ *
+ * A direct refutation at the place searched overrides an observation, because a party stood
+ * there and could not reach water. An inconclusive attempt is neutral in both directions: it
+ * neither passes the gate nor closes it, which is what "we could not tell" means.
+ *
+ * This returns a BOOLEAN on purpose. There is no number to leak into a ranking term.
+ *
+ * Physical access is a property of terrain, route and hydrography, none of which vary by
+ * season in this model, so a confirmation is not re-asked every season. Seasonal
+ * DEPENDABILITY is a different question entirely and this function does not touch it.
+ */
+export function isWaterAccessFeasible(
   band: Band,
   tileId: TileId,
   observedWaterAccess: number,
-): number {
-  const evidence = find(band, tileId, "water_access");
-
-  if (evidence === undefined || evidence.outcome === "inconclusive") {
-    return observedWaterAccess;
+  observedAccessThreshold: number,
+  // CORRECTION-23C §11 arm C2 — audit-only. Undefined/false in every normal world.
+  evidenceHiddenFromDestination = false,
+): boolean {
+  if (evidenceHiddenFromDestination) {
+    return observedWaterAccess > observedAccessThreshold;
   }
 
-  return evidence.outcome === "confirmed"
-    ? Math.max(observedWaterAccess, VERIFIED_WATER_ACCESS_FLOOR)
-    : Math.min(observedWaterAccess, REFUTED_WATER_ACCESS_CEILING);
+  const direct = deriveDirectWaterAccess(band, tileId);
+
+  if (direct.state === "accessed") {
+    return true;
+  }
+
+  // §7 — a refutation is scoped to the bounded area the party actually searched. A route
+  // failure never produces this state, because a party that could not reach the target
+  // answered nothing about the target and writes no row.
+  if (direct.state === "refuted" && direct.failureKind === "absent_in_bounded_search") {
+    return false;
+  }
+
+  return observedWaterAccess > observedAccessThreshold;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

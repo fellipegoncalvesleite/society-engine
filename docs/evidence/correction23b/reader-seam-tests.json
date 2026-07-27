@@ -4,11 +4,9 @@
   "cases": [
     {
       "id": "R1",
-      "title": "confirmed water access changes the water reader",
-      "expectation": "the same glimpse fails the 0.32 access gate without the answer and passes with it",
+      "title": "confirmed access changes the feasibility verdict",
+      "expectation": "an observation below the 0.32 threshold fails the gate; a physical answer passes it",
       "observed": {
-        "withoutEvidence": 0.25,
-        "withConfirmed": 0.55,
         "passesGateWithout": false,
         "passesGateWith": true
       },
@@ -18,22 +16,20 @@
     {
       "id": "R12",
       "title": "destroying the result reproduces the pre-reader decision",
-      "expectation": "removing the evidence row returns the water term to exactly the observed value",
+      "expectation": "with no row the gate falls back to exactly the band's observation",
       "observed": {
-        "observed": 0.25,
-        "withoutEvidence": 0.25,
-        "identical": true
+        "feasibleWithoutEvidence": false,
+        "fallsBackToObservation": true
       },
       "pass": true
     },
     {
       "id": "R2",
-      "title": "negative water result suppresses this target only",
-      "expectation": "the negative caps THIS tile below the gate and leaves every other tile untouched",
+      "title": "a negative suppresses this target only",
+      "expectation": "the refutation blocks this place; another place with good observation still passes",
       "observed": {
-        "withNegative": 0.25,
-        "cappedBelowGate": true,
-        "otherTileUnaffected": 0.9,
+        "withNegative": false,
+        "otherPlaceStillFeasible": true,
         "inconclusiveIsNeutral": true
       },
       "pass": true
@@ -41,9 +37,9 @@
     {
       "id": "R5",
       "title": "a non-water answer changes nothing in the water reader",
-      "expectation": "only the water_access question may move the water term",
+      "expectation": "only the water_access question may move the access verdict",
       "observed": {
-        "withTemporaryUseConfirmed": 0.25,
+        "withTemporaryUseConfirmed": false,
         "unchanged": true
       },
       "pass": true,
@@ -64,7 +60,7 @@
           "candidateTileId": "tile:100:0",
           "consideredAsTarget": false,
           "rejectionReason": "not_better_than_current",
-          "waterReliability": 0.55
+          "waterReliability": 0.25
         },
         "diverged": true
       },
@@ -118,7 +114,7 @@
           "seasonal_persistence"
         ],
         "routeRepeatabilityStillAQuestion": false,
-        "waterUnchangedWithNoEvidence": true
+        "waterFeasibilityFallsBackToObservation": true
       },
       "pass": true,
       "note": "§8 removal: any completed party is a successful round trip, so the question was a tautology."
@@ -131,7 +127,7 @@
         "campRefusedAfterNegative": true,
         "campRefusedAfterConfirmed": false,
         "campRefusedWithNoEvidence": false,
-        "waterUntouched": true,
+        "waterAccessUntouched": true,
         "resourceUntouched": true
       },
       "pass": true

@@ -1205,6 +1205,18 @@ export type FrontierVerificationQuestion =
  */
 export type RouteRepeatabilityEvidence = "walked_out_and_back" | "not_established";
 
+/**
+ * CORRECTION-23C §7 — WHY a water-access attempt failed, kept at the scope the physics
+ * actually represents.
+ *
+ * Only two causes are physically distinguishable in the current model, and inventing more
+ * would be a label, not a distinction:
+ *   - the party stood on the target and found nothing reachable in the bounded area;
+ *   - the party never reached the target, so the ROUTE failed and the place is unanswered.
+ * A route failure is scoped to that attempt and never becomes a claim about the destination.
+ */
+export type WaterAccessFailureKind = "absent_in_bounded_search" | "route_blocked";
+
 /** What the band already holds about a target, and what it is missing. */
 export interface FrontierVerificationEvidenceGap {
   readonly question: FrontierVerificationQuestion;
@@ -1247,6 +1259,8 @@ export interface FrontierVerificationResult {
   readonly harvestUnits: number;
   /** Human-readable basis, surfaced by the read model. */
   readonly evidenceBasis: string;
+  /** CORRECTION-23C §7 — physical scope of a negative answer; absent otherwise. */
+  readonly accessFailureKind?: WaterAccessFailureKind;
   readonly reasonIds: readonly ReasonId[];
 }
 
@@ -1280,6 +1294,56 @@ export interface VerificationEvidenceRecord {
   readonly routeTilesAtLastAttempt: number;
   /** §8 — recorded as a by-product of the journey, never as a question of its own. */
   readonly routeEvidence: RouteRepeatabilityEvidence;
+  /**
+   * CORRECTION-23C §5 — how the band came to hold the record this answer was asked about.
+   * Retained so a direct physical answer is never confused with an inherited or reported one.
+   */
+  readonly acquisition?: KnowledgeAcquisitionKind;
+  /** §7 — the physical scope of a negative answer. Absent on confirmed or inconclusive. */
+  readonly accessFailureKind?: WaterAccessFailureKind;
+}
+
+/**
+ * CORRECTION-23C §3/§5 — what a physical water-access event does and does not establish.
+ *
+ * The three ideas below were collapsed into one `waterReliability` scalar by CORRECTION-23B,
+ * which floored the field at 0.55 on a confirmed access. That floor satisfied a physical
+ * ACCESS gate and simultaneously fed a destination RANKING term and a margin relaxation, so
+ * "a party once drew water here" silently became "this place is better". It could also raise
+ * the number above the physical value, since a confirmation needs only `waterAccess >= 0.3`
+ * or an adjacent water tile.
+ *
+ * They are now three separate things:
+ *   accessState   did a party physically reach and use water here? (feasibility only)
+ *   reliability   how dependable is the water? (observation/experience only, never this)
+ *   preference    is this destination better? (reads reliability, never accessState)
+ */
+export type DirectWaterAccessState =
+  // No party has been sent to ask.
+  | "unasked"
+  // A party stood here and drew water. Establishes physical feasibility, nothing else.
+  | "accessed"
+  // A party stood here and found nothing reachable in the area it searched.
+  | "refuted"
+  // The attempt settled nothing — it must not pass the gate and must not fail it.
+  | "inconclusive";
+
+/** §5 — the full, bounded statement a direct water-access event supports. */
+export interface DirectWaterAccessEvidence {
+  readonly state: DirectWaterAccessState;
+  /** The season the event actually happened in. Never generalized to other seasons. */
+  readonly season?: Season;
+  /** Every season this exact question has been physically answered in at this place. */
+  readonly seasonsObserved: readonly Season[];
+  /** Route length walked on the last attempt — the route basis for the claim. */
+  readonly routeTiles?: number;
+  readonly routeEvidence?: RouteRepeatabilityEvidence;
+  readonly acquisition?: KnowledgeAcquisitionKind;
+  readonly attempts: number;
+  readonly failureKind?: WaterAccessFailureKind;
+  /** Literal non-claims, asserted by construction and checked by W1-W10. */
+  readonly provesReliability: false;
+  readonly provesOtherSeasons: false;
 }
 
 /** Bounded per-band record of verifications already attempted, for §16 retry control. */
@@ -2695,6 +2759,15 @@ export interface KnownUnusedHabitatOpportunity {
   readonly currentUsePressure: NormalizedIntensity;
   readonly currentCrowding: NormalizedIntensity;
   readonly waterReliability: NormalizedIntensity;
+  // CORRECTION-23C §6 — the PHYSICAL-ACCESS verdict, separate from the reliability number
+  // above. `waterReliability` is what the band observed and drives ranking;
+  // `waterAccessFeasible` is whether reaching water here is physically possible and drives
+  // only the gate. A confirmed access sets the boolean and NEVER moves the number.
+  readonly waterAccessFeasible?: boolean;
+  readonly directWaterAccessState?: DirectWaterAccessState;
+  /** The season the direct access event actually happened in. Never generalized. */
+  readonly directWaterAccessSeason?: Season;
+  readonly directWaterAccessSeasonsObserved?: readonly Season[];
   readonly travelCost: NormalizedIntensity;
   readonly riskPenalty: NormalizedIntensity;
   readonly confidence: NormalizedIntensity;
