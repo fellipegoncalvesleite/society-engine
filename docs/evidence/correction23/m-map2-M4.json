@@ -1,0 +1,170 @@
+{
+  "map": "map2",
+  "years": 120,
+  "seeds": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e"
+  ],
+  "summary": {
+    "M4": {
+      "seeds": 5,
+      "meanPopulation": 180.2,
+      "meanLivingBands": 7.8,
+      "meanExtinctBands": 1.8,
+      "meanPopulationPerBand": 23.17,
+      "meanFissions": 0.6,
+      "meanSupport": 0.14,
+      "meanReceipts": 54.9,
+      "meanExplorationParties": 30.6,
+      "meanVerificationParties": 386.6,
+      "meanResidentialMoves": 842.8,
+      "meanResourceTrips": 2332.4
+    }
+  },
+  "rows": [
+    {
+      "arm": "M4",
+      "seed": "a",
+      "startBands": 9,
+      "population": 179,
+      "livingBands": 8,
+      "extinctBands": 2,
+      "populationPerBand": 22.38,
+      "fissions": 1,
+      "meanSupport": 0.14,
+      "physicalFoodReceipts": 52.96,
+      "explorationParties": 31,
+      "verificationParties": 412,
+      "questionCounts": {
+        "route_repeatability": 86,
+        "resource_presence": 223,
+        "resource_usability": 61,
+        "water_access": 17,
+        "temporary_use": 25
+      },
+      "outcomeCounts": {
+        "confirmed": 6065,
+        "negative": 404,
+        "inconclusive": 16
+      },
+      "residentialMoves": 871,
+      "resourceTrips": 2620
+    },
+    {
+      "arm": "M4",
+      "seed": "b",
+      "startBands": 9,
+      "population": 172,
+      "livingBands": 7,
+      "extinctBands": 2,
+      "populationPerBand": 24.57,
+      "fissions": 0,
+      "meanSupport": 0.14,
+      "physicalFoodReceipts": 55.25,
+      "explorationParties": 29,
+      "verificationParties": 382,
+      "questionCounts": {
+        "route_repeatability": 71,
+        "resource_presence": 197,
+        "resource_usability": 71,
+        "water_access": 23,
+        "temporary_use": 20
+      },
+      "outcomeCounts": {
+        "confirmed": 7045,
+        "negative": 333,
+        "inconclusive": 23
+      },
+      "residentialMoves": 793,
+      "resourceTrips": 2228
+    },
+    {
+      "arm": "M4",
+      "seed": "c",
+      "startBands": 9,
+      "population": 195,
+      "livingBands": 8,
+      "extinctBands": 1,
+      "populationPerBand": 24.38,
+      "fissions": 0,
+      "meanSupport": 0.14,
+      "physicalFoodReceipts": 47.79,
+      "explorationParties": 30,
+      "verificationParties": 419,
+      "questionCounts": {
+        "seasonal_persistence": 2,
+        "temporary_use": 10,
+        "resource_usability": 59,
+        "water_access": 23,
+        "route_repeatability": 114,
+        "resource_presence": 211
+      },
+      "outcomeCounts": {
+        "confirmed": 7720,
+        "negative": 384,
+        "inconclusive": 19
+      },
+      "residentialMoves": 866,
+      "resourceTrips": 2165
+    },
+    {
+      "arm": "M4",
+      "seed": "d",
+      "startBands": 9,
+      "population": 160,
+      "livingBands": 7,
+      "extinctBands": 3,
+      "populationPerBand": 22.86,
+      "fissions": 1,
+      "meanSupport": 0.13,
+      "physicalFoodReceipts": 58.84,
+      "explorationParties": 27,
+      "verificationParties": 347,
+      "questionCounts": {
+        "route_repeatability": 41,
+        "temporary_use": 20,
+        "resource_usability": 42,
+        "resource_presence": 218,
+        "water_access": 26
+      },
+      "outcomeCounts": {
+        "confirmed": 6510,
+        "negative": 250,
+        "inconclusive": 13
+      },
+      "residentialMoves": 791,
+      "resourceTrips": 2006
+    },
+    {
+      "arm": "M4",
+      "seed": "e",
+      "startBands": 9,
+      "population": 195,
+      "livingBands": 9,
+      "extinctBands": 1,
+      "populationPerBand": 21.67,
+      "fissions": 1,
+      "meanSupport": 0.17,
+      "physicalFoodReceipts": 59.67,
+      "explorationParties": 36,
+      "verificationParties": 373,
+      "questionCounts": {
+        "route_repeatability": 112,
+        "resource_presence": 185,
+        "resource_usability": 44,
+        "water_access": 23,
+        "temporary_use": 9
+      },
+      "outcomeCounts": {
+        "confirmed": 7292,
+        "negative": 250,
+        "inconclusive": 9
+      },
+      "residentialMoves": 893,
+      "resourceTrips": 2643
+    }
+  ]
+}

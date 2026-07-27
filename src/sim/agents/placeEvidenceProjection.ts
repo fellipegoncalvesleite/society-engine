@@ -17,10 +17,17 @@
 // It takes the world only for tile identity/coordinates so distances can be reported; it
 // reads no resource, seasonal or hydrological truth from it.
 import type { TileId } from "../core/types";
+import {
+  VERIFICATION_ATTEMPT_HISTORY_CAP,
+  VERIFICATION_MAX_DISTANCE_TILES,
+  classifyPlaceForQuestion,
+  describeVerificationGap,
+  type PlaceEpistemicState,
+} from "./frontierVerification";
 import type { KnownTileRecord, KnowledgeAcquisitionKind } from "../knowledge/types";
 import { getTile } from "../world/generate";
 import type { WorldState } from "../world/types";
-import type { Band } from "./types";
+import type { Band, FrontierVerificationQuestion } from "./types";
 
 /** How well a single evidence domain is established for one place. */
 export type PlaceEvidenceStrength =
@@ -64,6 +71,61 @@ export interface PlaceEvidenceEntry {
   readonly upgradedFromTraversal: boolean;
 }
 
+/**
+ * CORRECTION-23 CONTINUATION §14 — the verification mechanism, in the selected-band panel.
+ *
+ * Before this, every causal verification state existed only in audit JSON, which §14 forbids.
+ * Everything below derives from canonical BAND state (`frontierVerificationAttempts`,
+ * `expeditions`, `knowledge.observedTiles`) and the production classifier — no world ecology.
+ */
+export interface PlaceVerificationTarget {
+  readonly tileId: TileId;
+  readonly distanceTiles?: number;
+  readonly question: FrontierVerificationQuestion;
+  /** Why the band's own record makes this look worth a second visit. */
+  readonly promisingSignal: string;
+  /** The specific evidence the band does not have. */
+  readonly missingEvidence: string;
+  readonly state: PlaceEpistemicState;
+  /** Present when the place is NOT a candidate, saying which gate stopped it. */
+  readonly blockedReason?: string;
+}
+
+export interface PlaceVerificationParty {
+  readonly tileId: TileId;
+  readonly question: FrontierVerificationQuestion;
+  readonly phase: string;
+  readonly routeTiles: number;
+  readonly onSiteBudgetDays: number;
+  readonly workDaysElapsed: number;
+  readonly selectionReason: string;
+  readonly attemptIndex: number;
+}
+
+export interface PlaceVerificationAttemptView {
+  readonly tileId: TileId;
+  readonly question: FrontierVerificationQuestion;
+  readonly outcome: "confirmed" | "negative" | "inconclusive" | "lost";
+  readonly season: string;
+  /** What this answer now permits the band to do that it could not before. */
+  readonly nowPermitted: string;
+  /** What is still not established about this place. */
+  readonly stillMissing: string;
+}
+
+export interface PlaceVerificationProjection {
+  /** Places the band's own record marks promising for a question it has not answered. */
+  readonly promisingUnverified: readonly PlaceVerificationTarget[];
+  /** Places the band's own record marks as poor — a reason NOT to go. */
+  readonly knownPoor: readonly PlaceVerificationTarget[];
+  readonly activeParties: readonly PlaceVerificationParty[];
+  readonly answered: readonly PlaceVerificationAttemptView[];
+  readonly failedOrInconclusive: readonly PlaceVerificationAttemptView[];
+  readonly attemptHistoryCap: number;
+  readonly noHiddenTruthRead: true;
+  readonly projectionOnly: true;
+}
+
 export interface PlaceEvidenceProjection {
   readonly totalKnownPlaces: number;
   readonly byAcquisition: Readonly<Record<string, number>>;
@@ -71,11 +133,43 @@ export interface PlaceEvidenceProjection {
   readonly residentiallyKnownPlaces: number;
   /** Bounded sample, farthest-first, so frontier country is what the panel shows. */
   readonly entries: readonly PlaceEvidenceEntry[];
+  readonly verification: PlaceVerificationProjection;
   readonly noHiddenTruthRead: true;
   readonly projectionOnly: true;
 }
 
 const MAX_ENTRIES = 24;
+const MAX_VERIFICATION_ROWS = 12;
+
+/** What each answer establishes, and what it still leaves open. §4's semantic contract. */
+const QUESTION_MEANING: Readonly<
+  Record<FrontierVerificationQuestion, { readonly permits: string; readonly stillMissing: string }>
+> = {
+  water_access: {
+    permits: "water can be reached and drawn here, on the day the party stood there",
+    stillMissing: "whether it is dependable across seasons, and its quality",
+  },
+  resource_presence: {
+    permits: "food resources were found in the bounded area actually searched",
+    stillMissing: "how much there is, and whether it can be taken",
+  },
+  resource_usability: {
+    permits: "a test attempt showed this place can (or cannot) be worked",
+    stillMissing: "a real harvest against a real stock — no calories have been taken",
+  },
+  temporary_use: {
+    permits: "a small party stayed and worked here for a short period",
+    stillMissing: "whether the whole band could live here",
+  },
+  route_repeatability: {
+    permits: "the route was walked out and back",
+    stillMissing: "whether it holds in other seasons or under load",
+  },
+  seasonal_persistence: {
+    permits: "one more season of coverage",
+    stillMissing: "the seasons still unvisited",
+  },
+};
 
 const PROVENANCE_LABEL: Readonly<Record<string, string>> = {
   residential_observation: "lived in or worked from",
@@ -206,6 +300,140 @@ function describeUses(record: KnownTileRecord): {
   };
 }
 
+const VERIFICATION_QUESTIONS: readonly FrontierVerificationQuestion[] = [
+  "water_access",
+  "resource_presence",
+  "resource_usability",
+  "temporary_use",
+  "route_repeatability",
+  "seasonal_persistence",
+];
+
+/**
+ * CORRECTION-23 CONTINUATION §14 — the verification mechanism as the band itself holds it.
+ *
+ * Reads band state and the production classifier ONLY. It reports the same distance and
+ * eligibility gates the selector applies, so a place the panel calls blocked is blocked for
+ * the reason shown — not for a reason invented by the read model.
+ */
+function deriveVerificationProjection(
+  world: WorldState,
+  band: Band,
+  distanceOf: (tileId: TileId) => number | undefined,
+): PlaceVerificationProjection {
+  const attempts = band.frontierVerificationAttempts ?? [];
+  const records = Object.values(band.knowledge.observedTiles);
+  const promising: PlaceVerificationTarget[] = [];
+  const poor: PlaceVerificationTarget[] = [];
+
+  for (const record of records) {
+    if (record.tileId === band.position) {
+      continue;
+    }
+
+    const distance = distanceOf(record.tileId);
+
+    for (const question of VERIFICATION_QUESTIONS) {
+      const state = classifyPlaceForQuestion(record, question, attempts);
+
+      if (state === "known_poor") {
+        poor.push({
+          tileId: record.tileId,
+          ...(distance === undefined ? {} : { distanceTiles: distance }),
+          question,
+          promisingSignal: "the band's own record of this place is poor",
+          missingEvidence: "nothing — this is evidence, not ignorance",
+          state,
+          blockedReason: "the band has looked and what it saw was bad; that is a reason not to go",
+        });
+        continue;
+      }
+
+      if (state !== "promising_unverified") {
+        continue;
+      }
+
+      const gap = describeVerificationGap(record, question);
+      const blockedReason =
+        gap === undefined
+          ? "the signal is too weak to justify the walk"
+          : distance === undefined
+            ? undefined
+            : distance < 3
+              ? "inside the working range already"
+              : distance > VERIFICATION_MAX_DISTANCE_TILES
+                ? "too far to verify — this is an exploration problem"
+                : undefined;
+
+      promising.push({
+        tileId: record.tileId,
+        ...(distance === undefined ? {} : { distanceTiles: distance }),
+        question,
+        promisingSignal: gap?.promisingSignal ?? "seen in passing",
+        missingEvidence: gap?.missingEvidence ?? QUESTION_MEANING[question].stillMissing,
+        state,
+        ...(blockedReason === undefined ? {} : { blockedReason }),
+      });
+    }
+  }
+
+  const byDistance = (
+    left: { readonly distanceTiles?: number; readonly tileId: TileId },
+    right: { readonly distanceTiles?: number; readonly tileId: TileId },
+  ): number =>
+    (left.distanceTiles ?? 0) === (right.distanceTiles ?? 0)
+      ? String(left.tileId).localeCompare(String(right.tileId))
+      : (left.distanceTiles ?? 0) - (right.distanceTiles ?? 0);
+
+  const activeParties = (band.expeditions ?? [])
+    .filter((expedition) => expedition.taskKind === "frontier_verification")
+    .map((expedition): PlaceVerificationParty | undefined => {
+      const plan = expedition.verificationPlan;
+
+      return plan === undefined
+        ? undefined
+        : {
+            tileId: plan.targetTileId,
+            question: plan.question,
+            phase: expedition.phase,
+            routeTiles: expedition.routeTileIds.length,
+            onSiteBudgetDays: plan.onSiteBudgetDays,
+            workDaysElapsed: expedition.workDaysElapsed,
+            selectionReason: plan.selectionReason,
+            attemptIndex: plan.attemptIndex,
+          };
+    })
+    .filter((party): party is PlaceVerificationParty => party !== undefined);
+
+  const asView = (attempt: (typeof attempts)[number]): PlaceVerificationAttemptView => ({
+    tileId: attempt.tileId,
+    question: attempt.question,
+    outcome: attempt.outcome,
+    season: attempt.season,
+    nowPermitted:
+      attempt.outcome === "confirmed"
+        ? QUESTION_MEANING[attempt.question].permits
+        : attempt.outcome === "negative"
+          ? "nothing — the band learned this place does not answer that question"
+          : "nothing yet — the question is still open",
+    stillMissing: QUESTION_MEANING[attempt.question].stillMissing,
+  });
+
+  return {
+    promisingUnverified: [...promising].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),
+    knownPoor: [...poor].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),
+    activeParties,
+    answered: attempts.filter((a) => a.outcome === "confirmed").slice(-MAX_VERIFICATION_ROWS).map(asView),
+    failedOrInconclusive: attempts
+      .filter((a) => a.outcome !== "confirmed")
+      .slice(-MAX_VERIFICATION_ROWS)
+      .map(asView),
+    attemptHistoryCap: VERIFICATION_ATTEMPT_HISTORY_CAP,
+    noHiddenTruthRead: true,
+    projectionOnly: true,
+  };
+}
+
 /**
  * Build the selected-band place-evidence projection. Pure, bounded, and behaviourally inert.
  */
@@ -275,6 +503,7 @@ export function derivePlaceEvidenceProjection(
     shallowTraversalPlaces: shallowCount,
     residentiallyKnownPlaces: residentialCount,
     entries,
+    verification: deriveVerificationProjection(world, band, distanceOf),
     noHiddenTruthRead: true,
     projectionOnly: true,
   };

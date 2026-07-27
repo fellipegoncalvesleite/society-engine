@@ -57,7 +57,7 @@ const VERIFICATION_MIN_NEED = 0.3;
 /** A record must look at least this promising on the band's OWN coarse impression. */
 const VERIFICATION_MIN_PROMISE = 0.28;
 /** Beyond this the place is not a verification target; it is an exploration problem. */
-const VERIFICATION_MAX_DISTANCE_TILES = 24;
+export const VERIFICATION_MAX_DISTANCE_TILES = 24;
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 const round2 = (v: number): number => Math.round(v * 100) / 100;
@@ -327,7 +327,7 @@ export function selectVerificationCandidate(
         continue;
       }
 
-      const gap = describeGap(record, question);
+      const gap = describeVerificationGap(record, question);
 
       if (gap === undefined) {
         continue;
@@ -384,7 +384,7 @@ const QUESTION_PRIORITY: readonly FrontierVerificationQuestion[] = [
 ];
 
 /** What the band's own record says, and what it is missing, for one question. */
-function describeGap(
+export function describeVerificationGap(
   record: KnownTileRecord,
   question: FrontierVerificationQuestion,
 ):

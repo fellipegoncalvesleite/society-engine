@@ -631,10 +631,19 @@ function resolveVerificationOnSite(
   }
 
   const finish = (
-    outcome: "confirmed" | "negative" | "inconclusive",
+    rawOutcome: "confirmed" | "negative" | "inconclusive",
     evidenceBasis: string,
     harvestUnits = 0,
-  ): AdvanceResult => ({
+  ): AdvanceResult => {
+    // CORRECTION-23 CONTINUATION §9 E5 — audit-only. An affirmative answer is downgraded to
+    // "we could not tell", isolating the value of confirmation from the value of asking.
+    // Undefined in every normal world.
+    const outcome =
+      world.auditOptions?.frontierVerificationConfirmationDisabled === true && rawOutcome === "confirmed"
+        ? ("inconclusive" as const)
+        : rawOutcome;
+
+    return {
     world,
     expedition: {
       ...expedition,
@@ -667,7 +676,8 @@ function resolveVerificationOnSite(
           }
         : {}),
     },
-  });
+    };
+  };
 
   switch (plan.question) {
     case "water_access": {
@@ -1523,6 +1533,11 @@ function maybeLaunchFrontierVerification(
   partyWorkers: number,
   need: VerificationNeed,
 ): Band | undefined {
+  // CORRECTION-23 CONTINUATION §9 E3 / §12 M5 — audit-only. Undefined in every normal world.
+  if (world.auditOptions?.frontierVerificationDisabled === true) {
+    return undefined;
+  }
+
   const active = (band.expeditions ?? []).filter(
     (expedition) => isExpeditionAway(expedition.phase) && expedition.taskKind === "frontier_verification",
   );
@@ -1798,8 +1813,17 @@ function maybeLaunchExpedition(world: WorldState, band: Band, day: DayNumber): B
   // there is anywhere better does not stop the rest of the band foraging, and
   // EXPEDITION_ACTIVE_CAP still bounds total parties.
   const verificationNeed = deriveVerificationNeed(band);
+  // CORRECTION-23 CONTINUATION §8 — audit-only launch-arm isolation. Undefined in every
+  // normal world, in which case both disjuncts stand exactly as written above.
+  const launchArm = world.auditOptions?.frontierVerificationLaunchArm;
+  const verificationGateOpen =
+    launchArm === "no_useful_retrieval_only"
+      ? noUsefulRetrieval
+      : launchArm === "need_only"
+        ? verificationNeed.need >= 0.45
+        : noUsefulRetrieval || verificationNeed.need >= 0.45;
 
-  if (noUsefulRetrieval || verificationNeed.need >= 0.45) {
+  if (verificationGateOpen) {
     const verified = maybeLaunchFrontierVerification(world, band, day, partyWorkers, verificationNeed);
 
     if (verified !== undefined) {
@@ -2085,7 +2109,13 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
 
             const verificationResult = result.expedition.verificationResult;
 
-            if (verificationResult !== undefined) {
+            // CORRECTION-23 CONTINUATION §9 E4 — audit-only. The party walked, worked and
+            // came home; only the answer is withheld at the hand-off. Undefined in every
+            // normal world.
+            if (
+              verificationResult !== undefined &&
+              currentWorld.auditOptions?.frontierVerificationKnowledgeDisabled !== true
+            ) {
               returnedVerifications.push({
                 result: verificationResult,
                 harvestUnits: verificationResult.harvestUnits,

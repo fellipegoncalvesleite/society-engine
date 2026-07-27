@@ -381,6 +381,99 @@ function PlaceEvidence({
           ))}
         </ul>
       </details>
+
+      <GoingBackToFindOut verification={evidence.verification} />
     </article>
+  );
+}
+
+/**
+ * CORRECTION-23 CONTINUATION §14 — the verification mechanism, in the panel.
+ *
+ * Shows what the band thinks is worth a second visit, what it has already written off, the
+ * party currently out asking, and what came back — including the failures. It renders only
+ * the projection, which reads band state and never world ecology.
+ */
+function GoingBackToFindOut({
+  verification,
+}: {
+  readonly verification: ReturnType<typeof derivePlaceEvidenceProjection>["verification"];
+}) {
+  const { promisingUnverified, knownPoor, activeParties, answered, failedOrInconclusive } = verification;
+
+  if (
+    promisingUnverified.length === 0 &&
+    knownPoor.length === 0 &&
+    activeParties.length === 0 &&
+    answered.length === 0 &&
+    failedOrInconclusive.length === 0
+  ) {
+    return null;
+  }
+
+  return (
+    <>
+      <span className="knowledge-kicker">Going back to find out</span>
+      {activeParties.length === 0 ? (
+        <p>No party is out asking a question about a place right now.</p>
+      ) : (
+        activeParties.map((party) => (
+          <p key={`${String(party.tileId)}:${party.question}`}>
+            A party is {party.phase} on the way to <strong>{String(party.tileId)}</strong> to find out{" "}
+            {party.question.replace(/_/g, " ")} — {party.routeTiles} tiles of route,{" "}
+            {party.onSiteBudgetDays} day(s) of work there ({party.workDaysElapsed} done). It went because{" "}
+            {party.selectionReason}.
+          </p>
+        ))
+      )}
+
+      <details className="knowledge-technical">
+        <summary>
+          Verification state (technical) — {promisingUnverified.length} promising, {knownPoor.length} written
+          off, {answered.length} answered, {failedOrInconclusive.length} unresolved
+        </summary>
+        <ul className="knowledge-evidence-list">
+          {promisingUnverified.map((target) => (
+            <li key={`p:${String(target.tileId)}:${target.question}`}>
+              <div className="knowledge-evidence-head">
+                <strong>{String(target.tileId)}</strong>
+                {target.distanceTiles === undefined ? null : <Chip>{target.distanceTiles} tiles</Chip>}
+                <Chip>{target.question.replace(/_/g, " ")}</Chip>
+                <Chip>{target.state.replace(/_/g, " ")}</Chip>
+                {target.blockedReason === undefined ? null : <Chip>blocked</Chip>}
+              </div>
+              <span className="knowledge-domain-basis">
+                {target.promisingSignal}; missing: {target.missingEvidence}
+                {target.blockedReason === undefined ? "" : ` — ${target.blockedReason}`}
+              </span>
+            </li>
+          ))}
+          {knownPoor.map((target) => (
+            <li key={`k:${String(target.tileId)}:${target.question}`}>
+              <div className="knowledge-evidence-head">
+                <strong>{String(target.tileId)}</strong>
+                {target.distanceTiles === undefined ? null : <Chip>{target.distanceTiles} tiles</Chip>}
+                <Chip>{target.question.replace(/_/g, " ")}</Chip>
+                <Chip>known poor</Chip>
+              </div>
+              <span className="knowledge-domain-basis">{target.blockedReason}</span>
+            </li>
+          ))}
+          {[...answered, ...failedOrInconclusive].map((attempt) => (
+            <li key={`a:${String(attempt.tileId)}:${attempt.question}:${attempt.outcome}`}>
+              <div className="knowledge-evidence-head">
+                <strong>{String(attempt.tileId)}</strong>
+                <Chip>{attempt.question.replace(/_/g, " ")}</Chip>
+                <Chip>{attempt.outcome}</Chip>
+                <Chip>{attempt.season}</Chip>
+              </div>
+              <span className="knowledge-domain-basis">
+                now permitted: {attempt.nowPermitted}; still missing: {attempt.stillMissing}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </details>
+    </>
   );
 }

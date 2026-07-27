@@ -1,0 +1,174 @@
+{
+  "map": "map2",
+  "years": 120,
+  "seeds": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e"
+  ],
+  "summary": {
+    "M0": {
+      "seeds": 5,
+      "meanPopulation": 204.8,
+      "meanLivingBands": 9,
+      "meanExtinctBands": 1,
+      "meanPopulationPerBand": 22.76,
+      "meanFissions": 1,
+      "meanSupport": 0.15,
+      "meanReceipts": 56.04,
+      "meanExplorationParties": 0,
+      "meanVerificationParties": 364.4,
+      "meanResidentialMoves": 890,
+      "meanResourceTrips": 2302
+    }
+  },
+  "rows": [
+    {
+      "arm": "M0",
+      "seed": "a",
+      "startBands": 9,
+      "population": 206,
+      "livingBands": 9,
+      "extinctBands": 1,
+      "populationPerBand": 22.89,
+      "fissions": 1,
+      "meanSupport": 0.13,
+      "physicalFoodReceipts": 48.87,
+      "explorationParties": 0,
+      "verificationParties": 370,
+      "questionCounts": {
+        "route_repeatability": 115,
+        "resource_usability": 58,
+        "water_access": 36,
+        "resource_presence": 136,
+        "temporary_use": 23,
+        "seasonal_persistence": 2
+      },
+      "outcomeCounts": {
+        "confirmed": 5820,
+        "negative": 552,
+        "inconclusive": 30
+      },
+      "residentialMoves": 923,
+      "resourceTrips": 2148
+    },
+    {
+      "arm": "M0",
+      "seed": "b",
+      "startBands": 9,
+      "population": 204,
+      "livingBands": 9,
+      "extinctBands": 1,
+      "populationPerBand": 22.67,
+      "fissions": 1,
+      "meanSupport": 0.15,
+      "physicalFoodReceipts": 57.06,
+      "explorationParties": 0,
+      "verificationParties": 378,
+      "questionCounts": {
+        "route_repeatability": 116,
+        "water_access": 34,
+        "resource_usability": 66,
+        "temporary_use": 23,
+        "resource_presence": 137,
+        "seasonal_persistence": 2
+      },
+      "outcomeCounts": {
+        "confirmed": 6026,
+        "negative": 247,
+        "inconclusive": 20
+      },
+      "residentialMoves": 883,
+      "resourceTrips": 2222
+    },
+    {
+      "arm": "M0",
+      "seed": "c",
+      "startBands": 9,
+      "population": 205,
+      "livingBands": 9,
+      "extinctBands": 1,
+      "populationPerBand": 22.78,
+      "fissions": 1,
+      "meanSupport": 0.15,
+      "physicalFoodReceipts": 52.14,
+      "explorationParties": 0,
+      "verificationParties": 333,
+      "questionCounts": {
+        "seasonal_persistence": 1,
+        "water_access": 33,
+        "resource_usability": 49,
+        "resource_presence": 108,
+        "route_repeatability": 113,
+        "temporary_use": 29
+      },
+      "outcomeCounts": {
+        "confirmed": 5706,
+        "inconclusive": 20,
+        "negative": 410
+      },
+      "residentialMoves": 870,
+      "resourceTrips": 2272
+    },
+    {
+      "arm": "M0",
+      "seed": "d",
+      "startBands": 9,
+      "population": 202,
+      "livingBands": 9,
+      "extinctBands": 1,
+      "populationPerBand": 22.44,
+      "fissions": 1,
+      "meanSupport": 0.16,
+      "physicalFoodReceipts": 63.14,
+      "explorationParties": 0,
+      "verificationParties": 368,
+      "questionCounts": {
+        "route_repeatability": 131,
+        "water_access": 42,
+        "resource_usability": 68,
+        "resource_presence": 110,
+        "temporary_use": 16,
+        "seasonal_persistence": 1
+      },
+      "outcomeCounts": {
+        "confirmed": 5955,
+        "negative": 428,
+        "inconclusive": 29
+      },
+      "residentialMoves": 887,
+      "resourceTrips": 2585
+    },
+    {
+      "arm": "M0",
+      "seed": "e",
+      "startBands": 9,
+      "population": 207,
+      "livingBands": 9,
+      "extinctBands": 1,
+      "populationPerBand": 23,
+      "fissions": 1,
+      "meanSupport": 0.14,
+      "physicalFoodReceipts": 58.99,
+      "explorationParties": 0,
+      "verificationParties": 373,
+      "questionCounts": {
+        "route_repeatability": 120,
+        "temporary_use": 23,
+        "resource_usability": 47,
+        "water_access": 42,
+        "resource_presence": 137,
+        "seasonal_persistence": 4
+      },
+      "outcomeCounts": {
+        "confirmed": 5613,
+        "inconclusive": 33,
+        "negative": 494
+      },
+      "residentialMoves": 887,
+      "resourceTrips": 2283
+    }
+  ]
+}

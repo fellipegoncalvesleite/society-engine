@@ -325,6 +325,25 @@ export interface WorldAuditOptions {
     | "storage"
     | "confidence"
     | "all";
+  // CORRECTION-23 CONTINUATION §9/§12 — control-arm switches for the E0-E5 marginal matrix
+  // and the M0-M5 default-map matrix. All undefined in every normal world, each read at
+  // exactly one seam, so with them undefined the production path is byte-identical.
+  //
+  // E3 / M5 — the band never raises a frontier-verification party. Isolates whether the
+  // effect comes from LAUNCHING THE PHYSICAL PARTIES at all.
+  readonly frontierVerificationDisabled?: boolean;
+  // E4 — parties are raised, walk, work and come home; only the returned domain evidence
+  // is withheld at the hand-off seam. Isolates the value of the EVIDENCE from the cost and
+  // displacement of the journey.
+  readonly frontierVerificationKnowledgeDisabled?: boolean;
+  // E5 — parties run and return normally, but an affirmative on-site result is downgraded
+  // to `inconclusive`. Isolates the value of AFFIRMATIVE ANSWERS from the value of having
+  // asked at all.
+  readonly frontierVerificationConfirmationDisabled?: boolean;
+  // §8 — launch-policy decomposition. The production gate is
+  // `noUsefulRetrieval || need >= 0.45`; these arms run exactly one disjunct so the two
+  // launch causes can be counted separately instead of inferred.
+  readonly frontierVerificationLaunchArm?: "no_useful_retrieval_only" | "need_only";
 }
 
 export interface WorldState {

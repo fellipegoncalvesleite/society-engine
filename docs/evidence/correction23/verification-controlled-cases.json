@@ -1,0 +1,230 @@
+{
+  "passed": 14,
+  "failed": 0,
+  "cases": [
+    {
+      "id": "V1",
+      "title": "promising water, access succeeds",
+      "expectation": "water_access confirmed; ONLY water evidence upgrades",
+      "observed": {
+        "question": "water_access",
+        "outcome": "confirmed",
+        "richnessBefore": 0.1,
+        "richnessAfter": 0.25,
+        "seasonalPatternAfter": "undefined"
+      },
+      "pass": true,
+      "target": "tile:90:7",
+      "truthWaterAccess": 0.473
+    },
+    {
+      "id": "V2",
+      "title": "visible water, physically inaccessible",
+      "expectation": "water_access NEGATIVE; never confirmed",
+      "observed": {
+        "question": "water_access",
+        "outcome": "negative"
+      },
+      "pass": true,
+      "target": "tile:86:4",
+      "truthWaterAccess": 0.066,
+      "adjacentWater": false
+    },
+    {
+      "id": "V3",
+      "title": "water accessed in one season",
+      "expectation": "no annual/seasonal reliability claim is created",
+      "observed": {
+        "outcome": "confirmed",
+        "seasonsObserved": 1,
+        "seasonalPattern": "undefined",
+        "observedWaterAccessAfter": 0.5,
+        "waterCappedBelowTruth": true
+      },
+      "pass": true,
+      "target": "tile:90:7",
+      "truthWaterAccess": 0.473
+    },
+    {
+      "id": "V4",
+      "title": "promising resource signs, resource present",
+      "expectation": "resource_presence may be confirmed",
+      "observed": {
+        "question": "resource_presence",
+        "outcome": "confirmed"
+      },
+      "pass": true,
+      "target": "tile:102:0",
+      "truthRichness": 0.36
+    },
+    {
+      "id": "V5",
+      "title": "promising signs, no resource found",
+      "expectation": "negative/inconclusive allowed; NO global absence inferred",
+      "observed": {
+        "question": "resource_presence",
+        "outcome": "negative",
+        "searchedTileRichnessAfter": 0.5,
+        "preExistingRecordsDowngraded": 0,
+        "newRecordsFromWalkingTheRoute": 11
+      },
+      "pass": true,
+      "target": "tile:86:4",
+      "truthRichness": 0.089,
+      "note": "route tiles the party physically crossed DO gain coarse records (some rounding to 0 on genuinely poor ground); that is observation, not inference."
+    },
+    {
+      "id": "V6",
+      "title": "resource present but unusable this season",
+      "expectation": "presence confirmed; usability rejected or unresolved",
+      "observed": {
+        "question": "resource_usability",
+        "outcome": "negative",
+        "allAttempts": [
+          "resource_usability:negative"
+        ]
+      },
+      "pass": true,
+      "target": "tile:100:0",
+      "truthRichness": 0.309,
+      "season": "winter (lean)"
+    },
+    {
+      "id": "V7",
+      "title": "usable resource with real ecological stock",
+      "expectation": "IF food is credited it must deplete a real stock and enter receipts exactly once",
+      "observed": {
+        "question": "resource_usability",
+        "outcome": "confirmed",
+        "harvestUnitsCredited": 0
+      },
+      "pass": true,
+      "target": "tile:102:0",
+      "truthRichness": 0.36,
+      "note": "NO calories are credited: verification targets a terrain record with no patch to draw against. Outcome B in §11."
+    },
+    {
+      "id": "V8",
+      "title": "clearly poor terrain",
+      "expectation": "classified known_poor for the water/resource questions and not sent a party for them",
+      "observed": {
+        "states": [
+          "known_poor",
+          "known_poor",
+          "known_poor",
+          "promising_unverified"
+        ],
+        "selectedQuestion": "route_repeatability",
+        "selectedThisTile": true
+      },
+      "pass": true,
+      "target": "tile:86:4",
+      "truthRichness": 0.089,
+      "note": "route_repeatability / seasonal_persistence still admit a known-poor place — recorded as a semantic finding."
+    },
+    {
+      "id": "V9",
+      "title": "unknown versus known poor",
+      "expectation": "the two states are distinct and never collapse",
+      "observed": {
+        "unknownStates": [
+          "unknown",
+          "unknown"
+        ],
+        "poorStates": [
+          "known_poor",
+          "known_poor"
+        ]
+      },
+      "pass": true,
+      "note": "distinct as TYPES. In production `unknown` is never instantiated for an observed tile — see the §7 census."
+    },
+    {
+      "id": "V10",
+      "title": "unreachable / out-of-range target",
+      "expectation": "no party reaches it; no destination knowledge is gained",
+      "observed": {
+        "attemptsAtTarget": 0,
+        "visitsAfter": 1,
+        "richnessUnchanged": true,
+        "waterUnchanged": true
+      },
+      "pass": true,
+      "target": "tile:0:0",
+      "distanceTiles": 102
+    },
+    {
+      "id": "V11",
+      "title": "temporary-use success",
+      "expectation": "bounded temporary-use evidence only; NOT full residential viability",
+      "observed": {
+        "outcome": "confirmed",
+        "allAttempts": [
+          "temporary_use:confirmed"
+        ],
+        "acquisitionAfter": "returned_route_reconnaissance",
+        "seasonalPattern": "undefined",
+        "bandStillAtHome": true
+      },
+      "pass": true,
+      "target": "tile:101:13",
+      "truthWaterAccess": 0.368
+    },
+    {
+      "id": "V12",
+      "title": "temporary-use failure",
+      "expectation": "bounded NEGATIVE evidence",
+      "observed": {
+        "outcome": "negative",
+        "allAttempts": [
+          "temporary_use:negative"
+        ]
+      },
+      "pass": true,
+      "target": "tile:100:0",
+      "truthWaterAccess": 0.076
+    },
+    {
+      "id": "V13",
+      "title": "repeated seasonal visits",
+      "expectation": "coverage grows incrementally; one visit never confirms persistence",
+      "observed": {
+        "statesBySeasonCount": [
+          "promising_unverified",
+          "promising_unverified",
+          "verified_usable",
+          "verified_usable"
+        ],
+        "seasonalAttemptOutcomes": [
+          "inconclusive"
+        ],
+        "allAttempts": [
+          "seasonal_persistence:inconclusive"
+        ]
+      },
+      "pass": true,
+      "target": "tile:100:13"
+    },
+    {
+      "id": "V14",
+      "title": "no-transfer control (hand-off suppressed)",
+      "expectation": "a party whose hand-off does not run transfers no evidence and no food",
+      "observed": {
+        "partySeen": true,
+        "phasesSeen": [
+          "outbound",
+          "operating",
+          "returning"
+        ],
+        "questionsLaunched": [
+          "resource_presence",
+          "route_repeatability"
+        ],
+        "attemptsRecorded": 0
+      },
+      "pass": true,
+      "target": "tile:100:13",
+      "note": "the production hand-off is gated on phase === 'completed'; a lost party never reaches it. E4 exercises the same seam."
+    }
+  ]
+}
