@@ -348,38 +348,6 @@ export interface WorldAuditOptions {
   // withheld from the feasibility reader, so the access effect can be isolated from the cost
   // and displacement of the journey. Undefined in every normal world; read at one seam.
   readonly waterAccessEvidenceHiddenFromDestination?: boolean;
-  // ───────────────────────────────────────────────────────────────────────────────────────
-  // CORRECTION-23E — DIAGNOSTIC ISOLATION ARMS. Every one is undefined in every normal
-  // world and read at exactly one seam. This checkpoint is a DIAGNOSIS: none of these may
-  // become a production default, and none of them is selected by any production code path.
-  // ───────────────────────────────────────────────────────────────────────────────────────
-  //
-  // §5 R2-R5 — decompose the CORRECTION-23D retry repair into its components so the
-  // marginal regression can be attributed to one of them rather than to "the repair".
-  //
-  //   legacy_eligibility        R2 — durable disposition is still WRITTEN, but eligibility
-  //                                  is read from the capped chronological collection with
-  //                                  the pre-23D gate. Isolates STORAGE from SUPPRESSION.
-  //   hardship_reopens          R3 — 23D gate, but hardship movement reopens a settled
-  //                                  question again (§8's removed term).
-  //   legacy_season_comparison  R4 — 23D gate, but `lastSeason !== currentSeason` reopens
-  //                                  water/resource questions again (§7's removed term).
-  //   suppression_disabled      R5 — 23D gate, but a settled confirmed/negative answer no
-  //                                  longer blocks a repeat.
-  readonly verificationRetryArm?:
-    | "legacy_eligibility"
-    | "hardship_reopens"
-    | "legacy_season_comparison"
-    | "suppression_disabled";
-  // §5 R6 — a returning frontier-verification party hands over its ANSWER but not its
-  // walked route, so the route never becomes ordinary known country. Isolates how much of
-  // verification's value was EXPLORATION rather than verification.
-  readonly verificationPartyRouteObservationDisabled?: boolean;
-  // §5 R7 — broad exploration is scheduled on its OWN eligibility instead of only when no
-  // verification candidate exists. The party budget is unchanged (one task per call,
-  // EXPEDITION_ACTIVE_CAP unchanged): only the order in which the two families are offered
-  // the same single slot changes. Isolates whether verification CROWDS OUT exploration.
-  readonly explorationSchedulingIndependent?: boolean;
   // §12 K1-K5 — place-retention counterfactuals, read only by `memoryCompression`. They
   // distinguish bad PRIORITISATION from raw CAPACITY pressure. §16 forbids selecting any of
   // them as production in this pass.
@@ -400,60 +368,6 @@ export interface WorldAuditOptions {
     | "no_inherited_mandatory";
   // K4 — exact known-tile capacity for the capacity arm. Undefined ⇒ the production 72.
   readonly placeRetentionCapacity?: number;
-  // ───────────────────────────────────────────────────────────────────────────────────────
-  // CORRECTION-23F — SEASONAL-RETRAVERSAL BENEFIT DECOMPOSITION. Audit-only, undefined in
-  // every normal world. CORRECTION-23E proved that restoring ONE deleted season term
-  // restores marginal survival and that suppressing the walked-route observation collapses
-  // it — but "walking" is not an answer. These arms split the walk into the things it
-  // actually does to band knowledge.
-  // ───────────────────────────────────────────────────────────────────────────────────────
-  //
-  // §7/§8/§9 — what a returning verification party's observation is allowed to do. Applied
-  // ONLY to the verification-return seam, by an explicit parameter, so no other observation
-  // producer is affected.
-  //
-  //   target_only          F3  — only the destination tile is observed
-  //   route_only           F4  — only the intermediate route tiles are observed
-  //   new_tiles_only       F5  — may create unknown records; never touches an existing one
-  //   existing_only        F6  — may refresh known records; never creates one
-  //   content_no_recency   F7  — content fields update; `lastObservedAt`/`visits` preserved
-  //   recency_no_content   F8  — only `lastObservedAt`/`visits` refresh; content preserved
-  //   no_season_identity   F9  — refreshes normally but does not add the current season
-  //   season_identity_only F10 — adds the current season only; nothing else changes
-  readonly verificationObservationPolicy?:
-    | "target_only"
-    | "route_only"
-    | "new_tiles_only"
-    | "existing_only"
-    | "content_no_recency"
-    | "recency_no_content"
-    | "no_season_identity"
-    | "season_identity_only";
-  // §10 F11/F12/F13 — separate the PARTY COUNT and the TARGET CHOICE from the question.
-  //
-  //   broad_exploration_targets F11 — same launch schedule, ordinary exploration selector
-  //   nearest_legal_frontier    F12 — same launch schedule, nearest legal frontier target
-  //   no_verification_question  F13 — the old seasonal target schedule and the same physical
-  //                                   route, but the party carries NO question, records NO
-  //                                   result and writes NO disposition. The single most
-  //                                   important architectural counterfactual in this pass.
-  readonly verificationTargetArm?:
-    | "broad_exploration_targets"
-    | "nearest_legal_frontier"
-    | "no_verification_question";
-  // §11 F14/F15/F16 — memory-retention interaction, without changing production retention.
-  //
-  //   protect_verification_targets F14 — places a verification party WOULD have visited are
-  //                                      protected from eviction, and no extra travel occurs
-  //   observation_cannot_protect   F15 — the travel happens, but its observations do not
-  //                                      refresh retention state, so they cannot defeat
-  //                                      eviction
-  //   protect_active_candidates    F16 — sparse protection for behaviourally active frontier
-  //                                      candidates only
-  readonly retentionInteractionArm?:
-    | "protect_verification_targets"
-    | "observation_cannot_protect"
-    | "protect_active_candidates";
 }
 
 export interface WorldState {

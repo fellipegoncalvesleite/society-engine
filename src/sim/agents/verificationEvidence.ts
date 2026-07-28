@@ -222,90 +222,8 @@ export interface RetryConditions {
   readonly hardship: number;
   /** Route length the band would walk now, if known. */
   readonly routeTiles?: number;
-  /**
-   * CORRECTION-23E §5 — AUDIT-ONLY component isolation. Undefined in every normal world.
-   * Supplied from `world.auditOptions.verificationRetryArm` at the single production call
-   * site; with it undefined this parameter is not read and the gate below is unchanged.
-   */
-  readonly retryArm?: RetryArm;
 }
 
-/** CORRECTION-23E §5 — see `WorldAuditOptions.verificationRetryArm`. Audit-only. */
-export type RetryArm =
-  | "legacy_eligibility"
-  | "hardship_reopens"
-  | "legacy_season_comparison"
-  | "suppression_disabled";
-
-/** The pre-CORRECTION-23D hardship-invalidation threshold. Read only by arm R3. */
-const LEGACY_MATERIAL_HARDSHIP_DELTA = 0.2;
-
-/**
- * CORRECTION-23E §5 arm R2 — the exact pre-23D gate, reading the exact pre-23D source.
- *
- * The durable disposition is still written by production; this arm only stops it being
- * CONSULTED, so R1 - R2 is the effect of moving the authority, and R2 - R0 is whatever else
- * 23D changed. Reproduced verbatim from `76893be` so the arm measures the old behaviour
- * rather than a paraphrase of it.
- */
-function mayAskAgainLegacy(
-  band: Band,
-  tileId: TileId,
-  question: FrontierVerificationQuestion,
-  conditions: RetryConditions,
-): RetryDecision {
-  const prior = (band.verificationEvidence ?? []).find(
-    (record) => record.tileId === tileId && record.question === question,
-  );
-
-  if (prior === undefined) {
-    return { allowed: true, reason: "never asked here" };
-  }
-
-  const seasonChanged = prior.lastSeason !== conditions.currentSeason;
-  const seasonNew = !prior.seasonsAnswered.includes(conditions.currentSeason);
-  const hardshipMoved =
-    Math.abs(conditions.hardship - prior.hardshipAtLastAttempt) >= LEGACY_MATERIAL_HARDSHIP_DELTA;
-  const routeMoved =
-    conditions.routeTiles !== undefined &&
-    Math.abs(conditions.routeTiles - prior.routeTilesAtLastAttempt) >= MATERIAL_ROUTE_DELTA;
-
-  if (question === "seasonal_persistence") {
-    return seasonNew
-      ? { allowed: true, reason: "a season this place has not been seen in" }
-      : { allowed: false, reason: "this season is already covered here" };
-  }
-
-  if (prior.outcome === "inconclusive") {
-    if (prior.attempts >= MAX_INCONCLUSIVE_ATTEMPTS) {
-      return { allowed: false, reason: "asked and left unresolved too many times" };
-    }
-
-    return conditions.currentTick - Number(prior.lastTick) >= RETRY_INTERVAL_TICKS
-      ? { allowed: true, reason: "the last attempt settled nothing" }
-      : { allowed: false, reason: "asked too recently" };
-  }
-
-  if (seasonChanged && (question === "water_access" || question === "resource_presence")) {
-    return { allowed: true, reason: "a different season may give a different answer" };
-  }
-
-  if (routeMoved) {
-    return { allowed: true, reason: "the way there has changed" };
-  }
-
-  if (hardshipMoved) {
-    return { allowed: true, reason: "the band's situation has materially changed" };
-  }
-
-  return {
-    allowed: false,
-    reason:
-      prior.outcome === "confirmed"
-        ? "already established here, and nothing has changed"
-        : "already found wanting here, and nothing has changed",
-  };
-}
 
 export interface RetryDecision {
   readonly allowed: boolean;
@@ -326,10 +244,6 @@ export function mayAskAgain(
   question: FrontierVerificationQuestion,
   conditions: RetryConditions,
 ): RetryDecision {
-  // CORRECTION-23E §5 arm R2 — audit-only, and the ONLY place this parameter is read.
-  if (conditions.retryArm === "legacy_eligibility") {
-    return mayAskAgainLegacy(band, tileId, question, conditions);
-  }
 
   const prior = find(band, tileId, question);
 
@@ -384,44 +298,12 @@ export function mayAskAgain(
     return { allowed: true, reason: "a season this place has not been answered in" };
   }
 
-  // CORRECTION-23E §5 arm R4 — audit-only. Restores ONLY the removed season comparison, so
-  // its cost is separated from the rest of the 23D repair.
-  if (
-    conditions.retryArm === "legacy_season_comparison" &&
-    prior.lastSeason !== conditions.currentSeason &&
-    (question === "water_access" || question === "resource_presence")
-  ) {
-    return { allowed: true, reason: "a different season may give a different answer" };
-  }
 
   if (routeMoved) {
     return { allowed: true, reason: "the way there has materially changed" };
   }
 
-  // CORRECTION-23E §5 arm R3 — audit-only. Restores ONLY the removed hardship term. The
-  // durable disposition deliberately stores no hardship, so this arm reads the hardship the
-  // CHRONOLOGICAL row recorded — the same source R0 used. Where that row has since been
-  // evicted the term cannot fire, so this arm UNDERSTATES the old behaviour rather than
-  // overstating it.
-  if (conditions.retryArm === "hardship_reopens") {
-    const chronological = (band.verificationEvidence ?? []).find(
-      (record) => record.tileId === tileId && record.question === question,
-    );
 
-    if (
-      chronological !== undefined &&
-      Math.abs(conditions.hardship - chronological.hardshipAtLastAttempt) >=
-        LEGACY_MATERIAL_HARDSHIP_DELTA
-    ) {
-      return { allowed: true, reason: "the band's situation has materially changed" };
-    }
-  }
-
-  // CORRECTION-23E §5 arm R5 — audit-only. A settled answer stops blocking a repeat, which
-  // isolates the launch reduction that suppression alone produced.
-  if (conditions.retryArm === "suppression_disabled") {
-    return { allowed: true, reason: "settled-answer suppression disabled for this arm" };
-  }
 
   // CORRECTION-23D §8 — HARDSHIP IS MOTIVATION, NOT EPISTEMIC INVALIDATION.
   //

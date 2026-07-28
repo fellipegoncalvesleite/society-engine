@@ -19,7 +19,6 @@ import type { Decision } from "../rules/types";
 import { getRiverCrossingForMovement, makeRiverCrossingKey } from "../world/hydrography";
 import type { WorldState } from "../world/types";
 // CORRECTION-23G §8 — audit-only read counter; a no-op when no audit is counting.
-import { countSeasonIdentityRead } from "../diagnostics/verificationScheduleReplay";
 
 const MAX_TRAVEL_CORRIDOR_MEMORIES = 96;
 
@@ -241,13 +240,6 @@ function updatePlaceMemoryRecord(
   // CORRECTION-23G §8 — the record's season identity crossing into place memory, where
   // `protoCamps` later scores it. Consequential when the record contributes a season the
   // place memory and the current season did not already carry.
-  countSeasonIdentityRead(
-    "place_memory_merge",
-    knownRecord.seasonsObserved.length,
-    knownRecord.seasonsObserved.some(
-      (season) => season !== input.world.time.season && !(existing?.seasonsObserved ?? []).includes(season),
-    ),
-  );
   const returnInfo = getReturnInfo({
     existing,
     input,

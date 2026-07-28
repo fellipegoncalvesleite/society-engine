@@ -53,8 +53,6 @@ import {
   recordLaunchRefusal,
   type LaunchDecisionDependency,
 } from "../diagnostics/verificationLaunchDiagnostics";
-// CORRECTION-23G §8 — audit-only read counter; a no-op when no audit is counting.
-import { countSeasonIdentityRead, selectorRotationAllows } from "../diagnostics/verificationScheduleReplay";
 
 // ── Bounds. Hard caps on state and search. ───────────────────────────────────────
 
@@ -154,7 +152,6 @@ export function classifyPlaceForQuestion(
       const seasons = record.seasonsObserved?.length ?? 0;
       // CORRECTION-23G §8 — consequential whenever the count moves the place off `unknown`,
       // which is the only way this question ever becomes askable.
-      countSeasonIdentityRead("verification_classification", seasons, seasons > 0);
       return seasons === 0 ? "unknown" : seasons >= 3 ? "verified_usable" : "promising_unverified";
     }
   }
@@ -315,19 +312,8 @@ export function selectVerificationCandidate(
           currentSeason: season,
           hardship: need.need,
           routeTiles: distance,
-          // CORRECTION-23E §5 — audit-only component isolation; undefined in every normal
-          // world, in which case the gate is exactly the one described above.
-          ...(world.auditOptions?.verificationRetryArm === undefined
-            ? {}
-            : { retryArm: world.auditOptions.verificationRetryArm }),
         }).allowed
       ) {
-        continue;
-      }
-
-      // CORRECTION-23G §6 supplement — audit-only rotation gate. Off in every normal world,
-      // in which case `selectorRotationAllows` returns true and this is one boolean test.
-      if (!selectorRotationAllows(String(band.id), record.tileId)) {
         continue;
       }
 
@@ -700,7 +686,6 @@ export function describeVerificationGap(
     case "seasonal_persistence": {
       const seasons = record.seasonsObserved?.length ?? 0;
       // CORRECTION-23G §8 — consequential when the count leaves a real gap to describe.
-      countSeasonIdentityRead("verification_gap", seasons, seasons > 0 && seasons < 3);
       if (seasons === 0 || seasons >= 3) return undefined;
       return {
         promise: clamp01(record.observedRichness ?? 0) * 0.8,

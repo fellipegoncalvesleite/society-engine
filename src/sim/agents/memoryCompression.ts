@@ -15,11 +15,6 @@ import type {
 import { getNeighborTiles, getTile } from "../world/generate";
 import type { Tile, WorldAuditOptions, WorldState } from "../world/types";
 // CORRECTION-23G §11 — audit-only. Both return `false` when no audit has registered a
-// donor-place set, which is every production, worker and UI path.
-import {
-  hasProtectedDonorPlaces,
-  isProtectedDonorPlace,
-} from "../diagnostics/verificationScheduleReplay";
 
 const MAX_EXACT_KNOWN_TILES = 72;
 const MAX_EXACT_PLACE_MEMORIES = 72;
@@ -156,13 +151,6 @@ function selectRetainedKnownTileIds(
   // selected — a list the donor BAND itself chose from its own knowledge, not a list derived
   // from hidden ecology — and nothing else. It is audit-only, absent in every normal world,
   // and it does not touch capacity, the scored ordering, or the inherited mandatory set.
-  if (hasProtectedDonorPlaces()) {
-    for (const record of records) {
-      if (isProtectedDonorPlace(record.tileId)) {
-        mandatory.add(record.tileId);
-      }
-    }
-  }
 
   // K1-K3 — three DIFFERENT answers to "which verified place deserves protection", so the
   // §11 question (is this forgetting legitimate?) is tested rather than assumed.

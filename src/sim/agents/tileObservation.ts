@@ -41,19 +41,6 @@ export function getObservedRisk(tile: Tile): number {
  * visit. This is band-perception, not hidden truth: everything recorded is what a
  * person standing there (or nearby) can see.
  */
-/**
- * CORRECTION-23F §7/§8/§9 — AUDIT-ONLY observation policy.
- *
- * CORRECTION-23E proved that suppressing the walked-route observation of a verification
- * party collapses marginal survival, and that restoring one season term restores it. Neither
- * result says WHICH part of the observation matters. This type names the parts so they can
- * be measured one at a time.
- *
- * It is passed EXPLICITLY, only at the verification-return seam, so no other observation
- * producer is touched. Undefined everywhere else, including every normal world.
- */
-export type ObservationPolicy = NonNullable<WorldState["auditOptions"]>["verificationObservationPolicy"];
-
 export function observeTileAndNearby(
   world: WorldState,
   knowledge: KnowledgeState,
@@ -61,8 +48,6 @@ export function observeTileAndNearby(
   // CORRECTION-18 §8 — how these observations were acquired. Defaults to the historical
   // behaviour (a residential observation) so every existing caller is unchanged.
   acquisition: KnowledgeAcquisitionKind = "residential_observation",
-  // CORRECTION-23F — audit-only; undefined for every production caller.
-  observationPolicy?: ObservationPolicy,
 ): KnowledgeState {
   const observedTiles: Record<string, KnownTileRecord> = {
     ...knowledge.observedTiles,
@@ -81,7 +66,6 @@ export function observeTileAndNearby(
       target,
       acquisition,
       restore,
-      observationPolicy,
     );
   }
 
@@ -260,20 +244,9 @@ function observeTile(
   target: ObservationTarget,
   acquisition: KnowledgeAcquisitionKind,
   restore: ShallowRestoreSwitches,
-  policy?: ObservationPolicy,
 ): void {
   const existingRecord = observedTiles[target.tile.id];
 
-  // CORRECTION-23F §7 — DISCOVERY versus MAINTENANCE. F5 may only create; F6 may only
-  // refresh. Both skip the observation history push as well, because a suppressed
-  // observation did not happen as far as the band is concerned.
-  if (policy === "new_tiles_only" && existingRecord !== undefined) {
-    return;
-  }
-
-  if (policy === "existing_only" && existingRecord === undefined) {
-    return;
-  }
   // CORRECTION-21 §14 — a traversal is treated shallowly ONLY while the band has nothing
   // better. Once a residential observation, scout or harvest has established real evidence
   // for this tile, a later party walking past neither downgrades it nor re-coarsens it.
@@ -376,73 +349,6 @@ function observeTile(
     observerBandId,
   });
 
-  observedTiles[target.tile.id] = applyObservationPolicy(record, existingRecord, world, policy);
+  observedTiles[target.tile.id] = record;
 }
 
-/**
- * CORRECTION-23F §8/§9 — split WHAT IS KNOWN from HOW ALIVE THE RECORD IS.
- *
- * The writer above changes both at once. `memoryCompression.getKnownRetentionScore` reads
- * `lastObservedAt.tick` (recency), `visits`, `confidence`, `observedWaterAccess`,
- * `observedAquaticPotential` and `knowledgeSource`; the decision layer reads the content
- * fields. Two of those — `lastObservedAt` and `visits` — are purely "this record is alive",
- * and they are the ones these arms move.
- *
- * HONEST LIMIT OF THE SEPARATION, recorded rather than hidden: `confidence` and the two
- * water fields feed BOTH content and retention, so `content_no_recency` still lets a small
- * amount of retention value through, and `recency_no_content` withholds a small amount. The
- * split is clean for recency and visits and approximate for the rest. A first observation of
- * an unknown tile has no previous content to preserve, so `recency_no_content` and
- * `season_identity_only` write it in full and are reported as such.
- */
-function applyObservationPolicy(
-  record: KnownTileRecord,
-  existingRecord: KnownTileRecord | undefined,
-  world: WorldState,
-  policy?: ObservationPolicy,
-): KnownTileRecord {
-  if (policy === undefined || policy === "target_only" || policy === "route_only") {
-    // The target/route arms filter WHICH tiles reach this writer; they do not change what a
-    // reached tile records.
-    return record;
-  }
-
-  if (policy === "no_season_identity") {
-    // F9 — physically revisited, but the visit adds no seasonal coverage.
-    return { ...record, seasonsObserved: existingRecord?.seasonsObserved ?? record.seasonsObserved };
-  }
-
-  if (existingRecord === undefined) {
-    return record;
-  }
-
-  if (policy === "content_no_recency") {
-    // F7 — everything the band LEARNS updates; the record does not become any more alive.
-    return {
-      ...record,
-      lastObservedAt: existingRecord.lastObservedAt,
-      visits: existingRecord.visits,
-    };
-  }
-
-  if (policy === "recency_no_content") {
-    // F8 — the record stays alive; the band learns nothing new from the visit.
-    return {
-      ...existingRecord,
-      lastObservedAt: record.lastObservedAt,
-      visits: record.visits,
-    };
-  }
-
-  if (policy === "season_identity_only") {
-    // F10 — the ONLY thing the visit establishes is that this place was seen this season.
-    return {
-      ...existingRecord,
-      seasonsObserved: existingRecord.seasonsObserved.includes(world.time.season)
-        ? existingRecord.seasonsObserved
-        : [...existingRecord.seasonsObserved, world.time.season],
-    };
-  }
-
-  return record;
-}

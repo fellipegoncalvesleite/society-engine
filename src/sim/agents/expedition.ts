@@ -81,22 +81,6 @@ import {
   isCountingTaskCampOutcomes,
   recordTaskCampOutcome,
 } from "../diagnostics/verificationLaunchDiagnostics";
-// CORRECTION-23G §5/§6/§7 — audit-only schedule-replay seam. Every function below returns a
-// constant (`undefined`, `false`, `[]`) or is a no-op when no audit has registered a slot,
-// which is every production, worker and UI path.
-import {
-  getScheduleReplayArm,
-  getScheduledLaunch,
-  getReplayLaunchOrdinal,
-  getUnusedDonorTargets,
-  isRecordingDonorSchedule,
-  noteRotationUse,
-  noteSelectorRotationUse,
-  recordDonorLaunch,
-  recordReplayOutcome,
-  type ReplayFailureReason,
-  type ScheduleReplayArm,
-} from "../diagnostics/verificationScheduleReplay";
 import {
   SIGNAL_ATTEMPT_CAP,
   appendReceivedSignal,
@@ -689,44 +673,6 @@ function resolveVerificationOnSite(
   const standTile = world.tiles[expedition.positionTileId];
   const time = getWorldTimeForDay(day);
 
-  // CORRECTION-23G §5 stage 2 — a REPLAY party carries no plan by construction. It still
-  // walked here, it still stands here, and it still spends the donor's on-site days before
-  // turning for home: the labour, provisions, time, route and risk are the donor's. What it
-  // does NOT do is ask, answer, or write anything down about the place. It reaches the
-  // ordinary return seam with `verificationResult === undefined`, which is what suppresses
-  // the attempt row, the evidence row and the durable disposition — all three at their real
-  // writers, none of them by a special case. Audit-only; absent in every normal world.
-  if (expedition.auditScheduleReplay !== undefined) {
-    const replayWorkDays = expedition.workDaysElapsed + 1;
-
-    // The party never got to the place it was sent to — the same physical branch the
-    // production task takes, so a diverged route costs the same and proves the same nothing.
-    if (expedition.positionTileId !== expedition.targetTileId) {
-      return {
-        world,
-        expedition: {
-          ...expedition,
-          phase: "returning",
-          workDaysElapsed: replayWorkDays,
-          outcomeReason: "route_endpoint_mismatch",
-        },
-      };
-    }
-
-    if (replayWorkDays < expedition.auditScheduleReplay.onSiteDays) {
-      return { world, expedition: { ...expedition, workDaysElapsed: replayWorkDays } };
-    }
-
-    return {
-      world,
-      expedition: {
-        ...expedition,
-        phase: "returning",
-        workDaysElapsed: replayWorkDays,
-        outcomeReason: "returned_information_only",
-      },
-    };
-  }
 
   if (plan === undefined || standTile === undefined) {
     return {
@@ -1736,420 +1682,9 @@ function maybeLaunchFrontierVerification(
     day,
   });
 
-  // CORRECTION-23G §6 supplement — record the audit rotation use at the moment the party is
-  // actually raised, so the gate reflects targets USED rather than targets merely considered.
-  // A no-op when the gate is off, which is every normal world.
-  noteSelectorRotationUse(String(band.id), candidate.tileId);
 
-  // CORRECTION-23G §5 stage 1 — DONOR SCHEDULE RECORDING. Audit-only: with no recorder
-  // registered this is one `undefined` comparison and nothing is written anywhere. Every
-  // field below is the band's own decision or a physical quantity the band's own planner
-  // computed from its own position — no hidden world truth reaches the schedule.
-  if (isRecordingDonorSchedule()) {
-    recordDonorLaunch({
-      bandId: String(band.id),
-      launchDay: Number(day),
-      taskSlot: (band.expeditions ?? []).filter(
-        (expedition) => expedition.taskKind === "frontier_verification",
-      ).length,
-      originTileId: String(band.position),
-      targetTileId: String(candidate.tileId),
-      plannedRoute: route.map((tileId) => String(tileId)),
-      partyWorkers: 2,
-      partyComposition,
-      question: candidate.question,
-      reasonSelected: `${candidate.promisingSignal}|${candidate.missingEvidence}`,
-      feasibility: {
-        distanceTiles: candidate.distanceTiles,
-        routeTiles: route.length - 1,
-        legDays,
-        onSiteDays: VERIFICATION_ON_SITE_DAYS,
-        departableWorkers: partyWorkers,
-        need: need.need,
-        score: candidate.score,
-      },
-    });
-  }
 
   return attachExpedition(band, { ...prepared, verificationPlan: plan });
-}
-
-/**
- * CORRECTION-23G §5/§6/§7 — THE VALID REPLACEMENT FOR F13.
- *
- * Under a replay arm this function REPLACES `maybeLaunchFrontierVerification` entirely, at
- * the same point in the same competition, with the same active cap and the same worker rule.
- * The production selector never runs, so nothing the removed semantics would have perturbed
- * can perturb the schedule — which is exactly the defect that made F13 inadmissible.
- *
- * The party it raises walks physically, pays the same labour, provisions, time, route and
- * risk, and makes the same legal ordinary observations on return. It carries NO
- * `verificationPlan`, so `resolveVerificationOnSite` produces no result, the return seam
- * pushes no `returnedVerifications`, and no attempt, evidence row or place disposition is
- * ever written.
- *
- * Divergence is recorded, never papered over: if the band is gone, the workers are
- * committed, no composition can be formed, or no physical route exists, the ledger takes a
- * failure row and no party is raised.
- */
-function maybeLaunchScheduleReplayParty(
-  world: WorldState,
-  band: Band,
-  day: DayNumber,
-  partyWorkers: number,
-  arm: ScheduleReplayArm,
-): Band | undefined {
-  // §11 G6 protects donor PLACES without launching anything, so it never reaches here.
-  if (arm === "G6") {
-    return undefined;
-  }
-
-  const entry = getScheduledLaunch(String(band.id), Number(day));
-
-  if (entry === undefined) {
-    return undefined;
-  }
-
-  const fail = (failureReason: ReplayFailureReason): undefined => {
-    recordReplayOutcome({
-      bandId: String(band.id),
-      day: Number(day),
-      donorTargetTileId: entry.targetTileId,
-      launched: false,
-      failureReason,
-    });
-    return undefined;
-  };
-
-  const active = (band.expeditions ?? []).filter(
-    (expedition) => isExpeditionAway(expedition.phase) && expedition.taskKind === "frontier_verification",
-  );
-
-  if (active.length >= VERIFICATION_ACTIVE_CAP || partyWorkers < entry.partyWorkers) {
-    return fail("active_cap_or_workers");
-  }
-
-  const availablePools = deriveAvailableMobilityPools(band);
-  const partyComposition = selectPartyComposition(availablePools, entry.partyWorkers, "fast");
-
-  if (partyComposition === undefined) {
-    return fail("no_party_composition");
-  }
-
-  const originMatched = String(band.position) === entry.originTileId;
-
-  // §7 G3 — the ordinary broad-exploration family, on the donor's cadence. It is a different
-  // TARGET FAMILY, not a different schedule: the heading comes from the band's own corridor
-  // memory, viewshed, known edge or inherited direction, exactly as production derives it,
-  // and the party has no destination tile at all.
-  if (arm === "G3") {
-    const heading = deriveFrontierHeading(world, band);
-
-    if (heading === undefined) {
-      return fail("no_arm_target");
-    }
-
-    const frontierPlan = buildFrontierPlan({
-      heading: { x: heading.heading.x, y: heading.heading.y },
-      basis: heading.basis,
-      anchorTileId: heading.anchorTileId,
-      headingConfidence: heading.headingConfidence,
-      outboundBudgetTiles: FRONTIER_OUTBOUND_BUDGET_TILES,
-      returnReserveTiles: FRONTIER_OUTBOUND_BUDGET_TILES,
-    });
-
-    const preparedExploration = createPreparedExpedition({
-      band,
-      taskKind: "frontier_exploration",
-      targetTileId: frontierPlan.anchorTileId,
-      targetPatchId: `frontier:${frontierPlan.sector}:${frontierPlan.basis}`,
-      routeTileIds: [band.position],
-      partyWorkers: entry.partyWorkers,
-      partyComposition,
-      day,
-    });
-
-    recordReplayOutcome({
-      bandId: String(band.id),
-      day: Number(day),
-      donorTargetTileId: entry.targetTileId,
-      launched: true,
-      targetTileId: String(frontierPlan.anchorTileId),
-      exactRoute: false,
-      originMatched,
-    });
-
-    return attachExpedition(
-      { ...band, lastFrontierExplorationTick: getWorldTimeForDay(day).tick },
-      {
-        ...preparedExploration,
-        frontierPlan,
-        frontierDeepestReachTiles: 0,
-        auditScheduleReplay: {
-          arm,
-          donorLaunchDay: entry.launchDay,
-          exactRoute: false,
-          onSiteDays: donorOnSiteDays(entry.question),
-        },
-      },
-    );
-  }
-
-  // G1/G2/G4/G5 all send a party to ONE band-known destination tile. Only the rule that
-  // picks the tile differs.
-  const candidates: readonly string[] =
-    arm === "G4"
-      ? selectNearestUncertainFrontierTargets(world, band)
-      : arm === "G5"
-        ? selectRotatingSectorTargets(world, band, getReplayLaunchOrdinal(String(band.id)))
-        : // G1/G2 — the recorded target first. G2 may then substitute an unused donor place
-          // (and ONLY an unused donor place) when the exact target is physically unreachable.
-          arm === "G2"
-          ? [entry.targetTileId, ...getUnusedDonorTargets(String(band.id)).filter((tileId) => tileId !== entry.targetTileId)]
-          : [entry.targetTileId];
-
-  if (candidates.length === 0) {
-    return fail("no_arm_target");
-  }
-
-  let chosenIndex = -1;
-  let chosenRoute: readonly TileId[] | undefined;
-  let lastFailure: ReplayFailureReason = "no_arm_target";
-
-  for (let index = 0; index < candidates.length; index += 1) {
-    const targetTileId = candidates[index] as TileId;
-
-    if (band.knowledge.observedTiles[targetTileId] === undefined) {
-      lastFailure = "target_record_absent";
-      continue;
-    }
-
-    const distance = tileGridDistance(world, band.position, targetTileId);
-
-    if (distance === undefined) {
-      lastFailure = "no_physical_route";
-      continue;
-    }
-
-    // §5 — the donor's own planned route is replayed TILE FOR TILE whenever the replay band
-    // stands where the donor band stood. Otherwise the paired world has already diverged
-    // physically, and the route is rebuilt to the same target by the same production route
-    // builder. Both cases are counted separately in the ledger; neither teleports.
-    const donorRoute =
-      index === 0 && originMatched && arm !== "G4" && arm !== "G5"
-        ? (entry.plannedRoute as readonly TileId[])
-        : undefined;
-    const searchBound = Math.min(EXPEDITION_MAX_ROUTE_TILES, distance + 8);
-    const route = donorRoute ?? buildExpeditionRouteTiles(world, band.position, targetTileId, searchBound);
-
-    if (route === undefined) {
-      lastFailure = "no_physical_route";
-      continue;
-    }
-
-    if (route.length - 1 > EXPEDITION_MAX_ROUTE_TILES) {
-      lastFailure = "route_over_budget";
-      continue;
-    }
-
-    if (
-      Math.ceil((route.length - 1) / EXPEDITION_BASE_TILES_PER_DAY) * 2 + VERIFICATION_ON_SITE_DAYS >
-      EXPEDITION_MAX_DURATION_DAYS
-    ) {
-      lastFailure = "duration_budget_exceeded";
-      continue;
-    }
-
-    chosenIndex = index;
-    chosenRoute = route;
-    break;
-  }
-
-  if (chosenIndex < 0 || chosenRoute === undefined) {
-    return fail(lastFailure);
-  }
-
-  const targetTileId = candidates[chosenIndex] as TileId;
-  const exactRoute = chosenIndex === 0 && originMatched && arm !== "G4" && arm !== "G5";
-
-  // §6 — the bounded rotation disposition. It asserts nothing about water, resources,
-  // temporary usability, seasonal persistence or any physical answer. It records only that
-  // this audit activity used this target under this replay schedule.
-  if (arm === "G2") {
-    noteRotationUse(String(band.id), String(targetTileId));
-  }
-
-  recordReplayOutcome({
-    bandId: String(band.id),
-    day: Number(day),
-    donorTargetTileId: entry.targetTileId,
-    launched: true,
-    targetTileId: String(targetTileId),
-    exactRoute,
-    originMatched,
-    ...(arm === "G2" && chosenIndex > 0 ? { rotationRetarget: true } : {}),
-  });
-
-  const prepared = createPreparedExpedition({
-    band,
-    taskKind: "frontier_verification",
-    targetTileId,
-    // No question, so no question in the id: the patch id names the audit activity itself.
-    targetPatchId: `replay:${arm}:${targetTileId}`,
-    routeTileIds: chosenRoute,
-    partyWorkers: entry.partyWorkers,
-    partyComposition,
-    day,
-  });
-
-  // NO `verificationPlan`. That single omission is what removes the question, the answer,
-  // the evidence row and the durable disposition — all four, at their real writers, without
-  // touching the physical journey.
-  return attachExpedition(band, {
-    ...prepared,
-    auditScheduleReplay: {
-      arm,
-      donorLaunchDay: entry.launchDay,
-      exactRoute,
-      onSiteDays: donorOnSiteDays(entry.question),
-    },
-  });
-}
-
-/**
- * §5 — the on-site days the DONOR party's own question class required, so the replay pays
- * the same time on the ground. `temporary_use` is the one question whose test is staying, and
- * it is the only one that costs the full `VERIFICATION_ON_SITE_DAYS`; every other question is
- * answered by one day's physical work at the destination.
- */
-function donorOnSiteDays(question: string): number {
-  return question === "temporary_use" ? VERIFICATION_ON_SITE_DAYS : 1;
-}
-
-/**
- * §7 G4 — the NEAREST eligible band-known uncertain frontier target, ranked by physical
- * distance and broken by tile id. Eligibility is band-known and carries no verification
- * semantics: no question is classified, no attempt history is consulted, and `mayAskAgain`
- * is never called. A place is eligible when the band has a record of it, it is a passable
- * destination, it sits in the same physical distance band the verification family uses, and
- * the band's own confidence in the record is below `REPLAY_UNCERTAIN_CONFIDENCE`.
- */
-function selectNearestUncertainFrontierTargets(world: WorldState, band: Band): readonly string[] {
-  const here = world.tiles[band.position];
-
-  if (here === undefined) {
-    return [];
-  }
-
-  const eligible: { readonly tileId: string; readonly distance: number }[] = [];
-
-  for (const record of Object.values(band.knowledge.observedTiles)) {
-    if (record.tileId === band.position || (record.confidence ?? 0) >= REPLAY_UNCERTAIN_CONFIDENCE) {
-      continue;
-    }
-
-    const tile = world.tiles[record.tileId];
-
-    if (tile === undefined || !isBandPassableDestination(tile)) {
-      continue;
-    }
-
-    const distance = Math.abs(tile.coord.x - here.coord.x) + Math.abs(tile.coord.y - here.coord.y);
-
-    if (distance < REPLAY_MIN_TARGET_DISTANCE || distance > REPLAY_MAX_TARGET_DISTANCE) {
-      continue;
-    }
-
-    eligible.push({ tileId: String(record.tileId), distance });
-  }
-
-  return eligible
-    .sort((left, right) =>
-      left.distance === right.distance
-        ? left.tileId.localeCompare(right.tileId)
-        : left.distance - right.distance,
-    )
-    .slice(0, REPLAY_TARGET_CANDIDATE_CAP)
-    .map((row) => row.tileId);
-}
-
-/**
- * §7 G5 — DETERMINISTIC GEOGRAPHIC ROTATION. The eight compass sectors are visited in a
- * fixed order driven by the band's own launch ordinal, so the arm cannot collapse onto one
- * nearby place and cannot be accused of choosing well. Within the chosen sector the least
- * confidently known legal place wins, broken by distance and then tile id. No verification
- * question is read.
- */
-function selectRotatingSectorTargets(
-  world: WorldState,
-  band: Band,
-  launchOrdinal: number,
-): readonly string[] {
-  const here = world.tiles[band.position];
-
-  if (here === undefined) {
-    return [];
-  }
-
-  const bySector = new Map<number, { readonly tileId: string; readonly confidence: number; readonly distance: number }[]>();
-
-  for (const record of Object.values(band.knowledge.observedTiles)) {
-    if (record.tileId === band.position) {
-      continue;
-    }
-
-    const tile = world.tiles[record.tileId];
-
-    if (tile === undefined || !isBandPassableDestination(tile)) {
-      continue;
-    }
-
-    const dx = tile.coord.x - here.coord.x;
-    const dy = tile.coord.y - here.coord.y;
-    const distance = Math.abs(dx) + Math.abs(dy);
-
-    if (distance < REPLAY_MIN_TARGET_DISTANCE || distance > REPLAY_MAX_TARGET_DISTANCE) {
-      continue;
-    }
-
-    // Eight sectors of 45°, measured from due east and increasing counter-clockwise. The
-    // arithmetic is exact and deterministic; no seeded choice is involved.
-    const sector = Math.floor(((Math.atan2(dy, dx) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 4)) % 8;
-    const list = bySector.get(sector);
-    const row = { tileId: String(record.tileId), confidence: record.confidence ?? 0, distance };
-
-    if (list === undefined) {
-      bySector.set(sector, [row]);
-    } else {
-      list.push(row);
-    }
-  }
-
-  const ordered: string[] = [];
-
-  // Start at the sector this launch is due, then take each following sector in turn, so a
-  // band whose due sector is empty still travels somewhere new rather than nowhere.
-  for (let step = 0; step < 8; step += 1) {
-    const rows = bySector.get((launchOrdinal + step) % 8);
-
-    if (rows === undefined) {
-      continue;
-    }
-
-    const best = [...rows].sort((left, right) =>
-      left.confidence === right.confidence
-        ? left.distance === right.distance
-          ? left.tileId.localeCompare(right.tileId)
-          : left.distance - right.distance
-        : left.confidence - right.confidence,
-    )[0];
-
-    if (best !== undefined) {
-      ordered.push(best.tileId);
-    }
-  }
-
-  return ordered.slice(0, REPLAY_TARGET_CANDIDATE_CAP);
 }
 
 /**
@@ -2378,34 +1913,8 @@ function maybeLaunchExpedition(world: WorldState, band: Band, day: DayNumber): B
         ? verificationNeed.need >= 0.45
         : noUsefulRetrieval || verificationNeed.need >= 0.45;
 
-  // CORRECTION-23E §5 arm R7 — audit-only. Broad exploration is offered the slot on its OWN
-  // eligibility rather than only when no verification candidate exists. THE PARTY BUDGET IS
-  // UNCHANGED: still one task per call, still `EXPEDITION_ACTIVE_CAP` — only the order in
-  // which two families are offered the same single slot differs. This measures whether
-  // verification crowds exploration out. Undefined in every normal world.
-  if (world.auditOptions?.explorationSchedulingIndependent === true) {
-    const exploredFirst = maybeLaunchFrontierExploration(world, band, day, currentTick, partyWorkers);
 
-    if (exploredFirst !== undefined) {
-      return exploredFirst;
-    }
-  }
-
-  // CORRECTION-23G §5/§6/§7 — under a registered schedule replay the production verification
-  // launcher does not run AT ALL, and the replay launcher takes the same slot with the same
-  // priority, cap and worker rule. Bypassing the selector entirely is the whole point: F13
-  // was inadmissible precisely because removing the semantics also moved the selector.
-  // `getScheduleReplayArm()` is `undefined` in every production, worker and UI path, in which
-  // case the branch below is the untouched production code.
-  const scheduleReplayArm = getScheduleReplayArm();
-
-  if (scheduleReplayArm !== undefined) {
-    const replayed = maybeLaunchScheduleReplayParty(world, band, day, partyWorkers, scheduleReplayArm);
-
-    if (replayed !== undefined) {
-      return replayed;
-    }
-  } else if (verificationGateOpen) {
+  if (verificationGateOpen) {
     const verified = maybeLaunchFrontierVerification(world, band, day, partyWorkers, verificationNeed);
 
     if (verified !== undefined) {
@@ -2692,14 +2201,8 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
           // route also becomes known country through the same canonical tile-observation
           // writer every other returning party uses.
           if (result.expedition.taskKind === "frontier_verification") {
-            // CORRECTION-23E §5 arm R6 — audit-only. The party still walks the same route and
-            // still hands over its ANSWER; only the ordinary tile observation of the route is
-            // withheld, so the EXPLORATION value of the walk can be separated from the
-            // VERIFICATION value of the answer. Undefined in every normal world.
-            if (currentWorld.auditOptions?.verificationPartyRouteObservationDisabled !== true) {
-              returnedReconRouteTiles.push(...result.expedition.routeTileIds);
-              returnedVerificationRouteTiles.push(...result.expedition.routeTileIds);
-            }
+            returnedReconRouteTiles.push(...result.expedition.routeTileIds);
+            returnedVerificationRouteTiles.push(...result.expedition.routeTileIds);
 
             const verificationResult = result.expedition.verificationResult;
 
@@ -2715,7 +2218,6 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
             // machinery at all. Audit-only; undefined in every normal world.
             if (
               verificationResult !== undefined &&
-              currentWorld.auditOptions?.verificationTargetArm !== "no_verification_question" &&
               currentWorld.auditOptions?.frontierVerificationKnowledgeDisabled !== true
             ) {
               returnedVerifications.push({
@@ -2864,58 +2366,13 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     // brings back shallow single-traversal knowledge of country it did not.
     let knowledge = currentBand.knowledge;
 
-    // CORRECTION-23F §7 — OBSERVATION-CONTENT ISOLATION.
-    //
-    // Production observes the verification party's route through the same call as a route
-    // reconnaissance party's, and that is preserved exactly: with no policy set, the single
-    // combined call below is the production path, byte for byte. Only when an audit policy
-    // is set do the two families separate, so the policy reaches verification travel alone.
-    const observationPolicy = currentWorld.auditOptions?.verificationObservationPolicy;
-
-    if (observationPolicy === undefined) {
-      if (returnedReconRouteTiles.length > 0) {
-        knowledge = observeTileAndNearby(
-          observationWorld,
-          knowledge,
-          toTargets(returnedReconRouteTiles),
-          "returned_route_reconnaissance",
-        );
-      }
-    } else {
-      const verificationTargets = new Set(
-        returnedVerifications.map((returned) => String(returned.result.targetTileId)),
+    if (returnedReconRouteTiles.length > 0) {
+      knowledge = observeTileAndNearby(
+        observationWorld,
+        knowledge,
+        toTargets(returnedReconRouteTiles),
+        "returned_route_reconnaissance",
       );
-      // §7 F3/F4 — the destination is a different epistemic object from the country crossed
-      // to reach it, so they are separated here rather than inside the writer.
-      const verificationRouteTiles = returnedVerificationRouteTiles.filter((tileId) =>
-        observationPolicy === "target_only"
-          ? verificationTargets.has(String(tileId))
-          : observationPolicy === "route_only"
-            ? !verificationTargets.has(String(tileId))
-            : true,
-      );
-      const otherReconTiles = returnedReconRouteTiles.filter(
-        (tileId) => !returnedVerificationRouteTiles.includes(tileId),
-      );
-
-      if (verificationRouteTiles.length > 0) {
-        knowledge = observeTileAndNearby(
-          observationWorld,
-          knowledge,
-          toTargets(verificationRouteTiles),
-          "returned_route_reconnaissance",
-          observationPolicy,
-        );
-      }
-
-      if (otherReconTiles.length > 0) {
-        knowledge = observeTileAndNearby(
-          observationWorld,
-          knowledge,
-          toTargets(otherReconTiles),
-          "returned_route_reconnaissance",
-        );
-      }
     }
 
     if (returnedFrontierRouteTiles.length > 0 && !transferSuppressed) {
