@@ -370,23 +370,43 @@ function deriveDecisionRelevance(
         };
       }
 
+      // CORRECTION-23I §6.2 — a launch now requires this place to BE the candidate the
+      // destination authority is working with, and water to be the binding blocker (Case A) or
+      // the selection to be imminent and resting on coarse observation alone (Case B).
+      const opportunity = band.carryingCapacity?.knownUnusedHabitat;
+      const isSelectedCandidate =
+        opportunity !== undefined && String(opportunity.candidateTileId) === String(target.tileId);
+      const caseA = isSelectedCandidate && opportunity?.waterAccessIsBindingBlocker === true;
+      const caseB = isSelectedCandidate && opportunity?.consideredAsTarget === true;
+
       return {
         ...base,
         questionText: "Is water physically accessible here?",
-        currentBlocker: alreadyPasses
-          ? "nothing — the band's own observation already passes the access gate"
-          : "insufficient access evidence; the destination is rejected for water",
+        currentBlocker: caseA
+          ? "the destination is rejected for water and nothing else is failing"
+          : caseB
+            ? "the destination is selected on coarse observed water alone"
+            : alreadyPasses
+              ? "nothing — and this place is not the candidate under consideration, so no party is sent"
+              : "insufficient access evidence, but this place is not the candidate under consideration",
         ifConfirmed: alreadyPasses
           ? "no change — the gate was already open"
           : "the destination becomes eligible to be considered",
         ifNegative: "the destination is blocked for water, within the area actually searched",
-        changesEligibility: true,
-        // The gate is one conjunct of `consideredAsTarget`; whether the flip reaches the
-        // SELECTED destination also needs the yield and risk conjuncts, which this row does
-        // not assert.
-        changesSelectedAction: false,
-        classification: alreadyPasses ? "eligibility_relevant" : "eligibility_relevant",
-        nextPhysicalActionEnabled: "considering this place as somewhere to move to",
+        changesEligibility: caseA || caseB,
+        // Case A is the one place a water answer reaches the SELECTED destination: every other
+        // conjunct of `consideredAsTarget` already passes, so the gate flip decides it.
+        changesSelectedAction: caseA,
+        classification: caseA
+          ? "immediate_action_relevant"
+          : caseB
+            ? "eligibility_relevant"
+            : "inert",
+        nextPhysicalActionEnabled: caseA
+          ? "this place becomes an eligible destination"
+          : caseB
+            ? "the band commits to this destination on direct rather than coarse evidence"
+            : "none — no party is launched for this place",
       };
     }
 
@@ -394,15 +414,16 @@ function deriveDecisionRelevance(
       return {
         ...base,
         questionText: "Is there food here at all, in the area a party can search?",
-        currentBlocker: "no stock-backed test here is authorised",
-        ifConfirmed: "the harder resource question becomes askable — but nothing physical yet",
-        ifNegative: "the same bounded test is suppressed here, and only here",
-        changesEligibility: true,
+        currentBlocker: "SUSPENDED — no party is sent to establish this",
+        ifConfirmed: "the harder resource question would become askable, and nothing reads its answer",
+        ifNegative: "the same bounded test would be suppressed here, and only here",
+        changesEligibility: false,
         changesSelectedAction: false,
-        classification: "eligibility_relevant",
+        classification: "future_system_evidence",
         missingReader:
-          "the only consumer is the verification selector's own resource_test_possible gate; " +
-          "no physical resource task reads this result",
+          "CORRECTION-23I §8.1 — suspended. The only consumer is the verification selector's own " +
+          "resource_test_possible gate, and no physical resource task reads that question's answer. " +
+          "The stock-backed activity that would give this a reader belongs to the next roadmap item",
       };
     }
 
@@ -410,15 +431,16 @@ function deriveDecisionRelevance(
       return {
         ...base,
         questionText: "Is a real take here worth attempting?",
-        currentBlocker: "none — no decision consults this answer",
+        currentBlocker: "SUSPENDED — no party is sent to establish this",
         ifConfirmed: "nothing changes",
         ifNegative: "nothing changes",
         changesEligibility: false,
         changesSelectedAction: false,
         classification: "future_system_evidence",
         missingReader:
-          "no production reader exists: the stock-backed activity that would resolve a real " +
-          "patch at an arbitrary tile and return a canonical receipt has not been built",
+          "CORRECTION-23I §8.2 — suspended. No production reader exists: the stock-backed " +
+          "activity that would resolve a real patch at an arbitrary tile and return a canonical " +
+          "receipt has not been built",
       };
     }
 
@@ -448,15 +470,16 @@ function deriveDecisionRelevance(
       return {
         ...base,
         questionText: "Does this place stay productive across seasons?",
-        currentBlocker: "none — no decision consults this answer",
+        currentBlocker: "SUSPENDED — no party is sent to establish this",
         ifConfirmed: "nothing changes",
         ifNegative: "nothing changes",
         changesEligibility: false,
         changesSelectedAction: false,
         classification: "future_system_evidence",
         missingReader:
-          "deliberately unread: the seasonal-scheduling system over verified distant country " +
-          "does not exist, and a premature consumer was explicitly rejected",
+          "CORRECTION-23I §8.3 — suspended. No behavioural reader exists and the physical task " +
+          "returns inconclusive by construction; the seasonal-scheduling system that would " +
+          "consume it has not been built, and inventing a premature consumer was rejected",
       };
     }
   }

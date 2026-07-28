@@ -1004,6 +1004,25 @@ function deriveKnownUnusedHabitat(
       riskPenalty < 0.4 &&
       usePressure < 0.3;
 
+    // CORRECTION-23I §6.2 Case A — IS WATER THE ONLY THING STOPPING THIS PLACE?
+    //
+    // `consideredAsTarget` is a conjunction, so `rejectionReason === "insufficient_water_
+    // reliability"` says water failed but says NOTHING about whether the yield and risk
+    // conjuncts pass. A launch gate built on the rejection reason alone would send parties to
+    // places that would still be rejected after a confirmation — exactly the over-launch this
+    // checkpoint exists to remove.
+    //
+    // This states the one thing the launch gate actually needs: with a confirmed direct access
+    // and nothing else changed, would this candidate become eligible? It is computed here
+    // because this is the only place the yield term, the competition margin and the risk term
+    // are all in scope. It is a REPORTED FACT, not an authority: no score reads it, no
+    // threshold moves on it, and `consideredAsTarget` above is untouched.
+    const waterAccessIsBindingBlocker =
+      !consideredAsTarget &&
+      !waterAccessFeasible &&
+      expectedPerCapita > input.currentPerCapita + competitionMargin &&
+      riskPenalty < 0.55;
+
     const opportunity: KnownUnusedHabitatOpportunity = {
       bandId: band.id,
       candidateTileId: tileId,
@@ -1017,6 +1036,10 @@ function deriveKnownUnusedHabitat(
       // §6/§13 — reported separately so nothing downstream can confuse "a party drew water
       // here" with "the water here is dependable".
       waterAccessFeasible,
+      // CORRECTION-23I §6.2 — true only when a confirmed direct access would, on its own,
+      // make this candidate eligible. Read by the verification launch gate; read by nothing
+      // that scores or ranks.
+      waterAccessIsBindingBlocker,
       directWaterAccessState: directWaterAccess.state,
       ...(directWaterAccess.season === undefined ? {} : { directWaterAccessSeason: directWaterAccess.season }),
       directWaterAccessSeasonsObserved: directWaterAccess.seasonsObserved,

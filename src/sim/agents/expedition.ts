@@ -76,6 +76,11 @@ import {
   selectVerificationCandidate as selectFrontierVerificationCandidate,
 } from "./frontierVerification";
 import { observeTileAndNearby } from "./tileObservation";
+// CORRECTION-23I — audit-only launch/consumption diagnostics; no-ops when unregistered.
+import {
+  isCountingTaskCampOutcomes,
+  recordTaskCampOutcome,
+} from "../diagnostics/verificationLaunchDiagnostics";
 // CORRECTION-23G §5/§6/§7 — audit-only schedule-replay seam. Every function below returns a
 // constant (`undefined`, `false`, `[]`) or is a no-op when no audit has registered a slot,
 // which is every production, worker and UI path.
@@ -265,6 +270,31 @@ function deriveTilesPerDay(band: Band, expedition: ExpeditionRecord, currentTick
  * caller, once); its benefit is equally physical — the party sleeps at its work
  * instead of shuttling to safe ground every evening.
  */
+/**
+ * CORRECTION-23I §7 — audit-only wrapper around the camp-outcome counter, so the four call
+ * sites above stay one line each. A no-op, and one boolean test, when no audit is counting.
+ */
+function recordCampOutcome(
+  expedition: ExpeditionRecord,
+  day: DayNumber,
+  reachedEvidenceReader: boolean,
+  refusedByEvidence: boolean,
+  blockedBefore?: "already_camped" | "same_day_reach" | "unusable_ground",
+): void {
+  if (!isCountingTaskCampOutcomes()) {
+    return;
+  }
+
+  recordTaskCampOutcome({
+    bandId: String(expedition.bandId),
+    tileId: String(expedition.positionTileId),
+    day: Number(day),
+    reachedEvidenceReader,
+    refusedByEvidence,
+    ...(blockedBefore === undefined ? {} : { blockedBefore }),
+  });
+}
+
 function deriveTaskCampForOperating(
   world: WorldState,
   expedition: ExpeditionRecord,
@@ -273,6 +303,16 @@ function deriveTaskCampForOperating(
   const homeLegDays = Math.ceil(expedition.routeTileIds.length / EXPEDITION_BASE_TILES_PER_DAY);
 
   if (homeLegDays < 1 || expedition.taskCamp !== undefined) {
+    // CORRECTION-23I §7 — audit-only. A party that already has a camp, or whose work is inside
+    // same-day reach, never reaches the evidence reader: those are not attempted camps and
+    // must not be counted as ones the evidence could have prevented.
+    recordCampOutcome(
+      expedition,
+      day,
+      false,
+      false,
+      expedition.taskCamp !== undefined ? "already_camped" : "same_day_reach",
+    );
     return expedition.taskCamp;
   }
 
@@ -280,6 +320,7 @@ function deriveTaskCampForOperating(
 
   // §16 — no dry, tolerable ground: no camp. The party pays the nightly shuttle instead.
   if (standTile === undefined || standTile.isAquatic === true || standTile.riskProfile.floodRisk > 0.75) {
+    recordCampOutcome(expedition, day, false, false, "unusable_ground");
     return undefined;
   }
 
@@ -290,7 +331,15 @@ function deriveTaskCampForOperating(
   // physically established answer to the temporary-use question at THIS tile.
   const campingBand = world.bands[expedition.bandId];
 
-  if (campingBand !== undefined && taskCampRefusedByEvidence(campingBand, expedition.positionTileId)) {
+  const refusedByEvidence =
+    campingBand !== undefined && taskCampRefusedByEvidence(campingBand, expedition.positionTileId);
+
+  // CORRECTION-23I §7 — audit-only, and this is THE measurement the section turns on. Reaching
+  // this line means every physical precondition already passed, so the camp was genuinely
+  // attempted and only the band's own evidence decides it.
+  recordCampOutcome(expedition, day, true, refusedByEvidence);
+
+  if (refusedByEvidence) {
     return undefined;
   }
 

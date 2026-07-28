@@ -2780,6 +2780,14 @@ export interface KnownUnusedHabitatOpportunity {
   // `waterAccessFeasible` is whether reaching water here is physically possible and drives
   // only the gate. A confirmed access sets the boolean and NEVER moves the number.
   readonly waterAccessFeasible?: boolean;
+  /**
+   * CORRECTION-23I §6.2 — true only when a confirmed direct water access would, on its own,
+   * make this candidate eligible: water currently fails and every other conjunct of
+   * `consideredAsTarget` already passes. The verification launch gate reads it to decide
+   * whether asking can change anything. Nothing that scores, ranks or relaxes a margin reads
+   * it, and it never becomes a magnitude.
+   */
+  readonly waterAccessIsBindingBlocker?: boolean;
   readonly directWaterAccessState?: DirectWaterAccessState;
   /** The season the direct access event actually happened in. Never generalized. */
   readonly directWaterAccessSeason?: Season;

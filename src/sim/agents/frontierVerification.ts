@@ -39,7 +39,20 @@ import type {
   FrontierVerificationPlan,
   FrontierVerificationQuestion,
 } from "./types";
-import { mayAskAgain, resourceTestEligible } from "./verificationEvidence";
+import {
+  deriveDirectWaterAccess,
+  mayAskAgain,
+  resourceTestEligible,
+  taskCampRefusedByEvidence,
+} from "./verificationEvidence";
+import { deriveTripDurationDays } from "./intraSeasonTrips";
+// CORRECTION-23I — audit-only refusal counting and the typed dependency shape.
+import {
+  isRecordingLaunchDependencies,
+  recordLaunchDependency,
+  recordLaunchRefusal,
+  type LaunchDecisionDependency,
+} from "../diagnostics/verificationLaunchDiagnostics";
 // CORRECTION-23G §8 — audit-only read counter; a no-op when no audit is counting.
 import { countSeasonIdentityRead, selectorRotationAllows } from "../diagnostics/verificationScheduleReplay";
 
@@ -247,6 +260,7 @@ export function selectVerificationCandidate(
   const currentTick = Number(world.time.tick);
   const season = world.time.season;
   const eligible: VerificationCandidate[] = [];
+  const candidateDependencies = new Map<string, LaunchDecisionDependency>();
   let examined = 0;
 
   // Farthest-first is wrong here and nearest-first biases toward the existing catchment, so
@@ -324,6 +338,25 @@ export function selectVerificationCandidate(
         continue;
       }
 
+      // ─────────────────────────────────────────────────────────────────────────────────
+      // CORRECTION-23I §5/§6/§7/§8 — THE DECISION-DEPENDENCY GATE.
+      //
+      // Everything above establishes that the band COULD ask. This establishes that the
+      // answer would change something the band is actually deciding. CORRECTION-23H measured
+      // what happens without it: across 1.63 million candidates, immediate action relevance
+      // never exceeded 1.5% in any world, two questions were tautological in practice
+      // (confirmation rates 0.98 and 1.00), and 94% of every physically consequential answer
+      // in the simulation was one branch of one question.
+      //
+      // A place being interesting, uncertain, distant or highly ranked is not a reason to
+      // spend two people and a week of walking on it.
+      // ─────────────────────────────────────────────────────────────────────────────────
+      const dependency = deriveLaunchDecisionDependency(world, band, record.tileId, question, distance);
+
+      if (dependency === undefined) {
+        continue;
+      }
+
       const gap = describeVerificationGap(record, question);
 
       if (gap === undefined) {
@@ -340,6 +373,10 @@ export function selectVerificationCandidate(
           clamp01(distance / VERIFICATION_MAX_DISTANCE_TILES) * 0.22 -
           clamp01(record.observedRisk ?? 0.3) * 0.16,
       );
+
+      // CORRECTION-23I §5/§12 — the approved candidate carries its decision dependency, so a
+      // launch can always be explained by the reason it was allowed rather than reconstructed.
+      candidateDependencies.set(`${String(record.tileId)}|${question}`, dependency);
 
       eligible.push({
         tileId: record.tileId,
@@ -363,11 +400,23 @@ export function selectVerificationCandidate(
     return undefined;
   }
 
-  return [...eligible].sort((left, right) =>
+  const winner = [...eligible].sort((left, right) =>
     right.score === left.score
       ? String(left.tileId).localeCompare(String(right.tileId))
       : right.score - left.score,
   )[0];
+
+  // CORRECTION-23I §12 — record the winning launch's decision dependency for the debug
+  // projection and the acceptance matrix. Audit-only: a no-op when nothing is recording.
+  if (winner !== undefined && isRecordingLaunchDependencies()) {
+    const dependency = candidateDependencies.get(`${String(winner.tileId)}|${winner.question}`);
+
+    if (dependency !== undefined) {
+      recordLaunchDependency({ ...dependency, day: currentTick });
+    }
+  }
+
+  return winner;
 }
 
 /**
@@ -382,6 +431,216 @@ const QUESTION_PRIORITY: readonly FrontierVerificationQuestion[] = [
   "temporary_use",
   "seasonal_persistence",
 ];
+
+/**
+ * CORRECTION-23I §8 — QUESTIONS SUSPENDED BECAUSE NOTHING PHYSICAL READS THEM.
+ *
+ * Not deleted, and not disabled by a flag anyone can flip: suspended, with the reason stated,
+ * because each one's promised consumer has not been built.
+ *
+ *   `resource_presence`        its ONLY consumer is the verification selector's own
+ *                              `resource_test_possible` gate below. A confirmed presence makes
+ *                              a second question askable and no physical task reads that
+ *                              second question's answer. The chain terminates in nothing.
+ *                              CORRECTION-23H: 22,205 answers returned, zero of them moved a
+ *                              reader that gates a physical action, and not one negative was
+ *                              ever returned (confirmation rate 1.00).
+ *   `resource_test_possible`   no production function distinguishes a confirmed result from a
+ *                              negative one. Fixture H5 proved it by probing every reader in
+ *                              the module against both arms.
+ *   `seasonal_persistence`     no behavioural reader, and the physical task returns
+ *                              `inconclusive` by construction — one visit cannot answer a
+ *                              question about other seasons. 9,435 answers, all inconclusive.
+ *
+ * The types, the physical resolvers and the evidence shapes are all retained: they are correct,
+ * they cost nothing dormant, and recreating them would be more work than keeping them. What is
+ * removed is the LAUNCH — the band no longer spends two people and a week of walking to
+ * establish something nothing will read.
+ *
+ * The stock-backed resource activity that would give the resource pair a reader belongs to the
+ * next roadmap item (Resource Investigation and Temporary Use Closure) and is deliberately NOT
+ * built here. §4: do not build the next roadmap system early merely to give a question a
+ * reader.
+ */
+const SUSPENDED_QUESTIONS: ReadonlySet<FrontierVerificationQuestion> = new Set([
+  "resource_presence",
+  "resource_test_possible",
+  "seasonal_persistence",
+]);
+
+/**
+ * §6.2 Case B — the actions production itself declares it is taking toward an opportunity. Used
+ * as the imminence test rather than a new threshold, so "imminent" means what the daughter
+ * colonization authority already means by it.
+ */
+const IMMINENT_COLONIZATION_ACTIONS: ReadonlySet<string> = new Set([
+  "probe",
+  "seek_new_range",
+  "fission_toward_opportunity",
+]);
+
+/**
+ * CORRECTION-23I §5 — THE TYPED DECISION DEPENDENCY.
+ *
+ * Returns the dependency when this question at this place can change a concrete decision the
+ * band is making now, and `undefined` when it cannot. Every input is band-known state, a
+ * current production decision input, a current pending physical activity, or canonical reader
+ * output. Nothing here reads hidden ecology, the answer the party would obtain, future
+ * population, future stock, or a benchmark result.
+ */
+function deriveLaunchDecisionDependency(
+  world: WorldState,
+  band: Band,
+  tileId: TileId,
+  question: FrontierVerificationQuestion,
+  distanceTiles: number,
+): LaunchDecisionDependency | undefined {
+  if (SUSPENDED_QUESTIONS.has(question)) {
+    recordLaunchRefusal(question, "question_suspended_no_reader");
+    return undefined;
+  }
+
+  if (question === "water_access") {
+    const opportunity = band.carryingCapacity?.knownUnusedHabitat;
+
+    // §6.2 — both cases require this place to BE the candidate the destination authority is
+    // currently working with. §6.1 explicitly rejects the weaker rule ("some list candidate's
+    // gate could hypothetically move"), which would preserve the existing over-launch: a
+    // hypothetical negative moves the gate for most currently permitted candidates.
+    if (opportunity === undefined || String(opportunity.candidateTileId) !== String(tileId)) {
+      recordLaunchRefusal(question, "not_selected_or_imminent");
+      return undefined;
+    }
+
+    // A settled direct answer means there is nothing left to establish.
+    const direct = deriveDirectWaterAccess(band, tileId);
+
+    if (direct.state === "accessed" || direct.state === "refuted") {
+      recordLaunchRefusal(question, "already_settled_directly");
+      return undefined;
+    }
+
+    // Case A — the candidate is rejected, and water is the ONLY reason. `waterAccessIsBinding
+    // Blocker` is computed inside the destination reader where the yield term, the competition
+    // margin and the risk term are all in scope, so this is not an approximation of the gate:
+    // it is the gate's own statement that a confirmation would flip it.
+    if (opportunity.consideredAsTarget !== true) {
+      if (opportunity.waterAccessIsBindingBlocker !== true) {
+        recordLaunchRefusal(
+          question,
+          opportunity.rejectionReason === "insufficient_water_reliability"
+            ? "non_water_requirement_fails"
+            : "water_not_the_binding_blocker",
+        );
+        return undefined;
+      }
+
+      return {
+        bandId: String(band.id),
+        day: 0,
+        question,
+        targetTileId: String(tileId),
+        blockedOrImminentAction: `consider ${String(tileId)} as a destination`,
+        authoritativeReader: "carryingCapacity.deriveKnownUnusedHabitat / isWaterAccessFeasible",
+        baselineVerdict: "rejected — insufficient_water_reliability",
+        possibleConfirmedVerdict: "eligible — every other requirement already passes",
+        possibleNegativeVerdict: "still rejected, and the band stops re-considering it",
+        exactReasonTheAnswerIsNeeded:
+          "water access is the single failing conjunct of consideredAsTarget at the selected candidate",
+        launchCase: "case_a_confirmation_unlocks",
+      };
+    }
+
+    // Case B — the candidate is currently SELECTED, its water verdict rests only on coarse
+    // observation, and production has declared it is acting toward it. A bounded negative
+    // would cancel that action. `state === "unasked"` above already established there is no
+    // direct evidence, so the current verdict is the observation's.
+    const colonization = band.carryingCapacity?.daughterColonization;
+    const imminent =
+      colonization !== undefined &&
+      IMMINENT_COLONIZATION_ACTIONS.has(String(colonization.recommendedAction));
+
+    if (!imminent) {
+      recordLaunchRefusal(question, "not_selected_or_imminent");
+      return undefined;
+    }
+
+    return {
+      bandId: String(band.id),
+      day: 0,
+      question,
+      targetTileId: String(tileId),
+      blockedOrImminentAction: `${String(colonization?.recommendedAction)} toward ${String(tileId)}`,
+      authoritativeReader: "carryingCapacity.deriveKnownUnusedHabitat / isWaterAccessFeasible",
+      baselineVerdict: "eligible on coarse observed water alone; no direct access established",
+      possibleConfirmedVerdict: "unchanged — the candidate stays eligible, now on direct evidence",
+      possibleNegativeVerdict: "the candidate is cancelled before the band commits to it",
+      exactReasonTheAnswerIsNeeded:
+        "a selected destination is resting on an unverified water observation and the band is about to act on it",
+      launchCase: "case_b_negative_vetoes",
+    };
+  }
+
+  if (question === "temporary_use") {
+    // §7.1 — measured, not assumed: negatives prevent 10.6% of ACTUALLY ATTEMPTED camps
+    // (492 of 4,626 across eleven worlds), so the question is retained and gated rather than
+    // suspended. The gate is the operation, not the place: a bounded camp is only decided when
+    // a party is working somewhere its home leg cannot be walked in a day.
+    const memory = (band.resourceKnowledgeState?.patchMemories ?? []).find(
+      (patch) => String(patch.approximateTile) === String(tileId),
+    );
+    // The away phases, spelled out rather than imported: `expedition.ts` imports this module,
+    // so taking its predicate would close an import cycle for one boolean.
+    const activeParty = (band.expeditions ?? []).some(
+      (expedition) =>
+        String(expedition.targetTileId) === String(tileId) &&
+        (expedition.phase === "prepared" ||
+          expedition.phase === "outbound" ||
+          expedition.phase === "operating" ||
+          expedition.phase === "returning"),
+    );
+
+    if (memory === undefined && !activeParty) {
+      recordLaunchRefusal(question, "no_pending_operation_needing_camp");
+      return undefined;
+    }
+
+    // A camp is only ever decided when the work cannot be reached and returned from in a day.
+    // `deriveTaskCampForOperating` returns early otherwise, so for a same-day target a
+    // temporary-use answer can never prevent anything.
+    if (deriveTripDurationDays(distanceTiles) <= 1) {
+      recordLaunchRefusal(question, "no_pending_operation_needing_camp");
+      return undefined;
+    }
+
+    if (taskCampRefusedByEvidence(band, tileId)) {
+      recordLaunchRefusal(question, "already_settled_directly");
+      return undefined;
+    }
+
+    return {
+      bandId: String(band.id),
+      day: 0,
+      question,
+      targetTileId: String(tileId),
+      blockedOrImminentAction: `operate a multi-day task at ${String(tileId)}`,
+      authoritativeReader: "expedition.deriveTaskCampForOperating / taskCampRefusedByEvidence",
+      baselineVerdict: "a bounded task camp here is currently permitted",
+      possibleConfirmedVerdict: "unchanged — absence of evidence already permitted the camp",
+      possibleNegativeVerdict: "the bounded task camp is refused and the party shuttles or leaves",
+      exactReasonTheAnswerIsNeeded:
+        "a remembered multi-day work target whose camp feasibility has never been physically tested",
+      launchCase: "case_b_negative_vetoes",
+    };
+  }
+
+  return undefined;
+}
+
+/** Re-exported so the audit and the projection classify launches by the same rule. */
+export function isSuspendedVerificationQuestion(question: FrontierVerificationQuestion): boolean {
+  return SUSPENDED_QUESTIONS.has(question);
+}
 
 /** What the band's own record says, and what it is missing, for one question. */
 export function describeVerificationGap(

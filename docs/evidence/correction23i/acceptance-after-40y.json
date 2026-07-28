@@ -1,0 +1,2479 @@
+{
+  "label": "after",
+  "years": 40,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "totals": {
+    "water_access": 99,
+    "resource_presence": 0,
+    "resource_test_possible": 0,
+    "temporary_use": 1185,
+    "seasonal_persistence": 0
+  },
+  "summary": {
+    "map1": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 162.6,
+      "meanSupport": 1.09,
+      "meanReceipts": 252.14,
+      "meanBirths": 116.4,
+      "meanDeaths": 108.8,
+      "meanUniqueTiles": 504.2,
+      "meanVerificationParties": 53,
+      "verificationByQuestion": {
+        "water_access": 20,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 245,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 61.4,
+      "meanReconnaissanceParties": 5.4,
+      "meanGatheringParties": 23.8,
+      "meanTotalParties": 228,
+      "meanSlotUtilisation": 0.0222,
+      "campsAttempted": 794,
+      "campsPreventedByEvidence": 16,
+      "launchCases": {
+        "case_b_negative_vetoes": 1906
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 348569,
+        "temporary_use|no_pending_operation_needing_camp": 308172,
+        "seasonal_persistence|question_suspended_no_reader": 218835,
+        "water_access|not_selected_or_imminent": 305330,
+        "water_access|water_not_the_binding_blocker": 508,
+        "water_access|already_settled_directly": 15
+      }
+    },
+    "map2": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 213.4,
+      "meanSupport": 0.73,
+      "meanReceipts": 260.07,
+      "meanBirths": 156.6,
+      "meanDeaths": 181.2,
+      "meanUniqueTiles": 793.8,
+      "meanVerificationParties": 102.4,
+      "verificationByQuestion": {
+        "water_access": 48,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 464,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 106,
+      "meanReconnaissanceParties": 6,
+      "meanGatheringParties": 38.4,
+      "meanTotalParties": 357.2,
+      "meanSlotUtilisation": 0.0183,
+      "campsAttempted": 1216,
+      "campsPreventedByEvidence": 14,
+      "launchCases": {
+        "case_b_negative_vetoes": 6879
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 1105015,
+        "temporary_use|no_pending_operation_needing_camp": 1322933,
+        "seasonal_persistence|question_suspended_no_reader": 900283,
+        "resource_presence|question_suspended_no_reader": 1190077,
+        "water_access|water_not_the_binding_blocker": 3079,
+        "water_access|already_settled_directly": 150,
+        "water_access|non_water_requirement_fails": 242
+      }
+    },
+    "site_A_coast": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 20,
+      "meanSupport": 0.01,
+      "meanReceipts": 6.37,
+      "meanBirths": 18,
+      "meanDeaths": 32,
+      "meanUniqueTiles": 68.8,
+      "meanVerificationParties": 22.6,
+      "verificationByQuestion": {
+        "water_access": 0,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 113,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 13,
+      "meanReconnaissanceParties": 1.6,
+      "meanGatheringParties": 3,
+      "meanTotalParties": 49.6,
+      "meanSlotUtilisation": 0.0199,
+      "campsAttempted": 189,
+      "campsPreventedByEvidence": 49,
+      "launchCases": {
+        "case_b_negative_vetoes": 113
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 282932,
+        "resource_presence|question_suspended_no_reader": 282932,
+        "temporary_use|no_pending_operation_needing_camp": 204758,
+        "seasonal_persistence|question_suspended_no_reader": 139491,
+        "temporary_use|already_settled_directly": 7713
+      }
+    },
+    "site_B_dry_plains": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 21,
+      "meanSupport": 0.27,
+      "meanReceipts": 10.74,
+      "meanBirths": 18.4,
+      "meanDeaths": 31.4,
+      "meanUniqueTiles": 54.4,
+      "meanVerificationParties": 3,
+      "verificationByQuestion": {
+        "water_access": 0,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 15,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 6.6,
+      "meanReconnaissanceParties": 0,
+      "meanGatheringParties": 0.6,
+      "meanTotalParties": 19,
+      "meanSlotUtilisation": 0.0092,
+      "campsAttempted": 62,
+      "campsPreventedByEvidence": 0,
+      "launchCases": {
+        "case_b_negative_vetoes": 15
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 280848,
+        "seasonal_persistence|question_suspended_no_reader": 223043,
+        "temporary_use|no_pending_operation_needing_camp": 231659,
+        "water_access|not_selected_or_imminent": 360,
+        "water_access|water_not_the_binding_blocker": 60
+      }
+    },
+    "site_C_dry_plains": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 29.6,
+      "meanSupport": 0.6,
+      "meanReceipts": 26.71,
+      "meanBirths": 21,
+      "meanDeaths": 25.4,
+      "meanUniqueTiles": 87.6,
+      "meanVerificationParties": 19,
+      "verificationByQuestion": {
+        "water_access": 0,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 95,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 13,
+      "meanReconnaissanceParties": 0,
+      "meanGatheringParties": 6.8,
+      "meanTotalParties": 72.2,
+      "meanSlotUtilisation": 0.0321,
+      "campsAttempted": 311,
+      "campsPreventedByEvidence": 157,
+      "launchCases": {
+        "case_b_negative_vetoes": 95
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 203165,
+        "temporary_use|no_pending_operation_needing_camp": 132231,
+        "seasonal_persistence|question_suspended_no_reader": 85444,
+        "water_access|water_not_the_binding_blocker": 135,
+        "water_access|not_selected_or_imminent": 13325,
+        "temporary_use|already_settled_directly": 2782
+      }
+    },
+    "site_D_aquatic": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 24,
+      "meanSupport": 0.47,
+      "meanReceipts": 19.77,
+      "meanBirths": 19.6,
+      "meanDeaths": 29.6,
+      "meanUniqueTiles": 30.4,
+      "meanVerificationParties": 8,
+      "verificationByQuestion": {
+        "water_access": 5,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 35,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 6,
+      "meanReconnaissanceParties": 0.2,
+      "meanGatheringParties": 8,
+      "meanTotalParties": 31.8,
+      "meanSlotUtilisation": 0.0125,
+      "campsAttempted": 129,
+      "campsPreventedByEvidence": 0,
+      "launchCases": {
+        "case_b_negative_vetoes": 4760
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 193350,
+        "seasonal_persistence|question_suspended_no_reader": 105481,
+        "water_access|water_not_the_binding_blocker": 435,
+        "resource_presence|question_suspended_no_reader": 114255,
+        "water_access|not_selected_or_imminent": 134492
+      }
+    },
+    "site_E_hills": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 27,
+      "meanSupport": 0.44,
+      "meanReceipts": 23.37,
+      "meanBirths": 20.4,
+      "meanDeaths": 27.4,
+      "meanUniqueTiles": 105.8,
+      "meanVerificationParties": 18.8,
+      "verificationByQuestion": {
+        "water_access": 10,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 84,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 13,
+      "meanReconnaissanceParties": 0,
+      "meanGatheringParties": 7.4,
+      "meanTotalParties": 63.6,
+      "meanSlotUtilisation": 0.027,
+      "campsAttempted": 285,
+      "campsPreventedByEvidence": 63,
+      "launchCases": {
+        "case_b_negative_vetoes": 94
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 265929,
+        "temporary_use|no_pending_operation_needing_camp": 210132,
+        "seasonal_persistence|question_suspended_no_reader": 132948,
+        "water_access|not_selected_or_imminent": 216744,
+        "water_access|non_water_requirement_fails": 123,
+        "water_access|water_not_the_binding_blocker": 255,
+        "temporary_use|already_settled_directly": 374
+      }
+    },
+    "site_F_hills": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 30.6,
+      "meanSupport": 0.66,
+      "meanReceipts": 29.94,
+      "meanBirths": 21.4,
+      "meanDeaths": 24.8,
+      "meanUniqueTiles": 119.6,
+      "meanVerificationParties": 11.8,
+      "verificationByQuestion": {
+        "water_access": 5,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 54,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 13,
+      "meanReconnaissanceParties": 13,
+      "meanGatheringParties": 3.2,
+      "meanTotalParties": 48.2,
+      "meanSlotUtilisation": 0.0214,
+      "campsAttempted": 178,
+      "campsPreventedByEvidence": 18,
+      "launchCases": {
+        "case_b_negative_vetoes": 59
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 105478,
+        "resource_presence|question_suspended_no_reader": 156791,
+        "temporary_use|no_pending_operation_needing_camp": 105337,
+        "seasonal_persistence|question_suspended_no_reader": 95161
+      }
+    },
+    "ordinary": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 20.2,
+      "meanSupport": 0.27,
+      "meanReceipts": 11.12,
+      "meanBirths": 18.2,
+      "meanDeaths": 32,
+      "meanUniqueTiles": 102,
+      "meanVerificationParties": 7.8,
+      "verificationByQuestion": {
+        "water_access": 11,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 28,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 12.4,
+      "meanReconnaissanceParties": 17.6,
+      "meanGatheringParties": 5.8,
+      "meanTotalParties": 52.8,
+      "meanSlotUtilisation": 0.0362,
+      "campsAttempted": 202,
+      "campsPreventedByEvidence": 0,
+      "launchCases": {
+        "case_b_negative_vetoes": 600,
+        "case_a_confirmation_unlocks": 45
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 203213,
+        "resource_presence|question_suspended_no_reader": 121865,
+        "temporary_use|no_pending_operation_needing_camp": 246645,
+        "seasonal_persistence|question_suspended_no_reader": 123767,
+        "water_access|water_not_the_binding_blocker": 27,
+        "water_access|non_water_requirement_fails": 345
+      }
+    },
+    "isolated_marginal": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 21.6,
+      "meanSupport": 0.31,
+      "meanReceipts": 12.37,
+      "meanBirths": 18.8,
+      "meanDeaths": 31.2,
+      "meanUniqueTiles": 179,
+      "meanVerificationParties": 5,
+      "verificationByQuestion": {
+        "water_access": 0,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 25,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 13,
+      "meanReconnaissanceParties": 0,
+      "meanGatheringParties": 3.4,
+      "meanTotalParties": 31.6,
+      "meanSlotUtilisation": 0.0167,
+      "campsAttempted": 99,
+      "campsPreventedByEvidence": 10,
+      "launchCases": {
+        "case_b_negative_vetoes": 25
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 267453,
+        "seasonal_persistence|question_suspended_no_reader": 239688,
+        "resource_presence|question_suspended_no_reader": 117820,
+        "water_access|not_selected_or_imminent": 227
+      }
+    },
+    "hostile": {
+      "seeds": 5,
+      "survival": 1,
+      "meanFinalPopulation": 20.4,
+      "meanSupport": 0.26,
+      "meanReceipts": 10.25,
+      "meanBirths": 19,
+      "meanDeaths": 32.6,
+      "meanUniqueTiles": 299.4,
+      "meanVerificationParties": 5.4,
+      "verificationByQuestion": {
+        "water_access": 0,
+        "resource_presence": 0,
+        "resource_test_possible": 0,
+        "temporary_use": 27,
+        "seasonal_persistence": 0
+      },
+      "meanExplorationParties": 13,
+      "meanReconnaissanceParties": 0,
+      "meanGatheringParties": 3.6,
+      "meanTotalParties": 50.2,
+      "meanSlotUtilisation": 0.032,
+      "campsAttempted": 186,
+      "campsPreventedByEvidence": 19,
+      "launchCases": {
+        "case_b_negative_vetoes": 27
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 263003,
+        "seasonal_persistence|question_suspended_no_reader": 163710,
+        "resource_presence|question_suspended_no_reader": 189505,
+        "water_access|not_selected_or_imminent": 40149
+      }
+    }
+  },
+  "rows": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 168,
+      "peakPopulation": 168,
+      "meanSupport": 1.1616,
+      "receipts": 271.36,
+      "births": 119,
+      "deaths": 106,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 525,
+      "verificationParties": 45,
+      "verificationByQuestion": {
+        "temporary_use": 43,
+        "water_access": 2
+      },
+      "broadExplorationParties": 61,
+      "reconnaissanceParties": 5,
+      "patchVerificationParties": 75,
+      "gatheringParties": 25,
+      "totalParties": 211,
+      "slotUtilisation": 0.0214,
+      "campsAttempted": 142,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 467,
+      "launchCases": {
+        "case_b_negative_vetoes": 467
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 66042,
+        "temporary_use|no_pending_operation_needing_camp": 56438,
+        "seasonal_persistence|question_suspended_no_reader": 40899,
+        "water_access|not_selected_or_imminent": 56832,
+        "water_access|water_not_the_binding_blocker": 90
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 160,
+      "peakPopulation": 161,
+      "meanSupport": 1.0536,
+      "receipts": 243.68,
+      "births": 116,
+      "deaths": 111,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 466,
+      "verificationParties": 53,
+      "verificationByQuestion": {
+        "temporary_use": 49,
+        "water_access": 4
+      },
+      "broadExplorationParties": 61,
+      "reconnaissanceParties": 6,
+      "patchVerificationParties": 99,
+      "gatheringParties": 19,
+      "totalParties": 238,
+      "slotUtilisation": 0.0229,
+      "campsAttempted": 170,
+      "campsPreventedByEvidence": 7,
+      "launchDependencies": 356,
+      "launchCases": {
+        "case_b_negative_vetoes": 356
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 75876,
+        "temporary_use|no_pending_operation_needing_camp": 61751,
+        "seasonal_persistence|question_suspended_no_reader": 39856,
+        "water_access|not_selected_or_imminent": 67472,
+        "water_access|water_not_the_binding_blocker": 60
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 161,
+      "peakPopulation": 162,
+      "meanSupport": 1.0618,
+      "receipts": 243,
+      "births": 115,
+      "deaths": 109,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 496,
+      "verificationParties": 60,
+      "verificationByQuestion": {
+        "temporary_use": 55,
+        "water_access": 5
+      },
+      "broadExplorationParties": 61,
+      "reconnaissanceParties": 4,
+      "patchVerificationParties": 71,
+      "gatheringParties": 26,
+      "totalParties": 222,
+      "slotUtilisation": 0.0206,
+      "campsAttempted": 152,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 465,
+      "launchCases": {
+        "case_b_negative_vetoes": 465
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 64599,
+        "temporary_use|no_pending_operation_needing_camp": 57240,
+        "seasonal_persistence|question_suspended_no_reader": 40085,
+        "water_access|not_selected_or_imminent": 57388,
+        "water_access|water_not_the_binding_blocker": 60,
+        "water_access|already_settled_directly": 15
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 162,
+      "peakPopulation": 162,
+      "meanSupport": 1.1368,
+      "receipts": 259.25,
+      "births": 116,
+      "deaths": 109,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 576,
+      "verificationParties": 56,
+      "verificationByQuestion": {
+        "temporary_use": 52,
+        "water_access": 4
+      },
+      "broadExplorationParties": 64,
+      "reconnaissanceParties": 8,
+      "patchVerificationParties": 92,
+      "gatheringParties": 29,
+      "totalParties": 249,
+      "slotUtilisation": 0.0249,
+      "campsAttempted": 178,
+      "campsPreventedByEvidence": 5,
+      "launchDependencies": 266,
+      "launchCases": {
+        "case_b_negative_vetoes": 266
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 73374,
+        "temporary_use|no_pending_operation_needing_camp": 67698,
+        "seasonal_persistence|question_suspended_no_reader": 50093,
+        "water_access|not_selected_or_imminent": 63531,
+        "water_access|water_not_the_binding_blocker": 103
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 162,
+      "peakPopulation": 162,
+      "meanSupport": 1.0433,
+      "receipts": 243.42,
+      "births": 116,
+      "deaths": 109,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 458,
+      "verificationParties": 51,
+      "verificationByQuestion": {
+        "temporary_use": 46,
+        "water_access": 5
+      },
+      "broadExplorationParties": 60,
+      "reconnaissanceParties": 4,
+      "patchVerificationParties": 85,
+      "gatheringParties": 20,
+      "totalParties": 220,
+      "slotUtilisation": 0.0213,
+      "campsAttempted": 152,
+      "campsPreventedByEvidence": 4,
+      "launchDependencies": 352,
+      "launchCases": {
+        "case_b_negative_vetoes": 352
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 68678,
+        "temporary_use|no_pending_operation_needing_camp": 65045,
+        "seasonal_persistence|question_suspended_no_reader": 47902,
+        "water_access|not_selected_or_imminent": 60107,
+        "water_access|water_not_the_binding_blocker": 195
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 216,
+      "peakPopulation": 238,
+      "meanSupport": 0.7771,
+      "receipts": 274.63,
+      "births": 158,
+      "deaths": 180,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 803,
+      "verificationParties": 94,
+      "verificationByQuestion": {
+        "temporary_use": 87,
+        "water_access": 7
+      },
+      "broadExplorationParties": 99,
+      "reconnaissanceParties": 2,
+      "patchVerificationParties": 74,
+      "gatheringParties": 35,
+      "totalParties": 304,
+      "slotUtilisation": 0.0155,
+      "campsAttempted": 198,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 1661,
+      "launchCases": {
+        "case_b_negative_vetoes": 1661
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 227054,
+        "temporary_use|no_pending_operation_needing_camp": 274190,
+        "seasonal_persistence|question_suspended_no_reader": 189320,
+        "resource_presence|question_suspended_no_reader": 244495,
+        "water_access|water_not_the_binding_blocker": 643,
+        "water_access|already_settled_directly": 30
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 210,
+      "peakPopulation": 238,
+      "meanSupport": 0.6951,
+      "receipts": 249.23,
+      "births": 154,
+      "deaths": 182,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 790,
+      "verificationParties": 100,
+      "verificationByQuestion": {
+        "temporary_use": 93,
+        "water_access": 7
+      },
+      "broadExplorationParties": 111,
+      "reconnaissanceParties": 1,
+      "patchVerificationParties": 137,
+      "gatheringParties": 31,
+      "totalParties": 380,
+      "slotUtilisation": 0.0195,
+      "campsAttempted": 266,
+      "campsPreventedByEvidence": 6,
+      "launchDependencies": 1587,
+      "launchCases": {
+        "case_b_negative_vetoes": 1587
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 236429,
+        "temporary_use|no_pending_operation_needing_camp": 270292,
+        "seasonal_persistence|question_suspended_no_reader": 162119,
+        "resource_presence|question_suspended_no_reader": 256987,
+        "water_access|water_not_the_binding_blocker": 797,
+        "water_access|non_water_requirement_fails": 227,
+        "water_access|already_settled_directly": 30
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 213,
+      "peakPopulation": 238,
+      "meanSupport": 0.7034,
+      "receipts": 255.66,
+      "births": 157,
+      "deaths": 182,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 760,
+      "verificationParties": 97,
+      "verificationByQuestion": {
+        "temporary_use": 83,
+        "water_access": 14
+      },
+      "broadExplorationParties": 103,
+      "reconnaissanceParties": 22,
+      "patchVerificationParties": 71,
+      "gatheringParties": 35,
+      "totalParties": 328,
+      "slotUtilisation": 0.0176,
+      "campsAttempted": 219,
+      "campsPreventedByEvidence": 8,
+      "launchDependencies": 1538,
+      "launchCases": {
+        "case_b_negative_vetoes": 1538
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 225450,
+        "temporary_use|no_pending_operation_needing_camp": 269129,
+        "seasonal_persistence|question_suspended_no_reader": 194418,
+        "resource_presence|question_suspended_no_reader": 239385,
+        "water_access|water_not_the_binding_blocker": 511
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 215,
+      "peakPopulation": 238,
+      "meanSupport": 0.7271,
+      "receipts": 261.58,
+      "births": 158,
+      "deaths": 181,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 772,
+      "verificationParties": 108,
+      "verificationByQuestion": {
+        "temporary_use": 96,
+        "water_access": 12
+      },
+      "broadExplorationParties": 111,
+      "reconnaissanceParties": 4,
+      "patchVerificationParties": 126,
+      "gatheringParties": 49,
+      "totalParties": 398,
+      "slotUtilisation": 0.0195,
+      "campsAttempted": 276,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 1138,
+      "launchCases": {
+        "case_b_negative_vetoes": 1138
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 218298,
+        "temporary_use|no_pending_operation_needing_camp": 256989,
+        "seasonal_persistence|question_suspended_no_reader": 177465,
+        "resource_presence|question_suspended_no_reader": 224362,
+        "water_access|water_not_the_binding_blocker": 619,
+        "water_access|already_settled_directly": 90
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 213,
+      "peakPopulation": 238,
+      "meanSupport": 0.7418,
+      "receipts": 259.23,
+      "births": 156,
+      "deaths": 181,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 844,
+      "verificationParties": 113,
+      "verificationByQuestion": {
+        "temporary_use": 105,
+        "water_access": 8
+      },
+      "broadExplorationParties": 106,
+      "reconnaissanceParties": 1,
+      "patchVerificationParties": 114,
+      "gatheringParties": 42,
+      "totalParties": 376,
+      "slotUtilisation": 0.0192,
+      "campsAttempted": 257,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 955,
+      "launchCases": {
+        "case_b_negative_vetoes": 955
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 197784,
+        "temporary_use|no_pending_operation_needing_camp": 252333,
+        "seasonal_persistence|question_suspended_no_reader": 176961,
+        "resource_presence|question_suspended_no_reader": 224848,
+        "water_access|water_not_the_binding_blocker": 509,
+        "water_access|non_water_requirement_fails": 15
+      }
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.0068,
+      "receipts": 7.1,
+      "births": 18,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 74,
+      "verificationParties": 24,
+      "verificationByQuestion": {
+        "temporary_use": 24
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 2,
+      "patchVerificationParties": 8,
+      "gatheringParties": 3,
+      "totalParties": 50,
+      "slotUtilisation": 0.0199,
+      "campsAttempted": 36,
+      "campsPreventedByEvidence": 5,
+      "launchDependencies": 24,
+      "launchCases": {
+        "case_b_negative_vetoes": 24
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 56476,
+        "resource_presence|question_suspended_no_reader": 56476,
+        "temporary_use|no_pending_operation_needing_camp": 41498,
+        "seasonal_persistence|question_suspended_no_reader": 28099,
+        "temporary_use|already_settled_directly": 1331
+      }
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.0068,
+      "receipts": 7.1,
+      "births": 18,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 64,
+      "verificationParties": 22,
+      "verificationByQuestion": {
+        "temporary_use": 22
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 4,
+      "patchVerificationParties": 7,
+      "gatheringParties": 3,
+      "totalParties": 49,
+      "slotUtilisation": 0.0199,
+      "campsAttempted": 35,
+      "campsPreventedByEvidence": 5,
+      "launchDependencies": 22,
+      "launchCases": {
+        "case_b_negative_vetoes": 22
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 56524,
+        "resource_presence|question_suspended_no_reader": 56524,
+        "temporary_use|no_pending_operation_needing_camp": 40682,
+        "seasonal_persistence|question_suspended_no_reader": 27892,
+        "temporary_use|already_settled_directly": 1208
+      }
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.0068,
+      "receipts": 7.08,
+      "births": 18,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 74,
+      "verificationParties": 24,
+      "verificationByQuestion": {
+        "temporary_use": 24
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 1,
+      "patchVerificationParties": 8,
+      "gatheringParties": 3,
+      "totalParties": 49,
+      "slotUtilisation": 0.0194,
+      "campsAttempted": 35,
+      "campsPreventedByEvidence": 5,
+      "launchDependencies": 24,
+      "launchCases": {
+        "case_b_negative_vetoes": 24
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 56476,
+        "resource_presence|question_suspended_no_reader": 56476,
+        "temporary_use|no_pending_operation_needing_camp": 41406,
+        "seasonal_persistence|question_suspended_no_reader": 28099,
+        "temporary_use|already_settled_directly": 1419
+      }
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.0075,
+      "receipts": 6.89,
+      "births": 18,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 66,
+      "verificationParties": 21,
+      "verificationByQuestion": {
+        "temporary_use": 21
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 1,
+      "patchVerificationParties": 13,
+      "gatheringParties": 3,
+      "totalParties": 51,
+      "slotUtilisation": 0.0203,
+      "campsAttempted": 40,
+      "campsPreventedByEvidence": 15,
+      "launchDependencies": 21,
+      "launchCases": {
+        "case_b_negative_vetoes": 21
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 56812,
+        "resource_presence|question_suspended_no_reader": 56812,
+        "temporary_use|no_pending_operation_needing_camp": 40973,
+        "seasonal_persistence|question_suspended_no_reader": 27763,
+        "temporary_use|already_settled_directly": 1882
+      }
+    },
+    {
+      "scenario": "site_A_coast",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.0086,
+      "receipts": 3.69,
+      "births": 18,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 66,
+      "verificationParties": 22,
+      "verificationByQuestion": {
+        "temporary_use": 22
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 11,
+      "gatheringParties": 3,
+      "totalParties": 49,
+      "slotUtilisation": 0.0201,
+      "campsAttempted": 43,
+      "campsPreventedByEvidence": 19,
+      "launchDependencies": 22,
+      "launchCases": {
+        "case_b_negative_vetoes": 22
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 56644,
+        "resource_presence|question_suspended_no_reader": 56644,
+        "temporary_use|no_pending_operation_needing_camp": 40199,
+        "seasonal_persistence|question_suspended_no_reader": 27638,
+        "temporary_use|already_settled_directly": 1873
+      }
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.225,
+      "receipts": 9.17,
+      "births": 18,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 37,
+      "verificationParties": 3,
+      "verificationByQuestion": {
+        "temporary_use": 3
+      },
+      "broadExplorationParties": 7,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 2,
+      "gatheringParties": 0,
+      "totalParties": 12,
+      "slotUtilisation": 0.0047,
+      "campsAttempted": 5,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 3,
+      "launchCases": {
+        "case_b_negative_vetoes": 3
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 56808,
+        "seasonal_persistence|question_suspended_no_reader": 45102,
+        "temporary_use|no_pending_operation_needing_camp": 43272,
+        "water_access|not_selected_or_imminent": 66,
+        "water_access|water_not_the_binding_blocker": 12
+      }
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 23,
+      "peakPopulation": 34,
+      "meanSupport": 0.3509,
+      "receipts": 13.51,
+      "births": 19,
+      "deaths": 30,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 40,
+      "verificationParties": 3,
+      "verificationByQuestion": {
+        "temporary_use": 3
+      },
+      "broadExplorationParties": 6,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 1,
+      "gatheringParties": 1,
+      "totalParties": 11,
+      "slotUtilisation": 0.0056,
+      "campsAttempted": 5,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 3,
+      "launchCases": {
+        "case_b_negative_vetoes": 3
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 55392,
+        "seasonal_persistence|question_suspended_no_reader": 43981,
+        "temporary_use|no_pending_operation_needing_camp": 46817,
+        "water_access|not_selected_or_imminent": 66,
+        "water_access|water_not_the_binding_blocker": 12
+      }
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 22,
+      "peakPopulation": 34,
+      "meanSupport": 0.2944,
+      "receipts": 11.78,
+      "births": 19,
+      "deaths": 31,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 57,
+      "verificationParties": 3,
+      "verificationByQuestion": {
+        "temporary_use": 3
+      },
+      "broadExplorationParties": 10,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 30,
+      "gatheringParties": 2,
+      "totalParties": 45,
+      "slotUtilisation": 0.0208,
+      "campsAttempted": 35,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 3,
+      "launchCases": {
+        "case_b_negative_vetoes": 3
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 56760,
+        "seasonal_persistence|question_suspended_no_reader": 45124,
+        "temporary_use|no_pending_operation_needing_camp": 47208,
+        "water_access|not_selected_or_imminent": 96,
+        "water_access|water_not_the_binding_blocker": 12
+      }
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 21,
+      "peakPopulation": 34,
+      "meanSupport": 0.2553,
+      "receipts": 10.29,
+      "births": 18,
+      "deaths": 31,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 86,
+      "verificationParties": 3,
+      "verificationByQuestion": {
+        "temporary_use": 3
+      },
+      "broadExplorationParties": 6,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 9,
+      "gatheringParties": 0,
+      "totalParties": 18,
+      "slotUtilisation": 0.0098,
+      "campsAttempted": 12,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 3,
+      "launchCases": {
+        "case_b_negative_vetoes": 3
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 55440,
+        "seasonal_persistence|question_suspended_no_reader": 44019,
+        "temporary_use|no_pending_operation_needing_camp": 47655,
+        "water_access|not_selected_or_imminent": 66,
+        "water_access|water_not_the_binding_blocker": 12
+      }
+    },
+    {
+      "scenario": "site_B_dry_plains",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 19,
+      "peakPopulation": 34,
+      "meanSupport": 0.2005,
+      "receipts": 8.97,
+      "births": 18,
+      "deaths": 33,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 52,
+      "verificationParties": 3,
+      "verificationByQuestion": {
+        "temporary_use": 3
+      },
+      "broadExplorationParties": 4,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 2,
+      "gatheringParties": 0,
+      "totalParties": 9,
+      "slotUtilisation": 0.005,
+      "campsAttempted": 5,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 3,
+      "launchCases": {
+        "case_b_negative_vetoes": 3
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 56448,
+        "seasonal_persistence|question_suspended_no_reader": 44817,
+        "temporary_use|no_pending_operation_needing_camp": 46707,
+        "water_access|not_selected_or_imminent": 66,
+        "water_access|water_not_the_binding_blocker": 12
+      }
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 30,
+      "peakPopulation": 34,
+      "meanSupport": 0.6145,
+      "receipts": 27.53,
+      "births": 21,
+      "deaths": 25,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 98,
+      "verificationParties": 19,
+      "verificationByQuestion": {
+        "temporary_use": 19
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 38,
+      "gatheringParties": 9,
+      "totalParties": 79,
+      "slotUtilisation": 0.0361,
+      "campsAttempted": 67,
+      "campsPreventedByEvidence": 38,
+      "launchDependencies": 19,
+      "launchCases": {
+        "case_b_negative_vetoes": 19
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 39601,
+        "temporary_use|no_pending_operation_needing_camp": 26446,
+        "seasonal_persistence|question_suspended_no_reader": 13754,
+        "water_access|water_not_the_binding_blocker": 27,
+        "water_access|not_selected_or_imminent": 1103,
+        "temporary_use|already_settled_directly": 281
+      }
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 29,
+      "peakPopulation": 34,
+      "meanSupport": 0.5698,
+      "receipts": 24.92,
+      "births": 21,
+      "deaths": 26,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 94,
+      "verificationParties": 19,
+      "verificationByQuestion": {
+        "temporary_use": 19
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 42,
+      "gatheringParties": 7,
+      "totalParties": 81,
+      "slotUtilisation": 0.0358,
+      "campsAttempted": 74,
+      "campsPreventedByEvidence": 44,
+      "launchDependencies": 19,
+      "launchCases": {
+        "case_b_negative_vetoes": 19
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 41905,
+        "temporary_use|no_pending_operation_needing_camp": 27626,
+        "seasonal_persistence|question_suspended_no_reader": 14410,
+        "water_access|water_not_the_binding_blocker": 27,
+        "water_access|not_selected_or_imminent": 1113,
+        "temporary_use|already_settled_directly": 386
+      }
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 29,
+      "peakPopulation": 34,
+      "meanSupport": 0.5763,
+      "receipts": 25.37,
+      "births": 21,
+      "deaths": 26,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 97,
+      "verificationParties": 19,
+      "verificationByQuestion": {
+        "temporary_use": 19
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 36,
+      "gatheringParties": 6,
+      "totalParties": 74,
+      "slotUtilisation": 0.0328,
+      "campsAttempted": 64,
+      "campsPreventedByEvidence": 27,
+      "launchDependencies": 19,
+      "launchCases": {
+        "case_b_negative_vetoes": 19
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 42049,
+        "temporary_use|no_pending_operation_needing_camp": 25849,
+        "seasonal_persistence|question_suspended_no_reader": 25084,
+        "water_access|water_not_the_binding_blocker": 27,
+        "water_access|not_selected_or_imminent": 4752,
+        "temporary_use|already_settled_directly": 1521
+      }
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 30,
+      "peakPopulation": 34,
+      "meanSupport": 0.6134,
+      "receipts": 27.49,
+      "births": 21,
+      "deaths": 25,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 84,
+      "verificationParties": 19,
+      "verificationByQuestion": {
+        "temporary_use": 19
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 37,
+      "gatheringParties": 7,
+      "totalParties": 76,
+      "slotUtilisation": 0.0319,
+      "campsAttempted": 68,
+      "campsPreventedByEvidence": 45,
+      "launchDependencies": 19,
+      "launchCases": {
+        "case_b_negative_vetoes": 19
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 39241,
+        "temporary_use|no_pending_operation_needing_camp": 26105,
+        "seasonal_persistence|question_suspended_no_reader": 13396,
+        "water_access|water_not_the_binding_blocker": 27,
+        "water_access|not_selected_or_imminent": 949,
+        "temporary_use|already_settled_directly": 281
+      }
+    },
+    {
+      "scenario": "site_C_dry_plains",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 30,
+      "peakPopulation": 34,
+      "meanSupport": 0.6376,
+      "receipts": 28.26,
+      "births": 21,
+      "deaths": 25,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 65,
+      "verificationParties": 19,
+      "verificationByQuestion": {
+        "temporary_use": 19
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 14,
+      "gatheringParties": 5,
+      "totalParties": 51,
+      "slotUtilisation": 0.0237,
+      "campsAttempted": 38,
+      "campsPreventedByEvidence": 3,
+      "launchDependencies": 19,
+      "launchCases": {
+        "case_b_negative_vetoes": 19
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 40369,
+        "temporary_use|no_pending_operation_needing_camp": 26205,
+        "seasonal_persistence|question_suspended_no_reader": 18800,
+        "water_access|water_not_the_binding_blocker": 27,
+        "water_access|not_selected_or_imminent": 5408,
+        "temporary_use|already_settled_directly": 313
+      }
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 25,
+      "peakPopulation": 34,
+      "meanSupport": 0.5138,
+      "receipts": 22.66,
+      "births": 20,
+      "deaths": 29,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 34,
+      "verificationParties": 9,
+      "verificationByQuestion": {
+        "temporary_use": 8,
+        "water_access": 1
+      },
+      "broadExplorationParties": 8,
+      "reconnaissanceParties": 1,
+      "patchVerificationParties": 14,
+      "gatheringParties": 12,
+      "totalParties": 44,
+      "slotUtilisation": 0.017,
+      "campsAttempted": 36,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 279,
+      "launchCases": {
+        "case_b_negative_vetoes": 279
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 38845,
+        "seasonal_persistence|question_suspended_no_reader": 22570,
+        "water_access|water_not_the_binding_blocker": 101,
+        "resource_presence|question_suspended_no_reader": 21336,
+        "water_access|not_selected_or_imminent": 24272
+      }
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 24,
+      "peakPopulation": 34,
+      "meanSupport": 0.4728,
+      "receipts": 19.44,
+      "births": 19,
+      "deaths": 29,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 25,
+      "verificationParties": 7,
+      "verificationByQuestion": {
+        "temporary_use": 6,
+        "water_access": 1
+      },
+      "broadExplorationParties": 4,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 3,
+      "gatheringParties": 2,
+      "totalParties": 16,
+      "slotUtilisation": 0.0063,
+      "campsAttempted": 12,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 1955,
+      "launchCases": {
+        "case_b_negative_vetoes": 1955
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 36959,
+        "seasonal_persistence|question_suspended_no_reader": 17587,
+        "water_access|water_not_the_binding_blocker": 72,
+        "resource_presence|question_suspended_no_reader": 25551,
+        "water_access|not_selected_or_imminent": 31052
+      }
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 24,
+      "peakPopulation": 34,
+      "meanSupport": 0.4713,
+      "receipts": 20.52,
+      "births": 20,
+      "deaths": 30,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 40,
+      "verificationParties": 9,
+      "verificationByQuestion": {
+        "temporary_use": 8,
+        "water_access": 1
+      },
+      "broadExplorationParties": 8,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 13,
+      "gatheringParties": 15,
+      "totalParties": 45,
+      "slotUtilisation": 0.0183,
+      "campsAttempted": 37,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 247,
+      "launchCases": {
+        "case_b_negative_vetoes": 247
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 38693,
+        "seasonal_persistence|question_suspended_no_reader": 22777,
+        "water_access|water_not_the_binding_blocker": 116,
+        "resource_presence|question_suspended_no_reader": 23543,
+        "water_access|not_selected_or_imminent": 25506
+      }
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 24,
+      "peakPopulation": 34,
+      "meanSupport": 0.473,
+      "receipts": 20.51,
+      "births": 20,
+      "deaths": 30,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 24,
+      "verificationParties": 7,
+      "verificationByQuestion": {
+        "temporary_use": 6,
+        "water_access": 1
+      },
+      "broadExplorationParties": 7,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 12,
+      "gatheringParties": 9,
+      "totalParties": 35,
+      "slotUtilisation": 0.0133,
+      "campsAttempted": 28,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 922,
+      "launchCases": {
+        "case_b_negative_vetoes": 922
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 40179,
+        "seasonal_persistence|question_suspended_no_reader": 20581,
+        "water_access|water_not_the_binding_blocker": 101,
+        "resource_presence|question_suspended_no_reader": 20126,
+        "water_access|not_selected_or_imminent": 24916
+      }
+    },
+    {
+      "scenario": "site_D_aquatic",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 23,
+      "peakPopulation": 34,
+      "meanSupport": 0.3945,
+      "receipts": 15.72,
+      "births": 19,
+      "deaths": 30,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 29,
+      "verificationParties": 8,
+      "verificationByQuestion": {
+        "temporary_use": 7,
+        "water_access": 1
+      },
+      "broadExplorationParties": 3,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 6,
+      "gatheringParties": 2,
+      "totalParties": 19,
+      "slotUtilisation": 0.0075,
+      "campsAttempted": 16,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 1357,
+      "launchCases": {
+        "case_b_negative_vetoes": 1357
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 38674,
+        "seasonal_persistence|question_suspended_no_reader": 21966,
+        "water_access|not_selected_or_imminent": 28746,
+        "resource_presence|question_suspended_no_reader": 23699,
+        "water_access|water_not_the_binding_blocker": 45
+      }
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 24,
+      "peakPopulation": 34,
+      "meanSupport": 0.3434,
+      "receipts": 16.8,
+      "births": 20,
+      "deaths": 30,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 111,
+      "verificationParties": 18,
+      "verificationByQuestion": {
+        "temporary_use": 17,
+        "water_access": 1
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 31,
+      "gatheringParties": 8,
+      "totalParties": 70,
+      "slotUtilisation": 0.0288,
+      "campsAttempted": 60,
+      "campsPreventedByEvidence": 8,
+      "launchDependencies": 18,
+      "launchCases": {
+        "case_b_negative_vetoes": 18
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 54737,
+        "temporary_use|no_pending_operation_needing_camp": 42629,
+        "seasonal_persistence|question_suspended_no_reader": 27784,
+        "water_access|not_selected_or_imminent": 45529,
+        "water_access|non_water_requirement_fails": 27,
+        "water_access|water_not_the_binding_blocker": 45
+      }
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 29,
+      "peakPopulation": 34,
+      "meanSupport": 0.5047,
+      "receipts": 28.25,
+      "births": 21,
+      "deaths": 26,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 89,
+      "verificationParties": 17,
+      "verificationByQuestion": {
+        "temporary_use": 14,
+        "water_access": 3
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 25,
+      "gatheringParties": 8,
+      "totalParties": 63,
+      "slotUtilisation": 0.0262,
+      "campsAttempted": 61,
+      "campsPreventedByEvidence": 20,
+      "launchDependencies": 17,
+      "launchCases": {
+        "case_b_negative_vetoes": 17
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 50751,
+        "temporary_use|no_pending_operation_needing_camp": 40162,
+        "seasonal_persistence|question_suspended_no_reader": 25334,
+        "water_access|not_selected_or_imminent": 40147,
+        "water_access|non_water_requirement_fails": 27,
+        "water_access|water_not_the_binding_blocker": 136
+      }
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 24,
+      "peakPopulation": 34,
+      "meanSupport": 0.3356,
+      "receipts": 16.56,
+      "births": 19,
+      "deaths": 29,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 104,
+      "verificationParties": 16,
+      "verificationByQuestion": {
+        "temporary_use": 15,
+        "water_access": 1
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 19,
+      "gatheringParties": 6,
+      "totalParties": 54,
+      "slotUtilisation": 0.024,
+      "campsAttempted": 45,
+      "campsPreventedByEvidence": 9,
+      "launchDependencies": 16,
+      "launchCases": {
+        "case_b_negative_vetoes": 16
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 56296,
+        "temporary_use|no_pending_operation_needing_camp": 45412,
+        "seasonal_persistence|question_suspended_no_reader": 30164,
+        "water_access|not_selected_or_imminent": 50164,
+        "water_access|non_water_requirement_fails": 15
+      }
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 29,
+      "peakPopulation": 34,
+      "meanSupport": 0.4902,
+      "receipts": 27.66,
+      "births": 21,
+      "deaths": 26,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 126,
+      "verificationParties": 19,
+      "verificationByQuestion": {
+        "temporary_use": 16,
+        "water_access": 3
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 29,
+      "gatheringParties": 7,
+      "totalParties": 68,
+      "slotUtilisation": 0.0277,
+      "campsAttempted": 63,
+      "campsPreventedByEvidence": 17,
+      "launchDependencies": 19,
+      "launchCases": {
+        "case_b_negative_vetoes": 19
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 52577,
+        "temporary_use|no_pending_operation_needing_camp": 43589,
+        "seasonal_persistence|question_suspended_no_reader": 26500,
+        "water_access|not_selected_or_imminent": 40691,
+        "water_access|non_water_requirement_fails": 27,
+        "temporary_use|already_settled_directly": 152,
+        "water_access|water_not_the_binding_blocker": 30
+      }
+    },
+    {
+      "scenario": "site_E_hills",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 29,
+      "peakPopulation": 34,
+      "meanSupport": 0.5034,
+      "receipts": 27.6,
+      "births": 21,
+      "deaths": 26,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 99,
+      "verificationParties": 24,
+      "verificationByQuestion": {
+        "temporary_use": 22,
+        "water_access": 2
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 18,
+      "gatheringParties": 8,
+      "totalParties": 63,
+      "slotUtilisation": 0.0282,
+      "campsAttempted": 56,
+      "campsPreventedByEvidence": 9,
+      "launchDependencies": 24,
+      "launchCases": {
+        "case_b_negative_vetoes": 24
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 51568,
+        "temporary_use|no_pending_operation_needing_camp": 38340,
+        "seasonal_persistence|question_suspended_no_reader": 23166,
+        "water_access|not_selected_or_imminent": 40213,
+        "water_access|non_water_requirement_fails": 27,
+        "water_access|water_not_the_binding_blocker": 44,
+        "temporary_use|already_settled_directly": 222
+      }
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 31,
+      "peakPopulation": 34,
+      "meanSupport": 0.6382,
+      "receipts": 29.4,
+      "births": 22,
+      "deaths": 25,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 109,
+      "verificationParties": 12,
+      "verificationByQuestion": {
+        "temporary_use": 11,
+        "water_access": 1
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 12,
+      "patchVerificationParties": 8,
+      "gatheringParties": 3,
+      "totalParties": 48,
+      "slotUtilisation": 0.0217,
+      "campsAttempted": 35,
+      "campsPreventedByEvidence": 3,
+      "launchDependencies": 12,
+      "launchCases": {
+        "case_b_negative_vetoes": 12
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 22369,
+        "resource_presence|question_suspended_no_reader": 32491,
+        "temporary_use|no_pending_operation_needing_camp": 20384,
+        "seasonal_persistence|question_suspended_no_reader": 19091
+      }
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 31,
+      "peakPopulation": 34,
+      "meanSupport": 0.6504,
+      "receipts": 29.92,
+      "births": 22,
+      "deaths": 25,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 126,
+      "verificationParties": 12,
+      "verificationByQuestion": {
+        "temporary_use": 11,
+        "water_access": 1
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 12,
+      "patchVerificationParties": 8,
+      "gatheringParties": 3,
+      "totalParties": 48,
+      "slotUtilisation": 0.0216,
+      "campsAttempted": 35,
+      "campsPreventedByEvidence": 3,
+      "launchDependencies": 12,
+      "launchCases": {
+        "case_b_negative_vetoes": 12
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 21134,
+        "resource_presence|question_suspended_no_reader": 30715,
+        "temporary_use|no_pending_operation_needing_camp": 19934,
+        "seasonal_persistence|question_suspended_no_reader": 18280
+      }
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 31,
+      "peakPopulation": 34,
+      "meanSupport": 0.6732,
+      "receipts": 30.63,
+      "births": 21,
+      "deaths": 24,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 94,
+      "verificationParties": 11,
+      "verificationByQuestion": {
+        "temporary_use": 10,
+        "water_access": 1
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 12,
+      "patchVerificationParties": 6,
+      "gatheringParties": 4,
+      "totalParties": 46,
+      "slotUtilisation": 0.0213,
+      "campsAttempted": 33,
+      "campsPreventedByEvidence": 3,
+      "launchDependencies": 11,
+      "launchCases": {
+        "case_b_negative_vetoes": 11
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 20924,
+        "resource_presence|question_suspended_no_reader": 30691,
+        "temporary_use|no_pending_operation_needing_camp": 21747,
+        "seasonal_persistence|question_suspended_no_reader": 18198
+      }
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 29,
+      "peakPopulation": 34,
+      "meanSupport": 0.6438,
+      "receipts": 27.35,
+      "births": 20,
+      "deaths": 25,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 144,
+      "verificationParties": 12,
+      "verificationByQuestion": {
+        "temporary_use": 11,
+        "water_access": 1
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 19,
+      "patchVerificationParties": 7,
+      "gatheringParties": 2,
+      "totalParties": 53,
+      "slotUtilisation": 0.0215,
+      "campsAttempted": 41,
+      "campsPreventedByEvidence": 6,
+      "launchDependencies": 12,
+      "launchCases": {
+        "case_b_negative_vetoes": 12
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 20995,
+        "resource_presence|question_suspended_no_reader": 33667,
+        "temporary_use|no_pending_operation_needing_camp": 23938,
+        "seasonal_persistence|question_suspended_no_reader": 22450
+      }
+    },
+    {
+      "scenario": "site_F_hills",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 31,
+      "peakPopulation": 34,
+      "meanSupport": 0.7063,
+      "receipts": 32.4,
+      "births": 22,
+      "deaths": 25,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 125,
+      "verificationParties": 12,
+      "verificationByQuestion": {
+        "temporary_use": 11,
+        "water_access": 1
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 10,
+      "patchVerificationParties": 7,
+      "gatheringParties": 4,
+      "totalParties": 46,
+      "slotUtilisation": 0.0208,
+      "campsAttempted": 34,
+      "campsPreventedByEvidence": 3,
+      "launchDependencies": 12,
+      "launchCases": {
+        "case_b_negative_vetoes": 12
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 20056,
+        "resource_presence|question_suspended_no_reader": 29227,
+        "temporary_use|no_pending_operation_needing_camp": 19334,
+        "seasonal_persistence|question_suspended_no_reader": 17142
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.2579,
+      "receipts": 10.38,
+      "births": 18,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 88,
+      "verificationParties": 5,
+      "verificationByQuestion": {
+        "temporary_use": 4,
+        "water_access": 1
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 10,
+      "patchVerificationParties": 16,
+      "gatheringParties": 5,
+      "totalParties": 49,
+      "slotUtilisation": 0.03,
+      "campsAttempted": 36,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 35,
+      "launchCases": {
+        "case_b_negative_vetoes": 35
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 47390,
+        "resource_presence|question_suspended_no_reader": 25470,
+        "temporary_use|no_pending_operation_needing_camp": 52658,
+        "seasonal_persistence|question_suspended_no_reader": 8984,
+        "water_access|water_not_the_binding_blocker": 12
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.2596,
+      "receipts": 11.19,
+      "births": 18,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 110,
+      "verificationParties": 8,
+      "verificationByQuestion": {
+        "water_access": 3,
+        "temporary_use": 5
+      },
+      "broadExplorationParties": 12,
+      "reconnaissanceParties": 23,
+      "patchVerificationParties": 6,
+      "gatheringParties": 7,
+      "totalParties": 56,
+      "slotUtilisation": 0.0388,
+      "campsAttempted": 44,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 185,
+      "launchCases": {
+        "case_a_confirmation_unlocks": 15,
+        "case_b_negative_vetoes": 170
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 38045,
+        "resource_presence|question_suspended_no_reader": 27675,
+        "temporary_use|no_pending_operation_needing_camp": 48586,
+        "seasonal_persistence|question_suspended_no_reader": 28215,
+        "water_access|non_water_requirement_fails": 105
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.2609,
+      "receipts": 10.9,
+      "births": 18,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 123,
+      "verificationParties": 11,
+      "verificationByQuestion": {
+        "water_access": 3,
+        "temporary_use": 8
+      },
+      "broadExplorationParties": 12,
+      "reconnaissanceParties": 24,
+      "patchVerificationParties": 6,
+      "gatheringParties": 7,
+      "totalParties": 60,
+      "slotUtilisation": 0.0426,
+      "campsAttempted": 48,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 188,
+      "launchCases": {
+        "case_a_confirmation_unlocks": 15,
+        "case_b_negative_vetoes": 173
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 39159,
+        "resource_presence|question_suspended_no_reader": 25380,
+        "temporary_use|no_pending_operation_needing_camp": 48604,
+        "seasonal_persistence|question_suspended_no_reader": 26667,
+        "water_access|non_water_requirement_fails": 105,
+        "water_access|water_not_the_binding_blocker": 15
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 21,
+      "peakPopulation": 34,
+      "meanSupport": 0.2805,
+      "receipts": 11.7,
+      "births": 19,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 85,
+      "verificationParties": 5,
+      "verificationByQuestion": {
+        "temporary_use": 4,
+        "water_access": 1
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 11,
+      "patchVerificationParties": 12,
+      "gatheringParties": 4,
+      "totalParties": 45,
+      "slotUtilisation": 0.0299,
+      "campsAttempted": 32,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 50,
+      "launchCases": {
+        "case_b_negative_vetoes": 50
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 41686,
+        "resource_presence|question_suspended_no_reader": 17109,
+        "temporary_use|no_pending_operation_needing_camp": 49192,
+        "seasonal_persistence|question_suspended_no_reader": 30651,
+        "water_access|non_water_requirement_fails": 30
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.2774,
+      "receipts": 11.41,
+      "births": 18,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 104,
+      "verificationParties": 10,
+      "verificationByQuestion": {
+        "water_access": 3,
+        "temporary_use": 7
+      },
+      "broadExplorationParties": 12,
+      "reconnaissanceParties": 20,
+      "patchVerificationParties": 6,
+      "gatheringParties": 6,
+      "totalParties": 54,
+      "slotUtilisation": 0.0397,
+      "campsAttempted": 42,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 187,
+      "launchCases": {
+        "case_a_confirmation_unlocks": 15,
+        "case_b_negative_vetoes": 172
+      },
+      "launchRefusals": {
+        "water_access|not_selected_or_imminent": 36933,
+        "resource_presence|question_suspended_no_reader": 26231,
+        "temporary_use|no_pending_operation_needing_camp": 47605,
+        "seasonal_persistence|question_suspended_no_reader": 29250,
+        "water_access|non_water_requirement_fails": 105
+      }
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 22,
+      "peakPopulation": 34,
+      "meanSupport": 0.323,
+      "receipts": 13.02,
+      "births": 19,
+      "deaths": 31,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 120,
+      "verificationParties": 5,
+      "verificationByQuestion": {
+        "temporary_use": 5
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 9,
+      "gatheringParties": 4,
+      "totalParties": 31,
+      "slotUtilisation": 0.0158,
+      "campsAttempted": 18,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 5,
+      "launchCases": {
+        "case_b_negative_vetoes": 5
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 53689,
+        "seasonal_persistence|question_suspended_no_reader": 48634,
+        "resource_presence|question_suspended_no_reader": 13353
+      }
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.2703,
+      "receipts": 10.36,
+      "births": 18,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 259,
+      "verificationParties": 5,
+      "verificationByQuestion": {
+        "temporary_use": 5
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 24,
+      "gatheringParties": 3,
+      "totalParties": 45,
+      "slotUtilisation": 0.0235,
+      "campsAttempted": 32,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 5,
+      "launchCases": {
+        "case_b_negative_vetoes": 5
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 31646,
+        "seasonal_persistence|question_suspended_no_reader": 49759,
+        "temporary_use|no_pending_operation_needing_camp": 52312,
+        "water_access|not_selected_or_imminent": 227
+      }
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 21,
+      "peakPopulation": 34,
+      "meanSupport": 0.2864,
+      "receipts": 11.36,
+      "births": 19,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 126,
+      "verificationParties": 5,
+      "verificationByQuestion": {
+        "temporary_use": 5
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 9,
+      "gatheringParties": 4,
+      "totalParties": 31,
+      "slotUtilisation": 0.0163,
+      "campsAttempted": 24,
+      "campsPreventedByEvidence": 10,
+      "launchDependencies": 5,
+      "launchCases": {
+        "case_b_negative_vetoes": 5
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 55489,
+        "seasonal_persistence|question_suspended_no_reader": 45978,
+        "resource_presence|question_suspended_no_reader": 3423
+      }
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 23,
+      "peakPopulation": 34,
+      "meanSupport": 0.3413,
+      "receipts": 14.5,
+      "births": 19,
+      "deaths": 30,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 163,
+      "verificationParties": 5,
+      "verificationByQuestion": {
+        "temporary_use": 5
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 5,
+      "gatheringParties": 3,
+      "totalParties": 26,
+      "slotUtilisation": 0.0143,
+      "campsAttempted": 13,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 5,
+      "launchCases": {
+        "case_b_negative_vetoes": 5
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 53820,
+        "seasonal_persistence|question_suspended_no_reader": 47212,
+        "resource_presence|question_suspended_no_reader": 35121
+      }
+    },
+    {
+      "scenario": "isolated_marginal",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 22,
+      "peakPopulation": 34,
+      "meanSupport": 0.3185,
+      "receipts": 12.63,
+      "births": 19,
+      "deaths": 31,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 227,
+      "verificationParties": 5,
+      "verificationByQuestion": {
+        "temporary_use": 5
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 4,
+      "gatheringParties": 3,
+      "totalParties": 25,
+      "slotUtilisation": 0.0136,
+      "campsAttempted": 12,
+      "campsPreventedByEvidence": 0,
+      "launchDependencies": 5,
+      "launchCases": {
+        "case_b_negative_vetoes": 5
+      },
+      "launchRefusals": {
+        "resource_presence|question_suspended_no_reader": 34277,
+        "seasonal_persistence|question_suspended_no_reader": 48105,
+        "temporary_use|no_pending_operation_needing_camp": 52143
+      }
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s1",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.2459,
+      "receipts": 9.9,
+      "births": 19,
+      "deaths": 33,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 458,
+      "verificationParties": 13,
+      "verificationByQuestion": {
+        "temporary_use": 13
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 33,
+      "gatheringParties": 3,
+      "totalParties": 62,
+      "slotUtilisation": 0.0466,
+      "campsAttempted": 49,
+      "campsPreventedByEvidence": 2,
+      "launchDependencies": 13,
+      "launchCases": {
+        "case_b_negative_vetoes": 13
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 51595,
+        "seasonal_persistence|question_suspended_no_reader": 32981,
+        "resource_presence|question_suspended_no_reader": 37157,
+        "water_access|not_selected_or_imminent": 9894
+      }
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s2",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.218,
+      "receipts": 9.67,
+      "births": 19,
+      "deaths": 33,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 274,
+      "verificationParties": 5,
+      "verificationByQuestion": {
+        "temporary_use": 5
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 34,
+      "gatheringParties": 3,
+      "totalParties": 55,
+      "slotUtilisation": 0.0393,
+      "campsAttempted": 41,
+      "campsPreventedByEvidence": 3,
+      "launchDependencies": 5,
+      "launchCases": {
+        "case_b_negative_vetoes": 5
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 51649,
+        "seasonal_persistence|question_suspended_no_reader": 29627,
+        "resource_presence|question_suspended_no_reader": 44212,
+        "water_access|not_selected_or_imminent": 10682
+      }
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s3",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 21,
+      "peakPopulation": 34,
+      "meanSupport": 0.2859,
+      "receipts": 10.62,
+      "births": 19,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 227,
+      "verificationParties": 1,
+      "verificationByQuestion": {
+        "temporary_use": 1
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 22,
+      "gatheringParties": 5,
+      "totalParties": 41,
+      "slotUtilisation": 0.021,
+      "campsAttempted": 31,
+      "campsPreventedByEvidence": 4,
+      "launchDependencies": 1,
+      "launchCases": {
+        "case_b_negative_vetoes": 1
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 53810,
+        "seasonal_persistence|question_suspended_no_reader": 32668,
+        "resource_presence|question_suspended_no_reader": 40431,
+        "water_access|not_selected_or_imminent": 6819
+      }
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s4",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 20,
+      "peakPopulation": 34,
+      "meanSupport": 0.2412,
+      "receipts": 9.82,
+      "births": 19,
+      "deaths": 33,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 338,
+      "verificationParties": 6,
+      "verificationByQuestion": {
+        "temporary_use": 6
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 35,
+      "gatheringParties": 3,
+      "totalParties": 57,
+      "slotUtilisation": 0.0358,
+      "campsAttempted": 43,
+      "campsPreventedByEvidence": 9,
+      "launchDependencies": 6,
+      "launchCases": {
+        "case_b_negative_vetoes": 6
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 51751,
+        "seasonal_persistence|question_suspended_no_reader": 33737,
+        "resource_presence|question_suspended_no_reader": 30674,
+        "water_access|not_selected_or_imminent": 6192
+      }
+    },
+    {
+      "scenario": "hostile",
+      "seed": "s5",
+      "survived": true,
+      "extinctionYear": null,
+      "finalPopulation": 21,
+      "peakPopulation": 34,
+      "meanSupport": 0.294,
+      "receipts": 11.24,
+      "births": 19,
+      "deaths": 32,
+      "residentialMoves": 0,
+      "uniqueTilesVisited": 200,
+      "verificationParties": 2,
+      "verificationByQuestion": {
+        "temporary_use": 2
+      },
+      "broadExplorationParties": 13,
+      "reconnaissanceParties": 0,
+      "patchVerificationParties": 17,
+      "gatheringParties": 4,
+      "totalParties": 36,
+      "slotUtilisation": 0.0174,
+      "campsAttempted": 22,
+      "campsPreventedByEvidence": 1,
+      "launchDependencies": 2,
+      "launchCases": {
+        "case_b_negative_vetoes": 2
+      },
+      "launchRefusals": {
+        "temporary_use|no_pending_operation_needing_camp": 54198,
+        "seasonal_persistence|question_suspended_no_reader": 34697,
+        "resource_presence|question_suspended_no_reader": 37031,
+        "water_access|not_selected_or_imminent": 6562
+      }
+    }
+  ]
+}

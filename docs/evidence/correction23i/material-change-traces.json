@@ -1,0 +1,250 @@
+{
+ "site_E_hills": {
+  "verificationParties": [
+   819.2,
+   18.8
+  ],
+  "broadExplorationParties": [
+   12.8,
+   13.0
+  ],
+  "patchVerificationParties": [
+   24.4,
+   24.4
+  ],
+  "gatheringParties": [
+   17.4,
+   7.4
+  ],
+  "totalParties": [
+   873.8,
+   63.6
+  ],
+  "slotUtilisation": [
+   0.327,
+   0.027
+  ],
+  "uniqueTilesVisited": [
+   138.0,
+   105.8
+  ],
+  "residentialMoves": [
+   0.0,
+   0.0
+  ],
+  "campsAttempted": [
+   0.0,
+   57.0
+  ],
+  "campsPreventedByEvidence": [
+   0.0,
+   12.6
+  ],
+  "receipts": [
+   13.406,
+   23.374
+  ],
+  "meanSupport": [
+   0.265,
+   0.435
+  ],
+  "births": [
+   18.8,
+   20.4
+  ],
+  "deaths": [
+   31.2,
+   27.4
+  ],
+  "finalPopulation": [
+   21.6,
+   27.0
+  ]
+ },
+ "site_B_dry_plains": {
+  "verificationParties": [
+   134.6,
+   3.0
+  ],
+  "broadExplorationParties": [
+   4.8,
+   6.6
+  ],
+  "patchVerificationParties": [
+   1.6,
+   8.8
+  ],
+  "gatheringParties": [
+   1.0,
+   0.6
+  ],
+  "totalParties": [
+   142.0,
+   19.0
+  ],
+  "slotUtilisation": [
+   0.051,
+   0.009
+  ],
+  "uniqueTilesVisited": [
+   94.2,
+   54.4
+  ],
+  "residentialMoves": [
+   0.0,
+   0.0
+  ],
+  "campsAttempted": [
+   0.0,
+   12.4
+  ],
+  "campsPreventedByEvidence": [
+   0.0,
+   0.0
+  ],
+  "receipts": [
+   15.748,
+   10.744
+  ],
+  "meanSupport": [
+   0.392,
+   0.265
+  ],
+  "births": [
+   19.0,
+   18.4
+  ],
+  "deaths": [
+   29.0,
+   31.4
+  ],
+  "finalPopulation": [
+   24.0,
+   21.0
+  ]
+ },
+ "map2": {
+  "verificationParties": [
+   4839.2,
+   102.4
+  ],
+  "broadExplorationParties": [
+   107.2,
+   106.0
+  ],
+  "patchVerificationParties": [
+   103.4,
+   104.4
+  ],
+  "gatheringParties": [
+   132.2,
+   38.4
+  ],
+  "totalParties": [
+   5185.0,
+   357.2
+  ],
+  "slotUtilisation": [
+   0.21,
+   0.018
+  ],
+  "uniqueTilesVisited": [
+   1077.2,
+   793.8
+  ],
+  "residentialMoves": [
+   0.0,
+   0.0
+  ],
+  "campsAttempted": [
+   0.0,
+   243.2
+  ],
+  "campsPreventedByEvidence": [
+   0.0,
+   2.8
+  ],
+  "receipts": [
+   263.636,
+   260.066
+  ],
+  "meanSupport": [
+   0.733,
+   0.729
+  ],
+  "births": [
+   158.0,
+   156.6
+  ],
+  "deaths": [
+   178.6,
+   181.2
+  ],
+  "finalPopulation": [
+   217.4,
+   213.4
+  ]
+ },
+ "map1": {
+  "verificationParties": [
+   1699.4,
+   53.0
+  ],
+  "broadExplorationParties": [
+   59.8,
+   61.4
+  ],
+  "patchVerificationParties": [
+   76.6,
+   84.4
+  ],
+  "gatheringParties": [
+   81.2,
+   23.8
+  ],
+  "totalParties": [
+   1924.0,
+   228.0
+  ],
+  "slotUtilisation": [
+   0.156,
+   0.022
+  ],
+  "uniqueTilesVisited": [
+   582.8,
+   504.2
+  ],
+  "residentialMoves": [
+   0.0,
+   0.0
+  ],
+  "campsAttempted": [
+   0.0,
+   158.8
+  ],
+  "campsPreventedByEvidence": [
+   0.0,
+   3.2
+  ],
+  "receipts": [
+   247.958,
+   252.142
+  ],
+  "meanSupport": [
+   1.08,
+   1.091
+  ],
+  "births": [
+   114.8,
+   116.4
+  ],
+  "deaths": [
+   109.2,
+   108.8
+  ],
+  "finalPopulation": [
+   160.6,
+   162.6
+  ]
+ }
+}
