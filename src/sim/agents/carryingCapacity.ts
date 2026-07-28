@@ -1,5 +1,10 @@
 import { deriveBaseHabitatPotential, deriveSeasonalEffectiveYield } from "./habitatYield";
 import { deriveDirectWaterAccess, isWaterAccessFeasible } from "./verificationEvidence";
+// CORRECTION-23H §5 — audit-only. Both are no-ops when no audit has registered a slot.
+import {
+  captureOpportunityInput,
+  isCapturingOpportunityInput,
+} from "../diagnostics/verificationValueOfInformation";
 import {
   applyResourceClassPressure,
   deriveResourceClassAvailability,
@@ -540,7 +545,7 @@ export function deriveCarryingCapacity(
     nutritionDeficit: perCapitaReturn.nutritionDeficit,
   };
 
-  const knownUnusedHabitat = deriveKnownUnusedHabitat(world, band, cache, {
+  const opportunityInput = {
     time,
     biomeCompetence,
     currentPerCapita: perCapitaValue,
@@ -548,7 +553,19 @@ export function deriveCarryingCapacity(
     sustainedOverCapacity,
     nomadicScalePressure: nomadicScalePressure.nomadicScalePressure,
     resourcePressure: resourceClassPressureLoss,
-  });
+  };
+
+  // CORRECTION-23H §5 — audit-only capture of the exact input the opportunity reader is about
+  // to receive. `biomeCompetence` and `resourcePressure` are local intermediates that no band
+  // field carries, so a value-of-information counterfactual that reconstructed them would be
+  // approximate — and an approximate counterfactual is not an orthogonal one. Capturing the
+  // real object costs one boolean test when no audit is registered, which is every production,
+  // worker and UI path. Nothing is read back into production.
+  if (isCapturingOpportunityInput()) {
+    captureOpportunityInput(String(band.id), opportunityInput, cache, Number(time.tick));
+  }
+
+  const knownUnusedHabitat = deriveKnownUnusedHabitat(world, band, cache, opportunityInput);
 
   const daughterColonization = deriveDaughterColonization(world, band, {
     time,
@@ -782,8 +799,14 @@ export function deriveKnownUnusedHabitatForAudit(
   world: WorldState,
   band: Band,
   input: Parameters<typeof deriveKnownUnusedHabitat>[3],
+  // CORRECTION-23H §5 — the tick context cache MUST be passed for this to reproduce
+  // production. `collectOpportunityCandidates` reads `getSalientMemorySummary(cache, …)`, so
+  // omitting the cache silently drops the salient candidate set and the audit answers a
+  // different question from the one production asked. Callers that cannot supply the cache get
+  // the old behaviour and must treat the result as unsound.
+  cache?: Parameters<typeof deriveKnownUnusedHabitat>[2],
 ): KnownUnusedHabitatOpportunity | undefined {
-  return deriveKnownUnusedHabitat(world, band, undefined, input);
+  return deriveKnownUnusedHabitat(world, band, cache, input);
 }
 
 /**
@@ -791,7 +814,7 @@ export function deriveKnownUnusedHabitatForAudit(
  * having gone to check. Unchanged from the value this gate has always used; it is named here
  * only so the feasibility question and the ranking term stop sharing a literal.
  */
-const WATER_ACCESS_OBSERVED_THRESHOLD = 0.32;
+export const WATER_ACCESS_OBSERVED_THRESHOLD = 0.32;
 
 function deriveKnownUnusedHabitat(
   world: WorldState,

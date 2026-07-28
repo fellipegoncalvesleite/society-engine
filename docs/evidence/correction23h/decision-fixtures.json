@@ -1,0 +1,130 @@
+{
+  "world": "map2",
+  "fixtureSite": "tile:204:72",
+  "candidateTileId": "tile:204:72",
+  "waterAccessObservedThreshold": 0.32,
+  "passed": 9,
+  "total": 12,
+  "results": [
+    {
+      "fixture": "H1",
+      "intent": "confirmed direct access passes the physical gate and nothing else",
+      "passed": true,
+      "checks": {
+        "gateBlockedWithoutEvidence": true,
+        "gateOpenedByConfirmation": true,
+        "rankingUnchanged": true,
+        "noSeasonalGeneralisation": true
+      }
+    },
+    {
+      "fixture": "H2",
+      "intent": "bounded negative access blocks the destination without claiming global absence",
+      "passed": true,
+      "checks": {
+        "gateOpenWithoutEvidence": true,
+        "gateClosedByBoundedNegative": true,
+        "routeFailureDoesNotCloseTheGate": true,
+        "scopeIsBoundedSearch": true
+      }
+    },
+    {
+      "fixture": "H3",
+      "intent": "confirmed presence must make a real later stock-backed test eligible",
+      "passed": false,
+      "checks": {
+        "booleanBlockedWithoutEvidence": true,
+        "booleanOpenedByConfirmation": true,
+        "physicalResourceTaskBecomesEligible": false
+      },
+      "notes": "MISSING READER: the only consumer of resourceTestEligible is the verification selector's own resource_test_possible gate (frontierVerification.ts:317). No physical resource task reads it. unlocksAnotherVerificationQuestion=false. Classification: future-system evidence, not actionable."
+    },
+    {
+      "fixture": "H4",
+      "intent": "bounded negative presence suppresses this test only, never global absence",
+      "passed": true,
+      "checks": {
+        "thisPlaceSuppressed": true,
+        "noGlobalAbsenceClaimed": true,
+        "rowScopedToPlaceAndQuestion": true
+      }
+    },
+    {
+      "fixture": "H5",
+      "intent": "resource_test_possible must unlock a real task",
+      "passed": false,
+      "checks": {
+        "someProductionReaderDistinguishesTheAnswers": false
+      },
+      "notes": "MISSING READER: no production function consumes a resource_test_possible result. The stock-backed activity that would resolve a real patch at an arbitrary tile and return a canonical receipt does not exist. Classification: future-system evidence. This fixture is EXPECTED to fail and its failure is the finding."
+    },
+    {
+      "fixture": "H6",
+      "intent": "confirmed temporary use must enable a bounded task camp that was blocked without it",
+      "passed": false,
+      "checks": {
+        "campBlockedWithoutEvidence": false,
+        "campEnabledByConfirmation": true
+      },
+      "notes": "ASYMMETRIC READER: taskCampRefusedByEvidence blocks only on a NEGATIVE. Absence of evidence already permits the camp, so a confirmed answer changes nothing. The positive branch of this question carries no decision value; only the negative branch does."
+    },
+    {
+      "fixture": "H7",
+      "intent": "negative temporary use blocks the bounded operation and only that",
+      "passed": true,
+      "checks": {
+        "campAllowedWithoutEvidence": true,
+        "campBlockedByNegative": true,
+        "residenceUntouched": true
+      }
+    },
+    {
+      "fixture": "H8",
+      "intent": "seasonal persistence is stored and changes no current decision",
+      "passed": true,
+      "checks": {
+        "evidenceStored": true,
+        "noneStoredWithoutIt": true,
+        "noCurrentDecisionChanges": true
+      }
+    },
+    {
+      "fixture": "H9",
+      "intent": "a settled question is not re-asked at the same place",
+      "passed": true,
+      "checks": {
+        "settledQuestionSuppressed": true
+      }
+    },
+    {
+      "fixture": "H10",
+      "intent": "when every possible answer leaves the gate open the candidate is inert",
+      "passed": true,
+      "checks": {
+        "confirmedLeavesGateOpen": true,
+        "routeNegativeLeavesGateOpen": true,
+        "thereforeNoDecisionValue": true
+      }
+    },
+    {
+      "fixture": "H11",
+      "intent": "an access answer never moves the ranking term",
+      "passed": true,
+      "checks": {
+        "rankingInputIdentical": true,
+        "gateIdenticalWhenObservationAlreadyPasses": true,
+        "projectionThresholdMatchesProduction": true
+      }
+    },
+    {
+      "fixture": "H12",
+      "intent": "a confirmed access changes the destination gate at the exact production seam",
+      "passed": true,
+      "checks": {
+        "gateFlips": true,
+        "flipReachesTheEligibilityConjunction": true
+      },
+      "notes": "The gate flip is exact and authoritative. Whether it changes the SELECTED destination additionally requires expectedPerCapita > currentPerCapita + margin and riskPenalty < 0.55 at the same place; the natural-launch matrix measures how often that holds."
+    }
+  ]
+}

@@ -68,6 +68,81 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-07-27 (DECISION-CONTINGENT VERIFICATION / VALUE-OF-INFORMATION CORRECTION-23H:
+  PROGRESS — DIAGNOSIS ACCEPTED / CORRECTION-23 PARENT STILL NOT MERGEABLE, branch
+  checkpoint/physical-frontier-verification-23 from ff48d29. Local main untouched at 668763f;
+  remote main recorded and untouched at 0a43083. DIAGNOSTIC ONLY — NO PRODUCTION BEHAVIOUR
+  CHANGED. New seams: one audit-only module (src/sim/diagnostics/verificationValueOfInformation.ts),
+  one capture call in carryingCapacity, one optional out-parameter on the verification selector,
+  and a read-only §13 projection. Diagnostics-off fingerprints identical to ff48d29 on map1
+  (9a204dde…) and map2 (439b4e7a…) at 40 years.
+
+  **CORRECTION-23G established that verification answers are inert in aggregate. 23H establishes
+  WHY, question by question, by asking the production readers what they WOULD say.**
+
+  **THE QUESTION-TO-READER LEDGER, read from production rather than documentation.**
+  `water_access` → `isWaterAccessFeasible` → the `consideredAsTarget` GATE (carryingCapacity.ts:905).
+  `resource_presence` → `resourceTestEligible` → ONLY the verification selector's own
+  `resource_test_possible` gate (frontierVerification.ts:317). `resource_test_possible` → NO READER.
+  `temporary_use` → `taskCampRefusedByEvidence` → the bounded task camp (expedition.ts:293), and
+  only on a NEGATIVE. `seasonal_persistence` → NO READER. Two structural consequences:
+  **`resource_presence` → `resource_test_possible` is a chain terminating in nothing**, and
+  **`temporary_use` is an ASYMMETRIC reader** — absence of evidence already permits the camp, so
+  its positive branch cannot enable anything.
+
+  **§5 SAME-SNAPSHOT Q0–Q3, 1,632,900 candidates** (11 physical worlds × 5 shared seeds × 40 y,
+  99.25% baseline soundness). `water_access` is 84.4% eligibility-relevant — but **76.2% of that
+  lives in the NEGATIVE arm against 9.3% in the confirmed arm**, realized answers are 6,414
+  confirmed to **102 negative (rate 0.98 — TAUTOLOGICAL)**, and **89% of candidates already have
+  observed water above the gate threshold**. `resource_presence` is 43.3% eligibility-relevant
+  with **zero negatives ever returned across 22,205 answers (rate 1.00 — TAUTOLOGICAL)**.
+  `resource_test_possible` is **95.4% future-system evidence**. `temporary_use` is 69.4%
+  eligibility-relevant carried **100% by the negative arm and 0.0% by the positive**, with
+  realized negatives at 52%. `seasonal_persistence` is **100% future-system**, 9,435 answers all
+  `inconclusive` by construction. Immediate action relevance never exceeds 1.5% in any world; on
+  the isolated-marginal tier 82.7% of everything the band asks is future-system evidence.
+
+  **§11 BOUNDED-HORIZON READER TRACE (55,274 returned answers, 90-day horizon, never long-run
+  population).** Only **6,279 (11.4%)** changed a reader that gates a physical action, and
+  **94% of those are `temporary_use` negatives** (5,883). Water contributes 396 (6% of its
+  answers). `resource_presence` contributes **zero physical** while moving its declared reader
+  22,205 times. `resource_test_possible` and `seasonal_persistence` contribute zero.
+
+  **H1–H12: 9/12 pass, and the three failures ARE the findings.** H3 and H5 name missing readers;
+  H6 names the temporary-use asymmetry. Gate 10 met (H1/H12 — a controlled positive changes a real
+  gate); gate 11 met (H2/H7 — a controlled negative prevents a real action).
+
+  **§10 selector-only is ZERO BY TAXONOMY, not by measurement**, and is reported as such: a
+  hypothetical negative moves the water gate first, so no candidate reaches the "no reader moves
+  at all" bucket. The realized-answer decomposition measures the same phenomenon instead.
+
+  **§12 RECOMMENDATION IS PER QUESTION, NOT GLOBAL** — `water_access` → A (decision-contingent
+  launch gate); `temporary_use` → E (already decision relevant, leave alone); `resource_presence`
+  and `resource_test_possible` → B (missing-reader construction); `seasonal_persistence` → C
+  (retire until seasonal scheduling exists). None is applied here.
+
+  **THREE INSTRUMENT BUGS WERE CAUGHT, EACH OF WHICH WOULD HAVE PRODUCED A VACUOUS PASS.**
+  (1) The audit re-ran the opportunity reader with `cache: undefined`, so
+  `collectOpportunityCandidates` dropped the salient-memory candidate set — 0/331 sound before the
+  fix, 99.25% after. (2) The reader trace counted "consumed" whenever a pure function returned a
+  value, reporting 100% consumption for questions with NO reader. (3) **The Q0 arm stripped only
+  `band.verificationEvidence`, but `find()` consults `KnownTileRecord.verificationDisposition`
+  FIRST** — CORRECTION-23D's place-record authority — so Q0 was not "no evidence" at all. The
+  entire first matrix was discarded and re-run with both stores substituted.
+
+  **§15 AUDIT-INSTRUMENTATION DEBT INVENTORIED**: 39/3,008 marker lines in expedition.ts,
+  12/1,551 in carryingCapacity.ts, 11/690 in memoryCompression.ts, 10/498 in
+  frontierVerification.ts, 6/449 in tileObservation.ts, plus 1,079 lines of diagnostics modules.
+  **`WorldAuditOptions.retentionInteractionArm` has NO consumer anywhere in src/ and should be
+  deleted.** The parent branch cannot become merge-ready until the superseded 23E/23F replay arms
+  are removed. PASSED: tsc, build, graph 221/764, boundaries (back edges 84, unchanged),
+  anti-omniscience all-zero, hidden-truth zero copies, lost-party no-transfer, food capture 1.000,
+  population and cohort conservation, determinism true, step-mode both maps with
+  fullCanonicalStateMatch, diagnostics-off parity. State bounded. 30.90 ms/tick. NOT DONE,
+  deliberately: no launch gate added, no question disabled, no selector or score changed.
+  See docs/evidence/correction23h/FINDINGS.md.)
+
+Previously updated:
   2026-07-27 (EXACT TRAVEL REPLAY / TARGET-SELECTION ISOLATION / TERRAIN-SENSITIVITY SIGNATURE
   CORRECTION-23G: PROGRESS — DIAGNOSIS ACCEPTED / CORRECTION-23 PARENT STILL NOT MERGEABLE,
   branch checkpoint/physical-frontier-verification-23 from ca9e3b8. Local main untouched at
@@ -2926,6 +3001,7 @@ Keep this bounded to the latest 10–15 accepted architecture changes. Condense 
 
 | Checkpoint/commit | Architecture change | Remaining caveat |
 | --- | --- | --- |
+| DECISION-CONTINGENT VERIFICATION / VALUE-OF-INFORMATION CORRECTION-23H (2026-07-27; branch `checkpoint/physical-frontier-verification-23` from `ff48d29`; **PROGRESS — DIAGNOSIS ACCEPTED / DO NOT MERGE**) | **Every verification question now has an explicit, measured reader — or a named missing one.** New audit-only module `src/sim/diagnostics/verificationValueOfInformation.ts` (opportunity-input capture, candidate observer, relevance taxonomy, bounded-horizon reader trace). Production seams: one capture call in `carryingCapacity.ts` (the reader's `biomeCompetence`/`resourcePressure` are local intermediates no band field carries, so reconstructing them would make every arm approximate — the real object is captured instead), one optional `auditEligibleOut` out-parameter on `selectVerificationCandidate` so §5 can evaluate EVERY eligible candidate rather than only the winner, `deriveKnownUnusedHabitatForAudit` extended to take the tick cache (without it the audit silently evaluated a smaller candidate set), and `WATER_ACCESS_OBSERVED_THRESHOLD` exported. New read-only §13 `decisionRelevance` projection on the Knowledge panel: for each place the band would verify, which decision is blocked, what each answer would do, and whether the reader exists. New audits `verificationValueOfInformationAudit.mjs` and `verificationDecisionFixturesAudit.mjs` (H1–H12) | **No production change made.** Three of five questions cannot change a physical action: `resource_test_possible` and `seasonal_persistence` have no reader at all, and `resource_presence`'s only consumer is another question nobody reads. `water_access` and `resource_presence` are TAUTOLOGICAL in practice (confirmation rates 0.98 and 1.00); 89% of water candidates already pass the gate on the band's own observation. **94% of all physically consequential verification evidence is a single branch of a single question** — a `temporary_use` negative. §10 selector-only is zero BY TAXONOMY and is reported with that reason. `retentionInteractionArm` is declared with no consumer and should be deleted; the superseded 23E/23F replay arms must be removed before the parent branch can be merge-ready |
 | EXACT TRAVEL REPLAY / TARGET-SELECTION ISOLATION CORRECTION-23G (2026-07-27; branch `checkpoint/physical-frontier-verification-23` from `ca9e3b8`; **PROGRESS — DIAGNOSIS ACCEPTED / DO NOT MERGE**) | **A valid replacement for the inadmissible F13, and it says verification semantics are worth nothing.** New audit-only module `src/sim/diagnostics/verificationScheduleReplay.ts` (module-slot registry in the `socialReadSeamHook.ts` idiom — donor recorder, schedule replay, bounded rotation disposition, donor-place protection, season-identity read counter). Stage 1 records every `frontier_verification` launch the BAND-KNOWN production selector makes; stage 2 replays it physically with the selector bypassed entirely, which is what F13 could not do. Seams: `expedition.ts` (recording, replay launcher, replay on-site task), `memoryCompression.ts` (G6 donor-place retention), and four one-line season-identity read counters in `bandDecision.ts`, `memory.ts` and `frontierVerification.ts`. **G1 reproduces F1 exactly on 6/6 sites** — and to four decimals on every quantity at 200 y on terrain A — while carrying 0 attempts, 0 evidence rows and 0 dispositions against F1's 12/48/430. **The cadence is not the mechanism** (G3/G4/G5 hold F1's exact launch days and party count and collapse terrain A to 0.20/5.4, 0.40/13.6, 0.40/19.6). **Nor is target diversity** (the §6 supplement repairs F13's collapse from 30 to 221 distinct targets and still returns 0.00). **G6 retention is a partial substitute on terrain A alone** (0.60/19.0 → 0.80/22.0 against F1's 1.00/34.0). Six qualified sites, two per structure class; new `scripts/marginalSitePhenotypeProbe.mjs`, `scripts/scheduleReplayMatrixAudit.mjs`, `scripts/scheduleReplayDiagnosisReport.mjs`. `.claude/launch.json` removed as unrelated scope and `.claude/` gitignored | **NO REPLICATED CONDITIONAL MECHANISM FOUND, and no production change made.** One site of six is sensitive and its structure class does not replicate — the other coastal/aquatic site is wetter, more aquatic, and neutral. **Terrain A fails the qualification rule CORRECTION-23F itself wrote** (corridor 100% passable, 0 obstacles, against 23F's stated [0.55, 0.98]); it is also the only site whose F0 baseline is not already safe (0.60 vs 0.96), so elsewhere there is nothing for any arm to improve. Whether A is a terrain class or one unrepresentative fixture is the open question. §8 proves every new record necessarily carries base content (ratio 1.00), so 23F's F5/F10 are not clean season-identity tests and none is claimed here. Memory-compression debt remains unrepaired and interaction-dependent |
 | HUMAN VIABILITY / CAUSAL CLOSURE CORRECTION-16 (2026-07-25; branch `checkpoint/human-viability-causal-closure-16` from CORRECTION-15's `d41c973`; **PROGRESS — DO NOT MERGE**) | **Evidence repair, not construction.** Two CORRECTION-15 conclusions are RETRACTED and one instrument was added. (1) **The social layer is NOT readability-only.** `socialCausalityAudit.mjs` was rewritten: derived fields are now perturbed through a new audit-only read seam, effects are reported against ELEVEN separately named fingerprints (none called "canonical state"), and every arm runs on 5 predeclared shared seeds. `innerFission` moves movement, physical receipts, knowledge, demography and viability on **5/5 seeds**; `socialTension` on 4/5 and 3/5; `cohesion` on 4/5 and 2/5. Re-running C15's OWN seed separates the two defects: innerFission/socialTension nulls were purely the WRONG SEAM, the cohesion null was single-seed + narrow fingerprint. (2) **The 2/11 `demographicDeathMemoryPathAudit` failure is an INVALID AUDIT EXPECTATION, not a regression** — new `demographicDeathMemoryCounterfactualAudit.mjs` clones ONE spring pre-demography snapshot into arms differing only in `band.deathMemory` and runs exactly one production annual update: fertility and net rate are monotone non-increasing in death memory, mortality is unchanged (no mortality path consumes it), and the measured fertility delta **0.070** matches `recentDeathSuppression*0.18 = 0.072`. 6/6 checks × 5/5 seeds. Added `src/sim/diagnostics/socialReadSeamHook.ts` (audit-only, non-persisted; one boolean check when unregistered) and `docs/evidence/correction16/AUDIT_ADMISSIBILITY.md`. Diagnostics-off output byte-identical to `d41c973` on map1 and map2 at 40y | **NOT ACCEPTED and largely UNBUILT.** Not built: §5A's §4.1-compliant annual-nutrition comparisons, §6.3 death-memory decay, §7.1 relationshipMemory / reportedKnowledge traces (both **UNRESOLVED**, not classified), §8 cohort arms and mediation waterfall, §9 viability cause taxonomy, §10 adaptation cascade (**no family proven in either direction**), §11 frontier exploration, §12 extinction arms, §13 fresh performance. Gates 4, 9, 11–19 and 25 unmet. `candidateRepairIsolationAudit`'s A metric still subtracts a component (`annualGroundTruthMeanFoodStress`) from a composite (`foodDemographicPressure`) — a §4.1 violation; **do not cite `consumedMinusGroundTruth = -0.077`**. The ~9-tile destination-knowledge horizon remains the binding blocker |
 | HUMAN VIABILITY / RECOVERY / ADAPTIVE RESILIENCE CORRECTION-15 (2026-07-25; branch `checkpoint/human-viability-adaptive-resilience-15` from public main `668763f`; **PROGRESS — DO NOT MERGE**; `222d3ec` used as evidence/patch donor only) | **Four ported repairs, each independently re-proven on this branch first** (`candidateRepairIsolationAudit.mjs`, before evidence taken on `668763f`): (A) the ANNUAL demographic step consumed mean food pressure **0.555** against a year that actually held **0.335** — overstating hardship by +0.220, with **89 physically-surplus years producing 0 surplus-signal years** (after: 0.129 vs 0.206, 111 → 114); repaired by `deriveAnnualNutritionState` consumed at the single annual call site, seasonal read retained for all behavior. (B) **31 of 480 seasons had zero trips** while the band held remembered patches inside the 10-tile radius but NONE inside the same-day budget (after: 0); repaired by a `requireSameDay` argmax domain. (C) unit proof that a saturated 48-slot `RESOURCE_KNOWLEDGE_CAP` **evicts the just-observed local patch**; repaired by protecting just-observed patch ids, list still bounded at 48. (D) the expedition observation timestamp is **required BY B and C** — `668763f` passes step-mode only because the recon path is never exercised; with B+C and without D map2 fails on `day`/`dayOfSeason` alone. **NEW: the recovery basin is sound** (`recoveryBasinAudit.mjs`) — no absorbing collapse spiral: one bad year recovers in 1 y, three bad years in 1 y, five SEVERE years in 12 y; chronic hunger clears within 2 y of sustained recovery; heavy prior death memory depresses one year then washes out; 33/34/35 starting people give a 3-person spread at 150 y. ~~NEW: the social layer is READABILITY-ONLY~~ — **RETRACTED BY CORRECTION-16.** The clamp was applied BETWEEN ticks, but `innerFission`/`socialTension` are rewritten by `applyInnerFissionSocialReadabilityContext` at position 7 of the `updateBandContextStates` chain BEFORE their readers at positions 8 (`applyProtoCampContext`) and 12 (`applyForagingLearningAdaptationContext`) execute, so the perturbation never reached a reader; the "canonical state" compared was a 10-field projection omitting `protoCampMemory.behavior`, `foragingAdaptation.behavior` and `pressureState`; and only ONE seed was used. Perturbed at the correct seam, `innerFission` moves movement, receipts, knowledge, demography and viability on 5/5 seeds. ~~NEW: cohort composition is worth 0.01 of support ratio~~ — **DOWNGRADED TO UNRESOLVED** (same instrument class, not re-proven). Added `candidateRepairIsolationAudit.mjs`, `recoveryBasinAudit.mjs`, `socialCausalityAudit.mjs` | **NOT ACCEPTED and PARTIAL.** Not built: the §6/§7 whole-viability cause taxonomy, the §9 adaptation cascade, the §12 dedicated multi-cause extinction arms — so gates 9/10/11/19/26 are unmet and "adaptation appears before collapse" is unproven in either direction. Habitat-ladder gates unchanged from CORRECTION-14 and with the same measured cause (9-tile destination-knowledge horizon): max 4 successful rich fissions, no second-generation fission, 3/5 `good` lineages fission, marginal never escapes, hostile never goes extinct. `demographicDeathMemoryPathAudit` FAILS 2/11 — ~~a REAL new failure~~ **RECLASSIFIED BY CORRECTION-16 as an INVALID AUDIT EXPECTATION**: both checks assert orderings on 40-year trajectory means of independently moving arms, and density-dependent food feedback reverses the sign (mean currentFoodStress R0 0.4233 → R1 0.4347 → R3 0.4526). A same-snapshot counterfactual passes 6/6 on 5/5 seeds. Production unchanged and untuned. `demographicPerLineageAudit`'s world equation was COMPLETED (transferred daughter population counted as new people; gap exactly 36 = 2×18) and passes on both commits. Performance not re-measured on this branch |

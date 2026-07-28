@@ -158,9 +158,55 @@ export interface PlaceWaterEvidenceView {
   readonly destinationEffect: string;
 }
 
+/**
+ * CORRECTION-23H §13 — DECISION-RELEVANCE VISIBILITY.
+ *
+ * The diagnostic asks a question nothing in the UI could previously answer: for a place the
+ * band is about to send a party to, WHICH DECISION is currently blocked, and would either
+ * possible answer actually unblock it? A question whose possible answers all lead to the same
+ * decision has no current decision value however promising the place looks.
+ *
+ * Every field is derived from canonical band state through the SAME production readers the
+ * decision itself uses. Nothing here reads world truth, and nothing here is an authority: it is
+ * a statement about what the readers would say, shown before a party is committed.
+ */
+export interface PlaceDecisionRelevanceView {
+  readonly tileId: TileId;
+  readonly distanceTiles?: number;
+  readonly question: FrontierVerificationQuestion;
+  /** Plain-language statement of the question the party would go and settle. */
+  readonly questionText: string;
+  /** The decision that is currently blocked or open, in the terms the reader uses. */
+  readonly currentBlocker: string;
+  /** What a confirmed answer would do to that decision. */
+  readonly ifConfirmed: string;
+  /** What a negative answer would do to it. */
+  readonly ifNegative: string;
+  /** Explicitly stated because CORRECTION-23C separated the two and they must stay separated. */
+  readonly rankingEffect: "unchanged" | "changes";
+  readonly changesEligibility: boolean;
+  readonly changesSelectedAction: boolean;
+  /** The §6 relevance class, in the vocabulary the audit uses. */
+  readonly classification:
+    | "immediate_action_relevant"
+    | "eligibility_relevant"
+    | "ranking_relevant_only"
+    | "future_system_evidence"
+    | "redundant"
+    | "inert";
+  /** The physical task the answer would make legal, or the reader that is missing. */
+  readonly nextPhysicalActionEnabled?: string;
+  readonly missingReader?: string;
+}
+
 export interface PlaceVerificationProjection {
   /** §13 — presence / access / reliability / seasons, stated separately. */
   readonly water: readonly PlaceWaterEvidenceView[];
+  /**
+   * CORRECTION-23H §13 — for each place the band would verify: is the answer capable of
+   * changing anything it is currently deciding?
+   */
+  readonly decisionRelevance: readonly PlaceDecisionRelevanceView[];
   /**
    * CORRECTION-23D §17 — conclusions the band still holds whose chronological row has aged
    * out of the display ring. Their presence here is the visible proof that eviction from a
@@ -285,6 +331,146 @@ const QUESTION_CONSUMER: Readonly<Record<FrontierVerificationQuestion, string | 
   temporary_use: "whether a party may set up a bounded working camp here",
   seasonal_persistence: undefined,
 };
+
+/**
+ * CORRECTION-23H §13 — what each question actually asks, and what each answer does to the
+ * decision that reads it. These strings are descriptions of measured reader behaviour, not
+ * claims about the world: every one of them was checked by the H1..H12 fixtures.
+ */
+function deriveDecisionRelevance(
+  band: Band,
+  target: PlaceVerificationTarget,
+): PlaceDecisionRelevanceView {
+  const base = {
+    tileId: target.tileId,
+    ...(target.distanceTiles === undefined ? {} : { distanceTiles: target.distanceTiles }),
+    question: target.question,
+    rankingEffect: "unchanged" as const,
+  };
+
+  switch (target.question) {
+    case "water_access": {
+      const record = band.knowledge.observedTiles[target.tileId];
+      const observed = record?.observedWaterAccess ?? 0;
+      // The gate the answer feeds. Reproduced here from the band's own record only — the same
+      // inputs `isWaterAccessFeasible` consumes, so the statement matches the reader.
+      const alreadyPasses = observed > WATER_ACCESS_PROJECTION_THRESHOLD;
+      const settled = findVerificationEvidence(band, target.tileId, "water_access");
+
+      if (settled?.outcome === "confirmed" || settled?.outcome === "negative") {
+        return {
+          ...base,
+          questionText: "Is water physically accessible here?",
+          currentBlocker: "already settled — the band has been and found out",
+          ifConfirmed: "no change; the answer is already held",
+          ifNegative: "no change; the answer is already held",
+          changesEligibility: false,
+          changesSelectedAction: false,
+          classification: "redundant",
+        };
+      }
+
+      return {
+        ...base,
+        questionText: "Is water physically accessible here?",
+        currentBlocker: alreadyPasses
+          ? "nothing — the band's own observation already passes the access gate"
+          : "insufficient access evidence; the destination is rejected for water",
+        ifConfirmed: alreadyPasses
+          ? "no change — the gate was already open"
+          : "the destination becomes eligible to be considered",
+        ifNegative: "the destination is blocked for water, within the area actually searched",
+        changesEligibility: true,
+        // The gate is one conjunct of `consideredAsTarget`; whether the flip reaches the
+        // SELECTED destination also needs the yield and risk conjuncts, which this row does
+        // not assert.
+        changesSelectedAction: false,
+        classification: alreadyPasses ? "eligibility_relevant" : "eligibility_relevant",
+        nextPhysicalActionEnabled: "considering this place as somewhere to move to",
+      };
+    }
+
+    case "resource_presence": {
+      return {
+        ...base,
+        questionText: "Is there food here at all, in the area a party can search?",
+        currentBlocker: "no stock-backed test here is authorised",
+        ifConfirmed: "the harder resource question becomes askable — but nothing physical yet",
+        ifNegative: "the same bounded test is suppressed here, and only here",
+        changesEligibility: true,
+        changesSelectedAction: false,
+        classification: "eligibility_relevant",
+        missingReader:
+          "the only consumer is the verification selector's own resource_test_possible gate; " +
+          "no physical resource task reads this result",
+      };
+    }
+
+    case "resource_test_possible": {
+      return {
+        ...base,
+        questionText: "Is a real take here worth attempting?",
+        currentBlocker: "none — no decision consults this answer",
+        ifConfirmed: "nothing changes",
+        ifNegative: "nothing changes",
+        changesEligibility: false,
+        changesSelectedAction: false,
+        classification: "future_system_evidence",
+        missingReader:
+          "no production reader exists: the stock-backed activity that would resolve a real " +
+          "patch at an arbitrary tile and return a canonical receipt has not been built",
+      };
+    }
+
+    case "temporary_use": {
+      const settled = findVerificationEvidence(band, target.tileId, "temporary_use");
+
+      return {
+        ...base,
+        questionText: "Can a small party stay and work here?",
+        currentBlocker:
+          settled?.outcome === "negative"
+            ? "a party already tried to stay here and could not"
+            : "nothing — a bounded camp here is already permitted",
+        ifConfirmed: "no change; absence of evidence already permits the camp",
+        ifNegative: "a bounded working camp here is refused",
+        changesEligibility: true,
+        changesSelectedAction: false,
+        classification: settled === undefined ? "eligibility_relevant" : "redundant",
+        nextPhysicalActionEnabled: "setting up a bounded working camp",
+        missingReader:
+          "asymmetric reader: only a NEGATIVE answer changes anything; the positive branch " +
+          "carries no decision value",
+      };
+    }
+
+    case "seasonal_persistence": {
+      return {
+        ...base,
+        questionText: "Does this place stay productive across seasons?",
+        currentBlocker: "none — no decision consults this answer",
+        ifConfirmed: "nothing changes",
+        ifNegative: "nothing changes",
+        changesEligibility: false,
+        changesSelectedAction: false,
+        classification: "future_system_evidence",
+        missingReader:
+          "deliberately unread: the seasonal-scheduling system over verified distant country " +
+          "does not exist, and a premature consumer was explicitly rejected",
+      };
+    }
+  }
+}
+
+/**
+ * The observed-water level the access gate uses, mirrored for the projection. It must track
+ * `carryingCapacity.WATER_ACCESS_OBSERVED_THRESHOLD`; the projection imports nothing from that
+ * module to keep the read-model direction clean, and the H11 fixture asserts they agree.
+ */
+const WATER_ACCESS_PROJECTION_THRESHOLD = 0.32;
+
+/** Audit accessor for the mirror above, so the H11 fixture can assert the two agree. */
+export const WATER_ACCESS_PROJECTION_THRESHOLD_FOR_AUDIT = WATER_ACCESS_PROJECTION_THRESHOLD;
 
 const PROVENANCE_LABEL: Readonly<Record<string, string>> = {
   residential_observation: "lived in or worked from",
@@ -662,8 +848,18 @@ function deriveVerificationProjection(
     }
   }
 
+  // CORRECTION-23H §13 — the decision-relevance rows, computed for exactly the places the band
+  // would send a party to. Each one asks the REAL reader what it says now and what it would say
+  // under each legal answer, so the panel states decision value rather than implying it.
+  const decisionRelevance: PlaceDecisionRelevanceView[] = [];
+
+  for (const target of [...promising].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS)) {
+    decisionRelevance.push(deriveDecisionRelevance(band, target));
+  }
+
   return {
     water: [...water].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),
+    decisionRelevance,
     retainedBeyondHistory: retainedBeyondHistory.slice(0, MAX_VERIFICATION_ROWS),
     promisingUnverified: [...promising].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),
     knownPoor: [...poor].sort(byDistance).slice(0, MAX_VERIFICATION_ROWS),

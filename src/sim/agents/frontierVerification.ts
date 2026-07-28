@@ -226,6 +226,12 @@ export function selectVerificationCandidate(
   world: WorldState,
   band: Band,
   need: VerificationNeed,
+  // CORRECTION-23H §5 — audit-only out-parameter. §5 requires EVERY eligible candidate to be
+  // evaluated, not only the winner this function returns, and re-deriving the eligible set in
+  // an audit would be a second copy of the selector rather than the selector. Passing an array
+  // here fills it with exactly the list the production sort below consumes. Undefined in every
+  // normal world; the production return value is unaffected in both cases.
+  auditEligibleOut?: VerificationCandidate[],
 ): VerificationCandidate | undefined {
   if (need.need < VERIFICATION_MIN_NEED) {
     return undefined;
@@ -347,6 +353,10 @@ export function selectVerificationCandidate(
       // One question per place per pass: the highest-priority open question.
       break;
     }
+  }
+
+  if (auditEligibleOut !== undefined) {
+    auditEligibleOut.push(...eligible);
   }
 
   if (eligible.length === 0) {
