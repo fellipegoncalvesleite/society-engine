@@ -77,6 +77,17 @@ import {
 } from "./frontierVerification";
 import { observeTileAndNearby } from "./tileObservation";
 // CORRECTION-23I — audit-only launch/consumption diagnostics; no-ops when unregistered.
+import { getNeighborTiles, getTile } from "../world/generate";
+// CORRECTION-24A §8 — audit-only exploration funnel; no-ops when unregistered.
+import {
+  isRecordingExplorationFunnel,
+  noteExplorationNotOffered,
+  noteExplorationOffered,
+  recordExplorationFunnel,
+  takeExplorationOfferState,
+  type ExplorationBlocker,
+  type SchedulerOutcome,
+} from "../diagnostics/explorationFunnelDiagnostics";
 import {
   isCountingTaskCampOutcomes,
   isRecordingVerificationJourneys,
@@ -1842,6 +1853,195 @@ function maybeLaunchFrontierExploration(
  * through the same departable-worker rule.
  */
 function maybeLaunchExpedition(world: WorldState, band: Band, day: DayNumber): Band {
+  // CORRECTION-24A §8/§9 — audit-only. One boolean test on the production path; when nothing is
+  // recording this is exactly the old function. The wrapper exists because production CANNOT
+  // answer §9's question on its own: `maybeLaunchFrontierExploration` is only called when no other
+  // family wants the slot, so on every day another family wins, nobody ever asks whether
+  // exploration was eligible. The recorder asks, with the same pure production functions.
+  if (!isRecordingExplorationFunnel()) {
+    return maybeLaunchExpeditionInner(world, band, day);
+  }
+
+  const result = maybeLaunchExpeditionInner(world, band, day);
+  recordExplorationOpportunity(world, band, result, day);
+  return result;
+}
+
+/**
+ * CORRECTION-24A §8 — evaluate the complete exploration funnel for one opportunity and classify it
+ * into exactly one primary blocker.
+ *
+ * Reads only band-known state and the same pure functions production uses. It never launches
+ * anything, never mutates, and is only reached while an audit is recording.
+ */
+function recordExplorationOpportunity(
+  world: WorldState,
+  before: Band,
+  after: Band,
+  day: DayNumber,
+): void {
+  const active = (before.expeditions ?? []).filter((expedition) => isExpeditionAway(expedition.phase));
+  const activeCapFull = active.length >= EXPEDITION_ACTIVE_CAP;
+  const signalPrompt = (before.receivedSmokeSignals ?? []).some(
+    (signal) =>
+      signal.meaning === "target_confirmed" &&
+      Number(signal.expiresOnDay) >= Number(day) &&
+      Number(day) - Number(signal.day) <= 2,
+  );
+  const onLaunchCadence = Number(day) % EXPEDITION_LAUNCH_CADENCE_DAYS === 0 || signalPrompt;
+
+  // §9 — an OPPORTUNITY is a day the scheduler actually runs. Production considers launching
+  // only every `EXPEDITION_LAUNCH_CADENCE_DAYS`, so recording the other five days in six would
+  // put a sampling choice of this audit's own making at the top of the blocker table and inflate
+  // every denominator sixfold. Off-cadence days are not opportunities and are not recorded.
+  if (!onLaunchCadence) {
+    return;
+  }
+
+  const departableWorkers = deriveDepartableWorkers(before);
+  const currentTick = Number(getWorldTimeForDay(day).tick);
+  const lastExplorationTick = before.lastFrontierExplorationTick;
+  const ticksSinceLastExploration =
+    lastExplorationTick === undefined ? undefined : currentTick - Number(lastExplorationTick);
+  const suppressionWindowActive =
+    ticksSinceLastExploration !== undefined &&
+    ticksSinceLastExploration <= FRONTIER_EXPLORATION_SUPPRESSION_TICKS;
+
+  const eligibility = deriveFrontierExplorationEligibility(world, before);
+  const heading = deriveFrontierHeading(world, before);
+  const pools = deriveAvailableMobilityPools(before);
+  const partyComposition = selectPartyComposition(pools, 2, "fast");
+
+  // §8 E1 — the band's own known frontier edge: a KNOWN tile with at least one unknown
+  // 4-neighbour. Band knowledge only; the neighbour lookup asks whether the BAND has a record,
+  // never what is physically there.
+  let knownEdgeTiles = 0;
+
+  for (const tileId of Object.keys(before.knowledge.observedTiles)) {
+    if (getTile(world, tileId as TileId) === undefined) {
+      continue;
+    }
+
+    for (const neighbour of getNeighborTiles(world, tileId as TileId)) {
+      if (before.knowledge.observedTiles[neighbour.id] === undefined) {
+        knownEdgeTiles += 1;
+        break;
+      }
+    }
+  }
+
+  // What the scheduler actually did with this slot.
+  const beforeIds = new Set((before.expeditions ?? []).map((expedition) => expedition.id));
+  const launched = (after.expeditions ?? []).find((expedition) => !beforeIds.has(expedition.id));
+  const schedulerOutcome: SchedulerOutcome =
+    launched === undefined
+      ? "nothing"
+      : launched.taskKind === "frontier_exploration"
+        ? "exploration"
+        : (launched.taskKind as SchedulerOutcome);
+
+  const unit = (value: number): number => Math.max(0, Math.min(1, value));
+  const to2 = (value: number): number => Math.round(value * 100) / 100;
+  const foodStress = unit(before.pressureState?.foodStress ?? 0);
+  const waterStress = unit(before.pressureState?.waterStress ?? 0);
+  // Production's own urgency threshold, reused rather than invented: below 0.35 a band is
+  // comfortable enough to verify before retrieving, so a retrieval that wins under it is not
+  // an emergency displacing exploration.
+  const retrievalUrgent = foodStress >= 0.35;
+
+  // ── §9 — the ONE primary blocker, evaluated in the physical order production applies. ──
+  const secondary: ExplorationBlocker[] = [];
+  const note = (blocker: ExplorationBlocker, condition: boolean): void => {
+    if (condition) secondary.push(blocker);
+  };
+
+  note("ACTIVE_CAP_FULL", activeCapFull);
+  note("OFF_LAUNCH_CADENCE", !onLaunchCadence);
+  note("POPULATION_TOO_SMALL", departableWorkers < 2);
+  note("ALREADY_EXPLORING", suppressionWindowActive);
+  note("NO_MOTIVE", !eligibility.eligible);
+  note("ADEQUATE_KNOWN_ALTERNATIVE", !eligibility.noKnownNonOverlappingDestination);
+  note("NO_BAND_KNOWN_FRONTIER", knownEdgeTiles === 0);
+  note("NO_HEADING", heading === undefined);
+  note("INSUFFICIENT_LABOR", partyComposition === undefined);
+
+  const offerState = takeExplorationOfferState();
+
+  const validProposal =
+    !activeCapFull &&
+    onLaunchCadence &&
+    departableWorkers >= 2 &&
+    !suppressionWindowActive &&
+    eligibility.eligible &&
+    heading !== undefined &&
+    partyComposition !== undefined;
+
+  const primaryBlocker: ExplorationBlocker = activeCapFull
+    ? "ACTIVE_CAP_FULL"
+    : !onLaunchCadence
+      ? "OFF_LAUNCH_CADENCE"
+      : departableWorkers < 2
+        ? "POPULATION_TOO_SMALL"
+        : suppressionWindowActive
+          ? "ALREADY_EXPLORING"
+          : !eligibility.eligible
+            ? // A band that already knows a viable destination outside its range is not failing
+              // to explore — it has nowhere it needs to look. That is a different finding from
+              // having no motive at all, and §9 keeps them apart.
+              !eligibility.noKnownNonOverlappingDestination
+              ? "ADEQUATE_KNOWN_ALTERNATIVE"
+              : "NO_MOTIVE"
+            : knownEdgeTiles === 0
+              ? "NO_BAND_KNOWN_FRONTIER"
+              : heading === undefined
+                ? "NO_HEADING"
+                : partyComposition === undefined
+                  ? "INSUFFICIENT_LABOR"
+                  : schedulerOutcome === "exploration"
+                    ? "SELECTED"
+                    : schedulerOutcome === "nothing"
+                      ? "VALID_BUT_IDLE_SLOT_UNUSED"
+                      : retrievalUrgent
+                        ? "DISPLACED_BY_URGENT_TASK"
+                        : "DISPLACED_BY_NONURGENT_TASK";
+
+  recordExplorationFunnel({
+    bandId: String(before.id),
+    day: Number(day),
+    foodStress: to2(foodStress),
+    waterStress: to2(waterStress),
+    rangeSaturation: eligibility.rangeSaturation,
+    lowReturnPressure: eligibility.lowReturnPressure,
+    dispersalPressure: eligibility.dispersalPressure,
+    noKnownNonOverlappingDestination: eligibility.noKnownNonOverlappingDestination,
+    exhaustedKnownOpportunity: eligibility.exhaustedKnownOpportunity,
+    evidenceScore: eligibility.evidenceScore,
+    willingness: eligibility.willingness,
+    eligible: eligibility.eligible,
+    population: before.demography?.population ?? 0,
+    departableWorkers,
+    headingAvailable: heading !== undefined,
+    ...(heading === undefined ? {} : { headingBasis: heading.basis, headingConfidence: heading.headingConfidence }),
+    knownEdgeTiles,
+    partyCompositionAvailable: partyComposition !== undefined,
+    activeParties: active.length,
+    activeCapFull,
+    onLaunchCadence,
+    suppressionWindowActive,
+    ...(ticksSinceLastExploration === undefined ? {} : { ticksSinceLastExploration }),
+    validProposal,
+    explorationOffered: offerState.offered,
+    ...(offerState.claimedBy === undefined ? {} : { claimedBy: offerState.claimedBy }),
+    competingProposals: active.map((expedition) => String(expedition.taskKind)),
+    retrievalWorthwhile: schedulerOutcome === "distant_plant_gathering",
+    retrievalUrgent,
+    schedulerOutcome,
+    primaryBlocker,
+    secondaryBlockers: secondary.filter((blocker) => blocker !== primaryBlocker),
+  });
+}
+
+function maybeLaunchExpeditionInner(world: WorldState, band: Band, day: DayNumber): Band {
   const active = (band.expeditions ?? []).filter((expedition) => isExpeditionAway(expedition.phase));
 
   // §13 — smoke on the horizon is a PROMPT: a camp that just read its own party's
@@ -1959,11 +2159,18 @@ function maybeLaunchExpedition(world: WorldState, band: Band, day: DayNumber): B
   // known country has stopped answering — which is exactly the band-known state
   // `deriveFrontierExplorationEligibility` measures.
   if (noUsefulRetrieval && verification === undefined && reconnaissance === undefined) {
+    // CORRECTION-24A §10 — audit-only marker; no-op when nothing is recording.
+    noteExplorationOffered();
+
     const explored = maybeLaunchFrontierExploration(world, band, day, currentTick, partyWorkers);
 
     if (explored !== undefined) {
       return explored;
     }
+  } else {
+    noteExplorationNotOffered(
+      !noUsefulRetrieval ? "retrieval" : verification !== undefined ? "patch_verification" : "reconnaissance",
+    );
   }
 
   const chosen =

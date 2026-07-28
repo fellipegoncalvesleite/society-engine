@@ -1,0 +1,565 @@
+{
+  "years": 40,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "scenarios": [
+    "map1",
+    "map2",
+    "site_A_coast",
+    "site_B_dry_plains",
+    "site_C_dry_plains",
+    "site_D_aquatic",
+    "site_E_hills",
+    "site_F_hills",
+    "ordinary",
+    "isolated_marginal",
+    "hostile"
+  ],
+  "totals": {
+    "opportunities": 277250,
+    "blockers": {
+      "NO_MOTIVE": 4775,
+      "SELECTED": 1342,
+      "ALREADY_EXPLORING": 247073,
+      "VALID_BUT_IDLE_SLOT_UNUSED": 23852,
+      "DISPLACED_BY_NONURGENT_TASK": 26,
+      "DISPLACED_BY_URGENT_TASK": 150,
+      "ACTIVE_CAP_FULL": 32
+    },
+    "validProposals": 25370,
+    "launches": 1342,
+    "blockerShare": {
+      "SELECTED": 0.0048,
+      "NO_MOTIVE": 0.0172,
+      "ADEQUATE_KNOWN_ALTERNATIVE": 0,
+      "NO_BAND_KNOWN_FRONTIER": 0,
+      "NO_HEADING": 0,
+      "INSUFFICIENT_LABOR": 0,
+      "ACTIVE_CAP_FULL": 0.0001,
+      "OFF_LAUNCH_CADENCE": 0,
+      "ALREADY_EXPLORING": 0.8912,
+      "POPULATION_TOO_SMALL": 0,
+      "DISPLACED_BY_URGENT_TASK": 0.0005,
+      "DISPLACED_BY_NONURGENT_TASK": 0.0001,
+      "VALID_BUT_IDLE_SLOT_UNUSED": 0.086
+    }
+  },
+  "byScenario": {
+    "map1": {
+      "opportunities": 60280,
+      "blockers": {
+        "NO_MOTIVE": 1968,
+        "SELECTED": 303,
+        "ALREADY_EXPLORING": 56259,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 1725,
+        "DISPLACED_BY_NONURGENT_TASK": 8,
+        "DISPLACED_BY_URGENT_TASK": 10,
+        "ACTIVE_CAP_FULL": 7
+      },
+      "validProposals": 2046,
+      "launches": 303,
+      "opportunitiesWithFoodStress": 25737,
+      "opportunitiesWithAnyPressure": 56994,
+      "eligible": 48271,
+      "headingAvailable": 60280,
+      "headingBasis": {
+        "known_edge": 600,
+        "water_margin": 29205,
+        "corridor_continuation": 30475
+      },
+      "knownEdgeTilesMean": 47.103,
+      "evidenceScoreMean": 0.5511,
+      "evidenceScoreMax": 0.98,
+      "evidenceScoreHistogram": {
+        "0.0-0.1": 0,
+        "0.1-0.2": 0,
+        "0.2-0.3": 0,
+        "0.3-0.4": 645,
+        "0.4-0.5": 17798,
+        "0.5+": 41837
+      },
+      "idleSlotNeverOffered": 1725,
+      "idleSlotOfferedAndRefused": 0,
+      "idleClaimedBy": {
+        "reconnaissance": 1703,
+        "patch_verification": 20,
+        "retrieval": 2
+      },
+      "finalPopulation": 819,
+      "survived": 5,
+      "eligibleRate": 0.8008,
+      "headingRate": 1,
+      "validProposalRate": 0.0339,
+      "launchRate": 0.005,
+      "survivalRate": 1,
+      "meanFinalPopulation": 163.8
+    },
+    "map2": {
+      "opportunities": 108454,
+      "blockers": {
+        "NO_MOTIVE": 2132,
+        "SELECTED": 532,
+        "ALREADY_EXPLORING": 97664,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 8026,
+        "DISPLACED_BY_NONURGENT_TASK": 12,
+        "ACTIVE_CAP_FULL": 12,
+        "DISPLACED_BY_URGENT_TASK": 76
+      },
+      "validProposals": 8646,
+      "launches": 532,
+      "opportunitiesWithFoodStress": 80782,
+      "opportunitiesWithAnyPressure": 103501,
+      "eligible": 98892,
+      "headingAvailable": 108454,
+      "headingBasis": {
+        "known_edge": 750,
+        "water_margin": 24531,
+        "corridor_continuation": 83173
+      },
+      "knownEdgeTilesMean": 43.3477,
+      "evidenceScoreMean": 0.661,
+      "evidenceScoreMax": 1,
+      "evidenceScoreHistogram": {
+        "0.0-0.1": 0,
+        "0.1-0.2": 0,
+        "0.2-0.3": 0,
+        "0.3-0.4": 872,
+        "0.4-0.5": 16230,
+        "0.5+": 91352
+      },
+      "idleSlotNeverOffered": 8026,
+      "idleSlotOfferedAndRefused": 0,
+      "idleClaimedBy": {
+        "reconnaissance": 2675,
+        "patch_verification": 5335,
+        "retrieval": 16
+      },
+      "finalPopulation": 1104,
+      "survived": 5,
+      "eligibleRate": 0.9118,
+      "headingRate": 1,
+      "validProposalRate": 0.0797,
+      "launchRate": 0.0049,
+      "survivalRate": 1,
+      "meanFinalPopulation": 220.8
+    },
+    "site_A_coast": {
+      "opportunities": 12069,
+      "blockers": {
+        "NO_MOTIVE": 75,
+        "SELECTED": 65,
+        "ALREADY_EXPLORING": 11917,
+        "DISPLACED_BY_URGENT_TASK": 5,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 7
+      },
+      "validProposals": 77,
+      "launches": 65,
+      "opportunitiesWithFoodStress": 11994,
+      "opportunitiesWithAnyPressure": 11994,
+      "eligible": 11994,
+      "headingAvailable": 12069,
+      "headingBasis": {
+        "known_edge": 75,
+        "water_margin": 360,
+        "corridor_continuation": 11634
+      },
+      "knownEdgeTilesMean": 37.5976,
+      "evidenceScoreMean": 0.8365,
+      "evidenceScoreMax": 1,
+      "evidenceScoreHistogram": {
+        "0.0-0.1": 0,
+        "0.1-0.2": 0,
+        "0.2-0.3": 0,
+        "0.3-0.4": 75,
+        "0.4-0.5": 0,
+        "0.5+": 11994
+      },
+      "idleSlotNeverOffered": 7,
+      "idleSlotOfferedAndRefused": 0,
+      "idleClaimedBy": {
+        "patch_verification": 7
+      },
+      "finalPopulation": 99,
+      "survived": 5,
+      "eligibleRate": 0.9938,
+      "headingRate": 1,
+      "validProposalRate": 0.0064,
+      "launchRate": 0.0054,
+      "survivalRate": 1,
+      "meanFinalPopulation": 19.8
+    },
+    "site_B_dry_plains": {
+      "opportunities": 12026,
+      "blockers": {
+        "NO_MOTIVE": 75,
+        "SELECTED": 27,
+        "ALREADY_EXPLORING": 4837,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 7077,
+        "DISPLACED_BY_URGENT_TASK": 10
+      },
+      "validProposals": 7114,
+      "launches": 27,
+      "opportunitiesWithFoodStress": 11771,
+      "opportunitiesWithAnyPressure": 11951,
+      "eligible": 11951,
+      "headingAvailable": 12026,
+      "headingBasis": {
+        "known_edge": 75,
+        "visible_relief": 150,
+        "water_margin": 75,
+        "corridor_continuation": 11726
+      },
+      "knownEdgeTilesMean": 43.8153,
+      "evidenceScoreMean": 0.8455,
+      "evidenceScoreMax": 1,
+      "evidenceScoreHistogram": {
+        "0.0-0.1": 0,
+        "0.1-0.2": 0,
+        "0.2-0.3": 0,
+        "0.3-0.4": 75,
+        "0.4-0.5": 0,
+        "0.5+": 11951
+      },
+      "idleSlotNeverOffered": 7077,
+      "idleSlotOfferedAndRefused": 0,
+      "idleClaimedBy": {
+        "patch_verification": 7073,
+        "retrieval": 4
+      },
+      "finalPopulation": 112,
+      "survived": 5,
+      "eligibleRate": 0.9938,
+      "headingRate": 1,
+      "validProposalRate": 0.5916,
+      "launchRate": 0.0022,
+      "survivalRate": 1,
+      "meanFinalPopulation": 22.4
+    },
+    "site_C_dry_plains": {
+      "opportunities": 12167,
+      "blockers": {
+        "NO_MOTIVE": 75,
+        "SELECTED": 65,
+        "ALREADY_EXPLORING": 12004,
+        "DISPLACED_BY_URGENT_TASK": 3,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 13,
+        "DISPLACED_BY_NONURGENT_TASK": 5,
+        "ACTIVE_CAP_FULL": 2
+      },
+      "validProposals": 86,
+      "launches": 65,
+      "opportunitiesWithFoodStress": 9904,
+      "opportunitiesWithAnyPressure": 12092,
+      "eligible": 12092,
+      "headingAvailable": 12167,
+      "headingBasis": {
+        "known_edge": 75,
+        "water_margin": 225,
+        "corridor_continuation": 11867
+      },
+      "knownEdgeTilesMean": 42.512,
+      "evidenceScoreMean": 0.6878,
+      "evidenceScoreMax": 1,
+      "evidenceScoreHistogram": {
+        "0.0-0.1": 0,
+        "0.1-0.2": 0,
+        "0.2-0.3": 0,
+        "0.3-0.4": 75,
+        "0.4-0.5": 75,
+        "0.5+": 12017
+      },
+      "idleSlotNeverOffered": 13,
+      "idleSlotOfferedAndRefused": 0,
+      "idleClaimedBy": {
+        "patch_verification": 13
+      },
+      "finalPopulation": 148,
+      "survived": 5,
+      "eligibleRate": 0.9938,
+      "headingRate": 1,
+      "validProposalRate": 0.0071,
+      "launchRate": 0.0053,
+      "survivalRate": 1,
+      "meanFinalPopulation": 29.6
+    },
+    "site_D_aquatic": {
+      "opportunities": 12010,
+      "blockers": {
+        "NO_MOTIVE": 75,
+        "SELECTED": 27,
+        "ALREADY_EXPLORING": 5190,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 6698,
+        "DISPLACED_BY_URGENT_TASK": 19,
+        "DISPLACED_BY_NONURGENT_TASK": 1
+      },
+      "validProposals": 6745,
+      "launches": 27,
+      "opportunitiesWithFoodStress": 11245,
+      "opportunitiesWithAnyPressure": 11935,
+      "eligible": 11935,
+      "headingAvailable": 12010,
+      "headingBasis": {
+        "known_edge": 75,
+        "water_margin": 90,
+        "corridor_continuation": 11845
+      },
+      "knownEdgeTilesMean": 30.2819,
+      "evidenceScoreMean": 0.8027,
+      "evidenceScoreMax": 1,
+      "evidenceScoreHistogram": {
+        "0.0-0.1": 0,
+        "0.1-0.2": 0,
+        "0.2-0.3": 0,
+        "0.3-0.4": 75,
+        "0.4-0.5": 0,
+        "0.5+": 11935
+      },
+      "idleSlotNeverOffered": 6698,
+      "idleSlotOfferedAndRefused": 0,
+      "idleClaimedBy": {
+        "patch_verification": 6280,
+        "retrieval": 418
+      },
+      "finalPopulation": 128,
+      "survived": 5,
+      "eligibleRate": 0.9938,
+      "headingRate": 1,
+      "validProposalRate": 0.5616,
+      "launchRate": 0.0022,
+      "survivalRate": 1,
+      "meanFinalPopulation": 25.6
+    },
+    "site_E_hills": {
+      "opportunities": 12123,
+      "blockers": {
+        "NO_MOTIVE": 75,
+        "SELECTED": 65,
+        "ALREADY_EXPLORING": 11962,
+        "ACTIVE_CAP_FULL": 3,
+        "DISPLACED_BY_URGENT_TASK": 6,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 12
+      },
+      "validProposals": 83,
+      "launches": 65,
+      "opportunitiesWithFoodStress": 11776,
+      "opportunitiesWithAnyPressure": 12048,
+      "eligible": 12048,
+      "headingAvailable": 12123,
+      "headingBasis": {
+        "known_edge": 75,
+        "water_margin": 345,
+        "corridor_continuation": 11703
+      },
+      "knownEdgeTilesMean": 43.6286,
+      "evidenceScoreMean": 0.7994,
+      "evidenceScoreMax": 1,
+      "evidenceScoreHistogram": {
+        "0.0-0.1": 0,
+        "0.1-0.2": 0,
+        "0.2-0.3": 0,
+        "0.3-0.4": 75,
+        "0.4-0.5": 0,
+        "0.5+": 12048
+      },
+      "idleSlotNeverOffered": 12,
+      "idleSlotOfferedAndRefused": 0,
+      "idleClaimedBy": {
+        "patch_verification": 12
+      },
+      "finalPopulation": 135,
+      "survived": 5,
+      "eligibleRate": 0.9938,
+      "headingRate": 1,
+      "validProposalRate": 0.0068,
+      "launchRate": 0.0054,
+      "survivalRate": 1,
+      "meanFinalPopulation": 27
+    },
+    "site_F_hills": {
+      "opportunities": 12005,
+      "blockers": {
+        "NO_MOTIVE": 75,
+        "DISPLACED_BY_URGENT_TASK": 5,
+        "SELECTED": 65,
+        "ALREADY_EXPLORING": 11860
+      },
+      "validProposals": 70,
+      "launches": 65,
+      "opportunitiesWithFoodStress": 8630,
+      "opportunitiesWithAnyPressure": 11930,
+      "eligible": 11900,
+      "headingAvailable": 12005,
+      "headingBasis": {
+        "known_edge": 75,
+        "water_margin": 150,
+        "corridor_continuation": 11780
+      },
+      "knownEdgeTilesMean": 43.1185,
+      "evidenceScoreMean": 0.6899,
+      "evidenceScoreMax": 0.97,
+      "evidenceScoreHistogram": {
+        "0.0-0.1": 0,
+        "0.1-0.2": 0,
+        "0.2-0.3": 0,
+        "0.3-0.4": 75,
+        "0.4-0.5": 406,
+        "0.5+": 11524
+      },
+      "idleSlotNeverOffered": 0,
+      "idleSlotOfferedAndRefused": 0,
+      "idleClaimedBy": {},
+      "finalPopulation": 155,
+      "survived": 5,
+      "eligibleRate": 0.9913,
+      "headingRate": 1,
+      "validProposalRate": 0.0058,
+      "launchRate": 0.0054,
+      "survivalRate": 1,
+      "meanFinalPopulation": 31
+    },
+    "ordinary": {
+      "opportunities": 12077,
+      "blockers": {
+        "NO_MOTIVE": 75,
+        "SELECTED": 63,
+        "ALREADY_EXPLORING": 11651,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 277,
+        "DISPLACED_BY_URGENT_TASK": 5,
+        "ACTIVE_CAP_FULL": 6
+      },
+      "validProposals": 345,
+      "launches": 63,
+      "opportunitiesWithFoodStress": 11927,
+      "opportunitiesWithAnyPressure": 12002,
+      "eligible": 12002,
+      "headingAvailable": 12077,
+      "headingBasis": {
+        "known_edge": 75,
+        "water_margin": 165,
+        "corridor_continuation": 11837
+      },
+      "knownEdgeTilesMean": 40.7415,
+      "evidenceScoreMean": 0.8807,
+      "evidenceScoreMax": 1,
+      "evidenceScoreHistogram": {
+        "0.0-0.1": 0,
+        "0.1-0.2": 0,
+        "0.2-0.3": 0,
+        "0.3-0.4": 75,
+        "0.4-0.5": 0,
+        "0.5+": 12002
+      },
+      "idleSlotNeverOffered": 277,
+      "idleSlotOfferedAndRefused": 0,
+      "idleClaimedBy": {
+        "reconnaissance": 243,
+        "patch_verification": 34
+      },
+      "finalPopulation": 110,
+      "survived": 5,
+      "eligibleRate": 0.9938,
+      "headingRate": 1,
+      "validProposalRate": 0.0286,
+      "launchRate": 0.0052,
+      "survivalRate": 1,
+      "meanFinalPopulation": 22
+    },
+    "isolated_marginal": {
+      "opportunities": 12025,
+      "blockers": {
+        "NO_MOTIVE": 75,
+        "SELECTED": 65,
+        "ALREADY_EXPLORING": 11880,
+        "DISPLACED_BY_URGENT_TASK": 2,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 3
+      },
+      "validProposals": 70,
+      "launches": 65,
+      "opportunitiesWithFoodStress": 11920,
+      "opportunitiesWithAnyPressure": 11950,
+      "eligible": 11950,
+      "headingAvailable": 12025,
+      "headingBasis": {
+        "known_edge": 90,
+        "visible_relief": 435,
+        "corridor_continuation": 11485,
+        "water_margin": 15
+      },
+      "knownEdgeTilesMean": 54.6469,
+      "evidenceScoreMean": 0.928,
+      "evidenceScoreMax": 1,
+      "evidenceScoreHistogram": {
+        "0.0-0.1": 0,
+        "0.1-0.2": 0,
+        "0.2-0.3": 0,
+        "0.3-0.4": 75,
+        "0.4-0.5": 0,
+        "0.5+": 11950
+      },
+      "idleSlotNeverOffered": 3,
+      "idleSlotOfferedAndRefused": 0,
+      "idleClaimedBy": {
+        "patch_verification": 3
+      },
+      "finalPopulation": 106,
+      "survived": 5,
+      "eligibleRate": 0.9938,
+      "headingRate": 1,
+      "validProposalRate": 0.0058,
+      "launchRate": 0.0054,
+      "survivalRate": 1,
+      "meanFinalPopulation": 21.2
+    },
+    "hostile": {
+      "opportunities": 12014,
+      "blockers": {
+        "NO_MOTIVE": 75,
+        "SELECTED": 65,
+        "ALREADY_EXPLORING": 11849,
+        "DISPLACED_BY_URGENT_TASK": 9,
+        "VALID_BUT_IDLE_SLOT_UNUSED": 14,
+        "ACTIVE_CAP_FULL": 2
+      },
+      "validProposals": 88,
+      "launches": 65,
+      "opportunitiesWithFoodStress": 11939,
+      "opportunitiesWithAnyPressure": 11939,
+      "eligible": 11939,
+      "headingAvailable": 12014,
+      "headingBasis": {
+        "known_edge": 105,
+        "visible_relief": 270,
+        "corridor_continuation": 11639
+      },
+      "knownEdgeTilesMean": 51.108,
+      "evidenceScoreMean": 0.9507,
+      "evidenceScoreMax": 1,
+      "evidenceScoreHistogram": {
+        "0.0-0.1": 0,
+        "0.1-0.2": 0,
+        "0.2-0.3": 0,
+        "0.3-0.4": 75,
+        "0.4-0.5": 0,
+        "0.5+": 11939
+      },
+      "idleSlotNeverOffered": 14,
+      "idleSlotOfferedAndRefused": 0,
+      "idleClaimedBy": {
+        "patch_verification": 14
+      },
+      "finalPopulation": 102,
+      "survived": 5,
+      "eligibleRate": 0.9938,
+      "headingRate": 1,
+      "validProposalRate": 0.0073,
+      "launchRate": 0.0054,
+      "survivalRate": 1,
+      "meanFinalPopulation": 20.4
+    }
+  }
+}

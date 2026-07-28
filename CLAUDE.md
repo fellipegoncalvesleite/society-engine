@@ -68,6 +68,69 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-07-28 (ORDINARY EXPLORATION AUTHORITY / LAUNCH-FUNNEL DIAGNOSIS CORRECTION-24A:
+  PROGRESS — ORDINARY-EXPLORATION BLOCKER ISOLATED / NO PRODUCTION REPAIR YET, and PARTIAL —
+  ACCEPTANCE GATES 13-18 ARE UNMET. Branch checkpoint/ordinary-exploration-capacity-24 from
+  CORRECTION-23's closure 59391d54. CORRECTION-23 is FROZEN; its remote still resolves to
+  59391d54 exactly. Local main untouched at 668763f; remote main untouched at 0a43083.
+  DIAGNOSTIC ONLY — diagnostics-off canonical fingerprints IDENTICAL to 59391d54 on both maps
+  (map1 7239c085…, map2 d748c78a…).
+
+  **THE ORDINARY-EXPLORATION BLOCKER IS NOT MOTIVE, NOT DIRECTION, NOT LABOUR AND NOT
+  COMPETITION.** 277,250 real production launch opportunities (11 worlds x 5 shared seeds x 40 y),
+  each classified into exactly ONE typed primary blocker: eligibility is **99.4% on nine of eleven
+  worlds** and 80.1%/91.2% on the default maps, with mean evidence score 0.55/0.66 against a 0.50
+  threshold and **nothing at all below 0.3 on map1**; `headingAvailable` is **1.000 on EVERY
+  world** (map2 basis: corridor_continuation 83,173, water_margin 24,531, known_edge 750; mean
+  43.3 known frontier-edge tiles); `INSUFFICIENT_LABOR` = **0**; `ACTIVE_CAP_FULL` = 32; and both
+  displacement classes together are **176 of 277,250 (0.06%)**. Exploration does not lose
+  contests — it is not entered into them.
+
+  **THE TWO AUTHORITIES THAT ACTUALLY BIND.** (a) **`ALREADY_EXPLORING` — 89.12%.**
+  `FRONTIER_EXPLORATION_SUPPRESSION_TICKS = 12` ticks = 12 seasons = **3 SIMULATED YEARS**, and it
+  is stamped the moment the party is RAISED, not when it returns — so a band gets one look per
+  three years regardless of what the look found, how large it is, or how much pressure it is
+  under. The measured launch rate matches exactly: 13 launches per 40-year run, one per 3.1 years.
+  (b) **`VALID_BUT_IDLE_SLOT_UNUSED` — 8.60%, and 23,852 of 23,852 were NEVER OFFERED the slot,
+  with 0 offered-and-refused.** Exploration competes last: it is called only when no retrieval,
+  patch-verification or reconnaissance candidate exists. The claiming family then launches
+  nothing — patch_verification 13,447, reconnaissance 4,621, retrieval 440.
+
+  **THE FAILURE IS TERRAIN-HETEROGENEOUS.** Nine worlds are bound by the suppression window, but
+  **site_B_dry_plains and site_D_aquatic are bound by the ordering gate instead** — a valid
+  proposal exists on 59%/56% of their opportunities, ~7,000 are claimed-and-unlaunched on each,
+  and those two worlds launch the LEAST of all eleven (27 against 63-65). **§15 classification is
+  I (interaction-dependent)**: **C (a cap, not a physical limit)** on nine worlds and **E
+  (idle-capacity policy failure)** on two. **A (no motive authority), B (heading failure) and
+  D (scheduler competition) are REFUTED by measurement.**
+
+  **AN INSTRUMENT ERROR WAS CAUGHT AND IS RECORDED.** The first version of this audit recorded
+  every day and reported `OFF_LAUNCH_CADENCE` as the top blocker at 83% — but production schedules
+  only one day in six, so that was the audit's own sampling choice presented as a finding.
+  Off-cadence days are no longer recorded; every denominator above is real opportunities.
+
+  **NOT BUILT — ACCEPTANCE GATES 13-18 UNMET, stated plainly rather than implied complete:** the
+  §10 O0-O5 same-snapshot counterfactuals; the §11 X1-X16 controlled fixtures; the 200-year and
+  500-year horizons; the §13 dc08b2d vs 59391d54 historical comparison; the §14 feedback-loop
+  first-divergence traces (**no loop is claimed**); the §17 read-only projection; and every
+  E4/E5/E6 returned-knowledge seam — so **returned records, one-year eviction, first-reader traces
+  and changed physical actions are NOT measured in this pass.**
+
+  **NO REPAIR IS LICENSED.** The window being the top blocker does NOT justify shortening it:
+  nothing here shows extra launches would produce DURABLE knowledge, and the CORRECTION-23E
+  retention debt (72-record capacity, mandatory set at 161%, median record lifetime 0.9 years) is
+  untouched and could erase every additional return. That is exactly what O4 and the 200-year
+  matrix would have to settle, and neither was run.
+
+  PASSED: tsc, build, graph 221/764 0 dup 0 dangling, import/adaptation/decision boundaries,
+  anti-omniscience C1-C5 and D all zero, determinism true, step-mode invariance both maps, food
+  capture 1.000, per-lineage population and cohort conservation, diagnostics-off fingerprint
+  parity to 59391d54. 26.8 ms/tick. Audit-code footprint: +207 lines in expedition.ts (one
+  wrapper + one recorder + two markers, all no-op when unregistered), one 247-line diagnostics
+  module, one 235-line script. See docs/evidence/correction24a/FINDINGS.md and
+  AUTHORITY_LEDGER.md.)
+
+Previously updated:
   2026-07-28 (TEMPORARY-USE PENDING-ACTION AUTHORITY / EXACT LAUNCH-TO-CAMP CONSUMPTION
   CORRECTION-23J: PASS — TEMPORARY-USE SUSPENDED UNTIL A REAL OPERATION READER EXISTS /
   CORRECTION-23 VERIFICATION BEHAVIOUR CLOSED, branch checkpoint/physical-frontier-verification-23
