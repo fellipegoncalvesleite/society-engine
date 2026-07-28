@@ -28,6 +28,7 @@
 //   - returning parties upgrade ONLY the domain physically investigated.
 //
 // Determinism: no randomness. Every tie breaks on tile id.
+import { SEASON_LENGTH_DAYS } from "../core/types";
 import type { ReasonId, Season, TickNumber, TileId } from "../core/types";
 import type { KnownTileRecord } from "../knowledge/types";
 import { getTile } from "../world/generate";
@@ -46,6 +47,11 @@ import {
   taskCampRefusedByEvidence,
 } from "./verificationEvidence";
 import { deriveTripDurationDays } from "./intraSeasonTrips";
+// CORRECTION-23J §5 — the identity of an operation the production selector actually chose.
+import {
+  derivePendingOperationAtTile,
+  deriveVerificationRoundTripDays,
+} from "./pendingOperation";
 // CORRECTION-23I — audit-only refusal counting and the typed dependency shape.
 import {
   isRecordingLaunchDependencies,
@@ -398,7 +404,10 @@ export function selectVerificationCandidate(
     const dependency = candidateDependencies.get(`${String(winner.tileId)}|${winner.question}`);
 
     if (dependency !== undefined) {
-      recordLaunchDependency({ ...dependency, day: currentTick });
+      // CORRECTION-23J §8 — stamped in DAYS. This recorded `currentTick` before, which put launch
+      // records on a different timeline from the expedition and camp records they must be joined
+      // to; a 90x unit mismatch cannot be paired.
+      recordLaunchDependency({ ...dependency, day: deriveCurrentDay(world) });
     }
   }
 
@@ -455,6 +464,40 @@ const SUSPENDED_QUESTIONS: ReadonlySet<FrontierVerificationQuestion> = new Set([
 ]);
 
 /**
+ * CORRECTION-23J §7/§13 — WHY `temporary_use` IS NOT IN THAT SET, AND IS STILL DORMANT.
+ *
+ * The three questions above are suspended because nothing physical reads them. `temporary_use`
+ * is different: it HAS a real reader — `deriveTaskCampForOperating` — and a held negative
+ * genuinely refuses a bounded camp (fixtures I5, J7). What it does not have is a seam at which a
+ * party could be sent in time to inform one.
+ *
+ * §7 asks which of three orderings the architecture can form. It forms none:
+ *
+ *   Model A (operation reserved, then investigated) does not exist. `maybeLaunchExpedition`
+ *     selects a candidate and calls `createPreparedExpedition`/`attachExpedition` in the same
+ *     call, so no operation is ever selected-and-waiting. Measured: 4,186,352 refusals for
+ *     `no_selected_operation` against 27 evaluations that found a genuinely pending one.
+ *   Model B (the selector blocked by temporary-use evidence, re-evaluating after an answer)
+ *     does not exist either. `taskCampRefusedByEvidence` has exactly one production reader and
+ *     it runs on ARRIVAL, inside the operating step — never in candidate selection.
+ *   Model C therefore holds, and the arithmetic says why. A camp is only decided when the
+ *     outbound leg is at least a day, so the decision falls `legDays` after the operation
+ *     leaves; the verification party needs `2 * legDays + VERIFICATION_ON_SITE_DAYS`. The
+ *     second is greater than the first for every leg length there is. Of the 27 evaluations
+ *     that reached a pending operation, 25 failed exactly here.
+ *
+ * So the launch gate below is written in full and correctly, and it admits nothing: zero
+ * production launches across eleven worlds x five seeds x 40 and 200 years. This is deliberately
+ * NOT expressed as a name in `SUSPENDED_QUESTIONS`. The dormancy is a physical consequence, and
+ * writing it as policy would hide the fact that the question becomes askable the moment a real
+ * pre-operation seam exists — at which point the gate opens by itself, with no rule to revisit.
+ *
+ * The question's type, its physical resolver in `expedition.ts`, its evidence shape and its
+ * reader are all retained and all correct. The operation-reservation seam that would feed them
+ * belongs to Resource Investigation / Temporary Use Closure and is deliberately NOT built here.
+ */
+
+/**
  * §6.2 Case B — the actions production itself declares it is taking toward an opportunity. Used
  * as the imminence test rather than a new threshold, so "imminent" means what the daughter
  * colonization authority already means by it.
@@ -474,6 +517,18 @@ const IMMINENT_COLONIZATION_ACTIONS: ReadonlySet<string> = new Set([
  * output. Nothing here reads hidden ecology, the answer the party would obtain, future
  * population, future stock, or a benchmark result.
  */
+/**
+ * The elapsed DAY, not the seasonal tick.
+ *
+ * CORRECTION-23J §8 requires launch and camp-decision days on one timeline, and expedition
+ * records are stamped in days. `world.time.day` is the authority; the fallback reproduces
+ * `getWorldTimeForTick`'s own conversion for a world constructed without it.
+ */
+function deriveCurrentDay(world: WorldState): number {
+  const day = world.time.day;
+  return day === undefined ? Number(world.time.tick) * SEASON_LENGTH_DAYS : Number(day);
+}
+
 function deriveLaunchDecisionDependency(
   world: WorldState,
   band: Band,
@@ -568,39 +623,63 @@ function deriveLaunchDecisionDependency(
   }
 
   if (question === "temporary_use") {
-    // §7.1 — measured, not assumed: negatives prevent 10.6% of ACTUALLY ATTEMPTED camps
-    // (492 of 4,626 across eleven worlds), so the question is retained and gated rather than
-    // suspended. The gate is the operation, not the place: a bounded camp is only decided when
-    // a party is working somewhere its home leg cannot be walked in a day.
-    const memory = (band.resourceKnowledgeState?.patchMemories ?? []).find(
-      (patch) => String(patch.approximateTile) === String(tileId),
-    );
-    // The away phases, spelled out rather than imported: `expedition.ts` imports this module,
-    // so taking its predicate would close an import cycle for one boolean.
-    const activeParty = (band.expeditions ?? []).some(
-      (expedition) =>
-        String(expedition.targetTileId) === String(tileId) &&
-        (expedition.phase === "prepared" ||
-          expedition.phase === "outbound" ||
-          expedition.phase === "operating" ||
-          expedition.phase === "returning"),
-    );
+    // CORRECTION-23J §6 — EIGHT CONDITIONS, IN ORDER, EACH REFUSING FOR ITS OWN REASON.
+    //
+    // CORRECTION-23I gated this on "a patch is remembered here OR any party is away toward this
+    // tile". §3 dismantled both halves: memory is not intent, and a `returning` party has already
+    // taken the decision the answer was supposed to inform. What replaces them is the operation
+    // itself — named, selected by the production activity selector, and still short of its camp
+    // decision.
+    const day = deriveCurrentDay(world);
+    const operation = derivePendingOperationAtTile(band.expeditions, tileId, day);
 
-    if (memory === undefined && !activeParty) {
-      recordLaunchRefusal(question, "no_pending_operation_needing_camp");
+    // (1) and (2) — a concrete operation, selected, at exactly this tile. `derivePendingOperation
+    // AtTile` matches on target identity and rejects every task family that has no destination,
+    // so a patch memory or a candidate-list entry can no longer reach this line at all.
+    if (operation === undefined) {
+      recordLaunchRefusal(question, "no_selected_operation");
       return undefined;
     }
 
-    // A camp is only ever decided when the work cannot be reached and returned from in a day.
-    // `deriveTaskCampForOperating` returns early otherwise, so for a same-day target a
-    // temporary-use answer can never prevent anything.
-    if (deriveTripDurationDays(distanceTiles) <= 1) {
-      recordLaunchRefusal(question, "no_pending_operation_needing_camp");
+    // (4) — the camp decision must still be ahead of it. Enforced twice on purpose: the identity
+    // itself admits only `prepared` and `outbound`, and rejects a party whose arrival day has
+    // already passed. `returning`, `completed`, `aborted` and `lost` can never appear here.
+    if (operation.expectedOperatingDay <= day) {
+      recordLaunchRefusal(question, "operation_camp_decision_already_passed");
       return undefined;
     }
 
+    // (3) and (6) — the route and duration must actually imply a camp decision. A same-day
+    // target never reaches the reader (`deriveTaskCampForOperating` returns early), so a bounded
+    // negative could not prevent or alter anything about this operation.
+    if (!operation.requiresTaskCampDecision || deriveTripDurationDays(distanceTiles) <= 1) {
+      recordLaunchRefusal(question, "operation_needs_no_camp_decision");
+      return undefined;
+    }
+
+    // (5) — a settled negative has already decided it; there is nothing left to establish.
     if (taskCampRefusedByEvidence(band, tileId)) {
       recordLaunchRefusal(question, "already_settled_directly");
+      return undefined;
+    }
+
+    // (7) — THE PHYSICAL ORDERING TEST, and the one §7 turns on. The party must be able to walk
+    // out, do the bounded on-site work, and walk home before the operation arrives at its target.
+    // No allowance, no rounding in the question's favour: an answer that lands after the camp
+    // decision informed nothing, and crediting it would be exactly the retrospective attribution
+    // §3.3 forbids.
+    const daysUntilCampDecision = operation.expectedOperatingDay - day;
+    const roundTripDays = deriveVerificationRoundTripDays(distanceTiles, VERIFICATION_ON_SITE_DAYS);
+
+    if (roundTripDays > daysUntilCampDecision) {
+      recordLaunchRefusal(question, "answer_cannot_return_before_camp_decision");
+      return undefined;
+    }
+
+    // (8) — the named operation must consume the answer inside one season. A decision further
+    // out than that is not the decision this party is being sent for.
+    if (daysUntilCampDecision > SEASON_LENGTH_DAYS) {
+      recordLaunchRefusal(question, "consumption_beyond_one_season");
       return undefined;
     }
 
@@ -609,14 +688,15 @@ function deriveLaunchDecisionDependency(
       day: 0,
       question,
       targetTileId: String(tileId),
-      blockedOrImminentAction: `operate a multi-day task at ${String(tileId)}`,
+      blockedOrImminentAction: `${operation.activityKind} ${operation.operationId} reaches ${String(tileId)} on day ${operation.expectedOperatingDay} and decides its camp`,
       authoritativeReader: "expedition.deriveTaskCampForOperating / taskCampRefusedByEvidence",
-      baselineVerdict: "a bounded task camp here is currently permitted",
+      baselineVerdict: "a bounded task camp for that operation is currently permitted",
       possibleConfirmedVerdict: "unchanged — absence of evidence already permitted the camp",
-      possibleNegativeVerdict: "the bounded task camp is refused and the party shuttles or leaves",
+      possibleNegativeVerdict: "that operation's bounded task camp is refused and it shuttles or leaves",
       exactReasonTheAnswerIsNeeded:
-        "a remembered multi-day work target whose camp feasibility has never been physically tested",
+        "one selected operation will decide a task camp at this place before the answer goes stale",
       launchCase: "case_b_negative_vetoes",
+      pendingOperation: operation,
     };
   }
 

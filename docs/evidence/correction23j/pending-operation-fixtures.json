@@ -1,0 +1,160 @@
+{
+  "fixtures": 12,
+  "passed": 11,
+  "vacuous": 1,
+  "failed": 0,
+  "results": [
+    {
+      "fixture": "J1",
+      "intent": "a remembered multi-day patch with no selected operation does not launch",
+      "status": "PASS",
+      "passed": true,
+      "checks": {
+        "patchMemoryPresent": true,
+        "noPendingOperation": true,
+        "notAsked": true
+      }
+    },
+    {
+      "fixture": "J2",
+      "intent": "admission to a candidate list is not selection",
+      "status": "PASS",
+      "passed": true,
+      "checks": {
+        "candidateListIsNotEmpty": true,
+        "tileIsAnAdmittedCandidate": true,
+        "patchIsRemembered": true,
+        "noPendingOperationThere": true,
+        "noTemporaryUseCandidate": true
+      },
+      "notes": "The place is live in the selector's own eligible set (water_access) and carries a remembered patch; temporary use is still not asked there."
+    },
+    {
+      "fixture": "J3",
+      "intent": "a selected same-day operation does not launch temporary-use verification",
+      "status": "PASS",
+      "passed": true,
+      "checks": {
+        "operationExists": true,
+        "notAsked": true
+      }
+    },
+    {
+      "fixture": "J4",
+      "intent": "a real selected multi-day operation produces a complete, correctly typed identity",
+      "status": "PASS",
+      "passed": true,
+      "checks": {
+        "identityExists": true,
+        "namesTheProductionExpedition": true,
+        "targetMatches": true,
+        "selectorIsProduction": true,
+        "requiresCampDecision": true,
+        "requiresMultiDayOperation": true,
+        "campDecisionStillAhead": true
+      },
+      "notes": "Outbound leg 3 day(s); a verification party needs 8 day(s) out and back. The launch itself is decided by J7/J8, not here."
+    },
+    {
+      "fixture": "J5",
+      "intent": "an operation pending at tile A does not justify verification at tile B",
+      "status": "PASS",
+      "passed": true,
+      "checks": {
+        "operationAtA": true,
+        "nothingPendingAtB": true,
+        "notAskedAtB": true
+      }
+    },
+    {
+      "fixture": "J6",
+      "intent": "returning, terminal and already-arrived parties can never be pending",
+      "status": "PASS",
+      "passed": true,
+      "checks": {
+        "notAsked": true,
+        "returningIsNotPending": true,
+        "returningDoesNotLaunch": true,
+        "completedIsNotPending": true,
+        "completedDoesNotLaunch": true,
+        "abortedIsNotPending": true,
+        "abortedDoesNotLaunch": true,
+        "lostIsNotPending": true,
+        "lostDoesNotLaunch": true,
+        "operatingIsNotPending": true,
+        "operatingDoesNotLaunch": true
+      }
+    },
+    {
+      "fixture": "J7",
+      "intent": "a negative that reaches the reader changes the exact named operation's camp outcome",
+      "status": "PASS",
+      "passed": true,
+      "checks": {
+        "campPermittedWithoutEvidence": true,
+        "campRefusedByNegative": true
+      }
+    },
+    {
+      "fixture": "J8",
+      "intent": "an answer that cannot arrive before the camp decision is not credited with informing it",
+      "status": "PASS",
+      "passed": true,
+      "checks": {
+        "answerArrivesTooLate": true,
+        "launchRefused": true
+      },
+      "notes": "Best case measurable in this architecture: the operation decides its camp in 3 day(s); the verification round trip is 8 day(s). §7 Model C."
+    },
+    {
+      "fixture": "J9",
+      "intent": "a lost verification party transfers no answer and no disposition",
+      "status": "PASS",
+      "passed": true,
+      "checks": {
+        "noEvidenceRow": true,
+        "noDisposition": true,
+        "readerUnchanged": true,
+        "campStillPermitted": true
+      }
+    },
+    {
+      "fixture": "J10",
+      "intent": "a temporary-use confirmation grants nothing beyond the camp",
+      "status": "PASS",
+      "passed": true,
+      "checks": {
+        "waterGateUnchanged": true,
+        "resourceEligibilityUnchanged": true,
+        "campStillMerelyPermitted": true,
+        "noResidenceOrStorageAuthority": true
+      }
+    },
+    {
+      "fixture": "J11",
+      "intent": "with no exact consumption seam, production temporary-use launches are zero",
+      "status": "PASS",
+      "passed": true,
+      "checks": {
+        "launchesAreZero": true,
+        "campsWereStillAttempted": true,
+        "refusalReasonIsTheOrdering": true
+      },
+      "notes": "Measured over 11 worlds x 5 seeds x 40 y. Camps are still attempted (2429), so the zero is a launch decision, not an absent reader."
+    },
+    {
+      "fixture": "J12",
+      "intent": "every natural launch names one operation and consumes it before the camp decision",
+      "status": "VACUOUS",
+      "passed": false,
+      "checks": {
+        "noUnnamedLaunch": true,
+        "noLateConsumption": true,
+        "noUnrelatedOnlyUse": true
+      },
+      "notes": "VACUOUS: there are no natural launches, so the contract holds over an empty set. This fixture asserts the contract; it does NOT demonstrate the behaviour exists, and is not counted as a pass."
+    }
+  ],
+  "orderingModel": "C — no valid pre-operation seam exists",
+  "diagnosticsRegistered": false
+}

@@ -79,7 +79,10 @@ import { observeTileAndNearby } from "./tileObservation";
 // CORRECTION-23I — audit-only launch/consumption diagnostics; no-ops when unregistered.
 import {
   isCountingTaskCampOutcomes,
+  isRecordingVerificationJourneys,
   recordTaskCampOutcome,
+  recordVerificationDeparture,
+  recordVerificationReturn,
 } from "../diagnostics/verificationLaunchDiagnostics";
 import {
   SIGNAL_ATTEMPT_CAP,
@@ -105,8 +108,12 @@ import type {
 
 // ── Bounds. Every one of these is a hard cap on state or search, never a tuning dial. ──
 
-/** A party covers this many route tiles in one unburdened travel day. */
-export const EXPEDITION_BASE_TILES_PER_DAY = 4;
+// CORRECTION-23J §5 — the travel pace now lives in `pendingOperation.ts`, which must be
+// importable by `frontierVerification.ts` (this module imports THAT one, so it cannot be the
+// owner without closing a cycle). Re-exported under its original name so every existing reader
+// is unaffected.
+export { EXPEDITION_BASE_TILES_PER_DAY } from "./pendingOperation";
+import { EXPEDITION_BASE_TILES_PER_DAY } from "./pendingOperation";
 /**
  * Ceiling on how far out an expedition may plan; derived reach is normally far lower.
  * §17 — this is a TECHNICAL search bound, not a behavioral range: at 36 tiles (54 km)
@@ -273,6 +280,10 @@ function recordCampOutcome(
     bandId: String(expedition.bandId),
     tileId: String(expedition.positionTileId),
     day: Number(day),
+    // CORRECTION-23J §8 — the operation that took this decision, so a camp refusal can be joined
+    // to the launch that named it instead of only counted in a total.
+    operationId: expedition.id,
+    activityKind: expedition.taskKind,
     reachedEvidenceReader,
     refusedByEvidence,
     ...(blockedBefore === undefined ? {} : { blockedBefore }),
@@ -1684,6 +1695,20 @@ function maybeLaunchFrontierVerification(
 
 
 
+  // CORRECTION-23J §8 — audit-only. The launch half of the paired trace, recorded where the
+  // party is actually raised rather than where the candidate was picked, so a candidate that
+  // wins selection and then fails to find a route is not counted as a journey.
+  if (isRecordingVerificationJourneys()) {
+    recordVerificationDeparture({
+      verificationExpeditionId: prepared.id,
+      bandId: String(band.id),
+      question: plan.question,
+      targetTileId: String(plan.targetTileId),
+      departureDay: Number(day),
+      routeTiles: route.length,
+    });
+  }
+
   return attachExpedition(band, { ...prepared, verificationPlan: plan });
 }
 
@@ -2104,6 +2129,8 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       readonly acquisition?: KnowledgeAcquisitionKind;
       readonly result: NonNullable<ExpeditionRecord["verificationResult"]>;
       readonly harvestUnits: number;
+      /** CORRECTION-23J §8 — which party came home, so the return can be paired to its launch. */
+      readonly expeditionId: string;
     }[] = [];
     // CORRECTION-18 §8 — kept SEPARATE from the reconnaissance list so the two returning
     // families can be stamped with their own acquisition provenance.
@@ -2225,6 +2252,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
                 acquisition: result.expedition.verificationPlan?.originatingAcquisition,
                 result: verificationResult,
                 harvestUnits: verificationResult.harvestUnits,
+                expeditionId: result.expedition.id,
               });
             }
           }
@@ -2398,6 +2426,19 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     const verificationHardship = deriveVerificationNeed(currentBand).need;
 
     for (const returned of returnedVerifications) {
+      // CORRECTION-23J §8 — audit-only. The return half. Reaching this loop IS the physical
+      // return: a lost party never appears, which is the §9 J9 control.
+      if (isRecordingVerificationJourneys()) {
+        recordVerificationReturn({
+          verificationExpeditionId: returned.expeditionId,
+          bandId: String(currentBand.id),
+          question: returned.result.question,
+          targetTileId: String(returned.result.targetTileId),
+          returnDay: Number(day),
+          outcome: returned.result.outcome,
+        });
+      }
+
       verificationAttempts = recordVerificationAttempt(verificationAttempts, {
         tileId: returned.result.targetTileId,
         question: returned.result.question,

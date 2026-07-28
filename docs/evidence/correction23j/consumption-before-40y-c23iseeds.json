@@ -1,0 +1,225 @@
+{
+  "years": 40,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "scenarios": [
+    "map1",
+    "map2",
+    "site_A_coast",
+    "site_B_dry_plains",
+    "site_C_dry_plains",
+    "site_D_aquatic",
+    "site_E_hills",
+    "site_F_hills",
+    "ordinary",
+    "isolated_marginal",
+    "hostile"
+  ],
+  "totals": {
+    "A_campsBlockedByAnyStoredNegative": 343,
+    "B_distinctNegativeRecordsThatBlock": 63,
+    "C_temporaryUseLaunches": 1145,
+    "D_launchesWithSelectedOperation": 0,
+    "E_launchesAnsweredInTime": 0,
+    "F_launchesConsumedByNamedOperation": 0,
+    "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+    "H_launchesNeverConsumed": 1145,
+    "launchesLost": 0,
+    "attemptedCamps": 3672,
+    "campDecisions": 5134,
+    "refusalsByReason": {
+      "no_pending_operation_needing_camp": 3425418,
+      "already_settled_directly": 16847
+    },
+    "preventionRateOfAttempts": 0.0934,
+    "namedConsumptionRateOfLaunches": 0
+  },
+  "byScenario": {
+    "map1": {
+      "A_campsBlockedByAnyStoredNegative": 12,
+      "B_distinctNegativeRecordsThatBlock": 3,
+      "C_temporaryUseLaunches": 221,
+      "D_launchesWithSelectedOperation": 0,
+      "E_launchesAnsweredInTime": 0,
+      "F_launchesConsumedByNamedOperation": 0,
+      "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+      "H_launchesNeverConsumed": 221,
+      "launchesLost": 0,
+      "attemptedCamps": 734,
+      "campDecisions": 1121,
+      "refusalsByReason": {
+        "no_pending_operation_needing_camp": 293442
+      }
+    },
+    "map2": {
+      "A_campsBlockedByAnyStoredNegative": 8,
+      "B_distinctNegativeRecordsThatBlock": 2,
+      "C_temporaryUseLaunches": 472,
+      "D_launchesWithSelectedOperation": 0,
+      "E_launchesAnsweredInTime": 0,
+      "F_launchesConsumedByNamedOperation": 0,
+      "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+      "H_launchesNeverConsumed": 472,
+      "launchesLost": 0,
+      "attemptedCamps": 1284,
+      "campDecisions": 1919,
+      "refusalsByReason": {
+        "no_pending_operation_needing_camp": 1313614
+      }
+    },
+    "site_A_coast": {
+      "A_campsBlockedByAnyStoredNegative": 25,
+      "B_distinctNegativeRecordsThatBlock": 10,
+      "C_temporaryUseLaunches": 114,
+      "D_launchesWithSelectedOperation": 0,
+      "E_launchesAnsweredInTime": 0,
+      "F_launchesConsumedByNamedOperation": 0,
+      "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+      "H_launchesNeverConsumed": 114,
+      "launchesLost": 0,
+      "attemptedCamps": 164,
+      "campDecisions": 178,
+      "refusalsByReason": {
+        "no_pending_operation_needing_camp": 204107,
+        "already_settled_directly": 7379
+      }
+    },
+    "site_B_dry_plains": {
+      "A_campsBlockedByAnyStoredNegative": 0,
+      "B_distinctNegativeRecordsThatBlock": 0,
+      "C_temporaryUseLaunches": 15,
+      "D_launchesWithSelectedOperation": 0,
+      "E_launchesAnsweredInTime": 0,
+      "F_launchesConsumedByNamedOperation": 0,
+      "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+      "H_launchesNeverConsumed": 15,
+      "launchesLost": 0,
+      "attemptedCamps": 80,
+      "campDecisions": 101,
+      "refusalsByReason": {
+        "no_pending_operation_needing_camp": 231250
+      }
+    },
+    "site_C_dry_plains": {
+      "A_campsBlockedByAnyStoredNegative": 193,
+      "B_distinctNegativeRecordsThatBlock": 33,
+      "C_temporaryUseLaunches": 95,
+      "D_launchesWithSelectedOperation": 0,
+      "E_launchesAnsweredInTime": 0,
+      "F_launchesConsumedByNamedOperation": 0,
+      "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+      "H_launchesNeverConsumed": 95,
+      "launchesLost": 0,
+      "attemptedCamps": 325,
+      "campDecisions": 398,
+      "refusalsByReason": {
+        "no_pending_operation_needing_camp": 120069,
+        "already_settled_directly": 8729
+      }
+    },
+    "site_D_aquatic": {
+      "A_campsBlockedByAnyStoredNegative": 0,
+      "B_distinctNegativeRecordsThatBlock": 0,
+      "C_temporaryUseLaunches": 34,
+      "D_launchesWithSelectedOperation": 0,
+      "E_launchesAnsweredInTime": 0,
+      "F_launchesConsumedByNamedOperation": 0,
+      "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+      "H_launchesNeverConsumed": 34,
+      "launchesLost": 0,
+      "attemptedCamps": 117,
+      "campDecisions": 214,
+      "refusalsByReason": {
+        "no_pending_operation_needing_camp": 186521
+      }
+    },
+    "site_E_hills": {
+      "A_campsBlockedByAnyStoredNegative": 69,
+      "B_distinctNegativeRecordsThatBlock": 6,
+      "C_temporaryUseLaunches": 83,
+      "D_launchesWithSelectedOperation": 0,
+      "E_launchesAnsweredInTime": 0,
+      "F_launchesConsumedByNamedOperation": 0,
+      "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+      "H_launchesNeverConsumed": 83,
+      "launchesLost": 0,
+      "attemptedCamps": 279,
+      "campDecisions": 316,
+      "refusalsByReason": {
+        "no_pending_operation_needing_camp": 202348,
+        "already_settled_directly": 739
+      }
+    },
+    "site_F_hills": {
+      "A_campsBlockedByAnyStoredNegative": 15,
+      "B_distinctNegativeRecordsThatBlock": 5,
+      "C_temporaryUseLaunches": 54,
+      "D_launchesWithSelectedOperation": 0,
+      "E_launchesAnsweredInTime": 0,
+      "F_launchesConsumedByNamedOperation": 0,
+      "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+      "H_launchesNeverConsumed": 54,
+      "launchesLost": 0,
+      "attemptedCamps": 178,
+      "campDecisions": 223,
+      "refusalsByReason": {
+        "no_pending_operation_needing_camp": 104427
+      }
+    },
+    "ordinary": {
+      "A_campsBlockedByAnyStoredNegative": 0,
+      "B_distinctNegativeRecordsThatBlock": 0,
+      "C_temporaryUseLaunches": 24,
+      "D_launchesWithSelectedOperation": 0,
+      "E_launchesAnsweredInTime": 0,
+      "F_launchesConsumedByNamedOperation": 0,
+      "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+      "H_launchesNeverConsumed": 24,
+      "launchesLost": 0,
+      "attemptedCamps": 239,
+      "campDecisions": 318,
+      "refusalsByReason": {
+        "no_pending_operation_needing_camp": 244395
+      }
+    },
+    "isolated_marginal": {
+      "A_campsBlockedByAnyStoredNegative": 9,
+      "B_distinctNegativeRecordsThatBlock": 2,
+      "C_temporaryUseLaunches": 27,
+      "D_launchesWithSelectedOperation": 0,
+      "E_launchesAnsweredInTime": 0,
+      "F_launchesConsumedByNamedOperation": 0,
+      "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+      "H_launchesNeverConsumed": 27,
+      "launchesLost": 0,
+      "attemptedCamps": 141,
+      "campDecisions": 172,
+      "refusalsByReason": {
+        "no_pending_operation_needing_camp": 261693
+      }
+    },
+    "hostile": {
+      "A_campsBlockedByAnyStoredNegative": 12,
+      "B_distinctNegativeRecordsThatBlock": 2,
+      "C_temporaryUseLaunches": 6,
+      "D_launchesWithSelectedOperation": 0,
+      "E_launchesAnsweredInTime": 0,
+      "F_launchesConsumedByNamedOperation": 0,
+      "G_launchesUsefulOnlyToUnrelatedOperations": 0,
+      "H_launchesNeverConsumed": 6,
+      "launchesLost": 0,
+      "attemptedCamps": 131,
+      "campDecisions": 174,
+      "refusalsByReason": {
+        "no_pending_operation_needing_camp": 263552
+      }
+    }
+  },
+  "sampleTraces": [],
+  "verdict": "LAUNCHES OCCUR BUT NO NAMED OPERATION EVER CONSUMES THE ANSWER — §13 Outcome B"
+}

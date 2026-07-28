@@ -19,6 +19,7 @@
 // was approved under, so the debug projection and the acceptance matrix can both read it
 // without re-deriving anything.
 
+import type { PendingOperationIdentity } from "../agents/pendingOperation";
 import type { FrontierVerificationQuestion } from "../agents/types";
 import type { TileId } from "../core/types";
 
@@ -28,6 +29,14 @@ export interface TaskCampOutcomeRow {
   readonly bandId: string;
   readonly tileId: string;
   readonly day: number;
+  /**
+   * CORRECTION-23J §8 — WHICH operation took this decision. Without it a camp refusal can only
+   * be counted in aggregate, which is exactly the inference §3.3 forbids: 23I could say that
+   * stored negatives prevented camps, but not that any particular launch informed any particular
+   * camp. The id is what turns those two statements into different measurements.
+   */
+  readonly operationId: string;
+  readonly activityKind: string;
   /** True when every physical precondition passed and only the evidence reader was consulted. */
   readonly reachedEvidenceReader: boolean;
   /** True when the evidence reader is what prevented the camp. */
@@ -84,6 +93,11 @@ export interface LaunchDecisionDependency {
   readonly exactReasonTheAnswerIsNeeded: string;
   /** `case_a` unlocks a rejected selected alternative; `case_b` can veto an imminent one. */
   readonly launchCase: "case_a_confirmation_unlocks" | "case_b_negative_vetoes";
+  /**
+   * CORRECTION-23J §5 — the ONE operation a `temporary_use` dependency names, when it names one.
+   * Absent for `water_access`, whose reader is the destination authority rather than a party.
+   */
+  readonly pendingOperation?: PendingOperationIdentity;
 }
 
 let dependencyRows: LaunchDecisionDependency[] | undefined;
@@ -124,7 +138,14 @@ export type LaunchRefusalReason =
   | "water_not_the_binding_blocker"
   | "already_settled_directly"
   | "no_pending_operation_needing_camp"
-  | "non_water_requirement_fails";
+  | "non_water_requirement_fails"
+  // CORRECTION-23J §6 — the temporary-use conditions, separated so the report can name WHICH
+  // one does the refusing rather than reporting one opaque total.
+  | "no_selected_operation"
+  | "operation_needs_no_camp_decision"
+  | "operation_camp_decision_already_passed"
+  | "answer_cannot_return_before_camp_decision"
+  | "consumption_beyond_one_season";
 
 let refusalCounts: Map<string, number> | undefined;
 
@@ -156,6 +177,73 @@ export function getLaunchRefusals(): Record<string, number> {
   return refusalCounts === undefined ? {} : Object.fromEntries(refusalCounts);
 }
 
+// ── CORRECTION-23J §8 verification journey rows ──────────────────────────────────────────
+//
+// The paired trace §8 requires cannot be assembled from launch counts and camp counts: joining
+// them needs the journey in between — which party went, when it left, when it physically came
+// home, and what it brought. These two row sets plus `TaskCampOutcomeRow.operationId` are exactly
+// what turns "negatives prevented camps somewhere" into "this launch informed that camp".
+
+export interface VerificationDepartureRow {
+  readonly verificationExpeditionId: string;
+  readonly bandId: string;
+  readonly question: FrontierVerificationQuestion;
+  readonly targetTileId: string;
+  readonly departureDay: number;
+  readonly routeTiles: number;
+}
+
+export interface VerificationReturnRow {
+  readonly verificationExpeditionId: string;
+  readonly bandId: string;
+  readonly question: FrontierVerificationQuestion;
+  readonly targetTileId: string;
+  readonly returnDay: number;
+  readonly outcome: "confirmed" | "negative" | "inconclusive";
+}
+
+let departureRows: VerificationDepartureRow[] | undefined;
+let returnRows: VerificationReturnRow[] | undefined;
+
+/** Starts (or with `false`, stops and discards) verification journey recording. */
+export function setVerificationJourneyRecording(enabled: boolean): void {
+  departureRows = enabled ? [] : undefined;
+  returnRows = enabled ? [] : undefined;
+}
+
+/** True while an audit is recording verification journeys. */
+export function isRecordingVerificationJourneys(): boolean {
+  return departureRows !== undefined;
+}
+
+/** Records one raised verification party. No-op when recording is off. */
+export function recordVerificationDeparture(row: VerificationDepartureRow): void {
+  if (departureRows === undefined) {
+    return;
+  }
+
+  departureRows.push(row);
+}
+
+/** Records one verification party that PHYSICALLY came home. A lost party never appears. */
+export function recordVerificationReturn(row: VerificationReturnRow): void {
+  if (returnRows === undefined) {
+    return;
+  }
+
+  returnRows.push(row);
+}
+
+/** Every recorded departure. */
+export function getVerificationDepartures(): readonly VerificationDepartureRow[] {
+  return departureRows ?? [];
+}
+
+/** Every recorded physical return. */
+export function getVerificationReturns(): readonly VerificationReturnRow[] {
+  return returnRows ?? [];
+}
+
 /** Convenience for callers that key by tile without importing the branded type. */
 export function tileKey(tileId: TileId): string {
   return String(tileId);
@@ -166,9 +254,17 @@ export function clearVerificationLaunchDiagnostics(): void {
   campRows = undefined;
   dependencyRows = undefined;
   refusalCounts = undefined;
+  departureRows = undefined;
+  returnRows = undefined;
 }
 
 /** True when any slot here is registered — asserted zero by the parity audit. */
 export function hasVerificationLaunchDiagnostics(): boolean {
-  return campRows !== undefined || dependencyRows !== undefined || refusalCounts !== undefined;
+  return (
+    campRows !== undefined ||
+    dependencyRows !== undefined ||
+    refusalCounts !== undefined ||
+    departureRows !== undefined ||
+    returnRows !== undefined
+  );
 }

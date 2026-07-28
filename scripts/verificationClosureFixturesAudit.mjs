@@ -32,6 +32,7 @@ try {
   const verification = await server.ssrLoadModule("/sim/agents/frontierVerification.ts");
   const exploration = await server.ssrLoadModule("/sim/agents/frontierExploration.ts");
   const diagnostics = await server.ssrLoadModule("/sim/diagnostics/verificationLaunchDiagnostics.ts");
+  const pendingOperation = await server.ssrLoadModule("/sim/agents/pendingOperation.ts");
 
   const THRESHOLD = capacity.WATER_ACCESS_OBSERVED_THRESHOLD;
 
@@ -234,15 +235,22 @@ try {
         campPermittedWithoutEvidence: evidence.taskCampRefusedByEvidence(band, targetTileId) === false,
         campRefusedByNegative: evidence.taskCampRefusedByEvidence(negative, targetTileId) === true,
       },
-      "The natural end-to-end chain is measured by temporaryUseCampPreventionAudit.mjs: 10,724 " +
-        "of 59,286 ACTUALLY ATTEMPTED camps are prevented across eleven worlds x five seeds x 40 y.",
+      "CORRECTION-23J §10 — the caveat that stood here cited 10,724 of 59,286 attempted camps. " +
+        "That figure does not reproduce on the commit it shipped in: running the same audit " +
+        "unmodified at 0955c87 gives 343 of 3,672 (9.34%). The old number described an " +
+        "intermediate dirty-tree state, not committed behaviour. What this fixture pins is the " +
+        "READER alone — a held negative refuses a camp — which is true and is all it tests. " +
+        "Whether a LAUNCH ever informs a camp is J8/J11, and the answer there is no.",
     );
   }
 
-  // ── I6 — no pending operation, no temporary-use launch ────────────────────────────────
+  // ── I6 — the temporary-use gate reads a SELECTED operation, not memory or presence ─────
   {
-    // Strip the patch memory and any active party for this tile: nothing is pending there.
-    const band = {
+    // CORRECTION-23J §14 — this fixture used to strip the patch memory and the expedition list
+    // and assert nothing was asked. That tested the weak assumption itself: of course a band
+    // with no memory and no parties asks nothing. What must be tested is the opposite — that a
+    // band with BOTH still does not ask, because neither is a selected pending operation.
+    const stripped = {
       ...withoutAnswer(baseBand, targetTileId, "temporary_use"),
       resourceKnowledgeState: {
         ...baseBand.resourceKnowledgeState,
@@ -253,8 +261,63 @@ try {
       expeditions: [],
     };
 
-    record("I6", "a temporary-use question is not asked where no operation is pending", {
-      notAsked: asks(band, targetTileId, "temporary_use") === false,
+    // Memory, restored. Intent, still absent.
+    const remembered = {
+      ...stripped,
+      resourceKnowledgeState: {
+        ...stripped.resourceKnowledgeState,
+        patchMemories: [
+          ...(stripped.resourceKnowledgeState.patchMemories ?? []),
+          {
+            ...(baseBand.resourceKnowledgeState?.patchMemories?.[0] ?? {}),
+            patchId: `fixture:patch:${targetTileId}`,
+            approximateTile: targetTileId,
+            linkedTiles: [],
+          },
+        ],
+      },
+    };
+
+    // A party at the target that has already passed its camp decision. Present, not pending.
+    const returningParty = {
+      ...remembered,
+      expeditions: [
+        {
+          id: "fixture:returning",
+          bandId: baseBand.id,
+          taskKind: "distant_plant_gathering",
+          phase: "returning",
+          originTileId: baseBand.position,
+          targetTileId,
+          targetPatchId: `fixture:patch:${targetTileId}`,
+          routeTileIds: [baseBand.position, targetTileId],
+          positionTileId: targetTileId,
+          routeIndex: 1,
+          departedDay: Number(world.time.day) - 6,
+          departedTick: world.time.tick,
+          plannedReturnDay: Number(world.time.day) + 4,
+          hardDeadlineDay: Number(world.time.day) + 10,
+          travelDaysElapsed: 4,
+          workDaysElapsed: 2,
+          partyWorkers: 3,
+          cargo: { harvestUnits: 0, carryCapacityUnits: 1, provisionUnitsConsumed: 0 },
+          injuryLoad: 0,
+          riskEpisodeIds: [],
+          reasonIds: [],
+        },
+      ],
+    };
+
+    record("I6", "neither a remembered patch nor a returning party is a pending operation", {
+      nothingPendingNotAsked: asks(stripped, targetTileId, "temporary_use") === false,
+      patchMemoryAloneNotAsked: asks(remembered, targetTileId, "temporary_use") === false,
+      returningPartyNotAsked: asks(returningParty, targetTileId, "temporary_use") === false,
+      returningPartyIsNotPending:
+        pendingOperation.derivePendingOperationAtTile(
+          returningParty.expeditions,
+          targetTileId,
+          Number(world.time.day),
+        ) === undefined,
     });
   }
 
