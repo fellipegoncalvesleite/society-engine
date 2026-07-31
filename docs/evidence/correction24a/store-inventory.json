@@ -1,0 +1,232 @@
+{
+  "years": 40,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3"
+  ],
+  "scenarios": [
+    "map1",
+    "map2",
+    "site_C_dry_plains",
+    "site_F_hills",
+    "ordinary"
+  ],
+  "explorationTilesSeen": 337910,
+  "bandsWithExplorationTiles": 20838,
+  "empiricalOverlap": {
+    "observedTiles": {
+      "holdsAnExplorationTile": 20838,
+      "bandsChecked": 0,
+      "tilesHeld": 337910
+    },
+    "placeMemory": {
+      "holdsAnExplorationTile": 2146,
+      "bandsChecked": 20838,
+      "tilesHeld": 2898
+    },
+    "placeAttachments": {
+      "holdsAnExplorationTile": 124,
+      "bandsChecked": 20838,
+      "tilesHeld": 124
+    },
+    "knownRoutes": {
+      "holdsAnExplorationTile": 0,
+      "bandsChecked": 20838,
+      "tilesHeld": 0
+    },
+    "compressedKnownTileSummaries": {
+      "holdsAnExplorationTile": 0,
+      "bandsChecked": 20838,
+      "tilesHeld": 0
+    },
+    "knownAreaSummaries": {
+      "holdsAnExplorationTile": 0,
+      "bandsChecked": 20838,
+      "tilesHeld": 0
+    },
+    "frontierInferredTiles": {
+      "holdsAnExplorationTile": 434,
+      "bandsChecked": 20838,
+      "tilesHeld": 1730
+    },
+    "resourcePatchMemory": {
+      "holdsAnExplorationTile": 0,
+      "bandsChecked": 20838,
+      "tilesHeld": 0
+    },
+    "travelCorridors": {
+      "holdsAnExplorationTile": 10,
+      "bandsChecked": 20838,
+      "tilesHeld": 10
+    },
+    "crossingMemories": {
+      "holdsAnExplorationTile": 0,
+      "bandsChecked": 20838,
+      "tilesHeld": 0
+    },
+    "protoCampMemory": {
+      "holdsAnExplorationTile": 0,
+      "bandsChecked": 20838,
+      "tilesHeld": 0
+    },
+    "verificationEvidence": {
+      "holdsAnExplorationTile": 68,
+      "bandsChecked": 20838,
+      "tilesHeld": 68
+    },
+    "seasonalRound": {
+      "holdsAnExplorationTile": 0,
+      "bandsChecked": 20838,
+      "tilesHeld": 0
+    }
+  },
+  "perScenario": {
+    "map1": {
+      "explorationTiles": 105788,
+      "bands": 7200,
+      "byStore": {
+        "observedTiles": 105788,
+        "placeMemory": 579,
+        "placeAttachments": 15,
+        "knownRoutes": 0,
+        "compressedKnownTileSummaries": 0,
+        "knownAreaSummaries": 0,
+        "frontierInferredTiles": 348,
+        "resourcePatchMemory": 0,
+        "travelCorridors": 0,
+        "crossingMemories": 0,
+        "protoCampMemory": 0,
+        "verificationEvidence": 0,
+        "seasonalRound": 0
+      }
+    },
+    "map2": {
+      "explorationTiles": 201573,
+      "bands": 12960,
+      "byStore": {
+        "observedTiles": 201573,
+        "placeMemory": 1957,
+        "placeAttachments": 67,
+        "knownRoutes": 0,
+        "compressedKnownTileSummaries": 0,
+        "knownAreaSummaries": 0,
+        "frontierInferredTiles": 672,
+        "resourcePatchMemory": 0,
+        "travelCorridors": 10,
+        "crossingMemories": 0,
+        "protoCampMemory": 0,
+        "verificationEvidence": 68,
+        "seasonalRound": 0
+      }
+    },
+    "site_C_dry_plains": {
+      "explorationTiles": 5638,
+      "bands": 1440,
+      "byStore": {
+        "observedTiles": 5638,
+        "placeMemory": 0,
+        "placeAttachments": 0,
+        "knownRoutes": 0,
+        "compressedKnownTileSummaries": 0,
+        "knownAreaSummaries": 0,
+        "frontierInferredTiles": 158,
+        "resourcePatchMemory": 0,
+        "travelCorridors": 0,
+        "crossingMemories": 0,
+        "protoCampMemory": 0,
+        "verificationEvidence": 0,
+        "seasonalRound": 0
+      }
+    },
+    "site_F_hills": {
+      "explorationTiles": 16604,
+      "bands": 1440,
+      "byStore": {
+        "observedTiles": 16604,
+        "placeMemory": 347,
+        "placeAttachments": 42,
+        "knownRoutes": 0,
+        "compressedKnownTileSummaries": 0,
+        "knownAreaSummaries": 0,
+        "frontierInferredTiles": 232,
+        "resourcePatchMemory": 0,
+        "travelCorridors": 0,
+        "crossingMemories": 0,
+        "protoCampMemory": 0,
+        "verificationEvidence": 0,
+        "seasonalRound": 0
+      }
+    },
+    "ordinary": {
+      "explorationTiles": 8307,
+      "bands": 1440,
+      "byStore": {
+        "observedTiles": 8307,
+        "placeMemory": 15,
+        "placeAttachments": 0,
+        "knownRoutes": 0,
+        "compressedKnownTileSummaries": 0,
+        "knownAreaSummaries": 0,
+        "frontierInferredTiles": 320,
+        "resourcePatchMemory": 0,
+        "travelCorridors": 0,
+        "crossingMemories": 0,
+        "protoCampMemory": 0,
+        "verificationEvidence": 0,
+        "seasonalRound": 0
+      }
+    }
+  },
+  "staticLedger": {
+    "observedTiles": {
+      "writer": "tileObservation.observeTileAndNearby",
+      "explorationCanPopulate": true,
+      "authoritativeReader": "carryingCapacity.collectOpportunityCandidates, campMovement, intraSeasonTrips, demography.getFissionTargetRecordIds",
+      "note": "THE canonical store. The exploration return calls this writer directly with acquisition returned_frontier_exploration."
+    },
+    "placeMemory": {
+      "writer": "memory.updatePlaceMemory, called ONLY from bandDecision.ts:981",
+      "explorationCanPopulate": "INDIRECTLY — updatePlaceMemory iterates addUnique(observedTileIds, nextPosition) and reads knownTiles[tileId]. observedTileIds comes from the RESIDENTIAL decision's own observation targets, never from the exploration route. A place record is therefore derived from an exploration-derived KnownTileRecord only once the band residentially reaches or observes that tile.",
+      "authoritativeReader": "protoCamps scoring, campMovement",
+      "sufficiencyOfOneRecordDeletion": "NOT sufficient once the band has residentially reached the tile — a derived copy then exists. The §6 ablation therefore strips placeMemory[tileId] as well."
+    },
+    "travelCorridors": {
+      "writer": "memory.updateTravelCorridorMemory(band.travelCorridors, decision, movementRecord)",
+      "explorationCanPopulate": false,
+      "authoritativeReader": "bandDecision corridor candidates",
+      "note": "Built from the RESIDENTIAL movement record and decision. The exploration hand-off never reaches it — this is the structural no-reader finding for the route/corridor family."
+    },
+    "crossingMemories": {
+      "writer": "memory.updateCrossingMemory(input, movementRecord)",
+      "explorationCanPopulate": false,
+      "authoritativeReader": "fordContext (PROJECTION — never called inside stepSim), crossingPractice",
+      "note": "Also movement-record derived."
+    },
+    "resourcePatchMemory": {
+      "writer": "intraSeasonTrips.applyActivityOutcomeToMemory",
+      "explorationCanPopulate": false,
+      "authoritativeReader": "trip target selection, expedition retrieval candidates",
+      "note": "Requires an existing ResourcePatchMemory as targetMemory. Frontier exploration carries no target patch, and CORRECTION-17's anti-omniscience check C4 (exploration_created_resource_memory) measures 0."
+    },
+    "compressedKnownTileSummaries": {
+      "writer": "memoryCompression.appendCompressedKnownSummary on eviction",
+      "explorationCanPopulate": true,
+      "authoritativeReader": "NONE — readers are spawn (writes []), memoryCompression itself, bandChronicle and bandHistory (both projections), demography (writes [] for a daughter).",
+      "sufficiencyOfOneRecordDeletion": "Irrelevant to the counterfactual: no behavioural reader consumes it."
+    },
+    "verificationEvidence": {
+      "writer": "verificationEvidence.recordVerificationEvidence + KnownTileRecord.verificationDisposition",
+      "explorationCanPopulate": false,
+      "authoritativeReader": "frontierVerification selector, taskCampRefusedByEvidence",
+      "note": "Written by verification parties only. CORRECTION-23J left the question dormant."
+    },
+    "frontierInferredTiles": {
+      "writer": "frontierKnowledge",
+      "explorationCanPopulate": false,
+      "authoritativeReader": "frontier heading derivation",
+      "note": "pruneObserved REMOVES observed tiles from the inferred set, so observing a tile empties it here rather than filling it. It is the complement of exploration knowledge, not a copy of it."
+    }
+  },
+  "conclusion": "See empiricalOverlap: any store with holdsAnExplorationTile > 0 must be stripped by the §6 one-record ablation."
+}

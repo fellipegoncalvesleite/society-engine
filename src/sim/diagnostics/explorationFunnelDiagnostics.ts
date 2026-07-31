@@ -632,6 +632,17 @@ export interface ExplorationRecordRow {
   readonly tileId: string;
   readonly expeditionId: string;
   readonly createdDay: number;
+  /**
+   * CORRECTION-24A FINALIZATION §6 — the audit-only identity of ONE writing event.
+   *
+   * It exists because `acquisition` is NOT a stable label for "this fact came from exploration".
+   * `tileObservation.ts:326-329` overwrites `acquisition` on every observation unless the existing
+   * record is already `residential_observation`, so an exploration-learned tile silently stops
+   * being labelled the moment the band residentially observes it. Any instrument that selects rows
+   * by the current label therefore drops exactly the tiles exploration mattered most for. Rows are
+   * keyed by this identity instead, and it is never persisted in canonical state.
+   */
+  readonly recordEventId: string;
   readonly isNewRecord: boolean;
   readonly acquisitionKind?: string;
   readonly confidence: number;

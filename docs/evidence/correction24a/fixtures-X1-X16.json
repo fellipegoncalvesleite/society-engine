@@ -13,9 +13,9 @@
     "hostile"
   ],
   "summary": {
-    "pass": 15,
+    "pass": 16,
     "fail": 0,
-    "vacuous": 1
+    "vacuous": 0
   },
   "fixtures": [
     {
@@ -41,13 +41,51 @@
     },
     {
       "id": "X3",
-      "title": "a band with motive but no band-known heading is classified NO_HEADING",
-      "verdict": "VACUOUS",
+      "title": "a band with motive but no band-known heading yields NO HEADING from the real heading authority",
+      "verdict": "PASS",
       "evidence": {
-        "rows": 0,
-        "headingAvailableRateOverall": 1
+        "controlledBands": 27,
+        "headingReturned": 0,
+        "noHeadingReturned": 27,
+        "motivePresentAmongNoHeading": 27,
+        "meanKnownTilesAfterNarrowing": 5,
+        "basesStillReturned": [],
+        "naturalNoHeadingRowsOnElevenWorlds": 0,
+        "headingAvailableRateNaturally": 1,
+        "examples": [
+          {
+            "band": "band:varied-dry-corridor-mid",
+            "seed": "s1",
+            "knownTilesAfter": 5,
+            "motivePresent": true,
+            "evidenceScore": 0.62,
+            "headingReturned": false,
+            "basis": null,
+            "anchorTileId": null
+          },
+          {
+            "band": "band:varied-dry-corridor-upper",
+            "seed": "s1",
+            "knownTilesAfter": 5,
+            "motivePresent": true,
+            "evidenceScore": 0.69,
+            "headingReturned": false,
+            "basis": null,
+            "anchorTileId": null
+          },
+          {
+            "band": "band:varied-estuary",
+            "seed": "s1",
+            "knownTilesAfter": 5,
+            "motivePresent": true,
+            "evidenceScore": 0.46,
+            "headingReturned": false,
+            "basis": null,
+            "anchorTileId": null
+          }
+        ]
       },
-      "note": "A heading was available on essentially every opportunity, so this class is genuinely rare rather than untested."
+      "note": "Constructed, not natural: the eleven worlds never reach this class, so the class is exercised on a controlled band-known state that only REMOVES knowledge. NO_HEADING is therefore architecturally reachable and the diagnostic class is not dead."
     },
     {
       "id": "X4",

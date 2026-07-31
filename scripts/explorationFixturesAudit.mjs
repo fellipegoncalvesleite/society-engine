@@ -51,6 +51,7 @@ try {
   const spawn = await server.ssrLoadModule("/sim/agents/spawn.ts");
   const diag = await server.ssrLoadModule("/sim/diagnostics/explorationFunnelDiagnostics.ts");
   const decision = await server.ssrLoadModule("/sim/rules/bandDecision.ts");
+  const frontier = await server.ssrLoadModule("/sim/agents/frontierExploration.ts");
 
   const isLiving = (band) =>
     band.viability?.status !== "extinct" &&
@@ -238,13 +239,105 @@ try {
     });
   }
 
-  // ── X3 — motive without a direction. ──
+  // ── X3 — motive without a direction, CONSTRUCTED (§7). ──
+  //
+  // No natural opportunity in eleven worlds ever reaches NO_HEADING, so the first pass recorded
+  // this VACUOUS. §7 requires either a real controlled state that reaches it, or a proof that the
+  // class is architecturally unreachable. It is reachable, and here is the construction.
+  //
+  // `deriveFrontierHeading` has exactly five branches and returns undefined only if all five fail:
+  //   (a) corridor continuation   — no corridor memory, no inferred tiles
+  //   (b) inherited/frontier intent — no band.frontierIntent
+  //   (c) viewshed water/relief cue — no cues
+  //   (d) farthest KNOWN EDGE tile  — the load-bearing one
+  //   (e) second-hand direction     — no inherited/reported records
+  //
+  // (d) needs a known, band-passable tile with an unknown 4-neighbour at distance >= 2 from camp
+  // (MIN_ANCHOR_DISTANCE_TILES = 2, and the search floor starts at MIN - 1 so distance must EXCEED
+  // 1). A band that knows ONLY its own tile and the 1-ring therefore has no qualifying edge: every
+  // tile it knows with an unknown neighbour sits at distance 1. That is an ordinary band-known
+  // state — a band that has never learned anything beyond arm's reach — and it reads no hidden
+  // truth: the construction only REMOVES knowledge, it never adds any.
   {
-    const noHeading = rows.filter((r) => r.primaryBlocker === "NO_HEADING");
-    record("X3", "a band with motive but no band-known heading is classified NO_HEADING", noHeading.length === 0 ? "VACUOUS" : noHeading.every((r) => !r.headingAvailable && r.eligible) ? "PASS" : "FAIL", {
-      rows: noHeading.length,
-      headingAvailableRateOverall: Math.round((count((r) => r.headingAvailable) / Math.max(1, rows.length)) * 10000) / 10000,
-    }, "A heading was available on essentially every opportunity, so this class is genuinely rare rather than untested.");
+    const attempts = [];
+
+    for (const seed of SEEDS) {
+      let w = build(FIXTURE_WORLDS[0], seed);
+
+      for (let d = 1; d <= 3 * 360; d += 1) w = runner.stepSim(w, 1, "daily");
+
+      for (const band of Object.values(w.bands).filter(isLiving)) {
+        const origin = w.tiles[band.position];
+
+        if (origin === undefined) continue;
+
+        // Knowledge kept: own tile + its 4-adjacent ring, nothing further.
+        const keep = new Set([String(band.position), ...origin.neighbors.map(String)]);
+        const observedTiles = Object.fromEntries(
+          Object.entries(band.knowledge.observedTiles).filter(([tileId]) => keep.has(String(tileId))),
+        );
+
+        const blind = {
+          ...band,
+          knowledge: {
+            ...band.knowledge,
+            observedTiles,
+            // (e) no second-hand direction, and no route memory to imply one.
+            knownRoutes: [],
+            placeAttachments: [],
+            rumors: [],
+          },
+          // (a) no corridor memory and no inferred frontier tiles.
+          travelCorridors: {},
+          frontierKnowledge: undefined,
+          // (b) no sustained directional intent.
+          frontierIntent: undefined,
+          // (c) no directional cue visible from camp. The field is `visibleLandscapeCues`, read by
+          // `selectDirectionalCue`; an earlier version of this fixture cleared a guessed
+          // `viewshedCues`/`landscapeVisibility` pair that does not exist, and the water-margin
+          // branch kept firing — which is why this fixture FAILED rather than passing quietly.
+          visibleLandscapeCues: [],
+        };
+
+        const blindWorld = { ...w, bands: { ...w.bands, [blind.id]: blind } };
+        const heading = frontier.deriveFrontierHeading(blindWorld, blind);
+        const eligibility = frontier.deriveFrontierExplorationEligibility(blindWorld, blind);
+
+        attempts.push({
+          band: String(band.id),
+          seed,
+          knownTilesAfter: Object.keys(observedTiles).length,
+          motivePresent: eligibility?.eligible === true,
+          evidenceScore: Math.round(Number(eligibility?.evidenceScore ?? 0) * 1000) / 1000,
+          headingReturned: heading !== undefined,
+          basis: heading?.basis ?? null,
+          anchorTileId: heading?.anchorTileId ?? null,
+        });
+      }
+    }
+
+    const noHeading = attempts.filter((a) => !a.headingReturned);
+    const naturalRows = rows.filter((r) => r.primaryBlocker === "NO_HEADING");
+
+    record(
+      "X3",
+      "a band with motive but no band-known heading yields NO HEADING from the real heading authority",
+      attempts.length === 0 ? "FAIL" : noHeading.length > 0 ? "PASS" : "FAIL",
+      {
+        controlledBands: attempts.length,
+        headingReturned: attempts.length - noHeading.length,
+        noHeadingReturned: noHeading.length,
+        motivePresentAmongNoHeading: noHeading.filter((a) => a.motivePresent).length,
+        meanKnownTilesAfterNarrowing:
+          Math.round((attempts.reduce((t, a) => t + a.knownTilesAfter, 0) / Math.max(1, attempts.length)) * 100) / 100,
+        basesStillReturned: [...new Set(attempts.filter((a) => a.headingReturned).map((a) => a.basis))],
+        naturalNoHeadingRowsOnElevenWorlds: naturalRows.length,
+        headingAvailableRateNaturally:
+          Math.round((count((r) => r.headingAvailable) / Math.max(1, rows.length)) * 10000) / 10000,
+        examples: noHeading.slice(0, 3),
+      },
+      "Constructed, not natural: the eleven worlds never reach this class, so the class is exercised on a controlled band-known state that only REMOVES knowledge. NO_HEADING is therefore architecturally reachable and the diagnostic class is not dead.",
+    );
   }
 
   // ── X4/X5 — TWO LIVE PROPOSALS, and the winner could physically launch (§13 strengthening). ──

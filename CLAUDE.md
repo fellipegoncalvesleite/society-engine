@@ -68,6 +68,65 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-07-31 (CORRECTION-24A FINALIZATION — EVENT-PAIRED FIRST-READER TRACE:
+  **THIS PASS CORRECTS THE ONE BELOW. Three of its conclusions are WITHDRAWN, and the cause is a
+  defect in the INSTRUMENT, not in the simulation.**
+
+  **THE PREVIOUS E6 WAS BIASED TOWARD NULL BY THE PRODUCTION WRITER.** `tileObservation.ts:326-329`
+  overwrites `acquisition` on every observation unless the record already reads
+  `residential_observation`, so a tile learned by exploration STOPS carrying the
+  `returned_frontier_exploration` label the moment the band residentially observes it. Any instrument
+  selecting rows by that label drops exactly the tiles exploration mattered most for. The old probe is
+  renamed **GLOBAL-SNAPSHOT SENSITIVITY** (0.84%/0.23%/0.19% at 40/200/500 y, denominator
+  band-snapshots). **WITHDRAWN: "the effect fades with time", "compounding is refuted", "the knowledge
+  is worth less than the labour it consumes", and "O2 makes outcomes worse".** **The same label bias
+  applies to the O5 arms** — `getFissionTargetRecordIds` suppresses on the same field — so the three
+  byte-identical O5 results are NOT evidence of inert readers.
+
+  **EVENT-PAIRED FIRST-READER TRACE (new, §6).** Every record carries an audit-only `recordEventId`
+  stamped at the canonical writer and is followed BY IDENTITY, not by label. One record at a time is
+  removed from ALL FIVE stores the §5 inventory proved can name it. 40 y, 11 worlds, 5 seeds,
+  **19,974 records**: movement **1,339/19,974**, camp **446**, resource **1,692**, fission
+  **1,160/14,053** changed a SELECTED ACTION — **4,637 records (23.2%)** in total, 3,743 within 90
+  days, **0 never read, 0 evicted before read**. Positive controls 96%/99.6%/27%/100%.
+  **BUT movement probe soundness is 59.7%** (11,930/19,974 reproduce production's own recorded
+  decision) and only **508 of 1,339** movement changes are physically realised. **So 2.5% is a FLOOR
+  with a closed physical chain and 23.2% is a CEILING of reader sensitivity; this pass did not narrow
+  the gap. Reader value is NOT claimed proven.**
+
+  **§5 AUTHORITATIVE-STORE INVENTORY over 337,910 exploration tiles.** FIVE stores can name one:
+  `observedTiles` (canonical), `placeMemory` (2,898 — derived once the band residentially reaches the
+  tile), `frontierInferredTiles` (1,730), `placeAttachments` (124), `verificationEvidence` (68),
+  `travelCorridors` (10). The last two are CO-NAMING, not copies. `resourcePatchMemory` is 0 (C4=0)
+  and `compressedKnownTileSummaries` has NO behavioural reader. **Deleting one KnownTileRecord is NOT
+  sufficient** — an earlier ablation stripped three and would have shipped the CORRECTION-23H failure.
+
+  **§8/§9 PAIRED MEDIATION.** O2 vs O0, 55 paired runs: **+6/-5/=44, median 0, bootstrap 95%
+  [-0.127, +0.291] crossing zero** — statistically indistinguishable from zero, which is what
+  withdraws the previous "-4.9%" claim (unpaired means). O3 preserves the first physical journey
+  **55/55**.
+
+  **§7 X3 IS NON-VACUOUS.** `NO_HEADING` is architecturally REACHABLE: branch (d) needs a known
+  passable tile with an unknown neighbour at distance > 1 (`MIN_ANCHOR_DISTANCE_TILES = 2`, floor
+  MIN-1), so a band knowing only its own tile and the 1-ring has nothing to point at. **9/9 controlled
+  bands return no heading with motive present** (evidence 0.46-0.69), `basesStillReturned: []`. The
+  construction only REMOVES knowledge. **X1-X16 = 16 PASS / 0 FAIL / 0 VACUOUS.**
+
+  **FOUR INSTRUMENT DEFECTS CAUGHT IN THIS PASS'S OWN PROBE**, each of which would have produced a
+  confident number: the camp reader read `candidates`/`selected`/`pressure`, none of which exist (a
+  vacuous 0/21); `ResourcePatchMemory` keys its tile as `approximateTile` not `tileId`; the fission
+  probe passed `contextCache: undefined` and `getFissionTargetRecordIds` then returns EVERY observed
+  tile instead of the salient subset (CORRECTION-23H bug #1 verbatim); and the movement probe first
+  ran AFTER the season-boundary step, scoring 0/33 soundness until moved to the pre-decision seam.
+
+  **§4.3 the dc08b2d -> 59391d54 comparison is DESCRIPTIVE ONLY** — the causal authority for
+  verification remains CORRECTION-23G's exact replay.
+
+  **NOT RUN: the 200- and 500-year event-paired matrices (§12).** Gate 12 is therefore UNMET and this
+  is reported as such rather than as closure. See docs/evidence/correction24a/COMPLETION_FINDINGS.md
+  sections F1-F6.)
+
+Previously updated:
   2026-07-29 (ORDINARY EXPLORATION CAUSAL CLOSURE — CORRECTION-24A COMPLETION:
   PROGRESS — LAUNCH THROTTLING CONFIRMED / NO EVIDENCE THAT MORE EXPLORATION IS BENEFICIAL.
   Branch checkpoint/ordinary-exploration-capacity-24, continuing d865beec. CORRECTION-23 FROZEN,

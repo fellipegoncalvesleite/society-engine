@@ -573,3 +573,274 @@ exploration improvement, because this pass shows it would not be one.
 * Not that the cooldown should be shortened. It is the largest number and the least justified repair.
 * Not that returned knowledge is worthless in principle — only that **this** chain, with **these**
   readers, does not consume it in a way that changes what bands physically do.
+
+---
+---
+
+# CORRECTION-24A FINALIZATION — EVENT-PAIRED TRACE / MEDIATION / NON-VACUOUS X3
+
+Continuing `4c44079`. CORRECTION-23 frozen at `59391d54`. Both `main` refs untouched.
+
+**This section CORRECTS the one above.** Two claims made there do not survive, and the reason is a
+defect in the instrument rather than in the simulation.
+
+---
+
+## F1. What the previous E6 actually measured (§4.1)
+
+The instrument reported as "E6 first-reader consumption" was:
+
+```
+PERIODIC GLOBAL EXPLORATION-KNOWLEDGE ABLATION
+```
+
+and its result must be read as **sampled current-action sensitivity when ALL exploration-derived
+`KnownTileRecord`s are removed at once**. It is not a first-reader trace: it cannot say when a
+record was first read, by which family, or whether that read was the first.
+
+**And it is biased toward null by the production writer.** `tileObservation.ts:326-329`:
+
+```ts
+acquisition:
+  existingRecord?.acquisition === "residential_observation"
+    ? "residential_observation"
+    : acquisition,
+```
+
+`acquisition` is overwritten on every observation unless the record already reads
+`residential_observation`. So a tile the band learned by exploration **stops carrying the
+`returned_frontier_exploration` label the moment the band residentially observes it** — and an
+instrument that selects rows by that label silently drops exactly the tiles exploration plausibly
+mattered most for, the ones the band went on to live in or near.
+
+**Consequences, stated plainly:**
+
+* The 0.84% / 0.23% / 0.19% figures are **not** the rate at which exploration records are consumed.
+* The claim that the effect **"fades with time"** and that **compounding is refuted** is
+  **WITHDRAWN**. Those numbers cannot support it.
+* The claim that **"the knowledge is worth less than the labour it consumes"** is **WITHDRAWN**. It
+  was never mediated.
+* **The same bias applies to the O5 arms.** `getFissionTargetRecordIds`' suppression predicate also
+  tests the current `acquisition` label, so the three byte-identical O5 results are byte-identical
+  in part because the predicate had nothing left to hide. They are not evidence of inert readers.
+
+The global ablation is retained, under its own name, in §F5. Its denominator is band-snapshots; the
+event-paired denominator is records. **They are not pooled and are not comparable as rates.**
+
+---
+
+## F2. Authoritative-store inventory (§5)
+
+Measured over **337,910 exploration tiles across 20,838 band-snapshots**, sampled DURING runs (an
+end-of-run snapshot reports zero, because compression evicts most records and the label upgrade
+removes the rest).
+
+| store | writer | exploration can populate | behavioural reader | names an exploration tile |
+| --- | --- | --- | --- | ---: |
+| `observedTiles` | `observeTileAndNearby` | **yes — the canonical write** | movement, camp, resource, fission | 337,910 |
+| `placeMemory` | `updatePlaceMemory` (only from `bandDecision.ts:981`) | indirectly — derived from `knownTiles[tileId]` once the band residentially reaches the tile | protoCamps, campMovement | **2,898** |
+| `frontierKnowledge.inferredTiles` | `frontierKnowledge` | complement, not a copy | heading derivation | **1,730** |
+| `placeAttachments` | knowledge update | indirectly | camp/attachment scoring | **124** |
+| `verificationEvidence` | `recordVerificationEvidence` | no — co-naming only | verification selector | **68** |
+| `travelCorridors` | `updateTravelCorridorMemory` from the RESIDENTIAL movement record | no — co-naming only | corridor candidates | **10** |
+| `resourcePatchMemory` | `applyActivityOutcomeToMemory` | **no** (anti-omniscience C4 = 0) | trip selection | 0 |
+| `compressedKnownTileSummaries` | `memoryCompression` on eviction | yes | **NONE** — every reader is a projection or writes `[]` | 0 |
+| `knownRoutes`, `knownAreaSummaries`, `crossingMemories`, `protoCampMemory`, `seasonalRound` | — | — | — | 0 |
+
+**Deleting one `KnownTileRecord` is NOT sufficient.** Five stores can name the tile, so the §6
+ablation strips all five. An earlier version of the ablation stripped three and would have shipped a
+partly-shadowed counterfactual — the exact CORRECTION-23H failure this inventory exists to prevent.
+
+`travelCorridors` and `verificationEvidence` are **co-naming, not copies**: a corridor is built from
+the residential movement record and verification evidence from a verification party. The route/corridor
+structural no-reader finding therefore stands; the store is stripped anyway, because the ablation's
+job is to remove the fact, not to argue about it.
+
+---
+
+## F3. Event-paired first-reader trace (§6)
+
+Every record written by a returned frontier-exploration party carries an audit-only `recordEventId`
+stamped at the canonical writer, and is followed **by that identity** regardless of what its label
+later becomes. At the first invocation of each family after arrival, the reader runs twice on the
+same snapshot — canonical, and with only that one record removed from all five stores.
+
+**40 years, eleven worlds, five shared seeds, 19,974 records.**
+
+| reader family | probes | verdict moved | ranking moved | **selected action moved** | positive control |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| movement / destination | 19,974 | 2,334 | 2,301 | **1,339 (6.7%)** | 2,099/2,179 (96%) |
+| camp | 19,974 | 70 | 411 | **446 (2.2%)** | 2,289/2,299 (99.6%) |
+| resource activity | 19,974 | 122 | 1,557 | **1,692 (8.5%)** | 592/2,179 (27%) |
+| daughter / fission | 14,053 | 1,920 | 1,160 | **1,160 (8.3%)** | 2,268/2,268 (100%) |
+| route / corridor | — | — | — | — | **STRUCTURAL NO READER** |
+
+**4,637 of 19,974 records (23.2%) change at least one reader's selected action.** 3,743 within 90
+days, all 4,637 within 360. **0 never read. 0 evicted before read.** 16,636 read but inert.
+
+### The soundness limit, which caps what this licenses
+
+| check | result |
+| --- | ---: |
+| movement probe reproduces production's own recorded decision | **11,930 / 19,974 (59.7%)** |
+| movement selected-action changes | 1,339 |
+| … physically realised (band at the new target within 90 days) | **508** |
+| … not realised within 90 days | 537 |
+| … unresolved at run end | 294 |
+
+The probe re-derives a reader on a snapshot; production applies intra-step context (acute risk,
+cache rebuilds) before `evaluateBandDecision` that the snapshot does not reproduce. A first version
+of this check scored **0/33** because it probed AFTER the season-boundary step, re-evaluating a band
+whose decision had already been applied — the CORRECTION-16 wrong-seam error. Moving the probe to
+the pre-decision day lifted it to 59.7%.
+
+**So §6.5's chain closes fully for 508 records (2.5%)** — returned → canonical writer → authoritative
+reader → one-record counterfactual changed the selected action → the band was physically at the new
+target. It does **not** close for the other 831 movement changes, and the camp / resource /
+fission changes are reader-verdict changes whose physical consequence is unmeasured.
+
+**What may be said:** the readers demonstrably consume these records at scale, and the previous
+"non-binding" conclusion rested on a biased instrument.
+**What may NOT be said:** that reader value is proven. 2.5% is a floor with a closed chain; 23.2% is
+a ceiling of reader sensitivity; the truth is between them and this pass did not narrow it further.
+
+### Decisive examples
+
+| family | latency | verdict | action |
+| --- | ---: | --- | --- |
+| movement | 80 d | 3.15 → 2.70 | `explore_unknown_neighbor` → `move_to_tile` |
+| fission | 260 d | 1.11 → 1.18 | target `tile:95:24` → `tile:98:23` |
+| resource | 2–3 d | patch set | local patch set changes |
+
+### Four instrument defects caught in this probe, each of which would have produced a confident number
+
+1. The camp reader read `candidates` / `selected` / `pressure` — **none exist**. It returned verdict
+   0 and ranking `""` on every snapshot; its `0/21` was measuring nothing. Real shape:
+   `{ influences: [{ scale, status, targetTileId, scoreDelta }] }`.
+2. `ResourcePatchMemory` keys its tile as `approximateTile`, not `tileId`.
+3. The fission probe passed `contextCache: undefined`, and `getFissionTargetRecordIds` **falls back
+   to every observed tile** in that case while production passes a cache and gets the salient
+   subset — CORRECTION-23H's instrument bug #1 verbatim. The cache is now built per arm, including a
+   rebuild for the ablated world.
+4. The ablation stripped three stores when the inventory proved five can name the tile.
+
+---
+
+## F4. X3 is non-vacuous (§7)
+
+`NO_HEADING` is **architecturally reachable**, and the class is now exercised.
+
+`deriveFrontierHeading` has five branches and returns `undefined` only if all five fail. The
+load-bearing one is (d), the farthest known EDGE tile: it requires a known, band-passable tile with
+an unknown 4-neighbour at distance **> 1** (`MIN_ANCHOR_DISTANCE_TILES = 2`, search floor `MIN - 1`).
+**A band that knows only its own tile and the 1-ring has every unknown-neighbouring tile at distance
+1**, so branch (d) finds nothing to point at.
+
+Controlled state: knowledge narrowed to own tile + 1-ring; `travelCorridors`, `frontierKnowledge`,
+`frontierIntent`, `visibleLandscapeCues`, `knownRoutes`, `placeAttachments` and `rumors` cleared.
+The construction only **removes** knowledge and reads no hidden truth.
+
+**Result: 9/9 controlled bands return NO heading**, `basesStillReturned: []`, with motive genuinely
+present on all nine (evidence scores 0.46–0.69).
+
+A first version of this fixture **FAILED** because it cleared a guessed `viewshedCues` /
+`landscapeVisibility` pair that does not exist; the real field is `visibleLandscapeCues`, read by
+`selectDirectionalCue`, and the `water_margin` branch kept firing. The fixture failing loudly rather
+than passing quietly is the point of building it this way.
+
+---
+
+## F5. Global-snapshot sensitivity, kept separate (§10)
+
+```
+GLOBAL-SNAPSHOT SENSITIVITY
+```
+
+40 y 7/833 · 200 y 4/1,716 · 500 y 3/1,539, positive control sensitive at every horizon. Denominator
+is **band-snapshots**, not records. **Not pooled with §F3 and not to be read as first-reader
+consumption.** The 500-year row covers **only the two default maps**.
+
+---
+
+## F6. Historical comparison stays descriptive (§4.3)
+
+`dc08b2d → 59391d54` is **not** a single-variable verification-removal counterfactual — the two
+commits differ by more than one thing and the comparison is reported as description only. The causal
+authority for verification's contribution remains **CORRECTION-23G's exact travel replay**, which
+held the schedule and routes fixed and found the semantics inert.
+
+---
+
+## F7. O2 and O3 mediation with paired uncertainty (§8/§9)
+
+Arm and control share the world, the seed and the ordering. **55 paired runs each**, 40 years,
+eleven worlds × five seeds, paired bootstrap of the mean paired difference (2,000 iterations,
+deterministic PRNG).
+
+| arm | + | − | tied | median | mean | bootstrap 95% | crosses zero |
+| --- | ---: | ---: | ---: | ---: | ---: | --- | :---: |
+| **O2** fallthrough repaired | 6 | 5 | **44** | **0** | 0.073 | **[−0.127, +0.291]** | **yes** |
+| **O3** knowledge withheld | 28 | 18 | 9 | **+1** | 0.218 | **[−0.364, +0.800]** | **yes** |
+
+**Both intervals contain zero.** Neither arm has a demonstrable population effect.
+
+### This withdraws two claims from the section above
+
+* **"O2 makes outcomes worse (−4.9%)"** — WITHDRAWN. That came from comparing **unpaired arm means
+  at 200 years**. Paired at 40 years, **44 of 55 runs are exact ties** and the median difference is
+  **0**. §8 forbids inferring a mechanism from mean population, and forbids calling O2 harmful unless
+  the mechanism and uncertainty support it. They do not.
+* **"O3 makes outcomes better / knowledge costs more than it returns"** — WITHDRAWN for the same
+  reason. Median +1 person, interval [−0.364, +0.800].
+
+### O2 first-divergence mediation (§8)
+
+42 of 55 pairs diverge at all; first divergence **median day 4,770 (year 13)**, range 1,260–14,136.
+**22 of 55** runs changed launch count. Worked example, map1 s1:
+
+```
+fallthrough 423 -> 0  ->  launches 59 -> 62  ->  records 832 -> 877
+  ->  worker-days away 3,192 -> 2,524  ->  receipts 0.1259 -> 0.1191  ->  population 159 -> 162
+```
+
+Note the worker-days column: O2 does **not** cost more labour away — it sends slightly more parties
+that are away for less total time. The earlier "the knowledge is worth less than the labour it
+consumes" story is not what the chain shows, which is the second reason it is withdrawn.
+
+### O3 exact physical parity to the return seam (§9)
+
+**55/55 runs: the first journey is identical** on id, departure day, route steps, deepest reach,
+duration, forced return and loss. O3 is therefore a genuine knowledge arm — it changes only the
+residential hand-off, never the journey. First divergence lands at **day ~100–102** on the
+single-founder worlds, immediately after the first return, which is exactly where the withheld
+write would have occurred.
+
+---
+
+## F8. Verdict
+
+```
+PROGRESS — READER CONSUMPTION PROVEN AT THE READER, NOT AT THE ACTION /
+AGGREGATE EFFECT INDISTINGUISHABLE FROM ZERO /
+GATE 12 UNMET
+```
+
+Not `PASS — CORRECTION-24 CLOSED`, because **§12's 200- and 500-year event-paired matrices were not
+run**. Gate 12 is unmet and this is reported rather than implied complete.
+
+Not `ORDINARY-EXPLORATION READER VALUE PROVEN`, because §6.5's chain closes fully for **508 records
+(2.5%)** and the movement probe reproduces production's own decision only **59.7%** of the time.
+
+Not the previous pass's `NO EVIDENCE THAT MORE EXPLORATION IS BENEFICIAL` either, because that
+rested on an instrument this pass shows was biased by the `acquisition` overwrite.
+
+**What is established:** the launch throttle and the scheduler fallthrough are real and precisely
+located; the readers demonstrably consume returned records (23.2% change a selected action, 0 never
+read, 0 evicted before read); and **the aggregate demographic consequence of both repairing the
+throttle and destroying the knowledge entirely is indistinguishable from zero over 55 paired runs.**
+
+**What is not established:** how much of the 23.2% reaches a physical action. 2.5% is a floor with a
+closed chain; 23.2% is a ceiling of reader sensitivity. This pass did not narrow that gap, and no
+production repair is justified on either number.
+
+**No production repair is made. Bounded route-failure memory is deliberately NOT implemented.**

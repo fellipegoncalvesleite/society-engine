@@ -798,6 +798,23 @@ function hasReachablePatchMemory(
   return false;
 }
 
+/**
+ * CORRECTION-24A FINALIZATION §6.1 — audit-only entry to the REAL resource-activity reader of
+ * band tile knowledge.
+ *
+ * The resource-activity family selects trips from `ResourcePatchMemory`, which ordinary exploration
+ * never writes (anti-omniscience C4 measures 0). Its ONLY read of `observedTiles` is the local
+ * reconnaissance starting state below, so that is the entry the event-paired counterfactual must
+ * hit. Calls the same function with the same inputs; removed by the CORRECTION-24 cleanup commit.
+ */
+export function buildStartingLocalReconnaissanceStateForAudit(
+  world: WorldState,
+  band: Band,
+  day: number,
+): ResourceKnowledgeState | undefined {
+  return buildStartingLocalReconnaissanceState(world, band, day);
+}
+
 function buildStartingLocalReconnaissanceState(
   world: WorldState,
   band: Band,

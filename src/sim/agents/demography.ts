@@ -1194,6 +1194,24 @@ function selectFissionTarget(
     .sort((left, right) => compareFissionTargetsSeeded(world, band, left, right))[0];
 }
 
+/**
+ * CORRECTION-24A FINALIZATION §6.1 — audit-only entry to the REAL fission target selector.
+ *
+ * §6.1 requires the event-paired counterfactual to hit "the actual production entry point for each
+ * real reader family". `selectFissionTarget` is module-private, and probing a nearby exported
+ * function instead (`deriveKnownBandSpacingForFission` is a spacing check for a target already
+ * chosen) would answer a different question. This calls the same function with the same inputs and
+ * changes no behaviour; it is removed by the CORRECTION-24 cleanup commit.
+ */
+export function selectFissionTargetForAudit(
+  world: WorldState,
+  band: Band,
+  comfortablePopulation: number,
+  contextCache?: TickContextCache,
+): FissionTargetCandidate | undefined {
+  return selectFissionTarget(world, band, comfortablePopulation, contextCache);
+}
+
 // VAR-1: fission-target ordering with the same seeded near-tie jitter as
 // movement (where a daughter founds is a key migration-divergence lever).
 // runSeed undefined → reduces to compareFissionTargets (legacy byte-identical);

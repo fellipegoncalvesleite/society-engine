@@ -2907,6 +2907,8 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
           recordExplorationRecord({
             bandId: String(currentBand.id),
             tileId: String(tileId),
+            // §6 — identity of THIS writing event, not of the tile's current label.
+            recordEventId: `${String(currentBand.id)}|${String(tileId)}|${Number(day)}`,
             expeditionId: String(journey?.id ?? ""),
             createdDay: Number(day),
             isNewRecord: isNew,
