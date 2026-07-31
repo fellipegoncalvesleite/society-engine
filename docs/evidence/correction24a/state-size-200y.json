@@ -1,0 +1,37 @@
+{
+  "arm": "K0",
+  "samples": [
+    {
+      "years": 25,
+      "bands": 1,
+      "population": 24,
+      "observedTilesPerBand": 72,
+      "dispositionRowsPerBand": 0,
+      "dispositionKbPerBand": 0.14,
+      "knowledgeKbPerBand": 141.55,
+      "bandKbTotal": 1484.52,
+      "chronologicalEvidenceRowsPerBand": 0,
+      "displayRingRowsPerBand": 0
+    },
+    {
+      "years": 50,
+      "bands": 1,
+      "population": 17,
+      "observedTilesPerBand": 72,
+      "dispositionRowsPerBand": 0,
+      "dispositionKbPerBand": 0.14,
+      "knowledgeKbPerBand": 168.13,
+      "bandKbTotal": 1539.03,
+      "chronologicalEvidenceRowsPerBand": 0,
+      "displayRingRowsPerBand": 0
+    },
+    {
+      "years": 100,
+      "extinct": true
+    },
+    {
+      "years": 200,
+      "extinct": true
+    }
+  ]
+}

@@ -80,12 +80,27 @@ import { observeTileAndNearby } from "./tileObservation";
 import { getNeighborTiles, getTile } from "../world/generate";
 // CORRECTION-24A §8 — audit-only exploration funnel; no-ops when unregistered.
 import {
+  amendExplorationJourney,
+  classifyExplorationOpportunity,
+  isExplorationPriorityArm,
+  isFallthroughRepairArm,
   isRecordingExplorationFunnel,
+  isRecordingExplorationJourneys,
+  isRecordingExplorationRecords,
+  noteClaimFailure,
+  noteFrontierStepDay,
+  recordExplorationJourney,
+  recordExplorationRecord,
+  takeFrontierStepDays,
   noteExplorationNotOffered,
   noteExplorationOffered,
+  noteProposalCandidates,
   recordExplorationFunnel,
   takeExplorationOfferState,
-  type ExplorationBlocker,
+  takeProposalCandidates,
+  type PostClaimFailure,
+  type SchedulerFamily,
+  type SchedulerFamilyLedgerRow,
   type SchedulerOutcome,
 } from "../diagnostics/explorationFunnelDiagnostics";
 import {
@@ -644,6 +659,9 @@ function advanceFrontierExplorationOutboundDay(
   // in every normal world => this branch is never taken.
   const lostBeforeReturn =
     terminal !== undefined && world.auditOptions?.frontierExplorationAlwaysLost === true;
+
+  // CORRECTION-24A §9 E4 — audit-only; no-op when nothing is recording.
+  noteFrontierStepDay(expedition.id, stepsTaken);
 
   const walkedKm = stepsTaken * KM_PER_TILE;
   const moved: ExpeditionRecord = {
@@ -1949,61 +1967,164 @@ function recordExplorationOpportunity(
   // an emergency displacing exploration.
   const retrievalUrgent = foodStress >= 0.35;
 
-  // ── §9 — the ONE primary blocker, evaluated in the physical order production applies. ──
-  const secondary: ExplorationBlocker[] = [];
-  const note = (blocker: ExplorationBlocker, condition: boolean): void => {
-    if (condition) secondary.push(blocker);
+  // §4.1 — a party PHYSICALLY AWAY right now, which the 12-tick cooldown outlives. The first pass
+  // called the cooldown `ALREADY_EXPLORING` and so could not tell the two apart.
+  const activeFrontierParty = active.some((expedition) => expedition.taskKind === "frontier_exploration");
+
+  // ── §6 — THE COMPLETE PHYSICAL-FEASIBILITY CONTRACT, through production authorities. ──
+  //
+  // Ordinary exploration discovers its route one physical step at a time, so there is no full route
+  // to test and §6 explicitly forbids requiring one. What CAN be tested before the party is raised
+  // is whether it could physically leave: build the plan production would build, prepare the record
+  // production would prepare, and ask the production step and reserve authorities. All four calls
+  // are pure — nothing below mutates the band, the world or the expedition list.
+  const plan =
+    heading === undefined
+      ? undefined
+      : buildFrontierPlan({
+          heading: { x: heading.heading.x, y: heading.heading.y },
+          basis: heading.basis,
+          anchorTileId: heading.anchorTileId,
+          headingConfidence: heading.headingConfidence,
+          outboundBudgetTiles: FRONTIER_OUTBOUND_BUDGET_TILES,
+          returnReserveTiles: FRONTIER_OUTBOUND_BUDGET_TILES,
+        });
+  const probe =
+    plan === undefined
+      ? undefined
+      : {
+          ...createPreparedExpedition({
+            band: before,
+            taskKind: "frontier_exploration" as ExpeditionTaskKind,
+            targetTileId: plan.anchorTileId,
+            targetPatchId: `frontier:${plan.sector}:${plan.basis}`,
+            routeTileIds: [before.position],
+            partyWorkers: 2,
+            day,
+          }),
+          frontierPlan: plan,
+          frontierDeepestReachTiles: 0,
+        };
+  const tilesPerDay = probe === undefined ? 0 : deriveTilesPerDay(before, probe, currentTick);
+  const returnReserveTiles =
+    probe === undefined
+      ? 0
+      : deriveOutwardTilesRemaining({
+          trailLength: 1,
+          tilesPerDay,
+          daysElapsed: 0,
+          maxDurationDays: EXPEDITION_MAX_DURATION_DAYS,
+          outboundBudgetTiles: FRONTIER_OUTBOUND_BUDGET_TILES,
+        });
+  const firstStepOutcome =
+    probe === undefined ? "no_plan" : chooseNextFrontierStep(world, probe, returnReserveTiles).kind;
+  // The duration envelope a raised party would carry. `plannedReturnDay` comes from the same
+  // `createPreparedExpedition` production uses, so this is production's own budget, not a replica.
+  const durationBudgetDays = probe === undefined ? 0 : Number(probe.hardDeadlineDay) - Number(day);
+
+  const offerState = takeExplorationOfferState(before.id, Number(day));
+  const candidates = takeProposalCandidates(before.id, Number(day));
+
+  const classification = classifyExplorationOpportunity({
+    activeCapFull,
+    onLaunchCadence,
+    departableWorkers,
+    suppressionWindowActive,
+    activeFrontierParty,
+    eligible: eligibility.eligible,
+    noKnownNonOverlappingDestination: eligibility.noKnownNonOverlappingDestination,
+    knownEdgeTiles,
+    headingAvailable: heading !== undefined,
+    partyCompositionAvailable: partyComposition !== undefined,
+    firstStepOutcome,
+    returnReserveTiles,
+    durationBudgetDays,
+    schedulerOutcome,
+    retrievalUrgent,
+    explorationOffered: offerState.offered,
+    ...(offerState.claimFailure === undefined ? {} : { claimFailure: offerState.claimFailure }),
+  });
+
+  // ── §7 — THE SAME-DECISION PROPOSAL LEDGER. ──
+  //
+  // One row per family for THIS decision. Active expeditions are deliberately absent: a party
+  // already walking is not a proposal competing for today's slot, and recording it as one was the
+  // first pass's `competingProposals` error.
+  const claimed = offerState.claimedBy;
+  const ledger: SchedulerFamilyLedgerRow[] = [];
+  const push = (
+    family: SchedulerFamily,
+    exists: boolean,
+    target: string | undefined,
+    eligible: boolean,
+    reached: boolean,
+    workers: number,
+  ): void => {
+    const isClaimer = claimed === family || (family === "frontier_exploration" && offerState.offered);
+    const launched =
+      (family === "frontier_exploration" && schedulerOutcome === "exploration") ||
+      (family === "distant_retrieval" && schedulerOutcome === "distant_plant_gathering") ||
+      (family === "distant_patch_verification" && schedulerOutcome === "distant_patch_verification") ||
+      (family === "route_reconnaissance" && schedulerOutcome === "route_reconnaissance") ||
+      (family === "frontier_water_verification" && schedulerOutcome === "frontier_verification");
+    ledger.push({
+      family,
+      candidateExists: exists,
+      ...(target === undefined ? {} : { candidateTarget: target }),
+      eligible,
+      priorityStatus: isClaimer ? "claimed" : reached ? "considered" : "not_reached",
+      workersRequired: workers,
+      partyCompositionAvailable: family === "frontier_exploration" ? partyComposition !== undefined : exists,
+      ...(isClaimer && !launched && offerState.claimFailure !== undefined
+        ? { reasonFailedAfterSelection: offerState.claimFailure }
+        : {}),
+      ...(isClaimer ? { reasonSelected: "highest priority family with a candidate" } : {}),
+      ...(!isClaimer && !exists ? { reasonRejectedBeforeSelection: "no candidate" } : {}),
+      ...(!isClaimer && exists && !reached ? { reasonRejectedBeforeSelection: "earlier family claimed" } : {}),
+      actualLaunch: launched,
+    });
   };
 
-  note("ACTIVE_CAP_FULL", activeCapFull);
-  note("OFF_LAUNCH_CADENCE", !onLaunchCadence);
-  note("POPULATION_TOO_SMALL", departableWorkers < 2);
-  note("ALREADY_EXPLORING", suppressionWindowActive);
-  note("NO_MOTIVE", !eligibility.eligible);
-  note("ADEQUATE_KNOWN_ALTERNATIVE", !eligibility.noKnownNonOverlappingDestination);
-  note("NO_BAND_KNOWN_FRONTIER", knownEdgeTiles === 0);
-  note("NO_HEADING", heading === undefined);
-  note("INSUFFICIENT_LABOR", partyComposition === undefined);
-
-  const offerState = takeExplorationOfferState();
-
-  const validProposal =
-    !activeCapFull &&
-    onLaunchCadence &&
-    departableWorkers >= 2 &&
-    !suppressionWindowActive &&
-    eligibility.eligible &&
-    heading !== undefined &&
-    partyComposition !== undefined;
-
-  const primaryBlocker: ExplorationBlocker = activeCapFull
-    ? "ACTIVE_CAP_FULL"
-    : !onLaunchCadence
-      ? "OFF_LAUNCH_CADENCE"
-      : departableWorkers < 2
-        ? "POPULATION_TOO_SMALL"
-        : suppressionWindowActive
-          ? "ALREADY_EXPLORING"
-          : !eligibility.eligible
-            ? // A band that already knows a viable destination outside its range is not failing
-              // to explore — it has nowhere it needs to look. That is a different finding from
-              // having no motive at all, and §9 keeps them apart.
-              !eligibility.noKnownNonOverlappingDestination
-              ? "ADEQUATE_KNOWN_ALTERNATIVE"
-              : "NO_MOTIVE"
-            : knownEdgeTiles === 0
-              ? "NO_BAND_KNOWN_FRONTIER"
-              : heading === undefined
-                ? "NO_HEADING"
-                : partyComposition === undefined
-                  ? "INSUFFICIENT_LABOR"
-                  : schedulerOutcome === "exploration"
-                    ? "SELECTED"
-                    : schedulerOutcome === "nothing"
-                      ? "VALID_BUT_IDLE_SLOT_UNUSED"
-                      : retrievalUrgent
-                        ? "DISPLACED_BY_URGENT_TASK"
-                        : "DISPLACED_BY_NONURGENT_TASK";
+  push(
+    "distant_retrieval",
+    candidates?.retrievalExists ?? false,
+    candidates?.retrievalTarget,
+    candidates?.retrievalWorthwhile ?? false,
+    true,
+    candidates?.partyWorkers ?? departableWorkers,
+  );
+  push(
+    "frontier_water_verification",
+    schedulerOutcome === "frontier_verification" || (candidates?.waterVerificationGateOpen ?? false),
+    undefined,
+    candidates?.waterVerificationGateOpen ?? schedulerOutcome === "frontier_verification",
+    true,
+    2,
+  );
+  push(
+    "distant_patch_verification",
+    candidates?.patchVerificationExists ?? false,
+    candidates?.patchVerificationTarget,
+    candidates?.patchVerificationExists ?? false,
+    candidates !== undefined,
+    2,
+  );
+  push(
+    "route_reconnaissance",
+    candidates?.reconnaissanceExists ?? false,
+    candidates?.reconnaissanceTarget,
+    candidates?.reconnaissanceExists ?? false,
+    candidates !== undefined,
+    2,
+  );
+  push(
+    "frontier_exploration",
+    classification.eligibleExplorationIntent,
+    plan === undefined ? undefined : String(plan.anchorTileId),
+    classification.physicallyValidExplorationProposal,
+    offerState.offered,
+    2,
+  );
 
   recordExplorationFunnel({
     bandId: String(before.id),
@@ -2029,15 +2150,30 @@ function recordExplorationOpportunity(
     onLaunchCadence,
     suppressionWindowActive,
     ...(ticksSinceLastExploration === undefined ? {} : { ticksSinceLastExploration }),
-    validProposal,
+    activeFrontierParty,
+    canBeginPhysicalExploration: classification.canBeginPhysicalExploration,
+    // §6 — normally FALSE and never required. Frontier exploration has no destination and no
+    // precomputed route; only the anchor is known before departure.
+    fullRouteKnown: false,
+    firstStepOutcome,
+    returnReserveTiles,
+    durationBudgetDays,
+    eligibleExplorationIntent: classification.eligibleExplorationIntent,
+    physicallyValidExplorationProposal: classification.physicallyValidExplorationProposal,
+    proposalLedger: ledger,
+    activePartyKinds: active.map((expedition) => String(expedition.taskKind)),
     explorationOffered: offerState.offered,
     ...(offerState.claimedBy === undefined ? {} : { claimedBy: offerState.claimedBy }),
-    competingProposals: active.map((expedition) => String(expedition.taskKind)),
-    retrievalWorthwhile: schedulerOutcome === "distant_plant_gathering",
+    ...(offerState.claimFailure === undefined ? {} : { claimFailure: offerState.claimFailure }),
+    ...(offerState.claimedCandidateTarget === undefined
+      ? {}
+      : { claimedCandidateTarget: offerState.claimedCandidateTarget }),
+    fallthroughOpportunity: classification.fallthroughOpportunity,
+    retrievalWorthwhile: candidates?.retrievalWorthwhile ?? schedulerOutcome === "distant_plant_gathering",
     retrievalUrgent,
     schedulerOutcome,
-    primaryBlocker,
-    secondaryBlockers: secondary.filter((blocker) => blocker !== primaryBlocker),
+    primaryBlocker: classification.primaryBlocker,
+    secondaryBlockers: classification.secondaryBlockers,
   });
 }
 
@@ -2158,9 +2294,39 @@ function maybeLaunchExpeditionInner(world: WorldState, band: Band, day: DayNumbe
   // route worth reading does that instead. Exploration is what a band does when its own
   // known country has stopped answering — which is exactly the band-known state
   // `deriveFrontierExplorationEligibility` measures.
-  if (noUsefulRetrieval && verification === undefined && reconnaissance === undefined) {
-    // CORRECTION-24A §10 — audit-only marker; no-op when nothing is recording.
-    noteExplorationOffered();
+  // CORRECTION-24A §12 O1 — audit-only priority arm, unset in every normal world. Exploration is
+  // offered the slot FIRST, but only against a NONURGENT competitor: `foodStress >= 0.35` is
+  // production's own urgency threshold and an urgent retrieval is never displaced. Motive, heading,
+  // physical budgets, the active cap and the worker rule are all untouched — the arm changes the
+  // ORDER of the cascade and nothing else, so a launch it produces is one production could have made.
+  if (isExplorationPriorityArm() && foodStress < 0.35) {
+    const preferred = maybeLaunchFrontierExploration(world, band, day, currentTick, partyWorkers);
+
+    if (preferred !== undefined) {
+      noteExplorationOffered(band.id, Number(day));
+      return preferred;
+    }
+  }
+
+  // CORRECTION-24A §7 — audit-only; records what this ONE decision actually had in front of it.
+  noteProposalCandidates(band.id, Number(day), {
+    retrievalExists: retrieval !== undefined,
+    ...(retrieval === undefined ? {} : { retrievalTarget: String(retrieval.targetTileId) }),
+    retrievalWorthwhile,
+    verifyBeforeRetrieving,
+    waterVerificationGateOpen: verificationGateOpen,
+    patchVerificationExists: verification !== undefined,
+    ...(verification === undefined ? {} : { patchVerificationTarget: String(verification.targetTileId) }),
+    reconnaissanceExists: reconnaissance !== undefined,
+    ...(reconnaissance === undefined ? {} : { reconnaissanceTarget: String(reconnaissance.targetTileId) }),
+    partyWorkers,
+  });
+
+  const explorationOffered = noUsefulRetrieval && verification === undefined && reconnaissance === undefined;
+
+  if (explorationOffered) {
+    // CORRECTION-24A §7 — audit-only marker; no-op when nothing is recording.
+    noteExplorationOffered(band.id, Number(day));
 
     const explored = maybeLaunchFrontierExploration(world, band, day, currentTick, partyWorkers);
 
@@ -2169,9 +2335,48 @@ function maybeLaunchExpeditionInner(world: WorldState, band: Band, day: DayNumbe
     }
   } else {
     noteExplorationNotOffered(
-      !noUsefulRetrieval ? "retrieval" : verification !== undefined ? "patch_verification" : "reconnaissance",
+      band.id,
+      Number(day),
+      !noUsefulRetrieval
+        ? "distant_retrieval"
+        : verification !== undefined
+          ? "distant_patch_verification"
+          : "route_reconnaissance",
+      String(
+        !noUsefulRetrieval
+          ? retrieval?.targetTileId
+          : verification !== undefined
+            ? verification.targetTileId
+            : reconnaissance?.targetTileId,
+      ),
     );
   }
+
+  /**
+   * CORRECTION-24A §7 — the claiming family reached a typed early return instead of launching.
+   *
+   * Every post-selection exit below funnels through here, so a scheduler FALLTHROUGH (the day is
+   * wasted with a valid exploration proposal in hand) can never be confused with scheduler ORDERING
+   * (exploration lost to a family that actually went). The `noteClaimFailure` call is audit-only.
+   *
+   * The O2 branch is the isolated fallthrough-repair arm and is unreachable in every normal world:
+   * `isFallthroughRepairArm()` is false unless an audit runner selected O2. It reconsiders only a
+   * proposal the band already derived, only when an earlier family claimed and then failed, and only
+   * while the slot is still free — it never fills an idle slot that had no valid proposal.
+   */
+  const refuseLaunch = (failure: PostClaimFailure): Band => {
+    noteClaimFailure(failure);
+
+    if (isFallthroughRepairArm() && !explorationOffered) {
+      const explored = maybeLaunchFrontierExploration(world, band, day, currentTick, partyWorkers);
+
+      if (explored !== undefined) {
+        return explored;
+      }
+    }
+
+    return band;
+  };
 
   const chosen =
     retrieval !== undefined && retrievalWorthwhile && !verifyBeforeRetrieving && !(retrievalEvidenceDegraded && foodStress < 0.35)
@@ -2228,8 +2433,14 @@ function maybeLaunchExpeditionInner(world: WorldState, band: Band, day: DayNumbe
         expedition.taskKind === "distant_patch_verification",
     );
 
-  if (chosen === undefined || (sameTargetActive && !relayException)) {
-    return band;
+  if (chosen === undefined) {
+    // The claiming family produced no candidate at all — a retrieval target that is worthwhile but
+    // whose evidence is degraded, on a band that already concluded against it.
+    return refuseLaunch("TARGET_STALE");
+  }
+
+  if (sameTargetActive && !relayException) {
+    return refuseLaunch("SAME_TARGET_CONFLICT");
   }
 
   // §8 — the party is drawn from the AVAILABLE mobility-role pools (present adults
@@ -2238,7 +2449,7 @@ function maybeLaunchExpeditionInner(world: WorldState, band: Band, day: DayNumbe
   const partyComposition = selectPartyComposition(availablePools, chosen.workers, chosen.preference);
 
   if (partyComposition === undefined) {
-    return band;
+    return refuseLaunch("PARTY_COMPOSITION_FAILED");
   }
 
   // §5.2 (multi-tile patch) — aim at the remembered anchor tile first; when the anchor
@@ -2270,13 +2481,13 @@ function maybeLaunchExpeditionInner(world: WorldState, band: Band, day: DayNumbe
   // No passable route within the bounded neighbourhood => physically unreachable. The
   // band simply does not go; it never teleports to the target.
   if (route === undefined || route.length - 1 > EXPEDITION_MAX_ROUTE_TILES) {
-    return band;
+    return refuseLaunch("ROUTE_BUILD_FAILED");
   }
 
   const legDays = Math.ceil((route.length - 1) / EXPEDITION_BASE_TILES_PER_DAY);
 
   if (legDays * 2 + 1 > EXPEDITION_MAX_DURATION_DAYS) {
-    return band;
+    return refuseLaunch("DURATION_FAILED");
   }
 
   const expedition = createPreparedExpedition({
@@ -2342,6 +2553,9 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     // CORRECTION-18 §8 — kept SEPARATE from the reconnaissance list so the two returning
     // families can be stamped with their own acquisition provenance.
     const returnedFrontierRouteTiles: TileId[] = [];
+    // CORRECTION-24A §10 E5 — audit-only. Which parties reached the canonical writer, so the
+    // records it creates can be attributed to the journey that carried them home.
+    const completedFrontierJourneys: ExpeditionRecord[] = [];
     // §13 — smoke the residential camp physically received today (bounded meaning only).
     const receivedSignalsToday: ReceivedSmokeSignal[] = [];
     let outcomes = [...(currentBand.recentExpeditionOutcomes ?? [])];
@@ -2509,7 +2723,53 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
           // eaten there: that still requires the existing observe/test/use paths.
           if (result.expedition.taskKind === "frontier_exploration") {
             returnedFrontierRouteTiles.push(...result.expedition.routeTileIds);
+            completedFrontierJourneys.push(result.expedition);
           }
+        }
+
+        // CORRECTION-24A §9 E4 — audit-only. EVERY terminal frontier party, not only the ones
+        // that came home: a `lost` party's journey is exactly the control that proves it
+        // transferred nothing, and deriving that from final known-tile counts (which §9 forbids)
+        // could never show it. Recorded here, before the return hand-off below, so the
+        // "tiles the BAND already knew" comparison is against pre-return knowledge.
+        if (isRecordingExplorationJourneys() && result.expedition.taskKind === "frontier_exploration") {
+          const plan = result.expedition.frontierPlan;
+          const trail = result.expedition.routeTileIds;
+          let newTiles = 0;
+
+          for (const tileId of new Set(trail)) {
+            if (currentBand.knowledge.observedTiles[tileId] === undefined) {
+              newTiles += 1;
+            }
+          }
+
+          recordExplorationJourney({
+            expeditionId: result.expedition.id,
+            bandId: String(currentBand.id),
+            departureDay: Number(result.expedition.departedDay),
+            ...(result.expedition.phase === "completed" ? { returnDay: Number(day) } : {}),
+            lost: result.expedition.phase === "lost",
+            forcedReturn: terminalReason === "frontier_barrier_blocked" || terminalReason === "party_lost",
+            durationDays: Number(day) - Number(result.expedition.departedDay),
+            partyWorkers: result.expedition.partyWorkers,
+            headingX: plan?.headingX ?? 0,
+            headingY: plan?.headingY ?? 0,
+            headingBasis: String(plan?.basis ?? "none"),
+            anchorTileId: String(result.expedition.targetTileId),
+            routeTileIds: trail.map((tileId) => String(tileId)),
+            routeSteps: Math.max(0, trail.length - 1),
+            routeStepsByDay: takeFrontierStepDays(result.expedition.id),
+            deepestReachTiles: result.expedition.frontierDeepestReachTiles ?? 0,
+            newTilesEntered: newTiles,
+            knownTilesRevisited: new Set(trail).size - newTiles,
+            partyLocalObservations: result.expedition.carriedObservations.length,
+            provisionsConsumed: result.expedition.cargo.provisionUnitsConsumed,
+            riskEpisodes: (result.expedition.riskEpisodeIds ?? []).length,
+            // E5 — filled by the return seam below. A lost party never reaches it, so these
+            // stay zero and the no-transfer control is structural rather than asserted.
+            newRecordsCreated: 0,
+            existingRecordsRefreshed: 0,
+          });
         }
         // Terminal parties are compacted into bounded history and dropped from the
         // active list — their workers become available again exactly here.
@@ -2611,12 +2871,57 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     }
 
     if (returnedFrontierRouteTiles.length > 0 && !transferSuppressed) {
+      // CORRECTION-24A §10 E5 — audit-only. The canonical return is the ONE place where a
+      // party's observations become band knowledge, so "what the party brought home" and "what
+      // the band now holds" are measured on either side of this single call rather than
+      // inferred from a later count. §10 forbids collapsing the two.
+      const before = knowledge.observedTiles;
+
       knowledge = observeTileAndNearby(
         observationWorld,
         knowledge,
         toTargets(returnedFrontierRouteTiles),
         "returned_frontier_exploration",
       );
+
+      if (isRecordingExplorationRecords()) {
+        const journey = completedFrontierJourneys[0];
+        let created = 0;
+        let refreshed = 0;
+
+        for (const tileId of new Set(returnedFrontierRouteTiles)) {
+          const after = knowledge.observedTiles[tileId];
+
+          if (after === undefined) {
+            continue;
+          }
+
+          const isNew = before[tileId] === undefined;
+
+          if (isNew) {
+            created += 1;
+          } else {
+            refreshed += 1;
+          }
+
+          recordExplorationRecord({
+            bandId: String(currentBand.id),
+            tileId: String(tileId),
+            expeditionId: String(journey?.id ?? ""),
+            createdDay: Number(day),
+            isNewRecord: isNew,
+            ...(after.acquisition === undefined ? {} : { acquisitionKind: String(after.acquisition) }),
+            confidence: after.confidence ?? 0,
+            seasonsObserved: (after.seasonsObserved ?? []).length,
+            firstObservedDay: Number(after.firstObservedAt ?? day),
+            lastObservedDay: Number(after.lastObservedAt ?? day),
+          });
+        }
+
+        if (journey !== undefined) {
+          amendExplorationJourney(journey.id, { newRecordsCreated: created, existingRecordsRefreshed: refreshed });
+        }
+      }
     }
 
     // CORRECTION-23 §13/§14 — apply what verification parties physically brought home.

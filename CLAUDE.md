@@ -68,6 +68,96 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-07-29 (ORDINARY EXPLORATION CAUSAL CLOSURE — CORRECTION-24A COMPLETION:
+  PROGRESS — LAUNCH THROTTLING CONFIRMED / NO EVIDENCE THAT MORE EXPLORATION IS BENEFICIAL.
+  Branch checkpoint/ordinary-exploration-capacity-24, continuing d865beec. CORRECTION-23 FROZEN,
+  remote still resolves to 59391d54 exactly. Local main untouched at 668763f; remote main untouched
+  at 0a43083. DIAGNOSTIC ONLY — diagnostics-off canonical fingerprints IDENTICAL to d865beec on both
+  maps (map1 7239c085…, map2 d748c78a…), confirmed TWICE by two independent instruments: the state
+  hash, and a 55-run production-behaviour comparison in which 59391d54 and d865beec are identical on
+  every column.
+
+  **PRECONDITION DEVIATION, REPORTED NOT HIDDEN.** The working tree was NOT clean at entry: ~1,175
+  uncommitted lines timestamped 2026-07-28 14:40-14:52, AFTER d865beec's 14:13 commit — an
+  interrupted earlier attempt at this same completion. It was PRESERVED (§1.8), backed up before any
+  edit, verified to typecheck and to reproduce d865beec's fingerprints, and built upon.
+
+  **THE FIRST PASS'S TWO BLOCKERS ARE CONFIRMED, LOCATED EXACTLY, AND BOTH ARE NON-BINDING.**
+  (a) The 12-tick cooldown: of 191,881 suppressed opportunities only **880 had a party still away**
+  and **191,001 (99.54%) had the party ALREADY HOME**, with **164,411** of those holding a
+  physically valid proposal. Mean cooldown elapsed at refusal 5.99 of 12 ticks. The §4.1 rename
+  (`SUPPRESSION_WINDOW_ACTIVE` + a separate `activeFrontierParty`) is what made this visible.
+  (b) The ordering gate: 18,242 fallthrough opportunities come from just **200 distinct claim
+  chains**, **147 of which repeat**, and **17,959 of 18,042 repeats are ROUTE_BUILD_FAILED** — one
+  band claiming the SAME unreachable tile every sixth day for THIRTY YEARS (longest run 1,726,
+  site_B_dry_plains tile:16:34).
+
+  **EVERY COUNTERFACTUAL IS NULL — this is the headline.** Nine arms at 40 y (11 worlds x 5 seeds):
+  O0 production 53.836, O1 priority 54.036, O2 fallthrough-repaired 53.909, O3 knowledge-withheld
+  54.055, O4 retention-protected 53.982, O5 movement 53.891, O5 fission/camp/resource **byte-identical
+  to O0**. **Spread 0.219 people (0.4%), survival 1.000 on all nine.** O2 removes the fallthrough
+  COMPLETELY (18,272 -> 0) for +8.6% launches and **0** additional changed actions. O3 destroys all
+  19,974 returned records and outcomes do not degrade. O4 cuts first-compression eviction 72%
+  (6,121 -> 1,724) and the reader changes FEWER actions (6 vs 7).
+
+  **THE READER EXISTS AND WEAKENS WITH TIME.** E6 same-snapshot counterfactual, positive control
+  sensitive at every horizon: **7/833 (0.84%) at 40 y, 4/1,716 (0.23%) at 200 y, 3/1,539 (0.19%) at
+  500 y**, controls 833/833, 1,716/1,716, 1,539/1,539. Compounding — the one mechanism under which a
+  launch-side repair could pay for itself — is REFUTED. At 200 y the arms separate and the sign runs
+  AGAINST more exploration (O2 44.636, O0 46.945, O3 48.655 with survival 0.818 vs 0.745), but that
+  rests on 5-seed means over near-extinct worlds with an inconsistent sign, so **exploration is NOT
+  claimed to be harmful**.
+
+  **§14 HISTORICAL COMPARISON — REMOVING 57,638 PARTIES CHANGED POPULATION BY 0.02.** dc08b2d ->
+  59391d54: frontier_verification 57,728 -> 90 (-99.8%), exploration launches 1,347 -> 1,366
+  (+1.4%), mean population 53.8182 -> 53.8364, survival 55/55 both. **Exploration was never
+  meaningfully crowded out by verification**, which reframes the first pass's premise. One real
+  effect: exploration-derived records +27.7% on 1.4% more launches, because verification had been
+  pre-observing the same country.
+
+  **TWO BLOCKER CLASSES READ ZERO AT 40 YEARS AND ARE REAL AT THE LONG HORIZONS** — POPULATION_TOO_SMALL
+  2.36% at 200 y and ADEQUATE_KNOWN_ALTERNATIVE non-zero for the first time at 500 y. Both PHYSICAL,
+  neither a policy cap. This is why §15 required the long runs.
+
+  **§11 READER MAP.** route/corridor has **NO READER AT ALL** — travelCorridors is written by
+  updateTravelCorridorMemory from the residential movement record, never from the exploration
+  hand-off, so no O5 arm is constructible and none is faked. camp, daughter/fission and resource
+  activity are **measurably inert**. Only movement/destination consumes anything. deriveFordContext
+  was REJECTED as a seam: its own header states it never runs inside stepSim.
+
+  **§6 AUTHORITY ABSENCES.** NO LAUNCH-TIME PROVISION AUTHORITY and NO LAUNCH-TIME RISK AUTHORITY —
+  frontierExploration.ts contains zero references to either. But provisions ARE a real EN-ROUTE
+  authority: provisionsExhausted forces `returning` with outcomeReason `provisions_ran_out`
+  (expedition.ts:912). Reported through EXPLORATION_LAUNCH_AUTHORITIES so no consumer can read an
+  absence as a tested zero. PARTY_COMPOSITION_FAILED and DURATION_FAILED read zero but have real
+  raise sites (:2452, :2490) — MEASURED zeros, not unused enum values.
+
+  **RECOMMENDED SEAM, IF EVER JUSTIFIED — NOT the cooldown and NOT the ordering.** `ROUTE_BUILD_FAILED`
+  has no failure memory. A bounded negative memory in the CLAIMING family's own retry logic would end
+  17,959 of 18,042 repeats. That is a correctness repair with independent justification and must NOT
+  be sold as an exploration improvement, because this pass shows it would not be one.
+
+  PASSED: tsc, build, graph 221/764 0 dup 0 dangling, import (84 back-edges, unchanged)/adaptation/
+  decision boundaries, X1-X16 **15 PASS / 0 FAIL / 1 VACUOUS** (X7 and X13 promoted from vacuous by
+  controlled runs — 180/180 low-labour rows classified on labour with 0 launches; 24 forced-lost
+  parties with 0 transfers AND 0 records written), anti-omniscience C1-C5 and D all zero over 747
+  breadcrumb steps, hidden-truth 0 unsupported copies 7/7 conclusions, food capture **1.000**,
+  population conservation 155+316-297=174, cohort conservation, determinism true, fresh-process
+  determinism, step-mode invariance both maps with fullCanonicalStateMatch, diagnostics-off
+  fingerprint parity to d865beec, offer-state pairing violations **0 every simulated day**, lost-party
+  transfers **0** at every horizon. State bounded (observedTilesPerBand pinned at the 72 cap).
+  28.88 ms/tick on an idle machine.
+
+  AUDIT DEBT: **+610 production lines since 59391d54, of which +518 in expedition.ts and 284 of those
+  are ONE function** (`recordExplorationOpportunity`, pure audit code kept there only for access to
+  module-private helpers). Four-item cleanup plan in the findings. Inherited and unchanged:
+  `WorldAuditOptions.retentionInteractionArm` still has no consumer; the superseded 23E/23F replay
+  arms are still present.
+
+  NOT DONE, deliberately: no production repair, no cooldown shortened, no scheduler reordered, no
+  roadmap feature started. See docs/evidence/correction24a/COMPLETION_FINDINGS.md.)
+
+Previously updated:
   2026-07-28 (ORDINARY EXPLORATION AUTHORITY / LAUNCH-FUNNEL DIAGNOSIS CORRECTION-24A:
   PROGRESS — ORDINARY-EXPLORATION BLOCKER ISOLATED / NO PRODUCTION REPAIR YET, and PARTIAL —
   ACCEPTANCE GATES 13-18 ARE UNMET. Branch checkpoint/ordinary-exploration-capacity-24 from
@@ -3162,6 +3252,7 @@ Keep this bounded to the latest 10–15 accepted architecture changes. Condense 
 
 | Checkpoint/commit | Architecture change | Remaining caveat |
 | --- | --- | --- |
+| ORDINARY EXPLORATION CAUSAL CLOSURE — CORRECTION-24A COMPLETION (2026-07-29; branch `checkpoint/ordinary-exploration-capacity-24` continuing `d865beec`; **PROGRESS — LAUNCH THROTTLING CONFIRMED / NO EVIDENCE THAT MORE EXPLORATION IS BENEFICIAL**) | **Both launch-side blockers are confirmed and located exactly, and both are non-binding.** §4.1 splits the old `ALREADY_EXPLORING` into `SUPPRESSION_WINDOW_ACTIVE` (the 12-tick cooldown) and a separate `activeFrontierParty`, which is what reveals that **191,001 of 191,881 suppressed opportunities (99.54%) had the party ALREADY HOME** and **164,411 held a physically valid proposal**. §7's typed post-claim ledger reveals the fallthrough is **200 claim chains, 147 repeating, 17,959 of 18,042 repeats `ROUTE_BUILD_FAILED`** — one band claiming the same unreachable tile every sixth day for thirty years. **Nine counterfactual arms all null**: spread 53.836-54.055 (0.4%), survival 1.000 on all; O2 eliminates the fallthrough completely for +8.6% launches and **0** extra changed actions; O3 destroys all 19,974 returned records without degrading outcomes; O4 cuts eviction 72% and the reader changes FEWER actions; O5 camp/fission/resource are **byte-identical** to production. **E6 weakens with horizon — 0.84% -> 0.23% -> 0.19% at 40/200/500 y** with a fully sensitive positive control, refuting compounding. §14: removing **57,638 verification parties** moved exploration launches +1.4% and population **+0.02**. New: `explorationHistoricalComparisonAudit.mjs`, `explorationFeedbackLoopAudit.mjs`, per-family O5 reader seams, a bounded `drainExplorationFunnel` for the long horizons | **No repair made and none licensed.** route/corridor has **no reader at all** (travelCorridors is written from the residential movement record); camp/fission/resource readers are measurably inert. **NO LAUNCH-TIME PROVISION OR RISK AUTHORITY** exists — but provisions bind EN ROUTE (`provisions_ran_out`, expedition.ts:912). `POPULATION_TOO_SMALL` (2.36% at 200 y) and `ADEQUATE_KNOWN_ALTERNATIVE` (500 y) read zero at 40 years and are real later. The 200-year sign runs against more exploration but rests on 5-seed means over near-extinct worlds — **exploration is NOT claimed harmful**. X3 remains VACUOUS. **Audit debt: +610 production lines, +518 in expedition.ts, 284 of them one audit function** that should move to diagnostics. `retentionInteractionArm` still has no consumer; 23E/23F replay arms still present. Recommended seam if ever justified: a bounded failure memory in the CLAIMING family's retry logic, on correctness grounds, NOT as an exploration improvement |
 | TEMPORARY-USE PENDING-ACTION AUTHORITY / EXACT LAUNCH-TO-CAMP CONSUMPTION CORRECTION-23J (2026-07-28; branch `checkpoint/physical-frontier-verification-23` from `0955c87`; **PASS — TEMPORARY-USE SUSPENDED UNTIL A REAL OPERATION READER EXISTS / CORRECTION-23 VERIFICATION BEHAVIOUR CLOSED**) | **A verification party is now sent only when one named, already-selected operation will read the answer before it decides its camp.** New typed identity `src/sim/agents/pendingOperation.ts` built entirely from the expedition record the production selector wrote (`frontier_exploration` excluded — no destination; `frontier_verification` excluded — self-reference; only `prepared` and `outbound` are pre-camp-decision). The 23I gate — `patch memory exists OR any active party exists` — is removed: memory is not intent, and a `returning` party has already taken the decision. **§7 model C, measured**: Model A cannot exist because `maybeLaunchExpedition` selects and launches in one call (4,186,352 `no_selected_operation` refusals against 27 genuinely pending), Model B cannot exist because `taskCampRefusedByEvidence` is read only on ARRIVAL, and the arithmetic closes it — a camp falls `legDays` after departure while an answer needs `2*legDays + on-site` (J4/J8: 3 days vs 8). **§10 D = 0**: of 1,145 launches under the 23I gate, NONE named a still-pending operation, and only 378 (33%) were even at a place work ever reached — so 23I's A cannot support its retention decision. Launches 1,142 -> 0; water 103 -> 109 (downstream divergence, gate untouched); suspended questions 0 -> 0; exploration unchanged. J1-J12 11 pass / 1 vacuous / 0 fail, I1-I14 14/14, I6 rewritten to test the real contract | **The 23I evidence file `temporary-use-camp-prevention.json` does not describe the commit it shipped in.** 23I's own audit run unmodified on `0955c87` gives **343/3,672 = 9.34%**, against the file's 10,724/59,286 (18.09%) and the source comment's 492/4,626 (10.6%); a second seed prefix gives 9.51%, so neither published figure is inside seed jitter. The file is preserved unaltered and corrected in `docs/evidence/correction23j/FINDINGS.md`; the 10.6% comment is deleted. **Do not cite either.** J12 is VACUOUS, not a pass — with zero natural launches it states the contract without demonstrating it. The suspension is a physical consequence of the gate, not a policy entry, so it reverses itself when a reservation seam exists; that seam belongs to Resource Investigation / Temporary Use Closure and was deliberately not built. **The ordinary-exploration deficit recorded by 23I is unrepaired and remains the next blocker** |
 | DECISION-CONTINGENT VERIFICATION / VALUE-OF-INFORMATION CORRECTION-23H (2026-07-27; branch `checkpoint/physical-frontier-verification-23` from `ff48d29`; **PROGRESS — DIAGNOSIS ACCEPTED / DO NOT MERGE**) | **Every verification question now has an explicit, measured reader — or a named missing one.** New audit-only module `src/sim/diagnostics/verificationValueOfInformation.ts` (opportunity-input capture, candidate observer, relevance taxonomy, bounded-horizon reader trace). Production seams: one capture call in `carryingCapacity.ts` (the reader's `biomeCompetence`/`resourcePressure` are local intermediates no band field carries, so reconstructing them would make every arm approximate — the real object is captured instead), one optional `auditEligibleOut` out-parameter on `selectVerificationCandidate` so §5 can evaluate EVERY eligible candidate rather than only the winner, `deriveKnownUnusedHabitatForAudit` extended to take the tick cache (without it the audit silently evaluated a smaller candidate set), and `WATER_ACCESS_OBSERVED_THRESHOLD` exported. New read-only §13 `decisionRelevance` projection on the Knowledge panel: for each place the band would verify, which decision is blocked, what each answer would do, and whether the reader exists. New audits `verificationValueOfInformationAudit.mjs` and `verificationDecisionFixturesAudit.mjs` (H1–H12) | **No production change made.** Three of five questions cannot change a physical action: `resource_test_possible` and `seasonal_persistence` have no reader at all, and `resource_presence`'s only consumer is another question nobody reads. `water_access` and `resource_presence` are TAUTOLOGICAL in practice (confirmation rates 0.98 and 1.00); 89% of water candidates already pass the gate on the band's own observation. **94% of all physically consequential verification evidence is a single branch of a single question** — a `temporary_use` negative. §10 selector-only is zero BY TAXONOMY and is reported with that reason. `retentionInteractionArm` is declared with no consumer and should be deleted; the superseded 23E/23F replay arms must be removed before the parent branch can be merge-ready |
 | EXACT TRAVEL REPLAY / TARGET-SELECTION ISOLATION CORRECTION-23G (2026-07-27; branch `checkpoint/physical-frontier-verification-23` from `ca9e3b8`; **PROGRESS — DIAGNOSIS ACCEPTED / DO NOT MERGE**) | **A valid replacement for the inadmissible F13, and it says verification semantics are worth nothing.** New audit-only module `src/sim/diagnostics/verificationScheduleReplay.ts` (module-slot registry in the `socialReadSeamHook.ts` idiom — donor recorder, schedule replay, bounded rotation disposition, donor-place protection, season-identity read counter). Stage 1 records every `frontier_verification` launch the BAND-KNOWN production selector makes; stage 2 replays it physically with the selector bypassed entirely, which is what F13 could not do. Seams: `expedition.ts` (recording, replay launcher, replay on-site task), `memoryCompression.ts` (G6 donor-place retention), and four one-line season-identity read counters in `bandDecision.ts`, `memory.ts` and `frontierVerification.ts`. **G1 reproduces F1 exactly on 6/6 sites** — and to four decimals on every quantity at 200 y on terrain A — while carrying 0 attempts, 0 evidence rows and 0 dispositions against F1's 12/48/430. **The cadence is not the mechanism** (G3/G4/G5 hold F1's exact launch days and party count and collapse terrain A to 0.20/5.4, 0.40/13.6, 0.40/19.6). **Nor is target diversity** (the §6 supplement repairs F13's collapse from 30 to 221 distinct targets and still returns 0.00). **G6 retention is a partial substitute on terrain A alone** (0.60/19.0 → 0.80/22.0 against F1's 1.00/34.0). Six qualified sites, two per structure class; new `scripts/marginalSitePhenotypeProbe.mjs`, `scripts/scheduleReplayMatrixAudit.mjs`, `scripts/scheduleReplayDiagnosisReport.mjs`. `.claude/launch.json` removed as unrelated scope and `.claude/` gitignored | **NO REPLICATED CONDITIONAL MECHANISM FOUND, and no production change made.** One site of six is sensitive and its structure class does not replicate — the other coastal/aquatic site is wetter, more aquatic, and neutral. **Terrain A fails the qualification rule CORRECTION-23F itself wrote** (corridor 100% passable, 0 obstacles, against 23F's stated [0.55, 0.98]); it is also the only site whose F0 baseline is not already safe (0.60 vs 0.96), so elsewhere there is nothing for any arm to improve. Whether A is a terrain class or one unrepresentative fixture is the open question. §8 proves every new record necessarily carries base content (ratio 1.00), so 23F's F5/F10 are not clean season-identity tests and none is claimed here. Memory-compression debt remains unrepaired and interaction-dependent |

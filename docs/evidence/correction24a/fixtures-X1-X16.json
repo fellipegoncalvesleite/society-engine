@@ -1,0 +1,238 @@
+{
+  "years": 25,
+  "seeds": [
+    "s1",
+    "s2",
+    "s3"
+  ],
+  "worlds": [
+    "map2",
+    "map1",
+    "site_B_dry_plains",
+    "site_D_aquatic",
+    "hostile"
+  ],
+  "summary": {
+    "pass": 15,
+    "fail": 0,
+    "vacuous": 1
+  },
+  "fixtures": [
+    {
+      "id": "X1",
+      "title": "a physically valid exploration proposal is reached, and is strictly stronger than eligibility",
+      "verdict": "PASS",
+      "evidence": {
+        "physicallyValidProposals": 8567,
+        "eligibleIntentButNotPhysicallyValid": 150,
+        "everyValidRowClearsFullContract": true
+      },
+      "note": "The complete §6 contract is asserted field by field, so a row cannot be called valid on eligibility alone."
+    },
+    {
+      "id": "X2",
+      "title": "a band with no reason to look is classified NO_MOTIVE and does not launch",
+      "verdict": "PASS",
+      "evidence": {
+        "rows": 2311,
+        "allIneligible": true,
+        "launchesUnderNoMotive": 0
+      }
+    },
+    {
+      "id": "X3",
+      "title": "a band with motive but no band-known heading is classified NO_HEADING",
+      "verdict": "VACUOUS",
+      "evidence": {
+        "rows": 0,
+        "headingAvailableRateOverall": 1
+      },
+      "note": "A heading was available on essentially every opportunity, so this class is genuinely rare rather than untested."
+    },
+    {
+      "id": "X4",
+      "title": "two live proposals exist on the same decision and the chosen family PHYSICALLY LAUNCHED",
+      "verdict": "PASS",
+      "evidence": {
+        "opportunitiesWithTwoLiveProposals": 8567,
+        "ofThoseWhereSomeFamilyActuallyLaunched": 404,
+        "ofThoseWhereNOBODYLaunched": 8163
+      },
+      "note": "The second number is the point: a contest is only a contest when the winner goes."
+    },
+    {
+      "id": "X5",
+      "title": "displacement is recorded only when another family actually launched",
+      "verdict": "PASS",
+      "evidence": {
+        "displacedRows": 83,
+        "withSchedulerOutcomeNothing": 0
+      }
+    },
+    {
+      "id": "X6",
+      "title": "earlier family claims -> fails to launch -> slot free -> valid exploration exists -> production does NOT reconsider",
+      "verdict": "PASS",
+      "evidence": {
+        "fallthroughOpportunities": 8163,
+        "everyClauseHeldOnEveryRow": true,
+        "claimingFamily": {
+          "route_reconnaissance": 2126,
+          "distant_patch_verification": 6010,
+          "distant_retrieval": 27
+        },
+        "itsTypedPostClaimFailure": {
+          "ROUTE_BUILD_FAILED": 8073,
+          "SAME_TARGET_CONFLICT": 90
+        },
+        "exampleTargets": [
+          {
+            "band": "band:varied-river-mid",
+            "day": 1350,
+            "claimedBy": "route_reconnaissance",
+            "target": "tile:104:56",
+            "failure": "ROUTE_BUILD_FAILED"
+          },
+          {
+            "band": "band:varied-river-mid",
+            "day": 1356,
+            "claimedBy": "route_reconnaissance",
+            "target": "tile:104:56",
+            "failure": "ROUTE_BUILD_FAILED"
+          },
+          {
+            "band": "band:varied-river-mid",
+            "day": 1362,
+            "claimedBy": "route_reconnaissance",
+            "target": "tile:104:56",
+            "failure": "ROUTE_BUILD_FAILED"
+          }
+        ]
+      },
+      "note": "Every clause is asserted on every row, so this is fallthrough rather than ordering."
+    },
+    {
+      "id": "X7",
+      "title": "a band that genuinely cannot raise two departable walkers is classified on labour",
+      "verdict": "PASS",
+      "evidence": {
+        "controlledLowLabourOpportunities": 180,
+        "ofThoseWithFewerThanTwoDepartableWorkers": 180,
+        "classifiedOnLabour": 180,
+        "everyLowRowIsClassifiedOnLabour": true,
+        "launchedAnyway": 0,
+        "naturalRowsOnElevenWorlds": 0,
+        "meanDepartableWorkersNaturally": 5.13
+      },
+      "note": "The eleven natural worlds never fall below two departable walkers, so this is measured on a deliberately tiny band. The natural count is reported beside it rather than instead of it."
+    },
+    {
+      "id": "X8",
+      "title": "physical departure is gated on a legal FIRST STEP and a positive return reserve, never on a known full route",
+      "verdict": "PASS",
+      "evidence": {
+        "rowsWithNoPassableFirstStep": 8275,
+        "rowsWithZeroReturnReserve": 0,
+        "primaryBlockerNoPassableFirstStep": 150,
+        "fullRouteKnownOnAnyRow": false
+      },
+      "note": "fullRouteKnown is false on every row, which is the expected and required state for frontier exploration."
+    },
+    {
+      "id": "X9",
+      "title": "the suppression window outlives the party, so cooldown and concurrency are separately classified",
+      "verdict": "PASS",
+      "evidence": {
+        "suppressionWindowActiveRows": 65806,
+        "ofWhichNoFrontierPartyIsActuallyAway": 65551,
+        "rowsWithAPartyPhysicallyAway": 255,
+        "shareOfCooldownWithNobodyOut": 0.9961
+      },
+      "note": "This is the measurement that makes the §4.1 rename a correction rather than a relabelling."
+    },
+    {
+      "id": "X10",
+      "title": "a full expedition slot is classified ACTIVE_CAP_FULL",
+      "verdict": "PASS",
+      "evidence": {
+        "rows": 9,
+        "meanActiveParties": 2
+      }
+    },
+    {
+      "id": "X11",
+      "title": "a returned exploration record changes one real physical action",
+      "verdict": "PASS",
+      "evidence": {
+        "sameSnapshotProbes": 220,
+        "probesWhereRemovingExplorationRecordsChangedTheSelectedAction": 1,
+        "positiveControlProbesWhereRemovingALLKNOWLEDGEChangedIt": 220,
+        "totalExplorationTilesHeldAcrossProbes": 3714
+      },
+      "note": "§13 requires this fixture to demonstrate the change or fail explicitly as a missing-reader finding. The positive control is what makes the failure evidence rather than an inert instrument."
+    },
+    {
+      "id": "X12",
+      "title": "returned records are followed through the real annual compression authority",
+      "verdict": "PASS",
+      "evidence": {
+        "recordsWrittenByTheCanonicalReturnSeam": 4350,
+        "recordsThatReachedAFirstCompression": 2083,
+        "evictedAtFirstCompression": 624,
+        "survivedFirstCompression": 1459,
+        "evictionShare": 0.2996,
+        "medianLifetimeDaysOfEvicted": 257
+      },
+      "note": "Eviction is read from memoryCompression's own retained set, not inferred from a later known-tile count."
+    },
+    {
+      "id": "X13",
+      "title": "a lost party transfers nothing",
+      "verdict": "PASS",
+      "evidence": {
+        "controlledLostParties": 24,
+        "lostPartiesThatTransferredAnything": 0,
+        "recordsWrittenByTheAlwaysLostArm": 0,
+        "naturalLostPartiesOnElevenWorlds": 0,
+        "completedPartiesNaturally": 358
+      },
+      "note": "No party is lost naturally on these worlds, so loss is forced through CORRECTION-17's existing frontierExplorationAlwaysLost option. Two independent assertions: no journey row reports a transfer, and the canonical writer produced no record at all on that arm."
+    },
+    {
+      "id": "X14",
+      "title": "offer state is consumed exactly once per recorded opportunity, with nothing left over",
+      "verdict": "PASS",
+      "evidence": {
+        "runs": 15,
+        "written": 76789,
+        "consumed": 76789,
+        "runsWithKeyMismatchOverwriteOrLeftover": 0,
+        "recordedOpportunities": 76834,
+        "opportunitiesWhereTheSchedulerReturnedBeforeEitherMarker": 45
+      },
+      "note": "The last number is not a leak: the scheduler exits before both markers when the cap is full, the day is off cadence or too few workers are departable, so nothing is written and nothing is consumed."
+    },
+    {
+      "id": "X15",
+      "title": "the O2 fallthrough-repair arm converts wasted decisions into launches and nothing else",
+      "verdict": "PASS",
+      "evidence": {
+        "O0_launches": 92,
+        "O2_launches": 100,
+        "O0_fallthroughOpportunities": 1556,
+        "O2_fallthroughOpportunities": 0,
+        "additionalLaunches": 8
+      },
+      "note": "O2 only reconsiders a proposal the band had already derived, on a slot the claiming family left free."
+    },
+    {
+      "id": "X16",
+      "title": "canonical state is identical with the funnel recording on and off",
+      "verdict": "PASS",
+      "evidence": {
+        "identical": true,
+        "sampleLength": 378
+      }
+    }
+  ]
+}

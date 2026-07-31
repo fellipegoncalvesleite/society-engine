@@ -82,6 +82,8 @@ import { SEASON_LENGTH_DAYS } from "../core/types";
 import { getWorldTimeForDay } from "../tick/time";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
+// CORRECTION-24A §12 O5 — audit-only. Identity/false unless an audit selected the O5 arm.
+import { hideExplorationRecordsFromReader } from "../diagnostics/explorationFunnelDiagnostics";
 
 const TRIP_DAY_CADENCE = 3;
 const FIRST_TRIP_DAY_OF_SEASON = 6;
@@ -814,7 +816,12 @@ function buildStartingLocalReconnaissanceState(
     band.perCapitaReturn?.perCapitaReturn ??
     0.5;
   let state = band.resourceKnowledgeState;
-  const localObservedRecords = Object.values(band.knowledge.observedTiles)
+  // CORRECTION-24A §12 O5 — audit-only reader isolation for the RESOURCE ACTIVITY family. The
+  // record is still written, still retained and still visible to every other reader; only this
+  // family's view of it is withheld. Identity in every normal world and on all other arms.
+  const localObservedRecords = Object.values(
+    hideExplorationRecordsFromReader("resource_activity", band.knowledge.observedTiles),
+  )
     .map((record) => {
       const tile = world.tiles[record.tileId];
 

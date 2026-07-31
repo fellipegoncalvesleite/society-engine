@@ -82,6 +82,8 @@ import {
 } from "../world/hydrography";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
+// CORRECTION-24A §12 O5 — audit-only. Identity/false unless an audit selected the O5 arm.
+import { isReaderSuppressed } from "../diagnostics/explorationFunnelDiagnostics";
 
 interface DemographyComputation {
   readonly demography: BandDemography;
@@ -1167,7 +1169,10 @@ function selectFissionTarget(
   return getFissionTargetRecordIds(
     band,
     contextCache,
-    world.auditOptions?.frontierKnowledgeHiddenFromFission === true,
+    // CORRECTION-24A §12 O5 — audit-only; the fission half of CORRECTION-20's combined switch,
+    // named separately so the two reader families can be reported apart. False on every arm but O5.
+    world.auditOptions?.frontierKnowledgeHiddenFromFission === true ||
+      isReaderSuppressed("daughter_fission"),
   )
     .map((tileId) => band.knowledge.observedTiles[tileId])
     .filter((record): record is KnownTileRecord =>
