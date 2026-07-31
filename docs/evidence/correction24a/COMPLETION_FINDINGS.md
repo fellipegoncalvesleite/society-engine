@@ -882,3 +882,118 @@ Behaviourally identical to Commit A and to `d865beec`: map1
 
 `WorldAuditOptions.retentionInteractionArm` still has no consumer anywhere in `src/`. The superseded
 CORRECTION-23E/23F replay arms are still present. Neither is this pass's to remove.
+
+---
+---
+
+# CORRECTION-24B — SINGLE-RECORD RETURN-WRITER REPLAY
+
+Continuing `e338beb`. CORRECTION-23 frozen at `59391d54`. Both `main` refs untouched.
+
+## G1. The three instruments, finally separated (§6)
+
+| name | what it did | what it may claim |
+| --- | --- | --- |
+| **GLOBAL-SNAPSHOT SENSITIVITY** | removed every record still carrying the exploration label from a periodic snapshot | superseded — biased by the provenance overwrite |
+| **SCHEDULED READER-OUTPUT SENSITIVITY** | called readers on an audit cadence; deleted a tile from five stores | **reader-output sensitivity only.** 23.2% is NOT consumption, NOT selected action, NOT physical value |
+| **TARGET REACHED WITHIN 90 DAYS AFTER AN AUDITED MOVEMENT DIFFERENCE** | 508 arrivals | **not a causal floor** — association, no decision identity |
+| **SINGLE-RECORD RETURN-WRITER REPLAY** (this pass) | forks at the canonical writer, suppresses ONE write, derives everything after it naturally | **the causal authority** |
+
+Denominators are never pooled. The first three are retained under their own names.
+
+## G2. Why the replay is legal where the previous probe was not
+
+The previous probe deleted a tile from `observedTiles`, `placeMemory`, `placeAttachments`,
+`frontierInferredTiles`, `travelCorridors` and `verificationEvidence` in a **later snapshot** — a
+state production never produced, and one that destroyed independent facts (a corridor written by
+residential movement, evidence written by a verification party) merely for naming the same tile.
+
+This replay changes exactly one thing: **whether one tile is written at the return.** The party
+departs, walks, takes its risk, eats its provisions and comes home identically in both arms. Both
+worlds are then stepped normally. Any later difference in place memory, corridors, camps, resource
+or fission state **arises naturally**. Nothing is stripped, synchronised or hand-built.
+
+New vs refresh falls out of the construction: filtering the tile from the write list means a new
+record is never created, and an existing record is never refreshed — its exact pre-return value
+survives (§8.3).
+
+## G3. Control-replay soundness (§9)
+
+```
+110 replay events   110 SOUND   0 UNSOUND   =  100%
+```
+
+Every admitted control arm reproduces the baseline world day for day across the full follow window.
+Compare the superseded scheduled probe at **59.7%**. No sound and unsound rows are averaged.
+
+## G4. 40-year replay matrix — eleven worlds × five seeds, 720-day follow
+
+| terminal class | count | share |
+| --- | ---: | ---: |
+| `WRITE_SUPPRESSED_NO_READER` | **52** | 47.3% |
+| `ACTUAL_READER_READ_BUT_INERT` | **53** | 48.2% |
+| `RECEIPT_OR_SUPPORT_CHANGED` | **5** | 4.5% |
+| `SELECTED_ACTION_CHANGED` | **0** | — |
+| `PHYSICAL_ACTION_CHANGED` | **0** | — |
+| `DEMOGRAPHY_CHANGED` | **0** | — |
+| `CONTROL_REPLAY_UNSOUND` | **0** | — |
+
+**47.3% of returned records can have their write suppressed and nothing anywhere differs for 720
+days.** That answers gate 6 directly: unread records can remain unread, and nearly half are. The
+superseded probe reported `neverRead = 0` only because it invoked every reader itself.
+
+**Zero events changed a production decision identity.** Under §10's exact-identity rule — a
+different `decisionId` + action from `world.decisions`, not a candidate set, not an influence array,
+not a ranking — that is zero selected-action and zero physical-action changes across 110 legal
+replays.
+
+**Five events changed receipts or support**, on `site_D_aquatic` (2) and `site_E_hills` (3).
+**Limitation, stated rather than buried:** these changed physical outcome with no seasonal decision
+identity changing, because `world.decisions` records the seasonal residential decision and not the
+daily trip selection in `runDailyActions`. They are real physical differences whose proximate
+selected action this instrument does not name, so they are NOT counted as `PHYSICAL_ACTION_CHANGED`.
+
+## G5. B-fixture coverage (§11) — partial, and reported as such
+
+| fixture | contract | status |
+| --- | --- | --- |
+| **B1** genuinely unread record | write suppressed, no reader, ever | **DEMONSTRATED — 52 events** |
+| **B2** actual reader, inert result | world diverges, both arms choose the same action | **DEMONSTRATED — 53 events** |
+| **B3** movement action changed | exact production movement decision differs | **NOT OBSERVED — 0 of 110** |
+| **B4** camp action changed | actual camp/local-shift action differs | **NOT OBSERVED** |
+| **B5** resource action changed | executed physical resource task differs | **NOT OBSERVED as a named decision**; 5 receipt changes are the nearest evidence and are reported separately |
+| **B6** fission action changed | actual daughter foundation target differs | **NOT OBSERVED — 0 fission differences** |
+| **B7** independent verification preserved | verification evidence survives suppression | **BY CONSTRUCTION** — nothing is manually stripped |
+| **B8** residential corridor preserved | pre-fork corridor survives in both arms | **BY CONSTRUCTION** |
+| **B9** downstream corridor arises naturally | divergence derived, not injected | **BY CONSTRUCTION** |
+| **B10** refreshed record | refresh suppressed, pre-return record preserved exactly | **DEMONSTRATED** — refresh events sampled in every run |
+| **B11** lost party | no writer fires, no recordEventId | **DEMONSTRATED** — X13, 24 forced losses, 0 records written |
+| **B12** exact control parity | control reproduces the original run | **DEMONSTRATED — 110/110** |
+
+**B3–B6 were not constructed.** §11 permits building a controlled physically legal state when the
+system cannot produce one naturally; that construction was not done, so **gate 18 is UNMET** and
+this is reported rather than implied complete.
+
+## G6. O2 at 200 years (§13) — interaction-dependent, not global
+
+| O2 vs O0, 55 paired runs, 200 y | |
+| --- | --- |
+| paired difference | +8 / −14 / **=33 tied** |
+| **median** | **0** |
+| mean | −2.309 |
+| bootstrap 95% | **[−5.236, −0.073]** — excludes zero |
+
+**The interval excludes zero, but the effect is three runs.** map1 s2 (−44), map1 s4 (−41) and
+map2 s2 (−37) account for −122 of the total. Per world:
+
+| world | sum | per seed |
+| --- | ---: | --- |
+| map1 | **−94** | −6, −44, −4, −41, +1 |
+| map2 | −32 | +1, −37, 0, +5, −1 |
+| site_A_coast, site_F_hills, isolated_marginal, hostile | **0** | **exactly 0 on all five seeds** |
+| site_B, site_C, site_E, ordinary | +2 … +10 | mostly 0 |
+
+**Four of eleven worlds are exactly zero on every seed and the median is 0.** The negative mean is
+an outlier-driven statistic on the two large default maps. Calling O2 "harmful" from it would repeat
+the aggregate-inference error withdrawn in the previous section. The mechanism behind those three
+runs is **not traced**. §13's trigger for the 500-year matrix is met and that matrix was launched.

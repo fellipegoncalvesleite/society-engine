@@ -815,6 +815,43 @@ export function isSparseRetentionArm(): boolean {
   return arm === "O4";
 }
 
+/**
+ * CORRECTION-24B §8.3 — SUPPRESS EXACTLY ONE RETURN-WRITER EVENT.
+ *
+ * The counterfactual this checkpoint needs is not "remove a record from a later snapshot" — that
+ * manufactures a state production never produced and forces the audit to guess which independent
+ * co-naming stores to strip with it. It is: let the party depart, walk, take its risk, eat its
+ * provisions and come home exactly as it did, and then decline to write ONE tile at the canonical
+ * writer. Everything downstream must then diverge NATURALLY.
+ *
+ * Filtering the tile out of the write target list handles both cases §8.3 distinguishes:
+ *   - a NEW record is simply never created;
+ *   - a REFRESH never happens, so the pre-return record survives untouched at its exact old value.
+ *
+ * Keyed by expedition + tile + return day, so one write event is named and no other is affected.
+ * `undefined` in every normal world and in the control arm of every replay.
+ */
+let suppressedWriteEvent: { readonly expeditionId: string; readonly tileId: string; readonly day: number } | undefined;
+
+export function setSuppressedReturnWrite(
+  event: { readonly expeditionId: string; readonly tileId: string; readonly day: number } | undefined,
+): void {
+  suppressedWriteEvent = event;
+}
+
+/** The tile whose write must not happen for this expedition on this day, if any. */
+export function suppressedReturnWriteTile(expeditionId: string, day: number): string | undefined {
+  if (
+    suppressedWriteEvent === undefined ||
+    suppressedWriteEvent.expeditionId !== expeditionId ||
+    suppressedWriteEvent.day !== day
+  ) {
+    return undefined;
+  }
+
+  return suppressedWriteEvent.tileId;
+}
+
 /** O5 — is this reader family suppressed on this arm? */
 export function isReaderSuppressed(family: ReaderFamily): boolean {
   return arm === "O5" && suppressedReader === family;

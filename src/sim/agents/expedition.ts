@@ -89,6 +89,7 @@ import {
   noteFrontierStepDay,
   recordExplorationJourney,
   recordExplorationRecord,
+  suppressedReturnWriteTile,
   takeFrontierStepDays,
   noteExplorationNotOffered,
   noteExplorationOffered,
@@ -2851,10 +2852,24 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       // inferred from a later count. §10 forbids collapsing the two.
       const before = knowledge.observedTiles;
 
+      // CORRECTION-24B §8.3 — audit-only. `suppressedReturnWriteTile` is undefined in every
+      // normal world and in every control arm, so this is exactly the old call. When a replay
+      // names one (expedition, tile, day), that ONE tile is dropped from the write list: a new
+      // record is never created and an existing one is never refreshed, leaving its exact
+      // pre-return value in place. No other tile, store or party is touched.
+      const suppressedTile = suppressedReturnWriteTile(
+        String(completedFrontierJourneys[0]?.id ?? ""),
+        Number(day),
+      );
+      const writeTargets =
+        suppressedTile === undefined
+          ? returnedFrontierRouteTiles
+          : returnedFrontierRouteTiles.filter((tileId) => String(tileId) !== suppressedTile);
+
       knowledge = observeTileAndNearby(
         observationWorld,
         knowledge,
-        toTargets(returnedFrontierRouteTiles),
+        toTargets(writeTargets),
         "returned_frontier_exploration",
       );
 
