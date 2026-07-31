@@ -844,3 +844,41 @@ closed chain; 23.2% is a ceiling of reader sensitivity. This pass did not narrow
 production repair is justified on either number.
 
 **No production repair is made. Bounded route-failure memory is deliberately NOT implemented.**
+
+---
+
+## F9. Commit B — audit cleanup (§11)
+
+Behaviourally identical to Commit A and to `d865beec`: map1
+`7239c085c118d094dd8cf52aacb8dc8e8dc8e7606dfdab664f668caa530c5785`, map2
+`d748c78a438d88de2d4ec918c2a7ff04bc83e9403ad9560a2b0ec9ba4b79954a`.
+
+### Removed
+
+| module | before | after | removed |
+| --- | ---: | ---: | ---: |
+| `agents/expedition.ts` | +520 | **+494** | O1 priority arm, O2 fallthrough-repair branch |
+| `agents/memoryCompression.ts` | +51 | **+34** | O4 sparse-retention arm |
+| `agents/campMovement.ts` | +19 | **0** | O5 camp choke point, reverted to direct reads |
+| `agents/carryingCapacity.ts` | +8 | **0** | O5 movement guard |
+| `agents/demography.ts` | +24 | **0** | O5 fission guard, `selectFissionTargetForAudit` |
+| `agents/intraSeasonTrips.ts` | +25 | **0** | O5 resource guard, `buildStartingLocalReconnaissanceStateForAudit` |
+| **production total** | **+647** | **+528** | **−119 lines; four modules back to untouched** |
+
+### Retained, and why
+
+* **`agents/expedition.ts` +494** — `recordExplorationOpportunity` (284 lines) plus the funnel,
+  journey and record hooks. These are the seams that produced every number in this report; removing
+  them would make the diagnosis unreproducible. `recordExplorationOpportunity` still belongs in
+  diagnostics and cannot move without exporting four module-private helpers — **this remains the
+  single largest piece of open audit debt.**
+* **`agents/memoryCompression.ts` +34** — the E5 first-compression amendment. It measures the
+  writer's own before/after state and must stay at that seam.
+* **`diagnostics/explorationFunnelDiagnostics.ts` +1,027** — audit-only module, the correct home.
+  The O1/O2/O4/O5 predicates remain declared but now have **no production consumer**; they are
+  inert and should be deleted when the funnel hooks go.
+
+### Inherited debt, unchanged
+
+`WorldAuditOptions.retentionInteractionArm` still has no consumer anywhere in `src/`. The superseded
+CORRECTION-23E/23F replay arms are still present. Neither is this pass's to remove.

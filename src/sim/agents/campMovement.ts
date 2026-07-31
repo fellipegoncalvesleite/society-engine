@@ -25,20 +25,6 @@ import type {
   TemporaryTaskCampRecord,
 } from "./types";
 import { getCanonicalFoodStress } from "./seasonalSurvival";
-// CORRECTION-24A §12 O5 — audit-only. Identity/false unless an audit selected the O5 arm.
-import { hideExplorationRecordFromReader } from "../diagnostics/explorationFunnelDiagnostics";
-import type { KnownTileRecord } from "../knowledge/types";
-
-/**
- * CORRECTION-24A §12 O5 — the CAMP family's single entry to band tile knowledge.
- *
- * Every camp-side read of `observedTiles` goes through here so one reader family can be isolated
- * without touching the writer, the record's retention, or any other family's view of it. Returns
- * the record unchanged on every arm but O5, and on O5 unless the camp family is the one named.
- */
-function campObservedRecord(band: Band, tileId: TileId): KnownTileRecord | undefined {
-  return hideExplorationRecordFromReader("camp", band.knowledge.observedTiles[tileId]);
-}
 
 const LOCAL_SHIFT_CAP = 8;
 const TEMPORARY_CAMP_CAP = 6;
@@ -664,7 +650,7 @@ function collectPressureReliefCandidates(
   signals: CampMovementSignals,
   localOrbitTrap: LocalOrbitTrapState,
 ): readonly PressureReliefCandidate[] {
-  const currentRecord = campObservedRecord(band, current.id);
+  const currentRecord = band.knowledge.observedTiles[current.id];
   const currentSupport = supportAdequacy(current, currentRecord);
   const currentWater = waterRefugeAdequacy(current, currentRecord);
   const currentCluster = localClusterId(current);
@@ -718,7 +704,7 @@ function makePressureReliefCandidate(input: {
   readonly tile: Tile;
   readonly distance: number;
 }): PressureReliefCandidate | undefined {
-  const observed = campObservedRecord(input.band, input.tile.id);
+  const observed = input.band.knowledge.observedTiles[input.tile.id];
   const inferred = input.band.frontierKnowledge?.inferredTiles[input.tile.id];
 
   if (observed === undefined && inferred === undefined) {
@@ -1248,7 +1234,7 @@ function chooseLocalShiftTarget(
     .filter((tile, index, all) =>
       tile.id !== current.id &&
       all.findIndex((other) => other.id === tile.id) === index &&
-      campObservedRecord(band, tile.id) !== undefined &&
+      band.knowledge.observedTiles[tile.id] !== undefined &&
       isPlausibleCampTile(tile) &&
       tileDistanceByCoord(current, tile) <= 2 &&
       !(blockedBacktrack !== undefined && blockedBacktrack[0] === band.position && blockedBacktrack[1] === tile.id))
@@ -1260,11 +1246,11 @@ function chooseLocalShiftTarget(
 }
 
 function scoreLocalShiftTile(band: Band, current: Tile, tile: Tile): LocalTarget | undefined {
-  const record = campObservedRecord(band, tile.id);
+  const record = band.knowledge.observedTiles[tile.id];
   if (record === undefined) {
     return undefined;
   }
-  const currentRecord = campObservedRecord(band, current.id);
+  const currentRecord = band.knowledge.observedTiles[current.id];
   const currentUse = localUsePressure(band, current.id);
   const targetUse = localUsePressure(band, tile.id);
   const foodGain = record.observedRichness - (currentRecord?.observedRichness ?? 0);

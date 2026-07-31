@@ -82,8 +82,6 @@ import { getNeighborTiles, getTile } from "../world/generate";
 import {
   amendExplorationJourney,
   classifyExplorationOpportunity,
-  isExplorationPriorityArm,
-  isFallthroughRepairArm,
   isRecordingExplorationFunnel,
   isRecordingExplorationJourneys,
   isRecordingExplorationRecords,
@@ -2294,20 +2292,6 @@ function maybeLaunchExpeditionInner(world: WorldState, band: Band, day: DayNumbe
   // route worth reading does that instead. Exploration is what a band does when its own
   // known country has stopped answering — which is exactly the band-known state
   // `deriveFrontierExplorationEligibility` measures.
-  // CORRECTION-24A §12 O1 — audit-only priority arm, unset in every normal world. Exploration is
-  // offered the slot FIRST, but only against a NONURGENT competitor: `foodStress >= 0.35` is
-  // production's own urgency threshold and an urgent retrieval is never displaced. Motive, heading,
-  // physical budgets, the active cap and the worker rule are all untouched — the arm changes the
-  // ORDER of the cascade and nothing else, so a launch it produces is one production could have made.
-  if (isExplorationPriorityArm() && foodStress < 0.35) {
-    const preferred = maybeLaunchFrontierExploration(world, band, day, currentTick, partyWorkers);
-
-    if (preferred !== undefined) {
-      noteExplorationOffered(band.id, Number(day));
-      return preferred;
-    }
-  }
-
   // CORRECTION-24A §7 — audit-only; records what this ONE decision actually had in front of it.
   noteProposalCandidates(band.id, Number(day), {
     retrievalExists: retrieval !== undefined,
@@ -2359,21 +2343,11 @@ function maybeLaunchExpeditionInner(world: WorldState, band: Band, day: DayNumbe
    * wasted with a valid exploration proposal in hand) can never be confused with scheduler ORDERING
    * (exploration lost to a family that actually went). The `noteClaimFailure` call is audit-only.
    *
-   * The O2 branch is the isolated fallthrough-repair arm and is unreachable in every normal world:
-   * `isFallthroughRepairArm()` is false unless an audit runner selected O2. It reconsiders only a
-   * proposal the band already derived, only when an earlier family claimed and then failed, and only
-   * while the slot is still free — it never fills an idle slot that had no valid proposal.
+   * The O1/O2 arms that once lived here are REMOVED — their evidence is generated and recorded in
+   * docs/evidence/correction24a/, and §11 requires the machinery to go once it has served.
    */
   const refuseLaunch = (failure: PostClaimFailure): Band => {
     noteClaimFailure(failure);
-
-    if (isFallthroughRepairArm() && !explorationOffered) {
-      const explored = maybeLaunchFrontierExploration(world, band, day, currentTick, partyWorkers);
-
-      if (explored !== undefined) {
-        return explored;
-      }
-    }
 
     return band;
   };

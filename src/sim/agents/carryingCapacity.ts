@@ -57,8 +57,6 @@ import { getTile } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
 import type { WorldState } from "../world/types";
 import type { FoodDemographyDiagnostics } from "../diagnostics/foodDemographyDiagnostics";
-// CORRECTION-24A §12 O5 — audit-only. Identity/false unless an audit selected the O5 arm.
-import { isReaderSuppressed } from "../diagnostics/explorationFunnelDiagnostics";
 
 // Carrying capacity + per-capita return + daughter colonization (checkpoint 2J).
 // Bounded (anchor catchment + salient memory candidates), deterministic, and
@@ -834,12 +832,7 @@ function deriveKnownUnusedHabitat(
 ): KnownUnusedHabitatOpportunity | undefined {
   const candidateIds = collectOpportunityCandidates(band, cache, {
     includeSideCountryCandidates: world.auditOptions?.daughterColonizationFissionBiasEnabled !== false,
-    // CORRECTION-24A §12 O5 — audit-only. CORRECTION-20's switch covers the opportunity and
-    // fission readers TOGETHER; O5 requires one family at a time, so the movement/destination
-    // half is named separately here. False on every arm but O5.
-    hideFrontierDerived:
-      world.auditOptions?.frontierKnowledgeHiddenFromFission === true ||
-      isReaderSuppressed("movement_destination"),
+    hideFrontierDerived: world.auditOptions?.frontierKnowledgeHiddenFromFission === true,
   });
 
   if (candidateIds.length === 0) {

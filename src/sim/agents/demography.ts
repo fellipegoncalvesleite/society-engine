@@ -82,8 +82,6 @@ import {
 } from "../world/hydrography";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
-// CORRECTION-24A §12 O5 — audit-only. Identity/false unless an audit selected the O5 arm.
-import { isReaderSuppressed } from "../diagnostics/explorationFunnelDiagnostics";
 
 interface DemographyComputation {
   readonly demography: BandDemography;
@@ -1169,10 +1167,7 @@ function selectFissionTarget(
   return getFissionTargetRecordIds(
     band,
     contextCache,
-    // CORRECTION-24A §12 O5 — audit-only; the fission half of CORRECTION-20's combined switch,
-    // named separately so the two reader families can be reported apart. False on every arm but O5.
-    world.auditOptions?.frontierKnowledgeHiddenFromFission === true ||
-      isReaderSuppressed("daughter_fission"),
+    world.auditOptions?.frontierKnowledgeHiddenFromFission === true,
   )
     .map((tileId) => band.knowledge.observedTiles[tileId])
     .filter((record): record is KnownTileRecord =>
@@ -1192,24 +1187,6 @@ function selectFissionTarget(
     )
     .filter((candidate): candidate is FissionTargetCandidate => candidate !== undefined)
     .sort((left, right) => compareFissionTargetsSeeded(world, band, left, right))[0];
-}
-
-/**
- * CORRECTION-24A FINALIZATION §6.1 — audit-only entry to the REAL fission target selector.
- *
- * §6.1 requires the event-paired counterfactual to hit "the actual production entry point for each
- * real reader family". `selectFissionTarget` is module-private, and probing a nearby exported
- * function instead (`deriveKnownBandSpacingForFission` is a spacing check for a target already
- * chosen) would answer a different question. This calls the same function with the same inputs and
- * changes no behaviour; it is removed by the CORRECTION-24 cleanup commit.
- */
-export function selectFissionTargetForAudit(
-  world: WorldState,
-  band: Band,
-  comfortablePopulation: number,
-  contextCache?: TickContextCache,
-): FissionTargetCandidate | undefined {
-  return selectFissionTarget(world, band, comfortablePopulation, contextCache);
 }
 
 // VAR-1: fission-target ordering with the same seeded near-tie jitter as

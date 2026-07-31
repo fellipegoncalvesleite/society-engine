@@ -18,7 +18,6 @@ import type { Tile, WorldAuditOptions, WorldState } from "../world/types";
 import {
   amendExplorationRecordFirstCompression,
   isRecordingExplorationRecords,
-  isSparseRetentionArm,
 } from "../diagnostics/explorationFunnelDiagnostics";
 // CORRECTION-23G §11 — audit-only. Both return `false` when no audit has registered a
 
@@ -217,22 +216,6 @@ function selectRetainedKnownTileIds(
         isSettledVerifiedRecord(record) &&
         (activeRouteTiles.has(record.tileId) ||
           world.time.tick - Number(record.lastObservedAt.tick) <= RECENT_MEMORY_TICK_WINDOW)
-      ) {
-        mandatory.add(record.tileId);
-      }
-    }
-  }
-
-  // CORRECTION-24A §12 O4 — audit-only sparse-retention arm, unset in every normal world.
-  // ONE cycle of protection for records ordinary exploration physically carried home, and nothing
-  // else: no capacity change, no scoring change, no other provenance protected. If exploration's
-  // returns are worth anything downstream, this is the arm that lets them live long enough to be
-  // read; if it changes nothing, more launches cannot help either.
-  if (isSparseRetentionArm()) {
-    for (const record of records) {
-      if (
-        record.acquisition === "returned_frontier_exploration" &&
-        world.time.tick - Number(record.firstObservedAt.tick) < 4
       ) {
         mandatory.add(record.tileId);
       }
