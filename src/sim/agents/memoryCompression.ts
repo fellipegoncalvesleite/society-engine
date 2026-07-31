@@ -14,11 +14,6 @@ import type {
 } from "../knowledge/types";
 import { getNeighborTiles, getTile } from "../world/generate";
 import type { Tile, WorldAuditOptions, WorldState } from "../world/types";
-// CORRECTION-24A §10/§12 — audit-only. Both no-op when no audit has registered a slot.
-import {
-  amendExplorationRecordFirstCompression,
-  isRecordingExplorationRecords,
-} from "../diagnostics/explorationFunnelDiagnostics";
 // CORRECTION-23G §11 — audit-only. Both return `false` when no audit has registered a
 
 const MAX_EXACT_KNOWN_TILES = 72;
@@ -52,35 +47,6 @@ export function compressBandMemoryState(world: WorldState, band: Band): Band {
 
   const retainedKnownTileIds = selectRetainedKnownTileIds(world, band, knownRecords);
   const compressedKnownRecords = knownRecords.filter((record) => !retainedKnownTileIds.has(record.tileId));
-
-  // CORRECTION-24A §10 E5 — audit-only. This is the FIRST compression every exploration-returned
-  // record meets, and §10 requires "the party returned observations" and "records survived long
-  // enough to be available" to stay separate quantities. They are separated here, at the real
-  // compression authority, rather than by counting known tiles at the end of a run.
-  if (isRecordingExplorationRecords()) {
-    for (const record of knownRecords) {
-      if (record.acquisition !== "returned_frontier_exploration") {
-        continue;
-      }
-
-      const evicted = !retainedKnownTileIds.has(record.tileId);
-
-      // Only the FIRST compression a record meets is recorded as such; later ones would
-      // overwrite the verdict and turn a survived-once record into a survived-always one.
-      amendExplorationRecordFirstCompression(String(band.id), String(record.tileId), {
-        nextCompressionDay: Number(world.time.day),
-        evictedAtFirstCompression: evicted,
-        ...(evicted
-          ? {
-              evictionDay: Number(world.time.day),
-              lifetimeDays: Number(world.time.day) - Number(record.firstObservedAt.day),
-            }
-          : {}),
-        seasonsObserved: (record.seasonsObserved ?? []).length,
-        confidence: record.confidence ?? 0,
-      });
-    }
-  }
   const retainedObservedTiles = knownRecords
     .filter((record) => retainedKnownTileIds.has(record.tileId))
     .map((record) => [record.tileId, record] as const);

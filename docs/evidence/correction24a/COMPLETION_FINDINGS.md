@@ -997,3 +997,42 @@ map2 s2 (−37) account for −122 of the total. Per world:
 an outlier-driven statistic on the two large default maps. Calling O2 "harmful" from it would repeat
 the aggregate-inference error withdrawn in the previous section. The mechanism behind those three
 runs is **not traced**. §13's trigger for the 500-year matrix is met and that matrix was launched.
+
+
+## G7. Commit B — complete CORRECTION-24 cleanup (§15)
+
+```bash
+git diff 59391d54f6553f7cd05170ce7889b4bd72a43055 -- src/sim
+```
+
+**is EMPTY.** Zero CORRECTION-24 production-source residue. No generic diagnostic facility is
+retained, so §15's exception clause is not invoked.
+
+### Removed
+
+| item | lines |
+| --- | ---: |
+| `src/sim/diagnostics/explorationFunnelDiagnostics.ts` — the whole module | **−1,027** |
+| `agents/expedition.ts` — `recordExplorationOpportunity`, funnel/journey/record hooks, offer markers, the return-writer suppression seam | **−494** |
+| `agents/memoryCompression.ts` — E5 first-compression amendment | **−34** |
+| **total** | **−1,555** |
+
+Together with CORRECTION-24A's cleanup commit (`e338beb`, −119 lines across four modules), the whole
+of CORRECTION-24's production instrumentation is gone.
+
+`src/sim` is byte-identical to `59391d54`, and the canonical fingerprints confirm it behaviourally:
+map1 `7239c085c118d094dd8cf52aacb8dc8e8dc8e7606dfdab664f668caa530c5785`, map2
+`d748c78a438d88de2d4ec918c2a7ff04bc83e9403ad9560a2b0ec9ba4b79954a` — the same values `d865beec`,
+Commit A and every CORRECTION-24 checkpoint produced.
+
+### Retained
+
+All evidence under `docs/evidence/correction24a/` and every audit script under `scripts/`. The
+scripts no longer run against this tree because the seams they read are gone; they remain as the
+record of how each number was produced, and are runnable against the tagged commits that carry the
+instrumentation (`9e317647` for the O-arms, `2644245e` for the writer replay).
+
+### Inherited CORRECTION-23 debt — untouched, as §15 requires
+
+`WorldAuditOptions.retentionInteractionArm` still has no consumer. The superseded CORRECTION-23E/23F
+replay arms remain. Neither was touched by this cleanup.
