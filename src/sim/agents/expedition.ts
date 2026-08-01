@@ -85,11 +85,6 @@ import {
   recordVerificationReturn,
 } from "../diagnostics/verificationLaunchDiagnostics";
 import {
-  isExplorationCausalAuditRecording,
-  recordReturnedExplorationObservation,
-  shouldSuppressExplorationReturnWrite,
-} from "../diagnostics/explorationCausalAudit";
-import {
   SIGNAL_ATTEMPT_CAP,
   appendReceivedSignal,
   findUnderstoodSignal,
@@ -2140,9 +2135,6 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     // CORRECTION-18 §8 — kept SEPARATE from the reconnaissance list so the two returning
     // families can be stamped with their own acquisition provenance.
     const returnedFrontierRouteTiles: TileId[] = [];
-    // CORRECTION-24C — audit-only identity authority for each real frontier return.
-    // This array never enters WorldState and is unused when the audit ledger is off.
-    const completedFrontierJourneys: ExpeditionRecord[] = [];
     // §13 — smoke the residential camp physically received today (bounded meaning only).
     const receivedSignalsToday: ReceivedSmokeSignal[] = [];
     let outcomes = [...(currentBand.recentExpeditionOutcomes ?? [])];
@@ -2310,7 +2302,6 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
           // eaten there: that still requires the existing observe/test/use paths.
           if (result.expedition.taskKind === "frontier_exploration") {
             returnedFrontierRouteTiles.push(...result.expedition.routeTileIds);
-            completedFrontierJourneys.push(result.expedition);
           }
         }
         // Terminal parties are compacted into bounded history and dropped from the
@@ -2413,65 +2404,12 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     }
 
     if (returnedFrontierRouteTiles.length > 0 && !transferSuppressed) {
-      const beforeReturnWrite = knowledge.observedTiles;
-      const observationByTile = new Map<
-        string,
-        { readonly tileId: TileId; readonly expeditionId: string }
-      >();
-
-      for (const journey of completedFrontierJourneys) {
-        for (const tileId of journey.routeTileIds) {
-          if (!observationByTile.has(String(tileId))) {
-            observationByTile.set(String(tileId), {
-              tileId,
-              expeditionId: journey.id,
-            });
-          }
-        }
-      }
-
-      const suppressedTileIds = new Set(
-        [...observationByTile.values()]
-          .filter((observation) =>
-            shouldSuppressExplorationReturnWrite(
-              observation.expeditionId,
-              String(observation.tileId),
-              Number(day),
-            ))
-          .map((observation) => String(observation.tileId)),
-      );
-      const writeTargets =
-        suppressedTileIds.size === 0
-          ? returnedFrontierRouteTiles
-          : returnedFrontierRouteTiles.filter(
-              (tileId) => !suppressedTileIds.has(String(tileId)),
-            );
-
       knowledge = observeTileAndNearby(
         observationWorld,
         knowledge,
-        toTargets(writeTargets),
+        toTargets(returnedFrontierRouteTiles),
         "returned_frontier_exploration",
       );
-
-      if (isExplorationCausalAuditRecording()) {
-        for (const observation of observationByTile.values()) {
-          const beforeRecord = beforeReturnWrite[observation.tileId];
-          const afterRecord = knowledge.observedTiles[observation.tileId];
-          const writeSuppressed = suppressedTileIds.has(String(observation.tileId));
-
-          recordReturnedExplorationObservation({
-            bandId: String(currentBand.id),
-            tileId: String(observation.tileId),
-            expeditionId: observation.expeditionId,
-            returnDay: Number(day),
-            isNewRecord: beforeRecord === undefined,
-            writeSuppressed,
-            ...(beforeRecord === undefined ? {} : { beforeRecord }),
-            ...(afterRecord === undefined ? {} : { afterRecord }),
-          });
-        }
-      }
     }
 
     // CORRECTION-23 §13/§14 — apply what verification parties physically brought home.

@@ -1,13 +1,7 @@
 import type { BandId, DecisionId, ReasonId, TileId, TickNumber } from "../core/types";
 import type { Action, Decision, NormalizedIntensity } from "../rules/types";
-import type { KnownTileRecord } from "../knowledge/types";
 import { getTile } from "../world/generate";
 import type { Tile, WorldState } from "../world/types";
-import {
-  beginExplorationReaderInvocation,
-  finishExplorationReaderInvocation,
-  noteExplorationRecordConsulted,
-} from "../diagnostics/explorationCausalAudit";
 import { deriveBandTendencies } from "./bandTendency";
 import { deriveCampFootholdProfile } from "./campFoothold";
 import type {
@@ -185,13 +179,6 @@ export function deriveCampMovementDecisionSupport(
   world: WorldState,
   band: Band,
 ): CampMovementDecisionSupport {
-  const campReaderToken = beginExplorationReaderInvocation({
-    readerFamily: "camp_movement",
-    productionFunction: "deriveCampMovementDecisionSupport",
-    bandId: String(band.id),
-    invocationDay: Number(world.time.day ?? Number(world.time.tick) * 90),
-    invocationTick: Number(world.time.tick),
-  });
   const signals = deriveSignals(band);
   const prior = band.campMovement;
   const pressureRelief = deriveRangeRotationPressureReliefState(world, band, prior, signals);
@@ -332,21 +319,6 @@ export function deriveCampMovementDecisionSupport(
     .filter((influence) => influence.scoreDelta > 0)
     .sort(compareInfluences)
     .slice(0, 5);
-
-  finishExplorationReaderInvocation(campReaderToken, {
-    readerVerdict:
-      capped.length === 0
-        ? "no_camp_movement_influence"
-        : capped
-            .map((influence) =>
-              `${influence.scale}:${String(influence.targetTileId ?? band.position)}`)
-            .join(","),
-    readerRanking: capped
-      .map((influence) =>
-        `${influence.scale}|${String(influence.targetTileId ?? band.position)}|` +
-        `${influence.scoreDelta.toFixed(4)}`)
-      .join(","),
-  });
 
   return {
     bandId: band.id,
@@ -679,7 +651,6 @@ function collectPressureReliefCandidates(
   localOrbitTrap: LocalOrbitTrapState,
 ): readonly PressureReliefCandidate[] {
   const currentRecord = band.knowledge.observedTiles[current.id];
-  noteCampMovementRecordConsultation(band, currentRecord, "current_camp_baseline");
   const currentSupport = supportAdequacy(current, currentRecord);
   const currentWater = waterRefugeAdequacy(current, currentRecord);
   const currentCluster = localClusterId(current);
@@ -735,12 +706,6 @@ function makePressureReliefCandidate(input: {
 }): PressureReliefCandidate | undefined {
   const observed = input.band.knowledge.observedTiles[input.tile.id];
   const inferred = input.band.frontierKnowledge?.inferredTiles[input.tile.id];
-
-  noteCampMovementRecordConsultation(
-    input.band,
-    observed,
-    "pressure_relief_candidate",
-  );
 
   if (observed === undefined && inferred === undefined) {
     return undefined;
@@ -1285,9 +1250,7 @@ function scoreLocalShiftTile(band: Band, current: Tile, tile: Tile): LocalTarget
   if (record === undefined) {
     return undefined;
   }
-  noteCampMovementRecordConsultation(band, record, "local_shift_candidate");
   const currentRecord = band.knowledge.observedTiles[current.id];
-  noteCampMovementRecordConsultation(band, currentRecord, "current_shift_baseline");
   const currentUse = localUsePressure(band, current.id);
   const targetUse = localUsePressure(band, tile.id);
   const foodGain = record.observedRichness - (currentRecord?.observedRichness ?? 0);
@@ -1305,30 +1268,6 @@ function scoreLocalShiftTile(band: Band, current: Tile, tile: Tile): LocalTarget
     placeMemory !== undefined ? "place memory exists" : undefined,
   ].filter((entry): entry is string => entry !== undefined);
   return { tileId: tile.id, score: round2(score), basis: basis.length === 0 ? ["nearby known camp option"] : basis.slice(0, 3) };
-}
-
-/** Records only the exact KnownTileRecord the real camp reader just dereferenced. */
-function noteCampMovementRecordConsultation(
-  band: Band,
-  record: KnownTileRecord | undefined,
-  consultationRole: string,
-): void {
-  if (record === undefined) {
-    return;
-  }
-
-  noteExplorationRecordConsulted({
-    readerFamily: "camp_movement",
-    bandId: String(band.id),
-    tileId: String(record.tileId),
-    consultationRole,
-    recordFirstObservedDay: Number(
-      record.firstObservedAt.day ?? Number(record.firstObservedAt.tick) * 90,
-    ),
-    recordLastObservedDay: Number(
-      record.lastObservedAt.day ?? Number(record.lastObservedAt.tick) * 90,
-    ),
-  });
 }
 
 function deriveSignals(band: Band): CampMovementSignals {

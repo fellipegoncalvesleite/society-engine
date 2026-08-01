@@ -32,10 +32,6 @@ import { advanceForestPatchState } from "../agents/forestPatches";
 import { advancePlantPatchState } from "../agents/plantStock";
 import type { WorldState } from "../world/types";
 import type { FoodDemographyDiagnostics } from "../diagnostics/foodDemographyDiagnostics";
-import {
-  isExplorationCausalAuditRecording,
-  recordSeasonalAction,
-} from "../diagnostics/explorationCausalAudit";
 import { getCalendarDay, getWorldTimeForDay } from "./time";
 
 // AUDIT-ONLY observer hook (ACTIVITY-GROUPS-9). A debug trace sink that lets an
@@ -211,54 +207,6 @@ function runSeasonalCompatibilityTick(
     const decision = evaluateBandDecision(currentWorld, currentBand, acuteRiskPreDecisionCache);
     const updatedBand = applyBandDecision(currentWorld, currentBand, decision, acuteRiskPreDecisionCache);
 
-    if (isExplorationCausalAuditRecording()) {
-      const latestMovement =
-        updatedBand.movementHistory[updatedBand.movementHistory.length - 1];
-      const previousLocalShiftIds = new Set(
-        (currentBand.campMovement?.recentLocalShifts ?? []).map((record) => record.id),
-      );
-      const previousTemporaryCampIds = new Set(
-        (currentBand.campMovement?.temporaryTaskCamps ?? []).map((record) => record.id),
-      );
-      const newLocalShift = updatedBand.campMovement?.recentLocalShifts.find(
-        (record) => !previousLocalShiftIds.has(record.id),
-      );
-      const newTemporaryTaskCamp = updatedBand.campMovement?.temporaryTaskCamps.find(
-        (record) => !previousTemporaryCampIds.has(record.id),
-      );
-
-      recordSeasonalAction({
-        bandId: String(currentBand.id),
-        day: Number(currentWorld.time.day ?? Number(currentWorld.time.tick) * 90),
-        tick: Number(currentWorld.time.tick),
-        decisionId: String(decision.id),
-        actionKind: decision.action.type,
-        targetTileId: getAuditActionTarget(decision.action, currentBand.position),
-        positionBefore: String(currentBand.position),
-        positionAfter: String(updatedBand.position),
-        moved: updatedBand.position !== currentBand.position,
-        ...(latestMovement?.decisionId === decision.id
-          ? { movementRecordDecisionId: String(latestMovement.decisionId) }
-          : {}),
-        ...(newLocalShift === undefined
-          ? {}
-          : {
-              newLocalShift: {
-                id: newLocalShift.id,
-                targetTileId: String(newLocalShift.toTileId),
-              },
-            }),
-        ...(newTemporaryTaskCamp === undefined
-          ? {}
-          : {
-              newTemporaryTaskCamp: {
-                id: newTemporaryTaskCamp.id,
-                targetTileId: String(newTemporaryTaskCamp.targetTileId),
-              },
-            }),
-      });
-    }
-
     // AUDIT-ONLY: in-situ decision trace, taken BEFORE this band's update is written
     // back into bandsById, so `currentWorld` is the true pre-this-band world. Pure:
     // observer is read-only and absent in all normal/worker runs.
@@ -346,28 +294,4 @@ function getNextSeasonBoundaryDay(day: number): number {
 
 function compareBands(left: Band, right: Band): number {
   return String(left.id).localeCompare(String(right.id));
-}
-
-/** Resolves the target already carried by the selected production action. */
-function getAuditActionTarget(
-  action: Decision["action"],
-  fallback: Band["position"],
-): string {
-  if ("targetTileId" in action && action.targetTileId !== undefined) {
-    return String(action.targetTileId);
-  }
-
-  if ("tileId" in action) {
-    return String(action.tileId);
-  }
-
-  if ("routeTileIds" in action) {
-    return String(action.routeTileIds[action.routeTileIds.length - 1] ?? fallback);
-  }
-
-  if ("targetTileIds" in action) {
-    return String(action.targetTileIds[0] ?? fallback);
-  }
-
-  return String(fallback);
 }
