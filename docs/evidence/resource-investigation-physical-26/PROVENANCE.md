@@ -57,7 +57,7 @@ point of the checkpoint.
 | file | purpose |
 | --- | --- |
 | `scripts/investigationPhysicalChainAudit.mjs` | natural occurrence; identity join `Decision.id → pending → execution → outcome`. |
-| `scripts/investigationPhysicalFixturesAudit.mjs` | controlled fixtures P1–P13. |
+| `scripts/investigationPhysicalFixturesAudit.mjs` | controlled fixtures P1–P14. |
 | `scripts/investigationBeforeAfterAudit.mjs` | the §15 causal proof; runs unmodified on both trees. |
 
 **No production instrumentation was added for any audit.** Every measurement reads state the
@@ -71,7 +71,7 @@ simulation already persists, or uses the pre-existing audit-only `decisionObserv
 | `ARCHITECTURE_DECISION.md` | written at `b746b68`; corrected in this pass (see below). |
 | `FINDINGS.md` | this pass. |
 | `PROVENANCE.md` | this file. |
-| `fixtures.json` | `node scripts/investigationPhysicalFixturesAudit.mjs` |
+| `fixtures.json` | `node scripts/investigationPhysicalFixturesAudit.mjs` (P1–P14, 37/37) |
 | `natural-occurrence.json` | `node scripts/investigationPhysicalChainAudit.mjs --years 20 --scenarios map1,map2,ordinary --seeds s1,s2` |
 | `behavioral-comparison-before.json` | `node scripts/investigationBeforeAfterAudit.mjs --label before --years 12 --seeds s1,s2 --scenarios map1,map2`, run in a git worktree at `f947550` |
 | `behavioral-comparison-after.json` | same command, `--label after`, on this tree |
@@ -120,7 +120,7 @@ decision.
 | hardship outcome | `node scripts/postEcologyHardshipOutcomeAudit.mjs` | PASS |
 | expedition knowledge latency | `node scripts/expeditionKnowledgeLatencyAudit.mjs` | PASS |
 | expedition lifecycle | `node scripts/expeditionLifecycleAudit.mjs` | **FAIL — and FAILS IDENTICALLY on `f947550`** with the same flags. Pre-existing, not a regression from this work, not repaired here. |
-| fixtures P1–P13 | `node scripts/investigationPhysicalFixturesAudit.mjs` | 35/35 |
+| fixtures P1–P14 | `node scripts/investigationPhysicalFixturesAudit.mjs` | 37/37 |
 | fixture negative control | P13 with the step-mode bug deliberately reintroduced | 3/3 fail, confirming P13 is not vacuous |
 
 ### The back-edge increase

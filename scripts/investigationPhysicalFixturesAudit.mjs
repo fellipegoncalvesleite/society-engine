@@ -17,6 +17,7 @@
 // P11 no false task-party record                    — a selection nobody executed makes none
 // P12 zero information receipt / support            — no food, no cargo, no support
 // P13 step-mode parity                              — daily/weekly/monthly/seasonal identical
+// P14 arrival_failed reachability                  — measured structural zero, not an untested branch
 //
 // NO PRODUCTION INSTRUMENTATION. Fixtures are built by constructing production worlds and
 // writing a pending record through the same production constructor the decision layer uses.
@@ -276,6 +277,56 @@ try {
         cases.P3.targetKnownBefore || !cases.P3.targetObservedAfter,
       );
     }
+  }
+
+  // ── P14 — WHY `arrival_failed` reads zero: it is architecturally unreachable here ────
+  {
+    // `arrival_failed` fires when a route was walked but its endpoint is not the target.
+    // `buildOutboundPathTiles` aims at the target when passable, otherwise at
+    // `resolveShoreApproachTile`; and `resolvePhysicalFoodHarvest`'s arrival rule — which
+    // the executor reuses verbatim — accepts a land tile adjacent to an AQUATIC target.
+    // So the branch needs an impassable NON-AQUATIC tile with a passable neighbour.
+    //
+    // There are none. This fixture measures that rather than asserting it, so the zero in
+    // the natural run is a STRUCTURAL zero with a stated cause, not an untested branch.
+    const survey = [];
+    for (const kind of ["map1", "map2"]) {
+      const world = runner.initSimWorld({ kind }, `${SEED_PREFIX}:impassable`);
+      const tiles = Object.values(world.tiles);
+      const impassable = tiles.filter((tile) => !passability.isBandPassableDestination(tile));
+      const nonAquatic = impassable.filter((tile) => tile.isAquatic !== true);
+      const reachableTarget = nonAquatic.filter((tile) =>
+        tile.neighbors.some((id) => {
+          const neighbor = world.tiles[id];
+          return neighbor !== undefined && passability.isBandPassableDestination(neighbor);
+        }),
+      );
+      survey.push({
+        map: kind,
+        tiles: tiles.length,
+        impassable: impassable.length,
+        impassableAndNonAquatic: nonAquatic.length,
+        withPassableNeighbour: reachableTarget.length,
+      });
+    }
+
+    cases.P14 = {
+      branch: "arrival_failed",
+      productionActivityResult: "failed_due_to_distance",
+      survey,
+      conclusion:
+        "Every impassable tile on both production maps is aquatic, so the route builder either reaches the target, reaches an aquatic-adjacent stand that counts as arrival, or finds no route at all (route_unavailable). arrival_failed is a defensive branch, architecturally unreachable on these maps — a STRUCTURAL zero, not an unexercised one.",
+    };
+    push(
+      "P14_arrival_failed_is_structurally_unreachable_here",
+      survey.every((entry) => entry.withPassableNeighbour === 0),
+      survey,
+    );
+    push(
+      "P14_survey_is_non_vacuous",
+      survey.every((entry) => entry.tiles > 0 && entry.impassable > 0),
+      survey,
+    );
   }
 
   // ── P4 — insufficient labor: a band with no spare working adults sends nobody ───────

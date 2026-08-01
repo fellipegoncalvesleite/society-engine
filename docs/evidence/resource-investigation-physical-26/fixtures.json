@@ -3,8 +3,8 @@
   "generatedFor": "resource investigation physical execution — controlled fixtures P1-P13",
   "seedPrefix": "c26:fixtures",
   "summary": {
-    "total": 35,
-    "passed": 35,
+    "total": 37,
+    "passed": 37,
     "failed": 0
   },
   "checks": [
@@ -95,6 +95,46 @@
     {
       "name": "P3_no_target_truth_read",
       "passed": true
+    },
+    {
+      "name": "P14_arrival_failed_is_structurally_unreachable_here",
+      "passed": true,
+      "detail": [
+        {
+          "map": "map1",
+          "tiles": 16000,
+          "impassable": 2601,
+          "impassableAndNonAquatic": 0,
+          "withPassableNeighbour": 0
+        },
+        {
+          "map": "map2",
+          "tiles": 30800,
+          "impassable": 3453,
+          "impassableAndNonAquatic": 0,
+          "withPassableNeighbour": 0
+        }
+      ]
+    },
+    {
+      "name": "P14_survey_is_non_vacuous",
+      "passed": true,
+      "detail": [
+        {
+          "map": "map1",
+          "tiles": 16000,
+          "impassable": 2601,
+          "impassableAndNonAquatic": 0,
+          "withPassableNeighbour": 0
+        },
+        {
+          "map": "map2",
+          "tiles": 30800,
+          "impassable": 3453,
+          "impassableAndNonAquatic": 0,
+          "withPassableNeighbour": 0
+        }
+      ]
     },
     {
       "name": "P4_insufficient_labor_named",
@@ -211,6 +251,27 @@
       "partyWorkers": null,
       "targetObservedAfter": false,
       "targetKnownBefore": false
+    },
+    "P14": {
+      "branch": "arrival_failed",
+      "productionActivityResult": "failed_due_to_distance",
+      "survey": [
+        {
+          "map": "map1",
+          "tiles": 16000,
+          "impassable": 2601,
+          "impassableAndNonAquatic": 0,
+          "withPassableNeighbour": 0
+        },
+        {
+          "map": "map2",
+          "tiles": 30800,
+          "impassable": 3453,
+          "impassableAndNonAquatic": 0,
+          "withPassableNeighbour": 0
+        }
+      ],
+      "conclusion": "Every impassable tile on both production maps is aquatic, so the route builder either reaches the target, reaches an aquatic-adjacent stand that counts as arrival, or finds no route at all (route_unavailable). arrival_failed is a defensive branch, architecturally unreachable on these maps — a STRUCTURAL zero, not an unexercised one."
     },
     "P4": {
       "workingAdults": 0,

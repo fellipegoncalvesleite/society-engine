@@ -79,7 +79,7 @@ executor could not have re-derived them (wrong season) and the call would have c
 | `executed_and_returned` | 139 |
 | `beyond_same_day_reach` | 147 |
 | `route_unavailable` | 54 |
-| `arrival_failed` | 0 |
+| `arrival_failed` | 0 (architecturally unreachable — see §11) |
 | everything else | 0 |
 | still pending at end of run | 3 |
 
@@ -233,10 +233,16 @@ replay arms are still present. Both inherited from CORRECTION-24A and untouched.
 - No claim that physical investigation improves outcomes. No population, survival or
   fitness comparison was run, and none is implied.
 - No claim about the mobility boundary in either direction (§9).
-- No claim that `arrival_failed` occurs naturally — it reads **0** across the natural run.
-  It has a real raise site and the exact production result `failed_due_to_distance`, but at
-  the observed same-day distances the route builder either finds the target or finds no
-  route at all. Reported as a measured zero.
+- `arrival_failed` reads **0** across the natural run, and fixture P14 establishes **why**
+  rather than leaving it an untested branch. It needs a route whose endpoint is not the
+  target, which needs an impassable **non-aquatic** tile with a passable neighbour, because
+  `buildOutboundPathTiles` aims at the target when passable and otherwise at
+  `resolveShoreApproachTile`, and the reused arrival rule accepts a land tile adjacent to an
+  **aquatic** target. Surveyed: map1 has 2,601 impassable tiles of 16,000 and map2 has 3,453
+  of 30,800, and **0 of either are non-aquatic**. So the branch is architecturally
+  unreachable on both production maps — a STRUCTURAL zero with a stated cause, not an
+  unexercised outcome. It is kept as a defensive branch carrying the exact production result
+  `failed_due_to_distance`.
 - No claim that the three still-pending records at the end of the run are a defect: a
   record selected in the final season has not had its trip day yet. They are counted in the
   conservation identity, not hidden.
