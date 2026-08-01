@@ -148,27 +148,82 @@ band-known uncertainty
 → later behavioral consequence
 ```
 
+**What an arrived party observes, and why it is more than the defect granted.** The
+removed free chain wrote the target at `distance 1` (confidence 0.68) and its ring at
+`distance 2` (0.34), for nobody. A party that physically stood on the target observes it
+at `distance 0` (confidence 1.0, `visits + 1`) and its 4-neighbours at `distance 1`,
+together with every tile of the walked route on the same terms — the distances
+`tileObservation.ts:259-268` already defines for standing somewhere. So a *single*
+successful investigation now teaches MORE than the defect did, while the population of
+investigations that teach anything at all collapses to those that were physically
+executed. The net is a measured quantity, not an assumption, and §15's before/after is
+what settles it. Understating the distances to make the diff look conservative would be
+its own falsification.
+
+Acquisition kind stays `residential_observation`: an investigation party is a same-day
+task group leaving from and returning to the residential camp, inside the ordinary daily
+range, which is exactly what that kind denotes and exactly what production already writes
+for this action. No new `KnowledgeAcquisitionKind` is added, so retention, compression and
+the CORRECTION-24A label-bias finding are untouched.
+
 **Why this is the smallest architecture that actually closes the chain.** It adds no
 pathfinder, no second knowledge writer, no scheduler, and no new physical subsystem.
-Every physical primitive — route, workers, duration, `route_time_infeasible`, memory
-application — is the one production already uses for information trips. The only new
-state is one optional, self-expiring record per band whose sole purpose is to carry
-`Decision.id` across the phase boundary that facts (1)–(3) prove cannot be crossed any
-other way.
+Every physical primitive — the route builder `buildOutboundPathTiles` /
+`findPassablePath`, the task-group worker derivation, `deriveTripDurationDays`, and the
+canonical `observeTileAndNearby` memory application — is the one production already uses
+for same-day information trips. The only new state is one optional, self-expiring record
+per band whose sole purpose is to carry `Decision.id` across the phase boundary that
+facts (1)–(3) prove cannot be crossed any other way.
+
+### Terminology correction (CORRECTION-26 continuation)
+
+An earlier draft of this document named `route_time_infeasible` as a production
+primitive. **It is not one.** `route_time_infeasible` exists only in
+`scripts/sameDayFailureGateProbe.mjs:44,47`, which maps production's own results onto an
+audit label:
+
+```js
+if (reasons.includes(":distance:access-low")) return "route_time_infeasible";
+if (outcome === "failed_due_to_distance") return "route_time_infeasible";
+```
+
+The production type is `IntraSeasonTripActivityResult` (`agents/types.ts:332`), and the
+member this checkpoint actually reuses is **`failed_due_to_distance`** — the result
+`resolvePhysicalFoodHarvest` produces when `routeReached` is false
+(`intraSeasonTrips.ts:393`). No production enum or reason name in this checkpoint is
+derived from an audit label.
 
 ## Outcome classes
 
-Every selected investigation resolves to exactly one, and none is silently discarded:
+Every selected investigation resolves to exactly one, and none is silently discarded.
+Names below are the production `PendingInvestigationOutcome` members; where an outcome
+also carries a real executed trip result, the exact
+`IntraSeasonTripActivityResult` member is named beside it:
 
 ```text
 executed_and_returned
-route_infeasible
+route_unavailable                 (no contiguous passable path; no trip result produced)
+arrival_failed                    → IntraSeasonTripActivityResult "failed_due_to_distance"
+beyond_same_day_reach             (duration > 1 day by deriveTripDurationDays; not executed)
 insufficient_labor
+destination_blocked
 target_no_longer_valid
-cancelled_before_departure
+band_moved_before_departure
+band_no_longer_active
 superseded
-transferred_to_existing_expedition_authority
+expired_before_execution
 ```
+
+`transferred_to_existing_expedition_authority` is **not** implemented. §10 permits a
+transfer only "where that authority genuinely represents the requested action". The
+expedition families are `retrieval` (food-class patch, hard-coded
+`food_resource_check`, carries cargo), `frontier_exploration` (no destination tile),
+`frontier_verification` (its own five-question evidence type and its own selector) and
+`reconnaissance` (a known route re-read). None of them represents "walk to this
+remembered patch and revise the band's belief about this resource class", and coupling
+one to it would mean inventing a new question type inside a checkpoint whose scope
+forbids redesigning expeditions. Over-range investigations therefore take the explicit
+named non-execution `beyond_same_day_reach`.
 
 ## State implications
 
