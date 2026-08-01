@@ -1,0 +1,244 @@
+{
+  "audit": "AUDIT-27 — §7.4 CROWDING DOUBLE-COUNTING TRACE",
+  "method": "Same-snapshot counterfactual: one frozen two-band world; the second band is removed from world.bands and the observer's whole derived context is recomputed through the production derivations. Nothing is stepped between arms.",
+  "productionInstrumentation": "NONE. Only exported production functions are called, read-only.",
+  "seed": "audit27:doublecount",
+  "overlapSeason": 0,
+  "observerBand": "band:custom:0",
+  "removedBand": "band:custom:1",
+  "observerPosition": "tile:195:90",
+  "removedBandPosition": "tile:196:90",
+  "residenceDistance": 1,
+  "measured": {
+    "deltas": {
+      "nearbyBandPressure": {
+        "withOtherBand": 0.15,
+        "withoutOtherBand": 0,
+        "delta": 0.15
+      },
+      "crowdingPenalty": {
+        "withOtherBand": 0.06,
+        "withoutOtherBand": 0,
+        "delta": 0.06
+      },
+      "parentCoreOverlap": {
+        "withOtherBand": 0,
+        "withoutOtherBand": 0,
+        "delta": 0
+      },
+      "daughterDispersalPressure": {
+        "withOtherBand": 0,
+        "withoutOtherBand": 0,
+        "delta": 0
+      },
+      "safeFrontierPull": {
+        "withOtherBand": 0.64,
+        "withoutOtherBand": 0.68,
+        "delta": -0.04
+      },
+      "inheritedFamiliarityPull": {
+        "withOtherBand": 0,
+        "withoutOtherBand": 0,
+        "delta": 0
+      },
+      "mobilityPressure": {
+        "withOtherBand": 0.09,
+        "withoutOtherBand": 0.08,
+        "delta": 0.01
+      },
+      "netMovePressure": {
+        "withOtherBand": 0.13,
+        "withoutOtherBand": 0.12,
+        "delta": 0.01
+      },
+      "placeAttachmentPull": {
+        "withOtherBand": 0,
+        "withoutOtherBand": 0,
+        "delta": 0
+      },
+      "riskPressure": {
+        "withOtherBand": 0.36,
+        "withoutOtherBand": 0.35,
+        "delta": 0.01
+      },
+      "rangeSaturation": {
+        "withOtherBand": 0.15,
+        "withoutOtherBand": 0.04,
+        "delta": 0.11
+      },
+      "rsNearbyCrowding": {
+        "withOtherBand": 0.15,
+        "withoutOtherBand": 0,
+        "delta": 0.15
+      },
+      "rsLocalPopulationEstimate": {
+        "withOtherBand": 54,
+        "withoutOtherBand": 30,
+        "delta": 24
+      },
+      "rsLocalBandCount": {
+        "withOtherBand": 2,
+        "withoutOtherBand": 1,
+        "delta": 1
+      },
+      "rsSaturation": {
+        "withOtherBand": 2.5,
+        "withoutOtherBand": 2.5,
+        "delta": 0
+      },
+      "perCapitaReturn": {
+        "withOtherBand": 0,
+        "withoutOtherBand": 0,
+        "delta": 0
+      },
+      "saturationPenalty": {
+        "withOtherBand": 0.5,
+        "withoutOtherBand": 0.5,
+        "delta": 0
+      },
+      "sustainedOverCapacity": {
+        "withOtherBand": 1.5,
+        "withoutOtherBand": 1.5,
+        "delta": 0
+      },
+      "ccCrowdingPenalty": {
+        "withOtherBand": 0.15,
+        "withoutOtherBand": 0,
+        "delta": 0.15
+      },
+      "meanCatchmentShare": {
+        "withOtherBand": 0.6923,
+        "withoutOtherBand": 1,
+        "delta": -0.3077
+      },
+      "sharedReachableSupport": {
+        "withOtherBand": 109.84,
+        "withoutOtherBand": 160.63,
+        "delta": -50.79
+      },
+      "rawReachableSupport": {
+        "withOtherBand": 160.63,
+        "withoutOtherBand": 160.63,
+        "delta": 0
+      },
+      "localUsePressureHere": {
+        "withOtherBand": 0,
+        "withoutOtherBand": 0,
+        "delta": 0
+      }
+    },
+    "movedInputCount": 13,
+    "movedInputs": [
+      "nearbyBandPressure",
+      "crowdingPenalty",
+      "safeFrontierPull",
+      "mobilityPressure",
+      "netMovePressure",
+      "riskPressure",
+      "rangeSaturation",
+      "rsNearbyCrowding",
+      "rsLocalPopulationEstimate",
+      "rsLocalBandCount",
+      "ccCrowdingPenalty",
+      "meanCatchmentShare",
+      "sharedReachableSupport"
+    ],
+    "movedDistinctScoreInputCount": 6,
+    "movedDistinctScoreInputs": [
+      "nearbyBandPressure",
+      "crowdingPenalty",
+      "safeFrontierPull",
+      "mobilityPressure",
+      "netMovePressure",
+      "rangeSaturation"
+    ]
+  },
+  "analyticChannels": [
+    {
+      "channel": "direct crowding scalar",
+      "scoreInput": "nearbyBandPressure",
+      "weightInScore": -0.24,
+      "site": "rules/decisionScoring.ts:76",
+      "path": "crowding.weightedCrowding -> ScoreBreakdown.nearbyBandPressure"
+    },
+    {
+      "channel": "amplified crowding penalty",
+      "scoreInput": "crowdingPenalty",
+      "weightInScore": -0.72,
+      "site": "rules/decisionScoring.ts:98",
+      "path": "getCrowdingPenalty(tile, nearby) = weightedCrowding * dryAmplifier * (1 - spatialBuffer*0.48)"
+    },
+    {
+      "channel": "range saturation",
+      "scoreInput": "rangeSaturation",
+      "weightInScore": -0.34,
+      "site": "rules/decisionScoring.ts:80",
+      "path": "saturationPressure contains nearby.weightedCrowding*0.34 + localUsePressure*0.32 + populationPressure*0.28 (socialContext.ts:472-478)"
+    },
+    {
+      "channel": "net move pressure",
+      "scoreInput": "netMovePressure",
+      "weightInScore": 0.72,
+      "site": "rules/decisionScoring.ts:71",
+      "path": "netMovePressure contains mobilityPressure (which contains crowdingPenalty*0.2) + daughterDispersalPressure*0.18 - placeAttachmentPull*0.48 (pressure.ts:270-348)"
+    },
+    {
+      "channel": "mobility pressure",
+      "scoreInput": "mobilityPressure",
+      "weightInScore": -0.05,
+      "site": "rules/decisionScoring.ts:106",
+      "path": "mobilityPressure contains crowdingPenalty*0.2 + daughterDispersalPressure*0.16 (pressure.ts:270-309)"
+    },
+    {
+      "channel": "place attachment pull",
+      "scoreInput": "placeAttachmentPull",
+      "weightInScore": 0.4,
+      "site": "rules/decisionScoring.ts:70",
+      "path": "placeAttachmentPull subtracts crowdingPenalty*0.22 (pressure.ts:264-269)"
+    },
+    {
+      "channel": "local use pressure",
+      "scoreInput": "localUsePressure",
+      "weightInScore": -0.44,
+      "site": "rules/decisionScoring.ts:69",
+      "path": "getUseIntensities multiplies the band's OWN use intensity by (1 + weightedCrowding*0.28) (pressure.ts:461-464), so crowding inflates the band's own recorded use of the tile"
+    },
+    {
+      "channel": "parent core overlap",
+      "scoreInput": "parentCoreOverlap",
+      "weightInScore": -0.16,
+      "site": "rules/decisionScoring.ts:77",
+      "path": "getDaughterDispersalPressure -> parentCoreOverlap (crowding.ts:500-523)"
+    },
+    {
+      "channel": "crowding explore boost",
+      "scoreInput": "crowdingExploreBoost",
+      "weightInScore": 0.48,
+      "site": "rules/decisionScoring.ts:91",
+      "path": "derived from the same crowding scalar in the exploration candidate family"
+    },
+    {
+      "channel": "saturation explore boost",
+      "scoreInput": "saturationExploreBoost",
+      "weightInScore": 0.58,
+      "site": "rules/decisionScoring.ts:92",
+      "path": "derived from saturationPressure, which already contains the crowding scalar"
+    },
+    {
+      "channel": "daughter dispersal explore boost",
+      "scoreInput": "daughterDispersalExploreBoost",
+      "weightInScore": 0.7,
+      "site": "rules/decisionScoring.ts:93",
+      "path": "derived from daughterDispersalPressure, which contains weightedCrowding*0.36 (crowding.ts:460-469)"
+    },
+    {
+      "channel": "per-capita return",
+      "scoreInput": "perCapitaReturn",
+      "weightInScore": 0.24,
+      "site": "rules/decisionScoring.ts:81",
+      "path": "carryingCapacity divides tile support by the shared-catchment share AND separately applies a saturationPenalty from localPopulationEstimate/supportableCapacity (carryingCapacity.ts:429-449)"
+    }
+  ],
+  "analyticChannelCount": 12,
+  "interpretation": "movedDistinctScoreInputs counts how many SEPARATELY-WEIGHTED additive terms of computeCandidateScore respond to the SAME single physical event (one overlapping neighbour). Whether each is a distinct consequence or a repeated representation is argued per channel in FINDINGS.md §7.4."
+}
