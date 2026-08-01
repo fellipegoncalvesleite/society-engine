@@ -1,0 +1,334 @@
+{
+  "instrument": "B1–B12 ACTUAL READER / PHYSICAL-ACTION FIXTURES",
+  "summary": {
+    "pass": 12,
+    "fail": 0,
+    "vacuous": 0
+  },
+  "required": "12 PASS / 0 FAIL / 0 VACUOUS",
+  "verdict": "PASS",
+  "fixtures": [
+    {
+      "id": "B1",
+      "title": "genuinely unread writer-day record",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "recordEventId": "exploration-record:band:dry-margin-foragers:expedition:band:dry-margin-foragers:96:frontier_exploration:742566b:tile:109:40:106",
+        "returnDay": 106,
+        "actualReaderEventsOnWriterDay": 0,
+        "actionStreamsEqual": true,
+        "downstreamEqualAfterExcludingWriterProducts": true,
+        "controlSound": true,
+        "terminalClass": "WRITE_SUPPRESSION_NO_TRACKED_CONSEQUENCE"
+      }
+    },
+    {
+      "id": "B2",
+      "title": "actual production reader consults the record but remains inert",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "scenario": "site_B_dry_plains",
+        "seed": "s3",
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:bf2043c5:tile:13:34:100",
+        "firstReader": {
+          "readerFamily": "camp_movement",
+          "productionFunction": "deriveCampMovementDecisionSupport",
+          "invocationDay": 180,
+          "consultationRole": "current_camp_baseline+current_shift_baseline"
+        },
+        "readerOutput": {
+          "control": {
+            "verdict": "local_camp_shift:tile:11:34,hard_move_recovery:tile:13:34,temporary_task_camp:tile:13:34",
+            "ranking": "local_camp_shift|tile:11:34|0.1800,hard_move_recovery|tile:13:34|0.1400,temporary_task_camp|tile:13:34|0.1100",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:14:34"
+          },
+          "counterfactual": {
+            "verdict": "local_camp_shift:tile:11:34,hard_move_recovery:tile:13:34,temporary_task_camp:tile:13:34",
+            "ranking": "local_camp_shift|tile:11:34|0.1800,hard_move_recovery|tile:13:34|0.1400,temporary_task_camp|tile:13:34|0.1100",
+            "selectedActionId": "decision:band:custom:0:2",
+            "selectedActionKind": "move_to_tile",
+            "selectedTarget": "tile:14:34"
+          }
+        }
+      }
+    },
+    {
+      "id": "B3",
+      "title": "returned observation changes an executed residential movement",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "scenario": "site_E_hills",
+        "seed": "s1",
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1b466dbc:tile:137:41:104",
+        "day": 630,
+        "firstDifferentDay": {
+          "control": [
+            {
+              "decisionId": "decision:band:custom:0:7",
+              "bandId": "band:custom:0",
+              "day": 630,
+              "actionKind": "move_to_tile",
+              "targetTileId": "tile:137:43",
+              "movementRecordId": "movement-record:band:custom:0:7:decision:band:custom:0:7",
+              "positionBefore": "tile:137:41",
+              "positionAfter": "tile:137:43"
+            }
+          ],
+          "counterfactual": []
+        },
+        "distinctMaterializedDecisions": {
+          "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1b466dbc:tile:137:41:104",
+          "scenario": "site_E_hills",
+          "seed": "s1",
+          "returnDay": 104,
+          "controlWriterObserved": true,
+          "counterfactualWriterObserved": true,
+          "firstDifferentMovementIndex": 4,
+          "control": {
+            "decisionId": "decision:band:custom:0:7",
+            "bandId": "band:custom:0",
+            "day": 630,
+            "actionKind": "move_to_tile",
+            "targetTileId": "tile:137:43",
+            "movementRecordId": "movement-record:band:custom:0:7:decision:band:custom:0:7",
+            "positionBefore": "tile:137:41",
+            "positionAfter": "tile:137:43"
+          },
+          "counterfactual": {
+            "decisionId": "decision:band:custom:0:8",
+            "bandId": "band:custom:0",
+            "day": 720,
+            "actionKind": "move_to_tile",
+            "targetTileId": "tile:137:43",
+            "movementRecordId": "movement-record:band:custom:0:8:decision:band:custom:0:8",
+            "positionBefore": "tile:137:41",
+            "positionAfter": "tile:137:43"
+          }
+        }
+      }
+    },
+    {
+      "id": "B4",
+      "title": "returned observation changes an executed camp action",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "scenario": "site_E_hills",
+        "seed": "s1",
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1b466dbc:tile:137:41:104",
+        "day": 630,
+        "control": [
+          {
+            "campActionId": "camp-action:decision:band:custom:0:7:camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+            "bandId": "band:custom:0",
+            "day": 630,
+            "campActionKind": "local_shift",
+            "targetTileId": "tile:137:43",
+            "campRecordId": "camp-shift:band:custom:0:7:tile:137:41:tile:137:43",
+            "positionBefore": "tile:137:41",
+            "positionAfter": "tile:137:43"
+          }
+        ],
+        "counterfactual": [
+          {
+            "campActionId": "camp-action:decision:band:custom:0:7:temporary-task-camp:band:custom:0:7:tile:136:41",
+            "bandId": "band:custom:0",
+            "day": 630,
+            "campActionKind": "temporary_task_camp",
+            "targetTileId": "tile:136:41",
+            "campRecordId": "temporary-task-camp:band:custom:0:7:tile:136:41",
+            "positionBefore": "tile:137:41",
+            "positionAfter": "tile:137:41"
+          }
+        ]
+      }
+    },
+    {
+      "id": "B5",
+      "title": "returned observation changes an executed resource activity",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "scenario": "site_A_coast",
+        "seed": "s1",
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1781dbf4:tile:205:70:100",
+        "day": 285,
+        "control": [
+          {
+            "activityActionId": "activity-action:daily-trip:band:custom:0:285:plant_gathering_group:tile:204:73",
+            "bandId": "band:custom:0",
+            "day": 285,
+            "activityKind": "plant_gathering_group",
+            "selectedPatchId": "patch:tile:204:73:fallback_food",
+            "selectedTileId": "tile:204:73",
+            "tripOrTaskId": "daily-trip:band:custom:0:285:plant_gathering_group:tile:204:73",
+            "workers": 4,
+            "route": [
+              "tile:207:73",
+              "tile:206:73",
+              "tile:205:73",
+              "tile:204:73"
+            ],
+            "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:285:plant_gathering_group:tile:204:73:no_effect_observed",
+            "receiptId": "receipt:daily-trip:band:custom:0:285:plant_gathering_group:tile:204:73",
+            "usableSupportReturned": 0
+          }
+        ],
+        "counterfactual": [
+          {
+            "activityActionId": "activity-action:daily-trip:band:custom:0:285:hunting_group:tile:206:72",
+            "bandId": "band:custom:0",
+            "day": 285,
+            "activityKind": "hunting_group",
+            "selectedPatchId": "patch:tile:206:72:animal_food",
+            "selectedTileId": "tile:206:72",
+            "tripOrTaskId": "daily-trip:band:custom:0:285:hunting_group:tile:206:72",
+            "workers": 3,
+            "route": [
+              "tile:207:73",
+              "tile:206:73",
+              "tile:206:72"
+            ],
+            "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:285:hunting_group:tile:206:72:target_not_found",
+            "receiptId": "receipt:daily-trip:band:custom:0:285:hunting_group:tile:206:72",
+            "usableSupportReturned": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "B6",
+      "title": "returned observation changes an executed daughter foundation",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "sourceWorld": "bounded physically legal production fission fixture",
+        "configuration": "aquatic_margin",
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:358:frontier_exploration:d22d025c:tile:120:116:360",
+        "parentBandId": "band:custom:0",
+        "returnDay": 360,
+        "refreshedTileId": "tile:120:116",
+        "route": [
+          "tile:119:116",
+          "tile:120:116"
+        ],
+        "firstActualFissionReader": {
+          "productionFunction": "selectFissionTarget",
+          "invocationDay": 360,
+          "consultationRole": "fission_target_candidate",
+          "readerVerdict": "fission_target:tile:119:116:0.9700",
+          "selectedActionId": "event:fission:band:custom:0:band:custom:0:daughter:1:t4:4"
+        },
+        "control": [
+          {
+            "fissionActionId": "event:fission:band:custom:0:band:custom:0:daughter:1:t4:4",
+            "parentBandId": "band:custom:0",
+            "day": 360,
+            "daughterBandId": "band:custom:0:daughter:1:t4",
+            "selectedTargetTileId": "tile:119:116",
+            "daughterActuallyCreated": true,
+            "daughterInitialPosition": "tile:119:116"
+          }
+        ],
+        "counterfactual": []
+      }
+    },
+    {
+      "id": "B7",
+      "title": "independent verification evidence is preserved",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "recordEventId": "exploration-record:band:dry-margin-foragers:expedition:band:dry-margin-foragers:96:frontier_exploration:742566b:tile:112:40:106",
+        "tileId": "tile:112:40",
+        "separateVerificationRowsNamingTile": 1,
+        "exactVerificationEvidencePreserved": true,
+        "controlWriterSuppressed": false,
+        "counterfactualWriterSuppressed": true
+      }
+    },
+    {
+      "id": "B8",
+      "title": "pre-fork residential corridor remains preserved",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:1260:frontier_exploration:23e78554:tile:133:45:1270",
+        "returnDay": 1270,
+        "preexistingResidentialCorridorCount": 10,
+        "exactlyPreservedResidentialCorridorIds": [
+          "route:tile:133:44->tile:133:45",
+          "route:tile:134:44->tile:133:44",
+          "route:tile:135:44->tile:134:44",
+          "route:tile:136:43->tile:135:44",
+          "route:tile:137:41->tile:137:43",
+          "route:tile:137:43->tile:136:43",
+          "route:tile:139:41->tile:137:41",
+          "route:tile:139:41->tile:141:41",
+          "route:tile:140:41->tile:139:41",
+          "route:tile:141:41->tile:140:41"
+        ]
+      }
+    },
+    {
+      "id": "B9",
+      "title": "later corridor difference follows natural residential movement",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "scenario": "site_E_hills",
+        "seed": "s1",
+        "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1b466dbc:tile:137:41:104",
+        "firstMovementDifferenceDay": 630,
+        "firstResidentialCorridorDifferenceDay": 630
+      }
+    },
+    {
+      "id": "B10",
+      "title": "suppressing a refresh preserves the exact pre-return record",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "scenario": "map1",
+        "seed": "s1",
+        "recordEventId": "exploration-record:band:dry-margin-foragers:expedition:band:dry-margin-foragers:96:frontier_exploration:742566b:tile:110:40:105",
+        "exactFingerprintPreserved": true
+      }
+    },
+    {
+      "id": "B11",
+      "title": "lost frontier party creates no writer event or record identity",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "lostOutcome": {
+          "expeditionId": "expedition:band:varied-dry-corridor-mid:96:frontier_exploration:d56febc",
+          "phase": "lost",
+          "outcomeReason": "party_lost"
+        },
+        "returnWriterEventsForLostParty": 0,
+        "recordEventIdentityCreated": false
+      }
+    },
+    {
+      "id": "B12",
+      "title": "every admitted exact control replay is sound",
+      "verdict": "PASS",
+      "vacuous": false,
+      "evidence": {
+        "replayDocuments": [
+          "docs/evidence/correction24c/production-reader-replay-40y.json",
+          "docs/evidence/correction24c/production-reader-replay-200y.json",
+          "docs/evidence/correction24c/production-reader-replay-500y.json"
+        ],
+        "replayEvents": 686,
+        "unsoundControls": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,2149 @@
+{
+  "instrument": "ACTUAL PRODUCTION READER HIDDEN-TRUTH PERTURBATION",
+  "recordEventId": "exploration-record:band:custom:0:expedition:band:custom:0:96:frontier_exploration:1b466dbc:tile:124:44:104",
+  "bandId": "band:custom:0",
+  "tileId": "tile:124:44",
+  "expeditionId": "expedition:band:custom:0:96:frontier_exploration:1b466dbc",
+  "returnDay": 104,
+  "followedThroughDay": 284,
+  "hiddenTruthActuallyChanged": true,
+  "bandKnownRecordIdentical": true,
+  "actualReaderEventsObserved": 2,
+  "actualReaderOutputsIdentical": true,
+  "actionStreamsIdentical": true,
+  "fingerprints": {
+    "controlHiddenTruth": "f48ddc8e6ee671ae0adb2605a25fe49de7150292933c66057799f56508fe59c0",
+    "perturbedHiddenTruth": "7fbd748766351b88ca4fc1160e11695e2a1fe8f39a6175c65e584ce844135078",
+    "controlKnownRecord": "5b09d84d2e047bbe201089d3841a1dd64f43457c2eb791c2f70be46b49a6611b",
+    "perturbedKnownRecord": "5b09d84d2e047bbe201089d3841a1dd64f43457c2eb791c2f70be46b49a6611b"
+  },
+  "control": {
+    "readers": [
+      {
+        "readerFamily": "movement_destination",
+        "productionFunction": "evaluateBandDecision/getKnownTileStats",
+        "invocationDay": 180,
+        "actualRecordConsulted": true,
+        "consultationRole": "known_tile_statistics",
+        "readerVerdict": "move_to_tile:tile:140:41",
+        "readerRanking": "move_to_tile:tile:140:41:2.490000|move_to_tile:tile:139:40:2.390000|move_to_tile:tile:137:41:2.170000|move_to_tile:tile:138:41:2.100000|move_to_tile:tile:139:42:2.040000|resource_scout:tile:139:42:1.990000|move_to_tile:tile:139:43:1.950000|move_to_tile:tile:138:42:1.790000|move_to_tile:tile:140:42:1.540000|move_to_tile:tile:140:40:1.440000|move_to_tile:tile:141:41:1.380000|move_to_tile:tile:138:40:1.370000|move_to_tile:tile:139:39:1.300000|stay:tile:139:41:1.180000",
+        "selectedActionId": "decision:band:custom:0:2",
+        "selectedActionKind": "move_to_tile",
+        "selectedTarget": "tile:140:41"
+      },
+      {
+        "readerFamily": "movement_destination",
+        "productionFunction": "evaluateBandDecision/getKnownTileStats",
+        "invocationDay": 270,
+        "actualRecordConsulted": true,
+        "consultationRole": "known_tile_statistics",
+        "readerVerdict": "move_to_tile:tile:140:41",
+        "readerRanking": "move_to_tile:tile:140:41:1.690000|move_to_tile:tile:141:40:1.390000|resource_scout:tile:138:40:1.110000|move_to_tile:tile:142:41:1.000000|move_to_tile:tile:141:42:0.990000|stay:tile:141:41:0.890000|move_to_tile:tile:139:41:0.890000|move_to_tile:tile:141:39:0.790000|move_to_tile:tile:142:40:0.750000|move_to_tile:tile:143:41:0.720000|move_to_tile:tile:141:43:0.410000|move_to_tile:tile:142:42:0.400000|move_to_tile:tile:140:42:0.090000|move_to_tile:tile:140:40:0.090000",
+        "selectedActionId": "decision:band:custom:0:3",
+        "selectedActionKind": "move_to_tile",
+        "selectedTarget": "tile:140:41"
+      }
+    ],
+    "actions": {
+      "movement": [
+        {
+          "decisionId": "decision:band:custom:0:2",
+          "bandId": "band:custom:0",
+          "day": 180,
+          "actionKind": "move_to_tile",
+          "targetTileId": "tile:140:41",
+          "movementRecordId": "movement-record:band:custom:0:2:decision:band:custom:0:2",
+          "positionBefore": "tile:139:41",
+          "positionAfter": "tile:141:41"
+        },
+        {
+          "decisionId": "decision:band:custom:0:3",
+          "bandId": "band:custom:0",
+          "day": 270,
+          "actionKind": "move_to_tile",
+          "targetTileId": "tile:140:41",
+          "movementRecordId": "movement-record:band:custom:0:3:decision:band:custom:0:3",
+          "positionBefore": "tile:141:41",
+          "positionAfter": "tile:140:41"
+        }
+      ],
+      "camp": [],
+      "resource": [
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:105:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 105,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:105:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:105:local_foraging_group:tile:137:41:failed_due_to_season_mismatch",
+          "receiptId": "receipt:daily-trip:band:custom:0:105:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:108:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 108,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:108:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:108:local_foraging_group:tile:138:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:108:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0.0094
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:111:local_foraging_group:tile:139:40",
+          "bandId": "band:custom:0",
+          "day": 111,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:139:40:generic_plant_food",
+          "selectedTileId": "tile:139:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:111:local_foraging_group:tile:139:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:139:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:111:local_foraging_group:tile:139:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:111:local_foraging_group:tile:139:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:114:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 114,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:114:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:114:local_foraging_group:tile:137:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:114:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0.0152
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:117:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 117,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:117:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:117:local_foraging_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:117:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:120:local_foraging_group:tile:139:40",
+          "bandId": "band:custom:0",
+          "day": 120,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:139:40:generic_plant_food",
+          "selectedTileId": "tile:139:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:120:local_foraging_group:tile:139:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:139:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:120:local_foraging_group:tile:139:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:120:local_foraging_group:tile:139:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:123:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 123,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:123:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:123:local_foraging_group:tile:137:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:123:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0.0114
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:126:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 126,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:126:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:126:local_foraging_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:126:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:129:local_foraging_group:tile:139:40",
+          "bandId": "band:custom:0",
+          "day": 129,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:139:40:generic_plant_food",
+          "selectedTileId": "tile:139:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:129:local_foraging_group:tile:139:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:139:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:129:local_foraging_group:tile:139:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:129:local_foraging_group:tile:139:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:132:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 132,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:132:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:132:local_foraging_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:132:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:135:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 135,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:135:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:135:local_foraging_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:135:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:138:local_foraging_group:tile:139:40",
+          "bandId": "band:custom:0",
+          "day": 138,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:139:40:generic_plant_food",
+          "selectedTileId": "tile:139:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:138:local_foraging_group:tile:139:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:139:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:138:local_foraging_group:tile:139:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:138:local_foraging_group:tile:139:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:141:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 141,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:141:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:141:local_foraging_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:141:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:144:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 144,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:144:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:144:local_foraging_group:tile:138:41:failed_due_to_season_mismatch",
+          "receiptId": "receipt:daily-trip:band:custom:0:144:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:147:local_foraging_group:tile:139:40",
+          "bandId": "band:custom:0",
+          "day": 147,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:139:40:generic_plant_food",
+          "selectedTileId": "tile:139:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:147:local_foraging_group:tile:139:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:139:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:147:local_foraging_group:tile:139:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:147:local_foraging_group:tile:139:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:150:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 150,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:150:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:150:local_foraging_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:150:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:153:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 153,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:153:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:153:local_foraging_group:tile:138:41:failed_due_to_season_mismatch",
+          "receiptId": "receipt:daily-trip:band:custom:0:153:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:156:local_foraging_group:tile:138:40",
+          "bandId": "band:custom:0",
+          "day": 156,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:40:fallback_food",
+          "selectedTileId": "tile:138:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:156:local_foraging_group:tile:138:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:138:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:156:local_foraging_group:tile:138:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:156:local_foraging_group:tile:138:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:159:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 159,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:159:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:159:local_foraging_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:159:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:162:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 162,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:162:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:162:local_foraging_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:162:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:165:local_foraging_group:tile:138:40",
+          "bandId": "band:custom:0",
+          "day": 165,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:40:generic_plant_food",
+          "selectedTileId": "tile:138:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:165:local_foraging_group:tile:138:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:138:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:165:local_foraging_group:tile:138:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:165:local_foraging_group:tile:138:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:168:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 168,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:168:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:168:local_foraging_group:tile:137:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:168:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:171:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 171,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:171:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:171:local_foraging_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:171:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:174:local_foraging_group:tile:138:40",
+          "bandId": "band:custom:0",
+          "day": 174,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:40:fallback_food",
+          "selectedTileId": "tile:138:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:174:local_foraging_group:tile:138:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:138:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:174:local_foraging_group:tile:138:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:174:local_foraging_group:tile:138:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:177:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 177,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:177:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:177:local_foraging_group:tile:137:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:177:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:186:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 186,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:186:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:186:plant_gathering_group:tile:139:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:186:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0.0243
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:189:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 189,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:fallback_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:189:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:189:plant_gathering_group:tile:140:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:189:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:192:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 192,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:fallback_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:192:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:192:plant_gathering_group:tile:139:42:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:192:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:195:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 195,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:195:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:195:plant_gathering_group:tile:138:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:195:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0.0179
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:198:plant_gathering_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 198,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:137:41:fallback_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:198:plant_gathering_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:198:plant_gathering_group:tile:137:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:198:plant_gathering_group:tile:137:41",
+          "usableSupportReturned": 0.0171
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:201:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 201,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:201:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:201:plant_gathering_group:tile:139:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:201:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0.0247
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:204:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 204,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:fallback_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:204:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:204:plant_gathering_group:tile:140:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:204:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:207:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 207,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:fallback_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:207:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:207:plant_gathering_group:tile:139:42:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:207:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:210:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 210,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:210:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:210:plant_gathering_group:tile:138:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:210:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0.0137
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:213:plant_gathering_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 213,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:137:41:fallback_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:213:plant_gathering_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:213:plant_gathering_group:tile:137:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:213:plant_gathering_group:tile:137:41",
+          "usableSupportReturned": 0.0144
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:216:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 216,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:216:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:216:plant_gathering_group:tile:139:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:216:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0.0132
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:219:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 219,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:generic_plant_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:219:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:219:plant_gathering_group:tile:140:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:219:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:222:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 222,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:fallback_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:222:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:222:plant_gathering_group:tile:139:42:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:222:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:225:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 225,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:225:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:225:plant_gathering_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:225:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:228:plant_gathering_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 228,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:137:41:fallback_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:228:plant_gathering_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:228:plant_gathering_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:228:plant_gathering_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:231:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 231,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:231:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:231:plant_gathering_group:tile:139:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:231:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:234:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 234,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:fallback_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:234:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:234:plant_gathering_group:tile:140:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:234:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:237:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 237,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:generic_plant_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:237:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:237:plant_gathering_group:tile:139:42:no_effect_observed",
+          "receiptId": "receipt:daily-trip:band:custom:0:237:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:240:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 240,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:240:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:240:plant_gathering_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:240:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:243:plant_gathering_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 243,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:137:41:fallback_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:243:plant_gathering_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:243:plant_gathering_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:243:plant_gathering_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:246:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 246,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:246:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:246:plant_gathering_group:tile:139:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:246:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:249:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 249,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:generic_plant_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:249:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:249:plant_gathering_group:tile:140:41:no_effect_observed",
+          "receiptId": "receipt:daily-trip:band:custom:0:249:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:252:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 252,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:generic_plant_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:252:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:252:plant_gathering_group:tile:139:42:no_effect_observed",
+          "receiptId": "receipt:daily-trip:band:custom:0:252:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:255:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 255,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:255:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:255:plant_gathering_group:tile:138:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:255:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:258:plant_gathering_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 258,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:137:41:fallback_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:258:plant_gathering_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:258:plant_gathering_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:258:plant_gathering_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:261:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 261,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:261:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:261:plant_gathering_group:tile:139:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:261:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:264:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 264,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:generic_plant_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:264:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:264:plant_gathering_group:tile:140:41:no_effect_observed",
+          "receiptId": "receipt:daily-trip:band:custom:0:264:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:267:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 267,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:generic_plant_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:267:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:267:plant_gathering_group:tile:139:42:no_effect_observed",
+          "receiptId": "receipt:daily-trip:band:custom:0:267:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:276:plant_gathering_group:tile:141:41",
+          "bandId": "band:custom:0",
+          "day": 276,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:141:41:fallback_food",
+          "selectedTileId": "tile:141:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:276:plant_gathering_group:tile:141:41",
+          "workers": 4,
+          "route": [
+            "tile:140:41",
+            "tile:141:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:276:plant_gathering_group:tile:141:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:276:plant_gathering_group:tile:141:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:279:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 279,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:generic_plant_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:279:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:279:plant_gathering_group:tile:139:41:failed_due_to_season_mismatch",
+          "receiptId": "receipt:daily-trip:band:custom:0:279:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:282:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 282,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:282:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:282:plant_gathering_group:tile:138:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:282:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0.0039
+        }
+      ],
+      "fission": []
+    }
+  },
+  "perturbed": {
+    "readers": [
+      {
+        "readerFamily": "movement_destination",
+        "productionFunction": "evaluateBandDecision/getKnownTileStats",
+        "invocationDay": 180,
+        "actualRecordConsulted": true,
+        "consultationRole": "known_tile_statistics",
+        "readerVerdict": "move_to_tile:tile:140:41",
+        "readerRanking": "move_to_tile:tile:140:41:2.490000|move_to_tile:tile:139:40:2.390000|move_to_tile:tile:137:41:2.170000|move_to_tile:tile:138:41:2.100000|move_to_tile:tile:139:42:2.040000|resource_scout:tile:139:42:1.990000|move_to_tile:tile:139:43:1.950000|move_to_tile:tile:138:42:1.790000|move_to_tile:tile:140:42:1.540000|move_to_tile:tile:140:40:1.440000|move_to_tile:tile:141:41:1.380000|move_to_tile:tile:138:40:1.370000|move_to_tile:tile:139:39:1.300000|stay:tile:139:41:1.180000",
+        "selectedActionId": "decision:band:custom:0:2",
+        "selectedActionKind": "move_to_tile",
+        "selectedTarget": "tile:140:41"
+      },
+      {
+        "readerFamily": "movement_destination",
+        "productionFunction": "evaluateBandDecision/getKnownTileStats",
+        "invocationDay": 270,
+        "actualRecordConsulted": true,
+        "consultationRole": "known_tile_statistics",
+        "readerVerdict": "move_to_tile:tile:140:41",
+        "readerRanking": "move_to_tile:tile:140:41:1.690000|move_to_tile:tile:141:40:1.390000|resource_scout:tile:138:40:1.110000|move_to_tile:tile:142:41:1.000000|move_to_tile:tile:141:42:0.990000|stay:tile:141:41:0.890000|move_to_tile:tile:139:41:0.890000|move_to_tile:tile:141:39:0.790000|move_to_tile:tile:142:40:0.750000|move_to_tile:tile:143:41:0.720000|move_to_tile:tile:141:43:0.410000|move_to_tile:tile:142:42:0.400000|move_to_tile:tile:140:42:0.090000|move_to_tile:tile:140:40:0.090000",
+        "selectedActionId": "decision:band:custom:0:3",
+        "selectedActionKind": "move_to_tile",
+        "selectedTarget": "tile:140:41"
+      }
+    ],
+    "actions": {
+      "movement": [
+        {
+          "decisionId": "decision:band:custom:0:2",
+          "bandId": "band:custom:0",
+          "day": 180,
+          "actionKind": "move_to_tile",
+          "targetTileId": "tile:140:41",
+          "movementRecordId": "movement-record:band:custom:0:2:decision:band:custom:0:2",
+          "positionBefore": "tile:139:41",
+          "positionAfter": "tile:141:41"
+        },
+        {
+          "decisionId": "decision:band:custom:0:3",
+          "bandId": "band:custom:0",
+          "day": 270,
+          "actionKind": "move_to_tile",
+          "targetTileId": "tile:140:41",
+          "movementRecordId": "movement-record:band:custom:0:3:decision:band:custom:0:3",
+          "positionBefore": "tile:141:41",
+          "positionAfter": "tile:140:41"
+        }
+      ],
+      "camp": [],
+      "resource": [
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:105:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 105,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:105:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:105:local_foraging_group:tile:137:41:failed_due_to_season_mismatch",
+          "receiptId": "receipt:daily-trip:band:custom:0:105:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:108:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 108,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:108:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:108:local_foraging_group:tile:138:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:108:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0.0094
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:111:local_foraging_group:tile:139:40",
+          "bandId": "band:custom:0",
+          "day": 111,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:139:40:generic_plant_food",
+          "selectedTileId": "tile:139:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:111:local_foraging_group:tile:139:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:139:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:111:local_foraging_group:tile:139:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:111:local_foraging_group:tile:139:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:114:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 114,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:114:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:114:local_foraging_group:tile:137:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:114:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0.0152
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:117:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 117,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:117:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:117:local_foraging_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:117:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:120:local_foraging_group:tile:139:40",
+          "bandId": "band:custom:0",
+          "day": 120,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:139:40:generic_plant_food",
+          "selectedTileId": "tile:139:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:120:local_foraging_group:tile:139:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:139:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:120:local_foraging_group:tile:139:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:120:local_foraging_group:tile:139:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:123:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 123,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:123:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:123:local_foraging_group:tile:137:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:123:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0.0114
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:126:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 126,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:126:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:126:local_foraging_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:126:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:129:local_foraging_group:tile:139:40",
+          "bandId": "band:custom:0",
+          "day": 129,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:139:40:generic_plant_food",
+          "selectedTileId": "tile:139:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:129:local_foraging_group:tile:139:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:139:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:129:local_foraging_group:tile:139:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:129:local_foraging_group:tile:139:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:132:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 132,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:132:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:132:local_foraging_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:132:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:135:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 135,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:135:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:135:local_foraging_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:135:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:138:local_foraging_group:tile:139:40",
+          "bandId": "band:custom:0",
+          "day": 138,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:139:40:generic_plant_food",
+          "selectedTileId": "tile:139:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:138:local_foraging_group:tile:139:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:139:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:138:local_foraging_group:tile:139:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:138:local_foraging_group:tile:139:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:141:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 141,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:141:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:141:local_foraging_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:141:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:144:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 144,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:144:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:144:local_foraging_group:tile:138:41:failed_due_to_season_mismatch",
+          "receiptId": "receipt:daily-trip:band:custom:0:144:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:147:local_foraging_group:tile:139:40",
+          "bandId": "band:custom:0",
+          "day": 147,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:139:40:generic_plant_food",
+          "selectedTileId": "tile:139:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:147:local_foraging_group:tile:139:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:139:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:147:local_foraging_group:tile:139:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:147:local_foraging_group:tile:139:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:150:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 150,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:150:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:150:local_foraging_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:150:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:153:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 153,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:153:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:153:local_foraging_group:tile:138:41:failed_due_to_season_mismatch",
+          "receiptId": "receipt:daily-trip:band:custom:0:153:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:156:local_foraging_group:tile:138:40",
+          "bandId": "band:custom:0",
+          "day": 156,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:40:fallback_food",
+          "selectedTileId": "tile:138:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:156:local_foraging_group:tile:138:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:138:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:156:local_foraging_group:tile:138:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:156:local_foraging_group:tile:138:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:159:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 159,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:159:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:159:local_foraging_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:159:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:162:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 162,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:162:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:162:local_foraging_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:162:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:165:local_foraging_group:tile:138:40",
+          "bandId": "band:custom:0",
+          "day": 165,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:40:generic_plant_food",
+          "selectedTileId": "tile:138:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:165:local_foraging_group:tile:138:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:138:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:165:local_foraging_group:tile:138:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:165:local_foraging_group:tile:138:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:168:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 168,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:168:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:168:local_foraging_group:tile:137:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:168:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:171:local_foraging_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 171,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:171:local_foraging_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:171:local_foraging_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:171:local_foraging_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:174:local_foraging_group:tile:138:40",
+          "bandId": "band:custom:0",
+          "day": 174,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:138:40:fallback_food",
+          "selectedTileId": "tile:138:40",
+          "tripOrTaskId": "daily-trip:band:custom:0:174:local_foraging_group:tile:138:40",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:138:40"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:174:local_foraging_group:tile:138:40:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:174:local_foraging_group:tile:138:40",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:177:local_foraging_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 177,
+          "activityKind": "local_foraging_group",
+          "selectedPatchId": "patch:tile:137:41:generic_plant_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:177:local_foraging_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:177:local_foraging_group:tile:137:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:177:local_foraging_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:186:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 186,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:186:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:186:plant_gathering_group:tile:139:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:186:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0.0243
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:189:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 189,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:fallback_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:189:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:189:plant_gathering_group:tile:140:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:189:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:192:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 192,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:fallback_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:192:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:192:plant_gathering_group:tile:139:42:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:192:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:195:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 195,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:195:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:195:plant_gathering_group:tile:138:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:195:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0.0179
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:198:plant_gathering_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 198,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:137:41:fallback_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:198:plant_gathering_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:198:plant_gathering_group:tile:137:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:198:plant_gathering_group:tile:137:41",
+          "usableSupportReturned": 0.0171
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:201:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 201,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:201:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:201:plant_gathering_group:tile:139:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:201:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0.0247
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:204:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 204,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:fallback_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:204:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:204:plant_gathering_group:tile:140:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:204:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:207:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 207,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:fallback_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:207:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:207:plant_gathering_group:tile:139:42:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:207:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:210:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 210,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:210:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:210:plant_gathering_group:tile:138:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:210:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0.0137
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:213:plant_gathering_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 213,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:137:41:fallback_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:213:plant_gathering_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:213:plant_gathering_group:tile:137:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:213:plant_gathering_group:tile:137:41",
+          "usableSupportReturned": 0.0144
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:216:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 216,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:216:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:216:plant_gathering_group:tile:139:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:216:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0.0132
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:219:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 219,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:generic_plant_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:219:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:219:plant_gathering_group:tile:140:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:219:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:222:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 222,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:fallback_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:222:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:222:plant_gathering_group:tile:139:42:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:222:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:225:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 225,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:225:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:225:plant_gathering_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:225:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:228:plant_gathering_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 228,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:137:41:fallback_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:228:plant_gathering_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:228:plant_gathering_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:228:plant_gathering_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:231:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 231,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:231:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:231:plant_gathering_group:tile:139:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:231:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:234:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 234,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:fallback_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:234:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:234:plant_gathering_group:tile:140:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:234:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:237:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 237,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:generic_plant_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:237:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:237:plant_gathering_group:tile:139:42:no_effect_observed",
+          "receiptId": "receipt:daily-trip:band:custom:0:237:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:240:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 240,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:240:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:240:plant_gathering_group:tile:138:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:240:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:243:plant_gathering_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 243,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:137:41:fallback_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:243:plant_gathering_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:243:plant_gathering_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:243:plant_gathering_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:246:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 246,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:246:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:246:plant_gathering_group:tile:139:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:246:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:249:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 249,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:generic_plant_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:249:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:249:plant_gathering_group:tile:140:41:no_effect_observed",
+          "receiptId": "receipt:daily-trip:band:custom:0:249:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:252:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 252,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:generic_plant_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:252:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:252:plant_gathering_group:tile:139:42:no_effect_observed",
+          "receiptId": "receipt:daily-trip:band:custom:0:252:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:255:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 255,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:fallback_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:255:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:255:plant_gathering_group:tile:138:41:failed_due_to_low_memory_confidence",
+          "receiptId": "receipt:daily-trip:band:custom:0:255:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:258:plant_gathering_group:tile:137:41",
+          "bandId": "band:custom:0",
+          "day": 258,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:137:41:fallback_food",
+          "selectedTileId": "tile:137:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:258:plant_gathering_group:tile:137:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41",
+            "tile:137:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:258:plant_gathering_group:tile:137:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:258:plant_gathering_group:tile:137:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:261:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 261,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:fallback_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:261:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:261:plant_gathering_group:tile:139:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:261:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:264:plant_gathering_group:tile:140:41",
+          "bandId": "band:custom:0",
+          "day": 264,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:140:41:generic_plant_food",
+          "selectedTileId": "tile:140:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:264:plant_gathering_group:tile:140:41",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:264:plant_gathering_group:tile:140:41:no_effect_observed",
+          "receiptId": "receipt:daily-trip:band:custom:0:264:plant_gathering_group:tile:140:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:267:plant_gathering_group:tile:139:42",
+          "bandId": "band:custom:0",
+          "day": 267,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:42:generic_plant_food",
+          "selectedTileId": "tile:139:42",
+          "tripOrTaskId": "daily-trip:band:custom:0:267:plant_gathering_group:tile:139:42",
+          "workers": 4,
+          "route": [
+            "tile:141:41",
+            "tile:140:41",
+            "tile:139:41",
+            "tile:139:42"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:267:plant_gathering_group:tile:139:42:no_effect_observed",
+          "receiptId": "receipt:daily-trip:band:custom:0:267:plant_gathering_group:tile:139:42",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:276:plant_gathering_group:tile:141:41",
+          "bandId": "band:custom:0",
+          "day": 276,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:141:41:fallback_food",
+          "selectedTileId": "tile:141:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:276:plant_gathering_group:tile:141:41",
+          "workers": 4,
+          "route": [
+            "tile:140:41",
+            "tile:141:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:276:plant_gathering_group:tile:141:41:target_not_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:276:plant_gathering_group:tile:141:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:279:plant_gathering_group:tile:139:41",
+          "bandId": "band:custom:0",
+          "day": 279,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:139:41:generic_plant_food",
+          "selectedTileId": "tile:139:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:279:plant_gathering_group:tile:139:41",
+          "workers": 4,
+          "route": [
+            "tile:140:41",
+            "tile:139:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:279:plant_gathering_group:tile:139:41:failed_due_to_season_mismatch",
+          "receiptId": "receipt:daily-trip:band:custom:0:279:plant_gathering_group:tile:139:41",
+          "usableSupportReturned": 0
+        },
+        {
+          "activityActionId": "activity-action:daily-trip:band:custom:0:282:plant_gathering_group:tile:138:41",
+          "bandId": "band:custom:0",
+          "day": 282,
+          "activityKind": "plant_gathering_group",
+          "selectedPatchId": "patch:tile:138:41:generic_plant_food",
+          "selectedTileId": "tile:138:41",
+          "tripOrTaskId": "daily-trip:band:custom:0:282:plant_gathering_group:tile:138:41",
+          "workers": 4,
+          "route": [
+            "tile:140:41",
+            "tile:139:41",
+            "tile:138:41"
+          ],
+          "physicalOutcomeId": "physical-outcome:daily-trip:band:custom:0:282:plant_gathering_group:tile:138:41:target_found",
+          "receiptId": "receipt:daily-trip:band:custom:0:282:plant_gathering_group:tile:138:41",
+          "usableSupportReturned": 0.0039
+        }
+      ],
+      "fission": []
+    }
+  },
+  "verdict": "PASS"
+}

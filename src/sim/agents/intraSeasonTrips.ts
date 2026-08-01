@@ -82,6 +82,12 @@ import { SEASON_LENGTH_DAYS } from "../core/types";
 import { getWorldTimeForDay } from "../tick/time";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
+import {
+  beginExplorationReaderInvocation,
+  finishExplorationReaderInvocation,
+  noteExplorationRecordConsulted,
+  recordResourceActivityAction,
+} from "../diagnostics/explorationCausalAudit";
 
 const TRIP_DAY_CADENCE = 3;
 const FIRST_TRIP_DAY_OF_SEASON = 6;
@@ -234,11 +240,30 @@ function applyTripDay(world: WorldState, day: number): WorldState {
       continue;
     }
 
+    const resourceReaderToken = beginExplorationReaderInvocation({
+      readerFamily: "resource_activity",
+      productionFunction: "applyTripDay/selectTripCandidate",
+      bandId: String(band.id),
+      invocationDay: Number(day),
+      invocationTick: Number(time.tick),
+    });
     const candidate = selectTripCandidate(currentWorld, band, day, MAX_TRIP_DISTANCE_TILES, false, true);
 
     if (candidate === undefined) {
+      finishExplorationReaderInvocation(resourceReaderToken, {
+        readerVerdict: "no_same_day_resource_candidate",
+        readerRanking: "",
+      });
       continue;
     }
+
+    finishExplorationReaderInvocation(resourceReaderToken, {
+      readerVerdict:
+        `${candidate.cause}:${String(candidate.targetTileId)}:${String(candidate.memory.patchId)}`,
+      readerRanking:
+        `${String(candidate.targetTileId)}|${String(candidate.memory.patchId)}|` +
+        `${candidate.score.toFixed(4)}`,
+    });
 
     // EXPEDITIONARY-2 §1 — REQUIRED PHYSICAL CORRECTION. This path is the SAME-DAY
     // activity path and nothing else. A round trip that does not fit the genuine
@@ -270,6 +295,26 @@ function applyTripDay(world: WorldState, day: number): WorldState {
       activityMemoryEffect: memoryApplication.effect,
       reasonIds: [...resolvedRecord.reasonIds, ...memoryApplication.effect.reasonIds],
     };
+    const tripOrTaskId =
+      `daily-trip:${String(band.id)}:${Number(day)}:${record.taskGroupType}:` +
+      `${String(record.targetTileId)}`;
+    const usableSupportReturned = record.physicalFoodHarvest?.usableSupport ?? 0;
+    recordResourceActivityAction({
+      activityActionId: `activity-action:${tripOrTaskId}`,
+      bandId: String(band.id),
+      day: Number(day),
+      activityKind: record.taskGroupType,
+      selectedPatchId: String(candidate.memory.patchId),
+      selectedTileId: String(record.targetTileId),
+      tripOrTaskId,
+      workers: record.estimatedPeopleCount,
+      route: record.pathTiles.map(String),
+      physicalOutcomeId: `physical-outcome:${tripOrTaskId}:${record.activityOutcome}`,
+      ...(record.physicalFoodHarvest === undefined
+        ? {}
+        : { receiptId: `receipt:${tripOrTaskId}` }),
+      usableSupportReturned,
+    });
     const recentIntraSeasonTrips = [record, ...(band.recentIntraSeasonTrips ?? [])].slice(0, RECENT_TRIP_RECORD_CAP);
     const activityLaborSummary = buildActivityLaborSummary(activityBand, record, recentIntraSeasonTrips);
     // ECO-SEASON-1: learn the realized seasonal ecology into the band's SEPARATE seasonal
@@ -836,6 +881,18 @@ function buildStartingLocalReconnaissanceState(
     .slice(0, STARTING_LOCAL_RECON_OBSERVED_TILE_CAP);
 
   for (const { record } of localObservedRecords) {
+    noteExplorationRecordConsulted({
+      readerFamily: "resource_activity",
+      bandId: String(band.id),
+      tileId: String(record.tileId),
+      consultationRole: "starting_local_reconnaissance",
+      recordFirstObservedDay: Number(
+        record.firstObservedAt.day ?? Number(record.firstObservedAt.tick) * 90,
+      ),
+      recordLastObservedDay: Number(
+        record.lastObservedAt.day ?? Number(record.lastObservedAt.tick) * 90,
+      ),
+    });
     const habitatPotential = deriveBaseHabitatPotential(record.tileId, record, time);
     const resourceSummary = deriveResourceClassAvailability(habitatPotential, record, time);
     state = updateResourceKnowledgeFromObservation(state, resourceSummary, {

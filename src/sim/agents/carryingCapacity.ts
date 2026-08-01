@@ -57,6 +57,11 @@ import { getTile } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
 import type { WorldState } from "../world/types";
 import type { FoodDemographyDiagnostics } from "../diagnostics/foodDemographyDiagnostics";
+import {
+  beginExplorationReaderInvocation,
+  finishExplorationReaderInvocation,
+  noteExplorationRecordConsulted,
+} from "../diagnostics/explorationCausalAudit";
 
 // Carrying capacity + per-capita return + daughter colonization (checkpoint 2J).
 // Bounded (anchor catchment + salient memory candidates), deterministic, and
@@ -118,6 +123,25 @@ export function deriveCarryingCapacity(
   }
 
   const time = world.time;
+  const movementReaderToken = beginExplorationReaderInvocation({
+    readerFamily: "movement_destination",
+    productionFunction: "deriveCarryingCapacity/deriveKnownUnusedHabitat",
+    bandId: String(band.id),
+    invocationDay: Number(time.day ?? Number(time.tick) * 90),
+    invocationTick: Number(time.tick),
+  });
+  noteExplorationRecordConsulted({
+    readerFamily: "movement_destination",
+    bandId: String(band.id),
+    tileId: String(currentRecord.tileId),
+    consultationRole: "current_residence_capacity",
+    recordFirstObservedDay: Number(
+      currentRecord.firstObservedAt.day ?? Number(currentRecord.firstObservedAt.tick) * 90,
+    ),
+    recordLastObservedDay: Number(
+      currentRecord.lastObservedAt.day ?? Number(currentRecord.lastObservedAt.tick) * 90,
+    ),
+  });
   const biomeCompetence = getBiomeCompetence(band);
   const demand = derivePopulationDemand(band);
 
@@ -566,6 +590,19 @@ export function deriveCarryingCapacity(
   }
 
   const knownUnusedHabitat = deriveKnownUnusedHabitat(world, band, cache, opportunityInput);
+  finishExplorationReaderInvocation(movementReaderToken, {
+    readerVerdict:
+      knownUnusedHabitat === undefined
+        ? "no_known_unused_habitat"
+        : `${knownUnusedHabitat.opportunityKind}:${String(knownUnusedHabitat.candidateTileId)}:` +
+          `${knownUnusedHabitat.consideredAsTarget ? "eligible" : "rejected"}`,
+    readerRanking:
+      knownUnusedHabitat === undefined
+        ? ""
+        : `${String(knownUnusedHabitat.candidateTileId)}|` +
+          `${knownUnusedHabitat.expectedPerCapitaReturn.toFixed(4)}|` +
+          `${knownUnusedHabitat.confidence.toFixed(4)}`,
+  });
 
   const daughterColonization = deriveDaughterColonization(world, band, {
     time,
@@ -870,6 +907,21 @@ function deriveKnownUnusedHabitat(
   for (const tileId of candidateIds) {
     const record = band.knowledge.observedTiles[tileId];
     const tile = getTile(world, tileId);
+
+    if (record !== undefined) {
+      noteExplorationRecordConsulted({
+        readerFamily: "movement_destination",
+        bandId: String(band.id),
+        tileId: String(tileId),
+        consultationRole: "destination_candidate",
+        recordFirstObservedDay: Number(
+          record.firstObservedAt.day ?? Number(record.firstObservedAt.tick) * 90,
+        ),
+        recordLastObservedDay: Number(
+          record.lastObservedAt.day ?? Number(record.lastObservedAt.tick) * 90,
+        ),
+      });
+    }
 
     if (record === undefined || tile === undefined || tile.isAquatic || !isBandPassableDestination(tile)) {
       continue;

@@ -9,6 +9,7 @@
 //
 // Usage: node scripts/canonicalStateFingerprint.mjs --map map1 --years 40 [--seed s]
 import { createHash } from "node:crypto";
+import { resolve } from "node:path";
 import { createServer } from "vite";
 
 function arg(name, dflt) {
@@ -19,12 +20,14 @@ function arg(name, dflt) {
 const MAP = arg("--map", "map1");
 const YEARS = Number(arg("--years", "40"));
 const SEED = arg("--seed", "");
+const SOURCE_ROOT = resolve(arg("--source-root", `${process.cwd()}/src`));
 
 const server = await createServer({
-  root: `${process.cwd()}/src`,
+  root: SOURCE_ROOT,
+  cacheDir: `node_modules/.vite-canonical-fingerprint-${process.pid}`,
   configFile: false,
   appType: "custom",
-  server: { middlewareMode: true },
+  server: { middlewareMode: true, hmr: false },
   logLevel: "error",
 });
 

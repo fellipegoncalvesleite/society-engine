@@ -197,6 +197,11 @@ import type {
   ScoreBreakdown,
 } from "./types";
 import { RECENT_BAND_DECISION_HISTORY_LIMIT } from "./decisionArchive";
+import {
+  beginExplorationReaderInvocation,
+  finishExplorationReaderInvocation,
+  noteExplorationRecordConsulted,
+} from "../diagnostics/explorationCausalAudit";
 
 // (tile-observation history limit moved with the writer to agents/tileObservation.ts)
 
@@ -479,7 +484,7 @@ function createCandidateEvaluationCache(
   const knownTileStats = measureDecision(
     profiler,
     "knownTileStats",
-    () => getKnownTileStats(band.knowledge),
+    () => getKnownTileStats(band.knowledge, band),
   );
   const corridorByEdgeKey = measureDecision(
     profiler,
@@ -723,7 +728,7 @@ function buildCorridorLookup(band: Band): ReadonlyMap<string, TravelCorridorMemo
   return corridors;
 }
 
-function getKnownTileStats(knowledge: KnowledgeState): KnownTileStats {
+function getKnownTileStats(knowledge: KnowledgeState, band: Band): KnownTileStats {
   const cached = knownTileStatsByObservedTiles.get(knowledge.observedTiles);
 
   if (cached !== undefined) {
@@ -734,6 +739,7 @@ function getKnownTileStats(knowledge: KnowledgeState): KnownTileStats {
   let confidenceSum = 0;
 
   for (const record of Object.values(knowledge.observedTiles)) {
+    noteMovementDestinationRecordConsultation(band, record, "known_tile_statistics");
     count += 1;
     confidenceSum += record.confidence;
   }
@@ -753,6 +759,13 @@ export function evaluateBandDecision(
   contextCache?: TickContextCache,
   profiler?: MovementDecisionProfiler,
 ): Decision {
+  const movementReaderToken = beginExplorationReaderInvocation({
+    readerFamily: "movement_destination",
+    productionFunction: "evaluateBandDecision/getKnownTileStats",
+    bandId: String(band.id),
+    invocationDay: Number(world.time.day ?? Number(world.time.tick) * 90),
+    invocationTick: Number(world.time.tick),
+  });
   const decisionId = makeDecisionId(world.time, band.id);
   const intentEvaluation = evaluateMobilityIntent(world, band);
   const decisionCache = createCandidateEvaluationCache(world, band, contextCache, profiler);
@@ -814,7 +827,7 @@ export function evaluateBandDecision(
     0,
   );
 
-  return {
+  const decision: Decision = {
     id: decisionId,
     bandId: band.id,
     time: world.time,
@@ -827,6 +840,40 @@ export function evaluateBandDecision(
     mobilityIntent: intentEvaluation.activeIntent,
     intentStatus: intentEvaluation.status,
   };
+  finishExplorationReaderInvocation(movementReaderToken, {
+    readerVerdict:
+      `${decision.action.type}:${String(getDecisionTargetTileId(decision.action, band.position))}`,
+    readerRanking: rankedCandidates
+      .map((candidate) =>
+        `${candidate.action.type}:${String(getDecisionTargetTileId(candidate.action, band.position))}:` +
+        `${candidate.score.toFixed(6)}`,
+      )
+      .join("|"),
+  });
+  return decision;
+}
+
+function noteMovementDestinationRecordConsultation(
+  band: Band,
+  record: KnownTileRecord | undefined,
+  consultationRole: string,
+): void {
+  if (record === undefined) {
+    return;
+  }
+
+  noteExplorationRecordConsulted({
+    readerFamily: "movement_destination",
+    bandId: String(band.id),
+    tileId: String(record.tileId),
+    consultationRole,
+    recordFirstObservedDay: Number(
+      record.firstObservedAt.day ?? Number(record.firstObservedAt.tick) * 90,
+    ),
+    recordLastObservedDay: Number(
+      record.lastObservedAt.day ?? Number(record.lastObservedAt.tick) * 90,
+    ),
+  });
 }
 
 function applyResidentialRelocationClearance(

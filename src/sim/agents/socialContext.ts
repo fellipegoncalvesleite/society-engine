@@ -74,6 +74,11 @@ import { getRiverCrossingForMovement } from "../world/hydrography";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
 import type { FoodDemographyDiagnostics } from "../diagnostics/foodDemographyDiagnostics";
+import {
+  beginExplorationReaderInvocation,
+  finishExplorationReaderInvocation,
+  noteExplorationRecordConsulted,
+} from "../diagnostics/explorationCausalAudit";
 
 const LOCAL_RANGE_RADIUS = 4;
 const TREND_WINDOW_SHORT = 4;
@@ -308,6 +313,13 @@ function collectResourceInferenceCandidates(
   band: Band,
   cache: TickContextCache,
 ): readonly ResourceInferenceCandidate[] {
+  const resourceReaderToken = beginExplorationReaderInvocation({
+    readerFamily: "resource_activity",
+    productionFunction: "collectResourceInferenceCandidates/inferResourceKnowledge",
+    bandId: String(band.id),
+    invocationDay: Number(world.time.day ?? Number(world.time.tick) * 90),
+    invocationTick: Number(world.time.tick),
+  });
   const candidateIds = getSalientMemorySummary(cache, band.id)?.knownOpportunityCandidateIds ?? [];
   const candidates: ResourceInferenceCandidate[] = [];
 
@@ -326,10 +338,25 @@ function collectResourceInferenceCandidates(
       continue;
     }
 
+    noteSocialContextRecordConsultation(
+      "resource_activity",
+      band,
+      record,
+      "resource_inference_candidate",
+    );
     const base = deriveBaseHabitatPotential(tileId, record, world.time);
     candidates.push({ tileId, summary: deriveResourceClassAvailability(base, record, world.time) });
   }
 
+  finishExplorationReaderInvocation(resourceReaderToken, {
+    readerVerdict: candidates.length === 0 ? "no_resource_inference_candidates" : "resource_candidates_read",
+    readerRanking: candidates
+      .map(
+        (candidate) =>
+          `${String(candidate.tileId)}:${JSON.stringify(candidate.summary)}`,
+      )
+      .join("|"),
+  });
   return candidates;
 }
 
@@ -453,8 +480,21 @@ function deriveRangeSaturationState(
   band: Band,
   cache: TickContextCache,
 ): RangeSaturationState {
+  const movementReaderToken = beginExplorationReaderInvocation({
+    readerFamily: "movement_destination",
+    productionFunction: "deriveRangeSaturationState",
+    bandId: String(band.id),
+    invocationDay: Number(world.time.day ?? Number(world.time.tick) * 90),
+    invocationTick: Number(world.time.tick),
+  });
   const tile = getTile(world, band.position);
   const knownRecord = band.knowledge.observedTiles[band.position];
+  noteSocialContextRecordConsultation(
+    "movement_destination",
+    band,
+    knownRecord,
+    "current_residence_saturation",
+  );
   const nearby = getNearbyBandPressure(world, band, band.position, cache);
   const localUsePressure = getLocalUsePressureValue(band.usePressure[band.position]);
   const localPopulationEstimate = getLocalPopulationEstimateFromCache(world, cache, band.position, LOCAL_RANGE_RADIUS);
@@ -486,7 +526,7 @@ function deriveRangeSaturationState(
     ? [makeContextReasonId(world, band.id, "range_saturation_detected", band.position)]
     : [];
 
-  return {
+  const result: RangeSaturationState = {
     bandId: band.id,
     focalTileId: band.position,
     localBandCount,
@@ -499,6 +539,13 @@ function deriveRangeSaturationState(
     confidence: round2(knownRecord?.confidence ?? 0.44),
     reasonIds,
   };
+  finishExplorationReaderInvocation(movementReaderToken, {
+    readerVerdict:
+      result.reasonIds.length === 0 ? "range_not_saturated" : "range_saturation_detected",
+    readerRanking:
+      `${result.saturationPressure.toFixed(4)}|${result.effectiveHabitatSuitability.toFixed(4)}`,
+  });
+  return result;
 }
 
 // Bounded rolling return-trend memory (2J.1). Tick-gated so the multiple context
@@ -811,6 +858,13 @@ function deriveFrontierDispersalPressure(
   cache: TickContextCache,
   profiler?: SocialContextProfiler,
 ): FrontierDispersalPressure {
+  const movementReaderToken = beginExplorationReaderInvocation({
+    readerFamily: "movement_destination",
+    productionFunction: "deriveFrontierDispersalPressure/getFrontierCandidates",
+    bandId: String(band.id),
+    invocationDay: Number(world.time.day ?? Number(world.time.tick) * 90),
+    invocationTick: Number(world.time.tick),
+  });
   const candidates = measureContext(
     profiler,
     "frontierCandidateSearch",
@@ -836,7 +890,7 @@ function deriveFrontierDispersalPressure(
     ? [makeContextReasonId(world, band.id, "frontier_dispersal_pressure", best?.tileId ?? band.position)]
     : [];
 
-  return {
+  const result: FrontierDispersalPressure = {
     bandId: band.id,
     pressure: round2(pressure),
     preferredCorridor: best?.corridorKind ?? "unknown",
@@ -844,6 +898,16 @@ function deriveFrontierDispersalPressure(
     bestFrontierTileId: best?.tileId,
     reasonIds,
   };
+  finishExplorationReaderInvocation(movementReaderToken, {
+    readerVerdict:
+      result.bestFrontierTileId === undefined
+        ? "no_frontier_candidate"
+        : `frontier_candidate:${String(result.bestFrontierTileId)}`,
+    readerRanking: candidates
+      .map((candidate) => `${String(candidate.tileId)}:${candidate.score.toFixed(4)}`)
+      .join("|"),
+  });
+  return result;
 }
 
 // 2K.8 learned-support coupling bounds (decision-side only). The weight keeps the term at the
@@ -862,8 +926,21 @@ export function deriveNearbyOpportunityGradient(
   cache: TickContextCache,
   profiler?: SocialContextProfiler,
 ): NearbyOpportunityGradient {
+  const movementReaderToken = beginExplorationReaderInvocation({
+    readerFamily: "movement_destination",
+    productionFunction: "deriveNearbyOpportunityGradient",
+    bandId: String(band.id),
+    invocationDay: Number(world.time.day ?? Number(world.time.tick) * 90),
+    invocationTick: Number(world.time.tick),
+  });
   const currentTile = getTile(world, band.position);
   const currentRecord = band.knowledge.observedTiles[band.position];
+  noteSocialContextRecordConsultation(
+    "movement_destination",
+    band,
+    currentRecord,
+    "current_opportunity_baseline",
+  );
   const currentSuitability = currentTile === undefined
     ? 0
     : getKnownHabitatSuitability(currentTile, currentRecord);
@@ -927,6 +1004,12 @@ export function deriveNearbyOpportunityGradient(
       continue;
     }
 
+    noteSocialContextRecordConsultation(
+      "movement_destination",
+      band,
+      record,
+      "nearby_opportunity_candidate",
+    );
     const tile = getTile(world, record.tileId);
 
     if (
@@ -996,7 +1079,7 @@ export function deriveNearbyOpportunityGradient(
   }
   countContext(profiler, "nearbyOpportunityCandidatesAccepted", knownCandidateCount);
 
-  return {
+  const result: NearbyOpportunityGradient = {
     bandId: band.id,
     currentTileId: band.position,
     bestKnownOpportunityTileId: best?.tileId,
@@ -1015,6 +1098,16 @@ export function deriveNearbyOpportunityGradient(
       ? []
       : [makeContextReasonId(world, band.id, "known_better_patch_pull", best.tileId)],
   };
+  finishExplorationReaderInvocation(movementReaderToken, {
+    readerVerdict:
+      result.bestKnownOpportunityTileId === undefined
+        ? "no_nearby_opportunity"
+        : `nearby_opportunity:${String(result.bestKnownOpportunityTileId)}`,
+    readerRanking:
+      `${String(result.bestKnownOpportunityTileId ?? "")}|` +
+      `${result.opportunityStrength.toFixed(4)}|${result.opportunityConfidence.toFixed(4)}`,
+  });
+  return result;
 }
 
 export function applyEncounterContext(
@@ -1483,6 +1576,12 @@ function getFrontierCandidates(
       continue;
     }
 
+    noteSocialContextRecordConsultation(
+      "movement_destination",
+      band,
+      record,
+      "frontier_candidate",
+    );
     const tile = getTile(world, record.tileId);
 
     if (tile === undefined || !isBandPassableDestination(tile)) {
@@ -1497,8 +1596,16 @@ function getFrontierCandidates(
 
     let unknownNeighborCount = 0;
     for (const neighborId of tile.neighbors) {
-      if (band.knowledge.observedTiles[neighborId] === undefined) {
+      const neighborRecord = band.knowledge.observedTiles[neighborId];
+      if (neighborRecord === undefined) {
         unknownNeighborCount += 1;
+      } else {
+        noteSocialContextRecordConsultation(
+          "movement_destination",
+          band,
+          neighborRecord,
+          "frontier_known_neighbor_boundary",
+        );
       }
     }
 
@@ -1666,6 +1773,30 @@ function getKnownHabitatSuitability(tile: Tile, record: Band["knowledge"]["obser
       (record.observedStorageSuitability ?? 0) * 0.06 -
       (record.observedRisk ?? 0) * 0.14,
   );
+}
+
+function noteSocialContextRecordConsultation(
+  readerFamily: "movement_destination" | "resource_activity",
+  band: Band,
+  record: Band["knowledge"]["observedTiles"][TileId] | undefined,
+  consultationRole: string,
+): void {
+  if (record === undefined) {
+    return;
+  }
+
+  noteExplorationRecordConsulted({
+    readerFamily,
+    bandId: String(band.id),
+    tileId: String(record.tileId),
+    consultationRole,
+    recordFirstObservedDay: Number(
+      record.firstObservedAt.day ?? Number(record.firstObservedAt.tick) * 90,
+    ),
+    recordLastObservedDay: Number(
+      record.lastObservedAt.day ?? Number(record.lastObservedAt.tick) * 90,
+    ),
+  });
 }
 
 function getHabitatCrowdingBuffer(tile: Tile): number {

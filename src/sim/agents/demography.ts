@@ -82,6 +82,12 @@ import {
 } from "../world/hydrography";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
+import {
+  beginExplorationReaderInvocation,
+  finishExplorationReaderInvocation,
+  noteExplorationRecordConsulted,
+  recordFissionAction,
+} from "../diagnostics/explorationCausalAudit";
 
 interface DemographyComputation {
   readonly demography: BandDemography;
@@ -172,12 +178,27 @@ export function updateBandsDemographyAndFission(
     };
     const computation = computeBandDemography(currentWorld, band, contextCache, diagnostics);
     const bandWithDemography = applyDemographyUpdate(currentWorld, band, computation);
+    const fissionAttempted =
+      computation.shouldCreateDaughter && Object.keys(bandsById).length < MAX_BANDS;
     const maybeFission =
-      computation.shouldCreateDaughter && Object.keys(bandsById).length < MAX_BANDS
+      fissionAttempted
         ? createDaughterBand(currentWorld, bandWithDemography, computation)
         : undefined;
 
     if (maybeFission === undefined) {
+      if (fissionAttempted) {
+        recordFissionAction({
+          fissionActionId:
+            `fission-action:${String(band.id)}:${Number(world.time.tick)}:not-created`,
+          parentBandId: String(band.id),
+          day: Number(world.time.day ?? Number(world.time.tick) * 90),
+          ...(computation.viableFrontier === undefined
+            ? {}
+            : { selectedTargetTileId: String(computation.viableFrontier.tileId) }),
+          daughterActuallyCreated: false,
+          tick: Number(world.time.tick),
+        });
+      }
       bandsById = {
         ...bandsById,
         [bandWithDemography.id]: bandWithDemography,
@@ -185,6 +206,23 @@ export function updateBandsDemographyAndFission(
       continue;
     }
 
+    const createdEvent =
+      maybeFission.parent.fissionEvents[maybeFission.parent.fissionEvents.length - 1];
+    recordFissionAction({
+      fissionActionId:
+        createdEvent === undefined
+          ? `fission-action:${String(band.id)}:${Number(world.time.tick)}:created`
+          : String(createdEvent.id),
+      parentBandId: String(band.id),
+      day: Number(world.time.day ?? Number(world.time.tick) * 90),
+      daughterBandId: String(maybeFission.daughter.id),
+      ...(computation.viableFrontier === undefined
+        ? {}
+        : { selectedTargetTileId: String(computation.viableFrontier.tileId) }),
+      daughterActuallyCreated: true,
+      daughterInitialPosition: String(maybeFission.daughter.position),
+      tick: Number(world.time.tick),
+    });
     bandsById = {
       ...bandsById,
       [maybeFission.parent.id]: maybeFission.parent,
@@ -1164,17 +1202,42 @@ function selectFissionTarget(
     return undefined;
   }
 
-  return getFissionTargetRecordIds(
+  const fissionReaderToken = beginExplorationReaderInvocation({
+    readerFamily: "daughter_fission",
+    productionFunction: "selectFissionTarget",
+    bandId: String(band.id),
+    invocationDay: Number(world.time.day ?? Number(world.time.tick) * 90),
+    invocationTick: Number(world.time.tick),
+  });
+  const records = getFissionTargetRecordIds(
     band,
     contextCache,
     world.auditOptions?.frontierKnowledgeHiddenFromFission === true,
   )
     .map((tileId) => band.knowledge.observedTiles[tileId])
-    .filter((record): record is KnownTileRecord =>
-      record !== undefined &&
-      record.tileId !== band.position &&
-      record.confidence >= 0.34,
-    )
+    .filter((record): record is KnownTileRecord => {
+      if (record !== undefined) {
+        noteExplorationRecordConsulted({
+          readerFamily: "daughter_fission",
+          bandId: String(band.id),
+          tileId: String(record.tileId),
+          consultationRole: "fission_target_candidate",
+          recordFirstObservedDay: Number(
+            record.firstObservedAt.day ?? Number(record.firstObservedAt.tick) * 90,
+          ),
+          recordLastObservedDay: Number(
+            record.lastObservedAt.day ?? Number(record.lastObservedAt.tick) * 90,
+          ),
+        });
+      }
+
+      return (
+        record !== undefined &&
+        record.tileId !== band.position &&
+        record.confidence >= 0.34
+      );
+    });
+  const candidates = records
     .map((record) =>
       scoreFissionTarget(
         world,
@@ -1186,7 +1249,21 @@ function selectFissionTarget(
       ),
     )
     .filter((candidate): candidate is FissionTargetCandidate => candidate !== undefined)
-    .sort((left, right) => compareFissionTargetsSeeded(world, band, left, right))[0];
+    .sort((left, right) => compareFissionTargetsSeeded(world, band, left, right));
+  const selected = candidates[0];
+
+  finishExplorationReaderInvocation(fissionReaderToken, {
+    readerVerdict:
+      selected === undefined
+        ? "no_viable_fission_target"
+        : `fission_target:${String(selected.tileId)}:${selected.score.toFixed(4)}`,
+    readerRanking: candidates
+      .slice(0, 12)
+      .map((candidate) => `${String(candidate.tileId)}|${candidate.score.toFixed(4)}`)
+      .join(","),
+  });
+
+  return selected;
 }
 
 // VAR-1: fission-target ordering with the same seeded near-tie jitter as

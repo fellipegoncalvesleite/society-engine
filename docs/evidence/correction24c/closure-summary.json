@@ -1,0 +1,697 @@
+{
+  "instrument": "CORRECTION-24C AGGREGATE ACCEPTANCE-GATE AUDIT",
+  "verdict": "PASS",
+  "checksPassed": 33,
+  "checksFailed": 0,
+  "replaySummary": {
+    "years40": {
+      "events": 110,
+      "sound": 110,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSION_NO_TRACKED_CONSEQUENCE": 0,
+        "WRITE_CHANGED_STORED_STATE_ONLY": 0,
+        "ACTUAL_READER_CONSULTED_SAME_OUTPUT": 22,
+        "ACTUAL_READER_OUTPUT_CHANGED": 70,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 10,
+        "RECEIPT_OR_SUPPORT_CHANGED": 8,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      },
+      "cumulative": {
+        "actualReaderConsulted": 110,
+        "readerOutputChanged": 88,
+        "selectedActionChanged": 18,
+        "physicalActionChanged": 18,
+        "receiptOrSupportChanged": 8,
+        "demographyChanged": 0
+      }
+    },
+    "years200": {
+      "events": 456,
+      "sound": 456,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSION_NO_TRACKED_CONSEQUENCE": 0,
+        "WRITE_CHANGED_STORED_STATE_ONLY": 0,
+        "ACTUAL_READER_CONSULTED_SAME_OUTPUT": 219,
+        "ACTUAL_READER_OUTPUT_CHANGED": 197,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 15,
+        "RECEIPT_OR_SUPPORT_CHANGED": 25,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      },
+      "cumulative": {
+        "actualReaderConsulted": 456,
+        "readerOutputChanged": 237,
+        "selectedActionChanged": 40,
+        "physicalActionChanged": 40,
+        "receiptOrSupportChanged": 25,
+        "demographyChanged": 0
+      }
+    },
+    "years500": {
+      "events": 120,
+      "sound": 120,
+      "unsound": 0,
+      "byClass": {
+        "WRITE_SUPPRESSION_NO_TRACKED_CONSEQUENCE": 0,
+        "WRITE_CHANGED_STORED_STATE_ONLY": 0,
+        "ACTUAL_READER_CONSULTED_SAME_OUTPUT": 50,
+        "ACTUAL_READER_OUTPUT_CHANGED": 66,
+        "SELECTED_ACTION_CHANGED": 0,
+        "PHYSICAL_ACTION_CHANGED": 0,
+        "RECEIPT_OR_SUPPORT_CHANGED": 4,
+        "DEMOGRAPHY_CHANGED": 0,
+        "CONTROL_REPLAY_UNSOUND": 0
+      },
+      "cumulative": {
+        "actualReaderConsulted": 120,
+        "readerOutputChanged": 70,
+        "selectedActionChanged": 4,
+        "physicalActionChanged": 4,
+        "receiptOrSupportChanged": 4,
+        "demographyChanged": 0
+      }
+    }
+  },
+  "o2PopulationPairedDifference": {
+    "positive": 6,
+    "negative": 13,
+    "tied": 36,
+    "median": 0,
+    "mean": -2.563636,
+    "bootstrap95": {
+      "lower": -6.054545,
+      "upper": 0.054545,
+      "iterations": 10000
+    },
+    "crossesZero": true
+  },
+  "receiptTraceSummary": {
+    "required": 5,
+    "additional": 3
+  },
+  "o3Summary": {
+    "comparedRuns": 55,
+    "exactParityRuns": 55,
+    "mismatchRuns": 0
+  },
+  "checks": [
+    {
+      "name": "replay40_scenario_count",
+      "passed": true,
+      "observed": [
+        "map1",
+        "map2",
+        "site_A_coast",
+        "site_B_dry_plains",
+        "site_C_dry_plains",
+        "site_D_aquatic",
+        "site_E_hills",
+        "site_F_hills",
+        "ordinary",
+        "isolated_marginal",
+        "hostile"
+      ]
+    },
+    {
+      "name": "replay40_seed_count",
+      "passed": true,
+      "observed": [
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5"
+      ]
+    },
+    {
+      "name": "replay40_event_count",
+      "passed": true,
+      "observed": 110
+    },
+    {
+      "name": "replay40_control_soundness",
+      "passed": true,
+      "observed": {
+        "events": 110,
+        "sound": 110,
+        "unsound": 0,
+        "byClass": {
+          "WRITE_SUPPRESSION_NO_TRACKED_CONSEQUENCE": 0,
+          "WRITE_CHANGED_STORED_STATE_ONLY": 0,
+          "ACTUAL_READER_CONSULTED_SAME_OUTPUT": 22,
+          "ACTUAL_READER_OUTPUT_CHANGED": 70,
+          "SELECTED_ACTION_CHANGED": 0,
+          "PHYSICAL_ACTION_CHANGED": 10,
+          "RECEIPT_OR_SUPPORT_CHANGED": 8,
+          "DEMOGRAPHY_CHANGED": 0,
+          "CONTROL_REPLAY_UNSOUND": 0
+        },
+        "cumulative": {
+          "actualReaderConsulted": 110,
+          "readerOutputChanged": 88,
+          "selectedActionChanged": 18,
+          "physicalActionChanged": 18,
+          "receiptOrSupportChanged": 8,
+          "demographyChanged": 0
+        }
+      }
+    },
+    {
+      "name": "replay40_reader_identity",
+      "passed": true,
+      "observed": 110
+    },
+    {
+      "name": "replay40_physical_identity",
+      "passed": true,
+      "observed": 18
+    },
+    {
+      "name": "replay40_structural_route_no_reader",
+      "passed": true,
+      "observed": {
+        "readerFamily": "route_corridor",
+        "finding": "Exploration-returned KnownTileRecord has no production route/corridor reader; corridors are written from executed residential movement records."
+      }
+    },
+    {
+      "name": "replay200_scenario_count",
+      "passed": true,
+      "observed": [
+        "map1",
+        "map2",
+        "site_A_coast",
+        "site_B_dry_plains",
+        "site_C_dry_plains",
+        "site_D_aquatic",
+        "site_E_hills",
+        "site_F_hills",
+        "ordinary",
+        "isolated_marginal",
+        "hostile"
+      ]
+    },
+    {
+      "name": "replay200_seed_count",
+      "passed": true,
+      "observed": [
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5"
+      ]
+    },
+    {
+      "name": "replay200_event_count",
+      "passed": true,
+      "observed": 456
+    },
+    {
+      "name": "replay200_control_soundness",
+      "passed": true,
+      "observed": {
+        "events": 456,
+        "sound": 456,
+        "unsound": 0,
+        "byClass": {
+          "WRITE_SUPPRESSION_NO_TRACKED_CONSEQUENCE": 0,
+          "WRITE_CHANGED_STORED_STATE_ONLY": 0,
+          "ACTUAL_READER_CONSULTED_SAME_OUTPUT": 219,
+          "ACTUAL_READER_OUTPUT_CHANGED": 197,
+          "SELECTED_ACTION_CHANGED": 0,
+          "PHYSICAL_ACTION_CHANGED": 15,
+          "RECEIPT_OR_SUPPORT_CHANGED": 25,
+          "DEMOGRAPHY_CHANGED": 0,
+          "CONTROL_REPLAY_UNSOUND": 0
+        },
+        "cumulative": {
+          "actualReaderConsulted": 456,
+          "readerOutputChanged": 237,
+          "selectedActionChanged": 40,
+          "physicalActionChanged": 40,
+          "receiptOrSupportChanged": 25,
+          "demographyChanged": 0
+        }
+      }
+    },
+    {
+      "name": "replay200_reader_identity",
+      "passed": true,
+      "observed": 456
+    },
+    {
+      "name": "replay200_physical_identity",
+      "passed": true,
+      "observed": 40
+    },
+    {
+      "name": "replay200_structural_route_no_reader",
+      "passed": true,
+      "observed": {
+        "readerFamily": "route_corridor",
+        "finding": "Exploration-returned KnownTileRecord has no production route/corridor reader; corridors are written from executed residential movement records."
+      }
+    },
+    {
+      "name": "replay500_scenario_count",
+      "passed": true,
+      "observed": [
+        "map1",
+        "map2"
+      ]
+    },
+    {
+      "name": "replay500_seed_count",
+      "passed": true,
+      "observed": [
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5"
+      ]
+    },
+    {
+      "name": "replay500_event_count",
+      "passed": true,
+      "observed": 120
+    },
+    {
+      "name": "replay500_control_soundness",
+      "passed": true,
+      "observed": {
+        "events": 120,
+        "sound": 120,
+        "unsound": 0,
+        "byClass": {
+          "WRITE_SUPPRESSION_NO_TRACKED_CONSEQUENCE": 0,
+          "WRITE_CHANGED_STORED_STATE_ONLY": 0,
+          "ACTUAL_READER_CONSULTED_SAME_OUTPUT": 50,
+          "ACTUAL_READER_OUTPUT_CHANGED": 66,
+          "SELECTED_ACTION_CHANGED": 0,
+          "PHYSICAL_ACTION_CHANGED": 0,
+          "RECEIPT_OR_SUPPORT_CHANGED": 4,
+          "DEMOGRAPHY_CHANGED": 0,
+          "CONTROL_REPLAY_UNSOUND": 0
+        },
+        "cumulative": {
+          "actualReaderConsulted": 120,
+          "readerOutputChanged": 70,
+          "selectedActionChanged": 4,
+          "physicalActionChanged": 4,
+          "receiptOrSupportChanged": 4,
+          "demographyChanged": 0
+        }
+      }
+    },
+    {
+      "name": "replay500_reader_identity",
+      "passed": true,
+      "observed": 120
+    },
+    {
+      "name": "replay500_physical_identity",
+      "passed": true,
+      "observed": 4
+    },
+    {
+      "name": "replay500_structural_route_no_reader",
+      "passed": true,
+      "observed": {
+        "readerFamily": "route_corridor",
+        "finding": "Exploration-returned KnownTileRecord has no production route/corridor reader; corridors are written from executed residential movement records."
+      }
+    },
+    {
+      "name": "historical_sample_selection",
+      "passed": true,
+      "observed": "historical 40-year sample: first new and first refresh per scenario/seed"
+    },
+    {
+      "name": "long_horizon_bins",
+      "passed": true,
+      "observed": {
+        "replay200": [
+          {
+            "label": "years_1_40",
+            "startDay": 1,
+            "endDay": 14400
+          },
+          {
+            "label": "years_81_120",
+            "startDay": 28801,
+            "endDay": 43200
+          },
+          {
+            "label": "years_161_200",
+            "startDay": 57601,
+            "endDay": 72000
+          }
+        ],
+        "replay500": [
+          {
+            "label": "years_1_100",
+            "startDay": 1,
+            "endDay": 36000
+          },
+          {
+            "label": "years_201_300",
+            "startDay": 72001,
+            "endDay": 108000
+          },
+          {
+            "label": "years_401_500",
+            "startDay": 144001,
+            "endDay": 180000
+          }
+        ]
+      }
+    },
+    {
+      "name": "five_required_receipt_traces",
+      "passed": true,
+      "observed": {
+        "required": 5,
+        "additional": 3
+      }
+    },
+    {
+      "name": "fixtures_B1_B12",
+      "passed": true,
+      "observed": {
+        "pass": 12,
+        "fail": 0,
+        "vacuous": 0
+      }
+    },
+    {
+      "name": "o2_clean_source",
+      "passed": true,
+      "observed": {
+        "sourceCommit": "9e317647b3ab8d4a36ae905a567a46b7a4845e1f",
+        "sourceRoot": "detached-clean-worktree-at-9e317647/src"
+      }
+    },
+    {
+      "name": "o2_500y_dimensions",
+      "passed": true,
+      "observed": {
+        "years": 500,
+        "pairedRuns": 55,
+        "scenarios": [
+          "map1",
+          "map2",
+          "site_A_coast",
+          "site_B_dry_plains",
+          "site_C_dry_plains",
+          "site_D_aquatic",
+          "site_E_hills",
+          "site_F_hills",
+          "ordinary",
+          "isolated_marginal",
+          "hostile"
+        ],
+        "seeds": [
+          "s1",
+          "s2",
+          "s3",
+          "s4",
+          "s5"
+        ]
+      }
+    },
+    {
+      "name": "o2_required_metrics",
+      "passed": true,
+      "observed": [
+        "survived",
+        "population",
+        "births",
+        "deaths",
+        "workerDaysAway",
+        "provisionsLoaded",
+        "provisionsConsumed",
+        "receipts",
+        "support",
+        "launches",
+        "returnedRecords"
+      ]
+    },
+    {
+      "name": "o2_metric_summary",
+      "passed": true,
+      "observed": {
+        "survived": {
+          "controlTotal": 34,
+          "treatedTotal": 33,
+          "controlMean": 0.618182,
+          "treatedMean": 0.6,
+          "meanPairedDifference": -0.018182
+        },
+        "population": {
+          "controlTotal": 2866,
+          "treatedTotal": 2725,
+          "controlMean": 52.109091,
+          "treatedMean": 49.545455,
+          "meanPairedDifference": -2.563636
+        },
+        "births": {
+          "controlTotal": 26938,
+          "treatedTotal": 25675,
+          "controlMean": 489.781818,
+          "treatedMean": 466.818182,
+          "meanPairedDifference": -22.963636
+        },
+        "deaths": {
+          "controlTotal": 27207,
+          "treatedTotal": 26077,
+          "controlMean": 494.672727,
+          "treatedMean": 474.127273,
+          "meanPairedDifference": -20.545455
+        },
+        "workerDaysAway": {
+          "controlTotal": 210030,
+          "treatedTotal": 211192,
+          "controlMean": 3818.727273,
+          "treatedMean": 3839.854545,
+          "meanPairedDifference": 21.127273
+        },
+        "provisionsLoaded": {
+          "controlTotal": 614.2464,
+          "treatedTotal": 614.9376,
+          "controlMean": 11.168116,
+          "treatedMean": 11.180684,
+          "meanPairedDifference": 0.012567
+        },
+        "provisionsConsumed": {
+          "controlTotal": 193.608,
+          "treatedTotal": 194.5744,
+          "controlMean": 3.520145,
+          "treatedMean": 3.537716,
+          "meanPairedDifference": 0.017571
+        },
+        "receipts": {
+          "controlTotal": 49398.2812,
+          "treatedTotal": 46802.996,
+          "controlMean": 898.150567,
+          "treatedMean": 850.963564,
+          "meanPairedDifference": -47.187004
+        },
+        "support": {
+          "controlTotal": 41.336218,
+          "treatedTotal": 40.219151,
+          "controlMean": 0.751568,
+          "treatedMean": 0.731257,
+          "meanPairedDifference": -0.02031
+        },
+        "launches": {
+          "controlTotal": 15479,
+          "treatedTotal": 15383,
+          "controlMean": 281.436364,
+          "treatedMean": 279.690909,
+          "meanPairedDifference": -1.745455
+        },
+        "returnedRecords": {
+          "controlTotal": 254913,
+          "treatedTotal": 252360,
+          "controlMean": 4634.781818,
+          "treatedMean": 4588.363636,
+          "meanPairedDifference": -46.418182
+        }
+      }
+    },
+    {
+      "name": "o2_paired_bootstrap",
+      "passed": true,
+      "observed": {
+        "positive": 6,
+        "negative": 13,
+        "tied": 36,
+        "median": 0,
+        "mean": -2.563636,
+        "bootstrap95": {
+          "lower": -6.054545,
+          "upper": 0.054545,
+          "iterations": 10000
+        },
+        "crossesZero": true
+      }
+    },
+    {
+      "name": "o2_three_run_mediation",
+      "passed": true,
+      "observed": [
+        {
+          "scenario": "map1",
+          "seed": "s2",
+          "populationDifference": -44,
+          "chain": [
+            [
+              "fallthroughRepair",
+              1350
+            ],
+            [
+              "explorationPhysical",
+              1350
+            ],
+            [
+              "laborProvision",
+              1350
+            ],
+            [
+              "localWorkTask",
+              1452
+            ],
+            [
+              "receiptSupport",
+              1452
+            ],
+            [
+              "birthsDeaths",
+              6120
+            ],
+            [
+              "population",
+              6120
+            ]
+          ]
+        },
+        {
+          "scenario": "map1",
+          "seed": "s4",
+          "populationDifference": -41,
+          "chain": [
+            [
+              "fallthroughRepair",
+              1350
+            ],
+            [
+              "explorationPhysical",
+              1350
+            ],
+            [
+              "laborProvision",
+              1350
+            ],
+            [
+              "localWorkTask",
+              6399
+            ],
+            [
+              "receiptSupport",
+              6399
+            ],
+            [
+              "birthsDeaths",
+              9360
+            ],
+            [
+              "population",
+              9360
+            ]
+          ]
+        },
+        {
+          "scenario": "map2",
+          "seed": "s2",
+          "populationDifference": -37,
+          "chain": [
+            [
+              "fallthroughRepair",
+              1260
+            ],
+            [
+              "explorationPhysical",
+              1260
+            ],
+            [
+              "laborProvision",
+              1260
+            ],
+            [
+              "localWorkTask",
+              1359
+            ],
+            [
+              "receiptSupport",
+              1359
+            ],
+            [
+              "birthsDeaths",
+              4320
+            ],
+            [
+              "population",
+              4320
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "o3_exact_physical_stream",
+      "passed": true,
+      "observed": {
+        "comparedRuns": 55,
+        "exactParityRuns": 55,
+        "mismatchRuns": 0,
+        "requiredFields": [
+          "expeditionId",
+          "bandId",
+          "partyWorkers",
+          "partyComposition",
+          "departureDay",
+          "routeTileIds",
+          "dailyPhysicalStream.traversedTileIds",
+          "dailyPhysicalStream.physicalStepCount",
+          "dailyPhysicalStream.positionAfterDay",
+          "riskEpisodeIds",
+          "provisionsLoaded",
+          "provisionsConsumed",
+          "forcedReturn",
+          "returnDay",
+          "lost",
+          "terminalOutcome",
+          "terminalPositionTileId"
+        ]
+      }
+    },
+    {
+      "name": "hidden_truth_perturbation",
+      "passed": true,
+      "observed": {
+        "hiddenTruthActuallyChanged": true,
+        "bandKnownRecordIdentical": true,
+        "actualReaderEventsObserved": 2,
+        "actualReaderOutputsIdentical": true,
+        "actionStreamsIdentical": true
+      }
+    }
+  ]
+}
