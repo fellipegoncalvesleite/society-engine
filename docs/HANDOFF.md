@@ -181,7 +181,49 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### FRONTIER OPPORTUNITY / DAUGHTER FISSION CAUSAL CLOSURE — CORRECTION-20 — PROGRESS, DO NOT MERGE
+### RESOURCE INVESTIGATION / TEMPORARY USE — AUTHORITY CLOSURE-25 — PROGRESS, DO NOT MERGE
+
+**Branch** `checkpoint/resource-investigation-authority-25`, from CORRECTION-24's closure
+`ce723b3f1973e4f3f2c54a424a614e723a14558a`. Local and remote `main` untouched at
+`0a43083a3a9103bc6b8f693b8823a604ae2c6a8d`. **No production behaviour changed —
+`src/sim` is tree-identical to `ce723b3`.**
+
+**CORRECTION-24 is CLOSED AND FROZEN at `ce723b3`.** Its verdict: exploration value and
+cost are world-dependent, no global repair justified, production tree unchanged. Do not
+reopen its exploration-capacity question.
+
+**Resource Investigation / Temporary Use is under AUTHORITY CLOSURE, not implementation.**
+No broad implementation has been authorized. The pass is diagnostic and documentary.
+
+Eleven of twelve action families are fully closed. The one missing seam: the seasonal
+`resource_scout` / `logistical_probe` pair reaches `SCOUT_MAX_DISTANCE = 10` tiles and
+revises resource belief with **no physical execution identity** — no workers, no
+traversed route, no duration, no provisions, no risk, no receipt.
+`collectProbeObservationTargets` (`bandDecision.ts:5539`) observes the target and its
+1-ring without walking a path. The minimum sufficient repair is identified (route the
+executed scout through the existing `intraSeasonTrips` authority) and deliberately **not
+applied** — it would change production behaviour and needs its own authorized checkpoint.
+
+The two temporary-camp representations do **not** conflict: `campMovement`'s
+`TemporaryTaskCampRecord` has no simulation-behavioural reader at all (UI, event log and
+public story only) while `ExpeditionTaskCamp` has real ones. They share a name, not a
+role. `temporary_use` verification remains dormant at **0 launches** by structural
+ordering, which is correct and was not "fixed".
+
+See `docs/evidence/resource-investigation-authority-25/`.
+
+---
+
+### HISTORICAL — superseded by the section above
+
+> The CORRECTION-20 status below was the *then*-current entry and is retained
+> unaltered as history. It is **no longer the current checkpoint**, and its
+> "recommended next step" is superseded. Likewise, any statement elsewhere in this
+> document that presents the old Ecology Architecture Sheet 2J.1-next sequence as the
+> active plan is **historical**; those passages are preserved but are not current
+> direction.
+
+### FRONTIER OPPORTUNITY / DAUGHTER FISSION CAUSAL CLOSURE — CORRECTION-20 — PROGRESS, DO NOT MERGE (HISTORICAL)
 
 **Branch** `checkpoint/frontier-opportunity-fission-closure-20`, from `4d20c98`. `main`
 untouched at `668763f`. **Not pushed. No production behaviour changed.**
@@ -7597,7 +7639,22 @@ UI in `src/ui/BandPanel.tsx`, audit + `--targeted-cause-event-check` in
 
 ## Recommended Next Step
 
-**Current recommendation after ECOLOGY VIABILITY CORRECTION-8 (PASS):**
+**CURRENT (CLOSURE-25, 2026-08-01).** Awaiting human review. The roadmap does **not**
+advance: CLOSURE-25 returned `PROGRESS — AUTHORITY MAP COMPLETE / ONE OR MORE EXACT
+PHYSICAL OR BEHAVIORAL SEAMS REMAIN MISSING`. The decision in front of the human is
+whether to authorize the identified minimum repair (route the executed
+`resource_scout` through the existing `intraSeasonTrips` authority so it gains a real
+route, workers, duration and a real failure mode) as its own checkpoint, or to accept
+the aggregation and move to Crowding. Do not start Crowding, and do not implement the
+repair, before that decision.
+
+CORRECTION-24 is closed and frozen at `ce723b3`. Its exploration-capacity question is
+not to be reopened.
+
+> **HISTORICAL — the recommendation below predates CORRECTION-13 through -24 and
+> CLOSURE-25. It is retained as history and is not current direction.**
+
+**Historical recommendation after ECOLOGY VIABILITY CORRECTION-8 (PASS):**
 **CLIMATE / WEATHER / REGIONAL SEASONALITY FOUNDATION-2 is restored as the ACTIVE
 checkpoint** (roadmap item 2). The ecology-viability correction line is closed: the
 selection-level bottleneck that made ordinary habitat non-viable is measured and fixed,
