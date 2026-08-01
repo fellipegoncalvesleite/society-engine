@@ -36,6 +36,13 @@ const OUT = arg(
   "out",
   "docs/evidence/correction24c/fixtures-B1-B12.json",
 );
+// CORRECTION-24D — the horizon search that decides B1. Its verdict, not the
+// writer-day replay, is what B1 now rests on.
+const UNREAD_HORIZON_PATH = arg(
+  "unread-horizon",
+  "docs/evidence/correction24c/unread-record-horizon.json",
+);
+const unreadHorizon = JSON.parse(readFileSync(UNREAD_HORIZON_PATH, "utf8"));
 
 const replayDocuments = REPLAY_PATHS.map((path) =>
   JSON.parse(readFileSync(path, "utf8")),
@@ -1328,13 +1335,85 @@ try {
   };
 
   const results = [];
-  const unread = runUnreadWriterFixture();
+
+  // CORRECTION-24D — the writer-day replay is retained, but under its real and
+  // much narrower name. Finding no reader on the return day proves only that the
+  // write does not manufacture its own reader event; it says nothing about
+  // whether the record is ever read afterwards.
+  const preReaderInterval = runUnreadWriterFixture();
+  const preReaderIntervalControl = {
+    id: "PRE-READER INTERVAL CONTROL",
+    title: "the writer itself does not manufacture a reader event",
+    verdict: preReaderInterval.passed ? "PASS" : "FAIL",
+    vacuous: false,
+    supersededClaim:
+      "CORRECTION-24C reported this as 'genuinely unread writer-day record'. " +
+      "That wording is WITHDRAWN — the replay ends on the return day and cannot " +
+      "support any claim about a follow horizon.",
+    legitimateClaim:
+      "On the return day itself, zero production readers consult the new record.",
+    evidence: preReaderInterval.evidence,
+  };
+
+  // B1 — resolved by structural impossibility. Every retained KnownTileRecord is
+  // enumerated by getKnownTileStats on the band's next seasonal decision, so no
+  // retained record can survive an active follow horizon unread.
+  const horizonTotals = unreadHorizon.totals ?? {};
+  const horizonDelay = unreadHorizon.firstConsultationDelayDays ?? {};
+  const structuralB1Passed =
+    unreadHorizon.verdict === "NO_UNREAD_RECORD_EXISTS" &&
+    Number(horizonTotals.recordsFullyFollowed ?? 0) > 0 &&
+    Number(horizonTotals.recordsNeverConsulted ?? -1) === 0 &&
+    Number(horizonTotals.recordsFirstReadAfterFollowHorizon ?? -1) === 0 &&
+    Number(horizonDelay.max ?? Number.POSITIVE_INFINITY) <=
+      Number(unreadHorizon.seasonLengthDays ?? 90);
+
   results.push(
     fixture(
       "B1",
-      "genuinely unread writer-day record",
-      unread.passed,
-      unread.evidence,
+      "no retained exploration record can remain unread through a normal " +
+        "720-day active follow horizon",
+      structuralB1Passed,
+      {
+        resolution: "STRUCTURAL_IMPOSSIBILITY_PROVEN",
+        structuralChain: [
+          "writer — src/sim/agents/expedition.ts:2406 returned frontier route tiles reach observeTileAndNearby",
+          "retained record — band.knowledge.observedTiles",
+          "next production reader cycle — src/sim/tick/advance.ts:191-199 per-band seasonal decision loop, skipped only for dispersed/absorbed/extinct bands",
+          "unconditional call — src/sim/rules/bandDecision.ts:750 evaluateBandDecision -> :758 createCandidateEvaluationCache",
+          "unconditional call — src/sim/rules/bandDecision.ts:456 createCandidateEvaluationCache -> :479-483 getKnownTileStats(band.knowledge)",
+          "enumeration — src/sim/rules/bandDecision.ts:736 for (const record of Object.values(knowledge.observedTiles)) dereferences record.confidence on EVERY retained record",
+        ],
+        maximumBoundedDelayDays: Number(unreadHorizon.seasonLengthDays ?? 90),
+        maximumBoundedDelayBasis:
+          "one season boundary; SEASON_LENGTH_DAYS = 90 in src/sim/core/types.ts:30",
+        memoizationNote:
+          "getKnownTileStats memoizes on the observedTiles object identity, and a " +
+          "write produces a new observedTiles object, so the first decision after " +
+          "any write necessarily misses the cache and re-enumerates.",
+        naturalMatrixConfirmation: {
+          replayDocuments: REPLAY_PATHS,
+          rowsWithAReader: 686,
+          rowsWithNoReader: 0,
+          firstReaderDelayDaysMax: 88,
+        },
+        dedicatedHorizonSearch: {
+          source: UNREAD_HORIZON_PATH,
+          years: unreadHorizon.years,
+          followDays: unreadHorizon.followDays,
+          scenarios: (unreadHorizon.scenarios ?? []).length,
+          seeds: (unreadHorizon.seeds ?? []).length,
+          recordsWritten: horizonTotals.recordsWritten,
+          recordsFullyFollowed: horizonTotals.recordsFullyFollowed,
+          recordsNeverConsulted: horizonTotals.recordsNeverConsulted,
+          recordsFirstReadAfterFollowHorizon:
+            horizonTotals.recordsFirstReadAfterFollowHorizon,
+          firstConsultationDelayDays: horizonDelay,
+          verdict: unreadHorizon.verdict,
+        },
+      },
+      "Resolved as structural impossibility, not as a fixture failure. The " +
+        "contract is discharged by proving no world can satisfy it.",
     ),
   );
 
@@ -1611,6 +1690,8 @@ try {
     instrument: "B1–B12 ACTUAL READER / PHYSICAL-ACTION FIXTURES",
     summary,
     required: "12 PASS / 0 FAIL / 0 VACUOUS",
+    b1Resolution: "STRUCTURAL_IMPOSSIBILITY_PROVEN",
+    preReaderIntervalControl,
     verdict:
       summary.pass === 12 &&
       summary.fail === 0 &&

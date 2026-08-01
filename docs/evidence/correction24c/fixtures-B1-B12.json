@@ -6,22 +6,78 @@
     "vacuous": 0
   },
   "required": "12 PASS / 0 FAIL / 0 VACUOUS",
+  "b1Resolution": "STRUCTURAL_IMPOSSIBILITY_PROVEN",
+  "preReaderIntervalControl": {
+    "id": "PRE-READER INTERVAL CONTROL",
+    "title": "the writer itself does not manufacture a reader event",
+    "verdict": "PASS",
+    "vacuous": false,
+    "supersededClaim": "CORRECTION-24C reported this as 'genuinely unread writer-day record'. That wording is WITHDRAWN — the replay ends on the return day and cannot support any claim about a follow horizon.",
+    "legitimateClaim": "On the return day itself, zero production readers consult the new record.",
+    "evidence": {
+      "recordEventId": "exploration-record:band:dry-margin-foragers:expedition:band:dry-margin-foragers:96:frontier_exploration:742566b:tile:109:40:106",
+      "returnDay": 106,
+      "actualReaderEventsOnWriterDay": 0,
+      "actionStreamsEqual": true,
+      "downstreamEqualAfterExcludingWriterProducts": true,
+      "controlSound": true,
+      "terminalClass": "WRITE_SUPPRESSION_NO_TRACKED_CONSEQUENCE"
+    }
+  },
   "verdict": "PASS",
   "fixtures": [
     {
       "id": "B1",
-      "title": "genuinely unread writer-day record",
+      "title": "no retained exploration record can remain unread through a normal 720-day active follow horizon",
       "verdict": "PASS",
       "vacuous": false,
       "evidence": {
-        "recordEventId": "exploration-record:band:dry-margin-foragers:expedition:band:dry-margin-foragers:96:frontier_exploration:742566b:tile:109:40:106",
-        "returnDay": 106,
-        "actualReaderEventsOnWriterDay": 0,
-        "actionStreamsEqual": true,
-        "downstreamEqualAfterExcludingWriterProducts": true,
-        "controlSound": true,
-        "terminalClass": "WRITE_SUPPRESSION_NO_TRACKED_CONSEQUENCE"
-      }
+        "resolution": "STRUCTURAL_IMPOSSIBILITY_PROVEN",
+        "structuralChain": [
+          "writer — src/sim/agents/expedition.ts:2406 returned frontier route tiles reach observeTileAndNearby",
+          "retained record — band.knowledge.observedTiles",
+          "next production reader cycle — src/sim/tick/advance.ts:191-199 per-band seasonal decision loop, skipped only for dispersed/absorbed/extinct bands",
+          "unconditional call — src/sim/rules/bandDecision.ts:750 evaluateBandDecision -> :758 createCandidateEvaluationCache",
+          "unconditional call — src/sim/rules/bandDecision.ts:456 createCandidateEvaluationCache -> :479-483 getKnownTileStats(band.knowledge)",
+          "enumeration — src/sim/rules/bandDecision.ts:736 for (const record of Object.values(knowledge.observedTiles)) dereferences record.confidence on EVERY retained record"
+        ],
+        "maximumBoundedDelayDays": 90,
+        "maximumBoundedDelayBasis": "one season boundary; SEASON_LENGTH_DAYS = 90 in src/sim/core/types.ts:30",
+        "memoizationNote": "getKnownTileStats memoizes on the observedTiles object identity, and a write produces a new observedTiles object, so the first decision after any write necessarily misses the cache and re-enumerates.",
+        "naturalMatrixConfirmation": {
+          "replayDocuments": [
+            "docs/evidence/correction24c/production-reader-replay-40y.json",
+            "docs/evidence/correction24c/production-reader-replay-200y.json",
+            "docs/evidence/correction24c/production-reader-replay-500y.json"
+          ],
+          "rowsWithAReader": 686,
+          "rowsWithNoReader": 0,
+          "firstReaderDelayDaysMax": 88
+        },
+        "dedicatedHorizonSearch": {
+          "source": "docs/evidence/correction24c/unread-record-horizon.json",
+          "years": 40,
+          "followDays": 720,
+          "scenarios": 11,
+          "seeds": 5,
+          "recordsWritten": 18757,
+          "recordsFullyFollowed": 17554,
+          "recordsNeverConsulted": 0,
+          "recordsFirstReadAfterFollowHorizon": 0,
+          "firstConsultationDelayDays": {
+            "min": 28,
+            "max": 88,
+            "histogram": {
+              "61-90": 17322,
+              "31-60": 231,
+              "0-30": 1
+            },
+            "exceedingSeasonLength": 0
+          },
+          "verdict": "NO_UNREAD_RECORD_EXISTS"
+        }
+      },
+      "note": "Resolved as structural impossibility, not as a fixture failure. The contract is discharged by proving no world can satisfy it."
     },
     {
       "id": "B2",

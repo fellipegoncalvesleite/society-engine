@@ -125,3 +125,27 @@ terminal outcome, and terminal position in the non-persisted journey ledger.
 They do not modify the world or either O0/O3 arm. The parity evidence therefore
 identifies `9e317647` as its production source and separately discloses the
 read-only audit projection.
+
+### The projection is now durable (CORRECTION-24D)
+
+Disclosing the projection in prose was not enough to reproduce it — the lines
+lived only in an uncommitted worktree. They are now committed as a patch:
+
+```text
+artifact     docs/evidence/correction24c/o3-physical-stream-projection.patch
+sha256       c6479f81ef81da1e0e0635f9f15909842007bdb932882ca65f3f745376949a6c
+base commit  5f04c96827f90ea39e193d3294835a48550947bb
+base tree    3fac2f72960f6ce37959b4c343758db0589fa8c9
+scope        2 files, +20 / -0
+```
+
+Reproduced end to end from a **fresh clean detached worktree** at the base
+commit: `git apply --check` OK → applied → applied scope matched the declaration
+exactly (`+11` / `+9`, no deletions) → TypeScript PASS → O3 audit rerun
+**55/55 exact, 0 mismatch** → **0 semantic differences** against the committed
+evidence. `sourceRoot` is a fixed label string rather than an absolute path, so
+no field actually required normalization. Recorded in
+`o3-projection-reproduction.json`.
+
+The projected `src/sim` lines are **not** committed to the checkpoint branch —
+only the patch artifact, the reproduction record, and the documentation.

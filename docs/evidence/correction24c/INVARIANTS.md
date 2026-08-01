@@ -34,7 +34,9 @@ recorded only after the long-running audit processes stop.
 | 500-year default-map replay | PASS; 120 events, 120 sound, 0 unsound, 0 missing samples |
 | Aggregate control soundness | PASS; **686 admitted events, 686 sound, 0 unsound (100%)** |
 | Five required receipt traces | PASS; 5/5 complete with exact physical causes; 3 additional natural receipt divergences retained |
-| B1–B12 controlled fixtures | PASS; **12 PASS / 0 FAIL / 0 VACUOUS** against the merged 40/200/500-year replays |
+| B1–B12 controlled fixtures | PASS; **12 PASS / 0 FAIL / 0 VACUOUS** against the merged 40/200/500-year replays. B1 resolved by CORRECTION-24D as `STRUCTURAL_IMPOSSIBILITY_PROVEN` |
+| B1 unread-horizon search (24D) | PASS; 11 worlds × 5 seeds × 40 y; 18,757 records written, **17,554 followed a full 720 days, 0 never consulted, 0 first-read after horizon**; delay min 28 / max 88 against a 90-day season |
+| O3 projection reproducibility (24D) | PASS; patch applies clean at `5f04c96`, scope matches declaration (+20/−0, 2 files), tsc PASS, rerun **55/55 exact**, **0 semantic differences** vs committed |
 | Reader-role normalization | PASS; repeated consultation roles are deduplicated without changing reader or action identity |
 | Exact action identities | PASS; movement, camp, resource, and fission ledgers are distinct from rankings and candidate arrays |
 | CORRECTION-24C closure audit | PASS; **33 PASS / 0 FAIL** over all nine durable evidence documents |

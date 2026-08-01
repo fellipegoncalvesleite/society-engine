@@ -99,6 +99,40 @@
     "exactParityRuns": 55,
     "mismatchRuns": 0
   },
+  "correction24d": {
+    "b1": {
+      "resolution": "STRUCTURAL_IMPOSSIBILITY_PROVEN",
+      "withdrawnClaim": "B1 was reported as a 'genuinely unread writer-day record'. That wording is withdrawn — the fixture replayed only the return day.",
+      "preservedNarrowResult": {
+        "name": "PRE-READER INTERVAL CONTROL",
+        "verdict": "PASS",
+        "claim": "On the return day itself, zero production readers consult the new record."
+      },
+      "structuralProof": {
+        "enumeratingFunction": "getKnownTileStats (src/sim/rules/bandDecision.ts:726, enumerating at :736)",
+        "reachedUnconditionallyFrom": "evaluateBandDecision:750 -> createCandidateEvaluationCache:758 -> :479-483",
+        "maximumBoundedDelayDays": 90,
+        "horizonSearch": {
+          "verdict": "NO_UNREAD_RECORD_EXISTS",
+          "recordsFullyFollowed": 17554,
+          "recordsNeverConsulted": 0,
+          "maxFirstConsultationDelayDays": 88
+        }
+      },
+      "countedAsResolvedContract": true
+    },
+    "o3Projection": {
+      "patch": "docs/evidence/correction24c/o3-physical-stream-projection.patch",
+      "patchSha256": "c6479f81ef81da1e0e0635f9f15909842007bdb932882ca65f3f745376949a6c",
+      "baseCommit": "5f04c96827f90ea39e193d3294835a48550947bb",
+      "baseTree": "3fac2f72960f6ce37959b4c343758db0589fa8c9",
+      "addedLines": 20,
+      "removedLines": 0,
+      "reproducedExactParityRuns": 55,
+      "semanticDifferencesVsCommitted": 0,
+      "verdict": "REPRODUCIBLE — 55/55 EXACT, 0 SEMANTIC DIFFERENCES"
+    }
+  },
   "checks": [
     {
       "name": "replay40_scenario_count",

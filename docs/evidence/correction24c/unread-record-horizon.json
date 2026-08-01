@@ -1,0 +1,53 @@
+{
+  "instrument": "CORRECTION-24D — RETAINED-RECORD UNREAD HORIZON SEARCH",
+  "note": "Production runs normally. Nothing is suppressed or deleted, no band is killed, no reader is disabled, and this script never invokes a reader.",
+  "years": 40,
+  "followDays": 720,
+  "scenarios": [
+    "map1",
+    "map2",
+    "site_A_coast",
+    "site_B_dry_plains",
+    "site_C_dry_plains",
+    "site_D_aquatic",
+    "site_E_hills",
+    "site_F_hills",
+    "ordinary",
+    "isolated_marginal",
+    "hostile"
+  ],
+  "seeds": [
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ],
+  "seasonLengthDays": 90,
+  "totals": {
+    "recordsWritten": 18757,
+    "recordsFullyFollowed": 17554,
+    "recordsNeverConsulted": 0,
+    "recordsFirstReadAfterFollowHorizon": 0,
+    "recordsStillRetainedAtFollowEnd": 11269
+  },
+  "firstConsultationDelayDays": {
+    "min": 28,
+    "max": 88,
+    "histogram": {
+      "61-90": 17322,
+      "31-60": 231,
+      "0-30": 1
+    },
+    "exceedingSeasonLength": 0
+  },
+  "firstReaderFunctions": {
+    "deriveRangeSaturationState": 795,
+    "deriveCarryingCapacity/deriveKnownUnusedHabitat": 4937,
+    "deriveFrontierDispersalPressure/getFrontierCandidates": 3204,
+    "evaluateBandDecision/getKnownTileStats": 8138,
+    "deriveCampMovementDecisionSupport": 480
+  },
+  "unreadCandidates": [],
+  "verdict": "NO_UNREAD_RECORD_EXISTS"
+}

@@ -85,9 +85,14 @@ event:
 | fission | 0 | 0 |
 
 Thus the corrected natural sample contains no stored-state-only or genuinely
-unread row, but that is a sample result rather than a claim that such writes are
-impossible. The non-vacuous controlled fixture separately proves the unread
-classification.
+unread row.
+
+> **Strengthened by CORRECTION-24D.** This paragraph originally read that the
+> absence "is a sample result rather than a claim that such writes are
+> impossible", and leaned on a controlled fixture to cover the unread branch.
+> Both statements are superseded: the absence is now proven **structural**, and
+> the fixture that was supposed to demonstrate the branch turned out to prove
+> something much narrower. See *B1 is corrected* below.
 
 ## Corrected long-horizon replay
 
@@ -174,7 +179,7 @@ to describe how often each outcome happens naturally.
 
 | id | contract | source |
 | --- | --- | --- |
-| B1 | genuinely unread writer-day record | 0 reader events on the writer day; terminal `WRITE_SUPPRESSION_NO_TRACKED_CONSEQUENCE` |
+| B1 | no retained record can stay unread through a 720-day active horizon | structural impossibility proven — see below |
 | B2 | actual reader consults the record and stays inert | `site_B_dry_plains s3` |
 | B3 | changes an executed residential movement | `site_E_hills s1` |
 | B4 | changes an executed camp action | `site_E_hills s1` |
@@ -187,9 +192,68 @@ to describe how often each outcome happens naturally.
 | B11 | lost party writes no event and no identity | 0 writer events, no identity created |
 | B12 | every admitted control replay is sound | 686 events, 0 unsound |
 
-B1 matters most. The natural matrices contain **no** stored-state-only and **no**
-genuinely unread row at any horizon, so without B1 the unread classification would
-be an untested branch. B1 constructs one and the classifier reports it correctly.
+### B1 is corrected — the original wording is withdrawn (CORRECTION-24D)
+
+> **Superseded.** CORRECTION-24C reported B1 as a *"genuinely unread writer-day
+> record"* and treated it as the missing proof that the unread branch of the
+> classifier was reachable. **That wording is withdrawn.** The fixture replayed
+> only the return day, so `actualReaderEventsOnWriterDay === 0` supports exactly
+> one claim — that the write does not manufacture its own reader event — and no
+> claim whatever about a follow horizon. The old result is preserved unchanged
+> under its correct narrower name, **PRE-READER INTERVAL CONTROL**.
+
+The replacement is a stronger result in the opposite direction. A dedicated search
+looked for a record that stays unread while its band remains alive and keeps
+taking ordinary decisions, over a follow window of at least 720 days. Nothing was
+suppressed, no band was killed, no reader was disabled, no record was deleted
+after writing, and the search never invoked a reader itself.
+
+```text
+11 worlds × 5 seeds × 40 years
+18,757 records written
+17,554 followed for a full 720 days
+     0 never consulted
+     0 first read after the horizon
+first-consultation delay: min 28, max 88 days
+```
+
+No such record exists, and the reason is structural rather than statistical:
+
+```text
+writer            expedition.ts:2406 — returned route tiles reach observeTileAndNearby
+retained record   band.knowledge.observedTiles
+next reader cycle advance.ts:191-199 — per-band seasonal decision loop, skipped
+                  only for dispersed / absorbed / extinct bands
+unconditional     bandDecision.ts:750 evaluateBandDecision
+                  → :758 createCandidateEvaluationCache
+unconditional     bandDecision.ts:456 createCandidateEvaluationCache
+                  → :479-483 getKnownTileStats(band.knowledge)
+enumeration       bandDecision.ts:736 — for (const record of
+                  Object.values(knowledge.observedTiles)) dereferences
+                  record.confidence on EVERY retained record
+```
+
+`getKnownTileStats` therefore consults every retained record at the band's next
+seasonal decision, so the maximum delay is one season boundary —
+`SEASON_LENGTH_DAYS = 90` (`src/sim/core/types.ts:30`). The memoization is not an
+escape hatch: the cache is keyed on the `observedTiles` object identity and a
+write produces a new object, so the first decision after any write necessarily
+misses the cache and re-enumerates.
+
+The measurements land exactly where that predicts. **17,322 of 17,554** delays
+fall in the 61–90 day bucket, none exceeds 90, and `getKnownTileStats` is the
+single most common first reader (8,138). The committed natural matrices agree
+independently: 686 of 686 rows reached a reader, maximum delay 88 days.
+
+B1 is therefore recorded as `STRUCTURAL IMPOSSIBILITY PROVEN`, not as a fixture
+failure — the contract is discharged by proving no world can satisfy it. Of the
+17,554 followed records, 11,269 were still retained at the end of their window;
+the rest were evicted by memory compression, which is why the claim is scoped to
+*retained* records.
+
+**Consequence for the natural matrices.** Their zero stored-state-only and zero
+genuinely-unread rows are no longer a sampling gap that a fixture had to cover.
+They are the only outcome the architecture permits.
 
 B6 is a constructed world rather than a natural sample, because natural fission
 reads are as scarce as the missing-sample table shows. It is not vacuous: a real
@@ -310,6 +374,37 @@ return day, loss, terminal outcome, and terminal position.
 O3 is therefore a pure knowledge-withheld arm for the measured first journey;
 its comparison is not withdrawn.
 
+### The projection is now reproducible (CORRECTION-24D)
+
+That evidence was generated from a detached worktree carrying 20 uncommitted
+audit-only lines, which made it unreproducible from anything committed. The exact
+projection is now a durable artifact:
+
+```text
+docs/evidence/correction24c/o3-physical-stream-projection.patch
+sha256      c6479f81ef81da1e0e0635f9f15909842007bdb932882ca65f3f745376949a6c
+base commit 5f04c96827f90ea39e193d3294835a48550947bb
+base tree   3fac2f72960f6ce37959b4c343758db0589fa8c9
+scope       2 files, +20 / -0
+            src/sim/agents/expedition.ts                        +11
+            src/sim/diagnostics/explorationFunnelDiagnostics.ts  +9
+```
+
+It exposes party composition, provisions loaded, risk-episode identities,
+terminal outcome and terminal position in the non-persisted journey ledger. Every
+added line writes only into that ledger — no world state and neither arm is
+modified.
+
+Reproduced from a clean worktree at the base commit: `git apply --check` OK, the
+applied scope matched the declaration exactly, TypeScript passed, and the rerun
+returned **55/55 exact parity, 0 mismatch**. Comparing the regenerated document
+with the committed one gives **0 semantic differences**; `sourceRoot` is a fixed
+label rather than an absolute path, so even the field reserved for normalization
+matched. Recorded in `o3-projection-reproduction.json`.
+
+The projected `src/sim` changes are deliberately **not** committed to the
+checkpoint branch — only the patch, the reproduction record and this note.
+
 ## Production-repair status
 
 No cooldown, scheduler, fallthrough, route-failure memory, expedition capacity,
@@ -319,11 +414,33 @@ seams only and are removed by the cleanup commit.
 
 ## Verdict
 
+CORRECTION-24C closed as:
+
 ```text
 PROGRESS — EXPLORATION VALUE OR COST IS WORLD-DEPENDENT /
 NO GLOBAL REPAIR JUSTIFIED /
 HUMAN DESIGN DISCUSSION REQUIRED
 ```
+
+CORRECTION-24D then corrected the two evidence defects above — the overstated B1
+contract and the unreproducible O3 projection — without touching any matrix
+result or any production line. With both discharged, the causal question is
+closed:
+
+```text
+PASS — CORRECTION-24 CAUSAL QUESTION CLOSED /
+EXPLORATION VALUE AND COST ARE WORLD-DEPENDENT /
+NO GLOBAL REPAIR JUSTIFIED /
+PRODUCTION TREE UNCHANGED /
+AWAITING HUMAN ROADMAP DECISION
+```
+
+```text
+CORRECTION-24 CLOSED AND FROZEN
+```
+
+The substantive finding is unchanged and was not re-litigated. Every matrix
+number in this document is the CORRECTION-24C result.
 
 Two findings decide this together, and neither alone would.
 

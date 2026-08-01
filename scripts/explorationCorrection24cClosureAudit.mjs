@@ -41,6 +41,22 @@ const mediation = readJson(paths.mediation);
 const o3 = readJson(paths.o3);
 const hiddenTruth = readJson(paths.hiddenTruth);
 
+/** Loads one optional CORRECTION-24D document, absent on pre-24D evidence sets. */
+const readOptionalJson = (path) => {
+  try {
+    return JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    return null;
+  }
+};
+
+const unreadHorizon = readOptionalJson(
+  `${ROOT}/unread-record-horizon.json`,
+);
+const o3Reproduction = readOptionalJson(
+  `${ROOT}/o3-projection-reproduction.json`,
+);
+
 const checks = [];
 
 /** Records one explicit acceptance check. */
@@ -378,6 +394,55 @@ const result = {
     comparedRuns: o3.comparedRuns,
     exactParityRuns: o3.exactParityRuns,
     mismatchRuns: o3.mismatchRuns,
+  },
+  // CORRECTION-24D — the two evidence corrections applied after 24C closed.
+  correction24d: {
+    b1: {
+      resolution: fixtures.b1Resolution ?? null,
+      withdrawnClaim:
+        "B1 was reported as a 'genuinely unread writer-day record'. That " +
+        "wording is withdrawn — the fixture replayed only the return day.",
+      preservedNarrowResult: {
+        name: "PRE-READER INTERVAL CONTROL",
+        verdict: fixtures.preReaderIntervalControl?.verdict ?? null,
+        claim: fixtures.preReaderIntervalControl?.legitimateClaim ?? null,
+      },
+      structuralProof: {
+        enumeratingFunction:
+          "getKnownTileStats (src/sim/rules/bandDecision.ts:726, enumerating at :736)",
+        reachedUnconditionallyFrom:
+          "evaluateBandDecision:750 -> createCandidateEvaluationCache:758 -> :479-483",
+        maximumBoundedDelayDays: 90,
+        horizonSearch: unreadHorizon === null
+          ? null
+          : {
+              verdict: unreadHorizon.verdict,
+              recordsFullyFollowed:
+                unreadHorizon.totals?.recordsFullyFollowed ?? null,
+              recordsNeverConsulted:
+                unreadHorizon.totals?.recordsNeverConsulted ?? null,
+              maxFirstConsultationDelayDays:
+                unreadHorizon.firstConsultationDelayDays?.max ?? null,
+            },
+      },
+      countedAsResolvedContract: true,
+    },
+    o3Projection: o3Reproduction === null
+      ? null
+      : {
+          patch: o3Reproduction.patch?.path ?? null,
+          patchSha256: o3Reproduction.patch?.sha256 ?? null,
+          baseCommit: o3Reproduction.patch?.baseCommit ?? null,
+          baseTree: o3Reproduction.patch?.baseTree ?? null,
+          addedLines: o3Reproduction.patch?.addedLines ?? null,
+          removedLines: o3Reproduction.patch?.removedLines ?? null,
+          reproducedExactParityRuns:
+            o3Reproduction.reproduction?.o3Rerun?.exactParityRuns ?? null,
+          semanticDifferencesVsCommitted:
+            o3Reproduction.reproduction?.committedComparison
+              ?.semanticDifferences ?? null,
+          verdict: o3Reproduction.verdict ?? null,
+        },
   },
   checks,
 };
