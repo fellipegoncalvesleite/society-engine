@@ -1,0 +1,535 @@
+{
+  "checkpoint": "CORRECTION-26",
+  "arm": "before",
+  "generatedFor": "before/after causal proof — does selection alone change target-area knowledge",
+  "years": 12,
+  "seedPrefix": "c26:beforeafter",
+  "seeds": [
+    "s1",
+    "s2"
+  ],
+  "scenarios": [
+    "map1",
+    "map2"
+  ],
+  "totals": {
+    "selections": 192,
+    "targetAreaChangedAtSelection": 181,
+    "targetAreaKnowledgeGainedAtSelection": 176,
+    "targetAreaKnowledgeLostAtSelection": 18,
+    "selectionsWithExecutionIdentity": 0,
+    "executionsObserved": 0,
+    "namedNonExecutions": 0
+  },
+  "shareOfSelectionsThatGainedTargetAreaKnowledge": 0.9166666666666666,
+  "runs": [
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "years": 12,
+      "selections": 25,
+      "targetAreaChangedAtSelection": 25,
+      "targetAreaKnowledgeGainedAtSelection": 25,
+      "targetAreaKnowledgeLostAtSelection": 2,
+      "selectionsWithExecutionIdentity": 0,
+      "executionsObserved": 0,
+      "namedNonExecutions": 0
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s2",
+      "years": 12,
+      "selections": 29,
+      "targetAreaChangedAtSelection": 24,
+      "targetAreaKnowledgeGainedAtSelection": 19,
+      "targetAreaKnowledgeLostAtSelection": 5,
+      "selectionsWithExecutionIdentity": 0,
+      "executionsObserved": 0,
+      "namedNonExecutions": 0
+    },
+    {
+      "label": "before",
+      "scenario": "map2",
+      "seed": "s1",
+      "years": 12,
+      "selections": 74,
+      "targetAreaChangedAtSelection": 73,
+      "targetAreaKnowledgeGainedAtSelection": 73,
+      "targetAreaKnowledgeLostAtSelection": 3,
+      "selectionsWithExecutionIdentity": 0,
+      "executionsObserved": 0,
+      "namedNonExecutions": 0
+    },
+    {
+      "label": "before",
+      "scenario": "map2",
+      "seed": "s2",
+      "years": 12,
+      "selections": 64,
+      "targetAreaChangedAtSelection": 59,
+      "targetAreaKnowledgeGainedAtSelection": 59,
+      "targetAreaKnowledgeLostAtSelection": 8,
+      "selectionsWithExecutionIdentity": 0,
+      "executionsObserved": 0,
+      "namedNonExecutions": 0
+    }
+  ],
+  "samples": [
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:1",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:113:40",
+      "knowledgeGained": 1,
+      "knowledgeLost": 1,
+      "detail": [
+        "tile:113:40|fallback_food:memory-down",
+        "tile:113:40|generic_plant_food:memory-up"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:40"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:2",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:115:39",
+      "knowledgeGained": 5,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:115:39:became-known",
+        "tile:115:38:became-known",
+        "tile:116:39:became-known",
+        "tile:115:40:became-known",
+        "tile:114:39:became-known"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:40"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:highland-edge-foragers:6",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:35:16",
+      "knowledgeGained": 6,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:35:16:became-known",
+        "tile:35:15:became-known",
+        "tile:36:16:became-known",
+        "tile:34:16:became-known",
+        "tile:35:16|generic_plant_food:memory-formed",
+        "tile:35:16|water_resource:memory-formed"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:35:19"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:lake-wetland-foragers:9",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:103:55",
+      "knowledgeGained": 4,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:103:55:became-known",
+        "tile:103:54:became-known",
+        "tile:104:55:became-known",
+        "tile:102:55:became-known"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:104:58"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:13",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:111:38",
+      "knowledgeGained": 3,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:111:38:became-known",
+        "tile:111:37:became-known",
+        "tile:110:38:became-known"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:40"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:15",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:109:37",
+      "knowledgeGained": 4,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:109:37:became-known",
+        "tile:109:36:became-known",
+        "tile:109:38:became-known",
+        "tile:108:37:became-known"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:16",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:111:34",
+      "knowledgeGained": 5,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:111:34:became-known",
+        "tile:111:33:became-known",
+        "tile:112:34:became-known",
+        "tile:111:35:became-known",
+        "tile:110:34:became-known"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:17",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:112:40",
+      "knowledgeGained": 6,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:112:40:terrain-up",
+        "tile:113:40:terrain-up",
+        "tile:112:41:terrain-up",
+        "tile:111:40:terrain-up",
+        "tile:112:40|generic_plant_food:memory-up",
+        "tile:112:40|fallback_food:memory-up"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:18",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:112:41",
+      "knowledgeGained": 7,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:112:41:terrain-up",
+        "tile:112:40:terrain-up",
+        "tile:113:41:terrain-up",
+        "tile:112:42:terrain-up",
+        "tile:111:41:terrain-up",
+        "tile:112:41|generic_plant_food:memory-up",
+        "tile:112:41|fallback_food:memory-up"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:19",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:112:42",
+      "knowledgeGained": 8,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:112:42:terrain-up",
+        "tile:112:41:terrain-up",
+        "tile:113:42:became-known",
+        "tile:112:43:terrain-up",
+        "tile:111:42:terrain-up",
+        "tile:112:42|generic_plant_food:memory-up",
+        "tile:112:42|fallback_food:memory-up",
+        "tile:112:42|water_resource:memory-up"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:20",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:111:39",
+      "knowledgeGained": 6,
+      "knowledgeLost": 1,
+      "detail": [
+        "tile:111:39:terrain-up",
+        "tile:112:39:terrain-up",
+        "tile:111:40:terrain-up",
+        "tile:111:39|fallback_food:memory-up",
+        "tile:111:39|generic_plant_food:memory-down",
+        "tile:111:39|water_resource:memory-formed",
+        "tile:111:39|aquatic_food:memory-formed"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:21",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:114:40",
+      "knowledgeGained": 6,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:114:40:terrain-up",
+        "tile:114:41:terrain-up",
+        "tile:113:40:terrain-up",
+        "tile:114:40|fallback_food:memory-up",
+        "tile:114:40|water_resource:memory-up",
+        "tile:114:40|aquatic_food:memory-up"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:lake-wetland-foragers:21",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:100:54",
+      "knowledgeGained": 4,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:100:54:became-known",
+        "tile:100:53:became-known",
+        "tile:101:54:became-known",
+        "tile:99:54:became-known"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:100:57"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:22",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:113:41",
+      "knowledgeGained": 7,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:113:41:terrain-up",
+        "tile:113:40:terrain-up",
+        "tile:113:42:became-known",
+        "tile:112:41:terrain-up",
+        "tile:113:41|fallback_food:memory-up",
+        "tile:113:41|water_resource:memory-formed",
+        "tile:113:41|aquatic_food:memory-formed"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:23",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:111:41",
+      "knowledgeGained": 7,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:111:41:terrain-up",
+        "tile:111:40:terrain-up",
+        "tile:112:41:terrain-up",
+        "tile:110:41:terrain-up",
+        "tile:111:41|fallback_food:memory-up",
+        "tile:111:41|water_resource:memory-formed",
+        "tile:111:41|aquatic_food:memory-formed"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:lake-wetland-foragers:23",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:102:54",
+      "knowledgeGained": 2,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:102:54:became-known",
+        "tile:102:53:became-known"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:101:57"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:24",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:112:40",
+      "knowledgeGained": 7,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:112:40:terrain-up",
+        "tile:112:39:terrain-up",
+        "tile:113:40:terrain-up",
+        "tile:112:41:terrain-up",
+        "tile:111:40:terrain-up",
+        "tile:112:40|fallback_food:memory-up",
+        "tile:112:40|aquatic_food:memory-formed"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:25",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:112:43",
+      "knowledgeGained": 5,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:112:42:terrain-up",
+        "tile:113:43:became-known",
+        "tile:112:43|generic_plant_food:memory-up",
+        "tile:112:43|fallback_food:memory-up",
+        "tile:112:43|water_resource:memory-formed"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:26",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:112:42",
+      "knowledgeGained": 4,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:112:42:terrain-up",
+        "tile:112:41:terrain-up",
+        "tile:113:42:became-known",
+        "tile:112:42|water_resource:memory-up"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:27",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:111:39",
+      "knowledgeGained": 5,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:112:39:terrain-up",
+        "tile:111:40:terrain-up",
+        "tile:111:39|fallback_food:memory-up",
+        "tile:111:39|water_resource:memory-up",
+        "tile:111:39|aquatic_food:memory-up"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:112:37"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:highland-edge-foragers:34",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:37:18",
+      "knowledgeGained": 6,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:37:18:became-known",
+        "tile:37:17:became-known",
+        "tile:38:18:became-known",
+        "tile:37:18|fallback_food:memory-formed",
+        "tile:37:18|water_resource:memory-formed",
+        "tile:37:18|generic_plant_food:memory-formed"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:37:22"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:36",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:115:49",
+      "knowledgeGained": 2,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:116:49:became-known",
+        "tile:114:49:became-known"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:113:46"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:37",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:115:49",
+      "knowledgeGained": 3,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:115:49:became-known",
+        "tile:115:48:became-known",
+        "tile:115:50:became-known"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:113:46"
+    },
+    {
+      "label": "before",
+      "scenario": "map1",
+      "seed": "s1",
+      "decisionId": "decision:band:dry-margin-foragers:42",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:115:53",
+      "knowledgeGained": 3,
+      "knowledgeLost": 0,
+      "detail": [
+        "tile:115:53:became-known",
+        "tile:116:53:became-known",
+        "tile:115:54:became-known"
+      ],
+      "hasPendingIdentity": false,
+      "bandPosition": "tile:115:50"
+    }
+  ]
+}

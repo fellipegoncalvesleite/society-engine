@@ -181,7 +181,82 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### RESOURCE INVESTIGATION / TEMPORARY USE — AUTHORITY CLOSURE-25 — PROGRESS, DO NOT MERGE
+### RESOURCE INVESTIGATION — PHYSICAL EXECUTION CORRECTION-26 — PROGRESS, DO NOT MERGE
+
+**Branch** `checkpoint/resource-investigation-physical-26`, continuing its own
+architecture-decision commit `b746b68`. Local and remote `main` untouched at
+`0a43083a3a9103bc6b8f693b8823a604ae2c6a8d`; CLOSURE-25 frozen at `f947550`. **PRODUCTION
+BEHAVIOUR CHANGED** — no fingerprint parity to either is claimed or possible.
+
+**Entry invariant PASSED:** `git diff --exit-code f947550 -- src/sim` was clean, so the
+previous executor's reverted half-state left nothing behind.
+
+**THE FREE-KNOWLEDGE CHAIN IS CLOSED, MEASURED AT THE EXACT SEAM.** Using the pre-existing
+audit-only `decisionObserver` (`tick/advance.ts:213-215`), which brackets `applyBandDecision`
+and nothing else and exists unchanged at `f947550`: **before, 176 of 192 selections (91.7%)
+gained target-area knowledge with 0 execution identities in existence; after, 0 of 234, with
+234 of 234 carrying an exact execution identity.** The after arm selects MORE investigations
+(234 vs 192), so this is not reduced scout frequency dressed as a repair. The 2 residual
+after-arm changes are knowledge being LOST (ring eviction), the opposite of the defect.
+
+**The chain now is:** selection leaves one bounded record carrying its `Decision.id` and
+observes only the tile the band is standing on → the next ordinary trip day staffs a party
+from labour the day's foraging group left → the same passable route builder the daily trips
+use → arrival or a named failure → observation only on arrival, through the canonical
+`observeTileAndNearby` → scout learning / side memory / plant test / exploitation skill →
+a terminal outcome in a bounded ring. Natural run (20 y × 3 scenarios × 2 seeds, 343
+selections): 139 `executed_and_returned`, 147 `beyond_same_day_reach`, 54 `route_unavailable`,
+0 lost, 3 still pending, 0 duplicate executions, 0 information receipts.
+
+**`beyond_same_day_reach` at 147/343 is the honest refusal, not a bug.** Selection reaches 10
+tiles, an honest same-day round trip covers 8, so anything past 4 one way is outside same-day
+physics. `deriveTripDurationDays` is applied both to the straight-line distance and to the
+route actually walked. Compressing these into one-day records is exactly what §10 forbids.
+
+**A REAL REGRESSION WAS INTRODUCED, CAUGHT AND FIXED.** `stepModeInvarianceAudit` failed
+after the first implementation — observations stamped day 180 under seasonal stepping against
+185 under daily. `runDailyActions` never advances `world.time`, so the executor was observing
+with the span's start time. Same defect CORRECTION-15 repaired as its item (D) for the
+expedition timestamp. Both maps now pass with `fullCanonicalStateMatch: true`. **Fixture P13
+passed while that bug was live** — it compared no timestamps; it was strengthened and a
+negative control (bug reintroduced) now fails 3/3.
+
+**CampMovement is truthful.** `TemporaryTaskCampRecord` → `TemporaryTaskPartyRecord`, written
+only when a party actually departed, carrying its `executionId`, real party size and real
+route length, asserting `noCamp: true`. CLOSURE-25's own audit rerun unmodified:
+`camp_movement_temporary_record` **129 → 0**, `expedition_task_camp` **103 → 113**
+(untouched). `ExpeditionTaskCamp` was not merged with it.
+
+**Layering:** a value-import graph over all 143 `src/sim` files reports **0 runtime cycles**
+and **0 `agents → rules` runtime edges**. `importBoundaryAudit`'s informational back-edge
+count rose 84 → 85; its regex counts `import type`, and the new edge is type-only.
+
+PASSED: tsc, build, graph 221/764 0 dup 0 dangling, import/decision/adaptation boundaries,
+context lifecycle, season-order invariance, step-mode invariance both maps with
+`fullCanonicalStateMatch`, determinism `deterministic=true`, resource and fauna
+anti-omniscience (`hiddenKnowledgeViolations: 0`), food capture 1.000 with conservation,
+terminal extinction, return kinds, hardship outcome, expedition knowledge latency, fixtures
+P1–P13 **35/35** plus a negative control.
+
+**INHERITED FAILURE, NOT A REGRESSION:** `expeditionLifecycleAudit` reports FAIL on this tree
+and **the identical FAIL on `f947550`** with the same flags (`sawOperating`, `sawReturning`,
+`sawTaskCamp` all false in a 40-year run). Pre-existing, not repaired here.
+
+**DEFERRED, UNPROVEN — do not cite as a finding.** The gap between what a scout may select
+(10 tiles) and the fixed same-day budget (8) refuses 43% of natural investigations. Whether
+that is a defect (a fixed budget that ignores `bandMobility`'s dynamic pace/conditioning/
+fatigue) or an honest limit is NOT established; no constant was touched and no counterfactual
+was run. Likewise `route_unavailable` has no failure memory, so an unreachable target can be
+re-selected — the same class CORRECTION-24A recommended a bounded negative memory for.
+
+**NOT RUN:** no 200 y / 500 y matrix, no population or survival comparison. No claim that
+physical investigation improves outcomes is made.
+
+See `docs/evidence/resource-investigation-physical-26/`.
+
+---
+
+### HISTORICAL — RESOURCE INVESTIGATION / TEMPORARY USE — AUTHORITY CLOSURE-25 — PROGRESS, DO NOT MERGE
 
 **Branch** `checkpoint/resource-investigation-authority-25`, from CORRECTION-24's closure
 `ce723b3f1973e4f3f2c54a424a614e723a14558a`. Local and remote `main` untouched at
@@ -8058,6 +8133,24 @@ exception; daughter colours related-but-distinct and never visually confusing.
 ---
 
 ## Checkpoint Log
+
+- **RESOURCE INVESTIGATION PHYSICAL EXECUTION CORRECTION-26** — *2026-08-01, PROGRESS — DO
+  NOT MERGE. Production behaviour changed.* Closed the free-knowledge chain: a selected
+  scout/probe no longer observes anything, it leaves one bounded record carrying its
+  `Decision.id` which the next ordinary trip day executes with real workers, a real passable
+  route and a real way to fail. Measured at the `decisionObserver` seam, target-area knowledge
+  gained at selection went **176/192 (91.7%) → 0/234**, with 234/234 now carrying an exact
+  execution identity and the after arm selecting MORE investigations, not fewer. 343 natural
+  selections resolve as 139 executed, 147 refused as beyond same-day reach, 54 with no
+  passable route, 0 lost. Extracted the observation/learning domain half to
+  `agents/resourceScoutObservation.ts` with **0 runtime cycles** and **0 agents→rules runtime
+  edges**. Reclassified the camp record that fired on mere selection into a party record that
+  fires only on a real departure (`camp_movement_temporary_record` 129 → 0,
+  `expedition_task_camp` untouched). **Introduced and fixed a real step-mode regression** (the
+  executor observed with the span's start time) and strengthened the fixture that had passed
+  while it was live, with a negative control. Inherited `expeditionLifecycleAudit` FAIL
+  reproduces identically on `f947550`. The selection-reach vs same-day-budget gap is recorded
+  as deferred and unproven. See `docs/evidence/resource-investigation-physical-26/`.
 
 - **FRONTIER OPPORTUNITY / DAUGHTER FISSION CAUSAL CLOSURE CORRECTION-20** — *2026-07-26,
   PROGRESS — DO NOT MERGE. No production change.* Completed the unfinished cross-seed

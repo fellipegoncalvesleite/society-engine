@@ -1,0 +1,250 @@
+{
+  "checkpoint": "CORRECTION-26",
+  "generatedFor": "resource investigation physical execution — controlled fixtures P1-P13",
+  "seedPrefix": "c26:fixtures",
+  "summary": {
+    "total": 35,
+    "passed": 35,
+    "failed": 0
+  },
+  "checks": [
+    {
+      "name": "P1_executed_and_returned",
+      "passed": true,
+      "detail": "executed_and_returned"
+    },
+    {
+      "name": "P1_carries_exact_execution_id",
+      "passed": true
+    },
+    {
+      "name": "P1_party_has_workers",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "P1_walked_a_real_route",
+      "passed": true,
+      "detail": 3
+    },
+    {
+      "name": "P1_observed_the_target",
+      "passed": true
+    },
+    {
+      "name": "P5_same_day_boundary_resource_scout",
+      "passed": true
+    },
+    {
+      "name": "P2_executed_and_returned",
+      "passed": true,
+      "detail": "executed_and_returned"
+    },
+    {
+      "name": "P2_carries_exact_execution_id",
+      "passed": true
+    },
+    {
+      "name": "P2_party_has_workers",
+      "passed": true,
+      "detail": 1
+    },
+    {
+      "name": "P2_walked_a_real_route",
+      "passed": true,
+      "detail": 3
+    },
+    {
+      "name": "P2_observed_the_target",
+      "passed": true
+    },
+    {
+      "name": "P5_same_day_boundary_logistical_probe",
+      "passed": true
+    },
+    {
+      "name": "P7_execution_is_later_than_selection",
+      "passed": true,
+      "detail": {
+        "P1": 6,
+        "P2": 6
+      }
+    },
+    {
+      "name": "P6_beyond_same_day_named_not_executed",
+      "passed": true,
+      "detail": "beyond_same_day_reach"
+    },
+    {
+      "name": "P6_no_execution_id",
+      "passed": true
+    },
+    {
+      "name": "P6_target_not_observed_by_the_refusal",
+      "passed": true
+    },
+    {
+      "name": "P3_named_non_execution",
+      "passed": true,
+      "detail": "destination_blocked"
+    },
+    {
+      "name": "P3_no_workers_left_camp",
+      "passed": true
+    },
+    {
+      "name": "P3_no_target_truth_read",
+      "passed": true
+    },
+    {
+      "name": "P4_insufficient_labor_named",
+      "passed": true,
+      "detail": "insufficient_labor"
+    },
+    {
+      "name": "P4_zero_workers_committed",
+      "passed": true
+    },
+    {
+      "name": "P4_no_execution_id",
+      "passed": true
+    },
+    {
+      "name": "P8_band_moved_cancellation",
+      "passed": true,
+      "detail": "band_moved_before_departure"
+    },
+    {
+      "name": "P8_no_execution_id",
+      "passed": true
+    },
+    {
+      "name": "P9_expiry_named",
+      "passed": true,
+      "detail": "expired_before_execution"
+    },
+    {
+      "name": "P9_no_execution_id",
+      "passed": true
+    },
+    {
+      "name": "P10_no_duplicate_execution",
+      "passed": true
+    },
+    {
+      "name": "P10_at_most_one_execution_per_decision",
+      "passed": true
+    },
+    {
+      "name": "P11_no_task_party_without_execution",
+      "passed": true
+    },
+    {
+      "name": "P11_task_parties_never_exceed_executions",
+      "passed": true,
+      "detail": {
+        "parties": 3,
+        "executions": 3
+      }
+    },
+    {
+      "name": "P12_no_information_receipt",
+      "passed": true
+    },
+    {
+      "name": "P12_zero_information_support",
+      "passed": true
+    },
+    {
+      "name": "P13_step_mode_parity_weekly",
+      "passed": true
+    },
+    {
+      "name": "P13_step_mode_parity_monthly",
+      "passed": true
+    },
+    {
+      "name": "P13_step_mode_parity_seasonal",
+      "passed": true
+    }
+  ],
+  "cases": {
+    "P1": {
+      "actionType": "resource_scout",
+      "targetTileId": "tile:73:111",
+      "decisionId": "decision:fixture:P1",
+      "outcome": "executed_and_returned",
+      "executionId": "investigation-exec:decision:fixture:P1:6",
+      "activityOutcome": "returned_with_information",
+      "partyWorkers": 1,
+      "routeDistanceTiles": 3,
+      "observedTileCount": 14,
+      "daysFromSelectionToResolution": 6,
+      "targetObservedAfter": true,
+      "newlyObservedTileCount": 6
+    },
+    "P2": {
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:73:111",
+      "decisionId": "decision:fixture:P2",
+      "outcome": "executed_and_returned",
+      "executionId": "investigation-exec:decision:fixture:P2:6",
+      "activityOutcome": "returned_with_information",
+      "partyWorkers": 1,
+      "routeDistanceTiles": 3,
+      "observedTileCount": 14,
+      "daysFromSelectionToResolution": 6,
+      "targetObservedAfter": true,
+      "newlyObservedTileCount": 6
+    },
+    "P6": {
+      "targetTileId": "tile:69:111",
+      "outcome": "beyond_same_day_reach",
+      "executionId": null,
+      "targetObservedAfter": false,
+      "targetKnownBefore": false
+    },
+    "P3": {
+      "targetTileId": "tile:205:0",
+      "outcome": "destination_blocked",
+      "executionId": null,
+      "partyWorkers": null,
+      "targetObservedAfter": false,
+      "targetKnownBefore": false
+    },
+    "P4": {
+      "workingAdults": 0,
+      "outcome": "insufficient_labor",
+      "partyWorkers": 0,
+      "availableWorkers": 0,
+      "executionId": null
+    },
+    "P8": {
+      "recordOrigin": "tile:72:111",
+      "bandPosition": "tile:76:111",
+      "outcome": "band_moved_before_departure",
+      "executionId": null
+    },
+    "P9": {
+      "outcome": "expired_before_execution",
+      "executionId": null
+    },
+    "P10_P12": {
+      "selectedDecisions": 5,
+      "resolvedDecisions": 4,
+      "distinctExecutionIds": 3,
+      "maxExecutionsPerDecision": 1,
+      "duplicateExecutions": 0,
+      "taskPartyRecords": 3,
+      "partiesWithoutExecution": 0,
+      "informationReceipts": 0,
+      "informationSupport": 0
+    },
+    "P13": {
+      "dailyLength": 38547,
+      "identicalWeekly": true,
+      "identicalMonthly": true,
+      "identicalSeasonal": true
+    }
+  }
+}

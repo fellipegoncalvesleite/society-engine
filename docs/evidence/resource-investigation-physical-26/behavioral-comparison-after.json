@@ -1,0 +1,111 @@
+{
+  "checkpoint": "CORRECTION-26",
+  "arm": "after",
+  "generatedFor": "before/after causal proof — does selection alone change target-area knowledge",
+  "years": 12,
+  "seedPrefix": "c26:beforeafter",
+  "seeds": [
+    "s1",
+    "s2"
+  ],
+  "scenarios": [
+    "map1",
+    "map2"
+  ],
+  "totals": {
+    "selections": 234,
+    "targetAreaChangedAtSelection": 2,
+    "targetAreaKnowledgeGainedAtSelection": 0,
+    "targetAreaKnowledgeLostAtSelection": 2,
+    "selectionsWithExecutionIdentity": 234,
+    "executionsObserved": 97,
+    "namedNonExecutions": 132
+  },
+  "shareOfSelectionsThatGainedTargetAreaKnowledge": 0,
+  "runs": [
+    {
+      "label": "after",
+      "scenario": "map1",
+      "seed": "s1",
+      "years": 12,
+      "selections": 51,
+      "targetAreaChangedAtSelection": 0,
+      "targetAreaKnowledgeGainedAtSelection": 0,
+      "targetAreaKnowledgeLostAtSelection": 0,
+      "selectionsWithExecutionIdentity": 51,
+      "executionsObserved": 26,
+      "namedNonExecutions": 24
+    },
+    {
+      "label": "after",
+      "scenario": "map1",
+      "seed": "s2",
+      "years": 12,
+      "selections": 27,
+      "targetAreaChangedAtSelection": 1,
+      "targetAreaKnowledgeGainedAtSelection": 0,
+      "targetAreaKnowledgeLostAtSelection": 1,
+      "selectionsWithExecutionIdentity": 27,
+      "executionsObserved": 8,
+      "namedNonExecutions": 18
+    },
+    {
+      "label": "after",
+      "scenario": "map2",
+      "seed": "s1",
+      "years": 12,
+      "selections": 80,
+      "targetAreaChangedAtSelection": 1,
+      "targetAreaKnowledgeGainedAtSelection": 0,
+      "targetAreaKnowledgeLostAtSelection": 1,
+      "selectionsWithExecutionIdentity": 80,
+      "executionsObserved": 39,
+      "namedNonExecutions": 40
+    },
+    {
+      "label": "after",
+      "scenario": "map2",
+      "seed": "s2",
+      "years": 12,
+      "selections": 76,
+      "targetAreaChangedAtSelection": 0,
+      "targetAreaKnowledgeGainedAtSelection": 0,
+      "targetAreaKnowledgeLostAtSelection": 0,
+      "selectionsWithExecutionIdentity": 76,
+      "executionsObserved": 24,
+      "namedNonExecutions": 50
+    }
+  ],
+  "samples": [
+    {
+      "label": "after",
+      "scenario": "map1",
+      "seed": "s2",
+      "decisionId": "decision:band:dry-margin-foragers:24",
+      "actionType": "logistical_probe",
+      "targetTileId": "tile:115:51",
+      "knowledgeGained": 0,
+      "knowledgeLost": 1,
+      "detail": [
+        "tile:115:50:forgotten"
+      ],
+      "hasPendingIdentity": true,
+      "bandPosition": "tile:114:47"
+    },
+    {
+      "label": "after",
+      "scenario": "map2",
+      "seed": "s1",
+      "decisionId": "decision:band:varied-dry-corridor-mid:44",
+      "actionType": "resource_scout",
+      "targetTileId": "tile:61:108",
+      "knowledgeGained": 0,
+      "knowledgeLost": 1,
+      "detail": [
+        "tile:61:107:forgotten"
+      ],
+      "hasPendingIdentity": true,
+      "bandPosition": "tile:59:108"
+    }
+  ]
+}
