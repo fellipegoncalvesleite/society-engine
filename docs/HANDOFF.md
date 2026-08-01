@@ -181,12 +181,17 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### RESOURCE INVESTIGATION — PHYSICAL EXECUTION CORRECTION-26 — PROGRESS, DO NOT MERGE
+### RESOURCE INVESTIGATION — PHYSICAL EXECUTION CORRECTION-26 — PASS — TECHNICALLY COMPLETE / AWAITING HUMAN ROADMAP CLOSURE / DO NOT MERGE
 
 **Branch** `checkpoint/resource-investigation-physical-26`, continuing its own
 architecture-decision commit `b746b68`. Local and remote `main` untouched at
 `0a43083a3a9103bc6b8f693b8823a604ae2c6a8d`; CLOSURE-25 frozen at `f947550`. **PRODUCTION
 BEHAVIOUR CHANGED** — no fingerprint parity to either is claimed or possible.
+
+**STATUS.** The implementation is accepted and technically complete; the documentation and
+evidence consistency pass is done. **The supervising human review may now close and freeze
+CORRECTION-26.** Roadmap item 2 does not close itself — it closes on that review. Crowding
+(item 3) is **not started** and is not authorized by this pass.
 
 **Entry invariant PASSED:** `git diff --exit-code f947550 -- src/sim` was clean, so the
 previous executor's reverted half-state left nothing behind.
@@ -194,10 +199,23 @@ previous executor's reverted half-state left nothing behind.
 **THE FREE-KNOWLEDGE CHAIN IS CLOSED, MEASURED AT THE EXACT SEAM.** Using the pre-existing
 audit-only `decisionObserver` (`tick/advance.ts:213-215`), which brackets `applyBandDecision`
 and nothing else and exists unchanged at `f947550`: **before, 176 of 192 selections (91.7%)
-gained target-area knowledge with 0 execution identities in existence; after, 0 of 234, with
-234 of 234 carrying an exact execution identity.** The after arm selects MORE investigations
+gained target-area knowledge; after, 0 of 234.** The after arm selects MORE investigations
 (234 vs 192), so this is not reduced scout frequency dressed as a repair. The 2 residual
 after-arm changes are knowledge being LOST (ring eviction), the opposite of the defect.
+
+**THE CHAIN, WITH PENDING AND EXECUTED KEPT DISTINCT** (regenerated
+`behavioral-comparison.json`). A pending identity is created at the decision seam and proves
+only that the selection is joinable; it is NOT an execution, because nothing has executed at
+that instant:
+
+| | selected | exact pending identities | later physical executions | later named non-executions | still pending at end |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| **before (`f947550`)** | 192 | **0** | 0 | 0 | 0 |
+| **after** | 234 | **234** | **97** | **132** | **5** |
+
+97 + 132 + 5 = 234 exactly: every pending identity resolves to a physical execution, to a
+named non-execution, or is still waiting for its trip day when measurement stopped. The
+before arm has no pending identity to resolve, which is the defect.
 
 **The chain now is:** selection leaves one bounded record carrying its `Decision.id` and
 observes only the tile the band is standing on → the next ordinary trip day staffs a party
@@ -208,10 +226,17 @@ a terminal outcome in a bounded ring. Natural run (20 y × 3 scenarios × 2 seed
 selections): 139 `executed_and_returned`, 147 `beyond_same_day_reach`, 54 `route_unavailable`,
 0 lost, 3 still pending, 0 duplicate executions, 0 information receipts.
 
-**`beyond_same_day_reach` at 147/343 is the honest refusal, not a bug.** Selection reaches 10
-tiles, an honest same-day round trip covers 8, so anything past 4 one way is outside same-day
-physics. `deriveTripDurationDays` is applied both to the straight-line distance and to the
-route actually walked. Compressing these into one-day records is exactly what §10 forbids.
+**`beyond_same_day_reach` at 147/343 is an honest NAMED REFUSAL under the currently
+authoritative production boundary.** Selection reaches 10 tiles
+(`SCOUT_MAX_DISTANCE`/`MAX_TRIP_DISTANCE_TILES`); the same-day round-trip budget is 8
+(`SAME_DAY_ROUND_TRIP_TILE_BUDGET`), and `deriveTripDurationDays` — production's own single
+boundary between the two physical paths — is applied both to the straight-line distance and
+to the route actually walked. Compressing these into one-day records is exactly what §10
+forbids, so they are refused by name instead.
+
+**This does NOT claim the four-tile boundary has been proven physically correct.** The
+executor obeys the boundary production already had; nothing here tested whether that boundary
+is the right one. See the deferred item below.
 
 **A REAL REGRESSION WAS INTRODUCED, CAUGHT AND FIXED.** `stepModeInvarianceAudit` failed
 after the first implementation — observations stamped day 180 under seasonal stepping against
@@ -236,21 +261,35 @@ context lifecycle, season-order invariance, step-mode invariance both maps with
 `fullCanonicalStateMatch`, determinism `deterministic=true`, resource and fauna
 anti-omniscience (`hiddenKnowledgeViolations: 0`), food capture 1.000 with conservation,
 terminal extinction, return kinds, hardship outcome, expedition knowledge latency, fixtures
-P1–P13 **35/35** plus a negative control.
+P1–P14 **37/37** plus a negative control.
 
 **INHERITED FAILURE, NOT A REGRESSION:** `expeditionLifecycleAudit` reports FAIL on this tree
 and **the identical FAIL on `f947550`** with the same flags (`sawOperating`, `sawReturning`,
 `sawTaskCamp` all false in a 40-year run). Pre-existing, not repaired here.
 
-**DEFERRED, UNPROVEN — do not cite as a finding.** The gap between what a scout may select
-(10 tiles) and the fixed same-day budget (8) refuses 43% of natural investigations. Whether
-that is a defect (a fixed budget that ignores `bandMobility`'s dynamic pace/conditioning/
-fatigue) or an honest limit is NOT established; no constant was touched and no counterfactual
-was run. Likewise `route_unavailable` has no failure memory, so an unreachable target can be
-re-selected — the same class CORRECTION-24A recommended a bounded negative memory for.
+**DEFERRED, UNPROVEN — do not cite as a finding.** The possible mismatch between the fixed
+trip-distance budget and dynamic `bandMobility` (pace, conditioning, fatigue) is **unproven in
+either direction**. It refuses 43% of natural investigations, which is why it is visible, but:
+**no mobility constant was changed**, no counterfactual over the boundary was run, **no
+separate correction is authorized**, and it is **not part of CORRECTION-26**. It remains
+deferred for later evidence. Likewise `route_unavailable` has no failure memory, so an
+unreachable target can be re-selected — the same class CORRECTION-24A recommended a bounded
+negative memory for, also unauthorized here.
 
 **NOT RUN:** no 200 y / 500 y matrix, no population or survival comparison. No claim that
 physical investigation improves outcomes is made.
+
+**ROADMAP — unchanged by this pass:**
+
+```text
+2. Resource Investigation / Temporary Use
+   └─ CORRECTION-26 technically complete, awaiting final human closure
+
+3. Crowding / Shared Range / Range Release
+   └─ next roadmap item, not started
+```
+
+No CORRECTION-27 exists. Crowding was not begun.
 
 See `docs/evidence/resource-investigation-physical-26/`.
 
@@ -8134,13 +8173,16 @@ exception; daughter colours related-but-distinct and never visually confusing.
 
 ## Checkpoint Log
 
-- **RESOURCE INVESTIGATION PHYSICAL EXECUTION CORRECTION-26** — *2026-08-01, PROGRESS — DO
-  NOT MERGE. Production behaviour changed.* Closed the free-knowledge chain: a selected
+- **RESOURCE INVESTIGATION PHYSICAL EXECUTION CORRECTION-26** — *2026-08-01, PASS —
+  TECHNICALLY COMPLETE / AWAITING HUMAN ROADMAP CLOSURE / DO NOT MERGE. Production behaviour
+  changed.* Closed the free-knowledge chain: a selected
   scout/probe no longer observes anything, it leaves one bounded record carrying its
   `Decision.id` which the next ordinary trip day executes with real workers, a real passable
   route and a real way to fail. Measured at the `decisionObserver` seam, target-area knowledge
   gained at selection went **176/192 (91.7%) → 0/234**, with 234/234 now carrying an exact
-  execution identity and the after arm selecting MORE investigations, not fewer. 343 natural
+  PENDING identity — which resolves to 97 physical executions, 132 named non-executions and 5
+  still awaiting a trip day (97+132+5=234) — and the after arm selecting MORE investigations,
+  not fewer. 343 natural
   selections resolve as 139 executed, 147 refused as beyond same-day reach, 54 with no
   passable route, 0 lost. Extracted the observation/learning domain half to
   `agents/resourceScoutObservation.ts` with **0 runtime cycles** and **0 agents→rules runtime

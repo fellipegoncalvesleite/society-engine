@@ -75,7 +75,7 @@ simulation already persists, or uses the pre-existing audit-only `decisionObserv
 | `natural-occurrence.json` | `node scripts/investigationPhysicalChainAudit.mjs --years 20 --scenarios map1,map2,ordinary --seeds s1,s2` |
 | `behavioral-comparison-before.json` | `node scripts/investigationBeforeAfterAudit.mjs --label before --years 12 --seeds s1,s2 --scenarios map1,map2`, run in a git worktree at `f947550` |
 | `behavioral-comparison-after.json` | same command, `--label after`, on this tree |
-| `behavioral-comparison.json` | the merged before/after document, including the authority-ledger delta |
+| `behavioral-comparison.json` | `node scripts/investigationBeforeAfterAudit.mjs --merge <before>,<after> --authority-before <-25 natural> --authority-after <-26 rerun> --natural <natural> --fixtures <fixtures> --out <this path>` — every number is READ from the generated JSON, none typed in by hand |
 | `closure25-authority-rerun.json` | `node scripts/resourceInvestigationAuthorityAudit.mjs --years 20 --scenarios map1,map2,ordinary --seeds s1 --out <this path>` — CLOSURE-25's own audit, **unmodified**, with `--out` redirected |
 
 ### Earlier checkpoint evidence was not overwritten
@@ -96,6 +96,19 @@ type `IntraSeasonTripActivityResult` (`agents/types.ts:332`) and the member actu
 `transferred_to_existing_expedition_authority` was removed with the reason it is not
 implemented. Two sections were added: the observation-distance trade and the acquisition-kind
 decision.
+
+## Terminology correction (documentation-consistency pass)
+
+`scripts/investigationBeforeAfterAudit.mjs` reported a metric named
+`selectionsWithExecutionIdentity`. It checks
+`updatedBand.pendingInvestigation.decisionId === decision.id` **at the decision seam**, which
+proves an exact PENDING identity and cannot prove a physical execution — nothing has executed
+at that instant. Renamed to `selectionsWithPendingIdentity` in the script and in every
+generated field. `executionsObserved` and `namedNonExecutions`, which genuinely inspect
+terminal ring entries, keep their names, and a new `stillPendingAtMeasurementEnd` closes the
+arithmetic (97 + 132 + 5 = 234). Both arms and the combined document were regenerated; the
+combined document is now produced by the script's `--merge` mode from the generated JSON
+rather than assembled by hand.
 
 ## Verification runs
 
@@ -120,7 +133,7 @@ decision.
 | hardship outcome | `node scripts/postEcologyHardshipOutcomeAudit.mjs` | PASS |
 | expedition knowledge latency | `node scripts/expeditionKnowledgeLatencyAudit.mjs` | PASS |
 | expedition lifecycle | `node scripts/expeditionLifecycleAudit.mjs` | **FAIL — and FAILS IDENTICALLY on `f947550`** with the same flags. Pre-existing, not a regression from this work, not repaired here. |
-| fixtures P1–P14 | `node scripts/investigationPhysicalFixturesAudit.mjs` | 37/37 |
+| fixtures P1–P14 | `node scripts/investigationPhysicalFixturesAudit.mjs` | **37/37** |
 | fixture negative control | P13 with the step-mode bug deliberately reintroduced | 3/3 fail, confirming P13 is not vacuous |
 
 ### The back-edge increase

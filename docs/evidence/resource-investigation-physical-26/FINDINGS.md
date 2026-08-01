@@ -21,13 +21,31 @@ departure point.
 (`tick/advance.ts:213-215`) fires between `applyBandDecision` and the write-back, so it
 brackets the applier and nothing else. Two maps × two seeds × 12 years on `f947550`:
 
-| | selections | gained target-area knowledge at selection | execution identities |
-| --- | ---: | ---: | ---: |
-| **before (`f947550`)** | 192 | **176 (91.7%)** | **0** |
-| **after** | 234 | **0 (0%)** | **234 (100%)** |
+| | selections | gained target-area knowledge at selection |
+| --- | ---: | ---: |
+| **before (`f947550`)** | 192 | **176 (91.7%)** |
+| **after** | 234 | **0 (0%)** |
 
 The after arm selects **more** investigations, not fewer — 234 against 192 — so the result
 is not reduced scout frequency wearing the costume of a repair.
+
+**Pending is not executed, and the two are named apart.** The metric that checks
+`updatedBand.pendingInvestigation.decisionId === decision.id` at the decision seam is
+`selectionsWithPendingIdentity`. It proves the selection created an exact, joinable pending
+identity; it proves nothing physical, because **nothing has executed at that instant**. (It
+was briefly named `selectionsWithExecutionIdentity`, which overstated it; corrected.) The
+counters that do inspect terminal outcomes are `executionsObserved` — a ring entry carrying
+an `executionId` — and `namedNonExecutions`. The full chain, from the regenerated
+`behavioral-comparison.json`:
+
+| | selected | exact pending identities | later physical executions | later named non-executions | still pending at end |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| **before (`f947550`)** | 192 | **0** | 0 | 0 | 0 |
+| **after** | 234 | **234** | **97** | **132** | **5** |
+
+97 + 132 + 5 = 234 exactly. Every pending identity resolves to a physical execution, to a
+named non-execution, or is still waiting for its trip day when measurement stopped. The
+before arm has no pending identity to resolve at all — that absence is the defect.
 
 Two selections in the after arm show a target-area change, and both are knowledge being
 **lost** (a tile in the ring forgotten under the bounded known-tile retention). That is the
@@ -85,14 +103,18 @@ executor could not have re-derived them (wrong season) and the call would have c
 
 343 = 340 resolved + 3 still pending. Nothing disappeared.
 
-**`beyond_same_day_reach` is the largest class and it is the honest one.** A scout may
-select a target up to 10 tiles away (`resourceScout.ts:50`), while an honest same-day round
-trip covers 8 (`intraSeasonTrips.ts:89`), so anything past 4 tiles one way is already
-outside same-day physics. `deriveTripDurationDays` — the production helper whose own comment
-calls itself "the single boundary between the two physical paths" — is applied twice: once
-on the straight-line distance selection used, and again on the route actually walked, which
-is often longer. Compressing those 147 into one-day records would have been exactly the
-falsification this checkpoint exists to remove.
+**`beyond_same_day_reach` is the largest class, and it is an honest NAMED REFUSAL under the
+currently authoritative production boundary.** A scout may select a target up to 10 tiles
+away (`resourceScout.ts:50`), while the same-day round-trip budget is 8
+(`intraSeasonTrips.ts:89`). `deriveTripDurationDays` — the production helper whose own
+comment calls itself "the single boundary between the two physical paths" — is applied twice:
+once on the straight-line distance selection used, and again on the route actually walked,
+which is often longer. Compressing those 147 into one-day records would have been exactly the
+falsification this checkpoint exists to remove, so they are refused by name instead.
+
+**What this does NOT establish.** It does **not** claim the four-tile boundary has been proven
+physically correct. The executor obeys the boundary production already had; whether that
+boundary is the right one was not tested here. See §9.
 
 **`route_unavailable` is terrain, not policy.** Selection measures straight-line distance;
 execution needs a contiguous passable path. This is the same mismatch CORRECTION-8 recorded
@@ -187,7 +209,7 @@ it is actually running on. Both maps now pass with `fullCanonicalStateMatch: tru
 `pendingInvestigation` / `recentInvestigationOutcomes` / `temporaryTaskParties` — none of
 which carry a timestamp. Observation timestamps and the observation history were added, and
 a **negative control** was run: with the bug deliberately reintroduced the fixture fails
-3/3 and passes 35/35 with it removed. A fixture that cannot fail is not evidence.
+3/3 and passes 37/37 with it removed. A fixture that cannot fail is not evidence.
 
 ## 8. Instrument errors caught in this pass's own probes
 
@@ -207,11 +229,21 @@ Recorded rather than quietly dropped, because each would have produced a confide
 Explicitly outside this checkpoint's scope and **not acted on**. Selection may reach 10
 tiles (`SCOUT_MAX_DISTANCE`, `MAX_TRIP_DISTANCE_TILES`) while the same-day round trip budget
 is 8 (`SAME_DAY_ROUND_TRIP_TILE_BUDGET`), so 147 of 343 natural investigations — 43% — are
-refused as `beyond_same_day_reach`. Whether that gap is a defect (a fixed trip-distance
-budget that does not respond to `bandMobility`'s dynamic pace, conditioning or fatigue) or
-an honest physical limit is **NOT established here**. Nothing in this pass measured a
-counterfactual over it, and no constant listed in §5 of the checkpoint was touched. It is
-recorded as a candidate for a later checkpoint and must not be cited as a finding.
+refused as `beyond_same_day_reach`. That refusal is honest **under the currently
+authoritative production boundary**; the boundary itself is a separate question.
+
+The possible mismatch between the fixed trip-distance budget and dynamic `bandMobility`
+(pace, conditioning, fatigue) is **unproven in either direction**:
+
+- **no mobility constant was changed** — `SAME_DAY_ROUND_TRIP_TILE_BUDGET`,
+  `deriveTripDurationDays`, `SCOUT_MAX_DISTANCE`, `bandMobility`, walking capacity,
+  conditioning, fatigue, urgency, tile scale, food-trip range, expedition limits and movement
+  speed are all untouched;
+- **no counterfactual over the boundary was run**;
+- **no separate correction is authorized**, and no CORRECTION-27 exists;
+- it is **not part of CORRECTION-26** and remains deferred for later evidence.
+
+It must not be cited as a finding in either direction.
 
 Also recorded and not acted on: `route_unavailable` at 54 of 343 has no failure memory, so a
 band can re-select an unreachable target repeatedly. That is the same class of defect

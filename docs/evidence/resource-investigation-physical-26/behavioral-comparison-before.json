@@ -17,9 +17,10 @@
     "targetAreaChangedAtSelection": 181,
     "targetAreaKnowledgeGainedAtSelection": 176,
     "targetAreaKnowledgeLostAtSelection": 18,
-    "selectionsWithExecutionIdentity": 0,
+    "selectionsWithPendingIdentity": 0,
     "executionsObserved": 0,
-    "namedNonExecutions": 0
+    "namedNonExecutions": 0,
+    "stillPendingAtMeasurementEnd": 0
   },
   "shareOfSelectionsThatGainedTargetAreaKnowledge": 0.9166666666666666,
   "runs": [
@@ -32,9 +33,10 @@
       "targetAreaChangedAtSelection": 25,
       "targetAreaKnowledgeGainedAtSelection": 25,
       "targetAreaKnowledgeLostAtSelection": 2,
-      "selectionsWithExecutionIdentity": 0,
+      "selectionsWithPendingIdentity": 0,
       "executionsObserved": 0,
-      "namedNonExecutions": 0
+      "namedNonExecutions": 0,
+      "stillPendingAtMeasurementEnd": 0
     },
     {
       "label": "before",
@@ -45,9 +47,10 @@
       "targetAreaChangedAtSelection": 24,
       "targetAreaKnowledgeGainedAtSelection": 19,
       "targetAreaKnowledgeLostAtSelection": 5,
-      "selectionsWithExecutionIdentity": 0,
+      "selectionsWithPendingIdentity": 0,
       "executionsObserved": 0,
-      "namedNonExecutions": 0
+      "namedNonExecutions": 0,
+      "stillPendingAtMeasurementEnd": 0
     },
     {
       "label": "before",
@@ -58,9 +61,10 @@
       "targetAreaChangedAtSelection": 73,
       "targetAreaKnowledgeGainedAtSelection": 73,
       "targetAreaKnowledgeLostAtSelection": 3,
-      "selectionsWithExecutionIdentity": 0,
+      "selectionsWithPendingIdentity": 0,
       "executionsObserved": 0,
-      "namedNonExecutions": 0
+      "namedNonExecutions": 0,
+      "stillPendingAtMeasurementEnd": 0
     },
     {
       "label": "before",
@@ -71,9 +75,10 @@
       "targetAreaChangedAtSelection": 59,
       "targetAreaKnowledgeGainedAtSelection": 59,
       "targetAreaKnowledgeLostAtSelection": 8,
-      "selectionsWithExecutionIdentity": 0,
+      "selectionsWithPendingIdentity": 0,
       "executionsObserved": 0,
-      "namedNonExecutions": 0
+      "namedNonExecutions": 0,
+      "stillPendingAtMeasurementEnd": 0
     }
   ],
   "samples": [

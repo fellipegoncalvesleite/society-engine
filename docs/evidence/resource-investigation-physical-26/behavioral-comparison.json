@@ -1,7 +1,36 @@
 {
   "checkpoint": "CORRECTION-26",
-  "generatedFor": "behavioral comparison \u2014 before f947550 vs after the physical correction",
+  "generatedFor": "behavioral comparison — before f947550 vs after the physical correction",
+  "generatedBy": "node scripts/investigationBeforeAfterAudit.mjs --merge",
   "measurementSeam": "production audit-only decisionObserver (tick/advance.ts:213-215): the exact pre- and post-applyBandDecision band, nothing else in the window. Present unchanged at f947550, so both arms measure the identical seam.",
+  "terminology": {
+    "exactPendingIdentities": "updatedBand.pendingInvestigation.decisionId === decision.id, checked AT THE DECISION SEAM. Proves the selection created an exact pending identity. It does NOT prove a physical execution: nothing has executed at that instant.",
+    "laterPhysicalExecutions": "terminal ring entries carrying an executionId — a party was staffed and walked a route.",
+    "laterNamedNonExecutions": "terminal ring entries with no executionId — the outcome names why nobody went.",
+    "stillPendingAtMeasurementEnd": "selected in the final season, so the trip day had not arrived when measurement stopped."
+  },
+  "chain": {
+    "before": {
+      "selectedInvestigations": 192,
+      "exactPendingIdentities": 0,
+      "laterPhysicalExecutions": 0,
+      "laterNamedNonExecutions": 0,
+      "stillPendingAtMeasurementEnd": 0,
+      "targetAreaKnowledgeGainedAtSelection": 176,
+      "targetAreaKnowledgeLostAtSelection": 18,
+      "shareOfSelectionsThatGainedTargetAreaKnowledge": 0.9166666666666666
+    },
+    "after": {
+      "selectedInvestigations": 234,
+      "exactPendingIdentities": 234,
+      "laterPhysicalExecutions": 97,
+      "laterNamedNonExecutions": 132,
+      "stillPendingAtMeasurementEnd": 5,
+      "targetAreaKnowledgeGainedAtSelection": 0,
+      "targetAreaKnowledgeLostAtSelection": 2,
+      "shareOfSelectionsThatGainedTargetAreaKnowledge": 0
+    }
+  },
   "arms": {
     "before": {
       "commit": "f94755047b2ea2a47b9453f3917e8eaf67816ca3",
@@ -10,11 +39,11 @@
         "targetAreaChangedAtSelection": 181,
         "targetAreaKnowledgeGainedAtSelection": 176,
         "targetAreaKnowledgeLostAtSelection": 18,
-        "selectionsWithExecutionIdentity": 0,
+        "selectionsWithPendingIdentity": 0,
         "executionsObserved": 0,
-        "namedNonExecutions": 0
+        "namedNonExecutions": 0,
+        "stillPendingAtMeasurementEnd": 0
       },
-      "shareOfSelectionsThatGainedTargetAreaKnowledge": 0.9166666666666666,
       "runs": [
         {
           "label": "before",
@@ -25,9 +54,10 @@
           "targetAreaChangedAtSelection": 25,
           "targetAreaKnowledgeGainedAtSelection": 25,
           "targetAreaKnowledgeLostAtSelection": 2,
-          "selectionsWithExecutionIdentity": 0,
+          "selectionsWithPendingIdentity": 0,
           "executionsObserved": 0,
-          "namedNonExecutions": 0
+          "namedNonExecutions": 0,
+          "stillPendingAtMeasurementEnd": 0
         },
         {
           "label": "before",
@@ -38,9 +68,10 @@
           "targetAreaChangedAtSelection": 24,
           "targetAreaKnowledgeGainedAtSelection": 19,
           "targetAreaKnowledgeLostAtSelection": 5,
-          "selectionsWithExecutionIdentity": 0,
+          "selectionsWithPendingIdentity": 0,
           "executionsObserved": 0,
-          "namedNonExecutions": 0
+          "namedNonExecutions": 0,
+          "stillPendingAtMeasurementEnd": 0
         },
         {
           "label": "before",
@@ -51,9 +82,10 @@
           "targetAreaChangedAtSelection": 73,
           "targetAreaKnowledgeGainedAtSelection": 73,
           "targetAreaKnowledgeLostAtSelection": 3,
-          "selectionsWithExecutionIdentity": 0,
+          "selectionsWithPendingIdentity": 0,
           "executionsObserved": 0,
-          "namedNonExecutions": 0
+          "namedNonExecutions": 0,
+          "stillPendingAtMeasurementEnd": 0
         },
         {
           "label": "before",
@@ -64,24 +96,25 @@
           "targetAreaChangedAtSelection": 59,
           "targetAreaKnowledgeGainedAtSelection": 59,
           "targetAreaKnowledgeLostAtSelection": 8,
-          "selectionsWithExecutionIdentity": 0,
+          "selectionsWithPendingIdentity": 0,
           "executionsObserved": 0,
-          "namedNonExecutions": 0
+          "namedNonExecutions": 0,
+          "stillPendingAtMeasurementEnd": 0
         }
       ]
     },
     "after": {
-      "commit": "working tree of checkpoint/resource-investigation-physical-26",
+      "commit": "checkpoint/resource-investigation-physical-26",
       "totals": {
         "selections": 234,
         "targetAreaChangedAtSelection": 2,
         "targetAreaKnowledgeGainedAtSelection": 0,
         "targetAreaKnowledgeLostAtSelection": 2,
-        "selectionsWithExecutionIdentity": 234,
+        "selectionsWithPendingIdentity": 234,
         "executionsObserved": 97,
-        "namedNonExecutions": 132
+        "namedNonExecutions": 132,
+        "stillPendingAtMeasurementEnd": 5
       },
-      "shareOfSelectionsThatGainedTargetAreaKnowledge": 0,
       "runs": [
         {
           "label": "after",
@@ -92,9 +125,10 @@
           "targetAreaChangedAtSelection": 0,
           "targetAreaKnowledgeGainedAtSelection": 0,
           "targetAreaKnowledgeLostAtSelection": 0,
-          "selectionsWithExecutionIdentity": 51,
+          "selectionsWithPendingIdentity": 51,
           "executionsObserved": 26,
-          "namedNonExecutions": 24
+          "namedNonExecutions": 24,
+          "stillPendingAtMeasurementEnd": 1
         },
         {
           "label": "after",
@@ -105,9 +139,10 @@
           "targetAreaChangedAtSelection": 1,
           "targetAreaKnowledgeGainedAtSelection": 0,
           "targetAreaKnowledgeLostAtSelection": 1,
-          "selectionsWithExecutionIdentity": 27,
+          "selectionsWithPendingIdentity": 27,
           "executionsObserved": 8,
-          "namedNonExecutions": 18
+          "namedNonExecutions": 18,
+          "stillPendingAtMeasurementEnd": 1
         },
         {
           "label": "after",
@@ -118,9 +153,10 @@
           "targetAreaChangedAtSelection": 1,
           "targetAreaKnowledgeGainedAtSelection": 0,
           "targetAreaKnowledgeLostAtSelection": 1,
-          "selectionsWithExecutionIdentity": 80,
+          "selectionsWithPendingIdentity": 80,
           "executionsObserved": 39,
-          "namedNonExecutions": 40
+          "namedNonExecutions": 40,
+          "stillPendingAtMeasurementEnd": 1
         },
         {
           "label": "after",
@@ -131,31 +167,21 @@
           "targetAreaChangedAtSelection": 0,
           "targetAreaKnowledgeGainedAtSelection": 0,
           "targetAreaKnowledgeLostAtSelection": 0,
-          "selectionsWithExecutionIdentity": 76,
+          "selectionsWithPendingIdentity": 76,
           "executionsObserved": 24,
-          "namedNonExecutions": 50
+          "namedNonExecutions": 50,
+          "stillPendingAtMeasurementEnd": 2
         }
       ]
     }
   },
-  "headline": {
-    "beforeSelectionsGainingTargetAreaKnowledge": 176,
-    "beforeSelections": 192,
-    "beforeExecutionIdentities": 0,
-    "afterSelectionsGainingTargetAreaKnowledge": 0,
-    "afterSelections": 234,
-    "afterExecutionIdentities": 234,
-    "afterExecutions": 97,
-    "afterNamedNonExecutions": 132,
-    "statement": "BEFORE: 176 of 192 selections (91.7%) gained target-area knowledge at the decision seam, with 0 execution identities in existence. AFTER: 0 of 234 selections gained any target-area knowledge at that seam, and 234 of 234 carry an exact execution identity that later resolves to a physical execution or a named non-execution. Scout/probe frequency is NOT used as evidence: the after arm selects MORE investigations (234 vs 192), not fewer."
-  },
   "residualAfterChanges": {
-    "count": 2,
-    "direction": "knowledge LOST, not gained",
-    "explanation": "Two selections in which a tile in the target's 1-ring was forgotten during the decision (bounded known-tile retention). That is the opposite of free knowledge and is reported separately rather than folded into a symmetric 'changed' count."
+    "knowledgeGained": 0,
+    "knowledgeLost": 2,
+    "note": "Any residual after-arm change is knowledge LOST (a ring tile forgotten under bounded retention), which is the opposite of the defect. The metric is directional for that reason."
   },
   "authorityLedger": {
-    "note": "CLOSURE-25's own audit rerun unmodified. Its output was written to the -26 directory; the -25 evidence file was not touched.",
+    "note": "CLOSURE-25's own audit rerun unmodified with --out redirected; the -25 evidence file was not touched.",
     "before_25": {
       "resource_scout": 51,
       "logistical_probe": 78,
@@ -189,7 +215,8 @@
     "campMovementTemporaryRecord": {
       "before": 129,
       "after": 0,
-      "meaning": "The record that claimed a temporary camp for a band that never left is gone. expedition_task_camp (103 -> 113) is untouched and still governed by ExpeditionTaskCamp."
+      "expeditionTaskCampBefore": 103,
+      "expeditionTaskCampAfter": 113
     }
   },
   "naturalOccurrence": {
@@ -236,14 +263,15 @@
   },
   "fixtures": {
     "summary": {
-      "total": 35,
-      "passed": 35,
+      "total": 37,
+      "passed": 37,
       "failed": 0
     }
   },
   "instrumentCorrectionsRecorded": [
     "A first version of this probe compared band state across a whole advanceWorldByDays(world,1) step and reported 41/234 target-area changes on the corrected tree. That window contains a day of daily actions, so ordinary subsistence trips and returning expeditions were attributed to the decision. Moved to the decisionObserver seam: 2/234, all of them losses.",
     "A first version of the metric was symmetric (any difference counted as a change). Free distant knowledge is a GAIN, so the metric is now directional and losses are reported separately.",
-    "The first version of fixture P13 compared only pendingInvestigation / recentInvestigationOutcomes / temporaryTaskParties and PASSED while step-mode invariance was genuinely broken. Observation timestamps were added; a negative control (bug reintroduced) now fails 3/3."
+    "The first version of fixture P13 compared only pendingInvestigation / recentInvestigationOutcomes / temporaryTaskParties and PASSED while step-mode invariance was genuinely broken. Observation timestamps were added; a negative control (bug reintroduced) now fails 3/3.",
+    "The field now named selectionsWithPendingIdentity was previously named selectionsWithExecutionIdentity. It checks a pending record created at selection and never proved an execution; the name overstated it and is corrected here."
   ]
 }

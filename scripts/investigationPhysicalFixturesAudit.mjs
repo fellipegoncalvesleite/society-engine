@@ -1,4 +1,4 @@
-// CORRECTION-26 §14 — controlled fixtures P1–P12 for the physical investigation chain.
+// CORRECTION-26 §14 — controlled fixtures P1–P14 for the physical investigation chain.
 //
 // Every fixture joins BY EXACT IDENTITY: `Decision.id` -> `PendingInvestigationRecord`
 // -> `executionId` -> `InvestigationOutcomeRingEntry` -> the memory that changed. Nothing
@@ -529,7 +529,7 @@ try {
   const passed = checks.filter((check) => check.passed).length;
   const document = {
     checkpoint: "CORRECTION-26",
-    generatedFor: "resource investigation physical execution — controlled fixtures P1-P13",
+    generatedFor: "resource investigation physical execution — controlled fixtures P1-P14",
     seedPrefix: SEED_PREFIX,
     summary: { total: checks.length, passed, failed: checks.length - passed },
     checks,
