@@ -4,7 +4,11 @@ import type {
   BandViabilityState,
   CausalTrace,
 } from "./types";
-import type { BandId, ReasonId, TileId } from "../core/types";
+import type { BandId, DayNumber, ReasonId, TileId } from "../core/types";
+// CORRECTION-26 — a band that leaves activity cannot send the party it selected. The
+// record is retired with a named cause rather than frozen mid-flight, so no selected
+// investigation can vanish without an outcome.
+import { retirePendingInvestigation } from "./pendingInvestigation";
 import { getTile } from "../world/generate";
 import type { WorldState } from "../world/types";
 
@@ -84,6 +88,12 @@ export function updateBandViabilityStates(world: WorldState): WorldState {
         ...band,
         size: 0,
         status: "dispersed",
+        ...retirePendingInvestigation(
+          band.pendingInvestigation,
+          "band_no_longer_active",
+          (world.time.day ?? 0) as DayNumber,
+          band.recentInvestigationOutcomes,
+        ),
         demography: recomputeDemographicCounts({
           ...band.demography,
           population: 0,
@@ -158,6 +168,12 @@ function terminalizeExtinctBand(
     size: 0,
     status: "dispersed",
     currentIntent: undefined,
+    ...retirePendingInvestigation(
+      band.pendingInvestigation,
+      "band_no_longer_active",
+      (world.time.day ?? 0) as DayNumber,
+      band.recentInvestigationOutcomes,
+    ),
     demography: recomputeDemographicCounts({
       ...band.demography,
       population: 0,

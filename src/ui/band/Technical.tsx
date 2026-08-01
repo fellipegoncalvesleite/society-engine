@@ -1508,9 +1508,9 @@ function CampMovementDetails({ band, world }: { readonly band: Band; readonly wo
     .slice(0, 6)
     .map((shift) => `${String(shift.fromTileId)}>${String(shift.toTileId)} d${shift.distance} ${shift.outcome}`)
     .join(" | ");
-  const camps = profile.temporaryTaskCamps
+  const camps = profile.temporaryTaskParties
     .slice(0, 6)
-    .map((camp) => `${camp.purpose}:${camp.status}:${String(camp.targetTileId)}`)
+    .map((party) => `${party.purpose}:${party.status}:${String(party.targetTileId)}:${party.partyWorkers}w:${party.routeDistanceTiles}t:${party.executionId ?? "no-exec"}`)
     .join(" | ");
   const relief = profile.rangeRotation;
   const reliefCandidates = relief.candidates
@@ -1530,7 +1530,7 @@ function CampMovementDetails({ band, world }: { readonly band: Band; readonly wo
       <Detail label="overview" value={`${profile.overviewTitle} · ${profile.overviewLines.join(" ")}`} />
       <Detail
         label="counts"
-        value={`local shifts ${profile.localCampShiftCount} · temporary camps ${profile.temporaryCampCount} · establishments ${profile.establishmentStateCount} · successes ${profile.establishmentSuccessCount} · failures ${profile.establishmentFailureCount} · recovery holds ${profile.recoveryHoldCount}`}
+        value={`local shifts ${profile.localCampShiftCount} · temporary camps ${profile.temporaryTaskPartyCount} · establishments ${profile.establishmentStateCount} · successes ${profile.establishmentSuccessCount} · failures ${profile.establishmentFailureCount} · recovery holds ${profile.recoveryHoldCount}`}
       />
       <Detail
         label="stagnation / collapse"
@@ -1574,11 +1574,11 @@ function CampMovementDetails({ band, world }: { readonly band: Band; readonly wo
       />
       <Detail
         label="integrity"
-        value={`local shifts distinct=${profile.integrity.localShiftDistinctFromRelocation} · temporary not settlement=${profile.integrity.temporaryCampsNotSettlement} · establishment not settlement=${profile.integrity.establishmentNotSettlement} · no new actions=${profile.integrity.noNewActions} · no new ecology=${profile.integrity.noNewEcology} · no settlement/inventory/property/agriculture/culture/territory=${profile.integrity.noSettlementInventoryPropertyAgricultureCultureTerritory}`}
+        value={`local shifts distinct=${profile.integrity.localShiftDistinctFromRelocation} · temporary not settlement=${profile.integrity.temporaryTaskPartiesNotSettlement} · establishment not settlement=${profile.integrity.establishmentNotSettlement} · no new actions=${profile.integrity.noNewActions} · no new ecology=${profile.integrity.noNewEcology} · no settlement/inventory/property/agriculture/culture/territory=${profile.integrity.noSettlementInventoryPropertyAgricultureCultureTerritory}`}
       />
       <Detail
         label="payload / caps"
-        value={`${formatBytes(profile.payloadBytesEstimate)} · max stored entries ${profile.maxStoredEntriesPerBand} · caps held ${String(profile.caps.capsHeld)} · local ${profile.caps.localShiftCap} · temporary ${profile.caps.temporaryCampCap} · decay ${profile.caps.oldCampDecayCap} · escape ${profile.caps.stagnationEscapeCap} · evidence/item ${profile.caps.evidencePerItemCap}`}
+        value={`${formatBytes(profile.payloadBytesEstimate)} · max stored entries ${profile.maxStoredEntriesPerBand} · caps held ${String(profile.caps.capsHeld)} · local ${profile.caps.localShiftCap} · temporary ${profile.caps.temporaryTaskPartyCap} · decay ${profile.caps.oldCampDecayCap} · escape ${profile.caps.stagnationEscapeCap} · evidence/item ${profile.caps.evidencePerItemCap}`}
       />
       <Detail label="stagnation flags" value={profile.stagnationFlags.join(" | ") || "none"} />
       <Detail label="relief candidates" value={reliefCandidates || "none"} />
@@ -1592,7 +1592,7 @@ function CampMovementDetails({ band, world }: { readonly band: Band; readonly wo
       <Detail label="escape sample" value={escapes || "none"} />
       <Detail label="old camp sample" value={oldCamp || "none"} />
       <Detail label="local shift ids" value={profile.technicalProof.localShiftIds.join(" | ") || "none"} />
-      <Detail label="temporary camp ids" value={profile.technicalProof.temporaryCampIds.join(" | ") || "none"} />
+      <Detail label="temporary camp ids" value={profile.technicalProof.temporaryTaskPartyIds.join(" | ") || "none"} />
       <Detail label="old camp decay ids" value={profile.technicalProof.oldCampDecayIds.join(" | ") || "none"} />
       <Detail label="escape ids" value={profile.technicalProof.escapeIds.join(" | ") || "none"} />
       <Detail label="event refs" value={profile.technicalProof.eventRefs.join(" | ") || "none"} />

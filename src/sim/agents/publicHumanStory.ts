@@ -20,7 +20,7 @@ import type {
   PressureReliefCandidate,
   SolutionAttempt,
   StagnationEscapeRecord,
-  TemporaryTaskCampRecord,
+  TemporaryTaskPartyRecord,
 } from "./types";
 
 export type PublicStoryCategory =
@@ -507,7 +507,7 @@ function makeCampStories(ctx: StoryContext, movement: ReturnType<typeof deriveCa
     stories.push(makeEstablishmentStory(ctx, movement.currentEstablishment));
   }
   stories.push(...movement.recentLocalShifts.slice(0, 2).map((shift) => makeLocalShiftStory(ctx, shift)));
-  stories.push(...movement.temporaryTaskCamps.slice(0, 2).map((camp) => makeTemporaryCampStory(ctx, camp)));
+  stories.push(...movement.temporaryTaskParties.slice(0, 2).map((party) => makeTemporaryTaskPartyStory(ctx, party)));
   stories.push(...movement.stagnationEscapes.slice(0, 2).map((escape) => makeEscapeStory(ctx, escape)));
   stories.push(...movement.oldCampDecay.slice(0, 2).map((decay) => makeOldCampStory(ctx, decay)));
   return stories.slice(0, CAMP_STORY_CAP);
@@ -565,21 +565,31 @@ function makeLocalShiftStory(ctx: StoryContext, shift: LocalCampShiftRecord): Pu
   });
 }
 
-function makeTemporaryCampStory(ctx: StoryContext, camp: TemporaryTaskCampRecord): PublicStoryItem {
-  const target = getTile(ctx.world, camp.targetTileId);
+// CORRECTION-26 §12 — the old version of this said "A small camp near the X let them test
+// work…" about a record written when a band merely SELECTED a probe. No camp existed and
+// nobody had left. It now narrates a party that physically walked out and came home.
+function makeTemporaryTaskPartyStory(ctx: StoryContext, party: TemporaryTaskPartyRecord): PublicStoryItem {
+  const target = getTile(ctx.world, party.targetTileId);
   const place = placePhrase(target ?? ctx.currentTile);
-  const objectName = camp.purpose === "crossing_prep" ? "crossing pole" : camp.purpose === "food_work" ? "digging stick" : "carrying bundle";
+  const objectName = party.purpose === "crossing_prep" ? "crossing pole" : party.purpose === "food_work" ? "digging stick" : "carrying bundle";
+  const arrived = party.status === "completed";
   return makeStoryItem({
     ctx,
     category: "camp_story",
     toneTier: "grounded",
     templateId: "camp-establishment-human",
-    localId: camp.id,
-    title: camp.purpose === "crossing_prep" ? "The Temporary Ford Camp" : "The Task Camp Test",
-    story: `A small camp near the ${place} let them test work with a ${objectName} without dragging everyone through it.`,
-    status: camp.status === "active" ? "being used" : camp.status,
-    evidenceChips: compactChips(["Temporary", camp.purpose.replace(/_/g, " ")]),
-    sourceRefs: [{ sourceSystem: "camp_movement", sourceId: camp.id, label: "Temporary camp" }],
+    localId: party.id,
+    title: arrived ? "The Day Party" : "The Walk That Turned Back",
+    story: arrived
+      ? `A few of them carried a ${objectName} out to the ${place}, looked it over, and were back before dark. The camp stayed where it was.`
+      : `A few of them set out for the ${place} and could not get through. They came back with the ${objectName} and nothing learned.`,
+    status: arrived ? "went and returned" : "could not reach it",
+    evidenceChips: compactChips([
+      `${party.partyWorkers} went`,
+      party.routeDistanceTiles > 0 ? `${party.routeDistanceTiles} tiles out` : undefined,
+      party.purpose.replace(/_/g, " "),
+    ]),
+    sourceRefs: [{ sourceSystem: "camp_movement", sourceId: party.id, label: "Task party" }],
     concreteObjectNames: [objectName],
     concreteFoodNames: [],
     fallbackGenericNameUsed: false,

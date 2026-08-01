@@ -218,24 +218,3 @@ export function visibleCueProbeKindPull(kind: NonNullable<Band["visibleLandscape
       return 0.06;
   }
 }
-
-export function updateVisibleLandscapeCueProbeUse(
-  band: Band,
-  action: Action,
-  scoutOrProbeTargetId: TileId | undefined,
-): readonly NonNullable<Band["visibleLandscapeCues"]>[number][] | undefined {
-  const cues = band.visibleLandscapeCues;
-  if (cues === undefined || scoutOrProbeTargetId === undefined || action.type !== "logistical_probe") {
-    return cues;
-  }
-
-  return cues.map((cue) =>
-    cue.approximateTileId === scoutOrProbeTargetId
-      ? {
-          ...cue,
-          status: "partly_checked",
-          influencedScoutOrProbeCount: cue.influencedScoutOrProbeCount + 1,
-        }
-      : cue,
-  );
-}

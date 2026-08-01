@@ -634,24 +634,28 @@ function deriveCampMovementEvents(band: Band): readonly CanonicalEventDraft[] {
     }));
   }
 
-  for (const camp of state.temporaryTaskCamps.slice(0, 2)) {
+  // CORRECTION-26 §12 — reports a party that physically departed, never a camp. A selected
+  // investigation that nobody executed produces no draft here.
+  for (const party of state.temporaryTaskParties.slice(0, 2)) {
     drafts.push(campMovementDraft({
       band,
-      id: camp.id,
-      tick: camp.tick,
-      title: "Temporary task camp",
-      summary: `A temporary task camp supported ${humanizeKey(camp.purpose).toLowerCase()} and is ${humanizeKey(camp.status).toLowerCase()}.`,
-      consequence: "This records a short-lived task foothold, not a new residential base.",
-      severity: camp.status === "failed" ? 0.44 : 0.24,
-      significance: 0.34 + camp.confidence * 0.22,
-      tileIds: [camp.originTileId, camp.targetTileId],
-      reasonIds: camp.evidenceRefs.flatMap((entry) => entry.reasonIds),
-      eventIds: camp.evidenceRefs.flatMap((entry) => entry.eventId === undefined ? [] : [entry.eventId as EventId]),
+      id: party.id,
+      tick: party.tick,
+      title: party.status === "completed" ? "Day party returned" : "Day party turned back",
+      summary: party.status === "completed"
+        ? `${party.partyWorkers} went out ${party.routeDistanceTiles} tiles for ${humanizeKey(party.purpose).toLowerCase()} and returned the same day.`
+        : `${party.partyWorkers} set out for ${humanizeKey(party.purpose).toLowerCase()} and could not reach the place.`,
+      consequence: "This records a same-day task party, not a camp and not a new residential base.",
+      severity: party.status === "failed" ? 0.44 : 0.24,
+      significance: 0.34 + party.confidence * 0.22,
+      tileIds: [party.originTileId, party.targetTileId],
+      reasonIds: party.evidenceRefs.flatMap((entry) => entry.reasonIds),
+      eventIds: party.evidenceRefs.flatMap((entry) => entry.eventId === undefined ? [] : [entry.eventId as EventId]),
       chips: [
-        { kind: "task camp", label: humanizeKey(camp.purpose), sourceIds: [camp.id] },
-        { kind: "status", label: humanizeKey(camp.status), sourceIds: [] },
+        { kind: "task party", label: humanizeKey(party.purpose), sourceIds: [party.id] },
+        { kind: "status", label: humanizeKey(party.status), sourceIds: [] },
       ],
-      score: 628 + camp.confidence * 16,
+      score: 628 + party.confidence * 16,
     }));
   }
 

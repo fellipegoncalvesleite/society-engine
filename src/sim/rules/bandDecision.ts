@@ -32,19 +32,19 @@ import {
   recordProbe,
 } from "../agents/probeMemory";
 import {
-  appendRecentScoutLearning,
-  applyResourceScoutLearningDelta,
-  buildScoutExpectationRecord,
-  classifyScoutContradiction,
-  classifyScoutOutcome,
-  effectiveConfidenceProfile,
-  expectationSeasonalFit,
-  plantObservationMemoryFromHint,
   selectResourceScoutTarget,
   type ResourceScoutContext,
   type ResourceScoutCandidate,
-  type ResourceScoutDebug,
 } from "../agents/resourceScout";
+// CORRECTION-26 — the narrow record that carries ONE selected investigation from the
+// seasonal decision into the daily phase that can physically execute it.
+import {
+  makePendingInvestigationRecord,
+  retirePendingInvestigation,
+  type PendingInvestigationActionType,
+  type PendingInvestigationProbePurpose,
+  type PendingInvestigationSelectionEvidence,
+} from "../agents/pendingInvestigation";
 // 2K.12: selection-only seasonal-memory reader (band-learned only; no hidden truth).
 import { readSeasonalEcologyHint } from "../agents/seasonalEcologyReader";
 import {
@@ -159,6 +159,7 @@ import type {
 import type {
   BandId,
   Coord,
+  DayNumber,
   DecisionId,
   ReasonId,
   Season,
@@ -166,6 +167,7 @@ import type {
   TileId,
   WorldTime,
 } from "../core/types";
+import { SEASON_LENGTH_DAYS } from "../core/types";
 import { MOVEMENT_TIEBREAK_EPSILON, seededTieBreakJitter } from "../core/seededVariation";
 import type { KnownTileRecord, KnowledgeState, TileObservation } from "../knowledge/types";
 // EXPEDITIONARY-4 §11 — the single known-tile observation writer (also used by returned
@@ -364,10 +366,7 @@ import type {
   RiverMovementAssessment,
 } from "./decisionCandidateTypes";
 // CORE-PIPELINE-DECOMPOSITION-2 — extracted candidate family modules.
-import {
-  buildVisibleLandscapeProbeCandidate,
-  updateVisibleLandscapeCueProbeUse,
-} from "./candidates/visibleLandscapeCandidate";
+import { buildVisibleLandscapeProbeCandidate } from "./candidates/visibleLandscapeCandidate";
 import {
   buildResourceScoutCandidate,
   buildResourceScoutContext,
@@ -954,24 +953,31 @@ export function applyBandDecision(
     !crossingBlocked &&
     !destinationBlocked &&
     isMovementAction;
-  const shouldObserveProbe =
-    !crossingBlocked &&
-    !destinationBlocked &&
-    isProbeAction;
+  // CORRECTION-26 — SELECTION NO LONGER OBSERVES THE TARGET AREA.
+  //
+  // A selected `resource_scout` / `logistical_probe` used to reach
+  // `collectProbeObservationTargets(world, band.position, targetTile)` here, which returned
+  // the target tile and its whole 1-ring straight to the canonical writer: knowledge up to
+  // ten tiles away changed with no worker, no route, no elapsed day and no way to fail. The
+  // band's own position appeared in that call only to exclude itself from the ring — it was
+  // never a departure point.
+  //
+  // The band physically spends this season where it is standing, exactly like a `stay`, so
+  // it observes exactly what a `stay` observes: its own tile. The target is observed by the
+  // party that actually walks there, on a later daily trip day, through
+  // `agents/intraSeasonTrips.ts` → the same canonical `observeTileAndNearby`.
   const observationTile = getTile(world, nextPosition);
   const observationTargets =
     observationTile === undefined
       ? []
       : shouldObserveNewArea
         ? collectMigrationObservationTargets(world, migrationWalk?.path ?? [], observationTile)
-        : shouldObserveProbe && targetTile !== undefined
-          ? collectProbeObservationTargets(world, band.position, targetTile)
         : [{ tile: observationTile, distance: 0 }];
   const observedTileIds = observationTargets.map((target) => target.tile.id);
   const updatedKnowledge = measureDecision(
     profiler,
     "observationUpdate",
-    () => targetTile === undefined || (!shouldObserveNewArea && !shouldObserveProbe)
+    () => targetTile === undefined || !shouldObserveNewArea
       ? band.knowledge
       : observeTileAndNearby(world, band.knowledge, observationTargets),
   );
@@ -999,100 +1005,76 @@ export function applyBandDecision(
       moved,
     }),
   );
-  // Probe recency update (2K.1G/2K.1H): an applied logistical_probe OR resource_scout
-  // (both residence-unchanged) is recorded against its target, with "info gain" =
-  // it observed at least one tile the band did not already know. Repeated no-gain
-  // scouts/probes of the same target accrue a diminishing-return penalty next time.
-  const scoutOrProbeTargetId =
-    (decision.action.type === "logistical_probe" || decision.action.type === "resource_scout") &&
-    isProbeAction &&
-    !crossingBlocked &&
-    !destinationBlocked
-      ? decision.action.targetTileId
-      : undefined;
-  const newTilesObserved = observedTileIds.some((id) => band.knowledge.observedTiles[id] === undefined);
-  const probeMemory =
-    scoutOrProbeTargetId === undefined
-      ? band.probeMemory
-      : recordProbe(band.probeMemory, scoutOrProbeTargetId, world.time.tick, newTilesObserved);
-  // 2K.1H resource_scout: a residence-unchanged INFORMATION action observes the target
-  // patch (band perception) and updates resource belief / patch memory ONLY (presence/
-  // access/season confidence, staleness) via the existing observation pipeline — never
-  // yield/carrying-capacity/stress/mortality, and never the residential position. The
-  // outcome is a conservative, partial, deterministic label (no hidden truth revealed).
-  const scoutUpdate =
-    isScoutAction && !crossingBlocked && !destinationBlocked && decision.action.type === "resource_scout"
-      ? applyResourceScoutObservation(world, band, decision.action, updatedKnowledge, newTilesObserved)
-      : undefined;
-  // 2K.10 — an APPLIED side-country probe that actually observed its side tile may form bounded,
-  // anti-omniscient resource/patch memory there (the missing off-corridor substrate 2K.9 needed).
-  // Mutually exclusive with scoutUpdate (probe = logistical_probe, scout = resource_scout).
-  const isSideProbeApplied =
-    scoutUpdate === undefined &&
-    shouldObserveProbe &&
-    !crossingBlocked &&
-    !destinationBlocked &&
-    isAppliedSideCountryProbe(decision);
-  const sideProbeResourceState = isSideProbeApplied
-    ? formSideCountryResourceMemory(world, band, targetTileId, updatedKnowledge)
-    : undefined;
-  // 2K.11 — if that side probe formed a memory at a PLANT-BEARING side tile, it may also run a
-  // bounded cautious test there so exploitationSkill ACCRUES for the encountered side class (the
-  // chain that makes side memories and learned skill finally match). Reuses the existing plant-test
-  // pipeline; outcomes stay suspicion-level; rarity inherited from the side-probe cadence.
-  const sideTestUpdate =
-    isSideProbeApplied && sideProbeResourceState !== undefined
-      ? applySideEncounteredCautiousTest(world, band, targetTileId, sideProbeResourceState)
-      : undefined;
-  const resourceKnowledgeState =
-    scoutUpdate?.resourceKnowledgeState ??
-    sideTestUpdate?.resourceKnowledgeState ??
-    sideProbeResourceState ??
-    band.resourceKnowledgeState;
-  // Merge the plant-use-test / cause-event produced by EITHER a resource_scout or a 2K.11 side test
-  // (mutually exclusive). Off both paths this is byte-identical to the pre-2K.11 scout-only handling.
-  const appliedPlantUseTest = scoutUpdate?.debug.plantUseTest ?? sideTestUpdate?.plantUseTest;
-  const appliedCauseSpecificEvent = scoutUpdate?.debug.causeSpecificEvent ?? sideTestUpdate?.causeSpecificEvent;
-  const lastResourceScout = scoutUpdate?.debug ?? band.lastResourceScout;
-  const recentScoutLearning =
-    scoutUpdate === undefined
-      ? band.recentScoutLearning
-      : appendRecentScoutLearning(band.recentScoutLearning, scoutUpdate.debug.learning);
-  const lastPlantUseTest = appliedPlantUseTest ?? band.lastPlantUseTest;
-  const recentPlantUseTests =
-    appliedPlantUseTest === undefined
-      ? band.recentPlantUseTests
-      : appendRecentPlantUseTest(band.recentPlantUseTests, appliedPlantUseTest);
-  const lastCauseSpecificEvent = appliedCauseSpecificEvent ?? band.lastCauseSpecificEvent;
-  const recentCauseSpecificEvents =
-    appliedCauseSpecificEvent === undefined
-      ? band.recentCauseSpecificEvents
-      : appendRecentCauseSpecificEvent(band.recentCauseSpecificEvents, appliedCauseSpecificEvent);
-  // 2K.6: accrue learned exploitation skill from THIS season's own use-test / cause event (from a
-  // resource_scout OR a 2K.11 side-encountered test). Knowledge-only — stores skill state, reads no
-  // truth, feeds no yield/support/movement. Carries the prior state unchanged when nothing
-  // class-attributable happened, so a band that never tests keeps it undefined (inert).
-  const exploitationSkill =
-    appliedPlantUseTest === undefined && appliedCauseSpecificEvent === undefined
-      ? band.exploitationSkill
-      : advanceExploitationSkill(
-          band.exploitationSkill,
-          band.id,
-          world.time.tick,
-          appliedPlantUseTest,
-          appliedCauseSpecificEvent,
-        );
+  // CORRECTION-26 §6 — A SELECTED INVESTIGATION LEAVES A BOUNDED PENDING RECORD, NOTHING ELSE.
+  //
+  // Everything downstream of a physical observation moved to the daily execution phase:
+  // probe recency (2K.1G/2K.1H, whose "info gain" flag is meaningless without an
+  // observation), the scout observation/learning chain (2K.1H), side-country patch memory
+  // formation (2K.10), the side-encountered cautious test (2K.11) and the exploitation
+  // skill (2K.6) it feeds. At selection they all carry their prior value unchanged.
+  //
+  // What IS decided here is the selection evidence: the VOI, candidate count and reason
+  // vector the scorer produced this season. It is captured now — the pre-26 code recovered
+  // it by re-running the selector inside the applier, which the daily executor could not do
+  // (wrong season, and `agents -> rules/candidates` would be a runtime cycle).
+  const investigationActionType: PendingInvestigationActionType | undefined =
+    decision.action.type === "resource_scout"
+      ? "resource_scout"
+      : decision.action.type === "logistical_probe"
+        ? "logistical_probe"
+        : undefined;
+  const investigationSelectable =
+    investigationActionType !== undefined && !crossingBlocked && !destinationBlocked;
+  const selectedInvestigation =
+    !investigationSelectable || investigationActionType === undefined
+      ? undefined
+      : makePendingInvestigationRecord({
+          decisionId: decision.id,
+          bandId: band.id,
+          actionType: investigationActionType,
+          // The residence at selection. Departure must start from HERE; a band that has
+          // moved by the trip day cancels rather than teleporting to its old origin.
+          originTileId: nextPosition,
+          targetTileId,
+          ...(decision.action.type === "resource_scout"
+            ? {
+                scoutKind: decision.action.scoutKind,
+                targetResourceClass: decision.action.targetResourceClass,
+              }
+            : { probePurpose: deriveProbePurpose(decision) }),
+          selectedTick: world.time.tick,
+          selectedDay: (world.time.day ?? (Number(world.time.tick) * SEASON_LENGTH_DAYS as DayNumber)) as DayNumber,
+          selectedSeason: world.time.season,
+          selectionEvidence: buildInvestigationSelectionEvidence(world, band, decision),
+        });
+  // A still-pending record from an earlier season is terminally retired here, never
+  // silently dropped: the band has now taken a different decision.
+  const retiredPrior = retirePendingInvestigation(
+    band.pendingInvestigation,
+    "superseded",
+    (world.time.day ?? 0) as DayNumber,
+    band.recentInvestigationOutcomes,
+  );
+  const pendingInvestigation = selectedInvestigation;
+  const recentInvestigationOutcomes = retiredPrior.recentInvestigationOutcomes;
+  const resourceKnowledgeState = band.resourceKnowledgeState;
+  const probeMemory = band.probeMemory;
+  const lastResourceScout = band.lastResourceScout;
+  const recentScoutLearning = band.recentScoutLearning;
+  const lastPlantUseTest = band.lastPlantUseTest;
+  const recentPlantUseTests = band.recentPlantUseTests;
+  const lastCauseSpecificEvent = band.lastCauseSpecificEvent;
+  const recentCauseSpecificEvents = band.recentCauseSpecificEvents;
+  const exploitationSkill = band.exploitationSkill;
   const reportedKnowledge = advanceReportedKnowledgeAfterDecision(band.reportedKnowledge, {
     action: decision.action,
     tick: world.time.tick,
     observedTileIds,
     moved,
   });
-  const visibleLandscapeCues = updateVisibleLandscapeCueProbeUse(
-    band,
-    decision.action,
-    scoutOrProbeTargetId,
-  );
+  // CORRECTION-26 — the cue is marked `partly_checked` by the party that physically checks
+  // it, in `agents/intraSeasonTrips.ts`, not by the decision that merely aimed at it.
+  const visibleLandscapeCues = band.visibleLandscapeCues;
   const bandWithMemory: Band = {
     ...band,
     position: nextPosition,
@@ -1112,6 +1094,8 @@ export function applyBandDecision(
     exploitationSkill,
     reportedKnowledge,
     visibleLandscapeCues,
+    pendingInvestigation,
+    recentInvestigationOutcomes,
     placeMemory: memoryUpdate.placeMemory,
     travelCorridors: memoryUpdate.travelCorridors,
     crossingMemories: memoryUpdate.crossingMemories,
@@ -2890,128 +2874,58 @@ function isAppliedSideCountryProbe(decision: Decision): boolean {
   );
 }
 
-// 2K.10 — side-country resource/patch memory formation. When an applied side-country probe OBSERVES
-// its inferred side tile, run the SAME band-known observation→patch-memory pipeline that resource_scout
-// uses (deriveResourceClassAvailability + updateResourceKnowledgeFromObservation) for that ONE observed
-// tile — so side-country becomes ecologically meaningful (a remembered resource/patch class), not just
-// "I saw land". Anti-omniscient: forms ONLY from the band's own OBSERVED record of the tile (requires
-// updatedKnowledge.observedTiles[tileId] to exist — an inferred-only tile, never reached, forms NOTHING),
-// salience-gated and low first-observation confidence (the existing pipeline), capped by the existing cap.
-// NEVER mutates tile yield/truth, grants no support/safety/processing certainty, forces no movement.
-export function formSideCountryResourceMemory(
+// CORRECTION-26 §8 — `formSideCountryResourceMemory` and `applySideEncounteredCautiousTest`
+// moved to `agents/resourceScoutObservation.ts`. They interpret an observation and mutate
+// resource memory; they do not choose anything, and the daily execution phase needs the
+// same canonical operation without an `agents -> rules` runtime cycle.
+
+/**
+ * CORRECTION-26 — capture the decision-time selection evidence for a selected
+ * investigation, at selection, in the layer that owns selection.
+ *
+ * This is the SAME derivation the pre-26 applier ran inside
+ * `applyResourceScoutObservation`; it is legitimate here because it runs in the same
+ * seasonal phase against the same band-field context the scorer saw. It is NOT legitimate
+ * from the daily executor, which is why the values are carried on the pending record
+ * instead of being recomputed there.
+ */
+function buildInvestigationSelectionEvidence(
   world: WorldState,
   band: Band,
-  tileId: TileId,
-  updatedKnowledge: Band["knowledge"],
-): ResourceKnowledgeState | undefined {
-  const record = updatedKnowledge.observedTiles[tileId];
-
-  if (record === undefined) {
-    return undefined; // not actually observed → no resource memory (the anti-omniscience gate)
+  decision: Decision,
+): PendingInvestigationSelectionEvidence {
+  if (decision.action.type !== "resource_scout") {
+    return { candidateCount: 1, voiScore: 0, expectedInfoValue: 0, repeatPenalty: 0 };
   }
 
-  const baseHab = deriveBaseHabitatPotential(tileId, record, world.time);
-  const summary = deriveResourceClassAvailability(baseHab, record, world.time);
-
-  return updateResourceKnowledgeFromObservation(band.resourceKnowledgeState, summary, {
-    tileId,
-    tick: world.time.tick,
-    season: world.time.season,
-    waterStress: band.pressureState?.waterStress ?? 0,
-    perCapitaReturn:
-      band.carryingCapacity?.perCapitaReturn.perCapitaReturn ??
-      band.perCapitaReturn?.perCapitaReturn ??
-      0.5,
-    anchorTileId: band.residentialAnchor?.anchorTileId,
-    observationSource: "side_country_probe",
-  });
-}
-
-// 2K.11 — side-encountered cautious test. When a side-country probe formed a patch memory at a
-// PLANT-BEARING side tile, run the SAME band-known plant-use-test chain the resource_scout uses
-// (plant observation → eligibility → cautious test → cause event) on that ONE remembered patch, so
-// exploitationSkill can ACCRUE for the side class the band actually encountered — closing the 2K.10
-// gap (sideFormedWithMatchingSkill was 0). Testability gate: derivePlantScoutObservationHint returns
-// nothing for a non-plant side tile (water / fallback floor / barren → no test). Anti-omniscient: it
-// reads the band's OWN observed plant hint (the same bounded perception the scout uses) + a
-// band-known patch memory it just formed; outcomes stay suspicion-level (the existing cautious-test
-// rules) — NO calories/support/safety/processing certainty. Rarity is inherited from the side-probe
-// cadence (M0.16B cooldown + lifetime cap, daughter-reset): at most one test per applied side probe.
-export function applySideEncounteredCautiousTest(
-  world: WorldState,
-  band: Band,
-  tileId: TileId,
-  sideResourceState: ResourceKnowledgeState,
-) {
-  const tile = getTile(world, tileId);
-
-  if (tile === undefined) {
-    return undefined;
-  }
-
-  const hint = derivePlantScoutObservationHint(tile, world.time, "plant_patch");
-
-  // Testability gate: a non-plant-bearing side tile yields no plant hint → no cautious test.
-  if (hint === undefined || hint.observedPlantClassId === undefined || hint.linkedResourceClassId === undefined) {
-    return undefined;
-  }
-
-  const resourceClass = hint.linkedResourceClassId;
-  const memory = sideResourceState.patchMemories.find(
-    (entry) => entry.approximateTile === tileId && entry.resourceClassId === resourceClass,
+  const targetTileId = decision.action.targetTileId;
+  const targetResourceClass = decision.action.targetResourceClass;
+  const candidate = selectResourceScoutTarget(band.resourceKnowledgeState, buildResourceScoutContext(world, band));
+  const dbg = candidate !== undefined && candidate.targetTileId === targetTileId ? candidate : undefined;
+  const existing = band.resourceKnowledgeState?.patchMemories.find(
+    (memory) => memory.approximateTile === targetTileId && memory.resourceClassId === targetResourceClass,
   );
 
-  if (memory === undefined) {
-    return undefined; // no band-known side memory of this observed class to test
+  return {
+    candidateCount: dbg?.candidateCount ?? 1,
+    voiScore: dbg?.voiScore ?? 0,
+    expectedInfoValue: dbg?.expectedInfoValue ?? 0,
+    repeatPenalty: dbg?.repeatPenalty ?? 0,
+    targetSource: dbg?.targetSource ?? existing?.source,
+    ...(dbg?.reasonVector === undefined ? {} : { reasonVector: dbg.reasonVector }),
+    ...(dbg?.patchReturnGuidance === undefined ? {} : { patchReturnGuidance: dbg.patchReturnGuidance }),
+  };
+}
+
+/** Which purpose a selected `logistical_probe` was chosen for. Selection classification. */
+function deriveProbePurpose(decision: Decision): PendingInvestigationProbePurpose {
+  if (isAppliedSideCountryProbe(decision)) {
+    return "side_country_observation";
   }
 
-  const reasonId = `reason:side_encountered_cautious_test:${memory.patchId}:${Number(world.time.tick)}` as ReasonId;
-  const memoryWithObs: ResourcePatchMemory = {
-    ...memory,
-    plantObservation: plantObservationMemoryFromHint(memory.plantObservation, hint, world.time.tick, reasonId),
-  };
-  const stateWithObs: ResourceKnowledgeState = {
-    ...sideResourceState,
-    patchMemories: sideResourceState.patchMemories.map((entry) =>
-      entry.patchId === memory.patchId ? memoryWithObs : entry,
-    ),
-  };
-
-  const season = world.time.season;
-  const foodStress = getCanonicalFoodStress(band);
-  const perCapitaReturn =
-    band.carryingCapacity?.perCapitaReturn.perCapitaReturn ?? band.perCapitaReturn?.perCapitaReturn ?? 0.5;
-  const eligibility = derivePlantUseEligibility(memoryWithObs, {
-    tick: world.time.tick,
-    season,
-    foodStress,
-    perCapitaReturn,
-    laborCapacity: band.carryingCapacity?.populationDemand?.laborCapacity,
-    dependencyLoad: band.carryingCapacity?.populationDemand?.dependencyLoad,
-  });
-  const testUpdate = applyPlantUseTestFromEligibility(stateWithObs, {
-    bandId: band.id,
-    tick: world.time.tick,
-    season,
-    memory: memoryWithObs,
-    eligibility,
-    foodStress,
-    perCapitaReturn,
-  });
-  const causeUpdate = deriveCauseSpecificEventFromPlantUseTest(testUpdate.resourceKnowledgeState, {
-    bandId: band.id,
-    tick: world.time.tick,
-    season,
-    memory: testUpdate.memory,
-    plantUseTest: testUpdate.event,
-    eligibility,
-  });
-
-  return {
-    resourceKnowledgeState: causeUpdate?.resourceKnowledgeState ?? testUpdate.resourceKnowledgeState,
-    plantUseTest: testUpdate.event,
-    causeSpecificEvent: causeUpdate?.event,
-  };
+  return decision.primaryReason.type === "frontier_probe"
+    ? "inferred_frontier_observation"
+    : "general_probe";
 }
 
 // 2K.6B / INFO-1: true when an applied decision is a PROACTIVE resource_scout — a residence-
@@ -3099,307 +3013,6 @@ function advanceCorridorRelocationState(
       : prior.cumulativeStepsSinceSettled;
 
   return { lastRelocationTick: tick, cumulativeStepsSinceSettled: priorRun + 1 };
-}
-
-// 2K.1H: apply an executed resource_scout. Observes the target patch (band perception)
-// and routes it through the existing observation -> resource-knowledge pipeline, which
-// raises mostly presence/access/season confidence and upgrades inferred beliefs in
-// place. Produces a conservative, partial, deterministic outcome for debug. Touches
-// resource belief / patch memory ONLY — never yield/stress/mortality/position.
-function applyResourceScoutObservation(
-  world: WorldState,
-  band: Band,
-  action: Extract<Action, { type: "resource_scout" }>,
-  updatedKnowledge: Band["knowledge"],
-  newTilesObserved: boolean,
-): { readonly resourceKnowledgeState: ResourceKnowledgeState | undefined; readonly debug: ResourceScoutDebug } {
-  const targetTileId = action.targetTileId;
-  const targetClass = action.targetResourceClass;
-  const tick = Number(world.time.tick);
-  const season = world.time.season;
-  const findPatch = (state: ResourceKnowledgeState | undefined) =>
-    state?.patchMemories.find((m) => m.approximateTile === targetTileId && m.resourceClassId === targetClass);
-
-  const before = findPatch(band.resourceKnowledgeState);
-  const beforeEff = before === undefined ? undefined : effectiveResourceConfidence(before, tick);
-  const beforeProfile = effectiveConfidenceProfile(before, tick);
-  const presenceBefore = beforeProfile.presenceConfidence;
-  const accessBefore = beforeProfile.accessConfidence;
-  const expectedSeasonalFit = expectationSeasonalFit(before, targetClass, season);
-  const expectedYieldHint = round2(Math.max(beforeProfile.yieldConfidence, before?.useHistory.lastYieldEstimate ?? 0));
-  const expectedSafety = beforeProfile.safetyConfidence;
-
-  // Re-derive the candidate (same band-field context as decision time, deterministic)
-  // to surface the decision-time reason vector / VOI / candidate count in debug.
-  const candidate = selectResourceScoutTarget(band.resourceKnowledgeState, buildResourceScoutContext(world, band));
-  const dbg = candidate !== undefined && candidate.targetTileId === targetTileId ? candidate : undefined;
-  const targetSource = dbg?.targetSource ?? before?.source ?? "inferred";
-  const previousNoGainCount =
-    band.probeMemory?.recentTargets.find((record) => record.tileId === targetTileId)?.consecutiveNoGain ?? 0;
-  const targetTile = getTile(world, targetTileId);
-  const plantObservation = targetTile === undefined
-    ? undefined
-    : derivePlantObservationForResourceScout(action, targetTile, world.time);
-
-  const targetRecord = updatedKnowledge.observedTiles[targetTileId];
-  let observedClassAvailability = 0;
-  let observedClassSupport = 0;
-  let observedSeasonalFit = 0;
-  let observedAccess = 0;
-  let resourceKnowledgeStateAfterObservation = band.resourceKnowledgeState;
-  if (targetRecord !== undefined) {
-    const baseHab = deriveBaseHabitatPotential(targetTileId, targetRecord, world.time);
-    const summary = deriveResourceClassAvailability(baseHab, targetRecord, world.time);
-    const contribution = summary.contributionByClass.find((entry) => entry.classId === targetClass);
-    observedClassAvailability = clamp01(contribution?.availability ?? 0);
-    observedClassSupport = clamp01(contribution?.supportContribution ?? 0);
-    observedSeasonalFit = clamp01(contribution?.seasonalModifier ?? 0);
-    observedAccess = clamp01((1 - (targetRecord.observedMovementCost ?? 0.5)) * 0.6 + targetRecord.confidence * 0.4);
-    resourceKnowledgeStateAfterObservation =
-      updateResourceKnowledgeFromObservation(band.resourceKnowledgeState, summary, {
-        tileId: targetTileId,
-        tick: world.time.tick,
-        season,
-        waterStress: band.pressureState?.waterStress ?? 0,
-        perCapitaReturn:
-          band.carryingCapacity?.perCapitaReturn.perCapitaReturn ??
-          band.perCapitaReturn?.perCapitaReturn ??
-          0.5,
-        anchorTileId: band.residentialAnchor?.anchorTileId,
-      }) ?? band.resourceKnowledgeState;
-  }
-
-  if (plantObservation !== undefined) {
-    observedClassAvailability = plantObservation.observedAvailabilityHint;
-    observedClassSupport = plantObservation.observedAbundanceHint;
-    observedSeasonalFit = plantObservation.seasonalFitHint;
-    observedAccess = plantObservation.accessHint;
-  }
-
-  const afterObservation = findPatch(resourceKnowledgeStateAfterObservation);
-  const afterObservationProfile = effectiveConfidenceProfile(afterObservation, tick);
-  const outcome = plantObservation === undefined
-    ? classifyScoutOutcome({
-        scoutKind: action.scoutKind,
-        targetResourceClass: targetClass,
-        presenceBefore,
-        presenceAfter: afterObservationProfile.presenceConfidence,
-        observedClassAvailability,
-        seasonMatch: observedSeasonalFit,
-        newTilesObserved,
-        accessBefore,
-        accessAfter: observedAccess,
-      })
-    : mapPlantObservationToScoutOutcome(plantObservation);
-  const contradictionKind = classifyScoutContradiction({
-    scoutKind: action.scoutKind,
-    targetSource,
-    outcome,
-    expectedPresence: presenceBefore,
-    expectedSeasonalFit,
-    expectedYieldHint,
-    expectedAccess: accessBefore,
-    observedPresenceHint: observedClassAvailability,
-    observedSeasonalFit,
-    observedYieldHint: observedClassSupport,
-    observedAccess,
-    previousNoGainCount,
-    wasStale: beforeEff?.isStale === true,
-  });
-  const learningUpdate = applyResourceScoutLearningDelta({
-    state: resourceKnowledgeStateAfterObservation,
-    bandId: band.id,
-    tick: world.time.tick,
-    season,
-    originTile: action.originTileId,
-    targetTile: targetTileId,
-    scoutKind: action.scoutKind,
-    targetResourceClass: targetClass,
-    targetSource,
-    outcome,
-    contradictionKind,
-    expectedPresence: presenceBefore,
-    expectedSeasonalFit,
-    expectedYieldHint,
-    expectedAccess: accessBefore,
-    expectedSafety,
-    observedPresenceHint: observedClassAvailability,
-    observedSeasonalFit,
-    observedYieldHint: observedClassSupport,
-    observedAccess,
-    plantObservation,
-  });
-
-  const resourceKnowledgeStateAfterScout = learningUpdate.state;
-  const afterScout = findPatch(resourceKnowledgeStateAfterScout);
-  const afterScoutProfile = effectiveConfidenceProfile(afterScout, tick);
-  const memoryUpdated = resourceKnowledgeStateAfterScout !== band.resourceKnowledgeState;
-  const plantUseEligibility = afterScout === undefined || plantObservation === undefined
-    ? undefined
-    : derivePlantUseEligibility(afterScout, {
-        tick: world.time.tick,
-        season,
-        foodStress: getCanonicalFoodStress(band),
-        perCapitaReturn:
-          band.carryingCapacity?.perCapitaReturn.perCapitaReturn ??
-          band.perCapitaReturn?.perCapitaReturn ??
-          0.5,
-        laborCapacity: band.carryingCapacity?.populationDemand?.laborCapacity,
-        dependencyLoad: band.carryingCapacity?.populationDemand?.dependencyLoad,
-      });
-  const plantUseTestUpdate =
-    resourceKnowledgeStateAfterScout === undefined || afterScout === undefined || plantUseEligibility === undefined
-      ? undefined
-      : applyPlantUseTestFromEligibility(resourceKnowledgeStateAfterScout, {
-          bandId: band.id,
-          tick: world.time.tick,
-          season,
-          memory: afterScout,
-          eligibility: plantUseEligibility,
-          foodStress: getCanonicalFoodStress(band),
-          perCapitaReturn:
-            band.carryingCapacity?.perCapitaReturn.perCapitaReturn ??
-            band.perCapitaReturn?.perCapitaReturn ??
-            0.5,
-        });
-  const resourceKnowledgeStateAfterPlantTest =
-    plantUseTestUpdate?.resourceKnowledgeState ?? resourceKnowledgeStateAfterScout;
-  // 2K.3A: derive a bounded NONLETHAL cause-specific event ONLY from a risk-relevant
-  // plant-use/test outcome (safety/processing suspicion, avoidance, supported fallback
-  // reaction). Updates conservative band-known caution memory (behaviour-neutral risk
-  // flags / observation suspicion) + debug only — never yield/CC/stress/mortality/
-  // population/relocation/fission. Most plant tests produce NO cause event.
-  const causeSpecificUpdate =
-    plantUseTestUpdate === undefined || plantUseEligibility === undefined
-      ? undefined
-      : deriveCauseSpecificEventFromPlantUseTest(plantUseTestUpdate.resourceKnowledgeState, {
-          bandId: band.id,
-          tick: world.time.tick,
-          season,
-          memory: plantUseTestUpdate.memory,
-          plantUseTest: plantUseTestUpdate.event,
-          eligibility: plantUseEligibility,
-        });
-  const resourceKnowledgeState =
-    causeSpecificUpdate?.resourceKnowledgeState ?? resourceKnowledgeStateAfterPlantTest;
-  const learning = buildScoutExpectationRecord({
-    bandId: band.id,
-    tick,
-    season,
-    originTile: action.originTileId,
-    targetTile: targetTileId,
-    scoutKind: action.scoutKind,
-    targetResourceClass: targetClass,
-    targetSource,
-    expectedPresence: presenceBefore,
-    expectedSeasonalFit,
-    expectedYieldHint,
-    expectedAccess: accessBefore,
-    expectedSafety,
-    observedPresenceHint: observedClassAvailability,
-    observedSeasonalFit,
-    observedYieldHint: observedClassSupport,
-    observedAccess,
-    plantObservation,
-    outcome,
-    contradictionKind,
-    confidenceBefore: beforeProfile,
-    confidenceAfter: afterScoutProfile,
-    memoryUpdated,
-    reasonIds: learningUpdate.reasonIds,
-  });
-
-  return {
-    resourceKnowledgeState,
-    debug: {
-      tick,
-      season,
-      scoutKind: action.scoutKind,
-      targetTile: targetTileId,
-      targetResourceClass: targetClass,
-      targetSource,
-      candidateCount: dbg?.candidateCount ?? 1,
-      selectedScore: dbg?.voiScore ?? 0,
-      expectedInfoValue: dbg?.expectedInfoValue ?? 0,
-      confidenceBefore: round2(presenceBefore),
-      confidenceAfter: round2(afterScoutProfile.presenceConfidence),
-      routeConfidenceChange: round2(afterScoutProfile.accessConfidence - accessBefore),
-      repeatPenalty: dbg?.repeatPenalty ?? 0,
-      outcome,
-      contradictionKind,
-      learning,
-      deltaByConfidenceChannel: learning.deltaByConfidenceChannel,
-      plantObservation,
-      plantUseEligibility,
-      plantUseTest: plantUseTestUpdate?.event,
-      causeSpecificEvent: causeSpecificUpdate?.event,
-      inferredBeliefTested: targetSource === "inferred",
-      falseOrUnconfirmedInference: contradictionKind === "inferred_belief_unconfirmed",
-      repeatedNoInfoScout: contradictionKind === "repeated_no_new_information",
-      seasonalMismatch: contradictionKind === "expected_seasonal_found_out_of_season",
-      partialConfirmation: contradictionKind === "partial_confirmation" || contradictionKind === "expected_animal_sign_only",
-      partialConfirmContradict:
-        contradictionKind !== "no_contradiction_confirmed" &&
-        Object.values(learning.deltaByConfidenceChannel).some((delta) => delta > 0) &&
-        Object.values(learning.deltaByConfidenceChannel).some((delta) => delta < 0),
-      memoryUpdated,
-      reasonVector: dbg?.reasonVector ?? {
-        uncertaintyReductionValue: 0,
-        needPressure: 0,
-        resourceClassUrgency: 0,
-        seasonMatch: round2(expectedSeasonalFit),
-        routeConfidence: round2(accessBefore),
-        distanceCost: 0,
-        repeatPenalty: 0,
-        staleWrongPenalty: 0,
-        lowConfidencePenalty: 0,
-      },
-      // 2K.5: guidance derived for the executed target (selection-only; debug/audit).
-      patchReturnGuidance: dbg?.patchReturnGuidance,
-      learnedWorldModelStatus: "future; contradiction records now feed it",
-    },
-  };
-}
-
-function derivePlantObservationForResourceScout(
-  action: Extract<Action, { type: "resource_scout" }>,
-  targetTile: Tile,
-  time: WorldTime,
-): PlantScoutObservationHint | undefined {
-  switch (action.scoutKind) {
-    case "plant_patch":
-    case "aquatic_patch":
-    case "fallback_food":
-    case "material_patch":
-    case "medicinal_toxic":
-      return derivePlantScoutObservationHint(targetTile, time, action.scoutKind);
-    case "water_refuge":
-    case "animal_sign":
-      return undefined;
-  }
-}
-
-function mapPlantObservationToScoutOutcome(
-  observation: PlantScoutObservationHint,
-): ResourceScoutDebug["outcome"] {
-  switch (observation.observationOutcome) {
-    case "confirmed_patch_present":
-      return "confirmed_patch_present";
-    case "confirmed_seasonal_absent":
-      return "confirmed_seasonal_absent";
-    case "found_low_abundance":
-      return "found_low_abundance";
-    case "suspected_processing_need":
-      return "processing_need_suspected";
-    case "suspected_safety_risk":
-      return "safety_risk_detected";
-    case "fallback_role_identified":
-      return "fallback_role_identified";
-    case "plant_patch_not_confirmed":
-      return "plant_patch_not_confirmed";
-    case "memory_refreshed_no_new_info":
-      return "memory_refreshed_no_new_info";
-  }
 }
 
 // 2K.12: bounded, selection-only seasonal-memory bias for the water-check candidate set.
@@ -5526,28 +5139,6 @@ function collectObservationTargets(
       if (!byTileId.has(secondRing.id)) {
         byTileId.set(secondRing.id, { tile: secondRing, distance: 2 });
       }
-    }
-  }
-
-  return Array.from(byTileId.values()).sort((left, right) =>
-    left.distance === right.distance
-      ? compareTiles(left.tile, right.tile)
-      : left.distance - right.distance,
-  );
-}
-
-function collectProbeObservationTargets(
-  world: WorldState,
-  originTileId: TileId,
-  targetTile: Tile,
-): readonly ObservationTarget[] {
-  const byTileId = new Map<TileId, ObservationTarget>();
-
-  byTileId.set(targetTile.id, { tile: targetTile, distance: 1 });
-
-  for (const neighbor of getNeighborTiles(world, targetTile.id)) {
-    if (neighbor.id !== originTileId && !byTileId.has(neighbor.id)) {
-      byTileId.set(neighbor.id, { tile: neighbor, distance: 2 });
     }
   }
 

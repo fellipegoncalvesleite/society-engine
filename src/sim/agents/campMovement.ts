@@ -4,6 +4,7 @@ import { getTile } from "../world/generate";
 import type { Tile, WorldState } from "../world/types";
 import { deriveBandTendencies } from "./bandTendency";
 import { deriveCampFootholdProfile } from "./campFoothold";
+import type { InvestigationOutcomeRingEntry } from "./pendingInvestigation";
 import type {
   Band,
   CampMovementDecisionTrace,
@@ -21,13 +22,13 @@ import type {
   PressureReliefCandidate,
   RangeRotationPressureReliefState,
   StagnationEscapeRecord,
-  TemporaryCampPurpose,
-  TemporaryTaskCampRecord,
+  TemporaryTaskPurpose,
+  TemporaryTaskPartyRecord,
 } from "./types";
 import { getCanonicalFoodStress } from "./seasonalSurvival";
 
 const LOCAL_SHIFT_CAP = 8;
-const TEMPORARY_CAMP_CAP = 6;
+const TEMPORARY_TASK_PARTY_CAP = 6;
 const OLD_CAMP_DECAY_CAP = 6;
 const STAGNATION_ESCAPE_CAP = 8;
 const RELIEF_CANDIDATE_CAP = 6;
@@ -91,7 +92,7 @@ export interface CampMovementProfile {
   readonly overviewLines: readonly string[];
   readonly currentEstablishment?: NewPlaceEstablishmentState;
   readonly recentLocalShifts: readonly LocalCampShiftRecord[];
-  readonly temporaryTaskCamps: readonly TemporaryTaskCampRecord[];
+  readonly temporaryTaskParties: readonly TemporaryTaskPartyRecord[];
   readonly oldCampDecay: readonly OldCampAnchorDecayRecord[];
   readonly stagnationFlags: readonly string[];
   readonly stagnationEscapes: readonly StagnationEscapeRecord[];
@@ -99,7 +100,7 @@ export interface CampMovementProfile {
   readonly latestDecisionTrace: CampMovementState["latestDecisionTrace"];
   readonly rangeRotation: RangeRotationPressureReliefState;
   readonly localCampShiftCount: number;
-  readonly temporaryCampCount: number;
+  readonly temporaryTaskPartyCount: number;
   readonly establishmentStateCount: number;
   readonly establishmentSuccessCount: number;
   readonly establishmentFailureCount: number;
@@ -138,7 +139,7 @@ export interface CampMovementProfile {
   readonly integrity: {
     readonly behaviorActive: true;
     readonly localShiftDistinctFromRelocation: boolean;
-    readonly temporaryCampsNotSettlement: boolean;
+    readonly temporaryTaskPartiesNotSettlement: boolean;
     readonly establishmentNotSettlement: boolean;
     readonly oldAnchorDecayGradual: boolean;
     readonly noNewActions: true;
@@ -149,7 +150,7 @@ export interface CampMovementProfile {
   };
   readonly technicalProof: {
     readonly localShiftIds: readonly string[];
-    readonly temporaryCampIds: readonly string[];
+    readonly temporaryTaskPartyIds: readonly string[];
     readonly oldCampDecayIds: readonly string[];
     readonly escapeIds: readonly string[];
     readonly eventRefs: readonly string[];
@@ -363,16 +364,23 @@ export function advanceCampMovementState(input: CampMovementAdvanceInput): CampM
     decisionTrace.scoreDelta > 0
     ? makeLocalShiftRecord(input, distance, decisionTrace)
     : undefined;
-  const temporaryCamp = !input.moved && (input.decision.action.type === "logistical_probe" || input.decision.action.type === "resource_scout")
-    ? makeTemporaryCampRecord(input, decisionTrace)
-    : undefined;
+  // CORRECTION-26 §12 — A RECORD ONLY WHEN A PARTY ACTUALLY WENT.
+  //
+  // This used to fire on `!moved && (probe || scout)` — i.e. on SELECTION — and asserted a
+  // temporary camp at a target nobody had walked to. It now reads the investigation the
+  // daily phase actually resolved during the season that just ended (daily actions for a
+  // span run BEFORE that span's seasonal decision, `tick/advance.ts:115-123`, so the
+  // freshest terminal outcome is exactly this season's), and writes a record only when a
+  // party physically departed. A selected-but-unexecuted investigation writes nothing here
+  // and stays inspectable through `band.recentInvestigationOutcomes`.
+  const temporaryParty = makeTemporaryTaskPartyRecord(input);
   const currentEstablishment = advanceEstablishment(input, prior?.currentEstablishment, signals, distance);
   const oldCampDecay = capOldCampDecay([
     ...maybeOldCampDecay(input, prior, signals),
     ...(prior?.oldCampDecay ?? []),
   ]);
   const oldCampPullScore = oldCampDecay[0]?.pullAfter ?? Math.max(0.18, signals.oldCampPull);
-  const escape = maybeStagnationEscape(input, signals, decisionTrace, localShift, temporaryCamp, rangeRotation);
+  const escape = maybeStagnationEscape(input, signals, decisionTrace, localShift, temporaryParty, rangeRotation);
   const stagnationEscapes = capEscapes([
     ...(escape === undefined ? [] : [escape]),
     ...(prior?.stagnationEscapes ?? []),
@@ -381,18 +389,19 @@ export function advanceCampMovementState(input: CampMovementAdvanceInput): CampM
     ...(localShift === undefined ? [] : [localShift]),
     ...(prior?.recentLocalShifts ?? []),
   ]);
-  const temporaryTaskCamps = capTemporaryCamps([
-    ...(temporaryCamp === undefined ? [] : [temporaryCamp]),
-    ...(prior?.temporaryTaskCamps ?? []).map((camp) =>
-      camp.expiresAfterTick < input.world.time.tick ? { ...camp, status: "expired" as const } : camp),
+  // No expiry pass: a same-day party is already home when its record is written, so there
+  // is no "active" state that could silently lapse. The bounded ring is the only limit.
+  const temporaryTaskParties = capTemporaryTaskParties([
+    ...(temporaryParty === undefined ? [] : [temporaryParty]),
+    ...(prior?.temporaryTaskParties ?? []),
   ]);
   const oscillationGuard = updateOscillationGuard(input, prior, localShift);
   const passiveCollapseAudit = derivePassiveCollapseAudit(input.updatedBand, input.world.time.tick, signals, stagnationEscapes);
-  const status = deriveStatus(signals, currentEstablishment, localShift, temporaryCamp, passiveCollapseAudit);
+  const status = deriveStatus(signals, currentEstablishment, localShift, temporaryParty, passiveCollapseAudit);
   const evidenceRefsWithinCap =
     (currentEstablishment === undefined || currentEstablishment.evidenceRefs.length <= EVIDENCE_PER_ITEM_CAP) &&
     recentLocalShifts.every((entry) => entry.evidenceRefs.length <= EVIDENCE_PER_ITEM_CAP) &&
-    temporaryTaskCamps.every((entry) => entry.evidenceRefs.length <= EVIDENCE_PER_ITEM_CAP) &&
+    temporaryTaskParties.every((entry) => entry.evidenceRefs.length <= EVIDENCE_PER_ITEM_CAP) &&
     stagnationEscapes.every((entry) => entry.evidenceRefs.length <= EVIDENCE_PER_ITEM_CAP);
   const state: CampMovementState = {
     bandId: input.updatedBand.id,
@@ -400,7 +409,7 @@ export function advanceCampMovementState(input: CampMovementAdvanceInput): CampM
     status,
     currentEstablishment,
     recentLocalShifts,
-    temporaryTaskCamps,
+    temporaryTaskParties,
     oldCampPullScore: round2(oldCampPullScore),
     oldCampDecay,
     stagnationFlags: signals.stagnationFlags,
@@ -411,13 +420,13 @@ export function advanceCampMovementState(input: CampMovementAdvanceInput): CampM
     oscillationGuard,
     caps: {
       localShiftCap: LOCAL_SHIFT_CAP,
-      temporaryCampCap: TEMPORARY_CAMP_CAP,
+      temporaryTaskPartyCap: TEMPORARY_TASK_PARTY_CAP,
       oldCampDecayCap: OLD_CAMP_DECAY_CAP,
       stagnationEscapeCap: STAGNATION_ESCAPE_CAP,
       evidencePerItemCap: EVIDENCE_PER_ITEM_CAP,
       capsHeld:
         recentLocalShifts.length <= LOCAL_SHIFT_CAP &&
-        temporaryTaskCamps.length <= TEMPORARY_CAMP_CAP &&
+        temporaryTaskParties.length <= TEMPORARY_TASK_PARTY_CAP &&
         oldCampDecay.length <= OLD_CAMP_DECAY_CAP &&
         stagnationEscapes.length <= STAGNATION_ESCAPE_CAP &&
         evidenceRefsWithinCap,
@@ -455,7 +464,7 @@ export function deriveCampMovementProfile(world: WorldState, band: Band): CampMo
   const evidence = [
     ...(state.currentEstablishment?.evidenceRefs ?? []),
     ...state.recentLocalShifts.flatMap((shift) => shift.evidenceRefs),
-    ...state.temporaryTaskCamps.flatMap((camp) => camp.evidenceRefs),
+    ...state.temporaryTaskParties.flatMap((camp) => camp.evidenceRefs),
     ...state.stagnationEscapes.flatMap((escape) => escape.evidenceRefs),
     ...rangeRotation.candidates.flatMap((candidate) => candidate.evidenceRefs),
   ];
@@ -478,7 +487,7 @@ export function deriveCampMovementProfile(world: WorldState, band: Band): CampMo
     overviewLines: campMovementOverviewLines(state),
     currentEstablishment: state.currentEstablishment,
     recentLocalShifts: state.recentLocalShifts,
-    temporaryTaskCamps: state.temporaryTaskCamps,
+    temporaryTaskParties: state.temporaryTaskParties,
     oldCampDecay: state.oldCampDecay,
     stagnationFlags: state.stagnationFlags,
     stagnationEscapes: state.stagnationEscapes,
@@ -486,7 +495,7 @@ export function deriveCampMovementProfile(world: WorldState, band: Band): CampMo
     latestDecisionTrace: state.latestDecisionTrace,
     rangeRotation,
     localCampShiftCount: state.recentLocalShifts.length,
-    temporaryCampCount: state.temporaryTaskCamps.length,
+    temporaryTaskPartyCount: state.temporaryTaskParties.length,
     establishmentStateCount: state.currentEstablishment === undefined ? 0 : 1,
     establishmentSuccessCount,
     establishmentFailureCount,
@@ -521,7 +530,7 @@ export function deriveCampMovementProfile(world: WorldState, band: Band): CampMo
     establishmentResetCaseCount: rangeRotation.counts.establishmentResetCases,
     maxStoredEntriesPerBand: Math.max(
       state.recentLocalShifts.length,
-      state.temporaryTaskCamps.length,
+      state.temporaryTaskParties.length,
       state.oldCampDecay.length,
       state.stagnationEscapes.length,
       rangeRotation.candidates.length,
@@ -531,7 +540,7 @@ export function deriveCampMovementProfile(world: WorldState, band: Band): CampMo
     integrity: {
       behaviorActive: true,
       localShiftDistinctFromRelocation: state.recentLocalShifts.every((shift) => shift.distance <= 2),
-      temporaryCampsNotSettlement: state.temporaryTaskCamps.every((camp) => camp.noSettlement && camp.noInventory),
+      temporaryTaskPartiesNotSettlement: state.temporaryTaskParties.every((camp) => camp.noSettlement && camp.noInventory),
       establishmentNotSettlement: state.currentEstablishment?.noSettlement ?? true,
       oldAnchorDecayGradual: state.oldCampDecay.every((record) => record.decayAmount <= 0.12 && record.canRecover),
       noNewActions: true,
@@ -542,7 +551,7 @@ export function deriveCampMovementProfile(world: WorldState, band: Band): CampMo
     },
     technicalProof: {
       localShiftIds: state.recentLocalShifts.map((entry) => entry.id).slice(0, SAMPLE_CAP),
-      temporaryCampIds: state.temporaryTaskCamps.map((entry) => entry.id).slice(0, SAMPLE_CAP),
+      temporaryTaskPartyIds: state.temporaryTaskParties.map((entry) => entry.id).slice(0, SAMPLE_CAP),
       oldCampDecayIds: state.oldCampDecay.map((entry) => entry.id).slice(0, SAMPLE_CAP),
       escapeIds: state.stagnationEscapes.map((entry) => entry.id).slice(0, SAMPLE_CAP),
       eventRefs: uniqueStrings(eventRefs).slice(0, SAMPLE_CAP),
@@ -1432,27 +1441,62 @@ function makeLocalShiftRecord(
   };
 }
 
-function makeTemporaryCampRecord(
+/**
+ * CORRECTION-26 §12 — build the record from the investigation that PHYSICALLY happened.
+ *
+ * Reads only the band's own bounded outcome ring, by identity. Returns undefined unless a
+ * party actually departed during the span that just ran: a named non-execution
+ * (`insufficient_labor`, `beyond_same_day_reach`, `superseded`, expiry, cancellation) means
+ * nobody left camp and therefore there is nothing to report here.
+ */
+function makeTemporaryTaskPartyRecord(
   input: CampMovementAdvanceInput,
-  trace: CampMovementDecisionTrace | undefined,
-): TemporaryTaskCampRecord {
-  const targetTileId = actionTargetTileId(input.decision.action) ?? input.updatedBand.position;
-  const purpose = temporaryPurposeForAction(input.decision.action);
+): TemporaryTaskPartyRecord | undefined {
+  const latest = input.updatedBand.recentInvestigationOutcomes?.[0];
+
+  // Only the investigation the band's PREVIOUS decision selected can have executed during
+  // the span that just ran; anything older was already reported in an earlier season.
+  if (latest === undefined || Number(latest.selectedTick) + 1 !== Number(input.world.time.tick)) {
+    return undefined;
+  }
+
+  // A party DEPARTED only when it had a route to walk. `route_unavailable` means the ground
+  // offered no way there at all, so nobody left camp and there is nothing to narrate as a
+  // journey — it stays inspectable through `recentInvestigationOutcomes`.
+  const departed =
+    latest.outcome === "executed_and_returned" || latest.outcome === "arrival_failed";
+
+  if (!departed) {
+    return undefined;
+  }
+
+  const arrived = latest.outcome === "executed_and_returned";
+
   return {
-    id: `temporary-task-camp:${String(input.updatedBand.id)}:${Number(input.world.time.tick)}:${String(targetTileId)}`,
+    id: `temporary-task-party:${String(input.updatedBand.id)}:${String(latest.decisionId)}`,
     tick: input.world.time.tick,
     originTileId: input.updatedBand.position,
-    targetTileId,
-    purpose,
-    status: input.destinationBlocked || input.crossingBlocked ? "failed" : "active",
-    confidence: round2(input.destinationBlocked || input.crossingBlocked ? 0.2 : 0.44),
-    expiresAfterTick: (input.world.time.tick + 3) as TickNumber,
+    targetTileId: latest.targetTileId,
+    purpose: temporaryPurposeForInvestigation(latest),
+    status: arrived ? "completed" : "failed",
+    confidence: round2(arrived ? 0.62 : 0.2),
+    ...(latest.executionId === undefined ? {} : { executionId: latest.executionId }),
+    partyWorkers: latest.partyWorkers ?? 0,
+    routeDistanceTiles: latest.routeDistanceTiles ?? 0,
     evidenceRefs: capEvidence([
-      movementEvidence(input, targetTileId, "residence held while a task camp or probe was tested", 0.54),
+      movementEvidence(
+        input,
+        latest.targetTileId,
+        arrived
+          ? "a small party walked out, looked, and came back the same day"
+          : "a small party set out and could not reach the place",
+        arrived ? 0.62 : 0.3,
+      ),
       adaptiveEvidence(input),
     ]),
     noSettlement: true,
     noInventory: true,
+    noCamp: true,
   };
 }
 
@@ -1488,7 +1532,7 @@ function maybeStagnationEscape(
   signals: CampMovementSignals,
   trace: CampMovementDecisionTrace | undefined,
   localShift: LocalCampShiftRecord | undefined,
-  temporaryCamp: TemporaryTaskCampRecord | undefined,
+  temporaryParty: TemporaryTaskPartyRecord | undefined,
   rangeRotation: RangeRotationPressureReliefState,
 ): StagnationEscapeRecord | undefined {
   if (signals.stagnationFlags.length === 0) {
@@ -1498,7 +1542,7 @@ function maybeStagnationEscape(
   const targetedEscape = isTargetedEscapeAction(input.decision.action.type);
   const response = localShift !== undefined
     ? trace?.scale === "pressure_relief_move" ? "pressure_relief_move" : "minor_camp_shift"
-    : temporaryCamp !== undefined
+    : temporaryParty !== undefined
       ? "temporary_task_camp"
       : trace?.scale === "relief_scout_probe"
         ? "scout_probe"
@@ -1519,7 +1563,7 @@ function maybeStagnationEscape(
   const status: StagnationEscapeRecord["status"] =
     blockedReasons.length > 0 || response === "no_viable_response"
       ? "blocked"
-      : input.moved || temporaryCamp !== undefined || response === "scout_probe" || response === "pressure_relief_move"
+      : input.moved || temporaryParty !== undefined || response === "scout_probe" || response === "pressure_relief_move"
         ? "trying"
         : response === "recovery_hold"
           ? "helped"
@@ -1602,11 +1646,11 @@ function deriveStatus(
   signals: CampMovementSignals,
   establishment: NewPlaceEstablishmentState,
   shift: LocalCampShiftRecord | undefined,
-  temporaryCamp: TemporaryTaskCampRecord | undefined,
+  temporaryParty: TemporaryTaskPartyRecord | undefined,
   passive: CampMovementState["passiveCollapseAudit"],
 ): CampMovementStatus {
   if (shift !== undefined) return "shifting";
-  if (temporaryCamp !== undefined) return "probing";
+  if (temporaryParty !== undefined) return "probing";
   if (establishment.recoveryNeed > 0.22) return "recovering";
   if (passive?.status === "suspicious_passive" || signals.stagnationFlags.length > 0) return "stagnant";
   if (establishment.status === "established" || establishment.status === "holding") return "established";
@@ -1669,11 +1713,8 @@ function makeSyntheticStayDecision(world: WorldState, band: Band): Decision {
   };
 }
 
-function temporaryPurposeForAction(action: Action): TemporaryCampPurpose {
-  if (action.type === "resource_scout") {
-    return action.scoutKind === "water_refuge" ? "refuge_check" : action.scoutKind === "aquatic_patch" ? "water_edge_work" : "food_work";
-  }
-  return "scout_probe";
+function temporaryPurposeForInvestigation(entry: InvestigationOutcomeRingEntry): TemporaryTaskPurpose {
+  return entry.actionType === "resource_scout" ? "food_work" : "scout_probe";
 }
 
 function campMovementOverviewTitle(state: CampMovementState): string {
@@ -1782,8 +1823,8 @@ function capLocalShifts(items: readonly LocalCampShiftRecord[]): readonly LocalC
   return uniqueById(items).slice(0, LOCAL_SHIFT_CAP);
 }
 
-function capTemporaryCamps(items: readonly TemporaryTaskCampRecord[]): readonly TemporaryTaskCampRecord[] {
-  return uniqueById(items).slice(0, TEMPORARY_CAMP_CAP);
+function capTemporaryTaskParties(items: readonly TemporaryTaskPartyRecord[]): readonly TemporaryTaskPartyRecord[] {
+  return uniqueById(items).slice(0, TEMPORARY_TASK_PARTY_CAP);
 }
 
 function capOldCampDecay(items: readonly OldCampAnchorDecayRecord[]): readonly OldCampAnchorDecayRecord[] {

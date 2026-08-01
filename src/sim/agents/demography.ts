@@ -997,6 +997,11 @@ function createDaughterBand(
     verificationEvidence: undefined,
     frontierVerificationAttempts: undefined,
     probeMemory: undefined, // 2K.1G: a daughter starts with no probe history of its own
+    // CORRECTION-26: an investigation the PARENT selected belongs to the parent. A
+    // daughter did not take that decision and cannot execute it, so it inherits neither
+    // the pending record nor the parent's terminal outcomes.
+    pendingInvestigation: undefined,
+    recentInvestigationOutcomes: undefined,
     recentScoutLearning: undefined, // 2K.1I-A: do not clone the parent's debug learning ring
     lastResourceScout: undefined, // 2K.5: the parent's last scout debug (incl. patch-return guidance) resets on fission
     lastPlantUseTest: undefined, // 2K.2E: plant test events are not perfectly inherited

@@ -26,6 +26,7 @@ import type { ResourceEcologyBandState, ResourceEcologyClassId } from "./resourc
 import type { TemporaryWatercraftAssessment } from "./storageSuitability";
 import type { VisibleNatureState } from "./visibleNature";
 import type { ProbeRecencyMemory } from "./probeMemory";
+import type { InvestigationOutcomeRingEntry, PendingInvestigationRecord } from "./pendingInvestigation";
 import type { ResourceScoutDebug, ScoutLearningRingEntry } from "./resourceScout";
 import type { PlantUseTestEvent, PlantUseTestRingEntry } from "./plantUseTesting";
 import type {
@@ -6125,7 +6126,12 @@ export type CampMovementStatus =
   | "stagnant"
   | "unstable";
 
-export type TemporaryCampPurpose =
+/**
+ * CORRECTION-26 §12 — what a small task party went out to do. RENAMED from
+ * `TemporaryCampPurpose`: the record it labels was never a camp (see
+ * `TemporaryTaskPartyRecord`).
+ */
+export type TemporaryTaskPurpose =
   | "food_work"
   | "water_edge_work"
   | "crossing_prep"
@@ -6292,18 +6298,51 @@ export interface LocalCampShiftRecord {
   readonly noSettlement: true;
 }
 
-export interface TemporaryTaskCampRecord {
+/**
+ * CORRECTION-26 §12 — A SMALL TASK PARTY THAT PHYSICALLY WENT OUT AND CAME BACK.
+ *
+ * THE DEFECT THIS REPLACES. This used to be `TemporaryTaskCampRecord`, and it was written
+ * whenever a band merely SELECTED a `logistical_probe` or `resource_scout` while holding
+ * its residence (`campMovement.ts`, `!input.moved && (probe || scout)`). It claimed an
+ * `originTileId -> targetTileId` camp with a purpose, a confidence and a three-tick
+ * expiry, and the event log, the public story and both UI panels reported it as one — "a
+ * small camp near the X let them test work". No camp existed. Nobody had left the
+ * residence. CLOSURE-25 recorded that `campMovement`'s "task camp" has NO reader inside
+ * the simulation at all, only projections, so what it produced was a projection of
+ * something that never happened.
+ *
+ * WHAT IT IS NOW. One record per investigation party that ACTUALLY DEPARTED, written from
+ * the resolved `PendingInvestigationRecord` the daily execution phase produced, carrying
+ * that execution's own identity, its real party size, its real route length, and its real
+ * terminal outcome. A same-day party sleeps nowhere, so `noCamp` is asserted alongside
+ * `noSettlement`/`noInventory`.
+ *
+ * A selected-but-unexecuted investigation produces NO record here — nobody went. It stays
+ * inspectable through `Band.recentInvestigationOutcomes`, which names why.
+ *
+ * NOT MERGED WITH `ExpeditionTaskCamp`. A genuine multi-day operation that must sleep at
+ * its target is still governed entirely by the expedition lifecycle; this type never
+ * describes one and never gains behaviour.
+ */
+export interface TemporaryTaskPartyRecord {
   readonly id: string;
   readonly tick: TickNumber;
+  /** The residence the party left from and returned to the same day. */
   readonly originTileId: TileId;
   readonly targetTileId: TileId;
-  readonly purpose: TemporaryCampPurpose;
-  readonly status: "active" | "completed" | "failed" | "expired";
+  readonly purpose: TemporaryTaskPurpose;
+  /** `completed` — walked there and looked. `failed` — could not reach the target. */
+  readonly status: "completed" | "failed";
   readonly confidence: NormalizedIntensity;
-  readonly expiresAfterTick: TickNumber;
+  /** The exact `investigation-exec:` identity, or absent when no route could be built. */
+  readonly executionId?: string;
+  readonly partyWorkers: number;
+  readonly routeDistanceTiles: number;
   readonly evidenceRefs: readonly CampMovementEvidenceRef[];
   readonly noSettlement: true;
   readonly noInventory: true;
+  /** A same-day party sleeps at home. This record is not, and never was, a camp. */
+  readonly noCamp: true;
 }
 
 export interface NewPlaceEstablishmentState {
@@ -6388,7 +6427,7 @@ export interface CampMovementState {
   readonly status: CampMovementStatus;
   readonly currentEstablishment?: NewPlaceEstablishmentState;
   readonly recentLocalShifts: readonly LocalCampShiftRecord[];
-  readonly temporaryTaskCamps: readonly TemporaryTaskCampRecord[];
+  readonly temporaryTaskParties: readonly TemporaryTaskPartyRecord[];
   readonly oldCampPullScore: NormalizedIntensity;
   readonly oldCampDecay: readonly OldCampAnchorDecayRecord[];
   readonly stagnationFlags: readonly string[];
@@ -6403,7 +6442,7 @@ export interface CampMovementState {
   };
   readonly caps: {
     readonly localShiftCap: number;
-    readonly temporaryCampCap: number;
+    readonly temporaryTaskPartyCap: number;
     readonly oldCampDecayCap: number;
     readonly stagnationEscapeCap: number;
     readonly evidencePerItemCap: number;
@@ -6510,6 +6549,17 @@ export interface Band {
   // recently scouted and whether they were informative — drives probe target diversity
   // + diminishing returns. Probe-quality only; never relocation/yield/stress.
   readonly probeMemory?: ProbeRecencyMemory;
+  // CORRECTION-26 — ONE selected-but-not-yet-executed resource investigation
+  // (`resource_scout` / `logistical_probe`), carrying its originating `Decision.id` from
+  // the seasonal boundary into the following season's first eligible trip day, where
+  // `agents/intraSeasonTrips.ts` physically executes it or names why it could not.
+  // Structurally capped at one (the seasonal loop takes one decision per band per season),
+  // self-expiring after one season, never inherited by a daughter, and never cleared
+  // without a terminal outcome being appended to the ring below.
+  readonly pendingInvestigation?: PendingInvestigationRecord;
+  // Bounded terminal history for the above, so no selected investigation can disappear
+  // silently. O(1) per band, independent of simulation age. Daughters reset.
+  readonly recentInvestigationOutcomes?: readonly InvestigationOutcomeRingEntry[];
   // Debug-only record of the band's most recent resource_scout (2K.1H). Surfaced in
   // report-band/BandPanel; never read by behaviour.
   readonly lastResourceScout?: ResourceScoutDebug;
