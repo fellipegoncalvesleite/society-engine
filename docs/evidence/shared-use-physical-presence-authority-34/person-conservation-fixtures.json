@@ -1,0 +1,113 @@
+{
+  "audit": "CORRECTION-34A-PERSON-CONSERVATION-CATCHMENT-FIXTURES",
+  "scenario": "map2",
+  "seed": "c34a:fixtures",
+  "band": {
+    "id": "band:varied-dry-corridor-mid",
+    "population": 25,
+    "workingAdults": 15
+  },
+  "summary": {
+    "fixtures": 9,
+    "unexpected": 0,
+    "vacuous": 0
+  },
+  "verdicts": {
+    "P1_residence_only_control": "FULL_RESIDENTIAL_POPULATION",
+    "P2_prepared_labor_committed_bodies_home": "LABOR_COMMITTED_BODIES_AT_HOME",
+    "P3_outbound_party_at_its_own_position": "WORKERS_AT_ROUTE_POSITION",
+    "P7_aborted_holds_no_body": "TERMINAL_OCCUPIES_NOTHING",
+    "P8_lost_holds_no_body": "TERMINAL_OCCUPIES_NOTHING",
+    "P9_two_concurrent_parties": "EACH_PARTY_ONCE_REMAINDER_CORRECT",
+    "P10_overcommit_after_population_loss_is_reconciled": "INVALID_STATE_REPAIRED_AT_SOURCE",
+    "P20_completed_history_creates_no_bodies": "HISTORY_IS_NOT_OCCUPANCY",
+    "P22_catchment_effort_vs_demand": "EFFORT_FALLS_DEMAND_HOLDS"
+  },
+  "fixtures": {
+    "P1_residence_only_control": {
+      "verdict": "FULL_RESIDENTIAL_POPULATION",
+      "population": 25,
+      "represented": 25,
+      "committedAway": 0
+    },
+    "P2_prepared_labor_committed_bodies_home": {
+      "verdict": "LABOR_COMMITTED_BODIES_AT_HOME",
+      "awaySources": 0,
+      "homePeople": 25,
+      "committedLabour": 2,
+      "note": "committed labour and physical absence are different questions; prepared answers only the first"
+    },
+    "P3_outbound_party_at_its_own_position": {
+      "verdict": "WORKERS_AT_ROUTE_POSITION",
+      "awayTile": "tile:73:110",
+      "awayPeople": 3,
+      "homePeople": 22,
+      "total": 25
+    },
+    "P7_aborted_holds_no_body": {
+      "verdict": "TERMINAL_OCCUPIES_NOTHING",
+      "phase": "aborted",
+      "awaySources": 0,
+      "represented": 25,
+      "population": 25,
+      "note": "a terminal record is history; it holds no immortal body and restores the residential remainder"
+    },
+    "P8_lost_holds_no_body": {
+      "verdict": "TERMINAL_OCCUPIES_NOTHING",
+      "phase": "lost",
+      "awaySources": 0,
+      "represented": 25,
+      "population": 25,
+      "note": "a terminal record is history; it holds no immortal body and restores the residential remainder"
+    },
+    "P9_two_concurrent_parties": {
+      "verdict": "EACH_PARTY_ONCE_REMAINDER_CORRECT",
+      "parties": 2,
+      "perParty": [
+        2,
+        2
+      ],
+      "homePeople": 21,
+      "represented": 25,
+      "population": 25,
+      "conserved": true
+    },
+    "P10_overcommit_after_population_loss_is_reconciled": {
+      "verdict": "INVALID_STATE_REPAIRED_AT_SOURCE",
+      "before": {
+        "committedAwayWorkers": 6,
+        "conserved": false,
+        "represented": 6,
+        "population": 2
+      },
+      "after": {
+        "committedAwayWorkers": 0,
+        "conserved": true,
+        "represented": 2,
+        "partyPhases": [
+          "lost"
+        ],
+        "stillAwayParties": 0
+      },
+      "note": "the party shrinks or is declared lost; the read model neither invents nor deletes people"
+    },
+    "P20_completed_history_creates_no_bodies": {
+      "verdict": "HISTORY_IS_NOT_OCCUPANCY",
+      "tripRecords": 24,
+      "represented": 25,
+      "population": 25
+    },
+    "P22_catchment_effort_vs_demand": {
+      "verdict": "EFFORT_FALLS_DEMAND_HOLDS",
+      "catchmentClaim": {
+        "allHome": 127.02000000000002,
+        "threeAway": 109.61999999999998
+      },
+      "consumptionDemand": {
+        "allHome": 25,
+        "threeAway": 25
+      },
+      "note": "local extraction effort must fall when bodies leave; consumption demand must not, because an away worker still eats"
+    }
+  }
+}
