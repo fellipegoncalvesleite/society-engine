@@ -178,7 +178,29 @@ four required proofs: no current consumer exists; completed records create no pr
 records + 1 terminal expedition record → 0 away sources, represented = population); no dead ledger
 introduced; the future architecture is named.
 
-### F7.4 — An instrument error in this pass's own probe, caught and recorded
+### F7.3b — P27 covers all four step modes, not two
+
+`stepModeInvarianceAudit` proves **daily == seasonal** with a full canonical-state match on both
+maps. P27 asks for daily, weekly, monthly *and* seasonal, so a four-way audit was added
+(`stepModeFourWayAudit.mjs`, `step-mode-four-way.json`):
+
+| mode | steps | tick reached | matches daily |
+| --- | --- | --- | --- |
+| daily | 1,890 | 21 | — (reference) |
+| weekly | 270 | 21 | **true** |
+| monthly | 63 | 21 | **true** |
+| seasonal | 21 | 21 | **true** |
+
+All four produce a **byte-identical** canonical projection (3,945 bytes each) over the identical
+630-day-multiple span. The projection is deliberately broad — band position, status, viability,
+full demography, every expedition's phase/workers/position/route index/provisions/harvest, terminal
+outcome ids, trip-record count, seasonal-receipt period, depletion key count — because
+CORRECTION-16's admissibility rule forbids calling a narrow fingerprint "canonical state".
+
+This makes "the four modes are batch sizes over one daily kernel" a measured fact rather than a
+claim read off the call graph.
+
+### F7.4 — Two instrument errors in this pass's own probes, caught and recorded
 
 The first closure run reported **1,420 duplicate expedition receipts at 20 years and 3,136 at 50**.
 That was the probe, not production: `recentIntraSeasonTrips` is a retained 24-slot ring, so the
@@ -186,6 +208,13 @@ same receipt is legitimately visible on every day it stays in the ring, and the 
 keys **across days**. It was counting retention, not duplication. Corrected to test uniqueness
 **within one band's ring at one instant**, which is the actual question — result **0 at both
 horizons**. The pre-correction numbers are recorded here rather than quietly dropped.
+
+**(2) The four-way step-mode probe first reported `DIVERGENT`.** `stepSim(world, steps, mode)`
+advances `steps` units *of that mode*, not days, so passing the same step count to all four
+compared **24 days against 24 seasons** — ticks 0 / 1 / 8 / 24. It was measuring its own unequal
+spans, not production. Corrected to equalise simulated days over a multiple of 630 (the LCM of the
+four mode lengths), all four modes are byte-identical. The false `DIVERGENT` is recorded because a
+reader who saw only the final result would not know the probe had ever been wrong.
 
 ### F7.5 — `getBandPhysicalPresence` documentation corrected
 
