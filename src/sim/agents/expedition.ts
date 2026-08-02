@@ -191,6 +191,102 @@ function isTerminalPhase(phase: ExpeditionPhase): phase is "completed" | "aborte
   return phase === "completed" || phase === "aborted" || phase === "lost";
 }
 
+/** Below this a journey is not a party; the verification and exploration families assert it too. */
+export const EXPEDITION_MIN_PARTY_WORKERS = 2;
+
+/**
+ * CORRECTION-34A §6 — an away party holds people the residential band may no longer have.
+ *
+ * The launch authority is sound AT THE LAUNCH INSTANT and only there: `deriveDepartableWorkers`
+ * subtracts already-committed workers through `getResidentialWorkingAdults`, caps the party at a
+ * third of the workforce and reserves two at camp, and `attachExpedition` caps concurrent parties
+ * at `EXPEDITION_ACTIVE_CAP`. What none of that can bound is the FUTURE. `demography.ts`,
+ * `viability.ts` and `demographicRenewal.ts` contain no reference to expeditions, and
+ * `partyWorkers` is written once at creation and never reduced — so an annual demographic step or
+ * a fission transfer landing while a party is away can drop the workforce below what is already
+ * committed. That is the only way `sum(away workers) > population` is reachable.
+ *
+ * The physical reading is that the people who left are among those the band lost, so the PARTY
+ * shrinks. The loss is never absorbed silently by the residential remainder, and it is never
+ * repaired inside `getBandPhysicalPresence` by inventing or deleting people — §6 forbids both.
+ * A party reduced below `EXPEDITION_MIN_PARTY_WORKERS` did not survive as a party and is declared
+ * lost, which is the existing terminal transition, not a new one: no cargo and no information
+ * reach camp.
+ *
+ * The newest commitment is released first — a band recalls the party it has just sent before the
+ * one already deep in its journey. Array order IS launch order (`attachExpedition` appends), so
+ * the order is deterministic without a re-sort.
+ *
+ * Pure. Returns the same object when nothing is overcommitted, so the common case allocates
+ * nothing and the daily call is a single comparison.
+ */
+export function reconcileExpeditionCommitment(band: Band): Band {
+  const expeditions = band.expeditions ?? [];
+
+  if (expeditions.length === 0) {
+    return band;
+  }
+
+  const workforce = Math.max(0, band.demography?.workingAdults ?? 0);
+  let committed = getCommittedExpeditionWorkers(band);
+
+  if (committed <= workforce) {
+    return band;
+  }
+
+  const next = [...expeditions];
+
+  for (let index = next.length - 1; index >= 0 && committed > workforce; index -= 1) {
+    const expedition = next[index];
+
+    if (!isExpeditionAway(expedition.phase)) {
+      continue;
+    }
+
+    const workers = Math.max(0, expedition.partyWorkers ?? 0);
+    const reduced = Math.max(0, workers - (committed - workforce));
+
+    if (reduced < EXPEDITION_MIN_PARTY_WORKERS) {
+      next[index] = { ...expedition, phase: "lost", partyWorkers: 0, outcomeReason: "party_lost" };
+      committed -= workers;
+      continue;
+    }
+
+    next[index] = { ...expedition, partyWorkers: reduced };
+    committed -= workers - reduced;
+  }
+
+  return { ...band, expeditions: next };
+}
+
+/**
+ * CORRECTION-34A §6 — the invariant itself, exported so audits assert the SAME predicate
+ * production maintains rather than a re-implementation of it. `workingAdults` is the bound
+ * because an away party is staffed from working adults; `population` is the bound the presence
+ * read model must satisfy. The four quantities §6 requires kept apart are returned separately:
+ * they are not interchangeable.
+ */
+export function getBandCommitmentAccounting(band: Band): {
+  readonly population: number;
+  readonly workingAdults: number;
+  readonly committedAwayWorkers: number;
+  readonly dependents: number;
+  readonly conserved: boolean;
+} {
+  const demography = band.demography;
+  const population = Math.max(0, demography?.population ?? band.size ?? 0);
+  const workingAdults = Math.max(0, demography?.workingAdults ?? 0);
+  const committedAwayWorkers = getCommittedExpeditionWorkers(band);
+
+  return {
+    population,
+    workingAdults,
+    committedAwayWorkers,
+    dependents: Math.max(0, demography?.dependents ?? 0),
+    conserved: committedAwayWorkers <= workingAdults && committedAwayWorkers <= population,
+  };
+}
+
 /** A party's physical carry ceiling: workers, minus injury, plus any practiced carrying relief. */
 export function deriveCarryCapacityUnits(
   band: Band,
@@ -2095,9 +2191,21 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       continue;
     }
 
-    const launched = maybeLaunchExpedition(currentWorld, bandsById[band.id] ?? band, day);
+    // CORRECTION-34A §6 — reconcile BEFORE anything reads or extends the commitment, so every
+    // band-day this action touches starts conserved. Demography, fission and viability run at the
+    // season boundary with no knowledge of away parties; this daily action is the first production
+    // code to see the result, and `expeditionDailyAction` fires on every day of the season.
+    const beforeReconcile = bandsById[band.id] ?? band;
+    const reconciled = reconcileExpeditionCommitment(beforeReconcile);
 
-    if (launched !== (bandsById[band.id] ?? band)) {
+    if (reconciled !== beforeReconcile) {
+      bandsById[band.id] = reconciled;
+      changed = true;
+    }
+
+    const launched = maybeLaunchExpedition(currentWorld, reconciled, day);
+
+    if (launched !== reconciled) {
       bandsById[band.id] = launched;
       changed = true;
     }

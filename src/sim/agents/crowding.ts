@@ -111,8 +111,14 @@ export function getBandPhysicalPresence(band: Band): readonly PhysicalPresenceSo
     });
   }
 
-  // Away workers can never exceed the population they came from; clamping here keeps the
-  // remainder non-negative without ever inventing people.
+  // CORRECTION-34A §6 — conservation is maintained UPSTREAM, not here. `reconcileExpeditionCommitment`
+  // (expedition.ts) runs at the head of the daily expedition action and shrinks or loses any party
+  // the band can no longer staff, so `awayPeople <= workingAdults <= population` holds on every
+  // band-day. This clamp is therefore defence-in-depth against a malformed record, never the thing
+  // that makes the sum work: it keeps the remainder non-negative and it deliberately does NOT
+  // shrink the away sources, because proportionally shrinking an already-launched party inside the
+  // read model would hide the defect rather than conserve people (§6 forbids exactly that).
+  // Assert with `getBandCommitmentAccounting`, which is the predicate production maintains.
   const residentialRemainder = Math.max(0, population - Math.min(awayPeople, population));
 
   return [
