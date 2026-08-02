@@ -1,0 +1,231 @@
+{
+  "audit": "physicalPresenceCurrentStateAudit",
+  "checkpoint": "CORRECTION-34",
+  "measuredOn": "5ebb5e9887e36341f69350d4d3cff85f9493457c (unmodified)",
+  "years": 20,
+  "generatedAt": "2026-08-02T21:17:37.535Z",
+  "phaseSemantics": {
+    "prepared": "labor committed at camp, NOT yet departed — physically AT HOME",
+    "outbound": "physically walking toward the target — physically AWAY",
+    "operating": "at/near the target — physically AWAY",
+    "returning": "physically walking home — physically AWAY",
+    "completed_aborted_lost": "terminal — no physical party",
+    "source": "src/sim/agents/types.ts:932-939, and expedition.ts:isExpeditionAway",
+    "note": "isExpeditionAway() includes `prepared` for LABOR commitment. For PHYSICAL presence, prepared is still at the residence; this audit separates the two."
+  },
+  "summary": {
+    "runs": 4,
+    "bandSeasons": 2240,
+    "awayWorkerSeasonsStillWeightedAtHome": 452,
+    "expeditionPartySeasons": 226,
+    "physicallyAwayPartySeasonsWithZeroPresenceAtPartyTile": 0,
+    "physicallyAwayPartySeasonsWithSomePresenceAtPartyTile": 135,
+    "taskCampSeasons": 0,
+    "distinctTripsObserved": 51925,
+    "physicallyAwayPartySeasonsBeyondOwnResidenceBall": 0,
+    "beyondResidenceBallWithZeroPresence": 0,
+    "bandSeasonsWhereFullWorkingAdultsStillDrewTheCatchment": 226
+  },
+  "runs": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "years": 20,
+      "bandSeasons": 400,
+      "ghostResidencePopulation": {
+        "awayWorkerSeasonsStillWeightedAtHome": 78,
+        "maxAwayShareOfHomePopulation": 0.0909,
+        "note": "buildCrowdingField weights the home scatter by demography.population (FULL). Anyone physically away is projected at home too."
+      },
+      "missingAwayPresence": {
+        "expeditionPartySeasons": 39,
+        "physicallyAwayPartySeasonsWithZeroPresenceAtPartyTile": 0,
+        "physicallyAwayPartySeasonsWithSomePresenceAtPartyTile": 28,
+        "partyTilesEqualToOwnResidence": 11,
+        "partySeasonsInsideOwnResidenceBall": 28,
+        "partySeasonsBeyondOwnResidenceBall": 0,
+        "beyondResidenceBallWithPresence": 0,
+        "beyondResidenceBallWithZeroPresence": 0,
+        "maxPartyDistanceFromResidence": 3,
+        "decisiveMeasurementNote": "Only `beyondResidenceBall*` is decisive. Inside the radius-4 ball the residence's own scatter already covers the tile, so 'presence' there says nothing about the party.",
+        "phaseCounts": {
+          "outbound": 39
+        },
+        "taskCampSeasons": 0
+      },
+      "sameDayPartyInvisibility": {
+        "distinctTripsObserved": 9409,
+        "note0": "deduplicated by (band, day, target); the bounded recentIntraSeasonTrips ring is re-read every band-season and must not be counted repeatedly",
+        "tripsWithTarget": 9409,
+        "tripsWithPeopleCount": 9409,
+        "meanEstimatedPeopleCount": 3.8135,
+        "tripsWithRoute": 9409,
+        "physicalPresenceAuthoritiesReadingTripRecords": 0,
+        "note": "no reference to recentIntraSeasonTrips exists in crowding.ts or sharedCatchment.ts; a same-day party is physically invisible to shared-range"
+      },
+      "catchmentOverlap": {
+        "bandSeasonsWithAwayWorkers": 39,
+        "bandSeasonsWhereFullWorkingAdultsStillDrewTheCatchment": 39,
+        "awayWorkerDrawSum": 78,
+        "note": "getBandForagingDraw reads demography.workingAdults, NOT getResidentialWorkingAdults. Reported as an accounting observation, not yet as a defect."
+      },
+      "socialConsequences": {
+        "encounterRecords": 0,
+        "frictionRecords": 0,
+        "partyDerivedEncounterAuthorities": 0,
+        "partyDerivedFrictionAuthorities": 0,
+        "note": "no encounter or friction authority reads expedition party position or trip records; parties create no social consequence at all"
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "years": 20,
+      "bandSeasons": 400,
+      "ghostResidencePopulation": {
+        "awayWorkerSeasonsStillWeightedAtHome": 78,
+        "maxAwayShareOfHomePopulation": 0.1053,
+        "note": "buildCrowdingField weights the home scatter by demography.population (FULL). Anyone physically away is projected at home too."
+      },
+      "missingAwayPresence": {
+        "expeditionPartySeasons": 39,
+        "physicallyAwayPartySeasonsWithZeroPresenceAtPartyTile": 0,
+        "physicallyAwayPartySeasonsWithSomePresenceAtPartyTile": 25,
+        "partyTilesEqualToOwnResidence": 14,
+        "partySeasonsInsideOwnResidenceBall": 25,
+        "partySeasonsBeyondOwnResidenceBall": 0,
+        "beyondResidenceBallWithPresence": 0,
+        "beyondResidenceBallWithZeroPresence": 0,
+        "maxPartyDistanceFromResidence": 3,
+        "decisiveMeasurementNote": "Only `beyondResidenceBall*` is decisive. Inside the radius-4 ball the residence's own scatter already covers the tile, so 'presence' there says nothing about the party.",
+        "phaseCounts": {
+          "outbound": 39
+        },
+        "taskCampSeasons": 0
+      },
+      "sameDayPartyInvisibility": {
+        "distinctTripsObserved": 9596,
+        "note0": "deduplicated by (band, day, target); the bounded recentIntraSeasonTrips ring is re-read every band-season and must not be counted repeatedly",
+        "tripsWithTarget": 9596,
+        "tripsWithPeopleCount": 9596,
+        "meanEstimatedPeopleCount": 3.8246,
+        "tripsWithRoute": 9596,
+        "physicalPresenceAuthoritiesReadingTripRecords": 0,
+        "note": "no reference to recentIntraSeasonTrips exists in crowding.ts or sharedCatchment.ts; a same-day party is physically invisible to shared-range"
+      },
+      "catchmentOverlap": {
+        "bandSeasonsWithAwayWorkers": 39,
+        "bandSeasonsWhereFullWorkingAdultsStillDrewTheCatchment": 39,
+        "awayWorkerDrawSum": 78,
+        "note": "getBandForagingDraw reads demography.workingAdults, NOT getResidentialWorkingAdults. Reported as an accounting observation, not yet as a defect."
+      },
+      "socialConsequences": {
+        "encounterRecords": 0,
+        "frictionRecords": 0,
+        "partyDerivedEncounterAuthorities": 0,
+        "partyDerivedFrictionAuthorities": 0,
+        "note": "no encounter or friction authority reads expedition party position or trip records; parties create no social consequence at all"
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "years": 20,
+      "bandSeasons": 720,
+      "ghostResidencePopulation": {
+        "awayWorkerSeasonsStillWeightedAtHome": 142,
+        "maxAwayShareOfHomePopulation": 0.1333,
+        "note": "buildCrowdingField weights the home scatter by demography.population (FULL). Anyone physically away is projected at home too."
+      },
+      "missingAwayPresence": {
+        "expeditionPartySeasons": 71,
+        "physicallyAwayPartySeasonsWithZeroPresenceAtPartyTile": 0,
+        "physicallyAwayPartySeasonsWithSomePresenceAtPartyTile": 46,
+        "partyTilesEqualToOwnResidence": 25,
+        "partySeasonsInsideOwnResidenceBall": 46,
+        "partySeasonsBeyondOwnResidenceBall": 0,
+        "beyondResidenceBallWithPresence": 0,
+        "beyondResidenceBallWithZeroPresence": 0,
+        "maxPartyDistanceFromResidence": 3,
+        "decisiveMeasurementNote": "Only `beyondResidenceBall*` is decisive. Inside the radius-4 ball the residence's own scatter already covers the tile, so 'presence' there says nothing about the party.",
+        "phaseCounts": {
+          "outbound": 71
+        },
+        "taskCampSeasons": 0
+      },
+      "sameDayPartyInvisibility": {
+        "distinctTripsObserved": 17135,
+        "note0": "deduplicated by (band, day, target); the bounded recentIntraSeasonTrips ring is re-read every band-season and must not be counted repeatedly",
+        "tripsWithTarget": 17135,
+        "tripsWithPeopleCount": 17135,
+        "meanEstimatedPeopleCount": 3.1418,
+        "tripsWithRoute": 17135,
+        "physicalPresenceAuthoritiesReadingTripRecords": 0,
+        "note": "no reference to recentIntraSeasonTrips exists in crowding.ts or sharedCatchment.ts; a same-day party is physically invisible to shared-range"
+      },
+      "catchmentOverlap": {
+        "bandSeasonsWithAwayWorkers": 71,
+        "bandSeasonsWhereFullWorkingAdultsStillDrewTheCatchment": 71,
+        "awayWorkerDrawSum": 142,
+        "note": "getBandForagingDraw reads demography.workingAdults, NOT getResidentialWorkingAdults. Reported as an accounting observation, not yet as a defect."
+      },
+      "socialConsequences": {
+        "encounterRecords": 0,
+        "frictionRecords": 0,
+        "partyDerivedEncounterAuthorities": 0,
+        "partyDerivedFrictionAuthorities": 0,
+        "note": "no encounter or friction authority reads expedition party position or trip records; parties create no social consequence at all"
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "years": 20,
+      "bandSeasons": 720,
+      "ghostResidencePopulation": {
+        "awayWorkerSeasonsStillWeightedAtHome": 154,
+        "maxAwayShareOfHomePopulation": 0.1333,
+        "note": "buildCrowdingField weights the home scatter by demography.population (FULL). Anyone physically away is projected at home too."
+      },
+      "missingAwayPresence": {
+        "expeditionPartySeasons": 77,
+        "physicallyAwayPartySeasonsWithZeroPresenceAtPartyTile": 0,
+        "physicallyAwayPartySeasonsWithSomePresenceAtPartyTile": 36,
+        "partyTilesEqualToOwnResidence": 41,
+        "partySeasonsInsideOwnResidenceBall": 36,
+        "partySeasonsBeyondOwnResidenceBall": 0,
+        "beyondResidenceBallWithPresence": 0,
+        "beyondResidenceBallWithZeroPresence": 0,
+        "maxPartyDistanceFromResidence": 4,
+        "decisiveMeasurementNote": "Only `beyondResidenceBall*` is decisive. Inside the radius-4 ball the residence's own scatter already covers the tile, so 'presence' there says nothing about the party.",
+        "phaseCounts": {
+          "outbound": 77
+        },
+        "taskCampSeasons": 0
+      },
+      "sameDayPartyInvisibility": {
+        "distinctTripsObserved": 15785,
+        "note0": "deduplicated by (band, day, target); the bounded recentIntraSeasonTrips ring is re-read every band-season and must not be counted repeatedly",
+        "tripsWithTarget": 15785,
+        "tripsWithPeopleCount": 15785,
+        "meanEstimatedPeopleCount": 3.1996,
+        "tripsWithRoute": 15785,
+        "physicalPresenceAuthoritiesReadingTripRecords": 0,
+        "note": "no reference to recentIntraSeasonTrips exists in crowding.ts or sharedCatchment.ts; a same-day party is physically invisible to shared-range"
+      },
+      "catchmentOverlap": {
+        "bandSeasonsWithAwayWorkers": 77,
+        "bandSeasonsWhereFullWorkingAdultsStillDrewTheCatchment": 77,
+        "awayWorkerDrawSum": 154,
+        "note": "getBandForagingDraw reads demography.workingAdults, NOT getResidentialWorkingAdults. Reported as an accounting observation, not yet as a defect."
+      },
+      "socialConsequences": {
+        "encounterRecords": 462,
+        "frictionRecords": 0,
+        "partyDerivedEncounterAuthorities": 0,
+        "partyDerivedFrictionAuthorities": 0,
+        "note": "no encounter or friction authority reads expedition party position or trip records; parties create no social consequence at all"
+      }
+    }
+  ]
+}

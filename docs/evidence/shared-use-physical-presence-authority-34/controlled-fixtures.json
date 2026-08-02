@@ -1,0 +1,195 @@
+{
+  "audit": "physicalPresenceFixturesAudit",
+  "checkpoint": "CORRECTION-34",
+  "arm": "after",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "years": 6,
+  "samplingResolution": "DAILY",
+  "authorityPresentOnThisArm": true,
+  "generatedAt": "2026-08-02T21:21:53.269Z",
+  "summary": {
+    "fixtures": 10,
+    "vacuous": [
+      "P8_P18_terminal_records_occupy_nothing",
+      "P9_concurrent_parties"
+    ],
+    "deferred": [
+      "P15_P16_P17_same_day_parties_deferred"
+    ],
+    "adverse": [],
+    "verdicts": {
+      "P22_person_conservation": "PEOPLE_CONSERVED",
+      "P1_no_away_party_control": "RESIDENCE_ONLY_WHEN_NOBODY_IS_AWAY",
+      "P2_P3_P5_away_party_presence": "AWAY_BODIES_AT_THEIR_OWN_POSITION",
+      "P4_temporary_task_camp": "TASK_CAMP_PRESENCE_TIED_TO_EXPEDITION",
+      "P8_P18_terminal_records_occupy_nothing": "VACUOUS_NO_TERMINAL_RECORDS_OBSERVED",
+      "P9_concurrent_parties": "VACUOUS_NO_CONCURRENT_PARTIES_OBSERVED",
+      "P12_own_party_is_not_a_foreign_band": "OWN_PARTY_NEVER_FOREIGN",
+      "P10_P14_party_scale": "PARTY_SCALE_FOLLOWS_PARTY_SIZE",
+      "P15_P16_P17_same_day_parties_deferred": "DEFERRED_SAME_DAY_PRESENCE_NOT_IMPLEMENTED",
+      "P25_boundedness": "BOUNDED"
+    }
+  },
+  "fixtures": [
+    {
+      "id": "P22_person_conservation",
+      "intent": "for every band on every observed day, residential remainder + away-party people must equal the represented population",
+      "bandDaysChecked": 2160,
+      "failures": 0,
+      "failureDetail": [],
+      "verdict": "PEOPLE_CONSERVED"
+    },
+    {
+      "id": "P1_no_away_party_control",
+      "intent": "with nobody away, the presence set is exactly the residence holding the whole population",
+      "maxSourcesPerBand": 2,
+      "note": "a band with no away party yields exactly one source, kind=residential_remainder",
+      "verdict": "RESIDENCE_ONLY_WHEN_NOBODY_IS_AWAY"
+    },
+    {
+      "id": "P2_P3_P5_away_party_presence",
+      "intent": "a physically away party must exist as bodies at its OWN position, not at home",
+      "partyDays": 202,
+      "partyDaysBeyondCrowdingRadius": 123,
+      "shareBeyondRadius": 0.6089,
+      "awayWorkerDaysRepresentedAtTheirOwnPosition": 505,
+      "awayWorkerDaysRepresentedNowhere": 0,
+      "ghostWorkerDaysStillFullyWeightedAtHome": 0,
+      "phaseDays": {
+        "outbound": 97,
+        "returning": 89,
+        "operating": 16
+      },
+      "verdict": "AWAY_BODIES_AT_THEIR_OWN_POSITION"
+    },
+    {
+      "id": "P4_temporary_task_camp",
+      "intent": "a task camp keeps its party's presence tied to the expedition and creates no residence",
+      "taskCampDays": 27,
+      "note": "task camps are observable only at DAILY resolution; a seasonal sample measured 0",
+      "verdict": "TASK_CAMP_PRESENCE_TIED_TO_EXPEDITION"
+    },
+    {
+      "id": "P8_P18_terminal_records_occupy_nothing",
+      "intent": "completed, aborted and lost expedition records must not keep a body anywhere",
+      "terminalRecordDays": 0,
+      "terminalRecordsStillHoldingPresence": 0,
+      "verdict": "VACUOUS_NO_TERMINAL_RECORDS_OBSERVED"
+    },
+    {
+      "id": "P9_concurrent_parties",
+      "intent": "two concurrent parties from one band each get bounded presence and are each subtracted exactly once",
+      "bandDaysWithTwoOrMoreAwayParties": 0,
+      "maxPresenceSourcesPerBand": 2,
+      "personConservationFailures": 0,
+      "verdict": "VACUOUS_NO_CONCURRENT_PARTIES_OBSERVED"
+    },
+    {
+      "id": "P12_own_party_is_not_a_foreign_band",
+      "intent": "a band must not read its own away party as foreign crowding",
+      "partyTileSelfReads": 202,
+      "ownPartyCountedAsForeign": 0,
+      "verdict": "OWN_PARTY_NEVER_FOREIGN"
+    },
+    {
+      "id": "P10_P14_party_scale",
+      "intent": "a small party contributes according to party size, never the parent band's whole population",
+      "sampledPartyDays": 202,
+      "weightedCrowdingAtPartyTiles": [
+        {
+          "workers": 2,
+          "population": 25,
+          "weightedCrowding": 0.28,
+          "beyond": false
+        },
+        {
+          "workers": 2,
+          "population": 22,
+          "weightedCrowding": 0.21,
+          "beyond": false
+        },
+        {
+          "workers": 2,
+          "population": 28,
+          "weightedCrowding": 0.25,
+          "beyond": false
+        },
+        {
+          "workers": 2,
+          "population": 31,
+          "weightedCrowding": 0.26,
+          "beyond": false
+        },
+        {
+          "workers": 2,
+          "population": 28,
+          "weightedCrowding": 0.24,
+          "beyond": false
+        },
+        {
+          "workers": 2,
+          "population": 24,
+          "weightedCrowding": 0.2,
+          "beyond": false
+        },
+        {
+          "workers": 2,
+          "population": 25,
+          "weightedCrowding": 0.17,
+          "beyond": false
+        },
+        {
+          "workers": 2,
+          "population": 22,
+          "weightedCrowding": 0.02,
+          "beyond": true
+        },
+        {
+          "workers": 2,
+          "population": 28,
+          "weightedCrowding": 0.04,
+          "beyond": false
+        },
+        {
+          "workers": 2,
+          "population": 31,
+          "weightedCrowding": 0.15,
+          "beyond": false
+        },
+        {
+          "workers": 2,
+          "population": 28,
+          "weightedCrowding": 0.04,
+          "beyond": false
+        },
+        {
+          "workers": 2,
+          "population": 24,
+          "weightedCrowding": 0.04,
+          "beyond": false
+        }
+      ],
+      "note": "party weight uses the existing population->weight transform on the PARTY size, so a 2-worker party carries ~1/15 of a 30-person band",
+      "verdict": "PARTY_SCALE_FOLLOWS_PARTY_SIZE"
+    },
+    {
+      "id": "P15_P16_P17_same_day_parties_deferred",
+      "intent": "same-day task parties: whether ephemeral daily presence is represented",
+      "implemented": false,
+      "reason": "The selected architecture (Option D) corrects the PERSISTENT multi-day expedition defect only. A same-day party is created, walks and returns inside one day and production keeps no simultaneous daily presence snapshot, so representing it would require the Option-E daily ledger. Trip HARVEST and depletion remain physical and untouched.",
+      "completedTripRecordsCreateNoPresence": true,
+      "completedTripRecordsCreateNoPresenceProof": "getBandPhysicalPresence reads only band.position and band.expeditions; it contains no reference to recentIntraSeasonTrips, so a completed trip record cannot become current body presence (P17).",
+      "futureSeam": "an ephemeral daily presence ledger built from planned trips before physical resolution",
+      "verdict": "DEFERRED_SAME_DAY_PRESENCE_NOT_IMPLEMENTED"
+    },
+    {
+      "id": "P25_boundedness",
+      "intent": "presence entries, sources per band and contributors per tile stay bounded",
+      "maxPresenceSourcesPerBand": 2,
+      "maxContributorsPerTile": 1,
+      "note": "sources per band = 1 residence + at most the active-expedition cap",
+      "verdict": "BOUNDED"
+    }
+  ]
+}

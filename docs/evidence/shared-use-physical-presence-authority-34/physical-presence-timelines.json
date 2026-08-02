@@ -1,0 +1,3650 @@
+{
+  "audit": "physicalPresenceFixturesAudit",
+  "checkpoint": "CORRECTION-34",
+  "arm": "after",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "years": 6,
+  "samplingResolution": "DAILY",
+  "authorityPresentOnThisArm": true,
+  "generatedAt": "2026-08-02T21:21:53.269Z",
+  "purpose": "per-day presence sets for band-days with an away party",
+  "rows": [
+    {
+      "day": 95,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:76:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:76:111",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 95,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:56:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:56:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 95,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:88:79",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:88:79",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 95,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:78:60",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:78:60",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 95,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:68:78",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 95,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:100:46",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:100:46",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 96,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:76:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:78:111",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 96,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:56:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:61:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 96,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:88:79",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:84:79",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 96,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:78:60",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:77:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 96,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:71:77",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 96,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:100:46",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:100:42",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 97,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:56:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:66:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 97,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:88:79",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:82:79",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 97,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:71:73",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 98,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:56:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:71:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 98,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:88:79",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:86:79",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 98,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:72:70",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 99,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:56:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:74:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 99,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:72:67",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 100,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:56:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:69:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 100,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:71:70",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 101,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:56:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:64:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 101,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:71:74",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 102,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:56:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:59:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 102,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:71:78",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 185,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:68:78",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 185,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:108:56",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:108:56",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 186,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:70:77",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 186,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:108:56",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:112:56",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 187,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:70:77",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 187,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:108:56",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:116:56",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 188,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:108:56",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:120:56",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 189,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:108:56",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:120:56",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 190,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:108:56",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:116:56",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 191,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:108:56",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:112:56",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 365,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:193:88",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:88",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 365,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:134:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:134:44",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 365,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:108:53",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:108:53",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 366,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:193:88",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:198:88",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 366,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:134:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:131:46",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 366,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:108:53",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:109:57",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 367,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:193:88",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:200:85",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 367,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:134:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:129:49",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 367,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:108:53",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:109:57",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 368,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:193:88",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:202:82",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 368,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:134:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:126:51",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 369,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:193:88",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:203:80",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 369,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:134:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:124:52",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 370,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:193:88",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:201:83",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 370,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:134:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:127:50",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 371,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:193:88",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:199:86",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 371,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:134:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:130:48",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 372,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:193:88",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:196:88",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 372,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:134:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:132:45",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 725,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:75",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:87:75",
+          "people": 5
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 726,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:75",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:87:77",
+          "people": 5
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 727,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:75",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:87:79",
+          "people": 5
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 728,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:75",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:88:79",
+          "people": 5
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 729,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:75",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:88:79",
+          "people": 5
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 730,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:75",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:88:79",
+          "people": 5
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 731,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:75",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:88:79",
+          "people": 5
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 732,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:75",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:87:78",
+          "people": 5
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 733,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:75",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:87:76",
+          "people": 5
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 995,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:74:111",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 996,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:77:111",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 997,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:78:111",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 998,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:78:111",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 999,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:75:111",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1085,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:103:47",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:103:47",
+          "people": 4
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1086,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:103:47",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:101:47",
+          "people": 4
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1087,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:103:47",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:100:46",
+          "people": 4
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1088,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:103:47",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:100:45",
+          "people": 4
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1089,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:103:47",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:100:45",
+          "people": 4
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1090,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:103:47",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:100:45",
+          "people": 4
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1091,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:103:47",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:100:45",
+          "people": 4
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1092,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:103:47",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:100:47",
+          "people": 4
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1093,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:103:47",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:102:47",
+          "people": 4
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1175,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:109:57",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:109:57",
+          "people": 6
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1176,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:109:57",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:108:56",
+          "people": 6
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1177,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:109:57",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:108:54",
+          "people": 6
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1178,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:109:57",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:108:54",
+          "people": 6
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1179,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:109:57",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:108:54",
+          "people": 6
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1180,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:109:57",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:108:54",
+          "people": 6
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1181,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:109:57",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:108:56",
+          "people": 6
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1259,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:73:111",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1259,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:57:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1259,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:87:75",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1259,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:72:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1259,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:68:78",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1259,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:103:48",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1260,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:76:111",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1260,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:54:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1260,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:89:74",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1260,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:69:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1260,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:68:73",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1260,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:102:46",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1261,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:78:112",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1261,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:51:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1261,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:90:72",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1261,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:66:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1261,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:68:68",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1261,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:101:44",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1262,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:81:112",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1262,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:48:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1262,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:92:71",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1262,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:63:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1262,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:68:63",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1262,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:100:42",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1263,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:83:113",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1263,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:45:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1263,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:95:71",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1263,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:60:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1263,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:68:60",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1263,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:99:40",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1264,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:86:113",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1264,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:42:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1264,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:97:70",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1264,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:57:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1264,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:68:65",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1264,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:98:38",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1265,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:88:114",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1265,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:39:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1265,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:99:69",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1265,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:54:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1265,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:68:70",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1265,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:97:36",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1266,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:88:114",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1266,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:39:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1266,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:99:69",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1266,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:54:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1266,
+      "bandId": "band:varied-lake-west",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:68:78",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:68:75",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1266,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:97:36",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1267,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:86:113",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1267,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:42:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1267,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:97:70",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1267,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:57:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1267,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:98:38",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1268,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:83:113",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1268,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:45:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1268,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:95:71",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1268,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:60:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1268,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:99:40",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1269,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:81:112",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1269,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:48:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1269,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:92:71",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1269,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:63:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1269,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:100:42",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1270,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:78:112",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1270,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:51:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1270,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:90:72",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1270,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:66:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1270,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:101:44",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1271,
+      "bandId": "band:varied-dry-corridor-mid",
+      "population": 25,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:74:111",
+          "people": 23
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:76:111",
+          "people": 2
+        }
+      ],
+      "representedTotal": 25
+    },
+    {
+      "day": 1271,
+      "bandId": "band:varied-dry-corridor-upper",
+      "population": 22,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:57:105",
+          "people": 20
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:54:105",
+          "people": 2
+        }
+      ],
+      "representedTotal": 22
+    },
+    {
+      "day": 1271,
+      "bandId": "band:varied-lake-east",
+      "population": 28,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:87:74",
+          "people": 26
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:89:74",
+          "people": 2
+        }
+      ],
+      "representedTotal": 28
+    },
+    {
+      "day": 1271,
+      "bandId": "band:varied-lake-north",
+      "population": 31,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:73:61",
+          "people": 29
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:69:61",
+          "people": 2
+        }
+      ],
+      "representedTotal": 31
+    },
+    {
+      "day": 1271,
+      "bandId": "band:varied-plains-creek",
+      "population": 24,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:104:48",
+          "people": 22
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:102:46",
+          "people": 2
+        }
+      ],
+      "representedTotal": 24
+    },
+    {
+      "day": 1349,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:110:57",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:110:57",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1350,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:110:57",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:114:57",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1351,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:110:57",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:118:57",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1352,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:110:57",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:119:57",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1353,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:110:57",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:115:57",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1354,
+      "bandId": "band:varied-river-mid",
+      "population": 34,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:110:57",
+          "people": 32
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:111:57",
+          "people": 2
+        }
+      ],
+      "representedTotal": 34
+    },
+    {
+      "day": 1529,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:89",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1529,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:134:44",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1530,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:86",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1530,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:132:45",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1531,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:83",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1531,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:131:47",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1532,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:80",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1532,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:129:48",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1533,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:77",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1533,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:127:49",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1534,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:74",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1534,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:126:51",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1535,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:71",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1535,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:124:52",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1536,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:71",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1536,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:124:52",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1537,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:74",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1537,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:126:51",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1538,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:77",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1538,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:127:49",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1539,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:80",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1539,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:129:48",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1540,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:83",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1540,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:131:47",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1541,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:194:89",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:86",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1541,
+      "bandId": "band:varied-pass-frontier",
+      "population": 16,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:135:44",
+          "people": 14
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:132:45",
+          "people": 2
+        }
+      ],
+      "representedTotal": 16
+    },
+    {
+      "day": 1715,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:195:90",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:195:90",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1716,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:195:90",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:89",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1717,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:195:90",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:87",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1718,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:195:90",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:87",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1719,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:195:90",
+          "people": 28
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:194:89",
+          "people": 2
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1805,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:196:90",
+          "people": 24
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:196:90",
+          "people": 6
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1806,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:196:90",
+          "people": 24
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:194:89",
+          "people": 6
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1807,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:196:90",
+          "people": 24
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:88",
+          "people": 6
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1808,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:196:90",
+          "people": 24
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:88",
+          "people": 6
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1809,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:196:90",
+          "people": 24
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:88",
+          "people": 6
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1810,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:196:90",
+          "people": 24
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:193:88",
+          "people": 6
+        }
+      ],
+      "representedTotal": 30
+    },
+    {
+      "day": 1811,
+      "bandId": "band:varied-estuary",
+      "population": 30,
+      "sources": [
+        {
+          "kind": "residential_remainder",
+          "tileId": "tile:196:90",
+          "people": 24
+        },
+        {
+          "kind": "away_party",
+          "tileId": "tile:194:90",
+          "people": 6
+        }
+      ],
+      "representedTotal": 30
+    }
+  ]
+}

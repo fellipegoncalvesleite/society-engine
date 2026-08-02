@@ -181,7 +181,45 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### SHARED RANGE — GLOBAL BAND-COUNT SOCIAL OMNISCIENCE — CORRECTION-33 — PASS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+### SHARED RANGE — RESIDENTIAL AND AWAY-PARTY PHYSICAL-PRESENCE AUTHORITY — CORRECTION-34 — **PROGRESS / NOT ACCEPTED / DO NOT MERGE**
+
+**Branch** `checkpoint/shared-use-physical-presence-authority-34` from the accepted CORRECTION-33
+tip `5ebb5e9887e36341f69350d4d3cff85f9493457c`. **CORRECTION-33 is CLOSED and FROZEN at
+`5ebb5e98`.** `main` untouched at `0a43083a`. **PRODUCTION BEHAVIOUR CHANGED.**
+
+**Away workers existed twice and nowhere.** Crowding scattered the full population from
+`band.position` and nothing from `expedition.positionTileId`. Daily on map2:s1 over 6 years: 202
+party-days, **123 (60.9%) beyond `CROWDING_RADIUS` from home**, **505 away-worker-days represented
+nowhere and the same 505 ghosted at home**.
+
+**The fix — Option D, one production file.** `getBandPhysicalPresence(band)` returns the
+residential remainder plus one bounded body group per away party at its own position. Both crowding
+paths use it, so **field/scan parity holds**. People conserved exactly (0 failures). After: **505 at
+their own position, 0 nowhere, 0 ghosted**, expedition behaviour identical.
+
+**Why PROGRESS.** The §19 evidence package is incomplete — no natural-occurrence 20y/50y, no
+resource accounting (P21), no performance, no `before-after.json`; ten fixtures unbuilt, three
+vacuous. **Same-day presence is deferred** (Option E is the named seam). **The catchment
+double-draw is measured but unrepaired**: `getBandForagingDraw` still uses full `workingAdults`, so
+away workers keep drawing the residential catchment while provisioned and harvesting away (226
+band-seasons) — §11.7 forbids rewriting it without a food-pipeline proof, so away workers remain
+duplicated *ecologically* though no longer *physically*.
+
+**Two instrument findings.** Seasonal sampling measured 0 parties beyond the radius and 0 task-camp
+days where daily sampling measures 60.9% and 27. And **the inherited `expeditionLifecycleAudit`
+failure is an instrument artifact**: it steps `stepSim(world, 1, "seasonal")`, so `operating`,
+`returning` and `taskCamp` are structurally invisible to it. Diagnosed, not repaired.
+
+**FUTURE REQUIREMENT RECORDED, NOT IMPLEMENTED (§3):** generalized fear of leaving camp after
+violence, trauma, hypervigilance, recovery through safe travel, and intergenerational fear
+transmission belong to **Core Health / Injury / Fear / Trauma / Recovery**, not here.
+
+**No further Item-3 work is authorized** until this checkpoint's evidence is completed or its scope
+is formally reduced. **Roadmap item 3 remains OPEN.**
+
+---
+
+### (previous) SHARED RANGE — GLOBAL BAND-COUNT SOCIAL OMNISCIENCE — CORRECTION-33 — PASS, CLOSED AND FROZEN at `5ebb5e98` / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
 
 **Branch** `checkpoint/social-access-unrelated-risk-provenance-33`, from the accepted CORRECTION-32
 tip `d11854153e76c2435bce9d53ffde49317e5e8f90`. **CORRECTION-32 is CLOSED and FROZEN at
@@ -10393,3 +10431,14 @@ exception; daughter colours related-but-distinct and never visually confusing.
   `scripts/socialAccessUnrelatedRiskFixturesAudit.mjs` and
   `scripts/socialAccessUnrelatedRiskNaturalAudit.mjs`. Evidence:
   `docs/evidence/social-access-unrelated-risk-provenance-33/`.
+
+- **2026-08-02 — CORRECTION-34 — SHARED RANGE: RESIDENTIAL AND AWAY-PARTY PHYSICAL PRESENCE —
+  `PROGRESS`, NOT ACCEPTED.** Crowding projected away expedition workers at home and nowhere else:
+  505 away-worker-days ghosted at home and represented nowhere, 60.9% of party-days beyond the
+  crowding radius. New `getBandPhysicalPresence` in `crowding.ts` splits the residential remainder
+  from each away party at its own position; people conserved exactly, field/scan parity preserved,
+  party scale follows party size. PROGRESS because the evidence package is incomplete (no natural
+  runs, no resource accounting, no performance), same-day presence is deferred, and the catchment
+  still draws full `workingAdults` while workers are away. The inherited `expeditionLifecycleAudit`
+  failure is diagnosed as a seasonal-sampling artifact. Evidence:
+  `docs/evidence/shared-use-physical-presence-authority-34/`.

@@ -47,6 +47,90 @@ export function getNearbyBandPressure(
   return pressure;
 }
 
+// CORRECTION-34 — WHERE A BAND'S BODIES ACTUALLY ARE.
+//
+// Physical crowding used to scatter `demography.population` from `band.position` and nothing
+// else, so a band with a party three days' walk away projected those people at HOME (ghost
+// bodies) and projected nothing where the party was actually standing (missing bodies). Measured
+// at daily resolution on map2:s1 over 3 years: 69 party-days, of which **34 (49.3%) were beyond
+// CROWDING_RADIUS from their own residence** — bodies that existed nowhere.
+//
+// This is the one authority for that question, and it CONSERVES PEOPLE: the residential remainder
+// is the population minus everyone physically away, and every away party is represented exactly
+// once at its own `positionTileId`. Summed over the sources, a band contributes its whole
+// population and no more.
+//
+// PHASE SEMANTICS ARE PRODUCTION'S, NOT THE NAMES'. `prepared` means "labor committed at camp,
+// NOT yet departed" (types.ts:933), so a prepared party is still physically AT HOME and is NOT
+// subtracted here — even though `isExpeditionAway` counts it as away for LABOUR. The two
+// questions are different and are answered differently. `completed`, `aborted` and `lost` are
+// terminal: they contribute no body anywhere, so a lost party leaves no immortal presence.
+//
+// Party SIZE carries through the existing population weight, so a 2-worker party scatters roughly
+// 1/15 of a 30-person band's weight and mostly falls under the 0.02 contribution floor beyond
+// distance 1. No new radius and no new constant is introduced for scale.
+const PHYSICALLY_AWAY_PHASES: ReadonlySet<string> = new Set(["outbound", "operating", "returning"]);
+
+export interface PhysicalPresenceSource {
+  readonly tileId: TileId;
+  /** People physically standing here. Residential remainder, or one away party's workers. */
+  readonly people: number;
+  readonly kind: "residential_remainder" | "away_party";
+  /** Present only for `away_party`, so a consumer can trace the body back to its expedition. */
+  readonly expeditionId?: string;
+}
+
+/**
+ * Every place this band currently has bodies, with the people at each.
+ *
+ * Reads only the band's own record — no world scan, no cache, bounded by the active-expedition
+ * cap. `sum(people)` equals `demography.population` exactly (see `physicalPresencePeopleTotal`).
+ */
+export function getBandPhysicalPresence(band: Band): readonly PhysicalPresenceSource[] {
+  const population = band.demography?.population ?? band.size ?? 0;
+  const sources: PhysicalPresenceSource[] = [];
+  let awayPeople = 0;
+
+  for (const expedition of band.expeditions ?? []) {
+    if (!PHYSICALLY_AWAY_PHASES.has(expedition.phase)) {
+      continue;
+    }
+
+    const workers = Math.max(0, expedition.partyWorkers ?? 0);
+
+    if (workers <= 0 || expedition.positionTileId === undefined) {
+      continue;
+    }
+
+    awayPeople += workers;
+    sources.push({
+      tileId: expedition.positionTileId,
+      people: workers,
+      kind: "away_party",
+      expeditionId: expedition.id,
+    });
+  }
+
+  // Away workers can never exceed the population they came from; clamping here keeps the
+  // remainder non-negative without ever inventing people.
+  const residentialRemainder = Math.max(0, population - Math.min(awayPeople, population));
+
+  return [
+    { tileId: band.position, people: residentialRemainder, kind: "residential_remainder" },
+    ...sources,
+  ];
+}
+
+/** The people this presence set represents. Equals `demography.population` when no party is away. */
+export function physicalPresencePeopleTotal(sources: readonly PhysicalPresenceSource[]): number {
+  return sources.reduce((total, source) => total + source.people, 0);
+}
+
+/** The existing population→weight transform, applied to ONE presence source rather than the band. */
+function presenceWeight(people: number): number {
+  return Math.min(1.6, people / 36);
+}
+
 // Direct per-tile scan (the pre-2J.2B path), retained for cache-less unit calls.
 function computePressureFromScan(
   world: WorldState,
@@ -198,22 +282,38 @@ function buildCrowdingField(world: WorldState, cache: TickContextCache): Crowdin
       }
     }
 
-    const originTile = getTile(world, band.position);
+    // CORRECTION-34 — scatter from EVERY place this band has bodies, not only from its
+    // residence: the residential remainder from `band.position`, and each physically-away party
+    // from its own `positionTileId`. People are conserved across the sources, so the band's total
+    // physical weight is unchanged when nobody is away and is redistributed — never duplicated —
+    // when somebody is.
+    const presence = getBandPhysicalPresence(band);
+    const sources: { readonly tile: Tile; readonly weight: number }[] = [];
 
-    if (originTile === undefined) {
+    for (const source of presence) {
+      const sourceTile = getTile(world, source.tileId);
+
+      if (sourceTile === undefined || source.people <= 0) {
+        continue;
+      }
+
+      sources.push({ tile: sourceTile, weight: presenceWeight(source.people) });
+    }
+
+    if (sources.length === 0) {
       continue;
     }
 
-    const populationWeight = Math.min(1.6, (band.demography?.population ?? band.size) / 36);
-
-    // Footprint = the proximity ball alone (distance <= CROWDING_RADIUS).
+    // Footprint = the union of each source's proximity ball (distance <= CROWDING_RADIUS).
     // CORRECTION-28: the band no longer scatters into the country it merely
     // remembers, so a band that has walked away stops crowding the place it
     // still values.
     const footprint = new Set<TileId>();
-    scatterBall(world, originTile.coord.x, originTile.coord.y, CROWDING_RADIUS, (reachedTileId) => {
-      footprint.add(reachedTileId);
-    });
+    for (const source of sources) {
+      scatterBall(world, source.tile.coord.x, source.tile.coord.y, CROWDING_RADIUS, (reachedTileId) => {
+        footprint.add(reachedTileId);
+      });
+    }
 
     for (const tileId of footprint) {
       const tile = getTile(world, tileId);
@@ -222,19 +322,29 @@ function buildCrowdingField(world: WorldState, cache: TickContextCache): Crowdin
         continue;
       }
 
-      const distance = getGridDistance(originTile, tile);
+      // One band, one weight per tile — summed across its own presence sources, because two
+      // groups of the same band standing near one tile really are more bodies near that tile.
+      let basePreclamp = 0;
 
-      if (distance > CROWDING_RADIUS) {
-        continue;
+      for (const source of sources) {
+        const distance = getGridDistance(source.tile, tile);
+
+        if (distance > CROWDING_RADIUS) {
+          continue;
+        }
+
+        const distanceWeight = distance <= CROWDING_RADIUS
+          ? Math.max(0, (CROWDING_RADIUS + 1 - distance) / (CROWDING_RADIUS + 1))
+          : 0;
+        const samePatchWeight =
+          distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
+
+        basePreclamp += (distanceWeight * 0.58 + samePatchWeight * 0.34) * source.weight;
       }
 
-      const distanceWeight = distance <= CROWDING_RADIUS
-        ? Math.max(0, (CROWDING_RADIUS + 1 - distance) / (CROWDING_RADIUS + 1))
-        : 0;
-      const samePatchWeight =
-        distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
-      const basePreclamp =
-        (distanceWeight * 0.58 + samePatchWeight * 0.34) * populationWeight;
+      if (basePreclamp <= 0) {
+        continue;
+      }
 
       let entry = byTile.get(tileId);
 
@@ -620,26 +730,39 @@ function computeCrowdingContribDescriptor(
   otherBand: Band,
   cache: TickContextCache | undefined,
 ): CrowdingContribDescriptor {
-  const otherTile = getTile(world, otherBand.position);
+  // CORRECTION-34 — the same presence sources the field uses, so the cache-less scan path and
+  // the cached field path stay byte-identical (the parity CORRECTION-28 audits).
+  let basePreclamp = 0;
 
-  if (otherTile === undefined) {
-    return SKIPPED_CROWDING_CONTRIB;
+  for (const source of getBandPhysicalPresence(otherBand)) {
+    if (source.people <= 0) {
+      continue;
+    }
+
+    const sourceTile = getTile(world, source.tileId);
+
+    if (sourceTile === undefined) {
+      continue;
+    }
+
+    const distance = getGridDistance(tile, sourceTile);
+
+    if (distance > CROWDING_RADIUS) {
+      continue;
+    }
+
+    const distanceWeight = distance <= CROWDING_RADIUS
+      ? Math.max(0, (CROWDING_RADIUS + 1 - distance) / (CROWDING_RADIUS + 1))
+      : 0;
+    const samePatchWeight =
+      distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
+
+    basePreclamp += (distanceWeight * 0.58 + samePatchWeight * 0.34) * presenceWeight(source.people);
   }
 
-  const distance = getGridDistance(tile, otherTile);
-
-  if (distance > CROWDING_RADIUS) {
+  if (basePreclamp <= 0) {
     return SKIPPED_CROWDING_CONTRIB;
   }
-
-  const distanceWeight = distance <= CROWDING_RADIUS
-    ? Math.max(0, (CROWDING_RADIUS + 1 - distance) / (CROWDING_RADIUS + 1))
-    : 0;
-  const samePatchWeight =
-    distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
-  const populationWeight = Math.min(1.6, (otherBand.demography?.population ?? otherBand.size) / 36);
-  const basePreclamp =
-    (distanceWeight * 0.58 + samePatchWeight * 0.34) * populationWeight;
 
   return { skip: false, basePreclamp };
 }
