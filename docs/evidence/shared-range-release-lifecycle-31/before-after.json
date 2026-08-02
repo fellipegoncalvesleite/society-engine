@@ -1,0 +1,907 @@
+{
+  "checkpoint": "CORRECTION-31 — SHARED RANGE / RANGE-FRICTION AND ACCESS-EXPECTATION LIFECYCLE",
+  "beforeCommit": "1c6a3ed8d0a8360c8fe4648a83387a2bd4fa30b4",
+  "afterBranch": "checkpoint/shared-range-release-lifecycle-31",
+  "probesIdenticalInBothArms": true,
+  "headline": {
+    "chain": "legitimate direct overlap -> departure -> physical pressure releases immediately -> no new direct evidence -> active social pressure cools and releases -> historical contact/place memory remains",
+    "physicalReleasesImmediately": {
+      "before": 0,
+      "after": 0,
+      "requirement": "identical and immediate in both arms — physical release must NOT be delayed to match social memory",
+      "satisfied": true
+    },
+    "socialPressureReleases": {
+      "before": 18,
+      "after": 8,
+      "requirement": "after releases strictly sooner than before",
+      "satisfied": true
+    },
+    "noStaleEscalation": {
+      "before": false,
+      "after": false,
+      "naturalBefore": 3,
+      "naturalAfter": 0,
+      "requirement": "no stale escalation in the after arm, in fixtures or naturally",
+      "satisfied": true
+    },
+    "contradictionAccelerates": {
+      "before": "NEVER_RELEASES_DESPITE_CONTRADICTION",
+      "after": "CONTRADICTION_ACCELERATES_S6_VS_S8",
+      "beforeReleaseSeason": null,
+      "afterReleaseSeason": 6,
+      "afterControlSeason": 8,
+      "requirement": "revisiting and finding nobody releases sooner than not revisiting",
+      "satisfied": true
+    },
+    "reportsFadeAndStaySecondHand": {
+      "before": "SECONDHAND_BUT_DOES_NOT_FADE",
+      "after": "SECONDHAND_AND_FADES",
+      "requirement": "a report-only belief stays second-hand AND fades",
+      "satisfied": true
+    },
+    "retellingIsNotConfirmation": {
+      "before": "TREATED_AS_2_INDEPENDENT_CONFIRMATIONS",
+      "after": "ONE_EPISODE_ONE_RECORD",
+      "beforeEvents": 2,
+      "afterEvents": 1,
+      "requirement": "relayed copies of one episode produce one record",
+      "satisfied": true
+    },
+    "historicalMemoryRemains": {
+      "before": "BAND_STILL_KNOWN_AFTER_RELEASE",
+      "after": "BAND_STILL_KNOWN_AFTER_RELEASE",
+      "afterContactCount": 19,
+      "afterPlaceMemoryHeld": true,
+      "requirement": "the band is still known and the place still remembered after release",
+      "satisfied": true
+    },
+    "reactivationRequiresFreshEvidence": {
+      "before": "VACUOUS_NOT_RELEASED_BEFORE_RETURN",
+      "after": "FRESH_EVIDENCE_REQUIRED_AND_SUFFICIENT",
+      "requirement": "return after release reactivates only through fresh evidence, with no remote prediction",
+      "satisfied": true
+    },
+    "notObtainedBy": [
+      "deleting contact memory",
+      "deleting place memory",
+      "deleting reports",
+      "globally zeroing access behaviour",
+      "disabling range friction",
+      "shortening every memory to one season",
+      "making departure omniscient",
+      "moving the observer away from the test",
+      "deleting physical depletion",
+      "converting every old event into no effect immediately"
+    ]
+  },
+  "fixtureComparison": [
+    {
+      "id": "P1",
+      "question": "one direct observation then departure",
+      "beforeVerdict": "RELEASED_PHYS_S0_SOCIAL_S18",
+      "afterVerdict": "RELEASED_PHYS_S0_SOCIAL_S8",
+      "changed": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P2",
+      "question": "repeated legitimate contemporary use persists longer, boundedly",
+      "beforeVerdict": "SATURATED_AT_CAP_9_BOTH_ARMS",
+      "afterVerdict": "SATURATED_AT_CAP_9_BOTH_ARMS",
+      "changed": false,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P3",
+      "question": "unvisited place after departure",
+      "beforeVerdict": "COOLS_WITHOUT_CONTRADICTION_S18",
+      "afterVerdict": "COOLS_WITHOUT_CONTRADICTION_S8",
+      "changed": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P4",
+      "question": "observer revisits and finds no one",
+      "beforeVerdict": "NEVER_RELEASES_DESPITE_CONTRADICTION",
+      "afterVerdict": "CONTRADICTION_ACCELERATES_S6_VS_S8",
+      "changed": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P5",
+      "question": "legitimately observed departure as an event",
+      "beforeVerdict": "NOT_REPRESENTABLE_NO_AUTHORITY",
+      "afterVerdict": "NOT_REPRESENTABLE_NO_AUTHORITY",
+      "changed": false,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P6",
+      "question": "return before full release",
+      "beforeVerdict": "REACTIVATED_BY_FRESH_EVIDENCE",
+      "afterVerdict": "REACTIVATED_BY_FRESH_EVIDENCE",
+      "changed": false,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P7",
+      "question": "return after full behavioural release",
+      "beforeVerdict": "VACUOUS_NOT_RELEASED_BEFORE_RETURN",
+      "afterVerdict": "FRESH_EVIDENCE_REQUIRED_AND_SUFFICIENT",
+      "changed": true,
+      "vacuousInEitherArm": true
+    },
+    {
+      "id": "P8",
+      "question": "same group, different place",
+      "beforeVerdict": "PLACE_PRESSURE_DOES_NOT_TRANSFER",
+      "afterVerdict": "PLACE_PRESSURE_DOES_NOT_TRANSFER",
+      "changed": false,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P9",
+      "question": "different group, same place",
+      "beforeVerdict": "NEW_BAND_STARTS_FRESH",
+      "afterVerdict": "NEW_BAND_STARTS_FRESH",
+      "changed": false,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P10",
+      "question": "kin or peaceful familiar sharing",
+      "beforeVerdict": "PEACEFUL_RELEASES_S18_NO_HOSTILITY",
+      "afterVerdict": "PEACEFUL_RELEASES_S4_NO_HOSTILITY",
+      "changed": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P11",
+      "question": "tense stranger use",
+      "beforeVerdict": "TENSE_NEVER_RELEASES",
+      "afterVerdict": "TENSE_PERSISTS_LONGER_S12_VS_S4",
+      "changed": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P12",
+      "question": "report-only belief",
+      "beforeVerdict": "SECONDHAND_BUT_DOES_NOT_FADE",
+      "afterVerdict": "SECONDHAND_AND_FADES",
+      "changed": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P13",
+      "question": "repeated copies of one report",
+      "beforeVerdict": "TREATED_AS_2_INDEPENDENT_CONFIRMATIONS",
+      "afterVerdict": "ONE_EPISODE_ONE_RECORD",
+      "changed": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P14",
+      "question": "genuinely independent fresh reports",
+      "beforeVerdict": "INDEPENDENT_SOURCES_NOT_DISTINGUISHED",
+      "afterVerdict": "INDEPENDENT_SOURCES_REINFORCE",
+      "changed": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P15",
+      "question": "environmental warning independence",
+      "beforeVerdict": "ENVIRONMENTAL_AVOIDANCE_SURVIVES_SOCIAL_RELEASE",
+      "afterVerdict": "ENVIRONMENTAL_AVOIDANCE_SURVIVES_SOCIAL_RELEASE",
+      "changed": false,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P16",
+      "question": "physical ecological legacy independence",
+      "beforeVerdict": "THREE_INDEPENDENT_CLOCKS_PHYS_S0_SOCIAL_S18",
+      "afterVerdict": "THREE_INDEPENDENT_CLOCKS_PHYS_S0_SOCIAL_S8",
+      "changed": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P17",
+      "question": "contact memory separation",
+      "beforeVerdict": "BAND_STILL_KNOWN_AFTER_RELEASE",
+      "afterVerdict": "BAND_STILL_KNOWN_AFTER_RELEASE",
+      "changed": false,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P18",
+      "question": "terminal other band",
+      "beforeVerdict": "NO_NEW_EVIDENCE_BUT_OLD_PERSISTS",
+      "afterVerdict": "NO_NEW_EVIDENCE_AND_OLD_RELEASES",
+      "changed": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P19",
+      "question": "no evidence ever existed",
+      "beforeVerdict": "NO_SOCIAL_LIFECYCLE_STATE",
+      "afterVerdict": "NO_SOCIAL_LIFECYCLE_STATE",
+      "changed": false,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P20",
+      "question": "band order invariance",
+      "beforeVerdict": "ORDER_INVARIANT",
+      "afterVerdict": "ORDER_INVARIANT",
+      "changed": false,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P21",
+      "question": "step-mode invariance",
+      "beforeVerdict": "STEP_MODE_INVARIANT",
+      "afterVerdict": "STEP_MODE_INVARIANT",
+      "changed": false,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P22",
+      "question": "long-horizon boundedness",
+      "beforeVerdict": "BOUNDED",
+      "afterVerdict": "BOUNDED",
+      "changed": false,
+      "vacuousInEitherArm": false
+    }
+  ],
+  "vacuousFixtures": {
+    "before": 1,
+    "after": 0
+  },
+  "natural20y": {
+    "physicalLayerUnchanged": true,
+    "physicalKeysChecked": [
+      "weightedCrowdingSum",
+      "bandSeasonsWithCrowding",
+      "catchmentClaimTileSeasons",
+      "contestedCatchmentTileSeasons",
+      "sharedReachableSupportSum",
+      "perCapitaReturnSum",
+      "tileDepletionSum",
+      "tripRecordSeasons",
+      "moves",
+      "fissions",
+      "absorbed",
+      "extinct",
+      "finalPopulation",
+      "finalLivingBandCount",
+      "survived",
+      "livingBandSeasons",
+      "seasons"
+    ],
+    "comparison": {
+      "absorbed": {
+        "before": 0,
+        "after": 0,
+        "delta": 0,
+        "unchanged": true
+      },
+      "accessBehaviorHookSum": {
+        "before": 35.16,
+        "after": 35.16,
+        "delta": 0,
+        "unchanged": true
+      },
+      "accessPlaceSeasons": {
+        "before": 4740,
+        "after": 4740,
+        "delta": 0,
+        "unchanged": true
+      },
+      "bandSeasonsWithActiveContribution": {
+        "before": 12,
+        "after": 4,
+        "delta": -8,
+        "unchanged": false
+      },
+      "bandSeasonsWithCrowding": {
+        "before": 56,
+        "after": 56,
+        "delta": 0,
+        "unchanged": true
+      },
+      "bandSeasonsWithRetainedButInertRecords": {
+        "before": 13,
+        "after": 21,
+        "delta": 8,
+        "unchanged": false
+      },
+      "catchmentClaimTileSeasons": {
+        "before": 26515,
+        "after": 26515,
+        "delta": 0,
+        "unchanged": true
+      },
+      "contestedCatchmentTileSeasons": {
+        "before": 43,
+        "after": 43,
+        "delta": 0,
+        "unchanged": true
+      },
+      "contributionSamples": {
+        "before": 600,
+        "after": 600,
+        "delta": 0,
+        "unchanged": true
+      },
+      "directFrictionCreated": {
+        "before": 28,
+        "after": 28,
+        "delta": 0,
+        "unchanged": true
+      },
+      "distinctReportEpisodes": {
+        "before": 1638,
+        "after": 1636,
+        "delta": -2,
+        "unchanged": false
+      },
+      "duplicateReportCopiesBlocked": {
+        "before": 1011,
+        "after": 1003,
+        "delta": -8,
+        "unchanged": false
+      },
+      "extinct": {
+        "before": 0,
+        "after": 0,
+        "delta": 0,
+        "unchanged": true
+      },
+      "finalLivingBandCount": {
+        "before": 30,
+        "after": 30,
+        "delta": 0,
+        "unchanged": true
+      },
+      "finalPopulation": {
+        "before": 817,
+        "after": 817,
+        "delta": 0,
+        "unchanged": true
+      },
+      "fissions": {
+        "before": 0,
+        "after": 0,
+        "delta": 0,
+        "unchanged": true
+      },
+      "frictionEvicted": {
+        "before": 45,
+        "after": 15,
+        "delta": -30,
+        "unchanged": false
+      },
+      "frictionRefreshedInPlace": {
+        "before": 657,
+        "after": 687,
+        "delta": 30,
+        "unchanged": false
+      },
+      "livingBandSeasons": {
+        "before": 2400,
+        "after": 2400,
+        "delta": 0,
+        "unchanged": true
+      },
+      "maxAccessPlaces": {
+        "before": 8,
+        "after": 8,
+        "delta": 0,
+        "unchanged": true
+      },
+      "maxContributionMagnitude": {
+        "before": 2.78,
+        "after": 2.34,
+        "delta": -0.44,
+        "unchanged": false
+      },
+      "maxFrictionRing": {
+        "before": 8,
+        "after": 8,
+        "delta": 0,
+        "unchanged": true
+      },
+      "maxRecordLifetimeTicks": {
+        "before": 29,
+        "after": 29,
+        "delta": 0,
+        "unchanged": true
+      },
+      "maxReportHops": {
+        "before": 1,
+        "after": 1,
+        "delta": 0,
+        "unchanged": true
+      },
+      "maxReportRing": {
+        "before": 16,
+        "after": 16,
+        "delta": 0,
+        "unchanged": true
+      },
+      "meanRecordLifetimeTicks": {
+        "before": 10.4,
+        "after": 16.0667,
+        "delta": 5.6667,
+        "unchanged": false
+      },
+      "moves": {
+        "before": 1547,
+        "after": 1547,
+        "delta": 0,
+        "unchanged": true
+      },
+      "negativeAgeRecords": {
+        "before": 0,
+        "after": 0,
+        "delta": 0,
+        "unchanged": true
+      },
+      "pairPlaceEpisodes": {
+        "before": 8,
+        "after": 8,
+        "delta": 0,
+        "unchanged": true
+      },
+      "pairPlaceReactivations": {
+        "before": 2,
+        "after": 2,
+        "delta": 0,
+        "unchanged": true
+      },
+      "perCapitaReturnSum": {
+        "before": 1305.41,
+        "after": 1305.41,
+        "delta": 0,
+        "unchanged": true
+      },
+      "recordsWithMeasuredLifetime": {
+        "before": 45,
+        "after": 15,
+        "delta": -30,
+        "unchanged": false
+      },
+      "rememberedRefusalAvoidanceSum": {
+        "before": 652.67,
+        "after": 637.97,
+        "delta": -14.7,
+        "unchanged": false
+      },
+      "reportFrictionCreated": {
+        "before": 33,
+        "after": 3,
+        "delta": -30,
+        "unchanged": false
+      },
+      "reportsReceived": {
+        "before": 2649,
+        "after": 2639,
+        "delta": -10,
+        "unchanged": false
+      },
+      "seasons": {
+        "before": 480,
+        "after": 480,
+        "delta": 0,
+        "unchanged": true
+      },
+      "sharedReachableSupportSum": {
+        "before": 114381.8,
+        "after": 114381.8,
+        "delta": 0,
+        "unchanged": true
+      },
+      "sharedUsePressureSum": {
+        "before": 45.98,
+        "after": 39.87,
+        "delta": -6.11,
+        "unchanged": false
+      },
+      "socialTensionSum": {
+        "before": 606.55,
+        "after": 606.41,
+        "delta": -0.14,
+        "unchanged": false
+      },
+      "staleEscalationSamples": {
+        "before": 3,
+        "after": 0,
+        "delta": -3,
+        "unchanged": false
+      },
+      "strangerCautionSum": {
+        "before": 76.68,
+        "after": 67.37,
+        "delta": -9.31,
+        "unchanged": false
+      },
+      "sumRecordLifetimeTicks": {
+        "before": 468,
+        "after": 241,
+        "delta": -227,
+        "unchanged": false
+      },
+      "summedContributionMagnitude": {
+        "before": 27.13,
+        "after": 6.74,
+        "delta": -20.39,
+        "unchanged": false
+      },
+      "survived": {
+        "before": 6,
+        "after": 6,
+        "delta": 0,
+        "unchanged": true
+      },
+      "tileDepletionSum": {
+        "before": 3419.5131,
+        "after": 3419.5131,
+        "delta": 0,
+        "unchanged": true
+      },
+      "tripRecordSeasons": {
+        "before": 57600,
+        "after": 57600,
+        "delta": 0,
+        "unchanged": true
+      },
+      "weightedCrowdingSum": {
+        "before": 2.51,
+        "after": 2.51,
+        "delta": 0,
+        "unchanged": true
+      }
+    },
+    "distributions": {
+      "before": {
+        "accessStateCounts": {
+          "familiar_use": 3035,
+          "none": 63,
+          "expected_return": 1620,
+          "tolerated_shared_use": 22
+        },
+        "socialEvidencePhaseCounts": {
+          "unmeasured": 4740
+        }
+      },
+      "after": {
+        "accessStateCounts": {
+          "familiar_use": 3047,
+          "none": 63,
+          "expected_return": 1624,
+          "tolerated_shared_use": 6
+        },
+        "socialEvidencePhaseCounts": {
+          "none": 4734,
+          "active": 5,
+          "cooling": 1
+        }
+      }
+    }
+  },
+  "naturalLong": {
+    "years": 50,
+    "physicalLayerUnchanged": true,
+    "comparison": {
+      "absorbed": {
+        "before": 0,
+        "after": 0,
+        "delta": 0,
+        "unchanged": true
+      },
+      "accessBehaviorHookSum": {
+        "before": 98.29,
+        "after": 98.29,
+        "delta": 0,
+        "unchanged": true
+      },
+      "accessPlaceSeasons": {
+        "before": 11940,
+        "after": 11940,
+        "delta": 0,
+        "unchanged": true
+      },
+      "bandSeasonsWithActiveContribution": {
+        "before": 36,
+        "after": 23,
+        "delta": -13,
+        "unchanged": false
+      },
+      "bandSeasonsWithCrowding": {
+        "before": 190,
+        "after": 190,
+        "delta": 0,
+        "unchanged": true
+      },
+      "bandSeasonsWithRetainedButInertRecords": {
+        "before": 60,
+        "after": 73,
+        "delta": 13,
+        "unchanged": false
+      },
+      "catchmentClaimTileSeasons": {
+        "before": 64188,
+        "after": 64188,
+        "delta": 0,
+        "unchanged": true
+      },
+      "contestedCatchmentTileSeasons": {
+        "before": 134,
+        "after": 134,
+        "delta": 0,
+        "unchanged": true
+      },
+      "contributionSamples": {
+        "before": 1500,
+        "after": 1500,
+        "delta": 0,
+        "unchanged": true
+      },
+      "directFrictionCreated": {
+        "before": 131,
+        "after": 129,
+        "delta": -2,
+        "unchanged": false
+      },
+      "distinctReportEpisodes": {
+        "before": 2729,
+        "after": 2729,
+        "delta": 0,
+        "unchanged": true
+      },
+      "duplicateReportCopiesBlocked": {
+        "before": 4001,
+        "after": 3976,
+        "delta": -25,
+        "unchanged": false
+      },
+      "extinct": {
+        "before": 0,
+        "after": 0,
+        "delta": 0,
+        "unchanged": true
+      },
+      "finalLivingBandCount": {
+        "before": 30,
+        "after": 30,
+        "delta": 0,
+        "unchanged": true
+      },
+      "finalPopulation": {
+        "before": 800,
+        "after": 800,
+        "delta": 0,
+        "unchanged": true
+      },
+      "fissions": {
+        "before": 0,
+        "after": 0,
+        "delta": 0,
+        "unchanged": true
+      },
+      "frictionEvicted": {
+        "before": 285,
+        "after": 125,
+        "delta": -160,
+        "unchanged": false
+      },
+      "frictionRefreshedInPlace": {
+        "before": 2653,
+        "after": 2537,
+        "delta": -116,
+        "unchanged": false
+      },
+      "livingBandSeasons": {
+        "before": 6000,
+        "after": 6000,
+        "delta": 0,
+        "unchanged": true
+      },
+      "maxAccessPlaces": {
+        "before": 8,
+        "after": 8,
+        "delta": 0,
+        "unchanged": true
+      },
+      "maxContributionMagnitude": {
+        "before": 2.78,
+        "after": 2.34,
+        "delta": -0.44,
+        "unchanged": false
+      },
+      "maxFrictionRing": {
+        "before": 8,
+        "after": 8,
+        "delta": 0,
+        "unchanged": true
+      },
+      "maxRecordLifetimeTicks": {
+        "before": 41,
+        "after": 48,
+        "delta": 7,
+        "unchanged": false
+      },
+      "maxReportHops": {
+        "before": 2,
+        "after": 2,
+        "delta": 0,
+        "unchanged": true
+      },
+      "maxReportRing": {
+        "before": 16,
+        "after": 16,
+        "delta": 0,
+        "unchanged": true
+      },
+      "meanRecordLifetimeTicks": {
+        "before": 15.0647,
+        "after": 18.208,
+        "delta": 3.1433,
+        "unchanged": false
+      },
+      "moves": {
+        "before": 3795,
+        "after": 3795,
+        "delta": 0,
+        "unchanged": true
+      },
+      "negativeAgeRecords": {
+        "before": 0,
+        "after": 0,
+        "delta": 0,
+        "unchanged": true
+      },
+      "pairPlaceEpisodes": {
+        "before": 15,
+        "after": 15,
+        "delta": 0,
+        "unchanged": true
+      },
+      "pairPlaceReactivations": {
+        "before": 19,
+        "after": 22,
+        "delta": 3,
+        "unchanged": false
+      },
+      "perCapitaReturnSum": {
+        "before": 3444.3,
+        "after": 3444.3,
+        "delta": 0,
+        "unchanged": true
+      },
+      "recordsWithMeasuredLifetime": {
+        "before": 285,
+        "after": 125,
+        "delta": -160,
+        "unchanged": false
+      },
+      "rememberedRefusalAvoidanceSum": {
+        "before": 1707.96,
+        "after": 1678.02,
+        "delta": -29.94,
+        "unchanged": false
+      },
+      "reportFrictionCreated": {
+        "before": 178,
+        "after": 13,
+        "delta": -165,
+        "unchanged": false
+      },
+      "reportsReceived": {
+        "before": 6730,
+        "after": 6705,
+        "delta": -25,
+        "unchanged": false
+      },
+      "seasons": {
+        "before": 1200,
+        "after": 1200,
+        "delta": 0,
+        "unchanged": true
+      },
+      "sharedReachableSupportSum": {
+        "before": 279576.94,
+        "after": 279576.94,
+        "delta": 0,
+        "unchanged": true
+      },
+      "sharedUsePressureSum": {
+        "before": 123.02,
+        "after": 115.54,
+        "delta": -7.48,
+        "unchanged": false
+      },
+      "socialTensionSum": {
+        "before": 1635.15,
+        "after": 1636.82,
+        "delta": 1.67,
+        "unchanged": false
+      },
+      "staleEscalationSamples": {
+        "before": 5,
+        "after": 3,
+        "delta": -2,
+        "unchanged": false
+      },
+      "strangerCautionSum": {
+        "before": 182.02,
+        "after": 162.11,
+        "delta": -19.91,
+        "unchanged": false
+      },
+      "sumRecordLifetimeTicks": {
+        "before": 2291,
+        "after": 2276,
+        "delta": -15,
+        "unchanged": false
+      },
+      "summedContributionMagnitude": {
+        "before": 57.11,
+        "after": 28.48,
+        "delta": -28.63,
+        "unchanged": false
+      },
+      "survived": {
+        "before": 6,
+        "after": 6,
+        "delta": 0,
+        "unchanged": true
+      },
+      "tileDepletionSum": {
+        "before": 13171.2717,
+        "after": 13171.2717,
+        "delta": 0,
+        "unchanged": true
+      },
+      "tripRecordSeasons": {
+        "before": 144000,
+        "after": 144000,
+        "delta": 0,
+        "unchanged": true
+      },
+      "weightedCrowdingSum": {
+        "before": 7.23,
+        "after": 7.23,
+        "delta": 0,
+        "unchanged": true
+      }
+    },
+    "distributions": {
+      "before": {
+        "accessStateCounts": {
+          "familiar_use": 5537,
+          "none": 63,
+          "expected_return": 6292,
+          "sensitive_place": 3,
+          "tolerated_shared_use": 45
+        },
+        "socialEvidencePhaseCounts": {
+          "unmeasured": 11940
+        }
+      },
+      "after": {
+        "accessStateCounts": {
+          "familiar_use": 5549,
+          "none": 63,
+          "expected_return": 6302,
+          "tolerated_shared_use": 26
+        },
+        "socialEvidencePhaseCounts": {
+          "none": 11914,
+          "active": 19,
+          "cooling": 7
+        }
+      }
+    }
+  }
+}

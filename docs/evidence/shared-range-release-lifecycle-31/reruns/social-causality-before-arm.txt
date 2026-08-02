@@ -1,0 +1,329 @@
+{
+ "cohesion_low": {
+  "changedOnAnySeed": true,
+  "seedsWithChange": [
+   "c16-soc-a",
+   "c16-soc-b",
+   "c16-soc-c",
+   "c16-soc-d",
+   "c16-soc-e"
+  ],
+  "unionOfChangedFingerprints": [
+   "activityAndPhysicalReceipts",
+   "decisionAndSelectedAction",
+   "demographyAndFission",
+   "foragingAdaptationBehavior",
+   "knowledgeAndMemories",
+   "movementAndPosition",
+   "pressureState",
+   "protoCampBehavior",
+   "viability"
+  ],
+  "changedBySeed": {
+   "c16-soc-a": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-b": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-c": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-d": [
+    "movementAndPosition",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-e": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ]
+  }
+ },
+ "cohesion_high": {
+  "changedOnAnySeed": true,
+  "seedsWithChange": [
+   "c16-soc-b",
+   "c16-soc-c",
+   "c16-soc-d",
+   "c16-soc-e"
+  ],
+  "unionOfChangedFingerprints": [
+   "activityAndPhysicalReceipts",
+   "decisionAndSelectedAction",
+   "demographyAndFission",
+   "foragingAdaptationBehavior",
+   "knowledgeAndMemories",
+   "movementAndPosition",
+   "pressureState",
+   "protoCampBehavior",
+   "viability"
+  ],
+  "changedBySeed": {
+   "c16-soc-a": [],
+   "c16-soc-b": [
+    "movementAndPosition",
+    "pressureState",
+    "demographyAndFission",
+    "protoCampBehavior"
+   ],
+   "c16-soc-c": [
+    "movementAndPosition",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-d": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior"
+   ],
+   "c16-soc-e": [
+    "movementAndPosition",
+    "pressureState",
+    "demographyAndFission",
+    "protoCampBehavior"
+   ]
+  }
+ },
+ "innerFission_highPressure": {
+  "changedOnAnySeed": true,
+  "seedsWithChange": [
+   "c16-soc-a",
+   "c16-soc-b",
+   "c16-soc-c",
+   "c16-soc-d",
+   "c16-soc-e"
+  ],
+  "unionOfChangedFingerprints": [
+   "activityAndPhysicalReceipts",
+   "decisionAndSelectedAction",
+   "demographyAndFission",
+   "foragingAdaptationBehavior",
+   "knowledgeAndMemories",
+   "movementAndPosition",
+   "pressureState",
+   "protoCampBehavior",
+   "viability"
+  ],
+  "changedBySeed": {
+   "c16-soc-a": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-b": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-c": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-d": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-e": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ]
+  }
+ },
+ "innerFission_zeroPressure": {
+  "changedOnAnySeed": true,
+  "seedsWithChange": [
+   "c16-soc-a",
+   "c16-soc-b",
+   "c16-soc-c",
+   "c16-soc-d",
+   "c16-soc-e"
+  ],
+  "unionOfChangedFingerprints": [
+   "activityAndPhysicalReceipts",
+   "decisionAndSelectedAction",
+   "demographyAndFission",
+   "foragingAdaptationBehavior",
+   "knowledgeAndMemories",
+   "movementAndPosition",
+   "pressureState",
+   "protoCampBehavior",
+   "viability"
+  ],
+  "changedBySeed": {
+   "c16-soc-a": [
+    "movementAndPosition",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-b": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-c": [
+    "movementAndPosition",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ],
+   "c16-soc-d": [
+    "movementAndPosition",
+    "decisionAndSelectedAction",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "knowledgeAndMemories",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior"
+   ],
+   "c16-soc-e": [
+    "movementAndPosition",
+    "activityAndPhysicalReceipts",
+    "pressureState",
+    "demographyAndFission",
+    "viability",
+    "protoCampBehavior",
+    "foragingAdaptationBehavior"
+   ]
+  }
+ },
+ "socialTension_hostile": {
+  "changedOnAnySeed": true,
+  "seedsWithChange": [
+   "c16-soc-c",
+   "c16-soc-d"
+  ],
+  "unionOfChangedFingerprints": [
+   "demographyAndFission",
+   "pressureState",
+   "protoCampBehavior"
+  ],
+  "changedBySeed": {
+   "c16-soc-a": [],
+   "c16-soc-b": [],
+   "c16-soc-c": [
+    "demographyAndFission"
+   ],
+   "c16-soc-d": [
+    "pressureState",
+    "protoCampBehavior"
+   ],
+   "c16-soc-e": []
+  }
+ },
+ "socialTension_harmonious": {
+  "changedOnAnySeed": true,
+  "seedsWithChange": [
+   "c16-soc-b",
+   "c16-soc-d"
+  ],
+  "unionOfChangedFingerprints": [
+   "demographyAndFission",
+   "pressureState"
+  ],
+  "changedBySeed": {
+   "c16-soc-a": [],
+   "c16-soc-b": [
+    "demographyAndFission"
+   ],
+   "c16-soc-c": [],
+   "c16-soc-d": [
+    "pressureState"
+   ],
+   "c16-soc-e": []
+  }
+ }
+}

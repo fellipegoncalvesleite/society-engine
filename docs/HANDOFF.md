@@ -181,7 +181,84 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### SHARED RANGE — RANGE-FRICTION OBSERVATION PROVENANCE — CORRECTION-30 — PASS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+### SHARED RANGE — RANGE-FRICTION AND ACCESS-EXPECTATION LIFECYCLE — CORRECTION-31 — PASS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+
+**Branch** `checkpoint/shared-range-release-lifecycle-31`, from the accepted CORRECTION-30 tip
+`1c6a3ed8d0a8360c8fe4648a83387a2bd4fa30b4`. **CORRECTION-30 is CLOSED and FROZEN at `1c6a3ed8`.**
+CORRECTION-29 frozen at `a15d0a78`; CORRECTION-28 frozen at `c5eb58a`; AUDIT-27 frozen at `b352c31`;
+local and remote `main` untouched at `0a43083`. **PRODUCTION BEHAVIOUR CHANGED.**
+
+**CORRECTION-31 addresses range-friction and access-expectation lifecycle only. Roadmap item 3
+remains OPEN.**
+
+**What was happening — three defects, all verified at the base commit.** (a) Every one of the six
+functions that turn a friction record into pressure read **only fields stamped at the episode's
+creation**, and **none read `event.tick`**; the single age test in the whole chain was a binary
+48-tick window, so a record pushed at full strength for twelve simulated years and then vanished off
+a cliff. (b) `confidence` counted `friction.length`, and `staleness` can only mark a memory stale
+below confidence 0.36 — so **the retained records propped up the confidence that would have retired
+them**, and with `placeImportance` rising as the observer kept using its own place, the
+classification could cross into `avoided_shared_use` *after* the other band had gone. That is
+AUDIT-27's C5, reproduced fresh before any change. (c) `deriveReportLinkedEvents` stamped every
+record with the **current** tick, and `makeEventId` embedded the tick, so each pass minted a *new*
+record instead of refreshing one — a report-linked record was **permanently age 0**, kept alive for
+as long as the report lived (`REPORT_MAX_AGE_TICKS = 160`, **forty simulated years**) at constant
+strength, with the report's own decaying `freshness` never consulted.
+
+**The fix — four files, no new store, no constant changed.** The decisive repository fact is that
+`ProtoAccessMemory` **stores nothing**: it is recomputed from scratch every tick. So the lifecycle is
+expressed as how evidence is *weighted* — full inside the current annual round (3 ticks), then a
+straight decline to zero at 8 ticks (kin/tolerated), 12 (neutral), 16 (tense), and 16 × 0.7 × hop
+factor × the report's own freshness (hearsay). `confidence` now counts only **active** evidence.
+Report-linked events carry `report.tickReceived`, which makes their id stable so the ring refreshes
+one record instead of minting a fresh one, and they are deduplicated by **original episode**
+`(originalObserverBandId, topic, targetTileId)` — the triple that survives relay.
+`reportedKnowledge.ts:648` no longer republishes friction that is itself report-derived or already
+released, which cuts the friction → report → friction loop.
+
+**Headline, identical fixtures in both arms.** Social release **season 18 → season 8**, with physical
+release at season 0 in **both** arms — physical release is never delayed to match social memory.
+Revisiting the place and finding nobody goes **`NEVER_RELEASES_DESPITE_CONTRADICTION` →
+`CONTRADICTION_ACCELERATES_S6_VS_S8`**. A report-only belief goes **`SECONDHAND_BUT_DOES_NOT_FADE` →
+`SECONDHAND_AND_FADES`**. Five relayed copies of one story go
+**`TREATED_AS_2_INDEPENDENT_CONFIRMATIONS` → `ONE_EPISODE_ONE_RECORD`**, while two genuinely
+different original observers still reinforce.
+
+**Natural, same maps/seeds/scenarios as AUDIT-27 → CORRECTION-30, 20 years:** stale-escalation
+samples **3 → 0**; summed friction contribution to access **27.13 → 6.74 (−75%)**; band-seasons with
+an active contribution **12 → 4** while band-seasons with **retained but inert** records **13 → 21**;
+report-linked records created **33 → 3 (−91%)**; direct records created **28 → 28**. **The physical
+layer is identical on all 17 checked keys at 20 years and at 50** — crowding 2.51, catchment
+26,515/43, support 114,381.8, depletion 3,419.5131, trips 57,600, moves 1,547, population 817, bands
+30, survival 6/6, fissions 0. CORRECTION-30's own instrument agrees independently.
+
+**Stated limits.** **AUDIT-27's C5 is byte-identical between arms and does not flip** — its test
+counts *retained records*, which this design deliberately keeps, and its access readings are at the
+observer's current tile rather than the departed band's place, so it cannot express this repair; it
+is reported unchanged rather than worked around. **P2 does not show what the spec anticipated**:
+`recentOverlapCount` saturates at 1 + the 8-slot ring = 9 within the first seasons of contact, so
+saturation is demonstrated but "repeated use persists measurably longer" is not, because the counter
+has no headroom. **Three instrument errors in this pass's own probes were caught and repaired.**
+`presentWithoutOthersSeasons` is the one accumulator added to an otherwise derived store, bounded at
+8. Cooling is time-based, not season-aware.
+
+PASSED: tsc (both), build, graph 221/764, import boundary (85 back edges, unchanged), season-order
+invariance, step-mode invariance **both maps with fullCanonicalStateMatch and firstDivergence null**,
+catchment invariants, living-ecology food pipeline, mobility authority, `socialCausalityAudit`
+**byte-identical between arms**, fixtures **P1–P22 in both arms with 0 vacuous**, AUDIT-27 11/11,
+CORRECTION-28 12/12, CORRECTION-29 12/12 and CORRECTION-30 15/15 all unchanged.
+
+Deferred and untouched: `nearbyBandPressure` vs `crowdingPenalty` double influence; candidate-score
+crowding double counting; the residence-anchored physical footprint; activity-party and expedition
+physical overlap; `territorialPressure`'s missing writer; kin crowding weights; parent-memory
+dispersal pressure; broader encounter visibility and barrier rules; trails; camps; smoke; culture;
+territory; conflict; fission; Daughter Viability.
+NOT RUN, deliberately: no 200-year matrix, no performance measurement.
+See `docs/evidence/shared-range-release-lifecycle-31/FINDINGS.md`.
+
+---
+
+### SHARED RANGE — RANGE-FRICTION OBSERVATION PROVENANCE — CORRECTION-30 — PASS / CLOSED AND FROZEN AT 1c6a3ed8 / DO NOT MERGE
 
 **Branch** `checkpoint/shared-range-friction-provenance-30`, from the accepted CORRECTION-29 tip
 `a15d0a78a3a7ef57b87b22226190d6729ba9b9d7`. **CORRECTION-29 is CLOSED and FROZEN at `a15d0a78`.**
@@ -10072,3 +10149,23 @@ exception; daughter colours related-but-distinct and never visually confusing.
   and makes `moderate_placeholder` unreachable — which is why it was not pinned. **Roadmap item 3
   remains OPEN**; range release is the next seam and is now unblocked.
   Evidence: `docs/evidence/shared-range-friction-provenance-30/`.
+
+- **SHARED RANGE — RANGE-FRICTION AND ACCESS-EXPECTATION LIFECYCLE (CORRECTION-31)** — PASS. Branch
+  `checkpoint/shared-range-release-lifecycle-31` from CORRECTION-30's `1c6a3ed8`. Legitimate evidence
+  had no afterlife: none of the six functions converting a friction record into pressure read
+  `event.tick`, so a record pushed at full strength for twelve simulated years and then fell off a
+  cliff; `confidence` counted retained records, so old evidence propped up the confidence that would
+  have retired it and an episode could grow *more* hostile after the other band left; and
+  report-linked friction was re-minted at the current tick every pass, so one report kept a record
+  permanently age 0 for up to forty simulated years. Because `ProtoAccessMemory` stores nothing, the
+  fix is a weighting layer, not a new store: full inside the current annual round, then a decline to
+  zero at 8/12/16 ticks by tone, and 16 × 0.7 × hops × the report's own freshness for hearsay. Report
+  events now carry their receipt tick (a stable id, so the ring refreshes one record) and are deduped
+  by original episode, and a band no longer republishes a rumour as its own knowledge or broadcasts a
+  belief it has stopped acting on. Social release **season 18 → 8** with physical release at season 0
+  in both arms; revisiting and finding nobody accelerates it to season 6; a report-only belief now
+  fades; five relayed copies become one record. Natural 20 y: stale escalations **3 → 0**, friction
+  contribution to access **27.13 → 6.74**, report-linked records **33 → 3**, direct records **28 →
+  28**, and the **physical layer identical on all 17 keys at 20 and 50 years**. **AUDIT-27's C5 does
+  NOT flip and cannot** — it counts retained records, which this design keeps. **Roadmap item 3
+  remains OPEN.** Evidence: `docs/evidence/shared-range-release-lifecycle-31/`.

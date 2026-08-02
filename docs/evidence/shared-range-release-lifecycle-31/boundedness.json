@@ -1,0 +1,144 @@
+{
+  "checkpoint": "CORRECTION-31 — BOUNDEDNESS",
+  "controlledP22": {
+    "before": {
+      "id": "P22",
+      "question": "long-horizon boundedness",
+      "verdict": "BOUNDED",
+      "precondition": "80 further seasons past every chosen lifecycle horizon",
+      "preconditionMet": true,
+      "seasons": 80,
+      "maxFrictionRingLength": 8,
+      "frictionRingCap": 8,
+      "maxReportCount": 16,
+      "reportRingCap": 16,
+      "maxAccessPlaces": 8,
+      "accessMemoryCap": 8,
+      "maxActiveEvidenceCount": 0,
+      "negativeAgeRecords": 0,
+      "placesStillActiveAtEnd": 0,
+      "activeAtEndSample": []
+    },
+    "after": {
+      "id": "P22",
+      "question": "long-horizon boundedness",
+      "verdict": "BOUNDED",
+      "precondition": "80 further seasons past every chosen lifecycle horizon",
+      "preconditionMet": true,
+      "seasons": 80,
+      "maxFrictionRingLength": 8,
+      "frictionRingCap": 8,
+      "maxReportCount": 16,
+      "reportRingCap": 16,
+      "maxAccessPlaces": 8,
+      "accessMemoryCap": 8,
+      "maxActiveEvidenceCount": 5,
+      "negativeAgeRecords": 0,
+      "placesStillActiveAtEnd": 6,
+      "activeAtEndSample": [
+        {
+          "band": "band:custom:1",
+          "tile": "tile:195:91",
+          "weight": 0.7,
+          "freshest": null
+        },
+        {
+          "band": "band:custom:1",
+          "tile": "tile:196:91",
+          "weight": 1,
+          "freshest": null
+        },
+        {
+          "band": "band:custom:2",
+          "tile": "tile:197:90",
+          "weight": 0.5,
+          "freshest": null
+        },
+        {
+          "band": "band:custom:2",
+          "tile": "tile:198:88",
+          "weight": 1,
+          "freshest": null
+        },
+        {
+          "band": "band:custom:2",
+          "tile": "tile:194:89",
+          "weight": 1,
+          "freshest": null
+        },
+        {
+          "band": "band:custom:3",
+          "tile": "tile:198:88",
+          "weight": 1,
+          "freshest": null
+        }
+      ]
+    }
+  },
+  "naturalLong": {
+    "years": 50,
+    "maxFrictionRing": {
+      "before": 8,
+      "after": 8,
+      "delta": 0,
+      "unchanged": true
+    },
+    "maxReportRing": {
+      "before": 16,
+      "after": 16,
+      "delta": 0,
+      "unchanged": true
+    },
+    "maxAccessPlaces": {
+      "before": 8,
+      "after": 8,
+      "delta": 0,
+      "unchanged": true
+    },
+    "negativeAgeRecords": {
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "unchanged": true
+    },
+    "maxRecordLifetimeTicks": {
+      "before": 41,
+      "after": 48,
+      "delta": 7,
+      "unchanged": false
+    },
+    "frictionEvicted": {
+      "before": 285,
+      "after": 125,
+      "delta": -160,
+      "unchanged": false
+    },
+    "bandSeasonsWithRetainedButInertRecords": {
+      "before": 60,
+      "after": 73,
+      "delta": 13,
+      "unchanged": false
+    },
+    "bandSeasonsWithActiveContribution": {
+      "before": 36,
+      "after": 23,
+      "delta": -13,
+      "unchanged": false
+    }
+  },
+  "caps": {
+    "frictionRing": 8,
+    "reportRing": 16,
+    "accessPlaces": 8,
+    "reportMaxAgeTicks": 160,
+    "frictionMaxAgeTicks": 48
+  },
+  "noNewStoreIntroduced": true,
+  "newFieldsAreDerivedPerTick": [
+    "activeEvidenceWeight",
+    "activeEvidenceCount",
+    "historicalEvidenceCount",
+    "socialEvidencePhase",
+    "presentWithoutOthersSeasons (bounded at 8)"
+  ]
+}

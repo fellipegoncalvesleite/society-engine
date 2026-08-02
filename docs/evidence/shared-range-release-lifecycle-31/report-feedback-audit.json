@@ -1,0 +1,90 @@
+{
+  "checkpoint": "CORRECTION-31 — REPORT FEEDBACK AND PROVENANCE",
+  "defect": "deriveReportLinkedEvents stamped every report-linked friction record with the CURRENT tick, and makeEventId embedded the tick, so each pass minted a NEW record instead of refreshing one. A report-linked record was permanently age 0: neither the 48-tick ring eviction nor the 48-tick access window could ever reach it, so one report kept a friction record alive for as long as the report lived (REPORT_MAX_AGE_TICKS = 160, forty simulated years) at constant strength.",
+  "repair": [
+    "the event is stamped with report.tickReceived, which also makes its id stable so the ring refreshes one record in place",
+    "report-linked events are deduplicated by original episode (originalObserverBandId, topic, targetTileId), which survives relay",
+    "accessNorms counts distinct report EPISODES weighted by freshness and hop depth, never report copies by .length",
+    "reportedKnowledge no longer republishes friction that is itself report-derived, or that has already released"
+  ],
+  "controlled": {
+    "P12_reportOnlyBelief": {
+      "before": "SECONDHAND_BUT_DOES_NOT_FADE",
+      "after": "SECONDHAND_AND_FADES",
+      "beforeFresh": 0.23,
+      "beforeAged": 0.23,
+      "afterFresh": 0.17,
+      "afterAged": 0.09
+    },
+    "P13_repeatedCopies": {
+      "before": "TREATED_AS_2_INDEPENDENT_CONFIRMATIONS",
+      "after": "ONE_EPISODE_ONE_RECORD",
+      "copies": 5,
+      "relayers": 2,
+      "beforeEvents": 2,
+      "afterEvents": 1
+    },
+    "P14_independentSources": {
+      "before": "INDEPENDENT_SOURCES_NOT_DISTINGUISHED",
+      "after": "INDEPENDENT_SOURCES_REINFORCE"
+    }
+  },
+  "natural20y": {
+    "reportFrictionCreated": {
+      "before": 33,
+      "after": 3,
+      "delta": -30,
+      "unchanged": false
+    },
+    "reportsReceived": {
+      "before": 2649,
+      "after": 2639,
+      "delta": -10,
+      "unchanged": false
+    },
+    "distinctReportEpisodes": {
+      "before": 1638,
+      "after": 1636,
+      "delta": -2,
+      "unchanged": false
+    },
+    "duplicateReportCopiesBlocked": {
+      "before": 1011,
+      "after": 1003,
+      "delta": -8,
+      "unchanged": false
+    },
+    "maxReportHops": {
+      "before": 1,
+      "after": 1,
+      "delta": 0,
+      "unchanged": true
+    },
+    "maxReportRing": {
+      "before": 16,
+      "after": 16,
+      "delta": 0,
+      "unchanged": true
+    }
+  },
+  "naturalLong": {
+    "reportFrictionCreated": {
+      "before": 178,
+      "after": 13,
+      "delta": -165,
+      "unchanged": false
+    },
+    "reportsReceived": {
+      "before": 6730,
+      "after": 6705,
+      "delta": -25,
+      "unchanged": false
+    },
+    "maxReportRing": {
+      "before": 16,
+      "after": 16,
+      "delta": 0,
+      "unchanged": true
+    }
+  }
+}
