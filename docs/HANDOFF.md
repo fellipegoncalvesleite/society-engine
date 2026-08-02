@@ -181,7 +181,68 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### CROWDING — PHYSICAL VS REMEMBERED RANGE SEPARATION — CORRECTION-28 — PASS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+### SHARED RANGE — DIRECT ENCOUNTER PROVENANCE — CORRECTION-29 — PASS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+
+**Branch** `checkpoint/shared-range-encounter-provenance-29`, from the accepted CORRECTION-28 tip
+`c5eb58a8f5ff7054665f9c376ac4ca856403efab`. **CORRECTION-28 is CLOSED and FROZEN at `c5eb58a8`.**
+AUDIT-27 frozen at `b352c31`; CORRECTION-26 frozen at `5f341648`; local and remote `main` untouched
+at `0a43083`. **PRODUCTION BEHAVIOUR CHANGED** — no fingerprint parity is claimed or possible.
+
+**CORRECTION-29 repairs only direct-encounter provenance. Roadmap item 3 remains OPEN.**
+
+**What changed — one file, three edits, both gates closed together.** The ghost chain lived
+entirely in `socialContext.ts` and passed **two** independent gates: `getEncounterCandidatePairs`
+paired any two bands whose `topReturnPlaceIds` named the same tile **with no distance condition at
+all**, and `getEncounterKind`'s `memoryOverlap > 0.24 || distance <= 3` admitted an encounter at
+**any** distance — the only non-distance-gated branch in the encounter system, fed by
+`getSharedMemoryOverlap` reading the other band's **private `placeMemory`** directly. The memory
+pairing block is deleted, the disjunct is gone (`distance <= 3`), and `getSharedMemoryOverlap` is
+deleted with its single call site.
+
+**Headline, identical fixture both arms:** two bands **42 tiles apart** that had **never met**,
+sharing one remembered tile, produced **3 `unrelated_overlap` encounter records and a contact
+memory with `contactCount` 3**. Now **0 and none** — while the remembering band **keeps its place
+memory** in both arms. A genuinely nearby pair still encounters and still accumulates repeat
+contacts. AUDIT-27's own **C10b flips `SOCIAL_KNOWLEDGE_FROM_MEMORY_OVERLAP_WITHOUT_PROXIMITY` →
+`NO_SOCIAL_KNOWLEDGE_WITHOUT_PROXIMITY`**, and P8's kin+memory arm reproduces AUDIT-27's **44-tile**
+figure exactly (3 `shared_resource_area` encounters → 0).
+
+**The natural result is a conservation, not a deletion.** Over the same worlds AUDIT-27 and
+CORRECTION-28 used: `contactMemoriesRefreshed` **42 → 32 (−10)** and `rememberedContactBandSeasons`
+**50 → 60 (+10)** — ten band-seasons moved exactly from *refreshed* to *merely remembered*.
+`contactMemoriesFirstCreated` is **2 in both arms** (no legitimate first contact lost), reported
+awareness is **35,776 in both**, and social-range recognition is **94 in both**. Direct encounters
+22 → 17.
+
+**Behaviourally almost inert.** Five of six 20-year runs byte-identical; the only divergence is
+`map2` s1 at tick 58, one band, one tile. Population 817 → 817, bands 30 → 30, survival 6/6,
+fissions 0 → 0, moves 1,546 → 1,547. **No improvement is claimed** — truthful provenance is the
+acceptance criterion, and encounter frequency was not recalibrated.
+
+**Stated limits.** P9 is an **unchanged pass in both arms**, not a repair credit: its bands are 42
+tiles apart and never shared familiar country, so no friction fired either way — the contact memory
+that feeds `rangeFriction.ts:478` is no longer created, but the cascade itself was not exercised.
+The "encounters beyond radius" counter is an **upper bound** measured at end-of-tick (5 in the after
+arm, all `unrelated_overlap`, three identical to the before arm) — admission beyond 3 is impossible
+by construction. P3 records that production has **no visibility or route rule** for encounters;
+none was invented here.
+
+**CORRECTION-28 remains intact:** its own fixtures rerun **12/12 unchanged**, and the distant
+remembering band still reads **zero physical crowding**. Physical readings are byte-identical
+between arms.
+
+PASSED: tsc (both), build, graph 221/764 0 dup 0 dangling, import boundary, season-order
+invariance, step-mode invariance **both maps with fullCanonicalStateMatch**, catchment invariants,
+living-ecology food pipeline, mobility authority, fixtures P1–P12 in both arms with **0 vacuous**.
+
+Deferred and untouched: `rangeFriction.ts`'s own private-trip provenance; range-friction release;
+access-memory decay; crowding double-counting; range-saturation formulas; footprint expansion; kin
+factors; `territorialPressure`; Daughter Viability.
+See `docs/evidence/shared-range-encounter-provenance-29/FINDINGS.md`.
+
+---
+
+### CROWDING — PHYSICAL VS REMEMBERED RANGE SEPARATION — CORRECTION-28 — PASS / CLOSED AND FROZEN AT c5eb58a8 / DO NOT MERGE
 
 **Branch** `checkpoint/crowding-physical-memory-separation-28`, from the accepted AUDIT-27 tip
 `b352c3195406fc9494c0b693a98eb0786f1a3780`. Local and remote `main` untouched at
@@ -9878,3 +9939,18 @@ exception; daughter colours related-but-distinct and never visually confusing.
   flips to `NO_OBSOLETE_CROWDING` while C5 and C10b stay put. `getParentCoreOverlap`'s separate
   memory→dispersal path is kin machinery, deferred and measured. **Roadmap item 3 remains OPEN.**
   Evidence: `docs/evidence/crowding-physical-memory-separation-28/`.
+
+- **SHARED RANGE — DIRECT ENCOUNTER PROVENANCE (CORRECTION-29)** — PASS. Branch
+  `checkpoint/shared-range-encounter-provenance-29` from CORRECTION-28's `c5eb58a`. One production
+  file: `socialContext.ts` no longer pairs bands by shared `topReturnPlaceIds` (that block had **no
+  distance condition at all**), no longer admits an encounter on `memoryOverlap > 0.24` at any
+  distance, and `getSharedMemoryOverlap` — the direct read of another band's private `placeMemory` —
+  is deleted. Two bands **42 tiles apart that had never met** went from **3 encounter records and a
+  contact memory** to **none**, keeping their place memories. AUDIT-27's own C10b flips to
+  `NO_SOCIAL_KNOWLEDGE_WITHOUT_PROXIMITY`; the kin+memory arm reproduces the **44-tile** figure.
+  Natural effect is a conservation: refreshes **42 → 32** and remembered-contact band-seasons
+  **50 → 60**, with first-created contacts **2 → 2**, reports **35,776 → 35,776** and social-range
+  recognition **94 → 94**. Five of six 20-year runs byte-identical; population, bands, survival and
+  fissions unchanged, so **no improvement is claimed**. P9 is an unchanged pass in both arms and is
+  **not** credited as closing the friction cascade. CORRECTION-28's fixtures rerun 12/12 unchanged.
+  **Roadmap item 3 remains OPEN.** Evidence: `docs/evidence/shared-range-encounter-provenance-29/`.

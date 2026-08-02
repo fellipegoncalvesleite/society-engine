@@ -1076,8 +1076,7 @@ function detectEncounter(
 
   const distance = getGridDistance(leftTile, rightTile);
   const relation = getEncounterRelation(left, right);
-  const memoryOverlap = getSharedMemoryOverlap(world, left, right);
-  const kind = getEncounterKind(distance, relation, memoryOverlap);
+  const kind = getEncounterKind(distance, relation);
 
   if (kind === undefined) {
     return undefined;
@@ -1715,10 +1714,16 @@ function isKnownReachable(
   return true;
 }
 
+// CORRECTION-29 — every branch is now gated on CURRENT DISTANCE. The last
+// clause used to read `memoryOverlap > 0.24 || distance <= 3`, admitting a
+// direct encounter at ANY distance whenever the two bands' private place
+// memories happened to coincide. That was the only non-distance-gated path in
+// the encounter system, and its input came from reading the other band's
+// private placeMemory. Remembered prior contact and reported awareness are
+// different things from meeting, and neither is created here.
 function getEncounterKind(
   distance: number,
   relation: BandEncounterRelation,
-  memoryOverlap: number,
 ): BandEncounterKind | undefined {
   if (distance === 0) {
     return "same_tile";
@@ -1736,7 +1741,7 @@ function getEncounterKind(
     return "sibling_overlap";
   }
 
-  if (memoryOverlap > 0.24 || distance <= 3) {
+  if (distance <= 3) {
     return relation === "unrelated" || relation === "unknown"
       ? "unrelated_overlap"
       : "shared_resource_area";
@@ -1771,36 +1776,12 @@ function getContactMemoryRelation(
   return relation === "unknown" ? "unknown" : "unrelated";
 }
 
-function getSharedMemoryOverlap(world: WorldState, left: Band, right: Band): number {
-  const rightReturnTiles = new Set(
-    Object.values(right.placeMemory)
-      .filter((memory) => memory.isReturnPlace || memory.attachment > 0.48)
-      .map((memory) => String(memory.tileId)),
-  );
-
-  return Object.values(left.placeMemory)
-    .filter((memory) => memory.isReturnPlace || memory.attachment > 0.48)
-    .map((memory) => {
-      if (rightReturnTiles.has(String(memory.tileId))) {
-        return clamp01(memory.attachment);
-      }
-
-      const leftTile = getTile(world, memory.tileId);
-
-      if (leftTile === undefined) {
-        return 0;
-      }
-
-      return Object.values(right.placeMemory).some((otherMemory) => {
-        const rightTile = getTile(world, otherMemory.tileId);
-
-        return rightTile !== undefined && getGridDistance(leftTile, rightTile) <= 1;
-      })
-        ? 0.3
-        : 0;
-    })
-    .sort((leftScore, rightScore) => rightScore - leftScore)[0] ?? 0;
-}
+// CORRECTION-29 — `getSharedMemoryOverlap` is deleted. It compared the two
+// bands' private `placeMemory` stores directly and was the omniscient read that
+// fed the encounter admission gate above. Its only caller was `detectEncounter`.
+// A band's own remembered awareness of neighbours it has actually met still has
+// a home in `socialRangeRecognition.ts`, which reads only the observer's own
+// contact memories, lineage and familiar country.
 
 function getEncounterTolerance(
   relation: BandEncounterRelation,
@@ -1949,32 +1930,12 @@ function getEncounterCandidatePairs(
     }
   }
 
-  const memoryTileBands = new Map<string, BandId[]>();
-
-  for (const bandId of cache.activeBandIds) {
-    const summary = getSalientMemorySummary(cache, bandId);
-
-    if (summary === undefined) {
-      continue;
-    }
-
-    for (const tileId of summary.topReturnPlaceIds.slice(0, 12)) {
-      const key = String(tileId);
-      const ids = memoryTileBands.get(key) ?? [];
-      ids.push(bandId);
-      memoryTileBands.set(key, ids);
-    }
-  }
-
-  for (const bandIds of memoryTileBands.values()) {
-    const sorted = bandIds.sort(compareBandIds);
-
-    for (let index = 0; index < sorted.length; index += 1) {
-      for (let otherIndex = index + 1; otherIndex < sorted.length; otherIndex += 1) {
-        pairKeys.add(getEncounterPairKey(sorted[index], sorted[otherIndex]));
-      }
-    }
-  }
+  // CORRECTION-29 — candidacy is CURRENT PROXIMITY ONLY. This used to also pair
+  // any two bands whose top return places named the same tile, with no distance
+  // condition at all, so two bands ~44 tiles apart who independently remembered
+  // one old place were admitted as encounter candidates (AUDIT-27 C10b). Two
+  // bands remembering the same ground proves nothing about whether either one
+  // currently knows the other is there, and it is not a meeting.
 
   return [...pairKeys]
     .sort()
