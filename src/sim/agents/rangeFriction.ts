@@ -1,10 +1,33 @@
-// RANGE-4 — record-only shared-use / intrusion-tension notices.
+// RANGE-4 — shared-use / intrusion-tension notices, from OBSERVER evidence only.
 //
-// This module records bounded recent notices from already grounded evidence:
-// a band's own familiar-country memory, nearby/contact/kin bands, recent activity
-// trips, band-known ford context, and existing second-hand reports. It is memory/debug
-// state only: no movement, conflict, demography, stress, yield, support, or territory
-// rule reads these records.
+// A notice is admitted by exactly two channels:
+//   - CONTEMPORARY DIRECT OBSERVATION: the other band is inside the observer's current
+//     physical proximity set (cache.nearbyBandsByBandId, DEFAULT_NEARBY_RADIUS = 4 —
+//     the same canonical authority physical crowding and encounter candidacy use), AND
+//     the place is inside the observer's own remembered country;
+//   - SECOND-HAND REPORT: a WordOfMouthReport received from another band, kept
+//     classified `reported_secondhand` with its source, trust basis and report id.
+// Everything else the module reads is the observer's OWN state: familiar country,
+// ford context, prior notices, contact memories (for RELATION only — they carry no
+// position), and kinship.
+//
+// CORRECTION-30 — this module used to read another band's PRIVATE state directly:
+// `other.position` became an "observed residential presence" whenever it fell on any
+// tile the observer merely remembered, at ANY distance; `other.recentIntraSeasonTrips`
+// became "inferred from recent activity"; and `countRecentTripsInRange` read the same
+// private trip list a third time to inflate `recentOverlapCount`, which drives
+// `repeated_outsider_use` and `moderate_placeholder` tension. A place being familiar to
+// the observer is not evidence about anybody else, and a private trip record is not a
+// witness. All three reads are gone. The activity channel is DEFERRED, not disabled by
+// preference: this repository has no physical trace, no cross-band smoke and no
+// long-range sighting authority to ground it (see
+// docs/evidence/shared-range-friction-provenance-30/authority-ledger.md §3.1), and
+// inventing one belongs to the Persistent Human Landscape pass.
+//
+// These records are NOT inert. Through accessNorms.ts they reach
+// `ProtoAccessBehaviorEffectState`, which `pressure.ts:161` consumes as a real decision
+// input, and `innerFission.ts:145` consumes as social tension. The previous header
+// claimed no rule reads them; that was true of DIRECT readers only and is corrected here.
 
 import type { BandId, ReasonId, TickNumber, TileId } from "../core/types";
 import { getTile } from "../world/generate";
@@ -14,7 +37,6 @@ import { deriveFamiliarCountry, type FamiliarCountrySummary } from "./familiarCo
 import { deriveFordContext } from "./fordContext";
 import type {
   Band,
-  IntraSeasonTripRecord,
   RangeFrictionConfidence,
   RangeFrictionEvent,
   RangeFrictionInterpretation,
@@ -28,7 +50,6 @@ import type {
 const RANGE_FRICTION_RING_LIMIT = 8;
 const RANGE_FRICTION_MAX_AGE_TICKS = 48;
 const RANGE_FRICTION_CANDIDATE_LIMIT = 12;
-const RANGE_FRICTION_TRIP_WINDOW_TICKS = 12;
 const RANGE_FRICTION_EVENTS_PER_PAIR_LIMIT = 2;
 const RANGE_FRICTION_NEW_EVENTS_PER_BAND_LIMIT = 5;
 
@@ -41,12 +62,16 @@ interface RangeMembership {
   readonly fordTiles: ReadonlySet<string>;
 }
 
+// CORRECTION-30 — `linkedActivityTripId` is gone from this shape. It could only ever be
+// produced from another band's private trip record, so keeping the field would leave the
+// door open. `RangeFrictionEvent.linkedActivityTripId` stays in types.ts: it is the right
+// vocabulary for a future channel in which a party is actually witnessed or a physical
+// trace is actually read. Nothing writes it today.
 interface PairNotice {
   readonly tileId: TileId;
   readonly activityKind: RangeFrictionOtherActivityKind;
   readonly confidence: RangeFrictionConfidence;
   readonly recentOverlapCount: number;
-  readonly linkedActivityTripId?: string;
   readonly reasonIds: readonly ReasonId[];
 }
 
@@ -65,6 +90,12 @@ export function advanceRangeFriction(world: WorldState, cache: TickContextCache)
 
   for (const observer of activeBands) {
     const membership = buildRangeMembership(observer, world);
+    // CORRECTION-30 — the ONE contemporary-observation authority. Current physical
+    // proximity, computed by buildTickContextCache from real positions at
+    // DEFAULT_NEARBY_RADIUS = 4. The candidate list below stays wider (it also holds
+    // kin and remembered contacts) because it is a SELECTION set, not an evidence
+    // claim; nothing becomes a direct notice unless it is in this set.
+    const nearbyBandIds = new Set<BandId>(cache.nearbyBandsByBandId.get(observer.id) ?? []);
     const candidates = deriveCandidateBands(observer, activeById, childrenByParent, cache)
       .filter((candidate) => candidate.id !== observer.id)
       .slice(0, RANGE_FRICTION_CANDIDATE_LIMIT);
@@ -75,7 +106,7 @@ export function advanceRangeFriction(world: WorldState, cache: TickContextCache)
         break;
       }
 
-      const pairEvents = derivePairEvents(world, observer, other, membership)
+      const pairEvents = derivePairEvents(world, observer, other, membership, nearbyBandIds.has(other.id))
         .slice(0, RANGE_FRICTION_EVENTS_PER_PAIR_LIMIT);
       freshEvents.push(...pairEvents);
     }
@@ -107,8 +138,9 @@ function derivePairEvents(
   observer: Band,
   other: Band,
   membership: RangeMembership,
+  observerIsPhysicallyNear: boolean,
 ): readonly RangeFrictionEvent[] {
-  const notices = derivePairNotices(world, observer, other, membership);
+  const notices = derivePairNotices(world, observer, other, membership, observerIsPhysicallyNear);
   const relation = deriveRelation(world, observer, other);
 
   return notices
@@ -122,7 +154,16 @@ function derivePairNotices(
   observer: Band,
   other: Band,
   membership: RangeMembership,
+  observerIsPhysicallyNear: boolean,
 ): readonly PairNotice[] {
+  // CORRECTION-30 — no contemporary evidence, no notice. `other.position` is the other
+  // band's PRIVATE state; the observer may only read it about a band it is physically
+  // beside. Without this the observer learned where a band forty tiles away was living
+  // purely because the tile happened to be one it remembered.
+  if (!observerIsPhysicallyNear) {
+    return [];
+  }
+
   const notices: PairNotice[] = [];
   const currentTier = classifyRangeTier(membership, other.position);
 
@@ -131,36 +172,19 @@ function derivePairNotices(
       tileId: other.position,
       activityKind: "residential_presence",
       confidence: "observed",
-      recentOverlapCount: 1 + countRecentTripsInRange(world, other, membership),
+      recentOverlapCount: 1 + countObserverNoticesOfBand(observer, other.id, world.time.tick),
       reasonIds: [
         makeReasonId(world, observer.id, other.id, "observed_residential_presence", other.position),
       ],
     });
   }
 
-  const recentTrips = (other.recentIntraSeasonTrips ?? [])
-    .filter((trip) => {
-      const age = Number(world.time.tick) - Number(trip.tick);
-      return age >= 0 && age <= RANGE_FRICTION_TRIP_WINDOW_TICKS;
-    })
-    .filter((trip) => classifyRangeTier(membership, trip.targetTileId) !== "unknown_to_observer")
-    .sort(compareTrips)
-    .slice(0, 4);
-
-  for (const trip of recentTrips) {
-    const overlapCount = recentTrips.filter((candidate) => candidate.targetTileId === trip.targetTileId).length;
-    notices.push({
-      tileId: trip.targetTileId,
-      activityKind: classifyTripActivity(world, observer, trip, membership),
-      confidence: "inferred_from_recent_activity",
-      recentOverlapCount: overlapCount,
-      linkedActivityTripId: makeTripId(trip),
-      reasonIds: [
-        makeReasonId(world, observer.id, other.id, "recent_activity_overlap", trip.targetTileId),
-        ...trip.reasonIds.slice(0, 2),
-      ],
-    });
-  }
+  // The activity channel is DEFERRED, not disabled by preference. It previously read
+  // `other.recentIntraSeasonTrips` — a private record — and called the result
+  // "inferred_from_recent_activity". Grounding it honestly needs a physical trace, a
+  // witnessed departure, or positional history none of which exist here: trip records
+  // carry a tick and a day, but no band's position is stored per day, so co-presence
+  // at the time of the trip is unrecoverable. See ARCHITECTURE_DECISION.md §2 Option C.
 
   return notices
     .sort(compareNotices)
@@ -214,7 +238,6 @@ function makePairEvent(
     confidence: notice.confidence,
     recurrenceCount: priorRecurrence + 1,
     recentOverlapCount: notice.recentOverlapCount,
-    linkedActivityTripId: notice.linkedActivityTripId,
     noConflictChange: true,
     noMovementChange: true,
     noPopulationChange: true,
@@ -394,58 +417,6 @@ function deriveTensionLevel(
   return relation === "stranger_or_unrecognized" || relation === "weak_contact" ? "watchful" : "none";
 }
 
-function classifyTripActivity(
-  world: WorldState,
-  observer: Band,
-  trip: IntraSeasonTripRecord,
-  membership: RangeMembership,
-): RangeFrictionOtherActivityKind {
-  const tile = getTile(world, trip.targetTileId);
-  const task = trip.taskGroupType;
-  const objective = trip.objective;
-  const cause = trip.cause;
-  const movement = trip.movementType;
-  const resourceClass = trip.resourceClassId;
-
-  if (
-    classifyRangeTier(membership, trip.targetTileId) === "ford_or_crossing" ||
-    trip.pathTiles.some((tileId) => membership.fordTiles.has(String(tileId))) ||
-    String(movement).includes("route")
-  ) {
-    return "crossing_or_route_use";
-  }
-
-  if (
-    String(task).includes("scout") ||
-    String(objective).includes("scout") ||
-    String(cause).includes("probe") ||
-    String(cause).includes("scout")
-  ) {
-    return "scouting_or_probe";
-  }
-
-  if (
-    resourceClass === "water_resource" ||
-    resourceClass === "aquatic_food" ||
-    String(task).includes("water") ||
-    String(task).includes("fish") ||
-    isWaterOrDeltaTile(tile)
-  ) {
-    return "fishing_or_water_work";
-  }
-
-  if (
-    String(task).includes("forag") ||
-    String(task).includes("hunt") ||
-    String(task).includes("gather") ||
-    String(objective).includes("food")
-  ) {
-    return "foraging_trip";
-  }
-
-  return observer.position === trip.targetTileId ? "passing_through" : "unknown_activity";
-}
-
 function deriveCandidateBands(
   observer: Band,
   activeById: ReadonlyMap<BandId, Band>,
@@ -621,13 +592,25 @@ function buildChildrenByParent(activeBands: readonly Band[]): ReadonlyMap<BandId
   return children;
 }
 
-function countRecentTripsInRange(world: WorldState, other: Band, membership: RangeMembership): number {
-  return (other.recentIntraSeasonTrips ?? []).filter((trip) => {
-    const age = Number(world.time.tick) - Number(trip.tick);
+// CORRECTION-30 — replaces `countRecentTripsInRange`, which read the OTHER band's private
+// `recentIntraSeasonTrips` to inflate `recentOverlapCount` (and so drove
+// `repeated_outsider_use` at >= 3 and `moderate_placeholder` tension at >= 4 off state the
+// observer could not see). This counts the observer's OWN prior direct notices of this band
+// inside its own country — "how many times have I recently seen them here" — so repeated
+// legitimate observation still escalates, from the observer's own memory. Bounded by the
+// 8-slot ring, so the value cannot exceed 1 + RANGE_FRICTION_RING_LIMIT.
+function countObserverNoticesOfBand(
+  observer: Band,
+  otherBandId: BandId,
+  currentTick: TickNumber,
+): number {
+  return (observer.recentRangeFrictionEvents ?? []).filter((event) => {
+    const age = Number(currentTick) - Number(event.tick);
     return (
       age >= 0 &&
-      age <= RANGE_FRICTION_TRIP_WINDOW_TICKS &&
-      classifyRangeTier(membership, trip.targetTileId) !== "unknown_to_observer"
+      age <= RANGE_FRICTION_MAX_AGE_TICKS &&
+      event.otherBandId === otherBandId &&
+      event.confidence === "observed"
     );
   }).length;
 }
@@ -736,18 +719,6 @@ function makeReasonId(
   return `reason:range-friction:${Number(world.time.tick)}:${observerBandId}:${otherBandId}:${reason}:${tileId}` as ReasonId;
 }
 
-function makeTripId(trip: IntraSeasonTripRecord): string {
-  return [
-    String(trip.sourceBandId),
-    Number(trip.day),
-    Number(trip.tick),
-    String(trip.originTileId),
-    String(trip.targetTileId),
-    trip.taskGroupType,
-    trip.cause,
-  ].join("|");
-}
-
 function compareEvents(left: RangeFrictionEvent, right: RangeFrictionEvent): number {
   return (
     Number(right.tick) - Number(left.tick) ||
@@ -784,15 +755,6 @@ function confidenceRank(confidence: RangeFrictionConfidence): number {
   if (confidence === "inferred_from_recent_activity") return 2;
   if (confidence === "reported_secondhand") return 1;
   return 0;
-}
-
-function compareTrips(left: IntraSeasonTripRecord, right: IntraSeasonTripRecord): number {
-  return (
-    Number(right.tick) - Number(left.tick) ||
-    Number(right.day) - Number(left.day) ||
-    String(left.targetTileId).localeCompare(String(right.targetTileId)) ||
-    left.taskGroupType.localeCompare(right.taskGroupType)
-  );
 }
 
 function compareBands(left: Band, right: Band): number {
