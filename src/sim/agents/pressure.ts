@@ -229,10 +229,17 @@ export function deriveBandPressureState(
       relationshipPracticeEfficiencyBias * 0.08 -
       relationshipRouteConfidenceBias * 0.06,
   );
+  // CORRECTION-32 — `crowdingPenalty * 0.08` is GONE from risk.
+  //
+  // riskPressure is a DANGER signal: demography.ts:401/1780 and viability.ts:248 read it, so
+  // physical proximity was raising a mortality-adjacent quantity with no social evidence
+  // whatsoever. A peaceful non-kin band standing nearby is a reason this place is harder to
+  // use — charged once, as `crowdingPenalty`, on the candidate — not a reason anyone is in
+  // danger. Social danger has its own authorities (encounters, rangeFriction, protoAccessMemory)
+  // and each of them requires evidence with provenance and a lifecycle.
   const riskPressure = clamp01(
     riskEstimate * 0.62 +
       combinedPressure * 0.16 +
-      crowdingPenalty * 0.08 +
       (currentMemory?.valences.includes("risky") === true ? 0.12 : 0) +
       acuteCaution * 0.44 +
       acuteMortalityRisk * 0.7 +
@@ -261,10 +268,16 @@ export function deriveBandPressureState(
       relationshipPlaceCharacterPull * 0.12 +
       relationshipReputationToleranceBias * 0.06,
   );
+  // CORRECTION-32 — `crowdingPenalty * 0.22` is GONE from attachment.
+  //
+  // placeAttachmentPull is scored on the STAY candidate, which is exactly where the one
+  // canonical crowding cost `crowdingPenalty(residence)` already applies. Reducing attachment
+  // by the same scalar charged the same nearby band a second time on the same candidate, and
+  // propagated a third time through `netMovePressure -= placeAttachmentPull * 0.48`. The
+  // current-site dispersal motive survives intact through `mobilityPressure` below.
   const placeAttachmentPull = clamp01(
     rawAttachmentPull * (1 - combinedPressure * 0.42) -
-      riskPressure * 0.08 -
-      crowdingPenalty * 0.22 +
+      riskPressure * 0.08 +
       daughterDispersal.inheritedFamiliarityPull * 0.08,
   );
   const mobilityPressure = clamp01(
@@ -272,6 +285,9 @@ export function deriveBandPressureState(
       waterStress * 0.3 +
       riskPressure * 0.18 +
       combinedPressure * 0.26 +
+      // CORRECTION-32 — this is the SINGLE current-site dispersal motive, deliberately kept.
+      // It reaches the score only through `netMovePressure`, which is 0 on the stay candidate,
+      // so a crowded residence LIFTS the alternatives rather than being penalised a second time.
       crowdingPenalty * 0.2 +
       daughterDispersal.daughterDispersalPressure * 0.16 +
       band.territorialPressure * 0.08 +

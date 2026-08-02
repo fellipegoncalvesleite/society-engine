@@ -476,6 +476,25 @@ function deriveRangeSaturationState(
       seasonalStress -
       carryingBuffer * 0.18,
   );
+  // CORRECTION-32 — the same sum with EVERY other-band term removed, clamped identically.
+  //
+  // Two terms carry other bands, not one. `nearby.weightedCrowding * 0.34` is the obvious one.
+  // But `localPopulationEstimate` is a distance-weighted sum over every active band inside the
+  // radius INCLUDING the deciding band, so `populationPressure` is a second measurement of the
+  // same nearby bodies, differing only in weighting and in having no kin discount. The
+  // decision-facing value keeps the band's OWN density (its own population is a real and
+  // distinct fact about this ground) and drops the rest, because the decision score already
+  // charges other bands once, as `crowdingPenalty`.
+  //
+  // `saturationPressure` itself is UNCHANGED and remains what carryingCapacity, innerFission,
+  // reportedKnowledge, frontierDispersal and the UI read.
+  const ownPopulationPressure = clamp01(band.demography.population / (52 + carryingBuffer * 72));
+  const saturationPressureExcludingCrowding = clamp01(
+    localUsePressure * 0.32 +
+      ownPopulationPressure * 0.28 +
+      seasonalStress -
+      carryingBuffer * 0.18,
+  );
   const effectiveHabitatSuitability = clamp01(
     habitatSuitability - saturationPressure * 0.36 - nearby.weightedCrowding * 0.12,
   );
@@ -496,6 +515,7 @@ function deriveRangeSaturationState(
     effectiveHabitatSuitability: round2(effectiveHabitatSuitability),
     perCapitaReturnEstimate: round2(perCapitaReturnEstimate),
     saturationPressure: round2(saturationPressure),
+    saturationPressureExcludingCrowding: round2(saturationPressureExcludingCrowding),
     confidence: round2(knownRecord?.confidence ?? 0.44),
     reasonIds,
   };

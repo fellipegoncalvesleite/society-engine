@@ -229,7 +229,7 @@ function buildWaterRefugeProfile(
       (seasonal?.reliability ?? 0.42) * 0.22 -
       tile.riskProfile.floodRisk * 0.06,
   );
-  const socialAccessRisk = getSocialAccessRisk(world, band, tile.id, contextCache);
+  const socialAccessRisk = getSocialAccessRisk(world, band, tile.id);
   const reliability = clamp01(
     waterAccess * 0.44 +
       drySeasonReliability * 0.28 +
@@ -491,7 +491,7 @@ function buildKnownProspectCandidate(
     expectedFood,
     travelCost: clamp01(distance / 8 + (record.observedMovementCost ?? tile.movementCost) / 6),
     uncertainty: clamp01(1 - record.confidence + (record.knowledgeSource === "personally_observed" ? 0 : 0.12)),
-    socialAccessRisk: getSocialAccessRisk(world, band, tile.id, contextCache),
+    socialAccessRisk: getSocialAccessRisk(world, band, tile.id),
     crossingRisk,
     corridorStrength,
     direction: getProspectDirection(currentTile, tile, basis),
@@ -818,20 +818,38 @@ function getProspectDirection(
   return basis.includes("known_river_continuity") ? "riverbank" : "unknown";
 }
 
+// CORRECTION-32 — physical proximity is no longer social danger.
+//
+// This used to build `localCrowding = clamp01(nearbyBandCount / 5 + salientUsers / 4)` and
+// charge it at 0.26 into `socialAccessRisk`, which scoreDecision weights at -0.36 and
+// getFallbackRank at x1.8. Both terms were wrong for the same reason: neither is social
+// evidence. `nearbyBandCount` is bodies — merely being near a non-kin band made a water refuge
+// socially risky with nothing having happened — and `salientUsers` was OTHER bands' remembered
+// places with no distance gate at all, the CORRECTION-28/29 defect surviving in a different
+// module (it made a place risky because a band 40 tiles away also remembers it).
+//
+// The place-specific term is now the band's OWN access memory ABOUT THIS PLACE:
+// `strangerCaution` and `rememberedRefusalAvoidance`, which CORRECTION-30 gave truthful
+// observation provenance and CORRECTION-31 gave a lifecycle that cools and releases. The
+// coefficient, the base caution and the known-contact relief are unchanged.
+//
+// NOT repaired here, and reported rather than silently kept: `unrelatedRisk` reads
+// `Object.values(world.bands).length` — a WORLD-TRUTH count a band cannot know. It is a
+// separate anti-omniscience defect, outside this checkpoint's crowding scope.
 function getSocialAccessRisk(
   world: WorldState,
   band: Band,
   tileId: TileId,
-  contextCache?: TickContextCache,
 ): number {
   const knownContactCount = Object.keys(band.contactMemories).length + band.knowledge.knownBands.length;
-  const nearbyBandCount = contextCache?.nearbyBandsByBandId.get(band.id)?.length ?? 0;
-  const salientUsers = contextCache?.salientMemoryBandIdsByTileId.get(tileId)?.filter((bandId) => bandId !== band.id).length ?? 0;
-  const localCrowding = clamp01(nearbyBandCount / 5 + salientUsers / 4);
+  const accessMemory = band.protoAccessMemory?.places[tileId];
+  const rememberedAccessCaution = clamp01(
+    (accessMemory?.strangerCaution ?? 0) * 0.6 + (accessMemory?.rememberedRefusalAvoidance ?? 0) * 0.4,
+  );
   const knownContactRelief = clamp01(knownContactCount * 0.08);
   const unrelatedRisk = Object.values(world.bands).length > 8 && knownContactCount === 0 ? 0.08 : 0;
 
-  return clamp01(0.28 + localCrowding * 0.26 + unrelatedRisk - knownContactRelief);
+  return clamp01(0.28 + rememberedAccessCaution * 0.26 + unrelatedRisk - knownContactRelief);
 }
 
 function getFallbackRank(

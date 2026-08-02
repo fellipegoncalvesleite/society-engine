@@ -44,6 +44,22 @@ export function isBandPassableDestination(tile: Tile): boolean {
 // here so every existing rules-side consumer keeps its import path. Same formula.
 export { getObservedRisk } from "../agents/tileObservation";
 
+// CORRECTION-32 — the ONE weight at which current physical crowding charges a candidate.
+//
+// It applies to `crowdingPenalty`, the single capacity-conditioned transform of
+// `NearbyBandPressure.weightedCrowding` (getCrowdingPenalty: weightedCrowding x dryAmplifier
+// x (1 - spatialCapacityBuffer * 0.48)). `nearbyBandPressure` is still carried on the
+// breakdown as EVIDENCE — for the UI, the decision explanation and the kin readings — but it
+// no longer charges the score, because it is the same scalar as `crowdingPenalty` with the
+// terrain conditioning removed, and charging both made physical capacity matter LESS than the
+// transform says it should.
+//
+// 0.96 = the 0.24 that the raw term used to carry + the 0.72 the transformed term carried. On
+// the maximally constrained tile (dryAmplifier 1, spatialCapacityBuffer 0) the charge is
+// therefore EXACTLY what it was before this checkpoint; only the over-charge on spacious,
+// well-watered ground is removed. Nothing is neutralised.
+export const CROWDING_DECISION_COST_WEIGHT = 0.96;
+
 export function scoreDecision(scoreBreakdown: ScoreBreakdown): number {
   return round2(
     scoreBreakdown.foodValue * 1.45 +
@@ -73,7 +89,6 @@ export function scoreDecision(scoreBreakdown: ScoreBreakdown): number {
       scoreBreakdown.depletionPenalty * 0.88 -
       scoreBreakdown.riverCorridorValue * 0.72 +
       scoreBreakdown.knownFordValue * 0.82 -
-      scoreBreakdown.nearbyBandPressure * 0.24 -
       scoreBreakdown.parentCoreOverlap * 0.16 +
       scoreBreakdown.inheritedFamiliarityPull * 0.18 +
       scoreBreakdown.safeFrontierPull * 0.62 -
@@ -95,7 +110,7 @@ export function scoreDecision(scoreBreakdown: ScoreBreakdown): number {
       scoreBreakdown.encounterTension * 0.46 +
       scoreBreakdown.encounterTolerance * 0.14 -
       scoreBreakdown.splitRisk * 0.36 -
-      scoreBreakdown.crowdingPenalty * 0.72 -
+      scoreBreakdown.crowdingPenalty * CROWDING_DECISION_COST_WEIGHT -
       scoreBreakdown.biomeMismatchPenalty * 0.42 +
       scoreBreakdown.biomeCompetence * 0.16 -
       scoreBreakdown.riverCrossingCost * 1.25 -

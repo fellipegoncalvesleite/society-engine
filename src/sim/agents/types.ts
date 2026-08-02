@@ -4160,6 +4160,16 @@ export interface RangeSaturationState {
   readonly effectiveHabitatSuitability: NormalizedIntensity;
   readonly perCapitaReturnEstimate: NormalizedIntensity;
   readonly saturationPressure: NormalizedIntensity;
+  // CORRECTION-32 — the SAME saturation sum with the `nearbyCrowding * 0.34` term removed.
+  //
+  // `saturationPressure` legitimately mixes the band's own use pressure, local population
+  // density, seasonal stress and current physical crowding, and every ecological/social
+  // reader (carryingCapacity, innerFission, reportedKnowledge, frontierDispersal, the UI)
+  // continues to read the full value. But the DECISION scorer already charges that same
+  // physical crowding once, through `crowdingPenalty`, so scoring the full saturation
+  // alongside it charged one nearby band twice under two names. The decision seam reads
+  // this partitioned value instead. Derived, never stored as an independent authority.
+  readonly saturationPressureExcludingCrowding: NormalizedIntensity;
   readonly confidence: NormalizedIntensity;
   // Range saturation v1 (checkpoint 2J): explicit capacity model on top of the
   // existing crowding signal. Optional for back-compat with older constructors.

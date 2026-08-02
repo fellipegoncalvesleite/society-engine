@@ -416,7 +416,7 @@ export function getDaughterDispersalPressure(
   const earlyDispersalUrgency = getEarlyDispersalUrgency(world, band);
   const kinCoreCrowding = clamp01(parentCoreOverlap * 0.62 + nearby.parentOverlap * 0.28 + nearby.daughterOverlap * 0.18);
   const kinTolerance = kinSafety;
-  const safeFrontierPull = tile === undefined ? 0 : getSafeFrontierPull(world, band, tile, nearby);
+  const safeFrontierPull = tile === undefined ? 0 : getSafeFrontierPull(world, band, tile);
   const localUsePressure = getLocalUsePressureValue(band.usePressure[tileId]);
   // CAUSAL-REPAIR-1: founders are no longer exempt from dispersal pressure.
   // A founding lineage in a saturating basin previously read 0 here forever
@@ -544,11 +544,18 @@ function getEarlyDispersalUrgency(world: WorldState, band: Band): number {
   return clamp01(1 - ageTicks / 80);
 }
 
+// CORRECTION-32 — this no longer subtracts `nearby.weightedCrowding * 0.22`.
+//
+// `safeFrontierPull` is scored DIRECTLY at +0.62 in scoreDecision, on the same move and
+// exploration candidates whose `crowdingPenalty` already charges that tile's crowding. The
+// subtraction was therefore a second (and, through daughterDispersalPressure, a third) charge
+// of one physical fact on one candidate. What the pull is FOR — unknown-neighbour ratio,
+// corridor value, band-known suitability — is untouched, and no fission, kin or dispersal rule
+// is redesigned here (that remains out of scope).
 function getSafeFrontierPull(
   world: WorldState,
   band: Band,
   tile: Tile,
-  nearby: NearbyBandPressure,
 ): number {
   if (tile.isAquatic || tile.terrainKind === "mountains" || tile.movementCost > 2.45) {
     return 0;
@@ -577,8 +584,7 @@ function getSafeFrontierPull(
   return clamp01(
     unknownNeighborRatio * 0.34 +
       corridorValue +
-      knownSuitability * 0.28 -
-      nearby.weightedCrowding * 0.22,
+      knownSuitability * 0.28,
   );
 }
 

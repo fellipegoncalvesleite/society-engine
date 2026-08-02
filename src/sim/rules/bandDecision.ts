@@ -676,6 +676,7 @@ function createEmptyRangeSaturation(
     effectiveHabitatSuitability: 0,
     perCapitaReturnEstimate: 0,
     saturationPressure: 0,
+    saturationPressureExcludingCrowding: 0,
     confidence: 0,
     reasonIds: [`reason:${band.id}:${world.time.tick}:range-saturation-empty` as ReasonId],
   };
@@ -2026,12 +2027,17 @@ function buildExploreCandidate(
   const pressureState = decisionCache.pressureSnapshot.bandPressureState;
   const currentUsePressure = getLocalUsePressureValue(band.usePressure[currentTile.id]);
   const nearbyPressure = decisionCache.pressureSnapshot.nearbyBandPressure;
-  const crowdingPenalty = getCrowdingPenalty(currentTile, nearbyPressure);
-  const rangeSaturation = band.rangeSaturation?.saturationPressure ?? 0;
+  // CORRECTION-32 — this is the crowding of the band's CURRENT RESIDENCE, not of the
+  // exploration target. The target is by definition UNKNOWN, so its crowding is unknowable and
+  // the breakdown's `crowdingPenalty` is 0 below: the residence's crowding must not be charged
+  // as a cost against the option of leaving it. It reaches this candidate through exactly one
+  // bounded, positive channel — `crowdingExploreBoost`, the response §12.5 allows once.
+  const residenceCrowdingPenalty = getCrowdingPenalty(currentTile, nearbyPressure);
+  const rangeSaturation = band.rangeSaturation?.saturationPressureExcludingCrowding ?? 0;
   const frontierDispersal = band.frontierDispersal?.pressure ?? 0;
   // Resource-belief probe pressure (2K.1F): nudges scout/probe curiosity only.
   const explorationBaseline = getExplorationBaseline(band, beliefOpportunity.probePressure, decisionCache);
-  const crowdingExploreBoost = clamp01(nearbyPressure.weightedCrowding * 0.18);
+  const crowdingExploreBoost = clamp01(residenceCrowdingPenalty * 0.18);
   // CAUSAL-REPAIR-1: SUSTAINED over-capacity (M0.11 signal — ≥2 consecutive
   // derivations, so a passing band never triggers it) escalates edge scouting
   // beyond the standing saturation pressure. Crowded good basins now push
@@ -2068,7 +2074,9 @@ function buildExploreCandidate(
       daughterDispersal.safeFrontierPull * 0.28 +
       frontierCandidate.parentAwayValue * daughterDispersal.daughterDispersalPressure * 0.22 -
       explorationRiskPenalty -
-      crowdingPenalty * 0.04 -
+      // CORRECTION-32 — `- crowdingPenalty * 0.04` removed. It made the residence's crowding
+      // reduce exploration value at the same moment `crowdingExploreBoost` was raising it:
+      // one fact, two opposite charges, on one candidate.
       band.demography.workingAdults / Math.max(1, band.demography.population) * 0.08 +
       crowdingExploreBoost +
       saturationExploreBoost +
@@ -2125,7 +2133,10 @@ function buildExploreCandidate(
     daughterDispersalPressure: daughterDispersal.daughterDispersalPressure,
     inheritedFamiliarityPull: daughterDispersal.inheritedFamiliarityPull,
     safeFrontierPull: daughterDispersal.safeFrontierPull,
-    crowdingPenalty,
+    // CORRECTION-32 — an unknown destination has no knowable crowding. `nearbyBandPressure`
+    // above still reports the RESIDENCE's reading as evidence for the explanation and the UI
+    // (it no longer carries a score weight); the cost channel is zero.
+    crowdingPenalty: 0,
     biomeCompetence: decisionCache.pressureSnapshot.biomeCurrentTileFit,
     biomeMismatchPenalty: 0,
     rangeSaturation,
@@ -3642,9 +3653,10 @@ function getBadSiteStuckResidencePenalty(
       scoreBreakdown.foodStress * 0.24 +
       scoreBreakdown.waterStress * 0.22 +
       scoreBreakdown.mobilityPressure * 0.16 +
-      scoreBreakdown.nearbyBandPressure * 0.16 +
       scoreBreakdown.rangeSaturation * 0.14 +
-      scoreBreakdown.crowdingPenalty * 0.14 +
+      // CORRECTION-32 — was `nearbyBandPressure * 0.16 + crowdingPenalty * 0.14`, the same
+      // scalar counted twice. One term at the sum of the two weights.
+      scoreBreakdown.crowdingPenalty * 0.3 +
       scoreBreakdown.socialAccessRisk * 0.08 +
       scoreBreakdown.depletionPenalty * 0.18 +
       scoreBreakdown.biomeMismatchPenalty * 0.12 +
@@ -3809,12 +3821,20 @@ function buildKnownTileScoreBreakdown(
       (band.nomadicScalePressure?.nomadicScalePressure ?? 0) * 0.24,
   );
   const stayAttachmentPressureRelief = isStay ? 1 - ecologicalMovePressure * 0.46 : 1;
+  // CORRECTION-32 — the decision seam reads the CROWDING-EXCLUDED saturation. The full
+  // `saturationPressure` still mixes own use, local population, seasonal stress AND current
+  // physical crowding, and every ecological/social reader still gets it; but this candidate is
+  // already charged that crowding once, as `crowdingPenalty`.
   const rangeSaturation = isStay
-    ? rangeSaturationState?.saturationPressure ?? 0
+    ? rangeSaturationState?.saturationPressureExcludingCrowding ?? 0
     : 0;
+  // CORRECTION-32 — `- crowdingPenalty * 0.24` removed from the target-side estimate. Nearby
+  // bodies are not evidence that per-capita return at that place has fallen; realized return,
+  // depletion and shared catchment measure that physically and separately (§10.3/§12.8). The
+  // stay side keeps the ecology authority's own `perCapitaReturnEstimate` unchanged.
   const perCapitaReturn = isStay
     ? rangeSaturationState?.perCapitaReturnEstimate ?? 0
-    : clamp01(expectedKnownFoodForRecord(record) - crowdingPenalty * 0.24);
+    : clamp01(expectedKnownFoodForRecord(record));
   const frontierDispersalPressure = frontierDispersalState?.pressure ?? 0;
   // FrontierIntent v0 (M0.3): a bounded pull toward the band's own held, decaying
   // frontier-drift direction/target (band-known only). Lets a frontier group keep
@@ -3987,8 +4007,10 @@ function buildKnownTileScoreBreakdown(
       riverAssessment.blockedCrossingPenalty * 0.5 -
       lightExplorationRouteBias * 0.08 -
       reportedTargetBias.cautionPenalty * 0.06 -
-      crowdingPenalty * 0.14 -
-      nearbyPressure.weightedCrowding * 0.08 -
+      // CORRECTION-32 — was `crowdingPenalty * 0.14 + weightedCrowding * 0.08`: the same
+      // scalar twice, once with the capacity transform and once without. One term now, at the
+      // sum of the two weights, on the capacity-conditioned quantity.
+      crowdingPenalty * 0.22 -
       daughterDispersal.parentCoreOverlap * (isStay ? 0.22 : 0.04) +
       daughterDispersal.daughterDispersalPressure * (isStay ? -0.28 : 0.18) +
       (isStay ? 0 : daughterDispersal.safeFrontierPull * 0.12) +
@@ -4371,23 +4393,14 @@ function buildCommonSecondaryReasons(
     );
   }
 
-  if (scoreBreakdown.nearbyBandPressure > 0.18) {
-    const nearbyPressure = getCandidateTileMemo(world, band, tile, decisionCache).nearbyPressure;
-
-    reasons.push(
-      makeReason(decisionId, "secondary", reasons.length + startIndex, {
-        type: "nearby_band_crowding",
-        strength: scoreBreakdown.nearbyBandPressure,
-        confidence: scoreBreakdown.memoryConfidence,
-        relatedTileIds: [tile.id],
-        bandId: band.id,
-        nearbyBandIds: nearbyPressure.pressureBandIds,
-        tileId: tile.id,
-        weightedCrowding: scoreBreakdown.nearbyBandPressure,
-      }),
-    );
-  }
-
+  // CORRECTION-32 — ONE crowding reason, not two.
+  //
+  // `nearby_band_crowding` used to fire alongside `crowding_reduced_local_suitability`, naming
+  // the raw `nearbyBandPressure * 0.24` score charge. That charge no longer exists, so emitting
+  // it would be an explanation disagreeing with the actual score authority. The surviving
+  // reason already carries BOTH the evidence (`weightedCrowding`, `nearbyBandIds`) and the cost
+  // (`crowdingPenalty`), so a decision can say "nearby physical use made this place less
+  // attractive by X" once. The reason TYPE stays in rules/types.ts as vocabulary.
   if (scoreBreakdown.crowdingPenalty > 0.12) {
     const nearbyPressure = getCandidateTileMemo(world, band, tile, decisionCache).nearbyPressure;
 
