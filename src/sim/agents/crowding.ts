@@ -129,22 +129,31 @@ function buildPressureResult(
 // Deterministic per-tick crowding field (2J.2B).
 //
 // Each band scatters its crowding influence into nearby tiles ONCE per cache,
-// from the fixed band snapshot:
-//   - proximity channel: tiles within CROWDING_RADIUS of the band's position
-//   - memory channel: tiles within distance 2 of the band's salient return /
-//     high-attachment places (the remembered-area overlap, reproduced exactly)
+// from the fixed band snapshot, through ONE channel:
+//   - proximity: tiles within CROWDING_RADIUS of the band's CURRENT position
 // Per tile it stores each contributor's pre-clamp base weight (kin factor NOT yet
 // applied), the kin-factor=1 crowding sum/count, and the sorted contributor ids.
 // A query for a deciding band then reads its tile entry and applies self-exclusion
 // + kin (0.72x) corrections in O(local kin), instead of iterating nearby bands.
 //
+// CORRECTION-28 — there is no memory channel, deliberately. This field used to
+// ALSO scatter into the radius-2 ball around each band's salient return /
+// high-attachment places, independent of where that band currently was, and add
+// `memoryOverlap * 0.24` to the weight. AUDIT-27 measured the consequence: a band
+// 35 tiles away still produced crowding, a contributor identity and downstream
+// saturation at a place it merely remembered, and memory-only overlap outnumbered
+// real physical overlap 27 to 25 across 7,360 pair-seasons. Physical crowding is
+// now created ONLY by current physical proximity. Remembered range keeps its own
+// authorities — placeMemory, familiarCountry, socialRangeRecognition and
+// protoAccessMemory — and none of them is a physical crowding source.
+//
 // Drift vs. the per-query scan is bounded and intended: (1) tiny float-add order
 // differences in the crowding sum (the field accumulates kf=1 in sorted order and
 // applies kin/self as deltas, rather than per-band inline), mostly absorbed by the
 // round2; (2) in the decision loop the field reflects the fixed pre-decision
-// snapshot rather than mid-loop moved positions. basePreclamp and memoryOverlap are
-// reproduced exactly, and nearbyBandCount / confidence stay exact (debug
-// pressureBandIds are bounded).
+// snapshot rather than mid-loop moved positions. basePreclamp is reproduced
+// exactly, and nearbyBandCount / confidence stay exact (debug pressureBandIds are
+// bounded).
 const MAX_DEBUG_PRESSURE_IDS = 32;
 
 interface CrowdingFieldTile {
@@ -197,40 +206,14 @@ function buildCrowdingField(world: WorldState, cache: TickContextCache): Crowdin
 
     const populationWeight = Math.min(1.6, (band.demography?.population ?? band.size) / 36);
 
-    // Memory channel: max remembered-area value per tile within distance 2 of a
-    // qualifying salient place (matches getRememberedAreaOverlap exactly).
-    const memOverlapByTile = new Map<TileId, number>();
-
-    for (const memory of getSalientPlaceMemories(band, cache)) {
-      if (!(memory.isReturnPlace || memory.attachment > 0.5)) {
-        continue;
-      }
-
-      const placeTile = getTile(world, memory.tileId);
-
-      if (placeTile === undefined) {
-        continue;
-      }
-
-      const value = clamp01(memory.attachment * 0.46 + (memory.isReturnPlace ? 0.22 : 0));
-
-      scatterBall(world, placeTile.coord.x, placeTile.coord.y, 2, (reachedTileId) => {
-        const previous = memOverlapByTile.get(reachedTileId);
-
-        if (previous === undefined || value > previous) {
-          memOverlapByTile.set(reachedTileId, value);
-        }
-      });
-    }
-
-    // Footprint = proximity ball (distance <= CROWDING_RADIUS) + memory tiles.
+    // Footprint = the proximity ball alone (distance <= CROWDING_RADIUS).
+    // CORRECTION-28: the band no longer scatters into the country it merely
+    // remembers, so a band that has walked away stops crowding the place it
+    // still values.
     const footprint = new Set<TileId>();
     scatterBall(world, originTile.coord.x, originTile.coord.y, CROWDING_RADIUS, (reachedTileId) => {
       footprint.add(reachedTileId);
     });
-    for (const memoryTileId of memOverlapByTile.keys()) {
-      footprint.add(memoryTileId);
-    }
 
     for (const tileId of footprint) {
       const tile = getTile(world, tileId);
@@ -240,9 +223,8 @@ function buildCrowdingField(world: WorldState, cache: TickContextCache): Crowdin
       }
 
       const distance = getGridDistance(originTile, tile);
-      const memoryOverlap = memOverlapByTile.get(tileId) ?? 0;
 
-      if (distance > CROWDING_RADIUS && memoryOverlap <= 0) {
+      if (distance > CROWDING_RADIUS) {
         continue;
       }
 
@@ -252,7 +234,7 @@ function buildCrowdingField(world: WorldState, cache: TickContextCache): Crowdin
       const samePatchWeight =
         distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
       const basePreclamp =
-        (distanceWeight * 0.58 + samePatchWeight * 0.34 + memoryOverlap * 0.24) * populationWeight;
+        (distanceWeight * 0.58 + samePatchWeight * 0.34) * populationWeight;
 
       let entry = byTile.get(tileId);
 
@@ -639,9 +621,8 @@ function computeCrowdingContribDescriptor(
   }
 
   const distance = getGridDistance(tile, otherTile);
-  const memoryOverlap = getRememberedAreaOverlap(world, otherBand, tile, cache);
 
-  if (distance > CROWDING_RADIUS && memoryOverlap <= 0) {
+  if (distance > CROWDING_RADIUS) {
     return SKIPPED_CROWDING_CONTRIB;
   }
 
@@ -652,29 +633,9 @@ function computeCrowdingContribDescriptor(
     distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
   const populationWeight = Math.min(1.6, (otherBand.demography?.population ?? otherBand.size) / 36);
   const basePreclamp =
-    (distanceWeight * 0.58 + samePatchWeight * 0.34 + memoryOverlap * 0.24) * populationWeight;
+    (distanceWeight * 0.58 + samePatchWeight * 0.34) * populationWeight;
 
   return { skip: false, basePreclamp };
-}
-
-function getRememberedAreaOverlap(
-  world: WorldState,
-  band: Band,
-  tile: Tile,
-  cache: TickContextCache | undefined,
-): number {
-  return getSalientPlaceMemories(band, cache)
-    .filter((memory) => memory.isReturnPlace || memory.attachment > 0.5)
-    .map((memory) => {
-      const memoryTile = getTile(world, memory.tileId);
-
-      if (memoryTile === undefined || getGridDistance(memoryTile, tile) > 2) {
-        return 0;
-      }
-
-      return clamp01(memory.attachment * 0.46 + (memory.isReturnPlace ? 0.22 : 0));
-    })
-    .sort((left, right) => right - left)[0] ?? 0;
 }
 
 function isKinOverlap(band: Band, otherBand: Band): boolean {

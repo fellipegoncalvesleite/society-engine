@@ -1,0 +1,274 @@
+{
+  "audit": "CORRECTION-28 — BEFORE / AFTER CAUSAL PROOF",
+  "beforeCommit": "b352c3195406fc9494c0b693a98eb0786f1a3780",
+  "afterBranch": "checkpoint/crowding-physical-memory-separation-28",
+  "method": "The identical fixture and trace scripts were run in a detached worktree at the before commit and on the corrected branch. Same seeds, same scenarios, same durations, same measurement seams.",
+  "headline": {
+    "memoryOnlyDistantContributionToPhysicalCrowding": {
+      "before": {
+        "verdict": "MEMORY_ONLY_CROWDING_PRESENT",
+        "preconditionMet": true,
+        "residenceDistance": 35,
+        "observerWeightedCrowding": 0.03,
+        "observerCrowdingPenalty": 0.01,
+        "observerNearbyBandCount": 1,
+        "observerCrowdingBandIds": [
+          "band:custom:0"
+        ],
+        "observerRsNearbyCrowding": 0.07,
+        "rememberingBandStillHoldsMemory": true
+      },
+      "after": {
+        "verdict": "MEMORY_ONLY_CROWDING_ABSENT",
+        "preconditionMet": true,
+        "residenceDistance": 35,
+        "observerWeightedCrowding": 0,
+        "observerCrowdingPenalty": 0,
+        "observerNearbyBandCount": 0,
+        "observerCrowdingBandIds": [],
+        "observerRsNearbyCrowding": 0.05,
+        "rememberingBandStillHoldsMemory": true
+      },
+      "requirement": "before > 0, after = 0",
+      "satisfied": true
+    },
+    "currentPhysicalProximityContribution": {
+      "before": {
+        "p2Verdict": "PROXIMITY_CROWDING_PRESENT",
+        "p2ResidenceDistance": 2,
+        "p2WeightedCrowding": 0.11,
+        "p3Verdict": "PROXIMITY_ALONE_SUFFICES",
+        "p3WeightedCrowding": 0.15
+      },
+      "after": {
+        "p2Verdict": "PROXIMITY_CROWDING_PRESENT",
+        "p2ResidenceDistance": 2,
+        "p2WeightedCrowding": 0.11,
+        "p3Verdict": "PROXIMITY_ALONE_SUFFICES",
+        "p3WeightedCrowding": 0.15
+      },
+      "requirement": "before > 0, after > 0",
+      "satisfied": true
+    }
+  },
+  "fixtureVerdicts": [
+    {
+      "id": "P1",
+      "question": "distant remembering band contributes physical crowding",
+      "before": "MEMORY_ONLY_CROWDING_PRESENT",
+      "after": "MEMORY_ONLY_CROWDING_ABSENT"
+    },
+    {
+      "id": "P2",
+      "question": "currently nearby active band still produces physical crowding",
+      "before": "PROXIMITY_CROWDING_PRESENT",
+      "after": "PROXIMITY_CROWDING_PRESENT"
+    },
+    {
+      "id": "P3",
+      "question": "proximity crowding without any remembered overlap",
+      "before": "PROXIMITY_ALONE_SUFFICES",
+      "after": "PROXIMITY_ALONE_SUFFICES"
+    },
+    {
+      "id": "P4",
+      "question": "nearby band that also holds remembered overlap is counted once",
+      "before": "MEASURED",
+      "after": "MEASURED"
+    },
+    {
+      "id": "P5",
+      "question": "equal-demand overlapping catchments still split support symmetrically",
+      "before": "SYMMETRIC_SPLIT_OBSERVED",
+      "after": "SYMMETRIC_SPLIT_OBSERVED"
+    },
+    {
+      "id": "P6",
+      "question": "distant remembered place remains social/spatial memory",
+      "before": "MEMORY_PRESERVED",
+      "after": "MEMORY_PRESERVED"
+    },
+    {
+      "id": "P7",
+      "question": "dispersed / absorbed / extinct bands contribute zero",
+      "before": "CLEAN_TERMINAL_EXCLUSION",
+      "after": "CLEAN_TERMINAL_EXCLUSION"
+    },
+    {
+      "id": "P8",
+      "question": "cached field path and cache-less scan path agree on every public field",
+      "before": "FIELD_SCAN_PARITY",
+      "after": "FIELD_SCAN_PARITY"
+    },
+    {
+      "id": "P9",
+      "question": "band processing order invariance",
+      "before": "ORDER_INVARIANT",
+      "after": "ORDER_INVARIANT"
+    },
+    {
+      "id": "P10",
+      "question": "step-mode invariance (daily/weekly/monthly/seasonal)",
+      "before": "STEP_MODE_INVARIANT",
+      "after": "STEP_MODE_INVARIANT"
+    },
+    {
+      "id": "P11",
+      "question": "memory-only distant pair gains no new contact evidence",
+      "before": "MEASURED",
+      "after": "MEASURED"
+    },
+    {
+      "id": "P12",
+      "question": "crowding derivations do not modify remembered state",
+      "before": "MEMORY_UNMODIFIED_BY_DERIVATION",
+      "after": "MEMORY_UNMODIFIED_BY_DERIVATION"
+    }
+  ],
+  "naturalOccurrenceComparison": {
+    "seasonSamples": {
+      "before": 480,
+      "after": 480,
+      "delta": 0
+    },
+    "bandSeasons": {
+      "before": 2400,
+      "after": 2400,
+      "delta": 0
+    },
+    "activeBandPairSeasons": {
+      "before": 7360,
+      "after": 7360,
+      "delta": 0
+    },
+    "sameTileResidencePairs": {
+      "before": 0,
+      "after": 0,
+      "delta": 0
+    },
+    "nearResidencePairs": {
+      "before": 26,
+      "after": 27,
+      "delta": 1
+    },
+    "overlappingPhysicalActivityPairs": {
+      "before": 25,
+      "after": 25,
+      "delta": 0
+    },
+    "memoryOnlyOverlapPairs": {
+      "before": 27,
+      "after": 26,
+      "delta": -1
+    },
+    "physicalOverlapBeyondCrowdingRadiusPairs": {
+      "before": 4,
+      "after": 4,
+      "delta": 0
+    },
+    "kinOverlapPairs": {
+      "before": 0,
+      "after": 0,
+      "delta": 0
+    },
+    "strangerOverlapPairs": {
+      "before": 25,
+      "after": 25,
+      "delta": 0
+    },
+    "rangeFrictionEventsObserved": {
+      "before": 149,
+      "after": 150,
+      "delta": 1
+    },
+    "accessMemoryStatesNonNone": {
+      "before": 18417,
+      "after": 18417,
+      "delta": 0
+    },
+    "accessMemoryBehaviorHookNonZero": {
+      "before": 2400,
+      "after": 2400,
+      "delta": 0
+    },
+    "crowdingPenaltyNonZeroBandSeasons": {
+      "before": 89,
+      "after": 49,
+      "delta": -40
+    },
+    "rangeSaturationNonZeroBandSeasons": {
+      "before": 2398,
+      "after": 2398,
+      "delta": 0
+    },
+    "movesWithCrowdingReason": {
+      "before": 0,
+      "after": 0,
+      "delta": 0
+    },
+    "movesTotal": {
+      "before": 1547,
+      "after": 1546,
+      "delta": -1
+    },
+    "crowdingReasonInstances": {
+      "before": 0,
+      "after": 0,
+      "delta": 0
+    },
+    "pressurePersistedAfterDeparture": {
+      "before": 56,
+      "after": 56,
+      "delta": 0
+    },
+    "terminalBandContributingToPressure": {
+      "before": 0,
+      "after": 0,
+      "delta": 0
+    },
+    "doubleCountedBandSeasons": {
+      "before": 83,
+      "after": 38,
+      "delta": -45
+    },
+    "ecologyRecoveryAfterReleaseCases": {
+      "before": 1,
+      "after": 1,
+      "delta": 0
+    },
+    "sharedCatchmentContestedTileSeasons": {
+      "before": 42,
+      "after": 42,
+      "delta": 0
+    },
+    "hiddenCrowdingNoPerceptionBandSeasons": {
+      "before": 0,
+      "after": 0,
+      "delta": 0
+    }
+  },
+  "naturalOccurrenceAccessStates": {
+    "before": {
+      "familiar_use": 12107,
+      "none": 294,
+      "expected_return": 6239,
+      "tolerated_shared_use": 71
+    },
+    "after": {
+      "familiar_use": 12107,
+      "none": 294,
+      "expected_return": 6239,
+      "tolerated_shared_use": 71
+    }
+  },
+  "naturalOccurrenceFrictionRelations": {
+    "before": {
+      "stranger_or_unrecognized": 8,
+      "familiar_neighbor": 141
+    },
+    "after": {
+      "stranger_or_unrecognized": 8,
+      "familiar_neighbor": 142
+    }
+  }
+}

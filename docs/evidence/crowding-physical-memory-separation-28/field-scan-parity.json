@@ -1,0 +1,14 @@
+{
+  "audit": "CORRECTION-28 — PHYSICAL VS REMEMBERED CROWDING CONTROLLED FIXTURES",
+  "arm": "after",
+  "seed": "c28:fixtures",
+  "seasons": 16,
+  "p8": {
+    "id": "P8",
+    "question": "cached field path and cache-less scan path agree on every public field",
+    "verdict": "FIELD_SCAN_PARITY",
+    "compared": 408,
+    "mismatches": 0,
+    "sampleMismatches": []
+  }
+}

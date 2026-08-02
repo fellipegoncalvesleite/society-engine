@@ -68,6 +68,91 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-08-01 (CROWDING — PHYSICAL VS REMEMBERED RANGE SEPARATION CORRECTION-28:
+  PASS — REMEMBERED PLACES NO LONGER CREATE PHYSICAL CROWDING / CURRENT PHYSICAL CROWDING AND
+  SHARED CATCHMENT COMPETITION REMAIN / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE.
+  Branch checkpoint/crowding-physical-memory-separation-28 from the accepted AUDIT-27 tip
+  b352c3195406fc9494c0b693a98eb0786f1a3780. AUDIT-27 FROZEN at b352c31; CORRECTION-26 FROZEN at
+  5f341648; local and remote main untouched at 0a43083. **PRODUCTION BEHAVIOUR CHANGED** — no
+  fingerprint parity is claimed or possible.
+
+  **AUDIT-27 REMAINS A *PROGRESS* DIAGNOSTIC CHECKPOINT. CORRECTION-28 REPAIRS ONLY THE
+  PHYSICAL-VS-REMEMBERED CROWDING SEAM. ROADMAP ITEM 3 REMAINS OPEN** and must not be marked
+  complete.
+
+  **ONE PRODUCTION FILE.** `src/sim/agents/crowding.ts` derived physical crowding from
+  `(distanceWeight*0.58 + samePatchWeight*0.34 + memoryOverlap*0.24) * populationWeight`, and the
+  memory channel ALSO widened the scatter footprint itself: a band scattered into the radius-2 ball
+  around each of its salient return / attachment>0.5 places **regardless of where it currently
+  was**. The memory channel is removed from **both** implementations of the same rule — the cached
+  field path `buildCrowdingField` and the cache-less scan path `computeCrowdingContribDescriptor` —
+  and `getRememberedAreaOverlap` is deleted. The skip condition narrows from
+  `distance > CROWDING_RADIUS && memoryOverlap <= 0` to `distance > CROWDING_RADIUS`. Physical
+  crowding is now created ONLY by current physical proximity. `getSalientPlaceMemories` is
+  RETAINED — it still serves `getParentCoreOverlap`.
+
+  **HEADLINE, the identical fixture run in both arms.** A band **35 TILES AWAY** that still holds a
+  salient memory within 2 of the observer's tile contributed `weightedCrowding 0.03`,
+  `crowdingPenalty 0.01`, `nearbyBandCount 1`, a named contributor identity and
+  `RangeSaturationState.nearbyCrowding 0.03`. It now contributes **0 / 0 / 0 / none / 0**.
+  **A currently nearby band is UNCHANGED at 0.11 → 0.11**, and a nearby band that has formed no
+  memory at all still crowds — proximity never needed shared memory. The change was NOT obtained by
+  reducing bands, memory formation or stepping frequency: `totalBandSeasons` is 2,400 in both arms.
+
+  **45% OF NATURALLY OCCURRING CROWDING WAS MEMORY-DERIVED.** AUDIT-27's own natural-occurrence
+  script, rerun unmodified on both arms with the same maps, seeds and 20-year durations:
+  band-seasons with non-zero `crowdingPenalty` **89 → 49**, possible double-counting band-seasons
+  **83 → 38**, crowding contributor identities **96 → 54**. Everything else is identical — 7,360
+  active pair-seasons, 2,400 band-seasons, `sameTileResidencePairs` 0, `kinOverlapPairs` 0,
+  `overlappingPhysicalActivityPairs` 25, `movesWithCrowdingReason` 0, `crowdingReasonInstances` 0,
+  `terminalBandContributingToPressure` 0, and the access-state distribution pinned at 18,417.
+  Memory-only overlap still EXISTS as memory (26 pair-seasons); it simply no longer counts as
+  physical crowding.
+
+  **BEHAVIOURALLY ALMOST INERT, AND THAT IS REPORTED AS-IS.** Five of six 20-year runs are
+  **byte-identical**. The only divergence is map2 seed s1 at **tick 37**, band
+  `varied-dry-corridor-mid`, `weightedCrowding` 0.12 → 0.11, which costs **one residential move**
+  across 20 years (431 → 430) while that run's crowded band-seasons halve 82 → 40. Population
+  817 → 817, living bands 30 → 30, survival 6/6 → 6/6, fissions 0 → 0. **NO IMPROVEMENT IS
+  CLAIMED** — the correction makes the crowding authority truthful, not the simulation better.
+
+  **AUDIT-27'S OWN UNMODIFIED INSTRUMENTS CONFIRM THE ISOLATION.** Its C4 fixture flips
+  `OBSOLETE_CROWDING_PERSISTS` → **`NO_OBSOLETE_CROWDING`**, and **every other AUDIT-27 fixture is
+  unchanged** — including **C10b** (two bands 44 tiles apart still gain contact memory and a
+  friction event from shared memory alone) and **C5** (physical releases on departure, perception
+  does not). §7.5 and §8 required both to be left alone, and they were. The double-counting trace is
+  unchanged (13 moved quantities, 6 distinct score inputs, 12 analytic channels) because its fixture
+  is two bands at distance 1 — pure proximity, which this correction cannot move.
+
+  **A SECOND MEMORY→PRESSURE PATH SURVIVES, DELIBERATELY, AND IS MEASURED NOT ASSUMED ABSENT.**
+  `getParentCoreOverlap` still takes `max(directOverlap, memoryOverlap)` over the **parent** band's
+  salient places into `DaughterDispersalPressure.parentCoreOverlap`. It does not flow through
+  `CrowdingField` and it is kin machinery: §7.8 forbids modifying kin behaviour here and AUDIT-27
+  measured **zero** natural kin-overlap cases, so there is no evidence to recalibrate against. The
+  fixtures read `parentCoreOverlap` and `daughterDispersalPressure` on every measurement so the
+  residual is quantified.
+
+  PASSED: tsc (both projects), build, graph 221/764 0 dup 0 dangling, import boundary (back edges
+  85, unchanged), season-order invariance, step-mode invariance BOTH maps with
+  `fullCanonicalStateMatch` and `firstDivergence: null`, catchment invariants (0.5/0.5 symmetric
+  split, per-capita 1.5 → 1.2 under contest), living-ecology food pipeline, mobility authority,
+  controlled fixtures **P1-P12 in BOTH arms with 0 vacuous**, and **field/scan parity with 0
+  mismatches in both arms** across 3 bands × 8 probe tiles × 17 seasons.
+
+  **INSTRUMENT ERRORS RECORDED, NOT DROPPED.** P4 was vacuous in two earlier forms — first
+  `VACUOUS_NOT_NEARBY` (relied on drift), then `VACUOUS_NO_REMEMBERED_OVERLAP` (moved the wrong
+  band, so its memories stayed around its old home). The accepted construction parks the OBSERVER
+  on one of the other band's genuinely warmed salient tiles. Both earlier verdicts were honest
+  vacuous reports, not false negatives. Separately, `crowdingControlledFixturesAudit.mjs` and
+  `crowdingDoubleCountingTraceAudit.mjs` DEFAULT their outputs into the AUDIT-27 evidence directory
+  and were given explicit `--out` paths; the whole AUDIT-27 directory is preserved byte-for-byte.
+
+  NOT RUN, deliberately: no 200 y / 500 y matrix, no performance re-measurement, no double-counting
+  consolidation, no encounter-provenance repair, no range-release repair, no physical-activity
+  footprint expansion, no Daughter Viability.
+  See docs/evidence/crowding-physical-memory-separation-28/FINDINGS.md.)
+
+Previously updated:
   2026-08-01 (RESOURCE INVESTIGATION PHYSICAL EXECUTION CORRECTION-26:
   PASS — TECHNICALLY COMPLETE / AWAITING HUMAN ROADMAP CLOSURE / DO NOT MERGE. The roadmap
   does not advance on this pass's authority: item 2 closes on the supervising human review,
@@ -1074,9 +1159,21 @@ Implemented checkpoint:
       (context lifecycle 4→2 rebuilds). See §25.2.
 
 Current active checkpoint:
-  RESOURCE INVESTIGATION / TEMPORARY USE (roadmap item 2) — CORRECTION-26 is TECHNICALLY
-  COMPLETE and awaiting final human roadmap closure; it is not self-closed. Crowding (item 3)
-  is the next roadmap item, NOT authorized and NOT started. Historical context follows:
+  CROWDING / SHARED RANGE / RANGE RELEASE (roadmap item 3) — **ACTIVE AND OPEN.** AUDIT-27
+  (b352c31) mapped the authorities and returned PROGRESS; it remains a diagnostic checkpoint and
+  authorized no production work beyond the one seam it defined. CORRECTION-28 repairs exactly that
+  seam — remembered places no longer create physical crowding — and nothing else. **Item 3 does NOT
+  close on this pass.** The AUDIT-27 seams still open, each needing its own checkpoint and its own
+  before/after evidence: double-counting consolidation in `computeCandidateScore` (the same crowding
+  scalar reaches one score through six separately-weighted terms); encounter-provenance repair (two
+  bands 44 tiles apart gain contact memory from shared remembered tiles, `getEncounterCandidatePairs`
+  has no distance gate); range-release lifecycle (range-friction events release only on a fixed
+  48-tick clock that never observes departure, and access expectations drift TOWARD avoided_shared_use
+  after the neighbour leaves); the physical shared-use substrate (`sharedCatchment`'s footprint is
+  residence-anchored, so real trips, expedition routes and investigation walks compete for nothing);
+  and `territorialPressure`, a spawn constant with three live behavioural readers and no writer.
+  Roadmap item 2 (RESOURCE INVESTIGATION / TEMPORARY USE) — CORRECTION-26 is TECHNICALLY
+  COMPLETE and awaiting final human roadmap closure; it is not self-closed. Historical context follows:
   HUMAN VIABILITY / CAUSAL CLOSURE (CORRECTION-16, PROGRESS) then DESTINATION KNOWLEDGE HORIZON /
   EXPLORATION REACH. The two "architecture facts" CORRECTION-15 recorded here are RETRACTED:
     - The social layer is NOT readability-only. cohesion, innerFission and socialTension all have
@@ -3429,6 +3526,7 @@ Keep this bounded to the latest 10–15 accepted architecture changes. Condense 
 
 | Checkpoint/commit | Architecture change | Remaining caveat |
 | --- | --- | --- |
+| CROWDING — PHYSICAL VS REMEMBERED RANGE SEPARATION — CORRECTION-28 (2026-08-01; branch `checkpoint/crowding-physical-memory-separation-28` from AUDIT-27's `b352c31`; **PASS — ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE**) | **Physical crowding can no longer be created by memory alone.** `crowding.ts` derived it from `(distanceWeight*0.58 + samePatchWeight*0.34 + memoryOverlap*0.24) * populationWeight`, and the memory channel ALSO widened the scatter footprint — a band scattered into the radius-2 ball around each salient return / attachment>0.5 place **regardless of where it currently was**. The channel is removed from **both** implementations of the same rule (`buildCrowdingField` and `computeCrowdingContribDescriptor`), `getRememberedAreaOverlap` is deleted, and the skip narrows to `distance > CROWDING_RADIUS`. **Option B (a typed second channel) was rejected**: remembered overlap already has four honest homes — `placeMemory`, `FamiliarCountrySummary`, `SocialRangeRecognitionSummary`, `ProtoAccessMemoryState` — and manufacturing a fifth with no reader is the "state field nobody reads" anti-pattern. **HEADLINE, identical fixture both arms: a band 35 TILES AWAY went from `weightedCrowding 0.03` / `crowdingPenalty 0.01` / `nearbyBandCount 1` / a named contributor identity / `rangeSaturation.nearbyCrowding 0.03` to 0 / 0 / 0 / none / 0, while a currently nearby band is UNCHANGED at 0.11 → 0.11 and a band with no memory at all still crowds.** **45% of natural crowding was memory-derived** — crowded band-seasons 89 → 49, double-counting 83 → 38, contributor identities 96 → 54, with every other natural counter identical. **Five of six 20-year runs byte-identical**; the sole divergence is map2 s1 at tick 37 (0.12 → 0.11), costing one move; population 817 → 817, bands 30 → 30, survival 6/6, fissions 0 → 0. AUDIT-27's own C4 flips to `NO_OBSOLETE_CROWDING`; C5 and C10b unchanged. New `scripts/crowdingMemorySeparation{FixturesAudit,BehaviorTrace,Compare}.mjs`; P1-P12 in both arms, 0 vacuous; field/scan parity 0 mismatches both arms | **NO IMPROVEMENT IS CLAIMED** — population, bands, survival and fissions are unchanged at 20 years and no long-horizon matrix was run. **A second memory→pressure path SURVIVES deliberately:** `getParentCoreOverlap` still takes `max(directOverlap, memoryOverlap)` over the PARENT band's salient places into `DaughterDispersalPressure`; it is kin machinery, §7.8 forbids touching it here, and AUDIT-27 measured **zero** natural kin-overlap cases — measured on every fixture read, not assumed absent. **Roadmap item 3 remains OPEN** with five AUDIT-27 seams unrepaired: double-counting in `computeCandidateScore`, encounter provenance (the 44-tile ghost), range-release lifecycle (48-tick clock blind to departure), the residence-anchored physical footprint, and `territorialPressure`'s missing writer. Instrument errors recorded: P4 was vacuous in two earlier forms, and two AUDIT-27 scripts default their output into AUDIT-27's evidence directory and needed explicit `--out` |
 | RESOURCE INVESTIGATION PHYSICAL EXECUTION — CORRECTION-26 (2026-08-01; branch `checkpoint/resource-investigation-physical-26` continuing `b746b68`; **PASS — TECHNICALLY COMPLETE / AWAITING HUMAN ROADMAP CLOSURE / DO NOT MERGE**) | **A selected `resource_scout`/`logistical_probe` no longer observes anything.** `collectProbeObservationTargets` is deleted; selection observes what a `stay` observes and leaves ONE bounded `PendingInvestigationRecord` (new `agents/pendingInvestigation.ts`) carrying the exact `Decision.id` into the following season's first trip day, where `agents/intraSeasonTrips.ts` staffs a party from labour the day's foraging group left, walks `buildOutboundPathTiles`/`findPassablePath`, and either arrives or names why not. Observation happens ONLY on arrival, through the canonical `observeTileAndNearby`; `derivePlantScoutObservationHint` (the one raw-truth read) sits behind that gate. New `agents/resourceScoutObservation.ts` holds the execution-neutral domain half — candidate selection and applied-decision classification STAYED in `rules/`. **Measured at the pre-existing `decisionObserver` seam (present unchanged at f947550): target-area knowledge gained at selection 176/192 (91.7%) → 0/234, with 234/234 now carrying an exact PENDING identity that resolves to 97 physical executions + 132 named non-executions + 5 awaiting a trip day, on MORE selections not fewer. A pending identity is not an execution and is not reported as one.** 343 natural selections resolve 139 executed / 147 `beyond_same_day_reach` / 54 `route_unavailable` / 3 pending / 0 lost / 0 duplicate executions / 0 receipts. `TemporaryTaskCampRecord` → `TemporaryTaskPartyRecord`, written only on a real departure with `noCamp: true` (`camp_movement_temporary_record` 129 → 0; `expedition_task_camp` 103 → 113, untouched, NOT merged). 0 runtime cycles in `src/sim`, 0 `agents → rules` runtime edges | **A real step-mode regression was introduced and fixed** (the executor observed with `runDailyActions`' span-start `world.time`, stamping day 180 vs 185 — the same defect CORRECTION-15 repaired as item (D)); **fixture P13 passed while it was live** and was strengthened with a negative control. Three instrument errors in this pass's own probes are recorded (whole-step measurement window, symmetric metric, vacuous P13). `expeditionLifecycleAudit` FAILS here and **identically on f947550** — inherited, unrepaired. **DEFERRED AND UNPROVEN:** `beyond_same_day_reach` is an honest named refusal under the currently authoritative production boundary; the four-tile boundary itself is NOT claimed proven physically correct. The possible mismatch with dynamic `bandMobility` is unproven in either direction, no mobility constant was changed, no separate correction is authorized, and it is not part of CORRECTION-26. `route_unavailable` has no failure memory. No long-horizon matrix, no population/survival comparison, no claim that physical investigation improves outcomes |
 | ORDINARY EXPLORATION CAUSAL CLOSURE — CORRECTION-24A COMPLETION (2026-07-29; branch `checkpoint/ordinary-exploration-capacity-24` continuing `d865beec`; **PROGRESS — LAUNCH THROTTLING CONFIRMED / NO EVIDENCE THAT MORE EXPLORATION IS BENEFICIAL**) | **Both launch-side blockers are confirmed and located exactly, and both are non-binding.** §4.1 splits the old `ALREADY_EXPLORING` into `SUPPRESSION_WINDOW_ACTIVE` (the 12-tick cooldown) and a separate `activeFrontierParty`, which is what reveals that **191,001 of 191,881 suppressed opportunities (99.54%) had the party ALREADY HOME** and **164,411 held a physically valid proposal**. §7's typed post-claim ledger reveals the fallthrough is **200 claim chains, 147 repeating, 17,959 of 18,042 repeats `ROUTE_BUILD_FAILED`** — one band claiming the same unreachable tile every sixth day for thirty years. **Nine counterfactual arms all null**: spread 53.836-54.055 (0.4%), survival 1.000 on all; O2 eliminates the fallthrough completely for +8.6% launches and **0** extra changed actions; O3 destroys all 19,974 returned records without degrading outcomes; O4 cuts eviction 72% and the reader changes FEWER actions; O5 camp/fission/resource are **byte-identical** to production. **E6 weakens with horizon — 0.84% -> 0.23% -> 0.19% at 40/200/500 y** with a fully sensitive positive control, refuting compounding. §14: removing **57,638 verification parties** moved exploration launches +1.4% and population **+0.02**. New: `explorationHistoricalComparisonAudit.mjs`, `explorationFeedbackLoopAudit.mjs`, per-family O5 reader seams, a bounded `drainExplorationFunnel` for the long horizons | **No repair made and none licensed.** route/corridor has **no reader at all** (travelCorridors is written from the residential movement record); camp/fission/resource readers are measurably inert. **NO LAUNCH-TIME PROVISION OR RISK AUTHORITY** exists — but provisions bind EN ROUTE (`provisions_ran_out`, expedition.ts:912). `POPULATION_TOO_SMALL` (2.36% at 200 y) and `ADEQUATE_KNOWN_ALTERNATIVE` (500 y) read zero at 40 years and are real later. The 200-year sign runs against more exploration but rests on 5-seed means over near-extinct worlds — **exploration is NOT claimed harmful**. X3 remains VACUOUS. **Audit debt: +610 production lines, +518 in expedition.ts, 284 of them one audit function** that should move to diagnostics. `retentionInteractionArm` still has no consumer; 23E/23F replay arms still present. Recommended seam if ever justified: a bounded failure memory in the CLAIMING family's retry logic, on correctness grounds, NOT as an exploration improvement |
 | TEMPORARY-USE PENDING-ACTION AUTHORITY / EXACT LAUNCH-TO-CAMP CONSUMPTION CORRECTION-23J (2026-07-28; branch `checkpoint/physical-frontier-verification-23` from `0955c87`; **PASS — TEMPORARY-USE SUSPENDED UNTIL A REAL OPERATION READER EXISTS / CORRECTION-23 VERIFICATION BEHAVIOUR CLOSED**) | **A verification party is now sent only when one named, already-selected operation will read the answer before it decides its camp.** New typed identity `src/sim/agents/pendingOperation.ts` built entirely from the expedition record the production selector wrote (`frontier_exploration` excluded — no destination; `frontier_verification` excluded — self-reference; only `prepared` and `outbound` are pre-camp-decision). The 23I gate — `patch memory exists OR any active party exists` — is removed: memory is not intent, and a `returning` party has already taken the decision. **§7 model C, measured**: Model A cannot exist because `maybeLaunchExpedition` selects and launches in one call (4,186,352 `no_selected_operation` refusals against 27 genuinely pending), Model B cannot exist because `taskCampRefusedByEvidence` is read only on ARRIVAL, and the arithmetic closes it — a camp falls `legDays` after departure while an answer needs `2*legDays + on-site` (J4/J8: 3 days vs 8). **§10 D = 0**: of 1,145 launches under the 23I gate, NONE named a still-pending operation, and only 378 (33%) were even at a place work ever reached — so 23I's A cannot support its retention decision. Launches 1,142 -> 0; water 103 -> 109 (downstream divergence, gate untouched); suspended questions 0 -> 0; exploration unchanged. J1-J12 11 pass / 1 vacuous / 0 fail, I1-I14 14/14, I6 rewritten to test the real contract | **The 23I evidence file `temporary-use-camp-prevention.json` does not describe the commit it shipped in.** 23I's own audit run unmodified on `0955c87` gives **343/3,672 = 9.34%**, against the file's 10,724/59,286 (18.09%) and the source comment's 492/4,626 (10.6%); a second seed prefix gives 9.51%, so neither published figure is inside seed jitter. The file is preserved unaltered and corrected in `docs/evidence/correction23j/FINDINGS.md`; the 10.6% comment is deleted. **Do not cite either.** J12 is VACUOUS, not a pass — with zero natural launches it states the contract without demonstrating it. The suspension is a physical consequence of the gate, not a policy entry, so it reverses itself when a reservation seam exists; that seam belongs to Resource Investigation / Temporary Use Closure and was deliberately not built. **The ordinary-exploration deficit recorded by 23I is unrepaired and remains the next blocker** |

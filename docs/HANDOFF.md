@@ -181,6 +181,64 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### CROWDING — PHYSICAL VS REMEMBERED RANGE SEPARATION — CORRECTION-28 — PASS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+
+**Branch** `checkpoint/crowding-physical-memory-separation-28`, from the accepted AUDIT-27 tip
+`b352c3195406fc9494c0b693a98eb0786f1a3780`. Local and remote `main` untouched at
+`0a43083a3a9103bc6b8f693b8823a604ae2c6a8d`; AUDIT-27 frozen at `b352c31`; CORRECTION-26 frozen at
+`5f341648`. **PRODUCTION BEHAVIOUR CHANGED** — no fingerprint parity is claimed or possible.
+
+**AUDIT-27 remains a PROGRESS diagnostic checkpoint. CORRECTION-28 repairs only
+physical-vs-remembered crowding separation. Roadmap item 3 remains OPEN.**
+
+**What changed — one file, one semantic edit.** `src/sim/agents/crowding.ts` derived physical
+crowding from `distanceWeight*0.58 + samePatchWeight*0.34 + memoryOverlap*0.24`, and the memory
+channel additionally widened the scatter footprint: a band scattered into the radius-2 ball around
+each of its salient remembered places **regardless of where it currently was**. The memory channel
+is removed from **both** the cached field path and the cache-less scan path; `getRememberedAreaOverlap`
+is deleted. Physical crowding is now created only by current physical proximity.
+
+**Headline, before → after, same fixture, same seeds:** a band **35 tiles away** that still
+remembers the observer's tile contributed `weightedCrowding 0.03`, `crowdingPenalty 0.01`,
+`nearbyBandCount 1` and a named contributor identity; it now contributes **0 / 0 / 0 / none**.
+A currently nearby band is unchanged at **0.11 → 0.11**, and a nearby band with no memory at all
+still crowds — proximity never needed memory.
+
+**45% of naturally occurring crowding was memory-derived.** Same maps, seeds and durations as
+AUDIT-27: band-seasons with non-zero `crowdingPenalty` **89 → 49**, double-counting band-seasons
+**83 → 38**, crowding contributor identities **96 → 54**. Everything else in the natural ledger is
+identical (7,360 pair-seasons, 2,400 band-seasons, `kinOverlapPairs` 0, `movesWithCrowdingReason` 0,
+`terminalBandContributingToPressure` 0, access states unchanged at 18,417).
+
+**Behaviourally almost inert, and that is reported as-is.** Five of six 20-year runs are
+byte-identical. The only divergence is `map2` seed `s1` at tick 37, one band, `weightedCrowding`
+0.12 → 0.11, costing one residential move over 20 years. Population 817 → 817, bands 30 → 30,
+survival 6/6, fissions 0 → 0. **No improvement is claimed.**
+
+**AUDIT-27's own unmodified C4 fixture flips `OBSOLETE_CROWDING_PERSISTS` → `NO_OBSOLETE_CROWDING`,
+and every other AUDIT-27 fixture is unchanged** — including C10b (the 44-tile ghost encounter) and
+C5 (perception never releases), which §7.5/§8 required to be left alone.
+
+**Deferred, untouched, and explicitly recorded:** `getParentCoreOverlap` still takes
+`max(directOverlap, memoryOverlap)` over the parent band's salient places into
+`DaughterDispersalPressure` — a second memory→pressure path that is kin machinery and out of scope
+(§7.8, and AUDIT-27 measured zero natural kin overlap). Also unchanged: shared-catchment footprint
+composition, trip/expedition/investigation overlap, encounter candidacy, range-friction release,
+access-memory decay, crowding score weights and the `nearbyBandPressure`/`crowdingPenalty`
+double-read, `RangeSaturationState` formulas, `localUsePressure` inflation, `placeAttachmentPull`,
+`territorialPressure`'s missing writer, kin factors, mobility-distance limits.
+
+PASSED: tsc (both projects), build, graph 221/764 0 dup 0 dangling, import boundary (back edges 85,
+unchanged), season-order invariance, step-mode invariance **both maps with
+fullCanonicalStateMatch**, catchment invariants, living-ecology food pipeline, mobility authority,
+fixtures P1–P12 in both arms with **0 vacuous**, field/scan parity **0 mismatches in both arms**.
+
+NOT RUN, deliberately: no 200 y / 500 y matrix, no performance re-measurement, no double-counting
+consolidation, no encounter-provenance repair, no range-release repair, no footprint expansion, no
+Daughter Viability. See `docs/evidence/crowding-physical-memory-separation-28/FINDINGS.md`.
+
+---
+
 ### RESOURCE INVESTIGATION — PHYSICAL EXECUTION CORRECTION-26 — PASS — TECHNICALLY COMPLETE / AWAITING HUMAN ROADMAP CLOSURE / DO NOT MERGE
 
 **Branch** `checkpoint/resource-investigation-physical-26`, continuing its own
@@ -9807,3 +9865,16 @@ exception; daughter colours related-but-distinct and never visually confusing.
   gate (18.1% ordinary / 0% rich, selection uses straight-line distance, execution needs a
   passable path) is measured, classified, and deferred to CORRECTION-9. Roadmap restores
   CLIMATE-2 as active. Evidence: `docs/evidence/correction8/`.
+
+- **CROWDING — PHYSICAL VS REMEMBERED RANGE SEPARATION (CORRECTION-28)** — PASS. Branch
+  `checkpoint/crowding-physical-memory-separation-28` from AUDIT-27's `b352c31`. One production
+  file: `crowding.ts` no longer adds `memoryOverlap * 0.24` to physical crowding, and no longer
+  scatters a band into the country it merely remembers — in **both** the cached field path and the
+  cache-less scan path. A band 35 tiles away that remembers the observer's tile went from
+  `weightedCrowding 0.03` + a named contributor identity to **0 and none**; a nearby band is
+  unchanged at 0.11. **45% of natural crowding was memory-derived** (crowded band-seasons 89 → 49,
+  double-counting 83 → 38). Five of six 20-year runs are byte-identical; population, bands,
+  survival and fissions unchanged, so **no improvement is claimed**. AUDIT-27's own C4 fixture
+  flips to `NO_OBSOLETE_CROWDING` while C5 and C10b stay put. `getParentCoreOverlap`'s separate
+  memory→dispersal path is kin machinery, deferred and measured. **Roadmap item 3 remains OPEN.**
+  Evidence: `docs/evidence/crowding-physical-memory-separation-28/`.
