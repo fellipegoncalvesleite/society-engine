@@ -109,4 +109,13 @@ src/sim/rules/decisionScoring.ts  +17  -2
                                  +142 -44
 ```
 
-No new module, no new store, no new constant file, no new import edge.
+**SEVEN production files** (`crowding.ts`, `dryMargin.ts`, `pressure.ts`, `socialContext.ts`,
+`types.ts`, `bandDecision.ts`, `decisionScoring.ts`). An earlier report said six; that was wrong
+and is corrected here.
+
+No new module, no new persistent store, **no new constant FILE**, no new import edge — but this
+pass **did** add one new exported calibration constant,
+`CROWDING_DECISION_COST_WEIGHT = 0.96` in `src/sim/rules/decisionScoring.ts`. "No new constant
+file" and "no new constant" are different claims and the earlier report blurred them. Whether
+`0.96` is the physically right magnitude is **not** established: CORRECTION-32 fixed the
+AUTHORITY and deliberately did not tune the STRENGTH.

@@ -8,6 +8,50 @@
     "fixtures": 21,
     "vacuous": 0,
     "vacuousIds": [],
+    "probesMeasured": 11,
+    "candidatesInspected": 138,
+    "cleanPairs": 135,
+    "contaminatedPairCount": 1,
+    "unpairedCandidateCount": 0,
+    "duplicateKeyCount": 1,
+    "legacyKeyCollisionCount": 6,
+    "rejectedCandidateCount": 3,
+    "failedSelfConsistencyAssertions": 2,
+    "blockingSelfConsistencyFailures": 0,
+    "failedSelfConsistencyDetail": [
+      {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 2,
+        "unpairedFullCandidates": 0,
+        "undeclared": [],
+        "causes": [
+          {
+            "cause": "KNOWN_IDENTITY_LIMIT_UNSTAMPED_CANDIDATE_FAMILY",
+            "severity": "stated_limit",
+            "count": 2,
+            "note": "`AlternativeConsidered` carries `isCorridorRelocation` but production never sets `isSideCountryProbe` on it, so two probes of different families at the same target are indistinguishable in the archive. They are REJECTED rather than guessed. Their exact DIRECT charges are still measured; only the whole-candidate total is withheld."
+          }
+        ]
+      },
+      {
+        "bandId": "band:custom:0",
+        "position": "tile:195:90",
+        "contaminatedPairs": 1,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "undeclared": [],
+        "causes": [
+          {
+            "cause": "EXTERNAL_SCORE_ADDITION_DIFFERS",
+            "severity": "stated_limit",
+            "count": 1,
+            "note": "the candidate's addition OUTSIDE `scoreDecision` differs between arms. `getBadSiteStuckResidencePenalty` reads crowdingPenalty/rangeSaturation/socialAccessRisk/mobilityPressure off the breakdown and is module-private, so the difference CANNOT be separated into crowding and non-crowding parts without re-implementing it. The pair is rejected rather than attributed."
+          }
+        ]
+      }
+    ],
     "verdicts": {
       "P1_zero_crowding_control": "ZERO_CROWDING_IS_ZERO",
       "P2_one_neutral_non_kin_neighbour": "SINGLE_BOUNDED_AUTHORITY",
@@ -84,11 +128,34 @@
           "move_to_tile",
           "stay"
         ],
+        "pairing": {
+          "fullCandidates": 14,
+          "controlCandidates": 14,
+          "pairedCandidates": 14,
+          "cleanPairs": 14,
+          "contaminatedPairs": 0,
+          "unpairableDuplicates": 0,
+          "unpairedFullCandidates": 0,
+          "duplicateKeyCount": 0,
+          "legacyKeyCollisions": [
+            {
+              "key": "move_to_tile:tile:196:90",
+              "count": 2
+            }
+          ],
+          "undeclaredDifferingFieldNames": []
+        },
+        "maxAbsCrowdingInfluenceOverAllCandidates": 0,
+        "candidatesWithAnyCrowdingCharge": 0,
         "maxCrowdingPathCount": 0,
         "stay": {
           "action": "stay:tile:195:90",
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "stay",
           "score": 5.47,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -107,8 +174,12 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "move_to_tile",
           "score": 5.82,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -128,8 +199,12 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:192:85",
+          "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.58,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -150,8 +225,12 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.82,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -170,8 +249,12 @@
           },
           {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 5.47,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -190,8 +273,12 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
+            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.92,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -210,8 +297,12 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
+            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.6,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -230,9 +321,13 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.59,
-            "totalCrowdingInfluence": -3.39,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
+            "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0,
@@ -250,8 +345,12 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
+            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.3,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -270,8 +369,12 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
+            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.27,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -290,8 +393,12 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.14,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -310,8 +417,12 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
+            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.95,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -330,8 +441,12 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
+            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.84,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -350,8 +465,12 @@
           },
           {
             "action": "logistical_probe:tile:197:88",
+            "identity": "logistical_probe:tile:197:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.57,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -370,8 +489,12 @@
           },
           {
             "action": "logistical_probe:tile:192:85",
+            "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.58,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -390,8 +513,12 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation",
+            "family": "corridor_relocation",
             "actionType": "move_to_tile",
             "score": 1.2,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -410,8 +537,12 @@
           },
           {
             "action": "logistical_probe:tile:197:89",
+            "identity": "logistical_probe:tile:197:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 0.39,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -493,11 +624,34 @@
           "resource_scout",
           "stay"
         ],
+        "pairing": {
+          "fullCandidates": 14,
+          "controlCandidates": 14,
+          "pairedCandidates": 14,
+          "cleanPairs": 14,
+          "contaminatedPairs": 0,
+          "unpairableDuplicates": 0,
+          "unpairedFullCandidates": 0,
+          "duplicateKeyCount": 0,
+          "legacyKeyCollisions": [
+            {
+              "key": "move_to_tile:tile:194:90",
+              "count": 2
+            }
+          ],
+          "undeclaredDifferingFieldNames": []
+        },
+        "maxAbsCrowdingInfluenceOverAllCandidates": 0.08,
+        "candidatesWithAnyCrowdingCharge": 10,
         "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "stay",
           "score": 5.11,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.07,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -516,9 +670,13 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "move_to_tile",
           "score": 5.36,
-          "totalCrowdingInfluence": -4.1,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "totalCrowdingInfluence": 0.04,
           "charges": {
             "directNearbyBandPressure": 0,
             "directCrowdingPenalty": 0.04,
@@ -537,8 +695,12 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:198:86",
+          "identity": "logistical_probe:tile:198:86|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.66,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -557,8 +719,12 @@
         },
         "resourceScout": {
           "action": "resource_scout:tile:194:90",
+          "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "resource_scout",
           "score": 2.42,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -578,8 +744,12 @@
         "candidates": [
           {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 5.11,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -598,9 +768,13 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.36,
-            "totalCrowdingInfluence": -4.1,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
+            "totalCrowdingInfluence": 0.04,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.04,
@@ -618,8 +792,12 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.49,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.08,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -638,8 +816,12 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
+            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.36,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.04,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -658,8 +840,12 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
+            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.1,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -678,8 +864,12 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
+            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.04,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.08,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -698,8 +888,12 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
+            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.85,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -718,8 +912,12 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
+            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.72,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -738,8 +936,12 @@
           },
           {
             "action": "logistical_probe:tile:198:86",
+            "identity": "logistical_probe:tile:198:86|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.66,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -758,8 +960,12 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.52,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.04,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -778,8 +984,12 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
+            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.17,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -798,8 +1008,12 @@
           },
           {
             "action": "resource_scout:tile:194:90",
+            "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "resource_scout",
             "score": 2.42,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -818,8 +1032,12 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=corridor_relocation",
+            "family": "corridor_relocation",
             "actionType": "move_to_tile",
             "score": 1.26,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -838,8 +1056,12 @@
           },
           {
             "action": "logistical_probe:tile:192:89",
+            "identity": "logistical_probe:tile:192:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 0.1,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -886,8 +1108,12 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
+        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+        "family": "core",
         "actionType": "stay",
         "score": 5.25,
+        "pairStatus": "clean_exact_partition",
+        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0.01,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -906,8 +1132,12 @@
       },
       "targetCandidate": {
         "action": "move_to_tile:tile:197:90",
+        "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+        "family": "core",
         "actionType": "move_to_tile",
         "score": 4.07,
+        "pairStatus": "clean_exact_partition",
+        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -946,7 +1176,7 @@
         {
           "action": "move_to_tile:tile:196:90",
           "targetCrowdingPenalty": 0,
-          "totalCrowdingInfluence": -2.97,
+          "totalCrowdingInfluence": 0,
           "paths": 0
         },
         {
@@ -1039,11 +1269,34 @@
           "move_to_tile",
           "stay"
         ],
+        "pairing": {
+          "fullCandidates": 13,
+          "controlCandidates": 13,
+          "pairedCandidates": 13,
+          "cleanPairs": 13,
+          "contaminatedPairs": 0,
+          "unpairableDuplicates": 0,
+          "unpairedFullCandidates": 0,
+          "duplicateKeyCount": 0,
+          "legacyKeyCollisions": [
+            {
+              "key": "move_to_tile:tile:196:90",
+              "count": 2
+            }
+          ],
+          "undeclaredDifferingFieldNames": []
+        },
+        "maxAbsCrowdingInfluenceOverAllCandidates": 0.05,
+        "candidatesWithAnyCrowdingCharge": 7,
         "maxCrowdingPathCount": 1,
         "stay": {
           "action": "stay:tile:195:90",
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "stay",
           "score": 5.25,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.01,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -1062,8 +1315,12 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "move_to_tile",
           "score": 5.4,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.02,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -1083,8 +1340,12 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:198:87",
+          "identity": "logistical_probe:tile:198:87|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.64,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -1105,8 +1366,12 @@
         "candidates": [
           {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 5.25,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1125,8 +1390,12 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.4,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1145,8 +1414,12 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
+            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.46,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.03,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1165,8 +1438,12 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
+            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.2,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1185,9 +1462,13 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.17,
-            "totalCrowdingInfluence": -2.97,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
+            "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0,
@@ -1205,8 +1486,12 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
+            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.13,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.05,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1225,8 +1510,12 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
+            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.07,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1245,8 +1534,12 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.73,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": -0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1265,8 +1558,12 @@
           },
           {
             "action": "logistical_probe:tile:198:87",
+            "identity": "logistical_probe:tile:198:87|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.64,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1285,8 +1582,12 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
+            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.56,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1305,8 +1606,12 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
+            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.46,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1325,8 +1630,12 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation",
+            "family": "corridor_relocation",
             "actionType": "move_to_tile",
             "score": 1.2,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1345,8 +1654,12 @@
           },
           {
             "action": "logistical_probe:tile:197:89",
+            "identity": "logistical_probe:tile:197:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 0.39,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1393,8 +1706,12 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
+        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+        "family": "core",
         "actionType": "stay",
         "score": 5.19,
+        "pairStatus": "clean_exact_partition",
+        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -1413,8 +1730,12 @@
       },
       "targetCandidate": {
         "action": "move_to_tile:tile:195:88",
+        "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+        "family": "core",
         "actionType": "move_to_tile",
         "score": 3.56,
+        "pairStatus": "clean_exact_partition",
+        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0.02,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -1441,7 +1762,7 @@
         {
           "action": "move_to_tile:tile:195:91",
           "targetCrowdingPenalty": 0,
-          "totalCrowdingInfluence": -3.18,
+          "totalCrowdingInfluence": 0,
           "paths": 0
         },
         {
@@ -1542,11 +1863,38 @@
           "move_to_tile",
           "stay"
         ],
+        "pairing": {
+          "fullCandidates": 14,
+          "controlCandidates": 14,
+          "pairedCandidates": 12,
+          "cleanPairs": 12,
+          "contaminatedPairs": 0,
+          "unpairableDuplicates": 2,
+          "unpairedFullCandidates": 0,
+          "duplicateKeyCount": 1,
+          "legacyKeyCollisions": [
+            {
+              "key": "move_to_tile:tile:195:91",
+              "count": 2
+            },
+            {
+              "key": "logistical_probe:tile:197:88",
+              "count": 2
+            }
+          ],
+          "undeclaredDifferingFieldNames": []
+        },
+        "maxAbsCrowdingInfluenceOverAllCandidates": 0.02,
+        "candidatesWithAnyCrowdingCharge": 2,
         "maxCrowdingPathCount": 1,
         "stay": {
           "action": "stay:tile:195:90",
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "stay",
           "score": 5.19,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -1565,8 +1913,12 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "move_to_tile",
           "score": 6.52,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -1586,8 +1938,12 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:197:87",
+          "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "logistical_probe",
           "score": 2.67,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -1608,8 +1964,12 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 6.52,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1628,8 +1988,12 @@
           },
           {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 5.19,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1648,9 +2012,13 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.13,
-            "totalCrowdingInfluence": -3.18,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
+            "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0,
@@ -1668,8 +2036,12 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
+            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.3,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1688,8 +2060,12 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
+            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.01,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1708,8 +2084,12 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.87,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1728,8 +2108,12 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
+            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.75,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1748,8 +2132,12 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
+            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.56,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1768,8 +2156,12 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
+            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.23,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1788,8 +2180,12 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
+            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 2.77,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1808,8 +2204,12 @@
           },
           {
             "action": "logistical_probe:tile:197:87",
+            "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 2.67,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1828,9 +2228,13 @@
           },
           {
             "action": "logistical_probe:tile:197:88",
+            "identity": "logistical_probe:tile:197:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 2.39,
-            "totalCrowdingInfluence": -3.16,
+            "pairStatus": "unpairable_duplicate_candidate_key",
+            "undeclaredDifferingFields": null,
+            "totalCrowdingInfluence": null,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0,
@@ -1848,8 +2252,12 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=corridor_relocation",
+            "family": "corridor_relocation",
             "actionType": "move_to_tile",
             "score": 1.95,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1868,9 +2276,13 @@
           },
           {
             "action": "logistical_probe:tile:197:88",
+            "identity": "logistical_probe:tile:197:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": -0.77,
-            "totalCrowdingInfluence": 0,
+            "pairStatus": "unpairable_duplicate_candidate_key",
+            "undeclaredDifferingFields": null,
+            "totalCrowdingInfluence": null,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0,
@@ -1916,8 +2328,12 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
+        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+        "family": "core",
         "actionType": "stay",
         "score": 5.26,
+        "pairStatus": "clean_exact_partition",
+        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0.06,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -1936,8 +2352,12 @@
       },
       "targetCandidate": {
         "action": "move_to_tile:tile:197:90",
+        "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+        "family": "core",
         "actionType": "move_to_tile",
         "score": 4.79,
+        "pairStatus": "clean_exact_partition",
+        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0.05,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -2064,11 +2484,29 @@
           "resource_scout",
           "stay"
         ],
+        "pairing": {
+          "fullCandidates": 13,
+          "controlCandidates": 13,
+          "pairedCandidates": 13,
+          "cleanPairs": 13,
+          "contaminatedPairs": 0,
+          "unpairableDuplicates": 0,
+          "unpairedFullCandidates": 0,
+          "duplicateKeyCount": 0,
+          "legacyKeyCollisions": [],
+          "undeclaredDifferingFieldNames": []
+        },
+        "maxAbsCrowdingInfluenceOverAllCandidates": 0.06,
+        "candidatesWithAnyCrowdingCharge": 10,
         "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "stay",
           "score": 5.26,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.06,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2087,8 +2525,12 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "move_to_tile",
           "score": 5.58,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.02,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2108,8 +2550,12 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:195:87",
+          "identity": "logistical_probe:tile:195:87|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.76,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2128,8 +2574,12 @@
         },
         "resourceScout": {
           "action": "resource_scout:tile:195:89",
+          "identity": "resource_scout:tile:195:89|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "resource_scout",
           "score": 2.57,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2149,8 +2599,12 @@
         "candidates": [
           {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 5.26,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.06,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2169,8 +2623,12 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.58,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2189,8 +2647,12 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.06,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.06,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2209,8 +2671,12 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
+            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.79,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.05,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2229,8 +2695,12 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.41,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.06,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2249,8 +2719,12 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
+            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.23,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.06,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2269,8 +2743,12 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
+            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.94,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2289,8 +2767,12 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
+            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.86,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.04,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2309,8 +2791,12 @@
           },
           {
             "action": "logistical_probe:tile:195:87",
+            "identity": "logistical_probe:tile:195:87|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.76,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2329,8 +2815,12 @@
           },
           {
             "action": "logistical_probe:tile:196:88",
+            "identity": "logistical_probe:tile:196:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.64,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2349,8 +2839,12 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
+            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.47,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2369,8 +2863,12 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
+            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.15,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2389,8 +2887,12 @@
           },
           {
             "action": "resource_scout:tile:195:89",
+            "identity": "resource_scout:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "resource_scout",
             "score": 2.57,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2454,8 +2956,12 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
+        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+        "family": "core",
         "actionType": "stay",
         "score": 4.86,
+        "pairStatus": "clean_exact_partition",
+        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0.07,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -2525,11 +3031,29 @@
           "resource_scout",
           "stay"
         ],
+        "pairing": {
+          "fullCandidates": 12,
+          "controlCandidates": 12,
+          "pairedCandidates": 12,
+          "cleanPairs": 12,
+          "contaminatedPairs": 0,
+          "unpairableDuplicates": 0,
+          "unpairedFullCandidates": 0,
+          "duplicateKeyCount": 0,
+          "legacyKeyCollisions": [],
+          "undeclaredDifferingFieldNames": []
+        },
+        "maxAbsCrowdingInfluenceOverAllCandidates": 0.08,
+        "candidatesWithAnyCrowdingCharge": 10,
         "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "stay",
           "score": 4.86,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.07,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2548,8 +3072,12 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:195:91",
+          "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "move_to_tile",
           "score": 4.92,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.05,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2569,8 +3097,12 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:197:87",
+          "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.02,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2589,8 +3121,12 @@
         },
         "resourceScout": {
           "action": "resource_scout:tile:195:89",
+          "identity": "resource_scout:tile:195:89|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "resource_scout",
           "score": 2.29,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2610,8 +3146,12 @@
         "candidates": [
           {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 4.86,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2630,8 +3170,12 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.92,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.05,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2650,8 +3194,12 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.68,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.04,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2670,8 +3218,12 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.38,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.08,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2690,8 +3242,12 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
+            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.98,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2710,8 +3266,12 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
+            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.91,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.05,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2730,8 +3290,12 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
+            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.58,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.08,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2750,8 +3314,12 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
+            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.5,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2770,8 +3338,12 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
+            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.32,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2790,8 +3362,12 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
+            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.17,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2810,8 +3386,12 @@
           },
           {
             "action": "logistical_probe:tile:197:87",
+            "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.02,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2830,8 +3410,12 @@
           },
           {
             "action": "resource_scout:tile:195:89",
+            "identity": "resource_scout:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "resource_scout",
             "score": 2.29,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2867,8 +3451,12 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
+        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+        "family": "core",
         "actionType": "stay",
         "score": 4.38,
+        "pairStatus": "clean_exact_partition",
+        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -2933,11 +3521,29 @@
           "resource_scout",
           "stay"
         ],
+        "pairing": {
+          "fullCandidates": 11,
+          "controlCandidates": 11,
+          "pairedCandidates": 11,
+          "cleanPairs": 11,
+          "contaminatedPairs": 0,
+          "unpairableDuplicates": 0,
+          "unpairedFullCandidates": 0,
+          "duplicateKeyCount": 0,
+          "legacyKeyCollisions": [],
+          "undeclaredDifferingFieldNames": []
+        },
+        "maxAbsCrowdingInfluenceOverAllCandidates": 0,
+        "candidatesWithAnyCrowdingCharge": 0,
         "maxCrowdingPathCount": 0,
         "stay": {
           "action": "stay:tile:195:90",
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "stay",
           "score": 4.38,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2956,8 +3562,12 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:196:91",
+          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "move_to_tile",
           "score": 5.97,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2978,8 +3588,12 @@
         "logisticalProbe": null,
         "resourceScout": {
           "action": "resource_scout:tile:194:90",
+          "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "resource_scout",
           "score": 2.78,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2999,8 +3613,12 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:196:91",
+            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.97,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3019,8 +3637,12 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.81,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3039,8 +3661,12 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.36,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3059,8 +3685,12 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.07,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3079,8 +3709,12 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
+            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.6,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3099,8 +3733,12 @@
           },
           {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 4.38,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3119,8 +3757,12 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
+            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.5,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3139,8 +3781,12 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
+            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.25,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3159,8 +3805,12 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
+            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.05,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3179,8 +3829,12 @@
           },
           {
             "action": "resource_scout:tile:194:90",
+            "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "resource_scout",
             "score": 2.78,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3199,8 +3853,12 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
+            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 2.7,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3238,8 +3896,12 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
+        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+        "family": "core",
         "actionType": "stay",
         "score": 4.26,
+        "pairStatus": "clean_exact_partition",
+        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0.08,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -3308,11 +3970,29 @@
           "resource_scout",
           "stay"
         ],
+        "pairing": {
+          "fullCandidates": 11,
+          "controlCandidates": 11,
+          "pairedCandidates": 11,
+          "cleanPairs": 11,
+          "contaminatedPairs": 0,
+          "unpairableDuplicates": 0,
+          "unpairedFullCandidates": 0,
+          "duplicateKeyCount": 0,
+          "legacyKeyCollisions": [],
+          "undeclaredDifferingFieldNames": []
+        },
+        "maxAbsCrowdingInfluenceOverAllCandidates": 0.08,
+        "candidatesWithAnyCrowdingCharge": 10,
         "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "stay",
           "score": 4.26,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.08,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3331,8 +4011,12 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:196:91",
+          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "move_to_tile",
           "score": 5.94,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.04,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3353,8 +4037,12 @@
         "logisticalProbe": null,
         "resourceScout": {
           "action": "resource_scout:tile:194:90",
+          "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "resource_scout",
           "score": 2.78,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3374,8 +4062,12 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:196:91",
+            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.94,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.04,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3394,8 +4086,12 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.79,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.03,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3414,8 +4110,12 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.35,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.03,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3434,8 +4134,12 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.03,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.06,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3454,8 +4158,12 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
+            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.56,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.06,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3474,8 +4182,12 @@
           },
           {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 4.26,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.08,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3494,8 +4206,12 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
+            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.51,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3514,8 +4230,12 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
+            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.24,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.03,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3534,8 +4254,12 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
+            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.01,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.05,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3554,8 +4278,12 @@
           },
           {
             "action": "resource_scout:tile:194:90",
+            "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "resource_scout",
             "score": 2.78,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3574,8 +4302,12 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
+            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 2.71,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3662,11 +4394,29 @@
           "move_to_tile",
           "stay"
         ],
+        "pairing": {
+          "fullCandidates": 11,
+          "controlCandidates": 11,
+          "pairedCandidates": 11,
+          "cleanPairs": 11,
+          "contaminatedPairs": 0,
+          "unpairableDuplicates": 0,
+          "unpairedFullCandidates": 0,
+          "duplicateKeyCount": 0,
+          "legacyKeyCollisions": [],
+          "undeclaredDifferingFieldNames": []
+        },
+        "maxAbsCrowdingInfluenceOverAllCandidates": 0.09,
+        "candidatesWithAnyCrowdingCharge": 10,
         "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "stay",
           "score": 5.44,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.09,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3685,8 +4435,12 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "move_to_tile",
           "score": 5.79,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.04,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3706,8 +4460,12 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:198:91",
+          "identity": "logistical_probe:tile:198:91|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "logistical_probe",
           "score": 2.82,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3728,8 +4486,12 @@
         "candidates": [
           {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 5.44,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.09,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3748,8 +4510,12 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.79,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.04,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3768,8 +4534,12 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
+            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.27,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3788,8 +4558,12 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.22,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.04,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3808,8 +4582,12 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
+            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.1,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.04,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3828,8 +4606,12 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
+            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.68,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3848,8 +4630,12 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.09,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3868,8 +4654,12 @@
           },
           {
             "action": "logistical_probe:tile:198:91",
+            "identity": "logistical_probe:tile:198:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 2.82,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3888,8 +4678,12 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
+            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 2.83,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3908,8 +4702,12 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
+            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 2.72,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3928,8 +4726,12 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
+            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 2.56,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4023,11 +4825,34 @@
           "resource_scout",
           "stay"
         ],
+        "pairing": {
+          "fullCandidates": 14,
+          "controlCandidates": 14,
+          "pairedCandidates": 14,
+          "cleanPairs": 14,
+          "contaminatedPairs": 0,
+          "unpairableDuplicates": 0,
+          "unpairedFullCandidates": 0,
+          "duplicateKeyCount": 0,
+          "legacyKeyCollisions": [
+            {
+              "key": "move_to_tile:tile:194:90",
+              "count": 2
+            }
+          ],
+          "undeclaredDifferingFieldNames": []
+        },
+        "maxAbsCrowdingInfluenceOverAllCandidates": 0.07,
+        "candidatesWithAnyCrowdingCharge": 10,
         "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "stay",
           "score": 4.64,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.07,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -4046,9 +4871,13 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "move_to_tile",
           "score": 5.35,
-          "totalCrowdingInfluence": -4.1,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "totalCrowdingInfluence": 0.02,
           "charges": {
             "directNearbyBandPressure": 0,
             "directCrowdingPenalty": 0.03,
@@ -4067,8 +4896,12 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:198:86",
+          "identity": "logistical_probe:tile:198:86|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.64,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -4087,8 +4920,12 @@
         },
         "resourceScout": {
           "action": "resource_scout:tile:194:90",
+          "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "resource_scout",
           "score": 2.41,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -4108,9 +4945,13 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.35,
-            "totalCrowdingInfluence": -4.1,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
+            "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.03,
@@ -4128,8 +4969,12 @@
           },
           {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 4.64,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4148,8 +4993,12 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.53,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.03,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4168,8 +5017,12 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
+            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.46,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4188,8 +5041,12 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
+            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.22,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": -0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4208,8 +5065,12 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
+            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.1,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.03,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4228,8 +5089,12 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
+            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.95,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4248,8 +5113,12 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
+            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.78,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4268,8 +5137,12 @@
           },
           {
             "action": "logistical_probe:tile:198:86",
+            "identity": "logistical_probe:tile:198:86|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.64,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4288,8 +5161,12 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.62,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4308,8 +5185,12 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
+            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.25,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4328,8 +5209,12 @@
           },
           {
             "action": "resource_scout:tile:194:90",
+            "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "resource_scout",
             "score": 2.41,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4348,8 +5233,12 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=corridor_relocation",
+            "family": "corridor_relocation",
             "actionType": "move_to_tile",
             "score": 1.25,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4368,8 +5257,12 @@
           },
           {
             "action": "logistical_probe:tile:192:89",
+            "identity": "logistical_probe:tile:192:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 0.09,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4459,11 +5352,29 @@
           "move_to_tile",
           "stay"
         ],
+        "pairing": {
+          "fullCandidates": 11,
+          "controlCandidates": 11,
+          "pairedCandidates": 11,
+          "cleanPairs": 10,
+          "contaminatedPairs": 1,
+          "unpairableDuplicates": 0,
+          "unpairedFullCandidates": 0,
+          "duplicateKeyCount": 0,
+          "legacyKeyCollisions": [],
+          "undeclaredDifferingFieldNames": []
+        },
+        "maxAbsCrowdingInfluenceOverAllCandidates": 0.08,
+        "candidatesWithAnyCrowdingCharge": 10,
         "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "stay",
           "score": 3.9,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.08,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -4482,8 +5393,12 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "move_to_tile",
           "score": 6.08,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0.02,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -4503,8 +5418,12 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:197:87",
+          "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
+          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.48,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -4525,8 +5444,12 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:194:90",
+            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 6.08,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.02,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4545,8 +5468,12 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
+            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.97,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4565,8 +5492,12 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
+            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.35,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.03,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4585,8 +5516,12 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
+            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.33,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4605,8 +5540,12 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
+            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.18,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.03,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4625,8 +5564,12 @@
           },
           {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 3.9,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.08,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4645,8 +5588,12 @@
           },
           {
             "action": "logistical_probe:tile:197:87",
+            "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.48,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4665,9 +5612,13 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
+            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.22,
-            "totalCrowdingInfluence": 0.05,
+            "pairStatus": "contaminated_external_score_addition_differs",
+            "undeclaredDifferingFields": [],
+            "totalCrowdingInfluence": null,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.06,
@@ -4685,8 +5636,12 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
+            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 2.92,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.05,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4705,8 +5660,12 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
+            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 2.77,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.05,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4725,8 +5684,12 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
+            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "move_to_tile",
             "score": 2.63,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.06,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4781,8 +5744,12 @@
           "crowdingPenalty": 0.06,
           "exploration": {
             "action": "explore_unknown_neighbor:tile:195:89",
+            "identity": "explore_unknown_neighbor:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "explore_unknown_neighbor",
             "score": 4.34,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": -0.04,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4801,8 +5768,12 @@
           },
           "stay": {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 5.12,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.07,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4829,8 +5800,12 @@
           "crowdingPenalty": 0,
           "exploration": {
             "action": "explore_unknown_neighbor:tile:195:89",
+            "identity": "explore_unknown_neighbor:tile:195:89|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "explore_unknown_neighbor",
             "score": 4.3,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4849,8 +5824,12 @@
           },
           "stay": {
             "action": "stay:tile:195:90",
+            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+            "family": "core",
             "actionType": "stay",
             "score": 5.23,
+            "pairStatus": "clean_exact_partition",
+            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -5067,7 +6046,7 @@
           "nearbyBandCount": 2,
           "weightedCrowding": 0.3,
           "crowdingPenalty": 0.11,
-          "stayCrowdingInfluence": 0.16,
+          "stayCrowdingInfluence": null,
           "stayPaths": 1,
           "stayScore": 4.21
         },

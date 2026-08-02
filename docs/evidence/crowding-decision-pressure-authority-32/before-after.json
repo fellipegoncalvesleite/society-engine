@@ -1,334 +1,206 @@
 {
-  "audit": "CORRECTION-32 before/after",
+  "audit": "CORRECTION-32 before/after, CORRECTED BY CORRECTION-32A",
   "before": "3e2c1215b4ccef2beb799b3a7882247f6cd186cd",
-  "after": "checkpoint/crowding-decision-pressure-authority-32",
-  "headline": "one physical nearby-band condition -> one explicit bounded decision influence -> no unjustified duplicate direct or indirect score charge",
-  "decisionAuthority": {
-    "candidatesWithThreeOrMoreCrowdingPaths": {
-      "syntheticAndNatural": {
-        "before": 49,
-        "after": 0
+  "after": "fdf043187fed9f7fd031647f9a23a74fef83e097 (production), evidence at the branch tip",
+  "status": "CORRECTION-32 is PROGRESS — NOT ACCEPTED, NOT FROZEN. Regenerated after the original attribution instrument was rejected.",
+  "headline": "one nearby physical-band condition -> one explicit bounded capacity-conditioned decision cost, one current-site dispersal motive, one bounded exploration response, and no automatic social danger",
+
+  "supersededMeasurements": {
+    "why": "The original instrument paired candidates by `${actionType}:${targetTileId}`, which is NOT unique: an M0.8 corridor-relocation candidate can share that key with an ordinary known move. `new Map(...)` kept only the last, so two DIFFERENT candidates' scores were subtracted and the difference published as crowding influence. See superseded-instrument-v1/README.md.",
+    "withdrawn": {
+      "candidatesWithThreeOrMoreCrowdingPaths": {
+        "syntheticAndNatural": { "before": 49, "after": 0 },
+        "natural20y": { "before": 56, "after": 0 },
+        "natural50y": { "before": 144, "after": 0 },
+        "withdrawnBecause": "composite fields were zeroed wholesale, so a candidate's own food, water and use-pressure terms were counted as crowding paths"
       },
-      "natural20y": {
-        "before": 56,
-        "after": 0
+      "maxPathsOnAnyCandidate": {
+        "natural20y": { "before": 4, "after": 2 },
+        "natural50y": { "before": 4, "after": 2 },
+        "withdrawnBecause": "same field-grouping error"
       },
-      "natural50y": {
-        "before": 144,
-        "after": 0
-      }
-    },
-    "maxPathsOnAnyCandidate": {
-      "natural20y": {
-        "before": 4,
-        "after": 2
-      },
-      "natural50y": {
-        "before": 4,
-        "after": 2
-      }
-    },
-    "pathContribution20y": {
-      "directNearbyBandPressure": {
-        "before": 0.97,
-        "after": 0
-      },
-      "directCrowdingPenalty": {
-        "before": 2.33,
-        "after": 3.09
-      },
-      "indirectPressureState": {
-        "before": 0.2,
-        "after": 0.18
-      },
-      "rangeSaturationOverlap": {
-        "before": 0.09,
-        "after": 0
-      },
-      "crowdingExploration": {
-        "before": 0,
-        "after": 0
-      },
-      "daughterDerived": {
-        "before": 0.54,
-        "after": 0
-      },
-      "combinedEffective": {
-        "before": 4.92,
-        "after": 3.78
-      }
-    },
-    "noAutomaticHostility20y": {
-      "crowdingRaisedRiskPressure": {
-        "before": 3,
-        "after": 0
-      },
-      "crowdingReducedPlaceAttachment": {
-        "before": 11,
-        "after": 0
-      }
+      "totalCrowdingInfluence": "every value, in both arms",
+      "residualThroughNestedComposites": "every value, in both arms; the metric itself is REMOVED rather than recomputed",
+      "crowdingRaisedRiskPressure20y": { "before": 3, "after": 0, "status": "RETAINED as a pressure-state observation — it compares deriveBandPressureState outputs directly and never used the candidate pairing" },
+      "crowdingReducedPlaceAttachment20y": { "before": 11, "after": 0, "status": "RETAINED for the same reason" }
     }
   },
-  "preservation": {
-    "physicalCrowdingLayer20y": {
-      "livingBandSeasons": {
-        "before": 2400,
-        "after": 2400
-      },
-      "bandSeasonsWithPhysicalCrowding": {
-        "before": 20,
-        "after": 20
-      },
-      "weightedCrowdingSum": {
-        "before": 0.74,
-        "after": 0.74
-      },
-      "weightedCrowdingMax": {
-        "before": 0.07,
-        "after": 0.07
-      },
-      "crowdingPenaltySum": {
-        "before": 0.52,
-        "after": 0.52
-      },
-      "crowdingPenaltyMax": {
-        "before": 0.06,
-        "after": 0.06
-      },
-      "note": "identical on all six keys at 20 years: the physical crowding field is untouched"
+
+  "correctedDecisionAuthority": {
+    "source": "fixed-breakdown-attribution{,-before}.json; admissibility in candidate-pairing-integrity{,-before}.json",
+    "method": "one candidate's own ScoreBreakdown, with only declared crowding fields replaced by production's zero-crowding values and every other field byte-identical; a pair that cannot be proven clean carries no attribution at all",
+    "candidatesScanned": { "before": 152, "after": 150 },
+    "cleanPairs": { "before": 152, "after": 150 },
+    "rejectedPairs": { "before": 0, "after": 0 },
+    "undeclaredDifferingFields": { "before": [], "after": [] },
+    "selfConsistencyAssertionsPassing": { "before": "9/9", "after": "9/9" },
+    "legacyKeyCollisionsFound": { "before": 3, "after": 3 },
+
+    "maxSeparatelyNamedDirectChargesOnOneCandidate": { "before": 3, "after": 1 },
+    "candidatesCarryingThreeOrMoreDirectCharges": { "before": 1, "after": 0 },
+    "maxNonZeroPartitionGroupsOnOneCandidate": { "before": 5, "after": 3 },
+    "candidatesWithThreeOrMoreNonZeroPartitionGroups": { "before": 48, "after": 7 },
+    "maxAbsFixedCandidatePartitionTotal": { "before": 0.42, "after": 0.24 },
+
+    "directInfluenceByGroupAbsoluteSum": {
+      "direct_nearbyBandPressure": { "before": 2.02, "after": 0 },
+      "direct_crowdingPenalty": { "before": 3.02, "after": 3.92, "note": "RISES BY DESIGN: CROWDING_DECISION_COST_WEIGHT 0.72 -> 0.96, the sum of the two weights it replaces" },
+      "direct_crowdingExploreBoost": { "before": 0.02, "after": 0 }
     },
-    "priorCheckpointFixtures": {
-      "AUDIT-27": "11/11 unchanged between arms",
-      "CORRECTION-28": "12/12 unchanged between arms",
-      "CORRECTION-29": "12/12 unchanged between arms",
-      "CORRECTION-30": "15/15 unchanged between arms",
-      "CORRECTION-31": "22/22 unchanged between arms",
-      "socialCausalityAudit": "byte-identical between arms (7226 bytes)"
+    "candidatesChargedByPartitionGroup": {
+      "partition_directCrowdingCost": { "before": 64, "after": 63 },
+      "partition_pressureState": { "before": 22, "after": 16 },
+      "partition_rangeSaturation": { "before": 32, "after": 0 },
+      "partition_daughterKin": { "before": 42, "after": 0 },
+      "partition_socialAccessRisk": { "before": 0, "after": 0, "instrumentLimit": "the zeroing seam does not zero cache.nearbyBandsByBandId, which is what the BEFORE arm's getSocialAccessRisk read. This zero is a blind spot, NOT evidence. Fixture S1 measures the real effect at +0.05." },
+      "partition_nestedComposites": { "before": 51, "after": 41, "note": "recoveryBenefit / expectedFutureValue / knownOpportunityPull are DOWNSTREAM of the two surviving authorities; nested propagation of an authority is not a second charge of it" }
     },
-    "stepModeInvariance": {
-      "map1": {
-        "pass": true,
-        "fullCanonicalStateMatch": true,
-        "firstDivergence": null
-      },
-      "map2": {
-        "pass": true,
-        "fullCanonicalStateMatch": true,
-        "firstDivergence": null
-      }
+    "survivingPaths": [
+      "one capacity-conditioned target-site cost (crowdingPenalty at CROWDING_DECISION_COST_WEIGHT)",
+      "one current-site dispersal motive (mobilityPressure -> netMovePressure, 0 on stay, so it LIFTS alternatives)",
+      "one bounded exploration response (crowdingExploreBoost)"
+    ]
+  },
+
+  "correctedZeroControls": {
+    "source": "zero-controls{,-before}.json",
+    "fixtures": 6,
+    "candidatesInspected": { "before": 67, "after": 67 },
+    "violatingCandidates": { "before": 0, "after": 0 },
+    "vacuous": { "before": 0, "after": 0 },
+    "note": "PASSES IN BOTH ARMS — preservation evidence, NOT repair credit. The superseded P1 checked only the stay candidate and passed while a move candidate in the same payload read -3.39.",
+    "familiesCovered": ["stay", "move_to_tile", "logistical_probe", "resource_scout", "explore_unknown_neighbor"],
+    "familiesNotGenerated": ["corridor_relocation", "side_country_probe", "visible_landscape_probe", "inferred_frontier_probe", "pressure_relief_probe"],
+    "Z5ConfoundingControl": {
+      "crowding": 0,
+      "foodStress": 1.0,
+      "waterStress": 0.6,
+      "mobilityPressure": 0.95,
+      "rangeSaturationFromOwnUse": 0.49,
+      "depletionPenalty": 0.25,
+      "riskCost": 0.1292,
+      "classifiedAsCrowding": 0
     }
   },
-  "naturalFinalState": {
-    "at20Years": {
-      "identicalKeys": 75,
-      "changed": [
-        {
-          "run": "map2:s1",
-          "key": "population",
-          "before": 224,
-          "after": 226
-        },
-        {
-          "run": "map2:s1",
-          "key": "residentialMoves",
-          "before": 448,
-          "after": 450
-        },
-        {
-          "run": "map2:s1",
-          "key": "meanSupportRatio",
-          "before": 0.07,
-          "after": 0.08
-        },
-        {
-          "run": "map2:s2",
-          "key": "population",
-          "before": 226,
-          "after": 227
-        },
-        {
-          "run": "map2:s2",
-          "key": "residentialMoves",
-          "before": 395,
-          "after": 401
-        },
-        {
-          "run": "map2:s2",
-          "key": "meanSupportRatio",
-          "before": 0.0822,
-          "after": 0.1256
-        },
-        {
-          "run": "ordinary:s1",
-          "key": "population",
-          "before": 21,
-          "after": 20
-        },
-        {
-          "run": "ordinary:s1",
-          "key": "residentialMoves",
-          "before": 53,
-          "after": 57
-        },
-        {
-          "run": "ordinary:s1",
-          "key": "meanSupportRatio",
-          "before": 0.03,
-          "after": 0.26
-        }
-      ]
+
+  "correctedSocialAccess": {
+    "source": "social-access-lifecycle{,-before}.json",
+    "measuredThrough": "dryMargin.deriveDryMarginMobilityContext(...).currentWaterRefuge.socialAccessRisk and the candidate ScoreBreakdown.socialAccessRisk; the private formula is NOT copied",
+    "S1_proximityAloneWithNoEvidence": {
+      "before": { "separated": 0.28, "adjacent": 0.33, "delta": 0.05, "verdict": "PROXIMITY_ALONE_RAISES_ACCESS_CAUTION" },
+      "after": { "separated": 0.33, "adjacent": 0.33, "delta": 0, "verdict": "PROXIMITY_ALONE_DOES_NOT_RAISE_ACCESS_CAUTION" },
+      "frictionRecordsIdenticalInBothReadings": true
     },
-    "at50Years": {
-      "identicalKeys": 75,
-      "changed": [
-        {
-          "run": "map1:s1",
-          "key": "population",
-          "before": 165,
-          "after": 164
-        },
-        {
-          "run": "map1:s1",
-          "key": "meanSupportRatio",
-          "before": 0.468,
-          "after": 0.292
-        },
-        {
-          "run": "map2:s1",
-          "key": "population",
-          "before": 205,
-          "after": 209
-        },
-        {
-          "run": "map2:s1",
-          "key": "residentialMoves",
-          "before": 701,
-          "after": 720
-        },
-        {
-          "run": "map2:s1",
-          "key": "meanSupportRatio",
-          "before": 0.1767,
-          "after": 0.1444
-        },
-        {
-          "run": "map2:s2",
-          "key": "population",
-          "before": 210,
-          "after": 216
-        },
-        {
-          "run": "map2:s2",
-          "key": "meanSupportRatio",
-          "before": 0.0978,
-          "after": 0.1056
-        },
-        {
-          "run": "ordinary:s1",
-          "key": "population",
-          "before": 14,
-          "after": 17
-        },
-        {
-          "run": "ordinary:s1",
-          "key": "meanSupportRatio",
-          "before": 0.02,
-          "after": 0.06
-        }
-      ]
-    }
+    "S2_legitimateActivePlaceEvidence": {
+      "method": "contact count held IDENTICAL: evidenced tile X vs unrelated tile Y in the same world",
+      "before": { "atX": 0.25, "atY": 0.25, "placeAttributableRise": 0, "verdict": "ACTIVE_ACCESS_EVIDENCE_HAS_NO_EFFECT" },
+      "after": { "atX": 0.30, "atY": 0.20, "placeAttributableRise": 0.10, "verdict": "ACTIVE_ACCESS_EVIDENCE_RAISES_CAUTION" },
+      "confoundedRawComparisonAfterArm": { "rawDelta": -0.03, "decomposition": "+0.05 place caution, -0.08 knownContactRelief from the contact memory the same episode legitimately created" }
+    },
+    "S3_lifecycleRelease_afterArm": {
+      "placeAttributableRiseByPhase": { "neverContacted": 0.05, "atContact": 0.10, "afterRelease": 0.04 },
+      "activeEvidenceWeight": { "neverContacted": 0, "atContact": 0.85, "afterRelease": 0 },
+      "strangerCaution": { "neverContacted": 0.11, "atContact": 0.33, "afterRelease": 0.11 },
+      "rememberedRefusalAvoidance": { "neverContacted": 0.34, "atContact": 0.49, "afterRelease": 0.33 },
+      "retainedButInert": { "contactMemories": 1, "encounterRecords": 18, "historicalEvidenceCount": 1, "socialEvidencePhase": "released_historical" },
+      "verdict": "RELEASED_HISTORY_RETAINED"
+    },
+    "verdictsBothArms": {
+      "S1_neutral_physical_proximity": { "before": "PROXIMITY_ALONE_RAISES_ACCESS_CAUTION", "after": "PROXIMITY_ALONE_DOES_NOT_RAISE_ACCESS_CAUTION" },
+      "S2_legitimate_active_access_evidence": { "before": "ACTIVE_ACCESS_EVIDENCE_HAS_NO_EFFECT", "after": "ACTIVE_ACCESS_EVIDENCE_RAISES_CAUTION" },
+      "S3_lifecycle_release": { "before": "RELEASED_HISTORY_RETAINED", "after": "RELEASED_HISTORY_RETAINED" },
+      "S4_place_specificity": { "before": "EVIDENCE_IS_PLACE_SPECIFIC", "after": "EVIDENCE_IS_PLACE_SPECIFIC" },
+      "S5_second_hand_evidence": { "before": "NOT_CONSTRUCTED_NO_REPORT_LINKED_RECORD_IN_THIS_GEOMETRY", "after": "NOT_CONSTRUCTED_NO_REPORT_LINKED_RECORD_IN_THIS_GEOMETRY" },
+      "S6_old_contact_without_place_evidence": { "before": "OLD_CONTACT_CREATES_NO_PLACE_DANGER", "after": "OLD_CONTACT_CREATES_NO_PLACE_DANGER" },
+      "S7_unrelated_world_count_control": { "before": "DELTA_IS_NOT_UNRELATED_RISK", "after": "DELTA_IS_NOT_UNRELATED_RISK" }
+    },
+    "worldBandCountHeldIdenticalAcrossEveryComparison": 2,
+    "unrelatedRiskNotRepairedHere": "Object.values(world.bands).length > 8 && knownContactCount === 0 — a world-truth read a band cannot know. Held constant so it cannot confound; out of scope."
   },
-  "fixtureVerdicts": {
-    "before": {
-      "P1_zero_crowding_control": "ZERO_CROWDING_IS_ZERO",
-      "P2_one_neutral_non_kin_neighbour": "MULTIPLE_CROWDING_PATHS",
-      "P3_residence_crowded_target_clear": "TARGET_KEEPS_NO_RESIDENCE_COST",
-      "P4_residence_clear_target_crowded": "TARGET_COSTED_AND_NO_FALSE_HOME_PUSH",
-      "P5_residence_and_target_crowded": "SYMMETRIC_NO_ARTIFICIAL_PREFERENCE",
-      "P6_terrain_capacity_comparison": "CAPACITY_TRANSFORM_EXPLAINS_DIFFERENCE",
-      "P7_crowding_without_depletion": "MEASURED",
-      "P8_depletion_without_current_crowding": "MEASURED",
-      "P9_crowding_plus_depletion": "MEASURED",
-      "P10_crowding_plus_social_friction": "MEASURED",
-      "P11_kin_crowding": "KIN_DISCOUNTED_BUT_STILL_CONSUME_SPACE",
-      "P12_tolerated_aggregation": "PHYSICAL_AND_SOCIAL_COEXIST",
-      "P13_range_saturation_overlap": "SATURATION_STILL_CARRIES_CROWDING_INTO_SCORE",
-      "P14_crowding_driven_exploration": "EXPLORATION_RESPONSE_MULTIPLIED",
-      "P15_repeated_nearby_seasons": "BOUNDED",
-      "P16_departure": "PHYSICAL_RELEASES_IMMEDIATELY",
-      "P17_several_nearby_bands": "MONOTONE_AND_BOUNDED",
-      "P18_candidate_family_parity": "A_FAMILY_DUPLICATES",
-      "P19_order_invariance": "ORDER_INVARIANT",
-      "P20_step_mode_invariance": "STEP_MODE_EQUIVALENT",
-      "P21_long_horizon": "NO_RESIDUAL_AFTER_DEPARTURE"
-    },
-    "after": {
-      "P1_zero_crowding_control": "ZERO_CROWDING_IS_ZERO",
-      "P2_one_neutral_non_kin_neighbour": "SINGLE_BOUNDED_AUTHORITY",
-      "P3_residence_crowded_target_clear": "TARGET_KEEPS_NO_RESIDENCE_COST",
-      "P4_residence_clear_target_crowded": "TARGET_COSTED_AND_NO_FALSE_HOME_PUSH",
-      "P5_residence_and_target_crowded": "SYMMETRIC_NO_ARTIFICIAL_PREFERENCE",
-      "P6_terrain_capacity_comparison": "CAPACITY_TRANSFORM_EXPLAINS_DIFFERENCE",
-      "P7_crowding_without_depletion": "MEASURED",
-      "P8_depletion_without_current_crowding": "MEASURED",
-      "P9_crowding_plus_depletion": "MEASURED",
-      "P10_crowding_plus_social_friction": "MEASURED",
-      "P11_kin_crowding": "KIN_DISCOUNTED_BUT_STILL_CONSUME_SPACE",
-      "P12_tolerated_aggregation": "PHYSICAL_AND_SOCIAL_COEXIST",
-      "P13_range_saturation_overlap": "OVERLAP_PARTITIONED_OUT_OF_DECISION",
-      "P14_crowding_driven_exploration": "EXPLORATION_RESPONSE_BOUNDED",
-      "P15_repeated_nearby_seasons": "BOUNDED",
-      "P16_departure": "PHYSICAL_RELEASES_IMMEDIATELY",
-      "P17_several_nearby_bands": "MONOTONE_AND_BOUNDED",
-      "P18_candidate_family_parity": "NO_FAMILY_DUPLICATES",
-      "P19_order_invariance": "ORDER_INVARIANT",
-      "P20_step_mode_invariance": "STEP_MODE_EQUIVALENT",
-      "P21_long_horizon": "NO_RESIDUAL_AFTER_DEPARTURE"
-    },
-    "flipped": [
-      {
-        "fixture": "P2_one_neutral_non_kin_neighbour",
-        "before": "MULTIPLE_CROWDING_PATHS",
-        "after": "SINGLE_BOUNDED_AUTHORITY"
-      },
-      {
-        "fixture": "P13_range_saturation_overlap",
-        "before": "SATURATION_STILL_CARRIES_CROWDING_INTO_SCORE",
-        "after": "OVERLAP_PARTITIONED_OUT_OF_DECISION"
-      },
-      {
-        "fixture": "P14_crowding_driven_exploration",
-        "before": "EXPLORATION_RESPONSE_MULTIPLIED",
-        "after": "EXPLORATION_RESPONSE_BOUNDED"
-      },
-      {
-        "fixture": "P18_candidate_family_parity",
-        "before": "A_FAMILY_DUPLICATES",
-        "after": "NO_FAMILY_DUPLICATES"
-      }
+
+  "correctedFixtures": {
+    "source": "controlled-fixtures{,-before}.json",
+    "fixtures": 21,
+    "vacuous": { "before": 0, "after": 0 },
+    "candidatesInspected": { "before": 136, "after": 138 },
+    "cleanPairs": { "before": 133, "after": 135 },
+    "rejectedCandidates": { "before": 3, "after": 3 },
+    "blockingSelfConsistencyFailures": { "before": 0, "after": 0 },
+    "legacyKeyCollisionsDocumented": { "before": 6, "after": 6 },
+    "rejectionCauses": [
+      "KNOWN_IDENTITY_LIMIT_UNSTAMPED_CANDIDATE_FAMILY (2 per arm) — production does not set isSideCountryProbe on AlternativeConsidered, so two probes of different families at one target are indistinguishable; REJECTED rather than guessed",
+      "EXTERNAL_SCORE_ADDITION_DIFFERS (1 per arm) — getBadSiteStuckResidencePenalty is module-private and reads crowding fields off the breakdown, so its change cannot be split into crowding and non-crowding parts"
     ],
-    "unchanged": [
-      "P1_zero_crowding_control",
-      "P3_residence_crowded_target_clear",
-      "P4_residence_clear_target_crowded",
-      "P5_residence_and_target_crowded",
-      "P6_terrain_capacity_comparison",
-      "P7_crowding_without_depletion",
-      "P8_depletion_without_current_crowding",
-      "P9_crowding_plus_depletion",
-      "P10_crowding_plus_social_friction",
-      "P11_kin_crowding",
-      "P12_tolerated_aggregation",
-      "P15_repeated_nearby_seasons",
-      "P16_departure",
-      "P17_several_nearby_bands",
-      "P19_order_invariance",
-      "P20_step_mode_invariance",
-      "P21_long_horizon"
+    "verdictsFlipped": [
+      "P2_one_neutral_non_kin_neighbour: MULTIPLE_CROWDING_PATHS -> SINGLE_BOUNDED_AUTHORITY",
+      "P13_range_saturation_overlap: SATURATION_STILL_CARRIES_CROWDING_INTO_SCORE -> OVERLAP_PARTITIONED_OUT_OF_DECISION",
+      "P14_crowding_driven_exploration: EXPLORATION_RESPONSE_MULTIPLIED -> EXPLORATION_RESPONSE_BOUNDED",
+      "P18_candidate_family_parity: A_FAMILY_DUPLICATES -> NO_FAMILY_DUPLICATES"
     ],
-    "vacuous": {
-      "before": 0,
-      "after": 0
-    }
-  }
+    "verdictsUnchanged": 17,
+    "note": "The SAME four verdicts flip under the corrected instrument as under the superseded one, and pairing integrity is identical in both arms, so the fixture verdicts never depended on the contaminated pairing."
+  },
+
+  "instrumentRegression": {
+    "source": "instrument-regression.json",
+    "cases": 5,
+    "reproducedInvalidResidual": 0,
+    "detail": [
+      { "arm": "after", "fixture": "P1_zero_crowding_control", "action": "move_to_tile:tile:196:90", "oldReported": -3.39, "corrected": [0, 0] },
+      { "arm": "after", "fixture": "F1_adjacent_pair_rich", "action": "move_to_tile:tile:194:90", "oldReported": -4.02, "corrected": [0.04, 0] },
+      { "arm": "after", "fixture": "F2_solo_control_rich", "action": "move_to_tile:tile:196:90", "oldReported": -3.39, "corrected": [0, 0] },
+      { "arm": "before", "fixture": "F1_adjacent_pair_rich", "action": "move_to_tile:tile:196:90", "oldReported": -3.02, "corrected": [0.15, 0] },
+      { "arm": "before", "fixture": "F2_solo_control_rich", "action": "move_to_tile:tile:196:90", "oldReported": -3.39, "corrected": [0, 0] }
+    ]
+  },
+
+  "preservationPhysicalLayer20y": {
+    "status": "RETAINED FROM CORRECTION-32 — produced by the natural-occurrence instrument, which never used the candidate pairing",
+    "livingBandSeasons": { "before": 2400, "after": 2400 },
+    "bandSeasonsWithPhysicalCrowding": { "before": 20, "after": 20 },
+    "weightedCrowdingSum": { "before": 0.74, "after": 0.74 },
+    "weightedCrowdingMax": { "before": 0.07, "after": 0.07 },
+    "crowdingPenaltySum": { "before": 0.52, "after": 0.52 },
+    "crowdingPenaltyMax": { "before": 0.06, "after": 0.06 },
+    "note": "the physical crowding LAYER is identical on all six of its keys at 20 years"
+  },
+
+  "productionDiffFacts": {
+    "productionFilesChanged": 7,
+    "files": [
+      "src/sim/agents/crowding.ts",
+      "src/sim/agents/dryMargin.ts",
+      "src/sim/agents/pressure.ts",
+      "src/sim/agents/socialContext.ts",
+      "src/sim/agents/types.ts",
+      "src/sim/rules/bandDecision.ts",
+      "src/sim/rules/decisionScoring.ts"
+    ],
+    "correctsEarlierClaimOf": 6,
+    "newExportedConstant": "CROWDING_DECISION_COST_WEIGHT = 0.96, exported from src/sim/rules/decisionScoring.ts",
+    "newConstantFile": false,
+    "newModule": false,
+    "newPersistentStore": false,
+    "newImportEdge": false,
+    "note": "'no new constant FILE' is TRUE and 'no new constant' is FALSE. The earlier report blurred the two."
+  },
+
+  "naturalOccurrenceCaveat": {
+    "filesRetained": ["natural-occurrence-20y{,-before}.json", "natural-occurrence-50y{,-before}.json", "behavioral-comparison.json", "step-mode-equivalence.json"],
+    "validFor": "physical crowding OCCURRENCE (weightedCrowding, crowdingPenalty, crowded band-seasons, contributor identities), pressure-state observations, and long-horizon world divergence",
+    "notValidFor": "any per-candidate crowding PATH COUNT or influence MAGNITUDE, which came from the superseded field grouping",
+    "qualifications": [
+      "later worlds are not like-for-like after behavioural divergence",
+      "crowding flipping no selected action in sampled cases is not proof that crowding is inert",
+      "a zero rounded detector can hide sub-rounding influence",
+      "world divergence is NOT an attribution of crowding magnitude",
+      "no outcome improvement is claimed"
+    ]
+  },
+
+  "notClaimed": [
+    "that 0.96 is the physically correct magnitude — CORRECTION-32 fixed the AUTHORITY and deliberately did not tune the STRENGTH",
+    "any improvement in population, survival, movement or any other outcome",
+    "that second-hand access evidence behaves correctly — S5 was NOT CONSTRUCTED in this geometry"
+  ]
 }

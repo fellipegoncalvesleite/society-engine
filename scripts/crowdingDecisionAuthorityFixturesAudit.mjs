@@ -15,7 +15,7 @@
 //   node scripts/crowdingDecisionAuthorityFixturesAudit.mjs --arm after
 
 import { dirname } from "node:path";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { createServer } from "vite";
 
 const arg = (name, fallback) => {
@@ -27,6 +27,14 @@ const SEASONS = Number(arg("seasons", "14"));
 const SEED = arg("seed", "c32:fixtures");
 const ARM = arg("arm", "after");
 const OUT = arg("out", "docs/evidence/crowding-decision-pressure-authority-32/controlled-fixtures.json");
+// CORRECTION-32A — the declared crowding-field manifest is READ from the published partition, so
+// this audit and `crowdingAttributionInstrumentAudit.mjs` provably use the same field partition
+// and cannot drift apart. Not redefined here.
+const PARTITION_FILE = arg(
+  "partition",
+  "docs/evidence/crowding-decision-pressure-authority-32/candidate-field-partition.json",
+);
+const CROWDING_FIELDS = JSON.parse(readFileSync(PARTITION_FILE, "utf8")).fields.map((f) => f.field);
 const SEASON_DAYS = 90;
 
 // The same anchors AUDIT-27 / CORRECTION-28 used, so the packages stay comparable.
@@ -186,6 +194,28 @@ try {
   const actionKey = (a) =>
     a.type === "stay" ? `stay:${a.tileId}` : a.targetTileId !== undefined ? `${a.type}:${a.targetTileId}` : a.type;
 
+  // CORRECTION-32A — CANDIDATE IDENTITY AND THE EQUALITY GUARD.
+  //
+  // `actionKey` alone is NOT unique: `buildCorridorRelocationCandidate` (M0.8) emits a
+  // `move_to_tile` whose target can coincide with an ordinary known move, and the first version
+  // of this audit paired candidates with `new Map(...)` on that key. The Map kept only the LAST
+  // entry, so a core move scoring 4.71 was subtracted against a corridor relocation scoring 1.32
+  // and the -3.39 difference was reported as "crowding influence" on a SOLO band with
+  // weightedCrowding 0. Identity now carries the origin and the archived family marker, a
+  // duplicate is REJECTED rather than collapsed, and a pair whose non-crowding fields differ is
+  // rejected too.
+  const candidateFamily = (alt) =>
+    alt.isCorridorRelocation === true
+      ? "corridor_relocation"
+      : alt.isSideCountryProbe === true
+        ? "side_country_probe"
+        : "core";
+  const identityKey = (alt, origin) => `${actionKey(alt.action)}|origin=${origin}|family=${candidateFamily(alt)}`;
+  const differingFieldNames = (a, b) => {
+    const names = new Set([...Object.keys(a), ...Object.keys(b)]);
+    return [...names].filter((n) => Math.abs((a[n] ?? 0) - (b[n] ?? 0)) > 1e-9).sort();
+  };
+
   // The named crowding charges on ONE candidate, each measured by substituting that field group
   // in the real ScoreBreakdown and re-running the exported pure `scoreDecision`.
   const chargesOn = (bd, ctx) => {
@@ -231,7 +261,34 @@ try {
 
     const decFull = bandDecision.evaluateBandDecision(wFull, bFull, dcFull);
     const decZero = bandDecision.evaluateBandDecision(wZero, bZero, dcZero);
-    const zeroByKey = new Map(decZero.alternativesConsidered.map((a) => [actionKey(a.action), a]));
+    const originFull = String(bFull.position);
+    const originZero = String(bZero.position);
+    const countKeys = (alts, origin) => {
+      const m = new Map();
+      for (const a of alts) {
+        const k = identityKey(a, origin);
+        m.set(k, (m.get(k) ?? 0) + 1);
+      }
+      return m;
+    };
+    const multFull = countKeys(decFull.alternativesConsidered, originFull);
+    const multZero = countKeys(decZero.alternativesConsidered, originZero);
+    const ambiguousKeys = new Set([
+      ...[...multFull].filter(([, c]) => c > 1).map(([k]) => k),
+      ...[...multZero].filter(([, c]) => c > 1).map(([k]) => k),
+    ]);
+    const zeroByKey = new Map();
+    for (const a of decZero.alternativesConsidered) {
+      const k = identityKey(a, originZero);
+      if (!ambiguousKeys.has(k)) zeroByKey.set(k, a);
+    }
+    // The superseded key's collisions, retained as evidence of the defect this pass repaired.
+    const legacyCounts = new Map();
+    for (const a of decFull.alternativesConsidered) {
+      const k = actionKey(a.action);
+      legacyCounts.set(k, (legacyCounts.get(k) ?? 0) + 1);
+    }
+    const legacyKeyCollisions = [...legacyCounts].filter(([, c]) => c > 1).map(([k, c]) => ({ key: k, count: c }));
 
     const dMemoF = new Map(); const dMemoZ = new Map();
     const dAt = (w, b, c, t, memo) => {
@@ -250,12 +307,46 @@ try {
         dZero: dAt(wZero, bZero, dcZero, tid, dMemoZ),
       };
       const charges = chargesOn(bd, ctx);
-      const zeroAlt = zeroByKey.get(actionKey(alt.action));
+      const key = identityKey(alt, originFull);
+      const zeroAlt = ambiguousKeys.has(key) ? undefined : zeroByKey.get(key);
+      // Guarded whole-candidate attribution. Admitted ONLY when the pair is unique in both arms,
+      // every field that differs is a declared crowding field, and the external (outside
+      // `scoreDecision`) score addition is identical — otherwise the difference is not crowding
+      // and is reported as null rather than as a residual.
+      let pairStatus;
+      let total = null;
+      let undeclared = null;
+      if (ambiguousKeys.has(key)) {
+        pairStatus = "unpairable_duplicate_candidate_key";
+      } else if (zeroAlt === undefined) {
+        pairStatus = "unpaired_no_control_candidate";
+      } else {
+        undeclared = differingFieldNames(bd, zeroAlt.scoreBreakdown).filter((f) => !CROWDING_FIELDS.includes(f));
+        const extFull = r4(alt.score - scoring.scoreDecision(bd));
+        const extZero = r4(zeroAlt.score - scoring.scoreDecision(zeroAlt.scoreBreakdown));
+        if (undeclared.length > 0) {
+          pairStatus = "contaminated_non_crowding_difference";
+        } else if (Math.abs(extZero - extFull) > 0.005) {
+          pairStatus = "contaminated_external_score_addition_differs";
+        } else {
+          pairStatus = "clean_exact_partition";
+          const hybrid = { ...bd };
+          for (const f of CROWDING_FIELDS) {
+            if (f in zeroAlt.scoreBreakdown) hybrid[f] = zeroAlt.scoreBreakdown[f];
+          }
+          total = r4(scoring.scoreDecision(hybrid) - scoring.scoreDecision(bd));
+        }
+      }
       return {
         action: actionKey(alt.action),
+        identity: key,
+        family: candidateFamily(alt),
         actionType: alt.action.type,
         score: r4(alt.score),
-        totalCrowdingInfluence: zeroAlt === undefined ? null : r4(zeroAlt.score - alt.score),
+        pairStatus,
+        undeclaredDifferingFields: undeclared,
+        // Now a FIXED-CANDIDATE PARTITION contribution, not a whole-world score subtraction.
+        totalCrowdingInfluence: total,
         charges,
         crowdingPathCount: Object.values(charges).filter((v) => Math.abs(v) >= 0.005).length,
         targetCrowdingPenalty: r4(bd.crowdingPenalty),
@@ -298,6 +389,27 @@ try {
       selected: actionKey(decFull.action),
       selectedZeroCrowding: actionKey(decZero.action),
       candidateFamilies: [...new Set(cands.map((c) => c.actionType))].sort(),
+      // CORRECTION-32A §14 — pairing integrity, reported on EVERY probe.
+      pairing: {
+        fullCandidates: decFull.alternativesConsidered.length,
+        controlCandidates: decZero.alternativesConsidered.length,
+        pairedCandidates: cands.filter((c) => c.pairStatus.startsWith("clean_") || c.pairStatus.startsWith("contaminated_")).length,
+        cleanPairs: cands.filter((c) => c.pairStatus === "clean_exact_partition").length,
+        contaminatedPairs: cands.filter((c) => c.pairStatus.startsWith("contaminated_")).length,
+        unpairableDuplicates: cands.filter((c) => c.pairStatus === "unpairable_duplicate_candidate_key").length,
+        unpairedFullCandidates: cands.filter((c) => c.pairStatus === "unpaired_no_control_candidate").length,
+        duplicateKeyCount: ambiguousKeys.size,
+        legacyKeyCollisions,
+        undeclaredDifferingFieldNames: [...new Set(cands.flatMap((c) => c.undeclaredDifferingFields ?? []))].sort(),
+      },
+      // §14 — the all-candidate crowding invariant. A fixture that inspects only the stay
+      // candidate is not a control; the maximum over EVERY candidate is what a verdict may use.
+      maxAbsCrowdingInfluenceOverAllCandidates: r4(
+        cands.reduce((m, c) => Math.max(m, Math.abs(c.totalCrowdingInfluence ?? 0)), 0),
+      ),
+      candidatesWithAnyCrowdingCharge: cands.filter(
+        (c) => c.crowdingPathCount > 0 || Math.abs(c.totalCrowdingInfluence ?? 0) >= 0.005,
+      ).length,
       maxCrowdingPathCount: Math.max(0, ...cands.map((c) => c.crowdingPathCount)),
       stay: best("stay"),
       bestMove: best("move_to_tile"),
@@ -321,8 +433,15 @@ try {
       probe: p,
       verdict:
         p.weightedCrowding === 0 && p.crowdingPenalty === 0 && p.nearbyBandCount === 0 &&
+        // CORRECTION-32A — this verdict used to read `p.stay.totalCrowdingInfluence` ONLY, and
+        // passed while a move candidate in the SAME payload reported -3.39. It now requires
+        // EVERY candidate to measure zero, and requires the pairing itself to be sound.
         p.crowdingBandIds.length === 0 && p.maxCrowdingPathCount === 0 &&
-        (p.stay?.totalCrowdingInfluence ?? 0) === 0
+        p.candidatesWithAnyCrowdingCharge === 0 &&
+        p.maxAbsCrowdingInfluenceOverAllCandidates < 0.005 &&
+        p.pairing.contaminatedPairs === 0 &&
+        p.pairing.unpairableDuplicates === 0 &&
+        p.pairing.unpairedFullCandidates === 0
           ? "ZERO_CROWDING_IS_ZERO" : "RESIDUAL_CROWDING_INFLUENCE",
     });
   }
@@ -965,7 +1084,107 @@ try {
     audit: "crowdingDecisionAuthorityFixturesAudit",
     checkpoint: "CORRECTION-32",
     arm: ARM, seed: SEED, warmSeasons: SEASONS,
-    summary: { fixtures: Object.keys(results).length, vacuous: vacuous.length, vacuousIds: vacuous, verdicts },
+    // CORRECTION-32A §14 — a fixture summary may claim "21/21 PASS" only alongside the pairing
+    // integrity of every probe it rests on. These counters are aggregated over every `pairing`
+    // block reachable in the payload, so a self-consistency violation cannot hide behind a
+    // headline verdict.
+    summary: (() => {
+      const probes = [];
+      const walk = (node) => {
+        if (node === null || typeof node !== "object") return;
+        if (Array.isArray(node)) {
+          for (const item of node) walk(item);
+          return;
+        }
+        if (node.pairing !== undefined && node.pairing !== null && typeof node.pairing === "object") {
+          probes.push(node);
+        }
+        for (const value of Object.values(node)) walk(value);
+      };
+      walk(results);
+      const sum = (pick) => probes.reduce((n, p) => n + (pick(p) ?? 0), 0);
+      // A rejected candidate is NOT the same thing as a broken audit. Each rejection is classified
+      // by its cause so the evidence explains itself, and an UNEXPLAINED rejection — a genuine
+      // non-crowding field difference — is separated from the two KNOWN, stated limits.
+      const classify = (p) => {
+        const causes = [];
+        if (p.pairing.undeclaredDifferingFieldNames.length > 0) {
+          causes.push({
+            cause: "UNEXPLAINED_NON_CROWDING_DIFFERENCE",
+            severity: "blocking",
+            fields: p.pairing.undeclaredDifferingFieldNames,
+            note: "a field outside the declared crowding manifest moved; the attribution is not admissible",
+          });
+        }
+        if (p.pairing.unpairableDuplicates > 0) {
+          causes.push({
+            cause: "KNOWN_IDENTITY_LIMIT_UNSTAMPED_CANDIDATE_FAMILY",
+            severity: "stated_limit",
+            count: p.pairing.unpairableDuplicates,
+            note:
+              "`AlternativeConsidered` carries `isCorridorRelocation` but production never sets " +
+              "`isSideCountryProbe` on it, so two probes of different families at the same target " +
+              "are indistinguishable in the archive. They are REJECTED rather than guessed. Their " +
+              "exact DIRECT charges are still measured; only the whole-candidate total is withheld.",
+          });
+        }
+        if (p.pairing.contaminatedPairs > 0) {
+          causes.push({
+            cause: "EXTERNAL_SCORE_ADDITION_DIFFERS",
+            severity: "stated_limit",
+            count: p.pairing.contaminatedPairs,
+            note:
+              "the candidate's addition OUTSIDE `scoreDecision` differs between arms. " +
+              "`getBadSiteStuckResidencePenalty` reads crowdingPenalty/rangeSaturation/" +
+              "socialAccessRisk/mobilityPressure off the breakdown and is module-private, so the " +
+              "difference CANNOT be separated into crowding and non-crowding parts without " +
+              "re-implementing it. The pair is rejected rather than attributed.",
+          });
+        }
+        if (p.pairing.unpairedFullCandidates > 0) {
+          causes.push({
+            cause: "NO_CONTROL_CANDIDATE",
+            severity: "stated_limit",
+            count: p.pairing.unpairedFullCandidates,
+            note: "the zero-crowding arm did not generate this candidate at all — a candidate-SET response, reported in §9.3, never a score attribution",
+          });
+        }
+        return causes;
+      };
+      const selfConsistencyFailures = probes
+        .filter((p) => classify(p).length > 0)
+        .map((p) => ({
+          bandId: p.bandId,
+          position: p.position,
+          contaminatedPairs: p.pairing.contaminatedPairs,
+          unpairableDuplicates: p.pairing.unpairableDuplicates,
+          unpairedFullCandidates: p.pairing.unpairedFullCandidates,
+          undeclared: p.pairing.undeclaredDifferingFieldNames,
+          causes: classify(p),
+        }));
+      const blocking = selfConsistencyFailures.filter((f) => f.causes.some((c) => c.severity === "blocking"));
+      return {
+        fixtures: Object.keys(results).length,
+        vacuous: vacuous.length,
+        vacuousIds: vacuous,
+        probesMeasured: probes.length,
+        candidatesInspected: sum((p) => p.pairing.fullCandidates),
+        cleanPairs: sum((p) => p.pairing.cleanPairs),
+        contaminatedPairCount: sum((p) => p.pairing.contaminatedPairs),
+        unpairedCandidateCount: sum((p) => p.pairing.unpairedFullCandidates),
+        duplicateKeyCount: sum((p) => p.pairing.duplicateKeyCount),
+        legacyKeyCollisionCount: sum((p) => p.pairing.legacyKeyCollisions.length),
+        // §14 reporting. `rejectedCandidateCount` is the honest denominator caveat on any
+        // "21/21" headline: these candidates carry no PUBLISHED whole-candidate attribution.
+        rejectedCandidateCount: sum(
+          (p) => p.pairing.contaminatedPairs + p.pairing.unpairableDuplicates + p.pairing.unpairedFullCandidates,
+        ),
+        failedSelfConsistencyAssertions: selfConsistencyFailures.length,
+        blockingSelfConsistencyFailures: blocking.length,
+        failedSelfConsistencyDetail: selfConsistencyFailures.slice(0, 12),
+        verdicts,
+      };
+    })(),
     fixtures: results,
   };
   mkdirSync(dirname(OUT), { recursive: true });

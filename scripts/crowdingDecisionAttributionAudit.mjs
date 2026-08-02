@@ -1,3 +1,22 @@
+// ============================================================================================
+// SUPERSEDED BY CORRECTION-32A — DO NOT RUN, DO NOT CITE ITS OUTPUT.
+//
+// Replaced by `scripts/crowdingAttributionInstrumentAudit.mjs`. Retained unmodified below the
+// line so the rejected method stays inspectable.
+//
+// THE DEFECT. `actionKey` is `${type}:${targetTileId}` — and that is NOT unique. An M0.8
+// corridor-relocation candidate emits a `move_to_tile` whose target can coincide with an
+// ordinary known move's, so both hash to one key and `new Map(...)` below keeps only the LAST.
+// The audit then subtracted TWO DIFFERENT CANDIDATES' scores and published the difference as
+// "crowding influence". On a SOLO band with `weightedCrowding 0` it reported -3.39; on
+// F1_adjacent_pair_rich it reported -4.02, which is literally `0.96 - 4.98` — a corridor
+// relocation minus a known move.
+//
+// `RESIDUAL = TOTAL - sum(DIRECT)` was never admissible either: a residual is evidence of nested
+// crowding only when every non-crowding input is provably identical, and this instrument never
+// checked. See docs/evidence/crowding-decision-pressure-authority-32/superseded-instrument-v1/README.md.
+// ============================================================================================
+//
 // CORRECTION-32 — counterfactual attribution matrix for physical-crowding decision influence.
 //
 // §13 of the checkpoint. Designed to run UNCHANGED on both arms:

@@ -1,5 +1,47 @@
 # CORRECTION-32 — FINDINGS
 
+> ## ⚠ CORRECTED BY CORRECTION-32A — READ THIS FIRST
+>
+> **CORRECTION-32 is `PROGRESS`. It is NOT accepted and NOT frozen.** Its first report said
+> `PASS`; that verdict rested on an attribution instrument that has since been rejected.
+>
+> **What was wrong.** `scripts/crowdingDecisionAttributionAudit.mjs` paired the full and
+> zero-crowding candidates by `${actionType}:${targetTileId}`. That key is **not unique** — an
+> M0.8 corridor-relocation candidate emits a `move_to_tile` whose target can coincide with an
+> ordinary known move's — and `new Map(...)` kept only the last. The audit then subtracted **two
+> different candidates of two different families** and published the difference as crowding
+> influence. `−4.02` is literally `0.96 − 4.98`. On a **solo band with no neighbours at all** it
+> reported `−3.39`. Every impossible residual in both arms sits on a colliding key, 1:1, with no
+> unexplained remainder.
+>
+> **What is withdrawn.** Every `totalCrowdingInfluence`; every
+> `residualThroughNestedComposites` (the metric is removed, not recomputed); the headline
+> **"candidates with ≥3 crowding paths 49 → 0"** and its natural restatements **56 → 0** and
+> **144 → 0**; **"max paths 4 → 2"**; and the claim that P1 was a zero-crowding control (it
+> verified `stay.totalCrowdingInfluence` only, while a move candidate in the same payload read
+> −3.39).
+>
+> **What replaces them.** See `INSTRUMENT_CORRECTION.md`. Under an instrument that holds every
+> non-crowding field of one fixed candidate byte-identical and rejects any pair it cannot prove
+> clean: max separately-named **direct** charges on one candidate **3 → 1**; candidates carrying
+> ≥3 direct charges **1 → 0**; direct `nearbyBandPressure` influence **2.02 → 0**; candidates
+> charged through range saturation **32 → 0** and through daughter-kin **42 → 0**; max
+> fixed-candidate partition total **0.42 → 0.24**. 150/152 candidates, **0 rejected, 0
+> contaminated, 9/9 self-consistency assertions passing in both arms.**
+>
+> **What is NOT withdrawn.** The physical-layer readings, the pressure-state observations, the
+> natural-occurrence occurrence counts and the behavioural comparison were never produced by the
+> broken pairing. They stand, with the qualifications in `before-after.json`.
+>
+> **The production implementation is SUPPORTED by the corrected evidence** and was not changed in
+> CORRECTION-32A. Two reporting errors are corrected: the diff touches **seven** production files,
+> not six, and it **does** add one new exported constant (`CROWDING_DECISION_COST_WEIGHT = 0.96`)
+> even though it adds no new constant *file*.
+>
+> Sections 1–11 below are the ORIGINAL report, preserved. Read them only alongside this block.
+
+---
+
 **SHARED RANGE — CROWDING DECISION-PRESSURE AUTHORITY AND DUPLICATE INFLUENCE**
 
 Branch `checkpoint/crowding-decision-pressure-authority-32` from the accepted and frozen

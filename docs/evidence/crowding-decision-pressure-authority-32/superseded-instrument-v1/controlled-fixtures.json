@@ -1,60 +1,16 @@
 {
   "audit": "crowdingDecisionAuthorityFixturesAudit",
   "checkpoint": "CORRECTION-32",
-  "arm": "before",
+  "arm": "after",
   "seed": "c32:fixtures",
   "warmSeasons": 14,
   "summary": {
     "fixtures": 21,
     "vacuous": 0,
     "vacuousIds": [],
-    "probesMeasured": 11,
-    "candidatesInspected": 136,
-    "cleanPairs": 133,
-    "contaminatedPairCount": 1,
-    "unpairedCandidateCount": 0,
-    "duplicateKeyCount": 1,
-    "legacyKeyCollisionCount": 6,
-    "rejectedCandidateCount": 3,
-    "failedSelfConsistencyAssertions": 2,
-    "blockingSelfConsistencyFailures": 0,
-    "failedSelfConsistencyDetail": [
-      {
-        "bandId": "band:custom:0",
-        "position": "tile:195:90",
-        "contaminatedPairs": 0,
-        "unpairableDuplicates": 2,
-        "unpairedFullCandidates": 0,
-        "undeclared": [],
-        "causes": [
-          {
-            "cause": "KNOWN_IDENTITY_LIMIT_UNSTAMPED_CANDIDATE_FAMILY",
-            "severity": "stated_limit",
-            "count": 2,
-            "note": "`AlternativeConsidered` carries `isCorridorRelocation` but production never sets `isSideCountryProbe` on it, so two probes of different families at the same target are indistinguishable in the archive. They are REJECTED rather than guessed. Their exact DIRECT charges are still measured; only the whole-candidate total is withheld."
-          }
-        ]
-      },
-      {
-        "bandId": "band:custom:0",
-        "position": "tile:195:90",
-        "contaminatedPairs": 1,
-        "unpairableDuplicates": 0,
-        "unpairedFullCandidates": 0,
-        "undeclared": [],
-        "causes": [
-          {
-            "cause": "EXTERNAL_SCORE_ADDITION_DIFFERS",
-            "severity": "stated_limit",
-            "count": 1,
-            "note": "the candidate's addition OUTSIDE `scoreDecision` differs between arms. `getBadSiteStuckResidencePenalty` reads crowdingPenalty/rangeSaturation/socialAccessRisk/mobilityPressure off the breakdown and is module-private, so the difference CANNOT be separated into crowding and non-crowding parts without re-implementing it. The pair is rejected rather than attributed."
-          }
-        ]
-      }
-    ],
     "verdicts": {
       "P1_zero_crowding_control": "ZERO_CROWDING_IS_ZERO",
-      "P2_one_neutral_non_kin_neighbour": "MULTIPLE_CROWDING_PATHS",
+      "P2_one_neutral_non_kin_neighbour": "SINGLE_BOUNDED_AUTHORITY",
       "P3_residence_crowded_target_clear": "TARGET_KEEPS_NO_RESIDENCE_COST",
       "P4_residence_clear_target_crowded": "TARGET_COSTED_AND_NO_FALSE_HOME_PUSH",
       "P5_residence_and_target_crowded": "SYMMETRIC_NO_ARTIFICIAL_PREFERENCE",
@@ -65,12 +21,12 @@
       "P10_crowding_plus_social_friction": "MEASURED",
       "P11_kin_crowding": "KIN_DISCOUNTED_BUT_STILL_CONSUME_SPACE",
       "P12_tolerated_aggregation": "PHYSICAL_AND_SOCIAL_COEXIST",
-      "P13_range_saturation_overlap": "SATURATION_STILL_CARRIES_CROWDING_INTO_SCORE",
-      "P14_crowding_driven_exploration": "EXPLORATION_RESPONSE_MULTIPLIED",
+      "P13_range_saturation_overlap": "OVERLAP_PARTITIONED_OUT_OF_DECISION",
+      "P14_crowding_driven_exploration": "EXPLORATION_RESPONSE_BOUNDED",
       "P15_repeated_nearby_seasons": "BOUNDED",
       "P16_departure": "PHYSICAL_RELEASES_IMMEDIATELY",
       "P17_several_nearby_bands": "MONOTONE_AND_BOUNDED",
-      "P18_candidate_family_parity": "A_FAMILY_DUPLICATES",
+      "P18_candidate_family_parity": "NO_FAMILY_DUPLICATES",
       "P19_order_invariance": "ORDER_INVARIANT",
       "P20_step_mode_invariance": "STEP_MODE_EQUIVALENT",
       "P21_long_horizon": "NO_RESIDUAL_AFTER_DEPARTURE"
@@ -128,34 +84,11 @@
           "move_to_tile",
           "stay"
         ],
-        "pairing": {
-          "fullCandidates": 14,
-          "controlCandidates": 14,
-          "pairedCandidates": 14,
-          "cleanPairs": 14,
-          "contaminatedPairs": 0,
-          "unpairableDuplicates": 0,
-          "unpairedFullCandidates": 0,
-          "duplicateKeyCount": 0,
-          "legacyKeyCollisions": [
-            {
-              "key": "move_to_tile:tile:196:90",
-              "count": 2
-            }
-          ],
-          "undeclaredDifferingFieldNames": []
-        },
-        "maxAbsCrowdingInfluenceOverAllCandidates": 0,
-        "candidatesWithAnyCrowdingCharge": 0,
         "maxCrowdingPathCount": 0,
         "stay": {
           "action": "stay:tile:195:90",
-          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "stay",
           "score": 5.47,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -174,12 +107,8 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
-          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "move_to_tile",
           "score": 5.82,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -199,12 +128,8 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:192:85",
-          "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.58,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -225,12 +150,8 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.82,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -249,12 +170,8 @@
           },
           {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
             "score": 5.47,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -273,12 +190,8 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
-            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.92,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -297,12 +210,8 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
-            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.6,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -321,13 +230,9 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.59,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0,
+            "totalCrowdingInfluence": -3.39,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0,
@@ -345,12 +250,8 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
-            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.3,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -369,12 +270,8 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
-            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.27,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -393,12 +290,8 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.14,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -417,12 +310,8 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
-            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.95,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -441,12 +330,8 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
-            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.84,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -465,12 +350,8 @@
           },
           {
             "action": "logistical_probe:tile:197:88",
-            "identity": "logistical_probe:tile:197:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.57,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -489,12 +370,8 @@
           },
           {
             "action": "logistical_probe:tile:192:85",
-            "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.58,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -513,12 +390,8 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation",
-            "family": "corridor_relocation",
             "actionType": "move_to_tile",
             "score": 1.2,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -537,12 +410,8 @@
           },
           {
             "action": "logistical_probe:tile:197:89",
-            "identity": "logistical_probe:tile:197:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 0.39,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -589,7 +458,7 @@
           "zeroCrowding": 0.53
         },
         "placeAttachmentPull": {
-          "full": 0.55,
+          "full": 0.56,
           "zeroCrowding": 0.56
         },
         "mobilityPressure": {
@@ -597,12 +466,12 @@
           "zeroCrowding": 0.34
         },
         "netMovePressure": {
-          "full": 0.22,
+          "full": 0.21,
           "zeroCrowding": 0.2
         },
         "decisionSaturation": {
-          "full": 0.17,
-          "zeroCrowding": 0.11
+          "full": 0.05,
+          "zeroCrowding": 0.05
         },
         "fullSaturationPressure": 0.17,
         "daughterDispersalPressure": 0,
@@ -624,68 +493,41 @@
           "resource_scout",
           "stay"
         ],
-        "pairing": {
-          "fullCandidates": 14,
-          "controlCandidates": 14,
-          "pairedCandidates": 14,
-          "cleanPairs": 14,
-          "contaminatedPairs": 0,
-          "unpairableDuplicates": 0,
-          "unpairedFullCandidates": 0,
-          "duplicateKeyCount": 0,
-          "legacyKeyCollisions": [
-            {
-              "key": "move_to_tile:tile:194:90",
-              "count": 2
-            }
-          ],
-          "undeclaredDifferingFieldNames": []
-        },
-        "maxAbsCrowdingInfluenceOverAllCandidates": 0.15,
-        "candidatesWithAnyCrowdingCharge": 10,
-        "maxCrowdingPathCount": 4,
+        "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
-          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "stay",
-          "score": 5.01,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.14,
+          "score": 5.11,
+          "totalCrowdingInfluence": 0.07,
           "charges": {
-            "directNearbyBandPressure": 0.04,
-            "directCrowdingPenalty": 0.05,
-            "pressureState": 0.01,
-            "rangeSaturation": 0.02,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.06,
+            "pressureState": 0,
+            "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
             "daughterDerivative": 0
           },
-          "crowdingPathCount": 4,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.06,
           "targetNearbyBandPressure": 0.15,
-          "rangeSaturationScored": 0.17,
+          "rangeSaturationScored": 0.05,
           "crowdingExploreBoost": 0,
           "daughterDispersalExploreBoost": 0
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
-          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "move_to_tile",
-          "score": 5.32,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.08,
+          "score": 5.36,
+          "totalCrowdingInfluence": -4.1,
           "charges": {
-            "directNearbyBandPressure": 0.02,
-            "directCrowdingPenalty": 0.02,
-            "pressureState": -0.01,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.04,
+            "pressureState": 0,
             "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
-            "daughterDerivative": 0.01
+            "daughterDerivative": 0
           },
-          "crowdingPathCount": 4,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.04,
           "targetNearbyBandPressure": 0.11,
           "rangeSaturationScored": 0,
@@ -695,12 +537,8 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:198:86",
-          "identity": "logistical_probe:tile:198:86|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.66,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -719,12 +557,8 @@
         },
         "resourceScout": {
           "action": "resource_scout:tile:194:90",
-          "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "resource_scout",
           "score": 2.42,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -744,46 +578,38 @@
         "candidates": [
           {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
-            "score": 5.01,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.14,
+            "score": 5.11,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
-              "pressureState": 0.01,
-              "rangeSaturation": 0.02,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": 0,
+              "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
-            "rangeSaturationScored": 0.17,
+            "rangeSaturationScored": 0.05,
             "crowdingExploreBoost": 0,
             "daughterDispersalExploreBoost": 0
           },
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 5.32,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
+            "score": 5.36,
+            "totalCrowdingInfluence": -4.1,
             "charges": {
-              "directNearbyBandPressure": 0.02,
-              "directCrowdingPenalty": 0.02,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -792,22 +618,18 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.42,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.15,
+            "score": 4.49,
+            "totalCrowdingInfluence": 0.08,
             "charges": {
-              "directNearbyBandPressure": 0.05,
-              "directCrowdingPenalty": 0.05,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.07,
             "targetNearbyBandPressure": 0.19,
             "rangeSaturationScored": 0,
@@ -816,22 +638,18 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
-            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.31,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.09,
+            "score": 4.36,
+            "totalCrowdingInfluence": 0.04,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -840,22 +658,18 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
-            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.08,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.04,
+            "score": 4.1,
+            "totalCrowdingInfluence": 0.02,
             "charges": {
-              "directNearbyBandPressure": 0.01,
-              "directCrowdingPenalty": 0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.02,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -864,22 +678,18 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
-            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.97,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.15,
+            "score": 4.04,
+            "totalCrowdingInfluence": 0.08,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.03
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.07,
             "targetNearbyBandPressure": 0.16,
             "rangeSaturationScored": 0,
@@ -888,22 +698,18 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
-            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.83,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.04,
+            "score": 3.85,
+            "totalCrowdingInfluence": 0.02,
             "charges": {
-              "directNearbyBandPressure": 0.02,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.02,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -912,22 +718,18 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
-            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.66,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.13,
+            "score": 3.72,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.04,
-              "pressureState": 0,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
             "rangeSaturationScored": 0,
@@ -936,12 +738,8 @@
           },
           {
             "action": "logistical_probe:tile:198:86",
-            "identity": "logistical_probe:tile:198:86|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.66,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -960,22 +758,18 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.48,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
+            "score": 3.52,
+            "totalCrowdingInfluence": 0.04,
             "charges": {
-              "directNearbyBandPressure": 0.02,
-              "directCrowdingPenalty": 0.03,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -984,22 +778,18 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
-            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.12,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.12,
+            "score": 3.17,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.04,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
             "rangeSaturationScored": 0,
@@ -1008,12 +798,8 @@
           },
           {
             "action": "resource_scout:tile:194:90",
-            "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "resource_scout",
             "score": 2.42,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1032,12 +818,8 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=corridor_relocation",
-            "family": "corridor_relocation",
             "actionType": "move_to_tile",
             "score": 1.26,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1056,12 +838,8 @@
           },
           {
             "action": "logistical_probe:tile:192:89",
-            "identity": "logistical_probe:tile:192:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 0.1,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1080,7 +858,7 @@
           }
         ]
       },
-      "verdict": "MULTIPLE_CROWDING_PATHS"
+      "verdict": "SINGLE_BOUNDED_AUTHORITY"
     },
     "P3_residence_crowded_target_clear": {
       "intent": "crowding only around the residence: a dispersal motive may exist, but the clear target must not inherit the residence's cost",
@@ -1108,36 +886,28 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
-        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-        "family": "core",
         "actionType": "stay",
-        "score": 5.23,
-        "pairStatus": "clean_exact_partition",
-        "undeclaredDifferingFields": [],
-        "totalCrowdingInfluence": 0.02,
+        "score": 5.25,
+        "totalCrowdingInfluence": 0.01,
         "charges": {
-          "directNearbyBandPressure": 0.01,
+          "directNearbyBandPressure": 0,
           "directCrowdingPenalty": 0.01,
           "pressureState": 0,
-          "rangeSaturation": 0.01,
+          "rangeSaturation": 0,
           "crowdingExploreBoost": 0,
           "daughterDerivative": 0
         },
-        "crowdingPathCount": 3,
+        "crowdingPathCount": 1,
         "targetCrowdingPenalty": 0.01,
         "targetNearbyBandPressure": 0.02,
-        "rangeSaturationScored": 0.06,
+        "rangeSaturationScored": 0.04,
         "crowdingExploreBoost": 0,
         "daughterDispersalExploreBoost": 0
       },
       "targetCandidate": {
         "action": "move_to_tile:tile:197:90",
-        "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-        "family": "core",
         "actionType": "move_to_tile",
         "score": 4.07,
-        "pairStatus": "clean_exact_partition",
-        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -1158,32 +928,32 @@
         {
           "action": "move_to_tile:tile:194:90",
           "targetCrowdingPenalty": 0.02,
-          "totalCrowdingInfluence": 0.03,
-          "paths": 3
+          "totalCrowdingInfluence": 0.02,
+          "paths": 1
         },
         {
           "action": "move_to_tile:tile:195:89",
           "targetCrowdingPenalty": 0.02,
-          "totalCrowdingInfluence": 0.05,
-          "paths": 3
-        },
-        {
-          "action": "move_to_tile:tile:196:90",
-          "targetCrowdingPenalty": 0,
-          "totalCrowdingInfluence": 0,
-          "paths": 0
+          "totalCrowdingInfluence": 0.03,
+          "paths": 1
         },
         {
           "action": "move_to_tile:tile:195:88",
           "targetCrowdingPenalty": 0.01,
-          "totalCrowdingInfluence": 0.02,
-          "paths": 2
+          "totalCrowdingInfluence": 0.01,
+          "paths": 1
+        },
+        {
+          "action": "move_to_tile:tile:196:90",
+          "targetCrowdingPenalty": 0,
+          "totalCrowdingInfluence": -2.97,
+          "paths": 0
         },
         {
           "action": "move_to_tile:tile:194:89",
           "targetCrowdingPenalty": 0.04,
-          "totalCrowdingInfluence": 0.09,
-          "paths": 3
+          "totalCrowdingInfluence": 0.05,
+          "paths": 1
         },
         {
           "action": "move_to_tile:tile:197:90",
@@ -1201,7 +971,7 @@
           "action": "move_to_tile:tile:196:89",
           "targetCrowdingPenalty": 0.01,
           "totalCrowdingInfluence": 0.01,
-          "paths": 2
+          "paths": 1
         },
         {
           "action": "move_to_tile:tile:196:91",
@@ -1247,8 +1017,8 @@
           "zeroCrowding": 0.11
         },
         "decisionSaturation": {
-          "full": 0.06,
-          "zeroCrowding": 0.05
+          "full": 0.04,
+          "zeroCrowding": 0.04
         },
         "fullSaturationPressure": 0.06,
         "daughterDispersalPressure": 0,
@@ -1269,68 +1039,41 @@
           "move_to_tile",
           "stay"
         ],
-        "pairing": {
-          "fullCandidates": 13,
-          "controlCandidates": 13,
-          "pairedCandidates": 13,
-          "cleanPairs": 13,
-          "contaminatedPairs": 0,
-          "unpairableDuplicates": 0,
-          "unpairedFullCandidates": 0,
-          "duplicateKeyCount": 0,
-          "legacyKeyCollisions": [
-            {
-              "key": "move_to_tile:tile:196:90",
-              "count": 2
-            }
-          ],
-          "undeclaredDifferingFieldNames": []
-        },
-        "maxAbsCrowdingInfluenceOverAllCandidates": 0.09,
-        "candidatesWithAnyCrowdingCharge": 7,
-        "maxCrowdingPathCount": 3,
+        "maxCrowdingPathCount": 1,
         "stay": {
           "action": "stay:tile:195:90",
-          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "stay",
-          "score": 5.23,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.02,
+          "score": 5.25,
+          "totalCrowdingInfluence": 0.01,
           "charges": {
-            "directNearbyBandPressure": 0.01,
+            "directNearbyBandPressure": 0,
             "directCrowdingPenalty": 0.01,
             "pressureState": 0,
-            "rangeSaturation": 0.01,
+            "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
             "daughterDerivative": 0
           },
-          "crowdingPathCount": 3,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.01,
           "targetNearbyBandPressure": 0.02,
-          "rangeSaturationScored": 0.06,
+          "rangeSaturationScored": 0.04,
           "crowdingExploreBoost": 0,
           "daughterDispersalExploreBoost": 0
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
-          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "move_to_tile",
-          "score": 5.39,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.03,
+          "score": 5.4,
+          "totalCrowdingInfluence": 0.02,
           "charges": {
-            "directNearbyBandPressure": 0.01,
-            "directCrowdingPenalty": 0.01,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.02,
             "pressureState": 0,
             "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
-            "daughterDerivative": 0.01
+            "daughterDerivative": 0
           },
-          "crowdingPathCount": 3,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.02,
           "targetNearbyBandPressure": 0.05,
           "rangeSaturationScored": 0,
@@ -1340,12 +1083,8 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:198:87",
-          "identity": "logistical_probe:tile:198:87|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.64,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -1366,46 +1105,38 @@
         "candidates": [
           {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
-            "score": 5.23,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.02,
+            "score": 5.25,
+            "totalCrowdingInfluence": 0.01,
             "charges": {
-              "directNearbyBandPressure": 0.01,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.01,
               "pressureState": 0,
-              "rangeSaturation": 0.01,
+              "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.01,
             "targetNearbyBandPressure": 0.02,
-            "rangeSaturationScored": 0.06,
+            "rangeSaturationScored": 0.04,
             "crowdingExploreBoost": 0,
             "daughterDispersalExploreBoost": 0
           },
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 5.39,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.03,
+            "score": 5.4,
+            "totalCrowdingInfluence": 0.02,
             "charges": {
-              "directNearbyBandPressure": 0.01,
-              "directCrowdingPenalty": 0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.02,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -1414,22 +1145,18 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
-            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.44,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.05,
+            "score": 4.46,
+            "totalCrowdingInfluence": 0.03,
             "charges": {
-              "directNearbyBandPressure": 0.02,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.02,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -1437,14 +1164,30 @@
             "daughterDispersalExploreBoost": 0
           },
           {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 4.2,
+            "totalCrowdingInfluence": 0.01,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 1,
+            "targetCrowdingPenalty": 0.01,
+            "targetNearbyBandPressure": 0.02,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.17,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0,
+            "totalCrowdingInfluence": -2.97,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0,
@@ -1461,47 +1204,19 @@
             "daughterDispersalExploreBoost": 0
           },
           {
-            "action": "move_to_tile:tile:195:88",
-            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-            "family": "core",
+            "action": "move_to_tile:tile:194:89",
             "actionType": "move_to_tile",
-            "score": 4.19,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.02,
+            "score": 4.13,
+            "totalCrowdingInfluence": 0.05,
             "charges": {
-              "directNearbyBandPressure": 0.01,
-              "directCrowdingPenalty": 0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 2,
-            "targetCrowdingPenalty": 0.01,
-            "targetNearbyBandPressure": 0.02,
-            "rangeSaturationScored": 0,
-            "crowdingExploreBoost": 0,
-            "daughterDispersalExploreBoost": 0
-          },
-          {
-            "action": "move_to_tile:tile:194:89",
-            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
-            "family": "core",
-            "actionType": "move_to_tile",
-            "score": 4.09,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.09,
-            "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
-              "pressureState": 0,
-              "rangeSaturation": 0,
-              "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
-            },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -1510,12 +1225,8 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
-            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.07,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1534,12 +1245,8 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.73,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": -0.01,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1558,12 +1265,8 @@
           },
           {
             "action": "logistical_probe:tile:198:87",
-            "identity": "logistical_probe:tile:198:87|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.64,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1582,22 +1285,18 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
-            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.56,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0.01,
             "charges": {
-              "directNearbyBandPressure": 0.01,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.01,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 2,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.01,
             "targetNearbyBandPressure": 0.02,
             "rangeSaturationScored": 0,
@@ -1606,12 +1305,8 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
-            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.46,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1630,12 +1325,8 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation",
-            "family": "corridor_relocation",
             "actionType": "move_to_tile",
             "score": 1.2,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1654,12 +1345,8 @@
           },
           {
             "action": "logistical_probe:tile:197:89",
-            "identity": "logistical_probe:tile:197:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 0.39,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1706,12 +1393,8 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
-        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-        "family": "core",
         "actionType": "stay",
         "score": 5.19,
-        "pairStatus": "clean_exact_partition",
-        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -1730,22 +1413,18 @@
       },
       "targetCandidate": {
         "action": "move_to_tile:tile:195:88",
-        "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-        "family": "core",
         "actionType": "move_to_tile",
-        "score": 3.54,
-        "pairStatus": "clean_exact_partition",
-        "undeclaredDifferingFields": [],
-        "totalCrowdingInfluence": 0.04,
+        "score": 3.56,
+        "totalCrowdingInfluence": 0.02,
         "charges": {
-          "directNearbyBandPressure": 0.01,
-          "directCrowdingPenalty": 0.01,
+          "directNearbyBandPressure": 0,
+          "directCrowdingPenalty": 0.02,
           "pressureState": 0,
           "rangeSaturation": 0,
           "crowdingExploreBoost": 0,
           "daughterDerivative": 0
         },
-        "crowdingPathCount": 2,
+        "crowdingPathCount": 1,
         "targetCrowdingPenalty": 0.02,
         "targetNearbyBandPressure": 0.05,
         "rangeSaturationScored": 0,
@@ -1762,7 +1441,7 @@
         {
           "action": "move_to_tile:tile:195:91",
           "targetCrowdingPenalty": 0,
-          "totalCrowdingInfluence": 0,
+          "totalCrowdingInfluence": -3.18,
           "paths": 0
         },
         {
@@ -1774,8 +1453,8 @@
         {
           "action": "move_to_tile:tile:195:89",
           "targetCrowdingPenalty": 0.01,
-          "totalCrowdingInfluence": 0.02,
-          "paths": 2
+          "totalCrowdingInfluence": 0.01,
+          "paths": 1
         },
         {
           "action": "move_to_tile:tile:196:90",
@@ -1792,8 +1471,8 @@
         {
           "action": "move_to_tile:tile:195:88",
           "targetCrowdingPenalty": 0.02,
-          "totalCrowdingInfluence": 0.04,
-          "paths": 2
+          "totalCrowdingInfluence": 0.02,
+          "paths": 1
         },
         {
           "action": "move_to_tile:tile:197:90",
@@ -1863,38 +1542,11 @@
           "move_to_tile",
           "stay"
         ],
-        "pairing": {
-          "fullCandidates": 14,
-          "controlCandidates": 14,
-          "pairedCandidates": 12,
-          "cleanPairs": 12,
-          "contaminatedPairs": 0,
-          "unpairableDuplicates": 2,
-          "unpairedFullCandidates": 0,
-          "duplicateKeyCount": 1,
-          "legacyKeyCollisions": [
-            {
-              "key": "move_to_tile:tile:195:91",
-              "count": 2
-            },
-            {
-              "key": "logistical_probe:tile:197:88",
-              "count": 2
-            }
-          ],
-          "undeclaredDifferingFieldNames": []
-        },
-        "maxAbsCrowdingInfluenceOverAllCandidates": 0.04,
-        "candidatesWithAnyCrowdingCharge": 2,
-        "maxCrowdingPathCount": 2,
+        "maxCrowdingPathCount": 1,
         "stay": {
           "action": "stay:tile:195:90",
-          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "stay",
           "score": 5.19,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -1913,12 +1565,8 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
-          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "move_to_tile",
           "score": 6.52,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -1938,12 +1586,8 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:197:87",
-          "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "logistical_probe",
           "score": 2.67,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -1964,12 +1608,8 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 6.52,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -1988,12 +1628,8 @@
           },
           {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
             "score": 5.19,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2012,13 +1648,9 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.13,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0,
+            "totalCrowdingInfluence": -3.18,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0,
@@ -2036,12 +1668,8 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
-            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.3,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2060,22 +1688,18 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
-            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.02,
+            "score": 4.01,
+            "totalCrowdingInfluence": 0.01,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.01,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 2,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.01,
             "targetNearbyBandPressure": 0.02,
             "rangeSaturationScored": 0,
@@ -2084,12 +1708,8 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.87,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2108,12 +1728,8 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
-            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.75,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2132,22 +1748,18 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
-            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.54,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.04,
+            "score": 3.56,
+            "totalCrowdingInfluence": 0.02,
             "charges": {
-              "directNearbyBandPressure": 0.01,
-              "directCrowdingPenalty": 0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.02,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 2,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -2156,12 +1768,8 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
-            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.23,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2180,12 +1788,8 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
-            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 2.77,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2204,12 +1808,8 @@
           },
           {
             "action": "logistical_probe:tile:197:87",
-            "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 2.67,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2228,13 +1828,9 @@
           },
           {
             "action": "logistical_probe:tile:197:88",
-            "identity": "logistical_probe:tile:197:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 2.39,
-            "pairStatus": "unpairable_duplicate_candidate_key",
-            "undeclaredDifferingFields": null,
-            "totalCrowdingInfluence": null,
+            "totalCrowdingInfluence": -3.16,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0,
@@ -2252,12 +1848,8 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=corridor_relocation",
-            "family": "corridor_relocation",
             "actionType": "move_to_tile",
             "score": 1.95,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2276,13 +1868,9 @@
           },
           {
             "action": "logistical_probe:tile:197:88",
-            "identity": "logistical_probe:tile:197:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": -0.77,
-            "pairStatus": "unpairable_duplicate_candidate_key",
-            "undeclaredDifferingFields": null,
-            "totalCrowdingInfluence": null,
+            "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0,
@@ -2328,46 +1916,38 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
-        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-        "family": "core",
         "actionType": "stay",
-        "score": 5.43,
-        "pairStatus": "clean_exact_partition",
-        "undeclaredDifferingFields": [],
-        "totalCrowdingInfluence": 0.1,
+        "score": 5.26,
+        "totalCrowdingInfluence": 0.06,
         "charges": {
-          "directNearbyBandPressure": 0.03,
-          "directCrowdingPenalty": 0.03,
-          "pressureState": 0.01,
-          "rangeSaturation": 0.01,
+          "directNearbyBandPressure": 0,
+          "directCrowdingPenalty": 0.04,
+          "pressureState": 0,
+          "rangeSaturation": 0,
           "crowdingExploreBoost": 0,
           "daughterDerivative": 0
         },
-        "crowdingPathCount": 4,
+        "crowdingPathCount": 1,
         "targetCrowdingPenalty": 0.04,
         "targetNearbyBandPressure": 0.11,
-        "rangeSaturationScored": 0.16,
+        "rangeSaturationScored": 0.05,
         "crowdingExploreBoost": 0,
         "daughterDispersalExploreBoost": 0
       },
       "targetCandidate": {
         "action": "move_to_tile:tile:197:90",
-        "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-        "family": "core",
         "actionType": "move_to_tile",
-        "score": 5.05,
-        "pairStatus": "clean_exact_partition",
-        "undeclaredDifferingFields": [],
-        "totalCrowdingInfluence": 0.11,
+        "score": 4.79,
+        "totalCrowdingInfluence": 0.05,
         "charges": {
-          "directNearbyBandPressure": 0.03,
-          "directCrowdingPenalty": 0.03,
+          "directNearbyBandPressure": 0,
+          "directCrowdingPenalty": 0.05,
           "pressureState": 0,
           "rangeSaturation": 0,
           "crowdingExploreBoost": 0,
-          "daughterDerivative": 0.02
+          "daughterDerivative": 0
         },
-        "crowdingPathCount": 3,
+        "crowdingPathCount": 1,
         "targetCrowdingPenalty": 0.05,
         "targetNearbyBandPressure": 0.12,
         "rangeSaturationScored": 0,
@@ -2376,61 +1956,61 @@
       },
       "knownMoveCandidates": [
         {
+          "action": "move_to_tile:tile:194:90",
+          "targetCrowdingPenalty": 0.02,
+          "totalCrowdingInfluence": 0.02,
+          "paths": 1
+        },
+        {
           "action": "move_to_tile:tile:196:90",
           "targetCrowdingPenalty": 0.06,
-          "totalCrowdingInfluence": 0.14,
-          "paths": 3
+          "totalCrowdingInfluence": 0.06,
+          "paths": 1
         },
         {
           "action": "move_to_tile:tile:197:90",
           "targetCrowdingPenalty": 0.05,
-          "totalCrowdingInfluence": 0.11,
-          "paths": 3
-        },
-        {
-          "action": "move_to_tile:tile:194:90",
-          "targetCrowdingPenalty": 0.02,
-          "totalCrowdingInfluence": 0.03,
-          "paths": 2
-        },
-        {
-          "action": "move_to_tile:tile:195:88",
-          "targetCrowdingPenalty": 0.01,
-          "totalCrowdingInfluence": 0.01,
-          "paths": 0
+          "totalCrowdingInfluence": 0.05,
+          "paths": 1
         },
         {
           "action": "move_to_tile:tile:195:91",
           "targetCrowdingPenalty": 0.06,
-          "totalCrowdingInfluence": 0.14,
-          "paths": 3
-        },
-        {
-          "action": "move_to_tile:tile:195:89",
-          "targetCrowdingPenalty": 0.02,
-          "totalCrowdingInfluence": 0.05,
-          "paths": 3
-        },
-        {
-          "action": "move_to_tile:tile:196:89",
-          "targetCrowdingPenalty": 0.04,
-          "totalCrowdingInfluence": 0.08,
-          "paths": 4
+          "totalCrowdingInfluence": 0.06,
+          "paths": 1
         },
         {
           "action": "move_to_tile:tile:196:91",
           "targetCrowdingPenalty": 0.07,
-          "totalCrowdingInfluence": 0.16,
-          "paths": 3
+          "totalCrowdingInfluence": 0.06,
+          "paths": 2
+        },
+        {
+          "action": "move_to_tile:tile:195:89",
+          "targetCrowdingPenalty": 0.02,
+          "totalCrowdingInfluence": 0.01,
+          "paths": 1
+        },
+        {
+          "action": "move_to_tile:tile:196:89",
+          "targetCrowdingPenalty": 0.04,
+          "totalCrowdingInfluence": 0.04,
+          "paths": 1
+        },
+        {
+          "action": "move_to_tile:tile:195:88",
+          "targetCrowdingPenalty": 0.01,
+          "totalCrowdingInfluence": 0,
+          "paths": 1
         },
         {
           "action": "move_to_tile:tile:194:89",
           "targetCrowdingPenalty": 0.01,
-          "totalCrowdingInfluence": 0.02,
-          "paths": 3
+          "totalCrowdingInfluence": 0.01,
+          "paths": 1
         }
       ],
-      "netMovePressureCrowdingContribution": 0.01,
+      "netMovePressureCrowdingContribution": 0.02,
       "probe": {
         "bandId": "band:custom:0",
         "position": "tile:195:90",
@@ -2449,113 +2029,107 @@
           "zeroCrowding": 0.68
         },
         "placeAttachmentPull": {
-          "full": 0.79,
-          "zeroCrowding": 0.8
+          "full": 0.54,
+          "zeroCrowding": 0.54
         },
         "mobilityPressure": {
-          "full": 0.4,
-          "zeroCrowding": 0.39
+          "full": 0.37,
+          "zeroCrowding": 0.36
         },
         "netMovePressure": {
-          "full": 0.16,
-          "zeroCrowding": 0.15
+          "full": 0.27,
+          "zeroCrowding": 0.25
         },
         "decisionSaturation": {
-          "full": 0.16,
-          "zeroCrowding": 0.13
+          "full": 0.05,
+          "zeroCrowding": 0.05
         },
-        "fullSaturationPressure": 0.16,
-        "daughterDispersalPressure": 0,
+        "fullSaturationPressure": 0.14,
+        "daughterDispersalPressure": 0.12,
         "overlappingBandIds": [
           "band:custom:1"
         ],
-        "localUsePressure": 0.1148,
+        "localUsePressure": 0.0656,
         "tileDepletion": 0,
         "perCapitaReturn": 1,
         "encounterRecords": 24,
         "contactMemories": 1,
         "frictionRecords": 0,
-        "accessState": "familiar_use",
+        "accessState": "tolerated_shared_use",
         "selected": "stay:tile:195:90",
         "selectedZeroCrowding": "stay:tile:195:90",
         "candidateFamilies": [
+          "logistical_probe",
           "move_to_tile",
           "resource_scout",
           "stay"
         ],
-        "pairing": {
-          "fullCandidates": 11,
-          "controlCandidates": 11,
-          "pairedCandidates": 11,
-          "cleanPairs": 11,
-          "contaminatedPairs": 0,
-          "unpairableDuplicates": 0,
-          "unpairedFullCandidates": 0,
-          "duplicateKeyCount": 0,
-          "legacyKeyCollisions": [],
-          "undeclaredDifferingFieldNames": []
-        },
-        "maxAbsCrowdingInfluenceOverAllCandidates": 0.16,
-        "candidatesWithAnyCrowdingCharge": 10,
-        "maxCrowdingPathCount": 4,
+        "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
-          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "stay",
-          "score": 5.43,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.1,
+          "score": 5.26,
+          "totalCrowdingInfluence": 0.06,
           "charges": {
-            "directNearbyBandPressure": 0.03,
-            "directCrowdingPenalty": 0.03,
-            "pressureState": 0.01,
-            "rangeSaturation": 0.01,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.04,
+            "pressureState": 0,
+            "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
             "daughterDerivative": 0
           },
-          "crowdingPathCount": 4,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.04,
           "targetNearbyBandPressure": 0.11,
-          "rangeSaturationScored": 0.16,
+          "rangeSaturationScored": 0.05,
           "crowdingExploreBoost": 0,
           "daughterDispersalExploreBoost": 0
         },
         "bestMove": {
-          "action": "move_to_tile:tile:197:90",
-          "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-          "family": "core",
+          "action": "move_to_tile:tile:194:90",
           "actionType": "move_to_tile",
-          "score": 5.05,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.11,
+          "score": 5.58,
+          "totalCrowdingInfluence": 0.02,
           "charges": {
-            "directNearbyBandPressure": 0.03,
-            "directCrowdingPenalty": 0.03,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.02,
             "pressureState": 0,
             "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
-            "daughterDerivative": 0.02
+            "daughterDerivative": 0
           },
-          "crowdingPathCount": 3,
-          "targetCrowdingPenalty": 0.05,
-          "targetNearbyBandPressure": 0.12,
+          "crowdingPathCount": 1,
+          "targetCrowdingPenalty": 0.02,
+          "targetNearbyBandPressure": 0.05,
           "rangeSaturationScored": 0,
           "crowdingExploreBoost": 0,
           "daughterDispersalExploreBoost": 0
         },
         "exploration": null,
-        "logisticalProbe": null,
+        "logisticalProbe": {
+          "action": "logistical_probe:tile:195:87",
+          "actionType": "logistical_probe",
+          "score": 3.76,
+          "totalCrowdingInfluence": 0,
+          "charges": {
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0,
+            "pressureState": 0,
+            "rangeSaturation": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDerivative": 0
+          },
+          "crowdingPathCount": 0,
+          "targetCrowdingPenalty": 0,
+          "targetNearbyBandPressure": 0,
+          "rangeSaturationScored": 0,
+          "crowdingExploreBoost": 0,
+          "daughterDispersalExploreBoost": 0
+        },
         "resourceScout": {
           "action": "resource_scout:tile:195:89",
-          "identity": "resource_scout:tile:195:89|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "resource_scout",
-          "score": 2.77,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
+          "score": 2.57,
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -2575,46 +2149,58 @@
         "candidates": [
           {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
-            "score": 5.43,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.1,
+            "score": 5.26,
+            "totalCrowdingInfluence": 0.06,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
-              "pressureState": 0.01,
-              "rangeSaturation": 0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
+              "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
-            "rangeSaturationScored": 0.16,
+            "rangeSaturationScored": 0.05,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:194:90",
+            "actionType": "move_to_tile",
+            "score": 5.58,
+            "totalCrowdingInfluence": 0.02,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 1,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
             "crowdingExploreBoost": 0,
             "daughterDispersalExploreBoost": 0
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 5.04,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.14,
+            "score": 5.06,
+            "totalCrowdingInfluence": 0.06,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.03
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
             "rangeSaturationScored": 0,
@@ -2623,22 +2209,18 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
-            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 5.05,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.11,
+            "score": 4.79,
+            "totalCrowdingInfluence": 0.05,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.05,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.05,
             "targetNearbyBandPressure": 0.12,
             "rangeSaturationScored": 0,
@@ -2646,23 +2228,59 @@
             "daughterDispersalExploreBoost": 0
           },
           {
-            "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
+            "action": "move_to_tile:tile:195:91",
             "actionType": "move_to_tile",
-            "score": 4.77,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.03,
+            "score": 4.41,
+            "totalCrowdingInfluence": 0.06,
             "charges": {
-              "directNearbyBandPressure": 0.01,
-              "directCrowdingPenalty": 0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
+            "crowdingPathCount": 1,
+            "targetCrowdingPenalty": 0.06,
+            "targetNearbyBandPressure": 0.15,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:196:91",
+            "actionType": "move_to_tile",
+            "score": 4.23,
+            "totalCrowdingInfluence": 0.06,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
             "crowdingPathCount": 2,
+            "targetCrowdingPenalty": 0.07,
+            "targetNearbyBandPressure": 0.19,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 3.94,
+            "totalCrowdingInfluence": 0.01,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -2670,14 +2288,30 @@
             "daughterDispersalExploreBoost": 0
           },
           {
-            "action": "move_to_tile:tile:195:88",
-            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-            "family": "core",
+            "action": "move_to_tile:tile:196:89",
             "actionType": "move_to_tile",
-            "score": 4.3,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.01,
+            "score": 3.86,
+            "totalCrowdingInfluence": 0.04,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 1,
+            "targetCrowdingPenalty": 0.04,
+            "targetNearbyBandPressure": 0.11,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:195:87",
+            "actionType": "logistical_probe",
+            "score": 3.76,
+            "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0,
@@ -2687,6 +2321,46 @@
               "daughterDerivative": 0
             },
             "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "logistical_probe:tile:196:88",
+            "actionType": "logistical_probe",
+            "score": 3.64,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 0,
+            "targetCrowdingPenalty": 0,
+            "targetNearbyBandPressure": 0,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:88",
+            "actionType": "move_to_tile",
+            "score": 3.47,
+            "totalCrowdingInfluence": 0,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.01,
             "targetNearbyBandPressure": 0.02,
             "rangeSaturationScored": 0,
@@ -2694,119 +2368,19 @@
             "daughterDispersalExploreBoost": 0
           },
           {
-            "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-            "family": "core",
-            "actionType": "move_to_tile",
-            "score": 4.18,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.14,
-            "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
-              "pressureState": 0,
-              "rangeSaturation": 0,
-              "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.03
-            },
-            "crowdingPathCount": 3,
-            "targetCrowdingPenalty": 0.06,
-            "targetNearbyBandPressure": 0.15,
-            "rangeSaturationScored": 0,
-            "crowdingExploreBoost": 0,
-            "daughterDispersalExploreBoost": 0
-          },
-          {
-            "action": "move_to_tile:tile:195:89",
-            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
-            "actionType": "move_to_tile",
-            "score": 4.12,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.05,
-            "charges": {
-              "directNearbyBandPressure": 0.02,
-              "directCrowdingPenalty": 0.02,
-              "pressureState": 0,
-              "rangeSaturation": 0,
-              "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
-            },
-            "crowdingPathCount": 3,
-            "targetCrowdingPenalty": 0.02,
-            "targetNearbyBandPressure": 0.05,
-            "rangeSaturationScored": 0,
-            "crowdingExploreBoost": 0,
-            "daughterDispersalExploreBoost": 0
-          },
-          {
-            "action": "move_to_tile:tile:196:89",
-            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
-            "family": "core",
-            "actionType": "move_to_tile",
-            "score": 4.09,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
-            "charges": {
-              "directNearbyBandPressure": 0.02,
-              "directCrowdingPenalty": 0.02,
-              "pressureState": -0.01,
-              "rangeSaturation": 0,
-              "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
-            },
-            "crowdingPathCount": 4,
-            "targetCrowdingPenalty": 0.04,
-            "targetNearbyBandPressure": 0.11,
-            "rangeSaturationScored": 0,
-            "crowdingExploreBoost": 0,
-            "daughterDispersalExploreBoost": 0
-          },
-          {
-            "action": "move_to_tile:tile:196:91",
-            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-            "family": "core",
-            "actionType": "move_to_tile",
-            "score": 3.98,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.16,
-            "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
-              "pressureState": 0,
-              "rangeSaturation": 0,
-              "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.03
-            },
-            "crowdingPathCount": 3,
-            "targetCrowdingPenalty": 0.07,
-            "targetNearbyBandPressure": 0.19,
-            "rangeSaturationScored": 0,
-            "crowdingExploreBoost": 0,
-            "daughterDispersalExploreBoost": 0
-          },
-          {
             "action": "move_to_tile:tile:194:89",
-            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.35,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.02,
+            "score": 3.15,
+            "totalCrowdingInfluence": 0.01,
             "charges": {
-              "directNearbyBandPressure": 0.01,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.01,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.01,
             "targetNearbyBandPressure": 0.02,
             "rangeSaturationScored": 0,
@@ -2815,12 +2389,8 @@
           },
           {
             "action": "resource_scout:tile:195:89",
-            "identity": "resource_scout:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "resource_scout",
-            "score": 2.77,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
+            "score": 2.57,
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -2851,8 +2421,8 @@
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
           "capacityTransformRatio": 0.4,
-          "stayTotalCrowdingInfluence": 0.14,
-          "stayPaths": 4
+          "stayTotalCrowdingInfluence": 0.07,
+          "stayPaths": 1
         },
         "constrained_dry": {
           "terrain": "plains",
@@ -2860,8 +2430,8 @@
           "weightedCrowding": 0.21,
           "crowdingPenalty": 0.14,
           "capacityTransformRatio": 0.6667,
-          "stayTotalCrowdingInfluence": 0.26,
-          "stayPaths": 4
+          "stayTotalCrowdingInfluence": 0.19,
+          "stayPaths": 2
         }
       },
       "verdict": "CAPACITY_TRANSFORM_EXPLAINS_DIFFERENCE"
@@ -2884,25 +2454,21 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
-        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-        "family": "core",
         "actionType": "stay",
-        "score": 4.76,
-        "pairStatus": "clean_exact_partition",
-        "undeclaredDifferingFields": [],
-        "totalCrowdingInfluence": 0.13,
+        "score": 4.86,
+        "totalCrowdingInfluence": 0.07,
         "charges": {
-          "directNearbyBandPressure": 0.04,
-          "directCrowdingPenalty": 0.04,
-          "pressureState": 0.01,
-          "rangeSaturation": 0.02,
+          "directNearbyBandPressure": 0,
+          "directCrowdingPenalty": 0.06,
+          "pressureState": 0,
+          "rangeSaturation": 0,
           "crowdingExploreBoost": 0,
           "daughterDerivative": 0
         },
-        "crowdingPathCount": 4,
+        "crowdingPathCount": 1,
         "targetCrowdingPenalty": 0.06,
         "targetNearbyBandPressure": 0.15,
-        "rangeSaturationScored": 0.12,
+        "rangeSaturationScored": 0,
         "crowdingExploreBoost": 0,
         "daughterDispersalExploreBoost": 0
       },
@@ -2924,7 +2490,7 @@
           "zeroCrowding": 0.44
         },
         "placeAttachmentPull": {
-          "full": 0.06,
+          "full": 0.07,
           "zeroCrowding": 0.07
         },
         "mobilityPressure": {
@@ -2932,12 +2498,12 @@
           "zeroCrowding": 0.19
         },
         "netMovePressure": {
-          "full": 0.25,
+          "full": 0.24,
           "zeroCrowding": 0.23
         },
         "decisionSaturation": {
-          "full": 0.12,
-          "zeroCrowding": 0.07
+          "full": 0,
+          "zeroCrowding": 0
         },
         "fullSaturationPressure": 0.12,
         "daughterDispersalPressure": 0,
@@ -2959,63 +2525,41 @@
           "resource_scout",
           "stay"
         ],
-        "pairing": {
-          "fullCandidates": 12,
-          "controlCandidates": 12,
-          "pairedCandidates": 12,
-          "cleanPairs": 12,
-          "contaminatedPairs": 0,
-          "unpairableDuplicates": 0,
-          "unpairedFullCandidates": 0,
-          "duplicateKeyCount": 0,
-          "legacyKeyCollisions": [],
-          "undeclaredDifferingFieldNames": []
-        },
-        "maxAbsCrowdingInfluenceOverAllCandidates": 0.16,
-        "candidatesWithAnyCrowdingCharge": 10,
-        "maxCrowdingPathCount": 4,
+        "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
-          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "stay",
-          "score": 4.76,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.13,
+          "score": 4.86,
+          "totalCrowdingInfluence": 0.07,
           "charges": {
-            "directNearbyBandPressure": 0.04,
-            "directCrowdingPenalty": 0.04,
-            "pressureState": 0.01,
-            "rangeSaturation": 0.02,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.06,
+            "pressureState": 0,
+            "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
             "daughterDerivative": 0
           },
-          "crowdingPathCount": 4,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.06,
           "targetNearbyBandPressure": 0.15,
-          "rangeSaturationScored": 0.12,
+          "rangeSaturationScored": 0,
           "crowdingExploreBoost": 0,
           "daughterDispersalExploreBoost": 0
         },
         "bestMove": {
           "action": "move_to_tile:tile:195:91",
-          "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "move_to_tile",
-          "score": 4.88,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.09,
+          "score": 4.92,
+          "totalCrowdingInfluence": 0.05,
           "charges": {
-            "directNearbyBandPressure": 0.03,
-            "directCrowdingPenalty": 0.03,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.04,
             "pressureState": 0,
             "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
-            "daughterDerivative": 0.02
+            "daughterDerivative": 0
           },
-          "crowdingPathCount": 3,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.04,
           "targetNearbyBandPressure": 0.11,
           "rangeSaturationScored": 0,
@@ -3025,12 +2569,8 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:197:87",
-          "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.02,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3049,12 +2589,8 @@
         },
         "resourceScout": {
           "action": "resource_scout:tile:195:89",
-          "identity": "resource_scout:tile:195:89|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "resource_scout",
           "score": 2.29,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3074,46 +2610,38 @@
         "candidates": [
           {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
-            "score": 4.76,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.13,
+            "score": 4.86,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.04,
-              "pressureState": 0.01,
-              "rangeSaturation": 0.02,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": 0,
+              "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
-            "rangeSaturationScored": 0.12,
+            "rangeSaturationScored": 0,
             "crowdingExploreBoost": 0,
             "daughterDispersalExploreBoost": 0
           },
           {
             "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.88,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.09,
+            "score": 4.92,
+            "totalCrowdingInfluence": 0.05,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -3122,22 +2650,18 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.64,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
+            "score": 4.68,
+            "totalCrowdingInfluence": 0.04,
             "charges": {
-              "directNearbyBandPressure": 0.03,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.03,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -3146,22 +2670,18 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.3,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.16,
+            "score": 4.38,
+            "totalCrowdingInfluence": 0.08,
             "charges": {
-              "directNearbyBandPressure": 0.05,
-              "directCrowdingPenalty": 0.06,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.07,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.04
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.07,
             "targetNearbyBandPressure": 0.19,
             "rangeSaturationScored": 0,
@@ -3170,22 +2690,18 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
-            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.92,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.13,
+            "score": 3.98,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.03
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
             "rangeSaturationScored": 0,
@@ -3194,22 +2710,18 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
-            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.88,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
+            "score": 3.91,
+            "totalCrowdingInfluence": 0.05,
             "charges": {
-              "directNearbyBandPressure": 0.02,
-              "directCrowdingPenalty": 0.03,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -3218,22 +2730,18 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
-            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.55,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.11,
+            "score": 3.58,
+            "totalCrowdingInfluence": 0.08,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.07,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 2,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.07,
             "targetNearbyBandPressure": 0.16,
             "rangeSaturationScored": 0,
@@ -3242,22 +2750,18 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
-            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.49,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.03,
+            "score": 3.5,
+            "totalCrowdingInfluence": 0.02,
             "charges": {
-              "directNearbyBandPressure": 0.01,
-              "directCrowdingPenalty": 0.01,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -3266,22 +2770,18 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
-            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.3,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.04,
+            "score": 3.32,
+            "totalCrowdingInfluence": 0.02,
             "charges": {
-              "directNearbyBandPressure": 0.01,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.01,
               "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -3290,22 +2790,18 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
-            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.12,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.12,
+            "score": 3.17,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.04,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
             "rangeSaturationScored": 0,
@@ -3314,12 +2810,8 @@
           },
           {
             "action": "logistical_probe:tile:197:87",
-            "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.02,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3338,12 +2830,8 @@
           },
           {
             "action": "resource_scout:tile:195:89",
-            "identity": "resource_scout:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "resource_scout",
             "score": 2.29,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3379,12 +2867,8 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
-        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-        "family": "core",
         "actionType": "stay",
         "score": 4.38,
-        "pairStatus": "clean_exact_partition",
-        "undeclaredDifferingFields": [],
         "totalCrowdingInfluence": 0,
         "charges": {
           "directNearbyBandPressure": 0,
@@ -3449,29 +2933,11 @@
           "resource_scout",
           "stay"
         ],
-        "pairing": {
-          "fullCandidates": 11,
-          "controlCandidates": 11,
-          "pairedCandidates": 11,
-          "cleanPairs": 11,
-          "contaminatedPairs": 0,
-          "unpairableDuplicates": 0,
-          "unpairedFullCandidates": 0,
-          "duplicateKeyCount": 0,
-          "legacyKeyCollisions": [],
-          "undeclaredDifferingFieldNames": []
-        },
-        "maxAbsCrowdingInfluenceOverAllCandidates": 0,
-        "candidatesWithAnyCrowdingCharge": 0,
         "maxCrowdingPathCount": 0,
         "stay": {
           "action": "stay:tile:195:90",
-          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "stay",
           "score": 4.38,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3490,12 +2956,8 @@
         },
         "bestMove": {
           "action": "move_to_tile:tile:196:91",
-          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "move_to_tile",
           "score": 5.97,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3516,12 +2978,8 @@
         "logisticalProbe": null,
         "resourceScout": {
           "action": "resource_scout:tile:194:90",
-          "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "resource_scout",
           "score": 2.78,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3541,12 +2999,8 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:196:91",
-            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.97,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3565,12 +3019,8 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.81,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3589,12 +3039,8 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.36,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3613,12 +3059,8 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 5.07,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3637,12 +3079,8 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
-            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 4.6,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3661,12 +3099,8 @@
           },
           {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
             "score": 4.38,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3685,12 +3119,8 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
-            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.5,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3709,12 +3139,8 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
-            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.25,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3733,12 +3159,8 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
-            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 3.05,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3757,12 +3179,8 @@
           },
           {
             "action": "resource_scout:tile:194:90",
-            "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "resource_scout",
             "score": 2.78,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3781,12 +3199,8 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
-            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
             "score": 2.7,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -3824,25 +3238,21 @@
       },
       "stay": {
         "action": "stay:tile:195:90",
-        "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-        "family": "core",
         "actionType": "stay",
-        "score": 4.16,
-        "pairStatus": "clean_exact_partition",
-        "undeclaredDifferingFields": [],
-        "totalCrowdingInfluence": 0.15,
+        "score": 4.26,
+        "totalCrowdingInfluence": 0.08,
         "charges": {
-          "directNearbyBandPressure": 0.04,
+          "directNearbyBandPressure": 0,
           "directCrowdingPenalty": 0.05,
-          "pressureState": 0.01,
-          "rangeSaturation": 0.02,
+          "pressureState": 0,
+          "rangeSaturation": 0,
           "crowdingExploreBoost": 0,
           "daughterDerivative": 0
         },
-        "crowdingPathCount": 4,
+        "crowdingPathCount": 1,
         "targetCrowdingPenalty": 0.06,
         "targetNearbyBandPressure": 0.15,
-        "rangeSaturationScored": 0.24,
+        "rangeSaturationScored": 0.13,
         "crowdingExploreBoost": 0,
         "daughterDispersalExploreBoost": 0
       },
@@ -3860,11 +3270,11 @@
         "parentOverlap": 0,
         "daughterOverlap": 0,
         "riskPressure": {
-          "full": 0.64,
+          "full": 0.63,
           "zeroCrowding": 0.63
         },
         "placeAttachmentPull": {
-          "full": 0.56,
+          "full": 0.57,
           "zeroCrowding": 0.57
         },
         "mobilityPressure": {
@@ -3876,8 +3286,8 @@
           "zeroCrowding": 0.58
         },
         "decisionSaturation": {
-          "full": 0.24,
-          "zeroCrowding": 0.19
+          "full": 0.13,
+          "zeroCrowding": 0.13
         },
         "fullSaturationPressure": 0.24,
         "daughterDispersalPressure": 0.33,
@@ -3898,63 +3308,41 @@
           "resource_scout",
           "stay"
         ],
-        "pairing": {
-          "fullCandidates": 11,
-          "controlCandidates": 11,
-          "pairedCandidates": 11,
-          "cleanPairs": 11,
-          "contaminatedPairs": 0,
-          "unpairableDuplicates": 0,
-          "unpairedFullCandidates": 0,
-          "duplicateKeyCount": 0,
-          "legacyKeyCollisions": [],
-          "undeclaredDifferingFieldNames": []
-        },
-        "maxAbsCrowdingInfluenceOverAllCandidates": 0.15,
-        "candidatesWithAnyCrowdingCharge": 10,
-        "maxCrowdingPathCount": 4,
+        "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
-          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "stay",
-          "score": 4.16,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.15,
+          "score": 4.26,
+          "totalCrowdingInfluence": 0.08,
           "charges": {
-            "directNearbyBandPressure": 0.04,
+            "directNearbyBandPressure": 0,
             "directCrowdingPenalty": 0.05,
-            "pressureState": 0.01,
-            "rangeSaturation": 0.02,
+            "pressureState": 0,
+            "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
             "daughterDerivative": 0
           },
-          "crowdingPathCount": 4,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.06,
           "targetNearbyBandPressure": 0.15,
-          "rangeSaturationScored": 0.24,
+          "rangeSaturationScored": 0.13,
           "crowdingExploreBoost": 0,
           "daughterDispersalExploreBoost": 0
         },
         "bestMove": {
           "action": "move_to_tile:tile:196:91",
-          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "move_to_tile",
-          "score": 5.89,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.09,
+          "score": 5.94,
+          "totalCrowdingInfluence": 0.04,
           "charges": {
-            "directNearbyBandPressure": 0.03,
-            "directCrowdingPenalty": 0.04,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.05,
             "pressureState": -0.01,
             "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
-            "daughterDerivative": 0.02
+            "daughterDerivative": 0
           },
-          "crowdingPathCount": 4,
+          "crowdingPathCount": 2,
           "targetCrowdingPenalty": 0.06,
           "targetNearbyBandPressure": 0.15,
           "rangeSaturationScored": 0,
@@ -3965,12 +3353,8 @@
         "logisticalProbe": null,
         "resourceScout": {
           "action": "resource_scout:tile:194:90",
-          "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "resource_scout",
           "score": 2.78,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -3990,22 +3374,18 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:196:91",
-            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 5.89,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.09,
+            "score": 5.94,
+            "totalCrowdingInfluence": 0.04,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.04,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.05,
               "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
             "rangeSaturationScored": 0,
@@ -4014,22 +3394,18 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 5.76,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.06,
+            "score": 5.79,
+            "totalCrowdingInfluence": 0.03,
             "charges": {
-              "directNearbyBandPressure": 0.02,
-              "directCrowdingPenalty": 0.02,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -4038,22 +3414,18 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 5.3,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
+            "score": 5.35,
+            "totalCrowdingInfluence": 0.03,
             "charges": {
-              "directNearbyBandPressure": 0.03,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.03,
-              "pressureState": 0,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -4062,22 +3434,18 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.95,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.14,
+            "score": 5.03,
+            "totalCrowdingInfluence": 0.06,
             "charges": {
-              "directNearbyBandPressure": 0.05,
-              "directCrowdingPenalty": 0.05,
-              "pressureState": 0,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.03
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.07,
             "targetNearbyBandPressure": 0.19,
             "rangeSaturationScored": 0,
@@ -4086,22 +3454,18 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
-            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.49,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.13,
+            "score": 4.56,
+            "totalCrowdingInfluence": 0.06,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
-              "pressureState": 0,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.03
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.07,
             "targetNearbyBandPressure": 0.16,
             "rangeSaturationScored": 0,
@@ -4110,46 +3474,38 @@
           },
           {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
-            "score": 4.16,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.15,
+            "score": 4.26,
+            "totalCrowdingInfluence": 0.08,
             "charges": {
-              "directNearbyBandPressure": 0.04,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.05,
-              "pressureState": 0.01,
-              "rangeSaturation": 0.02,
+              "pressureState": 0,
+              "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
-            "rangeSaturationScored": 0.24,
+            "rangeSaturationScored": 0.13,
             "crowdingExploreBoost": 0,
             "daughterDispersalExploreBoost": 0
           },
           {
             "action": "move_to_tile:tile:194:89",
-            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.49,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.03,
+            "score": 3.51,
+            "totalCrowdingInfluence": 0.01,
             "charges": {
-              "directNearbyBandPressure": 0.01,
-              "directCrowdingPenalty": 0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.02,
               "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -4158,22 +3514,18 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
-            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.19,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
+            "score": 3.24,
+            "totalCrowdingInfluence": 0.03,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -4182,22 +3534,18 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
-            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 2.95,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.11,
+            "score": 3.01,
+            "totalCrowdingInfluence": 0.05,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
             "rangeSaturationScored": 0,
@@ -4206,12 +3554,8 @@
           },
           {
             "action": "resource_scout:tile:194:90",
-            "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "resource_scout",
             "score": 2.78,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4230,22 +3574,18 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
-            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 2.69,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.03,
+            "score": 2.71,
+            "totalCrowdingInfluence": 0.01,
             "charges": {
-              "directNearbyBandPressure": 0.01,
-              "directCrowdingPenalty": 0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.02,
               "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -4261,7 +3601,7 @@
       "physicalChannel": {
         "weightedCrowding": 0.15,
         "crowdingPenalty": 0.06,
-        "paths": 4
+        "paths": 2
       },
       "socialChannel": {
         "frictionRecords": 0,
@@ -4269,7 +3609,7 @@
         "encounterRecords": 24,
         "accessState": "expected_return"
       },
-      "riskPressureCrowdingContribution": 0.01,
+      "riskPressureCrowdingContribution": 0,
       "probe": {
         "bandId": "band:custom:0",
         "position": "tile:195:90",
@@ -4284,24 +3624,24 @@
         "parentOverlap": 0,
         "daughterOverlap": 0,
         "riskPressure": {
-          "full": 0.69,
+          "full": 0.68,
           "zeroCrowding": 0.68
         },
         "placeAttachmentPull": {
-          "full": 0.86,
+          "full": 0.87,
           "zeroCrowding": 0.87
         },
         "mobilityPressure": {
-          "full": 0.46,
+          "full": 0.45,
           "zeroCrowding": 0.44
         },
         "netMovePressure": {
-          "full": 0.23,
+          "full": 0.22,
           "zeroCrowding": 0.2
         },
         "decisionSaturation": {
-          "full": 0.22,
-          "zeroCrowding": 0.16
+          "full": 0.1,
+          "zeroCrowding": 0.1
         },
         "fullSaturationPressure": 0.22,
         "daughterDispersalPressure": 0.21,
@@ -4322,63 +3662,41 @@
           "move_to_tile",
           "stay"
         ],
-        "pairing": {
-          "fullCandidates": 11,
-          "controlCandidates": 11,
-          "pairedCandidates": 11,
-          "cleanPairs": 11,
-          "contaminatedPairs": 0,
-          "unpairableDuplicates": 0,
-          "unpairedFullCandidates": 0,
-          "duplicateKeyCount": 0,
-          "legacyKeyCollisions": [],
-          "undeclaredDifferingFieldNames": []
-        },
-        "maxAbsCrowdingInfluenceOverAllCandidates": 0.14,
-        "candidatesWithAnyCrowdingCharge": 10,
-        "maxCrowdingPathCount": 4,
+        "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
-          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "stay",
-          "score": 5.35,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.14,
+          "score": 5.44,
+          "totalCrowdingInfluence": 0.09,
           "charges": {
-            "directNearbyBandPressure": 0.03,
-            "directCrowdingPenalty": 0.04,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.06,
             "pressureState": 0,
-            "rangeSaturation": 0.02,
+            "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
             "daughterDerivative": 0
           },
-          "crowdingPathCount": 3,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.06,
           "targetNearbyBandPressure": 0.15,
-          "rangeSaturationScored": 0.22,
+          "rangeSaturationScored": 0.1,
           "crowdingExploreBoost": 0,
           "daughterDispersalExploreBoost": 0
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
-          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "move_to_tile",
-          "score": 5.76,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.07,
+          "score": 5.79,
+          "totalCrowdingInfluence": 0.04,
           "charges": {
-            "directNearbyBandPressure": 0.02,
-            "directCrowdingPenalty": 0.03,
-            "pressureState": -0.01,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.04,
+            "pressureState": 0,
             "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
-            "daughterDerivative": 0.01
+            "daughterDerivative": 0
           },
-          "crowdingPathCount": 4,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.04,
           "targetNearbyBandPressure": 0.11,
           "rangeSaturationScored": 0,
@@ -4388,12 +3706,8 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:198:91",
-          "identity": "logistical_probe:tile:198:91|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "logistical_probe",
           "score": 2.82,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -4414,46 +3728,38 @@
         "candidates": [
           {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
-            "score": 5.35,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.14,
+            "score": 5.44,
+            "totalCrowdingInfluence": 0.09,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.04,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
               "pressureState": 0,
-              "rangeSaturation": 0.02,
+              "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
-            "rangeSaturationScored": 0.22,
+            "rangeSaturationScored": 0.1,
             "crowdingExploreBoost": 0,
             "daughterDispersalExploreBoost": 0
           },
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 5.76,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.07,
+            "score": 5.79,
+            "totalCrowdingInfluence": 0.04,
             "charges": {
-              "directNearbyBandPressure": 0.02,
-              "directCrowdingPenalty": 0.03,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -4462,22 +3768,18 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
-            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.25,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.04,
+            "score": 4.27,
+            "totalCrowdingInfluence": 0.02,
             "charges": {
-              "directNearbyBandPressure": 0.02,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.02,
-              "pressureState": 0,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -4486,22 +3788,18 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.19,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.07,
+            "score": 4.22,
+            "totalCrowdingInfluence": 0.04,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -4510,22 +3808,18 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
-            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.06,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
+            "score": 4.1,
+            "totalCrowdingInfluence": 0.04,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -4534,22 +3828,18 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
-            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.66,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.04,
+            "score": 3.68,
+            "totalCrowdingInfluence": 0.02,
             "charges": {
-              "directNearbyBandPressure": 0.01,
-              "directCrowdingPenalty": 0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.02,
               "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -4558,22 +3848,18 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.02,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.14,
+            "score": 3.09,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
-              "pressureState": 0,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.07,
             "targetNearbyBandPressure": 0.19,
             "rangeSaturationScored": 0,
@@ -4582,12 +3868,8 @@
           },
           {
             "action": "logistical_probe:tile:198:91",
-            "identity": "logistical_probe:tile:198:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 2.82,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -4606,22 +3888,18 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
-            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 2.78,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.12,
+            "score": 2.83,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.04,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
             "rangeSaturationScored": 0,
@@ -4630,22 +3908,18 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
-            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 2.67,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.12,
+            "score": 2.72,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.04,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
             "rangeSaturationScored": 0,
@@ -4654,22 +3928,18 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
-            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 2.53,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.1,
+            "score": 2.56,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.07,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 2,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.07,
             "targetNearbyBandPressure": 0.16,
             "rangeSaturationScored": 0,
@@ -4690,14 +3960,14 @@
         "crowdingPenalty": 0.06,
         "parentOverlap": 0,
         "daughterDispersalPressure": 0,
-        "stayPaths": 4
+        "stayPaths": 1
       },
       "kinArm": {
         "weightedCrowding": 0.11,
         "crowdingPenalty": 0.04,
         "parentOverlap": 0.31,
         "daughterDispersalPressure": 0.58,
-        "stayPaths": 4
+        "stayPaths": 1
       },
       "kinDiscountObserved": 0.04,
       "probe": {
@@ -4718,7 +3988,7 @@
           "zeroCrowding": 0.53
         },
         "placeAttachmentPull": {
-          "full": 0.55,
+          "full": 0.56,
           "zeroCrowding": 0.56
         },
         "mobilityPressure": {
@@ -4730,8 +4000,8 @@
           "zeroCrowding": 0.37
         },
         "decisionSaturation": {
-          "full": 0.15,
-          "zeroCrowding": 0.11
+          "full": 0.05,
+          "zeroCrowding": 0.05
         },
         "fullSaturationPressure": 0.15,
         "daughterDispersalPressure": 0.58,
@@ -4753,68 +4023,41 @@
           "resource_scout",
           "stay"
         ],
-        "pairing": {
-          "fullCandidates": 14,
-          "controlCandidates": 14,
-          "pairedCandidates": 14,
-          "cleanPairs": 14,
-          "contaminatedPairs": 0,
-          "unpairableDuplicates": 0,
-          "unpairedFullCandidates": 0,
-          "duplicateKeyCount": 0,
-          "legacyKeyCollisions": [
-            {
-              "key": "move_to_tile:tile:194:90",
-              "count": 2
-            }
-          ],
-          "undeclaredDifferingFieldNames": []
-        },
-        "maxAbsCrowdingInfluenceOverAllCandidates": 0.12,
-        "candidatesWithAnyCrowdingCharge": 10,
-        "maxCrowdingPathCount": 4,
+        "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
-          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "stay",
-          "score": 4.56,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.12,
+          "score": 4.64,
+          "totalCrowdingInfluence": 0.07,
           "charges": {
-            "directNearbyBandPressure": 0.03,
-            "directCrowdingPenalty": 0.03,
-            "pressureState": 0.01,
-            "rangeSaturation": 0.01,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.04,
+            "pressureState": 0,
+            "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
             "daughterDerivative": 0
           },
-          "crowdingPathCount": 4,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.04,
           "targetNearbyBandPressure": 0.11,
-          "rangeSaturationScored": 0.15,
+          "rangeSaturationScored": 0.05,
           "crowdingExploreBoost": 0,
           "daughterDispersalExploreBoost": 0
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
-          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "move_to_tile",
-          "score": 5.33,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.04,
+          "score": 5.35,
+          "totalCrowdingInfluence": -4.1,
           "charges": {
-            "directNearbyBandPressure": 0.01,
-            "directCrowdingPenalty": 0.02,
-            "pressureState": -0.01,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.03,
+            "pressureState": 0,
             "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
-            "daughterDerivative": 0.01
+            "daughterDerivative": 0
           },
-          "crowdingPathCount": 4,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.03,
           "targetNearbyBandPressure": 0.08,
           "rangeSaturationScored": 0,
@@ -4824,12 +4067,8 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:198:86",
-          "identity": "logistical_probe:tile:198:86|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.64,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -4848,12 +4087,8 @@
         },
         "resourceScout": {
           "action": "resource_scout:tile:194:90",
-          "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "resource_scout",
           "score": 2.41,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -4873,22 +4108,18 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 5.33,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.04,
+            "score": 5.35,
+            "totalCrowdingInfluence": -4.1,
             "charges": {
-              "directNearbyBandPressure": 0.01,
-              "directCrowdingPenalty": 0.02,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.03,
             "targetNearbyBandPressure": 0.08,
             "rangeSaturationScored": 0,
@@ -4897,46 +4128,38 @@
           },
           {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
-            "score": 4.56,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.12,
+            "score": 4.64,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
-              "pressureState": 0.01,
-              "rangeSaturation": 0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
+              "pressureState": 0,
+              "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
-            "rangeSaturationScored": 0.15,
+            "rangeSaturationScored": 0.05,
             "crowdingExploreBoost": 0,
             "daughterDispersalExploreBoost": 0
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.48,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
+            "score": 4.53,
+            "totalCrowdingInfluence": 0.03,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.05,
             "targetNearbyBandPressure": 0.14,
             "rangeSaturationScored": 0,
@@ -4945,22 +4168,18 @@
           },
           {
             "action": "move_to_tile:tile:195:89",
-            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.42,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.04,
+            "score": 4.46,
+            "totalCrowdingInfluence": 0,
             "charges": {
-              "directNearbyBandPressure": 0.02,
-              "directCrowdingPenalty": 0.02,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.03,
               "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.03,
             "targetNearbyBandPressure": 0.08,
             "rangeSaturationScored": 0,
@@ -4969,22 +4188,18 @@
           },
           {
             "action": "move_to_tile:tile:194:89",
-            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.21,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0,
+            "score": 4.22,
+            "totalCrowdingInfluence": -0.01,
             "charges": {
-              "directNearbyBandPressure": 0.01,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.01,
-              "pressureState": -0.01,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.01,
             "targetNearbyBandPressure": 0.03,
             "rangeSaturationScored": 0,
@@ -4993,22 +4208,18 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
-            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.05,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
+            "score": 4.1,
+            "totalCrowdingInfluence": 0.03,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.04,
-              "pressureState": 0,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.05,
             "targetNearbyBandPressure": 0.12,
             "rangeSaturationScored": 0,
@@ -5017,17 +4228,13 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
-            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.94,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.01,
+            "score": 3.95,
+            "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
-              "directCrowdingPenalty": 0,
-              "pressureState": -0.01,
+              "directCrowdingPenalty": 0.01,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
@@ -5041,22 +4248,18 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
-            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.74,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.06,
+            "score": 3.78,
+            "totalCrowdingInfluence": 0.02,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -5065,12 +4268,8 @@
           },
           {
             "action": "logistical_probe:tile:198:86",
-            "identity": "logistical_probe:tile:198:86|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.64,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -5089,22 +4288,18 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.59,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.04,
+            "score": 3.62,
+            "totalCrowdingInfluence": 0.01,
             "charges": {
-              "directNearbyBandPressure": 0.02,
-              "directCrowdingPenalty": 0.02,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.03,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.03,
             "targetNearbyBandPressure": 0.08,
             "rangeSaturationScored": 0,
@@ -5113,22 +4308,18 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
-            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.21,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.06,
+            "score": 3.25,
+            "totalCrowdingInfluence": 0.02,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
               "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -5137,12 +4328,8 @@
           },
           {
             "action": "resource_scout:tile:194:90",
-            "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "resource_scout",
             "score": 2.41,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -5161,12 +4348,8 @@
           },
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=corridor_relocation",
-            "family": "corridor_relocation",
             "actionType": "move_to_tile",
             "score": 1.25,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -5185,12 +4368,8 @@
           },
           {
             "action": "logistical_probe:tile:192:89",
-            "identity": "logistical_probe:tile:192:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 0.09,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -5246,7 +4425,7 @@
           "zeroCrowding": 0.65
         },
         "placeAttachmentPull": {
-          "full": 0.74,
+          "full": 0.76,
           "zeroCrowding": 0.76
         },
         "mobilityPressure": {
@@ -5258,11 +4437,11 @@
           "zeroCrowding": 0.55
         },
         "decisionSaturation": {
-          "full": 0.31,
-          "zeroCrowding": 0.25
+          "full": 0.19,
+          "zeroCrowding": 0.19
         },
         "fullSaturationPressure": 0.31,
-        "daughterDispersalPressure": 0.34,
+        "daughterDispersalPressure": 0.35,
         "overlappingBandIds": [
           "band:custom:1"
         ],
@@ -5280,63 +4459,41 @@
           "move_to_tile",
           "stay"
         ],
-        "pairing": {
-          "fullCandidates": 11,
-          "controlCandidates": 11,
-          "pairedCandidates": 11,
-          "cleanPairs": 10,
-          "contaminatedPairs": 1,
-          "unpairableDuplicates": 0,
-          "unpairedFullCandidates": 0,
-          "duplicateKeyCount": 0,
-          "legacyKeyCollisions": [],
-          "undeclaredDifferingFieldNames": []
-        },
-        "maxAbsCrowdingInfluenceOverAllCandidates": 0.15,
-        "candidatesWithAnyCrowdingCharge": 10,
-        "maxCrowdingPathCount": 4,
+        "maxCrowdingPathCount": 2,
         "stay": {
           "action": "stay:tile:195:90",
-          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "stay",
-          "score": 3.8,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.15,
+          "score": 3.9,
+          "totalCrowdingInfluence": 0.08,
           "charges": {
-            "directNearbyBandPressure": 0.03,
-            "directCrowdingPenalty": 0.04,
-            "pressureState": 0.01,
-            "rangeSaturation": 0.02,
+            "directNearbyBandPressure": 0,
+            "directCrowdingPenalty": 0.05,
+            "pressureState": 0,
+            "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
             "daughterDerivative": 0
           },
-          "crowdingPathCount": 4,
+          "crowdingPathCount": 1,
           "targetCrowdingPenalty": 0.06,
           "targetNearbyBandPressure": 0.15,
-          "rangeSaturationScored": 0.31,
+          "rangeSaturationScored": 0.19,
           "crowdingExploreBoost": 0,
           "daughterDispersalExploreBoost": 0
         },
         "bestMove": {
           "action": "move_to_tile:tile:194:90",
-          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "move_to_tile",
-          "score": 6.04,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
-          "totalCrowdingInfluence": 0.06,
+          "score": 6.08,
+          "totalCrowdingInfluence": 0.02,
           "charges": {
-            "directNearbyBandPressure": 0.03,
+            "directNearbyBandPressure": 0,
             "directCrowdingPenalty": 0.03,
-            "pressureState": 0,
+            "pressureState": -0.01,
             "rangeSaturation": 0,
             "crowdingExploreBoost": 0,
-            "daughterDerivative": 0.02
+            "daughterDerivative": 0
           },
-          "crowdingPathCount": 3,
+          "crowdingPathCount": 2,
           "targetCrowdingPenalty": 0.04,
           "targetNearbyBandPressure": 0.11,
           "rangeSaturationScored": 0,
@@ -5346,12 +4503,8 @@
         "exploration": null,
         "logisticalProbe": {
           "action": "logistical_probe:tile:197:87",
-          "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
-          "family": "core",
           "actionType": "logistical_probe",
           "score": 3.48,
-          "pairStatus": "clean_exact_partition",
-          "undeclaredDifferingFields": [],
           "totalCrowdingInfluence": 0,
           "charges": {
             "directNearbyBandPressure": 0,
@@ -5372,22 +4525,18 @@
         "candidates": [
           {
             "action": "move_to_tile:tile:194:90",
-            "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 6.04,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.06,
+            "score": 6.08,
+            "totalCrowdingInfluence": 0.02,
             "charges": {
-              "directNearbyBandPressure": 0.03,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.03,
-              "pressureState": 0,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -5396,46 +4545,18 @@
           },
           {
             "action": "move_to_tile:tile:195:88",
-            "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.94,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.03,
+            "score": 4.97,
+            "totalCrowdingInfluence": 0,
             "charges": {
-              "directNearbyBandPressure": 0.01,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.01,
               "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
-            "targetCrowdingPenalty": 0.02,
-            "targetNearbyBandPressure": 0.05,
-            "rangeSaturationScored": 0,
-            "crowdingExploreBoost": 0,
-            "daughterDispersalExploreBoost": 0
-          },
-          {
-            "action": "move_to_tile:tile:194:89",
-            "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
-            "family": "core",
-            "actionType": "move_to_tile",
-            "score": 4.31,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.03,
-            "charges": {
-              "directNearbyBandPressure": 0.01,
-              "directCrowdingPenalty": 0.01,
-              "pressureState": 0,
-              "rangeSaturation": 0,
-              "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
-            },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.02,
             "targetNearbyBandPressure": 0.05,
             "rangeSaturationScored": 0,
@@ -5444,22 +4565,18 @@
           },
           {
             "action": "move_to_tile:tile:195:91",
-            "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 4.3,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
+            "score": 4.35,
+            "totalCrowdingInfluence": 0.03,
             "charges": {
-              "directNearbyBandPressure": 0.03,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.03,
-              "pressureState": 0,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.01
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -5467,23 +4584,39 @@
             "daughterDispersalExploreBoost": 0
           },
           {
-            "action": "move_to_tile:tile:195:89",
-            "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
+            "action": "move_to_tile:tile:194:89",
             "actionType": "move_to_tile",
-            "score": 4.13,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.08,
+            "score": 4.33,
+            "totalCrowdingInfluence": 0.01,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.03,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.02,
+              "pressureState": -0.01,
+              "rangeSaturation": 0,
+              "crowdingExploreBoost": 0,
+              "daughterDerivative": 0
+            },
+            "crowdingPathCount": 2,
+            "targetCrowdingPenalty": 0.02,
+            "targetNearbyBandPressure": 0.05,
+            "rangeSaturationScored": 0,
+            "crowdingExploreBoost": 0,
+            "daughterDispersalExploreBoost": 0
+          },
+          {
+            "action": "move_to_tile:tile:195:89",
+            "actionType": "move_to_tile",
+            "score": 4.18,
+            "totalCrowdingInfluence": 0.03,
+            "charges": {
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.04,
               "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.04,
             "targetNearbyBandPressure": 0.11,
             "rangeSaturationScored": 0,
@@ -5492,36 +4625,28 @@
           },
           {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
-            "score": 3.8,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.15,
+            "score": 3.9,
+            "totalCrowdingInfluence": 0.08,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.04,
-              "pressureState": 0.01,
-              "rangeSaturation": 0.02,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.05,
+              "pressureState": 0,
+              "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
-            "rangeSaturationScored": 0.31,
+            "rangeSaturationScored": 0.19,
             "crowdingExploreBoost": 0,
             "daughterDispersalExploreBoost": 0
           },
           {
             "action": "logistical_probe:tile:197:87",
-            "identity": "logistical_probe:tile:197:87|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "logistical_probe",
             "score": 3.48,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -5540,22 +4665,18 @@
           },
           {
             "action": "move_to_tile:tile:196:90",
-            "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 3.14,
-            "pairStatus": "contaminated_external_score_addition_differs",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": null,
+            "score": 3.22,
+            "totalCrowdingInfluence": 0.05,
             "charges": {
-              "directNearbyBandPressure": 0.05,
-              "directCrowdingPenalty": 0.05,
-              "pressureState": 0,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.03
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.07,
             "targetNearbyBandPressure": 0.19,
             "rangeSaturationScored": 0,
@@ -5564,22 +4685,18 @@
           },
           {
             "action": "move_to_tile:tile:196:91",
-            "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 2.86,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.11,
+            "score": 2.92,
+            "totalCrowdingInfluence": 0.05,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.04,
-              "pressureState": -0.01,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.06,
+              "pressureState": 0,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 4,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
             "rangeSaturationScored": 0,
@@ -5588,22 +4705,18 @@
           },
           {
             "action": "move_to_tile:tile:196:89",
-            "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 2.7,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.12,
+            "score": 2.77,
+            "totalCrowdingInfluence": 0.05,
             "charges": {
-              "directNearbyBandPressure": 0.04,
+              "directNearbyBandPressure": 0,
               "directCrowdingPenalty": 0.05,
-              "pressureState": 0,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
-              "daughterDerivative": 0.03
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 2,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
             "rangeSaturationScored": 0,
@@ -5612,17 +4725,13 @@
           },
           {
             "action": "move_to_tile:tile:197:90",
-            "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "move_to_tile",
-            "score": 2.59,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.1,
+            "score": 2.63,
+            "totalCrowdingInfluence": 0.06,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
-              "pressureState": 0,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.07,
+              "pressureState": -0.01,
               "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
@@ -5645,10 +4754,10 @@
         "withCrowding": {
           "weightedCrowding": 0.15,
           "fullSaturationPressure": 0.17,
-          "decisionSaturationScored": 0.17,
-          "saturationChargedOnStay": 0.02,
-          "crowdingChargedOnStay": 0.05,
-          "stayPaths": 4
+          "decisionSaturationScored": 0.05,
+          "saturationChargedOnStay": 0,
+          "crowdingChargedOnStay": 0.06,
+          "stayPaths": 1
         },
         "withoutCrowding": {
           "weightedCrowding": 0,
@@ -5660,8 +4769,8 @@
         }
       },
       "saturationCrowdingComponent": 0.12,
-      "decisionSaturationCrowdingComponent": 0.12,
-      "verdict": "SATURATION_STILL_CARRIES_CROWDING_INTO_SCORE"
+      "decisionSaturationCrowdingComponent": 0,
+      "verdict": "OVERLAP_PARTITIONED_OUT_OF_DECISION"
     },
     "P14_crowding_driven_exploration": {
       "intent": "crowded residence with an uncertain alternative: exploration motivation is bounded and counted once",
@@ -5672,68 +4781,56 @@
           "crowdingPenalty": 0.06,
           "exploration": {
             "action": "explore_unknown_neighbor:tile:195:89",
-            "identity": "explore_unknown_neighbor:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "explore_unknown_neighbor",
-            "score": 4.31,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0,
+            "score": 4.34,
+            "totalCrowdingInfluence": -0.04,
             "charges": {
-              "directNearbyBandPressure": 0.04,
-              "directCrowdingPenalty": 0.05,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0,
               "pressureState": -0.01,
-              "rangeSaturation": 0.02,
+              "rangeSaturation": 0,
               "crowdingExploreBoost": -0.01,
-              "daughterDerivative": 0.02
+              "daughterDerivative": 0
             },
-            "crowdingPathCount": 6,
-            "targetCrowdingPenalty": 0.06,
+            "crowdingPathCount": 2,
+            "targetCrowdingPenalty": 0,
             "targetNearbyBandPressure": 0.15,
-            "rangeSaturationScored": 0.17,
-            "crowdingExploreBoost": 0.027,
+            "rangeSaturationScored": 0.05,
+            "crowdingExploreBoost": 0.0108,
             "daughterDispersalExploreBoost": 0
           },
           "stay": {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
-            "score": 5.02,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
-            "totalCrowdingInfluence": 0.14,
+            "score": 5.12,
+            "totalCrowdingInfluence": 0.07,
             "charges": {
-              "directNearbyBandPressure": 0.03,
-              "directCrowdingPenalty": 0.04,
+              "directNearbyBandPressure": 0,
+              "directCrowdingPenalty": 0.05,
               "pressureState": 0,
-              "rangeSaturation": 0.02,
+              "rangeSaturation": 0,
               "crowdingExploreBoost": 0,
               "daughterDerivative": 0
             },
-            "crowdingPathCount": 3,
+            "crowdingPathCount": 1,
             "targetCrowdingPenalty": 0.06,
             "targetNearbyBandPressure": 0.15,
-            "rangeSaturationScored": 0.17,
+            "rangeSaturationScored": 0.05,
             "crowdingExploreBoost": 0,
             "daughterDispersalExploreBoost": 0
           },
-          "explorationPaths": 6,
-          "explorationBoost": 0.027,
-          "explorationTargetPenalty": 0.06,
-          "explorationTotal": 0
+          "explorationPaths": 2,
+          "explorationBoost": 0.0108,
+          "explorationTargetPenalty": 0,
+          "explorationTotal": -0.04
         },
         "clear": {
           "weightedCrowding": 0,
           "crowdingPenalty": 0,
           "exploration": {
             "action": "explore_unknown_neighbor:tile:195:89",
-            "identity": "explore_unknown_neighbor:tile:195:89|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "explore_unknown_neighbor",
             "score": 4.3,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -5752,12 +4849,8 @@
           },
           "stay": {
             "action": "stay:tile:195:90",
-            "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
-            "family": "core",
             "actionType": "stay",
             "score": 5.23,
-            "pairStatus": "clean_exact_partition",
-            "undeclaredDifferingFields": [],
             "totalCrowdingInfluence": 0,
             "charges": {
               "directNearbyBandPressure": 0,
@@ -5780,9 +4873,9 @@
           "explorationTotal": 0
         }
       },
-      "explorationScoreDelta": 0.01,
-      "stayScoreDelta": -0.21,
-      "verdict": "EXPLORATION_RESPONSE_MULTIPLIED"
+      "explorationScoreDelta": 0.04,
+      "stayScoreDelta": -0.11,
+      "verdict": "EXPLORATION_RESPONSE_BOUNDED"
     },
     "P15_repeated_nearby_seasons": {
       "intent": "sustained proximity: physical pressure stays bounded and a static source does not multiply; accumulated depletion stays separate",
@@ -5792,8 +4885,8 @@
           "season": 0,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.13,
-          "stayPaths": 4,
+          "stayCrowdingInfluence": 0.07,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.0506
         },
@@ -5801,8 +4894,8 @@
           "season": 1,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.15,
-          "stayPaths": 4,
+          "stayCrowdingInfluence": 0.09,
+          "stayPaths": 2,
           "tileDepletion": 0,
           "localUsePressure": 0.1166
         },
@@ -5810,8 +4903,8 @@
           "season": 2,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.14,
-          "stayPaths": 3,
+          "stayCrowdingInfluence": 0.08,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1066
         },
@@ -5819,8 +4912,8 @@
           "season": 3,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.15,
-          "stayPaths": 4,
+          "stayCrowdingInfluence": 0.08,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1066
         },
@@ -5828,8 +4921,8 @@
           "season": 4,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.15,
-          "stayPaths": 4,
+          "stayCrowdingInfluence": 0.08,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1066
         },
@@ -5837,8 +4930,8 @@
           "season": 5,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.15,
-          "stayPaths": 4,
+          "stayCrowdingInfluence": 0.08,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1066
         },
@@ -5846,8 +4939,8 @@
           "season": 6,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.14,
-          "stayPaths": 4,
+          "stayCrowdingInfluence": 0.09,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1066
         },
@@ -5855,8 +4948,8 @@
           "season": 7,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.14,
-          "stayPaths": 4,
+          "stayCrowdingInfluence": 0.08,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1066
         },
@@ -5864,8 +4957,8 @@
           "season": 8,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.13,
-          "stayPaths": 3,
+          "stayCrowdingInfluence": 0.07,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1066
         },
@@ -5873,8 +4966,8 @@
           "season": 9,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.15,
-          "stayPaths": 3,
+          "stayCrowdingInfluence": 0.08,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1066
         },
@@ -5882,8 +4975,8 @@
           "season": 10,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.14,
-          "stayPaths": 3,
+          "stayCrowdingInfluence": 0.08,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1066
         },
@@ -5891,8 +4984,8 @@
           "season": 11,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.14,
-          "stayPaths": 3,
+          "stayCrowdingInfluence": 0.08,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1066
         },
@@ -5900,8 +4993,8 @@
           "season": 12,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.14,
-          "stayPaths": 4,
+          "stayCrowdingInfluence": 0.08,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1722
         },
@@ -5909,8 +5002,8 @@
           "season": 13,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.14,
-          "stayPaths": 3,
+          "stayCrowdingInfluence": 0.08,
+          "stayPaths": 1,
           "tileDepletion": 0,
           "localUsePressure": 0.1722
         }
@@ -5934,11 +5027,11 @@
         "crowdingBandIds": [
           "band:custom:1"
         ],
-        "stayPaths": 4,
-        "stayCrowdingInfluence": 0.14,
+        "stayPaths": 1,
+        "stayCrowdingInfluence": 0.07,
         "riskPressure": 0.53,
-        "placeAttachmentPull": 0.55,
-        "decisionSaturation": 0.17,
+        "placeAttachmentPull": 0.56,
+        "decisionSaturation": 0.05,
         "frictionRecords": 0,
         "contactMemories": 1
       },
@@ -5965,36 +5058,36 @@
           "nearbyBandCount": 1,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayCrowdingInfluence": 0.14,
-          "stayPaths": 4,
-          "stayScore": 5.01
+          "stayCrowdingInfluence": 0.07,
+          "stayPaths": 1,
+          "stayScore": 5.11
         },
         {
           "neighbours": 2,
           "nearbyBandCount": 2,
           "weightedCrowding": 0.3,
           "crowdingPenalty": 0.11,
-          "stayCrowdingInfluence": null,
-          "stayPaths": 4,
-          "stayScore": 4.14
+          "stayCrowdingInfluence": 0.16,
+          "stayPaths": 1,
+          "stayScore": 4.21
         },
         {
           "neighbours": 3,
           "nearbyBandCount": 3,
           "weightedCrowding": 0.44,
           "crowdingPenalty": 0.17,
-          "stayCrowdingInfluence": 0.44,
-          "stayPaths": 4,
-          "stayScore": 4.08
+          "stayCrowdingInfluence": 0.25,
+          "stayPaths": 1,
+          "stayScore": 4.36
         },
         {
           "neighbours": 4,
           "nearbyBandCount": 4,
           "weightedCrowding": 0.59,
           "crowdingPenalty": 0.23,
-          "stayCrowdingInfluence": 0.59,
-          "stayPaths": 4,
-          "stayScore": 3.88
+          "stayCrowdingInfluence": 0.35,
+          "stayPaths": 1,
+          "stayScore": 4.15
         }
       ],
       "verdict": "MONOTONE_AND_BOUNDED"
@@ -6007,30 +5100,30 @@
       "byFamily": {
         "stay": {
           "count": 1,
-          "maxPaths": 3,
+          "maxPaths": 1,
           "maxTargetPenalty": 0.06,
           "totals": [
-            0.14
+            0.07
           ]
         },
         "move_to_tile": {
           "count": 5,
-          "maxPaths": 4,
+          "maxPaths": 1,
           "maxTargetPenalty": 0.07,
           "totals": [
-            0.04,
-            0.14,
-            0.04,
-            0.12,
-            0.13
+            0.02,
+            0.08,
+            0.02,
+            0.07,
+            0.07
           ]
         },
         "explore_unknown_neighbor": {
           "count": 1,
-          "maxPaths": 6,
-          "maxTargetPenalty": 0.06,
+          "maxPaths": 2,
+          "maxTargetPenalty": 0,
           "totals": [
-            0
+            -0.04
           ]
         },
         "logistical_probe": {
@@ -6057,7 +5150,7 @@
         "resource_scout",
         "stay"
       ],
-      "verdict": "A_FAMILY_DUPLICATES"
+      "verdict": "NO_FAMILY_DUPLICATES"
     },
     "P19_order_invariance": {
       "intent": "permuted band processing order leaves canonical crowding outputs invariant",
@@ -6160,11 +5253,11 @@
           "season": 0,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayPaths": 4,
-          "stayCrowdingInfluence": 0.15,
-          "riskPressure": 0.63,
-          "placeAttachmentPull": 0.8,
-          "decisionSaturation": 0.29,
+          "stayPaths": 1,
+          "stayCrowdingInfluence": 0.08,
+          "riskPressure": 0.62,
+          "placeAttachmentPull": 0.82,
+          "decisionSaturation": 0.18,
           "frictionRecords": 0,
           "contactMemories": 1,
           "tileDepletion": 0
@@ -6188,11 +5281,11 @@
           "season": 2,
           "weightedCrowding": 0.15,
           "crowdingPenalty": 0.06,
-          "stayPaths": 3,
-          "stayCrowdingInfluence": 0.14,
-          "riskPressure": 0.72,
-          "placeAttachmentPull": 0.76,
-          "decisionSaturation": 0.39,
+          "stayPaths": 1,
+          "stayCrowdingInfluence": 0.1,
+          "riskPressure": 0.71,
+          "placeAttachmentPull": 0.77,
+          "decisionSaturation": 0.28,
           "frictionRecords": 0,
           "contactMemories": 1,
           "tileDepletion": 0

@@ -174,3 +174,41 @@ the two worlds have diverged behaviourally (44 vs 46 crowded band-seasons), so t
   265 / 224. First physical divergence tick 17 (map2 s1) and 23 (map2 s2); `map1:s2` is
   **byte-identical across all 80 seasons**, and `map1:s1` diverges only in derived pressure
   values with **no physical divergence at all**.
+
+---
+
+## CORRECTION-32A — INSTRUMENT CORRECTION (appended)
+
+**CORRECTION-32 is `PROGRESS` — NOT ACCEPTED, NOT FROZEN.** The whole-candidate counterfactual
+this document relies on was rejected: `crowdingDecisionAttributionAudit.mjs` paired candidates by
+`${actionType}:${targetTileId}`, a key an M0.8 corridor-relocation candidate can share with an
+ordinary known move, so `new Map(...)` collapsed the duplicates and two different candidates'
+scores were subtracted and published as crowding influence.
+
+Every `totalCrowdingInfluence` and every `residualThroughNestedComposites` figure referenced
+anywhere in this file is **withdrawn**. The corrected method, its limits and its results are in
+`INSTRUMENT_CORRECTION.md`; the rejected artifacts are in `superseded-instrument-v1/`.
+
+Two reporting corrections that apply throughout this directory:
+
+- the production diff touches **SEVEN** files (`crowding.ts`, `dryMargin.ts`, `pressure.ts`,
+  `socialContext.ts`, `types.ts`, `bandDecision.ts`, `decisionScoring.ts`), not six;
+- it adds **no new constant FILE** but it **does** add one new exported constant,
+  `CROWDING_DECISION_COST_WEIGHT = 0.96`. The two claims are not the same and were blurred.
+
+The production implementation was **not** rejected by the instrument failure; the corrected
+evidence supports it, and CORRECTION-32A changed no production file.
+
+### Commands added by CORRECTION-32A
+
+```bash
+node scripts/crowdingAttributionInstrumentAudit.mjs --arm {before,after}
+node scripts/crowdingAttributionInstrumentAudit.mjs --merge-regression
+node scripts/crowdingZeroControlsAudit.mjs --arm {before,after}
+node scripts/socialAccessLifecycleAudit.mjs --arm {before,after}
+node scripts/crowdingDecisionAuthorityFixturesAudit.mjs --arm {before,after} --seasons 14   # corrected pairing
+```
+
+The `before` arm runs in a detached `git worktree` at `3e2c1215…` with `node_modules` symlinked
+and the audit scripts copied in, writing to explicit `--out` paths outside the repository so no
+frozen evidence directory can be touched.

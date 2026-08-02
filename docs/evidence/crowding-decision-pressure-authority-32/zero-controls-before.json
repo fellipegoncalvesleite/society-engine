@@ -1,0 +1,1612 @@
+{
+  "audit": "crowdingZeroControlsAudit",
+  "checkpoint": "CORRECTION-32A",
+  "arm": "before",
+  "seed": "c32a:zero",
+  "seasons": 14,
+  "stressSeasons": 40,
+  "generatedAt": "2026-08-02T18:44:53.257Z",
+  "manifestSource": "/Users/fellipegoncalvesleite/Developer/human-nomad-simulator/docs/evidence/crowding-decision-pressure-authority-32/candidate-field-partition.json",
+  "manifestFieldCount": 22,
+  "directFieldCount": 3,
+  "directFields": [
+    "nearbyBandPressure",
+    "crowdingPenalty",
+    "crowdingExploreBoost"
+  ],
+  "whyThisExists": "The superseded P1 zero control verified `stay.totalCrowdingInfluence` only. A move candidate in the SAME payload reported -3.39 with weightedCrowding 0, nearbyBandCount 0, crowdingBandIds [] and every named charge 0. Every fixture here asserts over every candidate.",
+  "summary": {
+    "fixtures": 6,
+    "passed": 6,
+    "failed": 0,
+    "vacuous": 0,
+    "vacuousIds": [],
+    "totalCandidatesInspected": 67,
+    "totalViolatingCandidates": 0,
+    "verdicts": {
+      "Z1_solo_band_every_candidate": "ALL_CANDIDATES_ZERO",
+      "Z2_solo_exploration_candidate": "EXPLORATION_CANDIDATE_ZERO",
+      "Z3_solo_logistical_probe": "LOGISTICAL_PROBE_ZERO",
+      "Z4_solo_resource_scout": "RESOURCE_SCOUT_ZERO",
+      "Z5_zero_crowding_with_unrelated_pressures": "UNRELATED_PRESSURE_NOT_CLASSIFIED_AS_CROWDING",
+      "Z6_all_candidate_invariant": "NO_CANDIDATE_CARRIES_CROWDING"
+    }
+  },
+  "fixtures": [
+    {
+      "id": "Z1_solo_band_every_candidate",
+      "intent": "one band, no nearby bands: EVERY generated candidate must measure exactly zero crowding",
+      "syntheticState": true,
+      "syntheticNote": "warmed on real ground, then parked",
+      "bandId": "band:custom:0",
+      "position": "tile:195:90",
+      "source": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "livingBandsInWorld": 1
+      },
+      "candidateCount": 15,
+      "candidateFamilies": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "candidatesInspected": 15,
+      "dirtyCandidates": 0,
+      "dirtyDetail": [],
+      "candidates": [
+        {
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 5.76,
+          "targetTileId": "tile:195:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 5.23,
+          "targetTileId": "tile:194:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.91,
+          "targetTileId": "tile:195:89",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.73,
+          "targetTileId": "tile:196:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.41,
+          "targetTileId": "tile:197:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.32,
+          "targetTileId": "tile:195:88",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.29,
+          "targetTileId": "tile:195:91",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.12,
+          "targetTileId": "tile:194:89",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.09,
+          "targetTileId": "tile:196:89",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.93,
+          "targetTileId": "tile:196:91",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "logistical_probe:tile:197:88|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.85,
+          "targetTileId": "tile:197:88",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.42,
+          "targetTileId": "tile:192:85",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.11,
+          "targetTileId": "tile:194:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation",
+          "actionType": "move_to_tile",
+          "family": "corridor_relocation",
+          "score": 1.52,
+          "targetTileId": "tile:196:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "logistical_probe:tile:197:89|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 0.7,
+          "targetTileId": "tile:197:89",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        }
+      ],
+      "nonVacuous": true,
+      "verdict": "ALL_CANDIDATES_ZERO"
+    },
+    {
+      "id": "Z2_solo_exploration_candidate",
+      "intent": "a solo band with an EXPLORE candidate available: the exploration family must carry zero crowding",
+      "syntheticState": true,
+      "syntheticNote": "parked, then the 4-neighbour records removed so the explore family is generable",
+      "bandId": "band:custom:0",
+      "position": "tile:195:90",
+      "source": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "livingBandsInWorld": 1
+      },
+      "candidateCount": 9,
+      "candidateFamilies": [
+        "explore_unknown_neighbor",
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "candidatesInspected": 9,
+      "dirtyCandidates": 0,
+      "dirtyDetail": [],
+      "candidates": [
+        {
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 5.76,
+          "targetTileId": "tile:195:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "explore_unknown_neighbor:tile:195:89|origin=tile:195:90|family=core",
+          "actionType": "explore_unknown_neighbor",
+          "family": "core",
+          "score": 4.63,
+          "targetTileId": "tile:195:89",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.39,
+          "targetTileId": "tile:195:88",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.41,
+          "targetTileId": "tile:197:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.25,
+          "targetTileId": "tile:194:89",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.22,
+          "targetTileId": "tile:196:89",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.21,
+          "targetTileId": "tile:196:91",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.42,
+          "targetTileId": "tile:192:85",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.11,
+          "targetTileId": "tile:194:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        }
+      ],
+      "nonVacuous": true,
+      "familyPresent": true,
+      "familyCandidates": 1,
+      "verdict": "EXPLORATION_CANDIDATE_ZERO"
+    },
+    {
+      "id": "Z3_solo_logistical_probe",
+      "intent": "a solo band with a LOGISTICAL PROBE candidate: the probe family must carry zero crowding",
+      "syntheticState": true,
+      "syntheticNote": "warmed on real ground, then parked",
+      "bandId": "band:custom:0",
+      "position": "tile:195:90",
+      "source": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "livingBandsInWorld": 1
+      },
+      "candidateCount": 15,
+      "candidateFamilies": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "candidatesInspected": 15,
+      "dirtyCandidates": 0,
+      "dirtyDetail": [],
+      "candidates": [
+        {
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 5.76,
+          "targetTileId": "tile:195:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 5.23,
+          "targetTileId": "tile:194:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.91,
+          "targetTileId": "tile:195:89",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.73,
+          "targetTileId": "tile:196:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.41,
+          "targetTileId": "tile:197:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.32,
+          "targetTileId": "tile:195:88",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.29,
+          "targetTileId": "tile:195:91",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.12,
+          "targetTileId": "tile:194:89",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.09,
+          "targetTileId": "tile:196:89",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.93,
+          "targetTileId": "tile:196:91",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "logistical_probe:tile:197:88|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.85,
+          "targetTileId": "tile:197:88",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.42,
+          "targetTileId": "tile:192:85",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "resource_scout:tile:194:90|origin=tile:195:90|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.11,
+          "targetTileId": "tile:194:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation",
+          "actionType": "move_to_tile",
+          "family": "corridor_relocation",
+          "score": 1.52,
+          "targetTileId": "tile:196:90",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "logistical_probe:tile:197:89|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 0.7,
+          "targetTileId": "tile:197:89",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        }
+      ],
+      "nonVacuous": true,
+      "familyPresent": true,
+      "familyCandidates": 3,
+      "verdict": "LOGISTICAL_PROBE_ZERO"
+    },
+    {
+      "id": "Z4_solo_resource_scout",
+      "intent": "a solo band with a RESOURCE SCOUT candidate: the scout family must carry zero crowding",
+      "syntheticState": true,
+      "syntheticNote": "warmed 40 seasons on dry constrained ground so a resource belief can form, then parked",
+      "bandId": "band:custom:0",
+      "position": "tile:60:132",
+      "source": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "livingBandsInWorld": 1
+      },
+      "candidateCount": 14,
+      "candidateFamilies": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "candidatesInspected": 14,
+      "dirtyCandidates": 0,
+      "dirtyDetail": [],
+      "candidates": [
+        {
+          "identity": "move_to_tile:tile:62:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.12,
+          "targetTileId": "tile:62:132",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "logistical_probe:tile:56:129|origin=tile:60:132|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 2.72,
+          "targetTileId": "tile:56:129",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:60:133|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.68,
+          "targetTileId": "tile:60:133",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:59:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.5,
+          "targetTileId": "tile:59:132",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:61:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.38,
+          "targetTileId": "tile:61:132",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:60:131|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.1,
+          "targetTileId": "tile:60:131",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "resource_scout:tile:60:130|origin=tile:60:132|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.07,
+          "targetTileId": "tile:60:130",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:59:133|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.03,
+          "targetTileId": "tile:59:133",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:61:133|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.94,
+          "targetTileId": "tile:61:133",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:59:131|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.76,
+          "targetTileId": "tile:59:131",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:58:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.71,
+          "targetTileId": "tile:58:132",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:60:130|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.51,
+          "targetTileId": "tile:60:130",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:61:131|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.43,
+          "targetTileId": "tile:61:131",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "stay:tile:60:132|origin=tile:60:132|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 1.03,
+          "targetTileId": "tile:60:132",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        }
+      ],
+      "nonVacuous": true,
+      "familyPresent": true,
+      "familyCandidates": 1,
+      "verdict": "RESOURCE_SCOUT_ZERO"
+    },
+    {
+      "id": "Z5_zero_crowding_with_unrelated_pressures",
+      "intent": "large UNRELATED pressures with crowding at zero: none of them may be classified as crowding",
+      "syntheticState": true,
+      "syntheticNote": "warmed 40 seasons on dry constrained ground, then parked",
+      "bandId": "band:custom:0",
+      "position": "tile:60:132",
+      "source": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "livingBandsInWorld": 1
+      },
+      "candidateCount": 14,
+      "candidateFamilies": [
+        "logistical_probe",
+        "move_to_tile",
+        "resource_scout",
+        "stay"
+      ],
+      "candidatesInspected": 14,
+      "dirtyCandidates": 0,
+      "dirtyDetail": [],
+      "candidates": [
+        {
+          "identity": "move_to_tile:tile:62:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.12,
+          "targetTileId": "tile:62:132",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "logistical_probe:tile:56:129|origin=tile:60:132|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 2.72,
+          "targetTileId": "tile:56:129",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:60:133|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.68,
+          "targetTileId": "tile:60:133",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:59:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.5,
+          "targetTileId": "tile:59:132",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:61:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.38,
+          "targetTileId": "tile:61:132",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:60:131|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.1,
+          "targetTileId": "tile:60:131",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "resource_scout:tile:60:130|origin=tile:60:132|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.07,
+          "targetTileId": "tile:60:130",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:59:133|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.03,
+          "targetTileId": "tile:59:133",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:61:133|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.94,
+          "targetTileId": "tile:61:133",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:59:131|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.76,
+          "targetTileId": "tile:59:131",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:58:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.71,
+          "targetTileId": "tile:58:132",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:60:130|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.51,
+          "targetTileId": "tile:60:130",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "move_to_tile:tile:61:131|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.43,
+          "targetTileId": "tile:61:131",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        },
+        {
+          "identity": "stay:tile:60:132|origin=tile:60:132|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 1.03,
+          "targetTileId": "tile:60:132",
+          "targetWeightedCrowding": 0,
+          "targetNearbyBandCount": 0,
+          "targetCrowdingPenalty": 0,
+          "directFieldValues": {
+            "nearbyBandPressure": 0,
+            "crowdingPenalty": 0,
+            "crowdingExploreBoost": 0
+          },
+          "nonZeroDirectFields": [],
+          "exactDirectContribution": 0,
+          "pairStatus": "clean_exact_partition",
+          "undeclaredDifferingFields": [],
+          "fixedCandidatePartitionContribution": 0,
+          "clean": true
+        }
+      ],
+      "nonVacuous": true,
+      "unrelatedPressuresPresent": {
+        "foodStress": 1,
+        "waterStress": 0.6,
+        "localUsePressure": 0.11,
+        "placeAttachment": 0,
+        "attachmentValue": 0.09,
+        "rangeSaturationFromOwnUse": 0.49,
+        "riskCost": 0.1292,
+        "depletionPenalty": 0.25,
+        "mobilityPressure": 0.95
+      },
+      "activeUnrelatedPressureCount": 8,
+      "verdict": "UNRELATED_PRESSURE_NOT_CLASSIFIED_AS_CROWDING"
+    },
+    {
+      "id": "Z6_all_candidate_invariant",
+      "intent": "across EVERY zero-crowding fixture, no candidate may carry any crowding contribution — selected or not. This is the assertion the superseded P1 did not make.",
+      "candidatesInspected": 67,
+      "violatingCandidates": 0,
+      "violatingDetail": [],
+      "tolerance": 0.0005,
+      "verdict": "NO_CANDIDATE_CARRIES_CROWDING"
+    }
+  ]
+}

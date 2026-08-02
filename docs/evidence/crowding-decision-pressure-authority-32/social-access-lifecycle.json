@@ -1,0 +1,706 @@
+{
+  "audit": "socialAccessLifecycleAudit",
+  "checkpoint": "CORRECTION-32A",
+  "arm": "after",
+  "seed": "c32a:social",
+  "warmSeasons": 12,
+  "contactSeasons": 6,
+  "releaseSeasons": 20,
+  "generatedAt": "2026-08-02T19:42:06.668Z",
+  "measuredThrough": [
+    "dryMargin.deriveDryMarginMobilityContext(...).currentWaterRefuge.socialAccessRisk (real consumer)",
+    "evaluateBandDecision(...).alternativesConsidered[].scoreBreakdown.socialAccessRisk (scored at -0.36)"
+  ],
+  "privateFormulaNotCopied": true,
+  "geometry": {
+    "origin": {
+      "x": 100,
+      "y": 100
+    },
+    "tiles": [
+      "tile:100:100",
+      "tile:101:100",
+      "tile:100:101",
+      "tile:99:100"
+    ],
+    "farTiles": [
+      "tile:106:125"
+    ]
+  },
+  "summary": {
+    "fixtures": 7,
+    "vacuous": 0,
+    "vacuousIds": [],
+    "notConstructed": [
+      "S5_second_hand_evidence"
+    ],
+    "adverse": [],
+    "verdicts": {
+      "S1_neutral_physical_proximity": "PROXIMITY_ALONE_DOES_NOT_RAISE_ACCESS_CAUTION",
+      "S2_legitimate_active_access_evidence": "ACTIVE_ACCESS_EVIDENCE_RAISES_CAUTION",
+      "S3_lifecycle_release": "RELEASED_HISTORY_RETAINED",
+      "S4_place_specificity": "EVIDENCE_IS_PLACE_SPECIFIC",
+      "S5_second_hand_evidence": "NOT_CONSTRUCTED_NO_REPORT_LINKED_RECORD_IN_THIS_GEOMETRY",
+      "S6_old_contact_without_place_evidence": "OLD_CONTACT_CREATES_NO_PLACE_DANGER",
+      "S7_unrelated_world_count_control": "DELTA_IS_NOT_UNRELATED_RISK"
+    }
+  },
+  "fixtures": [
+    {
+      "id": "S1_neutral_physical_proximity",
+      "intent": "a non-kin band is physically nearby and NOTHING has happened: no friction record, no refusal, no active access warning, no hostile encounter, no report. Physical proximity alone must not raise this tile's social-access caution.",
+      "syntheticState": true,
+      "syntheticNote": "both bands warmed on real ground, then parked; measured before any tick, so no evidence can have formed",
+      "separated": {
+        "tileId": "tile:100:100",
+        "dryMarginRelevant": true,
+        "relevanceBasis": [
+          "current_ecology",
+          "biome_adaptation",
+          "learned_memory",
+          "seasonal_round",
+          "pressure_state",
+          "starting_profile"
+        ],
+        "currentWaterRefugeSocialAccessRisk": 0.33,
+        "maxCandidateSocialAccessRisk": 0.33,
+        "candidateSocialAccessRisks": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.33
+        ],
+        "accessMemory": {
+          "accessState": "familiar_use",
+          "strangerCaution": 0.11,
+          "rememberedRefusalAvoidance": 0.34,
+          "sharedUsePressure": 0.1,
+          "confidence": 0.62,
+          "activeEvidenceWeight": 0,
+          "activeEvidenceCount": 0,
+          "historicalEvidenceCount": 0,
+          "socialEvidencePhase": "none",
+          "presentWithoutOthersSeasons": 8
+        },
+        "evidence": {
+          "frictionRecords": 0,
+          "reportLinkedFrictionRecords": 0,
+          "contactMemories": 0,
+          "encounterRecords": 0
+        },
+        "worldBandCount": 2,
+        "knownContactCount": 0,
+        "unrelatedRiskWouldFire": false
+      },
+      "adjacent": {
+        "tileId": "tile:100:100",
+        "dryMarginRelevant": true,
+        "relevanceBasis": [
+          "current_ecology",
+          "biome_adaptation",
+          "learned_memory",
+          "seasonal_round",
+          "pressure_state",
+          "starting_profile"
+        ],
+        "currentWaterRefugeSocialAccessRisk": 0.33,
+        "maxCandidateSocialAccessRisk": 0.33,
+        "candidateSocialAccessRisks": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.33
+        ],
+        "accessMemory": {
+          "accessState": "familiar_use",
+          "strangerCaution": 0.11,
+          "rememberedRefusalAvoidance": 0.34,
+          "sharedUsePressure": 0.1,
+          "confidence": 0.62,
+          "activeEvidenceWeight": 0,
+          "activeEvidenceCount": 0,
+          "historicalEvidenceCount": 0,
+          "socialEvidencePhase": "none",
+          "presentWithoutOthersSeasons": 8
+        },
+        "evidence": {
+          "frictionRecords": 0,
+          "reportLinkedFrictionRecords": 0,
+          "contactMemories": 0,
+          "encounterRecords": 0
+        },
+        "worldBandCount": 2,
+        "knownContactCount": 0,
+        "unrelatedRiskWouldFire": false
+      },
+      "deltaFromProximityAlone": 0,
+      "bandCountIdentical": true,
+      "frictionRecordsIdentical": true,
+      "verdict": "PROXIMITY_ALONE_DOES_NOT_RAISE_ACCESS_CAUTION"
+    },
+    {
+      "id": "S2_legitimate_active_access_evidence",
+      "intent": "real place-specific social evidence, created by production authorities through a real sequence (physical proximity -> range friction -> protoAccessMemory for X), must raise social-access caution at X. Measured with the band's contact count HELD CONSTANT, so the place evidence is the only thing that varies.",
+      "syntheticState": true,
+      "syntheticNote": "two bands held physically adjacent through 6 real production seasons, re-parked after each",
+      "primaryMeasurement": {
+        "method": "same world, same band, same contact count, evidenced tile X vs unrelated tile Y",
+        "atEvidencedTileX": 0.3,
+        "atUnrelatedTileY": 0.2,
+        "placeAttributableRise": 0.1,
+        "knownContactCountIdentical": true,
+        "knownContactCount": 1
+      },
+      "confoundedRawComparison": {
+        "method": "neutral world vs contacted world at the same tile — NOT a clean treatment",
+        "neutralSocialAccessRisk": 0.33,
+        "contactedSocialAccessRisk": 0.3,
+        "rawDelta": -0.03,
+        "neutralKnownContactCount": 0,
+        "contactedKnownContactCount": 1,
+        "knownContactReliefDelta": -0.08,
+        "why": "the same episode that creates place evidence also creates a CONTACT MEMORY, and known contacts legitimately REDUCE access risk. The raw delta is the sum of a rise in place caution and a fall from contact relief, and is reported for completeness only."
+      },
+      "neutralBaseline": {
+        "tileId": "tile:100:100",
+        "dryMarginRelevant": true,
+        "relevanceBasis": [
+          "current_ecology",
+          "biome_adaptation",
+          "learned_memory",
+          "seasonal_round",
+          "pressure_state",
+          "starting_profile"
+        ],
+        "currentWaterRefugeSocialAccessRisk": 0.33,
+        "maxCandidateSocialAccessRisk": 0.33,
+        "candidateSocialAccessRisks": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.33
+        ],
+        "accessMemory": {
+          "accessState": "familiar_use",
+          "strangerCaution": 0.11,
+          "rememberedRefusalAvoidance": 0.34,
+          "sharedUsePressure": 0.1,
+          "confidence": 0.62,
+          "activeEvidenceWeight": 0,
+          "activeEvidenceCount": 0,
+          "historicalEvidenceCount": 0,
+          "socialEvidencePhase": "none",
+          "presentWithoutOthersSeasons": 8
+        },
+        "evidence": {
+          "frictionRecords": 0,
+          "reportLinkedFrictionRecords": 0,
+          "contactMemories": 0,
+          "encounterRecords": 0
+        },
+        "worldBandCount": 2,
+        "knownContactCount": 0,
+        "unrelatedRiskWouldFire": false
+      },
+      "withActiveEvidence": {
+        "tileId": "tile:100:100",
+        "dryMarginRelevant": true,
+        "relevanceBasis": [
+          "current_ecology",
+          "biome_adaptation",
+          "learned_memory",
+          "seasonal_round",
+          "pressure_state",
+          "starting_profile"
+        ],
+        "currentWaterRefugeSocialAccessRisk": 0.3,
+        "maxCandidateSocialAccessRisk": 0.3,
+        "candidateSocialAccessRisks": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.3
+        ],
+        "accessMemory": {
+          "accessState": "familiar_use",
+          "strangerCaution": 0.33,
+          "rememberedRefusalAvoidance": 0.49,
+          "sharedUsePressure": 0.38,
+          "confidence": 0.68,
+          "activeEvidenceWeight": 0.85,
+          "activeEvidenceCount": 1,
+          "historicalEvidenceCount": 0,
+          "socialEvidencePhase": "cooling",
+          "presentWithoutOthersSeasons": 0
+        },
+        "evidence": {
+          "frictionRecords": 0,
+          "reportLinkedFrictionRecords": 0,
+          "contactMemories": 1,
+          "encounterRecords": 18
+        },
+        "worldBandCount": 2,
+        "knownContactCount": 1,
+        "unrelatedRiskWouldFire": false
+      },
+      "evidenceIsBandsOwnPlaceMemory": true,
+      "bandCountIdentical": true,
+      "verdict": "ACTIVE_ACCESS_EVIDENCE_RAISES_CAUTION"
+    },
+    {
+      "id": "S3_lifecycle_release",
+      "intent": "after the other band departs and the CORRECTION-31 lifecycle cools the evidence, the records must REMAIN while the current social-access contribution returns to baseline.",
+      "syntheticState": true,
+      "syntheticNote": "the other band moved far away and 20 real production seasons run",
+      "atContact": {
+        "tileId": "tile:100:100",
+        "dryMarginRelevant": true,
+        "relevanceBasis": [
+          "current_ecology",
+          "biome_adaptation",
+          "learned_memory",
+          "seasonal_round",
+          "pressure_state",
+          "starting_profile"
+        ],
+        "currentWaterRefugeSocialAccessRisk": 0.3,
+        "maxCandidateSocialAccessRisk": 0.3,
+        "candidateSocialAccessRisks": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.3
+        ],
+        "accessMemory": {
+          "accessState": "familiar_use",
+          "strangerCaution": 0.33,
+          "rememberedRefusalAvoidance": 0.49,
+          "sharedUsePressure": 0.38,
+          "confidence": 0.68,
+          "activeEvidenceWeight": 0.85,
+          "activeEvidenceCount": 1,
+          "historicalEvidenceCount": 0,
+          "socialEvidencePhase": "cooling",
+          "presentWithoutOthersSeasons": 0
+        },
+        "evidence": {
+          "frictionRecords": 0,
+          "reportLinkedFrictionRecords": 0,
+          "contactMemories": 1,
+          "encounterRecords": 18
+        },
+        "worldBandCount": 2,
+        "knownContactCount": 1,
+        "unrelatedRiskWouldFire": false
+      },
+      "afterRelease": {
+        "tileId": "tile:100:100",
+        "dryMarginRelevant": true,
+        "relevanceBasis": [
+          "current_ecology",
+          "biome_adaptation",
+          "learned_memory",
+          "seasonal_round",
+          "pressure_state",
+          "starting_profile"
+        ],
+        "currentWaterRefugeSocialAccessRisk": 0.25,
+        "maxCandidateSocialAccessRisk": 0.25,
+        "candidateSocialAccessRisks": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.25
+        ],
+        "accessMemory": {
+          "accessState": "familiar_use",
+          "strangerCaution": 0.11,
+          "rememberedRefusalAvoidance": 0.33,
+          "sharedUsePressure": 0,
+          "confidence": 0.54,
+          "activeEvidenceWeight": 0,
+          "activeEvidenceCount": 0,
+          "historicalEvidenceCount": 1,
+          "socialEvidencePhase": "released_historical",
+          "presentWithoutOthersSeasons": 0
+        },
+        "evidence": {
+          "frictionRecords": 0,
+          "reportLinkedFrictionRecords": 0,
+          "contactMemories": 1,
+          "encounterRecords": 18
+        },
+        "worldBandCount": 2,
+        "knownContactCount": 1,
+        "unrelatedRiskWouldFire": false
+      },
+      "placeAttributableRiseByPhase": {
+        "neverContacted": {
+          "atX": 0.33,
+          "atY": 0.28,
+          "placeAttributable": 0.05,
+          "knownContactCount": 0,
+          "contactControlled": true
+        },
+        "atContact": {
+          "atX": 0.3,
+          "atY": 0.2,
+          "placeAttributable": 0.1,
+          "knownContactCount": 1,
+          "contactControlled": true
+        },
+        "afterRelease": {
+          "atX": 0.25,
+          "atY": 0.21,
+          "placeAttributable": 0.04,
+          "knownContactCount": 1,
+          "contactControlled": true
+        }
+      },
+      "riseRoundingBudget": 0.02,
+      "accessMemoryInputs": {
+        "neverContacted": {
+          "strangerCaution": 0.11,
+          "rememberedRefusalAvoidance": 0.34,
+          "activeEvidenceWeight": 0
+        },
+        "atContact": {
+          "strangerCaution": 0.33,
+          "rememberedRefusalAvoidance": 0.49,
+          "activeEvidenceWeight": 0.85
+        },
+        "afterRelease": {
+          "strangerCaution": 0.11,
+          "rememberedRefusalAvoidance": 0.33,
+          "activeEvidenceWeight": 0
+        }
+      },
+      "cautionResidualsVsNeverContacted": {
+        "strangerCaution": 0,
+        "rememberedRefusalAvoidance": -0.01
+      },
+      "noResidualCautionAboveNeverContactedBaseline": true,
+      "placeContributionReturnedToNeverContactedLevel": true,
+      "retainedButInert": {
+        "contactMemories": 1,
+        "encounterRecords": 18,
+        "historicalEvidenceCount": 1,
+        "socialEvidencePhase": "released_historical",
+        "activeEvidenceWeight": 0
+      },
+      "historicalRecordsRetained": true,
+      "activeEvidenceReleased": true,
+      "currentContributionReturnedToBaseline": true,
+      "verdict": "RELEASED_HISTORY_RETAINED"
+    },
+    {
+      "id": "S4_place_specificity",
+      "intent": "active access evidence at tile X must not increase social-access risk at unrelated tile Y",
+      "syntheticState": true,
+      "syntheticNote": "the same world as S2, with the observer parked at Y instead of X",
+      "atEvidenceTileX": {
+        "tileId": "tile:100:100",
+        "dryMarginRelevant": true,
+        "relevanceBasis": [
+          "current_ecology",
+          "biome_adaptation",
+          "learned_memory",
+          "seasonal_round",
+          "pressure_state",
+          "starting_profile"
+        ],
+        "currentWaterRefugeSocialAccessRisk": 0.3,
+        "maxCandidateSocialAccessRisk": 0.3,
+        "candidateSocialAccessRisks": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.3
+        ],
+        "accessMemory": {
+          "accessState": "familiar_use",
+          "strangerCaution": 0.33,
+          "rememberedRefusalAvoidance": 0.49,
+          "sharedUsePressure": 0.38,
+          "confidence": 0.68,
+          "activeEvidenceWeight": 0.85,
+          "activeEvidenceCount": 1,
+          "historicalEvidenceCount": 0,
+          "socialEvidencePhase": "cooling",
+          "presentWithoutOthersSeasons": 0
+        },
+        "evidence": {
+          "frictionRecords": 0,
+          "reportLinkedFrictionRecords": 0,
+          "contactMemories": 1,
+          "encounterRecords": 18
+        },
+        "worldBandCount": 2,
+        "knownContactCount": 1,
+        "unrelatedRiskWouldFire": false
+      },
+      "atUnrelatedTileY": {
+        "tileId": "tile:100:101",
+        "dryMarginRelevant": true,
+        "relevanceBasis": [
+          "current_ecology",
+          "biome_adaptation",
+          "learned_memory",
+          "seasonal_round",
+          "pressure_state",
+          "starting_profile"
+        ],
+        "currentWaterRefugeSocialAccessRisk": 0.2,
+        "maxCandidateSocialAccessRisk": 0.2,
+        "candidateSocialAccessRisks": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.2
+        ],
+        "accessMemory": null,
+        "evidence": {
+          "frictionRecords": 0,
+          "reportLinkedFrictionRecords": 0,
+          "contactMemories": 1,
+          "encounterRecords": 18
+        },
+        "worldBandCount": 2,
+        "knownContactCount": 1,
+        "unrelatedRiskWouldFire": false
+      },
+      "deltaYMinusX": -0.1,
+      "bandCountIdentical": true,
+      "verdict": "EVIDENCE_IS_PLACE_SPECIFIC"
+    },
+    {
+      "id": "S5_second_hand_evidence",
+      "intent": "a legitimate ACTIVE second-hand warning may affect caution where supported, must stay marked second-hand, and must release on its own (shorter) lifecycle",
+      "observer": {
+        "reportLinkedFrictionRecords": 0
+      },
+      "otherBand": {
+        "reportLinkedFrictionRecords": 0
+      },
+      "verdict": "NOT_CONSTRUCTED_NO_REPORT_LINKED_RECORD_IN_THIS_GEOMETRY",
+      "note": "Two bands in isolated proximity produce DIRECT observation, not hearsay: a report requires a third band to relay it. CORRECTION-31 already proves the report lifecycle (report-only belief DOES_NOT_FADE -> FADES) in its own frozen evidence directory, and no claim about second-hand access evidence is made from THIS pass."
+    },
+    {
+      "id": "S6_old_contact_without_place_evidence",
+      "intent": "a known contact memory with NO active evidence about tile X must not create tile-X social-access danger. (Contacts may legitimately REDUCE risk through knownContactRelief; what is forbidden is manufacturing danger.)",
+      "withRetainedContact": {
+        "tileId": "tile:100:100",
+        "dryMarginRelevant": true,
+        "relevanceBasis": [
+          "current_ecology",
+          "biome_adaptation",
+          "learned_memory",
+          "seasonal_round",
+          "pressure_state",
+          "starting_profile"
+        ],
+        "currentWaterRefugeSocialAccessRisk": 0.25,
+        "maxCandidateSocialAccessRisk": 0.25,
+        "candidateSocialAccessRisks": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.25
+        ],
+        "accessMemory": {
+          "accessState": "familiar_use",
+          "strangerCaution": 0.11,
+          "rememberedRefusalAvoidance": 0.33,
+          "sharedUsePressure": 0,
+          "confidence": 0.54,
+          "activeEvidenceWeight": 0,
+          "activeEvidenceCount": 0,
+          "historicalEvidenceCount": 1,
+          "socialEvidencePhase": "released_historical",
+          "presentWithoutOthersSeasons": 0
+        },
+        "evidence": {
+          "frictionRecords": 0,
+          "reportLinkedFrictionRecords": 0,
+          "contactMemories": 1,
+          "encounterRecords": 18
+        },
+        "worldBandCount": 2,
+        "knownContactCount": 1,
+        "unrelatedRiskWouldFire": false
+      },
+      "neutralNeverContacted": {
+        "tileId": "tile:100:100",
+        "dryMarginRelevant": true,
+        "relevanceBasis": [
+          "current_ecology",
+          "biome_adaptation",
+          "learned_memory",
+          "seasonal_round",
+          "pressure_state",
+          "starting_profile"
+        ],
+        "currentWaterRefugeSocialAccessRisk": 0.33,
+        "maxCandidateSocialAccessRisk": 0.33,
+        "candidateSocialAccessRisks": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.33
+        ],
+        "accessMemory": {
+          "accessState": "familiar_use",
+          "strangerCaution": 0.11,
+          "rememberedRefusalAvoidance": 0.34,
+          "sharedUsePressure": 0.1,
+          "confidence": 0.62,
+          "activeEvidenceWeight": 0,
+          "activeEvidenceCount": 0,
+          "historicalEvidenceCount": 0,
+          "socialEvidencePhase": "none",
+          "presentWithoutOthersSeasons": 8
+        },
+        "evidence": {
+          "frictionRecords": 0,
+          "reportLinkedFrictionRecords": 0,
+          "contactMemories": 0,
+          "encounterRecords": 0
+        },
+        "worldBandCount": 2,
+        "knownContactCount": 0,
+        "unrelatedRiskWouldFire": false
+      },
+      "deltaVsNeutral": -0.08,
+      "contactMemoriesRetained": 1,
+      "placeSpecificCaution": 0.11,
+      "verdict": "OLD_CONTACT_CREATES_NO_PLACE_DANGER"
+    },
+    {
+      "id": "S7_unrelated_world_count_control",
+      "intent": "repeat the comparison with the SAME total band count and only the legitimate access evidence changed, proving the delta is not `unrelatedRisk`'s world-truth band count",
+      "neutralArm": {
+        "worldBandCount": 2,
+        "knownContactCount": 0,
+        "unrelatedRiskWouldFire": false,
+        "socialAccessRisk": 0.33
+      },
+      "evidencedArm": {
+        "worldBandCount": 2,
+        "knownContactCount": 1,
+        "unrelatedRiskWouldFire": false,
+        "socialAccessRisk": 0.3
+      },
+      "delta": -0.03,
+      "bandCountIdentical": true,
+      "unrelatedRiskIdentical": true,
+      "verdict": "DELTA_IS_NOT_UNRELATED_RISK",
+      "knownDefectNotRepairedHere": "`unrelatedRisk` reads `Object.values(world.bands).length`, a world-truth count a band cannot know. Out of scope for CORRECTION-32 and CORRECTION-32A; held constant, not fixed."
+    }
+  ]
+}

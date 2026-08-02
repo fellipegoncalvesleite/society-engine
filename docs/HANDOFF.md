@@ -181,7 +181,54 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### SHARED RANGE — CROWDING DECISION-PRESSURE AUTHORITY AND DUPLICATE INFLUENCE — CORRECTION-32 — PASS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+### SHARED RANGE — CROWDING DECISION-PRESSURE AUTHORITY AND DUPLICATE INFLUENCE — CORRECTION-32 — **PROGRESS / NOT ACCEPTED / NOT FROZEN** / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+
+> **CORRECTION-32A (evidence repair, this pass).** CORRECTION-32 remained PROGRESS after its first
+> report because its whole-candidate counterfactual attribution was **contaminated**:
+> `crowdingDecisionAttributionAudit.mjs` paired candidates by `${actionType}:${targetTileId}`, a key
+> an M0.8 corridor-relocation candidate can share with an ordinary known move, so `new Map(...)`
+> kept only the last and two *different* candidates' scores were subtracted and published as
+> crowding influence. `−4.02` is literally `0.96 − 4.98`; a **solo band with no neighbours** reported
+> `−3.39`. Every impossible residual in both arms sits on a colliding key, 1:1.
+>
+> **The production consolidation was NOT rejected, but it was not accepted without corrected
+> evidence.** It is now corrected, and it **supports** the production diff. **No production file
+> changed in CORRECTION-32A** — `git diff --name-only fdf0431..HEAD` is scripts, docs and evidence
+> only.
+>
+> **Withdrawn:** every `totalCrowdingInfluence`; every `residualThroughNestedComposites` (metric
+> removed, not recomputed); "candidates with ≥3 crowding paths **49 → 0**" and the natural
+> **56 → 0** / **144 → 0**; "max paths **4 → 2**"; and P1's status as a zero-crowding control.
+> **Still valid:** the physical-layer readings, pressure-state observations, natural-occurrence
+> counts and behavioural comparison — none came from the broken pairing.
+>
+> **Corrected** (fixed candidate, every non-crowding field byte-identical, unprovable pairs
+> rejected; 150/152 candidates, 0 rejected, 0 contaminated, 9/9 self-consistency assertions on both
+> arms): max separately-named **direct** charges on one candidate **3 → 1**; candidates with ≥3
+> direct charges **1 → 0**; direct `nearbyBandPressure` influence **2.02 → 0**; candidates charged
+> through range saturation **32 → 0** and daughter-kin **42 → 0**; max partition total
+> **0.42 → 0.24**.
+>
+> **Zero controls Z1–Z6:** 67 candidates, 6 fixtures, **0 violating, 0 vacuous — in BOTH arms**
+> (preservation, not repair credit). **Social access S1–S7**, the proof CORRECTION-32 shipped
+> without: proximity alone with zero friction records **+0.05 → 0**; legitimate place evidence with
+> contact count held identical **0 → +0.10**; release **0.10 → 0.04** with `activeEvidenceWeight`
+> 0.85 → 0 and the records, contact memory and 18 encounter records all retained. **S5 (second-hand)
+> is NOT_CONSTRUCTED, not a pass.**
+>
+> **Two reporting corrections:** the diff touches **SEVEN** production files, not six, and it **does**
+> add one new exported constant `CROWDING_DECISION_COST_WEIGHT = 0.96` even though it adds no new
+> constant *file*.
+>
+> **Incident, reported not hidden:** two frozen evidence files were overwritten during the
+> regression rerun because `crowdingControlledFixturesAudit.mjs` and
+> `rangeReleaseLifecycleFixturesAudit.mjs` each have a **second** default output flag
+> (`--timeline-out`, `--timelines`) that `--out` does not cover — the same trap the previous pass
+> recorded. Restored with `git checkout`, both audits rerun with every output redirected, frozen
+> directories verified clean.
+>
+> **Do not describe CORRECTION-32 as frozen or accepted until the supervisor accepts it. Roadmap
+> item 3 is not complete.** See `docs/evidence/crowding-decision-pressure-authority-32/INSTRUMENT_CORRECTION.md`.
 
 **Branch** `checkpoint/crowding-decision-pressure-authority-32`, from the accepted CORRECTION-31 tip
 `3e2c1215b4ccef2beb799b3a7882247f6cd186cd`. **CORRECTION-31 is CLOSED and FROZEN at `3e2c1215`.**
@@ -10279,3 +10326,20 @@ exception; daughter colours related-but-distinct and never visually confusing.
   11/11, CORRECTION-28 12/12, -29 12/12, -30 15/15, -31 22/22 all unchanged. **No improvement claimed**
   — crowding never flips a selection in either arm. **Roadmap item 3 remains OPEN. TIME-CONTROL-1 is
   deferred.** Evidence: `docs/evidence/crowding-decision-pressure-authority-32/`.
+
+- **2026-08-02 — CORRECTION-32A — SHARED RANGE: CROWDING ATTRIBUTION INSTRUMENT AND SOCIAL-ACCESS
+  EVIDENCE REPAIR — `PROGRESS`, CORRECTION-32 REMAINS OPEN.** Evidence-repair pass on the still-open
+  CORRECTION-32 checkpoint; **no production file changed**. The whole-candidate counterfactual was
+  rejected — candidates were paired on a non-unique `${actionType}:${targetTileId}` key, so an
+  ordinary known move was subtracted against an M0.8 corridor relocation and the difference
+  published as crowding (`−4.02 = 0.96 − 4.98`; `−3.39` on a band with no neighbours). Replaced by
+  a fixed-candidate partition with a 66-field equality guard, explicit candidate identity, duplicate
+  rejection and 9 self-consistency assertions; **`RESIDUAL = TOTAL − sum(DIRECT)` is removed, not
+  recomputed**. New `scripts/crowdingAttributionInstrumentAudit.mjs`, `crowdingZeroControlsAudit.mjs`,
+  `socialAccessLifecycleAudit.mjs`; `crowdingDecisionAuthorityFixturesAudit.mjs` corrected. Corrected:
+  max named direct crowding charges on one candidate **3 → 1**, direct `nearbyBandPressure`
+  **2.02 → 0**, range-saturation candidates **32 → 0**, daughter-kin **42 → 0**. Zero controls
+  **67 candidates / 0 violating in both arms**; social access **proximity +0.05 → 0** and
+  **place evidence 0 → +0.10**, released history inert with records retained. Production
+  implementation **supported**; seven production files and one new exported constant recorded
+  correctly. Evidence: `docs/evidence/crowding-decision-pressure-authority-32/`.

@@ -1,0 +1,5686 @@
+{
+  "audit": "crowdingAttributionInstrumentAudit",
+  "checkpoint": "CORRECTION-32A",
+  "supersedes": "crowdingDecisionAttributionAudit.mjs (whole-candidate score subtraction)",
+  "arm": "before",
+  "seed": "c32:attribution",
+  "seasons": 14,
+  "generatedAt": "2026-08-02T18:41:56.344Z",
+  "purpose": "Candidate identity, duplicate-key detection and the strict equality guard. This file is the ADMISSIBILITY record: a candidate whose pair is not proven clean here may not carry an attributed total anywhere else.",
+  "candidateIdentity": [
+    "action type",
+    "target tile id (or, for stay, the stayed tile id)",
+    "origin tile id",
+    "candidate family (core / corridor_relocation / side_country_probe, read from the archived markers)"
+  ],
+  "knownIdentityLimit": "`AlternativeConsidered` carries `isCorridorRelocation` but production never sets `isSideCountryProbe` on it, so a side-country probe is indistinguishable from a core probe at the same target. Such a collision is therefore DETECTED as a duplicate key and REJECTED, never resolved by guessing.",
+  "summary": {
+    "bandsMeasured": 13,
+    "bandsWithError": 0,
+    "bandsWithNonZeroCrowding": 10,
+    "candidatesScanned": 152,
+    "duplicateCandidateKeyEntries": 0,
+    "distinctDuplicateKeys": 0,
+    "cleanPairs": 152,
+    "contaminatedPairs": 0,
+    "unpairableDuplicates": 0,
+    "unpairedFullCandidates": 0,
+    "unpairedControlCandidates": 0,
+    "undeclaredDifferingFieldNames": [],
+    "legacyKeyCollisions": 3,
+    "candidatesUnderALegacyKeyCollision": 6
+  },
+  "selfConsistency": [
+    {
+      "id": "SC1_zero_source_implies_zero_direct",
+      "ok": true,
+      "detail": "no candidate of a band with weightedCrowding 0 may carry a non-zero direct scorer contribution"
+    },
+    {
+      "id": "SC2_zero_source_implies_zero_partition",
+      "ok": true,
+      "detail": "no candidate of a band with weightedCrowding 0 may carry a non-zero fixed-candidate partition contribution"
+    },
+    {
+      "id": "SC3_clean_pairs_have_identical_hybrid",
+      "ok": true,
+      "detail": "a clean partition must reconstruct the control breakdown exactly, proving the manifest is complete for it"
+    },
+    {
+      "id": "SC4_no_attributable_total_without_clean_pair",
+      "ok": true,
+      "detail": "attributableTotal must be null whenever the pair is unpairable or contaminated"
+    },
+    {
+      "id": "SC5_no_undeclared_crowding_field",
+      "ok": true,
+      "detail": "every field that moves between the full and zero-crowding candidate must be declared in the manifest"
+    },
+    {
+      "id": "SC6_duplicate_keys_are_never_paired",
+      "ok": true,
+      "detail": "a duplicate candidate key must be rejected, never silently collapsed"
+    },
+    {
+      "id": "SC7_partition_groups_cover_the_total",
+      "ok": true,
+      "detail": "the per-group partition contributions must sum to the whole-partition total within the PROVEN round2 budget of 0.01 x (groups + 1) = 0.07, proving nothing is left over and nothing is double-counted. Observed max discrepancy: 0.03"
+    },
+    {
+      "id": "SC9_partition_groups_are_disjoint_and_cover_the_manifest",
+      "ok": true,
+      "detail": "the partition groups must be pairwise disjoint and their union must equal the declared manifest exactly, or the group sum is not a partition of the total and SC7's linearity argument fails"
+    },
+    {
+      "id": "SC8_direct_zero_groups_are_pure_crowding",
+      "ok": true,
+      "detail": "a zero-substitution group must contain only fields whose entire value IS the crowding quantity, so a band with no neighbours must measure exactly 0 on every one of them"
+    }
+  ],
+  "naturalScan": {
+    "map1": {
+      "seasonsScanned": 80,
+      "crowdedBandSeasonsObserved": 2,
+      "distinctBandsMeasured": 2
+    },
+    "map2": {
+      "seasonsScanned": 80,
+      "crowdedBandSeasonsObserved": 24,
+      "distinctBandsMeasured": 4
+    }
+  },
+  "regression": [
+    {
+      "arm": "before",
+      "label": "F1_adjacent_pair_rich",
+      "action": "move_to_tile:tile:196:90",
+      "oldReported": -3.02,
+      "why": "before-arm equivalent multi-point residual",
+      "matchedCandidates": 2,
+      "legacyKeyWasAmbiguous": true,
+      "legacyKeyFamilies": [
+        "core",
+        "corridor_relocation"
+      ],
+      "correctedIdentities": [
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation"
+      ],
+      "pairStatuses": [
+        "clean_exact_partition",
+        "clean_exact_partition"
+      ],
+      "correctedAttributableTotal": [
+        0.15,
+        0
+      ],
+      "correctedDirectSum": [
+        0.1,
+        0
+      ],
+      "crowdingInputs": [
+        {
+          "nearbyBandPressure": 0.19,
+          "crowdingPenalty": 0.07,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        {
+          "nearbyBandPressure": 0,
+          "crowdingPenalty": 0,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        }
+      ],
+      "diagnosis": "the superseded key was ambiguous here: two candidates of DIFFERENT families shared `${type}:${targetTileId}`, `new Map(...)` kept only the last, and the old instrument subtracted two different candidates' scores. The corrected identity separates them.",
+      "verdict": "CLEAN_EXACT_CONTRIBUTION"
+    },
+    {
+      "arm": "before",
+      "label": "F2_solo_control_rich",
+      "action": "move_to_tile:tile:196:90",
+      "oldReported": -3.39,
+      "why": "before-arm solo control",
+      "matchedCandidates": 2,
+      "legacyKeyWasAmbiguous": true,
+      "legacyKeyFamilies": [
+        "core",
+        "corridor_relocation"
+      ],
+      "correctedIdentities": [
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+        "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation"
+      ],
+      "pairStatuses": [
+        "clean_exact_partition",
+        "clean_exact_partition"
+      ],
+      "correctedAttributableTotal": [
+        0,
+        0
+      ],
+      "correctedDirectSum": [
+        0,
+        0
+      ],
+      "crowdingInputs": [
+        {
+          "nearbyBandPressure": 0,
+          "crowdingPenalty": 0,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        },
+        {
+          "nearbyBandPressure": 0,
+          "crowdingPenalty": 0,
+          "crowdingExploreBoost": 0,
+          "saturationExploreBoost": 0,
+          "rangeSaturation": 0,
+          "socialAccessRisk": 0,
+          "daughterDispersalExploreBoost": 0
+        }
+      ],
+      "diagnosis": "the superseded key was ambiguous here: two candidates of DIFFERENT families shared `${type}:${targetTileId}`, `new Map(...)` kept only the last, and the old instrument subtracted two different candidates' scores. The corrected identity separates them.",
+      "verdict": "CLEAN_EXACT_CONTRIBUTION"
+    }
+  ],
+  "results": [
+    {
+      "label": "F1_adjacent_pair_rich",
+      "bandId": "band:custom:0",
+      "position": "tile:195:90",
+      "source": {
+        "weightedCrowding": 0.15,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.06
+      },
+      "pairing": {
+        "fullCandidates": 15,
+        "controlCandidates": 15,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [
+          {
+            "key": "move_to_tile:tile:196:90",
+            "count": 2,
+            "families": [
+              {
+                "family": "core",
+                "score": 4.33
+              },
+              {
+                "family": "corridor_relocation",
+                "score": 1.31
+              }
+            ]
+          }
+        ],
+        "legacyKeyCollisionCount": 1,
+        "pairedCandidates": 15,
+        "cleanPairs": 15,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 5.74,
+          "controlScore": 5.81,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.04,
+              "zeroCrowding": 0,
+              "delta": -0.04
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.11,
+              "zeroCrowding": 0,
+              "delta": -0.11
+            },
+            "netMovePressure": {
+              "full": 0.0425,
+              "zeroCrowding": 0.038,
+              "delta": -0.0044
+            },
+            "perCapitaReturn": {
+              "full": 0.8261,
+              "zeroCrowding": 0.8357,
+              "delta": 0.0096
+            },
+            "safeFrontierPull": {
+              "full": 0.64,
+              "zeroCrowding": 0.67,
+              "delta": 0.03
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 4.99,
+          "controlScore": 5.13,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "placeAttachmentPull",
+            "rangeSaturation"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "expectedFutureValue": {
+              "full": 0.8387,
+              "zeroCrowding": 0.8681,
+              "delta": 0.0294
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "placeAttachmentPull": {
+              "full": 0.52,
+              "zeroCrowding": 0.54,
+              "delta": 0.02
+            },
+            "rangeSaturation": {
+              "full": 0.15,
+              "zeroCrowding": 0.1,
+              "delta": -0.05
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.75,
+          "controlScore": 4.84,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.04,
+              "zeroCrowding": 0,
+              "delta": -0.04
+            },
+            "expectedFutureValue": {
+              "full": 0.7598,
+              "zeroCrowding": 0.7766,
+              "delta": 0.0168
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.11,
+              "zeroCrowding": 0,
+              "delta": -0.11
+            },
+            "netMovePressure": {
+              "full": 0.0405,
+              "zeroCrowding": 0.0362,
+              "delta": -0.0042
+            },
+            "perCapitaReturn": {
+              "full": 0.8364,
+              "zeroCrowding": 0.846,
+              "delta": 0.0096
+            },
+            "recoveryBenefit": {
+              "full": 0.11,
+              "zeroCrowding": 0.1,
+              "delta": -0.01
+            },
+            "safeFrontierPull": {
+              "full": 0.45,
+              "zeroCrowding": 0.47,
+              "delta": 0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.5,
+          "controlScore": 4.54,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.02,
+              "zeroCrowding": 0,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.7809,
+              "zeroCrowding": 0.7886,
+              "delta": 0.0076
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.05,
+              "zeroCrowding": 0,
+              "delta": -0.05
+            },
+            "netMovePressure": {
+              "full": 0.0428,
+              "zeroCrowding": 0.0384,
+              "delta": -0.0045
+            },
+            "perCapitaReturn": {
+              "full": 0.8352,
+              "zeroCrowding": 0.84,
+              "delta": 0.0048
+            },
+            "safeFrontierPull": {
+              "full": 0.66,
+              "zeroCrowding": 0.67,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.33,
+          "controlScore": 4.48,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.07,
+              "zeroCrowding": 0,
+              "delta": -0.07
+            },
+            "expectedFutureValue": {
+              "full": 0.8156,
+              "zeroCrowding": 0.846,
+              "delta": 0.0304
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.19,
+              "zeroCrowding": 0,
+              "delta": -0.19
+            },
+            "netMovePressure": {
+              "full": 0.0401,
+              "zeroCrowding": 0.0359,
+              "delta": -0.0042
+            },
+            "perCapitaReturn": {
+              "full": 0.8248,
+              "zeroCrowding": 0.8416,
+              "delta": 0.0168
+            },
+            "recoveryBenefit": {
+              "full": 0.11,
+              "zeroCrowding": 0.1,
+              "delta": -0.01
+            },
+            "safeFrontierPull": {
+              "full": 0.63,
+              "zeroCrowding": 0.67,
+              "delta": 0.04
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.22,
+          "controlScore": 4.25,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.02,
+              "zeroCrowding": 0,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.7009,
+              "zeroCrowding": 0.7085,
+              "delta": 0.0076
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.05,
+              "zeroCrowding": 0,
+              "delta": -0.05
+            },
+            "netMovePressure": {
+              "full": 0.0416,
+              "zeroCrowding": 0.0372,
+              "delta": -0.0043
+            },
+            "perCapitaReturn": {
+              "full": 0.8542,
+              "zeroCrowding": 0.859,
+              "delta": 0.0048
+            },
+            "recoveryBenefit": {
+              "full": 0.11,
+              "zeroCrowding": 0.1,
+              "delta": -0.01
+            },
+            "safeFrontierPull": {
+              "full": 0.46,
+              "zeroCrowding": 0.47,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.99,
+          "controlScore": 4.07,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.04,
+              "zeroCrowding": 0,
+              "delta": -0.04
+            },
+            "expectedFutureValue": {
+              "full": 0.8194,
+              "zeroCrowding": 0.8362,
+              "delta": 0.0168
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.11,
+              "zeroCrowding": 0,
+              "delta": -0.11
+            },
+            "netMovePressure": {
+              "full": 0.0415,
+              "zeroCrowding": 0.0371,
+              "delta": -0.0043
+            },
+            "perCapitaReturn": {
+              "full": 0.8501,
+              "zeroCrowding": 0.8597,
+              "delta": 0.0096
+            },
+            "recoveryBenefit": {
+              "full": 0.11,
+              "zeroCrowding": 0.1,
+              "delta": -0.01
+            },
+            "safeFrontierPull": {
+              "full": 0.65,
+              "zeroCrowding": 0.67,
+              "delta": 0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.82,
+          "controlScore": 3.93,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.07,
+              "zeroCrowding": 0,
+              "delta": -0.07
+            },
+            "expectedFutureValue": {
+              "full": 0.7438,
+              "zeroCrowding": 0.767,
+              "delta": 0.0232
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.16,
+              "zeroCrowding": 0,
+              "delta": -0.16
+            },
+            "netMovePressure": {
+              "full": 0.0419,
+              "zeroCrowding": 0.0375,
+              "delta": -0.0044
+            },
+            "perCapitaReturn": {
+              "full": 0.8571,
+              "zeroCrowding": 0.8739,
+              "delta": 0.0168
+            },
+            "recoveryBenefit": {
+              "full": 0.11,
+              "zeroCrowding": 0.1,
+              "delta": -0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.71,
+          "controlScore": 3.84,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "expectedFutureValue": {
+              "full": 0.6582,
+              "zeroCrowding": 0.6838,
+              "delta": 0.0256
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "netMovePressure": {
+              "full": 0.0406,
+              "zeroCrowding": 0.0364,
+              "delta": -0.0042
+            },
+            "perCapitaReturn": {
+              "full": 0.8332,
+              "zeroCrowding": 0.8476,
+              "delta": 0.0144
+            },
+            "recoveryBenefit": {
+              "full": 0.11,
+              "zeroCrowding": 0.1,
+              "delta": -0.01
+            },
+            "safeFrontierPull": {
+              "full": 0.52,
+              "zeroCrowding": 0.56,
+              "delta": 0.04
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.67,
+          "controlScore": 3.67,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.64,
+          "controlScore": 3.76,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "expectedFutureValue": {
+              "full": 0.8041,
+              "zeroCrowding": 0.8285,
+              "delta": 0.0244
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "netMovePressure": {
+              "full": 0.0425,
+              "zeroCrowding": 0.0381,
+              "delta": -0.0044
+            },
+            "perCapitaReturn": {
+              "full": 0.858,
+              "zeroCrowding": 0.8724,
+              "delta": 0.0144
+            },
+            "recoveryBenefit": {
+              "full": 0.11,
+              "zeroCrowding": 0.1,
+              "delta": -0.01
+            },
+            "safeFrontierPull": {
+              "full": 0.81,
+              "zeroCrowding": 0.84,
+              "delta": 0.03
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:197:88|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.58,
+          "controlScore": 3.58,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "resource_scout:tile:196:90|origin=tile:195:90|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.59,
+          "controlScore": 2.59,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation",
+          "actionType": "move_to_tile",
+          "family": "corridor_relocation",
+          "score": 1.31,
+          "controlScore": 1.31,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:197:89|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 0.41,
+          "controlScore": 0.41,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "F2_solo_control_rich",
+      "bandId": "band:custom:0",
+      "position": "tile:195:90",
+      "source": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "crowdingPenalty": 0
+      },
+      "pairing": {
+        "fullCandidates": 15,
+        "controlCandidates": 15,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [
+          {
+            "key": "move_to_tile:tile:196:90",
+            "count": 2,
+            "families": [
+              {
+                "family": "core",
+                "score": 4.71
+              },
+              {
+                "family": "corridor_relocation",
+                "score": 1.32
+              }
+            ]
+          }
+        ],
+        "legacyKeyCollisionCount": 1,
+        "pairedCandidates": 15,
+        "cleanPairs": 15,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 5.94,
+          "controlScore": 5.94,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 5.48,
+          "controlScore": 5.48,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 5.03,
+          "controlScore": 5.03,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.71,
+          "controlScore": 4.71,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.71,
+          "controlScore": 4.71,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.42,
+          "controlScore": 4.42,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.28,
+          "controlScore": 4.28,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.26,
+          "controlScore": 4.26,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.07,
+          "controlScore": 4.07,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.96,
+          "controlScore": 3.96,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.65,
+          "controlScore": 3.65,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:197:88|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.59,
+          "controlScore": 3.59,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "resource_scout:tile:196:90|origin=tile:195:90|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.61,
+          "controlScore": 2.61,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation",
+          "actionType": "move_to_tile",
+          "family": "corridor_relocation",
+          "score": 1.32,
+          "controlScore": 1.32,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:197:89|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 0.41,
+          "controlScore": 0.41,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "F3_adjacent_pair_dry",
+      "bandId": "band:custom:0",
+      "position": "tile:60:132",
+      "source": {
+        "weightedCrowding": 0.21,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.14
+      },
+      "pairing": {
+        "fullCandidates": 15,
+        "controlCandidates": 15,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [],
+        "legacyKeyCollisionCount": 0,
+        "pairedCandidates": 15,
+        "cleanPairs": 15,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "logistical_probe:tile:58:133|origin=tile:60:132|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.41,
+          "controlScore": 3.41,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "resource_scout:tile:59:132|origin=tile:60:132|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.88,
+          "controlScore": 2.88,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:59:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.68,
+          "controlScore": 1.85,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.1,
+              "zeroCrowding": 0,
+              "delta": -0.1
+            },
+            "daughterDispersalPressure": {
+              "full": 0.27,
+              "zeroCrowding": 0.25,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.2564,
+              "zeroCrowding": 0.2855,
+              "delta": 0.0291
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "perCapitaReturn": {
+              "full": 0.2592,
+              "zeroCrowding": 0.2832,
+              "delta": 0.024
+            },
+            "safeFrontierPull": {
+              "full": 0.05,
+              "zeroCrowding": 0.09,
+              "delta": 0.04
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:60:131|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.28,
+          "controlScore": 1.45,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.1,
+              "zeroCrowding": 0,
+              "delta": -0.1
+            },
+            "daughterDispersalPressure": {
+              "full": 0.28,
+              "zeroCrowding": 0.25,
+              "delta": -0.03
+            },
+            "expectedFutureValue": {
+              "full": 0.4087,
+              "zeroCrowding": 0.436,
+              "delta": 0.0273
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "perCapitaReturn": {
+              "full": 0.3003,
+              "zeroCrowding": 0.3243,
+              "delta": 0.024
+            },
+            "safeFrontierPull": {
+              "full": 0.06,
+              "zeroCrowding": 0.1,
+              "delta": 0.04
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:59:131|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.21,
+          "controlScore": 1.3,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.05,
+              "zeroCrowding": 0,
+              "delta": -0.05
+            },
+            "daughterDispersalPressure": {
+              "full": 0.26,
+              "zeroCrowding": 0.25,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.3101,
+              "zeroCrowding": 0.3242,
+              "delta": 0.0142
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.07,
+              "zeroCrowding": 0,
+              "delta": -0.07
+            },
+            "perCapitaReturn": {
+              "full": 0.2813,
+              "zeroCrowding": 0.2933,
+              "delta": 0.012
+            },
+            "safeFrontierPull": {
+              "full": 0.07,
+              "zeroCrowding": 0.09,
+              "delta": 0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:60:130|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.22,
+          "controlScore": 1.3,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.04,
+              "zeroCrowding": 0,
+              "delta": -0.04
+            },
+            "daughterDispersalPressure": {
+              "full": 0.26,
+              "zeroCrowding": 0.25,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.4301,
+              "zeroCrowding": 0.4427,
+              "delta": 0.0126
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.07,
+              "zeroCrowding": 0,
+              "delta": -0.07
+            },
+            "perCapitaReturn": {
+              "full": 0.3134,
+              "zeroCrowding": 0.323,
+              "delta": 0.0096
+            },
+            "safeFrontierPull": {
+              "full": 0.08,
+              "zeroCrowding": 0.1,
+              "delta": 0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:62:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.01,
+          "controlScore": 1.25,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.14,
+              "zeroCrowding": 0,
+              "delta": -0.14
+            },
+            "daughterDispersalPressure": {
+              "full": 0.29,
+              "zeroCrowding": 0.25,
+              "delta": -0.04
+            },
+            "expectedFutureValue": {
+              "full": 0.308,
+              "zeroCrowding": 0.3467,
+              "delta": 0.0387
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.22,
+              "zeroCrowding": 0,
+              "delta": -0.22
+            },
+            "perCapitaReturn": {
+              "full": 0.3468,
+              "zeroCrowding": 0.3804,
+              "delta": 0.0336
+            },
+            "safeFrontierPull": {
+              "full": 0.06,
+              "zeroCrowding": 0.11,
+              "delta": 0.05
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:58:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1,
+          "controlScore": 1.08,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.05,
+              "zeroCrowding": 0,
+              "delta": -0.05
+            },
+            "daughterDispersalPressure": {
+              "full": 0.27,
+              "zeroCrowding": 0.25,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.1396,
+              "zeroCrowding": 0.1519,
+              "delta": 0.0124
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.07,
+              "zeroCrowding": 0,
+              "delta": -0.07
+            },
+            "perCapitaReturn": {
+              "full": 0.2508,
+              "zeroCrowding": 0.2628,
+              "delta": 0.012
+            },
+            "safeFrontierPull": {
+              "full": 0.15,
+              "zeroCrowding": 0.17,
+              "delta": 0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:60:133|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.94,
+          "controlScore": 1.1,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.1,
+              "zeroCrowding": 0,
+              "delta": -0.1
+            },
+            "daughterDispersalPressure": {
+              "full": 0.28,
+              "zeroCrowding": 0.25,
+              "delta": -0.03
+            },
+            "expectedFutureValue": {
+              "full": 0.1455,
+              "zeroCrowding": 0.1716,
+              "delta": 0.0261
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "perCapitaReturn": {
+              "full": 0.2852,
+              "zeroCrowding": 0.3092,
+              "delta": 0.024
+            },
+            "safeFrontierPull": {
+              "full": 0.06,
+              "zeroCrowding": 0.09,
+              "delta": 0.03
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:59:133|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.9,
+          "controlScore": 0.99,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.05,
+              "zeroCrowding": 0,
+              "delta": -0.05
+            },
+            "daughterDispersalPressure": {
+              "full": 0.28,
+              "zeroCrowding": 0.26,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.1044,
+              "zeroCrowding": 0.1167,
+              "delta": 0.0124
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.07,
+              "zeroCrowding": 0,
+              "delta": -0.07
+            },
+            "perCapitaReturn": {
+              "full": 0.2707,
+              "zeroCrowding": 0.2827,
+              "delta": 0.012
+            },
+            "safeFrontierPull": {
+              "full": 0.24,
+              "zeroCrowding": 0.26,
+              "delta": 0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "stay:tile:60:132|origin=tile:60:132|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 0.78,
+          "controlScore": 1.03,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "placeAttachmentPull",
+            "rangeSaturation"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.14,
+              "zeroCrowding": 0,
+              "delta": -0.14
+            },
+            "daughterDispersalPressure": {
+              "full": 0.29,
+              "zeroCrowding": 0.25,
+              "delta": -0.04
+            },
+            "expectedFutureValue": {
+              "full": 0.0256,
+              "zeroCrowding": 0.0858,
+              "delta": 0.0602
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.21,
+              "zeroCrowding": 0,
+              "delta": -0.21
+            },
+            "placeAttachmentPull": {
+              "full": 0,
+              "zeroCrowding": 0.02,
+              "delta": 0.02
+            },
+            "rangeSaturation": {
+              "full": 0.64,
+              "zeroCrowding": 0.57,
+              "delta": -0.07
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:61:132|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.73,
+          "controlScore": 1.03,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.18,
+              "zeroCrowding": 0,
+              "delta": -0.18
+            },
+            "daughterDispersalPressure": {
+              "full": 0.3,
+              "zeroCrowding": 0.25,
+              "delta": -0.05
+            },
+            "expectedFutureValue": {
+              "full": 0.2783,
+              "zeroCrowding": 0.3275,
+              "delta": 0.0493
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.28,
+              "zeroCrowding": 0,
+              "delta": -0.28
+            },
+            "perCapitaReturn": {
+              "full": 0.3086,
+              "zeroCrowding": 0.3518,
+              "delta": 0.0432
+            },
+            "safeFrontierPull": {
+              "full": 0.04,
+              "zeroCrowding": 0.1,
+              "delta": 0.06
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:60:134|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.57,
+          "controlScore": 0.64,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.05,
+              "zeroCrowding": 0,
+              "delta": -0.05
+            },
+            "daughterDispersalPressure": {
+              "full": 0.28,
+              "zeroCrowding": 0.26,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.0925,
+              "zeroCrowding": 0.1037,
+              "delta": 0.0112
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.07,
+              "zeroCrowding": 0,
+              "delta": -0.07
+            },
+            "perCapitaReturn": {
+              "full": 0.2935,
+              "zeroCrowding": 0.3055,
+              "delta": 0.012
+            },
+            "safeFrontierPull": {
+              "full": 0.25,
+              "zeroCrowding": 0.26,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:61:131|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.47,
+          "controlScore": 0.7,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.14,
+              "zeroCrowding": 0,
+              "delta": -0.14
+            },
+            "daughterDispersalPressure": {
+              "full": 0.29,
+              "zeroCrowding": 0.25,
+              "delta": -0.04
+            },
+            "expectedFutureValue": {
+              "full": 0.317,
+              "zeroCrowding": 0.3549,
+              "delta": 0.0379
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.21,
+              "zeroCrowding": 0,
+              "delta": -0.21
+            },
+            "perCapitaReturn": {
+              "full": 0.317,
+              "zeroCrowding": 0.3506,
+              "delta": 0.0336
+            },
+            "safeFrontierPull": {
+              "full": 0.05,
+              "zeroCrowding": 0.1,
+              "delta": 0.05
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:61:133|origin=tile:60:132|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.25,
+          "controlScore": 0.48,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.14,
+              "zeroCrowding": 0,
+              "delta": -0.14
+            },
+            "daughterDispersalPressure": {
+              "full": 0.29,
+              "zeroCrowding": 0.25,
+              "delta": -0.04
+            },
+            "expectedFutureValue": {
+              "full": 0.133,
+              "zeroCrowding": 0.1717,
+              "delta": 0.0387
+            },
+            "mobilityPressure": {
+              "full": 0.9,
+              "zeroCrowding": 0.87,
+              "delta": -0.03
+            },
+            "nearbyBandPressure": {
+              "full": 0.22,
+              "zeroCrowding": 0,
+              "delta": -0.22
+            },
+            "perCapitaReturn": {
+              "full": 0.3126,
+              "zeroCrowding": 0.3462,
+              "delta": 0.0336
+            },
+            "safeFrontierPull": {
+              "full": 0.05,
+              "zeroCrowding": 0.1,
+              "delta": 0.05
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "F4_three_neighbours_rich",
+      "bandId": "band:custom:0",
+      "position": "tile:195:90",
+      "source": {
+        "weightedCrowding": 0.44,
+        "nearbyBandCount": 3,
+        "crowdingBandIds": [
+          "band:custom:1",
+          "band:custom:2",
+          "band:custom:3"
+        ],
+        "crowdingPenalty": 0.17
+      },
+      "pairing": {
+        "fullCandidates": 11,
+        "controlCandidates": 11,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [],
+        "legacyKeyCollisionCount": 0,
+        "pairedCandidates": 11,
+        "cleanPairs": 11,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 5.07,
+          "controlScore": 5.31,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.13,
+              "zeroCrowding": 0,
+              "delta": -0.13
+            },
+            "daughterDispersalPressure": {
+              "full": 0.17,
+              "zeroCrowding": 0.11,
+              "delta": -0.06
+            },
+            "expectedFutureValue": {
+              "full": 0.9177,
+              "zeroCrowding": 0.9603,
+              "delta": 0.0425
+            },
+            "mobilityPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0.35,
+              "delta": -0.05
+            },
+            "nearbyBandPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0,
+              "delta": -0.34
+            },
+            "netMovePressure": {
+              "full": 0.1279,
+              "zeroCrowding": 0.1025,
+              "delta": -0.0255
+            },
+            "perCapitaReturn": {
+              "full": 0.7941,
+              "zeroCrowding": 0.8253,
+              "delta": 0.0312
+            },
+            "recoveryBenefit": {
+              "full": 0.26,
+              "zeroCrowding": 0.23,
+              "delta": -0.03
+            },
+            "safeFrontierPull": {
+              "full": 0.59,
+              "zeroCrowding": 0.67,
+              "delta": 0.08
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.98,
+          "controlScore": 5.27,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "daughterDispersalPressure": {
+              "full": 0.18,
+              "zeroCrowding": 0.11,
+              "delta": -0.07
+            },
+            "expectedFutureValue": {
+              "full": 0.8188,
+              "zeroCrowding": 0.8687,
+              "delta": 0.0499
+            },
+            "mobilityPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0.35,
+              "delta": -0.05
+            },
+            "nearbyBandPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0,
+              "delta": -0.4
+            },
+            "netMovePressure": {
+              "full": 0.1312,
+              "zeroCrowding": 0.1052,
+              "delta": -0.026
+            },
+            "perCapitaReturn": {
+              "full": 0.7992,
+              "zeroCrowding": 0.8352,
+              "delta": 0.036
+            },
+            "recoveryBenefit": {
+              "full": 0.27,
+              "zeroCrowding": 0.24,
+              "delta": -0.03
+            },
+            "safeFrontierPull": {
+              "full": 0.58,
+              "zeroCrowding": 0.67,
+              "delta": 0.09
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.64,
+          "controlScore": 4.93,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "daughterDispersalPressure": {
+              "full": 0.18,
+              "zeroCrowding": 0.11,
+              "delta": -0.07
+            },
+            "expectedFutureValue": {
+              "full": 0.8682,
+              "zeroCrowding": 0.9181,
+              "delta": 0.0499
+            },
+            "mobilityPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0.35,
+              "delta": -0.05
+            },
+            "nearbyBandPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0,
+              "delta": -0.4
+            },
+            "netMovePressure": {
+              "full": 0.1362,
+              "zeroCrowding": 0.1094,
+              "delta": -0.0269
+            },
+            "perCapitaReturn": {
+              "full": 0.811,
+              "zeroCrowding": 0.847,
+              "delta": 0.036
+            },
+            "recoveryBenefit": {
+              "full": 0.28,
+              "zeroCrowding": 0.25,
+              "delta": -0.03
+            },
+            "safeFrontierPull": {
+              "full": 0.58,
+              "zeroCrowding": 0.67,
+              "delta": 0.09
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 4.01,
+          "controlScore": 4.43,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "placeAttachmentPull",
+            "rangeSaturation"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.17,
+              "zeroCrowding": 0,
+              "delta": -0.17
+            },
+            "daughterDispersalPressure": {
+              "full": 0.19,
+              "zeroCrowding": 0.11,
+              "delta": -0.08
+            },
+            "expectedFutureValue": {
+              "full": 0.5647,
+              "zeroCrowding": 0.6746,
+              "delta": 0.1099
+            },
+            "mobilityPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0.35,
+              "delta": -0.05
+            },
+            "nearbyBandPressure": {
+              "full": 0.44,
+              "zeroCrowding": 0,
+              "delta": -0.44
+            },
+            "placeAttachmentPull": {
+              "full": 0.07,
+              "zeroCrowding": 0.11,
+              "delta": 0.04
+            },
+            "rangeSaturation": {
+              "full": 0.39,
+              "zeroCrowding": 0.24,
+              "delta": -0.15
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.73,
+          "controlScore": 4.02,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "daughterDispersalPressure": {
+              "full": 0.18,
+              "zeroCrowding": 0.11,
+              "delta": -0.07
+            },
+            "expectedFutureValue": {
+              "full": 0.8044,
+              "zeroCrowding": 0.8543,
+              "delta": 0.0499
+            },
+            "mobilityPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0.35,
+              "delta": -0.05
+            },
+            "nearbyBandPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0,
+              "delta": -0.4
+            },
+            "netMovePressure": {
+              "full": 0.1167,
+              "zeroCrowding": 0.0931,
+              "delta": -0.0236
+            },
+            "perCapitaReturn": {
+              "full": 0.7648,
+              "zeroCrowding": 0.8008,
+              "delta": 0.036
+            },
+            "recoveryBenefit": {
+              "full": 0.22,
+              "zeroCrowding": 0.19,
+              "delta": -0.03
+            },
+            "safeFrontierPull": {
+              "full": 0.57,
+              "zeroCrowding": 0.66,
+              "delta": 0.09
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.33,
+          "controlScore": 3.54,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.12,
+              "zeroCrowding": 0,
+              "delta": -0.12
+            },
+            "daughterDispersalPressure": {
+              "full": 0.18,
+              "zeroCrowding": 0.13,
+              "delta": -0.05
+            },
+            "expectedFutureValue": {
+              "full": 0.7367,
+              "zeroCrowding": 0.7715,
+              "delta": 0.0347
+            },
+            "mobilityPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0.35,
+              "delta": -0.05
+            },
+            "nearbyBandPressure": {
+              "full": 0.27,
+              "zeroCrowding": 0,
+              "delta": -0.27
+            },
+            "netMovePressure": {
+              "full": 0.121,
+              "zeroCrowding": 0.0967,
+              "delta": -0.0243
+            },
+            "perCapitaReturn": {
+              "full": 0.8022,
+              "zeroCrowding": 0.831,
+              "delta": 0.0288
+            },
+            "recoveryBenefit": {
+              "full": 0.22,
+              "zeroCrowding": 0.19,
+              "delta": -0.03
+            },
+            "safeFrontierPull": {
+              "full": 0.83,
+              "zeroCrowding": 0.89,
+              "delta": 0.06
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.12,
+          "controlScore": 3.35,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.12,
+              "zeroCrowding": 0,
+              "delta": -0.12
+            },
+            "daughterDispersalPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0.09,
+              "delta": -0.06
+            },
+            "expectedFutureValue": {
+              "full": 0.9194,
+              "zeroCrowding": 0.9576,
+              "delta": 0.0381
+            },
+            "mobilityPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0.35,
+              "delta": -0.05
+            },
+            "nearbyBandPressure": {
+              "full": 0.32,
+              "zeroCrowding": 0,
+              "delta": -0.32
+            },
+            "netMovePressure": {
+              "full": 0.1284,
+              "zeroCrowding": 0.1029,
+              "delta": -0.0256
+            },
+            "perCapitaReturn": {
+              "full": 0.8023,
+              "zeroCrowding": 0.8311,
+              "delta": 0.0288
+            },
+            "recoveryBenefit": {
+              "full": 0.25,
+              "zeroCrowding": 0.23,
+              "delta": -0.02
+            },
+            "safeFrontierPull": {
+              "full": 0.4,
+              "zeroCrowding": 0.47,
+              "delta": 0.07
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.73,
+          "controlScore": 2.89,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.09,
+              "zeroCrowding": 0,
+              "delta": -0.09
+            },
+            "daughterDispersalPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0.11,
+              "delta": -0.04
+            },
+            "expectedFutureValue": {
+              "full": 0.7833,
+              "zeroCrowding": 0.8115,
+              "delta": 0.0282
+            },
+            "mobilityPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0.35,
+              "delta": -0.05
+            },
+            "nearbyBandPressure": {
+              "full": 0.24,
+              "zeroCrowding": 0,
+              "delta": -0.24
+            },
+            "netMovePressure": {
+              "full": 0.1249,
+              "zeroCrowding": 0.0999,
+              "delta": -0.025
+            },
+            "perCapitaReturn": {
+              "full": 0.8178,
+              "zeroCrowding": 0.8394,
+              "delta": 0.0216
+            },
+            "recoveryBenefit": {
+              "full": 0.22,
+              "zeroCrowding": 0.19,
+              "delta": -0.03
+            },
+            "safeFrontierPull": {
+              "full": 0.62,
+              "zeroCrowding": 0.67,
+              "delta": 0.05
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:193:86|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 2.67,
+          "controlScore": 2.67,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0.35,
+              "delta": -0.05
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.56,
+          "controlScore": 2.72,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.09,
+              "zeroCrowding": 0,
+              "delta": -0.09
+            },
+            "daughterDispersalPressure": {
+              "full": 0.14,
+              "zeroCrowding": 0.09,
+              "delta": -0.05
+            },
+            "expectedFutureValue": {
+              "full": 0.8157,
+              "zeroCrowding": 0.8421,
+              "delta": 0.0264
+            },
+            "mobilityPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0.35,
+              "delta": -0.05
+            },
+            "nearbyBandPressure": {
+              "full": 0.24,
+              "zeroCrowding": 0,
+              "delta": -0.24
+            },
+            "netMovePressure": {
+              "full": 0.1243,
+              "zeroCrowding": 0.0994,
+              "delta": -0.0249
+            },
+            "perCapitaReturn": {
+              "full": 0.7903,
+              "zeroCrowding": 0.8119,
+              "delta": 0.0216
+            },
+            "recoveryBenefit": {
+              "full": 0.25,
+              "zeroCrowding": 0.22,
+              "delta": -0.03
+            },
+            "safeFrontierPull": {
+              "full": 0.41,
+              "zeroCrowding": 0.46,
+              "delta": 0.05
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.31,
+          "controlScore": 2.39,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.05,
+              "zeroCrowding": 0,
+              "delta": -0.05
+            },
+            "daughterDispersalPressure": {
+              "full": 0.11,
+              "zeroCrowding": 0.09,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.799,
+              "zeroCrowding": 0.814,
+              "delta": 0.015
+            },
+            "mobilityPressure": {
+              "full": 0.4,
+              "zeroCrowding": 0.35,
+              "delta": -0.05
+            },
+            "nearbyBandPressure": {
+              "full": 0.14,
+              "zeroCrowding": 0,
+              "delta": -0.14
+            },
+            "netMovePressure": {
+              "full": 0.1268,
+              "zeroCrowding": 0.1015,
+              "delta": -0.0253
+            },
+            "perCapitaReturn": {
+              "full": 0.8357,
+              "zeroCrowding": 0.8477,
+              "delta": 0.012
+            },
+            "recoveryBenefit": {
+              "full": 0.22,
+              "zeroCrowding": 0.19,
+              "delta": -0.03
+            },
+            "safeFrontierPull": {
+              "full": 0.44,
+              "zeroCrowding": 0.47,
+              "delta": 0.03
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "F5_explore_frontier_crowded",
+      "bandId": "band:custom:0",
+      "position": "tile:195:90",
+      "source": {
+        "weightedCrowding": 0.15,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.06
+      },
+      "pairing": {
+        "fullCandidates": 9,
+        "controlCandidates": 9,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [],
+        "legacyKeyCollisionCount": 0,
+        "pairedCandidates": 9,
+        "cleanPairs": 9,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 5,
+          "controlScore": 5.14,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "depletionPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "placeAttachmentPull",
+            "rangeSaturation"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "depletionPenalty": {
+              "full": 0.09,
+              "zeroCrowding": 0.08,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.8419,
+              "zeroCrowding": 0.8722,
+              "delta": 0.0303
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "placeAttachmentPull": {
+              "full": 0.52,
+              "zeroCrowding": 0.54,
+              "delta": 0.02
+            },
+            "rangeSaturation": {
+              "full": 0.15,
+              "zeroCrowding": 0.1,
+              "delta": -0.05
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.66,
+          "controlScore": 4.7,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.02,
+              "zeroCrowding": 0,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.7992,
+              "zeroCrowding": 0.8065,
+              "delta": 0.0073
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.05,
+              "zeroCrowding": 0,
+              "delta": -0.05
+            },
+            "netMovePressure": {
+              "full": 0.0427,
+              "zeroCrowding": 0.0382,
+              "delta": -0.0045
+            },
+            "perCapitaReturn": {
+              "full": 0.8352,
+              "zeroCrowding": 0.84,
+              "delta": 0.0048
+            },
+            "safeFrontierPull": {
+              "full": 0.83,
+              "zeroCrowding": 0.84,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "explore_unknown_neighbor:tile:195:89|origin=tile:195:90|family=core",
+          "actionType": "explore_unknown_neighbor",
+          "family": "core",
+          "score": 4.59,
+          "controlScore": 4.58,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingExploreBoost",
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "explorationValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "rangeSaturation",
+            "recoveryBenefit",
+            "safeFrontierPull",
+            "saturationExploreBoost"
+          ],
+          "observedFieldDeltas": {
+            "crowdingExploreBoost": {
+              "full": 0.027,
+              "zeroCrowding": 0,
+              "delta": -0.027
+            },
+            "crowdingPenalty": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "expectedFutureValue": {
+              "full": 0.8912,
+              "zeroCrowding": 0.8576,
+              "delta": -0.0336
+            },
+            "explorationValue": {
+              "full": 0.8804,
+              "zeroCrowding": 0.8468,
+              "delta": -0.0336
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "netMovePressure": {
+              "full": 0.21,
+              "zeroCrowding": 0.19,
+              "delta": -0.02
+            },
+            "rangeSaturation": {
+              "full": 0.15,
+              "zeroCrowding": 0.1,
+              "delta": -0.05
+            },
+            "recoveryBenefit": {
+              "full": 0.1055,
+              "zeroCrowding": 0.0987,
+              "delta": -0.0068
+            },
+            "safeFrontierPull": {
+              "full": 0.98,
+              "zeroCrowding": 1,
+              "delta": 0.02
+            },
+            "saturationExploreBoost": {
+              "full": 0.033,
+              "zeroCrowding": 0.022,
+              "delta": -0.011
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.28,
+          "controlScore": 4.32,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.02,
+              "zeroCrowding": 0,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.7096,
+              "zeroCrowding": 0.7168,
+              "delta": 0.0073
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.05,
+              "zeroCrowding": 0,
+              "delta": -0.05
+            },
+            "netMovePressure": {
+              "full": 0.0414,
+              "zeroCrowding": 0.0371,
+              "delta": -0.0043
+            },
+            "perCapitaReturn": {
+              "full": 0.8542,
+              "zeroCrowding": 0.859,
+              "delta": 0.0048
+            },
+            "recoveryBenefit": {
+              "full": 0.11,
+              "zeroCrowding": 0.1,
+              "delta": -0.01
+            },
+            "safeFrontierPull": {
+              "full": 0.55,
+              "zeroCrowding": 0.56,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.83,
+          "controlScore": 3.96,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "expectedFutureValue": {
+              "full": 0.6765,
+              "zeroCrowding": 0.7018,
+              "delta": 0.0252
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "netMovePressure": {
+              "full": 0.0405,
+              "zeroCrowding": 0.0362,
+              "delta": -0.0043
+            },
+            "perCapitaReturn": {
+              "full": 0.8332,
+              "zeroCrowding": 0.8476,
+              "delta": 0.0144
+            },
+            "recoveryBenefit": {
+              "full": 0.11,
+              "zeroCrowding": 0.1,
+              "delta": -0.01
+            },
+            "safeFrontierPull": {
+              "full": 0.69,
+              "zeroCrowding": 0.73,
+              "delta": 0.04
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.82,
+          "controlScore": 3.93,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.07,
+              "zeroCrowding": 0,
+              "delta": -0.07
+            },
+            "expectedFutureValue": {
+              "full": 0.7417,
+              "zeroCrowding": 0.7645,
+              "delta": 0.0228
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.16,
+              "zeroCrowding": 0,
+              "delta": -0.16
+            },
+            "netMovePressure": {
+              "full": 0.0418,
+              "zeroCrowding": 0.0374,
+              "delta": -0.0044
+            },
+            "perCapitaReturn": {
+              "full": 0.8571,
+              "zeroCrowding": 0.8739,
+              "delta": 0.0168
+            },
+            "recoveryBenefit": {
+              "full": 0.11,
+              "zeroCrowding": 0.1,
+              "delta": -0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.77,
+          "controlScore": 3.88,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "expectedFutureValue": {
+              "full": 0.8224,
+              "zeroCrowding": 0.8452,
+              "delta": 0.0228
+            },
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "netMovePressure": {
+              "full": 0.0424,
+              "zeroCrowding": 0.0379,
+              "delta": -0.0044
+            },
+            "perCapitaReturn": {
+              "full": 0.858,
+              "zeroCrowding": 0.8724,
+              "delta": 0.0144
+            },
+            "recoveryBenefit": {
+              "full": 0.11,
+              "zeroCrowding": 0.1,
+              "delta": -0.01
+            },
+            "safeFrontierPull": {
+              "full": 0.98,
+              "zeroCrowding": 1,
+              "delta": 0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.67,
+          "controlScore": 3.67,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.34,
+              "zeroCrowding": 0.32,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "resource_scout:tile:196:90|origin=tile:195:90|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.59,
+          "controlScore": 2.59,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "F6_explore_frontier_solo_control",
+      "bandId": "band:custom:0",
+      "position": "tile:195:90",
+      "source": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "crowdingPenalty": 0
+      },
+      "pairing": {
+        "fullCandidates": 9,
+        "controlCandidates": 9,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [],
+        "legacyKeyCollisionCount": 0,
+        "pairedCandidates": 9,
+        "cleanPairs": 9,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 5.48,
+          "controlScore": 5.48,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.84,
+          "controlScore": 4.84,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "explore_unknown_neighbor:tile:195:89|origin=tile:195:90|family=core",
+          "actionType": "explore_unknown_neighbor",
+          "family": "core",
+          "score": 4.75,
+          "controlScore": 4.75,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.49,
+          "controlScore": 4.49,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.28,
+          "controlScore": 4.28,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.19,
+          "controlScore": 4.19,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.07,
+          "controlScore": 4.07,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.65,
+          "controlScore": 3.65,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "resource_scout:tile:196:90|origin=tile:195:90|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.61,
+          "controlScore": 2.61,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "P1_zero_crowding_control",
+      "bandId": "band:custom:0",
+      "position": "tile:195:90",
+      "source": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "crowdingBandIds": [],
+        "crowdingPenalty": 0
+      },
+      "pairing": {
+        "fullCandidates": 15,
+        "controlCandidates": 15,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [
+          {
+            "key": "move_to_tile:tile:196:90",
+            "count": 2,
+            "families": [
+              {
+                "family": "core",
+                "score": 4.71
+              },
+              {
+                "family": "corridor_relocation",
+                "score": 1.32
+              }
+            ]
+          }
+        ],
+        "legacyKeyCollisionCount": 1,
+        "pairedCandidates": 15,
+        "cleanPairs": 15,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "move_to_tile:tile:194:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 5.94,
+          "controlScore": 5.94,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "stay:tile:195:90|origin=tile:195:90|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 5.48,
+          "controlScore": 5.48,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 5.03,
+          "controlScore": 5.03,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:194:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.71,
+          "controlScore": 4.71,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.71,
+          "controlScore": 4.71,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:88|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.42,
+          "controlScore": 4.42,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:197:90|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.28,
+          "controlScore": 4.28,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:195:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.26,
+          "controlScore": 4.26,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:89|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.07,
+          "controlScore": 4.07,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:91|origin=tile:195:90|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.96,
+          "controlScore": 3.96,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:192:85|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.65,
+          "controlScore": 3.65,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:197:88|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 3.59,
+          "controlScore": 3.59,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "resource_scout:tile:196:90|origin=tile:195:90|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.61,
+          "controlScore": 2.61,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:196:90|origin=tile:195:90|family=corridor_relocation",
+          "actionType": "move_to_tile",
+          "family": "corridor_relocation",
+          "score": 1.32,
+          "controlScore": 1.32,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:197:89|origin=tile:195:90|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 0.41,
+          "controlScore": 0.41,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "N_map1_s44_band:delta-coastal-foragers",
+      "bandId": "band:delta-coastal-foragers",
+      "position": "tile:121:60",
+      "source": {
+        "weightedCrowding": 0.03,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:lake-wetland-foragers"
+        ],
+        "crowdingPenalty": 0.01
+      },
+      "pairing": {
+        "fullCandidates": 9,
+        "controlCandidates": 9,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [],
+        "legacyKeyCollisionCount": 0,
+        "pairedCandidates": 9,
+        "cleanPairs": 9,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "move_to_tile:tile:122:60|origin=tile:121:60|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 5.81,
+          "controlScore": 5.81,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:123:60|origin=tile:121:60|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.33,
+          "controlScore": 3.33,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:121:59|origin=tile:121:60|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.15,
+          "controlScore": 3.15,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:122:59|origin=tile:121:60|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.88,
+          "controlScore": 2.88,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:121:58|origin=tile:121:60|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.05,
+          "controlScore": 2.05,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "resource_scout:tile:125:60|origin=tile:121:60|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 1.2,
+          "controlScore": 1.2,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:119:59|origin=tile:121:60|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": -0.07,
+          "controlScore": -0.07,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "stay:tile:121:60|origin=tile:121:60|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": -5.76,
+          "controlScore": -5.74,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "nearbyBandPressure",
+            "rangeSaturation"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.01,
+              "zeroCrowding": 0,
+              "delta": -0.01
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "rangeSaturation": {
+              "full": 0.12,
+              "zeroCrowding": 0.11,
+              "delta": -0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:120:59|origin=tile:121:60|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": -8.29,
+          "controlScore": -8.27,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "nearbyBandPressure",
+            "perCapitaReturn"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.01,
+              "zeroCrowding": 0,
+              "delta": -0.01
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "perCapitaReturn": {
+              "full": 0.7081,
+              "zeroCrowding": 0.7105,
+              "delta": 0.0024
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "N_map1_s44_band:lake-wetland-foragers",
+      "bandId": "band:lake-wetland-foragers",
+      "position": "tile:120:63",
+      "source": {
+        "weightedCrowding": 0.03,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:delta-coastal-foragers"
+        ],
+        "crowdingPenalty": 0.01
+      },
+      "pairing": {
+        "fullCandidates": 11,
+        "controlCandidates": 11,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [],
+        "legacyKeyCollisionCount": 0,
+        "pairedCandidates": 11,
+        "cleanPairs": 11,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "move_to_tile:tile:121:63|origin=tile:120:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 5.06,
+          "controlScore": 5.11,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.02,
+              "zeroCrowding": 0,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.716,
+              "zeroCrowding": 0.7248,
+              "delta": 0.0088
+            },
+            "nearbyBandPressure": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "netMovePressure": {
+              "full": 0.1341,
+              "zeroCrowding": 0.1303,
+              "delta": -0.0037
+            },
+            "perCapitaReturn": {
+              "full": 0.7933,
+              "zeroCrowding": 0.7981,
+              "delta": 0.0048
+            },
+            "safeFrontierPull": {
+              "full": 0.45,
+              "zeroCrowding": 0.46,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:122:63|origin=tile:120:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.58,
+          "controlScore": 4.6,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.01,
+              "zeroCrowding": 0,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.6818,
+              "zeroCrowding": 0.6866,
+              "delta": 0.0048
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "netMovePressure": {
+              "full": 0.1391,
+              "zeroCrowding": 0.1352,
+              "delta": -0.0039
+            },
+            "perCapitaReturn": {
+              "full": 0.8151,
+              "zeroCrowding": 0.8175,
+              "delta": 0.0024
+            },
+            "safeFrontierPull": {
+              "full": 0.63,
+              "zeroCrowding": 0.64,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:121:64|origin=tile:120:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.81,
+          "controlScore": 3.84,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.01,
+              "zeroCrowding": 0,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.5859,
+              "zeroCrowding": 0.5907,
+              "delta": 0.0048
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "netMovePressure": {
+              "full": 0.1079,
+              "zeroCrowding": 0.1048,
+              "delta": -0.0031
+            },
+            "perCapitaReturn": {
+              "full": 0.7874,
+              "zeroCrowding": 0.7898,
+              "delta": 0.0024
+            },
+            "safeFrontierPull": {
+              "full": 0.53,
+              "zeroCrowding": 0.54,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:120:64|origin=tile:120:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.79,
+          "controlScore": 3.79,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "expectedFutureValue",
+            "netMovePressure"
+          ],
+          "observedFieldDeltas": {
+            "expectedFutureValue": {
+              "full": 0.7061,
+              "zeroCrowding": 0.7058,
+              "delta": -0.0004
+            },
+            "netMovePressure": {
+              "full": 0.0726,
+              "zeroCrowding": 0.0704,
+              "delta": -0.0022
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:119:63|origin=tile:120:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.31,
+          "controlScore": 3.31,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "expectedFutureValue",
+            "netMovePressure"
+          ],
+          "observedFieldDeltas": {
+            "expectedFutureValue": {
+              "full": 0.8512,
+              "zeroCrowding": 0.8508,
+              "delta": -0.0004
+            },
+            "netMovePressure": {
+              "full": 0.0729,
+              "zeroCrowding": 0.0707,
+              "delta": -0.0022
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:120:65|origin=tile:120:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.7,
+          "controlScore": 2.69,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "expectedFutureValue",
+            "netMovePressure"
+          ],
+          "observedFieldDeltas": {
+            "expectedFutureValue": {
+              "full": 0.5278,
+              "zeroCrowding": 0.5274,
+              "delta": -0.0004
+            },
+            "netMovePressure": {
+              "full": 0.0636,
+              "zeroCrowding": 0.0616,
+              "delta": -0.002
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:118:63|origin=tile:120:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.56,
+          "controlScore": 2.56,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "expectedFutureValue",
+            "netMovePressure"
+          ],
+          "observedFieldDeltas": {
+            "expectedFutureValue": {
+              "full": 0.7514,
+              "zeroCrowding": 0.751,
+              "delta": -0.0004
+            },
+            "netMovePressure": {
+              "full": 0.0577,
+              "zeroCrowding": 0.0558,
+              "delta": -0.0018
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:119:64|origin=tile:120:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.39,
+          "controlScore": 2.39,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "expectedFutureValue",
+            "netMovePressure"
+          ],
+          "observedFieldDeltas": {
+            "expectedFutureValue": {
+              "full": 0.6464,
+              "zeroCrowding": 0.646,
+              "delta": -0.0004
+            },
+            "netMovePressure": {
+              "full": 0.0629,
+              "zeroCrowding": 0.0609,
+              "delta": -0.002
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "resource_scout:tile:119:63|origin=tile:120:63|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 1.55,
+          "controlScore": 1.55,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "stay:tile:120:63|origin=tile:120:63|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": -6.53,
+          "controlScore": -6.5,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "nearbyBandPressure",
+            "rangeSaturation"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.01,
+              "zeroCrowding": 0,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.0461,
+              "zeroCrowding": 0.0517,
+              "delta": 0.0056
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "rangeSaturation": {
+              "full": 0.15,
+              "zeroCrowding": 0.14,
+              "delta": -0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:119:62|origin=tile:120:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": -7.61,
+          "controlScore": -7.59,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "recoveryBenefit"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.01,
+              "zeroCrowding": 0,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.1285,
+              "zeroCrowding": 0.1321,
+              "delta": 0.0036
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "netMovePressure": {
+              "full": 0.0875,
+              "zeroCrowding": 0.0849,
+              "delta": -0.0026
+            },
+            "perCapitaReturn": {
+              "full": 0.7002,
+              "zeroCrowding": 0.7026,
+              "delta": 0.0024
+            },
+            "recoveryBenefit": {
+              "full": 0.21,
+              "zeroCrowding": 0.2,
+              "delta": -0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "N_map2_s14_band:varied-dry-corridor-mid",
+      "bandId": "band:varied-dry-corridor-mid",
+      "position": "tile:69:110",
+      "source": {
+        "weightedCrowding": 0.06,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:varied-dry-corridor-upper"
+        ],
+        "crowdingPenalty": 0.05
+      },
+      "pairing": {
+        "fullCandidates": 11,
+        "controlCandidates": 11,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [],
+        "legacyKeyCollisionCount": 0,
+        "pairedCandidates": 11,
+        "cleanPairs": 11,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "resource_scout:tile:70:110|origin=tile:69:110|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.08,
+          "controlScore": 2.08,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:68:110|origin=tile:69:110|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.77,
+          "controlScore": 1.8,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.02,
+              "zeroCrowding": 0,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.1796,
+              "zeroCrowding": 0.1852,
+              "delta": 0.0056
+            },
+            "mobilityPressure": {
+              "full": 0.94,
+              "zeroCrowding": 0.92,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "perCapitaReturn": {
+              "full": 0.2187,
+              "zeroCrowding": 0.2235,
+              "delta": 0.0048
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:70:110|origin=tile:69:110|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 1.2,
+          "controlScore": 1.23,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.02,
+              "zeroCrowding": 0,
+              "delta": -0.02
+            },
+            "daughterDispersalPressure": {
+              "full": 0.26,
+              "zeroCrowding": 0.25,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.4963,
+              "zeroCrowding": 0.5012,
+              "delta": 0.005
+            },
+            "mobilityPressure": {
+              "full": 0.94,
+              "zeroCrowding": 0.92,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "perCapitaReturn": {
+              "full": 0.2244,
+              "zeroCrowding": 0.2292,
+              "delta": 0.0048
+            },
+            "safeFrontierPull": {
+              "full": 0.08,
+              "zeroCrowding": 0.09,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:71:110|origin=tile:69:110|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.94,
+          "controlScore": 0.95,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.94,
+              "zeroCrowding": 0.92,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:67:110|origin=tile:69:110|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.75,
+          "controlScore": 0.75,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.94,
+              "zeroCrowding": 0.92,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "stay:tile:69:110|origin=tile:69:110|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 0.67,
+          "controlScore": 0.74,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "placeAttachmentPull",
+            "rangeSaturation"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.05,
+              "zeroCrowding": 0,
+              "delta": -0.05
+            },
+            "daughterDispersalPressure": {
+              "full": 0.27,
+              "zeroCrowding": 0.25,
+              "delta": -0.02
+            },
+            "mobilityPressure": {
+              "full": 0.94,
+              "zeroCrowding": 0.92,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "placeAttachmentPull": {
+              "full": 0.01,
+              "zeroCrowding": 0.03,
+              "delta": 0.02
+            },
+            "rangeSaturation": {
+              "full": 0.55,
+              "zeroCrowding": 0.52,
+              "delta": -0.03
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:69:108|origin=tile:69:110|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.3,
+          "controlScore": 0.53,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "daughterDispersalPressure": {
+              "full": 0.3,
+              "zeroCrowding": 0.26,
+              "delta": -0.04
+            },
+            "expectedFutureValue": {
+              "full": 0.0552,
+              "zeroCrowding": 0.0919,
+              "delta": 0.0367
+            },
+            "mobilityPressure": {
+              "full": 0.94,
+              "zeroCrowding": 0.92,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.19,
+              "zeroCrowding": 0,
+              "delta": -0.19
+            },
+            "perCapitaReturn": {
+              "full": 0.209,
+              "zeroCrowding": 0.245,
+              "delta": 0.036
+            },
+            "safeFrontierPull": {
+              "full": 0.22,
+              "zeroCrowding": 0.26,
+              "delta": 0.04
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:69:111|origin=tile:69:110|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.05,
+          "controlScore": 0.09,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "daughterDispersalPressure": {
+              "full": 0.25,
+              "zeroCrowding": 0.24,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.129,
+              "zeroCrowding": 0.1356,
+              "delta": 0.0066
+            },
+            "mobilityPressure": {
+              "full": 0.94,
+              "zeroCrowding": 0.92,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "perCapitaReturn": {
+              "full": 0.1742,
+              "zeroCrowding": 0.1814,
+              "delta": 0.0072
+            },
+            "safeFrontierPull": {
+              "full": 0.06,
+              "zeroCrowding": 0.07,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:68:111|origin=tile:69:110|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0,
+          "controlScore": 0,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.94,
+              "zeroCrowding": 0.92,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:70:111|origin=tile:69:110|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": -0.21,
+          "controlScore": -0.21,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.94,
+              "zeroCrowding": 0.92,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:69:112|origin=tile:69:110|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": -0.57,
+          "controlScore": -0.57,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.94,
+              "zeroCrowding": 0.92,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "N_map2_s14_band:varied-dry-corridor-upper",
+      "bandId": "band:varied-dry-corridor-upper",
+      "position": "tile:69:107",
+      "source": {
+        "weightedCrowding": 0.07,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:varied-dry-corridor-mid"
+        ],
+        "crowdingPenalty": 0.06
+      },
+      "pairing": {
+        "fullCandidates": 13,
+        "controlCandidates": 13,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [],
+        "legacyKeyCollisionCount": 0,
+        "pairedCandidates": 13,
+        "cleanPairs": 13,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "resource_scout:tile:66:107|origin=tile:69:107|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 1.94,
+          "controlScore": 1.94,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:68:108|origin=tile:69:107|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.65,
+          "controlScore": 0.72,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.04,
+              "zeroCrowding": 0,
+              "delta": -0.04
+            },
+            "daughterDispersalPressure": {
+              "full": 0.26,
+              "zeroCrowding": 0.25,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.1427,
+              "zeroCrowding": 0.1533,
+              "delta": 0.0106
+            },
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "perCapitaReturn": {
+              "full": 0.2442,
+              "zeroCrowding": 0.2538,
+              "delta": 0.0096
+            },
+            "safeFrontierPull": {
+              "full": 0.08,
+              "zeroCrowding": 0.09,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:69:108|origin=tile:69:107|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.61,
+          "controlScore": 0.8,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.12,
+              "zeroCrowding": 0,
+              "delta": -0.12
+            },
+            "daughterDispersalPressure": {
+              "full": 0.27,
+              "zeroCrowding": 0.25,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.0996,
+              "zeroCrowding": 0.1319,
+              "delta": 0.0323
+            },
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.15,
+              "zeroCrowding": 0,
+              "delta": -0.15
+            },
+            "perCapitaReturn": {
+              "full": 0.2162,
+              "zeroCrowding": 0.245,
+              "delta": 0.0288
+            },
+            "safeFrontierPull": {
+              "full": 0.05,
+              "zeroCrowding": 0.09,
+              "delta": 0.04
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:70:108|origin=tile:69:107|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.45,
+          "controlScore": 0.53,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "daughterDispersalPressure": {
+              "full": 0.28,
+              "zeroCrowding": 0.26,
+              "delta": -0.02
+            },
+            "expectedFutureValue": {
+              "full": 0.1808,
+              "zeroCrowding": 0.1935,
+              "delta": 0.0128
+            },
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.07,
+              "zeroCrowding": 0,
+              "delta": -0.07
+            },
+            "perCapitaReturn": {
+              "full": 0.218,
+              "zeroCrowding": 0.2324,
+              "delta": 0.0144
+            },
+            "safeFrontierPull": {
+              "full": 0.24,
+              "zeroCrowding": 0.25,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:68:107|origin=tile:69:107|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.45,
+          "controlScore": 0.5,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "expectedFutureValue": {
+              "full": 0.2914,
+              "zeroCrowding": 0.3006,
+              "delta": 0.0092
+            },
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.04,
+              "zeroCrowding": 0,
+              "delta": -0.04
+            },
+            "perCapitaReturn": {
+              "full": 0.1965,
+              "zeroCrowding": 0.2037,
+              "delta": 0.0072
+            },
+            "safeFrontierPull": {
+              "full": 0.06,
+              "zeroCrowding": 0.07,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:70:107|origin=tile:69:107|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.32,
+          "controlScore": 0.36,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "daughterDispersalPressure": {
+              "full": 0.25,
+              "zeroCrowding": 0.24,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.2126,
+              "zeroCrowding": 0.2188,
+              "delta": 0.0062
+            },
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.04,
+              "zeroCrowding": 0,
+              "delta": -0.04
+            },
+            "perCapitaReturn": {
+              "full": 0.1667,
+              "zeroCrowding": 0.1739,
+              "delta": 0.0072
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:67:107|origin=tile:69:107|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.27,
+          "controlScore": 0.27,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "stay:tile:69:107|origin=tile:69:107|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 0.25,
+          "controlScore": 0.32,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "rangeSaturation"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.06,
+              "zeroCrowding": 0,
+              "delta": -0.06
+            },
+            "daughterDispersalPressure": {
+              "full": 0.27,
+              "zeroCrowding": 0.25,
+              "delta": -0.02
+            },
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.07,
+              "zeroCrowding": 0,
+              "delta": -0.07
+            },
+            "rangeSaturation": {
+              "full": 0.57,
+              "zeroCrowding": 0.55,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:71:107|origin=tile:69:107|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 0.12,
+          "controlScore": 0.12,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:69:106|origin=tile:69:107|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": -0.14,
+          "controlScore": -0.09,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "mobilityPressure",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.04,
+              "zeroCrowding": 0,
+              "delta": -0.04
+            },
+            "daughterDispersalPressure": {
+              "full": 0.25,
+              "zeroCrowding": 0.24,
+              "delta": -0.01
+            },
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            },
+            "nearbyBandPressure": {
+              "full": 0.04,
+              "zeroCrowding": 0,
+              "delta": -0.04
+            },
+            "perCapitaReturn": {
+              "full": 0.1258,
+              "zeroCrowding": 0.1354,
+              "delta": 0.0096
+            },
+            "safeFrontierPull": {
+              "full": 0.04,
+              "zeroCrowding": 0.05,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:68:106|origin=tile:69:107|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": -0.39,
+          "controlScore": -0.39,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:70:106|origin=tile:69:107|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": -0.4,
+          "controlScore": -0.39,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:69:105|origin=tile:69:107|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": -0.43,
+          "controlScore": -0.43,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "mobilityPressure"
+          ],
+          "observedFieldDeltas": {
+            "mobilityPressure": {
+              "full": 0.95,
+              "zeroCrowding": 0.93,
+              "delta": -0.02
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "N_map2_s45_band:varied-lake-north",
+      "bandId": "band:varied-lake-north",
+      "position": "tile:72:63",
+      "source": {
+        "weightedCrowding": 0.03,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:varied-lake-west"
+        ],
+        "crowdingPenalty": 0.02
+      },
+      "pairing": {
+        "fullCandidates": 10,
+        "controlCandidates": 10,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [],
+        "legacyKeyCollisionCount": 0,
+        "pairedCandidates": 10,
+        "cleanPairs": 10,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "move_to_tile:tile:71:63|origin=tile:72:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.66,
+          "controlScore": 4.66,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "expectedFutureValue",
+            "netMovePressure"
+          ],
+          "observedFieldDeltas": {
+            "expectedFutureValue": {
+              "full": 0.8393,
+              "zeroCrowding": 0.839,
+              "delta": -0.0004
+            },
+            "netMovePressure": {
+              "full": 0.2511,
+              "zeroCrowding": 0.2468,
+              "delta": -0.0042
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:72:64|origin=tile:72:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.02,
+          "controlScore": 4.07,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "daughterDispersalPressure": {
+              "full": 0.28,
+              "zeroCrowding": 0.27,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.5723,
+              "zeroCrowding": 0.5801,
+              "delta": 0.0078
+            },
+            "nearbyBandPressure": {
+              "full": 0.05,
+              "zeroCrowding": 0,
+              "delta": -0.05
+            },
+            "netMovePressure": {
+              "full": 0.1603,
+              "zeroCrowding": 0.1573,
+              "delta": -0.003
+            },
+            "perCapitaReturn": {
+              "full": 0.5348,
+              "zeroCrowding": 0.542,
+              "delta": 0.0072
+            },
+            "safeFrontierPull": {
+              "full": 0.36,
+              "zeroCrowding": 0.37,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:71:64|origin=tile:72:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.8,
+          "controlScore": 3.82,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "nearbyBandPressure",
+            "netMovePressure",
+            "perCapitaReturn"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.02,
+              "zeroCrowding": 0,
+              "delta": -0.02
+            },
+            "daughterDispersalPressure": {
+              "full": 0.28,
+              "zeroCrowding": 0.27,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.616,
+              "zeroCrowding": 0.6194,
+              "delta": 0.0034
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "netMovePressure": {
+              "full": 0.1684,
+              "zeroCrowding": 0.1653,
+              "delta": -0.0031
+            },
+            "perCapitaReturn": {
+              "full": 0.5498,
+              "zeroCrowding": 0.5546,
+              "delta": 0.0048
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:72:62|origin=tile:72:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.63,
+          "controlScore": 3.62,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "expectedFutureValue",
+            "netMovePressure"
+          ],
+          "observedFieldDeltas": {
+            "expectedFutureValue": {
+              "full": 0.852,
+              "zeroCrowding": 0.8516,
+              "delta": -0.0004
+            },
+            "netMovePressure": {
+              "full": 0.1744,
+              "zeroCrowding": 0.1712,
+              "delta": -0.0032
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "stay:tile:72:63|origin=tile:72:63|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 3.59,
+          "controlScore": 3.63,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "nearbyBandPressure",
+            "placeAttachmentPull",
+            "rangeSaturation"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.02,
+              "zeroCrowding": 0,
+              "delta": -0.02
+            },
+            "daughterDispersalPressure": {
+              "full": 0.29,
+              "zeroCrowding": 0.28,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.5412,
+              "zeroCrowding": 0.551,
+              "delta": 0.0098
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "placeAttachmentPull": {
+              "full": 0.34,
+              "zeroCrowding": 0.35,
+              "delta": 0.01
+            },
+            "rangeSaturation": {
+              "full": 0.25,
+              "zeroCrowding": 0.24,
+              "delta": -0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:70:63|origin=tile:72:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.97,
+          "controlScore": 2.97,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "expectedFutureValue",
+            "netMovePressure"
+          ],
+          "observedFieldDeltas": {
+            "expectedFutureValue": {
+              "full": 0.5779,
+              "zeroCrowding": 0.5775,
+              "delta": -0.0004
+            },
+            "netMovePressure": {
+              "full": 0.1539,
+              "zeroCrowding": 0.1511,
+              "delta": -0.0029
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:71:62|origin=tile:72:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.74,
+          "controlScore": 2.74,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "expectedFutureValue",
+            "netMovePressure"
+          ],
+          "observedFieldDeltas": {
+            "expectedFutureValue": {
+              "full": 0.6694,
+              "zeroCrowding": 0.669,
+              "delta": -0.0004
+            },
+            "netMovePressure": {
+              "full": 0.176,
+              "zeroCrowding": 0.1729,
+              "delta": -0.0032
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:72:61|origin=tile:72:63|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.61,
+          "controlScore": 2.6,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "expectedFutureValue",
+            "netMovePressure",
+            "recoveryBenefit"
+          ],
+          "observedFieldDeltas": {
+            "expectedFutureValue": {
+              "full": 0.6791,
+              "zeroCrowding": 0.6787,
+              "delta": -0.0004
+            },
+            "netMovePressure": {
+              "full": 0.1763,
+              "zeroCrowding": 0.1731,
+              "delta": -0.0032
+            },
+            "recoveryBenefit": {
+              "full": 0.31,
+              "zeroCrowding": 0.3,
+              "delta": -0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "resource_scout:tile:71:62|origin=tile:72:63|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 1.64,
+          "controlScore": 1.64,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:71:61|origin=tile:72:63|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 0.85,
+          "controlScore": 0.85,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    },
+    {
+      "label": "N_map2_s45_band:varied-lake-west",
+      "bandId": "band:varied-lake-west",
+      "position": "tile:72:67",
+      "source": {
+        "weightedCrowding": 0.03,
+        "nearbyBandCount": 1,
+        "crowdingBandIds": [
+          "band:varied-lake-north"
+        ],
+        "crowdingPenalty": 0.02
+      },
+      "pairing": {
+        "fullCandidates": 9,
+        "controlCandidates": 9,
+        "duplicateCandidateKeys": [],
+        "distinctDuplicateKeys": 0,
+        "legacyKeyCollisions": [],
+        "legacyKeyCollisionCount": 0,
+        "pairedCandidates": 9,
+        "cleanPairs": 9,
+        "contaminatedPairs": 0,
+        "unpairableDuplicates": 0,
+        "unpairedFullCandidates": 0,
+        "unpairedControlCandidates": 0
+      },
+      "breakdownFieldCount": 66,
+      "candidates": [
+        {
+          "identity": "move_to_tile:tile:72:68|origin=tile:72:67|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 4.93,
+          "controlScore": 4.93,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:72:69|origin=tile:72:67|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.66,
+          "controlScore": 3.66,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "stay:tile:72:67|origin=tile:72:67|family=core",
+          "actionType": "stay",
+          "family": "core",
+          "score": 3.52,
+          "controlScore": 3.55,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "nearbyBandPressure",
+            "rangeSaturation"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.02,
+              "zeroCrowding": 0,
+              "delta": -0.02
+            },
+            "daughterDispersalPressure": {
+              "full": 0.29,
+              "zeroCrowding": 0.28,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.4309,
+              "zeroCrowding": 0.4407,
+              "delta": 0.0098
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "rangeSaturation": {
+              "full": 0.35,
+              "zeroCrowding": 0.34,
+              "delta": -0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:71:67|origin=tile:72:67|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.37,
+          "controlScore": 3.37,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:71:66|origin=tile:72:67|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 3.18,
+          "controlScore": 3.21,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [
+            "crowdingPenalty",
+            "daughterDispersalPressure",
+            "expectedFutureValue",
+            "nearbyBandPressure",
+            "perCapitaReturn",
+            "safeFrontierPull"
+          ],
+          "observedFieldDeltas": {
+            "crowdingPenalty": {
+              "full": 0.02,
+              "zeroCrowding": 0,
+              "delta": -0.02
+            },
+            "daughterDispersalPressure": {
+              "full": 0.3,
+              "zeroCrowding": 0.29,
+              "delta": -0.01
+            },
+            "expectedFutureValue": {
+              "full": 0.4081,
+              "zeroCrowding": 0.413,
+              "delta": 0.005
+            },
+            "nearbyBandPressure": {
+              "full": 0.03,
+              "zeroCrowding": 0,
+              "delta": -0.03
+            },
+            "perCapitaReturn": {
+              "full": 0.5378,
+              "zeroCrowding": 0.5426,
+              "delta": 0.0048
+            },
+            "safeFrontierPull": {
+              "full": 0.53,
+              "zeroCrowding": 0.54,
+              "delta": 0.01
+            }
+          },
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:71:68|origin=tile:72:67|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.34,
+          "controlScore": 2.34,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "resource_scout:tile:72:69|origin=tile:72:67|family=core",
+          "actionType": "resource_scout",
+          "family": "core",
+          "score": 2.22,
+          "controlScore": 2.22,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "move_to_tile:tile:70:67|origin=tile:72:67|family=core",
+          "actionType": "move_to_tile",
+          "family": "core",
+          "score": 2.21,
+          "controlScore": 2.21,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        },
+        {
+          "identity": "logistical_probe:tile:71:69|origin=tile:72:67|family=core",
+          "actionType": "logistical_probe",
+          "family": "core",
+          "score": 1.35,
+          "controlScore": 1.35,
+          "pairStatus": "clean_exact_partition",
+          "observedDifferingFields": [],
+          "observedFieldDeltas": {},
+          "undeclaredDifferingFields": [],
+          "externalAdditionDelta": 0,
+          "hybridEqualsControl": true
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
