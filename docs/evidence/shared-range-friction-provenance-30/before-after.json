@@ -1,0 +1,691 @@
+{
+  "checkpoint": "CORRECTION-30 — SHARED RANGE / RANGE-FRICTION OBSERVATION PROVENANCE",
+  "beforeCommit": "a15d0a78a3a7ef57b87b22226190d6729ba9b9d7",
+  "afterBranch": "checkpoint/shared-range-friction-provenance-30",
+  "probesIdenticalInBothArms": true,
+  "notObtainedBy": [
+    "deleting the trip",
+    "moving the other band",
+    "deleting observer place memory",
+    "suppressing every friction event",
+    "suppressing reports",
+    "changing fixture duration",
+    "changing simulation speed"
+  ],
+  "headline": {
+    "privateOtherBandTripCreatingObserverFriction": {
+      "requirement": "before = yes, after = no",
+      "before": {
+        "verdict": "PRIVATE_TRIP_CREATES_FRICTION",
+        "preconditionMet": true,
+        "separation": 42,
+        "inferredRecordsGained": 1,
+        "linkedActivityTripIds": 1,
+        "activityKinds": [
+          "crossing_or_route_use"
+        ]
+      },
+      "after": {
+        "verdict": "NO_SOCIAL_FRICTION_RECORD",
+        "preconditionMet": true,
+        "separation": 42,
+        "inferredRecordsGained": 0,
+        "linkedActivityTripIds": 0,
+        "activityKinds": []
+      },
+      "satisfied": true
+    },
+    "hiddenResidenceBecomingObservedPresence": {
+      "requirement": "before = yes, after = no",
+      "before": {
+        "verdict": "HIDDEN_RESIDENCE_BECOMES_OBSERVED",
+        "separation": 42,
+        "records": {
+          "ringLength": 2,
+          "namingOther": 2,
+          "byConfidence": {
+            "observed": 1,
+            "inferred_from_recent_activity": 1,
+            "reported_secondhand": 0,
+            "uncertain": 0
+          },
+          "withLinkedActivityTripId": 1,
+          "withLinkedReportId": 0,
+          "activityKinds": [
+            "crossing_or_route_use",
+            "residential_presence"
+          ],
+          "interpretations": [
+            "ford_overlap",
+            "ford_overlap"
+          ],
+          "tensionLevels": [
+            "none",
+            "none"
+          ],
+          "maxRecentOverlapCount": 6,
+          "tiles": [
+            "tile:195:130",
+            "tile:195:130"
+          ],
+          "ringWithLinkedActivityTripId": 1,
+          "ringInferredFromActivity": 1
+        }
+      },
+      "after": {
+        "verdict": "NO_SOCIAL_FRICTION_RECORD",
+        "separation": 42,
+        "records": {
+          "ringLength": 0,
+          "namingOther": 0,
+          "byConfidence": {
+            "observed": 0,
+            "inferred_from_recent_activity": 0,
+            "reported_secondhand": 0,
+            "uncertain": 0
+          },
+          "withLinkedActivityTripId": 0,
+          "withLinkedReportId": 0,
+          "activityKinds": [],
+          "interpretations": [],
+          "tensionLevels": [],
+          "maxRecentOverlapCount": 0,
+          "tiles": [],
+          "ringWithLinkedActivityTripId": 0,
+          "ringInferredFromActivity": 0
+        }
+      },
+      "satisfied": true
+    },
+    "legitimatePhysicallySupportedFriction": {
+      "requirement": "before = yes, after = yes",
+      "before": {
+        "p3": "LEGITIMATE_DIRECT_FRICTION_PRESENT",
+        "p4": "ENCOUNTERED_PAIR_STILL_PRODUCES_FRICTION"
+      },
+      "after": {
+        "p3": "LEGITIMATE_DIRECT_FRICTION_PRESENT",
+        "p4": "ENCOUNTERED_PAIR_STILL_PRODUCES_FRICTION"
+      },
+      "satisfied": true
+    },
+    "reportedEvidenceRemainsSecondHand": {
+      "requirement": "before = reported_secondhand, after = reported_secondhand",
+      "before": {
+        "verdict": "REPORT_LINKED_FRICTION_STAYS_SECONDHAND",
+        "confidences": [
+          "reported_secondhand"
+        ]
+      },
+      "after": {
+        "verdict": "REPORT_LINKED_FRICTION_STAYS_SECONDHAND",
+        "confidences": [
+          "reported_secondhand"
+        ]
+      },
+      "satisfied": true
+    },
+    "oldContactRevealingCurrentActivity": {
+      "requirement": "before = yes, after = no, contact memory retained in both",
+      "before": {
+        "verdict": "OLD_CONTACT_REVEALS_NEW_TRIP",
+        "contactMemoryStillHeld": true,
+        "inferredAfter": 4
+      },
+      "after": {
+        "verdict": "OLD_CONTACT_REVEALS_NOTHING_CURRENT",
+        "contactMemoryStillHeld": true,
+        "inferredAfter": 0
+      },
+      "satisfied": true
+    },
+    "physicalEcologicalConsequence": {
+      "requirement": "before = unchanged, after = unchanged",
+      "beforeObserverPhysical": {
+        "position": "tile:195:88",
+        "weightedCrowding": 0,
+        "crowdingPenalty": 0,
+        "crowdingBandIds": [],
+        "nearbyBandCount": 0,
+        "meanCatchmentShare": 1,
+        "footprintTiles": 13,
+        "overlappingBandIds": [],
+        "perCapitaReturn": 0.2,
+        "sharedReachableSupport": 144.56,
+        "tileDepletionHere": 0.0662,
+        "tripRecordCount": 24,
+        "seasonalReceiptUnits": null
+      },
+      "afterObserverPhysical": {
+        "position": "tile:195:88",
+        "weightedCrowding": 0,
+        "crowdingPenalty": 0,
+        "crowdingBandIds": [],
+        "nearbyBandCount": 0,
+        "meanCatchmentShare": 1,
+        "footprintTiles": 13,
+        "overlappingBandIds": [],
+        "perCapitaReturn": 0.2,
+        "sharedReachableSupport": 144.56,
+        "tileDepletionHere": 0.0662,
+        "tripRecordCount": 24,
+        "seasonalReceiptUnits": null
+      },
+      "beforeOtherPhysical": {
+        "position": "tile:195:130",
+        "weightedCrowding": 0,
+        "crowdingPenalty": 0,
+        "crowdingBandIds": [],
+        "nearbyBandCount": 0,
+        "meanCatchmentShare": 1,
+        "footprintTiles": 13,
+        "overlappingBandIds": [],
+        "perCapitaReturn": 0,
+        "sharedReachableSupport": 35.79,
+        "tileDepletionHere": 0.1857,
+        "tripRecordCount": 24,
+        "seasonalReceiptUnits": null
+      },
+      "afterOtherPhysical": {
+        "position": "tile:195:130",
+        "weightedCrowding": 0,
+        "crowdingPenalty": 0,
+        "crowdingBandIds": [],
+        "nearbyBandCount": 0,
+        "meanCatchmentShare": 1,
+        "footprintTiles": 13,
+        "overlappingBandIds": [],
+        "perCapitaReturn": 0,
+        "sharedReachableSupport": 35.79,
+        "tileDepletionHere": 0.1857,
+        "tripRecordCount": 24,
+        "seasonalReceiptUnits": null
+      },
+      "identical": true
+    }
+  },
+  "fixtureComparison": [
+    {
+      "id": "P1",
+      "question": "unobserved band's private trip into remembered country creates friction",
+      "beforeVerdict": "PRIVATE_TRIP_CREATES_FRICTION",
+      "afterVerdict": "NO_SOCIAL_FRICTION_RECORD",
+      "changed": true,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P2",
+      "question": "hidden residence inside remembered country becomes observed presence",
+      "beforeVerdict": "HIDDEN_RESIDENCE_BECOMES_OBSERVED",
+      "afterVerdict": "NO_SOCIAL_FRICTION_RECORD",
+      "changed": true,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P3",
+      "question": "physically adjacent bands still produce direct friction",
+      "beforeVerdict": "LEGITIMATE_DIRECT_FRICTION_PRESENT",
+      "afterVerdict": "LEGITIMATE_DIRECT_FRICTION_PRESENT",
+      "changed": false,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P4",
+      "question": "a legitimate encounter still supports contemporary friction",
+      "beforeVerdict": "ENCOUNTERED_PAIR_STILL_PRODUCES_FRICTION",
+      "afterVerdict": "ENCOUNTERED_PAIR_STILL_PRODUCES_FRICTION",
+      "changed": false,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P5",
+      "question": "a second-hand report creates only reported friction",
+      "beforeVerdict": "REPORT_LINKED_FRICTION_STAYS_SECONDHAND",
+      "afterVerdict": "REPORT_LINKED_FRICTION_STAYS_SECONDHAND",
+      "changed": false,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P6",
+      "question": "old contact reveals the other band's new trip target",
+      "beforeVerdict": "OLD_CONTACT_REVEALS_NEW_TRIP",
+      "afterVerdict": "OLD_CONTACT_REVEALS_NOTHING_CURRENT",
+      "changed": true,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P7",
+      "question": "physical consequence present while social knowledge absent",
+      "beforeVerdict": "SOCIAL_KNOWLEDGE_PRESENT",
+      "afterVerdict": "PHYSICAL_PRESENT_SOCIAL_ABSENT",
+      "changed": true,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P8",
+      "question": "private trip outside familiar country creates friction (negative control)",
+      "beforeVerdict": "NO_FRICTION_EITHER_ARM",
+      "afterVerdict": "NO_FRICTION_EITHER_ARM",
+      "changed": false,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P9",
+      "question": "the private-trip case moves the access cascade",
+      "beforeVerdict": "NO_ACCESS_CASCADE",
+      "afterVerdict": "NO_ACCESS_CASCADE",
+      "changed": false,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P10",
+      "question": "the private-trip case moves range-friction social tension",
+      "beforeVerdict": "NO_SOCIAL_TENSION_CASCADE",
+      "afterVerdict": "NO_SOCIAL_TENSION_CASCADE",
+      "changed": false,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P11",
+      "question": "an ambiguous or reported source is rendered as confirmed direct observation",
+      "beforeVerdict": "UNCERTAINTY_PRESERVED",
+      "afterVerdict": "UNCERTAINTY_PRESERVED",
+      "changed": false,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P12",
+      "question": "friction output depends on band record order",
+      "beforeVerdict": "ORDER_INVARIANT",
+      "afterVerdict": "ORDER_INVARIANT",
+      "changed": false,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P13",
+      "question": "friction differs between daily and seasonal stepping",
+      "beforeVerdict": "STEP_MODE_INVARIANT",
+      "afterVerdict": "STEP_MODE_INVARIANT",
+      "changed": false,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P14",
+      "question": "range-friction and report rings stay bounded",
+      "beforeVerdict": "RINGS_BOUNDED",
+      "afterVerdict": "RINGS_BOUNDED",
+      "changed": false,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    },
+    {
+      "id": "P15",
+      "question": "a terminal band still creates contemporary friction evidence",
+      "beforeVerdict": "NO_FRICTION_FROM_TERMINAL_BAND",
+      "afterVerdict": "NO_FRICTION_FROM_TERMINAL_BAND",
+      "changed": false,
+      "preconditionMet": true,
+      "vacuousInEitherArm": false
+    }
+  ],
+  "vacuousFixtures": {
+    "before": 0,
+    "after": 0
+  },
+  "naturalOccurrence": {
+    "scenarios": [
+      "map1",
+      "map2",
+      "ordinary"
+    ],
+    "seeds": [
+      "s1",
+      "s2"
+    ],
+    "seedPrefix": "audit27:natural",
+    "years": 20,
+    "physicalLayerUnchanged": true,
+    "physicalKeysChecked": [
+      "weightedCrowdingSum",
+      "bandSeasonsWithCrowding",
+      "catchmentClaimTileSeasons",
+      "contestedCatchmentTileSeasons",
+      "sharedReachableSupportSum",
+      "sharedReachableSupportSamples",
+      "perCapitaReturnSum",
+      "tileDepletionSum",
+      "tileDepletionNonZeroTiles",
+      "tripRecordSeasons",
+      "moves",
+      "fissions",
+      "finalPopulation",
+      "finalLivingBandCount",
+      "survived",
+      "livingBandSeasons",
+      "seasons"
+    ],
+    "comparison": {
+      "accessBehaviorHookSum": {
+        "before": 148.68,
+        "after": 148.68,
+        "delta": 0,
+        "unchanged": true
+      },
+      "accessPlaceSeasons": {
+        "before": 18711,
+        "after": 18711,
+        "delta": 0,
+        "unchanged": true
+      },
+      "bandSeasonsWithCrowding": {
+        "before": 56,
+        "after": 56,
+        "delta": 0,
+        "unchanged": true
+      },
+      "catchmentClaimTileSeasons": {
+        "before": 26515,
+        "after": 26515,
+        "delta": 0,
+        "unchanged": true
+      },
+      "contestedCatchmentTileSeasons": {
+        "before": 43,
+        "after": 43,
+        "delta": 0,
+        "unchanged": true
+      },
+      "directObservedPresenceRecords": {
+        "before": 31,
+        "after": 28,
+        "delta": -3,
+        "unchanged": false
+      },
+      "encounterLinkedRecords": {
+        "before": 25,
+        "after": 24,
+        "delta": -1,
+        "unchanged": false
+      },
+      "finalLivingBandCount": {
+        "before": 30,
+        "after": 30,
+        "delta": 0,
+        "unchanged": true
+      },
+      "finalPopulation": {
+        "before": 817,
+        "after": 817,
+        "delta": 0,
+        "unchanged": true
+      },
+      "fissions": {
+        "before": 0,
+        "after": 0,
+        "delta": 0,
+        "unchanged": true
+      },
+      "frictionRecordsCreated": {
+        "before": 148,
+        "after": 61,
+        "delta": -87,
+        "unchanged": false
+      },
+      "frictionRingBandSeasons": {
+        "before": 97,
+        "after": 97,
+        "delta": 0,
+        "unchanged": true
+      },
+      "frictionRingRecordSeasons": {
+        "before": 746,
+        "after": 718,
+        "delta": -28,
+        "unchanged": false
+      },
+      "inferredRecentActivityRecords": {
+        "before": 84,
+        "after": 0,
+        "delta": -84,
+        "unchanged": false
+      },
+      "livingBandSeasons": {
+        "before": 2400,
+        "after": 2400,
+        "delta": 0,
+        "unchanged": true
+      },
+      "maxCreationDistance": {
+        "before": 9,
+        "after": 9,
+        "delta": 0,
+        "unchanged": true
+      },
+      "maxFrictionRingLength": {
+        "before": 8,
+        "after": 8,
+        "delta": 0,
+        "unchanged": true
+      },
+      "moves": {
+        "before": 1547,
+        "after": 1547,
+        "delta": 0,
+        "unchanged": true
+      },
+      "perCapitaReturnSum": {
+        "before": 1305.41,
+        "after": 1305.41,
+        "delta": 0,
+        "unchanged": true
+      },
+      "recordsSourcedOnlyFromPrivatePosition": {
+        "before": 0,
+        "after": 0,
+        "delta": 0,
+        "unchanged": true
+      },
+      "recordsSourcedOnlyFromPrivateTrips": {
+        "before": 84,
+        "after": 0,
+        "delta": -84,
+        "unchanged": false
+      },
+      "recordsWithLinkedActivityTripId": {
+        "before": 84,
+        "after": 0,
+        "delta": -84,
+        "unchanged": false
+      },
+      "rememberedRefusalAvoidanceSum": {
+        "before": 2547.08,
+        "after": 2551.35,
+        "delta": 4.27,
+        "unchanged": false
+      },
+      "reportLinkedRecords": {
+        "before": 33,
+        "after": 33,
+        "delta": 0,
+        "unchanged": true
+      },
+      "reportedAwarenessRecords": {
+        "before": 35776,
+        "after": 35776,
+        "delta": 0,
+        "unchanged": true
+      },
+      "seasons": {
+        "before": 480,
+        "after": 480,
+        "delta": 0,
+        "unchanged": true
+      },
+      "sharedReachableSupportSamples": {
+        "before": 2400,
+        "after": 2400,
+        "delta": 0,
+        "unchanged": true
+      },
+      "sharedReachableSupportSum": {
+        "before": 114381.8,
+        "after": 114381.8,
+        "delta": 0,
+        "unchanged": true
+      },
+      "sharedUsePressureSum": {
+        "before": 182.11,
+        "after": 189.04,
+        "delta": 6.93,
+        "unchanged": false
+      },
+      "socialTensionSamples": {
+        "before": 2400,
+        "after": 2400,
+        "delta": 0,
+        "unchanged": true
+      },
+      "socialTensionSum": {
+        "before": 605.79,
+        "after": 606.55,
+        "delta": 0.76,
+        "unchanged": false
+      },
+      "strangerCautionSum": {
+        "before": 298.32,
+        "after": 300.64,
+        "delta": 2.32,
+        "unchanged": false
+      },
+      "survived": {
+        "before": 6,
+        "after": 6,
+        "delta": 0,
+        "unchanged": true
+      },
+      "tileDepletionNonZeroTiles": {
+        "before": 41278,
+        "after": 41278,
+        "delta": 0,
+        "unchanged": true
+      },
+      "tileDepletionSum": {
+        "before": 3419.5131,
+        "after": 3419.5131,
+        "delta": 0,
+        "unchanged": true
+      },
+      "tripRecordSeasons": {
+        "before": 57600,
+        "after": 57600,
+        "delta": 0,
+        "unchanged": true
+      },
+      "uniqueObserverOtherPairs": {
+        "before": 2,
+        "after": 2,
+        "delta": 0,
+        "unchanged": true
+      },
+      "weightedCrowdingSum": {
+        "before": 2.51,
+        "after": 2.51,
+        "delta": 0,
+        "unchanged": true
+      }
+    },
+    "distributions": {
+      "creationDistanceByBucket": {
+        "before": {
+          "4": 22,
+          "2-3": 108,
+          "5-10": 18
+        },
+        "after": {
+          "4": 9,
+          "2-3": 40,
+          "5-10": 12
+        }
+      },
+      "confidenceDistribution": {
+        "before": {
+          "observed": 31,
+          "inferred_from_recent_activity": 84,
+          "reported_secondhand": 33
+        },
+        "after": {
+          "observed": 28,
+          "reported_secondhand": 33
+        }
+      },
+      "interpretationDistribution": {
+        "before": {
+          "ford_overlap": 72,
+          "noticed_shared_use": 5,
+          "possible_intrusion": 17,
+          "repeated_outsider_use": 21,
+          "avoid_warning_remembered": 33
+        },
+        "after": {
+          "ford_overlap": 18,
+          "noticed_shared_use": 2,
+          "repeated_outsider_use": 8,
+          "avoid_warning_remembered": 33
+        }
+      },
+      "tensionDistribution": {
+        "before": {
+          "watchful": 41,
+          "none": 69,
+          "mild": 21,
+          "moderate_placeholder": 17
+        },
+        "after": {
+          "watchful": 36,
+          "none": 17,
+          "mild": 1,
+          "moderate_placeholder": 7
+        }
+      },
+      "activityKindDistribution": {
+        "before": {
+          "residential_presence": 31,
+          "crossing_or_route_use": 54,
+          "foraging_trip": 30,
+          "unknown_activity": 33
+        },
+        "after": {
+          "residential_presence": 28,
+          "unknown_activity": 33
+        }
+      },
+      "accessStateDistribution": {
+        "before": {
+          "familiar_use": 12116,
+          "none": 294,
+          "expected_return": 6231,
+          "tolerated_shared_use": 70
+        },
+        "after": {
+          "familiar_use": 12111,
+          "none": 294,
+          "expected_return": 6223,
+          "tolerated_shared_use": 83
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "audit": "AUDIT-27 range-release timeline probe, rerun on CORRECTION-30",
+  "comparedAgainst": "docs/evidence/shared-range-encounter-provenance-29/audit27-release-timelines-rerun.json (the CORRECTION-29 tip, a15d0a78)",
+  "note": "CORRECTION-30 \u00a714 forbids changing RANGE_FRICTION_MAX_AGE_TICKS, FRICTION_RECENT_WINDOW_TICKS, REPORT_RECENT_WINDOW_TICKS, access-memory staleness or release behaviour. None was changed. This diff records every field that nonetheless moved.",
+  "changedFieldCount": 2,
+  "changedFields": [
+    {
+      "path": ".timelines[0].rows[1].observerAccessSharedUsePressure",
+      "correction29": 0.02,
+      "correction30": 0.07
+    },
+    {
+      "path": ".timelines[0].rows[3].observerAccessSharedUsePressure",
+      "correction29": 0.03,
+      "correction30": 0.08
+    }
+  ],
+  "releaseLifecycleUnchanged": true
+}

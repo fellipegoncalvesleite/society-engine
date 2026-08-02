@@ -1,0 +1,278 @@
+{
+  "checkpoint": "CORRECTION-30 — BEHAVIOURAL IMPACT",
+  "years": 20,
+  "scenarios": [
+    "map1",
+    "map2",
+    "ordinary"
+  ],
+  "seeds": [
+    "s1",
+    "s2"
+  ],
+  "identicalRuns": 5,
+  "totalRuns": 6,
+  "runs": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "identicalRun": true,
+      "firstDivergence": null,
+      "divergentSeasons": 0,
+      "firstPhysicalDivergenceTick": null,
+      "firstSocialDivergenceTick": null,
+      "totalsBefore": {
+        "seasons": 80,
+        "moves": 249,
+        "fissions": 0,
+        "accessStateChanges": 100,
+        "finalLivingBandCount": 5,
+        "finalPopulation": 158,
+        "survived": true,
+        "totalBandSeasons": 400,
+        "frictionRingRecordSeasons": 0,
+        "frictionInferredRecordSeasons": 0,
+        "frictionObservedRecordSeasons": 0,
+        "frictionReportedRecordSeasons": 0,
+        "frictionWithTripIdRecordSeasons": 0
+      },
+      "totalsAfter": {
+        "seasons": 80,
+        "moves": 249,
+        "fissions": 0,
+        "accessStateChanges": 100,
+        "finalLivingBandCount": 5,
+        "finalPopulation": 158,
+        "survived": true,
+        "totalBandSeasons": 400,
+        "frictionRingRecordSeasons": 0,
+        "frictionInferredRecordSeasons": 0,
+        "frictionObservedRecordSeasons": 0,
+        "frictionReportedRecordSeasons": 0,
+        "frictionWithTripIdRecordSeasons": 0
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "identicalRun": true,
+      "firstDivergence": null,
+      "divergentSeasons": 0,
+      "firstPhysicalDivergenceTick": null,
+      "firstSocialDivergenceTick": null,
+      "totalsBefore": {
+        "seasons": 80,
+        "moves": 276,
+        "fissions": 0,
+        "accessStateChanges": 107,
+        "finalLivingBandCount": 5,
+        "finalPopulation": 155,
+        "survived": true,
+        "totalBandSeasons": 400,
+        "frictionRingRecordSeasons": 0,
+        "frictionInferredRecordSeasons": 0,
+        "frictionObservedRecordSeasons": 0,
+        "frictionReportedRecordSeasons": 0,
+        "frictionWithTripIdRecordSeasons": 0
+      },
+      "totalsAfter": {
+        "seasons": 80,
+        "moves": 276,
+        "fissions": 0,
+        "accessStateChanges": 107,
+        "finalLivingBandCount": 5,
+        "finalPopulation": 155,
+        "survived": true,
+        "totalBandSeasons": 400,
+        "frictionRingRecordSeasons": 0,
+        "frictionInferredRecordSeasons": 0,
+        "frictionObservedRecordSeasons": 0,
+        "frictionReportedRecordSeasons": 0,
+        "frictionWithTripIdRecordSeasons": 0
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "identicalRun": false,
+      "firstDivergence": {
+        "tick": 32,
+        "physicalDiff": false,
+        "socialDiff": true,
+        "changedBands": [
+          {
+            "bandId": "band:varied-dry-corridor-mid",
+            "changedFields": {
+              "frictionRing": {
+                "before": 3,
+                "after": 2
+              },
+              "frictionInferred": {
+                "before": 1,
+                "after": 0
+              },
+              "frictionWithTripId": {
+                "before": 1,
+                "after": 0
+              },
+              "socialTensionPressure": {
+                "before": 0.25,
+                "after": 0.24
+              }
+            }
+          }
+        ]
+      },
+      "divergentSeasons": 49,
+      "firstPhysicalDivergenceTick": null,
+      "firstSocialDivergenceTick": 32,
+      "totalsBefore": {
+        "seasons": 80,
+        "moves": 431,
+        "fissions": 0,
+        "accessStateChanges": 133,
+        "finalLivingBandCount": 9,
+        "finalPopulation": 226,
+        "survived": true,
+        "totalBandSeasons": 720,
+        "frictionRingRecordSeasons": 746,
+        "frictionInferredRecordSeasons": 441,
+        "frictionObservedRecordSeasons": 147,
+        "frictionReportedRecordSeasons": 158,
+        "frictionWithTripIdRecordSeasons": 441
+      },
+      "totalsAfter": {
+        "seasons": 80,
+        "moves": 431,
+        "fissions": 0,
+        "accessStateChanges": 133,
+        "finalLivingBandCount": 9,
+        "finalPopulation": 226,
+        "survived": true,
+        "totalBandSeasons": 720,
+        "frictionRingRecordSeasons": 718,
+        "frictionInferredRecordSeasons": 0,
+        "frictionObservedRecordSeasons": 492,
+        "frictionReportedRecordSeasons": 226,
+        "frictionWithTripIdRecordSeasons": 0
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "identicalRun": true,
+      "firstDivergence": null,
+      "divergentSeasons": 0,
+      "firstPhysicalDivergenceTick": null,
+      "firstSocialDivergenceTick": null,
+      "totalsBefore": {
+        "seasons": 80,
+        "moves": 470,
+        "fissions": 0,
+        "accessStateChanges": 149,
+        "finalLivingBandCount": 9,
+        "finalPopulation": 225,
+        "survived": true,
+        "totalBandSeasons": 720,
+        "frictionRingRecordSeasons": 0,
+        "frictionInferredRecordSeasons": 0,
+        "frictionObservedRecordSeasons": 0,
+        "frictionReportedRecordSeasons": 0,
+        "frictionWithTripIdRecordSeasons": 0
+      },
+      "totalsAfter": {
+        "seasons": 80,
+        "moves": 470,
+        "fissions": 0,
+        "accessStateChanges": 149,
+        "finalLivingBandCount": 9,
+        "finalPopulation": 225,
+        "survived": true,
+        "totalBandSeasons": 720,
+        "frictionRingRecordSeasons": 0,
+        "frictionInferredRecordSeasons": 0,
+        "frictionObservedRecordSeasons": 0,
+        "frictionReportedRecordSeasons": 0,
+        "frictionWithTripIdRecordSeasons": 0
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s1",
+      "identicalRun": true,
+      "firstDivergence": null,
+      "divergentSeasons": 0,
+      "firstPhysicalDivergenceTick": null,
+      "firstSocialDivergenceTick": null,
+      "totalsBefore": {
+        "seasons": 80,
+        "moves": 54,
+        "fissions": 0,
+        "accessStateChanges": 11,
+        "finalLivingBandCount": 1,
+        "finalPopulation": 27,
+        "survived": true,
+        "totalBandSeasons": 80,
+        "frictionRingRecordSeasons": 0,
+        "frictionInferredRecordSeasons": 0,
+        "frictionObservedRecordSeasons": 0,
+        "frictionReportedRecordSeasons": 0,
+        "frictionWithTripIdRecordSeasons": 0
+      },
+      "totalsAfter": {
+        "seasons": 80,
+        "moves": 54,
+        "fissions": 0,
+        "accessStateChanges": 11,
+        "finalLivingBandCount": 1,
+        "finalPopulation": 27,
+        "survived": true,
+        "totalBandSeasons": 80,
+        "frictionRingRecordSeasons": 0,
+        "frictionInferredRecordSeasons": 0,
+        "frictionObservedRecordSeasons": 0,
+        "frictionReportedRecordSeasons": 0,
+        "frictionWithTripIdRecordSeasons": 0
+      }
+    },
+    {
+      "scenario": "ordinary",
+      "seed": "s2",
+      "identicalRun": true,
+      "firstDivergence": null,
+      "divergentSeasons": 0,
+      "firstPhysicalDivergenceTick": null,
+      "firstSocialDivergenceTick": null,
+      "totalsBefore": {
+        "seasons": 80,
+        "moves": 67,
+        "fissions": 0,
+        "accessStateChanges": 12,
+        "finalLivingBandCount": 1,
+        "finalPopulation": 26,
+        "survived": true,
+        "totalBandSeasons": 80,
+        "frictionRingRecordSeasons": 0,
+        "frictionInferredRecordSeasons": 0,
+        "frictionObservedRecordSeasons": 0,
+        "frictionReportedRecordSeasons": 0,
+        "frictionWithTripIdRecordSeasons": 0
+      },
+      "totalsAfter": {
+        "seasons": 80,
+        "moves": 67,
+        "fissions": 0,
+        "accessStateChanges": 12,
+        "finalLivingBandCount": 1,
+        "finalPopulation": 26,
+        "survived": true,
+        "totalBandSeasons": 80,
+        "frictionRingRecordSeasons": 0,
+        "frictionInferredRecordSeasons": 0,
+        "frictionObservedRecordSeasons": 0,
+        "frictionReportedRecordSeasons": 0,
+        "frictionWithTripIdRecordSeasons": 0
+      }
+    }
+  ]
+}

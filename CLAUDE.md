@@ -68,6 +68,140 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-08-02 (SHARED RANGE — RANGE-FRICTION OBSERVATION PROVENANCE CORRECTION-30:
+  PASS — PRIVATE OTHER-BAND POSITION AND ACTIVITY STATE NO LONGER CREATE OBSERVER RANGE FRICTION /
+  LEGITIMATE DIRECT AND REPORTED EVIDENCE REMAIN / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE.
+  Branch checkpoint/shared-range-friction-provenance-30 from the accepted CORRECTION-29 tip
+  a15d0a78a3a7ef57b87b22226190d6729ba9b9d7. **CORRECTION-29 is CLOSED and FROZEN at a15d0a78.**
+  CORRECTION-28 frozen at c5eb58a; AUDIT-27 frozen at b352c31; local and remote main untouched at
+  0a43083. **PRODUCTION BEHAVIOUR CHANGED** — no fingerprint parity is claimed or possible.
+
+  **CORRECTION-30 REPAIRS ONLY OBSERVER PROVENANCE FOR RANGE FRICTION. ROADMAP ITEM 3 REMAINS
+  OPEN** and must not be marked complete.
+
+  **THE MODULE CONTAINED NO DISTANCE COMPUTATION OF ANY KIND.** `rangeFriction.ts` had no
+  `getGridDistance` import and no `distance` identifier in 800 lines, so its only condition was
+  "is this tile one I remember?" — and on that basis it read another band's PRIVATE state three
+  separate ways. (1) `other.position` became an `observed` `residential_presence` at ANY distance;
+  candidates came from proximity OR kinship OR any `contactMemories` entry, the last two with no
+  distance limit at all. (2) `other.recentIntraSeasonTrips` became
+  `inferred_from_recent_activity` carrying a `linkedActivityTripId` and an activity kind read off
+  the other band's private `taskGroupType` / `objective` / `cause` / `movementType` /
+  `resourceClassId` / `pathTiles`, over a **12-tick window — twelve seasons, THREE SIMULATED
+  YEARS**. (3) `countRecentTripsInRange` read the SAME private trip list a THIRD time to inflate
+  `recentOverlapCount` on the RESIDENTIAL notice — the value driving `repeated_outsider_use` (>=3)
+  and `moderate_placeholder` tension (>=4). Leaving any one of the three would have been the
+  half-state §18 forbids.
+
+  **THE RECORDS ARE NOT INERT, AND THE MODULE HEADER SAID THEY WERE.** Through
+  `accessNorms.ts:426` they set `strangerCaution` / `sharedUsePressure` /
+  `rememberedRefusalAvoidance` -> `ProtoAccessBehaviorEffectState` -> **`pressure.ts:161-166`,
+  five real decision inputs**. Separately `innerFission.ts:145` turns them into social tension and
+  `reportedKnowledge.ts:648` republishes the top three as outgoing `outsider_use_warning` reports.
+  The header's claim was true of DIRECT readers only and is corrected in this commit.
+
+  **ONE PRODUCTION FILE, `src/sim/agents/rangeFriction.ts` (+71 -112).** A contemporary direct
+  notice now requires the other band to be in the observer's CURRENT physical proximity set
+  (`cache.nearbyBandsByBandId`, `DEFAULT_NEARBY_RADIUS = 4`) — **the same canonical authority
+  CORRECTION-28 kept for physical crowding and CORRECTION-29 for encounter candidacy. No new
+  constant, no new type, no new module, no new import.** All three private-trip reads are deleted
+  with `classifyTripActivity`, `makeTripId`, `compareTrips` and `RANGE_FRICTION_TRIP_WINDOW_TICKS`;
+  `recentOverlapCount` is re-sourced to the observer's OWN friction ring (bounded at 1 + the
+  8-slot ring); `linkedActivityTripId` is removed from the internal `PairNotice` shape so it
+  cannot be produced from a private record again, while the field stays on `RangeFrictionEvent` in
+  types.ts as the vocabulary for a future witnessed-activity channel. `deriveReportLinkedEvents`
+  and `deriveCandidateBands` are UNTOUCHED — the candidate list is a selection set, not an
+  evidence claim, and nearby bands are added first so the 12-slot cap can never crowd one out.
+
+  **OPTION D (BUILD PHYSICAL TRACES NOW) WAS REJECTED ON INSPECTION, NOT PREFERENCE.** The
+  repository has NO trace authority of any kind: no tracks, no trails as world features, no camp
+  remains (`TemporaryTaskPartyRecord` asserts `noCamp: true`), no trace freshness, no cross-band
+  smoke (`fireSignals.ts` resolves one band's own deliberate signal to its own camp), and no
+  band/person cue in `landscapeVisibility.ts` — its `LandscapeVisibilityCueKind` union is entirely
+  terrain. Deferred to the Persistent Human Landscape pass; **no witness, trace, smoke, visibility
+  or exact activity knowledge was fabricated.** Option B (a generic observer-evidence interface)
+  was rejected as premature (two live cases, one duplicate, one placeholder), and Options E1/E2
+  were rejected because trip records carry a tick and a day but **no band's position is stored per
+  day**, so co-presence at the time of the trip is unrecoverable.
+
+  **HEADLINE, identical fixture in both arms.** Two bands **42 TILES APART**, no encounter, no
+  report, with the OTHER band's newest **real production** trip record retargeted at a tile the
+  observer remembers: before, **1 `inferred_from_recent_activity` record with a
+  `linkedActivityTripId`** claiming `crossing_or_route_use`; after, **0** — and the trip record
+  itself survives in BOTH arms. The hidden-residence fixture goes **2 records (one of them
+  `observed`, `recentOverlapCount` 6) -> 0**. An adjacent pair (P3) and an encountered pair (P4)
+  still produce friction in both arms, and reports stay `reported_secondhand` (P5, P11).
+
+  **NATURAL, same maps, seeds (`audit27:natural`), scenarios and 20-year duration as AUDIT-27 /
+  CORRECTION-28 / CORRECTION-29, 2,400 living band-seasons per arm:** friction records created
+  **148 -> 61 (-58.8%)**; `inferred_from_recent_activity` **84 -> 0**; `linkedActivityTripId`
+  **84 -> 0**; report-linked **33 -> 33**; reported awareness **35,776 -> 35,776**; unique
+  observer/other pairs 2 -> 2. **THE PHYSICAL LAYER IS IDENTICAL ON ALL 17 CHECKED KEYS** —
+  crowding 2.51, catchment 26,515 / 43, reachable support 114,381.8, depletion 3,419.5131 over
+  41,278 tiles, trips 57,600, moves 1,547, population 817, bands 30, survival 6/6, fissions 0.
+  **AUDIT-27's own unmodified natural instrument moves EXACTLY ONE of 24 aggregates**
+  (`rangeFrictionEventsObserved` 148 -> 61 — the same two numbers this pass's independent
+  instrument produced), with `crowdingPenaltyNonZeroBandSeasons` 51, `doubleCountedBandSeasons`
+  40, `pressurePersistedAfterDeparture` 55 and `accessMemoryStatesNonNone` 18,417 all unchanged.
+
+  **BEHAVIOURALLY: five of six 20-year runs identical, and `firstPhysicalDivergenceTick` is NULL
+  IN ALL SIX.** The sole divergent run is map2 s1 (the only run producing friction at all), first
+  divergence **tick 32**, band `varied-dry-corridor-mid`, social only: ring 3 -> 2, inferred
+  1 -> 0, trip ids 1 -> 0, social tension 0.25 -> 0.24. **NO IMPROVEMENT IS CLAIMED.**
+
+  **THE ONE NON-SUBTRACTIVE CHANGE WAS ISOLATED WITH A THIRD ARM.** Access pressure moves slightly
+  UP (`sharedUsePressureSum` 182.11 -> 189.04, `strangerCautionSum` 298.32 -> 300.64). A third arm
+  with `recentOverlapCount` pinned to 1 gives **identical record counts** (61 / 28 / 0 / 33 — so
+  the -87 is entirely the removal of the private reads) but `sharedUsePressureSum` **164.49**:
+  the rise is entirely the observer-memory re-sourcing, and removal alone would have LOWERED it
+  by 9.7%. Pinning was REJECTED because it makes the top tension tier `moderate_placeholder`
+  **structurally unreachable** (17 -> 0, against 7 shipped) and reclassifies 8
+  `repeated_outsider_use` records as `possible_intrusion`; §9.4 requires a legitimate case to stay
+  capable of appropriate friction.
+
+  **LIMITS STATED, NOT BURIED.** (1) **P9 and P10 are UNCHANGED PASSES IN BOTH ARMS and are NOT
+  repair credit** — but each carries a POSITIVE CONTROL that strips the friction ring from a world
+  with real friction and shows the probe moving (`familiar_use` -> `tolerated_shared_use`,
+  `strangerCaution` 0 -> 0.13, `sharedUsePressure` 0 -> 0.24, social tension 0.22 -> 0.26), so the
+  nulls are real nulls and not an insensitive instrument. (2) **Defect chain A (hidden residence)
+  has a NATURAL OCCURRENCE OF ZERO** — `recordsSourcedOnlyFromPrivatePosition` reads 0 in BOTH
+  arms, so the whole -87 comes from chain B; the hidden-residence repair is proven ONLY by fixture
+  P2 and claims no natural credit. (3) Proximity-as-detection is symmetric, terrain-blind and
+  coarse; production still has **NO visibility, route or barrier rule** for social perception of
+  any kind. (4) `directObservedPresenceRecords` 31 -> 28 is a RE-IDENTIFICATION (event ids embed
+  `interpretation`, which depends on `recentOverlapCount`), not a loss of grounded records, and
+  was not separately isolated. (5) The rumour loop is only half-cut: `rangeFriction.ts:250` blocks
+  a band's OWN reports, but a false record travelling to a neighbour and returning is still
+  structurally possible.
+
+  PASSED: tsc (both projects), build, graph 221/764 0 dup 0 dangling, import boundary (back edges
+  85, unchanged), season-order invariance, step-mode invariance BOTH maps with
+  `fullCanonicalStateMatch` and `firstDivergence: null`, catchment invariants, living-ecology food
+  pipeline, mobility authority, fixtures **P1-P15 in BOTH arms with 0 vacuous**, CORRECTION-29
+  fixtures **12/12 unchanged**, CORRECTION-28 fixtures **12/12 unchanged**, AUDIT-27 fixtures
+  **11/11 unchanged vs the CORRECTION-29 tip** (C4 and C10b remain flipped, inherited),
+  `socialCausalityAudit` **byte-identical between arms**. The AUDIT-27 release-timeline probe moved
+  in exactly TWO fields, both `observerAccessSharedUsePressure`; the release LIFECYCLE is
+  unchanged.
+
+  **TWO FIXTURES WERE VACUOUS IN THEIR FIRST FORM AND WERE REPAIRED, NOT COUNTED:** P3 relied on
+  two bands staying adjacent through warming and drifted apart; P12 spawned onto a fixed offset
+  triple and silently got fewer than three bands.
+
+  DEFERRED AND UNTOUCHED: range-friction expiry and release (AUDIT-27's C5 still reads
+  `PHYSICAL_RELEASES_PERCEPTION_DOES_NOT`); access-memory decay; crowding double-counting;
+  `nearbyBandPressure` / `crowdingPenalty` weights; the residence-anchored physical shared-use
+  footprint; trip / expedition ecological competition; trails; camp traces; encounter visibility
+  and barriers; smoke detection; culture; territory; conflict; fission; `territorialPressure`;
+  Daughter Viability.
+
+  NOT RUN, deliberately: no 200 y / 500 y matrix, no performance re-measurement, no fresh-process
+  determinism run, no `simBenchmark` fingerprint comparison. INHERITED FAILURE, not rerun and not
+  claimed fixed: `expeditionLifecycleAudit` (recorded FAILING identically at CORRECTION-26's base
+  and tip).
+  See docs/evidence/shared-range-friction-provenance-30/FINDINGS.md.)
+
+Previously updated:
   2026-08-01 (SHARED RANGE — DIRECT ENCOUNTER PROVENANCE CORRECTION-29:
   PASS — PRIVATE PLACE-MEMORY COINCIDENCE NO LONGER CREATES DIRECT ENCOUNTERS / LEGITIMATE
   PHYSICAL CONTACT REMAINS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE.
@@ -1247,21 +1381,26 @@ Implemented checkpoint:
 Current active checkpoint:
   CROWDING / SHARED RANGE / RANGE RELEASE (roadmap item 3) — **ACTIVE AND OPEN.** AUDIT-27
   (b352c31) mapped the authorities and returned PROGRESS; it remains a diagnostic checkpoint and
-  authorized no production work beyond the seams it defined. Two of those seams are now repaired,
+  authorized no production work beyond the seams it defined. Three of those seams are now repaired,
   each in its own checkpoint: **CORRECTION-28 (CLOSED and FROZEN at c5eb58a8)** — remembered places
-  no longer create physical crowding; and **CORRECTION-29** — private place-memory coincidence no
-  longer creates direct encounters. **Item 3 does NOT close on either pass.** The AUDIT-27 seams
-  still open, each needing its own checkpoint and its own before/after evidence: double-counting
-  consolidation in `computeCandidateScore` (the same crowding scalar reaches one score through six
-  separately-weighted terms); range-release lifecycle (range-friction events release only on a fixed
-  48-tick clock that never observes departure, and access expectations drift TOWARD avoided_shared_use
-  after the neighbour leaves); the physical shared-use substrate (`sharedCatchment`'s footprint is
-  residence-anchored, so real trips, expedition routes and investigation walks compete for nothing);
-  `territorialPressure`, a spawn constant with three live behavioural readers and no writer; and
-  `rangeFriction.ts`'s **own** private-trip provenance, which CORRECTION-29 deliberately left alone
-  (it reads another band's `recentIntraSeasonTrips` gated on *place*, not on observation).
-  CORRECTION-29 also recorded, without repairing, that production has **no visibility, route or
-  barrier rule** for encounters at all — bands separated by water still meet.
+  no longer create physical crowding; **CORRECTION-29 (CLOSED and FROZEN at a15d0a78)** — private
+  place-memory coincidence no longer creates direct encounters; and **CORRECTION-30** — private
+  other-band position and trip records no longer create observer range friction. **Item 3 does NOT
+  close on any of them.** The AUDIT-27 seams still open, each needing its own checkpoint and its own
+  before/after evidence: **range-release lifecycle — the next one, and now unblocked** (range-friction
+  events release only on a fixed 48-tick clock that never observes departure, and access expectations
+  drift TOWARD avoided_shared_use after the neighbour leaves; C5 still reads
+  `PHYSICAL_RELEASES_PERCEPTION_DOES_NOT`); double-counting consolidation in `computeCandidateScore`
+  (the same crowding scalar reaches one score through six separately-weighted terms); the physical
+  shared-use substrate (`sharedCatchment`'s footprint is residence-anchored, so real trips, expedition
+  routes and investigation walks compete for nothing); and `territorialPressure`, a spawn constant
+  with three live behavioural readers and no writer.
+  Two absences are recorded across CORRECTION-29 and -30 and were deliberately NOT filled in:
+  production has **no visibility, route or barrier rule** for social perception at all (bands
+  separated by water still meet), and there is **no physical-trace authority of any kind** — no
+  tracks, no trails as world features, no camp remains, no trace freshness, no cross-band smoke, and
+  no band or person cue in `landscapeVisibility.ts`. Both belong to the future Persistent Human
+  Landscape pass; inventing either to preserve event frequency is explicitly forbidden.
   Roadmap item 2 (RESOURCE INVESTIGATION / TEMPORARY USE) — CORRECTION-26 is TECHNICALLY
   COMPLETE and awaiting final human roadmap closure; it is not self-closed. Historical context follows:
   HUMAN VIABILITY / CAUSAL CLOSURE (CORRECTION-16, PROGRESS) then DESTINATION KNOWLEDGE HORIZON /
@@ -3616,6 +3755,7 @@ Keep this bounded to the latest 10–15 accepted architecture changes. Condense 
 
 | Checkpoint/commit | Architecture change | Remaining caveat |
 | --- | --- | --- |
+| SHARED RANGE — RANGE-FRICTION OBSERVATION PROVENANCE — CORRECTION-30 (2026-08-02; branch `checkpoint/shared-range-friction-provenance-30` from CORRECTION-29's `a15d0a78`; **PASS — ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE**) | **A place being familiar to the observer is no longer evidence about anybody else.** `rangeFriction.ts` contained **no distance computation of any kind** — no `getGridDistance` import, no `distance` identifier in 800 lines — so a remembered tile alone licensed three separate reads of another band's PRIVATE state: `other.position` as an `observed` `residential_presence` at ANY distance (candidates came from proximity OR kinship OR any `contactMemories` entry, the last two ungated); `other.recentIntraSeasonTrips` as `inferred_from_recent_activity` with a `linkedActivityTripId` and an activity kind read off private task/objective/cause/movement/resource fields over a **12-tick, THREE-YEAR** window; and `countRecentTripsInRange` reading the same trip list a THIRD time to inflate `recentOverlapCount` on the RESIDENTIAL notice — the value driving `repeated_outsider_use` and `moderate_placeholder`. A contemporary notice now requires the other band to be in the observer's CURRENT physical proximity set (`cache.nearbyBandsByBandId`, `DEFAULT_NEARBY_RADIUS = 4` — **the same canonical authority CORRECTION-28 kept for crowding and CORRECTION-29 for encounter candidacy; no new constant, type, module or import**). All three private reads deleted with `classifyTripActivity`, `makeTripId`, `compareTrips`, `RANGE_FRICTION_TRIP_WINDOW_TICKS`; `recentOverlapCount` re-sourced to the observer's OWN ring; `linkedActivityTripId` removed from the internal notice shape (field retained in types.ts for a future witnessed-activity channel); `deriveReportLinkedEvents` and `deriveCandidateBands` UNTOUCHED. **The records were never inert and the header said they were:** via `accessNorms.ts:426` they set `strangerCaution` / `sharedUsePressure` / `rememberedRefusalAvoidance` -> `ProtoAccessBehaviorEffectState` -> **`pressure.ts:161-166`, five real decision inputs**; header corrected. **Option D (physical traces) rejected on inspection:** no tracks, no trails as world features, no camp remains (`TemporaryTaskPartyRecord` asserts `noCamp: true`), no freshness, no cross-band smoke, no band cue in `landscapeVisibility.ts`. **HEADLINE: two bands 42 tiles apart, no encounter, no report, the other band's newest REAL trip retargeted at a remembered tile — 1 inferred-activity record with a trip id -> 0, trip record surviving in BOTH arms; hidden residence 2 -> 0.** Natural (same maps/seeds/duration as 27/28/29, 2,400 band-seasons/arm): records **148 -> 61**, inferred **84 -> 0**, trip ids **84 -> 0**, reports **33 -> 33** and **35,776 -> 35,776**; **physical layer identical on all 17 keys**; AUDIT-27's own instrument moves **1 of 24 aggregates**. Five of six 20-year runs identical, `firstPhysicalDivergenceTick` **null in all six**. New `scripts/rangeFrictionProvenance{FixturesAudit,NaturalAudit,BehaviorTrace,Compare}.mjs`; P1-P15 both arms, 0 vacuous | **NO IMPROVEMENT IS CLAIMED** — population 817, bands 30, moves 1,547, survival 6/6, fissions 0, all unchanged; no long-horizon matrix. **The one non-subtractive change is isolated with a third arm:** access pressure rises slightly (`sharedUsePressureSum` 182.11 -> 189.04) and an arm with `recentOverlapCount` pinned to 1 gives identical record counts but **164.49**, proving the rise is entirely the observer-memory re-sourcing; pinning was rejected because it makes `moderate_placeholder` **structurally unreachable** (17 -> 0 vs 7). **P9/P10 are UNCHANGED PASSES IN BOTH ARMS and are NOT repair credit** — each carries a positive control proving the probe does move with real friction, so the nulls are real. **Defect chain A has a NATURAL OCCURRENCE OF ZERO** (`recordsSourcedOnlyFromPrivatePosition` 0 in both arms) — proven only by fixture P2, no natural credit claimed. `directObservedPresenceRecords` 31 -> 28 is a re-identification (event ids embed `interpretation`), not a loss, and was not separately isolated. The rumour loop is half-cut: a band's own reports are blocked, a false record travelling to a neighbour and back is not. Two fixtures were vacuous in their first form (P3 drift, P12 spawn) and were repaired, not counted. Deferred: range release (C5 still `PHYSICAL_RELEASES_PERCEPTION_DOES_NOT`); access-memory decay; crowding double-counting; footprint expansion; trails/camps/traces; encounter visibility; `territorialPressure`; Daughter Viability. Inherited failure not rerun: `expeditionLifecycleAudit` |
 | SHARED RANGE — DIRECT ENCOUNTER PROVENANCE — CORRECTION-29 (2026-08-01; branch `checkpoint/shared-range-encounter-provenance-29` from CORRECTION-28's `c5eb58a`; **PASS — ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE**) | **A coincidence between two bands' private place memories is no longer a meeting.** The ghost chain lived entirely in `socialContext.ts` and passed **two independent gates**, both closed in the same commit: `getEncounterCandidatePairs` paired any two bands whose `topReturnPlaceIds` named the same tile **with no distance condition at all**, and `getEncounterKind`'s `memoryOverlap > 0.24 \|\| distance <= 3` admitted a direct encounter at **any** distance — the only non-distance-gated branch in the encounter system — fed by `getSharedMemoryOverlap` reading the **other band's private `placeMemory`** directly. Pairing block deleted, disjunct narrowed to `distance <= 3`, `getSharedMemoryOverlap` deleted with its single call site. `updateContactMemory`, encounter outcomes, tolerance, tension, disposition and response distributions **untouched**. **Option B (physical-activity evidence: trips, expeditions, camps, routes) was DEFERRED not rejected** — §8 excludes those overlaps, and it would ADD encounters, making the before/after proof unreadable. **HEADLINE: two bands 42 tiles apart that had NEVER met, sharing one remembered tile, produced 3 `unrelated_overlap` encounter records and a contact memory with contactCount 3 — now 0 and none, keeping their place memories in both arms.** AUDIT-27's own C10b flips to `NO_SOCIAL_KNOWLEDGE_WITHOUT_PROXIMITY`; P8's kin+memory arm reproduces the **44-tile** figure (3 → 0) while kin-only-at-distance is 0 in both arms. **The natural result is a CONSERVATION: refreshes 42 → 32 (−10) and remembered-contact band-seasons 50 → 60 (+10)** — ten moved exactly from *refreshed* to *merely remembered* — with first-created contacts **2 → 2**, reports **35,776 → 35,776** and social-range recognition **94 → 94**. Five of six 20-year runs byte-identical; sole divergence map2 s1 tick 58, one band, one tile. New `scripts/encounterProvenance{FixturesAudit,NaturalAudit,Compare}.mjs`; P1-P12 both arms, 0 vacuous | **NO IMPROVEMENT IS CLAIMED** — population 817 → 817, bands 30 → 30, survival 6/6, fissions 0; encounter frequency deliberately not recalibrated. **P9 is an UNCHANGED PASS in both arms and is NOT credited as closing the friction cascade**: its bands are 42 tiles apart so they never shared familiar country and no friction fired either way. The contact memory that feeds `rangeFriction.ts:478` (which adds **every** `contactMemories` band as a friction candidate with no distance limit) is simply no longer created. **The "encounters beyond admission radius" counter is an UPPER BOUND** measured at end-of-tick — encounters are written before the decision loop moves bands — so the after arm reads 5, not 0; all five are `unrelated_overlap` and three are identical to the before arm; admission beyond 3 is impossible by construction. **P3 records that production has NO visibility, route or barrier rule for encounters** (bands separated by water still meet) and none was invented. Deferred: `rangeFriction.ts`'s own private-trip provenance; range-friction release; access-memory decay; crowding double-counting; range-saturation formulas; footprint expansion; kin factors; `territorialPressure`; Daughter Viability. No long-horizon matrix |
 | CROWDING — PHYSICAL VS REMEMBERED RANGE SEPARATION — CORRECTION-28 (2026-08-01; branch `checkpoint/crowding-physical-memory-separation-28` from AUDIT-27's `b352c31`; **PASS — ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE**) | **Physical crowding can no longer be created by memory alone.** `crowding.ts` derived it from `(distanceWeight*0.58 + samePatchWeight*0.34 + memoryOverlap*0.24) * populationWeight`, and the memory channel ALSO widened the scatter footprint — a band scattered into the radius-2 ball around each salient return / attachment>0.5 place **regardless of where it currently was**. The channel is removed from **both** implementations of the same rule (`buildCrowdingField` and `computeCrowdingContribDescriptor`), `getRememberedAreaOverlap` is deleted, and the skip narrows to `distance > CROWDING_RADIUS`. **Option B (a typed second channel) was rejected**: remembered overlap already has four honest homes — `placeMemory`, `FamiliarCountrySummary`, `SocialRangeRecognitionSummary`, `ProtoAccessMemoryState` — and manufacturing a fifth with no reader is the "state field nobody reads" anti-pattern. **HEADLINE, identical fixture both arms: a band 35 TILES AWAY went from `weightedCrowding 0.03` / `crowdingPenalty 0.01` / `nearbyBandCount 1` / a named contributor identity / `rangeSaturation.nearbyCrowding 0.03` to 0 / 0 / 0 / none / 0, while a currently nearby band is UNCHANGED at 0.11 → 0.11 and a band with no memory at all still crowds.** **45% of natural crowding was memory-derived** — crowded band-seasons 89 → 49, double-counting 83 → 38, contributor identities 96 → 54, with every other natural counter identical. **Five of six 20-year runs byte-identical**; the sole divergence is map2 s1 at tick 37 (0.12 → 0.11), costing one move; population 817 → 817, bands 30 → 30, survival 6/6, fissions 0 → 0. AUDIT-27's own C4 flips to `NO_OBSOLETE_CROWDING`; C5 and C10b unchanged. New `scripts/crowdingMemorySeparation{FixturesAudit,BehaviorTrace,Compare}.mjs`; P1-P12 in both arms, 0 vacuous; field/scan parity 0 mismatches both arms | **NO IMPROVEMENT IS CLAIMED** — population, bands, survival and fissions are unchanged at 20 years and no long-horizon matrix was run. **A second memory→pressure path SURVIVES deliberately:** `getParentCoreOverlap` still takes `max(directOverlap, memoryOverlap)` over the PARENT band's salient places into `DaughterDispersalPressure`; it is kin machinery, §7.8 forbids touching it here, and AUDIT-27 measured **zero** natural kin-overlap cases — measured on every fixture read, not assumed absent. **Roadmap item 3 remains OPEN** with five AUDIT-27 seams unrepaired: double-counting in `computeCandidateScore`, encounter provenance (the 44-tile ghost), range-release lifecycle (48-tick clock blind to departure), the residence-anchored physical footprint, and `territorialPressure`'s missing writer. Instrument errors recorded: P4 was vacuous in two earlier forms, and two AUDIT-27 scripts default their output into AUDIT-27's evidence directory and needed explicit `--out` |
 | RESOURCE INVESTIGATION PHYSICAL EXECUTION — CORRECTION-26 (2026-08-01; branch `checkpoint/resource-investigation-physical-26` continuing `b746b68`; **PASS — TECHNICALLY COMPLETE / AWAITING HUMAN ROADMAP CLOSURE / DO NOT MERGE**) | **A selected `resource_scout`/`logistical_probe` no longer observes anything.** `collectProbeObservationTargets` is deleted; selection observes what a `stay` observes and leaves ONE bounded `PendingInvestigationRecord` (new `agents/pendingInvestigation.ts`) carrying the exact `Decision.id` into the following season's first trip day, where `agents/intraSeasonTrips.ts` staffs a party from labour the day's foraging group left, walks `buildOutboundPathTiles`/`findPassablePath`, and either arrives or names why not. Observation happens ONLY on arrival, through the canonical `observeTileAndNearby`; `derivePlantScoutObservationHint` (the one raw-truth read) sits behind that gate. New `agents/resourceScoutObservation.ts` holds the execution-neutral domain half — candidate selection and applied-decision classification STAYED in `rules/`. **Measured at the pre-existing `decisionObserver` seam (present unchanged at f947550): target-area knowledge gained at selection 176/192 (91.7%) → 0/234, with 234/234 now carrying an exact PENDING identity that resolves to 97 physical executions + 132 named non-executions + 5 awaiting a trip day, on MORE selections not fewer. A pending identity is not an execution and is not reported as one.** 343 natural selections resolve 139 executed / 147 `beyond_same_day_reach` / 54 `route_unavailable` / 3 pending / 0 lost / 0 duplicate executions / 0 receipts. `TemporaryTaskCampRecord` → `TemporaryTaskPartyRecord`, written only on a real departure with `noCamp: true` (`camp_movement_temporary_record` 129 → 0; `expedition_task_camp` 103 → 113, untouched, NOT merged). 0 runtime cycles in `src/sim`, 0 `agents → rules` runtime edges | **A real step-mode regression was introduced and fixed** (the executor observed with `runDailyActions`' span-start `world.time`, stamping day 180 vs 185 — the same defect CORRECTION-15 repaired as item (D)); **fixture P13 passed while it was live** and was strengthened with a negative control. Three instrument errors in this pass's own probes are recorded (whole-step measurement window, symmetric metric, vacuous P13). `expeditionLifecycleAudit` FAILS here and **identically on f947550** — inherited, unrepaired. **DEFERRED AND UNPROVEN:** `beyond_same_day_reach` is an honest named refusal under the currently authoritative production boundary; the four-tile boundary itself is NOT claimed proven physically correct. The possible mismatch with dynamic `bandMobility` is unproven in either direction, no mobility constant was changed, no separate correction is authorized, and it is not part of CORRECTION-26. `route_unavailable` has no failure memory. No long-horizon matrix, no population/survival comparison, no claim that physical investigation improves outcomes |

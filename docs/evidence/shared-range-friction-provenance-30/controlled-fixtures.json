@@ -1,0 +1,806 @@
+{
+  "checkpoint": "CORRECTION-30",
+  "arm": "after",
+  "seed": "c30:fixtures",
+  "warmSeasons": 16,
+  "map": "map2",
+  "generatedFixtures": 15,
+  "vacuousFixtures": 0,
+  "measurementSeam": "advanceRangeFriction(world, buildTickContextCache(world)) — the production writer, called directly",
+  "fixtures": [
+    {
+      "id": "P1",
+      "question": "unobserved band's private trip into remembered country creates friction",
+      "verdict": "NO_SOCIAL_FRICTION_RECORD",
+      "syntheticState": true,
+      "injected": "observer prior contact memory; the OTHER band's newest real trip record retargeted at a tile the observer remembers",
+      "precondition": "bands beyond every proximity radius, no encounter, no report, trip target inside observer's familiar country",
+      "preconditionMet": true,
+      "separation": 42,
+      "targetTile": "tile:191:88",
+      "observerTierAtTarget": "edge",
+      "trip": {
+        "sourceBandId": "band:custom:1",
+        "tick": 16,
+        "day": 1437,
+        "targetTileId": "tile:191:88",
+        "taskGroupType": "plant_gathering_group",
+        "cause": "food_resource_check",
+        "objective": "food_patch_check",
+        "clonedFromRealProductionRecord": true
+      },
+      "physicalTripRecordSurvives": true,
+      "before": {
+        "ringLength": 0,
+        "namingOther": 0,
+        "byConfidence": {
+          "observed": 0,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [],
+        "interpretations": [],
+        "tensionLevels": [],
+        "maxRecentOverlapCount": 0,
+        "tiles": [],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      },
+      "after": {
+        "ringLength": 0,
+        "namingOther": 0,
+        "byConfidence": {
+          "observed": 0,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [],
+        "interpretations": [],
+        "tensionLevels": [],
+        "maxRecentOverlapCount": 0,
+        "tiles": [],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      }
+    },
+    {
+      "id": "P2",
+      "question": "hidden residence inside remembered country becomes observed presence",
+      "verdict": "NO_SOCIAL_FRICTION_RECORD",
+      "syntheticState": true,
+      "injected": "observer prior contact memory; observer's own observedTiles + placeMemory seeded for the tile the other band stands on (copied from that band's own records)",
+      "precondition": "other band residing on a tile the observer remembers, beyond every proximity radius, with no encounter and no report",
+      "preconditionMet": true,
+      "separation": 42,
+      "otherResidenceTile": "tile:195:130",
+      "observerRemembersIt": true,
+      "before": {
+        "ringLength": 0,
+        "namingOther": 0,
+        "byConfidence": {
+          "observed": 0,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [],
+        "interpretations": [],
+        "tensionLevels": [],
+        "maxRecentOverlapCount": 0,
+        "tiles": [],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      },
+      "after": {
+        "ringLength": 0,
+        "namingOther": 0,
+        "byConfidence": {
+          "observed": 0,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [],
+        "interpretations": [],
+        "tensionLevels": [],
+        "maxRecentOverlapCount": 0,
+        "tiles": [],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      }
+    },
+    {
+      "id": "P3",
+      "question": "physically adjacent bands still produce direct friction",
+      "verdict": "LEGITIMATE_DIRECT_FRICTION_PRESENT",
+      "syntheticState": true,
+      "injected": "the neighbour parked two tiles from the observer's post-warming position",
+      "precondition": "other band inside the canonical proximity set, residing on a tile the observer knows",
+      "preconditionMet": true,
+      "separation": 2,
+      "insideCanonicalProximitySet": true,
+      "otherResidenceTile": "tile:196:90",
+      "after": {
+        "ringLength": 4,
+        "namingOther": 4,
+        "byConfidence": {
+          "observed": 4,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence"
+        ],
+        "interpretations": [
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "uncertain_presence"
+        ],
+        "tensionLevels": [
+          "mild",
+          "mild",
+          "mild",
+          "watchful"
+        ],
+        "maxRecentOverlapCount": 4,
+        "tiles": [
+          "tile:196:90",
+          "tile:197:90",
+          "tile:197:90",
+          "tile:197:90"
+        ],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      }
+    },
+    {
+      "id": "P4",
+      "question": "a legitimate encounter still supports contemporary friction",
+      "verdict": "ENCOUNTERED_PAIR_STILL_PRODUCES_FRICTION",
+      "precondition": "a real encounter record exists between the pair",
+      "preconditionMet": true,
+      "note": "Encounter admission (<= 3) is a SUBSET of the proximity set (<= 4) and applyEncounterContext runs on the same cache immediately before advanceRangeFriction, so a separate encounter branch would be a vacuous disjunct. This fixture measures that encountered pairs still get friction through the proximity gate rather than asserting it.",
+      "encounterCount": 12,
+      "encounterKinds": [
+        "adjacent_contact",
+        "same_tile",
+        "same_tile",
+        "same_tile",
+        "unrelated_overlap",
+        "unrelated_overlap",
+        "unrelated_overlap",
+        "unrelated_overlap",
+        "unrelated_overlap",
+        "unrelated_overlap",
+        "unrelated_overlap",
+        "unrelated_overlap"
+      ],
+      "contactMemoryExists": true,
+      "separation": 2,
+      "insideCanonicalProximitySet": true,
+      "after": {
+        "ringLength": 7,
+        "namingOther": 7,
+        "byConfidence": {
+          "observed": 7,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence"
+        ],
+        "interpretations": [
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "ford_overlap",
+          "ford_overlap",
+          "possible_intrusion"
+        ],
+        "tensionLevels": [
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "none",
+          "none"
+        ],
+        "maxRecentOverlapCount": 7,
+        "tiles": [
+          "tile:194:88",
+          "tile:194:89",
+          "tile:194:89",
+          "tile:194:89",
+          "tile:194:90",
+          "tile:194:90",
+          "tile:196:90"
+        ],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      }
+    },
+    {
+      "id": "P5",
+      "question": "a second-hand report creates only reported friction",
+      "verdict": "REPORT_LINKED_FRICTION_STAYS_SECONDHAND",
+      "syntheticState": true,
+      "injected": "a real production report, retargeted at the observer's remembered tile and re-sourced to the other band",
+      "clonedFromRealReport": true,
+      "precondition": "a report from ANOTHER band naming a tile inside the observer's familiar country",
+      "preconditionMet": true,
+      "reportTopic": "crowded_range_warning",
+      "reportTargetTile": "tile:191:88",
+      "reportLinkedEventCount": 1,
+      "reportLinkedConfidences": [
+        "reported_secondhand"
+      ],
+      "reportLinkedActivityKinds": [
+        "unknown_activity"
+      ],
+      "separation": 42,
+      "after": {
+        "ringLength": 1,
+        "namingOther": 1,
+        "byConfidence": {
+          "observed": 0,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 1,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 1,
+        "activityKinds": [
+          "unknown_activity"
+        ],
+        "interpretations": [
+          "crowded_water_place"
+        ],
+        "tensionLevels": [
+          "watchful"
+        ],
+        "maxRecentOverlapCount": 1,
+        "tiles": [
+          "tile:191:88"
+        ],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      }
+    },
+    {
+      "id": "P6",
+      "question": "old contact reveals the other band's new trip target",
+      "verdict": "OLD_CONTACT_REVEALS_NOTHING_CURRENT",
+      "syntheticState": true,
+      "injected": "the other band relocated 40 tiles away; its newest real trip retargeted at a tile the observer remembers",
+      "precondition": "a genuine prior contact memory, formed by real adjacency, then separation",
+      "preconditionMet": true,
+      "priorContactCount": 18,
+      "contactMemoryStillHeld": true,
+      "contactCountAfter": 18,
+      "separation": 40,
+      "hiddenTripTarget": "tile:192:90",
+      "trip": {
+        "sourceBandId": "band:custom:1",
+        "tick": 6,
+        "day": 537,
+        "targetTileId": "tile:192:90",
+        "taskGroupType": "local_foraging_group",
+        "cause": "local_resource_use",
+        "objective": "local_exploitation",
+        "clonedFromRealProductionRecord": true
+      },
+      "before": {
+        "ringLength": 8,
+        "namingOther": 8,
+        "byConfidence": {
+          "observed": 8,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence"
+        ],
+        "interpretations": [
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "ford_overlap"
+        ],
+        "tensionLevels": [
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "none"
+        ],
+        "maxRecentOverlapCount": 9,
+        "tiles": [
+          "tile:194:88",
+          "tile:194:88",
+          "tile:194:88",
+          "tile:194:89",
+          "tile:194:89",
+          "tile:194:89",
+          "tile:194:89",
+          "tile:194:90"
+        ],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      },
+      "after": {
+        "ringLength": 8,
+        "namingOther": 8,
+        "byConfidence": {
+          "observed": 8,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence"
+        ],
+        "interpretations": [
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "ford_overlap"
+        ],
+        "tensionLevels": [
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "none"
+        ],
+        "maxRecentOverlapCount": 9,
+        "tiles": [
+          "tile:194:88",
+          "tile:194:88",
+          "tile:194:88",
+          "tile:194:89",
+          "tile:194:89",
+          "tile:194:89",
+          "tile:194:89",
+          "tile:194:90"
+        ],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      }
+    },
+    {
+      "id": "P7",
+      "question": "physical consequence present while social knowledge absent",
+      "verdict": "PHYSICAL_PRESENT_SOCIAL_ABSENT",
+      "syntheticState": true,
+      "note": "The two bands are 40 tiles apart, so their catchments do not overlap — this fixture proves the SEPARATION (physical readings live, social record absent), not that catchment competition itself occurs at distance. Residence-anchored catchment overlap is an AUDIT-27 seam this checkpoint does not touch.",
+      "precondition": "the other band holds a real trip record and both bands have live physical readings",
+      "preconditionMet": true,
+      "otherBandPhysical": {
+        "position": "tile:195:130",
+        "weightedCrowding": 0,
+        "crowdingPenalty": 0,
+        "crowdingBandIds": [],
+        "nearbyBandCount": 0,
+        "meanCatchmentShare": 1,
+        "footprintTiles": 13,
+        "overlappingBandIds": [],
+        "perCapitaReturn": 0,
+        "sharedReachableSupport": 35.79,
+        "tileDepletionHere": 0.1857,
+        "tripRecordCount": 24,
+        "seasonalReceiptUnits": null
+      },
+      "observerPhysical": {
+        "position": "tile:195:88",
+        "weightedCrowding": 0,
+        "crowdingPenalty": 0,
+        "crowdingBandIds": [],
+        "nearbyBandCount": 0,
+        "meanCatchmentShare": 1,
+        "footprintTiles": 13,
+        "overlappingBandIds": [],
+        "perCapitaReturn": 0.2,
+        "sharedReachableSupport": 144.56,
+        "tileDepletionHere": 0.0662,
+        "tripRecordCount": 24,
+        "seasonalReceiptUnits": null
+      },
+      "observerSocialKnowledgeOfOther": {
+        "ringLength": 0,
+        "namingOther": 0,
+        "byConfidence": {
+          "observed": 0,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [],
+        "interpretations": [],
+        "tensionLevels": [],
+        "maxRecentOverlapCount": 0,
+        "tiles": [],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      }
+    },
+    {
+      "id": "P8",
+      "question": "private trip outside familiar country creates friction (negative control)",
+      "verdict": "NO_FRICTION_EITHER_ARM",
+      "syntheticState": true,
+      "note": "NEGATIVE CONTROL — this is expected to be identical in both arms and is NOT primary acceptance evidence.",
+      "precondition": "trip target outside the observer's familiar country",
+      "preconditionMet": true,
+      "targetTile": "tile:193:130",
+      "observerRemembersTarget": false,
+      "separation": 42,
+      "before": {
+        "ringLength": 0,
+        "namingOther": 0,
+        "byConfidence": {
+          "observed": 0,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [],
+        "interpretations": [],
+        "tensionLevels": [],
+        "maxRecentOverlapCount": 0,
+        "tiles": [],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      },
+      "after": {
+        "ringLength": 0,
+        "namingOther": 0,
+        "byConfidence": {
+          "observed": 0,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [],
+        "interpretations": [],
+        "tensionLevels": [],
+        "maxRecentOverlapCount": 0,
+        "tiles": [],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      }
+    },
+    {
+      "id": "P9",
+      "question": "the private-trip case moves the access cascade",
+      "verdict": "NO_ACCESS_CASCADE",
+      "syntheticState": true,
+      "precondition": "the P1 construction; access memory read at the trip target tile before and after the friction writer runs",
+      "preconditionMet": true,
+      "targetTile": "tile:191:88",
+      "separation": 42,
+      "accessBefore": {
+        "placeExists": false,
+        "accessState": null,
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "placeSensitivity": 0,
+        "behaviorSensitivePlaceCautionBias": 0.01,
+        "behaviorContestedAvoidanceBias": 0,
+        "behaviorToleranceReductionBias": 0,
+        "behaviorMaxHook": 0.03,
+        "topPlaceCount": 8
+      },
+      "accessAfter": {
+        "placeExists": false,
+        "accessState": null,
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "placeSensitivity": 0,
+        "behaviorSensitivePlaceCautionBias": 0.01,
+        "behaviorContestedAvoidanceBias": 0,
+        "behaviorToleranceReductionBias": 0,
+        "behaviorMaxHook": 0.03,
+        "topPlaceCount": 8
+      },
+      "positiveControl": {
+        "frictionRingLength": 4,
+        "accessWithFriction": {
+          "placeExists": true,
+          "accessState": "tolerated_shared_use",
+          "strangerCaution": 0.13,
+          "sharedUsePressure": 0.24,
+          "rememberedRefusalAvoidance": 0.14,
+          "placeSensitivity": 0.34,
+          "behaviorSensitivePlaceCautionBias": 0.01,
+          "behaviorContestedAvoidanceBias": 0,
+          "behaviorToleranceReductionBias": 0,
+          "behaviorMaxHook": 0.06,
+          "topPlaceCount": 7
+        },
+        "accessWithoutFriction": {
+          "placeExists": true,
+          "accessState": "familiar_use",
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0.14,
+          "placeSensitivity": 0.26,
+          "behaviorSensitivePlaceCautionBias": 0.01,
+          "behaviorContestedAvoidanceBias": 0,
+          "behaviorToleranceReductionBias": 0,
+          "behaviorMaxHook": 0.06,
+          "topPlaceCount": 7
+        },
+        "tensionWithFriction": {
+          "socialTensionPressure": 0.26,
+          "rangeFrictionCauseStrength": null,
+          "cohesion": 0.71,
+          "tolerance": 0.64
+        },
+        "tensionWithoutFriction": {
+          "socialTensionPressure": 0.22,
+          "rangeFrictionCauseStrength": null,
+          "cohesion": 0.71,
+          "tolerance": 0.64
+        },
+        "accessProbeIsSensitive": true,
+        "tensionProbeIsSensitive": true
+      },
+      "probeSensitivityNote": "the access probe DOES move when real friction is present, so the null above is a real null"
+    },
+    {
+      "id": "P10",
+      "question": "the private-trip case moves range-friction social tension",
+      "verdict": "NO_SOCIAL_TENSION_CASCADE",
+      "syntheticState": true,
+      "precondition": "the P1 construction; social tension read before and after the friction writer runs",
+      "preconditionMet": true,
+      "separation": 42,
+      "tensionBefore": {
+        "socialTensionPressure": 0.25,
+        "rangeFrictionCauseStrength": null,
+        "cohesion": 0.78,
+        "tolerance": 0.59
+      },
+      "tensionAfter": {
+        "socialTensionPressure": 0.25,
+        "rangeFrictionCauseStrength": null,
+        "cohesion": 0.78,
+        "tolerance": 0.59
+      },
+      "positiveControl": {
+        "frictionRingLength": 4,
+        "accessWithFriction": {
+          "placeExists": true,
+          "accessState": "tolerated_shared_use",
+          "strangerCaution": 0.13,
+          "sharedUsePressure": 0.24,
+          "rememberedRefusalAvoidance": 0.14,
+          "placeSensitivity": 0.34,
+          "behaviorSensitivePlaceCautionBias": 0.01,
+          "behaviorContestedAvoidanceBias": 0,
+          "behaviorToleranceReductionBias": 0,
+          "behaviorMaxHook": 0.06,
+          "topPlaceCount": 7
+        },
+        "accessWithoutFriction": {
+          "placeExists": true,
+          "accessState": "familiar_use",
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0.14,
+          "placeSensitivity": 0.26,
+          "behaviorSensitivePlaceCautionBias": 0.01,
+          "behaviorContestedAvoidanceBias": 0,
+          "behaviorToleranceReductionBias": 0,
+          "behaviorMaxHook": 0.06,
+          "topPlaceCount": 7
+        },
+        "tensionWithFriction": {
+          "socialTensionPressure": 0.26,
+          "rangeFrictionCauseStrength": null,
+          "cohesion": 0.71,
+          "tolerance": 0.64
+        },
+        "tensionWithoutFriction": {
+          "socialTensionPressure": 0.22,
+          "rangeFrictionCauseStrength": null,
+          "cohesion": 0.71,
+          "tolerance": 0.64
+        },
+        "accessProbeIsSensitive": true,
+        "tensionProbeIsSensitive": true
+      },
+      "probeSensitivityNote": "the tension probe DOES move when real friction is present, so the null above is a real null"
+    },
+    {
+      "id": "P11",
+      "question": "an ambiguous or reported source is rendered as confirmed direct observation",
+      "verdict": "UNCERTAINTY_PRESERVED",
+      "precondition": "P5 produced at least one report-linked friction event",
+      "preconditionMet": true,
+      "reportLinkedConfidences": [
+        "reported_secondhand"
+      ],
+      "note": "Reads P5's own output rather than rebuilding the case, so the two cannot disagree."
+    },
+    {
+      "id": "P12",
+      "question": "friction output depends on band record order",
+      "verdict": "ORDER_INVARIANT",
+      "precondition": "three bands producing at least one friction event",
+      "preconditionMet": true,
+      "bandCount": 3,
+      "forwardRingSignatureLength": 2290,
+      "identical": true
+    },
+    {
+      "id": "P13",
+      "question": "friction differs between daily and seasonal stepping",
+      "verdict": "STEP_MODE_INVARIANT",
+      "precondition": "at least one friction event exists after one season",
+      "preconditionMet": true,
+      "identical": true,
+      "seasonalSignatureLength": 760,
+      "dailySignatureLength": 760
+    },
+    {
+      "id": "P14",
+      "question": "range-friction and report rings stay bounded",
+      "verdict": "RINGS_BOUNDED",
+      "precondition": "five clustered bands producing friction over 8 further seasons",
+      "preconditionMet": true,
+      "bandCount": 5,
+      "maxFrictionRingLength": 8,
+      "frictionRingCap": 8,
+      "maxReportCount": 16
+    },
+    {
+      "id": "P15",
+      "question": "a terminal band still creates contemporary friction evidence",
+      "verdict": "NO_FRICTION_FROM_TERMINAL_BAND",
+      "syntheticState": true,
+      "injected": "the neighbour marked status=dispersed / viability.status=extinct at the identical geometry",
+      "precondition": "the same geometry produces friction while the neighbour is alive",
+      "preconditionMet": true,
+      "liveArm": {
+        "ringLength": 7,
+        "namingOther": 7,
+        "byConfidence": {
+          "observed": 7,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence",
+          "residential_presence"
+        ],
+        "interpretations": [
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "crowded_water_place",
+          "ford_overlap",
+          "ford_overlap",
+          "possible_intrusion"
+        ],
+        "tensionLevels": [
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "mild",
+          "none",
+          "none"
+        ],
+        "maxRecentOverlapCount": 7,
+        "tiles": [
+          "tile:194:88",
+          "tile:194:89",
+          "tile:194:89",
+          "tile:194:89",
+          "tile:194:90",
+          "tile:194:90",
+          "tile:196:90"
+        ],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      },
+      "terminalArm": {
+        "ringLength": 0,
+        "namingOther": 0,
+        "byConfidence": {
+          "observed": 0,
+          "inferred_from_recent_activity": 0,
+          "reported_secondhand": 0,
+          "uncertain": 0
+        },
+        "withLinkedActivityTripId": 0,
+        "withLinkedReportId": 0,
+        "activityKinds": [],
+        "interpretations": [],
+        "tensionLevels": [],
+        "maxRecentOverlapCount": 0,
+        "tiles": [],
+        "ringWithLinkedActivityTripId": 0,
+        "ringInferredFromActivity": 0
+      }
+    }
+  ]
+}
