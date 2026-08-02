@@ -181,7 +181,67 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### SHARED RANGE — RESIDENTIAL AND AWAY-PARTY PHYSICAL-PRESENCE AUTHORITY — CORRECTION-34 — **PROGRESS / NOT ACCEPTED / DO NOT MERGE**
+### DAILY TASK-PARTY PRESENCE, CATCHMENT ACCOUNTING AND EVIDENCE CLOSURE — CORRECTION-34A — **CORRECTION-34 FORMALLY NARROWED / ROADMAP ITEM 3 STAYS OPEN / DO NOT MERGE**
+
+**Branch** `checkpoint/shared-use-physical-presence-authority-34`, continuing `4042210`.
+CORRECTION-33 frozen at `5ebb5e98`; `main` untouched at `0a43083a`.
+**PRODUCTION BEHAVIOUR CHANGED — three files, four commits.**
+
+**What changed**
+
+1. **Person conservation is structural** (`expedition.ts`, `crowding.ts` comment). The launch
+   authority is sound *at the launch instant*; the hole is that `demography.ts`, `viability.ts`
+   and `demographicRenewal.ts` contain **zero** occurrences of "expedition" and `partyWorkers` is
+   write-once, so a demographic step or fission landing while a party is away can drop the
+   workforce below what is committed. `reconcileExpeditionCommitment` shrinks the newest party
+   first and declares `lost` below 2 workers, running daily inside `expeditionDailyAction` with
+   **no new import edge**. `getBandCommitmentAccounting` exports the invariant.
+2. **Catchment effort separated from demand** (`sharedCatchment.ts`). `getBandForagingDraw` now
+   counts adults **physically at camp**; `derivePopulationDemand` is untouched. Weights not
+   retuned. Claim 127.02 → 109.62 with three away; demand held at 25.
+3. **`expeditionLifecycleAudit` repaired** — daily canonical (operating 130 / returning 488 /
+   task-camp 375 / concurrent TRUE) vs seasonal (0/0/0/FALSE). **PASS, 0 failed checks.**
+
+**Exact next action**
+
+Roadmap item 3 is **open**. The named next pieces, in order of dependency:
+
+- **The same-day presence seam (deferred, not failed).** There is **no within-day consumer of
+  physical presence in production** — `runDailyActions` builds no context cache, every
+  `buildTickContextCache` site is inside `runSeasonalCompatibilityTick`, the two daily-action
+  modules reference crowding zero times, and a same-day party never exists at a boundary. A ledger
+  would be dead state. **Do not build one, and do not move crowding to a daily cadence as a
+  side-effect of some other checkpoint.** It becomes actionable only in the future **daily
+  mobility / party-overlap / encounter** architecture, which must supply a daily shared-use
+  substrate, one presence authority for both party kinds, an explicit within-day temporal
+  abstraction, a frozen daily selection snapshot, person conservation across both kinds, and its
+  own performance + step-mode proof. Full seam:
+  `docs/evidence/shared-use-physical-presence-authority-34/SAME_DAY_PRESENCE_SEAM.md`.
+  **`recentIntraSeasonTrips` may never answer "who is standing there now."**
+- **Transport technology / provisions.** The Default Expedition Carrying Rule is already
+  implemented — bodily baseline `0.12` units/worker, improvement only through a learned,
+  materially-grounded, maintained practice — **except that the provisions budget carries no
+  carrying term** (`expedition.ts:374-378` is `workers × 0.0008 × 24`, both constants). Learned
+  carrying raises what comes home and walking pace, but not what can be taken out, so viable trip
+  length is bounded by a constant rather than by capability. See
+  `DEFAULT_EXPEDITION_CARRYING_RULE.md`. Owned by the future material/craft/transport pass.
+- Remaining AUDIT-27 seams: the residence-anchored `sharedCatchment` **footprint** (still
+  residence-anchored even though the *draw* is now honest), `territorialPressure`'s missing writer,
+  kin crowding weights, parent-memory dispersal pressure, and whether
+  `CROWDING_DECISION_COST_WEIGHT = 0.96` is the physically right magnitude.
+
+**Not done in CORRECTION-34A:** no before/intermediate fixture arms re-run, no performance or
+state-size measurement, no 200 y matrix; fixtures P11/P13/P19/P23/P24/P26/P27/P28 not built.
+
+**Deferred anthropological debts recorded, not fixed:** sex and age composition, household care,
+childcare, skill-specific party members, storage and caches, transport technologies,
+social/ritual/trade journeys, party encounters, trauma and cultural mobility conservatism.
+The roadmap requirement that communities may later develop reversible elder-supported or
+culturally sustained resistance to leaving familiar territory is preserved.
+
+---
+
+### SHARED RANGE — RESIDENTIAL AND AWAY-PARTY PHYSICAL-PRESENCE AUTHORITY — CORRECTION-34 — **PROGRESS / NOT ACCEPTED / DO NOT MERGE** (superseded by CORRECTION-34A above)
 
 **Branch** `checkpoint/shared-use-physical-presence-authority-34` from the accepted CORRECTION-33
 tip `5ebb5e9887e36341f69350d4d3cff85f9493457c`. **CORRECTION-33 is CLOSED and FROZEN at

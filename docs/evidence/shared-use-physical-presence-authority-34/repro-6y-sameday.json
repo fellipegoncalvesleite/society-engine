@@ -4,10 +4,10 @@
   "arm": "after",
   "scenario": "map2",
   "seed": "audit27:natural:map2:s1",
-  "years": 20,
+  "years": 6,
   "samplingResolution": "DAILY",
   "authorityPresentOnThisArm": true,
-  "generatedAt": "2026-08-02T22:04:42.952Z",
+  "generatedAt": "2026-08-02T22:07:04.189Z",
   "purpose": "same-day task parties — DEFERRED in this checkpoint, with the limitation stated explicitly",
   "fixture": {
     "id": "P15_P16_P17_same_day_parties_deferred",
