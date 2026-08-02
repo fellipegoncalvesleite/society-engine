@@ -1,0 +1,25 @@
+{
+  "audit": "CORRECTION-33 step-mode equivalence",
+  "arm": "after",
+  "fixtureP19": {
+    "id": "P19_step_mode_invariance",
+    "intent": "daily and seasonal internal batching over the same span must be canonically equivalent for these readings",
+    "seasonalSocialAccessRisk": 0.29,
+    "dailySocialAccessRisk": 0.29,
+    "changedFields": [],
+    "verdict": "STEP_MODE_EQUIVALENT"
+  },
+  "fixtureP18": {
+    "id": "P18_order_invariance",
+    "intent": "permuting band record order must not change any canonical observer reading",
+    "changedFields": [],
+    "verdict": "ORDER_INVARIANT"
+  },
+  "productionAudit": {
+    "script": "scripts/stepModeInvarianceAudit.mjs",
+    "result": "PASS",
+    "fullCanonicalStateMatch": true,
+    "firstDivergence": null
+  },
+  "note": "StepMode itself is untouched by CORRECTION-33."
+}

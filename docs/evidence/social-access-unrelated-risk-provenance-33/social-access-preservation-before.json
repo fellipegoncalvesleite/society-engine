@@ -1,0 +1,241 @@
+{
+  "audit": "socialAccessUnrelatedRiskFixturesAudit",
+  "checkpoint": "CORRECTION-33",
+  "arm": "before",
+  "seed": "c33:fixtures",
+  "warmSeasons": 12,
+  "generatedAt": "2026-08-02T20:53:07.403Z",
+  "geometry": {
+    "origin": {
+      "x": 100,
+      "y": 112
+    },
+    "localTiles": [
+      "tile:100:112",
+      "tile:101:112",
+      "tile:100:113",
+      "tile:99:112"
+    ],
+    "remoteTilesUsed": 24,
+    "remoteMinDistance": 30
+  },
+  "purpose": "the legitimate CORRECTION-30/-31/-32 path must remain live and must still release",
+  "placeAttributableRiseByPhase": {
+    "neverContacted": {
+      "socialAccessRisk": 0.29,
+      "knownContactCount": 0,
+      "contactMemories": 0,
+      "accessMemory": {
+        "strangerCaution": 0,
+        "rememberedRefusalAvoidance": 0.14,
+        "activeEvidenceWeight": 0,
+        "socialEvidencePhase": "none",
+        "historicalEvidenceCount": 0
+      },
+      "frictionRecords": 0,
+      "worldBandRecords": 2,
+      "maxCandidateSocialAccessRisk": 0.29
+    },
+    "atContact": {
+      "socialAccessRisk": 0.24,
+      "knownContactCount": 1,
+      "contactMemories": 1,
+      "accessMemory": {
+        "strangerCaution": 0.17,
+        "rememberedRefusalAvoidance": 0.16,
+        "activeEvidenceWeight": 0.78,
+        "socialEvidencePhase": "cooling",
+        "historicalEvidenceCount": 0
+      },
+      "frictionRecords": 0,
+      "worldBandRecords": 2,
+      "maxCandidateSocialAccessRisk": 0.24
+    },
+    "afterRelease": {
+      "socialAccessRisk": 0.21,
+      "knownContactCount": 1,
+      "contactMemories": 1,
+      "accessMemory": {
+        "strangerCaution": 0,
+        "rememberedRefusalAvoidance": 0.14,
+        "activeEvidenceWeight": 0,
+        "socialEvidencePhase": "released_historical",
+        "historicalEvidenceCount": 1
+      },
+      "frictionRecords": 0,
+      "worldBandRecords": 2,
+      "maxCandidateSocialAccessRisk": 0.22
+    }
+  },
+  "fixtures": [
+    {
+      "id": "P6_legitimate_active_access_evidence",
+      "intent": "CORRECTION-32A's positive control: real place-specific evidence at X must still raise social-access risk at X. Isolated as ACTIVE vs RELEASED at the same tile with the contact memory retained in both arms, so known-contact relief is identical and cancels.",
+      "syntheticState": true,
+      "syntheticNote": "two bands held physically adjacent through 6 real production seasons",
+      "method": "risk at X with active evidence, minus risk at X after the CORRECTION-31 lifecycle released it; contact count identical",
+      "neverContacted": {
+        "socialAccessRisk": 0.29,
+        "knownContactCount": 0,
+        "contactMemories": 0,
+        "accessMemory": {
+          "strangerCaution": 0,
+          "rememberedRefusalAvoidance": 0.14,
+          "activeEvidenceWeight": 0,
+          "socialEvidencePhase": "none",
+          "historicalEvidenceCount": 0
+        },
+        "frictionRecords": 0,
+        "worldBandRecords": 2,
+        "maxCandidateSocialAccessRisk": 0.29
+      },
+      "atContact": {
+        "socialAccessRisk": 0.24,
+        "knownContactCount": 1,
+        "contactMemories": 1,
+        "accessMemory": {
+          "strangerCaution": 0.17,
+          "rememberedRefusalAvoidance": 0.16,
+          "activeEvidenceWeight": 0.78,
+          "socialEvidencePhase": "cooling",
+          "historicalEvidenceCount": 0
+        },
+        "frictionRecords": 0,
+        "worldBandRecords": 2,
+        "maxCandidateSocialAccessRisk": 0.24
+      },
+      "afterRelease": {
+        "socialAccessRisk": 0.21,
+        "knownContactCount": 1,
+        "contactMemories": 1,
+        "accessMemory": {
+          "strangerCaution": 0,
+          "rememberedRefusalAvoidance": 0.14,
+          "activeEvidenceWeight": 0,
+          "socialEvidencePhase": "released_historical",
+          "historicalEvidenceCount": 1
+        },
+        "frictionRecords": 0,
+        "worldBandRecords": 2,
+        "maxCandidateSocialAccessRisk": 0.22
+      },
+      "activeEvidenceEffect": 0.03,
+      "knownContactCountIdentical": true,
+      "evidenceIsBandsOwnPlaceMemory": true,
+      "verdict": "ACTIVE_EVIDENCE_STILL_RAISES_RISK"
+    },
+    {
+      "id": "P7_release_lifecycle",
+      "intent": "CORRECTION-31 remains intact: history is retained while the active contribution returns to baseline, and the remote world count does not preserve it",
+      "syntheticState": true,
+      "byPhase": {
+        "neverContacted": {
+          "socialAccessRisk": 0.29,
+          "knownContactCount": 0,
+          "contactMemories": 0,
+          "accessMemory": {
+            "strangerCaution": 0,
+            "rememberedRefusalAvoidance": 0.14,
+            "activeEvidenceWeight": 0,
+            "socialEvidencePhase": "none",
+            "historicalEvidenceCount": 0
+          },
+          "frictionRecords": 0,
+          "worldBandRecords": 2,
+          "maxCandidateSocialAccessRisk": 0.29
+        },
+        "atContact": {
+          "socialAccessRisk": 0.24,
+          "knownContactCount": 1,
+          "contactMemories": 1,
+          "accessMemory": {
+            "strangerCaution": 0.17,
+            "rememberedRefusalAvoidance": 0.16,
+            "activeEvidenceWeight": 0.78,
+            "socialEvidencePhase": "cooling",
+            "historicalEvidenceCount": 0
+          },
+          "frictionRecords": 0,
+          "worldBandRecords": 2,
+          "maxCandidateSocialAccessRisk": 0.24
+        },
+        "afterRelease": {
+          "socialAccessRisk": 0.21,
+          "knownContactCount": 1,
+          "contactMemories": 1,
+          "accessMemory": {
+            "strangerCaution": 0,
+            "rememberedRefusalAvoidance": 0.14,
+            "activeEvidenceWeight": 0,
+            "socialEvidencePhase": "released_historical",
+            "historicalEvidenceCount": 1
+          },
+          "frictionRecords": 0,
+          "worldBandRecords": 2,
+          "maxCandidateSocialAccessRisk": 0.22
+        }
+      },
+      "activeEvidenceWeight": {
+        "neverContacted": 0,
+        "atContact": 0.78,
+        "afterRelease": 0
+      },
+      "socialEvidencePhase": "released_historical",
+      "historicalRecordsRetained": true,
+      "contactMemoriesRetained": 1,
+      "encounterRecordsRetained": 18,
+      "noResidualDangerAboveBaseline": true,
+      "verdict": "RELEASED_HISTORY_RETAINED"
+    },
+    {
+      "id": "P8_old_known_contact_without_place_evidence",
+      "intent": "a retained contact memory with no ACTIVE evidence about X must not manufacture danger at X; known-contact relief may legitimately remain and only ever lowers risk",
+      "contactMemories": 1,
+      "knownContactCount": 1,
+      "activeEvidenceWeight": 0,
+      "riskAfterRelease": 0.21,
+      "riskNeverContacted": 0.29,
+      "verdict": "OLD_CONTACT_CREATES_NO_PLACE_DANGER"
+    },
+    {
+      "id": "P10_same_world_count_different_evidence",
+      "intent": "hold the world band count constant, change only legitimate place-specific evidence; risk must change because of the evidence",
+      "worldBandRecords": {
+        "active": 2,
+        "released": 2
+      },
+      "worldBandCountIdentical": true,
+      "socialAccessRisk": {
+        "active": 0.24,
+        "released": 0.21
+      },
+      "delta": 0.03,
+      "verdict": "EVIDENCE_MOVES_RISK_AT_CONSTANT_POPULATION"
+    },
+    {
+      "id": "P11_different_world_count_same_evidence",
+      "intent": "hold legitimate evidence constant, change the world band count; risk must not change",
+      "worldBandRecords": {
+        "low": 7,
+        "high": 21
+      },
+      "socialAccessRisk": {
+        "low": 0.24,
+        "high": 0.24
+      },
+      "accessMemoryIdentical": true,
+      "changedFields": [],
+      "verdict": "POPULATION_DOES_NOT_MOVE_RISK"
+    },
+    {
+      "id": "P16_active_evidence_still_reaches_candidate_score",
+      "intent": "a legitimate active place-memory difference must still reach ScoreBreakdown.socialAccessRisk and the final score",
+      "maxCandidateSocialAccessRisk": {
+        "neutral": 0.29,
+        "contacted": 0.24
+      },
+      "candidateScoresDiffer": true,
+      "verdict": "ACTIVE_EVIDENCE_REACHES_THE_SCORE"
+    }
+  ]
+}

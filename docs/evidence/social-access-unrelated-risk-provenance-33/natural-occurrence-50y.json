@@ -1,0 +1,164 @@
+{
+  "audit": "socialAccessUnrelatedRiskNaturalAudit",
+  "checkpoint": "CORRECTION-33",
+  "arm": "after",
+  "years": 50,
+  "seedPrefix": "audit27:natural",
+  "scenarios": [
+    "map1",
+    "map2"
+  ],
+  "seeds": [
+    "s1",
+    "s2"
+  ],
+  "generatedAt": "2026-08-02T20:55:28.792Z",
+  "detectorNote": "`oldConditionFires` evaluates the REMOVED expression as a pure detector on both arms. It describes world state, not behaviour: on the after arm it still fires and simply reaches no decision. A high rate on the after arm is the POINT — it measures how often the old term was silently active.",
+  "summary": {
+    "runs": 4,
+    "bandSeasons": 5600,
+    "oldConditionFires": 3230,
+    "bandsAffected": 18,
+    "firesSustainedOnlyByTerminalRecords": 0,
+    "firesWithZeroSocialEvidence": 3230,
+    "finalPopulation": 727,
+    "finalLivingBands": 28,
+    "finalWorldBandRecords": 28,
+    "residentialMoves": 2040,
+    "depletionSum": 0
+  },
+  "runs": [
+    {
+      "scenario": "map1",
+      "seed": "s1",
+      "years": 50,
+      "bandSeasons": 1000,
+      "livingBandSeasons": 1000,
+      "oldConditionFires": 0,
+      "oldConditionFireRate": 0,
+      "bandsAffected": 0,
+      "firesSustainedOnlyByTerminalRecords": 0,
+      "firesWithZeroSocialEvidence": 0,
+      "socialAccessRisk": {
+        "readings": 200,
+        "min": 0.2,
+        "p25": 0.29,
+        "median": 0.3,
+        "p75": 0.3,
+        "max": 0.33,
+        "mean": 0.2951
+      },
+      "finalState": {
+        "worldBandRecords": 5,
+        "livingBands": 5,
+        "population": 164,
+        "absorbed": 0,
+        "extinct": 0,
+        "dispersed": 0,
+        "residentialMoves": 400,
+        "contactMemories": 2,
+        "frictionRecords": 0,
+        "depletionSum": 0
+      }
+    },
+    {
+      "scenario": "map1",
+      "seed": "s2",
+      "years": 50,
+      "bandSeasons": 1000,
+      "livingBandSeasons": 1000,
+      "oldConditionFires": 0,
+      "oldConditionFireRate": 0,
+      "bandsAffected": 0,
+      "firesSustainedOnlyByTerminalRecords": 0,
+      "firesWithZeroSocialEvidence": 0,
+      "socialAccessRisk": {
+        "readings": 240,
+        "min": 0.28,
+        "p25": 0.3,
+        "median": 0.3,
+        "p75": 0.3,
+        "max": 0.33,
+        "mean": 0.3007
+      },
+      "finalState": {
+        "worldBandRecords": 5,
+        "livingBands": 5,
+        "population": 154,
+        "absorbed": 0,
+        "extinct": 0,
+        "dispersed": 0,
+        "residentialMoves": 331,
+        "contactMemories": 0,
+        "frictionRecords": 0,
+        "depletionSum": 0
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s1",
+      "years": 50,
+      "bandSeasons": 1800,
+      "livingBandSeasons": 1800,
+      "oldConditionFires": 1800,
+      "oldConditionFireRate": 1,
+      "bandsAffected": 9,
+      "firesSustainedOnlyByTerminalRecords": 0,
+      "firesWithZeroSocialEvidence": 1800,
+      "socialAccessRisk": {
+        "readings": 1367,
+        "min": 0.28,
+        "p25": 0.3,
+        "median": 0.3,
+        "p75": 0.3,
+        "max": 0.34,
+        "mean": 0.3047
+      },
+      "finalState": {
+        "worldBandRecords": 9,
+        "livingBands": 9,
+        "population": 205,
+        "absorbed": 0,
+        "extinct": 0,
+        "dispersed": 0,
+        "residentialMoves": 692,
+        "contactMemories": 0,
+        "frictionRecords": 0,
+        "depletionSum": 0
+      }
+    },
+    {
+      "scenario": "map2",
+      "seed": "s2",
+      "years": 50,
+      "bandSeasons": 1800,
+      "livingBandSeasons": 1800,
+      "oldConditionFires": 1430,
+      "oldConditionFireRate": 0.7944,
+      "bandsAffected": 9,
+      "firesSustainedOnlyByTerminalRecords": 0,
+      "firesWithZeroSocialEvidence": 1430,
+      "socialAccessRisk": {
+        "readings": 1367,
+        "min": 0.22,
+        "p25": 0.25,
+        "median": 0.3,
+        "p75": 0.3,
+        "max": 0.33,
+        "mean": 0.2823
+      },
+      "finalState": {
+        "worldBandRecords": 9,
+        "livingBands": 9,
+        "population": 204,
+        "absorbed": 0,
+        "extinct": 0,
+        "dispersed": 0,
+        "residentialMoves": 617,
+        "contactMemories": 2,
+        "frictionRecords": 0,
+        "depletionSum": 0
+      }
+    }
+  ]
+}

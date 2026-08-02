@@ -1,0 +1,149 @@
+{
+  "audit": "CORRECTION-33 before/after",
+  "before": "d11854153e76c2435bce9d53ffde49317e5e8f90",
+  "after": "checkpoint/social-access-unrelated-risk-provenance-33",
+  "headline": "observer evidence unchanged + global band records cross 8 -> 9 -> before social risk changes, after it does not",
+  "decisiveIsolation": {
+    "method": "one world holding the observer and every remote band, warmed once; arms are SUBSETS of that finished world, so the observer band object is byte-identical by construction",
+    "observerStateIdenticalInEveryRow": {
+      "before": true,
+      "after": true
+    },
+    "atEightRecords": {
+      "before": {
+        "socialAccessRisk": 0.29,
+        "fallbackRank": 11,
+        "maxCandidateSocialAccessRisk": 0.29
+      },
+      "after": {
+        "socialAccessRisk": 0.29,
+        "fallbackRank": 11,
+        "maxCandidateSocialAccessRisk": 0.29
+      }
+    },
+    "atNineRecords": {
+      "before": {
+        "socialAccessRisk": 0.37,
+        "fallbackRank": 12,
+        "maxCandidateSocialAccessRisk": 0.37
+      },
+      "after": {
+        "socialAccessRisk": 0.29,
+        "fallbackRank": 11,
+        "maxCandidateSocialAccessRisk": 0.29
+      }
+    }
+  },
+  "fixtureVerdicts": {
+    "before": {
+      "P1_eight_versus_nine_remote_bands": "THRESHOLD_CHANGES_OBSERVER_STATE",
+      "P2_one_versus_many_remote_bands": "REMOTE_POPULATION_CHANGES_OBSERVER_STATE",
+      "P3_active_versus_terminal_hidden_bands": "TERMINAL_OR_ACTIVE_RECORDS_AFFECT_OBSERVER",
+      "P4_remote_fission": "REMOTE_FISSION_CHANGES_OBSERVER",
+      "P5_remote_spawn": "REMOTE_SPAWN_CHANGES_OBSERVER",
+      "P6_legitimate_active_access_evidence": "ACTIVE_EVIDENCE_STILL_RAISES_RISK",
+      "P7_release_lifecycle": "RELEASED_HISTORY_RETAINED",
+      "P8_old_known_contact_without_place_evidence": "OLD_CONTACT_CREATES_NO_PLACE_DANGER",
+      "P10_same_world_count_different_evidence": "EVIDENCE_MOVES_RISK_AT_CONSTANT_POPULATION",
+      "P11_different_world_count_same_evidence": "POPULATION_DOES_NOT_MOVE_RISK",
+      "P16_active_evidence_still_reaches_candidate_score": "ACTIVE_EVIDENCE_REACHES_THE_SCORE",
+      "P9_report_supported_caution": "NOT_CONSTRUCTED_REQUIRES_A_THIRD_RELAYING_BAND",
+      "P12_water_refuge_ranking": "WATER_REFUGE_RANKING_AFFECTED",
+      "P13_river_prospect": "RIVER_PROSPECT_AFFECTED",
+      "P14_stay_move_scout": "STAY_MOVE_SCOUT_AFFECTED",
+      "P15_candidate_score": "CANDIDATE_SCORES_DIFFER_ACROSS_THRESHOLD",
+      "P17_no_global_count_reader_remains": "GLOBAL_COUNT_READER_REMAINS",
+      "P18_order_invariance": "ORDER_INVARIANT",
+      "P19_step_mode_invariance": "STEP_MODE_EQUIVALENT",
+      "P20_long_horizon_world_growth": "DISCONTINUITY_AT_THRESHOLD"
+    },
+    "after": {
+      "P1_eight_versus_nine_remote_bands": "THRESHOLD_HAS_NO_EFFECT",
+      "P2_one_versus_many_remote_bands": "REMOTE_POPULATION_HAS_NO_EFFECT",
+      "P3_active_versus_terminal_hidden_bands": "TERMINAL_AND_ACTIVE_RECORDS_BOTH_INERT",
+      "P4_remote_fission": "REMOTE_FISSION_INERT",
+      "P5_remote_spawn": "REMOTE_SPAWN_INERT",
+      "P6_legitimate_active_access_evidence": "ACTIVE_EVIDENCE_STILL_RAISES_RISK",
+      "P7_release_lifecycle": "RELEASED_HISTORY_RETAINED",
+      "P8_old_known_contact_without_place_evidence": "OLD_CONTACT_CREATES_NO_PLACE_DANGER",
+      "P10_same_world_count_different_evidence": "EVIDENCE_MOVES_RISK_AT_CONSTANT_POPULATION",
+      "P11_different_world_count_same_evidence": "POPULATION_DOES_NOT_MOVE_RISK",
+      "P16_active_evidence_still_reaches_candidate_score": "ACTIVE_EVIDENCE_REACHES_THE_SCORE",
+      "P9_report_supported_caution": "NOT_CONSTRUCTED_REQUIRES_A_THIRD_RELAYING_BAND",
+      "P12_water_refuge_ranking": "WATER_REFUGE_RANKING_UNAFFECTED",
+      "P13_river_prospect": "RIVER_PROSPECT_UNAFFECTED",
+      "P14_stay_move_scout": "STAY_MOVE_SCOUT_UNAFFECTED",
+      "P15_candidate_score": "CANDIDATE_SCORES_IDENTICAL_ACROSS_THRESHOLD",
+      "P17_no_global_count_reader_remains": "NO_GLOBAL_COUNT_READER",
+      "P18_order_invariance": "ORDER_INVARIANT",
+      "P19_step_mode_invariance": "STEP_MODE_EQUIVALENT",
+      "P20_long_horizon_world_growth": "NO_DISCONTINUITY_AT_THRESHOLD"
+    },
+    "adverseBefore": [
+      "P1_eight_versus_nine_remote_bands",
+      "P2_one_versus_many_remote_bands",
+      "P3_active_versus_terminal_hidden_bands",
+      "P4_remote_fission",
+      "P5_remote_spawn",
+      "P12_water_refuge_ranking",
+      "P13_river_prospect",
+      "P14_stay_move_scout",
+      "P15_candidate_score",
+      "P17_no_global_count_reader_remains",
+      "P20_long_horizon_world_growth"
+    ],
+    "adverseAfter": [],
+    "vacuous": {
+      "before": [],
+      "after": []
+    },
+    "notConstructed": {
+      "before": [
+        "P9_report_supported_caution"
+      ],
+      "after": [
+        "P9_report_supported_caution"
+      ]
+    }
+  },
+  "naturalOccurrence": {
+    "20y": {
+      "bandSeasons": 2240,
+      "oldConditionFires": 1310,
+      "bandsAffected": 18,
+      "firesWithZeroSocialEvidence": 1310,
+      "firesSustainedOnlyByTerminalRecords": 0
+    },
+    "50y": {
+      "bandSeasons": 5600,
+      "oldConditionFires": 3230,
+      "bandsAffected": 18,
+      "firesWithZeroSocialEvidence": 3230,
+      "firesSustainedOnlyByTerminalRecords": 0
+    }
+  },
+  "preservation": {
+    "activeEvidenceStillRaisesRisk": "ACTIVE_EVIDENCE_STILL_RAISES_RISK",
+    "releasedHistoryInactive": "RELEASED_HISTORY_RETAINED",
+    "knownContactReliefRemains": "OLD_CONTACT_CREATES_NO_PLACE_DANGER",
+    "activeEvidenceReachesTheScore": "ACTIVE_EVIDENCE_REACHES_THE_SCORE"
+  },
+  "productionDiff": {
+    "files": [
+      "src/sim/agents/dryMargin.ts"
+    ],
+    "removedTerm": "unrelatedRisk",
+    "removedParameter": "world",
+    "baseUnchanged": 0.28,
+    "accessMemoryCoefficientUnchanged": 0.26,
+    "knownContactReliefUnchanged": 0.08,
+    "newConstants": 0,
+    "newModules": 0,
+    "newStores": 0
+  },
+  "notClaimed": [
+    "any outcome improvement",
+    "that base 0.28 is correctly calibrated",
+    "that report-derived access evidence was exercised here (P9 NOT_CONSTRUCTED)"
+  ]
+}

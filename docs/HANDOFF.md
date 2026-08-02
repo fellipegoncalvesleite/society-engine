@@ -181,7 +181,43 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### SHARED RANGE — CROWDING DECISION-PRESSURE AUTHORITY AND DUPLICATE INFLUENCE — CORRECTION-32 — **PROGRESS / NOT ACCEPTED / NOT FROZEN** / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+### SHARED RANGE — GLOBAL BAND-COUNT SOCIAL OMNISCIENCE — CORRECTION-33 — PASS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+
+**Branch** `checkpoint/social-access-unrelated-risk-provenance-33`, from the accepted CORRECTION-32
+tip `d11854153e76c2435bce9d53ffde49317e5e8f90`. **CORRECTION-32 is CLOSED and FROZEN at
+`d1185415`.** CORRECTION-31 frozen at `3e2c1215`; -30 at `1c6a3ed8`; -29 at `a15d0a78`; -28 at
+`c5eb58a`; AUDIT-27 at `b352c31`; `main` untouched at `0a43083a`.
+**PRODUCTION BEHAVIOUR CHANGED** — no fingerprint parity is claimed or possible.
+
+**A band was reading the simulator's population.** `dryMargin.getSocialAccessRisk` computed
+`unrelatedRisk = Object.values(world.bands).length > 8 && knownContactCount === 0 ? 0.08 : 0`, so a
+band became more cautious about a particular **water place** because the simulator held a ninth
+band record — counting **extinct, absorbed and dispersed** records, and bands it had never seen,
+never been told about, and that had never been near that water. It was also an inversion: having
+no known contacts is evidence of **isolation** at least as much as of danger.
+
+**The fix — Option A. One production file, the term removed and the `world` parameter removed with
+it.** `getSocialAccessRisk` was the only reader of `world.bands` in that module, so dropping the
+parameter makes the invariant structural rather than merely tested. No new constant, module, store,
+type or import edge; base `0.28`, access coefficient `0.26` and known-contact relief `0.08` all
+untouched.
+
+**Headline, observer band object byte-identical and only the record count varied:** 8 → 9 records
+moved `socialAccessRisk` **0.29 → 0.37** and `fallbackRank` **11 → 12** before; both stay
+**0.29 / 11** after. **Naturally the term fired in 1,310 of 2,240 band-seasons (58.5%) at 20 years
+and 3,230 of 5,600 at 50 — every one with zero social evidence**, across 18 bands, because map2
+holds a constant 9 records. map1 never exceeded 8 and is identical on every key.
+
+**Fixtures P1–P20: 0 vacuous, 0 adverse after, 11 adverse before.** Preserved and proven: active
+place evidence still raises risk, released history stays inactive with records retained, an old
+contact manufactures no danger, and active evidence still reaches the candidate score. **P9 is
+NOT_CONSTRUCTED, not a pass.** Four instrument errors in this pass's own probes are recorded.
+
+**Roadmap item 3 remains OPEN.**
+
+---
+
+### (previous) SHARED RANGE — CROWDING DECISION-PRESSURE AUTHORITY AND DUPLICATE INFLUENCE — CORRECTION-32 — **CLOSED AND FROZEN at `d1185415`** (was PROGRESS) / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
 
 > **CORRECTION-32A (evidence repair, this pass).** CORRECTION-32 remained PROGRESS after its first
 > report because its whole-candidate counterfactual attribution was **contaminated**:
@@ -10343,3 +10379,17 @@ exception; daughter colours related-but-distinct and never visually confusing.
   **place evidence 0 → +0.10**, released history inert with records retained. Production
   implementation **supported**; seven production files and one new exported constant recorded
   correctly. Evidence: `docs/evidence/crowding-decision-pressure-authority-32/`.
+
+- **2026-08-02 — CORRECTION-33 — SHARED RANGE: GLOBAL BAND-COUNT SOCIAL OMNISCIENCE — `PASS`,
+  ROADMAP ITEM 3 STAYS ACTIVE.** `dryMargin.getSocialAccessRisk` read
+  `Object.values(world.bands).length > 8` — the simulator's own population, including terminal
+  records — and turned it into caution about a specific water place for any band with no known
+  contacts. Removed, along with the `world` parameter, making the invariant structural. One
+  production file; base caution, access-memory coefficient and known-contact relief all unchanged.
+  Observer byte-identical, 8 → 9 records: risk **0.29 → 0.37** and fallbackRank **11 → 12** before,
+  both unchanged after. Naturally armed in **58.5%** of band-seasons at 20 y, always with zero
+  social evidence. P1–P20 with 0 vacuous and 0 adverse after (11 adverse before); legitimate active
+  evidence, release lifecycle and contact relief all proven preserved. New
+  `scripts/socialAccessUnrelatedRiskFixturesAudit.mjs` and
+  `scripts/socialAccessUnrelatedRiskNaturalAudit.mjs`. Evidence:
+  `docs/evidence/social-access-unrelated-risk-provenance-33/`.

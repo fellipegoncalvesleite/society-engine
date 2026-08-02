@@ -229,7 +229,7 @@ function buildWaterRefugeProfile(
       (seasonal?.reliability ?? 0.42) * 0.22 -
       tile.riskProfile.floodRisk * 0.06,
   );
-  const socialAccessRisk = getSocialAccessRisk(world, band, tile.id);
+  const socialAccessRisk = getSocialAccessRisk(band, tile.id);
   const reliability = clamp01(
     waterAccess * 0.44 +
       drySeasonReliability * 0.28 +
@@ -491,7 +491,7 @@ function buildKnownProspectCandidate(
     expectedFood,
     travelCost: clamp01(distance / 8 + (record.observedMovementCost ?? tile.movementCost) / 6),
     uncertainty: clamp01(1 - record.confidence + (record.knowledgeSource === "personally_observed" ? 0 : 0.12)),
-    socialAccessRisk: getSocialAccessRisk(world, band, tile.id),
+    socialAccessRisk: getSocialAccessRisk(band, tile.id),
     crossingRisk,
     corridorStrength,
     direction: getProspectDirection(currentTile, tile, basis),
@@ -833,11 +833,35 @@ function getProspectDirection(
 // observation provenance and CORRECTION-31 gave a lifecycle that cools and releases. The
 // coefficient, the base caution and the known-contact relief are unchanged.
 //
-// NOT repaired here, and reported rather than silently kept: `unrelatedRisk` reads
-// `Object.values(world.bands).length` — a WORLD-TRUTH count a band cannot know. It is a
-// separate anti-omniscience defect, outside this checkpoint's crowding scope.
+// CORRECTION-33 — `unrelatedRisk` is GONE, and the `world` parameter with it.
+//
+// It read `Object.values(world.bands).length > 8 && knownContactCount === 0 ? 0.08 : 0`, so a
+// band became more cautious about a particular water place because the SIMULATOR held a ninth
+// band record. Nothing about that count is knowable to the band: not how many groups exist, not
+// where they are, not whether they are alive — `world.bands` retains extinct, absorbed and
+// dispersed records — and not whether any of them has ever been near this water. A remote band
+// merely being created, fissioning or dying silently changed another band's judgement of its own
+// local water source, through fallbackRank (x1.8), water-source ordering, the river prospect, the
+// stay/move/scout comparison and `ScoreBreakdown.socialAccessRisk` (scoreDecision -0.36).
+//
+// It was also a THRESHOLD: the 8 -> 9 crossing moved a real decision input by a step, with no new
+// evidence of any kind reaching the band.
+//
+// The term is REMOVED rather than re-sourced. Generic uncertainty about an unverified place is
+// already carried by the base 0.28, which is unchanged; a second unexplained baseline would just
+// be the same constant under a new name. Deriving "many groups exist out there" from encounters,
+// reports or visiting networks would be a REGIONAL SOCIAL AWARENESS system — a real human
+// mechanism, and explicitly out of scope here (it needs named groups, travel, exchange and
+// inherited information, none of which this repository yet represents). Deriving it from
+// unidentified tracks, abandoned camps or smoke is impossible: CORRECTION-30 established that no
+// physical-trace authority exists anywhere in production.
+//
+// What remains is exactly what the band can know: a base caution about an unverified place, its
+// OWN place-specific access memory (CORRECTION-30 gave it provenance, CORRECTION-31 a lifecycle
+// that cools and releases, CORRECTION-32 made it the source), and relief from the contacts it
+// actually holds. Taking `world` away is the point: this function can no longer read world state
+// at all, so the defect cannot return by a different name.
 function getSocialAccessRisk(
-  world: WorldState,
   band: Band,
   tileId: TileId,
 ): number {
@@ -847,9 +871,8 @@ function getSocialAccessRisk(
     (accessMemory?.strangerCaution ?? 0) * 0.6 + (accessMemory?.rememberedRefusalAvoidance ?? 0) * 0.4,
   );
   const knownContactRelief = clamp01(knownContactCount * 0.08);
-  const unrelatedRisk = Object.values(world.bands).length > 8 && knownContactCount === 0 ? 0.08 : 0;
 
-  return clamp01(0.28 + rememberedAccessCaution * 0.26 + unrelatedRisk - knownContactRelief);
+  return clamp01(0.28 + rememberedAccessCaution * 0.26 - knownContactRelief);
 }
 
 function getFallbackRank(

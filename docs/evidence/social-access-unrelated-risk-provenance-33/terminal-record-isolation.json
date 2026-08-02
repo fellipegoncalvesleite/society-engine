@@ -1,0 +1,58 @@
+{
+  "audit": "socialAccessUnrelatedRiskFixturesAudit",
+  "checkpoint": "CORRECTION-33",
+  "arm": "after",
+  "seed": "c33:fixtures",
+  "warmSeasons": 12,
+  "generatedAt": "2026-08-02T20:52:49.285Z",
+  "geometry": {
+    "origin": {
+      "x": 100,
+      "y": 112
+    },
+    "localTiles": [
+      "tile:100:112",
+      "tile:101:112",
+      "tile:100:113",
+      "tile:99:112"
+    ],
+    "remoteTilesUsed": 24,
+    "remoteMinDistance": 30
+  },
+  "purpose": "extinct, absorbed and dispersed records are RETAINED in `world.bands`; this file measures whether they create social danger",
+  "fixture": {
+    "id": "P3_active_versus_terminal_hidden_bands",
+    "intent": "the observer's state is held identical while extra remote records are active, extinct, absorbed or dispersed. None may affect current social risk, and the observer must not learn their terminal status either.",
+    "syntheticState": true,
+    "soloSocialAccessRisk": 0.29,
+    "byTerminalKind": [
+      {
+        "terminalKind": "active",
+        "worldBandRecords": 9,
+        "livingBands": 9,
+        "socialAccessRisk": 0.29
+      },
+      {
+        "terminalKind": "extinct",
+        "worldBandRecords": 9,
+        "livingBands": 1,
+        "socialAccessRisk": 0.29
+      },
+      {
+        "terminalKind": "absorbed",
+        "worldBandRecords": 9,
+        "livingBands": 1,
+        "socialAccessRisk": 0.29
+      },
+      {
+        "terminalKind": "dispersed",
+        "worldBandRecords": 9,
+        "livingBands": 1,
+        "socialAccessRisk": 0.29
+      }
+    ],
+    "terminalRecordsAreRetainedInWorldBands": true,
+    "changedFieldsVersusSolo": [],
+    "verdict": "TERMINAL_AND_ACTIVE_RECORDS_BOTH_INERT"
+  }
+}

@@ -1,0 +1,1437 @@
+{
+  "audit": "socialAccessUnrelatedRiskFixturesAudit",
+  "checkpoint": "CORRECTION-33",
+  "arm": "after",
+  "seed": "c33:fixtures",
+  "warmSeasons": 12,
+  "generatedAt": "2026-08-02T20:52:49.285Z",
+  "geometry": {
+    "origin": {
+      "x": 100,
+      "y": 112
+    },
+    "localTiles": [
+      "tile:100:112",
+      "tile:101:112",
+      "tile:100:113",
+      "tile:99:112"
+    ],
+    "remoteTilesUsed": 24,
+    "remoteMinDistance": 30
+  },
+  "summary": {
+    "fixtures": 20,
+    "vacuous": 0,
+    "vacuousIds": [],
+    "notConstructed": [
+      "P9_report_supported_caution"
+    ],
+    "adverse": [],
+    "verdicts": {
+      "P1_eight_versus_nine_remote_bands": "THRESHOLD_HAS_NO_EFFECT",
+      "P2_one_versus_many_remote_bands": "REMOTE_POPULATION_HAS_NO_EFFECT",
+      "P3_active_versus_terminal_hidden_bands": "TERMINAL_AND_ACTIVE_RECORDS_BOTH_INERT",
+      "P4_remote_fission": "REMOTE_FISSION_INERT",
+      "P5_remote_spawn": "REMOTE_SPAWN_INERT",
+      "P6_legitimate_active_access_evidence": "ACTIVE_EVIDENCE_STILL_RAISES_RISK",
+      "P7_release_lifecycle": "RELEASED_HISTORY_RETAINED",
+      "P8_old_known_contact_without_place_evidence": "OLD_CONTACT_CREATES_NO_PLACE_DANGER",
+      "P10_same_world_count_different_evidence": "EVIDENCE_MOVES_RISK_AT_CONSTANT_POPULATION",
+      "P11_different_world_count_same_evidence": "POPULATION_DOES_NOT_MOVE_RISK",
+      "P16_active_evidence_still_reaches_candidate_score": "ACTIVE_EVIDENCE_REACHES_THE_SCORE",
+      "P9_report_supported_caution": "NOT_CONSTRUCTED_REQUIRES_A_THIRD_RELAYING_BAND",
+      "P12_water_refuge_ranking": "WATER_REFUGE_RANKING_UNAFFECTED",
+      "P13_river_prospect": "RIVER_PROSPECT_UNAFFECTED",
+      "P14_stay_move_scout": "STAY_MOVE_SCOUT_UNAFFECTED",
+      "P15_candidate_score": "CANDIDATE_SCORES_IDENTICAL_ACROSS_THRESHOLD",
+      "P17_no_global_count_reader_remains": "NO_GLOBAL_COUNT_READER",
+      "P18_order_invariance": "ORDER_INVARIANT",
+      "P19_step_mode_invariance": "STEP_MODE_EQUIVALENT",
+      "P20_long_horizon_world_growth": "NO_DISCONTINUITY_AT_THRESHOLD"
+    }
+  },
+  "fixtures": [
+    {
+      "id": "P1_eight_versus_nine_remote_bands",
+      "intent": "two worlds identical from the observer's point of view, the second holding ONE more remote, unknown band record. The observer receives no evidence of any kind.",
+      "syntheticState": true,
+      "syntheticNote": "remote records injected into the finished world by cloning; no tick is run, observer untouched",
+      "worldBandRecords": {
+        "eight": 8,
+        "nine": 9
+      },
+      "observerStateIdentical": true,
+      "socialAccessRisk": {
+        "atEight": 0.29,
+        "atNine": 0.29
+      },
+      "delta": 0,
+      "changedFields": [],
+      "physicalControlsIdentical": true,
+      "verdict": "THRESHOLD_HAS_NO_EFFECT"
+    },
+    {
+      "id": "P2_one_versus_many_remote_bands",
+      "intent": "observer alone, observer + 8 remote bands, observer + 20 remote bands. No encounter, report, friction, place overlap or known contact exists.",
+      "syntheticState": true,
+      "worldBandRecords": [
+        1,
+        9,
+        21
+      ],
+      "socialAccessRisk": [
+        0.29,
+        0.29,
+        0.29
+      ],
+      "changedFields": [],
+      "observerStateIdentical": true,
+      "verdict": "REMOTE_POPULATION_HAS_NO_EFFECT"
+    },
+    {
+      "id": "P3_active_versus_terminal_hidden_bands",
+      "intent": "the observer's state is held identical while extra remote records are active, extinct, absorbed or dispersed. None may affect current social risk, and the observer must not learn their terminal status either.",
+      "syntheticState": true,
+      "soloSocialAccessRisk": 0.29,
+      "byTerminalKind": [
+        {
+          "terminalKind": "active",
+          "worldBandRecords": 9,
+          "livingBands": 9,
+          "socialAccessRisk": 0.29
+        },
+        {
+          "terminalKind": "extinct",
+          "worldBandRecords": 9,
+          "livingBands": 1,
+          "socialAccessRisk": 0.29
+        },
+        {
+          "terminalKind": "absorbed",
+          "worldBandRecords": 9,
+          "livingBands": 1,
+          "socialAccessRisk": 0.29
+        },
+        {
+          "terminalKind": "dispersed",
+          "worldBandRecords": 9,
+          "livingBands": 1,
+          "socialAccessRisk": 0.29
+        }
+      ],
+      "terminalRecordsAreRetainedInWorldBands": true,
+      "changedFieldsVersusSolo": [],
+      "verdict": "TERMINAL_AND_ACTIVE_RECORDS_BOTH_INERT"
+    },
+    {
+      "id": "P4_remote_fission",
+      "intent": "a distant band divides; the observer receives no evidence. No social-access or movement change may follow from the fission alone.",
+      "syntheticState": true,
+      "syntheticNote": "modelled as one additional remote band record, which is exactly what a distant fission presents to this formula",
+      "worldBandRecords": {
+        "before": 8,
+        "after": 9
+      },
+      "socialAccessRisk": {
+        "before": 0.29,
+        "after": 0.29
+      },
+      "selectedAction": {
+        "before": "move_to_tile:tile:99:113",
+        "after": "move_to_tile:tile:99:113"
+      },
+      "changedFields": [],
+      "verdict": "REMOTE_FISSION_INERT"
+    },
+    {
+      "id": "P5_remote_spawn",
+      "intent": "a new distant band record is created. No observer decision field may change.",
+      "syntheticState": true,
+      "worldBandRecords": {
+        "before": 8,
+        "after": 9
+      },
+      "socialAccessRisk": {
+        "before": 0.29,
+        "after": 0.29
+      },
+      "changedFields": [],
+      "verdict": "REMOTE_SPAWN_INERT"
+    },
+    {
+      "id": "P6_legitimate_active_access_evidence",
+      "intent": "CORRECTION-32A's positive control: real place-specific evidence at X must still raise social-access risk at X. Isolated as ACTIVE vs RELEASED at the same tile with the contact memory retained in both arms, so known-contact relief is identical and cancels.",
+      "syntheticState": true,
+      "syntheticNote": "two bands held physically adjacent through 6 real production seasons",
+      "method": "risk at X with active evidence, minus risk at X after the CORRECTION-31 lifecycle released it; contact count identical",
+      "neverContacted": {
+        "socialAccessRisk": 0.29,
+        "knownContactCount": 0,
+        "contactMemories": 0,
+        "accessMemory": {
+          "strangerCaution": 0,
+          "rememberedRefusalAvoidance": 0.14,
+          "activeEvidenceWeight": 0,
+          "socialEvidencePhase": "none",
+          "historicalEvidenceCount": 0
+        },
+        "frictionRecords": 0,
+        "worldBandRecords": 2,
+        "maxCandidateSocialAccessRisk": 0.29
+      },
+      "atContact": {
+        "socialAccessRisk": 0.24,
+        "knownContactCount": 1,
+        "contactMemories": 1,
+        "accessMemory": {
+          "strangerCaution": 0.17,
+          "rememberedRefusalAvoidance": 0.16,
+          "activeEvidenceWeight": 0.78,
+          "socialEvidencePhase": "cooling",
+          "historicalEvidenceCount": 0
+        },
+        "frictionRecords": 0,
+        "worldBandRecords": 2,
+        "maxCandidateSocialAccessRisk": 0.24
+      },
+      "afterRelease": {
+        "socialAccessRisk": 0.21,
+        "knownContactCount": 1,
+        "contactMemories": 1,
+        "accessMemory": {
+          "strangerCaution": 0,
+          "rememberedRefusalAvoidance": 0.14,
+          "activeEvidenceWeight": 0,
+          "socialEvidencePhase": "released_historical",
+          "historicalEvidenceCount": 1
+        },
+        "frictionRecords": 0,
+        "worldBandRecords": 2,
+        "maxCandidateSocialAccessRisk": 0.22
+      },
+      "activeEvidenceEffect": 0.03,
+      "knownContactCountIdentical": true,
+      "evidenceIsBandsOwnPlaceMemory": true,
+      "verdict": "ACTIVE_EVIDENCE_STILL_RAISES_RISK"
+    },
+    {
+      "id": "P7_release_lifecycle",
+      "intent": "CORRECTION-31 remains intact: history is retained while the active contribution returns to baseline, and the remote world count does not preserve it",
+      "syntheticState": true,
+      "byPhase": {
+        "neverContacted": {
+          "socialAccessRisk": 0.29,
+          "knownContactCount": 0,
+          "contactMemories": 0,
+          "accessMemory": {
+            "strangerCaution": 0,
+            "rememberedRefusalAvoidance": 0.14,
+            "activeEvidenceWeight": 0,
+            "socialEvidencePhase": "none",
+            "historicalEvidenceCount": 0
+          },
+          "frictionRecords": 0,
+          "worldBandRecords": 2,
+          "maxCandidateSocialAccessRisk": 0.29
+        },
+        "atContact": {
+          "socialAccessRisk": 0.24,
+          "knownContactCount": 1,
+          "contactMemories": 1,
+          "accessMemory": {
+            "strangerCaution": 0.17,
+            "rememberedRefusalAvoidance": 0.16,
+            "activeEvidenceWeight": 0.78,
+            "socialEvidencePhase": "cooling",
+            "historicalEvidenceCount": 0
+          },
+          "frictionRecords": 0,
+          "worldBandRecords": 2,
+          "maxCandidateSocialAccessRisk": 0.24
+        },
+        "afterRelease": {
+          "socialAccessRisk": 0.21,
+          "knownContactCount": 1,
+          "contactMemories": 1,
+          "accessMemory": {
+            "strangerCaution": 0,
+            "rememberedRefusalAvoidance": 0.14,
+            "activeEvidenceWeight": 0,
+            "socialEvidencePhase": "released_historical",
+            "historicalEvidenceCount": 1
+          },
+          "frictionRecords": 0,
+          "worldBandRecords": 2,
+          "maxCandidateSocialAccessRisk": 0.22
+        }
+      },
+      "activeEvidenceWeight": {
+        "neverContacted": 0,
+        "atContact": 0.78,
+        "afterRelease": 0
+      },
+      "socialEvidencePhase": "released_historical",
+      "historicalRecordsRetained": true,
+      "contactMemoriesRetained": 1,
+      "encounterRecordsRetained": 18,
+      "noResidualDangerAboveBaseline": true,
+      "verdict": "RELEASED_HISTORY_RETAINED"
+    },
+    {
+      "id": "P8_old_known_contact_without_place_evidence",
+      "intent": "a retained contact memory with no ACTIVE evidence about X must not manufacture danger at X; known-contact relief may legitimately remain and only ever lowers risk",
+      "contactMemories": 1,
+      "knownContactCount": 1,
+      "activeEvidenceWeight": 0,
+      "riskAfterRelease": 0.21,
+      "riskNeverContacted": 0.29,
+      "verdict": "OLD_CONTACT_CREATES_NO_PLACE_DANGER"
+    },
+    {
+      "id": "P10_same_world_count_different_evidence",
+      "intent": "hold the world band count constant, change only legitimate place-specific evidence; risk must change because of the evidence",
+      "worldBandRecords": {
+        "active": 2,
+        "released": 2
+      },
+      "worldBandCountIdentical": true,
+      "socialAccessRisk": {
+        "active": 0.24,
+        "released": 0.21
+      },
+      "delta": 0.03,
+      "verdict": "EVIDENCE_MOVES_RISK_AT_CONSTANT_POPULATION"
+    },
+    {
+      "id": "P11_different_world_count_same_evidence",
+      "intent": "hold legitimate evidence constant, change the world band count; risk must not change",
+      "worldBandRecords": {
+        "low": 7,
+        "high": 21
+      },
+      "socialAccessRisk": {
+        "low": 0.24,
+        "high": 0.24
+      },
+      "accessMemoryIdentical": true,
+      "changedFields": [],
+      "verdict": "POPULATION_DOES_NOT_MOVE_RISK"
+    },
+    {
+      "id": "P16_active_evidence_still_reaches_candidate_score",
+      "intent": "a legitimate active place-memory difference must still reach ScoreBreakdown.socialAccessRisk and the final score",
+      "maxCandidateSocialAccessRisk": {
+        "neutral": 0.29,
+        "contacted": 0.24
+      },
+      "candidateScoresDiffer": true,
+      "verdict": "ACTIVE_EVIDENCE_REACHES_THE_SCORE"
+    },
+    {
+      "id": "P9_report_supported_caution",
+      "intent": "where a legitimate existing report can produce active access evidence, that path must remain",
+      "verdict": "NOT_CONSTRUCTED_REQUIRES_A_THIRD_RELAYING_BAND",
+      "note": "Two bands in isolated proximity produce DIRECT observation, not hearsay; a report needs a third band to relay it, and constructing one here would mean inventing a report topic this checkpoint forbids. CORRECTION-31's frozen evidence already proves the report lifecycle (P12 = SECONDHAND_AND_FADES), rerun unchanged in this pass's regression suite. NOT reported as a pass, and no claim about report-derived access evidence is made here."
+    },
+    {
+      "id": "P12_water_refuge_ranking",
+      "intent": "a remote hidden band must not change socialAccessRisk, fallbackRank or water-source ordering",
+      "atEight": {
+        "socialAccessRisk": 0.29,
+        "fallbackRank": 11,
+        "order": [
+          "tile:96:113"
+        ],
+        "ranks": [
+          9
+        ],
+        "risks": [
+          0.29
+        ]
+      },
+      "atNine": {
+        "socialAccessRisk": 0.29,
+        "fallbackRank": 11,
+        "order": [
+          "tile:96:113"
+        ],
+        "ranks": [
+          9
+        ],
+        "risks": [
+          0.29
+        ]
+      },
+      "candidatesInspected": 1,
+      "verdict": "WATER_REFUGE_RANKING_UNAFFECTED"
+    },
+    {
+      "id": "P13_river_prospect",
+      "intent": "a remote hidden band must not change prospect social risk, prospect strength or the selected prospect",
+      "atEight": {
+        "tileId": "",
+        "socialAccessRisk": 0.29,
+        "prospectStrength": 0.18
+      },
+      "atNine": {
+        "tileId": "",
+        "socialAccessRisk": 0.29,
+        "prospectStrength": 0.18
+      },
+      "verdict": "RIVER_PROSPECT_UNAFFECTED"
+    },
+    {
+      "id": "P14_stay_move_scout",
+      "intent": "a remote hidden band must not change stay/move/scout values, the departure threshold, probe availability or the selected action",
+      "atEight": {
+        "stayValue": 0,
+        "moveValue": 0.1,
+        "scoutValue": 0.25,
+        "departureThreshold": 0.17,
+        "socialAccessRisk": 0.29,
+        "logisticalProbeAvailable": false,
+        "logisticalProbeSelected": false,
+        "selectedAction": "move_to_tile:tile:99:113"
+      },
+      "atNine": {
+        "stayValue": 0,
+        "moveValue": 0.1,
+        "scoutValue": 0.25,
+        "departureThreshold": 0.17,
+        "socialAccessRisk": 0.29,
+        "logisticalProbeAvailable": false,
+        "logisticalProbeSelected": false,
+        "selectedAction": "move_to_tile:tile:99:113"
+      },
+      "verdict": "STAY_MOVE_SCOUT_UNAFFECTED"
+    },
+    {
+      "id": "P15_candidate_score",
+      "intent": "identical candidates across the 8 -> 9 threshold must produce identical ScoreBreakdown.socialAccessRisk and identical final scores",
+      "candidateCount": {
+        "atEight": 12,
+        "atNine": 12
+      },
+      "socialAccessRisks": {
+        "atEight": [
+          0,
+          0.29,
+          0,
+          0,
+          0.29,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "atNine": [
+          0,
+          0.29,
+          0,
+          0,
+          0.29,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "scoresIdentical": true,
+      "socialRisksIdentical": true,
+      "changedScores": [],
+      "verdict": "CANDIDATE_SCORES_IDENTICAL_ACROSS_THRESHOLD"
+    },
+    {
+      "id": "P17_no_global_count_reader_remains",
+      "intent": "runtime sweep of the world band count with the observer held identical; no decision-facing reading may move",
+      "sweep": [
+        {
+          "worldBandRecords": 1,
+          "socialAccessRisk": 0.29,
+          "fallbackRank": 11,
+          "maxCandidateSocialAccessRisk": 0.29,
+          "selectedAction": "move_to_tile:tile:99:113"
+        },
+        {
+          "worldBandRecords": 2,
+          "socialAccessRisk": 0.29,
+          "fallbackRank": 11,
+          "maxCandidateSocialAccessRisk": 0.29,
+          "selectedAction": "move_to_tile:tile:99:113"
+        },
+        {
+          "worldBandRecords": 6,
+          "socialAccessRisk": 0.29,
+          "fallbackRank": 11,
+          "maxCandidateSocialAccessRisk": 0.29,
+          "selectedAction": "move_to_tile:tile:99:113"
+        },
+        {
+          "worldBandRecords": 7,
+          "socialAccessRisk": 0.29,
+          "fallbackRank": 11,
+          "maxCandidateSocialAccessRisk": 0.29,
+          "selectedAction": "move_to_tile:tile:99:113"
+        },
+        {
+          "worldBandRecords": 8,
+          "socialAccessRisk": 0.29,
+          "fallbackRank": 11,
+          "maxCandidateSocialAccessRisk": 0.29,
+          "selectedAction": "move_to_tile:tile:99:113"
+        },
+        {
+          "worldBandRecords": 9,
+          "socialAccessRisk": 0.29,
+          "fallbackRank": 11,
+          "maxCandidateSocialAccessRisk": 0.29,
+          "selectedAction": "move_to_tile:tile:99:113"
+        },
+        {
+          "worldBandRecords": 10,
+          "socialAccessRisk": 0.29,
+          "fallbackRank": 11,
+          "maxCandidateSocialAccessRisk": 0.29,
+          "selectedAction": "move_to_tile:tile:99:113"
+        },
+        {
+          "worldBandRecords": 13,
+          "socialAccessRisk": 0.29,
+          "fallbackRank": 11,
+          "maxCandidateSocialAccessRisk": 0.29,
+          "selectedAction": "move_to_tile:tile:99:113"
+        },
+        {
+          "worldBandRecords": 21,
+          "socialAccessRisk": 0.29,
+          "fallbackRank": 11,
+          "maxCandidateSocialAccessRisk": 0.29,
+          "selectedAction": "move_to_tile:tile:99:113"
+        }
+      ],
+      "worldBandRecordCountsWhereSomethingMoved": [],
+      "observerStateIdenticalThroughout": true,
+      "staticProof": "`getSocialAccessRisk` no longer takes `world` at all on the after arm, so a global read is not merely absent but structurally impossible without changing the signature.",
+      "verdict": "NO_GLOBAL_COUNT_READER"
+    },
+    {
+      "id": "P18_order_invariance",
+      "intent": "permuting band record order must not change any canonical observer reading",
+      "changedFields": [],
+      "verdict": "ORDER_INVARIANT"
+    },
+    {
+      "id": "P19_step_mode_invariance",
+      "intent": "daily and seasonal internal batching over the same span must be canonically equivalent for these readings",
+      "seasonalSocialAccessRisk": 0.29,
+      "dailySocialAccessRisk": 0.29,
+      "changedFields": [],
+      "verdict": "STEP_MODE_EQUIVALENT"
+    },
+    {
+      "id": "P20_long_horizon_world_growth",
+      "intent": "a real world run forward, with the 8 <-> 9 record crossing exercised at every season against real evolving band state, tracking the least-informed living band",
+      "years": 20,
+      "seasonsObserved": 80,
+      "recordCountRange": [
+        9,
+        9
+      ],
+      "recordCountIsConstant": true,
+      "naturalCrossingObserved": false,
+      "seasonsMeasurable": 80,
+      "seasonsWithUninformedControl": 80,
+      "discontinuitiesAtCrossing": [],
+      "note": "The default world holds a CONSTANT record count, so the old term was not a rare edge case but permanently armed for every band with zero known contacts. `naturalCrossingObserved` is therefore false by world construction, not by instrument failure.",
+      "verdict": "NO_DISCONTINUITY_AT_THRESHOLD",
+      "series": [
+        {
+          "season": 0,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.28,
+          "socialAccessRiskAtReducedCount": 0.28,
+          "delta": 0
+        },
+        {
+          "season": 1,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 2,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 3,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 4,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 5,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 6,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 7,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 8,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 9,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 10,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.33,
+          "socialAccessRiskAtReducedCount": 0.33,
+          "delta": 0
+        },
+        {
+          "season": 11,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 12,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.33,
+          "socialAccessRiskAtReducedCount": 0.33,
+          "delta": 0
+        },
+        {
+          "season": 13,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 14,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.29,
+          "socialAccessRiskAtReducedCount": 0.29,
+          "delta": 0
+        },
+        {
+          "season": 15,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 16,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 17,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.33,
+          "socialAccessRiskAtReducedCount": 0.33,
+          "delta": 0
+        },
+        {
+          "season": 18,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 19,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 20,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 21,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 22,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.33,
+          "socialAccessRiskAtReducedCount": 0.33,
+          "delta": 0
+        },
+        {
+          "season": 23,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 24,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 25,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 26,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 27,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.33,
+          "socialAccessRiskAtReducedCount": 0.33,
+          "delta": 0
+        },
+        {
+          "season": 28,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 29,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 30,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 31,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 32,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 33,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.33,
+          "socialAccessRiskAtReducedCount": 0.33,
+          "delta": 0
+        },
+        {
+          "season": 34,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 35,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 36,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 37,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 38,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 39,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 40,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 41,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 42,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 43,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 44,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.33,
+          "socialAccessRiskAtReducedCount": 0.33,
+          "delta": 0
+        },
+        {
+          "season": 45,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 46,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 47,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 48,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 49,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 50,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 51,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 52,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 53,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 54,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 55,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 56,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 57,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 58,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 59,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.34,
+          "socialAccessRiskAtReducedCount": 0.34,
+          "delta": 0
+        },
+        {
+          "season": 60,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 61,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 62,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.33,
+          "socialAccessRiskAtReducedCount": 0.33,
+          "delta": 0
+        },
+        {
+          "season": 63,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 64,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 65,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 66,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 67,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.33,
+          "socialAccessRiskAtReducedCount": 0.33,
+          "delta": 0
+        },
+        {
+          "season": 68,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 69,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 70,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 71,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 72,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 73,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 74,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 75,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 76,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 77,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 78,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        },
+        {
+          "season": 79,
+          "worldBandRecords": 9,
+          "reducedWorldBandRecords": 8,
+          "livingBands": 9,
+          "controlBandId": "band:varied-dry-corridor-mid",
+          "knownContactCount": 0,
+          "socialAccessRiskAtFullCount": 0.3,
+          "socialAccessRiskAtReducedCount": 0.3,
+          "delta": 0
+        }
+      ]
+    }
+  ]
+}
