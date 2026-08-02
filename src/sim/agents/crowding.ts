@@ -55,10 +55,13 @@ export function getNearbyBandPressure(
 // at daily resolution on map2:s1 over 3 years: 69 party-days, of which **34 (49.3%) were beyond
 // CROWDING_RADIUS from their own residence** — bodies that existed nowhere.
 //
-// This is the one authority for that question, and it CONSERVES PEOPLE: the residential remainder
-// is the population minus everyone physically away, and every away party is represented exactly
-// once at its own `positionTileId`. Summed over the sources, a band contributes its whole
-// population and no more.
+// This is the one authority for that question. It REPORTS canonical expedition state: the
+// residential remainder is the population minus everyone physically away, and every away party is
+// represented exactly once at its own `positionTileId`. Whether the sources sum to the whole
+// population therefore depends on that canonical state being VALID — it is not a property this
+// function establishes on its own. Validity is maintained upstream by
+// `reconcileExpeditionCommitment`, and this function never silently resizes a party to make the
+// arithmetic work. See the note on the clamp inside `getBandPhysicalPresence`.
 //
 // PHASE SEMANTICS ARE PRODUCTION'S, NOT THE NAMES'. `prepared` means "labor committed at camp,
 // NOT yet departed" (types.ts:933), so a prepared party is still physically AT HOME and is NOT
@@ -84,7 +87,14 @@ export interface PhysicalPresenceSource {
  * Every place this band currently has bodies, with the people at each.
  *
  * Reads only the band's own record — no world scan, no cache, bounded by the active-expedition
- * cap. `sum(people)` equals `demography.population` exactly (see `physicalPresencePeopleTotal`).
+ * cap.
+ *
+ * `sum(people)` equals `demography.population` **for valid canonical expedition state**, i.e.
+ * whenever `sum(away partyWorkers) <= population`. That precondition is maintained upstream by
+ * `reconcileExpeditionCommitment`, which runs daily; it is NOT established here. A band assembled
+ * directly by a test or a future caller that never ran a day can still be overcommitted, and this
+ * function will report that faithfully rather than disguise it. Assert with
+ * `getBandCommitmentAccounting(band).conserved`.
  */
 export function getBandPhysicalPresence(band: Band): readonly PhysicalPresenceSource[] {
   const population = band.demography?.population ?? band.size ?? 0;
@@ -300,9 +310,9 @@ function buildCrowdingField(world: WorldState, cache: TickContextCache): Crowdin
 
     // CORRECTION-34 — scatter from EVERY place this band has bodies, not only from its
     // residence: the residential remainder from `band.position`, and each physically-away party
-    // from its own `positionTileId`. People are conserved across the sources, so the band's total
-    // physical weight is unchanged when nobody is away and is redistributed — never duplicated —
-    // when somebody is.
+    // from its own `positionTileId`. The band's total physical weight is unchanged when nobody is
+    // away and is redistributed — never duplicated — when somebody is, for valid canonical
+    // expedition state (maintained upstream by `reconcileExpeditionCommitment`, not here).
     const presence = getBandPhysicalPresence(band);
     const sources: { readonly tile: Tile; readonly weight: number }[] = [];
 

@@ -1,0 +1,23 @@
+{
+  "audit": "CORRECTION-34A-CATCHMENT-EXPEDITION-ACCOUNTING",
+  "scenario": "map2",
+  "seed": "c34a:fixtures",
+  "decision": "Option C — separate local extraction effort from consumption demand",
+  "changed": "sharedCatchment.getBandForagingDraw now counts adults physically at camp",
+  "unchanged": "carryingCapacity.derivePopulationDemand still counts the whole band",
+  "rows": [
+    {
+      "arm": "all_workers_home",
+      "awayWorkers": 0,
+      "catchmentClaim": 127.02000000000002,
+      "consumptionDemand": 25
+    },
+    {
+      "arm": "three_workers_away",
+      "awayWorkers": 3,
+      "catchmentClaim": 109.61999999999998,
+      "consumptionDemand": 25
+    }
+  ],
+  "verdict": "EFFORT_FALLS_DEMAND_HOLDS"
+}

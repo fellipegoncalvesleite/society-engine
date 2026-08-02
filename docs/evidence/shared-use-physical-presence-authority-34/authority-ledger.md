@@ -36,3 +36,18 @@
 | consumption demand | **UNCHANGED AND SEPARATE** — `carryingCapacity.derivePopulationDemand` still counts the whole band, because an away worker still eats. |
 | `getBandPhysicalPresence` conservation guarantee | **DOCUMENTATION CORRECTED** — it is not self-conserving. The sum equals `population` only for VALID canonical expedition state; validity is maintained upstream by the daily reconciliation, which covers every band-day the daily kernel produces but not a band object assembled directly by a test or future caller. |
 | expedition lifecycle observation | **INSTRUMENT REPAIRED** — daily sampling is canonical; the seasonal arm is retained as the counter-example. |
+
+---
+
+## CORRECTION-34B amendment
+
+| Authority | Status |
+| --- | --- |
+| party size | **ONE AUTHORITY.** `partyWorkers`, `partyComposition`, `cargo.carryCapacityUnits` and cargo are reconciled together by `reconcileExpeditionCommitment`. Previously `partyWorkers` moved alone. |
+| committed-worker totals | **AGREE.** `getCommittedExpeditionWorkers(band) === partyCompositionTotal(deriveCommittedMobilityPools(band))` on every band-day; 0 mismatches in 162,000 band-days at 50 y. |
+| residential catchment effort | **AGREES WITH PARTY SIZE.** Effort adults = `workingAdults − committed`; the previous split produced **−1**. |
+| carry ceiling | **FOLLOWS WORKERS.** Recomputed from the reduced party and wrapped in `Math.min`, so reconciliation can never raise it. Excess cargo is abandoned, `harvest + lost` invariant. |
+| travel pace | **NEVER IMPROVES ON LOSS.** Removal order high → typical → limited. |
+| `prepared` termination | **NOT A DEATH.** `aborted` + `commitment_unsupported`; only away parties below the minimum are `lost`. |
+| `getBandPhysicalPresence` documentation | **CONTRADICTION REMOVED.** The file no longer says both "CONSERVES PEOPLE" and "NOT self-conserving"; it reports canonical state, conservation depends on upstream validity, and it never silently resizes a party. |
+| provisions | **TRIP-LOCAL ACCOUNTING ABSTRACTION, not a conserved store.** Stated explicitly; full material conservation is not claimed for provisions. |

@@ -78,3 +78,34 @@ party-overlap / encounter architecture. Same-day trips remain physically real th
 target, depletion, result and return. No dead ledger was introduced. See
 `SAME_DAY_PRESENCE_SEAM.md` for the missing consumer, why completed trip history cannot represent
 current bodies, the six requirements of the future authority, and the roadmap entry.
+
+---
+
+## CORRECTION-34B — partial reconciliation: Option B, one authority
+
+Supervising review found that CORRECTION-34A's reconciliation reduced `partyWorkers` alone.
+Reproduced before any change: **`PARTIAL RECONCILIATION SPLIT AUTHORITY`**, with residential effort
+adults reading **−1**.
+
+| Option | Decision |
+| --- | --- |
+| A — whole-party cancellation only | Rejected: destroying a six-person party because the band lost one adult is disproportionate, and discards cargo and information with it. |
+| **B — canonical deterministic partial reconciliation** | **SELECTED.** Workers, composition, carry ceiling and cargo move together in one function. |
+| C — protect away commitments upstream in demography/fission | **Deferred, and recorded as architecturally superior.** It requires demography to own away-worker accounting — a demographic-ownership change beyond a presence correction. Not refuted. |
+| D — return/abort instead of resizing | Rejected: turning a party for home requires the residential band to know something it has no channel to learn (CORRECTION-30 established there is no communication authority). |
+| E — another design | Not required. |
+
+**Removal order is high → typical → limited**, under the rule that *reconciliation may never improve
+a party's capability*: `derivePartyPaceFactor = 1 + (high*0.15 − limited*0.20)/total`, so dropping
+`limited` members would make a party that just lost people move faster.
+
+**Cargo above the reduced ceiling is abandoned to `lostUnits`**, with `harvest + lost` invariant and
+capacity wrapped in `Math.min` so it can never rise. No transport aid is granted.
+
+**One new outcome reason, `commitment_unsupported`**, for a `prepared` party only — every existing
+reason describes something that happened on a journey, and a prepared party has none. Its people are
+at camp and must not be declared lost.
+
+**The aggregate-model limit is stated, not hidden:** cohorts have no individual identity, so a
+workforce decline cannot reveal who was lost. The removal order is a deterministic accounting
+convention chosen for monotonicity, not an anthropological claim.

@@ -1,0 +1,38 @@
+{
+  "check": "RECOVERY-12 step-mode invariance (daily == seasonal)",
+  "verdict": "PASS",
+  "years": 20,
+  "maps": [
+    "map1",
+    "map2"
+  ],
+  "isolation": "one fresh child process per map",
+  "results": {
+    "map1": {
+      "map": "map1",
+      "pass": true,
+      "tickMatch": true,
+      "seasonalTick": 80,
+      "dailyTick": 80,
+      "populationAuthorityMatch": true,
+      "fullCanonicalStateMatch": true,
+      "seasonalPopulation": 152,
+      "dailyPopulation": 152,
+      "bandCount": 5,
+      "firstDivergence": null
+    },
+    "map2": {
+      "map": "map2",
+      "pass": true,
+      "tickMatch": true,
+      "seasonalTick": 80,
+      "dailyTick": 80,
+      "populationAuthorityMatch": true,
+      "fullCanonicalStateMatch": true,
+      "seasonalPopulation": 227,
+      "dailyPopulation": 227,
+      "bandCount": 9,
+      "firstDivergence": null
+    }
+  }
+}

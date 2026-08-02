@@ -209,18 +209,71 @@ export const EXPEDITION_MIN_PARTY_WORKERS = 2;
  * The physical reading is that the people who left are among those the band lost, so the PARTY
  * shrinks. The loss is never absorbed silently by the residential remainder, and it is never
  * repaired inside `getBandPhysicalPresence` by inventing or deleting people — §6 forbids both.
- * A party reduced below `EXPEDITION_MIN_PARTY_WORKERS` did not survive as a party and is declared
- * lost, which is the existing terminal transition, not a new one: no cargo and no information
- * reach camp.
  *
  * The newest commitment is released first — a band recalls the party it has just sent before the
  * one already deep in its journey. Array order IS launch order (`attachExpedition` appends), so
  * the order is deterministic without a re-sort.
  *
+ * ── CORRECTION-34B — WHY THIS IS ONE AUTHORITY AND NOT A `partyWorkers` EDIT ──────────────────
+ *
+ * The first version of this function reduced `partyWorkers` alone and left every quantity DERIVED
+ * from it stale, which supervising review reproduced as a split authority: with six workers cut to
+ * five, `getCommittedExpeditionWorkers` read 5 while `deriveCommittedMobilityPools` still read 6,
+ * the carry ceiling stayed at capacity-for-six, the pace factor kept the six-person composition,
+ * and the residential catchment subtracted SIX adults from a workforce of five — a **negative**
+ * local extraction effort. Every one of those is repaired here, in one place, because a party's
+ * size is not one number: it is `partyWorkers`, `partyComposition`, the carry ceiling the workers
+ * justify, and the cargo that ceiling can still hold.
+ *
+ * THE AGGREGATE-MODEL LIMIT, STATED RATHER THAN HIDDEN. The simulator has cohorts, not people. A
+ * workforce decline while a party is away CANNOT reveal whether the people lost were at camp, in
+ * the party, aged out, transferred by fission or died. Nothing here pretends otherwise. The
+ * convention below is a deterministic accounting rule, not a claim about individuals.
+ *
+ * THE RULE THAT DECIDES WHO LEAVES: **reconciliation may never IMPROVE a party's capability.**
+ * Members are removed high pool → typical → limited, because `derivePartyPaceFactor` is
+ * `1 + (high*0.15 - limited*0.20)/total` — dropping `limited` members would make a party that just
+ * lost people move FASTER, a capability granted by a loss. Removing from `high` first guarantees
+ * pace is monotonically non-increasing, and the carry ceiling falls with the worker count.
+ *
+ * CARGO. The ceiling is recomputed from the reduced party, and harvest above it is ABANDONED into
+ * `lostUnits` — fewer hands cannot carry what more hands could. Cargo is conserved exactly:
+ * `harvest + lost` is invariant across reconciliation, and neither cargo nor capacity may rise.
+ * No container, pack or basket is granted: the ceiling is still bare bodily carrying scaled by the
+ * band's own learned practice, exactly as `deriveCarryCapacityUnits` computes it.
+ *
+ * PHASE-APPROPRIATE TERMINATION. `prepared` means labour committed AT CAMP, not yet departed
+ * (types.ts). Those people never left, so calling them `lost` would be a false death. A prepared
+ * party that can no longer be staffed is `aborted` with `commitment_unsupported` — it holds no
+ * body either way, and the people are already inside the residential remainder. Only a party that
+ * is physically AWAY and falls below `EXPEDITION_MIN_PARTY_WORKERS` is `lost`, which is the
+ * existing terminal transition: no cargo and no information reach camp.
+ *
  * Pure. Returns the same object when nothing is overcommitted, so the common case allocates
  * nothing and the daily call is a single comparison.
  */
-export function reconcileExpeditionCommitment(band: Band): Band {
+function reduceCompositionNeverFaster(
+  composition: ExpeditionPartyComposition,
+  removeCount: number,
+): ExpeditionPartyComposition {
+  let { limited, typical, high } = composition;
+  let remaining = Math.max(0, removeCount);
+
+  const fromHigh = Math.min(high, remaining);
+  high -= fromHigh;
+  remaining -= fromHigh;
+
+  const fromTypical = Math.min(typical, remaining);
+  typical -= fromTypical;
+  remaining -= fromTypical;
+
+  const fromLimited = Math.min(limited, remaining);
+  limited -= fromLimited;
+
+  return { limited, typical, high };
+}
+
+export function reconcileExpeditionCommitment(band: Band, currentTick: number): Band {
   const expeditions = band.expeditions ?? [];
 
   if (expeditions.length === 0) {
@@ -247,13 +300,48 @@ export function reconcileExpeditionCommitment(band: Band): Band {
     const reduced = Math.max(0, workers - (committed - workforce));
 
     if (reduced < EXPEDITION_MIN_PARTY_WORKERS) {
-      next[index] = { ...expedition, phase: "lost", partyWorkers: 0, outcomeReason: "party_lost" };
+      // A prepared party never departed: its people are standing in camp and are already inside
+      // the residential remainder. Declaring them lost would invent a death.
+      const terminal = expedition.phase === "prepared"
+        ? { phase: "aborted" as const, outcomeReason: "commitment_unsupported" as const }
+        : { phase: "lost" as const, outcomeReason: "party_lost" as const };
+
+      next[index] = {
+        ...expedition,
+        ...terminal,
+        partyWorkers: 0,
+        ...(expedition.partyComposition === undefined
+          ? {}
+          : { partyComposition: { limited: 0, typical: 0, high: 0 } }),
+      };
       committed -= workers;
       continue;
     }
 
-    next[index] = { ...expedition, partyWorkers: reduced };
-    committed -= workers - reduced;
+    const removed = workers - reduced;
+    // The ceiling the REDUCED party justifies. `Math.min` guarantees reconciliation can never
+    // raise a ceiling even if a learned carrying practice changed in the meantime.
+    const capacity = round4(Math.min(
+      expedition.cargo.carryCapacityUnits,
+      deriveCarryCapacityUnits(band, reduced, expedition.injuryLoad ?? 0, currentTick),
+    ));
+    const carried = expedition.cargo.harvestUnits;
+    const abandoned = round4(Math.max(0, carried - capacity));
+
+    next[index] = {
+      ...expedition,
+      partyWorkers: reduced,
+      ...(expedition.partyComposition === undefined
+        ? {}
+        : { partyComposition: reduceCompositionNeverFaster(expedition.partyComposition, removed) }),
+      cargo: {
+        ...expedition.cargo,
+        carryCapacityUnits: capacity,
+        harvestUnits: round4(carried - abandoned),
+        lostUnits: round4((expedition.cargo.lostUnits ?? 0) + abandoned),
+      },
+    };
+    committed -= removed;
   }
 
   return { ...band, expeditions: next };
@@ -2196,7 +2284,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     // season boundary with no knowledge of away parties; this daily action is the first production
     // code to see the result, and `expeditionDailyAction` fires on every day of the season.
     const beforeReconcile = bandsById[band.id] ?? band;
-    const reconciled = reconcileExpeditionCommitment(beforeReconcile);
+    const reconciled = reconcileExpeditionCommitment(beforeReconcile, Number(getWorldTimeForDay(day).tick));
 
     if (reconciled !== beforeReconcile) {
       bandsById[band.id] = reconciled;

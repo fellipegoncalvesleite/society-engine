@@ -350,3 +350,90 @@ CORRECTION-28 fixtures 12/12 including **P8 FIELD_SCAN_PARITY**.
 FAILING: `expeditionLifecycleAudit` — inherited, now diagnosed as an audit sampling artifact (above).
 
 NOT RUN: natural occurrence, performance, resource accounting.
+
+---
+
+# CORRECTION-34B — partial reconciliation consistency and numeric resource proof
+
+## G1 — The split authority was real, and reproduced before any change
+
+CORRECTION-34A reduced `partyWorkers` and left everything derived from it stale. Measured at
+`fd868d6` on a six-worker party whose workforce fell to five while staying above the minimum:
+**`PARTIAL RECONCILIATION SPLIT AUTHORITY`**, four failing checks. Composition stayed 6 while
+workers read 5; `deriveCommittedMobilityPools` stayed 6 while `getCommittedExpeditionWorkers` read
+5; the carry ceiling stayed at capacity-for-six; the pace factor kept the six-person composition;
+and **residential effort adults read −1** — the catchment believed more adults were away than the
+band had.
+
+The existing P10 fixture missed it because it drove the party below the minimum and lost the whole
+party, so the partial path was never exercised. Full table in `PARTIAL_RECONCILIATION_AUDIT.md`.
+
+## G2 — Option B, with a rule that forbids capability gain
+
+Workers, composition, ceiling and cargo now move together in one authority. Members are removed
+**high → typical → limited**, because `derivePartyPaceFactor = 1 + (high*0.15 − limited*0.20)/total`
+means dropping `limited` members would make a party that just lost people move *faster*. Measured
+pace `0.9917 → 0.96`. Cargo above the reduced ceiling is abandoned: **0.648 → 0.6 harvest + 0.048
+lost, sum invariant**. Capacity is wrapped in `Math.min` so it can never rise.
+
+Option C (upstream demographic ownership of away workers) is recorded as **architecturally
+superior and deferred, not refuted**. Option D was rejected because turning a party for home
+requires the band to know something it has no channel to learn.
+
+## G3 — `prepared` people are no longer declared lost
+
+One new outcome reason, `commitment_unsupported`, introduced only because every existing reason
+describes something that happened on a journey and a `prepared` party has none. A prepared party
+that cannot be staffed is `aborted` at camp; only physically away parties below the minimum are
+`lost`.
+
+## G4 — Fixtures R1–R12: 12/12, 0 vacuous, 0 failing
+
+An authoring error in R5 is recorded: its first version gave two four-worker parties the six-worker
+default ceiling, so the untouched party was inconsistent before reconciliation ran.
+
+## G5 — Numeric resource chain: `NUMERIC_RESOURCE_CHAIN_RECONCILED`
+
+One real completed expedition, driven daily on map2:s1:
+
+```
+takenAtTarget_usableSupport = 0.0083     (support units)
+cargo.harvestUnits          = 0.0757     (cargo units — a DIFFERENT quantity)
+carryCapacityUnits          = 0.6
+carried = min(harvest, capacity) = 0.0757
+afterProvisions = max(0, carried - 0.038) = 0.0377
+deliveredFraction = clamp01(0.0377 / 0.0083) = 1
+delivered = 0.0083 = receipt usableSupport    IDENTITY HOLDS
+```
+
+**Provisions are classified as a trip-local accounting abstraction, and full material conservation
+is explicitly NOT claimed for them.** No residential store is decremented at launch;
+`consumeProvisions` only increments a counter; the constant's own header says "never a store". What
+*is* conserved is the cargo chain. Backing provisions with a real store belongs to the Adaptation /
+Material Culture pass.
+
+## G6 — Natural occurrence is an explicit NULL
+
+20 y: 64,800 band-days, **all no-op**. 50 y: 162,000 band-days, **all no-op**. Zero partial
+reductions, zero mismatches of any kind, zero conservation failures, zero duplicate receipts.
+**Partial reconciliation never occurs naturally in this world**, so the natural sweep proves nothing
+about partial-reduction correctness — the controlled fixtures are the proof, exactly as review
+warned.
+
+## G7 — Three instrument errors in this pass's own probes, all recorded
+
+1. **R5 fixture** built two four-worker parties with a six-worker ceiling (above).
+2. **Numeric chain, first attempt:** used peak cargo as "taken at target". `cargo.harvestUnits` and
+   `physicalFoodHarvest.usableSupport` are different quantities in different units; conflating them
+   made the identity fail.
+3. **Numeric chain, second attempt:** used *peak* cargo and capacity as the sample point. Cargo is
+   not monotonic — a party can abandon load on the way home — so the correct sample is the **last
+   away-phase day**. Both wrong readings are kept in the record.
+
+## G8 — Documentation contradiction removed
+
+`crowding.ts` previously said both "it CONSERVES PEOPLE" and "this read model is NOT
+self-conserving". It now says one thing in all three places: the read model **reports** canonical
+expedition state; conservation depends on that state being valid, which
+`reconcileExpeditionCommitment` maintains upstream; and the read model never silently resizes a
+party. The JSDoc no longer claims unconditionally that `sum(people)` equals `population`.

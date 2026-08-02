@@ -1,0 +1,203 @@
+{
+  "audit": "CORRECTION-34B-PARTIAL-RECONCILIATION-FIXTURES",
+  "scenario": "map2",
+  "seed": "c34b:fixtures",
+  "tick": 8,
+  "summary": {
+    "fixtures": 12,
+    "failing": 0,
+    "vacuous": 0
+  },
+  "verdicts": {
+    "R1_valid_no_op": "BYTE_IDENTICAL_SAME_OBJECT",
+    "R2_partial_reduction_six_to_five": "ALL_AUTHORITIES_AGREE",
+    "R3_larger_partial_eight_to_four": "CARGO_RECONCILED_AT_SCALE",
+    "R4_reduction_below_minimum": "AWAY_PARTY_TERMINAL_NO_BODY",
+    "R5_two_concurrent_parties": "NEWEST_REDUCED_FIRST_DETERMINISTIC",
+    "R6_prepared_party_cancelled_not_lost": "CANCELLED_AT_CAMP_NOT_DECLARED_LOST",
+    "R7_outbound_party": "PHASE_AND_ROUTE_PRESERVED",
+    "R8_operating_with_cargo": "CAPACITY_AND_CARGO_RECONCILE_NUMERICALLY",
+    "R9_returning_with_cargo": "NO_CARGO_CREATED_PHASE_PRESERVED",
+    "R10_workforce_recovery_no_regrow": "PARTY_DOES_NOT_REGROW",
+    "R11_terminal_records_ignored": "TERMINAL_RECORDS_COMMIT_NOTHING",
+    "R12_legacy_party_without_composition": "LEGACY_FALLBACK_DETERMINISTIC_AND_CONSISTENT"
+  },
+  "fixtures": {
+    "R1_valid_no_op": {
+      "verdict": "BYTE_IDENTICAL_SAME_OBJECT",
+      "sameObjectReference": true,
+      "note": "a valid band must not even be reallocated — the common daily path is one comparison"
+    },
+    "R2_partial_reduction_six_to_five": {
+      "verdict": "ALL_AUTHORITIES_AGREE",
+      "partyWorkers": 5,
+      "compositionTotal": 5,
+      "composition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 0
+      },
+      "committedWorkers": 5,
+      "committedPools": 5,
+      "carryCapacityUnits": 0.6,
+      "capacityForFive": 0.6,
+      "harvestUnits": 0.6,
+      "lostUnits": 0.048,
+      "cargoConserved": true,
+      "paceBefore": 0.9916666666666667,
+      "paceAfter": 0.96,
+      "paceNeverImproved": true,
+      "checks": {
+        "workersOk": true,
+        "committedOk": true,
+        "withinWorkforce": true,
+        "presenceOk": true,
+        "capacityOk": true,
+        "cargoWithinCap": true,
+        "all": true
+      }
+    },
+    "R3_larger_partial_eight_to_four": {
+      "verdict": "CARGO_RECONCILED_AT_SCALE",
+      "partyWorkers": 4,
+      "compositionTotal": 4,
+      "composition": {
+        "limited": 2,
+        "typical": 2,
+        "high": 0
+      },
+      "capacityBefore": 0.96,
+      "capacityAfter": 0.48,
+      "capacityForFour": 0.48,
+      "harvestBefore": 0.912,
+      "harvestAfter": 0.48,
+      "abandoned": 0.432,
+      "cargoConserved": true,
+      "checks": {
+        "workersOk": true,
+        "committedOk": true,
+        "withinWorkforce": true,
+        "presenceOk": true,
+        "capacityOk": true,
+        "cargoWithinCap": true,
+        "all": true
+      }
+    },
+    "R4_reduction_below_minimum": {
+      "verdict": "AWAY_PARTY_TERMINAL_NO_BODY",
+      "phase": "lost",
+      "outcomeReason": "party_lost",
+      "partyWorkers": 0,
+      "compositionTotal": 0,
+      "awaySources": 0,
+      "represented": 10,
+      "population": 10,
+      "note": "an away party below the minimum is lost — the existing terminal transition; no cargo or information reaches camp"
+    },
+    "R5_two_concurrent_parties": {
+      "verdict": "NEWEST_REDUCED_FIRST_DETERMINISTIC",
+      "oldest": {
+        "id": "e:old",
+        "workers": 4,
+        "phase": "operating"
+      },
+      "newest": {
+        "id": "e:new",
+        "workers": 2,
+        "phase": "operating"
+      },
+      "rule": "array order IS launch order (attachExpedition appends); the newest commitment is released first",
+      "committedWorkers": 6,
+      "workingAdults": 6,
+      "checks": {
+        "workersOk": true,
+        "committedOk": true,
+        "withinWorkforce": true,
+        "presenceOk": true,
+        "capacityOk": true,
+        "cargoWithinCap": true,
+        "all": true
+      }
+    },
+    "R6_prepared_party_cancelled_not_lost": {
+      "verdict": "CANCELLED_AT_CAMP_NOT_DECLARED_LOST",
+      "phase": "aborted",
+      "outcomeReason": "commitment_unsupported",
+      "partyWorkers": 0,
+      "awaySources": 0,
+      "represented": 10,
+      "population": 10,
+      "note": "prepared = labour committed AT CAMP, not yet departed; these people never left, so party_lost would invent a death. They are already inside the residential remainder."
+    },
+    "R7_outbound_party": {
+      "verdict": "PHASE_AND_ROUTE_PRESERVED",
+      "phase": "outbound",
+      "routeIndex": 1,
+      "positionTileId": "tile:78:110",
+      "routeTileIds": [
+        "tile:78:111",
+        "tile:78:110"
+      ],
+      "partyWorkers": 5,
+      "compositionTotal": 5,
+      "note": "reconciliation resizes the party; it does not move it, retarget it or change its phase",
+      "checks": {
+        "workersOk": true,
+        "committedOk": true,
+        "withinWorkforce": true,
+        "presenceOk": true,
+        "capacityOk": true,
+        "cargoWithinCap": true,
+        "all": true
+      }
+    },
+    "R8_operating_with_cargo": {
+      "verdict": "CAPACITY_AND_CARGO_RECONCILE_NUMERICALLY",
+      "harvestBefore": 0.7056,
+      "lostBefore": 0.01,
+      "harvestAfter": 0.6,
+      "lostAfter": 0.1156,
+      "capacityBefore": 0.72,
+      "capacityAfter": 0.6,
+      "sumBefore": 0.7156,
+      "sumAfter": 0.7156,
+      "provisionsUntouched": true
+    },
+    "R9_returning_with_cargo": {
+      "verdict": "NO_CARGO_CREATED_PHASE_PRESERVED",
+      "phase": "returning",
+      "harvestBefore": 0.36,
+      "harvestAfter": 0.36,
+      "lostAfter": 0,
+      "cargoNotIncreased": true,
+      "note": "cargo below the reduced ceiling is untouched; the receipt is written by buildReturnedRecord on arrival and is not reached from here"
+    },
+    "R10_workforce_recovery_no_regrow": {
+      "verdict": "PARTY_DOES_NOT_REGROW",
+      "workersAfterReduction": 5,
+      "workersAfterRecovery": 5,
+      "compositionAfterRecovery": {
+        "limited": 1,
+        "typical": 4,
+        "high": 0
+      },
+      "note": "reconciliation is one-way; people do not walk back to a distant party because the cohort recovered at home"
+    },
+    "R11_terminal_records_ignored": {
+      "verdict": "TERMINAL_RECORDS_COMMIT_NOTHING",
+      "committedWorkers": 0,
+      "committedPools": 0,
+      "reconciliationWasNoOp": true,
+      "represented": 10,
+      "population": 10
+    },
+    "R12_legacy_party_without_composition": {
+      "verdict": "LEGACY_FALLBACK_DETERMINISTIC_AND_CONSISTENT",
+      "partyWorkers": 5,
+      "compositionPresent": false,
+      "committedWorkers": 5,
+      "committedPools": 5,
+      "note": "deriveCommittedMobilityPools treats a composition-less party as typical walkers, so the two totals still agree"
+    }
+  }
+}

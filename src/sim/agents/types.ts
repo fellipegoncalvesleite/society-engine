@@ -970,6 +970,12 @@ export type ExpeditionOutcomeReason =
   | "injury_forced_return"
   | "season_window_closed"
   | "party_lost"
+  // CORRECTION-34B §9 — the band could no longer staff a commitment it had already made, and the
+  // party had NOT yet departed. Existing reasons cannot express this: every one of them describes
+  // something that happened on a journey, and a `prepared` party has no journey. Its people are
+  // standing in camp and are already inside the residential remainder, so calling them
+  // `party_lost` would invent a death. Reached only from `reconcileExpeditionCommitment`.
+  | "commitment_unsupported"
   // CORRECTION-17 §9/§10 — frontier-exploration terminations. Every one is a physical
   // reason a party stopped going outward; none of them is "success by timeout".
   //

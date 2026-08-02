@@ -202,6 +202,31 @@ CORRECTION-33 frozen at `5ebb5e98`; `main` untouched at `0a43083a`.
 3. **`expeditionLifecycleAudit` repaired** — daily canonical (operating 130 / returning 488 /
    task-camp 375 / concurrent TRUE) vs seasonal (0/0/0/FALSE). **PASS, 0 failed checks.**
 
+**CORRECTION-34B — partial reconciliation consistency (latest)**
+
+Supervising review found CORRECTION-34A's `reconcileExpeditionCommitment` reduced `partyWorkers`
+alone. **Reproduced before any change: `PARTIAL RECONCILIATION SPLIT AUTHORITY`** — composition
+stayed 6 against 5 workers, mobility pools stayed 6 against `getCommittedExpeditionWorkers` 5, the
+carry ceiling stayed at capacity-for-six, and **residential effort adults read −1**. A
+`Math.max(0, …)` clamp hid it in the draw output.
+
+Repaired as **Option B, one authority**: workers, composition, ceiling and cargo move together;
+removal order **high → typical → limited** so reconciliation can never make a party *faster*; excess
+cargo abandoned with `harvest + lost` invariant; capacity wrapped in `Math.min`. New outcome reason
+`commitment_unsupported` for `prepared` parties so people who never departed are not declared lost.
+
+**R1–R12: 12/12, 0 vacuous.** **Numeric resource chain reconciled** (delivered 0.0083 = receipt).
+**Natural: 0 partial reconciliations in 162,000 band-days at 50 y — an explicit NULL**, so the
+controlled fixtures are the only proof of partial-reduction correctness.
+
+**Option C — demography/fission owning away-worker accounting — is recorded as architecturally
+superior and DEFERRED, not refuted.** That is the next thing to consider if this area is reopened.
+
+**Provisions are a trip-local accounting abstraction, NOT a conserved store.** Full material
+conservation is not claimed for them; the cargo chain is what conserves.
+
+---
+
 **Evidence closure (supervisor scope amendment applied)**
 
 Same-day party **current-presence implementation** is formally removed from CORRECTION-34's

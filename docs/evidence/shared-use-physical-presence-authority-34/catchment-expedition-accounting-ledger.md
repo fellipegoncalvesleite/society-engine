@@ -115,3 +115,28 @@ pipeline (`verdict: PASS`), step-mode invariance (`fullCanonicalStateMatch: true
   fixed the crowding authority without tuning its strength.
 - A band whose whole party is away still claims a floor of `Math.max(1, ...)`. That floor predates
   this checkpoint and is retained.
+
+---
+
+## CORRECTION-34B addendum — the committed count the catchment reads must be true
+
+CORRECTION-34A re-sourced `getBandForagingDraw` to `partyCompositionTotal(deriveCommittedMobilityPools(band))`.
+That is the right authority, but it was only as correct as the composition behind it — and
+CORRECTION-34A's partial reduction left composition stale.
+
+Measured at `fd868d6` with six workers reduced to five:
+
+```
+workingAdults                                   5
+getCommittedExpeditionWorkers                   5
+partyCompositionTotal(deriveCommittedMobilityPools)   6   <- stale
+residential effort adults = 5 - 6              -1   <- negative extraction effort
+```
+
+The draw *value* read 32.085 in both arms because `Math.max(0, ...)` clamps −1 to 0. **The clamp hid
+the defect in the output while the input was wrong**, which is why the audit reports `effortAdults`
+separately rather than trusting the draw.
+
+After CORRECTION-34B the composition is reduced with the workers, so effort adults read **0** and
+the two committed totals agree. Natural sweep: **0 catchment/worker mismatches in 64,800 band-days
+at 20 y and 162,000 at 50 y**. Consumption demand is untouched throughout.

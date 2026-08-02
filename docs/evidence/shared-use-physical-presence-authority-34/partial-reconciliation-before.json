@@ -1,0 +1,116 @@
+{
+  "audit": "CORRECTION-34B-PARTIAL-RECONCILIATION",
+  "headline": "PARTIAL RECONCILIATION SPLIT AUTHORITY",
+  "scenario": "map2",
+  "seed": "c34b:partial",
+  "tick": 8,
+  "construction": {
+    "bandId": "band:varied-dry-corridor-mid",
+    "partyWorkers": 6,
+    "partyCompositionTotal": 6,
+    "workingAdultsAfterDemographicChange": 5,
+    "minPartyWorkers": 2,
+    "note": "the party stays above the minimum, so the whole-party-loss path is NOT the one under test"
+  },
+  "before": {
+    "label": "before_reconciliation",
+    "partyWorkers": 6,
+    "phase": "operating",
+    "outcomeReason": null,
+    "partyComposition": {
+      "limited": 1,
+      "typical": 4,
+      "high": 1
+    },
+    "partyCompositionTotal": 6,
+    "committedViaGetCommittedExpeditionWorkers": 6,
+    "committedViaDeriveCommittedMobilityPools": 6,
+    "committedPools": {
+      "limited": 1,
+      "typical": 4,
+      "high": 1
+    },
+    "availableMobilityPools": {
+      "limited": 0,
+      "typical": 0,
+      "high": 0
+    },
+    "physicalAwayPeople": 6,
+    "residentialPhysicalPeople": 9,
+    "representedPopulation": 15,
+    "population": 15,
+    "workingAdults": 5,
+    "residentialCatchmentDraw": 32.085,
+    "carryCapacityUnits": 0.72,
+    "capacityForCurrentWorkers": 0.72,
+    "harvestUnits": 0.648,
+    "lostUnits": 0,
+    "provisionUnitsConsumed": 0,
+    "loadRatio": 0.9,
+    "partyPaceFactor": 0.9917,
+    "nextDayProvisionConsumption": 0.0048,
+    "cargoBeyondCapacity": 0
+  },
+  "after": {
+    "label": "after_current_reconciliation",
+    "partyWorkers": 5,
+    "phase": "operating",
+    "outcomeReason": null,
+    "partyComposition": {
+      "limited": 1,
+      "typical": 4,
+      "high": 1
+    },
+    "partyCompositionTotal": 6,
+    "committedViaGetCommittedExpeditionWorkers": 5,
+    "committedViaDeriveCommittedMobilityPools": 6,
+    "committedPools": {
+      "limited": 1,
+      "typical": 4,
+      "high": 1
+    },
+    "availableMobilityPools": {
+      "limited": 0,
+      "typical": 0,
+      "high": 0
+    },
+    "physicalAwayPeople": 5,
+    "residentialPhysicalPeople": 10,
+    "representedPopulation": 15,
+    "population": 15,
+    "workingAdults": 5,
+    "residentialCatchmentDraw": 32.085,
+    "carryCapacityUnits": 0.72,
+    "capacityForCurrentWorkers": 0.6,
+    "harvestUnits": 0.648,
+    "lostUnits": 0,
+    "provisionUnitsConsumed": 0,
+    "loadRatio": 0.9,
+    "partyPaceFactor": 0.9917,
+    "nextDayProvisionConsumption": 0.004,
+    "cargoBeyondCapacity": 0
+  },
+  "checks": {
+    "partyWorkersEqualsCompositionTotal": false,
+    "committedTotalsAgree": false,
+    "capacityMatchesCurrentWorkers": false,
+    "cargoWithinCapacity": true,
+    "cargoConserved": true,
+    "cargoNotIncreased": true,
+    "capacityNotIncreased": true,
+    "committedWithinWorkforce": true,
+    "awayWithinPopulation": true,
+    "presenceConserved": true,
+    "catchmentAgreesWithCommittedWorkers": false
+  },
+  "failingChecks": [
+    "partyWorkersEqualsCompositionTotal",
+    "committedTotalsAgree",
+    "capacityMatchesCurrentWorkers",
+    "catchmentAgreesWithCommittedWorkers"
+  ],
+  "effortAdults": {
+    "expectedFromPartyWorkers": 0,
+    "actualFromMobilityPools": -1
+  }
+}

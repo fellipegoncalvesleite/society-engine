@@ -1,0 +1,26 @@
+{
+  "audit": "CORRECTION-34B-NATURAL-RECONCILIATION",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "years": 20,
+  "samplingResolution": "DAILY",
+  "verdict": "NO_AUTHORITY_DISAGREEMENT_OBSERVED",
+  "measurements": {
+    "bandDaysObserved": 64800,
+    "reconciliationChecks": 64800,
+    "noOpReconciliations": 64800,
+    "partialPartyReductions": 0,
+    "wholePartyCancellationsOrLosses": 0,
+    "preparedPartyCancellations": 0,
+    "outboundReductions": 0,
+    "operatingReductions": 0,
+    "returningReductions": 0,
+    "cargoAbandonedByReconciliation": 0,
+    "compositionWorkerMismatches": 0,
+    "carryCapacityMismatches": 0,
+    "catchmentWorkerMismatches": 0,
+    "personConservationFailures": 0,
+    "duplicateReceipts": 0
+  },
+  "interpretation": "PARTIAL RECONCILIATION NEVER OCCURS NATURALLY in this world. That is stated plainly: the natural sweep is therefore a NULL result and proves nothing about partial-reduction correctness. Controlled fixtures R1-R12 are the proof; this run only shows the repair introduces no disagreement in ordinary play."
+}

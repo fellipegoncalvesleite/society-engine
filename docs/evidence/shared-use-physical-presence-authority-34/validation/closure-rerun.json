@@ -1,0 +1,282 @@
+{
+  "audit": "CORRECTION-34A-EVIDENCE-CLOSURE",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "summary": {
+    "fixtures": 12,
+    "unexpected": 0,
+    "deferredByScopeReduction": 5,
+    "notConstructed": 0
+  },
+  "verdicts": {
+    "P11_small_and_large_parties": "MONOTONE_AND_BOUNDED",
+    "P13_two_parties_at_one_target": "BOTH_CONTRIBUTE_AND_EACH_BAND_CONSERVED",
+    "P15_same_day_solo_party": "DEFERRED_BY_FORMAL_SCOPE_REDUCTION",
+    "P16_two_same_day_parties_different_targets": "DEFERRED_BY_FORMAL_SCOPE_REDUCTION",
+    "P17_two_same_day_parties_same_target": "DEFERRED_BY_FORMAL_SCOPE_REDUCTION",
+    "P18_same_route_different_within_day_timing": "DEFERRED_BY_FORMAL_SCOPE_REDUCTION",
+    "P19_same_day_and_expedition_overlap": "DEFERRED_BY_FORMAL_SCOPE_REDUCTION",
+    "P23_ghost_caution_separation": "BODIES_LEAVE_IMMEDIATELY_MEMORY_IS_SEPARATE",
+    "P24_hidden_party_creates_no_social_knowledge": "PHYSICAL_PRESENCE_ALONE_CREATES_NO_ENCOUNTER",
+    "P26_order_invariance": "PRESENCE_IS_ORDER_INDEPENDENT_BY_CONSTRUCTION",
+    "P28_long_horizon_boundedness": "BOUNDED_NO_GHOSTS_NO_LEAKS",
+    "P21_resource_accounting": "NO_UNIT_APPEARS_TWICE"
+  },
+  "fixtures": {
+    "P11_small_and_large_parties": {
+      "verdict": "MONOTONE_AND_BOUNDED",
+      "rows": [
+        {
+          "workers": 2,
+          "awayPeople": 2,
+          "homePeople": 23,
+          "total": 25
+        },
+        {
+          "workers": 3,
+          "awayPeople": 3,
+          "homePeople": 22,
+          "total": 25
+        },
+        {
+          "workers": 5,
+          "awayPeople": 5,
+          "homePeople": 20,
+          "total": 25
+        },
+        {
+          "workers": 8,
+          "awayPeople": 8,
+          "homePeople": 17,
+          "total": 25
+        }
+      ],
+      "note": "away presence follows party size exactly and never exceeds the population it came from"
+    },
+    "P13_two_parties_at_one_target": {
+      "verdict": "BOTH_CONTRIBUTE_AND_EACH_BAND_CONSERVED",
+      "targetTile": "tile:77:110",
+      "bandA": {
+        "id": "band:varied-dry-corridor-mid",
+        "atTarget": 3,
+        "total": 25,
+        "population": 25
+      },
+      "bandB": {
+        "id": "band:varied-dry-corridor-upper",
+        "atTarget": 2,
+        "total": 22,
+        "population": 22
+      },
+      "note": "each band's presence is computed independently and neither absorbs the other's bodies"
+    },
+    "P15_same_day_solo_party": {
+      "verdict": "DEFERRED_BY_FORMAL_SCOPE_REDUCTION",
+      "proof": {
+        "noCurrentConsumerExists": {
+          "runDailyActionsBuildsContextCache": false,
+          "buildTickContextCacheCallSitesAllInsideSeasonalTick": true,
+          "dailyActionModulesReferencingCrowdingOrCache": 0,
+          "sameDayPartyExistsAtSeasonBoundary": false,
+          "note": "a same-day party is created, acts and returns inside one synchronous applyTripDay"
+        },
+        "completedRecordsCreateNoPresence": {
+          "tripRecordsHeld": 24,
+          "terminalExpeditionRecordsHeld": 1,
+          "awayPresenceSources": 0,
+          "represented": 25,
+          "population": 25,
+          "ok": true
+        },
+        "noDeadLedgerIntroduced": {
+          "newPresenceStateAdded": false,
+          "crowdingMovedToDailyCadence": false,
+          "sameDayTripPhysicsChanged": false
+        },
+        "futureArchitectureNamed": "daily mobility / party-overlap / encounter architecture — see SAME_DAY_PRESENCE_SEAM.md"
+      }
+    },
+    "P16_two_same_day_parties_different_targets": {
+      "verdict": "DEFERRED_BY_FORMAL_SCOPE_REDUCTION",
+      "proof": {
+        "noCurrentConsumerExists": {
+          "runDailyActionsBuildsContextCache": false,
+          "buildTickContextCacheCallSitesAllInsideSeasonalTick": true,
+          "dailyActionModulesReferencingCrowdingOrCache": 0,
+          "sameDayPartyExistsAtSeasonBoundary": false,
+          "note": "a same-day party is created, acts and returns inside one synchronous applyTripDay"
+        },
+        "completedRecordsCreateNoPresence": {
+          "tripRecordsHeld": 24,
+          "terminalExpeditionRecordsHeld": 1,
+          "awayPresenceSources": 0,
+          "represented": 25,
+          "population": 25,
+          "ok": true
+        },
+        "noDeadLedgerIntroduced": {
+          "newPresenceStateAdded": false,
+          "crowdingMovedToDailyCadence": false,
+          "sameDayTripPhysicsChanged": false
+        },
+        "futureArchitectureNamed": "daily mobility / party-overlap / encounter architecture — see SAME_DAY_PRESENCE_SEAM.md"
+      }
+    },
+    "P17_two_same_day_parties_same_target": {
+      "verdict": "DEFERRED_BY_FORMAL_SCOPE_REDUCTION",
+      "proof": {
+        "noCurrentConsumerExists": {
+          "runDailyActionsBuildsContextCache": false,
+          "buildTickContextCacheCallSitesAllInsideSeasonalTick": true,
+          "dailyActionModulesReferencingCrowdingOrCache": 0,
+          "sameDayPartyExistsAtSeasonBoundary": false,
+          "note": "a same-day party is created, acts and returns inside one synchronous applyTripDay"
+        },
+        "completedRecordsCreateNoPresence": {
+          "tripRecordsHeld": 24,
+          "terminalExpeditionRecordsHeld": 1,
+          "awayPresenceSources": 0,
+          "represented": 25,
+          "population": 25,
+          "ok": true
+        },
+        "noDeadLedgerIntroduced": {
+          "newPresenceStateAdded": false,
+          "crowdingMovedToDailyCadence": false,
+          "sameDayTripPhysicsChanged": false
+        },
+        "futureArchitectureNamed": "daily mobility / party-overlap / encounter architecture — see SAME_DAY_PRESENCE_SEAM.md"
+      }
+    },
+    "P18_same_route_different_within_day_timing": {
+      "verdict": "DEFERRED_BY_FORMAL_SCOPE_REDUCTION",
+      "proof": {
+        "noCurrentConsumerExists": {
+          "runDailyActionsBuildsContextCache": false,
+          "buildTickContextCacheCallSitesAllInsideSeasonalTick": true,
+          "dailyActionModulesReferencingCrowdingOrCache": 0,
+          "sameDayPartyExistsAtSeasonBoundary": false,
+          "note": "a same-day party is created, acts and returns inside one synchronous applyTripDay"
+        },
+        "completedRecordsCreateNoPresence": {
+          "tripRecordsHeld": 24,
+          "terminalExpeditionRecordsHeld": 1,
+          "awayPresenceSources": 0,
+          "represented": 25,
+          "population": 25,
+          "ok": true
+        },
+        "noDeadLedgerIntroduced": {
+          "newPresenceStateAdded": false,
+          "crowdingMovedToDailyCadence": false,
+          "sameDayTripPhysicsChanged": false
+        },
+        "futureArchitectureNamed": "daily mobility / party-overlap / encounter architecture — see SAME_DAY_PRESENCE_SEAM.md"
+      }
+    },
+    "P19_same_day_and_expedition_overlap": {
+      "verdict": "DEFERRED_BY_FORMAL_SCOPE_REDUCTION",
+      "proof": {
+        "noCurrentConsumerExists": {
+          "runDailyActionsBuildsContextCache": false,
+          "buildTickContextCacheCallSitesAllInsideSeasonalTick": true,
+          "dailyActionModulesReferencingCrowdingOrCache": 0,
+          "sameDayPartyExistsAtSeasonBoundary": false,
+          "note": "a same-day party is created, acts and returns inside one synchronous applyTripDay"
+        },
+        "completedRecordsCreateNoPresence": {
+          "tripRecordsHeld": 24,
+          "terminalExpeditionRecordsHeld": 1,
+          "awayPresenceSources": 0,
+          "represented": 25,
+          "population": 25,
+          "ok": true
+        },
+        "noDeadLedgerIntroduced": {
+          "newPresenceStateAdded": false,
+          "crowdingMovedToDailyCadence": false,
+          "sameDayTripPhysicsChanged": false
+        },
+        "futureArchitectureNamed": "daily mobility / party-overlap / encounter architecture — see SAME_DAY_PRESENCE_SEAM.md"
+      }
+    },
+    "P23_ghost_caution_separation": {
+      "verdict": "BODIES_LEAVE_IMMEDIATELY_MEMORY_IS_SEPARATE",
+      "bodiesAtTargetBefore": 3,
+      "bodiesAtTargetAfter": 0,
+      "socialRecordsUntouchedByPresence": {
+        "contactMemories": 0,
+        "encounterRecords": 0,
+        "frictionRecords": 0
+      },
+      "note": "physical departure is instantaneous in the presence authority; social cooling/retention is CORRECTION-31's lifecycle and is not driven from here"
+    },
+    "P24_hidden_party_creates_no_social_knowledge": {
+      "verdict": "PHYSICAL_PRESENCE_ALONE_CREATES_NO_ENCOUNTER",
+      "partyDaysObserved": 8,
+      "encounterRecordsCreatedOverSameWindow": 0,
+      "note": "presence is a physical fact only; encounter admission remains CORRECTION-29's proximity gate and is not reached from getBandPhysicalPresence"
+    },
+    "P26_order_invariance": {
+      "verdict": "PRESENCE_IS_ORDER_INDEPENDENT_BY_CONSTRUCTION",
+      "arity": "getBandPhysicalPresence(band) — one band, no world, no cache, no iteration order",
+      "partyOrderForwardEqualsReversedAsMultiset": true,
+      "emittedOrderFollowsRecordOrder": true,
+      "limitation": "the DAILY band iteration order is the fixed compareBands/compareExpeditionBands sort and has no injectable permutation seam; it is NOT permuted here. Seasonal band-order permutation is covered by seasonOrderInvarianceAudit, which passes.",
+      "note": "the emitted ARRAY order follows record order; the SET of sources and every people count is identical, which is what any consumer reads"
+    },
+    "P28_long_horizon_boundedness": {
+      "verdict": "BOUNDED_NO_GHOSTS_NO_LEAKS",
+      "rows": [
+        {
+          "years": 20,
+          "elapsedMs": 5719,
+          "msPerSimDay": 0.7943,
+          "stateBytes": 76896969,
+          "stateMB": 73.33,
+          "livingBands": 9,
+          "maxPresenceSourcesPerBand": 3,
+          "maxContributorsPerTile": 2,
+          "maxActivePartiesPerBand": 2,
+          "maxTripRecordsPerBand": 24,
+          "maxOutcomeRecordsPerBand": 6,
+          "staleTerminalPresenceEntries": 0,
+          "personConservationFailures": 0,
+          "duplicateExpeditionReceipts": 0,
+          "ephemeralDailyPresenceEntries": 0
+        },
+        {
+          "years": 50,
+          "elapsedMs": 14427,
+          "msPerSimDay": 0.8015,
+          "stateBytes": 78013849,
+          "stateMB": 74.4,
+          "livingBands": 9,
+          "maxPresenceSourcesPerBand": 3,
+          "maxContributorsPerTile": 2,
+          "maxActivePartiesPerBand": 2,
+          "maxTripRecordsPerBand": 24,
+          "maxOutcomeRecordsPerBand": 6,
+          "staleTerminalPresenceEntries": 0,
+          "personConservationFailures": 0,
+          "duplicateExpeditionReceipts": 0,
+          "ephemeralDailyPresenceEntries": 0
+        }
+      ]
+    },
+    "P21_resource_accounting": {
+      "verdict": "NO_UNIT_APPEARS_TWICE",
+      "years": 20,
+      "ledger": {
+        "provisionUnitsConsumed": 1.964,
+        "lostUnits": 0,
+        "deliveredHarvestUnits": 0.1926,
+        "terminalParties": 127,
+        "receiptsSeen": 17
+      },
+      "duplicateReceipts": 0,
+      "receiptsBeforeReturn": 0,
+      "note": "provisions are subtracted from carried cargo at return (buildReturnedRecord); a lost party delivers nothing; a receipt id may not repeat"
+    }
+  }
+}
