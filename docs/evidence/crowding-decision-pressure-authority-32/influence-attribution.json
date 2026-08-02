@@ -1,0 +1,1751 @@
+{
+  "audit": "CORRECTION-32 influence attribution",
+  "source": "counterfactual-matrix-before.json / counterfactual-matrix.json",
+  "instrument": "TOTAL = evaluateBandDecision run twice on the same world (full vs crowding-zeroed tick cache) and subtracted. DIRECT = one field group substituted in the real ScoreBreakdown and the exported pure scoreDecision re-run. RESIDUAL = TOTAL - sum(DIRECT), i.e. crowding reaching the score through nested composites.",
+  "scoreWeightsBefore": {
+    "nearbyBandPressure": -0.24,
+    "crowdingPenalty": -0.72,
+    "rangeSaturation": -0.34,
+    "crowdingExploreBoost": 0.48,
+    "saturationExploreBoost": 0.58,
+    "daughterDispersalExploreBoost": 0.7,
+    "netMovePressure": 0.72,
+    "mobilityPressure": -0.05,
+    "placeAttachmentPull": 0.4,
+    "safeFrontierPull": 0.62,
+    "parentCoreOverlap": -0.16
+  },
+  "scoreWeightsAfter": {
+    "nearbyBandPressure": "evidence only (no weight)",
+    "crowdingPenalty": -0.96,
+    "rangeSaturation": "-0.34 on saturationPressureExcludingCrowding",
+    "crowdingExploreBoost": 0.48,
+    "saturationExploreBoost": 0.58,
+    "daughterDispersalExploreBoost": 0.7,
+    "netMovePressure": 0.72,
+    "mobilityPressure": -0.05,
+    "placeAttachmentPull": 0.4,
+    "safeFrontierPull": "+0.62, no longer crowding-derived",
+    "parentCoreOverlap": -0.16
+  },
+  "absoluteInfluenceByPath": {
+    "before": {
+      "minus_direct_nearbyBandPressure": 2.02,
+      "minus_direct_crowdingPenalty": 3.02,
+      "minus_crowding_in_pressureState": 0.23,
+      "minus_rangeSaturation_crowding": 0.15,
+      "minus_crowdingExploreBoost": 0.02,
+      "minus_daughter_crowding_derivative": 0.95
+    },
+    "after": {
+      "minus_direct_nearbyBandPressure": 0,
+      "minus_direct_crowdingPenalty": 3.92,
+      "minus_crowding_in_pressureState": 0.11,
+      "minus_rangeSaturation_crowding": 0,
+      "minus_crowdingExploreBoost": 0,
+      "minus_daughter_crowding_derivative": 0
+    }
+  },
+  "candidateCounts": {
+    "before": {
+      "scanned": 113,
+      "withThreeOrMorePaths": 49
+    },
+    "after": {
+      "scanned": 111,
+      "withThreeOrMorePaths": 0
+    }
+  },
+  "zeroControls": {
+    "before": [
+      {
+        "label": "F2_solo_control_rich",
+        "weightedCrowding": 0,
+        "totalOnStay": 0,
+        "nonZeroPathsOnStay": 0,
+        "totalOnExploration": null,
+        "nonZeroPathsOnExploration": null,
+        "crowdingBandIds": []
+      },
+      {
+        "label": "F6_explore_frontier_solo_control",
+        "weightedCrowding": 0,
+        "totalOnStay": 0,
+        "nonZeroPathsOnStay": 0,
+        "totalOnExploration": 0,
+        "nonZeroPathsOnExploration": 0,
+        "crowdingBandIds": []
+      }
+    ],
+    "after": [
+      {
+        "label": "F2_solo_control_rich",
+        "weightedCrowding": 0,
+        "totalOnStay": 0,
+        "nonZeroPathsOnStay": 0,
+        "totalOnExploration": null,
+        "nonZeroPathsOnExploration": null,
+        "crowdingBandIds": []
+      },
+      {
+        "label": "F6_explore_frontier_solo_control",
+        "weightedCrowding": 0,
+        "totalOnStay": 0,
+        "nonZeroPathsOnStay": 0,
+        "totalOnExploration": 0,
+        "nonZeroPathsOnExploration": 0,
+        "crowdingBandIds": []
+      }
+    ]
+  },
+  "perFixture": [
+    {
+      "label": "F1_adjacent_pair_rich",
+      "weightedCrowding": 0.15,
+      "crowdingPenalty": 0.06,
+      "terrain": "river_valley",
+      "droughtRisk": 0,
+      "capacityTransformRatio": 0.4,
+      "stay": {
+        "before": {
+          "total": 0.14,
+          "directSum": 0.12,
+          "residual": 0.02,
+          "paths": 4,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.04,
+            "minus_direct_crowdingPenalty": 0.05,
+            "minus_crowding_in_pressureState": 0.01,
+            "minus_rangeSaturation_crowding": 0.02,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0.07,
+          "directSum": 0.05,
+          "residual": 0.02,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.05,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0.07,
+          "directSum": 0.07,
+          "residual": 0,
+          "paths": 3,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.02,
+            "minus_direct_crowdingPenalty": 0.03,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0.02
+          }
+        },
+        "after": {
+          "total": 0.07,
+          "directSum": 0.05,
+          "residual": 0.02,
+          "paths": 2,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.06,
+            "minus_crowding_in_pressureState": -0.01,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": null,
+        "after": null
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.66,
+          "zero": 0.66
+        },
+        "mobilityPressure": {
+          "full": 0.34,
+          "zero": 0.32
+        },
+        "placeAttachmentPull": {
+          "full": 0.54,
+          "zero": 0.56
+        },
+        "netMovePressure": {
+          "full": 0.21,
+          "zero": 0.19
+        },
+        "saturationPressure": {
+          "full": 0.15,
+          "zero": 0.1
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.67,
+          "zero": 0.67
+        },
+        "mobilityPressure": {
+          "full": 0.36,
+          "zero": 0.35
+        },
+        "placeAttachmentPull": {
+          "full": 0.61,
+          "zero": 0.61
+        },
+        "netMovePressure": {
+          "full": 0.18,
+          "zero": 0.17
+        },
+        "saturationPressure": {
+          "full": 0.09,
+          "zero": 0.09
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      }
+    },
+    {
+      "label": "F2_solo_control_rich",
+      "weightedCrowding": 0,
+      "crowdingPenalty": 0,
+      "terrain": "river_valley",
+      "droughtRisk": 0,
+      "capacityTransformRatio": null,
+      "stay": {
+        "before": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": null,
+        "after": null
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.66,
+          "zero": 0.66
+        },
+        "mobilityPressure": {
+          "full": 0.33,
+          "zero": 0.33
+        },
+        "placeAttachmentPull": {
+          "full": 0.55,
+          "zero": 0.55
+        },
+        "netMovePressure": {
+          "full": 0.2,
+          "zero": 0.2
+        },
+        "saturationPressure": {
+          "full": 0.04,
+          "zero": 0.04
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.66,
+          "zero": 0.66
+        },
+        "mobilityPressure": {
+          "full": 0.33,
+          "zero": 0.33
+        },
+        "placeAttachmentPull": {
+          "full": 0.55,
+          "zero": 0.55
+        },
+        "netMovePressure": {
+          "full": 0.2,
+          "zero": 0.2
+        },
+        "saturationPressure": {
+          "full": 0.04,
+          "zero": 0.04
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      }
+    },
+    {
+      "label": "F3_adjacent_pair_dry",
+      "weightedCrowding": 0.21,
+      "crowdingPenalty": 0.14,
+      "terrain": "plains",
+      "droughtRisk": 0.2445,
+      "capacityTransformRatio": 0.6667,
+      "stay": {
+        "before": {
+          "total": 0.25,
+          "directSum": 0.2,
+          "residual": 0.05,
+          "paths": 4,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.05,
+            "minus_direct_crowdingPenalty": 0.11,
+            "minus_crowding_in_pressureState": 0.01,
+            "minus_rangeSaturation_crowding": 0.03,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0.18,
+          "directSum": 0.13,
+          "residual": 0.05,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.13,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0.17,
+          "directSum": 0.12,
+          "residual": 0.05,
+          "paths": 3,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.03,
+            "minus_direct_crowdingPenalty": 0.07,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0.02
+          }
+        },
+        "after": {
+          "total": 0.11,
+          "directSum": 0.09,
+          "residual": 0.02,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.09,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": null,
+        "after": null
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.39,
+          "zero": 0.38
+        },
+        "mobilityPressure": {
+          "full": 0.9,
+          "zero": 0.87
+        },
+        "placeAttachmentPull": {
+          "full": 0,
+          "zero": 0.02
+        },
+        "netMovePressure": {
+          "full": 1,
+          "zero": 1
+        },
+        "saturationPressure": {
+          "full": 0.64,
+          "zero": 0.57
+        },
+        "daughterDispersalPressure": {
+          "full": 0.29,
+          "zero": 0.25
+        },
+        "perCapitaReturnEstimate": {
+          "full": 0.53,
+          "zero": 0.53
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.37,
+          "zero": 0.37
+        },
+        "mobilityPressure": {
+          "full": 0.96,
+          "zero": 0.93
+        },
+        "placeAttachmentPull": {
+          "full": 0.02,
+          "zero": 0.02
+        },
+        "netMovePressure": {
+          "full": 1,
+          "zero": 1
+        },
+        "saturationPressure": {
+          "full": 0.49,
+          "zero": 0.49
+        },
+        "daughterDispersalPressure": {
+          "full": 0.29,
+          "zero": 0.25
+        },
+        "perCapitaReturnEstimate": {
+          "full": 0.18,
+          "zero": 0.18
+        }
+      }
+    },
+    {
+      "label": "F4_three_neighbours_rich",
+      "weightedCrowding": 0.44,
+      "crowdingPenalty": 0.17,
+      "terrain": "river_valley",
+      "droughtRisk": 0,
+      "capacityTransformRatio": 0.3864,
+      "stay": {
+        "before": {
+          "total": 0.42,
+          "directSum": 0.28,
+          "residual": 0.14,
+          "paths": 4,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.1,
+            "minus_direct_crowdingPenalty": 0.12,
+            "minus_crowding_in_pressureState": 0.01,
+            "minus_rangeSaturation_crowding": 0.05,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0.24,
+          "directSum": 0.16,
+          "residual": 0.08,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.16,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0.24,
+          "directSum": 0.25,
+          "residual": -0.01,
+          "paths": 4,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.08,
+            "minus_direct_crowdingPenalty": 0.09,
+            "minus_crowding_in_pressureState": 0.04,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0.04
+          }
+        },
+        "after": {
+          "total": 0.12,
+          "directSum": 0.11,
+          "residual": 0.01,
+          "paths": 2,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.12,
+            "minus_crowding_in_pressureState": -0.01,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": null,
+        "after": null
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.67,
+          "zero": 0.66
+        },
+        "mobilityPressure": {
+          "full": 0.4,
+          "zero": 0.35
+        },
+        "placeAttachmentPull": {
+          "full": 0.08,
+          "zero": 0.12
+        },
+        "netMovePressure": {
+          "full": 0.54,
+          "zero": 0.45
+        },
+        "saturationPressure": {
+          "full": 0.39,
+          "zero": 0.24
+        },
+        "daughterDispersalPressure": {
+          "full": 0.19,
+          "zero": 0.11
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.67,
+          "zero": 0.67
+        },
+        "mobilityPressure": {
+          "full": 0.49,
+          "zero": 0.44
+        },
+        "placeAttachmentPull": {
+          "full": 0.07,
+          "zero": 0.07
+        },
+        "netMovePressure": {
+          "full": 0.66,
+          "zero": 0.6
+        },
+        "saturationPressure": {
+          "full": 0.08,
+          "zero": 0.08
+        },
+        "daughterDispersalPressure": {
+          "full": 0.22,
+          "zero": 0.13
+        },
+        "perCapitaReturnEstimate": {
+          "full": 0.88,
+          "zero": 0.88
+        }
+      }
+    },
+    {
+      "label": "F5_explore_frontier_crowded",
+      "weightedCrowding": 0.15,
+      "crowdingPenalty": 0.06,
+      "terrain": "river_valley",
+      "droughtRisk": 0,
+      "capacityTransformRatio": 0.4,
+      "stay": {
+        "before": {
+          "total": 0.14,
+          "directSum": 0.08,
+          "residual": 0.06,
+          "paths": 3,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.03,
+            "minus_direct_crowdingPenalty": 0.04,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0.01,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0.07,
+          "directSum": 0.06,
+          "residual": 0.01,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.06,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0.04,
+          "directSum": 0.05,
+          "residual": -0.01,
+          "paths": 3,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.02,
+            "minus_direct_crowdingPenalty": 0.02,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0.01
+          }
+        },
+        "after": {
+          "total": 0.08,
+          "directSum": 0.07,
+          "residual": 0.01,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.07,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": {
+          "total": -0.01,
+          "directSum": 0.05,
+          "residual": -0.06,
+          "paths": 6,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.03,
+            "minus_direct_crowdingPenalty": 0.04,
+            "minus_crowding_in_pressureState": -0.02,
+            "minus_rangeSaturation_crowding": 0.01,
+            "minus_crowdingExploreBoost": -0.02,
+            "minus_daughter_crowding_derivative": 0.01
+          }
+        },
+        "after": {
+          "total": -0.04,
+          "directSum": 0,
+          "residual": -0.04,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.66,
+          "zero": 0.66
+        },
+        "mobilityPressure": {
+          "full": 0.34,
+          "zero": 0.32
+        },
+        "placeAttachmentPull": {
+          "full": 0.54,
+          "zero": 0.56
+        },
+        "netMovePressure": {
+          "full": 0.21,
+          "zero": 0.19
+        },
+        "saturationPressure": {
+          "full": 0.15,
+          "zero": 0.1
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.67,
+          "zero": 0.67
+        },
+        "mobilityPressure": {
+          "full": 0.36,
+          "zero": 0.35
+        },
+        "placeAttachmentPull": {
+          "full": 0.61,
+          "zero": 0.61
+        },
+        "netMovePressure": {
+          "full": 0.18,
+          "zero": 0.17
+        },
+        "saturationPressure": {
+          "full": 0.09,
+          "zero": 0.09
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      }
+    },
+    {
+      "label": "F6_explore_frontier_solo_control",
+      "weightedCrowding": 0,
+      "crowdingPenalty": 0,
+      "terrain": "river_valley",
+      "droughtRisk": 0,
+      "capacityTransformRatio": null,
+      "stay": {
+        "before": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.66,
+          "zero": 0.66
+        },
+        "mobilityPressure": {
+          "full": 0.33,
+          "zero": 0.33
+        },
+        "placeAttachmentPull": {
+          "full": 0.55,
+          "zero": 0.55
+        },
+        "netMovePressure": {
+          "full": 0.2,
+          "zero": 0.2
+        },
+        "saturationPressure": {
+          "full": 0.04,
+          "zero": 0.04
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.66,
+          "zero": 0.66
+        },
+        "mobilityPressure": {
+          "full": 0.33,
+          "zero": 0.33
+        },
+        "placeAttachmentPull": {
+          "full": 0.55,
+          "zero": 0.55
+        },
+        "netMovePressure": {
+          "full": 0.2,
+          "zero": 0.2
+        },
+        "saturationPressure": {
+          "full": 0.04,
+          "zero": 0.04
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      }
+    },
+    {
+      "label": "N_map1_s44_band:delta-coastal-foragers",
+      "weightedCrowding": 0.03,
+      "crowdingPenalty": 0.01,
+      "terrain": "river_valley",
+      "droughtRisk": 0,
+      "capacityTransformRatio": 0.3333,
+      "stay": {
+        "before": {
+          "total": 0.02,
+          "directSum": 0,
+          "residual": 0.02,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0.01,
+          "directSum": 0.01,
+          "residual": 0,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.01,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": null,
+        "after": null
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.36,
+          "zero": 0.36
+        },
+        "mobilityPressure": {
+          "full": 0.36,
+          "zero": 0.36
+        },
+        "placeAttachmentPull": {
+          "full": 0.3,
+          "zero": 0.3
+        },
+        "netMovePressure": {
+          "full": 0.38,
+          "zero": 0.38
+        },
+        "saturationPressure": {
+          "full": 0.12,
+          "zero": 0.11
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.36,
+          "zero": 0.36
+        },
+        "mobilityPressure": {
+          "full": 0.36,
+          "zero": 0.36
+        },
+        "placeAttachmentPull": {
+          "full": 0.3,
+          "zero": 0.3
+        },
+        "netMovePressure": {
+          "full": 0.38,
+          "zero": 0.38
+        },
+        "saturationPressure": {
+          "full": 0.09,
+          "zero": 0.09
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      }
+    },
+    {
+      "label": "N_map1_s44_band:lake-wetland-foragers",
+      "weightedCrowding": 0.03,
+      "crowdingPenalty": 0.01,
+      "terrain": "river_valley",
+      "droughtRisk": 0,
+      "capacityTransformRatio": 0.3333,
+      "stay": {
+        "before": {
+          "total": 0.03,
+          "directSum": 0.03,
+          "residual": 0,
+          "paths": 3,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.01,
+            "minus_direct_crowdingPenalty": 0.01,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0.01,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0.02,
+          "directSum": 0.01,
+          "residual": 0.01,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.01,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0.05,
+          "directSum": 0.05,
+          "residual": 0,
+          "paths": 3,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.02,
+            "minus_direct_crowdingPenalty": 0.02,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0.01
+          }
+        },
+        "after": {
+          "total": 0.03,
+          "directSum": 0.02,
+          "residual": 0.01,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.02,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": null,
+        "after": null
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.46,
+          "zero": 0.46
+        },
+        "mobilityPressure": {
+          "full": 0.41,
+          "zero": 0.41
+        },
+        "placeAttachmentPull": {
+          "full": 0.37,
+          "zero": 0.37
+        },
+        "netMovePressure": {
+          "full": 0.4,
+          "zero": 0.39
+        },
+        "saturationPressure": {
+          "full": 0.15,
+          "zero": 0.14
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.46,
+          "zero": 0.46
+        },
+        "mobilityPressure": {
+          "full": 0.41,
+          "zero": 0.41
+        },
+        "placeAttachmentPull": {
+          "full": 0.37,
+          "zero": 0.37
+        },
+        "netMovePressure": {
+          "full": 0.4,
+          "zero": 0.39
+        },
+        "saturationPressure": {
+          "full": 0.12,
+          "zero": 0.12
+        },
+        "daughterDispersalPressure": {
+          "full": 0,
+          "zero": 0
+        },
+        "perCapitaReturnEstimate": {
+          "full": 1,
+          "zero": 1
+        }
+      }
+    },
+    {
+      "label": "N_map2_s14_band:varied-dry-corridor-mid",
+      "weightedCrowding": 0.06,
+      "crowdingPenalty": 0.05,
+      "terrain": "desert",
+      "droughtRisk": 0.5086,
+      "capacityTransformRatio": 0.8333,
+      "stay": {
+        "before": {
+          "total": 0.07,
+          "directSum": 0.08,
+          "residual": -0.01,
+          "paths": 4,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.02,
+            "minus_direct_crowdingPenalty": 0.04,
+            "minus_crowding_in_pressureState": 0.01,
+            "minus_rangeSaturation_crowding": 0.01,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0.05,
+          "directSum": 0.05,
+          "residual": 0,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.05,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0.03,
+          "directSum": 0.02,
+          "residual": 0.01,
+          "paths": 2,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.01,
+            "minus_direct_crowdingPenalty": 0.01,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0.03,
+          "directSum": 0.02,
+          "residual": 0.01,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.02,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": null,
+        "after": null
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.43,
+          "zero": 0.42
+        },
+        "mobilityPressure": {
+          "full": 0.94,
+          "zero": 0.92
+        },
+        "placeAttachmentPull": {
+          "full": 0.01,
+          "zero": 0.03
+        },
+        "netMovePressure": {
+          "full": 1,
+          "zero": 1
+        },
+        "saturationPressure": {
+          "full": 0.55,
+          "zero": 0.52
+        },
+        "daughterDispersalPressure": {
+          "full": 0.27,
+          "zero": 0.25
+        },
+        "perCapitaReturnEstimate": {
+          "full": 0.03,
+          "zero": 0.03
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.42,
+          "zero": 0.42
+        },
+        "mobilityPressure": {
+          "full": 0.94,
+          "zero": 0.92
+        },
+        "placeAttachmentPull": {
+          "full": 0.03,
+          "zero": 0.03
+        },
+        "netMovePressure": {
+          "full": 1,
+          "zero": 1
+        },
+        "saturationPressure": {
+          "full": 0.48,
+          "zero": 0.48
+        },
+        "daughterDispersalPressure": {
+          "full": 0.27,
+          "zero": 0.25
+        },
+        "perCapitaReturnEstimate": {
+          "full": 0.03,
+          "zero": 0.03
+        }
+      }
+    },
+    {
+      "label": "N_map2_s14_band:varied-dry-corridor-upper",
+      "weightedCrowding": 0.07,
+      "crowdingPenalty": 0.06,
+      "terrain": "desert",
+      "droughtRisk": 0.6029,
+      "capacityTransformRatio": 0.8571,
+      "stay": {
+        "before": {
+          "total": 0.07,
+          "directSum": 0.07,
+          "residual": 0,
+          "paths": 3,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.02,
+            "minus_direct_crowdingPenalty": 0.04,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0.01,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0.06,
+          "directSum": 0.07,
+          "residual": -0.01,
+          "paths": 2,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.06,
+            "minus_crowding_in_pressureState": 0.01,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0.07,
+          "directSum": 0.06,
+          "residual": 0.01,
+          "paths": 3,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0.02,
+            "minus_direct_crowdingPenalty": 0.03,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0.01
+          }
+        },
+        "after": {
+          "total": 0.14,
+          "directSum": 0.12,
+          "residual": 0.02,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.12,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": null,
+        "after": null
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.44,
+          "zero": 0.44
+        },
+        "mobilityPressure": {
+          "full": 0.95,
+          "zero": 0.93
+        },
+        "placeAttachmentPull": {
+          "full": 0,
+          "zero": 0
+        },
+        "netMovePressure": {
+          "full": 1,
+          "zero": 1
+        },
+        "saturationPressure": {
+          "full": 0.57,
+          "zero": 0.55
+        },
+        "daughterDispersalPressure": {
+          "full": 0.27,
+          "zero": 0.25
+        },
+        "perCapitaReturnEstimate": {
+          "full": 0.18,
+          "zero": 0.18
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.44,
+          "zero": 0.44
+        },
+        "mobilityPressure": {
+          "full": 0.95,
+          "zero": 0.93
+        },
+        "placeAttachmentPull": {
+          "full": 0,
+          "zero": 0
+        },
+        "netMovePressure": {
+          "full": 1,
+          "zero": 1
+        },
+        "saturationPressure": {
+          "full": 0.49,
+          "zero": 0.49
+        },
+        "daughterDispersalPressure": {
+          "full": 0.27,
+          "zero": 0.25
+        },
+        "perCapitaReturnEstimate": {
+          "full": 0.18,
+          "zero": 0.18
+        }
+      }
+    },
+    {
+      "label": "N_map2_s45_band:varied-lake-north",
+      "weightedCrowding": 0.03,
+      "crowdingPenalty": 0.02,
+      "terrain": "wetlands",
+      "droughtRisk": 0.0421,
+      "capacityTransformRatio": 0.6667,
+      "stay": {
+        "before": {
+          "total": 0.04,
+          "directSum": 0.01,
+          "residual": 0.03,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.01,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0.03,
+          "directSum": 0.02,
+          "residual": 0.01,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.02,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": null,
+        "after": null
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.46,
+          "zero": 0.45
+        },
+        "mobilityPressure": {
+          "full": 0.61,
+          "zero": 0.61
+        },
+        "placeAttachmentPull": {
+          "full": 0.36,
+          "zero": 0.37
+        },
+        "netMovePressure": {
+          "full": 0.71,
+          "zero": 0.7
+        },
+        "saturationPressure": {
+          "full": 0.25,
+          "zero": 0.24
+        },
+        "daughterDispersalPressure": {
+          "full": 0.29,
+          "zero": 0.28
+        },
+        "perCapitaReturnEstimate": {
+          "full": 0.63,
+          "zero": 0.63
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.45,
+          "zero": 0.45
+        },
+        "mobilityPressure": {
+          "full": 0.61,
+          "zero": 0.61
+        },
+        "placeAttachmentPull": {
+          "full": 0.37,
+          "zero": 0.37
+        },
+        "netMovePressure": {
+          "full": 0.7,
+          "zero": 0.7
+        },
+        "saturationPressure": {
+          "full": 0.22,
+          "zero": 0.22
+        },
+        "daughterDispersalPressure": {
+          "full": 0.29,
+          "zero": 0.28
+        },
+        "perCapitaReturnEstimate": {
+          "full": 0.63,
+          "zero": 0.63
+        }
+      }
+    },
+    {
+      "label": "N_map2_s45_band:varied-lake-west",
+      "weightedCrowding": 0.03,
+      "crowdingPenalty": 0.02,
+      "terrain": "wetlands",
+      "droughtRisk": 0.0596,
+      "capacityTransformRatio": 0.6667,
+      "stay": {
+        "before": {
+          "total": 0.03,
+          "directSum": 0.01,
+          "residual": 0.02,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.01,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0.03,
+          "directSum": 0.02,
+          "residual": 0.01,
+          "paths": 1,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0.02,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "bestMove": {
+        "before": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        },
+        "after": {
+          "total": 0,
+          "directSum": 0,
+          "residual": 0,
+          "paths": 0,
+          "deltas": {
+            "minus_direct_nearbyBandPressure": 0,
+            "minus_direct_crowdingPenalty": 0,
+            "minus_crowding_in_pressureState": 0,
+            "minus_rangeSaturation_crowding": 0,
+            "minus_crowdingExploreBoost": 0,
+            "minus_daughter_crowding_derivative": 0
+          }
+        }
+      },
+      "exploration": {
+        "before": null,
+        "after": null
+      },
+      "compositesBefore": {
+        "riskPressure": {
+          "full": 0.47,
+          "zero": 0.47
+        },
+        "mobilityPressure": {
+          "full": 0.88,
+          "zero": 0.88
+        },
+        "placeAttachmentPull": {
+          "full": 0.02,
+          "zero": 0.02
+        },
+        "netMovePressure": {
+          "full": 1,
+          "zero": 1
+        },
+        "saturationPressure": {
+          "full": 0.35,
+          "zero": 0.34
+        },
+        "daughterDispersalPressure": {
+          "full": 0.29,
+          "zero": 0.28
+        },
+        "perCapitaReturnEstimate": {
+          "full": 0,
+          "zero": 0
+        }
+      },
+      "compositesAfter": {
+        "riskPressure": {
+          "full": 0.47,
+          "zero": 0.47
+        },
+        "mobilityPressure": {
+          "full": 0.88,
+          "zero": 0.88
+        },
+        "placeAttachmentPull": {
+          "full": 0.02,
+          "zero": 0.02
+        },
+        "netMovePressure": {
+          "full": 1,
+          "zero": 1
+        },
+        "saturationPressure": {
+          "full": 0.32,
+          "zero": 0.32
+        },
+        "daughterDispersalPressure": {
+          "full": 0.29,
+          "zero": 0.28
+        },
+        "perCapitaReturnEstimate": {
+          "full": 0,
+          "zero": 0
+        }
+      }
+    }
+  ],
+  "naturalScan": {
+    "map1": {
+      "seasonsScanned": 80,
+      "crowdedBandSeasonsObserved": 2,
+      "distinctBandsMeasured": 2
+    },
+    "map2": {
+      "seasonsScanned": 80,
+      "crowdedBandSeasonsObserved": 24,
+      "distinctBandsMeasured": 4
+    }
+  }
+}

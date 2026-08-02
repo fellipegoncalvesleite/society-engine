@@ -181,7 +181,69 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### SHARED RANGE — RANGE-FRICTION AND ACCESS-EXPECTATION LIFECYCLE — CORRECTION-31 — PASS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+### SHARED RANGE — CROWDING DECISION-PRESSURE AUTHORITY AND DUPLICATE INFLUENCE — CORRECTION-32 — PASS / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
+
+**Branch** `checkpoint/crowding-decision-pressure-authority-32`, from the accepted CORRECTION-31 tip
+`3e2c1215b4ccef2beb799b3a7882247f6cd186cd`. **CORRECTION-31 is CLOSED and FROZEN at `3e2c1215`.**
+CORRECTION-30 frozen at `1c6a3ed8`; CORRECTION-29 at `a15d0a78`; CORRECTION-28 at `c5eb58a`;
+AUDIT-27 at `b352c31`; local and remote `main` untouched at `0a43083`.
+**PRODUCTION BEHAVIOUR CHANGED** — no fingerprint parity is claimed or possible.
+
+**CORRECTION-32 addresses physical-crowding decision authority and duplicate influence only.
+Roadmap item 3 remains OPEN and must not be marked complete.**
+
+**What was happening.** One physical fact — other people are nearby, now — was charged to a single
+decision up to **six** times under six different names. Measured, not argued: the audit swaps the
+tick cache's nearby-band-pressure memo for a `Map`-like answering "nobody nearby", so **real
+production code** (`deriveBandPressureState`, `getCrowdingPenalty`, `applyRangeSaturationContext`,
+`getDaughterDispersalPressure` and the whole candidate scorer) re-derives with crowding at zero.
+**49 of 113 measured candidates carried three or more separately-named crowding charges**; naturally,
+**56 of 212 at 20 years and 144 of 488 at 50**. The two largest, `nearbyBandPressure × 0.24` and
+`crowdingPenalty × 0.72`, were **the same scalar with and without the terrain transform**, so the raw
+term diluted exactly the capacity conditioning it was meant to respect. `riskPressure` gained
+`crowdingPenalty × 0.08`, making proximity raise a **danger** signal that `demography.ts` and
+`viability.ts` read with no social evidence at all. And the **exploration candidate was charged the
+residence's crowding** — six paths with contradictory signs netting **−0.01**, so no honest
+explanation of that decision could be written.
+
+**The fix — Option D on an Option-B quantity. Six files, +142 −44, no new module, store, type or
+constant file.** `weightedCrowding` stays evidence; `crowdingPenalty` becomes the one decision-facing
+cost at `CROWDING_DECISION_COST_WEIGHT = 0.96` (= the `0.24 + 0.72` it replaces, so the maximally
+constrained tile is unchanged and only the spacious-ground over-charge goes); an unknown destination
+costs **0**; the residence's crowding reaches non-stay candidates once through `netMovePressure`
+(which is 0 on stay) and the exploration option once through `crowdingExploreBoost`; a derived
+`RangeSaturationState.saturationPressureExcludingCrowding` partitions the overlap at the decision
+seam while every ecological and social reader keeps the full value; and `riskPressure`,
+`placeAttachmentPull`, `safeFrontierPull`, the move-side `perCapitaReturn` and `socialAccessRisk` all
+stop carrying crowding.
+
+**Headline.** Candidates with ≥3 crowding charges **49 → 0** (measured), **56 → 0** at 20 natural
+years, **144 → 0** at 50; max paths on any candidate **4 → 2**; crowding raising `riskPressure`
+**3 → 0** and **7 → 0**; reducing `placeAttachmentPull` **11 → 0** and **22 → 0**. **The physical
+crowding layer is identical at 20 years on all six of its keys.** Fixtures **P1–P21, 21/21 with 0
+vacuous in both arms**, four verdicts flipping and 17 unchanged passes reported as preservation
+rather than credit.
+
+**No improvement is claimed.** `crowdedSeasonsWhereCrowdingFlippedSelection` is **0 in both arms** at
+20 and 50 years. `map1:s2` is byte-identical across 80 seasons and `map1:s1` has no physical
+divergence at all; 75 of 84 final-state keys are identical.
+
+**Deliberately not repaired, and recorded:** `dryMargin.getSocialAccessRisk`'s `unrelatedRisk` reads
+`Object.values(world.bands).length` — a world-truth band count a band cannot know;
+`rangeSaturation.perCapitaReturnEstimate` still carries crowding into the stay candidate through the
+ecology authority; and the daughter-dispersal crowding path is retained under §12.13, documented, and
+measures **0** naturally.
+
+**TIME-CONTROL-1 is deferred.** The public simulator may later expose only **Day** and **Season**.
+Both must remain batch sizes over the same daily causal kernel — Season means "simulate 90 daily days
+faster", never "use simplified seasonal behaviour". No alternate seasonal behaviour is authorized.
+`StepMode` and all four internal modes are retained unchanged.
+
+Evidence: `docs/evidence/crowding-decision-pressure-authority-32/`.
+
+---
+
+### SHARED RANGE — RANGE-FRICTION AND ACCESS-EXPECTATION LIFECYCLE — CORRECTION-31 — PASS, CLOSED AND FROZEN at `3e2c1215` / ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE
 
 **Branch** `checkpoint/shared-range-release-lifecycle-31`, from the accepted CORRECTION-30 tip
 `1c6a3ed8d0a8360c8fe4648a83387a2bd4fa30b4`. **CORRECTION-30 is CLOSED and FROZEN at `1c6a3ed8`.**
@@ -8042,7 +8104,34 @@ UI in `src/ui/BandPanel.tsx`, audit + `--targeted-cause-event-check` in
 
 ## Recommended Next Step
 
-**CURRENT (CLOSURE-25, 2026-08-01).** Awaiting human review. The roadmap does **not**
+**CURRENT (CORRECTION-32, 2026-08-02).** Awaiting human review. **Roadmap item 3
+(Crowding / Shared Range / Range Release) remains OPEN** — CORRECTION-32 repaired the
+decision AUTHORITY for current physical crowding and nothing else. The decision in front
+of the supervising human is which of the remaining AUDIT-27 seams to authorize next:
+
+1. **the physical shared-use substrate** — `sharedCatchment`'s footprint is
+   residence-anchored, so real trips, expedition routes and investigation walks compete
+   for nothing;
+2. **`territorialPressure`** — a spawn constant with three live behavioural readers and
+   no writer;
+3. **activity-party crowding / expedition overlap / temporary task-party footprints**;
+4. **the anti-omniscience defect CORRECTION-32 found and did not repair** —
+   `dryMargin.getSocialAccessRisk`'s `unrelatedRisk` reads
+   `Object.values(world.bands).length`, a world-truth band count a band cannot know;
+5. **whether `CROWDING_DECISION_COST_WEIGHT = 0.96` is the physically right magnitude** —
+   this pass fixed the authority and deliberately did not tune the strength.
+
+**TIME-CONTROL-1 is deferred and unstarted.** If authorized, it may expose only **Day**
+and **Season** to the player while retaining one daily causal kernel; Season must mean
+"simulate 90 daily days faster", never "use simplified seasonal behaviour". Do not change
+`StepMode` or the four internal modes.
+
+Do not begin physical activity-party footprint expansion, expedition overlap,
+`territorialPressure`, fission, Daughter Viability or TIME-CONTROL-1 before that decision.
+
+---
+
+**PREVIOUS (CLOSURE-25, 2026-08-01).** Awaiting human review. The roadmap does **not**
 advance: CLOSURE-25 returned `PROGRESS — AUTHORITY MAP COMPLETE / ONE OR MORE EXACT
 PHYSICAL OR BEHAVIORAL SEAMS REMAIN MISSING`. The decision in front of the human is
 whether to authorize the identified minimum repair (route the executed
@@ -10169,3 +10258,24 @@ exception; daughter colours related-but-distinct and never visually confusing.
   28**, and the **physical layer identical on all 17 keys at 20 and 50 years**. **AUDIT-27's C5 does
   NOT flip and cannot** — it counts retained records, which this design keeps. **Roadmap item 3
   remains OPEN.** Evidence: `docs/evidence/shared-range-release-lifecycle-31/`.
+
+- **2026-08-02 — SHARED RANGE / CROWDING DECISION-PRESSURE AUTHORITY AND DUPLICATE INFLUENCE
+  (CORRECTION-32): PASS — CURRENT PHYSICAL CROWDING NOW HAS ONE EXPLICIT BOUNDED DECISION AUTHORITY /
+  ROADMAP ITEM 3 STAYS ACTIVE / DO NOT MERGE.** Branch
+  `checkpoint/crowding-decision-pressure-authority-32` from CORRECTION-31's frozen `3e2c1215`; `main`
+  untouched at `0a43083`. One physical fact was charged to a single decision up to **six** times under
+  six names — `nearbyBandPressure × 0.24` and `crowdingPenalty × 0.72` being **the same scalar with and
+  without the terrain transform**, the pair recurring inside `expectedFutureValue` and
+  `getBadSiteStuckResidencePenalty`, `rangeSaturation` carrying it again, `riskPressure` turning
+  proximity into a **danger** signal `demography.ts` and `viability.ts` read, `placeAttachmentPull` and
+  `safeFrontierPull` charging it once more, and **the exploration candidate being charged the
+  residence's crowding**. Option D on an Option-B quantity, six files, +142 −44, no new module or
+  store: `weightedCrowding` is evidence, `crowdingPenalty` is the one cost at
+  `CROWDING_DECISION_COST_WEIGHT = 0.96` (the sum it replaces, so constrained terrain is unchanged), an
+  unknown destination costs 0, and `saturationPressureExcludingCrowding` partitions the overlap at the
+  decision seam only. Candidates with ≥3 crowding charges **49 → 0**, naturally **56 → 0** at 20 y and
+  **144 → 0** at 50 y; crowding raising `riskPressure` **3 → 0** / **7 → 0**; **physical crowding layer
+  identical at 20 years on all six keys**; fixtures **P1–P21 21/21, 0 vacuous, both arms**; AUDIT-27
+  11/11, CORRECTION-28 12/12, -29 12/12, -30 15/15, -31 22/22 all unchanged. **No improvement claimed**
+  — crowding never flips a selection in either arm. **Roadmap item 3 remains OPEN. TIME-CONTROL-1 is
+  deferred.** Evidence: `docs/evidence/crowding-decision-pressure-authority-32/`.

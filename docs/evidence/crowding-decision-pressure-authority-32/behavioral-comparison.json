@@ -1,0 +1,102 @@
+{
+  "audit": "CORRECTION-32 behavioural comparison",
+  "before": "3e2c1215",
+  "after": "checkpoint/crowding-decision-pressure-authority-32",
+  "years": 20,
+  "runs": [
+    {
+      "map": "map1",
+      "seed": "s1",
+      "identical": false,
+      "firstDivergenceTick": 60,
+      "firstPhysicalDivergenceTick": null,
+      "firstDerivedDivergenceTick": 60,
+      "seasonsWithPhysicalDifference": 0,
+      "seasonsWithDerivedDifference": 1,
+      "totalSeasons": 80,
+      "firstPhysicalDivergence": null,
+      "endState": {
+        "beforeMoves": 265,
+        "afterMoves": 265,
+        "beforeDepletion": 0,
+        "afterDepletion": 0
+      }
+    },
+    {
+      "map": "map1",
+      "seed": "s2",
+      "identical": true,
+      "firstDivergenceTick": null,
+      "firstPhysicalDivergenceTick": null,
+      "firstDerivedDivergenceTick": null,
+      "seasonsWithPhysicalDifference": 0,
+      "seasonsWithDerivedDifference": 0,
+      "totalSeasons": 80,
+      "firstPhysicalDivergence": null,
+      "endState": {
+        "beforeMoves": 224,
+        "afterMoves": 224,
+        "beforeDepletion": 0,
+        "afterDepletion": 0
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "s1",
+      "identical": false,
+      "firstDivergenceTick": 17,
+      "firstPhysicalDivergenceTick": 17,
+      "firstDerivedDivergenceTick": 17,
+      "seasonsWithPhysicalDifference": 60,
+      "seasonsWithDerivedDifference": 64,
+      "totalSeasons": 80,
+      "firstPhysicalDivergence": {
+        "tick": 17,
+        "beforePhysical": "band:varied-dry-corridor-mid@tile:76:111#24,band:varied-dry-corridor-upper@tile:55:105#22,band:varied-estuary@tile:194:89#30,band:varied-lake-east@tile:87:74#28",
+        "afterPhysical": "band:varied-dry-corridor-mid@tile:76:111#24,band:varied-dry-corridor-upper@tile:55:105#22,band:varied-estuary@tile:194:89#30,band:varied-lake-east@tile:87:74#28",
+        "beforeMoves": 92,
+        "afterMoves": 91,
+        "beforeDepletion": 0,
+        "afterDepletion": 0
+      },
+      "endState": {
+        "beforeMoves": 448,
+        "afterMoves": 450,
+        "beforeDepletion": 0,
+        "afterDepletion": 0
+      }
+    },
+    {
+      "map": "map2",
+      "seed": "s2",
+      "identical": false,
+      "firstDivergenceTick": 17,
+      "firstPhysicalDivergenceTick": 23,
+      "firstDerivedDivergenceTick": 17,
+      "seasonsWithPhysicalDifference": 51,
+      "seasonsWithDerivedDifference": 58,
+      "totalSeasons": 80,
+      "firstPhysicalDivergence": {
+        "tick": 23,
+        "beforePhysical": "band:varied-dry-corridor-mid@tile:68:110#24,band:varied-dry-corridor-upper@tile:74:107#21,band:varied-estuary@tile:195:89#30,band:varied-lake-east@tile:87:74#28",
+        "afterPhysical": "band:varied-dry-corridor-mid@tile:68:110#24,band:varied-dry-corridor-upper@tile:74:107#21,band:varied-estuary@tile:195:89#30,band:varied-lake-east@tile:87:74#28",
+        "beforeMoves": 121,
+        "afterMoves": 122,
+        "beforeDepletion": 0,
+        "afterDepletion": 0
+      },
+      "endState": {
+        "beforeMoves": 395,
+        "afterMoves": 401,
+        "beforeDepletion": 0,
+        "afterDepletion": 0
+      }
+    }
+  ],
+  "summary": {
+    "runs": 4,
+    "identicalRuns": 1,
+    "runsWithPhysicalDivergence": 2,
+    "earliestPhysicalDivergenceTick": 17
+  }
+}
