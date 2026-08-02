@@ -52,3 +52,29 @@ CORRECTION-28 audits is preserved (verified: `P8 = FIELD_SCAN_PARITY`).
 - Same-day task parties (Option E).
 - No encounter, friction or access authority reads the new presence set — co-presence is exposed,
   perception is not invented (§12.2).
+
+---
+
+## CORRECTION-34A amendment — Option E is not merely deferred, it is non-actionable
+
+The table above deferred Option E (a daily ephemeral presence ledger) as "a separate checkpoint".
+CORRECTION-34A audited whether it could be built at all and found a stronger result: **there is no
+within-day consumer of physical presence in production**, so such a ledger would have no reader.
+
+- `runDailyActions` builds no `TickContextCache`; every `buildTickContextCache` call site is inside
+  `runSeasonalCompatibilityTick`.
+- `intraSeasonTrips.ts` and `expedition.ts` reference `crowding` / `nearbyBand` / `TickContextCache`
+  **zero times**.
+- A same-day party never exists at a season boundary: it is created, acts and returns inside one
+  synchronous `applyTripDay`.
+
+A day-scoped ledger would therefore be **empty at every instant its only consumer runs** — the
+state-field-nobody-reads pattern §3.2 and §18.1 forbid. Making it live requires moving the
+shared-use substrate to a daily cadence, which the checkpoint scope excludes.
+
+**Under the supervisor scope amendment, same-day current presence is formally removed from
+CORRECTION-34's acceptance requirements** and deferred to the future daily mobility /
+party-overlap / encounter architecture. Same-day trips remain physically real through labor, route,
+target, depletion, result and return. No dead ledger was introduced. See
+`SAME_DAY_PRESENCE_SEAM.md` for the missing consumer, why completed trip history cannot represent
+current bodies, the six requirements of the future authority, and the roadmap entry.

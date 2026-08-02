@@ -1,0 +1,24 @@
+{
+  "audit": "CORRECTION-34A-RESOURCE-ACCOUNTING",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "years": 20,
+  "ledger": {
+    "provisionUnitsConsumed": 1.964,
+    "lostUnits": 0,
+    "deliveredHarvestUnits": 0.1926,
+    "terminalParties": 127,
+    "receiptsSeen": 17
+  },
+  "duplicateReceipts": 0,
+  "receiptsBeforeReturn": 0,
+  "reconciliation": {
+    "stockRemovedAtTarget": "resolveExpeditionTargetWork — same plant/fauna/aquatic stocks and losses as a near trip, at the tile the party stands on",
+    "cargoCreated": "cargo.harvestUnits, capped by carryCapacityUnits",
+    "cargoLost": "cargo.lostUnits — injury-forced abandonment and lost parties",
+    "partyConsumption": "cargo.provisionUnitsConsumed, subtracted from the carried amount in buildReturnedRecord",
+    "returnedReceipt": "one IntraSeasonTripRecord on the return day, id-deduplicated",
+    "residentialSupport": "seasonalFoodReceipts -> deriveHumanFoodSupportLedger, one current-period freshness rule"
+  },
+  "verdict": "NO_UNIT_APPEARS_TWICE"
+}

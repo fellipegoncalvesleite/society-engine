@@ -1,0 +1,40 @@
+{
+  "audit": "CORRECTION-34A-DAILY-PRESENCE-ORDERING",
+  "readAt": "4f296442af62153a74001a5305f71108fa1c3e10",
+  "scopeNote": "Section 8 was written to specify the ordering contract for a NEW same-day presence authority. Under the supervisor scope amendment no such authority is built, so this records the EXISTING daily ordering that a future daily mobility / party-overlap / encounter checkpoint must build on.",
+  "registry": {
+    "module": "src/sim/agents/dailyActionRegistry.ts",
+    "order": ["intraSeasonTripDailyAction", "expeditionDailyAction"],
+    "fixedLiteral": true,
+    "sortedAtRuntime": false,
+    "expeditionFiresEveryDay": true,
+    "whyLeafModule": "trips before expeditions on a shared day; a module-initialization cycle would capture an undefined handler depending on bundler init order, which is import-order-dependent nondeterminism"
+  },
+  "questions": {
+    "whenAreSameDayPartiesSelected": "applyTripDay (intraSeasonTrips.ts:244), per band, loop at :260 over Object.values(world.bands).sort(compareBands)",
+    "whichWorldSnapshotSelectsThem": "selectTripCandidate(currentWorld, ...) at :265 — currentWorld, not world: the band SET is frozen, the STATE is already mutated by earlier bands the same day",
+    "canAnEarlierBandDepleteATargetFirst": true,
+    "isThatIntendedPhysicalSequence": "intended and documented at intraSeasonTrips.ts:251-255 as shared-catchment competition in deterministic sorted band order",
+    "whenIsDailyPhysicalPresenceVisible": "never — there is no daily physical-presence read model; getBandPhysicalPresence is consumed only through a TickContextCache, and every buildTickContextCache call site is inside runSeasonalCompatibilityTick",
+    "whenDoesItExpire": "not applicable — nothing ephemeral is stored; multi-day presence is derived on demand from band.expeditions and ends exactly when the phase becomes terminal",
+    "canCrowdingAndSharedUseReadTheSamePlan": "they read the same AUTHORITY (getBandPhysicalPresence) from the same seasonal cache, which is why field/scan parity holds; there is no plan because there is no daily read model",
+    "canPartyLaborBeSelectedTwice": false
+  },
+  "labourNonReusePoints": [
+    "expedition.ts:182-184 getResidentialWorkingAdults subtracts getCommittedExpeditionWorkers",
+    "bandMobility.ts:294-302 deriveAvailableMobilityPools subtracts partyCompositionTotal(deriveCommittedMobilityPools)",
+    "intraSeasonTrips.ts:247-250 tripWorkersByBandId — the investigation party is staffed from what the ordinary trip left",
+    "expedition.ts reconcileExpeditionCommitment (CORRECTION-34A) — daily, covers workforce collapse after a legal launch"
+  ],
+  "orderDependence": {
+    "dailyBandIterationOrder": "fixed canonical sort (compareBands / compareExpeditionBands); no injectable permutation seam exists",
+    "dailyOrderSensitivity": "order-SENSITIVE by design (earlier bands deplete first) but not order-AMBIGUOUS (the order never varies between runs)",
+    "seasonalBandOrderPermutation": "covered by seasonOrderInvarianceAudit — physical/causal state byte-identical under ascending/descending/permuted; PASS",
+    "presenceReadModelOrderDependence": "structurally none — getBandPhysicalPresence(band) takes one band, no world, no cache, no iteration order"
+  },
+  "singleDailyAuthority": {
+    "labour": "getResidentialWorkingAdults / deriveAvailableMobilityPools, reconciled daily by reconcileExpeditionCommitment",
+    "physicalPresence": "getBandPhysicalPresence — derived on demand, consumed seasonally",
+    "dailyPhysicalPresenceAuthority": "DOES NOT EXIST AND IS NOT CREATED BY CORRECTION-34A — see SAME_DAY_PRESENCE_SEAM.md section 3 for the six requirements a future one must meet"
+  }
+}

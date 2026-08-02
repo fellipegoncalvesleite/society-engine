@@ -1,0 +1,42 @@
+{
+  "audit": "CORRECTION-34A-EXPEDITION-ACADEMIC-VALIDITY",
+  "assessedAt": "4f296442af62153a74001a5305f71108fa1c3e10",
+  "classifications": ["well represented", "partially represented", "missing but required now", "missing and deferred", "unsupported simulator abstraction"],
+  "epistemicWarning": "No single ethnographic society is treated as representative. Binford's forager/collector contrast is a continuum of organisational responses to resource structure, not a taxonomy of peoples. Structural claims are assessed; magnitudes are not validated.",
+  "boxes": [
+    { "box": "residential versus logistical mobility", "classification": "well represented", "claimType": "research-supported mechanism", "evidence": "two distinct paths separated by a physical test (deriveSameDayRoundTripFeasible / deriveTripDurationDays > 1), not a label" },
+    { "box": "task-specific party formation", "classification": "partially represented", "claimType": "implementation abstraction", "evidence": "ExpeditionTaskKind distinguishes retrieval, patch verification, route reconnaissance, frontier exploration; composition is role-pool based, not skill based" },
+    { "box": "party size", "classification": "partially represented", "claimType": "implementation abstraction", "evidence": "deriveDepartableWorkers = min(residential adults - 2, workingAdults/3); responds to available labour, not to expected return or economies of scale" },
+    { "box": "party composition", "classification": "partially represented", "claimType": "future dependency", "evidence": "three mobility-role pools conserved against the workforce; no sex/age structure because canonical demography has none — fabricating one is forbidden" },
+    { "box": "daily versus multi-day trips", "classification": "well represented", "claimType": "research-supported mechanism", "evidence": "enforced by the round-trip budget; CORRECTION-26 removed departure-day food credit for multi-day work" },
+    { "box": "routes", "classification": "well represented", "claimType": "research-supported mechanism", "evidence": "real passable paths, EXPEDITION_MAX_ROUTE_TILES = 36, position pinned to route index (positionOffRouteViolations = 0)" },
+    { "box": "travel duration", "classification": "well represented", "claimType": "research-supported mechanism", "evidence": "days elapse; one pace authority across seven travel contexts with load, injury and composition as inputs" },
+    { "box": "target work", "classification": "well represented", "claimType": "research-supported mechanism", "evidence": "resolveExpeditionTargetWork reuses the same harvest machinery, stocks and losses as a near trip; depletion occurs where the party stands" },
+    { "box": "temporary camps", "classification": "well represented", "claimType": "research-supported mechanism", "evidence": "established only when the walk home exceeds a day AND the ground can host one; costs provisions; holds nothing; expires; 375 task-camp days observed daily over 40 y" },
+    { "box": "provisions", "classification": "partially represented", "claimType": "deliberate simplification", "evidence": "consumed per worker-day, forces early return, subtracted from cargo at return; GAP — the budget is constant and carries no carrying-capability term (expedition.ts:374-378)" },
+    { "box": "carrying", "classification": "well represented", "claimType": "research-supported mechanism", "evidence": "0.12 units/worker bodily baseline; improvement only via a learned, materially-grounded, maintained practice with four independent zero-relief cases; matches the Default Expedition Carrying Rule" },
+    { "box": "injury and fatigue", "classification": "partially represented", "claimType": "deliberate simplification", "evidence": "injury slows pace, cuts the carry ceiling, can force return with cargo abandonment; no cumulative cross-trip fatigue" },
+    { "box": "return-only delivery", "classification": "well represented", "claimType": "research-supported mechanism", "evidence": "cargo becomes food only on physical return, exactly once; receiptsBeforeReturn = 0; no duplicate receipt ids at 20 or 50 years" },
+    { "box": "information return", "classification": "well represented", "claimType": "research-supported mechanism", "evidence": "observations stay party-local until physical return, then apply through the canonical writer; a lost party's observations never arrive" },
+    { "box": "failure and loss", "classification": "well represented", "claimType": "research-supported mechanism", "evidence": "lost past the hard deadline, aborted, typed outcome reasons; 0 natural occurrences in 40 y of map1, so proven by controlled fixtures P7/P8 rather than on zero observations" },
+    { "box": "storage and caching", "classification": "missing and deferred", "claimType": "future dependency", "evidence": "parties only return or lose cargo; caching requires material, property and economic systems that do not exist" },
+    { "box": "care and dependent constraints", "classification": "missing and deferred", "claimType": "future dependency", "evidence": "dependents and elders weight consumption but no childcare constraint shapes who may leave or how far" },
+    { "box": "social encounters", "classification": "missing and deferred", "claimType": "future dependency", "evidence": "deliberately out of scope; physical co-presence creates no encounter, caution or knowledge (fixture P24)" },
+    { "box": "seasonality", "classification": "partially represented", "claimType": "future dependency", "evidence": "seasonal stocks, conditions and decision cadence exist; logistical STRATEGY does not shift seasonally — awaits migration, which awaits climate" },
+    { "box": "learning", "classification": "partially represented", "claimType": "research-supported mechanism", "evidence": "carrying and water practices are learned, material-dependent, testable and inheritable; skill-specific party SELECTION does not read it" },
+    { "box": "resource accounting", "classification": "well represented", "claimType": "repository fact", "evidence": "CORRECTION-34A closed the last leak: away workers no longer claim the residential catchment while extracting elsewhere; P21 NO_UNIT_APPEARS_TWICE" }
+  ],
+  "summary": {
+    "wellRepresented": 10,
+    "partiallyRepresented": 8,
+    "missingButRequiredNow": 0,
+    "missingAndDeferred": 3,
+    "unsupportedSimulatorAbstraction": 0
+  },
+  "notClaimed": [
+    "no magnitude is validated (0.12 carry units, 24-day cap, provisions constant, 0.65/0.85 catchment weights)",
+    "no claim that logistical mobility RATES are realistic — 161 expeditions in 40 years on map1 is untested for plausibility",
+    "compared against structural claims in the literature, not against a quantitative dataset",
+    "one map and one seed underlie each measurement set"
+  ]
+}

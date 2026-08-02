@@ -1,0 +1,55 @@
+{
+  "audit": "CORRECTION-34A-CONTROLLED-FIXTURES-INTERMEDIATE",
+  "arm": "intermediate",
+  "commit": "4042210b332d41b91ed394aa9307962f0106a60c",
+  "armProduction": "RECONSTRUCTED, not a checkout. At 4042210 the presence authority existed exactly as it does now (CORRECTION-34A did not change getBandPhysicalPresence), reconcileExpeditionCommitment did not exist, and getBandForagingDraw read FULL demography.workingAdults. The two changed expressions are reproduced verbatim in scripts/presenceBeforeAfterAudit.mjs; every unchanged fixture therefore carries the after-arm value by construction, which is stated rather than re-measured.",
+  "whatChangedBetweenIntermediateAndAfter": [
+    "reconcileExpeditionCommitment was added (expedition.ts)",
+    "getBandCommitmentAccounting was added (expedition.ts)",
+    "getBandForagingDraw now subtracts committed away adults (sharedCatchment.ts)",
+    "getBandPhysicalPresence documentation corrected — behaviour unchanged"
+  ],
+  "verdicts": {
+    "P1_residence_only_control": "FULL_RESIDENTIAL_POPULATION",
+    "P2_prepared_labor_committed_bodies_home": "LABOR_COMMITTED_BODIES_AT_HOME",
+    "P3_outbound_party_at_its_own_position": "WORKERS_AT_ROUTE_POSITION",
+    "P7_aborted_holds_no_body": "TERMINAL_OCCUPIES_NOTHING",
+    "P8_lost_holds_no_body": "TERMINAL_OCCUPIES_NOTHING",
+    "P9_two_concurrent_parties": "EACH_PARTY_ONCE_REMAINDER_CORRECT",
+    "P10_overcommit_after_population_loss_is_reconciled": "OVERCOMMIT_RENDERED_UNRECONCILED",
+    "P11_small_and_large_parties": "MONOTONE_AND_BOUNDED",
+    "P13_two_parties_at_one_target": "BOTH_CONTRIBUTE_AND_EACH_BAND_CONSERVED",
+    "P20_completed_history_creates_no_bodies": "HISTORY_IS_NOT_OCCUPANCY",
+    "P21_resource_accounting": "NO_UNIT_APPEARS_TWICE",
+    "P22_catchment_effort_vs_demand": "EFFORT_UNCHANGED_STILL_CONFLATED",
+    "P23_ghost_caution_separation": "BODIES_LEAVE_IMMEDIATELY_MEMORY_IS_SEPARATE",
+    "P24_hidden_party_creates_no_social_knowledge": "PHYSICAL_PRESENCE_ALONE_CREATES_NO_ENCOUNTER",
+    "P26_order_invariance": "PRESENCE_IS_ORDER_INDEPENDENT_BY_CONSTRUCTION",
+    "P28_long_horizon_boundedness": "BOUNDED_BUT_CONSERVATION_NOT_GUARANTEED"
+  },
+  "theTwoFixturesThatDiffer": {
+    "P10_overcommit_after_population_loss": {
+      "intermediate": { "population": 2, "committedAwayWorkers": 6, "represented": 6, "conserved": false, "note": "the invalid state is rendered faithfully — the read model neither invents nor deletes people, and nothing upstream reconciles it" },
+      "after": { "population": 2, "committedAwayWorkers": 0, "represented": 2, "conserved": true, "partyPhases": ["lost"], "note": "reconciled at source; the party the band can no longer staff is declared lost" }
+    },
+    "P22_catchment_effort_vs_demand": {
+      "intermediate": { "catchmentClaimAllHome": 127.02, "catchmentClaimThreeAway": 127.02, "consumptionDemand": 25, "note": "the claim does not move when three workers leave — away workers keep claiming the residential catchment while extracting at the target" },
+      "after": { "catchmentClaimAllHome": 127.02, "catchmentClaimThreeAway": 109.62, "consumptionDemand": 25, "note": "effort falls, demand holds" }
+    }
+  },
+  "naturalScaleOfTheCatchmentDifference": {
+    "years": 6, "scenario": "map2", "seed": "audit27:natural:map2:s1", "samplingResolution": "DAILY",
+    "claimSumIntermediate": 446633.3,
+    "claimSumAfter": 446128.3,
+    "absoluteReduction": 505,
+    "bandDaysWhereClaimDiffers": 202,
+    "arithmeticCheck": "the reduction equals the 505 away-worker-days exactly, because the working-adult weight is 1.0 — every other band-day is byte-identical, which is what shows the change is scoped to away workers and is not a global recalibration"
+  },
+  "deferredByFormalScopeReduction": [
+    "P15_same_day_solo_party",
+    "P16_two_same_day_parties_different_targets",
+    "P17_two_same_day_parties_same_target",
+    "P18_same_route_different_within_day_timing",
+    "P19_same_day_and_expedition_overlap"
+  ]
+}

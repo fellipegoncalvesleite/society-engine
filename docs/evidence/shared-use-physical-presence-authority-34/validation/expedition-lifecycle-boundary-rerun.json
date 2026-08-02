@@ -1,0 +1,49 @@
+{
+  "check": "EXPEDITION-LIFECYCLE-1-SEASON-BOUNDARY",
+  "note": "NOT CANONICAL. Retained to demonstrate why boundary-only sampling is insufficient.",
+  "years": 40,
+  "sampling": "seasonal",
+  "observed": {
+    "launched": 87,
+    "completed": 161,
+    "aborted": 0,
+    "lost": 0,
+    "depositsWithFood": 11,
+    "informationOnly": 150,
+    "maxActivePerBand": 1,
+    "maxOutcomeRecords": 6,
+    "maxRouteTiles": 26,
+    "sawPrepared": false,
+    "sawOutbound": true,
+    "sawOperating": false,
+    "sawReturning": false,
+    "sawTaskCamp": false,
+    "sawConcurrentParties": false,
+    "phaseDays": {
+      "prepared": 0,
+      "outbound": 87,
+      "operating": 0,
+      "returning": 0
+    },
+    "taskCampDays": 0,
+    "samples": 160,
+    "travelDaysSeen": 0,
+    "provisionsConsumed": 2.5748,
+    "cargoLost": 0,
+    "laborOverCommitViolations": 0,
+    "positionOffRouteViolations": 0,
+    "personConservationViolations": 0,
+    "receiptsBeforeReturn": 0,
+    "deliveredUnits": 0.4966999999999999,
+    "outcomeReasons": {
+      "frontier_return_budget_reached": 35,
+      "frontier_barrier_blocked": 28,
+      "returned_information_only": 74,
+      "returned_with_cargo": 11,
+      "physically_exhausted": 6,
+      "verification_confirmed": 5,
+      "seasonally_inactive": 1,
+      "target_absent": 1
+    }
+  }
+}

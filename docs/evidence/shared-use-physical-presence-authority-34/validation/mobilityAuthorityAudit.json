@@ -1,0 +1,73 @@
+{
+  "check": "MOBILITY-AUTHORITY-1",
+  "verdict": "PASS",
+  "checks": {
+    "consumersImportAuthority_6": true,
+    "noPrivateResidentialPaceConstants_6": true,
+    "residentialSlowerThanSelectedParty_7": true,
+    "residentialTakesMoreDaysSameRoute_7": true,
+    "dependentsSlowTheColumn_7": true,
+    "emergencyOverreachHelpsButBounded_7": true,
+    "reconFasterThanLoaded_6": true,
+    "injuredSlowerThanParty_6": true,
+    "poolsConservedSweep_8": true,
+    "fatigueShiftsRolesGradually_8": true,
+    "highPoolExhaustsUnderCommitment_8": true,
+    "availabilityReconciles_8": true,
+    "exhaustionSlowsNextParty_8": true,
+    "overAskBlocked_8": true,
+    "balancedPreservesHighPool_8": true,
+    "productionPoolsReconcile_8": true,
+    "productionNeverOverCommits_8": true
+  },
+  "comparisonSameRoute": {
+    "routeTiles": 12,
+    "selectedParty": {
+      "kmPerDay": 7,
+      "days": 3
+    },
+    "wholeBandColumn": {
+      "kmPerDay": 2.254,
+      "days": 8
+    },
+    "emergencyColumn": {
+      "kmPerDay": 3.606
+    },
+    "leanColumnKmPerDay": 3.185,
+    "burdenedColumnKmPerDay": 2.002
+  },
+  "pools": {
+    "rested": {
+      "limited": 3,
+      "typical": 14,
+      "high": 3
+    },
+    "exhausted": {
+      "limited": 5,
+      "typical": 13,
+      "high": 2
+    },
+    "pools20": {
+      "limited": 3,
+      "typical": 14,
+      "high": 3
+    },
+    "fastParty": {
+      "limited": 0,
+      "typical": 1,
+      "high": 3
+    },
+    "availableAfterFast": {
+      "limited": 3,
+      "typical": 13,
+      "high": 0
+    },
+    "secondFast": {
+      "limited": 0,
+      "typical": 4,
+      "high": 0
+    },
+    "firstFactor": 1.1125,
+    "secondFactor": 1
+  }
+}

@@ -111,14 +111,24 @@ export function getBandPhysicalPresence(band: Band): readonly PhysicalPresenceSo
     });
   }
 
-  // CORRECTION-34A §6 — conservation is maintained UPSTREAM, not here. `reconcileExpeditionCommitment`
-  // (expedition.ts) runs at the head of the daily expedition action and shrinks or loses any party
-  // the band can no longer staff, so `awayPeople <= workingAdults <= population` holds on every
-  // band-day. This clamp is therefore defence-in-depth against a malformed record, never the thing
-  // that makes the sum work: it keeps the remainder non-negative and it deliberately does NOT
-  // shrink the away sources, because proportionally shrinking an already-launched party inside the
-  // read model would hide the defect rather than conserve people (§6 forbids exactly that).
-  // Assert with `getBandCommitmentAccounting`, which is the predicate production maintains.
+  // CORRECTION-34A §6 — WHAT THIS FUNCTION DOES AND DOES NOT GUARANTEE.
+  //
+  // This read model is NOT self-conserving and does not claim to be. It reports what the
+  // expedition records say, and the sum below equals `population` only when the canonical
+  // expedition state handed to it is VALID — that is, when `sum(away partyWorkers) <= population`.
+  //
+  // Validity is maintained UPSTREAM by `reconcileExpeditionCommitment` (expedition.ts), which runs
+  // at the head of the daily expedition action and shrinks or loses any party the band can no
+  // longer staff. That covers every band-day produced by the daily kernel, which is the only way
+  // production advances a world. It does NOT cover a band object assembled directly by a test,
+  // fixture or future caller that never ran a day — such a band can still be overcommitted, and
+  // this function will faithfully render that overcommitment rather than disguise it.
+  //
+  // The clamp below therefore keeps the residential remainder non-negative and nothing more. It
+  // deliberately does NOT shrink the away sources: proportionally shrinking an already-launched
+  // party inside the read model would hide an invalid upstream state rather than conserve people,
+  // and §6 forbids exactly that. Callers that need the guarantee must assert
+  // `getBandCommitmentAccounting(band).conserved`, which is the predicate production maintains.
   const residentialRemainder = Math.max(0, population - Math.min(awayPeople, population));
 
   return [

@@ -110,7 +110,94 @@ were measured by a *daily probe*, while production reads presence only at bounda
 multi-day fix moves production behaviour only when a party is still out when a boundary falls. The
 repair is correct and retained; no claim is made that it moves behaviour on all 505.
 
-## F7 — What is not claimed
+## F7 — Evidence closure (supervisor scope amendment)
+
+Same-day party **current-presence implementation** is formally removed from CORRECTION-34's
+acceptance requirements, because the audit proved production has no within-day consumer capable of
+reading such a ledger without a new daily shared-use authority. Same-day trips remain physically
+real; no dead ledger was introduced; the seam is preserved in roadmap and handoff.
+
+### F7.1 — The precise three-stage comparison
+
+Daily, map2:s1, 6 years, 202 party-days:
+
+| | ghosted at home | represented nowhere | at own position |
+| --- | --- | --- | --- |
+| BEFORE `5ebb5e98` | **505** | **505** | 0 |
+| INTERMEDIATE `4042210` | 0 | 0 | **505** |
+| AFTER tip | 0 | 0 | **505** |
+
+Intermediate and after are identical here **because CORRECTION-34A did not touch the presence
+authority** — that is the point of showing them separately.
+
+Catchment, same run: claim sum **446,633.3 → 446,128.3**, reduction **exactly 505** across exactly
+**202** band-days. The reduction equals the away-worker-days because the working-adult weight is
+1.0; every other band-day is byte-identical, which is what shows the change is scoped to away
+workers rather than a global recalibration.
+
+Reconciliation, the constructed overcommit:
+
+| | represented | population | conserved |
+| --- | --- | --- | --- |
+| BEFORE | 2 | 2 | true — but only by being blind to parties |
+| INTERMEDIATE | **6** | 2 | **false** |
+| AFTER | 2 | 2 | **true** (party declared `lost`) |
+
+### F7.2 — Performance and boundedness
+
+| | 20 y | 50 y |
+| --- | --- | --- |
+| elapsed | 6,208 ms | 14,844 ms |
+| ms per simulated day | 0.86 | 0.82 |
+| state size | **73.33 MB** | **74.40 MB** |
+| max presence sources per band | 3 | 3 |
+| max contributors per tile | 2 | 2 |
+| max active parties per band | 2 | 2 |
+| max trip records per band | 24 | 24 |
+| max outcome records per band | 6 | 6 |
+| stale terminal presence entries | **0** | **0** |
+| person-conservation failures | **0** | **0** |
+| duplicate expedition receipts | **0** | **0** |
+| ephemeral daily presence entries | 0 | 0 (none exist) |
+
+State grows **1.07 MB between 20 and 50 years** while every cap holds: 3 presence sources = 1
+residential + `EXPEDITION_ACTIVE_CAP`, 24 = `RECENT_TRIP_RECORD_CAP`, 6 = `EXPEDITION_OUTCOME_CAP`.
+Per-day cost is flat (0.86 → 0.82 ms), so nothing scales with elapsed time.
+
+### F7.3 — Closure fixtures
+
+12 fixtures: **0 unexpected, 0 not-constructed, 5 deferred by formal scope reduction.**
+
+`P11` MONOTONE_AND_BOUNDED · `P13` BOTH_CONTRIBUTE_AND_EACH_BAND_CONSERVED · `P21`
+NO_UNIT_APPEARS_TWICE · `P23` BODIES_LEAVE_IMMEDIATELY_MEMORY_IS_SEPARATE · `P24`
+PHYSICAL_PRESENCE_ALONE_CREATES_NO_ENCOUNTER · `P26`
+PRESENCE_IS_ORDER_INDEPENDENT_BY_CONSTRUCTION · `P28` BOUNDED_NO_GHOSTS_NO_LEAKS.
+
+`P15`–`P19` report **DEFERRED_BY_FORMAL_SCOPE_REDUCTION**, not vacuous passes, each carrying the
+four required proofs: no current consumer exists; completed records create no presence (24 trip
+records + 1 terminal expedition record → 0 away sources, represented = population); no dead ledger
+introduced; the future architecture is named.
+
+### F7.4 — An instrument error in this pass's own probe, caught and recorded
+
+The first closure run reported **1,420 duplicate expedition receipts at 20 years and 3,136 at 50**.
+That was the probe, not production: `recentIntraSeasonTrips` is a retained 24-slot ring, so the
+same receipt is legitimately visible on every day it stays in the ring, and the probe accumulated
+keys **across days**. It was counting retention, not duplication. Corrected to test uniqueness
+**within one band's ring at one instant**, which is the actual question — result **0 at both
+horizons**. The pre-correction numbers are recorded here rather than quietly dropped.
+
+### F7.5 — `getBandPhysicalPresence` documentation corrected
+
+The first CORRECTION-34A comment claimed conservation "holds on every band-day", which overclaims.
+The function is **not self-conserving**: its sum equals `population` only for *valid canonical
+expedition state*. Validity is maintained upstream by the daily reconciliation, which covers every
+band-day the daily kernel produces — but **not** a band object assembled directly by a test,
+fixture or future caller that never ran a day. Such a band will be rendered as overcommitted rather
+than disguised. The comment now says exactly that, and points callers needing the guarantee at
+`getBandCommitmentAccounting(band).conserved`.
+
+## F8 — What is not claimed
 
 - No outcome improvement. Nothing here argues the simulation is better, only that it is truthful.
 - The **magnitudes** are untested: `0.12` carry units, the `0.65`/`0.85` catchment weights (now

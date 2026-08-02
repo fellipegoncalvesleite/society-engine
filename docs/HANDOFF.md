@@ -202,6 +202,27 @@ CORRECTION-33 frozen at `5ebb5e98`; `main` untouched at `0a43083a`.
 3. **`expeditionLifecycleAudit` repaired** — daily canonical (operating 130 / returning 488 /
    task-camp 375 / concurrent TRUE) vs seasonal (0/0/0/FALSE). **PASS, 0 failed checks.**
 
+**Evidence closure (supervisor scope amendment applied)**
+
+Same-day party **current-presence implementation** is formally removed from CORRECTION-34's
+acceptance requirements. Production has no within-day consumer able to read such a ledger without a
+new daily shared-use authority. **No dead ledger was introduced and crowding was not moved to a
+daily cadence.** Same-day trips remain physically real through labor, route, target, depletion,
+result and return.
+
+Three-stage proof (daily, map2:s1, 6 y, 202 party-days) — ghosted / nowhere / at own position:
+**BEFORE 505 / 505 / 0 · INTERMEDIATE 0 / 0 / 505 · AFTER 0 / 0 / 505.** Catchment claim
+**446,633.3 → 446,128.3, reduction exactly 505** across exactly 202 band-days. Reconciliation:
+BEFORE represents 2 of 2 (blind to parties), INTERMEDIATE **6 of 2 `conserved: false`**, AFTER 2 of
+2 with the party `lost`.
+
+Performance: 20 y **6,208 ms / 0.86 ms per simulated day / 73.33 MB**; 50 y **14,844 ms / 0.82 ms /
+74.40 MB**. State grows 1.07 MB between horizons; every cap holds; stale presence, conservation
+failures and duplicate receipts are **0** at both.
+
+Closure fixtures: **12, 0 unexpected, 5 DEFERRED_BY_FORMAL_SCOPE_REDUCTION** (P15–P19), each
+deferred fixture carrying the four required proofs rather than a vacuous pass.
+
 **Exact next action**
 
 Roadmap item 3 is **open**. The named next pieces, in order of dependency:

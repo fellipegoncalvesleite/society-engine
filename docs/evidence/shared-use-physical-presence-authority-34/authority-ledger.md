@@ -23,3 +23,16 @@
 | completed trip records becoming current presence | **STRUCTURALLY IMPOSSIBLE** — `getBandPhysicalPresence` contains no reference to `recentIntraSeasonTrips` |
 | **away workers drawing the residential catchment while also provisioned and harvesting away** | **MEASURED, NOT REPAIRED** — 226 band-seasons. `getBandForagingDraw` uses full `workingAdults`. Named as the next seam; §11.7 forbids rewriting the catchment without a food-pipeline proof |
 | same-day parties invisible to shared range | **MEASURED, DEFERRED** — needs the Option-E daily ledger |
+
+---
+
+## CORRECTION-34A amendment
+
+| Authority | Status after CORRECTION-34A |
+| --- | --- |
+| same-day parties invisible to shared range | **FORMALLY DEFERRED — non-actionable, not merely unbuilt.** No within-day consumer of physical presence exists in production, so an Option-E ledger would have no reader. Removed from CORRECTION-34's acceptance requirements by supervisor amendment. See `SAME_DAY_PRESENCE_SEAM.md`. |
+| person conservation across a party's absence | **REPAIRED** — `reconcileExpeditionCommitment` (daily, inside `expeditionDailyAction`) shrinks or loses a party the band can no longer staff. `getBandCommitmentAccounting` exports the invariant. The launch authority was already sound *at the launch instant*; the hole was that `demography.ts` / `viability.ts` / `demographicRenewal.ts` contain zero expedition references and `partyWorkers` is write-once. |
+| residential catchment extraction effort | **REPAIRED** — `getBandForagingDraw` counts adults physically at camp (`deriveCommittedMobilityPools`, the same authority `deriveAvailableMobilityPools` uses). Weights not retuned. |
+| consumption demand | **UNCHANGED AND SEPARATE** — `carryingCapacity.derivePopulationDemand` still counts the whole band, because an away worker still eats. |
+| `getBandPhysicalPresence` conservation guarantee | **DOCUMENTATION CORRECTED** — it is not self-conserving. The sum equals `population` only for VALID canonical expedition state; validity is maintained upstream by the daily reconciliation, which covers every band-day the daily kernel produces but not a band object assembled directly by a test or future caller. |
+| expedition lifecycle observation | **INSTRUMENT REPAIRED** — daily sampling is canonical; the seasonal arm is retained as the counter-example. |

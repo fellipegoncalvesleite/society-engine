@@ -1,0 +1,50 @@
+{
+  "audit": "CORRECTION-34A-PERFORMANCE-AND-BOUNDEDNESS",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "machineNote": "wall-clock on a shared developer machine; comparable within this file, not across machines",
+  "rows": [
+    {
+      "years": 20,
+      "elapsedMs": 6208,
+      "msPerSimDay": 0.8622,
+      "stateBytes": 76896969,
+      "stateMB": 73.33,
+      "livingBands": 9,
+      "maxPresenceSourcesPerBand": 3,
+      "maxContributorsPerTile": 2,
+      "maxActivePartiesPerBand": 2,
+      "maxTripRecordsPerBand": 24,
+      "maxOutcomeRecordsPerBand": 6,
+      "staleTerminalPresenceEntries": 0,
+      "personConservationFailures": 0,
+      "duplicateExpeditionReceipts": 0,
+      "ephemeralDailyPresenceEntries": 0
+    },
+    {
+      "years": 50,
+      "elapsedMs": 14844,
+      "msPerSimDay": 0.8247,
+      "stateBytes": 78013849,
+      "stateMB": 74.4,
+      "livingBands": 9,
+      "maxPresenceSourcesPerBand": 3,
+      "maxContributorsPerTile": 2,
+      "maxActivePartiesPerBand": 2,
+      "maxTripRecordsPerBand": 24,
+      "maxOutcomeRecordsPerBand": 6,
+      "staleTerminalPresenceEntries": 0,
+      "personConservationFailures": 0,
+      "duplicateExpeditionReceipts": 0,
+      "ephemeralDailyPresenceEntries": 0
+    }
+  ],
+  "requirements": {
+    "dailyEphemeralPresenceDiscardedAfterItsDay": "N/A — no ephemeral daily presence exists (same-day presence deferred)",
+    "historicalTripRecordsBounded": "RECENT_TRIP_RECORD_CAP",
+    "activeExpeditionPresenceBoundedByActiveCap": "EXPEDITION_ACTIVE_CAP = 2",
+    "noPersonLevelSimulation": true,
+    "noRouteByWorldMatrix": true,
+    "noUnboundedOverlapHistory": true
+  }
+}
