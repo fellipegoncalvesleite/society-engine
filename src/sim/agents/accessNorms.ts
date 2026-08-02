@@ -25,6 +25,44 @@ const FRICTION_RECENT_WINDOW_TICKS = 48;
 const REPORT_RECENT_WINDOW_TICKS = 80;
 const BEHAVIOR_HOOK_CAP = 0.08;
 
+// CORRECTION-31 — the social-evidence lifecycle.
+//
+// Before this, a friction record either counted at FULL strength or not at all: the only age
+// test in the whole chain was the binary `age <= FRICTION_RECENT_WINDOW_TICKS` below, and not
+// one of the six functions that turn a record into pressure read `event.tick`. A group seen
+// once governed a place for twelve simulated years and then vanished off a cliff — and because
+// `confidence` counted retained records, the held evidence propped up the very confidence that
+// would otherwise have let `staleness` mark it stale, so an episode could grow MORE severe
+// after the other band left (AUDIT-27 C5).
+//
+// Evidence now has an age and a provenance, and its influence declines to nothing well before
+// the record itself is evicted. The record, the contact memory and the place memory are all
+// kept: release is behavioural, not amnesic.
+//
+// 1 tick = 1 season, 4 ticks = 1 year. The fresh window is the current annual round for every
+// class, because seasonal dispersal and re-aggregation make the year the natural unit of
+// "still current" (Mauss). The release horizons differ by how the episode felt and how it was
+// learned; see docs/evidence/shared-range-release-lifecycle-31/ARCHITECTURE_DECISION.md §4.
+const SOCIAL_EVIDENCE_FRESH_TICKS = 3;
+const SOCIAL_EVIDENCE_RELEASE_TICKS_TOLERATED = 8;
+const SOCIAL_EVIDENCE_RELEASE_TICKS_NEUTRAL = 12;
+const SOCIAL_EVIDENCE_RELEASE_TICKS_TENSE = 16;
+const SOCIAL_EVIDENCE_RELEASE_TICKS_REPORTED = 16;
+// Hearsay is weaker per unit than a sighting but sticks around longer (Lewandowsky et al. on
+// continued influence; Whallon on visiting as the information channel). Each relay step past
+// the first degrades it further.
+const REPORTED_EVIDENCE_WEIGHT_CAP = 0.7;
+const REPORTED_EVIDENCE_HOP_PENALTY = 0.2;
+// Below this an episode is historical: retained, inspectable, and behaviourally inert.
+const SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT = 0.05;
+// The one contradiction channel this repository can support truthfully: the observer is
+// standing at the place and the canonical proximity-only crowding scalar reads zero, so
+// nobody is within DEFAULT_NEARBY_RADIUS. That is a real local observation and it makes an
+// old sighting count as older. It proves nothing about where the other band went, and it is
+// unavailable to a band that has not gone there (§10.6/§10.7).
+const PRESENT_WITHOUT_OTHERS_AGE_BONUS_TICKS = 2;
+const PRESENT_WITHOUT_OTHERS_SEASON_CAP = 8;
+
 export function applyProtoAccessContext(world: WorldState): WorldState {
   const bands = Object.values(world.bands)
     .sort(compareBands)
@@ -152,8 +190,22 @@ function deriveAccessMemory(
   const anchor = band.anchorMemories?.[tileId];
   const proto = band.protoCampMemory?.places[tileId];
   const range = deriveFamiliarCountry(band, world.time.tick);
-  const friction = collectTileFrictionEvents(world, band, tileId);
+  // CORRECTION-31 — the one legitimate contradiction channel. `nearbyBandPressure` is the
+  // post-CORRECTION-28 proximity-only crowding scalar, so zero means no band within
+  // DEFAULT_NEARBY_RADIUS of where this band is standing. Counted only while the band is
+  // actually AT the place; a band that has not gone there learns nothing (§10.7). Bounded.
+  const presentWithoutOthers = current && (band.pressureState?.nearbyBandPressure ?? 0) === 0;
+  const presentWithoutOthersSeasons = presentWithoutOthers
+    ? Math.min(PRESENT_WITHOUT_OTHERS_SEASON_CAP, (prior?.presentWithoutOthersSeasons ?? 0) + 1)
+    : 0;
+  const friction = collectTileFrictionEvidence(world, band, tileId, presentWithoutOthersSeasons);
   const reports = collectTileReports(world, band, tileId);
+  const activeEvidence = friction.filter((entry) => entry.weight >= SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT);
+  const activeEvidenceWeight = round2(friction.reduce((max, entry) => Math.max(max, entry.weight), 0));
+  // CORRECTION-31 — several relayed copies of one story are one piece of evidence with
+  // several voices. Reports are counted by ORIGINAL episode and weighted by their own
+  // freshness, never by `.length` (§10.9).
+  const reportEpisodes = weighReportEpisodes(reports);
   const storageSignals = collectStorageSignals(world, band, tileId, tile);
   const visibleSignals = collectVisibleSignals(world, band, tileId, tile);
   const crossingSignal = getCrossingSignal(band, tileId);
@@ -191,19 +243,19 @@ function deriveAccessMemory(
     strongestFrictionRelation(friction, (relation) => relation === "familiar_neighbor") * 0.36 +
       bestContactTolerance(band, friction, false) * 0.28 +
       cooperationFromFriction(friction) * 0.18 +
-      reports.filter((report) => report.trustBasis === "familiar_neighbor" || report.trustBasis === "repeated_contact").length * 0.06,
+      weighedReportTopics(reportEpisodes, (report) => report.trustBasis === "familiar_neighbor" || report.trustBasis === "repeated_contact") * 0.06,
   ));
   const strangerCaution = round2(clamp01(
     strongestFrictionRelation(friction, (relation) => relation === "stranger_or_unrecognized" || relation === "weak_contact") * 0.38 +
-      reports.filter((report) => report.topic === "outsider_use_warning" || report.sourceBasis === "unknown_band_nearby").length * 0.12 +
+      weighedReportTopics(reportEpisodes, (report) => report.topic === "outsider_use_warning" || report.sourceBasis === "unknown_band_nearby") * 0.12 +
       (placeImportance >= 0.45 ? tensionFromFriction(friction) * 0.22 : tensionFromFriction(friction) * 0.12) +
-      (reports.some((report) => report.topic === "bad_water_warning" || report.topic === "avoid_place") ? 0.12 : 0),
+      weighedReportFlag(reportEpisodes, (report) => report.topic === "bad_water_warning" || report.topic === "avoid_place") * 0.12,
   ));
   const sharedUsePressure = round2(clamp01(
-    friction.reduce((max, event) => Math.max(max, eventPressure(event)), 0) * 0.42 +
+    friction.reduce((max, entry) => Math.max(max, eventPressure(entry)), 0) * 0.42 +
       (current ? band.pressureState?.nearbyBandPressure ?? 0 : 0) * 0.22 +
       (proto?.socialCrowdingPressureNearby ?? 0) * 0.26 +
-      reports.filter((report) => report.topic === "crowded_water_warning" || report.topic === "crowded_range_warning").length * 0.08,
+      weighedReportTopics(reportEpisodes, (report) => report.topic === "crowded_water_warning" || report.topic === "crowded_range_warning") * 0.08,
   ));
   const crowdingResourcePressure = round2(clamp01(
     (band.usePressure[tileId]?.recentUseIntensity ?? 0) * 0.28 +
@@ -212,9 +264,12 @@ function deriveAccessMemory(
       storageSignals.pressure * 0.1 +
       sharedUsePressure * 0.18,
   ));
+  // NOTE — the last two terms are deliberately NOT weighted by the social lifecycle. A place
+  // valenced `avoid_place`/`risky` and a death memory nearby are the band's own non-social
+  // reasons to be careful, and they must not release because another band left (§10.12, P15).
   const rememberedRefusalAvoidance = round2(clamp01(
     avoidanceFromFriction(friction) * 0.46 +
-      (reports.some((report) => report.topic === "avoid_place" || report.topic === "bad_water_warning") ? 0.18 : 0) +
+      weighedReportFlag(reportEpisodes, (report) => report.topic === "avoid_place" || report.topic === "bad_water_warning") * 0.18 +
       (place?.valences.includes("avoid_place") === true || place?.valences.includes("risky") === true ? 0.14 : 0) +
       (proto?.deathMemoryNearby ?? 0) * 0.18,
   ));
@@ -233,12 +288,17 @@ function deriveAccessMemory(
   ));
   const staleYears = getAccessStaleYears(world, current, prior, place, proto, friction, reports);
   const staleness = round2(clamp01(staleYears / 12));
+  // CORRECTION-31 — confidence counts ACTIVE evidence and weighted report episodes, not
+  // retained record counts. Before this, held records propped up the very confidence that
+  // `classifyAccessState` needs to fall below 0.36 before `staleness` can mark the memory
+  // stale — so old evidence defended itself and the memory could never go stale while it sat
+  // in the ring.
   const confidence = round2(clamp01(
     (place?.confidence ?? 0) * 0.18 +
       (proto?.confidence ?? 0) * 0.22 +
       familiarUseStrength * 0.16 +
-      Math.min(1, friction.length / 3) * 0.16 +
-      Math.min(1, reports.length / 3) * 0.1 +
+      Math.min(1, activeEvidence.length / 3) * 0.16 +
+      Math.min(1, reportEpisodes.reduce((sum, entry) => sum + entry.weight, 0) / 3) * 0.1 +
       storageSignals.confidence * 0.08 +
       visibleSignals.confidence * 0.06 +
       (current ? 0.08 : 0) -
@@ -313,6 +373,22 @@ function deriveAccessMemory(
     confidence,
     staleness,
     staleYears,
+    // CORRECTION-31 — the lifecycle, DERIVED not stored. `activeEvidenceWeight` is how much
+    // the strongest surviving episode still counts; `historicalEvidenceCount` is how many
+    // records the band still holds that no longer move anything. Together they are the
+    // active/historical separation §8.3-§8.4 asks for, without a second store.
+    activeEvidenceWeight,
+    activeEvidenceCount: activeEvidence.length,
+    historicalEvidenceCount: friction.length - activeEvidence.length,
+    socialEvidencePhase:
+      friction.length === 0
+        ? "none"
+        : activeEvidence.length === 0
+          ? "released_historical"
+          : activeEvidenceWeight >= 1
+            ? "active"
+            : "cooling",
+    presentWithoutOthersSeasons,
     positiveReasons,
     negativeReasons,
     topReasons: [
@@ -322,7 +398,7 @@ function deriveAccessMemory(
     sourceReasonIds: uniqueReasonIds([
       ...(place?.reasonIds ?? []),
       ...(proto?.reasonIds ?? []),
-      ...friction.flatMap((event) => event.reasonIds),
+      ...friction.flatMap((entry) => entry.event.reasonIds),
       ...reports.flatMap((report) => report.reasonIds),
       ...storageSignals.reasonIds,
       ...visibleSignals.reasonIds,
@@ -418,17 +494,110 @@ function emptyAccessBehavior(tileId?: TileId): ProtoAccessBehaviorEffectState {
   };
 }
 
-function collectTileFrictionEvents(
+// CORRECTION-31 — a friction record together with how much it still counts.
+export interface WeightedSocialEvidence {
+  readonly event: RangeFrictionEvent;
+  readonly ageTicks: number;
+  readonly weight: number;
+}
+
+/** How long an episode of this kind keeps any behavioural influence at all. */
+function socialEvidenceReleaseTicks(event: RangeFrictionEvent): number {
+  if (event.confidence === "reported_secondhand") {
+    return SOCIAL_EVIDENCE_RELEASE_TICKS_REPORTED;
+  }
+  if (
+    isKinRelation(event.relation) ||
+    event.interpretation === "tolerated_kin_presence" ||
+    event.interpretation === "noticed_shared_use"
+  ) {
+    return SOCIAL_EVIDENCE_RELEASE_TICKS_TOLERATED;
+  }
+  if (
+    (event.tensionLevel === "mild" || event.tensionLevel === "moderate_placeholder") &&
+    (event.relation === "stranger_or_unrecognized" || event.relation === "weak_contact")
+  ) {
+    return SOCIAL_EVIDENCE_RELEASE_TICKS_TENSE;
+  }
+  return SOCIAL_EVIDENCE_RELEASE_TICKS_NEUTRAL;
+}
+
+/** Full inside the current annual round, then a straight decline to nothing. */
+function socialEvidenceAgeWeight(ageTicks: number, releaseTicks: number): number {
+  if (ageTicks < 0) {
+    // A record stamped in the future is not evidence. Guards the negative-age case §22 asks for.
+    return 0;
+  }
+  if (ageTicks <= SOCIAL_EVIDENCE_FRESH_TICKS) {
+    return 1;
+  }
+  if (ageTicks >= releaseTicks) {
+    return 0;
+  }
+  return clamp01((releaseTicks - ageTicks) / (releaseTicks - SOCIAL_EVIDENCE_FRESH_TICKS));
+}
+
+function weighSocialEvidence(
+  world: WorldState,
+  band: Band,
+  event: RangeFrictionEvent,
+  presentWithoutOthersSeasons: number,
+): WeightedSocialEvidence {
+  const rawAge = Number(world.time.tick) - Number(event.tick);
+  // Being at the place and seeing nobody makes an old sighting count as older. Bounded, and
+  // available only to a band that actually went there.
+  const contradictionBonus = Math.min(
+    PRESENT_WITHOUT_OTHERS_SEASON_CAP,
+    presentWithoutOthersSeasons,
+  ) * PRESENT_WITHOUT_OTHERS_AGE_BONUS_TICKS;
+  const ageTicks = rawAge < 0 ? rawAge : rawAge + contradictionBonus;
+  let weight = socialEvidenceAgeWeight(ageTicks, socialEvidenceReleaseTicks(event));
+
+  if (event.confidence === "reported_secondhand") {
+    const report = (band.reportedKnowledge?.reports ?? []).find(
+      (entry) => entry.reportId === event.linkedReportId,
+    );
+    const hops = report?.hops ?? 1;
+    const hopFactor = clamp01(1 - REPORTED_EVIDENCE_HOP_PENALTY * Math.max(0, hops - 1));
+    // The report's own decay is wired in rather than given a second invented clock. When the
+    // report has already left the ring, the age curve alone carries it out.
+    const freshness = report === undefined ? 1 : clamp01(report.freshness);
+    weight = weight * REPORTED_EVIDENCE_WEIGHT_CAP * hopFactor * freshness;
+  }
+
+  return { event, ageTicks: rawAge, weight: round2(clamp01(weight)) };
+}
+
+/**
+ * CORRECTION-31 — is this episode still current enough to act on, or to pass on as news?
+ *
+ * Exported for `reportedKnowledge.ts`, which republishes a band's friction as outgoing
+ * warnings. Without this, a released belief kept being broadcast as though it were current.
+ * Pure: takes the band's own state and the tick, reads no other band and no hidden truth.
+ * The contradiction bonus is deliberately NOT applied here — that is per-place state, and
+ * this predicate answers the weaker, place-independent question "has this aged out?".
+ */
+export function isSocialEvidenceActive(
+  world: WorldState,
+  band: Band,
+  event: RangeFrictionEvent,
+): boolean {
+  return weighSocialEvidence(world, band, event, 0).weight >= SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT;
+}
+
+function collectTileFrictionEvidence(
   world: WorldState,
   band: Band,
   tileId: TileId,
-): readonly RangeFrictionEvent[] {
+  presentWithoutOthersSeasons: number,
+): readonly WeightedSocialEvidence[] {
   return (band.recentRangeFrictionEvents ?? [])
     .filter((event) =>
       event.tileId === tileId &&
       Number(world.time.tick) - Number(event.tick) <= FRICTION_RECENT_WINDOW_TICKS,
     )
-    .sort(compareFrictionEvents)
+    .map((event) => weighSocialEvidence(world, band, event, presentWithoutOthersSeasons))
+    .sort(compareWeightedEvidence)
     .slice(0, 6);
 }
 
@@ -445,6 +614,54 @@ function collectTileReports(
     )
     .sort((left, right) => Number(right.tickReceived) - Number(left.tickReceived) || String(left.reportId).localeCompare(String(right.reportId)))
     .slice(0, 5);
+}
+
+// CORRECTION-31 — one entry per ORIGINAL episode, weighted by that episode's freshness and
+// degraded by relay depth. Before this, every access scalar counted reports with `.length`,
+// so five relayed copies of one warning were five times as loud as the story deserved.
+// `originalObserverBandId` survives relay (reportedKnowledge.ts:1027), which is what makes
+// "same episode" answerable at all; two reports with DIFFERENT original observers are
+// genuinely independent and do reinforce each other.
+interface WeightedReportEpisode {
+  readonly report: WordOfMouthReport;
+  readonly weight: number;
+}
+
+function weighReportEpisodes(reports: readonly WordOfMouthReport[]): readonly WeightedReportEpisode[] {
+  const byEpisode = new Map<string, WeightedReportEpisode>();
+  for (const report of reports) {
+    const key = [
+      String(report.originalObserverBandId ?? report.sourceBandId),
+      String(report.topic),
+      String(report.targetTileId ?? "untiled"),
+    ].join("|");
+    const hopFactor = clamp01(1 - REPORTED_EVIDENCE_HOP_PENALTY * Math.max(0, report.hops - 1));
+    const weight = round2(clamp01(report.freshness) * hopFactor);
+    const existing = byEpisode.get(key);
+    // Keep the strongest single voice for an episode, never the sum of its echoes.
+    if (existing === undefined || weight > existing.weight) {
+      byEpisode.set(key, { report, weight });
+    }
+  }
+  return [...byEpisode.values()].sort(
+    (left, right) => right.weight - left.weight || String(left.report.reportId).localeCompare(String(right.report.reportId)),
+  );
+}
+
+/** Summed weight of the distinct episodes matching a predicate — the old `.length` term. */
+function weighedReportTopics(
+  episodes: readonly WeightedReportEpisode[],
+  predicate: (report: WordOfMouthReport) => boolean,
+): number {
+  return episodes.reduce((sum, entry) => (predicate(entry.report) ? sum + entry.weight : sum), 0);
+}
+
+/** Strongest single episode matching a predicate — the old `.some() ? 1 : 0` term. */
+function weighedReportFlag(
+  episodes: readonly WeightedReportEpisode[],
+  predicate: (report: WordOfMouthReport) => boolean,
+): number {
+  return episodes.reduce((max, entry) => (predicate(entry.report) ? Math.max(max, entry.weight) : max), 0);
 }
 
 function isAccessSensitiveReport(report: WordOfMouthReport): boolean {
@@ -870,14 +1087,19 @@ function getWaterImportance(
   ));
 }
 
+// CORRECTION-31 — every one of these six used to read only fields stamped at the episode's
+// creation, so age was invisible and an old episode pushed exactly as hard as a fresh one.
+// Each now scales its contribution by the evidence weight, which is what makes cooling and
+// behavioural release happen at all.
 function strongestFrictionRelation(
-  events: readonly RangeFrictionEvent[],
+  evidence: readonly WeightedSocialEvidence[],
   predicate: (relation: RangeFrictionRelation) => boolean,
 ): number {
   let strongest = 0;
-  for (const event of events) {
-    if (predicate(event.relation)) {
-      strongest = Math.max(strongest, 0.3 + eventPressure(event) * 0.45 + Math.min(0.18, event.recurrenceCount * 0.04));
+  for (const entry of evidence) {
+    if (predicate(entry.event.relation)) {
+      const raw = 0.3 + eventPressure(entry) * 0.45 + Math.min(0.18, entry.event.recurrenceCount * 0.04);
+      strongest = Math.max(strongest, raw * entry.weight);
     }
   }
   return clamp01(strongest);
@@ -885,12 +1107,12 @@ function strongestFrictionRelation(
 
 function bestContactTolerance(
   band: Band,
-  events: readonly RangeFrictionEvent[],
+  evidence: readonly WeightedSocialEvidence[],
   kinOnly: boolean,
 ): number {
   let best = 0;
-  for (const event of events) {
-    const contact = band.contactMemories[event.otherBandId];
+  for (const entry of evidence) {
+    const contact = band.contactMemories[entry.event.otherBandId];
     if (contact === undefined) {
       continue;
     }
@@ -898,46 +1120,53 @@ function bestContactTolerance(
     if (kinOnly !== kin) {
       continue;
     }
-    best = Math.max(best, contact.trustLikeTolerance * 0.45 + contact.familiarity * 0.28 + Math.min(0.2, contact.sharedUseCount * 0.04));
+    const raw = contact.trustLikeTolerance * 0.45 + contact.familiarity * 0.28 + Math.min(0.2, contact.sharedUseCount * 0.04);
+    best = Math.max(best, raw * entry.weight);
   }
   return clamp01(best);
 }
 
-function tensionFromFriction(events: readonly RangeFrictionEvent[]): number {
-  return events.reduce((max, event) => Math.max(max, eventPressure(event)), 0);
+function tensionFromFriction(evidence: readonly WeightedSocialEvidence[]): number {
+  return evidence.reduce((max, entry) => Math.max(max, eventPressure(entry)), 0);
 }
 
-function cooperationFromFriction(events: readonly RangeFrictionEvent[]): number {
+function cooperationFromFriction(evidence: readonly WeightedSocialEvidence[]): number {
   let strongest = 0;
-  for (const event of events) {
-    if (event.interpretation === "tolerated_kin_presence" || event.interpretation === "noticed_shared_use") {
-      strongest = Math.max(strongest, 0.24 + Math.min(0.2, event.recurrenceCount * 0.04));
-    }
-  }
-  return clamp01(strongest);
-}
-
-function avoidanceFromFriction(events: readonly RangeFrictionEvent[]): number {
-  let strongest = 0;
-  for (const event of events) {
+  for (const entry of evidence) {
     if (
-      event.interpretation === "avoid_warning_remembered" ||
-      event.interpretation === "possible_intrusion" ||
-      event.interpretation === "repeated_outsider_use"
+      entry.event.interpretation === "tolerated_kin_presence" ||
+      entry.event.interpretation === "noticed_shared_use"
     ) {
-      strongest = Math.max(strongest, 0.2 + eventPressure(event) * 0.46 + Math.min(0.2, event.recurrenceCount * 0.04));
+      const raw = 0.24 + Math.min(0.2, entry.event.recurrenceCount * 0.04);
+      strongest = Math.max(strongest, raw * entry.weight);
     }
   }
   return clamp01(strongest);
 }
 
-function eventPressure(event: RangeFrictionEvent): number {
+function avoidanceFromFriction(evidence: readonly WeightedSocialEvidence[]): number {
+  let strongest = 0;
+  for (const entry of evidence) {
+    if (
+      entry.event.interpretation === "avoid_warning_remembered" ||
+      entry.event.interpretation === "possible_intrusion" ||
+      entry.event.interpretation === "repeated_outsider_use"
+    ) {
+      const raw = 0.2 + eventPressure(entry) * 0.46 + Math.min(0.2, entry.event.recurrenceCount * 0.04);
+      strongest = Math.max(strongest, raw * entry.weight);
+    }
+  }
+  return clamp01(strongest);
+}
+
+function eventPressure(entry: WeightedSocialEvidence): number {
+  const event = entry.event;
   const tension =
     event.tensionLevel === "moderate_placeholder" ? 0.66 :
     event.tensionLevel === "mild" ? 0.42 :
     event.tensionLevel === "watchful" ? 0.28 :
     0;
-  return clamp01(tension + Math.min(0.24, event.recentOverlapCount * 0.04));
+  return clamp01((tension + Math.min(0.24, event.recentOverlapCount * 0.04)) * entry.weight);
 }
 
 function isKinRelation(relation: RangeFrictionRelation): boolean {
@@ -950,7 +1179,7 @@ function getAccessStaleYears(
   prior: ProtoAccessMemory | undefined,
   place: Band["placeMemory"][TileId] | undefined,
   proto: ProtoCampPlaceMemory | undefined,
-  friction: readonly RangeFrictionEvent[],
+  friction: readonly WeightedSocialEvidence[],
   reports: readonly WordOfMouthReport[],
 ): number {
   if (current) {
@@ -964,8 +1193,8 @@ function getAccessStaleYears(
   if (proto !== undefined) {
     evidenceTick = Math.max(evidenceTick, Number(proto.lastUsedTick));
   }
-  for (const event of friction) {
-    evidenceTick = Math.max(evidenceTick, Number(event.tick));
+  for (const entry of friction) {
+    evidenceTick = Math.max(evidenceTick, Number(entry.event.tick));
   }
   for (const report of reports) {
     evidenceTick = Math.max(evidenceTick, Number(report.tickReceived));
@@ -1015,16 +1244,16 @@ function compareAccessReasons(left: ProtoAccessReason, right: ProtoAccessReason)
   return left.reason.localeCompare(right.reason);
 }
 
-function compareFrictionEvents(left: RangeFrictionEvent, right: RangeFrictionEvent): number {
+function compareWeightedEvidence(left: WeightedSocialEvidence, right: WeightedSocialEvidence): number {
   const pressure = eventPressure(right) - eventPressure(left);
   if (pressure !== 0) {
     return pressure;
   }
-  const recurrence = right.recurrenceCount - left.recurrenceCount;
+  const recurrence = right.event.recurrenceCount - left.event.recurrenceCount;
   if (recurrence !== 0) {
     return recurrence;
   }
-  return String(left.eventId).localeCompare(String(right.eventId));
+  return String(left.event.eventId).localeCompare(String(right.event.eventId));
 }
 
 function comparePlaceMemories(

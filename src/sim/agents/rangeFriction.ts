@@ -224,7 +224,7 @@ function makePairEvent(
   );
 
   return {
-    eventId: makeEventId(world, observer.id, other.id, notice.tileId, interpretation, notice.activityKind),
+    eventId: makeEventId(world.time.tick, observer.id, other.id, notice.tileId, interpretation, notice.activityKind),
     tick: world.time.tick,
     season: world.time.season,
     observerBandId: observer.id,
@@ -248,6 +248,20 @@ function makePairEvent(
   };
 }
 
+// CORRECTION-31 — the identity of the ORIGINAL episode a report describes, not of the
+// copy that happened to arrive. `originalObserverBandId` survives relay
+// (reportedKnowledge.ts:1027 sets it to `report.originalObserverBandId ?? report.sourceBandId`
+// and increments `hops`), so every relayed copy of one story shares this triple. Several
+// retellings are one piece of evidence with several voices, and must not behave like
+// several independent confirmations.
+function reportEpisodeKey(report: WordOfMouthReport): string {
+  return [
+    String(report.originalObserverBandId ?? report.sourceBandId),
+    String(report.topic),
+    String(report.targetTileId ?? "untiled"),
+  ].join("|");
+}
+
 function deriveReportLinkedEvents(
   world: WorldState,
   observer: Band,
@@ -256,9 +270,17 @@ function deriveReportLinkedEvents(
 ): readonly RangeFrictionEvent[] {
   const reports = observer.reportedKnowledge?.reports ?? [];
   const events: RangeFrictionEvent[] = [];
+  const seenEpisodes = new Set<string>();
 
   for (const report of reports) {
     if (!isFrictionReport(report) || report.targetTileId === undefined) {
+      continue;
+    }
+    // CORRECTION-31 — one record per ORIGINAL episode. Before this, five relayed copies
+    // of one warning produced five friction events, and accessNorms then counted them by
+    // `.length` — so a single story could be louder than five independent sightings.
+    const episodeKey = reportEpisodeKey(report);
+    if (seenEpisodes.has(episodeKey)) {
       continue;
     }
     // RUMOR-LOOP FIX (2026-07-10): a band's OWN report is not evidence of
@@ -279,22 +301,34 @@ function deriveReportLinkedEvents(
       continue;
     }
 
+    seenEpisodes.add(episodeKey);
+
     const sourceBand = activeById.get(report.sourceBandId);
     const relation = sourceBand !== undefined
       ? deriveRelation(world, observer, sourceBand)
       : relationFromReportTrust(report);
     const tile = getTile(world, report.targetTileId);
     const interpretation = interpretationFromReport(report, tile);
+    // CORRECTION-31 — the event is stamped with the tick the REPORT ARRIVED, not the tick
+    // this derivation happens to run. Before this it was re-minted at `world.time.tick`
+    // every tick, and because `makeEventId` embeds the tick, each pass created a NEW id
+    // rather than refreshing one record. A report-linked record was therefore always age 0:
+    // the 48-tick ring eviction could never reach it, and accessNorms' recency window never
+    // expired it, so one report kept a friction record alive for as long as the report
+    // lived — up to REPORT_MAX_AGE_TICKS = 160 (forty simulated years) at constant strength.
+    // Stamping the receipt tick makes the id STABLE, so mergeEventRing refreshes the same
+    // record in place and the record ages like every other kind of evidence.
+    const eventTick = report.tickReceived;
     events.push({
       eventId: makeEventId(
-        world,
+        eventTick,
         observer.id,
         report.sourceBandId,
         report.targetTileId,
         interpretation,
         "unknown_activity",
       ),
-      tick: world.time.tick,
+      tick: eventTick,
       season: world.time.season,
       observerBandId: observer.id,
       otherBandId: report.sourceBandId,
@@ -690,8 +724,12 @@ function isWaterOrDeltaTile(tile: Tile | undefined): boolean {
   );
 }
 
+// CORRECTION-31 — takes the EVENT's tick rather than the world's. A direct observation is
+// stamped now (so it is a new record each tick it recurs, which is what recurrence means);
+// a report-linked record is stamped with the report's receipt tick, which makes its id
+// stable so the ring refreshes one record instead of minting a fresh one every tick.
 function makeEventId(
-  world: WorldState,
+  eventTick: TickNumber,
   observerBandId: BandId,
   otherBandId: BandId,
   tileId: TileId | undefined,
@@ -700,7 +738,7 @@ function makeEventId(
 ): string {
   return [
     "range-friction",
-    Number(world.time.tick),
+    Number(eventTick),
     String(observerBandId),
     String(otherBandId),
     tileId === undefined ? "untiled" : String(tileId),

@@ -2411,6 +2411,20 @@ export type ProtoAccessEncounterTone =
   | "cooperation_remembered"
   | "stale_uncertain";
 
+// CORRECTION-31 — a DERIVED description of where the band's social evidence about a place has
+// got to. It is not a stored state machine and nothing writes it as an authority: it is read
+// off evidence age and provenance every tick, so it cannot drift out of step with the records
+// it describes.
+//   none                 no friction evidence about this place at all
+//   active               the freshest episode is still inside the current annual round
+//   cooling              evidence exists and still counts, but is losing influence with age
+//   released_historical  records are still held, and no longer move any behaviour
+export type ProtoAccessSocialEvidencePhase =
+  | "none"
+  | "active"
+  | "cooling"
+  | "released_historical";
+
 export type ProtoAccessReasonFamily =
   | "familiar_use"
   | "kin_tolerance"
@@ -2449,6 +2463,19 @@ export interface ProtoAccessMemory {
   readonly confidence: NormalizedIntensity;
   readonly staleness: NormalizedIntensity;
   readonly staleYears: number;
+  // CORRECTION-31 — the social-evidence lifecycle, DERIVED every tick by accessNorms, never
+  // stored as an independent authority. `activeEvidenceWeight` is how much the strongest
+  // surviving episode about this place still counts (1 = fresh, 0 = behaviourally released);
+  // `historicalEvidenceCount` is how many records the band still holds that no longer move
+  // anything. Release is behavioural: the records, the contact memory and the place memory
+  // all remain. `presentWithoutOthersSeasons` is the bounded count of consecutive seasons the
+  // band has stood here with nobody inside the proximity radius — the one contradiction
+  // channel this repository can support truthfully.
+  readonly activeEvidenceWeight?: NormalizedIntensity;
+  readonly activeEvidenceCount?: number;
+  readonly historicalEvidenceCount?: number;
+  readonly socialEvidencePhase?: ProtoAccessSocialEvidencePhase;
+  readonly presentWithoutOthersSeasons?: number;
   readonly positiveReasons: readonly ProtoAccessReason[];
   readonly negativeReasons: readonly ProtoAccessReason[];
   readonly topReasons: readonly string[];
