@@ -9,9 +9,20 @@
 //  - information-only / lost / aborted parties deposit none;
 //  - state stays bounded; the run is deterministic.
 import { createServer } from "vite";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
 
 const ROOT = process.cwd();
 const YEARS = 40;
+
+const arg = (name, fallback) => {
+  const index = process.argv.indexOf(`--${name}`);
+  return index >= 0 && process.argv[index + 1] !== undefined ? process.argv[index + 1] : fallback;
+};
+// Both outputs are explicit. Default "" means "print only, write nothing", so this audit can
+// never silently overwrite a frozen evidence file — the trap CORRECTION-32A recorded twice.
+const OUT = arg("out", "");
+const BOUNDARY_OUT = arg("boundary-out", "");
 
 const server = await createServer({
   root: `${ROOT}/src`, configFile: false, appType: "custom", server: { middlewareMode: true }, logLevel: "error",
@@ -42,13 +53,29 @@ try {
   const sameDayBoundaryCorrect =
     durationBoundary.fourTiles === 1 && durationBoundary.fiveTiles > 1 && durationBoundary.tenTiles > 1;
 
+// CORRECTION-34A §11 — THE INSTRUMENT CORRECTION.
+//
+// This audit used to step `stepSim(world, 1, "seasonal")` and observe only at the season
+// boundary. An expedition's whole lifecycle is bounded by EXPEDITION_MAX_DURATION_DAYS = 24
+// inside a 90-day season, so a party launches, walks, works and returns BETWEEN two boundaries.
+// `operating`, `returning` and `taskCamp` were therefore structurally invisible to it and it
+// reported sawOperating/sawReturning/sawTaskCamp = false for its whole history — an INSTRUMENT
+// ARTIFACT that was inherited and re-reported as a production FAIL across several checkpoints.
+//
+// Physical presence is a DAILY fact. The daily arm is canonical; the seasonal arm is retained,
+// run on the SAME world and seed, purely to demonstrate what boundary sampling cannot see.
+function runLifecycleArm(runner, expeditionMod, sampling, years) {
   const observed = {
     launched: 0, completed: 0, aborted: 0, lost: 0,
     depositsWithFood: 0, informationOnly: 0,
     maxActivePerBand: 0, maxOutcomeRecords: 0, maxRouteTiles: 0,
-    sawOutbound: false, sawOperating: false, sawReturning: false, sawTaskCamp: false,
+    sawPrepared: false, sawOutbound: false, sawOperating: false, sawReturning: false,
+    sawTaskCamp: false, sawConcurrentParties: false,
+    phaseDays: { prepared: 0, outbound: 0, operating: 0, returning: 0 },
+    taskCampDays: 0, samples: 0,
     travelDaysSeen: 0, provisionsConsumed: 0, cargoLost: 0,
     laborOverCommitViolations: 0, positionOffRouteViolations: 0,
+    personConservationViolations: 0,
     receiptsBeforeReturn: 0, deliveredUnits: 0,
     outcomeReasons: {},
   };
@@ -58,8 +85,13 @@ try {
 
   let world = runner.initSimWorld({ kind: "map1" }, "expedition-lifecycle");
 
-  for (let step = 0; step < YEARS * 4; step += 1) {
-    world = runner.stepSim(world, 1, "seasonal");
+  // daily: 360 observations per year. seasonal: 4 — the boundary-only view.
+  const steps = sampling === "daily" ? years * 360 : years * 4;
+  const stepMode = sampling === "daily" ? "daily" : "seasonal";
+
+  for (let step = 0; step < steps; step += 1) {
+    world = runner.stepSim(world, 1, stepMode);
+    observed.samples += 1;
 
     for (const band of Object.values(world.bands)) {
       const active = band.expeditions ?? [];
@@ -70,14 +102,25 @@ try {
       const away = expeditionMod.getCommittedExpeditionWorkers(band);
       if (away > band.demography.workingAdults) observed.laborOverCommitViolations += 1;
 
+      // CORRECTION-34A §6 — person conservation, asserted through the SAME predicate production
+      // maintains rather than a re-implementation of it.
+      const accounting = expeditionMod.getBandCommitmentAccounting(band);
+      if (!accounting.conserved) observed.personConservationViolations += 1;
+
+      // §12 P9 — two legal parties from one band, observed rather than assumed.
+      const awayParties = active.filter((e) =>
+        e.phase === "prepared" || e.phase === "outbound" || e.phase === "operating" || e.phase === "returning");
+      if (awayParties.length >= 2) observed.sawConcurrentParties = true;
+
       for (const expedition of active) {
         seenExpeditionIds.add(expedition.id);
         observed.maxRouteTiles = Math.max(observed.maxRouteTiles, expedition.routeTileIds.length);
         observed.travelDaysSeen = Math.max(observed.travelDaysSeen, expedition.travelDaysElapsed);
-        if (expedition.phase === "outbound") observed.sawOutbound = true;
-        if (expedition.phase === "operating") observed.sawOperating = true;
-        if (expedition.phase === "returning") observed.sawReturning = true;
-        if (expedition.taskCamp !== undefined) observed.sawTaskCamp = true;
+        if (expedition.phase === "prepared") { observed.sawPrepared = true; observed.phaseDays.prepared += 1; }
+        if (expedition.phase === "outbound") { observed.sawOutbound = true; observed.phaseDays.outbound += 1; }
+        if (expedition.phase === "operating") { observed.sawOperating = true; observed.phaseDays.operating += 1; }
+        if (expedition.phase === "returning") { observed.sawReturning = true; observed.phaseDays.returning += 1; }
+        if (expedition.taskCamp !== undefined) { observed.sawTaskCamp = true; observed.taskCampDays += 1; }
 
         // No teleport: the party's position must be the route tile at its index.
         if (expedition.routeTileIds[expedition.routeIndex] !== expedition.positionTileId) {
@@ -117,6 +160,15 @@ try {
     }
   }
   observed.launched = seenExpeditionIds.size;
+  return { observed, terminalCount: terminalIds.size };
+}
+
+  // CANONICAL arm — daily sampling. The verdict is taken from this one.
+  const daily = runLifecycleArm(runner, expeditionMod, "daily", YEARS);
+  // COUNTER-EXAMPLE arm — the boundary-only view this audit used to have, same world and seed.
+  const boundary = runLifecycleArm(runner, expeditionMod, "seasonal", YEARS);
+  const observed = daily.observed;
+  const terminalIds = { size: daily.terminalCount };
 
   // Determinism: a fresh identical run must produce identical expedition identities.
   let repeat = runner.initSimWorld({ kind: "map1" }, "expedition-lifecycle");
@@ -148,16 +200,61 @@ try {
     outcomeRecordsBounded: observed.maxOutcomeRecords <= expeditionMod.EXPEDITION_OUTCOME_CAP,
     routeLengthBounded: observed.maxRouteTiles <= expeditionMod.EXPEDITION_MAX_ROUTE_TILES + 1,
     deterministicExpeditionIdentities: JSON.stringify(repeatIds) === JSON.stringify(onceIds),
+    // CORRECTION-34A §6 — the invariant, asserted on every sampled band-day.
+    personConserved: observed.personConservationViolations === 0,
+    // CORRECTION-34A §11 — non-vacuity. These are the phases boundary sampling could not see.
+    operatingObservedNonVacuously: observed.phaseDays.operating > 0,
+    returningObservedNonVacuously: observed.phaseDays.returning > 0,
+    taskCampObservedNonVacuously: observed.taskCampDays > 0,
   };
   const pass = Object.values(checks).every(Boolean);
+
+  // §11 — what the boundary-only arm could NOT see, on the same world and seed. This is the
+  // evidence that the inherited FAIL was an instrument artifact and not a production defect.
+  const boundaryBlindness = {
+    sampling: { daily: observed.samples, seasonal: boundary.observed.samples },
+    operating: { daily: observed.phaseDays.operating, seasonal: boundary.observed.phaseDays.operating },
+    returning: { daily: observed.phaseDays.returning, seasonal: boundary.observed.phaseDays.returning },
+    taskCampDays: { daily: observed.taskCampDays, seasonal: boundary.observed.taskCampDays },
+    sawOperating: { daily: observed.sawOperating, seasonal: boundary.observed.sawOperating },
+    sawReturning: { daily: observed.sawReturning, seasonal: boundary.observed.sawReturning },
+    sawTaskCamp: { daily: observed.sawTaskCamp, seasonal: boundary.observed.sawTaskCamp },
+    sawConcurrentParties: { daily: observed.sawConcurrentParties, seasonal: boundary.observed.sawConcurrentParties },
+    interpretation:
+      "An expedition's whole lifecycle fits inside a season (EXPEDITION_MAX_DURATION_DAYS = 24 of 90), " +
+      "so a boundary sample can only ever catch a party that happens to straddle the boundary. " +
+      "The daily arm is canonical; the seasonal arm is retained to show why.",
+  };
+
   out = {
     check: "EXPEDITION-LIFECYCLE-1",
     verdict: pass ? "PASS" : "FAIL",
+    canonicalSampling: "daily",
     years: YEARS,
     checks,
     durationBoundary,
     observed,
+    boundaryBlindness,
   };
+
+  if (OUT !== "") {
+    mkdirSync(dirname(OUT), { recursive: true });
+    writeFileSync(OUT, `${JSON.stringify(out, null, 2)}\n`, "utf8");
+  }
+  if (BOUNDARY_OUT !== "") {
+    mkdirSync(dirname(BOUNDARY_OUT), { recursive: true });
+    writeFileSync(
+      BOUNDARY_OUT,
+      `${JSON.stringify({
+        check: "EXPEDITION-LIFECYCLE-1-SEASON-BOUNDARY",
+        note: "NOT CANONICAL. Retained to demonstrate why boundary-only sampling is insufficient.",
+        years: YEARS,
+        sampling: "seasonal",
+        observed: boundary.observed,
+      }, null, 2)}\n`,
+      "utf8",
+    );
+  }
 } finally {
   await server.close();
 }
