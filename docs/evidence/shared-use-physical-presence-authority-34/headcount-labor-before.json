@@ -1,0 +1,63 @@
+{
+  "audit": "CORRECTION-34D-PARTY-HEADCOUNT-LABOR-AUTHORITY",
+  "phase": "before",
+  "constructedState": {
+    "population": 20,
+    "workingAdults": 5,
+    "elders": 7,
+    "dependents": 8,
+    "parties": 1,
+    "partyPhase": "operating"
+  },
+  "headline": "PARTY HEADCOUNT STILL ACTS AS IMPOSSIBLE LABOR",
+  "split": {
+    "labourGrantedToParty": 6,
+    "bandWorkingAdultCohort": 5,
+    "impossibleLabourGranted": 1,
+    "physicalHeadcountAndLabourSeparableInState": false,
+    "fieldsPresentOnRecord": {
+      "partyWorkers": true,
+      "physicalPartyPeople": false,
+      "nonWorkingPartyPeople": false
+    }
+  },
+  "measurements": {
+    "physicalAwayHeadcount": 6,
+    "residentialPhysicalHeadcount": 14,
+    "totalWorkingAdults": 5,
+    "partyWorkers": 6,
+    "partyComposition": {
+      "limited": 1,
+      "typical": 4,
+      "high": 1
+    },
+    "partyCompositionTotal": 6,
+    "committedMobilityPoolTotal": 6,
+    "availableMobilityPoolTotal": 0,
+    "travelPaceTilesPerDay": 2.092,
+    "travelPacePartyFactor": 0.9916666666666667,
+    "carryCapacityUnits": 0.72,
+    "provisionConsumptionPerDay": 0.0048,
+    "maximumProvisionBudget": 0.1152,
+    "targetWorkResidentialLabour": 0,
+    "catchmentAdults": 0,
+    "catchmentElders": 6,
+    "catchmentDependents": 8,
+    "catchmentAgedAwayOverflow": 1,
+    "catchmentForagingDraw": 10.3,
+    "totalRepresentedPopulation": 20,
+    "commitmentAccounting": {
+      "population": 20,
+      "workingAdults": 5,
+      "committedAwayWorkers": 6,
+      "dependents": 8,
+      "conserved": true,
+      "awayHeadcountExceedsWorkingAdults": true
+    }
+  },
+  "privateReaderArithmeticReproduced": [
+    "sharedCatchment.getBandForagingDraw (module-private; arithmetic published in its own comment)",
+    "intraSeasonTrips.estimateTaskGroupPeople (module-private; reads workingAdults minus away partyWorkers)",
+    "expedition.consumeProvisions / provisionsExhausted (module-private; the rate constant is exported)"
+  ]
+}
