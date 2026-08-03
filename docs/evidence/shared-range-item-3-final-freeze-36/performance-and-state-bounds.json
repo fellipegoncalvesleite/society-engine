@@ -1,0 +1,121 @@
+{
+  "audit": "ITEM-3-FINAL-FREEZE-PERFORMANCE-AND-STATE-BOUNDS",
+  "tree": "706166892d40189fc56ac7458b9e90a8ffdbddd7",
+  "machineNote": "wall clock on a shared developer machine; comparable within this file, not across machines. NO performance claim is made against any earlier checkpoint.",
+  "integratedNaturalRuns": [
+    {
+      "horizon": "20y",
+      "seed": "audit27:natural:s1",
+      "bandDays": 64800,
+      "msPerSimulatedDay": 0.9083,
+      "elapsedMs": 6540,
+      "caps": {
+        "presenceSourcesPerBand": 3,
+        "tripRecordsPerBand": 24,
+        "outcomeRecordsPerBand": 6,
+        "frictionRecordsPerBand": 8,
+        "encounterRecordsPerBand": 24,
+        "activePartiesPerBand": 2,
+        "accessPlacesPerBand": 8,
+        "crowdingContributorsOnOneTile": 1
+      }
+    },
+    {
+      "horizon": "50y",
+      "seed": "audit27:natural:s1",
+      "bandDays": 162000,
+      "msPerSimulatedDay": 0.9856,
+      "elapsedMs": 17740,
+      "caps": {
+        "presenceSourcesPerBand": 3,
+        "tripRecordsPerBand": 24,
+        "outcomeRecordsPerBand": 6,
+        "frictionRecordsPerBand": 8,
+        "encounterRecordsPerBand": 24,
+        "activePartiesPerBand": 2,
+        "accessPlacesPerBand": 8,
+        "crowdingContributorsOnOneTile": 1
+      }
+    },
+    {
+      "horizon": "200y",
+      "seed": "audit27:natural:s1",
+      "bandDays": 627479,
+      "msPerSimulatedDay": 1.0246,
+      "elapsedMs": 73770,
+      "caps": {
+        "presenceSourcesPerBand": 3,
+        "tripRecordsPerBand": 24,
+        "outcomeRecordsPerBand": 6,
+        "frictionRecordsPerBand": 8,
+        "encounterRecordsPerBand": 24,
+        "activePartiesPerBand": 2,
+        "accessPlacesPerBand": 8,
+        "crowdingContributorsOnOneTile": 1
+      }
+    },
+    {
+      "horizon": "200y-incident-seed",
+      "seed": "audit27:natural:map2:s1",
+      "bandDays": 628919,
+      "msPerSimulatedDay": 1.0033,
+      "elapsedMs": 72240,
+      "caps": {
+        "presenceSourcesPerBand": 3,
+        "tripRecordsPerBand": 24,
+        "outcomeRecordsPerBand": 6,
+        "frictionRecordsPerBand": 8,
+        "encounterRecordsPerBand": 24,
+        "activePartiesPerBand": 2,
+        "accessPlacesPerBand": 8,
+        "crowdingContributorsOnOneTile": 1
+      }
+    }
+  ],
+  "stateSizeAndCapsFromTheClosureAudit": [
+    {
+      "years": 20,
+      "elapsedMs": 6564,
+      "msPerSimDay": 0.9117,
+      "stateBytes": 76979076,
+      "stateMB": 73.41,
+      "livingBands": 9,
+      "maxPresenceSourcesPerBand": 2,
+      "maxContributorsPerTile": 2,
+      "maxActivePartiesPerBand": 1,
+      "maxTripRecordsPerBand": 24,
+      "maxOutcomeRecordsPerBand": 6,
+      "staleTerminalPresenceEntries": 0,
+      "personConservationFailures": 0,
+      "duplicateExpeditionReceipts": 0,
+      "ephemeralDailyPresenceEntries": 0
+    },
+    {
+      "years": 50,
+      "elapsedMs": 16186,
+      "msPerSimDay": 0.8992,
+      "stateBytes": 78098399,
+      "stateMB": 74.48,
+      "livingBands": 9,
+      "maxPresenceSourcesPerBand": 3,
+      "maxContributorsPerTile": 2,
+      "maxActivePartiesPerBand": 2,
+      "maxTripRecordsPerBand": 24,
+      "maxOutcomeRecordsPerBand": 6,
+      "staleTerminalPresenceEntries": 0,
+      "personConservationFailures": 0,
+      "duplicateExpeditionReceipts": 0,
+      "ephemeralDailyPresenceEntries": 0
+    }
+  ],
+  "productionCaps": {
+    "note": "every store sits at or below its production cap at every horizon measured",
+    "presenceSourcesPerBand": "1 residential + EXPEDITION_ACTIVE_CAP",
+    "tripRecords": 24,
+    "outcomeRecords": 6,
+    "frictionRecords": 8,
+    "accessPlaces": 8,
+    "crowdingContributorsPerTile": 2
+  },
+  "perDayCost": "flat from 20 to 200 simulated years — 1.02 ms/simulated day at 200 years against 0.81/0.80 at 20/50 in the closure audit arm; no growth term is visible."
+}

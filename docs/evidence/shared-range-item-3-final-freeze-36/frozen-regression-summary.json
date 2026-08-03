@@ -1,0 +1,146 @@
+{
+  "audit": "ITEM-3-FINAL-FREEZE-FROZEN-REGRESSION",
+  "tree": "706166892d40189fc56ac7458b9e90a8ffdbddd7",
+  "method": "every output flag enumerated from each script own parser (including multi-line arg() declarations) and redirected into artifacts/. Accepted evidence verified by sha256 over all 607 files before and after.",
+  "frozenEvidenceIntegrity": "IDENTICAL — 607 accepted evidence files, sha256 unchanged across the entire regression",
+  "structural": {
+    "tscApp": "PASS",
+    "tscNode": "PASS",
+    "build": "PASS",
+    "graph": "221/764, 0 dup, 0 dangling",
+    "importBoundary": "85 internal back-edges — unchanged since CORRECTION-28",
+    "seasonOrderInvariance": "PASS",
+    "stepModeInvariance": "PASS",
+    "stepModeFourWay": "ALL_FOUR_STEP_MODES_IDENTICAL",
+    "catchmentInvariants": "PASS",
+    "foodPipeline": "PASS",
+    "mobilityAuthority": "PASS",
+    "socialCausality": "ran clean"
+  },
+  "suites": {
+    "AUDIT_27": {
+      "cases": 11,
+      "verdicts": [
+        "C1:PHYSICAL_SHARE_REDUCED_BY_SECOND_BAND",
+        "C2:NOT_SEPARABLE_AT_PRODUCTION_RADII",
+        "C3:NOT_REPRESENTABLE_IN_FIXTURE",
+        "C4:NO_OBSOLETE_CROWDING",
+        "C5:PHYSICAL_RELEASES_PERCEPTION_DOES_NOT",
+        "C6:CLEAN_TERMINAL_RELEASE",
+        "C7:PHYSICAL_COMPETITION_UNCHANGED_BY_KINSHIP",
+        "C8:CAPACITY_SENSITIVE",
+        "C9:ORDER_INVARIANT",
+        "C10:SOCIAL_KNOWLEDGE_ACQUIRED_CHECK_PROVENANCE",
+        "C10b:NO_SOCIAL_KNOWLEDGE_WITHOUT_PROXIMITY"
+      ]
+    },
+    "CORRECTION_28": {
+      "fixtures": 12,
+      "fieldScanParityMismatches": 0
+    },
+    "CORRECTION_29": {
+      "fixtures": 12
+    },
+    "CORRECTION_30": {
+      "fixtures": 15
+    },
+    "CORRECTION_31": {
+      "fixtures": 22
+    },
+    "CORRECTION_32": {
+      "fixtures": 21,
+      "vacuous": 0
+    },
+    "CORRECTION_32A_zeroControls": {
+      "fixtures": 6,
+      "vacuous": 0,
+      "violatingCandidates": 0
+    },
+    "CORRECTION_33": {
+      "fixtures": 20,
+      "vacuous": 0,
+      "adverse": []
+    },
+    "CORRECTION_34_presence_50y": {
+      "fixtures": 10,
+      "vacuous": [
+        "P8_P18_terminal_records_occupy_nothing"
+      ],
+      "adverse": [],
+      "P9": "CONCURRENT_PARTIES_CONSERVED"
+    },
+    "CORRECTION_34A_closure": {
+      "fixtures": 12,
+      "unexpected": 0,
+      "deferred": 5,
+      "notConstructed": 0
+    },
+    "CORRECTION_34B_R1_R12": {
+      "fixtures": 12,
+      "failing": 0,
+      "vacuous": 0
+    },
+    "CORRECTION_34C_L1_L12": {
+      "fixtures": 12,
+      "failing": 0,
+      "vacuous": 0
+    },
+    "CORRECTION_34D_H1_H14": {
+      "fixtures": 14,
+      "failing": 0,
+      "vacuous": 0
+    },
+    "CORRECTION_34E_T1_T14": {
+      "fixtures": 14,
+      "failing": 0,
+      "vacuous": 0,
+      "notConstructed": 0
+    },
+    "CORRECTION_34F_Z0_Z12": {
+      "fixtures": 13,
+      "failing": 0,
+      "vacuous": 0
+    },
+    "personConservation": {
+      "fixtures": 9,
+      "unexpected": 0
+    },
+    "numericResourceChain": "NUMERIC_RESOURCE_CHAIN_RECONCILED"
+  },
+  "performanceAndStateBounds": [
+    {
+      "years": 20,
+      "elapsedMs": 6564,
+      "msPerSimDay": 0.9117,
+      "stateBytes": 76979076,
+      "stateMB": 73.41,
+      "livingBands": 9,
+      "maxPresenceSourcesPerBand": 2,
+      "maxContributorsPerTile": 2,
+      "maxActivePartiesPerBand": 1,
+      "maxTripRecordsPerBand": 24,
+      "maxOutcomeRecordsPerBand": 6,
+      "staleTerminalPresenceEntries": 0,
+      "personConservationFailures": 0,
+      "duplicateExpeditionReceipts": 0,
+      "ephemeralDailyPresenceEntries": 0
+    },
+    {
+      "years": 50,
+      "elapsedMs": 16186,
+      "msPerSimDay": 0.8992,
+      "stateBytes": 78098399,
+      "stateMB": 74.48,
+      "livingBands": 9,
+      "maxPresenceSourcesPerBand": 3,
+      "maxContributorsPerTile": 2,
+      "maxActivePartiesPerBand": 2,
+      "maxTripRecordsPerBand": 24,
+      "maxOutcomeRecordsPerBand": 6,
+      "staleTerminalPresenceEntries": 0,
+      "personConservationFailures": 0,
+      "duplicateExpeditionReceipts": 0,
+      "ephemeralDailyPresenceEntries": 0
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "audit": "ROADMAP-ITEM-3-FRESH-PROCESS-DETERMINISM",
+  "seed": "audit27:natural:map2:s1",
+  "spanDays": 2520,
+  "parentProcessDigest": "84fe3955bf0d9a3df1f531f285ad9e18d0c35c78ef27d3615b7f8581a068d524",
+  "freshProcessDigest": "84fe3955bf0d9a3df1f531f285ad9e18d0c35c78ef27d3615b7f8581a068d524",
+  "identical": true,
+  "childError": null,
+  "method": "the same script re-invoked as a genuinely separate OS process via execFileSync --child, which builds its own Vite SSR module graph and its own world",
+  "occurrenceInTheComparedRun": {
+    "exploitationOutcomes": 5,
+    "outcomesDeliveringHarvest": 2,
+    "activePartiesAtEnd": 0,
+    "frictionRecords": 0,
+    "encounterRecords": 0,
+    "contactMemories": 0,
+    "livingBands": 9
+  },
+  "nonVacuousPredicate": true,
+  "nonVacuity": {
+    "predicate": "the compared run contains real Item 3 behaviour and the child process actually produced a digest",
+    "exploitationOutcomes": 5,
+    "childProduced": true
+  },
+  "verdict": "FRESH_PROCESS_IDENTICAL"
+}

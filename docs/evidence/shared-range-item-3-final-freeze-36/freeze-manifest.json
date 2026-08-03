@@ -1,0 +1,520 @@
+{
+  "audit": "ROADMAP-ITEM-3-FINAL-FREEZE-MANIFEST",
+  "status": "FINAL FREEZE CANDIDATE — AWAITING BROWSER GPT ACCEPTANCE. This executor does not declare Item 3 accepted or frozen.",
+  "repository": "fellipegoncalvesleite/human-nomad-simulator",
+  "branch": "checkpoint/shared-range-item-3-final-freeze-36",
+  "candidateFreezeHead": "706166892d40189fc56ac7458b9e90a8ffdbddd7",
+  "acceptedProductionTip": "706166892d40189fc56ac7458b9e90a8ffdbddd7",
+  "previousFinalIntegrationAudit": "742b567f9351ca3ef9eaafef05a620dbd2ff1db4",
+  "mainHead": "0a43083a3a9103bc6b8f693b8823a604ae2c6a8d",
+  "mergeBaseWithMain": "0a43083a3a9103bc6b8f693b8823a604ae2c6a8d",
+  "mainUntouched": "main is 0a43083a3a9103bc6b8f693b8823a604ae2c6a8d and is the merge base; nothing in the Item 3 line has been merged into it",
+  "acceptedEvidenceUntouched": "verified by sha256 over all 607 accepted evidence files before and after the full regression — IDENTICAL. See frozen-evidence-integrity.json",
+  "acceptedSubCheckpoints": [
+    {
+      "checkpoint": "AUDIT-27",
+      "branch": "checkpoint/crowding-shared-range-authority-27",
+      "sha": "b352c3195406fc9494c0b693a98eb0786f1a3780",
+      "tipSubject": "audit: separate the crowding a band feels from the country it remembers",
+      "evidenceDirectory": "docs/evidence/crowding-shared-range-authority-27",
+      "isAncestorOfFreezeHead": true
+    },
+    {
+      "checkpoint": "CORRECTION-28",
+      "branch": "checkpoint/crowding-physical-memory-separation-28",
+      "sha": "c5eb58a8f5ff7054665f9c376ac4ca856403efab",
+      "tipSubject": "sim: stop a band from crowding the country it only remembers",
+      "evidenceDirectory": "docs/evidence/crowding-physical-memory-separation-28",
+      "isAncestorOfFreezeHead": true
+    },
+    {
+      "checkpoint": "CORRECTION-29",
+      "branch": "checkpoint/shared-range-encounter-provenance-29",
+      "sha": "a15d0a78a3a7ef57b87b22226190d6729ba9b9d7",
+      "tipSubject": "sim: stop two bands meeting because they remember the same place",
+      "evidenceDirectory": "docs/evidence/shared-range-encounter-provenance-29",
+      "isAncestorOfFreezeHead": true
+    },
+    {
+      "checkpoint": "CORRECTION-30",
+      "branch": "checkpoint/shared-range-friction-provenance-30",
+      "sha": "1c6a3ed8d0a8360c8fe4648a83387a2bd4fa30b4",
+      "tipSubject": "docs: record what a band may honestly know about another band",
+      "evidenceDirectory": "docs/evidence/shared-range-friction-provenance-30",
+      "isAncestorOfFreezeHead": true
+    },
+    {
+      "checkpoint": "CORRECTION-31",
+      "branch": "checkpoint/shared-range-release-lifecycle-31",
+      "sha": "3e2c1215b4ccef2beb799b3a7882247f6cd186cd",
+      "tipSubject": "docs: record how a belief about neighbours is supposed to end",
+      "evidenceDirectory": "docs/evidence/shared-range-release-lifecycle-31",
+      "isAncestorOfFreezeHead": true
+    },
+    {
+      "checkpoint": "CORRECTION-32 / -32A",
+      "branch": "checkpoint/crowding-decision-pressure-authority-32",
+      "sha": "d11854153e76c2435bce9d53ffde49317e5e8f90",
+      "tipSubject": "audit: find the instrument subtracting two different candidates and calling it crowding",
+      "evidenceDirectory": "docs/evidence/crowding-decision-pressure-authority-32",
+      "isAncestorOfFreezeHead": true
+    },
+    {
+      "checkpoint": "CORRECTION-33",
+      "branch": "checkpoint/social-access-unrelated-risk-provenance-33",
+      "sha": "5ebb5e9887e36341f69350d4d3cff85f9493457c",
+      "tipSubject": "sim: stop a band fearing a spring because the world holds a ninth record",
+      "evidenceDirectory": "docs/evidence/social-access-unrelated-risk-provenance-33",
+      "isAncestorOfFreezeHead": true
+    },
+    {
+      "checkpoint": "CORRECTION-34 .. -34F",
+      "branch": "checkpoint/shared-use-physical-presence-authority-34",
+      "sha": "df349eb60940d3ee3995fa6bccac7c902578fd3e",
+      "tipSubject": "docs: record the contract, and what 34E's 'required' did not cover",
+      "evidenceDirectory": "docs/evidence/shared-use-physical-presence-authority-34",
+      "isAncestorOfFreezeHead": true
+    },
+    {
+      "checkpoint": "ITEM 3 FINAL INTEGRATION AUDIT",
+      "branch": "checkpoint/shared-range-item-3-final-freeze",
+      "sha": "742b567f9351ca3ef9eaafef05a620dbd2ff1db4",
+      "tipSubject": "docs: stamp the candidate freeze head into the manifest",
+      "evidenceDirectory": "docs/evidence/shared-range-item-3-final-freeze",
+      "isAncestorOfFreezeHead": true
+    },
+    {
+      "checkpoint": "CORRECTION-35",
+      "branch": "checkpoint/shared-range-release-territorial-authority-35",
+      "sha": "706166892d40189fc56ac7458b9e90a8ffdbddd7",
+      "tipSubject": "docs: record what was repaired, and that the incident was twice the size we published",
+      "evidenceDirectory": "docs/evidence/shared-range-release-territorial-authority-35",
+      "isAncestorOfFreezeHead": true
+    }
+  ],
+  "lineage": "every accepted sub-checkpoint above is an ancestor of the candidate freeze head, so the Item 3 line is linear from main through AUDIT-27 to CORRECTION-35",
+  "productionFilesParticipatingInItem3": {
+    "definition": "files changed between the AUDIT-27 tip (b352c31, the last commit before any Item 3 production change) and the candidate freeze head. AUDIT-27 itself was audit-only.",
+    "fileCount": 20,
+    "files": [
+      {
+        "file": "src/sim/agents/accessNorms.ts",
+        "added": 308,
+        "removed": 41
+      },
+      {
+        "file": "src/sim/agents/acuteRisk.ts",
+        "added": 6,
+        "removed": 1
+      },
+      {
+        "file": "src/sim/agents/bandEvents.ts",
+        "added": 13,
+        "removed": 3
+      },
+      {
+        "file": "src/sim/agents/bandMobility.ts",
+        "added": 113,
+        "removed": 9
+      },
+      {
+        "file": "src/sim/agents/crowding.ts",
+        "added": 224,
+        "removed": 89
+      },
+      {
+        "file": "src/sim/agents/demography.ts",
+        "added": 52,
+        "removed": 1
+      },
+      {
+        "file": "src/sim/agents/dryMargin.ts",
+        "added": 50,
+        "removed": 9
+      },
+      {
+        "file": "src/sim/agents/expedition.ts",
+        "added": 411,
+        "removed": 13
+      },
+      {
+        "file": "src/sim/agents/intraSeasonTrips.ts",
+        "added": 95,
+        "removed": 12
+      },
+      {
+        "file": "src/sim/agents/pressure.ts",
+        "added": 26,
+        "removed": 4
+      },
+      {
+        "file": "src/sim/agents/rangeFriction.ts",
+        "added": 119,
+        "removed": 119
+      },
+      {
+        "file": "src/sim/agents/reportedKnowledge.ts",
+        "added": 18,
+        "removed": 1
+      },
+      {
+        "file": "src/sim/agents/sharedCatchment.ts",
+        "added": 62,
+        "removed": 5
+      },
+      {
+        "file": "src/sim/agents/socialContext.ts",
+        "added": 41,
+        "removed": 60
+      },
+      {
+        "file": "src/sim/agents/types.ts",
+        "added": 113,
+        "removed": 1
+      },
+      {
+        "file": "src/sim/rules/bandDecision.ts",
+        "added": 45,
+        "removed": 29
+      },
+      {
+        "file": "src/sim/rules/decisionScoring.ts",
+        "added": 17,
+        "removed": 2
+      },
+      {
+        "file": "src/sim/rules/mobilityIntent.ts",
+        "added": 3,
+        "removed": 1
+      },
+      {
+        "file": "src/sim/rules/types.ts",
+        "added": 1,
+        "removed": 0
+      },
+      {
+        "file": "src/ui/band/Mobility.tsx",
+        "added": 12,
+        "removed": 5
+      }
+    ],
+    "totals": {
+      "added": 1729,
+      "removed": 405
+    },
+    "note": "the diff from main also contains roadmap items 1 and 2 (expeditionary logistics, resource investigation) and is NOT the Item 3 surface."
+  },
+  "productionDiffFromPreviousAudit": [
+    "src/sim/agents/accessNorms.ts   | 50 ++++++++++++++++++++++++++++++++++++-----",
+    " src/sim/agents/pressure.ts      |  8 ++++++-",
+    " src/sim/agents/types.ts         | 22 ++++++++++++++++++",
+    " src/sim/rules/bandDecision.ts   |  5 ++++-",
+    " src/sim/rules/mobilityIntent.ts |  4 +++-",
+    " src/sim/rules/types.ts          |  1 +",
+    " 6 files changed, 81 insertions(+), 9 deletions(-)"
+  ],
+  "thisCheckpointChangedNoProductionFile": true,
+  "deterministicSeedsAndMaps": {
+    "map": "map2",
+    "sharedRangeSeed": "audit27:natural:s1",
+    "incidentSeed": "audit27:natural:map2:s1",
+    "note": "both seeds are reported because they disagree. The same machinery produces a socially rich world on one and a very different social history on the other — the divergent-history property Item 3 wanted."
+  },
+  "sixCarriedForwardSeamsVerbatim": "**If Item 3 is frozen, these seams do NOT close with it** and must be carried forward verbatim:\n\n1. **the physical shared-use substrate** — `sharedCatchment`'s footprint is residence-anchored, so\n   real trips, expedition routes and investigation walks compete for nothing. Measured and\n   published in `shared-catchment-boundary.json`; **unchanged by CORRECTION-35**.\n2. **activity-party crowding / expedition overlap / temporary task-party footprints.**\n3. **no visibility, route or barrier rule** for social perception of any kind.\n4. **no physical-trace authority** — no tracks, trails, camp remains, trace freshness or cross-band\n   smoke. Belongs to the Persistent Human Landscape pass.\n5. **`SocialPressureProfile.territorialPressure`** — a second orphan, documented by CORRECTION-35\n   as having **zero readers repository-wide**. Inert, therefore not a blocker; it must not be wired\n   up by a future system without its own lived writer.\n6. **no UI surfaces the social-evidence lifecycle**, unchanged from Item 3.\n",
+  "sameDayPresenceDeferral": "CORRECTION-34A formally removed same-day party CURRENT-PRESENCE from scope: production has no within-day consumer, runDailyActions builds no TickContextCache, and a day-scoped ledger would be empty at every instant its only consumer runs. The seam is documented; no dead ledger was introduced.",
+  "residenceAnchoredCatchmentBoundary": "sharedCatchment.getBandForagingFootprint is anchored on band.residentialAnchor.catchmentTileIds, falling back to a bounded ring around band.position. Route walking claims nothing; a task camp claims nothing. This is carried-forward seam 1 and is OPEN.",
+  "publicTimeControlDeferral": "the public Day/Season simplification remains DEFERRED and unimplemented. All four internal step modes are retained as batch sizes over one daily kernel.",
+  "roadmapItemFourExplicitlyAbsent": {
+    "started": false,
+    "absentBehaviour": [
+      "dynamic fission driven by shared-range pressure",
+      "daughter viability",
+      "successor-group selection",
+      "cancelling a prepared party to free founders",
+      "founder-policy change"
+    ],
+    "evidence": "createDaughterBand is untouched by CORRECTION-35; the production diff from the previous audit head touches six files, none of them fission. Controlled fixtures I13 and C8 assert the boundary."
+  },
+  "wholeBranchDiffFromMain": {
+    "fileCount": 50,
+    "note": "spans roadmap items 1 through 3; recorded for completeness only"
+  },
+  "requiredAuditsAndResults": {
+    "certification": {
+      "claims": 12,
+      "failing": 0,
+      "failingIds": [],
+      "vacuous": 0,
+      "vacuousIds": [],
+      "notConstructed": 0,
+      "notConstructedIds": []
+    },
+    "integratedControlledFixtures": {
+      "fixtures": 16,
+      "failing": 0,
+      "vacuous": 0,
+      "notConstructed": 0,
+      "failingIds": [],
+      "vacuousIds": [],
+      "notConstructedIds": []
+    },
+    "correction35Lifecycle": {
+      "fixtures": 12,
+      "failing": 0,
+      "vacuous": 0,
+      "vacuousIds": [],
+      "failingIds": [],
+      "notConstructed": 1
+    },
+    "correction35Territorial": {
+      "fixtures": 12,
+      "failing": 0,
+      "vacuous": 0,
+      "vacuousIds": [],
+      "failingIds": []
+    },
+    "correction35Combined": {
+      "fixtures": 8,
+      "failing": 0,
+      "vacuous": 0,
+      "vacuousIds": [],
+      "failingIds": []
+    },
+    "naturalIntegrated": [
+      {
+        "horizon": "20y",
+        "seed": "audit27:natural:s1",
+        "bandDays": 64800,
+        "adverseTotal": 0,
+        "releasedPlacesBehaviourallyChecked": 0,
+        "releasedPlacesStillMovingBehaviour": 0
+      },
+      {
+        "horizon": "50y",
+        "seed": "audit27:natural:s1",
+        "bandDays": 162000,
+        "adverseTotal": 0,
+        "releasedPlacesBehaviourallyChecked": 0,
+        "releasedPlacesStillMovingBehaviour": 0
+      },
+      {
+        "horizon": "200y",
+        "seed": "audit27:natural:s1",
+        "bandDays": 627479,
+        "adverseTotal": 0,
+        "releasedPlacesBehaviourallyChecked": 197,
+        "releasedPlacesStillMovingBehaviour": 0
+      },
+      {
+        "horizon": "200y-incident-seed",
+        "seed": "audit27:natural:map2:s1",
+        "bandDays": 628919,
+        "adverseTotal": 0,
+        "releasedPlacesBehaviourallyChecked": 305,
+        "releasedPlacesStillMovingBehaviour": 0
+      }
+    ],
+    "fourWayExpeditionArm": {
+      "verdict": "ALL_FOUR_MODES_IDENTICAL_WITH_ITEM_3_BEHAVIOUR_PRESENT",
+      "occurrence": {
+        "exploitationOutcomes": 5,
+        "outcomesDeliveringHarvest": 2,
+        "activePartiesAtEnd": 0,
+        "frictionRecords": 0,
+        "encounterRecords": 0,
+        "contactMemories": 0,
+        "livingBands": 9
+      }
+    },
+    "fourWaySharedRangeArm": {
+      "verdict": "ALL_FOUR_MODES_IDENTICAL_WITH_ITEM_3_BEHAVIOUR_PRESENT",
+      "occurrence": {
+        "exploitationOutcomes": 26,
+        "outcomesDeliveringHarvest": 3,
+        "activePartiesAtEnd": 3,
+        "frictionRecords": 16,
+        "encounterRecords": 48,
+        "contactMemories": 2,
+        "livingBands": 9
+      }
+    },
+    "freshProcessExpeditionArm": "FRESH_PROCESS_IDENTICAL",
+    "freshProcessSharedRangeArm": "FRESH_PROCESS_IDENTICAL",
+    "lifecycleDeterminism50y": {
+      "verdict": "ALL_FOUR_MODES_IDENTICAL_ON_THE_DERIVED_LIFECYCLE",
+      "occurrence": {
+        "predicate": "the compared trajectory must actually contain a cooling or released place, or the identity is an identity about nothing",
+        "lifecycleOccurs": true,
+        "coolingPlaceSamples": 6,
+        "releasedPlaceSamples": 0,
+        "activePlaceSamples": 29
+      }
+    },
+    "lifecycleDeterminism200y": {
+      "verdict": "ALL_FOUR_MODES_IDENTICAL_ON_THE_DERIVED_LIFECYCLE",
+      "occurrence": {
+        "predicate": "the compared trajectory must actually contain a cooling or released place, or the identity is an identity about nothing",
+        "lifecycleOccurs": true,
+        "coolingPlaceSamples": 388,
+        "releasedPlaceSamples": 198,
+        "activePlaceSamples": 420
+      },
+      "activePartyAcrossDemographicBoundary": {
+        "question": "was a party still physically away on a day the annual demographic step ran?",
+        "annualBoundariesObserved": 200,
+        "boundaryDaysWithAtLeastOnePartyAway": 180,
+        "maxPartiesAwayOnABoundaryDay": 6,
+        "samples": [
+          {
+            "day": 2880,
+            "year": 8,
+            "partiesPhysicallyAway": 5
+          },
+          {
+            "day": 3240,
+            "year": 9,
+            "partiesPhysicallyAway": 1
+          },
+          {
+            "day": 3600,
+            "year": 10,
+            "partiesPhysicallyAway": 6
+          },
+          {
+            "day": 3960,
+            "year": 11,
+            "partiesPhysicallyAway": 1
+          },
+          {
+            "day": 4320,
+            "year": 12,
+            "partiesPhysicallyAway": 1
+          },
+          {
+            "day": 4680,
+            "year": 13,
+            "partiesPhysicallyAway": 1
+          },
+          {
+            "day": 5040,
+            "year": 14,
+            "partiesPhysicallyAway": 3
+          },
+          {
+            "day": 5760,
+            "year": 16,
+            "partiesPhysicallyAway": 2
+          }
+        ],
+        "sampledDaily": true,
+        "note": "sampled DAILY on purpose. CORRECTION-34A and -34D both record that a season-boundary sample reports zero here and is a sampling artefact, not a fact about the world.",
+        "verdict": "OBSERVED_A_PARTY_AWAY_ACROSS_AN_ANNUAL_DEMOGRAPHIC_BOUNDARY"
+      }
+    },
+    "frozenRegression": {
+      "AUDIT_27": {
+        "cases": 11,
+        "verdicts": [
+          "C1:PHYSICAL_SHARE_REDUCED_BY_SECOND_BAND",
+          "C2:NOT_SEPARABLE_AT_PRODUCTION_RADII",
+          "C3:NOT_REPRESENTABLE_IN_FIXTURE",
+          "C4:NO_OBSOLETE_CROWDING",
+          "C5:PHYSICAL_RELEASES_PERCEPTION_DOES_NOT",
+          "C6:CLEAN_TERMINAL_RELEASE",
+          "C7:PHYSICAL_COMPETITION_UNCHANGED_BY_KINSHIP",
+          "C8:CAPACITY_SENSITIVE",
+          "C9:ORDER_INVARIANT",
+          "C10:SOCIAL_KNOWLEDGE_ACQUIRED_CHECK_PROVENANCE",
+          "C10b:NO_SOCIAL_KNOWLEDGE_WITHOUT_PROXIMITY"
+        ]
+      },
+      "CORRECTION_28": {
+        "fixtures": 12,
+        "fieldScanParityMismatches": 0
+      },
+      "CORRECTION_29": {
+        "fixtures": 12
+      },
+      "CORRECTION_30": {
+        "fixtures": 15
+      },
+      "CORRECTION_31": {
+        "fixtures": 22
+      },
+      "CORRECTION_32": {
+        "fixtures": 21,
+        "vacuous": 0
+      },
+      "CORRECTION_32A_zeroControls": {
+        "fixtures": 6,
+        "vacuous": 0,
+        "violatingCandidates": 0
+      },
+      "CORRECTION_33": {
+        "fixtures": 20,
+        "vacuous": 0,
+        "adverse": []
+      },
+      "CORRECTION_34_presence_50y": {
+        "fixtures": 10,
+        "vacuous": [
+          "P8_P18_terminal_records_occupy_nothing"
+        ],
+        "adverse": [],
+        "P9": "CONCURRENT_PARTIES_CONSERVED"
+      },
+      "CORRECTION_34A_closure": {
+        "fixtures": 12,
+        "unexpected": 0,
+        "deferred": 5,
+        "notConstructed": 0
+      },
+      "CORRECTION_34B_R1_R12": {
+        "fixtures": 12,
+        "failing": 0,
+        "vacuous": 0
+      },
+      "CORRECTION_34C_L1_L12": {
+        "fixtures": 12,
+        "failing": 0,
+        "vacuous": 0
+      },
+      "CORRECTION_34D_H1_H14": {
+        "fixtures": 14,
+        "failing": 0,
+        "vacuous": 0
+      },
+      "CORRECTION_34E_T1_T14": {
+        "fixtures": 14,
+        "failing": 0,
+        "vacuous": 0,
+        "notConstructed": 0
+      },
+      "CORRECTION_34F_Z0_Z12": {
+        "fixtures": 13,
+        "failing": 0,
+        "vacuous": 0
+      },
+      "personConservation": {
+        "fixtures": 9,
+        "unexpected": 0
+      },
+      "numericResourceChain": "NUMERIC_RESOURCE_CHAIN_RECONCILED"
+    },
+    "structural": {
+      "tscApp": "PASS",
+      "tscNode": "PASS",
+      "build": "PASS",
+      "graph": "221/764, 0 dup, 0 dangling",
+      "importBoundary": "85 internal back-edges — unchanged since CORRECTION-28",
+      "seasonOrderInvariance": "PASS",
+      "stepModeInvariance": "PASS",
+      "stepModeFourWay": "ALL_FOUR_STEP_MODES_IDENTICAL",
+      "catchmentInvariants": "PASS",
+      "foodPipeline": "PASS",
+      "mobilityAuthority": "PASS",
+      "socialCausality": "ran clean"
+    },
+    "frozenEvidenceIntegrity": "IDENTICAL"
+  }
+}
