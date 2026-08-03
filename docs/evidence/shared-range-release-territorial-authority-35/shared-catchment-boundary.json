@@ -1,0 +1,49 @@
+{
+  "audit": "CORRECTION-35-SHARED-CATCHMENT-BOUNDARY",
+  "productionChangedByThisCheckpoint": false,
+  "verifiedBy": "git diff 742b567..HEAD -- src/sim/agents/sharedCatchment.ts is empty",
+  "seed": "audit27:natural:s1",
+  "warmDays": 3600,
+  "livingBands": 9,
+  "exportedNames": [
+    "buildSharedCatchmentIndex",
+    "getBandForagingFootprint",
+    "getOverlappingBandIds",
+    "getSharedCatchmentIndex",
+    "getTileSupportShare"
+  ],
+  "anchorEvidence": {
+    "measured": true,
+    "band": "band:varied-dry-corridor-mid",
+    "residenceTile": "tile:60:108",
+    "movedTo": "tile:63:106",
+    "hasResidentialAnchor": true,
+    "anchorCatchmentTiles": 16,
+    "tilesAtResidence": 14,
+    "movingPositionOnly": {
+      "tiles": 14,
+      "footprintChanged": false,
+      "overlapWithOriginal": 14
+    },
+    "movingPositionWithNoAnchor": {
+      "tiles": 0,
+      "footprintChanged": true,
+      "overlapWithOriginal": 0,
+      "whyZero": "the fallback ring keeps only tiles the band has ITSELF observed (`band.knowledge.observedTiles[tileId]`). Dropped at a distant tile it has never seen, the band claims NOTHING — which is the anti-omniscience rule doing its job, not an empty measurement. The footprint moved; it moved to nothing."
+    },
+    "finding": "collectFootprintCandidateIds prefers band.residentialAnchor.catchmentTileIds and only falls back to a ring around band.position when no anchor exists. So the footprint is anchored on the RESIDENTIAL ANCHOR, which is a stronger and more specific form of residence-anchoring than 'wherever the band currently stands'. Moving the position alone does not move it (ARM 1); removing the anchor does (ARM 2). Either way it is drawn about where the band LIVES, and never about a route or a task camp."
+  },
+  "boundary": {
+    "residentialCatchmentClaim": "RESIDENCE-ANCHORED, and specifically anchored on band.residentialAnchor.catchmentTileIds, falling back to a bounded ring around band.position when no anchor is held. Two bands contest a range only where these overlap.",
+    "expeditionTargetWork": "REMOVES PHYSICAL STOCK at the target tile, through resolvePhysicalFoodHarvest. This is real, world-level depletion.",
+    "aLaterGroupAtTheSameTarget": "OBSERVES THE DEPLETED STOCK, because the stock is world state rather than a per-band ledger. This is the one genuine shared-use channel that reaches beyond the residential catchment.",
+    "routeWalking": "CREATES NO CATCHMENT CLAIM. A party crossing country competes with nobody for it.",
+    "taskCamp": "CLAIMS NO RANGE. TemporaryTaskPartyRecord asserts noCamp: true and no footprint is drawn around it."
+  },
+  "remainingLimitation": {
+    "statement": "the physical shared-use substrate is still residence-anchored, so real trips, expedition routes and investigation walks compete for nothing along their length",
+    "consequence": "two bands whose parties repeatedly cross the same country, without either living there, generate no ecological competition and no crowding from that crossing",
+    "status": "OPEN — a FUTURE DEPENDENCY, not closed by CORRECTION-35 and not closed by Item 3",
+    "doNotRemoveThisOnFreeze": "this limitation predates CORRECTION-35 (AUDIT-27 recorded it) and survives it. Freezing Item 3 does not resolve it and must not be read as resolving it."
+  }
+}

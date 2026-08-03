@@ -1,0 +1,91 @@
+{
+  "audit": "CORRECTION-35-NATURAL-OCCURRENCE",
+  "seed": "audit27:natural:map2:s1",
+  "years": 200,
+  "days": 72000,
+  "samplingCadence": {
+    "territorialField": "daily (stored field)",
+    "protoAccessMemory": "once per tick (its own derivation cadence; there is no finer value to observe)"
+  },
+  "releaseLifecycle": {
+    "placeSamples": 55714,
+    "bandTicksSampled": 6996,
+    "phaseActive": 378,
+    "phaseCooling": 260,
+    "phaseReleased": 307,
+    "phaseNone": 54769,
+    "placesInCorrectedInterval": 2,
+    "placesAtExactlyZeroWeight": 307,
+    "placesAtOrAboveThreshold": 636,
+    "releasedWithNonZeroWeight": 0,
+    "coolingWithZeroWeight": 0,
+    "countsDisagreeingWithRecordTotal": 0,
+    "activeCountZeroWithNonZeroWeight": 0,
+    "correctedIntervalExamples": [
+      {
+        "day": 69660,
+        "tick": 774,
+        "band": "band:varied-estuary",
+        "tile": "tile:190:87",
+        "weight": 0.04,
+        "phaseNow": "cooling",
+        "phaseUnderParentRule": "released_historical",
+        "activeCountNow": 1,
+        "historicalCountNow": 0
+      },
+      {
+        "day": 70830,
+        "tick": 787,
+        "band": "band:varied-estuary",
+        "tile": "tile:191:87",
+        "weight": 0.04,
+        "phaseNow": "cooling",
+        "phaseUnderParentRule": "released_historical",
+        "activeCountNow": 1,
+        "historicalCountNow": 0
+      }
+    ],
+    "countMismatchExamples": [],
+    "correctedIntervalShare": 0,
+    "interpretation": "the corrected interval IS occupied naturally; every one of these places was published as released_historical by the parent while still moving behaviour",
+    "contradictionsAfterCorrection": 0
+  },
+  "territorialPressure": {
+    "bandDaysSampled": 628919,
+    "distinctBandValues": [
+      0.12,
+      0.1264
+    ],
+    "valueChangesOutsideDaughterCreation": 0,
+    "daughterCreationsObserved": 1,
+    "bandsWithNoSocialEvidenceHoldingNonZeroValue": 552147,
+    "socialPressureProfileValues": [
+      0.08
+    ],
+    "changeExamples": [],
+    "bandsProbedOnFinalWorld": 8,
+    "bandsWhereVaryingTheFieldMovedPressure": 0,
+    "interpretation": "varying the field across its whole range moves no band's pressure on the final natural world"
+  },
+  "itemThreeIncidentReMeasured": {
+    "measured": false,
+    "incidentDay": 44640,
+    "horizonDays": 72000,
+    "incidentDayReached": true,
+    "incidentBandPresent": false,
+    "bandsPresentOnThatDay": [
+      "band:varied-dry-corridor-mid",
+      "band:varied-dry-corridor-upper",
+      "band:varied-estuary",
+      "band:varied-estuary:daughter:1:t436",
+      "band:varied-lake-east",
+      "band:varied-lake-north",
+      "band:varied-lake-west",
+      "band:varied-pass-frontier",
+      "band:varied-plains-creek",
+      "band:varied-river-mid"
+    ],
+    "reason": "day 44640 was reached but band band:varied-estuary:daughter:1:t412 does not exist in THIS tree's world. That is expected on the corrected tree: Part B changes movement decisions, so a 200-year trajectory diverges from the parent's and a daughter lineage founded at tick 412 in one world need not exist in the other. The incident must be re-measured on the tree where it was found — run this audit in a parent worktree.",
+    "incidentDayReachedNote": "reported explicitly so 'not measured' is never mistaken for 'measured zero'"
+  }
+}

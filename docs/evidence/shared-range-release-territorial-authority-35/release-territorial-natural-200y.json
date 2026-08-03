@@ -1,0 +1,68 @@
+{
+  "audit": "CORRECTION-35-NATURAL-OCCURRENCE",
+  "seed": "audit27:natural:s1",
+  "years": 200,
+  "days": 72000,
+  "samplingCadence": {
+    "territorialField": "daily (stored field)",
+    "protoAccessMemory": "once per tick (its own derivation cadence; there is no finer value to observe)"
+  },
+  "releaseLifecycle": {
+    "placeSamples": 55592,
+    "bandTicksSampled": 6980,
+    "phaseActive": 420,
+    "phaseCooling": 388,
+    "phaseReleased": 198,
+    "phaseNone": 54586,
+    "placesInCorrectedInterval": 0,
+    "placesAtExactlyZeroWeight": 198,
+    "placesAtOrAboveThreshold": 808,
+    "releasedWithNonZeroWeight": 0,
+    "coolingWithZeroWeight": 0,
+    "countsDisagreeingWithRecordTotal": 0,
+    "activeCountZeroWithNonZeroWeight": 0,
+    "correctedIntervalExamples": [],
+    "countMismatchExamples": [],
+    "correctedIntervalShare": 0,
+    "interpretation": "NO place in this world occupies the corrected interval, so at this seed and horizon the parent's labels were already right and the correction changes no published field. That is a NULL OBSERVATION about frequency, not evidence that the defect does not exist — the Item 3 audit found it once in 448 released samples over 200 years, and the controlled fixtures L1/L2 are the proof it is real.",
+    "contradictionsAfterCorrection": 0
+  },
+  "territorialPressure": {
+    "bandDaysSampled": 627479,
+    "distinctBandValues": [
+      0.12,
+      0.1264
+    ],
+    "valueChangesOutsideDaughterCreation": 0,
+    "daughterCreationsObserved": 1,
+    "bandsWithNoSocialEvidenceHoldingNonZeroValue": 482127,
+    "socialPressureProfileValues": [
+      0.08
+    ],
+    "changeExamples": [],
+    "bandsProbedOnFinalWorld": 8,
+    "bandsWhereVaryingTheFieldMovedPressure": 0,
+    "interpretation": "varying the field across its whole range moves no band's pressure on the final natural world"
+  },
+  "itemThreeIncidentReMeasured": {
+    "measured": false,
+    "incidentDay": 44640,
+    "horizonDays": 72000,
+    "incidentDayReached": true,
+    "incidentBandPresent": false,
+    "bandsPresentOnThatDay": [
+      "band:varied-dry-corridor-mid",
+      "band:varied-dry-corridor-upper",
+      "band:varied-estuary",
+      "band:varied-estuary:daughter:1:t488",
+      "band:varied-lake-east",
+      "band:varied-lake-north",
+      "band:varied-lake-west",
+      "band:varied-pass-frontier",
+      "band:varied-plains-creek",
+      "band:varied-river-mid"
+    ],
+    "reason": "day 44640 was reached but band band:varied-estuary:daughter:1:t412 does not exist in THIS tree's world. That is expected on the corrected tree: Part B changes movement decisions, so a 200-year trajectory diverges from the parent's and a daughter lineage founded at tick 412 in one world need not exist in the other. The incident must be re-measured on the tree where it was found — run this audit in a parent worktree.",
+    "incidentDayReachedNote": "reported explicitly so 'not measured' is never mistaken for 'measured zero'"
+  }
+}
