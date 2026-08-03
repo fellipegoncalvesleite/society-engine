@@ -1,0 +1,16 @@
+{
+  "audit": "physicalPresenceFixturesAudit",
+  "checkpoint": "CORRECTION-34",
+  "arm": "after",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "years": 6,
+  "samplingResolution": "DAILY",
+  "authorityPresentOnThisArm": true,
+  "generatedAt": "2026-08-03T00:13:22.689Z",
+  "purpose": "physical co-presence must not become observation, encounter, friction or fear without an evidence authority",
+  "partyDerivedEncounterAuthorities": 0,
+  "partyDerivedFrictionAuthorities": 0,
+  "ownPartyCountedAsForeign": 0,
+  "note": "getBandPhysicalPresence feeds ONLY the physical crowding field. No encounter, friction or access-memory authority reads it, so a party creates no social consequence — the substrate exposes co-presence without inventing perception (§12.2)."
+}

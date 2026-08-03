@@ -202,6 +202,31 @@ CORRECTION-33 frozen at `5ebb5e98`; `main` untouched at `0a43083a`.
 3. **`expeditionLifecycleAudit` repaired** — daily canonical (operating 130 / returning 488 /
    task-camp 375 / concurrent TRUE) vs seasonal (0/0/0/FALSE). **PASS, 0 failed checks.**
 
+**CORRECTION-34C — away-body / cohort / fission ownership (latest)**
+
+34B bounded the party by `workingAdults`. That is labour, and it falls on ordinary aging with
+population untouched, so a cohort reclassification deleted a body from a distant party.
+Reproduced: **`COHORT AGING TELEPORTS AWAY BODY`** (residential 14->15, away 6->5, no physical
+event). Fission could also found a daughter from people standing on an expedition route.
+
+Repaired, **Option A minimal, three changes**: the reconciler bounds on **population (bodies)**;
+`createDaughterBand` caps the daughter at `population - awayPartyPeople` and blocks below
+`DAUGHTER_MIN_POPULATION`; `getBandForagingDraw` removes the aged-away overflow from elders.
+
+Ownership is now explicit: **headcount <- population · labour <- getResidentialWorkingAdults ·
+cohort identity <- demography (classification only) · role composition <- bandMobility**.
+`committed > workingAdults` is now **legitimate**, not a conservation failure.
+
+**L1-L12: 12/12.** 34B's R1-R12 re-pointed at the population trigger: **12/12**. Natural 20 y/50 y:
+**0** annual boundaries crossed by active parties, all headcount changes are physical returns,
+**0** by reconciliation. Parties last <=24 days against annual demography, so natural overlap does
+not occur — the fixtures are the proof, not the zero.
+
+**Roadmap Item 4 remains unstarted.** This set only the ownership boundary. Party age cohorts and
+locating a death inside a party need the future individual/household layer.
+
+---
+
 **CORRECTION-34B — partial reconciliation consistency (latest)**
 
 Supervising review found CORRECTION-34A's `reconcileExpeditionCommitment` reduced `partyWorkers`

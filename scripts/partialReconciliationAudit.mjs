@@ -68,14 +68,18 @@ try {
     },
   };
 
-  // Workforce falls to five while the party is away. Population falls by the same one person, so
-  // the demographic change itself is internally consistent and only the PARTY is in question.
+  // CORRECTION-34C — the trigger is POPULATION, not the working-adult cohort. This probe used to
+  // drop `workingAdults` to five, which was the old (wrong) trigger: a cohort reclassification
+  // moves nobody, so it must no longer resize a party. To exercise the partial-reduction path the
+  // band must genuinely not have the bodies, so POPULATION is set to five.
   const band = {
     ...base,
     demography: {
       ...base.demography,
+      population: 5,
       workingAdults: 5,
-      population: Math.max(5, base.demography.population - (base.demography.workingAdults - 5)),
+      elders: 0,
+      dependents: 0,
     },
     expeditions: [party],
   };
@@ -141,7 +145,11 @@ try {
       Math.abs((before.harvestUnits + before.lostUnits) - (after.harvestUnits + after.lostUnits)) < 1e-9,
     cargoNotIncreased: after.harvestUnits <= before.harvestUnits + 1e-9,
     capacityNotIncreased: after.carryCapacityUnits <= before.carryCapacityUnits + 1e-9,
-    committedWithinWorkforce: after.committedViaGetCommittedExpeditionWorkers <= after.workingAdults,
+    // CORRECTION-34C — the conservation bound is BODIES. `committed <= workingAdults` is NOT an
+    // invariant: an away adult who ages into the elder cohort leaves the band with more people
+    // committed than it has working adults, and nobody moved. The obsolete assertion is retained
+    // as an observation so the change is visible rather than silently dropped.
+    committedWithinPopulation: after.committedViaGetCommittedExpeditionWorkers <= after.population,
     awayWithinPopulation: after.physicalAwayPeople <= after.population,
     presenceConserved: after.representedPopulation === after.population,
     catchmentAgreesWithCommittedWorkers: null, // filled below
@@ -151,7 +159,11 @@ try {
   const actualEffortAdults = after.workingAdults - after.committedViaDeriveCommittedMobilityPools;
   checks.catchmentAgreesWithCommittedWorkers = expectedEffortAdults === actualEffortAdults;
 
-  const failing = Object.entries(checks).filter(([, v]) => v === false).map(([k]) => k);
+  checks.observation_committedExceedsWorkingAdults_isLegitimateAfter34C =
+    after.committedViaGetCommittedExpeditionWorkers > after.workingAdults;
+  const failing = Object.entries(checks)
+    .filter(([k, v]) => v === false && !k.startsWith("observation_"))
+    .map(([k]) => k);
   const headline = failing.length === 0 ? "PARTIAL RECONCILIATION CONSISTENT" : "PARTIAL RECONCILIATION SPLIT AUTHORITY";
 
   out = {

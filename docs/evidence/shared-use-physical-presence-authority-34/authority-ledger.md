@@ -51,3 +51,18 @@
 | `prepared` termination | **NOT A DEATH.** `aborted` + `commitment_unsupported`; only away parties below the minimum are `lost`. |
 | `getBandPhysicalPresence` documentation | **CONTRADICTION REMOVED.** The file no longer says both "CONSERVES PEOPLE" and "NOT self-conserving"; it reports canonical state, conservation depends on upstream validity, and it never silently resizes a party. |
 | provisions | **TRIP-LOCAL ACCOUNTING ABSTRACTION, not a conserved store.** Stated explicitly; full material conservation is not claimed for provisions. |
+
+---
+
+## CORRECTION-34C amendment
+
+| Authority | Status |
+| --- | --- |
+| physical party headcount | **BOUNDED BY POPULATION (bodies).** Previously bounded by `workingAdults`, which made cohort aging delete a distant body. |
+| productive working-adult labour | `getResidentialWorkingAdults`, clamped at 0. Unchanged and correct. |
+| demographic cohort identity | `demography.ts`. Changes classification ONLY — never location. |
+| fission founders | **PHYSICALLY RESIDENTIAL PEOPLE ONLY.** `min(getDaughterPopulation(total), population − awayPartyPeople)`, blocked below `DAUGHTER_MIN_POPULATION`. |
+| residential catchment effort | Aged-away overflow now removed from **elders** as well as adults, so an away person who aged contributes no local effort. |
+| `getBandCommitmentAccounting.conserved` | Tests **bodies** (`committed <= population`). `awayHeadcountExceedsWorkingAdults` reported separately — it is legitimate. |
+| `reconcileExpeditionCommitment` | **DEFENSIVE REPAIR for corrupt/legacy state.** Cannot fire on ordinary demography; claims no physical mechanism. |
+| party-local loss | Requires a party-local physical outcome. Never inferred from cohort aging. |

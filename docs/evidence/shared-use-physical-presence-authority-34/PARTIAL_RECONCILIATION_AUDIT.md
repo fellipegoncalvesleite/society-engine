@@ -152,3 +152,20 @@ against this defect").
 - Reconciliation is one-way: a party does not regrow when the cohort recovers (R10). That is
   deliberate — people do not walk back to a distant party because the census improved.
 - One map and seed underlie the natural sweep.
+
+---
+
+## CORRECTION-34C amendment — the trigger moved from labour to bodies
+
+This document's fixtures were built around the `workingAdults` trigger. CORRECTION-34C establishes
+that a working-adult fall is **not** grounds to resize a party: it is a labour reclassification and
+can occur through ordinary aging with population untouched.
+
+R1–R12 were therefore re-pointed at the **population** trigger and re-run: **12/12, 0 vacuous**,
+`PARTIAL RECONCILIATION CONSISTENT`. Everything they establish about partial reduction — workers,
+composition, ceiling, cargo and pace moving together, high→typical→limited removal, `harvest+lost`
+invariant, phase-appropriate termination — is unchanged and still holds. Only the circumstance that
+*causes* a reduction is narrower, and correctly so.
+
+The obsolete assertion `committed <= workingAdults` is retained as a labelled observation rather
+than deleted, so the semantic change is visible in the evidence.

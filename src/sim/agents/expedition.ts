@@ -280,16 +280,43 @@ export function reconcileExpeditionCommitment(band: Band, currentTick: number): 
     return band;
   }
 
-  const workforce = Math.max(0, band.demography?.workingAdults ?? 0);
+  // ── CORRECTION-34C — THE BOUND IS BODIES, NOT LABOUR. ───────────────────────────────────────
+  //
+  // This function used to bound the party by `demography.workingAdults`, which made every fall in
+  // the working-adult cohort permission to delete a body from a distant party. `workingAdults` is
+  // a LABOUR CLASSIFICATION and it falls for reasons that move nobody — most obviously ordinary
+  // aging, where `demography.ts` does `adults -= adultsAged; elders += adultsAged;` with
+  // `population` untouched. Measured on a band whose workforce had already declined to its party
+  // size, one adult-to-elder transition moved a person from the expedition tile to the residence
+  // with no route, return, communication, death or transfer: `COHORT AGING TELEPORTS AWAY BODY`.
+  //
+  // A party's headcount is a count of PHYSICAL BODIES. The only thing that can make a body
+  // impossible is the band not having that person at all, so the bound is `population`. An adult
+  // who becomes an elder while away is still standing exactly where they were; they are now an
+  // elder who happens to be on an expedition. Their labour is handled separately and correctly by
+  // `getResidentialWorkingAdults`, which clamps at zero.
+  //
+  // WHAT THIS FUNCTION NOW MEANS. With a population bound it can no longer fire on ordinary
+  // demography. `population` falling below the committed headcount is not an event the simulation
+  // produces through any normal path — fission is bounded by residential availability
+  // (`createDaughterBand`), deaths reduce population and the party together only through explicit
+  // party outcomes, and the launch authority cannot overcommit. So this is a DEFENSIVE REPAIR for
+  // corrupted or legacy state, not a demographic response. It deliberately does NOT claim to know
+  // a physical mechanism for the reduction, because there isn't one: when it fires, something
+  // upstream is already wrong.
+  //
+  // Party-local loss must come from a party-local physical outcome (`party_lost` past the hard
+  // deadline, injury-forced return, provisions exhausted). It is never inferred from cohort aging.
+  const physicalPeople = Math.max(0, band.demography?.population ?? band.size ?? 0);
   let committed = getCommittedExpeditionWorkers(band);
 
-  if (committed <= workforce) {
+  if (committed <= physicalPeople) {
     return band;
   }
 
   const next = [...expeditions];
 
-  for (let index = next.length - 1; index >= 0 && committed > workforce; index -= 1) {
+  for (let index = next.length - 1; index >= 0 && committed > physicalPeople; index -= 1) {
     const expedition = next[index];
 
     if (!isExpeditionAway(expedition.phase)) {
@@ -297,7 +324,7 @@ export function reconcileExpeditionCommitment(band: Band, currentTick: number): 
     }
 
     const workers = Math.max(0, expedition.partyWorkers ?? 0);
-    const reduced = Math.max(0, workers - (committed - workforce));
+    const reduced = Math.max(0, workers - (committed - physicalPeople));
 
     if (reduced < EXPEDITION_MIN_PARTY_WORKERS) {
       // A prepared party never departed: its people are standing in camp and are already inside
@@ -360,6 +387,7 @@ export function getBandCommitmentAccounting(band: Band): {
   readonly committedAwayWorkers: number;
   readonly dependents: number;
   readonly conserved: boolean;
+  readonly awayHeadcountExceedsWorkingAdults: boolean;
 } {
   const demography = band.demography;
   const population = Math.max(0, demography?.population ?? band.size ?? 0);
@@ -371,7 +399,16 @@ export function getBandCommitmentAccounting(band: Band): {
     workingAdults,
     committedAwayWorkers,
     dependents: Math.max(0, demography?.dependents ?? 0),
-    conserved: committedAwayWorkers <= workingAdults && committedAwayWorkers <= population,
+    // CORRECTION-34C — CONSERVATION IS ABOUT BODIES. `committedAwayWorkers` is a headcount of
+    // people standing somewhere else, so the only conservation question is whether the band has
+    // that many people. It is NOT a defect for the away headcount to exceed `workingAdults`: an
+    // adult who ages to elder while away is still away, and the band then legitimately has more
+    // people committed than it has working adults. Labour availability is a separate question,
+    // answered by `getResidentialWorkingAdults`, which clamps at zero.
+    conserved: committedAwayWorkers <= population,
+    // Reported separately so a caller can see the labour picture without it being mistaken for a
+    // conservation failure.
+    awayHeadcountExceedsWorkingAdults: committedAwayWorkers > workingAdults,
   };
 }
 

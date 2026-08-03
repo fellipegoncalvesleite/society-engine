@@ -109,3 +109,23 @@ at camp and must not be declared lost.
 **The aggregate-model limit is stated, not hidden:** cohorts have no individual identity, so a
 workforce decline cannot reveal who was lost. The removal order is a deterministic accounting
 convention chosen for monotonicity, not an anthropological claim.
+
+---
+
+## CORRECTION-34C — away-body ownership: Option A, minimal
+
+34B bounded the party by `workingAdults`. That is labour, not bodies, and it falls on ordinary
+aging — reproduced as `COHORT AGING TELEPORTS AWAY BODY`.
+
+| Option | Decision |
+| --- | --- |
+| **A — protect away people upstream** | **SELECTED, minimal form.** Fission draws only from physically residential people; cohort reclassification never touches a party; the headcount bound is population. |
+| B — party people as new state distinct from party workers | Rejected here. The distinction is now *expressed* (headcount ← population, labour ← workingAdults) without adding a party-cohort model, which is Item 4 scope. |
+| C — suspend cohort/fission while parties are away | Rejected: coarse, and freezing demography because one small party exists is a hidden behavioural artifact. |
+| D — allocate demographic change by location | Rejected for now: needs party age cohorts, i.e. individual-ish structure this checkpoint must not invent. |
+
+Three changes: the reconciler bounds on `population`; `createDaughterBand` caps the daughter by
+residential availability and blocks below `DAUGHTER_MIN_POPULATION`; `getBandForagingDraw` removes
+the aged-away overflow from elders so an away person who aged stops contributing local effort.
+
+**Roadmap Item 4 remains unstarted.** This set only the ownership boundary.

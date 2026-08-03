@@ -281,9 +281,21 @@ function getFallbackFootprintCandidateIds(
 function getBandForagingDraw(band: Band): number {
   const demo = band.demography;
   const committedAway = partyCompositionTotal(deriveCommittedMobilityPools(band));
+
+  // CORRECTION-34C — the away headcount can exceed the working-adult cohort, and that is
+  // LEGITIMATE rather than a defect: a party is staffed from working adults, but one of them can
+  // age into the elder cohort while still standing at the target. `demography.ts` reclassifies
+  // them (`adults -= adultsAged; elders += adultsAged;`) without moving anybody.
+  //
+  // Subtracting the away headcount from adults alone would then leave that person counted in
+  // `elders`, contributing 0.85 of LOCAL extraction effort from an expedition tile. The overflow —
+  // away people the working-adult cohort can no longer account for — is therefore taken out of
+  // elders, which is the only cohort an away adult can have aged into. Dependents are never
+  // reduced: a party is not staffed from them, so an away person can never be one.
   const adults = Math.max(0, demo.workingAdults - committedAway);
+  const agedAwayOverflow = Math.max(0, committedAway - Math.max(0, demo.workingAdults));
+  const elders = Math.max(0, Math.max(0, demo.elders) - agedAwayOverflow);
   const dependents = Math.max(0, demo.dependents);
-  const elders = Math.max(0, demo.elders);
 
   return Math.max(1, adults * 1.0 + dependents * 0.65 + elders * 0.85);
 }

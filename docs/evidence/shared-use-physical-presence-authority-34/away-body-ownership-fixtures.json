@@ -1,0 +1,308 @@
+{
+  "audit": "CORRECTION-34C-AWAY-BODY-OWNERSHIP-FIXTURES",
+  "summary": {
+    "fixtures": 12,
+    "failing": 0,
+    "vacuous": 0
+  },
+  "verdicts": {
+    "L1_aging_without_movement": "NO_BODY_CHANGED_TILE",
+    "L2_dependent_becomes_adult": "MATURATION_DOES_NOT_TOUCH_PARTY",
+    "L3_ordinary_residential_death": "DEATH_CHANGES_RESIDENCE_NOT_THE_PARTY",
+    "L4_explicit_party_loss": "PARTY_LOCAL_OUTCOME_OWNS_THE_LOSS",
+    "L5_prepared_party_cancellation": "AT_CAMP_COMMITMENT_MOVES_NOBODY",
+    "L6_fission_with_sufficient_residential_population": "DAUGHTER_FROM_RESIDENTIAL_PEOPLE_PARTY_UNCHANGED",
+    "L7_fission_blocked_by_residential_unavailability": "BLOCKED_RATHER_THAN_BORROWING_AWAY_BODIES",
+    "L8_party_returns_after_protected_aging": "RETURN_RECONCILES_ONCE_NO_POPULATION_CREATED_OR_DELETED",
+    "L9_two_concurrent_parties_across_annual_demography": "BOTH_PARTIES_PHYSICALLY_CONSERVED",
+    "L10_population_collapse_below_away_headcount": "EXPLICIT_OUTCOME_AND_STATED_MODEL_LIMIT",
+    "L11_legacy_overcommitted_state": "DETERMINISTIC_DEFENSIVE_REPAIR_NO_INVENTED_HISTORY",
+    "L12_step_mode_equivalence_across_annual_boundary": "IDENTICAL_ACROSS_ALL_FOUR_MODES"
+  },
+  "fixtures": {
+    "L1_aging_without_movement": {
+      "verdict": "NO_BODY_CHANGED_TILE",
+      "beforeReconciliation": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "partyWorkers": 6,
+        "partyPhase": "operating",
+        "represented": 20
+      },
+      "afterReconciliation": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "partyWorkers": 6,
+        "partyPhase": "operating",
+        "represented": 20
+      },
+      "note": "workingAdults 6 -> 5 with population unchanged; the party keeps all six bodies at its own tile"
+    },
+    "L2_dependent_becomes_adult": {
+      "verdict": "MATURATION_DOES_NOT_TOUCH_PARTY",
+      "beforeMaturation": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "partyWorkers": 6,
+        "partyPhase": "operating",
+        "represented": 20
+      },
+      "afterMaturation": {
+        "population": 20,
+        "workingAdults": 6,
+        "elders": 7,
+        "dependents": 7,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "partyWorkers": 6,
+        "partyPhase": "operating",
+        "represented": 20
+      },
+      "afterReconciliation": {
+        "population": 20,
+        "workingAdults": 6,
+        "elders": 7,
+        "dependents": 7,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "partyWorkers": 6,
+        "partyPhase": "operating",
+        "represented": 20
+      },
+      "note": "residential maturation creates nobody inside the away party and does not change its headcount"
+    },
+    "L3_ordinary_residential_death": {
+      "verdict": "DEATH_CHANGES_RESIDENCE_NOT_THE_PARTY",
+      "before": {
+        "population": 20,
+        "workingAdults": 6,
+        "elders": 6,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "partyWorkers": 6,
+        "partyPhase": "operating",
+        "represented": 20
+      },
+      "afterReconciliation": {
+        "population": 19,
+        "workingAdults": 6,
+        "elders": 6,
+        "dependents": 7,
+        "residentialPeople": 13,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "partyWorkers": 6,
+        "partyPhase": "operating",
+        "represented": 19
+      },
+      "note": "population falls by one at the residence; the distant party is untouched"
+    },
+    "L4_explicit_party_loss": {
+      "verdict": "PARTY_LOCAL_OUTCOME_OWNS_THE_LOSS",
+      "snapshot": {
+        "population": 20,
+        "workingAdults": 6,
+        "elders": 6,
+        "dependents": 8,
+        "residentialPeople": 20,
+        "awayPeople": 0,
+        "awayTiles": [],
+        "partyWorkers": 0,
+        "partyPhase": "lost",
+        "represented": 20
+      },
+      "note": "a terminal party holds no body. Loss arrives through the party's own physical outcome (hard deadline, injury, provisions), never through cohort aging."
+    },
+    "L5_prepared_party_cancellation": {
+      "verdict": "AT_CAMP_COMMITMENT_MOVES_NOBODY",
+      "snapshot": {
+        "population": 20,
+        "workingAdults": 6,
+        "elders": 6,
+        "dependents": 8,
+        "residentialPeople": 20,
+        "awayPeople": 0,
+        "awayTiles": [],
+        "partyWorkers": 6,
+        "partyPhase": "prepared",
+        "represented": 20
+      },
+      "note": "prepared people are already inside the residential remainder; cancelling is a labour decision, not a movement or a death"
+    },
+    "L6_fission_with_sufficient_residential_population": {
+      "verdict": "DAUGHTER_FROM_RESIDENTIAL_PEOPLE_PARTY_UNCHANGED",
+      "population": 80,
+      "awayPartyPeople": 6,
+      "uncapped": 27,
+      "residentiallyAvailable": 74,
+      "capped": 27,
+      "blocked": false,
+      "note": "the cap does not bind when the residence is thick; the away party is not consulted because it is not drawn from"
+    },
+    "L7_fission_blocked_by_residential_unavailability": {
+      "verdict": "BLOCKED_RATHER_THAN_BORROWING_AWAY_BODIES",
+      "population": 60,
+      "awayPartyPeople": 48,
+      "uncapped": 20,
+      "residentiallyAvailable": 12,
+      "capped": 12,
+      "blocked": true,
+      "note": "the uncapped draw (20) would have exceeded the 12 people physically at camp. The daughter is not founded rather than borrowing bodies standing on an expedition route."
+    },
+    "L8_party_returns_after_protected_aging": {
+      "verdict": "RETURN_RECONCILES_ONCE_NO_POPULATION_CREATED_OR_DELETED",
+      "afterAgingPartyIntact": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "partyWorkers": 6,
+        "partyPhase": "operating",
+        "represented": 20
+      },
+      "afterReturn": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 20,
+        "awayPeople": 0,
+        "awayTiles": [],
+        "partyWorkers": 0,
+        "partyPhase": "completed",
+        "represented": 20
+      },
+      "note": "the aged person walks home with the party; population is 20 throughout and the elder cohort keeps the transition"
+    },
+    "L9_two_concurrent_parties_across_annual_demography": {
+      "verdict": "BOTH_PARTIES_PHYSICALLY_CONSERVED",
+      "before": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110",
+          "tile:79:111"
+        ],
+        "partyWorkers": 3,
+        "partyPhase": "operating",
+        "represented": 20
+      },
+      "after": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110",
+          "tile:79:111"
+        ],
+        "partyWorkers": 3,
+        "partyPhase": "operating",
+        "represented": 20
+      },
+      "awayTiles": [
+        "tile:78:110",
+        "tile:79:111"
+      ],
+      "note": "workingAdults 5 against 6 committed; neither party loses a body because the bound is population, not labour"
+    },
+    "L10_population_collapse_below_away_headcount": {
+      "verdict": "EXPLICIT_OUTCOME_AND_STATED_MODEL_LIMIT",
+      "after": {
+        "population": 3,
+        "workingAdults": 1,
+        "elders": 1,
+        "dependents": 1,
+        "residentialPeople": 0,
+        "awayPeople": 3,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "partyWorkers": 3,
+        "partyPhase": "operating",
+        "represented": 3
+      },
+      "partyPhase": "operating",
+      "outcomeReason": null,
+      "outcomeKind": "partial_reduction_above_minimum",
+      "residentialRemainderIsZero": true,
+      "modelLimit": "population below the away headcount is not reachable through any ordinary path once fission is bounded and aging no longer moves bodies. If it occurs, the state is already corrupt: the reconciler produces an explicit terminal outcome and does NOT claim to know which physical mechanism removed the people. No solution is invented."
+    },
+    "L11_legacy_overcommitted_state": {
+      "verdict": "DETERMINISTIC_DEFENSIVE_REPAIR_NO_INVENTED_HISTORY",
+      "after": {
+        "population": 12,
+        "workingAdults": 4,
+        "elders": 4,
+        "dependents": 4,
+        "residentialPeople": 0,
+        "awayPeople": 12,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "partyWorkers": 12,
+        "partyPhase": "operating",
+        "represented": 12
+      },
+      "deterministicAcrossRepeatedCalls": true,
+      "note": "handled defensively and identically every time; the outcome names no historical mechanism because none can be known"
+    },
+    "L12_step_mode_equivalence_across_annual_boundary": {
+      "verdict": "IDENTICAL_ACROSS_ALL_FOUR_MODES",
+      "spanDays": 1260,
+      "annualBoundariesCrossed": 3,
+      "expeditionRecordsPresentAcrossModes": 24,
+      "matches": {
+        "daily": true,
+        "weekly": true,
+        "monthly": true,
+        "seasonal": true
+      },
+      "note": "not marked PASS merely because no expedition was active — the expedition-record count is reported"
+    }
+  }
+}

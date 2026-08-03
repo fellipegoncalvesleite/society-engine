@@ -47,12 +47,19 @@ try {
     cargo: { harvestUnits: 0, carryCapacityUnits: cap(6), provisionUnitsConsumed: 0, lostUnits: 0 },
     ...over,
   });
-  const band = (workingAdults, expeditions, population) => ({
+  // CORRECTION-34C — these fixtures exercise PARTIAL REDUCTION, whose trigger is now POPULATION
+  // (physical bodies), not the working-adult cohort. The first argument is therefore the body
+  // count the band actually has. A cohort reclassification no longer resizes a party at all, which
+  // is what fixtures L1-L12 prove; these fixtures keep proving that WHEN a reduction does happen,
+  // every derived quantity moves with it.
+  const band = (bodies, expeditions, population) => ({
     ...base,
     demography: {
       ...base.demography,
-      workingAdults,
-      population: population ?? Math.max(workingAdults, base.demography.population),
+      population: population ?? bodies,
+      workingAdults: bodies,
+      elders: 0,
+      dependents: 0,
     },
     expeditions,
   });
@@ -70,7 +77,7 @@ try {
       e.phase === "prepared" || e.phase === "outbound" || e.phase === "operating" || e.phase === "returning");
     const workersOk = active.every((e) => e.partyComposition === undefined || e.partyWorkers === compTotal(e));
     const committedOk = expedition.getCommittedExpeditionWorkers(b) === committedPools(b);
-    const withinWorkforce = expedition.getCommittedExpeditionWorkers(b) <= b.demography.workingAdults;
+    const withinWorkforce = expedition.getCommittedExpeditionWorkers(b) <= b.demography.population;
     const presenceOk = total(b) === b.demography.population;
     const capacityOk = active.every((e) =>
       e.cargo.carryCapacityUnits <= expedition.deriveCarryCapacityUnits(b, e.partyWorkers, e.injuryLoad ?? 0, tick) + 1e-9);
@@ -90,7 +97,7 @@ try {
   // ---------------------------------------------------------------- R2 partial 6 -> 5
   {
     const carried = Number((cap(6) * 0.9).toFixed(4));
-    const b = band(5, [party({ cargo: { harvestUnits: carried, carryCapacityUnits: cap(6), provisionUnitsConsumed: 0, lostUnits: 0 } })], 15);
+    const b = band(5, [party({ cargo: { harvestUnits: carried, carryCapacityUnits: cap(6), provisionUnitsConsumed: 0, lostUnits: 0 } })]);
     const r = rec(b);
     const e = r.expeditions[0];
     const c = consistent(r);
@@ -111,7 +118,7 @@ try {
     const carried = Number((cap(8) * 0.95).toFixed(4));
     const p = party({ partyWorkers: 8, partyComposition: { limited: 2, typical: 4, high: 2 },
       cargo: { harvestUnits: carried, carryCapacityUnits: cap(8), provisionUnitsConsumed: 0, lostUnits: 0 } });
-    const b = band(4, [p], 20);
+    const b = band(4, [p]);
     const r = rec(b);
     const e = r.expeditions[0];
     const c = consistent(r);
@@ -125,7 +132,7 @@ try {
 
   // ---------------------------------------------------------------- R4 below minimum
   {
-    const b = band(1, [party({ partyWorkers: 6, cargo: { harvestUnits: 0.3, carryCapacityUnits: cap(6), provisionUnitsConsumed: 0, lostUnits: 0 } })], 10);
+    const b = band(1, [party({ partyWorkers: 6, cargo: { harvestUnits: 0.3, carryCapacityUnits: cap(6), provisionUnitsConsumed: 0, lostUnits: 0 } })]);
     const r = rec(b);
     const e = r.expeditions[0];
     const away = crowding.getBandPhysicalPresence(r).filter((s) => s.kind === "away_party");
@@ -146,7 +153,7 @@ try {
       cargo: { harvestUnits: 0, carryCapacityUnits: cap(4), provisionUnitsConsumed: 0, lostUnits: 0 } });
     const p2 = party({ id: "e:new", partyWorkers: 4, partyComposition: { limited: 1, typical: 2, high: 1 },
       cargo: { harvestUnits: 0, carryCapacityUnits: cap(4), provisionUnitsConsumed: 0, lostUnits: 0 } });
-    const b = band(6, [p1, p2], 20);
+    const b = band(6, [p1, p2]);
     const r = rec(b);
     const c = consistent(r);
     const byId = Object.fromEntries(r.expeditions.map((e) => [e.id, e]));
@@ -159,7 +166,7 @@ try {
 
   // ---------------------------------------------------------------- R6 prepared party
   {
-    const b = band(1, [party({ phase: "prepared", partyWorkers: 6 })], 10);
+    const b = band(1, [party({ phase: "prepared", partyWorkers: 6 })]);
     const r = rec(b);
     const e = r.expeditions[0];
     const away = crowding.getBandPhysicalPresence(r).filter((s) => s.kind === "away_party");
@@ -174,7 +181,7 @@ try {
   // ---------------------------------------------------------------- R7 outbound party
   {
     const p = party({ phase: "outbound", partyWorkers: 6, routeIndex: 1 });
-    const b = band(5, [p], 15);
+    const b = band(5, [p]);
     const r = rec(b);
     const e = r.expeditions[0];
     const c = consistent(r);
@@ -187,7 +194,7 @@ try {
   // ---------------------------------------------------------------- R8 operating with cargo
   {
     const carried = Number((cap(6) * 0.98).toFixed(4));
-    const b = band(5, [party({ phase: "operating", cargo: { harvestUnits: carried, carryCapacityUnits: cap(6), provisionUnitsConsumed: 0.002, lostUnits: 0.01 } })], 15);
+    const b = band(5, [party({ phase: "operating", cargo: { harvestUnits: carried, carryCapacityUnits: cap(6), provisionUnitsConsumed: 0.002, lostUnits: 0.01 } })]);
     const r = rec(b);
     const e = r.expeditions[0];
     add("R8_operating_with_cargo",
@@ -202,7 +209,7 @@ try {
   // ---------------------------------------------------------------- R9 returning with cargo
   {
     const carried = Number((cap(6) * 0.5).toFixed(4));
-    const b = band(5, [party({ phase: "returning", cargo: { harvestUnits: carried, carryCapacityUnits: cap(6), provisionUnitsConsumed: 0, lostUnits: 0 } })], 15);
+    const b = band(5, [party({ phase: "returning", cargo: { harvestUnits: carried, carryCapacityUnits: cap(6), provisionUnitsConsumed: 0, lostUnits: 0 } })]);
     const r = rec(b);
     const e = r.expeditions[0];
     add("R9_returning_with_cargo",
@@ -215,7 +222,7 @@ try {
 
   // ---------------------------------------------------------------- R10 workforce recovery
   {
-    const reduced = rec(band(5, [party()], 15));
+    const reduced = rec(band(5, [party()]));
     const recovered = rec({ ...reduced, demography: { ...reduced.demography, workingAdults: 15 } });
     const e = recovered.expeditions[0];
     add("R10_workforce_recovery_no_regrow",
@@ -231,7 +238,7 @@ try {
       party({ id: "e:done", phase: "completed", partyWorkers: 4 }),
       party({ id: "e:gone", phase: "lost", partyWorkers: 4 }),
       party({ id: "e:quit", phase: "aborted", partyWorkers: 4 }),
-    ], 10);
+    ]);
     const r = rec(b);
     add("R11_terminal_records_ignored",
       expedition.getCommittedExpeditionWorkers(b) === 0 && r === b ? "TERMINAL_RECORDS_COMMIT_NOTHING" : "UNEXPECTED",
@@ -243,7 +250,7 @@ try {
   {
     const legacy = party({ partyWorkers: 6 });
     delete legacy.partyComposition;
-    const b = band(5, [legacy], 15);
+    const b = band(5, [legacy]);
     const r = rec(b);
     const e = r.expeditions[0];
     add("R12_legacy_party_without_composition",

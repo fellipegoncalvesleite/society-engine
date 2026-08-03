@@ -437,3 +437,71 @@ self-conserving". It now says one thing in all three places: the read model **re
 expedition state; conservation depends on that state being valid, which
 `reconcileExpeditionCommitment` maintains upstream; and the read model never silently resizes a
 party. The JSDoc no longer claims unconditionally that `sum(people)` equals `population`.
+
+---
+
+# CORRECTION-34C — away-body, cohort and fission ownership
+
+## H1 — 34B's authorities agreed; the reason for moving them did not
+
+34B bounded the party by `demography.workingAdults`, a LABOUR classification that falls when
+`demography.ts:2532-2537` does `adults -= adultsAged; elders += adultsAged;` with population
+untouched. Reproduced against `c207d8a`: **`COHORT AGING TELEPORTS AWAY BODY`**, one person moved
+from the expedition tile to the residence with `physicalEventJustifyingLocationChange: null`.
+After 34C the same input leaves residential 14 / away 6 / partyWorkers 6, population 20 throughout.
+
+**Precision correction to the finding:** its illustrative numbers (workingAdults 10 → 9 with a party
+of 6) do NOT trigger the reconciler, because it fires only when committed > workforce and 6 ≤ 9.
+Recorded as a true negative. The mechanism is real; the triggering case is a workforce already
+declined to the party size.
+
+## H2 — the model cannot locate a death, and no longer pretends to
+
+Deaths are an aggregate net-rate quantity with no location field, and demography/viability/renewal
+contain zero expedition references. Resizing a party on a population fall was an assumption, not a
+derivation.
+
+## H3 — fission could found a daughter with people who were not at camp
+
+`getDaughterPopulation` read total population; `createDaughterBand` had zero expedition references.
+Now capped by `population − awayPartyPeople` and blocked below `DAUGHTER_MIN_POPULATION` (L7:
+population 60 with 48 away, uncapped draw 20 against 12 at camp → blocked, not borrowed).
+
+## H4 — ownership after the repair
+
+```
+physical party headcount   ← bounded by population (bodies)
+productive labour          ← getResidentialWorkingAdults, clamped at 0
+cohort identity            ← demography.ts, classification only
+mobility-role composition  ← bandMobility, capability only
+```
+
+`conserved` now tests `committed <= population`; `awayHeadcountExceedsWorkingAdults` is reported
+separately because it is **legitimate**, not a failure.
+
+A third change closes a residual the first two exposed: `getBandForagingDraw` now removes the
+aged-away overflow from **elders**, so an away person who aged no longer contributes 0.85 of LOCAL
+extraction effort from an expedition tile.
+
+## H5 — the reconciler is now a defensive repair
+
+It cannot fire on ordinary demography. It claims no physical mechanism, because when it fires the
+upstream state is already invalid. Party-local loss requires a party-local physical outcome.
+
+## H6 — fixtures and natural occurrence
+
+L1–L12: **12/12, 0 vacuous**. 34B's R1–R12 were re-pointed at the population trigger (they encoded
+the obsolete `workingAdults` one) and pass **12/12**; `PARTIAL RECONCILIATION CONSISTENT`.
+
+Natural 20 y / 50 y: **0 annual boundaries crossed by active parties**, all 302 / 720 headcount
+changes are **physical returns**, **0** attributable to reconciliation, 0 conservation failures.
+Parties last ≤24 days against annual demography, so overlap does not occur naturally — **a zero
+here is not proof, the fixtures are**.
+
+## H7 — two more instrument errors in this pass's own probes
+
+1. The natural probe classified every ordinary physical return as a reconciliation (302 false
+   "unexplained" at 20 y) because a terminal party is pruned from `band.expeditions` into
+   `recentExpeditionOutcomes`; only the first store was consulted.
+2. L10 first asserted `phase === "lost"` when a 6→3 reduction correctly stays above the minimum and
+   is a partial reduction.

@@ -17,6 +17,10 @@ import type {
   SeasonalSupportState,
   TravelCorridorMemory,
 } from "./types";
+// CORRECTION-34C — the away-party headcount, read from the same leaf authority
+// `deriveAvailableMobilityPools` and the shared-catchment effort term use, so a fission cannot
+// disagree with them about who is physically at camp. `bandMobility` imports only types.
+import { deriveCommittedMobilityPools, partyCompositionTotal } from "./bandMobility";
 import { createDaughterDeepHistory } from "./bandHistory";
 import {
   inheritAdaptiveHumanForDaughter,
@@ -849,7 +853,30 @@ function createDaughterBand(
   }
 
   const parentPopulationBefore = toPopulationCount(parent.demography.population);
-  const daughterPopulation = getDaughterPopulation(parentPopulationBefore);
+
+  // ── CORRECTION-34C — A DAUGHTER IS FOUNDED BY PEOPLE WHO ARE PHYSICALLY HERE. ────────────────
+  //
+  // `getDaughterPopulation` reads the parent's TOTAL population, and nothing in this function ever
+  // knew about expeditions, so a fission could allocate founders who are standing on an expedition
+  // route or at its target — people who cannot walk out to found anything, because they are not at
+  // the camp the founding party leaves from. It could also drop the parent's cohorts beneath its
+  // own committed party and let the daily reconciler delete those bodies the next day.
+  //
+  // The founding draw is therefore capped by the people physically at the residence. The away
+  // headcount comes from `bandMobility`, a leaf module, and is the SAME authority
+  // `deriveAvailableMobilityPools` and the shared-catchment effort term already use, so "who is at
+  // camp" cannot diverge between readers. When too many people are away the daughter falls below
+  // `DAUGHTER_MIN_POPULATION` and the fission is BLOCKED rather than borrowing bodies it cannot
+  // reach — the parent may be numerically large while being physically thin at home.
+  //
+  // This is the minimum ownership boundary Item 3 needs. Full dynamic fission, daughter viability
+  // and successor groups remain Roadmap Item 4 and are NOT started here.
+  const awayPartyPeople = partyCompositionTotal(deriveCommittedMobilityPools(parent));
+  const residentiallyAvailable = Math.max(0, parentPopulationBefore - awayPartyPeople);
+  const daughterPopulation = Math.min(
+    getDaughterPopulation(parentPopulationBefore),
+    residentiallyAvailable,
+  );
 
   if (daughterPopulation < DAUGHTER_MIN_POPULATION) {
     return undefined;

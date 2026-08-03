@@ -1,0 +1,63 @@
+{
+  "audit": "CORRECTION-34C-T3-FISSION-WHILE-AWAY",
+  "headline": "FISSION MAY DRAW FROM AWAY BODIES (selection is population-based, not location-based)",
+  "productionRule": "getDaughterPopulation(parentPopulationBefore) reads TOTAL parent population; createDaughterBand contains ZERO expedition references",
+  "measurements": {
+    "parentPopulationBefore": 20,
+    "awayPartyPeople": 6,
+    "physicallyResidentialPeople": 14,
+    "impliedDaughterPopulation": 7,
+    "parentPopulationAfter": 13,
+    "daughterExceedsResidentiallyAvailable": false,
+    "shortfallDrawnFromAwayBodies": 0
+  },
+  "nextDayReconciliation": {
+    "parentAfterFissionSimulated": {
+      "label": "parent_after_fission",
+      "population": 15,
+      "workingAdults": 4,
+      "elders": 6,
+      "dependents": 5,
+      "residentialPeople": 9,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 6,
+      "awayTiles": [
+        "tile:74:110"
+      ],
+      "partyWorkers": 6,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 1
+      },
+      "partyCompositionTotal": 6,
+      "partyPhase": "operating",
+      "represented": 15
+    },
+    "afterReconciliation": {
+      "label": "parent_after_reconciliation",
+      "population": 15,
+      "workingAdults": 4,
+      "elders": 6,
+      "dependents": 5,
+      "residentialPeople": 9,
+      "residentialTile": "tile:74:111",
+      "awayPeople": 6,
+      "awayTiles": [
+        "tile:74:110"
+      ],
+      "partyWorkers": 6,
+      "partyComposition": {
+        "limited": 1,
+        "typical": 4,
+        "high": 1
+      },
+      "partyCompositionTotal": 6,
+      "partyPhase": "operating",
+      "represented": 15
+    },
+    "note": "even when the daughter fits inside the residential remainder, the parent's cohort recomputation can drop workingAdults below the committed party, and the reconciler then removes away bodies"
+  },
+  "canDaughterImplicitlyIncludeAwayPeople": true,
+  "limitation": "the daughter split is reproduced arithmetically from the published split fraction rather than by calling the module-private getDaughterPopulation; the ZERO expedition references in createDaughterBand is the load-bearing fact and is read directly from source"
+}

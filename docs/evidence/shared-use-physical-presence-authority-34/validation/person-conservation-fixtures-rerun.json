@@ -81,13 +81,13 @@
         "population": 2
       },
       "after": {
-        "committedAwayWorkers": 0,
+        "committedAwayWorkers": 2,
         "conserved": true,
         "represented": 2,
         "partyPhases": [
-          "lost"
+          "operating"
         ],
-        "stillAwayParties": 0
+        "stillAwayParties": 1
       },
       "note": "the party shrinks or is declared lost; the read model neither invents nor deletes people"
     },

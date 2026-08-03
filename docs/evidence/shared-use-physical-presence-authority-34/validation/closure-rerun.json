@@ -230,8 +230,8 @@
       "rows": [
         {
           "years": 20,
-          "elapsedMs": 5719,
-          "msPerSimDay": 0.7943,
+          "elapsedMs": 5757,
+          "msPerSimDay": 0.7996,
           "stateBytes": 76896969,
           "stateMB": 73.33,
           "livingBands": 9,
@@ -247,8 +247,8 @@
         },
         {
           "years": 50,
-          "elapsedMs": 14427,
-          "msPerSimDay": 0.8015,
+          "elapsedMs": 14430,
+          "msPerSimDay": 0.8017,
           "stateBytes": 78013849,
           "stateMB": 74.4,
           "livingBands": 9,

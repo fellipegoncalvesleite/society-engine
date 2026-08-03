@@ -1,0 +1,22 @@
+{
+  "audit": "physicalPresenceFixturesAudit",
+  "checkpoint": "CORRECTION-34",
+  "arm": "after",
+  "scenario": "map2",
+  "seed": "audit27:natural:map2:s1",
+  "years": 6,
+  "samplingResolution": "DAILY",
+  "authorityPresentOnThisArm": true,
+  "generatedAt": "2026-08-03T00:13:22.689Z",
+  "purpose": "same-day task parties — DEFERRED in this checkpoint, with the limitation stated explicitly",
+  "fixture": {
+    "id": "P15_P16_P17_same_day_parties_deferred",
+    "intent": "same-day task parties: whether ephemeral daily presence is represented",
+    "implemented": false,
+    "reason": "The selected architecture (Option D) corrects the PERSISTENT multi-day expedition defect only. A same-day party is created, walks and returns inside one day and production keeps no simultaneous daily presence snapshot, so representing it would require the Option-E daily ledger. Trip HARVEST and depletion remain physical and untouched.",
+    "completedTripRecordsCreateNoPresence": true,
+    "completedTripRecordsCreateNoPresenceProof": "getBandPhysicalPresence reads only band.position and band.expeditions; it contains no reference to recentIntraSeasonTrips, so a completed trip record cannot become current body presence (P17).",
+    "futureSeam": "an ephemeral daily presence ledger built from planned trips before physical resolution",
+    "verdict": "DEFERRED_SAME_DAY_PRESENCE_NOT_IMPLEMENTED"
+  }
+}
