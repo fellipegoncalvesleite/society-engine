@@ -1,0 +1,205 @@
+{
+  "audit": "CORRECTION-35-REGRESSION-SUMMARY",
+  "tree": "427d953 (+ successor commits)",
+  "parent": "742b567",
+  "note": "Every audit was run with EVERY output flag redirected into artifacts/. Frozen evidence directories were verified clean before and after. One frozen-evidence incident occurred, was restored before any commit, and is recorded in PROVENANCE.md.",
+  "structural": {
+    "tscApp": "PASS",
+    "tscNode": "PASS",
+    "build": "PASS",
+    "graph": "221/764, 0 duplicate, 0 dangling",
+    "importBoundary": "85 internal back-edges — UNCHANGED from CORRECTION-28 through -34F",
+    "seasonOrderInvariance": "PASS",
+    "stepModeInvariance": "PASS (fullCanonicalStateMatch true, firstDivergence null, both maps)",
+    "stepModeFourWay": "ALL_FOUR_STEP_MODES_IDENTICAL",
+    "catchmentInvariants": "PASS",
+    "foodPipeline": "PASS",
+    "mobilityAuthority": "PASS",
+    "socialCausality": "ran clean"
+  },
+  "itemThree": {
+    "integrationFixtures": {
+      "fixtures": 16,
+      "failing": 0,
+      "vacuous": 0,
+      "notConstructed": 0
+    },
+    "determinism": "ALL_FOUR_MODES_IDENTICAL_WITH_ITEM_3_BEHAVIOUR_PRESENT",
+    "freshProcess": "FRESH_PROCESS_IDENTICAL",
+    "releasedPlaceProbe": {
+      "releasedPlacesChecked": 305,
+      "incidentsFound": 0,
+      "interpretation": "no released place moved behaviour in the scanned window"
+    },
+    "naturalIntegration": [
+      {
+        "horizon": "20y",
+        "adverseTotal": 0,
+        "bandDays": 64800
+      },
+      {
+        "horizon": "50y",
+        "adverseTotal": 0,
+        "bandDays": 162000
+      },
+      {
+        "horizon": "200y",
+        "adverseTotal": 0,
+        "bandDays": 628919
+      },
+      {
+        "horizon": "20y-shared-range",
+        "adverseTotal": 0,
+        "bandDays": 64800
+      }
+    ]
+  },
+  "inheritedSuites": {
+    "audit27": {
+      "cases": 11,
+      "verdicts": [
+        "C1:PHYSICAL_SHARE_REDUCED_BY_SECOND_BAND",
+        "C2:NOT_SEPARABLE_AT_PRODUCTION_RADII",
+        "C3:NOT_REPRESENTABLE_IN_FIXTURE",
+        "C4:NO_OBSOLETE_CROWDING",
+        "C5:PHYSICAL_RELEASES_PERCEPTION_DOES_NOT",
+        "C6:CLEAN_TERMINAL_RELEASE",
+        "C7:PHYSICAL_COMPETITION_UNCHANGED_BY_KINSHIP",
+        "C8:CAPACITY_SENSITIVE",
+        "C9:ORDER_INVARIANT",
+        "C10:SOCIAL_KNOWLEDGE_ACQUIRED_CHECK_PROVENANCE",
+        "C10b:NO_SOCIAL_KNOWLEDGE_WITHOUT_PROXIMITY"
+      ]
+    },
+    "correction28": {
+      "fixtures": 12,
+      "fieldScanParityMismatches": 0
+    },
+    "correction29": {
+      "fixtures": 12
+    },
+    "correction30": {
+      "fixtures": 15
+    },
+    "correction31": {
+      "fixtures": 22
+    },
+    "correction32": {
+      "fixtures": 21,
+      "vacuous": 0
+    },
+    "correction32ZeroControls": {
+      "fixtures": 6,
+      "vacuous": 0,
+      "violating": 0
+    },
+    "correction33": {
+      "fixtures": 20,
+      "vacuous": 0,
+      "adverse": []
+    },
+    "correction34Presence20y": {
+      "fixtures": 10,
+      "vacuous": [
+        "P8_P18_terminal_records_occupy_nothing",
+        "P9_concurrent_parties"
+      ],
+      "adverse": []
+    },
+    "correction34Presence50y": {
+      "fixtures": 10,
+      "vacuous": [
+        "P8_P18_terminal_records_occupy_nothing"
+      ],
+      "adverse": []
+    },
+    "correction34aClosure": {
+      "fixtures": 12,
+      "unexpected": 0,
+      "deferred": 5
+    },
+    "personConservation": {
+      "fixtures": 9,
+      "unexpected": 0
+    },
+    "partialReconciliationR1R12": {
+      "fixtures": 12,
+      "failing": 0,
+      "vacuous": 0
+    },
+    "awayBodyL1L12": {
+      "fixtures": 12,
+      "failing": 0,
+      "vacuous": 0
+    },
+    "headcountH1H14": {
+      "fixtures": 14,
+      "failing": 0,
+      "vacuous": 0
+    },
+    "targetWorkT1T14": {
+      "fixtures": 14,
+      "failing": 0,
+      "vacuous": 0
+    },
+    "zeroLabourZ0Z12": {
+      "fixtures": 13,
+      "failing": 0,
+      "vacuous": 0
+    },
+    "numericResourceChain": "NUMERIC_RESOURCE_CHAIN_RECONCILED"
+  },
+  "performanceAndState": [
+    {
+      "years": 20,
+      "elapsedMs": 5812,
+      "msPerSimDay": 0.8072,
+      "stateBytes": 76979076,
+      "stateMB": 73.41,
+      "livingBands": 9,
+      "maxPresenceSourcesPerBand": 2,
+      "maxContributorsPerTile": 2,
+      "maxActivePartiesPerBand": 1,
+      "maxTripRecordsPerBand": 24,
+      "maxOutcomeRecordsPerBand": 6,
+      "staleTerminalPresenceEntries": 0,
+      "personConservationFailures": 0,
+      "duplicateExpeditionReceipts": 0,
+      "ephemeralDailyPresenceEntries": 0
+    },
+    {
+      "years": 50,
+      "elapsedMs": 14329,
+      "msPerSimDay": 0.7961,
+      "stateBytes": 78098399,
+      "stateMB": 74.48,
+      "livingBands": 9,
+      "maxPresenceSourcesPerBand": 3,
+      "maxContributorsPerTile": 2,
+      "maxActivePartiesPerBand": 2,
+      "maxTripRecordsPerBand": 24,
+      "maxOutcomeRecordsPerBand": 6,
+      "staleTerminalPresenceEntries": 0,
+      "personConservationFailures": 0,
+      "duplicateExpeditionReceipts": 0,
+      "ephemeralDailyPresenceEntries": 0
+    }
+  ],
+  "knownDeviations": [
+    {
+      "id": "P8_P18_terminal_records_occupy_nothing",
+      "status": "VACUOUS on BOTH parent and tip",
+      "note": "inherited from CORRECTION-34; named rather than counted as a pass, exactly as CLAUDE.md records it"
+    },
+    {
+      "id": "P9_concurrent_parties",
+      "status": "VACUOUS at 20y on the tip, non-vacuous on the parent at 20y, non-vacuous on the tip at 50y and 100y",
+      "note": "CORRECTION-35 Part B changes movement decisions, so the 20-year window on the corrected trajectory happens not to contain a concurrent-party overlap. Coverage is RESTORED at 50y (CONCURRENT_PARTIES_CONSERVED, only the inherited P8_P18 vacuous). Reported as a horizon artefact of a changed world, with the parent comparison, rather than as a pass."
+    },
+    {
+      "id": "expeditionLifecycleAudit",
+      "status": "not rerun",
+      "note": "inherited; CORRECTION-34A repaired it and it is not claimed here"
+    }
+  ]
+}

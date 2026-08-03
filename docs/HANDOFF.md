@@ -181,6 +181,95 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### RELEASED-EVIDENCE FIELD CONSISTENCY AND ORPHAN TERRITORIAL AUTHORITY — CORRECTION-35 — **CANDIDATE COMPLETE / AWAITING BROWSER GPT AUDIT / DO NOT MERGE**
+
+```text
+Roadmap Item 3:
+CORRECTION-35 candidate complete — awaiting Browser GPT audit
+
+Roadmap Item 4:
+not started
+```
+
+**Branch** `checkpoint/shared-range-release-territorial-authority-35`, from the Item 3
+final-integration candidate freeze head `742b567`. `main` untouched at `0a43083a`.
+**PRODUCTION BEHAVIOUR CHANGED — six files.**
+
+Two defects the Item 3 final audit named and did not fix.
+
+**PART A — the Item 3 blocker.** `types.ts` said in two places that a `released_historical` record
+"no longer moves anything". Every social contribution scales by `entry.weight`, so a record stops
+moving behaviour at weight **zero** — but the labels were derived from
+`weight >= SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT (0.05)`. Everything in `0 < weight < 0.05` was
+published as fully historical while still changing behaviour. Fixed by deriving the three lifecycle
+fields from `weight > 0` (an exact test — `weighSocialEvidence` returns `round2`), while `confidence`
+keeps reading the 0.05 set unchanged, which is that constant's real CORRECTION-31 job.
+
+**The incident is twice the published size.** Re-measured on the parent tree across all **six**
+access scalars instead of three: **0.04**, not `<= 0.02`, with **`kinTolerance` 0.02** the largest
+component — a scalar the original probe never read. The original three reproduce to the digit.
+The Item 3 `PROGRESS` verdict was correct; the magnitude was understated. Addendum appended, the
+original evidence not rewritten.
+
+**It changed no behaviour, cross-tree:** parent `742b567` vs lifecycle-only `e5e3143` produce
+identical digests for access behaviour (six scalars + confidence, 72 non-trivial place-rows),
+decisions, candidates, pressure state and every reason's reported pressure.
+
+**The blocker is closed by the instrument that found it:** `itemThreeReleasedPlaceProbe.mjs`,
+unmodified, reports **0 incidents** ("no released place moved behaviour"). Its denominator moves
+with the world (448 → 305) because Part B changes the trajectory, so that is *not* a like-for-like
+1 → 0 and is not offered as one; `L1`/`L2` are the like-for-like proof.
+
+**PART B — the orphan.** `Band.territorialPressure` is written twice ever (`0.12` at spawn,
+`clamp01(parent * 0.72 + 0.04)` at daughter creation) and reached behaviour through **three**
+readers — `pressure.ts` ×0.08, `mobilityIntent.ts` ×0.12, `bandDecision.ts` ×0.14. The brief named
+two; the inventory found the third, the one that scores movement intents. All three removed
+(Option A: field kept in state for schema, history and UI; no lived writer invented).
+
+**Reproduced before removal:** varying only the field across `0 / 0.12 / 0.8` moves **18 of 18**
+band-measurements on the parent and on the lifecycle-only commit, **0 of 18** on the tip. The
+attribution channel is genuinely measured — `low_mobility_pressure` `0.1523 → 0.1691 → 0.2643` on
+the parent, constant on the tip. **Zero-divergence control:** warm 0 days with every band's field
+pinned to 0, all three trees produce the **identical digest**, so removal is exactly equivalent to
+holding the field at zero and no reader survives.
+
+**Natural:** 64,800 / 162,000 band-days sampled daily — one distinct value, **0 changes outside
+daughter creation**, **0 bands moved by the field**. Part A's corrected interval is occupied
+**0 times** at the shared-range seed over 200 years and **2 of 55,714** place-samples at the incident
+seed; **0 contradictions** everywhere. The repair is justified by the contract, not by frequency.
+
+**Fixtures:** L1–L12 12/12 (1 NOT CONSTRUCTED, `L3`), T1–T12 12/12, C1–C8 8/8 — **0 failing, 0
+vacuous**. `T8` records a **second orphan**, `SocialPressureProfile.territorialPressure`, which has
+**zero readers repository-wide** and is documented rather than removed.
+
+**Regression:** tsc both, build, graph 221/764 0 dup 0 dangling, import boundary **85 back-edges
+unchanged**, season-order, step-mode (`fullCanonicalStateMatch`/`firstDivergence null`), four-way
+identical, fresh-process identical, catchment, food pipeline, mobility authority, socialCausality.
+Item 3 I1–I16 16/16 0 vacuous; natural integration **adverse 0** at 20/50/200 y. AUDIT-27 11/11,
+-28 12/12 (field/scan parity 0), -29 12/12, -30 15/15, -31 22/22, -32 21/21 + 6/6, -33 20/20,
+-34/-34A, person conservation, R1–R12, L1–L12, H1–H14, T1–T14, Z0–Z12, numeric chain `RECONCILED`.
+0.807/0.796 ms per simulated day; every store at or below its cap.
+
+**Eight instrument errors in this checkpoint's own probes are recorded**, including four in the
+inherited cross-tree probe — a missing `kinTolerance`, candidate identity never actually compared,
+an attribution figure that was three `-1` sentinels compared with each other, and a decision score
+that did not exist as a field. **A frozen-evidence incident occurred**: three audits wrote into
+frozen directories through multi-line `arg(` declarations the flag sweep missed; four files restored
+with `git checkout` **before any commit**, verified clean, every audit rerun fully redirected. **No
+frozen-evidence commit exists.**
+
+**Two deviations stated:** `P8_P18` vacuous on both trees (inherited); `P9_concurrent_parties`
+vacuous at 20 y on the corrected tree, non-vacuous on the parent, **restored at 50 y and 100 y** —
+a horizon artefact of a changed world.
+
+**NOT CLAIMED:** no outcome improvement; no constant re-tuned; no lived territorial writer; no UI
+surfaces the lifecycle; the residence-anchored catchment limitation stays **open**.
+**Item 3 is not declared frozen here — that is the supervisor's decision.**
+
+Evidence: `docs/evidence/shared-range-release-territorial-authority-35/`.
+
+---
+
 ### ROADMAP ITEM 3 FINAL INTEGRATION AUDIT — **PROGRESS / CANDIDATE FOR CLOSURE / NOT FROZEN / DO NOT MERGE**
 
 ```text
@@ -8562,7 +8651,33 @@ UI in `src/ui/BandPanel.tsx`, audit + `--targeted-cause-event-check` in
 
 ## Recommended Next Step
 
-**CURRENT (CORRECTION-32, 2026-08-02).** Awaiting human review. **Roadmap item 3
+**CURRENT (CORRECTION-35, 2026-08-03).** Awaiting Browser GPT audit of the pushed
+`checkpoint/shared-range-release-territorial-authority-35`. **Roadmap Item 3 remains ACTIVE and is
+NOT frozen; Roadmap Item 4 is NOT started.**
+
+CORRECTION-35 closes the one blocker the Item 3 final integration audit left standing, and closes
+the `territorialPressure` orphan that audit recorded as still open (seam 2 in the list below, now
+struck). The decision in front of the supervisor is whether Item 3 may now go to final freeze.
+
+**If Item 3 is frozen, these seams do NOT close with it** and must be carried forward verbatim:
+
+1. **the physical shared-use substrate** — `sharedCatchment`'s footprint is residence-anchored, so
+   real trips, expedition routes and investigation walks compete for nothing. Measured and
+   published in `shared-catchment-boundary.json`; **unchanged by CORRECTION-35**.
+2. **activity-party crowding / expedition overlap / temporary task-party footprints.**
+3. **no visibility, route or barrier rule** for social perception of any kind.
+4. **no physical-trace authority** — no tracks, trails, camp remains, trace freshness or cross-band
+   smoke. Belongs to the Persistent Human Landscape pass.
+5. **`SocialPressureProfile.territorialPressure`** — a second orphan, documented by CORRECTION-35
+   as having **zero readers repository-wide**. Inert, therefore not a blocker; it must not be wired
+   up by a future system without its own lived writer.
+6. **no UI surfaces the social-evidence lifecycle**, unchanged from Item 3.
+
+**Do not begin Item 4 on this branch.**
+
+---
+
+**SUPERSEDED (CORRECTION-32, 2026-08-02).** Awaiting human review. **Roadmap item 3
 (Crowding / Shared Range / Range Release) remains OPEN** — CORRECTION-32 repaired the
 decision AUTHORITY for current physical crowding and nothing else. The decision in front
 of the supervising human is which of the remaining AUDIT-27 seams to authorize next:
@@ -10784,3 +10899,22 @@ exception; daughter colours related-but-distinct and never visually confusing.
   still draws full `workingAdults` while workers are away. The inherited `expeditionLifecycleAudit`
   failure is diagnosed as a seasonal-sampling artifact. Evidence:
   `docs/evidence/shared-use-physical-presence-authority-34/`.
+
+- **CORRECTION-35 — released-evidence field consistency and orphan territorial authority**
+  (2026-08-03, branch `checkpoint/shared-range-release-territorial-authority-35` from the Item 3
+  candidate freeze head `742b567`). **CANDIDATE COMPLETE — awaiting Browser GPT audit. Production
+  behaviour changed, six files.** Part A: the three social-evidence lifecycle fields are now derived
+  from `weight > 0` instead of the `0.05` confidence threshold, so `released_historical` means what
+  `types.ts` always claimed it meant; `confidence` still reads the `0.05` set and is byte-identical.
+  Proven behaviour-neutral cross-tree against `742b567` on four digests over 72 non-trivial
+  place-rows, and the Item 3 audit's own unmodified released-place probe now reports 0 incidents.
+  The incident's true magnitude is **0.04, not 0.02** — `kinTolerance` moves 0.02 and the original
+  probe read only three of six scalars; recorded as a superseding addendum, original evidence
+  unaltered. Part B: `Band.territorialPressure`, a spawn constant with no lived writer, reached
+  behaviour through **three** readers (`pressure.ts`, `mobilityIntent.ts`, `bandDecision.ts`); all
+  three removed, field retained in state. Reproduced first — 18 of 18 band-measurements moved on the
+  parent, 0 of 18 on the tip, with a zero-divergence control proving removal is exactly equivalent
+  to pinning the field to zero. L1–L12 / T1–T12 / C1–C8 all pass with 0 vacuous and 1 honestly
+  NOT CONSTRUCTED. Eight instrument errors recorded, including four inherited ones and a
+  frozen-evidence incident restored before any commit. **Item 3 not declared frozen; Item 4 not
+  started.** Evidence: `docs/evidence/shared-range-release-territorial-authority-35/`.
