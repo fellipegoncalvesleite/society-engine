@@ -1,5 +1,8 @@
 # CORRECTION-34 — ARCHITECTURE DECISION
 
+> **SUPERSEDED IN PART BY CORRECTION-34D.** `getBandPhysicalPresence` still returns one source per away party, but the count it places is the party's PHYSICAL HEADCOUNT (`partyWorkers + nonWorkingPartyPeople`), not `partyWorkers`. The Option-D decision recorded below is unchanged; what changed is which quantity feeds it. CORRECTION-34D's own architecture choice (Option B + Option C) is recorded in `PARTY_HEADCOUNT_LABOR_AUTHORITY.md` §3.
+> See `PARTY_HEADCOUNT_LABOR_AUTHORITY.md`.
+
 **Selected: Option D — the expedition-only correction, expressed as one shared presence authority.**
 
 ## What was built

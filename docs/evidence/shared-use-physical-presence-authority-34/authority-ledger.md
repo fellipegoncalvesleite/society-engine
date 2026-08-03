@@ -66,3 +66,47 @@
 | `getBandCommitmentAccounting.conserved` | Tests **bodies** (`committed <= population`). `awayHeadcountExceedsWorkingAdults` reported separately — it is legitimate. |
 | `reconcileExpeditionCommitment` | **DEFENSIVE REPAIR for corrupt/legacy state.** Cannot fire on ordinary demography; claims no physical mechanism. |
 | party-local loss | Requires a party-local physical outcome. Never inferred from cohort aging. |
+
+---
+
+## CORRECTION-34D — the two party quantities
+
+`partyWorkers` appears twice in the table above, once as a body count and once as labour. It is now
+**labour only**, and the rows are corrected here rather than edited in place so the change is
+visible.
+
+| Authority | Question it answers | Reads | Consumers |
+| --- | --- | --- | --- |
+| `getExpeditionPhysicalPeople` (bandMobility) | how many bodies are in this party | `partyWorkers + nonWorkingPartyPeople` | presence, conservation, provisions, fission |
+| `derivePhysicallyAwayPartyPeople` (bandMobility) | how many bodies are elsewhere | away phases only — **`prepared` excluded** | population conservation, fission founder draw |
+| `derivePreparedCommitmentPartyPeople` (bandMobility) | who is here but already spoken for | `prepared` phase only | fission founder availability, named separately |
+| `getExpeditionProductiveWorkers` (bandMobility) | how much work can this party do | `partyWorkers` | composition, pace, carrying, target work |
+| `getCommittedExpeditionWorkers` (expedition) | how much of the band's labour is spoken for | `partyWorkers` over all committed phases **incl. `prepared`** | `getResidentialWorkingAdults`, catchment adult term |
+| `getCommittedExpeditionPeople` (expedition) | how many bodies are away | `derivePhysicallyAwayPartyPeople` | conservation |
+| `ExpeditionRecord.nonWorkingPartyPeople` | bodies present that supply no labour | stored, bounded, monotone while away | catchment elder term, provisions, pace |
+
+### Consumers, corrected
+
+| Consumer | Was | Now |
+| --- | --- | --- |
+| `getBandPhysicalPresence` | `partyWorkers` | **physical people** |
+| `consumeProvisions`, `provisionsExhausted`, task-camp setup, campless shuttle, `acuteRisk` budget | `partyWorkers` | **physical people** — everyone eats |
+| `deriveCarryCapacityUnits` | `partyWorkers` | unchanged — **productive workers**, zero for a non-working member |
+| `deriveTravelPace` / `derivePartyPaceFactor` | composition only | composition **plus** non-working members at the existing limited-walker penalty |
+| `createDaughterBand` | `partyCompositionTotal(deriveCommittedMobilityPools)` — counted `prepared` as away | **physically away** + separately named **prepared commitment** |
+| `getBandForagingDraw` | adults − committed; elders − *inferred* overflow | adults − away workers; elders − **recorded** non-working |
+| `getBandCommitmentAccounting.conserved` | committed workers ≤ population | **physically away people ≤ population** (+ new `laborBounded`) |
+| `estimateTaskGroupPeople`, pending-investigation labour | `partyWorkers` | unchanged — labour questions against a labour cohort |
+| `ExpeditionOutcomeSummary` | `partyWorkers` for human-facing counts | new `partyPeople`; events read `partyPeople ?? partyWorkers` |
+
+### Duplication risks — updated
+
+| Risk | Status |
+| --- | --- |
+| **away workers drawing the residential catchment while also provisioned and harvesting away** | **REPAIRED by CORRECTION-34A**, and its elder term is now read rather than inferred |
+| a party granted more labour than the band's whole working-adult cohort | **REPAIRED** — `laborBounded`, measured every band-day |
+| a non-working body vanishing from the map | **REPAIRED** — presence counts people |
+| a non-working body eating for free | **REPAIRED** — consumption counts people |
+| a non-working body granting carrying or work | **NOT PRESENT** — both read productive workers |
+| prepared people counted as physically distant | **REPAIRED** — separate authority, separate name |
+| a defensive repair read as a physical history | **NOT PRESENT** — `invalid_state_repaired`, never narrated |

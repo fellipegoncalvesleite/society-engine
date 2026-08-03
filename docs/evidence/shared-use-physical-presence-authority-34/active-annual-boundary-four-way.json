@@ -1,7 +1,7 @@
 {
   "audit": "CORRECTION-34D-ACTIVE-ANNUAL-BOUNDARY-FOUR-WAY",
   "verdict": "IDENTICAL_ACROSS_ALL_FOUR_MODES_WITH_AN_ACTIVE_PARTY",
-  "setupDaysBeforeInjection": 1070,
+  "setupDaysBeforeInjection": 1078,
   "comparedSpanDays": 630,
   "annualBoundariesInsideComparedSpan": [
     1080,
@@ -10,32 +10,45 @@
   "boundaryCrossedWhileTheInjectedPartyWasWalking": 1080,
   "activeAcrossBoundary": {
     "daily": {
-      "dayAtInjection": 1070,
-      "daysToNextAnnualBoundary": 10,
+      "dayAtInjection": 1078,
+      "daysToNextAnnualBoundary": 2,
+      "routeTiles": 8,
       "injectedParties": 9,
       "stillOnRecord": 0,
-      "resolvedToOutcome": 9
+      "resolvedToOutcome": 9,
+      "annualBoundaryDay": 1080,
+      "injectedPartiesStillWalkingTheDayBeforeDemography": 9,
+      "injectedPartiesStillWalkingOnTheDemographyDay": 9
     },
     "weekly": {
-      "dayAtInjection": 1070,
-      "daysToNextAnnualBoundary": 10,
+      "dayAtInjection": 1078,
+      "daysToNextAnnualBoundary": 2,
+      "routeTiles": 8,
       "injectedParties": 9,
       "stillOnRecord": 0,
-      "resolvedToOutcome": 9
+      "resolvedToOutcome": 9,
+      "sampledMidSpan": false,
+      "reason": "a coarser step mode cannot be sampled between its own steps"
     },
     "monthly": {
-      "dayAtInjection": 1070,
-      "daysToNextAnnualBoundary": 10,
+      "dayAtInjection": 1078,
+      "daysToNextAnnualBoundary": 2,
+      "routeTiles": 8,
       "injectedParties": 9,
       "stillOnRecord": 0,
-      "resolvedToOutcome": 9
+      "resolvedToOutcome": 9,
+      "sampledMidSpan": false,
+      "reason": "a coarser step mode cannot be sampled between its own steps"
     },
     "seasonal": {
-      "dayAtInjection": 1070,
-      "daysToNextAnnualBoundary": 10,
+      "dayAtInjection": 1078,
+      "daysToNextAnnualBoundary": 2,
+      "routeTiles": 8,
       "injectedParties": 9,
       "stillOnRecord": 0,
-      "resolvedToOutcome": 9
+      "resolvedToOutcome": 9,
+      "sampledMidSpan": false,
+      "reason": "a coarser step mode cannot be sampled between its own steps"
     }
   },
   "matches": {
@@ -45,11 +58,16 @@
     "seasonal": true
   },
   "nonVacuous": {
-    "dayAtInjection": 1070,
-    "daysToNextAnnualBoundary": 10,
+    "dayAtInjection": 1078,
+    "daysToNextAnnualBoundary": 2,
+    "routeTiles": 8,
     "injectedParties": 9,
     "stillOnRecord": 0,
-    "resolvedToOutcome": 9
+    "resolvedToOutcome": 9,
+    "annualBoundaryDay": 1080,
+    "injectedPartiesStillWalkingTheDayBeforeDemography": 9,
+    "injectedPartiesStillWalkingOnTheDemographyDay": 9,
+    "partyMeasuredWalkingOnBothSidesOfDemography": true
   },
   "instrumentErrorRecorded": "The first version of this fixture stepped the SETUP span with `stepSim(w, 1080/days, mode)`. 1080/7 is 154.29, so the weekly arm was handed a fractional step count and landed on a different day from the other three \u2014 it reported DIVERGENT, and the divergence was the audit's own arithmetic, not production. The setup now runs through `advanceWorldByDays` (identical in every arm) and only the compared span sits on the 630-day grid.",
   "whyTheOldFixtureWasInsufficient": "L12 stepped a natural world 1260 days and counted expedition records at the end. A natural party lasts at most 24 days against ANNUAL demography, so any record it found had been launched long after the last boundary. It proved step-mode determinism, which is real, but not that an ACTIVE party is represented identically across a demographic boundary \u2014 which is the property this checkpoint changes."

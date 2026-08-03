@@ -6,10 +6,10 @@
   "rows": [
     {
       "years": 20,
-      "elapsedMs": 6208,
-      "msPerSimDay": 0.8622,
-      "stateBytes": 76896969,
-      "stateMB": 73.33,
+      "elapsedMs": 10924,
+      "msPerSimDay": 1.5172,
+      "stateBytes": 76898193,
+      "stateMB": 73.34,
       "livingBands": 9,
       "maxPresenceSourcesPerBand": 3,
       "maxContributorsPerTile": 2,
@@ -23,9 +23,9 @@
     },
     {
       "years": 50,
-      "elapsedMs": 14844,
-      "msPerSimDay": 0.8247,
-      "stateBytes": 78013849,
+      "elapsedMs": 26737,
+      "msPerSimDay": 1.4854,
+      "stateBytes": 78015181,
       "stateMB": 74.4,
       "livingBands": 9,
       "maxPresenceSourcesPerBand": 3,

@@ -181,6 +181,65 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### EXPEDITION PHYSICAL HEADCOUNT vs PRODUCTIVE PARTY LABOUR — CORRECTION-34D — **ROADMAP ITEM 3 STAYS OPEN / ITEM 4 UNSTARTED / DO NOT MERGE**
+
+**Branch** `checkpoint/shared-use-physical-presence-authority-34`, continuing `e9b9655`.
+`main` untouched at `0a43083a`. **PRODUCTION BEHAVIOUR CHANGED — eleven files.**
+
+**The defect.** CORRECTION-34C stopped cohort aging teleporting a body home, but one field still
+answered two incompatible questions. `partyWorkers` was the physical headcount for presence,
+conservation and fission AND the productive labour for work, pace, carrying and provisioning.
+Measured on 34C's own accepted state through production's own daily reconciliation:
+**`PARTY HEADCOUNT STILL ACTS AS IMPOSSIBLE LABOR`** — a band of five working adults ran a party
+supplying six, with a carry ceiling of 0.72 (capacity-for-six) and a six-person pace composition.
+
+**The fix — Option B + Option C.** A new optional `ExpeditionRecord.nonWorkingPartyPeople`; the
+physical headcount is DERIVED as `partyWorkers + nonWorkingPartyPeople`, which makes
+`0 <= productive <= physical` **structural** — no clamp maintains it, so no clamp can hide it.
+Both derivations live once in `bandMobility` (a leaf). Option C names the allocation rule
+production was already performing without saying so: **residence-first**. A falling working-adult
+cohort is charged to residential adults while enough exist; only when the residence is exhausted
+does an away party convert workers into non-working members, at their own tile, with nobody moving.
+
+**After, same input:** away headcount 6 -> 6, residence 14 -> 14, workers 6 -> 5, composition
+{1,4,1} -> {1,4,0} (high emptied first), carry 0.72 -> 0.6, pace 2.092 -> 1.969 tiles/day,
+**provisions 0.0048/day unchanged because all six still eat**, population 20 throughout.
+
+**Authorities now separated.** Consumption on bodies (provisions, budget, task-camp setup, campless
+shuttle, acute-risk share); carrying and work on productive workers (zero productive carrying for a
+non-working member — a bounded choice, not a physiology model); pace on both, with non-working
+members charged the existing limited-walker penalty. Prepared parties are physically residential
+and are withheld from founding as a **named prior labour commitment**, never as physical absence.
+Fission founders come from `population - physicallyAway - preparedCommitment`.
+
+**Defensive path corrected.** A physically-away party whose labour falls below the minimum turns
+for home under `party_labor_unsupported` **keeping every body** (34C declared it `lost`, inventing a
+death out of an accounting change at home). A record describing more people than the band has is
+retired whole under `invalid_state_repaired`, which `bandEvents` refuses to narrate at all.
+
+**Evidence.** H1-H14 14/14, 0 failing, 0 vacuous; R1-R12 re-pointed at the labour trigger (R4
+reversed); L1-L12 with L10 corrected and L12's verdict narrowed to
+`STEP_MODE_IDENTICAL_NO_ACTIVE_PARTY_CLAIM`; natural 20 y / 50 y with 0 adverse on every counter.
+
+**Honest limits.** Away people-days EQUAL away worker-days at both horizons, so the split never
+opens by itself in these worlds — the natural sweep proves the change is inert in ordinary play and
+**nothing** about the reduction path; H1-H14 are that proof. The residence-first rule is an
+aggregate accounting convention, not an observation of which individual aged. The model cannot
+locate a death inside a party. Trip-local provisions decrement no residential store, so full
+material conservation is explicitly NOT claimed for them. The pace burden and the zero carrying
+share are bounded choices, not measured magnitudes. **Same-day current presence remains formally
+deferred** by the CORRECTION-34A scope reduction, preserved exactly. **Roadmap Item 4 is unstarted.**
+
+**Instrument errors and incidents:** four, all recorded in
+`docs/evidence/shared-use-physical-presence-authority-34/PARTY_HEADCOUNT_LABOR_AUTHORITY.md` §13 and
+`PROVENANCE.md` — including **H12 passing while claiming a boundary crossing that had not happened**
+(withdrawn and rebuilt), and two evidence-output incidents whose exact restoration state is tabulated
+rather than summarised.
+
+See `docs/evidence/shared-use-physical-presence-authority-34/PARTY_HEADCOUNT_LABOR_AUTHORITY.md`.
+
+---
+
 ### DAILY TASK-PARTY PRESENCE, CATCHMENT ACCOUNTING AND EVIDENCE CLOSURE — CORRECTION-34A — **CORRECTION-34 FORMALLY NARROWED / ROADMAP ITEM 3 STAYS OPEN / DO NOT MERGE**
 
 **Branch** `checkpoint/shared-use-physical-presence-authority-34`, continuing `4042210`.
@@ -8802,6 +8861,8 @@ exception; daughter colours related-but-distinct and never visually confusing.
 ---
 
 ## Checkpoint Log
+
+- **CORRECTION-34D** (`checkpoint/shared-use-physical-presence-authority-34`) — expedition physical headcount separated from productive party labour; consumption on bodies, work/carrying on labour, pace on both; prepared commitment distinguished from physical absence; fission founders from physically-available people; corrupt legacy state retired as a labelled non-historical repair. H1-H14 14/14. Item 4 unstarted.
 
 - **RESOURCE INVESTIGATION PHYSICAL EXECUTION CORRECTION-26** — *2026-08-01, PASS —
   TECHNICALLY COMPLETE / AWAITING HUMAN ROADMAP CLOSURE / DO NOT MERGE. Production behaviour

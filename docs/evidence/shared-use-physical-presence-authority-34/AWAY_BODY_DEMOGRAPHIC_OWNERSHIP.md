@@ -1,5 +1,8 @@
 # Away-body, demographic cohort and fission ownership
 
+> **SUPERSEDED IN PART BY CORRECTION-34D.** `partyWorkers` is no longer the physical headcount. It is PRODUCTIVE LABOUR; bodies are `partyWorkers + nonWorkingPartyPeople`. Every statement below that reads `partyWorkers` as a count of people is true only of a party whose members are all still working — which is every party at launch, and every party in these worlds naturally. **L10's verdict is corrected**: a party that silently lost three people while staying `operating` with a null outcome reason was accepted here as an explicit outcome; it was not, and the record is now retired whole under `invalid_state_repaired`. **L12 did not prove what its name claims** — it counted expedition records 1,260 days into a natural world, where a 24-day party cannot still be walking at an annual boundary; CORRECTION-34D H12 constructs that case. **The fission bound changed**: it used `deriveCommittedMobilityPools`, which counts `prepared` parties standing in the camp, and now uses physically-away people plus a separately named prepared-commitment rule.
+> See `PARTY_HEADCOUNT_LABOR_AUTHORITY.md`.
+
 CORRECTION-34C. Supervising review found that CORRECTION-34B made the party's internal authorities
 agree while still letting a **demographic cohort change move a body without a journey**. It was
 real. This documents the reproduction, the repair, and one precision correction to the finding.

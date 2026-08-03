@@ -17,7 +17,7 @@
     "L9_two_concurrent_parties_across_annual_demography": "BOTH_PARTIES_PHYSICALLY_CONSERVED",
     "L10_population_collapse_below_away_headcount": "LABELLED_NON_HISTORICAL_REPAIR_AND_STATED_MODEL_LIMIT",
     "L11_legacy_overcommitted_state": "DETERMINISTIC_DEFENSIVE_REPAIR_NO_INVENTED_HISTORY",
-    "L12_step_mode_equivalence_across_annual_boundary": "IDENTICAL_ACROSS_ALL_FOUR_MODES"
+    "L12_step_mode_equivalence_across_annual_boundary": "STEP_MODE_IDENTICAL_NO_ACTIVE_PARTY_CLAIM"
   },
   "fixtures": {
     "L1_aging_without_movement": {
@@ -291,7 +291,7 @@
       "note": "handled defensively and identically every time, and the outcome NAMES ITSELF a repair (`invalid_state_repaired`) rather than leaving a null reason on a party that is still walking"
     },
     "L12_step_mode_equivalence_across_annual_boundary": {
-      "verdict": "IDENTICAL_ACROSS_ALL_FOUR_MODES",
+      "verdict": "STEP_MODE_IDENTICAL_NO_ACTIVE_PARTY_CLAIM",
       "spanDays": 1260,
       "annualBoundariesCrossed": 3,
       "expeditionRecordsPresentAcrossModes": 24,

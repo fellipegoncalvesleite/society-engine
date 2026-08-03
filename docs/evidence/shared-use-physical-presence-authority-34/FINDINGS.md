@@ -1,5 +1,8 @@
 # CORRECTION-34A — FINDINGS (supersedes the CORRECTION-34 section below)
 
+> **SUPERSEDED IN PART BY CORRECTION-34D.** Every figure below that counts away people via `partyWorkers` remains numerically correct for these worlds — away people-days equal away worker-days at 20 and 50 years, measured — but the two are now DIFFERENT QUANTITIES and must not be conflated in future work. One natural result is also corrected: **`0 annual boundaries crossed by active parties` is wrong**. Sampled daily on the season transition into spring it is 18 band-days at 20 years and 50 at 50, on 7 of 20 world boundaries.
+> See `PARTY_HEADCOUNT_LABOR_AUTHORITY.md`.
+
 **DAILY TASK-PARTY PRESENCE, CATCHMENT ACCOUNTING AND EVIDENCE CLOSURE**
 
 Continuing `4042210b332d41b91ed394aa9307962f0106a60c` on the same branch. CORRECTION-33 frozen at

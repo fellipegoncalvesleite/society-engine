@@ -374,10 +374,19 @@ try {
     // mode grid. Only the COMPARED span must, and 630 is the LCM of 1/7/30/90.
     //
     // Annual demography runs at each spring season boundary — days 360, 720, 1080, ... — and a
-    // party lives at most EXPEDITION_MAX_DURATION_DAYS = 24 days. The party is therefore injected
-    // at day 1070, TEN DAYS before the boundary at 1080, which is the only way it can still be
-    // walking when demography runs.
-    const SETUP_DAYS = 1070;
+    // party lives at most EXPEDITION_MAX_DURATION_DAYS = 24 days.
+    //
+    // AN INSTRUMENT ERROR IS RECORDED HERE. The first version injected at day 1070, ten days
+    // before the boundary, and PASSED — but it only checked that a party existed at injection and
+    // resolved by the end of the span. Adding a direct measurement of the party's phase ON the
+    // demography day showed 0 parties still walking: an `operating` party one tile out finishes
+    // its three work days and walks home in roughly five, so it was already terminal at day 1080
+    // and the fixture had been claiming a boundary crossing that never happened.
+    //
+    // The party is now injected TWO DAYS before the boundary, `outbound` along a multi-tile route
+    // so it is still walking out when demography runs, and the fixture asserts the measured phase
+    // rather than inferring it.
+    const SETUP_DAYS = 1078;
     const SPAN = 630;                      // crosses the boundaries at 1080 and 1440
     const canon = (w) => JSON.stringify(Object.values(w.bands)
       .sort((x, y) => String(x.id).localeCompare(String(y.id)))
@@ -398,14 +407,24 @@ try {
         if (b.status === "dispersed" || b.viability?.status === "absorbed" || b.viability?.status === "extinct") {
           injected[id] = b; continue;
         }
-        const near = (w.tiles[b.position]?.neighbors ?? [])[0] ?? b.position;
+        // A route long enough that the party is still walking OUT when demography runs. Built by
+        // walking distinct neighbours deterministically from the band's own tile.
+        const route = [b.position];
+        while (route.length < 8) {
+          const next = (w.tiles[route[route.length - 1]]?.neighbors ?? [])
+            .filter((t) => !route.includes(t))
+            .sort((x, y) => String(x).localeCompare(String(y)))[0];
+          if (next === undefined) break;
+          route.push(next);
+        }
+        if (route.length < 3) { injected[id] = b; continue; }
         injected[id] = {
           ...b,
           expeditions: [...(b.expeditions ?? []), {
-            id: `expedition:h12:${String(b.id)}`, phase: "operating", partyWorkers: 2,
+            id: `expedition:h12:${String(b.id)}`, phase: "outbound", partyWorkers: 2,
             partyComposition: { limited: 0, typical: 2, high: 0 },
-            positionTileId: near, routeTileIds: [b.position, near], routeIndex: 1,
-            targetTileId: near, taskKind: "resource_retrieval", injuryLoad: 0,
+            positionTileId: route[1], routeTileIds: route, routeIndex: 1,
+            targetTileId: route[route.length - 1], taskKind: "resource_retrieval", injuryLoad: 0,
             travelDaysElapsed: 1, workDaysElapsed: 0,
             departedDay: w.time.day, departedTick: w.time.tick,
             plannedReturnDay: (Number(w.time.day) + 200), hardDeadlineDay: (Number(w.time.day) + 400),
@@ -419,29 +438,73 @@ try {
       const injectedCount = Object.values(w.bands)
         .reduce((n, b) => n + (b.expeditions ?? []).filter((e) => String(e.id).includes("h12")).length, 0);
       const dayAtInjection = Number(w.time.day);
-      w = runner.stepSim(w, SPAN / days, mode);
+      // NON-VACUITY, MEASURED RATHER THAN ASSUMED. Existing at injection and resolving later does
+      // NOT establish that a party was still walking when demography ran. The daily arm therefore
+      // steps one day at a time and records the injected party's phase on the day BEFORE the
+      // season turns to spring and on the transition day ITSELF. The coarser modes cannot be
+      // sampled mid-span by construction — that is what a step mode IS — so the daily arm carries
+      // the non-vacuity proof and the four-way comparison carries the equivalence proof.
+      let activeImmediatelyBefore = 0;
+      let activeImmediatelyAfter = 0;
+      let boundaryDay = null;
+      const countInjectedAway = (x) => Object.values(x.bands).reduce((n, b) =>
+        n + (b.expeditions ?? []).filter((e) =>
+          String(e.id).includes("h12") &&
+          ["outbound", "operating", "returning"].includes(e.phase)).length, 0);
+
+      if (mode === "daily") {
+        for (let step = 0; step < SPAN; step += 1) {
+          const seasonBefore = w.time.season;
+          const awayBefore = countInjectedAway(w);
+          w = runner.stepSim(w, 1, mode);
+          if (seasonBefore !== "spring" && w.time.season === "spring" && boundaryDay === null) {
+            boundaryDay = Number(w.time.day);
+            activeImmediatelyBefore = awayBefore;
+            activeImmediatelyAfter = countInjectedAway(w);
+          }
+        }
+      } else {
+        w = runner.stepSim(w, SPAN / days, mode);
+      }
       const survivingCount = Object.values(w.bands)
         .reduce((n, b) => n + (b.expeditions ?? []).filter((e) => String(e.id).includes("h12")).length, 0);
       const outcomeCount = Object.values(w.bands)
         .reduce((n, b) => n + (b.recentExpeditionOutcomes ?? []).filter((o) => String(o.id).includes("h12")).length, 0);
       results[mode] = canon(w);
       activeAcrossBoundary[mode] = {
-        dayAtInjection, daysToNextAnnualBoundary: 1080 - dayAtInjection,
+        dayAtInjection, daysToNextAnnualBoundary: 1080 - dayAtInjection, routeTiles: 8,
         injectedParties: injectedCount, stillOnRecord: survivingCount, resolvedToOutcome: outcomeCount,
+        ...(mode === "daily"
+          ? {
+              annualBoundaryDay: boundaryDay,
+              injectedPartiesStillWalkingTheDayBeforeDemography: activeImmediatelyBefore,
+              injectedPartiesStillWalkingOnTheDemographyDay: activeImmediatelyAfter,
+            }
+          : { sampledMidSpan: false, reason: "a coarser step mode cannot be sampled between its own steps" }),
       };
     }
     const allMatch = Object.values(results).every((v) => v === results.daily);
+    const d = activeAcrossBoundary.daily;
+    // The fixture may only claim the boundary was crossed BY AN ACTIVE PARTY if a party was
+    // measured still walking on both sides of the demographic step.
+    const genuinelyActiveAcrossBoundary =
+      d.injectedPartiesStillWalkingTheDayBeforeDemography > 0 &&
+      d.injectedPartiesStillWalkingOnTheDemographyDay > 0;
     const representedThroughout = Object.values(activeAcrossBoundary).every(
       (v) => v.injectedParties > 0 && (v.stillOnRecord + v.resolvedToOutcome) > 0);
     add("H12_active_annual_boundary_equivalence",
-      allMatch && representedThroughout ? "IDENTICAL_ACROSS_ALL_FOUR_MODES_WITH_AN_ACTIVE_PARTY"
+      allMatch && representedThroughout && genuinelyActiveAcrossBoundary
+        ? "IDENTICAL_ACROSS_ALL_FOUR_MODES_WITH_AN_ACTIVE_PARTY"
         : allMatch ? "IDENTICAL_BUT_NO_ACTIVE_PARTY_CROSSED_THE_BOUNDARY" : "DIVERGENT",
       { setupDaysBeforeInjection: SETUP_DAYS, comparedSpanDays: SPAN,
         annualBoundariesInsideComparedSpan: [1080, 1440],
         boundaryCrossedWhileTheInjectedPartyWasWalking: 1080,
         activeAcrossBoundary,
         matches: Object.fromEntries(Object.keys(MODE_DAYS).map((m) => [m, results[m] === results.daily])),
-        nonVacuous: activeAcrossBoundary.daily,
+        nonVacuous: {
+          ...activeAcrossBoundary.daily,
+          partyMeasuredWalkingOnBothSidesOfDemography: genuinelyActiveAcrossBoundary,
+        },
         instrumentErrorRecorded:
           "The first version of this fixture stepped the SETUP span with `stepSim(w, 1080/days, mode)`. 1080/7 is 154.29, so the weekly arm was handed a fractional step count and landed on a different day from the other three — it reported DIVERGENT, and the divergence was the audit's own arithmetic, not production. The setup now runs through `advanceWorldByDays` (identical in every arm) and only the compared span sits on the 630-day grid.",
         whyTheOldFixtureWasInsufficient:

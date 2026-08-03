@@ -249,8 +249,12 @@ try {
       partiesSeen += Object.values(w.bands).reduce((n, b) => n + (b.expeditions ?? []).length, 0);
     }
     const allMatch = Object.values(results).every((v) => v === results.daily);
+    // CORRECTION-34D — THE VERDICT NAME IS NARROWED TO WHAT THIS FIXTURE ACTUALLY MEASURES.
+    // It establishes step-mode determinism over a span containing annual boundaries. It does NOT
+    // establish that an ACTIVE party is represented identically across one, because it never
+    // checks any party's phase on a demography day. CORRECTION-34D H12 does that.
     add("L12_step_mode_equivalence_across_annual_boundary",
-      allMatch && partiesSeen > 0 ? "IDENTICAL_ACROSS_ALL_FOUR_MODES"
+      allMatch && partiesSeen > 0 ? "STEP_MODE_IDENTICAL_NO_ACTIVE_PARTY_CLAIM"
         : allMatch ? "IDENTICAL_BUT_NO_EXPEDITION_RECORD_PRESENT" : "DIVERGENT",
       { spanDays: SPAN, annualBoundariesCrossed: Math.floor(SPAN / 360),
         expeditionRecordsPresentAcrossModes: partiesSeen,

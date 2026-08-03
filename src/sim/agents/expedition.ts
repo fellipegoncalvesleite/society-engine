@@ -443,8 +443,7 @@ function reconcileExpeditionLabor(band: Band, currentTick: number): Band {
  * under an outcome reason that names it as a repair — never partially and silently shrunk, which
  * would delete people and then describe the result as something that happened in the world.
  */
-function repairInvalidPhysicalCommitment(band: Band, currentTick: number): Band {
-  void currentTick;
+function repairInvalidPhysicalCommitment(band: Band): Band {
   const population = Math.max(0, band.demography?.population ?? band.size ?? 0);
   let awayPeople = derivePhysicallyAwayPartyPeople(band);
 
@@ -488,7 +487,7 @@ export function reconcileExpeditionCommitment(band: Band, currentTick: number): 
     return band;
   }
 
-  return repairInvalidPhysicalCommitment(reconcileExpeditionLabor(band, currentTick), currentTick);
+  return repairInvalidPhysicalCommitment(reconcileExpeditionLabor(band, currentTick));
 }
 
 /**

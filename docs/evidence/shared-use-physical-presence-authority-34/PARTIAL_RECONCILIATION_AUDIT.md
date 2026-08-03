@@ -1,5 +1,8 @@
 # Partial expedition reconciliation — split authority, reproduced and repaired
 
+> **SUPERSEDED IN PART BY CORRECTION-34D.** Partial reconciliation now has TWO triggers, not one. The LABOUR bound (`away workers <= workingAdults`) reduces work, pace and carrying while keeping every body; the BODY bound (`away people <= population`) is defensive only and retires a record whole under `invalid_state_repaired`. **Fixtures R1-R12 were re-pointed accordingly** — they set `population === workingAdults`, which now describes the corrupt-state case rather than a partial reduction, so six of them were measuring the defensive path by accident. **R4 is reversed, not rephrased**: a party driven below the minimum is no longer `lost`, because a cohort falling at home does not kill people three days' walk away — it turns for home keeping every body, under `party_labor_unsupported`.
+> See `PARTY_HEADCOUNT_LABOR_AUTHORITY.md`.
+
 CORRECTION-34B. Supervising review of CORRECTION-34A found one untested reachable inconsistency in
 `reconcileExpeditionCommitment`. It was real. This documents the measurement, the design decision,
 the repair and its limits.
