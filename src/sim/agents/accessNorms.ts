@@ -53,7 +53,26 @@ const SOCIAL_EVIDENCE_RELEASE_TICKS_REPORTED = 16;
 // the first degrades it further.
 const REPORTED_EVIDENCE_WEIGHT_CAP = 0.7;
 const REPORTED_EVIDENCE_HOP_PENALTY = 0.2;
-// Below this an episode is historical: retained, inspectable, and behaviourally inert.
+/**
+ * CORRECTION-35 — THIS IS A CONFIDENCE THRESHOLD, NOT THE RELEASE POINT, AND THE COMMENT THAT SAID
+ * OTHERWISE WAS WRONG.
+ *
+ * It used to read "below this an episode is historical: retained, inspectable, and behaviourally
+ * inert". That is false of the code beneath it. Every contribution scales by `entry.weight`
+ * (`strongestFrictionRelation`, `bestContactTolerance`, `tensionFromFriction`, the tolerance and
+ * refusal terms, `eventPressure`), so an episode stops moving behaviour when its weight reaches
+ * ZERO, not when it drops below this constant. Measured: a two-hop reported record fifteen ticks
+ * old weighs 0.04, was counted as historical, and still moved `strangerCaution`,
+ * `rememberedRefusalAvoidance` and `kinTolerance`.
+ *
+ * What this constant actually governs is how many episodes are strong enough to prop up
+ * `confidence`, which is the CORRECTION-31 concern: retained records must not defend the very
+ * confidence that has to fall before `staleness` can retire the memory. That job is unchanged and
+ * the threshold is deliberately NOT moved — moving it to make the lifecycle labels agree would
+ * change behaviour to fix a naming error.
+ *
+ * The lifecycle labels now use weight > 0 instead. See `contributingEvidence` below.
+ */
 const SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT = 0.05;
 // The one contradiction channel this repository can support truthfully: the observer is
 // standing at the place and the canonical proximity-only crowding scalar reads zero, so
@@ -200,7 +219,21 @@ function deriveAccessMemory(
     : 0;
   const friction = collectTileFrictionEvidence(world, band, tileId, presentWithoutOthersSeasons);
   const reports = collectTileReports(world, band, tileId);
-  const activeEvidence = friction.filter((entry) => entry.weight >= SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT);
+  // CORRECTION-35 — TWO DIFFERENT QUESTIONS, ANSWERED SEPARATELY.
+  //
+  // `confidenceEvidence` — which episodes are strong enough to support the memory's confidence.
+  // This is the CORRECTION-31 threshold, unchanged, and it is the ONLY thing that feeds the
+  // confidence term below. Redefining it would move real behaviour.
+  //
+  // `contributingEvidence` — which episodes still change a behaviour scalar at all. Every
+  // contribution multiplies by `entry.weight`, and `weighSocialEvidence` returns `round2(...)`, so
+  // weight 0 is an EXACT causal zero reached by multiplication, not an epsilon. That makes
+  // `weight > 0` the honest test for "still counts", and it is what the exported lifecycle fields
+  // now report. Before this, a record between 0 and the confidence threshold was published as
+  // fully historical while still moving `strangerCaution`, `rememberedRefusalAvoidance` and
+  // `kinTolerance`.
+  const confidenceEvidence = friction.filter((entry) => entry.weight >= SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT);
+  const contributingEvidence = friction.filter((entry) => entry.weight > 0);
   const activeEvidenceWeight = round2(friction.reduce((max, entry) => Math.max(max, entry.weight), 0));
   // CORRECTION-31 — several relayed copies of one story are one piece of evidence with
   // several voices. Reports are counted by ORIGINAL episode and weighted by their own
@@ -297,7 +330,8 @@ function deriveAccessMemory(
     (place?.confidence ?? 0) * 0.18 +
       (proto?.confidence ?? 0) * 0.22 +
       familiarUseStrength * 0.16 +
-      Math.min(1, activeEvidence.length / 3) * 0.16 +
+      // CORRECTION-35 — still the 0.05 set, so this term is numerically unchanged.
+      Math.min(1, confidenceEvidence.length / 3) * 0.16 +
       Math.min(1, reportEpisodes.reduce((sum, entry) => sum + entry.weight, 0) / 3) * 0.1 +
       storageSignals.confidence * 0.08 +
       visibleSignals.confidence * 0.06 +
@@ -378,12 +412,16 @@ function deriveAccessMemory(
     // records the band still holds that no longer move anything. Together they are the
     // active/historical separation §8.3-§8.4 asks for, without a second store.
     activeEvidenceWeight,
-    activeEvidenceCount: activeEvidence.length,
-    historicalEvidenceCount: friction.length - activeEvidence.length,
+    // CORRECTION-35 — the three lifecycle fields now agree with the contribution curve and with
+    // each other. `activeEvidenceCount + historicalEvidenceCount` is the number of retained records
+    // about this place, and `released_historical` means every one of them weighs exactly zero and
+    // therefore multiplies out of every behaviour scalar.
+    activeEvidenceCount: contributingEvidence.length,
+    historicalEvidenceCount: friction.length - contributingEvidence.length,
     socialEvidencePhase:
       friction.length === 0
         ? "none"
-        : activeEvidence.length === 0
+        : contributingEvidence.length === 0
           ? "released_historical"
           : activeEvidenceWeight >= 1
             ? "active"
