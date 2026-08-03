@@ -1,0 +1,629 @@
+{
+  "audit": "CORRECTION-35-TERRITORIAL-PRESSURE-FIXTURES",
+  "summary": {
+    "fixtures": 12,
+    "failing": 0,
+    "vacuous": 0,
+    "vacuousIds": [],
+    "failingIds": []
+  },
+  "verdicts": {
+    "T1_reader_writer_matrix": "MATRIX_PUBLISHED_NO_UNIDENTIFIED_READER",
+    "T2_spawn_without_social_evidence": "NO_TERRITORIAL_CONTRIBUTION_FROM_SPAWN",
+    "T3_field_isolation_arm": "BEFORE_AND_AFTER_PUBLISHED_AND_COMPARED_ACROSS_TREES",
+    "T4_crowding_without_encounter": "PHYSICAL_CROWDING_LIVE_NO_TERRITORIAL_MOTIVE_INVENTED",
+    "T5_encounter_friction_access_path_live": "ACCEPTED_SOCIAL_PATH_LIVE_AND_SINGLE",
+    "T6_release_leaves_no_orphan_continuation": "WHEN_EVIDENCE_REACHES_ZERO_NOTHING_CONTINUES_THE_SOCIAL_EFFECT",
+    "T7_daughter_inheritance": "INHERITED_VALUE_CARRIES_NO_BEHAVIOUR",
+    "T8_social_pressure_profile_distinction": "SEPARATE_FIELD_ALWAYS_INERT_NEVER_UPDATED",
+    "T9_decision_attribution": "ATTRIBUTION_FIGURE_OBSERVED_AND_NO_LONGER_VARIES_WITH_AN_UNPROVENANCED_FIELD",
+    "T10_no_duplicate_charge": "NO_TERRITORIAL_CHARGE_REMAINS_TO_DUPLICATE_ANYTHING",
+    "T11_natural_occurrence": "MEASURED_SEPARATELY",
+    "T12_determinism": "DELEGATED_TO_THE_ITEM_3_DETERMINISM_AUDIT"
+  },
+  "fixtures": {
+    "T1_reader_writer_matrix": {
+      "verdict": "MATRIX_PUBLISHED_NO_UNIDENTIFIED_READER",
+      "vacuous": false,
+      "matrixFile": "authority-matrix.md and territorial-pressure-before.json",
+      "behaviouralReadersBefore": 3,
+      "behaviouralReadersAfter": 0,
+      "inertCopiesRetained": [
+        "DecisionContextSnapshot (bandDecision, campMovement)",
+        "simRunner UI projection",
+        "SocialPressureProfile.territorialPressure (never had a reader)"
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the matrix was derived by grepping every occurrence in src/, not from memory; three behavioural readers were found where the brief named two"
+      }
+    },
+    "T2_spawn_without_social_evidence": {
+      "verdict": "NO_TERRITORIAL_CONTRIBUTION_FROM_SPAWN",
+      "vacuous": false,
+      "rows": [
+        {
+          "territorialPressure": 0,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        },
+        {
+          "territorialPressure": 0.12,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        },
+        {
+          "territorialPressure": 0.8,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        }
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the band has real non-zero mobility pressure from other sources, so 'unchanged' is not a comparison of zeros",
+        "mobilityPressure": 0.9
+      }
+    },
+    "T3_field_isolation_arm": {
+      "verdict": "BEFORE_AND_AFTER_PUBLISHED_AND_COMPARED_ACROSS_TREES",
+      "vacuous": false,
+      "before": "territorial-pressure-before.json — mobilityPressure 0.90/0.91/0.97, 0.91/0.92/0.97, 0.56/0.57/0.62, 0.75/0.76/0.81 across territorialPressure 0/0.12/0.8",
+      "after": "territorial-pressure-after.json — 0.90/0.90/0.90, 0.91/0.91/0.91, 0.56/0.56/0.56, 0.75/0.75/0.75",
+      "crossTree": "cross-tree-territorial-isolation.json — the same probe run in three trees. Parent 742b567: 18 of 18 band-measurements move (mobilityPressure 18, candidates 18, netMovePressure 15, reason pressures 15, selected score 12). Lifecycle-only e5e3143: still 18 of 18, confirming Part A did not touch this path. Tip 427d953: 0 of 18.",
+      "zeroDivergenceControl": "warmed 0 days with every band's field pinned to 0, parent and tip agree BIT FOR BIT, so removing the term is exactly equivalent to holding the field at zero and no reader survives.",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the effect is reproduced on the parent tree before being claimed removed, and the removal is controlled against a zero-divergence arm"
+      }
+    },
+    "T4_crowding_without_encounter": {
+      "verdict": "PHYSICAL_CROWDING_LIVE_NO_TERRITORIAL_MOTIVE_INVENTED",
+      "vacuous": false,
+      "weightedCrowding": 0.18,
+      "rows": [
+        {
+          "territorialPressure": 0,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        },
+        {
+          "territorialPressure": 0.12,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        },
+        {
+          "territorialPressure": 0.8,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        }
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "real physical crowding exists at the measured tile",
+        "weightedCrowding": 0.18
+      }
+    },
+    "T5_encounter_friction_access_path_live": {
+      "verdict": "ACCEPTED_SOCIAL_PATH_LIVE_AND_SINGLE",
+      "vacuous": false,
+      "withEvidence": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "withoutEvidence": {
+        "phase": "none",
+        "activeCount": 0,
+        "historicalCount": 0,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 0,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "fresh friction genuinely moves access behaviour, so removing the territorial term did not kill the real path",
+        "delta": 0.97
+      }
+    },
+    "T6_release_leaves_no_orphan_continuation": {
+      "verdict": "WHEN_EVIDENCE_REACHES_ZERO_NOTHING_CONTINUES_THE_SOCIAL_EFFECT",
+      "vacuous": false,
+      "releasedRow": {
+        "age": 12,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "territorialRows": [
+        {
+          "territorialPressure": 0,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        },
+        {
+          "territorialPressure": 0.12,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        },
+        {
+          "territorialPressure": 0.8,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        }
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the same construction does move behaviour when the evidence is fresh"
+      }
+    },
+    "T7_daughter_inheritance": {
+      "verdict": "INHERITED_VALUE_CARRIES_NO_BEHAVIOUR",
+      "vacuous": false,
+      "parentValue": 0.8,
+      "inheritedValue": 0.616,
+      "rows": [
+        {
+          "territorialPressure": 0,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        },
+        {
+          "territorialPressure": 0.12,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        },
+        {
+          "territorialPressure": 0.8,
+          "mobilityPressure": 0.9,
+          "netMovePressure": 1,
+          "crowdingPenalty": 0,
+          "nearbyBandPressure": 0,
+          "action": "move_to_tile",
+          "target": "tile:61:108",
+          "score": 3.48,
+          "deliberationBreadth": 11,
+          "reasonPressures": [
+            "primary:seek_better_water=0.9282",
+            "sec7:daughter_dispersal_pressure=0.26",
+            "sec10:mobility_pressure=0.9"
+          ],
+          "attributionReasons": [],
+          "candidates": [
+            "move_to_tile:tile:58:108:0.67",
+            "move_to_tile:tile:59:108:1.39",
+            "move_to_tile:tile:59:109:-0.3",
+            "move_to_tile:tile:60:106:0.05",
+            "move_to_tile:tile:60:109:0.59",
+            "move_to_tile:tile:60:110:-0.45",
+            "move_to_tile:tile:61:108:3.48",
+            "move_to_tile:tile:61:109:0.85",
+            "move_to_tile:tile:62:108:1.48",
+            "resource_scout:tile:61:108:3.17",
+            "stay:-:0.99"
+          ]
+        }
+      ],
+      "itemFourUntouched": "no founder selection, no daughter viability, no successor group — createDaughterBand is unmodified by this correction",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the inherited value is genuinely non-zero and the band has real pressure from elsewhere",
+        "inheritedValue": 0.616
+      }
+    },
+    "T8_social_pressure_profile_distinction": {
+      "verdict": "SEPARATE_FIELD_ALWAYS_INERT_NEVER_UPDATED",
+      "vacuous": false,
+      "field": "SocialPressureProfile.territorialPressure",
+      "writer": "getInitialSocialPressure() = 0.08 at spawn; applyDemographyToSocialPressure spreads it forward unchanged",
+      "readers": 0,
+      "distinctFromBandField": true,
+      "valueAtSpawn": 0.08,
+      "bandValueAtSpawn": 0.12,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the two fields hold DIFFERENT constants (0.08 vs 0.12), which is itself proof they are not one authority"
+      }
+    },
+    "T9_decision_attribution": {
+      "verdict": "ATTRIBUTION_FIGURE_OBSERVED_AND_NO_LONGER_VARIES_WITH_AN_UNPROVENANCED_FIELD",
+      "vacuous": false,
+      "band": "band:varied-estuary",
+      "stayWarmDays": 180,
+      "attributionReasonsPerValue": [
+        {
+          "territorialPressure": 0,
+          "attribution": [
+            "primary:low_mobility_pressure=0.1523"
+          ]
+        },
+        {
+          "territorialPressure": 0.12,
+          "attribution": [
+            "primary:low_mobility_pressure=0.1523"
+          ]
+        },
+        {
+          "territorialPressure": 0.8,
+          "attribution": [
+            "primary:low_mobility_pressure=0.1523"
+          ]
+        }
+      ],
+      "allReasonPressuresPerValue": [
+        {
+          "territorialPressure": 0,
+          "reasons": [
+            "primary:low_mobility_pressure=0.1523"
+          ]
+        },
+        {
+          "territorialPressure": 0.12,
+          "reasons": [
+            "primary:low_mobility_pressure=0.1523"
+          ]
+        },
+        {
+          "territorialPressure": 0.8,
+          "reasons": [
+            "primary:low_mobility_pressure=0.1523"
+          ]
+        }
+      ],
+      "notConstructed": false,
+      "instrumentCorrection": "the first form of this fixture read `primaryReason.detail.pressure`. There is no `detail`; the field is `pressure` on the reason. It therefore read its own -1 fallback in all three arms and reported that three identical sentinels proved the figure no longer varies. It proved nothing. Corrected here, and cross-checked against the parent tree, where the SAME reading moves 0.1523 -> 0.1691 -> 0.2643 on band:varied-estuary as the field goes 0 -> 0.12 -> 0.8.",
+      "crossTreeCompanion": "cross-tree-territorial-isolation.json — attributionMovedBands 3 on the parent, 0 here",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a reason carrying an attribution pressure was genuinely observed, so 'does not vary' is a statement about a value that exists",
+        "observed": true,
+        "sample": [
+          "primary:low_mobility_pressure=0.1523"
+        ]
+      }
+    },
+    "T10_no_duplicate_charge": {
+      "verdict": "NO_TERRITORIAL_CHARGE_REMAINS_TO_DUPLICATE_ANYTHING",
+      "vacuous": false,
+      "crowdingPenalty": [
+        0,
+        0,
+        0
+      ],
+      "correction32Bounds": "the CORRECTION-32 direct-charge suite is rerun unchanged in this checkpoint's regression; removing a term cannot add a charge",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the crowding channel is still readable and unchanged across all three values"
+      }
+    },
+    "T11_natural_occurrence": {
+      "verdict": "MEASURED_SEPARATELY",
+      "vacuous": false,
+      "files": [
+        "territorial-pressure-natural-20y.json",
+        "territorial-pressure-natural-50y.json",
+        "territorial-pressure-natural-200y.json"
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "three horizons measured in companion runs"
+      }
+    },
+    "T12_determinism": {
+      "verdict": "DELEGATED_TO_THE_ITEM_3_DETERMINISM_AUDIT",
+      "vacuous": false,
+      "note": "four-way time-mode equivalence and fresh-process determinism are rerun unchanged on this tree in the regression; removing a constant term cannot introduce mode dependence",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the determinism audit is rerun with Item 3 behaviour present in the compared span"
+      }
+    }
+  }
+}

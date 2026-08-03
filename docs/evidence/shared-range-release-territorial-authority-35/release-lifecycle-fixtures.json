@@ -1,0 +1,1518 @@
+{
+  "audit": "CORRECTION-35-RELEASE-LIFECYCLE-FIXTURES",
+  "summary": {
+    "fixtures": 12,
+    "failing": 0,
+    "vacuous": 0,
+    "vacuousIds": [],
+    "failingIds": [],
+    "notConstructed": 1
+  },
+  "verdicts": {
+    "L1_natural_incident_shape": "SUB_THRESHOLD_EVIDENCE_IS_COOLING_AND_ITS_BEHAVIOUR_IS_UNCHANGED",
+    "L2_just_below_threshold": "NON_ZERO_BEHAVIOUR_IS_NEVER_LABELLED_FULLY_HISTORICAL",
+    "L3_exactly_at_threshold": "NOT_CONSTRUCTED_NO_ROW_LANDS_EXACTLY_ON_0_05",
+    "L4_exact_zero": "RELEASED_AND_BEHAVIOURALLY_INERT",
+    "L5_fresh_evidence": "ACTIVE",
+    "L6_mixed_weights": "COUNTS_MAX_WEIGHT_AND_PHASE_ALL_COHERENT",
+    "L7_reports_and_direct": "REPORT_WEIGHTING_AND_EPISODE_ACCOUNTING_INTACT",
+    "L8_confidence_preservation": "CONFIDENCE_RECORDED_FOR_CROSS_TREE_COMPARISON",
+    "L9_decision_preservation": "DECISIONS_RECORDED_FOR_CROSS_TREE_COMPARISON",
+    "L10_retained_history": "RELEASED_RECORD_STILL_HELD_AND_STILL_COUNTED_AS_HISTORY",
+    "L11_fresh_reencounter": "A_NEW_EPISODE_COUNTS_AND_THE_OLD_ONE_STAYS_RELEASED",
+    "L12_lifecycle_determinism": "IDENTICAL_ON_REPEAT"
+  },
+  "fixtures": {
+    "L1_natural_incident_shape": {
+      "verdict": "SUB_THRESHOLD_EVIDENCE_IS_COOLING_AND_ITS_BEHAVIOUR_IS_UNCHANGED",
+      "vacuous": false,
+      "row": {
+        "age": 15,
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.04,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.01,
+          "sharedUsePressure": 0.01,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0.02
+      },
+      "beforeThisCorrection": "phase released_historical, activeCount 0, historicalCount 1, same 0.02-0.04 behaviour delta",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a record genuinely lands between 0 and the 0.05 threshold AND genuinely moves behaviour",
+        "weight": 0.04,
+        "delta": 0.02
+      }
+    },
+    "L2_just_below_threshold": {
+      "verdict": "NON_ZERO_BEHAVIOUR_IS_NEVER_LABELLED_FULLY_HISTORICAL",
+      "vacuous": false,
+      "rows": [
+        {
+          "age": 15,
+          "weight": 0.04,
+          "phase": "cooling",
+          "delta": 0.02
+        }
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "at least one sub-threshold row exists to judge",
+        "rows": 1
+      }
+    },
+    "L3_exactly_at_threshold": {
+      "verdict": "NOT_CONSTRUCTED_NO_ROW_LANDS_EXACTLY_ON_0_05",
+      "vacuous": false,
+      "row": null,
+      "notConstructed": true,
+      "note": "no integer age produces weight exactly 0.05 on either curve; reported as NOT CONSTRUCTED rather than approximated",
+      "nonVacuousPredicate": false,
+      "nonVacuous": {
+        "predicate": "a row lands exactly on the threshold and moves behaviour"
+      }
+    },
+    "L4_exact_zero": {
+      "verdict": "RELEASED_AND_BEHAVIOURALLY_INERT",
+      "vacuous": false,
+      "rows": [
+        {
+          "age": 12,
+          "phase": "released_historical",
+          "activeCount": 0,
+          "historicalCount": 1,
+          "weight": 0,
+          "confidence": 0.59,
+          "recordsForTile": 1,
+          "deltas": {
+            "strangerCaution": 0,
+            "sharedUsePressure": 0,
+            "rememberedRefusalAvoidance": 0,
+            "rememberedCooperationTolerance": 0,
+            "kinTolerance": 0,
+            "familiarTolerance": 0
+          },
+          "behaviourDelta": 0
+        },
+        {
+          "age": 13,
+          "phase": "released_historical",
+          "activeCount": 0,
+          "historicalCount": 1,
+          "weight": 0,
+          "confidence": 0.59,
+          "recordsForTile": 1,
+          "deltas": {
+            "strangerCaution": 0,
+            "sharedUsePressure": 0,
+            "rememberedRefusalAvoidance": 0,
+            "rememberedCooperationTolerance": 0,
+            "kinTolerance": 0,
+            "familiarTolerance": 0
+          },
+          "behaviourDelta": 0
+        },
+        {
+          "age": 14,
+          "phase": "released_historical",
+          "activeCount": 0,
+          "historicalCount": 1,
+          "weight": 0,
+          "confidence": 0.59,
+          "recordsForTile": 1,
+          "deltas": {
+            "strangerCaution": 0,
+            "sharedUsePressure": 0,
+            "rememberedRefusalAvoidance": 0,
+            "rememberedCooperationTolerance": 0,
+            "kinTolerance": 0,
+            "familiarTolerance": 0
+          },
+          "behaviourDelta": 0
+        },
+        {
+          "age": 15,
+          "phase": "released_historical",
+          "activeCount": 0,
+          "historicalCount": 1,
+          "weight": 0,
+          "confidence": 0.59,
+          "recordsForTile": 1,
+          "deltas": {
+            "strangerCaution": 0,
+            "sharedUsePressure": 0,
+            "rememberedRefusalAvoidance": 0,
+            "rememberedCooperationTolerance": 0,
+            "kinTolerance": 0,
+            "familiarTolerance": 0
+          },
+          "behaviourDelta": 0
+        }
+      ],
+      "rowCount": 13,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "zero-weight rows exist AND the same construction produces non-zero behaviour at younger ages, so inertness is a measured drop",
+        "zeroRows": 13,
+        "maxDelta": 0.97
+      }
+    },
+    "L5_fresh_evidence": {
+      "verdict": "ACTIVE",
+      "vacuous": false,
+      "row": {
+        "age": 0,
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a full-weight record exists and moves behaviour",
+        "delta": 0.97
+      }
+    },
+    "L6_mixed_weights": {
+      "verdict": "COUNTS_MAX_WEIGHT_AND_PHASE_ALL_COHERENT",
+      "vacuous": false,
+      "result": {
+        "phase": "active",
+        "activeCount": 2,
+        "historicalCount": 1,
+        "weight": 1,
+        "confidence": 0.69,
+        "recordsForTile": 3,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "three records with genuinely mixed weights, at least one live and at least one released",
+        "active": 2,
+        "historical": 1,
+        "records": 3
+      }
+    },
+    "L7_reports_and_direct": {
+      "verdict": "REPORT_WEIGHTING_AND_EPISODE_ACCOUNTING_INTACT",
+      "vacuous": false,
+      "mixed": {
+        "phase": "cooling",
+        "activeCount": 2,
+        "historicalCount": 0,
+        "weight": 0.89,
+        "confidence": 0.69,
+        "recordsForTile": 2,
+        "deltas": {
+          "strangerCaution": 0.31,
+          "sharedUsePressure": 0.2,
+          "rememberedRefusalAvoidance": 0.21,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.11
+        },
+        "behaviourDelta": 0.85
+      },
+      "directOnly": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.89,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.31,
+          "sharedUsePressure": 0.2,
+          "rememberedRefusalAvoidance": 0.21,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.11
+        },
+        "behaviourDelta": 0.85
+      },
+      "reportedOnly": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.52,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.19,
+          "sharedUsePressure": 0.15,
+          "rememberedRefusalAvoidance": 0.11,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.06
+        },
+        "behaviourDelta": 0.52
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "both channels carry weight at the same age and hearsay is genuinely discounted",
+        "direct": 0.89,
+        "reported": 0.52
+      }
+    },
+    "L8_confidence_preservation": {
+      "verdict": "CONFIDENCE_RECORDED_FOR_CROSS_TREE_COMPARISON",
+      "vacuous": false,
+      "confidences": [
+        {
+          "age": 0,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 1,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 2,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 3,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 4,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 5,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 6,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 7,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 8,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 9,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 10,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 11,
+          "direct": 0.64,
+          "reported": 0.64
+        },
+        {
+          "age": 12,
+          "direct": 0.59,
+          "reported": 0.64
+        },
+        {
+          "age": 13,
+          "direct": 0.59,
+          "reported": 0.64
+        },
+        {
+          "age": 14,
+          "direct": 0.59,
+          "reported": 0.64
+        },
+        {
+          "age": 15,
+          "direct": 0.59,
+          "reported": 0.59
+        },
+        {
+          "age": 16,
+          "direct": 0.59,
+          "reported": 0.59
+        },
+        {
+          "age": 17,
+          "direct": 0.59,
+          "reported": 0.59
+        },
+        {
+          "age": 18,
+          "direct": 0.59,
+          "reported": 0.59
+        },
+        {
+          "age": 19,
+          "direct": 0.59,
+          "reported": 0.59
+        },
+        {
+          "age": 20,
+          "direct": 0.59,
+          "reported": 0.59
+        },
+        {
+          "age": 21,
+          "direct": 0.59,
+          "reported": 0.59
+        },
+        {
+          "age": 22,
+          "direct": 0.59,
+          "reported": 0.59
+        },
+        {
+          "age": 23,
+          "direct": 0.59,
+          "reported": 0.59
+        },
+        {
+          "age": 24,
+          "direct": 0.59,
+          "reported": 0.59
+        }
+      ],
+      "digest": "c9628a479b514f21e806a51c5125ea4643c310e945c1d2404d64deb32343f89f",
+      "crossTreeCompanion": "release-lifecycle-before.json vs release-lifecycle-after.json — every confidence value in both sweeps is identical, and the confidence term still reads the 0.05 set",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "confidence genuinely varies across the sweep, so 'unchanged' is a real comparison rather than a constant",
+        "distinctValues": 2
+      }
+    },
+    "L9_decision_preservation": {
+      "verdict": "DECISIONS_RECORDED_FOR_CROSS_TREE_COMPARISON",
+      "vacuous": false,
+      "decisions": [
+        {
+          "band": "band:varied-dry-corridor-mid",
+          "action": "move_to_tile",
+          "target": "tile:61:108"
+        },
+        {
+          "band": "band:varied-dry-corridor-upper",
+          "action": "resource_scout",
+          "target": "tile:64:107"
+        },
+        {
+          "band": "band:varied-estuary",
+          "action": "move_to_tile",
+          "target": "tile:192:88"
+        },
+        {
+          "band": "band:varied-lake-east",
+          "action": "logistical_probe",
+          "target": "tile:87:75"
+        },
+        {
+          "band": "band:varied-lake-north",
+          "action": "move_to_tile",
+          "target": "tile:74:60"
+        },
+        {
+          "band": "band:varied-lake-west",
+          "action": "move_to_tile",
+          "target": "tile:71:80"
+        },
+        {
+          "band": "band:varied-pass-frontier",
+          "action": "move_to_tile",
+          "target": "tile:133:44"
+        },
+        {
+          "band": "band:varied-plains-creek",
+          "action": "move_to_tile",
+          "target": "tile:103:47"
+        },
+        {
+          "band": "band:varied-river-mid",
+          "action": "move_to_tile",
+          "target": "tile:112:57"
+        }
+      ],
+      "digest": "9f1781cb538de8cbc90a74c1713704c70fed2ebf01a33a99c1937b88d534493d",
+      "crossTreeCompanion": "compared against the parent commit in cross-tree-comparison.json — the lifecycle commit alone must leave every score and action identical",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "more than one band produced a decision",
+        "bands": 9
+      }
+    },
+    "L10_retained_history": {
+      "verdict": "RELEASED_RECORD_STILL_HELD_AND_STILL_COUNTED_AS_HISTORY",
+      "vacuous": false,
+      "row": {
+        "age": 12,
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the record is genuinely still in the ring while contributing nothing"
+      }
+    },
+    "L11_fresh_reencounter": {
+      "verdict": "A_NEW_EPISODE_COUNTS_AND_THE_OLD_ONE_STAYS_RELEASED",
+      "vacuous": false,
+      "releasedOnly": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "releasedPlusFresh": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 1,
+        "weight": 1,
+        "confidence": 0.64,
+        "recordsForTile": 2,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the old record alone moves nothing and the pair moves something, so the new episode is what counts"
+      }
+    },
+    "L12_lifecycle_determinism": {
+      "verdict": "IDENTICAL_ON_REPEAT",
+      "vacuous": false,
+      "once": {
+        "phase": "cooling",
+        "activeCount": 2,
+        "historicalCount": 0,
+        "weight": 0.89,
+        "confidence": 0.64,
+        "recordsForTile": 2,
+        "deltas": {
+          "strangerCaution": 0.31,
+          "sharedUsePressure": 0.2,
+          "rememberedRefusalAvoidance": 0.21,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.11
+        },
+        "behaviourDelta": 0.85
+      },
+      "identical": true,
+      "crossTreeCompanion": "four-way and fresh-process equivalence are asserted by the Item 3 determinism audit, rerun in this checkpoint's regression",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "two records of genuinely different classes are being hashed",
+        "phase": "cooling",
+        "activeCount": 2,
+        "historicalCount": 0,
+        "weight": 0.89,
+        "confidence": 0.64,
+        "recordsForTile": 2,
+        "deltas": {
+          "strangerCaution": 0.31,
+          "sharedUsePressure": 0.2,
+          "rememberedRefusalAvoidance": 0.21,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.11
+        },
+        "behaviourDelta": 0.85
+      }
+    }
+  },
+  "weightSweep": [
+    {
+      "age": 0,
+      "direct": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.56,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.21,
+          "sharedUsePressure": 0.16,
+          "rememberedRefusalAvoidance": 0.12,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.07
+        },
+        "behaviourDelta": 0.57
+      }
+    },
+    {
+      "age": 1,
+      "direct": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.56,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.21,
+          "sharedUsePressure": 0.16,
+          "rememberedRefusalAvoidance": 0.12,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.07
+        },
+        "behaviourDelta": 0.57
+      }
+    },
+    {
+      "age": 2,
+      "direct": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.56,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.21,
+          "sharedUsePressure": 0.16,
+          "rememberedRefusalAvoidance": 0.12,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.07
+        },
+        "behaviourDelta": 0.57
+      }
+    },
+    {
+      "age": 3,
+      "direct": {
+        "phase": "active",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 1,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.36,
+          "sharedUsePressure": 0.22,
+          "rememberedRefusalAvoidance": 0.25,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.12
+        },
+        "behaviourDelta": 0.97
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.56,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.21,
+          "sharedUsePressure": 0.16,
+          "rememberedRefusalAvoidance": 0.12,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.07
+        },
+        "behaviourDelta": 0.57
+      }
+    },
+    {
+      "age": 4,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.89,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.31,
+          "sharedUsePressure": 0.2,
+          "rememberedRefusalAvoidance": 0.21,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.11
+        },
+        "behaviourDelta": 0.85
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.52,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.19,
+          "sharedUsePressure": 0.15,
+          "rememberedRefusalAvoidance": 0.11,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.06
+        },
+        "behaviourDelta": 0.52
+      }
+    },
+    {
+      "age": 5,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.78,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.27,
+          "sharedUsePressure": 0.17,
+          "rememberedRefusalAvoidance": 0.18,
+          "rememberedCooperationTolerance": 0.02,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.09
+        },
+        "behaviourDelta": 0.73
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.47,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.17,
+          "sharedUsePressure": 0.13,
+          "rememberedRefusalAvoidance": 0.1,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.06
+        },
+        "behaviourDelta": 0.47
+      }
+    },
+    {
+      "age": 6,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.67,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.22,
+          "sharedUsePressure": 0.15,
+          "rememberedRefusalAvoidance": 0.14,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.08
+        },
+        "behaviourDelta": 0.6
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.43,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.15,
+          "sharedUsePressure": 0.12,
+          "rememberedRefusalAvoidance": 0.08,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.05
+        },
+        "behaviourDelta": 0.41
+      }
+    },
+    {
+      "age": 7,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.56,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.18,
+          "sharedUsePressure": 0.13,
+          "rememberedRefusalAvoidance": 0.11,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.07
+        },
+        "behaviourDelta": 0.5
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.39,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.14,
+          "sharedUsePressure": 0.11,
+          "rememberedRefusalAvoidance": 0.07,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.05
+        },
+        "behaviourDelta": 0.38
+      }
+    },
+    {
+      "age": 8,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.44,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.14,
+          "sharedUsePressure": 0.1,
+          "rememberedRefusalAvoidance": 0.08,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.05
+        },
+        "behaviourDelta": 0.38
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.34,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.12,
+          "sharedUsePressure": 0.1,
+          "rememberedRefusalAvoidance": 0.06,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.04
+        },
+        "behaviourDelta": 0.33
+      }
+    },
+    {
+      "age": 9,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.33,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.1,
+          "sharedUsePressure": 0.08,
+          "rememberedRefusalAvoidance": 0.06,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.04
+        },
+        "behaviourDelta": 0.29
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.3,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.1,
+          "sharedUsePressure": 0.09,
+          "rememberedRefusalAvoidance": 0.05,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.04
+        },
+        "behaviourDelta": 0.29
+      }
+    },
+    {
+      "age": 10,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.22,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.06,
+          "sharedUsePressure": 0.05,
+          "rememberedRefusalAvoidance": 0.03,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.03
+        },
+        "behaviourDelta": 0.18
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.26,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.09,
+          "sharedUsePressure": 0.08,
+          "rememberedRefusalAvoidance": 0.04,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.03
+        },
+        "behaviourDelta": 0.25
+      }
+    },
+    {
+      "age": 11,
+      "direct": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.11,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.03,
+          "sharedUsePressure": 0.03,
+          "rememberedRefusalAvoidance": 0.01,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.01
+        },
+        "behaviourDelta": 0.08
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.22,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.07,
+          "sharedUsePressure": 0.06,
+          "rememberedRefusalAvoidance": 0.03,
+          "rememberedCooperationTolerance": 0.01,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.03
+        },
+        "behaviourDelta": 0.2
+      }
+    },
+    {
+      "age": 12,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.17,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.06,
+          "sharedUsePressure": 0.05,
+          "rememberedRefusalAvoidance": 0.02,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.02
+        },
+        "behaviourDelta": 0.15
+      }
+    },
+    {
+      "age": 13,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.13,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.04,
+          "sharedUsePressure": 0.04,
+          "rememberedRefusalAvoidance": 0.02,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.02
+        },
+        "behaviourDelta": 0.12
+      }
+    },
+    {
+      "age": 14,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.09,
+        "confidence": 0.64,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.03,
+          "sharedUsePressure": 0.03,
+          "rememberedRefusalAvoidance": 0.01,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0.01
+        },
+        "behaviourDelta": 0.08
+      }
+    },
+    {
+      "age": 15,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "cooling",
+        "activeCount": 1,
+        "historicalCount": 0,
+        "weight": 0.04,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0.01,
+          "sharedUsePressure": 0.01,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0.02
+      }
+    },
+    {
+      "age": 16,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 17,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 18,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 19,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 20,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 21,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 22,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 23,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    },
+    {
+      "age": 24,
+      "direct": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      },
+      "reported": {
+        "phase": "released_historical",
+        "activeCount": 0,
+        "historicalCount": 1,
+        "weight": 0,
+        "confidence": 0.59,
+        "recordsForTile": 1,
+        "deltas": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "rememberedCooperationTolerance": 0,
+          "kinTolerance": 0,
+          "familiarTolerance": 0
+        },
+        "behaviourDelta": 0
+      }
+    }
+  ]
+}
