@@ -1,0 +1,200 @@
+{
+  "audit": "CORRECTION-34E-EXPEDITION-TARGET-WORK-LABOR",
+  "phase": "before",
+  "productionAcceptsPartyLabourAuthority": false,
+  "target": "tile:73:111",
+  "band": "band:varied-dry-corridor-mid",
+  "patchId": "patch:tile:73:111:fallback_food",
+  "distanceTiles": 2,
+  "memoryPresenceConfidence": 0.37,
+  "memoryYieldConfidence": 0.06,
+  "chain": "resolveExpeditionTargetWork -> buildTripRecord -> resolvePhysicalFoodHarvest (real production)",
+  "headlines": {
+    "W1": "DISTANT WORK CHANGES WHEN HOME LABOR CHANGES",
+    "W2": "PARTY PRODUCTIVE LABOR IS INERT AT ITS OWN TARGET"
+  },
+  "W1_same_party_different_residential_labor": {
+    "arms": {
+      "residentialAdultsAtHome_1": {
+        "workingAdults": 6,
+        "partyWorkers": 5,
+        "estimatedPeopleCount": 1,
+        "activityOutcome": "target_found",
+        "estimatedReturnValue": 0.0071,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestedAmount": 0.0071,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0086,
+        "depletionApplied": 0.0086,
+        "transportLoss": 0.0004,
+        "processingLoss": 0.0011,
+        "usableSupport": 0.0071,
+        "shadowPeople": null,
+        "stockBefore": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockAfter": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockChangedAtTarget": false
+      },
+      "residentialAdultsAtHome_25": {
+        "workingAdults": 30,
+        "partyWorkers": 5,
+        "estimatedPeopleCount": 6,
+        "activityOutcome": "partial_success",
+        "estimatedReturnValue": 0.0291,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestedAmount": 0.0291,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "stockBefore": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockAfter": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockChangedAtTarget": false
+      }
+    },
+    "invariant": false,
+    "note": "the party, its composition, its cargo, the target, the route, the season, the memory and the world stock are identical; ONLY the adults left at the residence differ"
+  },
+  "W2_same_residence_different_party_labor": {
+    "arms": {
+      "party_2_workers": {
+        "workingAdults": 12,
+        "residentialAfterCommitment": 10,
+        "partyWorkers": 2,
+        "estimatedPeopleCount": 2,
+        "activityOutcome": "partial_success",
+        "estimatedReturnValue": 0.0186,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestedAmount": 0.0186,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0226,
+        "depletionApplied": 0.0226,
+        "transportLoss": 0.0011,
+        "processingLoss": 0.0029,
+        "usableSupport": 0.0186,
+        "shadowPeople": null,
+        "stockBefore": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockAfter": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockChangedAtTarget": false
+      },
+      "party_5_workers": {
+        "workingAdults": 15,
+        "residentialAfterCommitment": 10,
+        "partyWorkers": 5,
+        "estimatedPeopleCount": 2,
+        "activityOutcome": "partial_success",
+        "estimatedReturnValue": 0.0186,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestedAmount": 0.0186,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0226,
+        "depletionApplied": 0.0226,
+        "transportLoss": 0.0011,
+        "processingLoss": 0.0029,
+        "usableSupport": 0.0186,
+        "shadowPeople": null,
+        "stockBefore": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockAfter": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockChangedAtTarget": false
+      }
+    },
+    "partyLabourChangesWork": false,
+    "note": "residential labour after commitment is 10 in BOTH arms, so any difference is attributable to the party"
+  },
+  "W3_productive_labor_vs_physical_headcount": {
+    "arms": {
+      "A_5workers_0nonworking_5bodies": {
+        "estimatedPeopleCount": 2,
+        "activityOutcome": "partial_success",
+        "estimatedReturnValue": 0.0186,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestedAmount": 0.0186,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0226,
+        "depletionApplied": 0.0226,
+        "transportLoss": 0.0011,
+        "processingLoss": 0.0029,
+        "usableSupport": 0.0186,
+        "shadowPeople": null,
+        "stockBefore": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockAfter": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockChangedAtTarget": false
+      },
+      "B_5workers_2nonworking_7bodies": {
+        "estimatedPeopleCount": 2,
+        "activityOutcome": "partial_success",
+        "estimatedReturnValue": 0.0186,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestedAmount": 0.0186,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0226,
+        "depletionApplied": 0.0226,
+        "transportLoss": 0.0011,
+        "processingLoss": 0.0029,
+        "usableSupport": 0.0186,
+        "shadowPeople": null,
+        "stockBefore": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockAfter": {
+          "depletionStore": "0.0142",
+          "plantStore": null,
+          "faunaStore": null
+        },
+        "stockChangedAtTarget": false
+      }
+    },
+    "targetWorkEqual": true,
+    "note": "non-working bodies must not increase the take; consumption and pace burden are measured separately by the CORRECTION-34D fixtures"
+  }
+}
