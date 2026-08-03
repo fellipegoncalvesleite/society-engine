@@ -224,3 +224,55 @@ before/after probe's stock reading keyed the world's stores by tile id when `pla
 keyed by patch id, so `stockChangedAtTarget` read `false` in **every arm of both trees** and the
 field measured nothing. Both arms were regenerated with the corrected probe; the superseded pair is
 preserved in git history at `12716a6` and `d36bc87`.
+
+---
+
+## CORRECTION-34F — provenance
+
+| Arm | Tree |
+| --- | --- |
+| before | `e7d8de44fd78c8e15308a3bc47a3b346cffd1668` (CORRECTION-34E tip) — measured **in place**, before any production edit, and committed as its own before-arm commit `7d4dda3`. |
+| after | `checkpoint/shared-use-physical-presence-authority-34` |
+
+**No worktree was needed.** The probe is arm-neutral by construction — every case is wrapped, so a
+tree that resolves and a tree that throws both produce a comparable row — and the before arm was
+taken and committed before the production change, so the parent behaviour is preserved in history
+rather than reconstructed.
+
+Preflight verified: branch exact, tree clean, local **and** remote HEAD both `e7d8de4`,
+`origin/main` `0a43083a`, one worktree, no stash, no in-progress merge/rebase/cherry-pick, and
+`git diff --name-status e7d8de4..HEAD` empty.
+
+### Commands
+
+```bash
+node scripts/zeroLaborTargetWorkAudit.mjs --phase before --out <evidence>/zero-labor-target-work-before.json   # committed first
+node scripts/zeroLaborTargetWorkAudit.mjs --phase after  --out <evidence>/zero-labor-target-work-after.json
+node scripts/zeroLaborContractFixturesAudit.mjs \
+  --out            <evidence>/zero-labor-target-work-fixtures.json \
+  --out-natural-20 <evidence>/natural-target-work-contract-20y.json \
+  --out-natural-50 <evidence>/natural-target-work-contract-50y.json
+```
+
+Every regression was rerun with **every** output flag redirected outside the repository, including
+`--timeline-out`, `--timelines`, `--parity-out`, `--chain-out`, `--cascade-out`, the six presence
+outputs and CORRECTION-33's six. `git diff --name-only e7d8de4..HEAD -- docs/evidence/
+':(exclude)…authority-34/**'` returns nothing and no working-tree change exists outside the
+checkpoint directory. **No frozen-evidence incident occurred.**
+
+### Attribution: compared against the 34E tree, not against committed files
+
+Regressions were compared to the CORRECTION-34E run of the same scripts (same session, same
+arguments), which is the only comparison that attributes a difference to *this* pass. Result:
+**every suite byte-identical modulo `generatedAt`** — the 34E T-fixtures, caller matrix, numeric
+chain and after-arm proof are identical *files*; the 34E natural 20 y and 50 y runs are
+byte-identical; the same-day digest is the same sha256; and all nine frozen suites are identical.
+
+### No instrument error was found in this pass
+
+The probe was built on the CORRECTION-34E instrument corrections already recorded (stock keyed by
+`physicalFoodHarvest.sourceId`, not by tile; `estimatedReturnValue` labelled as the post-harvest
+return). Both were carried forward deliberately rather than rediscovered. One design choice worth
+naming: because a rejected case returns no record and therefore no `sourceId`, the probe resolves a
+valid five-worker party **first** and reuses that source id, so a rejected case can still have its
+stock compared against the same patch instead of being scored against nothing.

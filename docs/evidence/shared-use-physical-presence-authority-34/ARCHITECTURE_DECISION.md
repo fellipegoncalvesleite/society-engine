@@ -170,3 +170,37 @@ work — the same class of error, in the other direction.
 - Carrying, provisions, pace, presence and fission — all settled by CORRECTION-34D and untouched.
 - Who *within* a party does the work. A party remains an aggregate; skill, age and injury inside it
   need the future individual/household layer.
+
+---
+
+## CORRECTION-34F — the target-work labour domain: Option A, strict positive integer
+
+### The choice
+
+| Option | Verdict |
+| --- | --- |
+| **A — reject anything that is not a positive integer, at the exported boundary** | **SELECTED.** The smallest truthful design: an impossible exported call fails loudly, and no clamp remains that could disguise a caller's mistake. |
+| B — accept zero and build a canonical no-work record | REJECTED. It adds an outcome and a state to describe something no party can be, and turns a broken caller into a silent no-op — which is what let zero labour remove stock in the first place. |
+| C — validate phase and minimum in every caller instead | REJECTED as the primary mechanism: it leaves the exported authority untruthful for any future caller. Its substance is kept as evidence — the canonical call order is proven, and the resolver rejects defensively on top of it. |
+| D — clamp to 1 | REJECTED. Silently inventing a worker is the same error as silently rounding one. |
+
+### Why the bound is one, not the expedition minimum
+
+One person can physically work a day, so a physical resolver must not refuse it. The two-worker
+minimum answers a different question — what is worth sending, and when a party turns for home — and
+it already has a home in `expedition.ts`, enforced by the launch gate and by
+`reconcileExpeditionLabor`. Two independent reasons agree: the semantic one above, and the
+structural one that `expedition.ts` imports `intraSeasonTrips.ts` and never the reverse, so sharing
+the constant would close a dependency cycle.
+
+The honest consequence is stated rather than hidden: the resolver alone would accept a party of one.
+Canonical production never hands it one (measured labour range 2..7 over 50 simulated years), and
+if it ever did, the expedition module — not this one — is where that policy would be enforced.
+
+### What was deliberately NOT changed
+
+- `EXPEDITION_MIN_PARTY_WORKERS` and every policy that reads it.
+- The harvest equation, the confidence terms and the outcome classification thresholds.
+- The same-day residential path, which passes no party context and never reaches this validation.
+- Any caller: the canonical call order already cannot produce an invalid value, so nothing needed
+  repairing. The contract guards a future caller and a hand-assembled state.

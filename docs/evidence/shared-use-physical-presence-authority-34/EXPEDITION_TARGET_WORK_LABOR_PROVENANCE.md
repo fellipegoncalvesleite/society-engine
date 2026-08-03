@@ -315,3 +315,33 @@ is meaningful.
 Roadmap Item 3 stays active. Roadmap Item 4 remains **unstarted** — nothing here cancels, staffs or
 selects a party. The CORRECTION-34A formal scope reduction (same-day *current presence* deferred
 with a documented seam) is preserved exactly and is untouched by this pass.
+
+---
+
+## 13. SUPERSEDING AMENDMENT — CORRECTION-34F closed a hole this document left open
+
+Everything above stands. One thing it did not say, and should have.
+
+§3 of this document reported that the new `options.partyWorkers` is **required** and has **no
+default**, and presented that as making the invariant structural. It made the *presence* of a labour
+count structural. It did not constrain the **value**, and the builder's doc line "a party of zero
+workers works none" was not true of the code beneath it:
+
+- the physically-present outcome test is `estimatedPeopleCount >= 2 ? "partial_success" : "target_found"`, so zero read `target_found`;
+- `baseReturnValue = estimatedPeopleCount * 0.035 + yieldConfidence * 0.22 + presenceConfidence * 0.08` kept its confidence terms;
+- that became the `requestedAmount` the physical resolver removes from stock.
+
+**Measured on real production:** zero workers were accepted and **removed 0.0047 of stock**; a
+verification party of nobody **read the target**; `0.4` people were rounded to `0` (and still removed
+stock) and `1.6` to `2`.
+
+CORRECTION-34F requires a **positive integer** and passes it through unaltered — the
+`Math.max(0, Math.round(...))` was the laundering step. The bound is **1**, not
+`EXPEDITION_MIN_PARTY_WORKERS`: one person can physically work, and the two-worker minimum is
+expedition policy that lives in `expedition.ts` (and cannot be imported here without closing a
+dependency cycle). Canonical production is proven never to make an invalid call, and both long runs
+would have thrown if it had.
+
+Nothing in §1–§12 of this document changes: T1–T14, the caller matrix, the numeric chain, the
+after-arm proof and the same-day digest were all rerun and are byte-identical. See
+`ZERO_LABOR_TARGET_WORK_CONTRACT.md`.

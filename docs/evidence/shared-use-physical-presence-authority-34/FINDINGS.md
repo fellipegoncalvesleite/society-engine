@@ -614,3 +614,78 @@ tuned); any outcome improvement (active party-days move 854 → 866 at 20 y, rep
 anything about who *within* a party works; any performance conclusion (no timing arm was built); and
 no 200-year matrix was run. Roadmap Item 4 remains unstarted, and CORRECTION-34A's same-day
 current-presence deferral is preserved exactly.
+
+---
+
+# CORRECTION-34F — zero-labour target-work contract closure
+
+Full account in `ZERO_LABOR_TARGET_WORK_CONTRACT.md`.
+
+## J1 — 34E made the labour count required; it did not constrain the value
+
+34E's own §3 presented "required, no default" as making the invariant structural. It made the
+*presence* of a count structural, not its *domain*. The builder's doc line "a party of zero workers
+works none" was false of the code beneath it: the physically-present outcome test is
+`estimatedPeopleCount >= 2`, so zero read `target_found`; `baseReturnValue` keeps its
+`yieldConfidence * 0.22 + presenceConfidence * 0.08` terms when the labour term is zero; and that
+value becomes the `requestedAmount` the physical resolver removes from stock.
+
+## J2 — reproduced on real production, before any change
+
+| case | accepted | people | depletion | stock changed |
+| --- | --- | --- | --- | --- |
+| zero workers, exploitation | **yes** | **0** (`target_found`) | **0.0047** | **yes** |
+| zero workers, verification | **yes** | 0 | 0 | **it read the target** |
+| 0.4 workers | **yes** | **0** (rounded) | 0.0047 | yes |
+| 1.6 workers | **yes** | **2** (rounded) | 0.0226 | yes |
+| NaN / ±∞ / −1 | no | — | 0 | no |
+
+`ZERO LABOR REMOVES PHYSICAL STOCK`. Committed as its own before-arm commit before any edit.
+
+## J3 — Option A: a positive integer, and the bound is one
+
+`Number.isInteger(w) && w >= 1`, and the value is then passed through **unaltered** — the
+`Math.max(0, Math.round(...))` was the laundering step that turned an impossible count into a
+plausible one. The bound is **1**, not `EXPEDITION_MIN_PARTY_WORKERS`: one person can physically
+work, so a physical resolver may not encode the two-worker *policy*, and `expedition.ts` imports
+`intraSeasonTrips.ts` and never the reverse, so importing the constant would close a dependency
+cycle. The minimum stays where it is enforced — the launch gate and `reconcileExpeditionLabor`.
+
+## J4 — canonical production never needed repairing, and that is measured
+
+`expeditionDailyAction` reconciles **first**, then launches, then advances. Driven on constructed
+states: an unstaffable *operating* party leaves the operating phase (labour 6 → 3, bodies kept at 6,
+phase → `returning`); an unstaffable *prepared* party becomes `aborted`; a healthy one is untouched.
+The launch gate refuses below 2 with an integer-valued `deriveDepartableWorkers`, and target work is
+reachable only from `phase === "operating"`. Every write to `partyWorkers` in `src/sim` is
+enumerated; the only ones that produce 0 also set a terminal phase.
+
+## J5 — Z0–Z12: 13/13, 0 failing, 0 vacuous
+
+Zero exploitation rejected; zero verification cannot read the target; negative, NaN, ±∞ and both
+fractional values rejected; one, two and five workers unchanged; verify-only with a valid party
+still reads and still removes nothing; the same-day path never enters the contract.
+`casesRemovingStockWithoutAValidPositiveIntegerParty` **3 → 0**.
+
+## J6 — natural call domain, and a structural proof
+
+20 y / 50 y: **94 / 225** operating party-days reaching target work, **0** zero-labour, **0**
+fractional, **0** non-finite, **0** below the expedition minimum, labour range **2..7**. The proof
+is structural rather than statistical: after 34F an invalid count *throws*, and both runs completed.
+
+Natural occurrence of the defect is therefore **zero**. This closes an **exported contract**, not an
+observed misbehaviour — and the before-arm measurement is what shows the hole was real.
+
+## J7 — inert for every valid party
+
+Rerun against the CORRECTION-34E tree: 34E's T1–T14, caller matrix, numeric chain and after-arm
+proof are **identical files**; 34E's natural 20 y and 50 y are **byte-identical**; the same-day
+digest is the **same sha256**; 34/34A/R1–R12/L1–L12/H1–H14/numeric-chain/four-way are identical; and
+AUDIT-27 and CORRECTION-28 through -33 are identical including every second output flag. No frozen
+evidence changed.
+
+## J8 — not claimed
+
+That a party of one is a sensible expedition (the resolver permits it; policy forbids sending it,
+and none occurs); that ordinary play was hitting this; anything about the harvest equation; any
+outcome or performance change. No 200-year matrix. Item 4 unstarted.

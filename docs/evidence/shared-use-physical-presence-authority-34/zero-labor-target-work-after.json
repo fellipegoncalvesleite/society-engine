@@ -1,0 +1,378 @@
+{
+  "audit": "CORRECTION-34F-ZERO-LABOR-TARGET-WORK-CONTRACT",
+  "phase": "after",
+  "headline": "ZERO LABOR REJECTED BEFORE WORK",
+  "verificationHeadline": "ZERO LABOR CANNOT INSPECT THE TARGET",
+  "fractionalHeadline": "FRACTIONAL PEOPLE REJECTED",
+  "target": "tile:73:111",
+  "band": "band:varied-dry-corridor-mid",
+  "patchId": "patch:tile:73:111:fallback_food",
+  "sourceId": "plant:tile:73:111:roots_tubers_uso",
+  "distanceTiles": 2,
+  "chain": "resolveExpeditionTargetWork -> buildTripRecord -> resolvePhysicalFoodHarvest (real production)",
+  "cases": {
+    "Z1_zero_exploitation": {
+      "case": "Z1_zero_exploitation",
+      "partyWorkers": "0",
+      "verifyOnly": false,
+      "accepted": false,
+      "threw": true,
+      "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received 0. Zero or fractional labour cannot produce a physical request, stock removal, cargo or an ",
+      "estimatedPeopleCount": null,
+      "activityOutcome": null,
+      "returnedResourceKind": null,
+      "returnValueAfterHarvest": null,
+      "physicalSourceFound": null,
+      "physicalAvailability": null,
+      "harvestedAmount": null,
+      "depletionApplied": null,
+      "usableSupport": null,
+      "readTheTarget": false,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": false
+    },
+    "Z2_zero_verification": {
+      "case": "Z2_zero_verification",
+      "partyWorkers": "0",
+      "verifyOnly": true,
+      "accepted": false,
+      "threw": true,
+      "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received 0. Zero or fractional labour cannot produce a physical request, stock removal, cargo or an ",
+      "estimatedPeopleCount": null,
+      "activityOutcome": null,
+      "returnedResourceKind": null,
+      "returnValueAfterHarvest": null,
+      "physicalSourceFound": null,
+      "physicalAvailability": null,
+      "harvestedAmount": null,
+      "depletionApplied": null,
+      "usableSupport": null,
+      "readTheTarget": false,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": false
+    },
+    "Z3a_fractional_0_4": {
+      "case": "Z3a_fractional_0_4",
+      "partyWorkers": "0.4",
+      "verifyOnly": false,
+      "accepted": false,
+      "threw": true,
+      "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received 0.4. Zero or fractional labour cannot produce a physical request, stock removal, cargo or a",
+      "estimatedPeopleCount": null,
+      "activityOutcome": null,
+      "returnedResourceKind": null,
+      "returnValueAfterHarvest": null,
+      "physicalSourceFound": null,
+      "physicalAvailability": null,
+      "harvestedAmount": null,
+      "depletionApplied": null,
+      "usableSupport": null,
+      "readTheTarget": false,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": false
+    },
+    "Z3b_fractional_1_6": {
+      "case": "Z3b_fractional_1_6",
+      "partyWorkers": "1.6",
+      "verifyOnly": false,
+      "accepted": false,
+      "threw": true,
+      "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received 1.6. Zero or fractional labour cannot produce a physical request, stock removal, cargo or a",
+      "estimatedPeopleCount": null,
+      "activityOutcome": null,
+      "returnedResourceKind": null,
+      "returnValueAfterHarvest": null,
+      "physicalSourceFound": null,
+      "physicalAvailability": null,
+      "harvestedAmount": null,
+      "depletionApplied": null,
+      "usableSupport": null,
+      "readTheTarget": false,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": false
+    },
+    "Z4a_nan": {
+      "case": "Z4a_nan",
+      "partyWorkers": "NaN",
+      "verifyOnly": false,
+      "accepted": false,
+      "threw": true,
+      "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received NaN. Zero or fractional labour cannot produce a physical request, stock removal, cargo or a",
+      "estimatedPeopleCount": null,
+      "activityOutcome": null,
+      "returnedResourceKind": null,
+      "returnValueAfterHarvest": null,
+      "physicalSourceFound": null,
+      "physicalAvailability": null,
+      "harvestedAmount": null,
+      "depletionApplied": null,
+      "usableSupport": null,
+      "readTheTarget": false,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": false
+    },
+    "Z4b_infinity": {
+      "case": "Z4b_infinity",
+      "partyWorkers": "Infinity",
+      "verifyOnly": false,
+      "accepted": false,
+      "threw": true,
+      "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received Infinity. Zero or fractional labour cannot produce a physical request, stock removal, cargo",
+      "estimatedPeopleCount": null,
+      "activityOutcome": null,
+      "returnedResourceKind": null,
+      "returnValueAfterHarvest": null,
+      "physicalSourceFound": null,
+      "physicalAvailability": null,
+      "harvestedAmount": null,
+      "depletionApplied": null,
+      "usableSupport": null,
+      "readTheTarget": false,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": false
+    },
+    "Z4c_negative_infinity": {
+      "case": "Z4c_negative_infinity",
+      "partyWorkers": "-Infinity",
+      "verifyOnly": false,
+      "accepted": false,
+      "threw": true,
+      "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received -Infinity. Zero or fractional labour cannot produce a physical request, stock removal, carg",
+      "estimatedPeopleCount": null,
+      "activityOutcome": null,
+      "returnedResourceKind": null,
+      "returnValueAfterHarvest": null,
+      "physicalSourceFound": null,
+      "physicalAvailability": null,
+      "harvestedAmount": null,
+      "depletionApplied": null,
+      "usableSupport": null,
+      "readTheTarget": false,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": false
+    },
+    "Z4d_negative_one": {
+      "case": "Z4d_negative_one",
+      "partyWorkers": "-1",
+      "verifyOnly": false,
+      "accepted": false,
+      "threw": true,
+      "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received -1. Zero or fractional labour cannot produce a physical request, stock removal, cargo or an",
+      "estimatedPeopleCount": null,
+      "activityOutcome": null,
+      "returnedResourceKind": null,
+      "returnValueAfterHarvest": null,
+      "physicalSourceFound": null,
+      "physicalAvailability": null,
+      "harvestedAmount": null,
+      "depletionApplied": null,
+      "usableSupport": null,
+      "readTheTarget": false,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": false
+    },
+    "Z6_one_worker": {
+      "case": "Z6_one_worker",
+      "partyWorkers": "1",
+      "verifyOnly": false,
+      "accepted": true,
+      "threw": false,
+      "estimatedPeopleCount": 1,
+      "activityOutcome": "target_found",
+      "returnedResourceKind": "gathered_plant_food",
+      "returnValueAfterHarvest": 0.0071,
+      "physicalSourceFound": true,
+      "physicalAvailability": 0.0354,
+      "harvestedAmount": 0.0086,
+      "depletionApplied": 0.0086,
+      "usableSupport": 0.0071,
+      "readTheTarget": true,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":0.4094,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9086}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": true
+    },
+    "Z7_two_workers": {
+      "case": "Z7_two_workers",
+      "partyWorkers": "2",
+      "verifyOnly": false,
+      "accepted": true,
+      "threw": false,
+      "estimatedPeopleCount": 2,
+      "activityOutcome": "partial_success",
+      "returnedResourceKind": "gathered_plant_food",
+      "returnValueAfterHarvest": 0.0186,
+      "physicalSourceFound": true,
+      "physicalAvailability": 0.0354,
+      "harvestedAmount": 0.0226,
+      "depletionApplied": 0.0226,
+      "usableSupport": 0.0186,
+      "readTheTarget": true,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":0.718,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9226}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": true
+    },
+    "Z8_five_workers": {
+      "case": "Z8_five_workers",
+      "partyWorkers": "5",
+      "verifyOnly": false,
+      "accepted": true,
+      "threw": false,
+      "estimatedPeopleCount": 5,
+      "activityOutcome": "partial_success",
+      "returnedResourceKind": "gathered_plant_food",
+      "returnValueAfterHarvest": 0.0291,
+      "physicalSourceFound": true,
+      "physicalAvailability": 0.0354,
+      "harvestedAmount": 0.0354,
+      "depletionApplied": 0.0354,
+      "usableSupport": 0.0291,
+      "readTheTarget": true,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":1,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9354}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": true
+    },
+    "Z10_verify_only_valid_party": {
+      "case": "Z10_verify_only_valid_party",
+      "partyWorkers": "5",
+      "verifyOnly": true,
+      "accepted": true,
+      "threw": false,
+      "estimatedPeopleCount": 5,
+      "activityOutcome": "partial_success",
+      "returnedResourceKind": "none",
+      "returnValueAfterHarvest": 0,
+      "physicalSourceFound": true,
+      "physicalAvailability": 0.0354,
+      "harvestedAmount": 0,
+      "depletionApplied": 0,
+      "usableSupport": 0,
+      "readTheTarget": true,
+      "stockBefore": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockAfter": {
+        "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+        "faunaStockState": null,
+        "aquaticStockState": null
+      },
+      "stockChangedAtTarget": false
+    }
+  },
+  "contractSummary": {
+    "rejectedCases": [
+      "Z1_zero_exploitation",
+      "Z2_zero_verification",
+      "Z3a_fractional_0_4",
+      "Z3b_fractional_1_6",
+      "Z4a_nan",
+      "Z4b_infinity",
+      "Z4c_negative_infinity",
+      "Z4d_negative_one"
+    ],
+    "acceptedCases": [
+      "Z6_one_worker",
+      "Z7_two_workers",
+      "Z8_five_workers",
+      "Z10_verify_only_valid_party"
+    ],
+    "casesRemovingStockWithoutAValidPositiveIntegerParty": []
+  }
+}

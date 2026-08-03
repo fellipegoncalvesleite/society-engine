@@ -160,3 +160,31 @@ none needed separate wiring:
 | a verification party depleting stock | **NOT PRESENT** — `verifyOnly` suppresses the take; 0 events in 50 y (T8) |
 | the same-day path losing its residential authority | **NOT PRESENT** — it passes no party context; same-day records byte-identical across trees over the comparable window (T7) |
 | two concurrent parties reading each other or their sum | **NOT PRESENT** — each reads its own record (T12) |
+
+---
+
+## CORRECTION-34F amendment — the target-work labour DOMAIN
+
+CORRECTION-34E established WHO the labour count comes from. It did not establish WHAT VALUES that
+count may take, and the 34E ledger row above did not say so.
+
+| Question | Authority | Domain |
+| --- | --- | --- |
+| how many people are working at this target | `options.partyWorkers` on `resolveExpeditionTargetWork` | **positive integer, enforced at the exported boundary; zero, fractional and non-finite rejected** |
+| is a party worth sending, and when does it turn for home | `EXPEDITION_MIN_PARTY_WORKERS = 2` in `expedition.ts` | the launch gate and `reconcileExpeditionLabor` — **policy, deliberately NOT in the resolver** |
+| how many people are working at the residence today | `estimateTaskGroupPeople(band, taskGroupType)` | unchanged; never enters this contract |
+
+**Why the split.** One person can physically do a day's work, so a *physical* resolver may not
+encode a *policy* minimum. And `expedition.ts` imports `intraSeasonTrips.ts` and never the reverse,
+so importing the constant to share a number would close a dependency cycle.
+
+### Duplication and impossibility risks — updated
+
+| Risk | Status |
+| --- | --- |
+| **a party with nobody in it removing physical stock** | **REPAIRED** — measured 0.0047 removed before; rejected after |
+| **a party with nobody in it reading a target through the party-work authority** | **REPAIRED** — verification with zero labour now throws |
+| **fractional people silently rounded** | **REPAIRED** — 0.4 → 0 and 1.6 → 2 before; both rejected after |
+| a clamp disguising a broken caller | **NOT PRESENT** — the value is passed through unaltered after validation |
+| canonical production reaching an invalid call | **NOT PRESENT** — proven by call order, by driving the reconciler, and by two long runs that would have thrown; observed labour range 2..7 |
+| the resolver encoding expedition policy | **NOT PRESENT** — bound is 1; the minimum of 2 stays in `expedition.ts` |

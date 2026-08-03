@@ -1,0 +1,417 @@
+{
+  "audit": "CORRECTION-34F-ZERO-LABOR-CONTRACT-FIXTURES",
+  "summary": {
+    "fixtures": 13,
+    "failing": 0,
+    "vacuous": 0,
+    "vacuousIds": [],
+    "failingIds": []
+  },
+  "contract": {
+    "resolverLowerBound": 1,
+    "resolverRequiresInteger": true,
+    "expeditionMinPartyWorkers": 2,
+    "whereTheMinimumLives": "expedition.ts — the launch gate and reconcileExpeditionLabor. NOT in the resolver, because one person can physically work and because expedition.ts imports intraSeasonTrips.ts and never the reverse."
+  },
+  "target": {
+    "tile": "tile:73:111",
+    "band": "band:varied-dry-corridor-mid",
+    "sourceId": "plant:tile:73:111:roots_tubers_uso"
+  },
+  "verdicts": {
+    "Z1_zero_exploitation": "ZERO_LABOR_REJECTED_BEFORE_WORK",
+    "Z2_zero_verification": "ZERO_LABOR_CANNOT_INSPECT_THE_TARGET",
+    "Z3_negative_labor": "NEGATIVE_LABOR_REJECTED",
+    "Z4_non_finite_labor": "NON_FINITE_LABOR_REJECTED",
+    "Z5_fractional_labor": "FRACTIONAL_PEOPLE_REJECTED_NOT_ROUNDED",
+    "Z6_one_worker": "ONE_WORKER_ACCEPTED_BY_THE_RESOLVER_AND_WORKS_AS_ONE",
+    "Z7_two_worker_expedition": "UNCHANGED_FROM_34E",
+    "Z8_five_worker_expedition": "UNCHANGED_FROM_34E",
+    "Z9_same_day_control": "SAME_DAY_PATH_NEVER_ENTERS_THIS_CONTRACT",
+    "Z10_verify_only_valid_party": "VALID_PARTY_VERIFIES_WITH_ZERO_REMOVAL",
+    "Z0_canonical_call_order": "RECONCILIATION_REMOVES_AN_UNSTAFFABLE_PARTY_FROM_THE_OPERATING_PHASE_BEFORE_WORK",
+    "Z11_natural_call_domain_20y": "EVERY_NATURAL_TARGET_WORK_CALL_CARRIES_A_VALID_PARTY",
+    "Z12_natural_call_domain_50y": "EVERY_NATURAL_TARGET_WORK_CALL_CARRIES_A_VALID_PARTY"
+  },
+  "fixtures": {
+    "Z1_zero_exploitation": {
+      "verdict": "ZERO_LABOR_REJECTED_BEFORE_WORK",
+      "vacuous": false,
+      "result": {
+        "threw": true,
+        "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received 0. Zero or fractional labour cannot produce a physi",
+        "estimatedPeopleCount": null,
+        "activityOutcome": null,
+        "returnedResourceKind": null,
+        "returnValueAfterHarvest": 0,
+        "physicalSourceFound": null,
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "usableSupport": 0,
+        "readTheTarget": false,
+        "stockChangedAtTarget": false
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the SAME target with a valid five-worker party removes real stock, so a zero-labour refusal is a refusal and not an empty patch",
+        "controlDepletion": 0.0354,
+        "controlAvailability": 0.0354
+      },
+      "before": "accepted, classified target_found, requested from the confidence terms alone, removed 0.0047 of stock"
+    },
+    "Z2_zero_verification": {
+      "verdict": "ZERO_LABOR_CANNOT_INSPECT_THE_TARGET",
+      "vacuous": false,
+      "result": {
+        "threw": true,
+        "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received 0. Zero or fractional labour cannot produce a physi",
+        "estimatedPeopleCount": null,
+        "activityOutcome": null,
+        "returnedResourceKind": null,
+        "returnValueAfterHarvest": 0,
+        "physicalSourceFound": null,
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "usableSupport": 0,
+        "readTheTarget": false,
+        "stockChangedAtTarget": false
+      },
+      "validPartyVerification": {
+        "threw": false,
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "none",
+        "returnValueAfterHarvest": 0,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "usableSupport": 0,
+        "readTheTarget": true,
+        "stockChangedAtTarget": false
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a VALID party verifying the same target DOES read it and removes nothing, so the zero-labour refusal is not a target that cannot be read",
+        "validPartyReadTheTarget": true,
+        "validPartyDepletion": 0
+      },
+      "note": "an observation is what a verification party carries home; the target-work authority produces its raw material, so a party with nobody in it must not reach it"
+    },
+    "Z3_negative_labor": {
+      "verdict": "NEGATIVE_LABOR_REJECTED",
+      "vacuous": false,
+      "result": {
+        "threw": true,
+        "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received -1. Zero or fractional labour cannot produce a phys",
+        "estimatedPeopleCount": null,
+        "activityOutcome": null,
+        "returnedResourceKind": null,
+        "returnValueAfterHarvest": 0,
+        "physicalSourceFound": null,
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "usableSupport": 0,
+        "readTheTarget": false,
+        "stockChangedAtTarget": false
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the resolver does resolve for a valid party, so the rejection is a rejection of the value and not of the fixture",
+        "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received -1. Zero or fractional labour cannot produce a phys"
+      }
+    },
+    "Z4_non_finite_labor": {
+      "verdict": "NON_FINITE_LABOR_REJECTED",
+      "vacuous": false,
+      "nan": {
+        "threw": true,
+        "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received NaN. Zero or fractional labour cannot produce a phy",
+        "estimatedPeopleCount": null,
+        "activityOutcome": null,
+        "returnedResourceKind": null,
+        "returnValueAfterHarvest": 0,
+        "physicalSourceFound": null,
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "usableSupport": 0,
+        "readTheTarget": false,
+        "stockChangedAtTarget": false
+      },
+      "infinity": {
+        "threw": true,
+        "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received Infinity. Zero or fractional labour cannot produce ",
+        "estimatedPeopleCount": null,
+        "activityOutcome": null,
+        "returnedResourceKind": null,
+        "returnValueAfterHarvest": 0,
+        "physicalSourceFound": null,
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "usableSupport": 0,
+        "readTheTarget": false,
+        "stockChangedAtTarget": false
+      },
+      "negativeInfinity": {
+        "threw": true,
+        "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received -Infinity. Zero or fractional labour cannot produce",
+        "estimatedPeopleCount": null,
+        "activityOutcome": null,
+        "returnedResourceKind": null,
+        "returnValueAfterHarvest": 0,
+        "physicalSourceFound": null,
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "usableSupport": 0,
+        "readTheTarget": false,
+        "stockChangedAtTarget": false
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the resolver resolves for a valid party, so all three rejections are about the value",
+        "allThrew": true
+      }
+    },
+    "Z5_fractional_labor": {
+      "verdict": "FRACTIONAL_PEOPLE_REJECTED_NOT_ROUNDED",
+      "vacuous": false,
+      "zeroPointFour": {
+        "threw": true,
+        "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received 0.4. Zero or fractional labour cannot produce a phy",
+        "estimatedPeopleCount": null,
+        "activityOutcome": null,
+        "returnedResourceKind": null,
+        "returnValueAfterHarvest": 0,
+        "physicalSourceFound": null,
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "usableSupport": 0,
+        "readTheTarget": false,
+        "stockChangedAtTarget": false
+      },
+      "oneCommaSix": {
+        "threw": true,
+        "errorMessage": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically present in the party. Received 1.6. Zero or fractional labour cannot produce a phy",
+        "estimatedPeopleCount": null,
+        "activityOutcome": null,
+        "returnedResourceKind": null,
+        "returnValueAfterHarvest": 0,
+        "physicalSourceFound": null,
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "usableSupport": 0,
+        "readTheTarget": false,
+        "stockChangedAtTarget": false
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the resolver resolves for a valid integer party, so the two rejections are about fractional people specifically"
+      },
+      "before": "0.4 was silently rounded to 0 (and still removed stock); 1.6 was silently rounded to 2 — a person and a half became two people"
+    },
+    "Z6_one_worker": {
+      "verdict": "ONE_WORKER_ACCEPTED_BY_THE_RESOLVER_AND_WORKS_AS_ONE",
+      "vacuous": false,
+      "result": {
+        "threw": false,
+        "estimatedPeopleCount": 1,
+        "activityOutcome": "target_found",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0071,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0086,
+        "depletionApplied": 0.0086,
+        "usableSupport": 0.0071,
+        "readTheTarget": true,
+        "stockChangedAtTarget": true
+      },
+      "resolverLowerBound": 1,
+      "expeditionMinimumPartyWorkers": 2,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "one worker actually removed stock, so 'accepted' means it did work and not merely that it did not throw",
+        "people": 1,
+        "depletion": 0.0086
+      },
+      "statedHonestly": "The RESOLVER's lower bound is 1, not EXPEDITION_MIN_PARTY_WORKERS (2). One person can physically work a day. The two-worker minimum is an EXPEDITION POLICY about what is worth sending and what turns for home; it is enforced in expedition.ts by the launch gate and by reconcileExpeditionLabor, and it is measured separately by Z11/Z12. Putting it in this module would also close a dependency cycle: expedition.ts imports intraSeasonTrips.ts and never the reverse."
+    },
+    "Z7_two_worker_expedition": {
+      "verdict": "UNCHANGED_FROM_34E",
+      "vacuous": false,
+      "result": {
+        "threw": false,
+        "estimatedPeopleCount": 2,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0186,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0226,
+        "depletionApplied": 0.0226,
+        "usableSupport": 0.0186,
+        "readTheTarget": true,
+        "stockChangedAtTarget": true
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the two-worker party did real work",
+        "people": 2,
+        "depletion": 0.0226
+      }
+    },
+    "Z8_five_worker_expedition": {
+      "verdict": "UNCHANGED_FROM_34E",
+      "vacuous": false,
+      "result": {
+        "threw": false,
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "usableSupport": 0.0291,
+        "readTheTarget": true,
+        "stockChangedAtTarget": true
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "both valid parties did real work and the larger removed strictly more, so party labour is still live",
+        "depletion": "0.0226 -> 0.0354"
+      }
+    },
+    "Z9_same_day_control": {
+      "verdict": "SAME_DAY_PATH_NEVER_ENTERS_THIS_CONTRACT",
+      "vacuous": false,
+      "sameDayRecords": 216,
+      "bands": 9,
+      "peopleRange": {
+        "min": 2,
+        "max": 4
+      },
+      "allWithinResidentialCohort": true,
+      "allIntegers": true,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "more than one band produced same-day records, so the claim is measured over a real non-empty set",
+        "records": 216,
+        "bands": 9
+      },
+      "note": "same-day trips pass no `partyWork` object at all, so `buildTripRecord` takes the estimateTaskGroupPeople branch and the CORRECTION-34F validation is never reached"
+    },
+    "Z10_verify_only_valid_party": {
+      "verdict": "VALID_PARTY_VERIFIES_WITH_ZERO_REMOVAL",
+      "vacuous": false,
+      "result": {
+        "threw": false,
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "none",
+        "returnValueAfterHarvest": 0,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "usableSupport": 0,
+        "readTheTarget": true,
+        "stockChangedAtTarget": false
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the party genuinely read a target that a non-verifying party of the same size DOES deplete, so zero removal is suppression and not absence",
+        "readTheTarget": true,
+        "exploitationDepletionAtSameTarget": 0.0354
+      }
+    },
+    "Z0_canonical_call_order": {
+      "verdict": "RECONCILIATION_REMOVES_AN_UNSTAFFABLE_PARTY_FROM_THE_OPERATING_PHASE_BEFORE_WORK",
+      "vacuous": false,
+      "order": [
+        "expeditionDailyAction iterates bands and calls reconcileExpeditionCommitment FIRST, before maybeLaunchExpedition and before advanceExpeditionOneDay (expedition.ts, the CORRECTION-34A ordering)",
+        "reconcileExpeditionLabor turns a physically-away party reduced below EXPEDITION_MIN_PARTY_WORKERS into `returning` (`party_labor_unsupported`), and a `prepared` one into `aborted` (`commitment_unsupported`), setting its labour to 0 only on that terminal record",
+        "repairInvalidPhysicalCommitment retires an over-committed record whole as `aborted` (`invalid_state_repaired`), again terminal",
+        "maybeLaunchExpedition refuses below 2 (`deriveDepartableWorkers` returns an integer and the gate is `partyWorkers < 2 -> return band`); the verification, reconnaissance and exploration families hardcode 2",
+        "advanceExpeditionOneDay reaches target work ONLY from `phase === 'operating'` — the verification branch at the frontier/patch cases and the exploitation branch — so a `returning`/`aborted` record never calls it",
+        "therefore every target-work call carries an integer >= EXPEDITION_MIN_PARTY_WORKERS"
+      ],
+      "measuredPredicates": {
+        "operatingStarvedPhase": "returning",
+        "operatingStarvedWorkers": 1,
+        "operatingStarvedKeptItsBodies": 6,
+        "operatingStarvedLeavesOperatingPhase": true,
+        "preparedStarvedPhase": "aborted",
+        "preparedStarvedIsTerminal": true,
+        "healthyOperatingUntouched": true,
+        "launchLowerBound": 2,
+        "expeditionMinPartyWorkers": 2
+      },
+      "writesToPartyWorkersInProduction": [
+        "maybeLaunchExpedition -> createPreparedExpedition(partyWorkers: chosen.workers) — integer >= 2",
+        "frontier verification / frontier exploration launches — hardcoded 2",
+        "applyReducedProductiveLabor(partyWorkers: reducedWorkers) — integer, because workingAdults is Math.round()ed; below the minimum the record is simultaneously moved out of `operating`",
+        "reconcileExpeditionLabor / repairInvalidPhysicalCommitment set 0 ONLY together with a terminal phase"
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the reconciler genuinely acted on the starved party (labour fell from 6) and genuinely left the healthy one alone, so neither result is a no-op",
+        "starvedWorkers": 1,
+        "starvedPhase": "returning"
+      }
+    },
+    "Z11_natural_call_domain_20y": {
+      "verdict": "EVERY_NATURAL_TARGET_WORK_CALL_CARRIES_A_VALID_PARTY",
+      "vacuous": false,
+      "years": 20,
+      "bandDays": 64800,
+      "operatingPartyDaysReachingTargetWork": 94,
+      "zeroLaborCalls": 0,
+      "fractionalLaborCalls": 0,
+      "nonFiniteLaborCalls": 0,
+      "belowExpeditionMinimumCalls": 0,
+      "validCalls": 94,
+      "observedLaborRange": {
+        "min": 2,
+        "max": 7
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "real operating parties existed in this run, so the all-valid result is measured over a non-empty domain",
+        "operatingPartyDays": 94
+      },
+      "structuralProof": "after CORRECTION-34F an invalid labour count throws inside resolveExpeditionTargetWork. This run completed, so canonical production made no zero, fractional or non-finite target-work call anywhere in it."
+    },
+    "Z12_natural_call_domain_50y": {
+      "verdict": "EVERY_NATURAL_TARGET_WORK_CALL_CARRIES_A_VALID_PARTY",
+      "vacuous": false,
+      "years": 50,
+      "bandDays": 162000,
+      "operatingPartyDaysReachingTargetWork": 225,
+      "zeroLaborCalls": 0,
+      "fractionalLaborCalls": 0,
+      "nonFiniteLaborCalls": 0,
+      "belowExpeditionMinimumCalls": 0,
+      "validCalls": 225,
+      "observedLaborRange": {
+        "min": 2,
+        "max": 7
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "real operating parties existed in this run, so the all-valid result is measured over a non-empty domain",
+        "operatingPartyDays": 225
+      },
+      "structuralProof": "after CORRECTION-34F an invalid labour count throws inside resolveExpeditionTargetWork. This run completed, so canonical production made no zero, fractional or non-finite target-work call anywhere in it."
+    }
+  }
+}

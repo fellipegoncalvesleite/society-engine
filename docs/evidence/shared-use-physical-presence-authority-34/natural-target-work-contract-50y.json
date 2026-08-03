@@ -1,0 +1,22 @@
+{
+  "audit": "CORRECTION-34F-NATURAL-TARGET-WORK-CALL-DOMAIN",
+  "seed": "audit27:natural:map2:s1",
+  "expeditionMinPartyWorkers": 2,
+  "years": 50,
+  "days": 18000,
+  "bandDays": 162000,
+  "operatingPartyDaysReachingTargetWork": 225,
+  "zeroLaborCalls": 0,
+  "fractionalLaborCalls": 0,
+  "nonFiniteLaborCalls": 0,
+  "belowExpeditionMinimumCalls": 0,
+  "validCalls": 225,
+  "minObservedLabor": 2,
+  "maxObservedLabor": 7,
+  "completedWithoutThrowing": true,
+  "structuralProof": "after CORRECTION-34F an invalid labour count throws inside resolveExpeditionTargetWork. This run completed, so canonical production made no zero, fractional or non-finite target-work call anywhere in it.",
+  "nonVacuity": {
+    "operatingPartyDaysObserved": 225,
+    "note": "if this is 0 the run proves nothing about the call domain, only that nothing was called"
+  }
+}
