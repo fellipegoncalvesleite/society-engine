@@ -1,0 +1,177 @@
+{
+  "manifest": "ROADMAP-ITEM-3-FREEZE-MANIFEST",
+  "status": "CANDIDATE FOR CLOSURE — NOT FROZEN. One blocker found; see blockers[]. The executor may not declare the item frozen.",
+  "repository": "fellipegoncalvesleite/human-nomad-simulator",
+  "branch": "checkpoint/shared-range-item-3-final-freeze",
+  "candidateFreezeHead": "PLACEHOLDER_SET_AT_COMMIT",
+  "branchedFrom": "df349eb60940d3ee3995fa6bccac7c902578fd3e",
+  "mainHead": "0a43083a3a9103bc6b8f693b8823a604ae2c6a8d",
+  "mergeBaseWithMain": "0a43083a3a9103bc6b8f693b8823a604ae2c6a8d",
+  "mainUntouched": true,
+  "acceptedSubCheckpoints": [
+    {
+      "name": "AUDIT-27 crowding / shared range authority (diagnostic)",
+      "branch": "checkpoint/crowding-shared-range-authority-27",
+      "sha": "b352c3195406fc9494c0b693a98eb0786f1a3780",
+      "status": "FROZEN",
+      "evidence": "docs/evidence/crowding-shared-range-authority-27/"
+    },
+    {
+      "name": "CORRECTION-28 physical vs remembered crowding",
+      "branch": "checkpoint/crowding-physical-memory-separation-28",
+      "sha": "c5eb58a8f5ff7054665f9c376ac4ca856403efab",
+      "status": "FROZEN",
+      "evidence": "docs/evidence/crowding-physical-memory-separation-28/"
+    },
+    {
+      "name": "CORRECTION-29 direct encounter provenance",
+      "branch": "checkpoint/shared-range-encounter-provenance-29",
+      "sha": "a15d0a78a3a7ef57b87b22226190d6729ba9b9d7",
+      "status": "FROZEN",
+      "evidence": "docs/evidence/shared-range-encounter-provenance-29/"
+    },
+    {
+      "name": "CORRECTION-30 range-friction observation provenance",
+      "branch": "checkpoint/shared-range-friction-provenance-30",
+      "sha": "1c6a3ed8d0a8360c8fe4648a83387a2bd4fa30b4",
+      "status": "FROZEN",
+      "evidence": "docs/evidence/shared-range-friction-provenance-30/"
+    },
+    {
+      "name": "CORRECTION-31 range-friction and access-expectation lifecycle",
+      "branch": "checkpoint/shared-range-release-lifecycle-31",
+      "sha": "3e2c1215b4ccef2beb799b3a7882247f6cd186cd",
+      "status": "FROZEN",
+      "evidence": "docs/evidence/shared-range-release-lifecycle-31/"
+    },
+    {
+      "name": "CORRECTION-32 + 32A crowding decision-pressure authority and its evidence repair",
+      "branch": "checkpoint/crowding-decision-pressure-authority-32",
+      "sha": "d11854153e76c2435bce9d53ffde49317e5e8f90",
+      "status": "ACCEPTED (32 shipped as PROGRESS; 32A repaired its instrument)",
+      "evidence": "docs/evidence/crowding-decision-pressure-authority-32/"
+    },
+    {
+      "name": "CORRECTION-33 global band-count social omniscience",
+      "branch": "checkpoint/social-access-unrelated-risk-provenance-33",
+      "sha": "5ebb5e9887e36341f69350d4d3cff85f9493457c",
+      "status": "FROZEN",
+      "evidence": "docs/evidence/social-access-unrelated-risk-provenance-33/"
+    },
+    {
+      "name": "CORRECTION-34 away-party physical presence",
+      "branch": "checkpoint/shared-use-physical-presence-authority-34",
+      "sha": "4042210b332d41b91ed394aa9307962f0106a60c",
+      "status": "accepted sub-tip within the 34 branch",
+      "evidence": "docs/evidence/shared-use-physical-presence-authority-34/"
+    },
+    {
+      "name": "CORRECTION-34A daily presence, catchment effort, evidence closure",
+      "sha": "f875738b10b0ffc5edef3a89fd2c763eb06f1043",
+      "closureSha": "4f296442af62153a74001a5305f71108fa1c3e10",
+      "status": "accepted sub-tip"
+    },
+    {
+      "name": "CORRECTION-34B partial reconciliation consistency",
+      "sha": "fd868d6877fa17646a6186b2a358b08f27c8adf2",
+      "status": "accepted sub-tip"
+    },
+    {
+      "name": "CORRECTION-34C away-body, cohort and fission ownership",
+      "sha": "e9b9655631088e090c38097b095c4e899e81123d",
+      "status": "accepted sub-tip"
+    },
+    {
+      "name": "CORRECTION-34D physical headcount vs productive labour",
+      "sha": "c8df1eaa927ce0c7779ed6b184eeea40568a6a5e",
+      "status": "accepted sub-tip"
+    },
+    {
+      "name": "CORRECTION-34E expedition target-work labour provenance",
+      "sha": "e7d8de44fd78c8e15308a3bc47a3b346cffd1668",
+      "status": "accepted sub-tip"
+    },
+    {
+      "name": "CORRECTION-34F zero-labour target-work contract",
+      "sha": "df349eb60940d3ee3995fa6bccac7c902578fd3e",
+      "status": "ACCEPTED AND FROZEN — the Item 3 base for this audit"
+    }
+  ],
+  "ancestryVerified": "every SHA above is an ancestor of the next, and main (0a43083a) is an ancestor of the freeze candidate. Verified with git merge-base --is-ancestor, not read from a prompt.",
+  "productionFilesForItemThree": [
+    "src/sim/agents/accessNorms.ts",
+    "src/sim/agents/acuteRisk.ts",
+    "src/sim/agents/bandEvents.ts",
+    "src/sim/agents/bandMobility.ts",
+    "src/sim/agents/crowding.ts",
+    "src/sim/agents/demography.ts",
+    "src/sim/agents/dryMargin.ts",
+    "src/sim/agents/expedition.ts",
+    "src/sim/agents/intraSeasonTrips.ts",
+    "src/sim/agents/pressure.ts",
+    "src/sim/agents/rangeFriction.ts",
+    "src/sim/agents/reportedKnowledge.ts",
+    "src/sim/agents/sharedCatchment.ts",
+    "src/sim/agents/socialContext.ts",
+    "src/sim/agents/types.ts",
+    "src/sim/rules/bandDecision.ts",
+    "src/sim/rules/decisionScoring.ts",
+    "src/ui/band/Mobility.tsx"
+  ],
+  "productionDiffAcrossItemThree": "b352c31..df349eb -- src/ : 18 files, +1654 -402",
+  "productionChangedByThisCheckpoint": "NONE — audit only. git diff df349eb..HEAD -- src/ is empty.",
+  "evidenceDirectories": [
+    "docs/evidence/crowding-shared-range-authority-27/",
+    "docs/evidence/crowding-physical-memory-separation-28/",
+    "docs/evidence/shared-range-encounter-provenance-29/",
+    "docs/evidence/shared-range-friction-provenance-30/",
+    "docs/evidence/shared-range-release-lifecycle-31/",
+    "docs/evidence/crowding-decision-pressure-authority-32/",
+    "docs/evidence/social-access-unrelated-risk-provenance-33/",
+    "docs/evidence/shared-use-physical-presence-authority-34/",
+    "docs/evidence/shared-range-item-3-final-freeze/"
+  ],
+  "deterministicSeedsAndMaps": {
+    "integratedFixtures": {
+      "map": "map2",
+      "seed": "item3:integration"
+    },
+    "naturalIntegration": {
+      "map": "map2",
+      "seed": "audit27:natural:s1",
+      "horizons": [
+        20,
+        50,
+        200
+      ]
+    },
+    "expeditionSeedSecondArm": {
+      "map": "map2",
+      "seed": "audit27:natural:map2:s1",
+      "note": "the 34-family seed. Exercises expeditions richly but produces NO encounters or friction on this world, which is why the canonical natural arm uses the shared-range seed."
+    },
+    "timeModeEquivalence": {
+      "expeditionSeedSpanDays": 2520,
+      "sharedRangeSeedSpanDays": 5040
+    }
+  },
+  "frozenEvidenceUnchanged": "git diff --name-only df349eb..HEAD -- docs/evidence/ excluding the new freeze directory returns nothing; no working-tree change exists outside it.",
+  "sameDayDeferral": "same-day party CURRENT presence remains formally deferred by the CORRECTION-34A supervisor scope amendment. No within-day consumer exists; no dead ledger was introduced. Unchanged by this audit.",
+  "itemFourExplicitlyUnimplemented": [
+    "dynamic fission driven by shared-range pressure",
+    "daughter viability modelling",
+    "successor-group selection (who leaves)",
+    "cancellation of a prepared party to free founders",
+    "any policy change to DAUGHTER_MIN_POPULATION or the founder-availability rule"
+  ],
+  "blockers": [
+    {
+      "id": "B1",
+      "title": "a place labelled released_historical can still move behaviour",
+      "severity": "blocks the unqualified freeze claim, does not invalidate any accepted correction",
+      "measured": "1 of 448 released-place samples over 200 simulated years on seed audit27:natural:map2:s1; 0 of 193 on audit27:natural:s1. Magnitude 0.01 on strangerCaution and 0.01 on rememberedRefusalAvoidance, total 0.02.",
+      "evidence": "released-place-probe.json",
+      "smallestCorrection": "derive socialEvidencePhase === released_historical only when the max surviving weight is exactly 0, and keep 0 < weight < SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT labelled cooling. A derived read-model field only; the contribution curve is already correct, continuous and monotone."
+    }
+  ]
+}

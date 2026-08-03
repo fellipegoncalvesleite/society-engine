@@ -1,0 +1,1111 @@
+{
+  "audit": "ROADMAP-ITEM-3-INTEGRATION-FIXTURES",
+  "seed": "item3:integration",
+  "summary": {
+    "fixtures": 16,
+    "failing": 0,
+    "vacuous": 0,
+    "notConstructed": 0,
+    "failingIds": [],
+    "vacuousIds": [],
+    "notConstructedIds": []
+  },
+  "verdicts": {
+    "I1_two_bands_no_overlap": "NO_ENCOUNTER_NO_FRICTION_NO_EXPECTATION_NO_CROWDING",
+    "I2_overlap_without_social_evidence": "PHYSICAL_CROWDING_WITHOUT_INVENTED_SOCIAL_RISK_AND_NO_GLOBAL_CENSUS",
+    "I3_encounter_to_friction": "CO_PRESENCE_PRODUCES_ATTRIBUTABLE_FRICTION_WITH_NO_DUPLICATE_EPISODE",
+    "I4_friction_to_access_expectation": "EXPECTATION_DERIVES_FROM_HELD_EVIDENCE_NOT_FROM_CURRENT_WORLD_TRUTH",
+    "I5_single_social_pressure_path": "ZERO_EVIDENCE_ZERO_SOCIAL_PRESSURE_AND_ONE_BOUNDED_CROWDING_COST",
+    "I6_release_lifecycle": "ACTIVE_THEN_COOLING_THEN_RELEASED_WITH_RECORDS_RETAINED",
+    "I11_history_remains_while_state_is_inactive": "HISTORY_PRESERVED_CURRENT_STATE_INACTIVE",
+    "I16_release_then_reencounter": "REACTIVATION_ONLY_THROUGH_FRESH_EVIDENCE",
+    "I7_task_camp_inside_another_range": "PARTY_STANDS_WHERE_IT_IS_PARENT_NOT_GHOSTED_NO_INVENTED_SOCIAL_CONSEQUENCE",
+    "I8_concurrent_parties": "POPULATION_CONSERVED_HEADCOUNTS_AND_LABOR_INDEPENDENT",
+    "I9_non_working_party_member": "BODY_AWAY_NO_WORK_NO_CARRY_BUT_CONSUMES_AND_BURDENS",
+    "I10_target_removal_to_returned_support": "ONE_CHAIN_UNITS_DISTINCT_NO_SUPPORT_BEFORE_RETURN",
+    "I12_remote_record_isolation": "FOCAL_RESULT_UNCHANGED_BY_FIFTEEN_REMOTE_RECORDS",
+    "I13_prepared_party_boundary": "PREPARED_PEOPLE_ARE_RESIDENTIAL_THEIR_LABOR_IS_NOT",
+    "I14_annual_cohort_boundary_with_active_party": "AGING_MOVES_NO_BODY_LABOR_FOLLOWS_THE_CONVENTION",
+    "I15_invalid_target_work_contract": "ZERO_FRACTIONAL_AND_NON_FINITE_FAIL_BEFORE_READING_THE_TARGET"
+  },
+  "fixtures": {
+    "I1_two_bands_no_overlap": {
+      "verdict": "NO_ENCOUNTER_NO_FRICTION_NO_EXPECTATION_NO_CROWDING",
+      "vacuous": false,
+      "separationTiles": 64,
+      "encounters": 0,
+      "frictionRecords": 0,
+      "contactMemories": 0,
+      "crowdingA": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "contributors": [],
+        "crowdingPenalty": 0
+      },
+      "crowdingB": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "contributors": [],
+        "crowdingPenalty": 0
+      },
+      "socialContributionA": {
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "total": 0,
+        "activeEvidenceWeight": 0,
+        "activeEvidenceCount": 0,
+        "historicalEvidenceCount": 0,
+        "socialEvidencePhase": "none",
+        "placeTracked": true
+      },
+      "catchmentOverlapAtA": [],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "exactly two living bands genuinely far apart, so the all-zero result is a real separation and not an empty world",
+        "bands": 2,
+        "separationTiles": 64
+      }
+    },
+    "I2_overlap_without_social_evidence": {
+      "verdict": "PHYSICAL_CROWDING_WITHOUT_INVENTED_SOCIAL_RISK_AND_NO_GLOBAL_CENSUS",
+      "vacuous": false,
+      "crowdingAtA": {
+        "weightedCrowding": 0.02,
+        "nearbyBandCount": 1,
+        "contributors": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.01
+      },
+      "socialContributionA": {
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "total": 0,
+        "activeEvidenceWeight": 0,
+        "activeEvidenceCount": 0,
+        "historicalEvidenceCount": 0,
+        "socialEvidencePhase": "none",
+        "placeTracked": true
+      },
+      "remoteRecordsAdded": 6,
+      "crowdingWithRemoteRecords": {
+        "weightedCrowding": 0.02,
+        "nearbyBandCount": 1,
+        "contributors": [
+          "band:custom:1"
+        ],
+        "crowdingPenalty": 0.01
+      },
+      "socialContributionWithRemoteRecords": {
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "total": 0,
+        "activeEvidenceWeight": 0,
+        "activeEvidenceCount": 0,
+        "historicalEvidenceCount": 0,
+        "socialEvidencePhase": "none",
+        "placeTracked": true
+      },
+      "strangerCaution": {
+        "before": 0,
+        "withRemote": 0
+      },
+      "censusInvariant": true,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "real physical crowding exists (non-zero) AND six remote records were genuinely added, so both halves are measured",
+        "weightedCrowding": 0.02,
+        "remoteRecords": 6
+      }
+    },
+    "I3_encounter_to_friction": {
+      "verdict": "CO_PRESENCE_PRODUCES_ATTRIBUTABLE_FRICTION_WITH_NO_DUPLICATE_EPISODE",
+      "vacuous": false,
+      "measuredPlace": "tile:194:89",
+      "encounterRecords": 24,
+      "contactCount": 25,
+      "frictionRecords": 8,
+      "duplicateEpisodeKeys": 0,
+      "duplicateEventIds": 0,
+      "everyRecordNamesAKnownBand": true,
+      "interpretations": [
+        "crowded_water_place",
+        "ford_overlap"
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "real encounters AND real friction records exist, so 'no duplicate episode' is measured over a non-empty set",
+        "encounters": 24,
+        "friction": 8
+      }
+    },
+    "I4_friction_to_access_expectation": {
+      "verdict": "EXPECTATION_DERIVES_FROM_HELD_EVIDENCE_NOT_FROM_CURRENT_WORLD_TRUTH",
+      "vacuous": false,
+      "measuredPlace": "tile:194:89",
+      "withOtherBandPresent": {
+        "strangerCaution": 0.07,
+        "sharedUsePressure": 0.24,
+        "rememberedRefusalAvoidance": 0,
+        "total": 0.31,
+        "activeEvidenceWeight": 0.89,
+        "activeEvidenceCount": 4,
+        "historicalEvidenceCount": 0,
+        "socialEvidencePhase": "cooling",
+        "placeTracked": true
+      },
+      "withOtherBandDeletedFromTheWorld": {
+        "strangerCaution": 0.07,
+        "sharedUsePressure": 0.24,
+        "rememberedRefusalAvoidance": 0,
+        "total": 0.31,
+        "activeEvidenceWeight": 0.89,
+        "activeEvidenceCount": 4,
+        "historicalEvidenceCount": 0,
+        "socialEvidencePhase": "cooling",
+        "placeTracked": true
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the friction ring genuinely contributes something at this place, so the invariance is a real comparison",
+        "contribution": 0.31
+      },
+      "note": "deleting the other band from the world entirely leaves the expectation unchanged: it is read off the observer's own held records, not off a live census"
+    },
+    "I5_single_social_pressure_path": {
+      "verdict": "ZERO_EVIDENCE_ZERO_SOCIAL_PRESSURE_AND_ONE_BOUNDED_CROWDING_COST",
+      "vacuous": false,
+      "measuredPlace": "tile:194:89",
+      "withEvidence": {
+        "strangerCaution": 0.07,
+        "sharedUsePressure": 0.24,
+        "rememberedRefusalAvoidance": 0,
+        "total": 0.31,
+        "activeEvidenceWeight": 0.89,
+        "activeEvidenceCount": 4,
+        "historicalEvidenceCount": 0,
+        "socialEvidencePhase": "cooling",
+        "placeTracked": true
+      },
+      "withEvidenceStripped": {
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "total": 0,
+        "activeEvidenceWeight": 0,
+        "activeEvidenceCount": 0,
+        "historicalEvidenceCount": 0,
+        "socialEvidencePhase": "none",
+        "placeTracked": true
+      },
+      "zeroEvidenceStrangerCaution": 0,
+      "physicalCrowdingPenalty": 0.06,
+      "crowdingDecisionAuthority": "CORRECTION-32 — weightedCrowding is evidence, crowdingPenalty is the ONE decision-facing cost at CROWDING_DECISION_COST_WEIGHT. The >=3-separately-named-charges bound (0) and the max-2-path bound are asserted by the CORRECTION-32 suite, rerun unchanged in this freeze.",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the social channel is non-zero on this pair, so 'stripping evidence gives zero' is a measured drop and not a pair with nothing to lose",
+        "socialContribution": 0.31,
+        "crowdingPenalty": 0.06
+      }
+    },
+    "I6_release_lifecycle": {
+      "verdict": "ACTIVE_THEN_COOLING_THEN_RELEASED_WITH_RECORDS_RETAINED",
+      "vacuous": false,
+      "measuredPlace": "tile:194:89",
+      "observerPinnedAtThePlace": true,
+      "physicalReleaseSeason": 1,
+      "socialReleaseSeason": 6,
+      "startingContribution": 0.31,
+      "retainedFrictionRecordsAfterRelease": 8,
+      "retainedContactMemories": 1,
+      "retainedEncounterRecords": 24,
+      "finalContribution": {
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "total": 0,
+        "activeEvidenceWeight": 0,
+        "activeEvidenceCount": 0,
+        "historicalEvidenceCount": 4,
+        "socialEvidencePhase": "released_historical",
+        "placeTracked": true
+      },
+      "timeline": [
+        {
+          "season": 1,
+          "socialTotal": 0.24,
+          "activeEvidenceWeight": 0.56,
+          "activeCount": 4,
+          "historicalCount": 0,
+          "phase": "cooling",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 2,
+          "socialTotal": 0.18,
+          "activeEvidenceWeight": 0.44,
+          "activeCount": 4,
+          "historicalCount": 0,
+          "phase": "cooling",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 3,
+          "socialTotal": 0.14,
+          "activeEvidenceWeight": 0.33,
+          "activeCount": 3,
+          "historicalCount": 1,
+          "phase": "cooling",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 4,
+          "socialTotal": 0.09,
+          "activeEvidenceWeight": 0.22,
+          "activeCount": 2,
+          "historicalCount": 2,
+          "phase": "cooling",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 5,
+          "socialTotal": 0.05,
+          "activeEvidenceWeight": 0.11,
+          "activeCount": 1,
+          "historicalCount": 3,
+          "phase": "cooling",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 6,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 7,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 8,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 9,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 10,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 11,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 12,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 13,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 14,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 15,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 16,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 17,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 18,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 19,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 20,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 21,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 22,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 23,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        },
+        {
+          "season": 24,
+          "socialTotal": 0,
+          "activeEvidenceWeight": 0,
+          "activeCount": 0,
+          "historicalCount": 4,
+          "phase": "released_historical",
+          "weightedCrowding": 0,
+          "retainedRecords": 8
+        }
+      ],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the pair started with real active contribution, it genuinely reached zero, and the records genuinely survived — release is behavioural, not deletion",
+        "startingContribution": 0.31,
+        "releaseSeason": 6,
+        "retainedRecords": 8
+      }
+    },
+    "I11_history_remains_while_state_is_inactive": {
+      "verdict": "HISTORY_PRESERVED_CURRENT_STATE_INACTIVE",
+      "vacuous": false,
+      "retainedFrictionRecords": 8,
+      "retainedContactMemories": 1,
+      "retainedEncounterRecords": 24,
+      "contributionWhenActive": 0.31,
+      "contributionNow": 0,
+      "socialEvidencePhase": "released_historical",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "records that once DID move behaviour are still held and now move nothing",
+        "recordsHeld": 8,
+        "contributionThen": 0.31,
+        "contributionNow": 0
+      }
+    },
+    "I16_release_then_reencounter": {
+      "verdict": "REACTIVATION_ONLY_THROUGH_FRESH_EVIDENCE",
+      "vacuous": false,
+      "measuredPlace": "tile:194:89",
+      "reactivationSeason": 1,
+      "newEventIdsAtReactivation": 1,
+      "physicalCrowdingReturned": true,
+      "recordsBeforeReencounter": 8,
+      "recordsAfterReencounter": 8,
+      "totalNewEventIdsByEnd": 8,
+      "timeline": [
+        {
+          "season": 1,
+          "socialTotal": 0.15,
+          "weightedCrowding": 0.18,
+          "records": 8,
+          "newEventIds": 1,
+          "phase": "active"
+        },
+        {
+          "season": 2,
+          "socialTotal": 0.15,
+          "weightedCrowding": 0.18,
+          "records": 8,
+          "newEventIds": 2,
+          "phase": "active"
+        },
+        {
+          "season": 3,
+          "socialTotal": 0.15,
+          "weightedCrowding": 0.18,
+          "records": 8,
+          "newEventIds": 3,
+          "phase": "active"
+        },
+        {
+          "season": 4,
+          "socialTotal": 0.13,
+          "weightedCrowding": 0.1,
+          "records": 8,
+          "newEventIds": 5,
+          "phase": "active"
+        },
+        {
+          "season": 5,
+          "socialTotal": 0.15,
+          "weightedCrowding": 0.1,
+          "records": 8,
+          "newEventIds": 6,
+          "phase": "active"
+        },
+        {
+          "season": 6,
+          "socialTotal": 0.15,
+          "weightedCrowding": 0.1,
+          "records": 8,
+          "newEventIds": 7,
+          "phase": "active"
+        },
+        {
+          "season": 7,
+          "socialTotal": 0.15,
+          "weightedCrowding": 0.1,
+          "records": 8,
+          "newEventIds": 8,
+          "phase": "active"
+        },
+        {
+          "season": 8,
+          "socialTotal": 0.14,
+          "weightedCrowding": 0.02,
+          "records": 8,
+          "newEventIds": 8,
+          "phase": "cooling"
+        },
+        {
+          "season": 9,
+          "socialTotal": 0.12,
+          "weightedCrowding": 0.02,
+          "records": 8,
+          "newEventIds": 8,
+          "phase": "cooling"
+        },
+        {
+          "season": 10,
+          "socialTotal": 0.11,
+          "weightedCrowding": 0.02,
+          "records": 8,
+          "newEventIds": 8,
+          "phase": "cooling"
+        },
+        {
+          "season": 11,
+          "socialTotal": 0,
+          "weightedCrowding": 0.02,
+          "records": 8,
+          "newEventIds": 8,
+          "phase": "none"
+        },
+        {
+          "season": 12,
+          "socialTotal": 0,
+          "weightedCrowding": 0,
+          "records": 8,
+          "newEventIds": 8,
+          "phase": "none"
+        },
+        {
+          "season": 13,
+          "socialTotal": 0,
+          "weightedCrowding": 0,
+          "records": 8,
+          "newEventIds": 8,
+          "phase": "none"
+        },
+        {
+          "season": 14,
+          "socialTotal": 0,
+          "weightedCrowding": 0,
+          "records": 8,
+          "newEventIds": 8,
+          "phase": "none"
+        },
+        {
+          "season": 15,
+          "socialTotal": 0,
+          "weightedCrowding": 0,
+          "records": 8,
+          "newEventIds": 8,
+          "phase": "none"
+        },
+        {
+          "season": 16,
+          "socialTotal": 0,
+          "weightedCrowding": 0,
+          "records": 8,
+          "newEventIds": 8,
+          "phase": "none"
+        }
+      ],
+      "notConstructed": false,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the other band genuinely came back into physical range at a place that once carried active evidence, so the social answer is about reactivation and not about absence",
+        "physicalCrowdingReturned": true,
+        "priorActiveContribution": 0.31
+      }
+    },
+    "I7_task_camp_inside_another_range": {
+      "verdict": "PARTY_STANDS_WHERE_IT_IS_PARENT_NOT_GHOSTED_NO_INVENTED_SOCIAL_CONSEQUENCE",
+      "vacuous": false,
+      "presence": {
+        "sources": [
+          {
+            "tile": "tile:194:89",
+            "people": 26,
+            "kind": "residential_remainder"
+          },
+          {
+            "tile": "tile:166:121",
+            "people": 4,
+            "kind": "away_party"
+          }
+        ],
+        "total": 30,
+        "population": 30
+      },
+      "accounting": {
+        "conserved": true,
+        "laborBounded": true,
+        "physicallyAwayPeople": 4,
+        "population": 30
+      },
+      "hostForeignCrowdingBefore": {
+        "weightedCrowding": 0,
+        "nearbyBandCount": 0,
+        "contributors": [],
+        "crowdingPenalty": 0
+      },
+      "hostForeignCrowdingAfter": {
+        "weightedCrowding": 0.03,
+        "nearbyBandCount": 1,
+        "contributors": [
+          "band:custom:0"
+        ],
+        "crowdingPenalty": 0.01
+      },
+      "hostSocialContributionBefore": {
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "total": 0,
+        "activeEvidenceWeight": 0,
+        "activeEvidenceCount": 0,
+        "historicalEvidenceCount": 0,
+        "socialEvidencePhase": "none",
+        "placeTracked": true
+      },
+      "hostSocialContributionAfter": {
+        "strangerCaution": 0,
+        "sharedUsePressure": 0,
+        "rememberedRefusalAvoidance": 0,
+        "total": 0,
+        "activeEvidenceWeight": 0,
+        "activeEvidenceCount": 0,
+        "historicalEvidenceCount": 0,
+        "socialEvidencePhase": "none",
+        "placeTracked": true
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the party is genuinely away from a genuinely larger band, so 'not ghosted at home' and 'not counted nowhere' are both real claims",
+        "population": 30,
+        "awayPeople": 4,
+        "sources": 2
+      },
+      "statedLimit": "the host's foreign-crowding reading is taken through the canonical reader; whether an away party SHOULD raise a host's crowding is the shared-use substrate seam AUDIT-27 left open and Item 3 did not close. What is proven here is that the body is at its own tile, the parent is not ghosted, nobody is counted nowhere, and NO social consequence is invented automatically."
+    },
+    "I8_concurrent_parties": {
+      "verdict": "POPULATION_CONSERVED_HEADCOUNTS_AND_LABOR_INDEPENDENT",
+      "vacuous": false,
+      "presence": {
+        "sources": [
+          {
+            "tile": "tile:75:111",
+            "people": 52,
+            "kind": "residential_remainder"
+          },
+          {
+            "tile": "tile:73:111",
+            "people": 2,
+            "kind": "away_party"
+          },
+          {
+            "tile": "tile:73:111",
+            "people": 6,
+            "kind": "away_party"
+          }
+        ],
+        "total": 60,
+        "population": 60
+      },
+      "committedAwayWorkers": 8,
+      "physicallyAwayPeople": 8,
+      "residentialWorkingAdultsAfterCommitment": 17,
+      "partyA": {
+        "workers": 2,
+        "recordPeople": 2,
+        "depletion": 0.0226
+      },
+      "partyB": {
+        "workers": 6,
+        "recordPeople": 6,
+        "depletion": 0.0354
+      },
+      "neitherReadsTheSum": true,
+      "neitherReadsTheResidence": true,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "both parties did real work and read DIFFERENT counts",
+        "a": 2,
+        "b": 6,
+        "sumWouldBe": 8,
+        "residenceWouldBe": 17
+      }
+    },
+    "I9_non_working_party_member": {
+      "verdict": "BODY_AWAY_NO_WORK_NO_CARRY_BUT_CONSUMES_AND_BURDENS",
+      "vacuous": false,
+      "targetWork": {
+        "zeroNonWorking": 0.0354,
+        "twoNonWorking": 0.0354
+      },
+      "carryCeiling": {
+        "zeroNonWorking": 0.6,
+        "twoNonWorking": 0.6
+      },
+      "bodiesConsuming": {
+        "zeroNonWorking": 5,
+        "twoNonWorking": 7
+      },
+      "paceFactor": {
+        "zeroNonWorking": 1,
+        "twoNonWorking": 0.9429
+      },
+      "residentialWorkingAdults": {
+        "zeroNonWorking": 20,
+        "twoNonWorking": 20
+      },
+      "awayPresence": {
+        "tile": "tile:73:111",
+        "people": 7,
+        "kind": "away_party"
+      },
+      "presenceTotalsMatchPopulation": true,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "real work was done, the two extra bodies are genuinely present, and the ceiling is non-zero so 'unchanged' is a real comparison",
+        "harvest": 0.0354,
+        "bodies": "5 -> 7",
+        "capacity": 0.6
+      },
+      "note": "residential extraction does not regain the body or its labour: getResidentialWorkingAdults is identical in both arms because the non-working member was never residential labour"
+    },
+    "I10_target_removal_to_returned_support": {
+      "verdict": "ONE_CHAIN_UNITS_DISTINCT_NO_SUPPORT_BEFORE_RETURN",
+      "vacuous": false,
+      "units": {
+        "harvestedAmount": "physical stock units removed at the target",
+        "usableSupport": "human food support units after transport and processing losses",
+        "cargoUnits": "expedition cargo units — a DIFFERENT quantity from usableSupport, not equated",
+        "provisionUnits": "trip-local provision units; no residential store is decremented",
+        "patchDepletion": "normalised patch depletion 0..1"
+      },
+      "chain": [
+        {
+          "step": "productive party labour",
+          "value": 5
+        },
+        {
+          "step": "record estimatedPeopleCount",
+          "value": 5
+        },
+        {
+          "step": "physical availability at target",
+          "value": 0.0354
+        },
+        {
+          "step": "requested amount",
+          "value": null,
+          "cappedByAvailability": true,
+          "note": "availability capped the take, so the request is only bounded below by the removal"
+        },
+        {
+          "step": "target stock removal = depletionApplied",
+          "value": 0.0354
+        },
+        {
+          "step": "patch depletion before -> after",
+          "value": "0.2198 -> 1"
+        },
+        {
+          "step": "transport loss",
+          "value": 0.0017
+        },
+        {
+          "step": "processing loss",
+          "value": 0.0046
+        },
+        {
+          "step": "usable support after losses",
+          "value": 0.0291
+        },
+        {
+          "step": "carry ceiling from productive workers",
+          "value": 0.6
+        },
+        {
+          "step": "carried within ceiling",
+          "value": 0.0291
+        },
+        {
+          "step": "abandoned above ceiling",
+          "value": 0
+        },
+        {
+          "step": "physical people consuming provisions",
+          "value": 7,
+          "perDay": 0.0056
+        },
+        {
+          "step": "band food receipts on the WORK day",
+          "value": 0.01,
+          "unchangedFrom": 0.01
+        }
+      ],
+      "noSupportBeforeReturn": true,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "every link carries a non-zero quantity, the patch genuinely moved, and the party genuinely holds more bodies than workers",
+        "removal": 0.0354,
+        "support": 0.0291,
+        "patch": "0.2198 -> 1",
+        "bodies": 7,
+        "workers": 5
+      },
+      "statedNonClaim": "abandonment reads 0 here and is NOT demonstrated: one work-day's take is far below the ceiling, and abandonment arises from cargo ACCUMULATED across work-days, measured by CORRECTION-34B (0.648 -> 0.6 carried + 0.048 lost). Nothing was fabricated to make it non-zero. The deposit-exactly-once half is asserted by the CORRECTION-34A closure and numeric-chain audits, rerun unchanged in this freeze."
+    },
+    "I12_remote_record_isolation": {
+      "verdict": "FOCAL_RESULT_UNCHANGED_BY_FIFTEEN_REMOTE_RECORDS",
+      "vacuous": false,
+      "recordsAdded": {
+        "active": 3,
+        "extinct": 3,
+        "absorbed": 3,
+        "dispersed": 3,
+        "withParties": 3
+      },
+      "totalAdded": 15,
+      "baseline": {
+        "crowding": {
+          "weightedCrowding": 0,
+          "nearbyBandCount": 0,
+          "contributors": [],
+          "crowdingPenalty": 0
+        },
+        "social": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "total": 0,
+          "activeEvidenceWeight": 0,
+          "activeEvidenceCount": 0,
+          "historicalEvidenceCount": 0,
+          "socialEvidencePhase": "none",
+          "placeTracked": true
+        },
+        "access": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0.03,
+          "accessState": "familiar_use",
+          "confidence": 0.59
+        }
+      },
+      "after": {
+        "crowding": {
+          "weightedCrowding": 0,
+          "nearbyBandCount": 0,
+          "contributors": [],
+          "crowdingPenalty": 0
+        },
+        "social": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0,
+          "rememberedRefusalAvoidance": 0,
+          "total": 0,
+          "activeEvidenceWeight": 0,
+          "activeEvidenceCount": 0,
+          "historicalEvidenceCount": 0,
+          "socialEvidencePhase": "none",
+          "placeTracked": true
+        },
+        "access": {
+          "strangerCaution": 0,
+          "sharedUsePressure": 0.03,
+          "accessState": "familiar_use",
+          "confidence": 0.59
+        }
+      },
+      "unchanged": true,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "at least twelve remote records of five kinds were genuinely added AND the focal band has a non-trivial reading to disturb",
+        "added": 15,
+        "focalCrowding": 0,
+        "focalConfidence": 0.59
+      },
+      "note": "CORRECTION-33 removed the world-band-count term; this fixture is its integrated restatement across crowding, friction weighting and access expectation at once"
+    },
+    "I13_prepared_party_boundary": {
+      "verdict": "PREPARED_PEOPLE_ARE_RESIDENTIAL_THEIR_LABOR_IS_NOT",
+      "vacuous": false,
+      "presence": {
+        "sources": [
+          {
+            "tile": "tile:75:111",
+            "people": 60,
+            "kind": "residential_remainder"
+          }
+        ],
+        "total": 60,
+        "population": 60
+      },
+      "physicallyAwayPeople": 0,
+      "preparedCommitmentPeople": 5,
+      "residentialWorkingAdults": 20,
+      "committedAwayWorkers": 5,
+      "awaySources": 0,
+      "founderAvailabilityPolicy": "createDaughterBand caps the daughter at min(getDaughterPopulation(total), population - awayPartyPeople) and blocks below DAUGHTER_MIN_POPULATION; prepared people are counted as PRESENT for bodies and as COMMITTED for labour, and withholding them from founding is a stated POLICY, not a physical necessity (CORRECTION-34D §8).",
+      "itemFourNotImplemented": "no cancellation of a prepared party to free founders, no successor-group selection, no daughter viability model. Roadmap Item 4.",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a real prepared party of five exists inside a larger band, so 'physically residential' and 'labour committed' are both measured",
+        "preparedPeople": 5,
+        "population": 60
+      }
+    },
+    "I14_annual_cohort_boundary_with_active_party": {
+      "verdict": "AGING_MOVES_NO_BODY_LABOR_FOLLOWS_THE_CONVENTION",
+      "vacuous": false,
+      "unagedPresence": {
+        "sources": [
+          {
+            "tile": "tile:75:111",
+            "people": 20,
+            "kind": "residential_remainder"
+          },
+          {
+            "tile": "tile:73:111",
+            "people": 6,
+            "kind": "away_party"
+          }
+        ],
+        "total": 26,
+        "population": 26
+      },
+      "unagedWorkers": 6,
+      "unagedBodies": 6,
+      "agedPresence": {
+        "sources": [
+          {
+            "tile": "tile:75:111",
+            "people": 20,
+            "kind": "residential_remainder"
+          },
+          {
+            "tile": "tile:73:111",
+            "people": 6,
+            "kind": "away_party"
+          }
+        ],
+        "total": 26,
+        "population": 26
+      },
+      "agedWorkers": 3,
+      "agedBodies": 6,
+      "agedNonWorking": 3,
+      "agedPhase": "operating",
+      "agedOutcomeReason": null,
+      "targetWorkAtReducedLabour": {
+        "people": 3,
+        "depletion": 0.0296
+      },
+      "fourWayEquivalence": "asserted by the CORRECTION-34D H12 active-annual-boundary fixture and the four-way audit, both rerun unchanged in this freeze",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "labour genuinely fell while all six bodies genuinely stayed away — both halves measured on the real reconciler",
+        "bodies": 6,
+        "workers": 3
+      }
+    },
+    "I15_invalid_target_work_contract": {
+      "verdict": "ZERO_FRACTIONAL_AND_NON_FINITE_FAIL_BEFORE_READING_THE_TARGET",
+      "vacuous": false,
+      "control": {
+        "people": 5,
+        "depletion": 0.0354,
+        "stockChanged": true
+      },
+      "cases": {
+        "zero": {
+          "threw": true,
+          "message": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically pr",
+          "readTheTarget": false,
+          "depletion": 0,
+          "stockChanged": false
+        },
+        "zeroVerify": {
+          "threw": true,
+          "message": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically pr",
+          "readTheTarget": false,
+          "depletion": 0,
+          "stockChanged": false
+        },
+        "fractionalLow": {
+          "threw": true,
+          "message": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically pr",
+          "readTheTarget": false,
+          "depletion": 0,
+          "stockChanged": false
+        },
+        "fractionalHigh": {
+          "threw": true,
+          "message": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically pr",
+          "readTheTarget": false,
+          "depletion": 0,
+          "stockChanged": false
+        },
+        "nan": {
+          "threw": true,
+          "message": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically pr",
+          "readTheTarget": false,
+          "depletion": 0,
+          "stockChanged": false
+        },
+        "infinity": {
+          "threw": true,
+          "message": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically pr",
+          "readTheTarget": false,
+          "depletion": 0,
+          "stockChanged": false
+        },
+        "negative": {
+          "threw": true,
+          "message": "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the productive labour physically pr",
+          "readTheTarget": false,
+          "depletion": 0,
+          "stockChanged": false
+        }
+      },
+      "allRejected": true,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the SAME target with a valid five-worker party reads it and removes real stock, so every rejection is a refusal and not an absent patch",
+        "controlDepletion": 0.0354
+      }
+    }
+  }
+}
