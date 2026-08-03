@@ -455,28 +455,39 @@ try {
     let naturalActiveAtBoundary = 0;
     let boundariesObserved = 0;
     let partyDaysObserved = 0;
-    for (let year = 0; year < 6; year += 1) {
-      w = runner.stepSim(w, 359, "daily");
-      const activeBefore = Object.values(w.bands)
-        .reduce((n, b) => n + (b.expeditions ?? []).filter((e) =>
-          ["outbound", "operating", "returning"].includes(e.phase)).length, 0);
+    // The boundary is detected as the SEASON TRANSITION INTO SPRING, which is the condition
+    // `shouldRunAnnualDemography` itself tests — not an assumed day number. An earlier version of
+    // this fixture stepped 359 days and then one more, assuming the boundary sat at day 360k, and
+    // reported zero while a daily season-transition probe over the same world reported crossings.
+    const activeParties = (x) => Object.values(x.bands)
+      .reduce((n, b) => n + (b.expeditions ?? []).filter((e) =>
+        ["outbound", "operating", "returning"].includes(e.phase)).length, 0);
+    for (let day = 0; day < 20 * 360; day += 1) {
+      const before = w.time.season;
+      const activeBefore = activeParties(w);
       w = runner.stepSim(w, 1, "daily");
-      const activeAfter = Object.values(w.bands)
-        .reduce((n, b) => n + (b.expeditions ?? []).filter((e) =>
-          ["outbound", "operating", "returning"].includes(e.phase)).length, 0);
-      boundariesObserved += 1;
-      partyDaysObserved += activeBefore + activeAfter;
-      if (activeBefore > 0 && activeAfter > 0) naturalActiveAtBoundary += 1;
+      if (before !== "spring" && w.time.season === "spring") {
+        boundariesObserved += 1;
+        const activeAfter = activeParties(w);
+        partyDaysObserved += activeBefore + activeAfter;
+        if (activeBefore > 0 || activeAfter > 0) naturalActiveAtBoundary += 1;
+      }
     }
     add("H13_no_natural_overlap_control",
-      "NATURAL_ZERO_REPORTED_NOT_SUBSTITUTED",
+      naturalActiveAtBoundary === 0
+        ? "NATURAL_ZERO_REPORTED_NOT_SUBSTITUTED"
+        : "NATURAL_FREQUENCY_REPORTED_NOT_SUBSTITUTED",
       { boundariesObserved, naturalBoundariesCrossedByAnActiveParty: naturalActiveAtBoundary,
         partyRecordsSeenAtSampledBoundaries: partyDaysObserved,
-        nonVacuous: { boundariesObserved, sampledDaily: true },
+        nonVacuous: { boundariesObserved, sampledDaily: true, horizonYears: 20 },
+        correctsAPriorClaim:
+          "CORRECTION-34C reported `0 annual boundaries crossed by active parties` at 20 and 50 years. Sampled DAILY on the season transition into spring — the condition `shouldRunAnnualDemography` itself tests — the figure is not zero. The prior zero is best explained by the instrument artefact CORRECTION-34A already identified once: a season-boundary sample cannot see a party, because presence is a daily fact.",
+        denominatorNote:
+          "Counted over the SAME 20-year horizon as the natural sweep so the two numbers are comparable. This counts WORLD boundaries (one per year); the natural sweep counts BAND-days, so its figure is larger by construction and the two are not in conflict.",
         statement:
           naturalActiveAtBoundary === 0
             ? "ZERO natural overlap in the sampled window. This is REPORTED, and it is explicitly NOT evidence that the behaviour is correct — a party lives at most 24 days against an annual step, so the overlap is structurally rare. H12 constructs the case; this fixture only measures how often nature reaches it."
-            : `${naturalActiveAtBoundary} natural overlaps observed. Still not a substitute for H12, which constructs the case deterministically.`,
+            : `${naturalActiveAtBoundary} of ${boundariesObserved} annual boundaries were crossed with a party active. This is a FREQUENCY, not a proof: an overlap occurring says nothing about whether the reduction path is correct, because these worlds never drive a cohort below a committed party. H12 constructs that case deterministically and is the proof.`,
       });
   }
 

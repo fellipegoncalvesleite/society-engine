@@ -18,7 +18,7 @@
     "H10_return_after_labor_reduction": "HEADCOUNT_RETURNS_EXACTLY_ONCE_NO_COHORT_CREATED_OR_DELETED",
     "H11_corrupt_legacy_state": "LABELLED_NON_HISTORICAL_REPAIR_NO_SILENT_DELETION",
     "H12_active_annual_boundary_equivalence": "IDENTICAL_ACROSS_ALL_FOUR_MODES_WITH_AN_ACTIVE_PARTY",
-    "H13_no_natural_overlap_control": "NATURAL_ZERO_REPORTED_NOT_SUBSTITUTED",
+    "H13_no_natural_overlap_control": "NATURAL_FREQUENCY_REPORTED_NOT_SUBSTITUTED",
     "H14_legacy_record_migration": "UPGRADED_DETERMINISTICALLY_AND_CONSERVATIVELY"
   },
   "fixtures": {
@@ -779,15 +779,18 @@
       "whyTheOldFixtureWasInsufficient": "L12 stepped a natural world 1260 days and counted expedition records at the end. A natural party lasts at most 24 days against ANNUAL demography, so any record it found had been launched long after the last boundary. It proved step-mode determinism, which is real, but not that an ACTIVE party is represented identically across a demographic boundary — which is the property this checkpoint changes."
     },
     "H13_no_natural_overlap_control": {
-      "verdict": "NATURAL_ZERO_REPORTED_NOT_SUBSTITUTED",
-      "boundariesObserved": 6,
-      "naturalBoundariesCrossedByAnActiveParty": 0,
-      "partyRecordsSeenAtSampledBoundaries": 0,
+      "verdict": "NATURAL_FREQUENCY_REPORTED_NOT_SUBSTITUTED",
+      "boundariesObserved": 20,
+      "naturalBoundariesCrossedByAnActiveParty": 7,
+      "partyRecordsSeenAtSampledBoundaries": 18,
       "nonVacuous": {
-        "boundariesObserved": 6,
-        "sampledDaily": true
+        "boundariesObserved": 20,
+        "sampledDaily": true,
+        "horizonYears": 20
       },
-      "statement": "ZERO natural overlap in the sampled window. This is REPORTED, and it is explicitly NOT evidence that the behaviour is correct — a party lives at most 24 days against an annual step, so the overlap is structurally rare. H12 constructs the case; this fixture only measures how often nature reaches it."
+      "correctsAPriorClaim": "CORRECTION-34C reported `0 annual boundaries crossed by active parties` at 20 and 50 years. Sampled DAILY on the season transition into spring — the condition `shouldRunAnnualDemography` itself tests — the figure is not zero. The prior zero is best explained by the instrument artefact CORRECTION-34A already identified once: a season-boundary sample cannot see a party, because presence is a daily fact.",
+      "denominatorNote": "Counted over the SAME 20-year horizon as the natural sweep so the two numbers are comparable. This counts WORLD boundaries (one per year); the natural sweep counts BAND-days, so its figure is larger by construction and the two are not in conflict.",
+      "statement": "7 of 20 annual boundaries were crossed with a party active. This is a FREQUENCY, not a proof: an overlap occurring says nothing about whether the reduction path is correct, because these worlds never drive a cohort below a committed party. H12 constructs that case deterministically and is the proof."
     },
     "H14_legacy_record_migration": {
       "verdict": "UPGRADED_DETERMINISTICALLY_AND_CONSERVATIVELY",
