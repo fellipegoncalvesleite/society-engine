@@ -1,0 +1,410 @@
+{
+  "audit": "ITEM-4-FISSION-BEFORE-ARCHITECTURE",
+  "tree": "ef76971bd66a7413313183349b9468a879405970",
+  "seeds": [
+    "audit27:natural:s1",
+    "audit27:natural:map2:s1"
+  ],
+  "years": 200,
+  "headline": "MEASURED — see measuredBehaviour",
+  "measuredBehaviour": {
+    "fissionsObserved": 2,
+    "instantaneous": "a daughter appears complete within ONE simulated day of the annual demographic step; there is no attempt, proposal, preparation or journey state at any point",
+    "daughterCoResidentWithParent": 0,
+    "daughterPlacedAtADistantTile": 2,
+    "maxDistanceTeleported": 7,
+    "populationConservedAcrossThePair": 1,
+    "populationNotConserved": 1,
+    "cohortsConservedWorkingAdults": 0,
+    "cohortsConservedDependents": 0,
+    "cohortsConservedElders": 0,
+    "daughterDependentShares": [
+      0.3333
+    ],
+    "daughterElderShares": [
+      0.1111
+    ],
+    "awayPeopleAtFission": [
+      0,
+      0
+    ],
+    "preparedPeopleAtFission": [
+      0,
+      0
+    ],
+    "knowledgeClones": 0,
+    "knowledgeInheritedShares": [
+      0.1339,
+      0.1478
+    ],
+    "inheritedFoodReceipts": 0,
+    "inheritedExpeditions": 0,
+    "ordinaryBandImmediately": 2,
+    "anyFissionProvisionalState": 0
+  },
+  "structuralFindingsReadFromProduction": {
+    "viabilityCheck": "the ONLY viability test is `daughterPopulation >= DAUGHTER_MIN_POPULATION` inside createDaughterBand. There is no parent residual viability test, no successor early viability test and no establishment window.",
+    "failurePath": "NONE. createDaughterBand either returns a complete daughter or returns undefined before creating anything. Once created, a daughter is an ordinary band forever; there is no return, reintegration or failed establishment.",
+    "cohortAllocation": "NOT ALLOCATED. Both the parent-after and the daughter are passed through recomputeDemographicCounts, which DERIVES cohorts from population at fixed ratios (dependents 35%, elders 10%, remainder working adults). Whatever composition the parent actually had is destroyed on both sides by the split.",
+    "founderAvailability": "CHECKED. CORRECTION-34C and -34D cap the founding draw at population minus physically-away minus prepared-commitment people, and BLOCK below DAUGHTER_MIN_POPULATION rather than borrowing.",
+    "destinationKnowledge": "BAND-KNOWN. selectFissionTarget reads band.knowledge.observedTiles gated at confidence >= 0.34; no hidden richness is read.",
+    "physicalTransition": "NONE. The daughter is constructed with `position: target.tileId` — it appears AT the destination without travelling, and no movement authority is consulted.",
+    "supportAtBirth": "seasonalFoodReceipts, seasonalSupport, recentIntraSeasonTrips and expeditions are all explicitly reset to undefined, so the daughter starts with NO support and NO inherited commitments.",
+    "knowledgeInheritance": "PARTIAL and degraded (2K.1D), with a clone guard (assertDaughterFissionStateNotCloned) over a registered non-cloneable field list.",
+    "eventConservationClaim": "the BandFissionEvent records `worldPopulationAfterFission` by ASSIGNING it `worldPopulationBeforeFission`, so `fissionPopulationConserved` is structurally incapable of being false. It is a restatement, not a measurement."
+  },
+  "runs": [
+    {
+      "seed": "audit27:natural:s1",
+      "years": 200,
+      "fissionsObserved": 1,
+      "events": [
+        {
+          "seed": "audit27:natural:s1",
+          "day": 43920,
+          "year": 122,
+          "parent": "band:varied-estuary",
+          "daughter": "band:varied-estuary:daughter:1:t488",
+          "parentSplitPressureBefore": 0.61,
+          "parentSplitPressureAfter": 0.22,
+          "parentPopulationBefore": 50,
+          "parentPopulationAfter": 33,
+          "daughterPopulation": 18,
+          "populationSum": 51,
+          "populationConservedAcrossThePair": false,
+          "worldPopulationBefore": 197,
+          "worldPopulationAfter": 198,
+          "worldPopulationConserved": false,
+          "parentCohortsBefore": {
+            "workingAdults": 29,
+            "dependents": 14,
+            "elders": 7
+          },
+          "parentCohortsAfter": {
+            "workingAdults": 18,
+            "dependents": 12,
+            "elders": 3
+          },
+          "daughterCohorts": {
+            "workingAdults": 10,
+            "dependents": 6,
+            "elders": 2
+          },
+          "cohortSums": {
+            "workingAdults": 28,
+            "dependents": 18,
+            "elders": 5
+          },
+          "cohortsConserved": {
+            "workingAdults": false,
+            "dependents": false,
+            "elders": false
+          },
+          "daughterDependentShare": 0.3333,
+          "daughterElderShare": 0.1111,
+          "parentPosition": "tile:193:87",
+          "daughterPosition": "tile:187:88",
+          "targetTileId": "tile:187:88",
+          "distanceParentToDaughterOnCreation": 7,
+          "daughterCoResidentWithParent": false,
+          "daughterKnewItsOwnPositionBeforeMoving": true,
+          "parentConfidenceInTarget": 1,
+          "daughterSeasonalFoodReceipts": "reset",
+          "daughterSeasonalSupport": "INHERITED",
+          "daughterExpeditions": 0,
+          "daughterRecentTrips": 0,
+          "parentObservedTiles": 112,
+          "daughterObservedTiles": 15,
+          "knowledgeInheritedShare": 0.1339,
+          "daughterIsAKnowledgeClone": false,
+          "parentPhysicallyAwayBefore": 0,
+          "parentPreparedBefore": 0,
+          "eventReportedConserved": true,
+          "eventWorldPopulationBefore": 197,
+          "eventWorldPopulationAfter": 197,
+          "daughterStatus": "foraging",
+          "daughterIsOrdinaryBandImmediately": true,
+          "daughterHasFissionProvisionalState": false
+        }
+      ],
+      "worldPopulationSeries": [
+        {
+          "day": 1,
+          "worldPopulation": 238,
+          "bands": 9
+        },
+        {
+          "day": 3601,
+          "worldPopulation": 233,
+          "bands": 9
+        },
+        {
+          "day": 7201,
+          "worldPopulation": 226,
+          "bands": 9
+        },
+        {
+          "day": 10801,
+          "worldPopulation": 216,
+          "bands": 9
+        },
+        {
+          "day": 14401,
+          "worldPopulation": 211,
+          "bands": 9
+        },
+        {
+          "day": 18001,
+          "worldPopulation": 208,
+          "bands": 9
+        },
+        {
+          "day": 21601,
+          "worldPopulation": 209,
+          "bands": 9
+        },
+        {
+          "day": 25201,
+          "worldPopulation": 198,
+          "bands": 8
+        },
+        {
+          "day": 28801,
+          "worldPopulation": 199,
+          "bands": 8
+        },
+        {
+          "day": 32401,
+          "worldPopulation": 199,
+          "bands": 8
+        },
+        {
+          "day": 36001,
+          "worldPopulation": 195,
+          "bands": 8
+        },
+        {
+          "day": 39601,
+          "worldPopulation": 195,
+          "bands": 8
+        },
+        {
+          "day": 43201,
+          "worldPopulation": 197,
+          "bands": 8
+        },
+        {
+          "day": 46801,
+          "worldPopulation": 201,
+          "bands": 9
+        },
+        {
+          "day": 50401,
+          "worldPopulation": 201,
+          "bands": 9
+        },
+        {
+          "day": 54001,
+          "worldPopulation": 203,
+          "bands": 9
+        },
+        {
+          "day": 57601,
+          "worldPopulation": 206,
+          "bands": 9
+        },
+        {
+          "day": 61201,
+          "worldPopulation": 208,
+          "bands": 9
+        },
+        {
+          "day": 64801,
+          "worldPopulation": 207,
+          "bands": 9
+        },
+        {
+          "day": 68401,
+          "worldPopulation": 204,
+          "bands": 9
+        }
+      ]
+    },
+    {
+      "seed": "audit27:natural:map2:s1",
+      "years": 200,
+      "fissionsObserved": 1,
+      "events": [
+        {
+          "seed": "audit27:natural:map2:s1",
+          "day": 39240,
+          "year": 109,
+          "parent": "band:varied-estuary",
+          "daughter": "band:varied-estuary:daughter:1:t436",
+          "parentSplitPressureBefore": 0.6,
+          "parentSplitPressureAfter": 0.22,
+          "parentPopulationBefore": 49,
+          "parentPopulationAfter": 31,
+          "daughterPopulation": 18,
+          "populationSum": 49,
+          "populationConservedAcrossThePair": true,
+          "worldPopulationBefore": 192,
+          "worldPopulationAfter": 192,
+          "worldPopulationConserved": true,
+          "parentCohortsBefore": {
+            "workingAdults": 29,
+            "dependents": 14,
+            "elders": 6
+          },
+          "parentCohortsAfter": {
+            "workingAdults": 17,
+            "dependents": 11,
+            "elders": 3
+          },
+          "daughterCohorts": {
+            "workingAdults": 10,
+            "dependents": 6,
+            "elders": 2
+          },
+          "cohortSums": {
+            "workingAdults": 27,
+            "dependents": 17,
+            "elders": 5
+          },
+          "cohortsConserved": {
+            "workingAdults": false,
+            "dependents": false,
+            "elders": false
+          },
+          "daughterDependentShare": 0.3333,
+          "daughterElderShare": 0.1111,
+          "parentPosition": "tile:191:86",
+          "daughterPosition": "tile:187:87",
+          "targetTileId": "tile:187:87",
+          "distanceParentToDaughterOnCreation": 5,
+          "daughterCoResidentWithParent": false,
+          "daughterKnewItsOwnPositionBeforeMoving": true,
+          "parentConfidenceInTarget": 1,
+          "daughterSeasonalFoodReceipts": "reset",
+          "daughterSeasonalSupport": "INHERITED",
+          "daughterExpeditions": 0,
+          "daughterRecentTrips": 0,
+          "parentObservedTiles": 115,
+          "daughterObservedTiles": 17,
+          "knowledgeInheritedShare": 0.1478,
+          "daughterIsAKnowledgeClone": false,
+          "parentPhysicallyAwayBefore": 0,
+          "parentPreparedBefore": 0,
+          "eventReportedConserved": true,
+          "eventWorldPopulationBefore": 192,
+          "eventWorldPopulationAfter": 192,
+          "daughterStatus": "foraging",
+          "daughterIsOrdinaryBandImmediately": true,
+          "daughterHasFissionProvisionalState": false
+        }
+      ],
+      "worldPopulationSeries": [
+        {
+          "day": 1,
+          "worldPopulation": 238,
+          "bands": 9
+        },
+        {
+          "day": 3601,
+          "worldPopulation": 232,
+          "bands": 9
+        },
+        {
+          "day": 7201,
+          "worldPopulation": 226,
+          "bands": 9
+        },
+        {
+          "day": 10801,
+          "worldPopulation": 221,
+          "bands": 9
+        },
+        {
+          "day": 14401,
+          "worldPopulation": 216,
+          "bands": 9
+        },
+        {
+          "day": 18001,
+          "worldPopulation": 213,
+          "bands": 9
+        },
+        {
+          "day": 21601,
+          "worldPopulation": 209,
+          "bands": 9
+        },
+        {
+          "day": 25201,
+          "worldPopulation": 196,
+          "bands": 8
+        },
+        {
+          "day": 28801,
+          "worldPopulation": 195,
+          "bands": 8
+        },
+        {
+          "day": 32401,
+          "worldPopulation": 191,
+          "bands": 8
+        },
+        {
+          "day": 36001,
+          "worldPopulation": 192,
+          "bands": 8
+        },
+        {
+          "day": 39601,
+          "worldPopulation": 190,
+          "bands": 9
+        },
+        {
+          "day": 43201,
+          "worldPopulation": 194,
+          "bands": 9
+        },
+        {
+          "day": 46801,
+          "worldPopulation": 192,
+          "bands": 9
+        },
+        {
+          "day": 50401,
+          "worldPopulation": 193,
+          "bands": 9
+        },
+        {
+          "day": 54001,
+          "worldPopulation": 194,
+          "bands": 9
+        },
+        {
+          "day": 57601,
+          "worldPopulation": 192,
+          "bands": 9
+        },
+        {
+          "day": 61201,
+          "worldPopulation": 193,
+          "bands": 9
+        },
+        {
+          "day": 64801,
+          "worldPopulation": 193,
+          "bands": 9
+        },
+        {
+          "day": 68401,
+          "worldPopulation": 186,
+          "bands": 8
+        }
+      ]
+    }
+  ]
+}
