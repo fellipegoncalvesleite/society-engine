@@ -181,7 +181,7 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### ROADMAP ITEM 4 — IMPLEMENTATION-38 — **PROGRESS: PRE-IMPLEMENTATION GATES COMPLETE, STATE MACHINE NOT BUILT / DO NOT MERGE**
+### ROADMAP ITEM 4 — IMPLEMENTATION-38 — **PROGRESS: TWO PURE AUTHORITIES BUILT, LIFECYCLE STATE MACHINE NOT BUILT / DO NOT MERGE / NOT PUSHED**
 
 ```text
 Roadmap Item 3:
@@ -194,8 +194,78 @@ Roadmap Item 5:
 not started
 ```
 
+> **READ THIS BEFORE ACTING ON THE LINE ABOVE.** "Implementation candidate" describes the
+> checkpoint, **not** the Direction D lifecycle. As of `42951ea` the lifecycle is **NOT
+> IMPLEMENTED**. What exists is **two pure leaves with ZERO PRODUCTION CALLERS**
+> (`fissionFounderAllocation.ts`, `fissionParentResidualViability.ts`) and three audits.
+> `createDaughterBand` is **untouched**, and every one of the six measured defects — instantaneous
+> creation, the teleport, the manufactured dependents, viability-as-one-inequality, the
+> impossibility of failure, and the restated conservation flag — is **still live in production**.
+> **Item 4 must not be described as implemented, and this checkpoint must not be pushed**, until the
+> lifecycle exists end to end.
+
 **Branch** `checkpoint/dynamic-fission-provisional-successor-38`, from the accepted
-audit/architecture tip `ab29864`. **AUDIT ONLY so far — `git diff ab29864..HEAD -- src/` is empty.**
+audit/architecture tip `ab29864`. **Local HEAD `42951ea`; remote still at `87859eb`; three local
+commits ahead, unpushed.**
+
+---
+
+#### 2026-08-03 continuation — parent residual viability, and the reader surface
+
+**`b342e89` — the parent residual authority, and the defect in the interrupted attempt at it.**
+`AUTHORITY_MAP.md` recorded "is the parent still viable?" as an authority that does not exist. The
+interrupted implementation of it did not compile (`TS2739`: the type had begun separating
+split-caused strain from prior fragility and the body had not), and the model underneath was wrong
+in a way worth recording. It summed every adverse quantity into one `residualStrain` against one
+threshold. **Measured before replacing it: a hungry, sick, badly placed parent of 10 working adults
+scored 0.92 against a 0.62 threshold, and 0.674 of that 0.92 — SEVENTY-THREE PER CENT — was hardship
+the departure did not cause and could not change.** Lowering the caller's minimum founder request
+from 18 to 2 moved the score **not at all**, because every dominant term was invariant to the
+founder count. It refused precisely the splits `RESEARCH_CONSTRAINTS.md` §3 records as most
+ordinary, for reasons no revision could reach.
+
+**Five models compared, hybrid selected.** Hard physical blocks are absolute tests on the residual.
+`splitCausedDamage` reads only before→after movements, so a quantity the split cannot move
+contributes zero — which is why nutrition is excluded, and that follows from **L2** rather than from
+taste. `priorFragility` is read at before levels only, so it structurally cannot contain anything
+the split did; it narrows a `tolerance` instead of joining the score. **Two properties then hold by
+shape rather than by tuning: a departure that changes nothing scores exactly 0 against a tolerance
+floored at 0.18, so existing hardship can NEVER veto on its own; and tolerance shrinks as hardship
+rises, so the same departure a fed band absorbs is refused for a starving one.** PR9/PR10/PR11 hold
+one variable each to prove both.
+
+**PR1-PR20: 20 passing, 0 failing, 0 vacuous**, non-vacuity asserted per fixture. 18 of 19 reason ids
+emitted; the one that is not is recorded **NOT CONSTRUCTED, deliberately** rather than given a
+fabricated fixture. **Three of the fixtures were wrong before they were right and all three are
+recorded** — PR5 asserted a parent could not split when the authority correctly found that it could,
+and PR10/PR11 compared post-revision numbers against pre-revision claims. **PR16 then caught a
+defect in this pass's own authority: it published `round2` quantities while deciding on full
+precision, so at the boundary a reader recomputing the verdict from the published evidence
+disagreed with it. Fixed in the authority, not in the test.**
+
+**`42951ea` — the reader surface, measured.** `ARCHITECTURE_DECISION.md` named "auditing every
+reader" as Direction D's large cost and never counted it. **160 band-enumeration sites across 41
+files, 144 with no lifecycle filter within reach, plus 104 status-branch sites.** Seventeen
+subsystems classified: 7 allowed unchanged, 5 allowed with a provisional interpretation, 4 blocked,
+1 deferred. Three judgements cut against the obvious and are argued from physics: **presence is
+allowed unchanged** (hiding a provisional group's bodies would recreate CORRECTION-34's ghosts);
+**encounters are blocked for the parent/successor pair only** (at departure the two stand on the same
+tile, and CORRECTION-29's proximity gate would invent stranger friction out of the split itself);
+**catchment is deferred** (residence-anchored footprint — Item 3's seam, carried forward, closed by
+nothing here). The method is lexical and says so: it reports sites needing a decision, not defects.
+
+**Checks on both commits:** `tsc` both projects PASS (the inherited tree did not compile), build
+PASS, graph **221/764 0 dup 0 dangling — unchanged**, import boundary **85 back-edges — unchanged**,
+founder allocation fixtures re-run unchanged. **No frozen evidence file changed.** **Production
+behaviour is unchanged and no natural-occurrence evidence exists for either authority, because
+nothing calls them.**
+
+**Why the lifecycle was not started rather than begun and left open.** The measured surface is 13
+lifecycle phases, 144 enumeration sites each needing a decision, F1-F26 plus G1-G10, three natural
+horizons on three scenarios, and the full Item 3 regression. It is atomic: an attempt state nothing
+resolves, or a provisional band every reader treats as ordinary, is the half-state `CLAUDE.md` §18
+forbids — and, as `ARCHITECTURE_DECISION.md` §4 already argued, **worse than the measured defect
+because it would look finished.** Stopping at a pure-leaf boundary keeps that from happening.
 
 **§3 support contradiction RESOLVED.** The probe's label was wrong; production is correct. The
 daughter is built with `seasonalSupport: undefined`, and the final `updateBandContextStates` pass
@@ -8857,14 +8927,32 @@ UI in `src/ui/BandPanel.tsx`, audit + `--targeted-cause-event-check` in
 
 ## Recommended Next Step
 
-**CURRENT (ROADMAP ITEM 4, 2026-08-03).** Awaiting Browser GPT audit of the pushed
-`checkpoint/dynamic-fission-daughter-viability-37`. **Roadmap Item 3 is ACCEPTED AND FROZEN.
-Roadmap Item 4 is ACTIVE — its audit and architecture are complete and its implementation is NOT
-started. Roadmap Item 5 is NOT started.**
+**CURRENT (ROADMAP ITEM 4, 2026-08-03, at local `42951ea` — UNPUSHED).** **Roadmap Item 3 is
+ACCEPTED AND FROZEN. Roadmap Item 4 is ACTIVE — two pure authorities are implemented and audited,
+and the Direction D lifecycle is NOT started. Roadmap Item 5 is NOT started.**
 
-The decision in front of the supervisor is whether to authorise the Direction D implementation as
-its own checkpoint, from this measured baseline, or to redirect the architecture before any code is
-written.
+**The exact next safe action** is to build the Direction D lifecycle as one coherent change, in this
+order, because each step is the next one's precondition:
+
+1. `FissionAttempt` state on `Band` — proposal, commitment, departure-ready — bounded, holding no
+   bodies, with a resolver that cannot leave it open. Nothing else may be built first, because every
+   later phase needs an identity to hang off.
+2. The **departure transition**: the one seam where population moves. It calls
+   `allocateFounderCohorts` and then `assessParentResidualWithRevision`, honours
+   `permittedFounderCount`, and proves the cohort-by-cohort invariant at that single point.
+3. The **provisional successor**, constructed at the parent's position — never at the target — with
+   the runner transition chosen so it cannot be processed twice on its departure day.
+4. The 144 enumeration sites, decided against the classification already published in
+   `provisional-reader-surface.json`.
+5. Travel, establishment, return, reintegration, early failure, stabilization.
+6. Proposal causality last, so the lifecycle is exercised before the thing that triggers it is tuned.
+
+**Do not push this branch until 1-6 exist end to end.** The two committed authorities are pure
+leaves with no callers; pushing now would publish a checkpoint whose title claims a lifecycle it
+does not have.
+
+The decision in front of the supervisor is whether to authorise that implementation as its own
+checkpoint from this measured baseline, or to redirect the architecture before more code is written.
 
 **The six Item 3 seams below remain OPEN and are closed by nothing in Item 4.**
 
@@ -11188,3 +11276,21 @@ exception; daughter colours related-but-distinct and never visually confusing.
   14 ✅ / 6 🟨 / 3 ⬜ / 11 ❌. Accepted evidence identical over 635 files; Item 3 frozen and
   untouched; **Item 5 not started.** Evidence:
   `docs/evidence/dynamic-fission-daughter-viability-37/`.
+
+- **ROADMAP ITEM 4 — IMPLEMENTATION-38 continuation (2026-08-03, `b342e89` + `42951ea`, branch
+  `checkpoint/dynamic-fission-provisional-successor-38`) — PROGRESS: TWO PURE AUTHORITIES BUILT,
+  LIFECYCLE NOT BUILT / NOT PUSHED / DO NOT MERGE.** The parent residual authority
+  `AUTHORITY_MAP.md` recorded as missing now exists. The interrupted attempt at it did not compile
+  and summed pre-existing hardship into the refusal: measured, **73% of a struggling parent's 0.92
+  refusal score was hardship the split did not cause**, and lowering the minimum founder request
+  from 18 to 2 moved it not at all. Five models compared; the selected one separates hard physical
+  blocks, split-caused damage (before→after movements only, so nutrition is excluded by **L2**) and
+  prior fragility (before levels only), with fragility narrowing a floored tolerance rather than
+  joining the score — so **existing hardship can never veto on its own, and is never irrelevant**.
+  PR1-PR20 20/20, 0 failing, 0 vacuous; three fixtures were wrong before they were right and PR16
+  found a rounding defect in this pass's own authority, fixed in the authority. Separately, the
+  Direction D reader surface is counted for the first time: **160 band-enumeration sites, 144
+  unguarded, 104 status branches, 17 subsystems classified**. `tsc` both, build, graph 221/764 and
+  import boundary 85 all unchanged; no frozen evidence touched; **`createDaughterBand` untouched and
+  all six measured defects still live in production.** Item 3 frozen and untouched; **Item 5 not
+  started.** Evidence: `docs/evidence/dynamic-fission-daughter-viability-37/PARENT_RESIDUAL_DECISION.md`.
