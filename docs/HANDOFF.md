@@ -181,7 +181,53 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### ROADMAP ITEM 4 — DYNAMIC FISSION / DAUGHTER VIABILITY / SUCCESSOR GROUPS — **PROGRESS: AUDIT AND ARCHITECTURE COMPLETE, IMPLEMENTATION NOT STARTED / DO NOT MERGE**
+### ROADMAP ITEM 4 — IMPLEMENTATION-38 — **PROGRESS: PRE-IMPLEMENTATION GATES COMPLETE, STATE MACHINE NOT BUILT / DO NOT MERGE**
+
+```text
+Roadmap Item 3:
+accepted and frozen
+
+Roadmap Item 4:
+implementation candidate — awaiting Browser GPT audit
+
+Roadmap Item 5:
+not started
+```
+
+**Branch** `checkpoint/dynamic-fission-provisional-successor-38`, from the accepted
+audit/architecture tip `ab29864`. **AUDIT ONLY so far — `git diff ab29864..HEAD -- src/` is empty.**
+
+**§3 support contradiction RESOLVED.** The probe's label was wrong; production is correct. The
+daughter is built with `seasonalSupport: undefined`, and the final `updateBandContextStates` pass
+(`advance.ts:284`, after demography at `:237`) derives a fresh one **within the same day** from the
+daughter's own state. Measured: the daughter's `rawSupportRatio` reads **0** against the parent's
+**1.12** — the value present describes having *nothing*. Nothing physical crossed: receipt store
+reset, support object is not the parent's, deep-unequal, carries no receipts. **The before-package's
+material claim stands; only the wording changes.**
+
+**§4 bibliography added** — every source tied to the constraint it supports, with Dunbar (1992)
+cited only to be excluded and Lindenfors et al. (2021) as the reason.
+
+**§5 split-state inventory COMPLETE, and it found four more laundering paths beyond the cohorts:**
+`hungerPressure * 0.86` (the daughter starts **14% less hungry than the camp it left**);
+`storageCapacity: 0.16` hardcoded to the spawn default regardless of the parent (**material
+capability from nothing**, feeding `baseComfort` ×8); `viability.status: "viable"` **set at
+departure**, which §16 forbids because it declares the outcome Item 4 exists to test; and reset
+`acuteRisk` / `deathMemory` / `bodyCampLogistics`, which is right for history and wrong for bodies.
+**Fixing only the cohorts would leave a hunger discount, free storage and a success badge.**
+
+**The ~60-field non-cloneable registry is sound and must be preserved** — knowledge, memory, social
+records and debug rings are already handled correctly.
+
+**The state machine is NOT built.** Remaining: the eleven-state machine, cohort allocation, the
+physical journey authority, the provisional reader matrix, F1–F26, G1–G10, natural runs, four-way
+determinism and the Item 3 regression.
+
+Evidence: `docs/evidence/dynamic-fission-daughter-viability-37/`.
+
+---
+
+### ROADMAP ITEM 4 — AUDIT AND ARCHITECTURE (37) — **ACCEPTED AS THE IMPLEMENTATION BASELINE**
 
 ```text
 Roadmap Item 3:
