@@ -79,7 +79,10 @@ export function getNearbyBandPressure(
 
 export interface PhysicalPresenceSource {
   readonly tileId: TileId;
-  /** People physically standing here. Residential remainder, or one away party's workers. */
+  /**
+   * People physically standing here: the residential remainder, or one away party's BODIES.
+   * CORRECTION-34D — bodies, not workers. A party member who supplies no labour still stands here.
+   */
   readonly people: number;
   readonly kind: "residential_remainder" | "away_party";
   /** Present only for `away_party`, so a consumer can trace the body back to its expedition. */
@@ -93,11 +96,15 @@ export interface PhysicalPresenceSource {
  * cap.
  *
  * `sum(people)` equals `demography.population` **for valid canonical expedition state**, i.e.
- * whenever `sum(away partyWorkers) <= population`. That precondition is maintained upstream by
- * `reconcileExpeditionCommitment`, which runs daily; it is NOT established here. A band assembled
- * directly by a test or a future caller that never ran a day can still be overcommitted, and this
- * function will report that faithfully rather than disguise it. Assert with
- * `getBandCommitmentAccounting(band).conserved`.
+ * whenever `sum(physically away party PEOPLE) <= population`. CORRECTION-34D: that is
+ * `partyWorkers + nonWorkingPartyPeople` over the physically-away phases, NOT `partyWorkers` —
+ * labour and bodies are different quantities and only bodies are conserved here. `prepared`
+ * parties are excluded because their people are standing at the residence.
+ *
+ * The precondition is maintained upstream by `reconcileExpeditionCommitment`, which runs daily; it
+ * is NOT established here. A band assembled directly by a test or a future caller that never ran a
+ * day can still be overcommitted, and this function will report that faithfully rather than
+ * disguise it. Assert with `getBandCommitmentAccounting(band).conserved`.
  */
 export function getBandPhysicalPresence(band: Band): readonly PhysicalPresenceSource[] {
   const population = band.demography?.population ?? band.size ?? 0;
@@ -131,14 +138,20 @@ export function getBandPhysicalPresence(band: Band): readonly PhysicalPresenceSo
   //
   // This read model is NOT self-conserving and does not claim to be. It reports what the
   // expedition records say, and the sum below equals `population` only when the canonical
-  // expedition state handed to it is VALID — that is, when `sum(away partyWorkers) <= population`.
+  // expedition state handed to it is VALID — that is, when
+  // `sum(physically away party PEOPLE) <= population` (CORRECTION-34D: bodies, not labour).
   //
   // Validity is maintained UPSTREAM by `reconcileExpeditionCommitment` (expedition.ts), which runs
-  // at the head of the daily expedition action and shrinks or loses any party the band can no
-  // longer staff. That covers every band-day produced by the daily kernel, which is the only way
-  // production advances a world. It does NOT cover a band object assembled directly by a test,
-  // fixture or future caller that never ran a day — such a band can still be overcommitted, and
-  // this function will faithfully render that overcommitment rather than disguise it.
+  // at the head of the daily expedition action. CORRECTION-34D split what it does, and the old
+  // wording here — that it "shrinks or loses any party the band can no longer staff" — is no
+  // longer true of ordinary demography: a band that can no longer STAFF a party converts its
+  // workers into non-working members WITHOUT MOVING ANY BODY, so presence is untouched. Only a
+  // record describing more PEOPLE than the band has is retired, and that is a defensive repair for
+  // invalid state, not a demographic response. That covers every band-day produced by the daily
+  // kernel, which is the only way production advances a world. It does NOT cover a band object
+  // assembled directly by a test, fixture or future caller that never ran a day — such a band can
+  // still be overcommitted, and this function will faithfully render that overcommitment rather
+  // than disguise it.
   //
   // The clamp below therefore keeps the residential remainder non-negative and nothing more. It
   // deliberately does NOT shrink the away sources: proportionally shrinking an already-launched

@@ -1468,6 +1468,10 @@ function advanceExpeditionOneDay(
     // Physical work: draw the distant stock through the SAME harvest resolution a near
     // trip uses. The stock is depleted here, standing at the target. The receipt is not
     // food yet — it becomes cargo.
+    //
+    // CORRECTION-34E — the RESOLVER is shared with the near trip; the LABOUR is not. A near trip's
+    // group is sized from the residence because that is where it is drawn from; this party is
+    // sized from itself because that is where it is standing.
     const memory = findTargetMemory(band, withProvisions.targetPatchId);
 
     if (memory === undefined) {
