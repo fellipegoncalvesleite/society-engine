@@ -21,9 +21,9 @@
         "partyWorkers": 5,
         "estimatedPeopleCount": 5,
         "activityOutcome": "partial_success",
-        "estimatedReturnValue": 0.0291,
+        "returnValueAfterHarvest": 0.0291,
         "returnedResourceKind": "gathered_plant_food",
-        "requestedAmount": 0.0291,
+        "requestWasCappedByAvailability": true,
         "physicalSourceFound": true,
         "physicalAvailability": 0.0354,
         "harvestedAmount": 0.0354,
@@ -32,26 +32,29 @@
         "processingLoss": 0.0046,
         "usableSupport": 0.0291,
         "shadowPeople": null,
+        "sourceId": "plant:tile:73:111:roots_tubers_uso",
         "stockBefore": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
         "stockAfter": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":1,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9354}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
-        "stockChangedAtTarget": false
+        "stockChangedAtTarget": true
       },
       "residentialAdultsAtHome_25": {
         "workingAdults": 30,
         "partyWorkers": 5,
         "estimatedPeopleCount": 5,
         "activityOutcome": "partial_success",
-        "estimatedReturnValue": 0.0291,
+        "returnValueAfterHarvest": 0.0291,
         "returnedResourceKind": "gathered_plant_food",
-        "requestedAmount": 0.0291,
+        "requestWasCappedByAvailability": true,
         "physicalSourceFound": true,
         "physicalAvailability": 0.0354,
         "harvestedAmount": 0.0354,
@@ -60,17 +63,20 @@
         "processingLoss": 0.0046,
         "usableSupport": 0.0291,
         "shadowPeople": null,
+        "sourceId": "plant:tile:73:111:roots_tubers_uso",
         "stockBefore": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
         "stockAfter": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":1,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9354}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
-        "stockChangedAtTarget": false
+        "stockChangedAtTarget": true
       }
     },
     "invariant": true,
@@ -84,9 +90,9 @@
         "partyWorkers": 2,
         "estimatedPeopleCount": 2,
         "activityOutcome": "partial_success",
-        "estimatedReturnValue": 0.0186,
+        "returnValueAfterHarvest": 0.0186,
         "returnedResourceKind": "gathered_plant_food",
-        "requestedAmount": 0.0186,
+        "requestWasCappedByAvailability": false,
         "physicalSourceFound": true,
         "physicalAvailability": 0.0354,
         "harvestedAmount": 0.0226,
@@ -95,17 +101,20 @@
         "processingLoss": 0.0029,
         "usableSupport": 0.0186,
         "shadowPeople": null,
+        "sourceId": "plant:tile:73:111:roots_tubers_uso",
         "stockBefore": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
         "stockAfter": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":0.718,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9226}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
-        "stockChangedAtTarget": false
+        "stockChangedAtTarget": true
       },
       "party_5_workers": {
         "workingAdults": 15,
@@ -113,9 +122,9 @@
         "partyWorkers": 5,
         "estimatedPeopleCount": 5,
         "activityOutcome": "partial_success",
-        "estimatedReturnValue": 0.0291,
+        "returnValueAfterHarvest": 0.0291,
         "returnedResourceKind": "gathered_plant_food",
-        "requestedAmount": 0.0291,
+        "requestWasCappedByAvailability": true,
         "physicalSourceFound": true,
         "physicalAvailability": 0.0354,
         "harvestedAmount": 0.0354,
@@ -124,17 +133,20 @@
         "processingLoss": 0.0046,
         "usableSupport": 0.0291,
         "shadowPeople": null,
+        "sourceId": "plant:tile:73:111:roots_tubers_uso",
         "stockBefore": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
         "stockAfter": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":1,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9354}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
-        "stockChangedAtTarget": false
+        "stockChangedAtTarget": true
       }
     },
     "partyLabourChangesWork": true,
@@ -145,9 +157,9 @@
       "A_5workers_0nonworking_5bodies": {
         "estimatedPeopleCount": 5,
         "activityOutcome": "partial_success",
-        "estimatedReturnValue": 0.0291,
+        "returnValueAfterHarvest": 0.0291,
         "returnedResourceKind": "gathered_plant_food",
-        "requestedAmount": 0.0291,
+        "requestWasCappedByAvailability": true,
         "physicalSourceFound": true,
         "physicalAvailability": 0.0354,
         "harvestedAmount": 0.0354,
@@ -156,24 +168,27 @@
         "processingLoss": 0.0046,
         "usableSupport": 0.0291,
         "shadowPeople": null,
+        "sourceId": "plant:tile:73:111:roots_tubers_uso",
         "stockBefore": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
         "stockAfter": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":1,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9354}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
-        "stockChangedAtTarget": false
+        "stockChangedAtTarget": true
       },
       "B_5workers_2nonworking_7bodies": {
         "estimatedPeopleCount": 5,
         "activityOutcome": "partial_success",
-        "estimatedReturnValue": 0.0291,
+        "returnValueAfterHarvest": 0.0291,
         "returnedResourceKind": "gathered_plant_food",
-        "requestedAmount": 0.0291,
+        "requestWasCappedByAvailability": true,
         "physicalSourceFound": true,
         "physicalAvailability": 0.0354,
         "harvestedAmount": 0.0354,
@@ -182,17 +197,20 @@
         "processingLoss": 0.0046,
         "usableSupport": 0.0291,
         "shadowPeople": null,
+        "sourceId": "plant:tile:73:111:roots_tubers_uso",
         "stockBefore": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":0.2198,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
         "stockAfter": {
-          "depletionStore": "0.0142",
-          "plantStore": null,
-          "faunaStore": null
+          "plantPatchState": "{\"depletion\":1,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.9354}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
         },
-        "stockChangedAtTarget": false
+        "stockChangedAtTarget": true
       }
     },
     "targetWorkEqual": true,

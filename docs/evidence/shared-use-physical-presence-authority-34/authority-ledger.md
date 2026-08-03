@@ -110,3 +110,53 @@ visible.
 | a non-working body granting carrying or work | **NOT PRESENT** — both read productive workers |
 | prepared people counted as physically distant | **REPAIRED** — separate authority, separate name |
 | a defensive repair read as a physical history | **NOT PRESENT** — `invalid_state_repaired`, never narrated |
+
+---
+
+## CORRECTION-34E amendment — target work
+
+### A correction to the CORRECTION-34D row above
+
+The 34D row for `getExpeditionProductiveWorkers` listed its consumers as
+"composition, pace, carrying, **target work**". **The last of those was not true when it was
+written.** Nothing in CORRECTION-34D touched target work; `resolveExpeditionTargetWork` still handed
+the whole band to `buildTripRecord`, which sized the working group from
+`estimateTaskGroupPeople(band)` — the residential cohort. The row is corrected here rather than
+quietly amended in place.
+
+### Authority, after CORRECTION-34E
+
+| Question | Authority | Reads |
+| --- | --- | --- |
+| how many people are working at THIS TARGET, right now | `options.partyWorkers` on `resolveExpeditionTargetWork`, supplied as `getExpeditionProductiveWorkers(expedition)` | the party's own productive labour |
+| how many people are working at the RESIDENCE today | `estimateTaskGroupPeople(band, taskGroupType)` | residential working adults minus committed party workers, capped by a task share, floored at 1 |
+
+The parameter is **required and has no default**, so a caller that cannot say who is working cannot
+resolve work. The ordering `same-day ≠ expedition` is therefore structural, not a convention.
+
+### Consumers reached by the one corrected variable
+
+`estimatedPeopleCount` is a single term inside `buildTripRecord`, so all of these follow from it and
+none needed separate wiring:
+
+| Consumer | Effect |
+| --- | --- |
+| `deriveResourceReturnRecord` | the requested target amount (`estimatedPeopleCount * 0.035 + ...`) |
+| activity-outcome classification | `target_found` vs `partial_success` |
+| `resolvePhysicalFoodHarvest` → `resolvePlantFoodHarvest` / `resolveFaunaFoodHarvest` | **the amount actually removed from world stock** |
+| `estimateFaunaTripPressureIntensity` | fauna pressure |
+| shadow subsistence record | the labour it describes |
+| `IntraSeasonTripRecord.estimatedPeopleCount` | the recorded labour provenance |
+| expedition cargo | via `usableSupport`, unchanged in its own equation |
+
+### Duplication risks — updated again
+
+| Risk | Status |
+| --- | --- |
+| **distant work scaled by workers who stayed home** | **REPAIRED** — measured 4.1× before (0.0086 vs 0.0354 removed by the same five-person party), invariant after |
+| **a party inert at its own target** | **REPAIRED** — 2 vs 5 workers read 2 vs 2 before, 2 vs 5 after |
+| a party silently floored to one person's work | **REPAIRED** — no floor on the party branch (T6) |
+| a non-working body granting target work | **NOT PRESENT** — target work reads productive workers (T4) |
+| a verification party depleting stock | **NOT PRESENT** — `verifyOnly` suppresses the take; 0 events in 50 y (T8) |
+| the same-day path losing its residential authority | **NOT PRESENT** — it passes no party context; same-day records byte-identical across trees over the comparable window (T7) |
+| two concurrent parties reading each other or their sum | **NOT PRESENT** — each reads its own record (T12) |

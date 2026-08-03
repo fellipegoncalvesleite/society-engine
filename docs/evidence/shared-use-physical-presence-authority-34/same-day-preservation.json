@@ -1,0 +1,38 @@
+{
+  "audit": "CORRECTION-34E-SAME-DAY-PRESERVATION-COMPARISON",
+  "method": "the SAME script, run unmodified on both trees through a temporary detached git worktree; the parent worktree was removed immediately afterwards and no second implementation was created there",
+  "parentCommit": "c8df1eaa927ce0c7779ed6b184eeea40568a6a5e",
+  "afterCommit": "HEAD (CORRECTION-34E)",
+  "parent": {
+    "audit": "CORRECTION-34E-SAME-DAY-PREFIX-PRESERVATION",
+    "seed": "audit27:natural:map2:s1",
+    "maxDays": 1440,
+    "daysCompared": 729,
+    "stoppedBecause": "first_expedition_target_work_day",
+    "sameDayTripRecordsDigested": 2034,
+    "sameDayPeopleCountSum": 5868,
+    "digest": "ac71f4f487d9fd9c533a53d94cfbd67dffe79812f4ab0630910538504f143911",
+    "scope": "same-day trip records only, over the prefix with no expedition target work — the only window in which the two trees have no legitimate source of divergence",
+    "doesNotClaim": "byte identity of the whole world, or identity past the first expedition work day; CORRECTION-34E intentionally changes what an expedition party's own record says, verification parties included"
+  },
+  "after": {
+    "audit": "CORRECTION-34E-SAME-DAY-PREFIX-PRESERVATION",
+    "seed": "audit27:natural:map2:s1",
+    "maxDays": 1440,
+    "daysCompared": 729,
+    "stoppedBecause": "first_expedition_target_work_day",
+    "sameDayTripRecordsDigested": 2034,
+    "sameDayPeopleCountSum": 5868,
+    "digest": "ac71f4f487d9fd9c533a53d94cfbd67dffe79812f4ab0630910538504f143911",
+    "scope": "same-day trip records only, over the prefix with no expedition target work — the only window in which the two trees have no legitimate source of divergence",
+    "doesNotClaim": "byte identity of the whole world, or identity past the first expedition work day; CORRECTION-34E intentionally changes what an expedition party's own record says, verification parties included"
+  },
+  "identical": true,
+  "verdict": "SAME_DAY_PREFIX_BYTE_IDENTICAL_ACROSS_TREES",
+  "nonVacuity": {
+    "sameDayTripRecordsCompared": 2034,
+    "daysCompared": 729,
+    "note": "a matching digest over an empty set would prove nothing; 2034 records over 729 days were compared"
+  },
+  "statedLimit": "the comparison stops at the first expedition target-work day BY DESIGN. Past that day the two trees legitimately differ, verification parties included, and no identity is claimed there."
+}

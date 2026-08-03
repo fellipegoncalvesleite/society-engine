@@ -1,0 +1,73 @@
+{
+  "audit": "CORRECTION-34E-NATURAL-TARGET-WORK",
+  "seed": "audit27:natural:map2:s1",
+  "years": 20,
+  "days": 7200,
+  "bandDays": 64800,
+  "activePartyDays": 866,
+  "operatingWorkDays": 87,
+  "exploitationWorkDays": 43,
+  "verificationWorkDays": 44,
+  "productiveWorkerDaysOnWorkDays": 301,
+  "physicalPeopleDaysOnWorkDays": 301,
+  "nonWorkingPeopleDaysOnWorkDays": 0,
+  "recordPeopleSumOnWorkDays": 301,
+  "workDaysWhereRecordPeopleNotEqualPartyWorkers": 0,
+  "workDaysWithZeroResidentialProductiveLabour": 0,
+  "workDaysWithZeroResidentialProductiveLabourAndPositiveWork": 0,
+  "workDaysWhereResidentialCountWouldHaveDiffered": 87,
+  "targetStockRemovedSum": 1.9705,
+  "usableSupportSum": 1.4836,
+  "transportLossSum": 0.2629,
+  "processingLossSum": 0.2242,
+  "workDaysWithDepletion": 32,
+  "verifyOnlyAttempts": 44,
+  "verifyOnlyDepletionEvents": 0,
+  "cargoAcceptedSum": 0.3006,
+  "cargoAbandonedSum": 0.0033,
+  "provisionsConsumedSum": 2.0096,
+  "returnedSupportSum": 0.3006,
+  "stockConservationFailures": 0,
+  "duplicateWorkReceipts": 0,
+  "supportExceedingRemoval": 0,
+  "personConservationFailures": 0,
+  "labourBoundFailures": 0,
+  "peopleCountRange": {
+    "min": 2,
+    "max": 7
+  },
+  "partyWorkerRange": {
+    "min": 2,
+    "max": 7
+  },
+  "residentialAtWorkDayRange": {
+    "min": 7,
+    "max": 19
+  },
+  "outcomeReasonsOnWorkDays": {
+    "returned_with_cargo": 32,
+    "physically_exhausted": 10,
+    "returned_information_only": 44,
+    "seasonally_inactive": 1
+  },
+  "sourceKindsOnWorkDays": {
+    "plant_patch": 65,
+    "fauna_stock": 19,
+    "aquatic_stock": 3
+  },
+  "deliveredOutcomes": 127,
+  "adverse": {
+    "workDaysWhereRecordPeopleNotEqualPartyWorkers": 0,
+    "verifyOnlyDepletionEvents": 0,
+    "stockConservationFailures": 0,
+    "supportExceedingRemoval": 0,
+    "personConservationFailures": 0,
+    "duplicateWorkReceipts": 0
+  },
+  "nonVacuity": {
+    "operatingWorkDaysObserved": 87,
+    "workDaysWithDepletion": 32,
+    "claimIsProvenByFixturesNotByThisRun": true,
+    "note": "a zero on any adverse counter is DESCRIPTIVE ONLY; if operatingWorkDays is 0 this run proves nothing at all about the repair"
+  }
+}

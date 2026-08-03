@@ -132,3 +132,41 @@ residential availability and blocks below `DAUGHTER_MIN_POPULATION`; `getBandFor
 the aged-away overflow from elders so an away person who aged stops contributing local effort.
 
 **Roadmap Item 4 remains unstarted.** This set only the ownership boundary.
+
+---
+
+## CORRECTION-34E — target-work labour: Option A, at the seam that already knows the party
+
+### The choice
+
+| Option | Verdict |
+| --- | --- |
+| **A — an explicit productive-group-size input at the existing record-building seam, required, no default** | **SELECTED** |
+| B — make `estimateTaskGroupPeople` expedition-aware | REJECTED. It is a residential authority answering a residential question; teaching it about parties would give one function two incompatible meanings and put the branch further from the caller that knows the answer. |
+| C — hand `buildTripRecord` a synthetic band whose `workingAdults` equals the party | REJECTED. It fabricates demography that does not exist, and every other field read off that band (dependents, adaptation, memory, position) would silently be a lie too. |
+| D — scale the resulting cargo after the fact | REJECTED. The stock is removed inside the resolver, so a post-hoc scale would leave the record, the depletion and the cargo describing three different amounts of work — exactly the split CORRECTION-34B closed elsewhere. |
+| E — a second harvest resolver for expeditions | REJECTED. There must remain exactly one physical harvest equation. |
+
+### Why the parameter is required rather than optional
+
+An optional `partyWorkers` with a residential fallback would keep the defect one forgotten argument
+away, and the fallback would be invisible in review. Making it required converts the invariant from
+something tests check into something the type system and the runtime refuse to violate: an
+expedition that cannot say how many of its people are working cannot resolve work at all.
+
+### Why no floor of one on the party branch
+
+`estimateTaskGroupPeople` ends in `Math.max(1, ...)` because a residence always has somebody in it.
+A party does not: reconciliation can reduce its productive labour to zero while its bodies stay at
+the target. Importing that floor would let a party with no working members still request a person's
+work — the same class of error, in the other direction.
+
+### What was deliberately NOT changed
+
+- The harvest equation `estimatedPeopleCount * 0.035 + yieldConfidence * 0.22 + presenceConfidence * 0.08`.
+  The AUTHORITY was wrong; the STRENGTH is untested and was left alone.
+- The same-day residential path, including its floor and its task-group shares.
+- `resolvePhysicalFoodHarvest`, which stays labour-blind by design so that one equation removes stock.
+- Carrying, provisions, pace, presence and fission — all settled by CORRECTION-34D and untouched.
+- Who *within* a party does the work. A party remains an aggregate; skill, age and injury inside it
+  need the future individual/household layer.

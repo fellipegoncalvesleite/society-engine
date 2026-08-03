@@ -1,0 +1,607 @@
+{
+  "audit": "CORRECTION-34E-TARGET-WORK-FIXTURES",
+  "summary": {
+    "fixtures": 14,
+    "failing": 0,
+    "notConstructed": 0,
+    "vacuous": 0,
+    "vacuousIds": [],
+    "failingIds": []
+  },
+  "plantTarget": {
+    "tile": "tile:73:111",
+    "sourceKind": "plant_patch",
+    "band": "band:varied-dry-corridor-mid"
+  },
+  "faunaTarget": {
+    "tile": "tile:100:42",
+    "sourceKind": "fauna_stock"
+  },
+  "verdicts": {
+    "T1_ordinary_expedition_work": "RECORD_PEOPLE_EQUALS_PARTY_WORKERS",
+    "T2_residential_labor_invariance": "DISTANT_WORK_UNMOVED_BY_HOME_LABOR",
+    "T3_party_labor_sensitivity": "WORK_REQUEST_FOLLOWS_PARTY_LABOR",
+    "T4_non_working_physical_members": "BODIES_CONSUME_AND_BURDEN_WITHOUT_WORKING",
+    "T5_labor_reduction_before_operation": "REDUCED_LABOR_REACHES_EVERY_TARGET_WORK_FIELD",
+    "T6_zero_residential_workers": "PARTY_DOES_NOT_FALL_TO_THE_RESIDENTIAL_FLOOR",
+    "T7_same_day_control": "SAME_DAY_PATH_RETAINS_ITS_OWN_RESIDENTIAL_AUTHORITY",
+    "T8_verify_only_control": "PARTY_LABOR_PROVENANCE_WITH_ZERO_REMOVAL",
+    "T9_plant_target": "PARTY_LABOR_OWNS_PLANT_REQUEST_AND_DEPLETION",
+    "T10_fauna_or_aquatic_target": "PARTY_LABOR_OWNS_FAUNA_REQUEST_AND_PRESSURE",
+    "T11_cargo_chain": "CHAIN_CONSISTENT_UNITS_KEPT_DISTINCT",
+    "T12_two_concurrent_parties": "EACH_PARTY_USES_ITS_OWN_LABOR",
+    "T13_legacy_expedition_record": "LEGACY_RECORD_USES_PARTY_WORKERS_DETERMINISTICALLY",
+    "T14_four_way_step_mode_with_target_work": "IDENTICAL_ACROSS_ALL_FOUR_MODES_WITH_REAL_TARGET_WORK"
+  },
+  "fixtures": {
+    "T1_ordinary_expedition_work": {
+      "verdict": "RECORD_PEOPLE_EQUALS_PARTY_WORKERS",
+      "vacuous": false,
+      "result": {
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "requestWasCappedByAvailability": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "partyWorkers": 5,
+        "recordPeople": 5,
+        "harvested": 0.0354,
+        "predicate": "a real physical source was found and a non-zero amount was actually removed"
+      },
+      "note": "the record's working group IS the party, not a share of anything"
+    },
+    "T2_residential_labor_invariance": {
+      "verdict": "DISTANT_WORK_UNMOVED_BY_HOME_LABOR",
+      "vacuous": false,
+      "oneAdultAtHome": {
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "requestWasCappedByAvailability": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "twentyFiveAtHome": {
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "requestWasCappedByAvailability": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "both arms removed a non-zero amount, so equality is not two zeros",
+        "residentialAdults": "1 vs 25",
+        "people": "5 vs 5",
+        "depletion": "0.0354 vs 0.0354"
+      },
+      "note": "before the repair this pair read 1 vs 6 people and 0.0086 vs 0.0354 depletion"
+    },
+    "T3_party_labor_sensitivity": {
+      "verdict": "WORK_REQUEST_FOLLOWS_PARTY_LABOR",
+      "vacuous": false,
+      "twoWorkers": {
+        "estimatedPeopleCount": 2,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0186,
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0226,
+        "depletionApplied": 0.0226,
+        "transportLoss": 0.0011,
+        "processingLoss": 0.0029,
+        "usableSupport": 0.0186,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "sixWorkers": {
+        "estimatedPeopleCount": 6,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "requestWasCappedByAvailability": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the larger party actually removed strictly more, so the response is measured not assumed",
+        "people": "2 -> 6",
+        "returnAfterHarvest": "0.0186 -> 0.0291"
+      },
+      "equation": "baseReturnValue = estimatedPeopleCount * 0.035 + yieldConfidence * 0.22 + presenceConfidence * 0.08 (deriveResourceReturnRecord), bounded and unchanged by this checkpoint"
+    },
+    "T4_non_working_physical_members": {
+      "verdict": "BODIES_CONSUME_AND_BURDEN_WITHOUT_WORKING",
+      "vacuous": false,
+      "fiveWorkersZeroNonWorking": {
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "requestWasCappedByAvailability": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "fiveWorkersTwoNonWorking": {
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "requestWasCappedByAvailability": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "real work was done and the two extra bodies are genuinely present in the consumption count",
+        "work": "0.0354 vs 0.0354",
+        "bodiesConsuming": "5 vs 7",
+        "paceFactor": "1 vs 0.942857"
+      },
+      "note": "target work identical, consumption and pace burden both rise with the extra bodies"
+    },
+    "T5_labor_reduction_before_operation": {
+      "verdict": "REDUCED_LABOR_REACHES_EVERY_TARGET_WORK_FIELD",
+      "vacuous": false,
+      "workersAfterReduction": 3,
+      "physicalBodies": 6,
+      "nonVacuousPredicate": true,
+      "nonVacuousNote": "reconciliation genuinely reduced labour (6 -> <6, not to zero) and the unreduced arm did real work",
+      "nonWorking": 3,
+      "atFullLabour": {
+        "estimatedPeopleCount": 6,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "requestWasCappedByAvailability": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "atReducedLabour": {
+        "estimatedPeopleCount": 3,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0243,
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0296,
+        "depletionApplied": 0.0296,
+        "transportLoss": 0.0014,
+        "processingLoss": 0.0038,
+        "usableSupport": 0.0243,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "nonVacuous": {
+        "workers": "6 -> 3",
+        "bodies": "6 -> 6",
+        "people": "6 -> 3",
+        "depletion": "0.0354 -> 0.0296"
+      },
+      "note": "no body moved; no residential worker performed the distant work"
+    },
+    "T6_zero_residential_workers": {
+      "verdict": "PARTY_DOES_NOT_FALL_TO_THE_RESIDENTIAL_FLOOR",
+      "vacuous": false,
+      "result": {
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "requestWasCappedByAvailability": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "residentialWorkersRemaining": 0,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the party did real work AND read above the residential floor of one, so the floor is provably not what answered",
+        "residentialAfterCommitment": 0,
+        "recordPeople": 5,
+        "wouldHaveBeen": 1
+      },
+      "note": "estimateTaskGroupPeople applies Math.max(1, ...) so the residential path would read 1; the party path applies no floor"
+    },
+    "T7_same_day_control": {
+      "verdict": "SAME_DAY_PATH_RETAINS_ITS_OWN_RESIDENTIAL_AUTHORITY",
+      "vacuous": false,
+      "sameDayRecordsObserved": 216,
+      "bandsObserved": 9,
+      "peopleCountRange": {
+        "min": 2,
+        "max": 4
+      },
+      "smallestCohortBand": {
+        "workingAdults": 10,
+        "maxGroup": 2
+      },
+      "largestCohortBand": {
+        "workingAdults": 19,
+        "maxGroup": 4
+      },
+      "allWithinResidentialCohort": true,
+      "tracksResidence": true,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "more than one band produced same-day records AND their residential cohorts genuinely differ, so 'tracks the residence' is a real comparison",
+        "sameDayRecordsObserved": 216,
+        "bands": 9,
+        "cohortSpread": "10 .. 19"
+      },
+      "crossTreeCompanion": "targetWorkSameDayPreservationAudit.mjs — same-day trip records over the pre-expedition-work prefix are BYTE-IDENTICAL between c8df1ea and this tree (2,034 records, 729 days, same sha256)",
+      "note": "same-day trips pass no party context; the residential estimator's floor of one and cohort ceiling both still govern them"
+    },
+    "T8_verify_only_control": {
+      "verdict": "PARTY_LABOR_PROVENANCE_WITH_ZERO_REMOVAL",
+      "vacuous": false,
+      "verifyResult": {
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "none",
+        "returnValueAfterHarvest": 0,
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "transportLoss": 0,
+        "processingLoss": 0,
+        "usableSupport": 0,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "verifyWithOneAdultAtHome": {
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "none",
+        "returnValueAfterHarvest": 0,
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "transportLoss": 0,
+        "processingLoss": 0,
+        "usableSupport": 0,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a real source with real availability WAS standing there, so zero removal is suppression and not absence",
+        "people": 5,
+        "harvested": 0,
+        "depleted": 0,
+        "invariantToHomeLabour": true
+      },
+      "honestLimit": "labour enters the verification record's own group size and its outcome classification. It does NOT change whether a source physically exists or its availability — those are world facts the party reads, not effort-scaled quantities, so party size cannot alter them and nothing here claims it does."
+    },
+    "T9_plant_target": {
+      "verdict": "PARTY_LABOR_OWNS_PLANT_REQUEST_AND_DEPLETION",
+      "vacuous": false,
+      "sourceKind": "plant_patch",
+      "twoWorkers": {
+        "estimatedPeopleCount": 2,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0186,
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0226,
+        "depletionApplied": 0.0226,
+        "transportLoss": 0.0011,
+        "processingLoss": 0.0029,
+        "usableSupport": 0.0186,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "sixWorkers": {
+        "estimatedPeopleCount": 6,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "requestWasCappedByAvailability": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "both arms actually depleted the patch",
+        "depletion": "0.0226 -> 0.0354",
+        "people": "2 -> 6"
+      }
+    },
+    "T10_fauna_or_aquatic_target": {
+      "verdict": "PARTY_LABOR_OWNS_FAUNA_REQUEST_AND_PRESSURE",
+      "vacuous": false,
+      "sourceKind": "fauna_stock",
+      "twoWorkers": {
+        "estimatedPeopleCount": 2,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "hunted_fauna_food",
+        "returnValueAfterHarvest": 0.0185,
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.7983,
+        "harvestedAmount": 0.0244,
+        "depletionApplied": 0.0244,
+        "transportLoss": 0.0023,
+        "processingLoss": 0.0035,
+        "usableSupport": 0.0185,
+        "shadowPeople": null,
+        "sourceKind": "fauna_stock"
+      },
+      "sixWorkers": {
+        "estimatedPeopleCount": 6,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "hunted_fauna_food",
+        "returnValueAfterHarvest": 0.0399,
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.7983,
+        "harvestedAmount": 0.0526,
+        "depletionApplied": 0.0526,
+        "transportLoss": 0.005,
+        "processingLoss": 0.0076,
+        "usableSupport": 0.0399,
+        "shadowPeople": null,
+        "sourceKind": "fauna_stock"
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a real fauna/aquatic source was found and the larger party actually depleted it",
+        "people": "2 -> 6",
+        "depletion": "0.0244 -> 0.0526"
+      }
+    },
+    "T11_cargo_chain": {
+      "verdict": "CHAIN_CONSISTENT_UNITS_KEPT_DISTINCT",
+      "vacuous": false,
+      "chain": [
+        {
+          "step": "productive party labour",
+          "value": 5
+        },
+        {
+          "step": "record estimatedPeopleCount",
+          "value": 5
+        },
+        {
+          "step": "return value after harvest (resourceReturn.estimatedReturnValue, OVERWRITTEN by the resolver — this is the return, not the request)",
+          "value": 0.0346
+        },
+        {
+          "step": "request was capped by availability",
+          "value": false
+        },
+        {
+          "step": "requested target amount (DIRECTLY OBSERVABLE: availability did not cap the take, so the request IS the removal)",
+          "value": 0.0455,
+          "lowerBound": 0.0455
+        },
+        {
+          "step": "physical availability at target",
+          "value": 0.7983
+        },
+        {
+          "step": "actual target removal (harvestedAmount = depletionApplied)",
+          "value": 0.0455,
+          "alsoDepletion": 0.0455
+        },
+        {
+          "step": "transport loss",
+          "value": 0.0044
+        },
+        {
+          "step": "processing loss",
+          "value": 0.0066
+        },
+        {
+          "step": "usable support after losses",
+          "value": 0.0346
+        },
+        {
+          "step": "carry ceiling justified by productive workers",
+          "value": 0.6
+        },
+        {
+          "step": "carried within ceiling",
+          "value": 0.0346
+        },
+        {
+          "step": "abandoned above ceiling",
+          "value": 0
+        },
+        {
+          "step": "physical people consuming provisions per day",
+          "value": 7,
+          "perDay": 0.0056
+        }
+      ],
+      "consistency": {
+        "removalEqualsDepletion": true,
+        "supportNeverExceedsRemoval": true,
+        "peopleEqualsPartyWorkers": true,
+        "provisionsCountBodiesNotWorkers": true
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "every link carries a non-zero quantity and the party genuinely holds more bodies than workers",
+        "removal": 0.0455,
+        "support": 0.0346,
+        "bodies": 7,
+        "workers": 5,
+        "capacity": 0.6
+      }
+    },
+    "T12_two_concurrent_parties": {
+      "verdict": "EACH_PARTY_USES_ITS_OWN_LABOR",
+      "vacuous": false,
+      "partyA": {
+        "estimatedPeopleCount": 2,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0186,
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0226,
+        "depletionApplied": 0.0226,
+        "transportLoss": 0.0011,
+        "processingLoss": 0.0029,
+        "usableSupport": 0.0186,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "partyB": {
+        "estimatedPeopleCount": 6,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "requestWasCappedByAvailability": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "both parties did real work and read DIFFERENT counts, so neither collapsed onto a shared number",
+        "a": 2,
+        "b": 6,
+        "sumWouldBe": 8,
+        "residentialWouldBe": 12
+      },
+      "note": "neither party reads the sum (8), the residence (12 adults remaining), nor the other party"
+    },
+    "T13_legacy_expedition_record": {
+      "verdict": "LEGACY_RECORD_USES_PARTY_WORKERS_DETERMINISTICALLY",
+      "vacuous": false,
+      "result": {
+        "estimatedPeopleCount": 4,
+        "activityOutcome": "partial_success",
+        "returnedResourceKind": "gathered_plant_food",
+        "returnValueAfterHarvest": 0.0291,
+        "requestWasCappedByAvailability": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0354,
+        "harvestedAmount": 0.0354,
+        "depletionApplied": 0.0354,
+        "transportLoss": 0.0017,
+        "processingLoss": 0.0046,
+        "usableSupport": 0.0291,
+        "shadowPeople": null,
+        "sourceKind": "plant_patch"
+      },
+      "deterministicAcrossRepeatedCalls": true,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the legacy fields are genuinely absent and the record still produced real work",
+        "partyWorkers": 4,
+        "nonWorkingFieldPresent": false,
+        "compositionPresent": false,
+        "recordPeople": 4
+      },
+      "note": "an absent nonWorkingPartyPeople reads as zero, so bodies equal workers and target labour is partyWorkers"
+    },
+    "T14_four_way_step_mode_with_target_work": {
+      "verdict": "IDENTICAL_ACROSS_ALL_FOUR_MODES_WITH_REAL_TARGET_WORK",
+      "vacuous": false,
+      "spanDays": 2520,
+      "matches": {
+        "daily": true,
+        "weekly": true,
+        "monthly": true,
+        "seasonal": true
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the span genuinely contains expeditions that exploited a target and delivered a harvest, so the identity is about a behaviour that happened",
+        "expeditionOutcomesDeliveringHarvest": 2,
+        "exploitationTaskOutcomes": 6
+      },
+      "note": "not marked PASS merely because the modes agree — the count of expeditions that actually delivered a harvest is what makes the agreement mean anything"
+    }
+  }
+}

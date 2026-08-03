@@ -508,3 +508,109 @@ here is not proof, the fixtures are**.
    `recentExpeditionOutcomes`; only the first store was consulted.
 2. L10 first asserted `phase === "lost"` when a 6→3 reduction correctly stays above the minimum and
    is a partial reduction.
+
+---
+
+# CORRECTION-34E — expedition target-work labour provenance
+
+Full account in `EXPEDITION_TARGET_WORK_LABOR_PROVENANCE.md`. Summary of what this pass establishes.
+
+## I1 — CORRECTION-34D's ledger claimed target work, and did not have it
+
+34D's authority ledger listed `getExpeditionProductiveWorkers` as the authority for "composition,
+pace, carrying, **target work**". Target work was never touched. `resolveExpeditionTargetWork`
+handed the whole band to `buildTripRecord`, which sized the working group with
+`estimateTaskGroupPeople(band)` — residential working adults minus committed party workers, capped
+by a task share, **floored at one**. The claim is corrected in the ledger rather than amended away.
+
+## I2 — the defect, reproduced on real production before anything changed
+
+One real world, one real band, one real harvestable patch, one **identical** five-worker party, and
+only the number of adults left at home varied:
+
+| | 1 adult at home | 25 adults at home |
+| --- | --- | --- |
+| `estimatedPeopleCount` | 1 | 6 |
+| stock removed | 0.0086 | **0.0354** |
+| patch depletion | 0.2198 → 0.4094 | 0.2198 → **1.0, exhausted** |
+
+**4.1× more distant stock removed because of people who never left camp.** In the other direction
+the party was inert at its own target: 2 and 5 workers both read 2.
+
+## I3 — one required parameter, two production files
+
+`resolveExpeditionTargetWork` takes a **required** `options.partyWorkers` and hands it to
+`buildTripRecord` as `partyWork.productiveWorkers`; `buildTripRecord` branches once, taking the
+party's labour for an expedition and `estimateTaskGroupPeople` for a same-day trip. `expedition.ts`
+supplies `getExpeditionProductiveWorkers` at both call sites, exploitation and verification. No
+default (a default would silently restore the defect), no floor of one on the party branch, no
+synthetic band, no second harvest equation, and no change to the equation itself.
+
+## I4 — after
+
+Target work is invariant to residential labour (5 people, 0.0354 removed, with 1 or 25 adults at
+home) and follows party labour (2 workers → 0.0226, 5 → 0.0354, residence held identical).
+
+## I5 — fixtures T1–T14: 14/14, 0 failing, 0 vacuous, 0 not-constructed
+
+Non-vacuity is **asserted** per fixture, not declared: the harness relabels a fixture `VACUOUS:` and
+fails the run if its predicate is false. T4 shows non-working bodies consuming and burdening pace
+without granting work or carrying. T5 shows a reconciled party (bodies 6 → 6, workers 6 → 3) moving
+its target work with the labour and not the bodies. T6 shows a party of five with an empty residence
+reading five, not the residential floor of one. T12 shows two concurrent parties reading neither
+each other, nor their sum, nor the residence.
+
+## I6 — the same-day path, proven in two halves
+
+Single-tree positive control: across 9 bands with cohorts spanning 10..19, all 216 same-day group
+sizes stay inside their own band's residential cohort and the largest cohort still fields the
+largest group. Cross-tree: the same script at `c8df1ea` and here digests **2,034 same-day trip
+records over 729 days** to the **same sha256**. The comparison stops at the first expedition
+target-work day by design — past that point the trees legitimately differ, verification parties
+included, and claiming identity there would be measuring an intended change and calling it a
+regression.
+
+## I7 — natural occurrence, and why it is not a null this time
+
+Daily sampling, map2, `audit27:natural:map2:s1`:
+
+| | 20 y | 50 y |
+| --- | --- | --- |
+| expedition target work-days | 87 | 213 |
+| record people ≠ party workers | **0** | **0** |
+| verify-only depletion events | 0 | 0 |
+| stock-conservation / support-exceeding-removal / person-conservation failures | 0 / 0 / 0 | 0 / 0 / 0 |
+| **work-days where a residence-derived count would have DIFFERED** | **87 / 87** | **213 / 213** |
+
+Unlike CORRECTION-34D, this change is **not inert in ordinary play**: on every natural target-work
+day the old authority would have produced a different working group. Two qualifications stated:
+physical people-days equal productive worker-days at both horizons, so the non-working-member half
+of the split still never opens by itself (T4 is its proof); and zero natural work-days have an empty
+residence, so T6's floor case claims no natural credit.
+
+## I8 — five instrument errors in this pass's own probes, all recorded
+
+The before/after probe's stock reading **measured nothing** (tile-keyed lookup against a
+patch-keyed store, `false` in every arm of both trees) and both arms were regenerated;
+`requestedAmount` was actually the post-harvest return and was renamed; the natural probe read the
+wrong field for verification days and reported 0 work-days where they existed; T14's first form was
+vacuous at 630 days and was rebuilt at 2,520; and `summary.vacuous: 0` was hardcoded and is now
+asserted and counted.
+
+## I9 — regressions
+
+All nine frozen-checkpoint fixture suites were rerun on the parent commit and on this tree with
+every output flag redirected. **Verdicts identical in all nine.** Five byte-identical modulo
+`generatedAt`; four (AUDIT-27, its release timelines, CORRECTION-31's lifecycle timelines,
+CORRECTION-32) show small numeric drift with no verdict change — the expected downstream consequence
+of a distant party removing a different amount of stock. CORRECTION-32's headline invariant holds on
+both trees: max crowding paths on any candidate 2, candidates with ≥3 charges 0. No frozen evidence
+was written to at any point.
+
+## I10 — what is not claimed
+
+That `* 0.035` is the right magnitude (the authority was fixed, the strength deliberately not
+tuned); any outcome improvement (active party-days move 854 → 866 at 20 y, reported, not sold);
+anything about who *within* a party works; any performance conclusion (no timing arm was built); and
+no 200-year matrix was run. Roadmap Item 4 remains unstarted, and CORRECTION-34A's same-day
+current-presence deferral is preserved exactly.

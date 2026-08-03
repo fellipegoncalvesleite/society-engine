@@ -147,3 +147,80 @@ direction.** The file's own header says the timings are comparable within a file
 machines; these two rows were produced on a machine that had been running audits continuously for
 hours, and no before/after timing arm was constructed. Reporting the rise as a regression, or
 dismissing it as noise, would both be unsupported.
+
+---
+
+## CORRECTION-34E — provenance
+
+| Arm | Tree |
+| --- | --- |
+| before | `12716a68dfd0ca4c21a59174f5f604de1d7f31bd` — the pass's own before-arm commit, which contains the probe and the pre-repair production. Run through a **temporary detached worktree** with `node_modules` symlinked and the corrected probe copied in; the worktree was removed immediately afterwards and no second implementation was created there. |
+| parent (regressions, same-day preservation) | `c8df1eaa927ce0c7779ed6b184eeea40568a6a5e` — same mechanism, same removal. |
+| after | `checkpoint/shared-use-physical-presence-authority-34` |
+
+Both arms ran the **same probe file**. It is arm-neutral by construction: it passes
+`{ partyWorkers }` in every call, which the pre-repair resolver ignores as an unknown property and
+the repaired resolver requires, and it detects which tree it is on **by behaviour** — resolving once
+without the option and recording whether the resolver ignores it (before) or refuses (after) —
+rather than by arity or by assumption.
+
+### Ownership
+
+This pass began with an explicit exclusive-ownership transfer from the interrupted Claude App
+session. Preflight confirmed one worktree, no stashes, no in-progress merge/rebase/cherry-pick, no
+index lock, branch exact, `origin/main` unchanged at `0a43083a`. The two inherited commits
+(`12716a6`, `d36bc87`) were preserved unmodified; nothing was reset, amended, squashed or discarded.
+
+### Commands
+
+```bash
+# before arm, in a temporary detached worktree at 12716a6
+node scripts/targetWorkLaborAudit.mjs --phase before --out <scratch>/before.json
+# after arm
+node scripts/targetWorkLaborAudit.mjs --phase after  --out <scratch>/after.json
+
+node scripts/targetWorkFixturesAudit.mjs \
+  --out <evidence>/target-work-labor-fixtures.json \
+  --out-matrix <evidence>/target-work-caller-matrix.json \
+  --out-chain  <evidence>/target-work-numeric-chain.json
+
+node scripts/targetWorkNaturalAudit.mjs --years 20 --out <evidence>/natural-target-work-20y.json
+node scripts/targetWorkNaturalAudit.mjs --years 50 --out <evidence>/natural-target-work-50y.json
+
+# run on BOTH trees, digests compared
+node scripts/targetWorkSameDayPreservationAudit.mjs --out <scratch>/sameday-<tree>.json
+```
+
+Every frozen-checkpoint regression was run with **every** output flag redirected outside the
+repository — including `--timeline-out` (AUDIT-27), `--timelines` (CORRECTION-31), `--parity-out`,
+`--chain-out`, `--cascade-out`, and CORRECTION-33's **six** output flags. `git diff --name-only
+c8df1ea..HEAD -- docs/evidence/ ':(exclude)…authority-34/**'` returns nothing, and no working-tree
+change exists outside the current checkpoint's directory. **No frozen-evidence incident occurred in
+this pass.**
+
+### Why regressions were compared rerun-to-rerun, not rerun-to-committed-file
+
+Several committed fixture files predate CORRECTION-28..-32 and legitimately differ from any current
+run (AUDIT-27's C4 and C10b have been flipped since CORRECTION-28/-29). Comparing this tree's rerun
+against the *committed* file would therefore attribute inherited, documented differences to this
+pass. Each suite was instead run on the parent commit and on this tree with identical arguments, and
+the two runs compared. Result: **verdicts identical in all nine suites**; five suites byte-identical
+once the `generatedAt` line is ignored; four show small numeric drift with no verdict change, which
+is the expected downstream consequence of a distant party now removing a different amount of stock.
+See `target-work-regression-delta.json`.
+
+### 34D artifacts were NOT regenerated
+
+`performance.json`, `controlled-fixtures.json`, `expedition-presence.json` and the other
+CORRECTION-34D artifacts describe CORRECTION-34D's tree and are left as they are, so that report
+stays checkable against its own evidence. Where CORRECTION-34E's production change moves those
+numbers, the movement is recorded in `target-work-regression-delta.json` rather than by overwriting
+history.
+
+### Instrument corrections in this pass
+
+Five, all listed in §10 of `EXPEDITION_TARGET_WORK_LABOR_PROVENANCE.md`. The most serious: the
+before/after probe's stock reading keyed the world's stores by tile id when `plantPatchState` is
+keyed by patch id, so `stockChangedAtTarget` read `false` in **every arm of both trees** and the
+field measured nothing. Both arms were regenerated with the corrected probe; the superseded pair is
+preserved in git history at `12716a6` and `d36bc87`.

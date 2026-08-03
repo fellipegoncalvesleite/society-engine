@@ -1,0 +1,109 @@
+{
+  "audit": "CORRECTION-34E-FROZEN-REGRESSION-DELTA",
+  "method": "every frozen-checkpoint fixture suite was run with EVERY output flag redirected outside the repository, on BOTH the parent commit c8df1ea (through a temporary detached worktree, removed afterwards) and on this tree. Comparing rerun-to-rerun rather than rerun-to-committed-file is what makes attribution possible: several committed files predate CORRECTION-28..-32 and legitimately differ from any current run.",
+  "parentCommit": "c8df1eaa927ce0c7779ed6b184eeea40568a6a5e",
+  "rows": [
+    {
+      "audit": "AUDIT-27 crowding controlled fixtures",
+      "verdictsIdentical": true,
+      "payloadIdenticalIgnoringTimestampAndOutputPath": false
+    },
+    {
+      "audit": "CORRECTION-28 memory separation",
+      "verdictsIdentical": true,
+      "payloadIdenticalIgnoringTimestampAndOutputPath": true
+    },
+    {
+      "audit": "CORRECTION-29 encounter provenance",
+      "verdictsIdentical": true,
+      "payloadIdenticalIgnoringTimestampAndOutputPath": true
+    },
+    {
+      "audit": "CORRECTION-30 range-friction provenance",
+      "verdictsIdentical": true,
+      "payloadIdenticalIgnoringTimestampAndOutputPath": true
+    },
+    {
+      "audit": "CORRECTION-31 release lifecycle",
+      "verdictsIdentical": true,
+      "payloadIdenticalIgnoringTimestampAndOutputPath": true
+    },
+    {
+      "audit": "CORRECTION-32 crowding decision authority",
+      "verdictsIdentical": true,
+      "payloadIdenticalIgnoringTimestampAndOutputPath": false
+    },
+    {
+      "audit": "CORRECTION-32A zero controls",
+      "verdictsIdentical": true,
+      "payloadIdenticalIgnoringTimestampAndOutputPath": true
+    },
+    {
+      "audit": "CORRECTION-32A social access lifecycle",
+      "verdictsIdentical": true,
+      "payloadIdenticalIgnoringTimestampAndOutputPath": true
+    },
+    {
+      "audit": "CORRECTION-33 social access unrelated risk",
+      "verdictsIdentical": true,
+      "payloadIdenticalIgnoringTimestampAndOutputPath": true
+    }
+  ],
+  "verdictsIdenticalEverywhere": true,
+  "payloadDifferences": {
+    "explanation": "CORRECTION-34E changes how much stock a distant party removes, so worlds containing expedition target work diverge downstream. Four suites show small numeric drift with NO verdict change; five are identical once the generatedAt line is ignored.",
+    "drifted": [
+      "AUDIT-27 (saturationPressure 0.12->0.11, observerNetMovePressure 0.29->0.27 and similar, case C5 rows only)",
+      "AUDIT-27 release timelines",
+      "CORRECTION-31 lifecycle timelines (placeSensitivity 0.05->0.06, magnitude 0.60->0.61)",
+      "CORRECTION-32 (P5 pressureState 0->0.01, P17 stayScore 4.17->4.18)"
+    ],
+    "correction32HeadlineStillHolds": {
+      "maxCrowdingPathsOnAnyCandidate": {
+        "parent": 2,
+        "head": 2
+      },
+      "candidatesWithThreeOrMoreCharges": {
+        "parent": 0,
+        "head": 0
+      }
+    }
+  },
+  "performance": {
+    "note": "REPORTED, NOT INTERPRETED. No before/after timing arm was built and the machine is shared, exactly as CORRECTION-34D recorded.",
+    "msPerSimDay": {
+      "c34d": {
+        "y20": 1.5172,
+        "y50": 1.4854
+      },
+      "c34e": {
+        "y20": 0.8543,
+        "y50": 0.8558
+      }
+    },
+    "stateBytes": {
+      "c34d": {
+        "y20": 76898193,
+        "y50": 78015181
+      },
+      "c34e": {
+        "y20": 76945569,
+        "y50": 77949576
+      }
+    },
+    "stateDeltaBytes": {
+      "y20": 47376,
+      "y50": -65605
+    },
+    "stateInterpretation": "CORRECTION-34E stores NO new field, so the small movement in both directions is the changed world trajectory, not new state.",
+    "capsUnchanged": {
+      "presenceSourcesPerBand": 3,
+      "tripRecords": 24,
+      "outcomeRecords": 6,
+      "activeParties": 2,
+      "staleTerminalPresence": 0,
+      "personConservationFailures": 0,
+      "duplicateReceipts": 0
+    }
+  }
+}

@@ -99,20 +99,27 @@ try {
     throw new Error("no band holds a remembered patch that production physically harvests — the probe refuses to fabricate one");
   }
 
-  // Physical stock at the target. Tiles carry no stock field, so the world-level stores are read
-  // by identity and hashed; `depletionApplied` on the harvest record is reported alongside it.
-  const stockAt = (w) => {
+  // PHYSICAL STOCK AT THE TARGET — keyed by the SOURCE the resolver actually wrote.
+  //
+  // INSTRUMENT CORRECTION (recorded, not hidden): the first version of this probe keyed the stores
+  // by `targetTileId`. `plantPatchState` is keyed by PATCH id and the fauna store by its own
+  // source id, so the lookup never matched and `stockChangedAtTarget` read false in every arm of
+  // both trees — the field measured nothing at all while the harvest record showed real depletion.
+  // The correct key is `physicalFoodHarvest.sourceId`, which the resolver returns.
+  const stockForSource = (w, sourceId) => {
+    if (sourceId === undefined) return null;
     const pick = (store) => {
-      if (store === undefined || store === null) return null;
+      if (store === undefined || store === null) return undefined;
       const entry = Array.isArray(store)
-        ? store.find((x) => String(x?.tileId ?? x?.approximateTile) === String(targetTileId))
-        : store[targetTileId];
-      return entry === undefined ? null : JSON.stringify(entry);
+        ? store.find((x) => String(x?.patchId ?? x?.id ?? x?.sourceId) === String(sourceId))
+        : store[sourceId];
+      return entry === undefined ? undefined : JSON.stringify(entry);
     };
     return {
-      depletionStore: pick(w.depletion ?? w.tileDepletion),
-      plantStore: pick(w.plantPatches ?? w.plantPatchState),
-      faunaStore: pick(w.faunaStocks ?? w.faunaStockState),
+      plantPatchState: pick(w.plantPatchState) ?? null,
+      faunaStockState: pick(w.faunaStockState) ?? null,
+      aquaticStockState: pick(w.aquaticStockState) ?? null,
+      tileDepletion: w.depletion?.[targetTileId] === undefined ? null : JSON.stringify(w.depletion[targetTileId]),
     };
   };
 
@@ -159,21 +166,27 @@ try {
 
   // One measurement through the real chain.
   const measure = (band, opts) => {
-    const before = stockAt(world);
     const res = trips.resolveExpeditionTargetWork(
       world, band, memory, targetTileId,
       distanceTiles, route, day, "food_resource_check",
       opts,
     );
     const r = res.record;
-    const after = stockAt(res.world);
     const h = r.physicalFoodHarvest;
+    const sourceId = h?.sourceId;
+    const before = stockForSource(world, sourceId);
+    const after = stockForSource(res.world, sourceId);
     return {
       estimatedPeopleCount: r.estimatedPeopleCount,
       activityOutcome: r.activityOutcome,
-      estimatedReturnValue: r.resourceReturn?.estimatedReturnValue ?? null,
+      // POST-harvest. `resolvePhysicalFoodHarvest` overwrites `estimatedReturnValue` with the
+      // usable support, so this is the RETURN, never the REQUEST. The request is not carried on
+      // the returned record at all; it is recoverable exactly when the harvest was not capped by
+      // availability, in which case `harvestedAmount` IS the requested amount.
+      returnValueAfterHarvest: r.resourceReturn?.estimatedReturnValue ?? null,
       returnedResourceKind: r.resourceReturn?.returnedResourceKind ?? null,
-      requestedAmount: r.resourceReturn?.estimatedReturnValue ?? null,
+      requestWasCappedByAvailability: h === undefined ? null
+        : Math.abs((h.harvestedAmount ?? 0) - (h.physicalAvailability ?? 0)) < 1e-9,
       physicalSourceFound: h?.physicalSourceFound ?? null,
       physicalAvailability: h?.physicalAvailability ?? null,
       harvestedAmount: h?.harvestedAmount ?? null,
@@ -182,6 +195,7 @@ try {
       processingLoss: h?.processingLoss ?? null,
       usableSupport: h?.usableSupport ?? null,
       shadowPeople: r.shadowSubsistence?.peopleCount ?? null,
+      sourceId: sourceId === undefined ? null : String(sourceId),
       stockBefore: before, stockAfter: after,
       stockChangedAtTarget: JSON.stringify(before) !== JSON.stringify(after),
     };
@@ -194,7 +208,7 @@ try {
   const w1High = measure(mkBand(30, 5, 0), partyOpts(5));  // 30 adults, 5 away -> 25 at home
   const w1Invariant =
     w1Low.estimatedPeopleCount === w1High.estimatedPeopleCount &&
-    w1Low.estimatedReturnValue === w1High.estimatedReturnValue &&
+    w1Low.returnValueAfterHarvest === w1High.returnValueAfterHarvest &&
     w1Low.harvestedAmount === w1High.harvestedAmount &&
     w1Low.depletionApplied === w1High.depletionApplied;
 
@@ -212,7 +226,7 @@ try {
   const w3B = measure(mkBand(15, 5, 2), partyOpts(5));   // 5 workers, 2 non-working, 7 bodies
   const w3WorkEqual =
     w3A.estimatedPeopleCount === w3B.estimatedPeopleCount &&
-    w3A.estimatedReturnValue === w3B.estimatedReturnValue &&
+    w3A.returnValueAfterHarvest === w3B.returnValueAfterHarvest &&
     w3A.harvestedAmount === w3B.harvestedAmount;
 
   // ── Headlines ───────────────────────────────────────────────────────────────────────────────
@@ -276,8 +290,8 @@ console.log(JSON.stringify({
   W1: {
     home1: out.W1_same_party_different_residential_labor.arms.residentialAdultsAtHome_1.estimatedPeopleCount,
     home25: out.W1_same_party_different_residential_labor.arms.residentialAdultsAtHome_25.estimatedPeopleCount,
-    request1: out.W1_same_party_different_residential_labor.arms.residentialAdultsAtHome_1.estimatedReturnValue,
-    request25: out.W1_same_party_different_residential_labor.arms.residentialAdultsAtHome_25.estimatedReturnValue,
+    return1: out.W1_same_party_different_residential_labor.arms.residentialAdultsAtHome_1.returnValueAfterHarvest,
+    return25: out.W1_same_party_different_residential_labor.arms.residentialAdultsAtHome_25.returnValueAfterHarvest,
     harvest1: out.W1_same_party_different_residential_labor.arms.residentialAdultsAtHome_1.harvestedAmount,
     harvest25: out.W1_same_party_different_residential_labor.arms.residentialAdultsAtHome_25.harvestedAmount,
     depletion1: out.W1_same_party_different_residential_labor.arms.residentialAdultsAtHome_1.depletionApplied,
