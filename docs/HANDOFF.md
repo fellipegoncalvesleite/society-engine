@@ -181,6 +181,52 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### ROADMAP ITEM 3 FINAL INTEGRATION AUDIT — **PROGRESS / CANDIDATE FOR CLOSURE / NOT FROZEN / DO NOT MERGE**
+
+```text
+Roadmap Item 3:
+candidate for closure — awaiting Browser GPT acceptance
+
+Roadmap Item 4:
+not started
+```
+
+**Branch** `checkpoint/shared-range-item-3-final-freeze`, from the accepted CORRECTION-34F tip
+`df349eb`. `main` untouched at `0a43083a`. **AUDIT ONLY — `git diff df349eb..HEAD -- src/` is empty.**
+
+**The integrated chain closes.** Crowding → encounter → friction → access expectation → release →
+decision pressure → residential extraction → expedition presence → productive labour → target work,
+exercised end to end through the canonical production readers. **I1–I16: 16 fixtures, 0 failing,
+0 vacuous, 0 not-constructed**, non-vacuity asserted per fixture.
+
+Every item on the forbidden list is absent **except one**: no duplicate pressure, no hidden census
+(15 remote records of five kinds leave the focal reading byte-identical), no ghosts, no teleported
+bodies, no distant residential labour, no task camp read as residential movement, no double-counted
+population, no invalid labour creating work, **no support before return**, no early fission.
+
+**The one blocker.** A place production labels `released_historical` can still move behaviour by
+≤ 0.02. `types.ts:2522` says historical records "no longer move anything", but the label flips at
+`SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT = 0.05` while contributions scale continuously to zero. Measured
+once in 448 released samples over 200 years (0 in 193 on the other seed). **The label leads its own
+quantity.** Smallest correction, named and not applied: label `released_historical` only at weight
+exactly 0 — a derived read-model field, no behaviour change. Not patched, because this checkpoint is
+audit-only by instruction.
+
+**Natural 20 / 50 / 200 y** (map2, `audit27:natural:s1`): 64,800 / 162,000 / 628,560 band-days,
+373 encounters and 587 friction records by 200 y, 8,626 active party-days, 1,108 target-work days,
+**adverse total 0 at all three horizons**. A second seed produces zero social activity across 200
+years from identical machinery — divergent histories, and the reason both seeds are reported.
+
+**Determinism** in two arms so the compared span actually contains the behaviour: four-way identical,
+daily repeat identical, fresh-process identical on both. **Frozen regressions:** 17 suites,
+222 fixtures, 0 failing, 21 of 21 comparable outputs byte-identical to the CORRECTION-34F run, no
+frozen evidence changed. **Per-day cost flat 20 → 200 years; every store at or below its cap.**
+
+**Three instrument errors in this audit's own probes are recorded**, including one that first looked
+like a defect and was not. Evidence: `docs/evidence/shared-range-item-3-final-freeze/`.
+
+---
+
 ### ZERO-LABOUR TARGET-WORK CONTRACT CLOSURE — CORRECTION-34F — **ROADMAP ITEM 3 STAYS OPEN / ITEM 4 UNSTARTED / DO NOT MERGE**
 
 **Branch** `checkpoint/shared-use-physical-presence-authority-34`, continuing `e7d8de4`.
@@ -8963,6 +9009,7 @@ exception; daughter colours related-but-distinct and never visually confusing.
 
 ## Checkpoint Log
 
+- **ROADMAP ITEM 3 FINAL INTEGRATION AUDIT** (`checkpoint/shared-range-item-3-final-freeze`) — audit-only integration pass over the whole Shared Range item; I1-I16 16/16 with 0 vacuous, 0 adverse over 200 natural years, determinism identical on both arms, 222 frozen fixtures unchanged. PROGRESS, not frozen: one blocker, a place labelled released_historical can still move behaviour by <= 0.02. Item 4 not started.
 - **CORRECTION-34F** (`checkpoint/shared-use-physical-presence-authority-34`) — the target-work labour count must be a positive integer; zero, fractional and non-finite labour can no longer produce an observation, a physical request, stock removal, cargo or support, and the rounding that laundered them is gone. Bound is 1, not the expedition minimum, which stays in expedition.ts. Z0-Z12 13/13, 0 vacuous; inert for every valid party. Item 4 unstarted.
 - **CORRECTION-34E** (`checkpoint/shared-use-physical-presence-authority-34`) — expedition target work now uses the productive labour physically standing at the target, not the residential cohort; a required `options.partyWorkers` with no default makes the invariant structural; distant harvest, depletion, fauna pressure, cargo and recorded labour all follow the party; the same-day residential path keeps its own authority and is byte-identical over the comparable window. T1-T14 14/14, 0 vacuous. Item 4 unstarted.
 - **CORRECTION-34D** (`checkpoint/shared-use-physical-presence-authority-34`) — expedition physical headcount separated from productive party labour; consumption on bodies, work/carrying on labour, pace on both; prepared commitment distinguished from physical absence; fission founders from physically-available people; corrupt legacy state retired as a labelled non-historical repair. H1-H14 14/14. Item 4 unstarted.
