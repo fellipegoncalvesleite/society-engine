@@ -206,16 +206,38 @@ export function resolveExpeditionTargetWork(
      *
      * A default here would silently restore that defect for any caller that forgot, so there is
      * none: an expedition that cannot say how many of its people are working cannot resolve work.
+     *
+     * CORRECTION-34F — MUST BE A POSITIVE INTEGER. 34E required the field and left the value
+     * unconstrained, which let two impossible parties through. Zero workers were classified
+     * `target_found` (the outcome test is `>= 2`), given a request built from the confidence terms
+     * alone (`0 * 0.035 + yieldConfidence * 0.22 + presenceConfidence * 0.08`), and **removed
+     * 0.0047 of real stock**; and `0.4` and `1.6` people were silently rounded to 0 and 2. People
+     * are counted, not measured, and nobody cannot work.
+     *
+     * THE BOUND HERE IS ONE, NOT `EXPEDITION_MIN_PARTY_WORKERS`, and that is deliberate. One person
+     * can physically do a day's work — the two-worker minimum is an EXPEDITION POLICY about what is
+     * worth sending and what turns for home, enforced in `expedition.ts` by the launch gate
+     * (`partyWorkers < 2` never launches) and by `reconcileExpeditionLabor` (a party reduced below
+     * the minimum is turned `returning` or `aborted` before it can operate). This module is the
+     * physical work resolver and must not encode that policy: `expedition.ts` imports
+     * `intraSeasonTrips.ts` and never the reverse, so reaching for the constant would close a
+     * dependency cycle to share a number that belongs to the other module anyway.
      */
     readonly partyWorkers: number;
   },
 ): { readonly world: WorldState; readonly record: IntraSeasonTripRecord } {
   const productiveWorkers = options?.partyWorkers;
 
-  if (typeof productiveWorkers !== "number" || !Number.isFinite(productiveWorkers) || productiveWorkers < 0) {
+  if (
+    typeof productiveWorkers !== "number" ||
+    !Number.isInteger(productiveWorkers) ||
+    productiveWorkers < 1
+  ) {
     throw new Error(
-      "resolveExpeditionTargetWork requires options.partyWorkers — the productive labour physically " +
-      "present in the party. Falling back to residential labour is the CORRECTION-34E defect.",
+      "resolveExpeditionTargetWork requires options.partyWorkers to be a positive integer — the " +
+      "productive labour physically present in the party. Received " + String(productiveWorkers) + ". " +
+      "Zero or fractional labour cannot produce a physical request, stock removal, cargo or an " +
+      "observation, and falling back to residential labour is the CORRECTION-34E defect.",
     );
   }
 
@@ -248,7 +270,10 @@ export function resolveExpeditionTargetWork(
   // proven cause of the generic target_not_found dominance (218/362 in the 40y audit).
   const baseRecord = buildTripRecord(world, band, candidate, day, time.tick, time.season, faunaGeo, {
     physicallyAtTarget: true,
-    productiveWorkers: Math.max(0, Math.round(productiveWorkers)),
+    // CORRECTION-34F — passed through unaltered. The previous `Math.max(0, Math.round(...))` was
+    // the laundering step: it turned an impossible count into a plausible one and let the caller's
+    // mistake reach the stock. Validated above, so there is nothing left to clamp.
+    productiveWorkers,
   });
   // Override the route with the expedition's real, already-walked physical route so
   // `routeReached` reflects where the party is genuinely standing rather than
@@ -1457,7 +1482,11 @@ function buildTripRecord(
   // `estimateTaskGroupPeople`, unchanged.
   partyWork?: {
     readonly physicallyAtTarget: boolean;
-    /** Authoritative. Never derived here, never floored to one — a party of zero workers works none. */
+    /**
+     * Authoritative, and never derived here. CORRECTION-34F — guaranteed a POSITIVE INTEGER by
+     * `resolveExpeditionTargetWork`, the only caller that sets this object; zero and fractional
+     * counts are rejected at that boundary rather than rounded into something plausible here.
+     */
     readonly productiveWorkers: number;
   },
 ): IntraSeasonTripRecord {
@@ -1493,9 +1522,12 @@ function buildTripRecord(
   // The party path takes the party's own productive labour and applies NO floor of one: the
   // residential estimator's `Math.max(1, ...)` exists so a band always fields someone at home, and
   // importing it would let a party with no working members still request a person's work.
+  //
+  // CORRECTION-34F — and no rounding either. The value arrives validated as a positive integer, so
+  // clamping it here could only ever disguise a caller that broke the contract.
   const estimatedPeopleCount = partyWork === undefined
     ? estimateTaskGroupPeople(band, taskGroupType)
-    : Math.max(0, Math.round(partyWork.productiveWorkers));
+    : partyWork.productiveWorkers;
   const objective = deriveObjective(candidate.cause);
   const pathTiles = buildOutboundPathTiles(world, band.position, candidate.targetTileId);
   const endDay = (Number(day) + estimatedDurationDays - 1) as DayNumber;
