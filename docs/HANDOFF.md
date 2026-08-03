@@ -181,6 +181,52 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### ZERO-LABOUR TARGET-WORK CONTRACT CLOSURE — CORRECTION-34F — **ROADMAP ITEM 3 STAYS OPEN / ITEM 4 UNSTARTED / DO NOT MERGE**
+
+**Branch** `checkpoint/shared-use-physical-presence-authority-34`, continuing `e7d8de4`.
+`main` untouched at `0a43083a`. **PRODUCTION BEHAVIOUR CHANGED — one file, one validation.**
+
+**CORRECTION-34E's central repair stands and is not reopened.** Its T1–T14, caller matrix, numeric
+chain, after-arm proof and same-day digest were rerun here and are byte-identical.
+
+**The hole it left.** 34E made `options.partyWorkers` required and removed the residential fallback,
+and presented that as making the invariant structural. It made the *presence* of a labour count
+structural, not its *domain*: the validation accepted **zero**, and the builder laundered the value
+through `Math.max(0, Math.round(...))`. Downstream, the physically-present outcome test is
+`estimatedPeopleCount >= 2`, so zero read `target_found`; `baseReturnValue` keeps its confidence
+terms when the labour term is zero; and that becomes the amount removed from stock.
+
+**Reproduced on real production and committed before any edit (`7d4dda3`):** zero workers were
+accepted, classified `target_found`, and **removed 0.0047 of physical stock**; a verification party
+of nobody **read the target**; `0.4` people were rounded to `0` (and still removed stock) and `1.6`
+to `2`.
+
+**The fix — Option A.** `Number.isInteger(w) && w >= 1` at the exported boundary, and the value is
+then passed through **unaltered**, because the rounding was the laundering step. The bound is **1**,
+not `EXPEDITION_MIN_PARTY_WORKERS`: one person can physically work, so a physical resolver must not
+encode the two-worker policy — that lives in `expedition.ts` — and importing the constant would
+close a dependency cycle, since `expedition.ts` imports `intraSeasonTrips.ts` and never the reverse.
+
+**No caller needed repairing, and that is measured.** `expeditionDailyAction` reconciles first, then
+launches, then advances; driving the real reconciler shows an unstaffable operating party leaving the
+operating phase (labour 6 → 3, bodies kept at 6), a prepared one aborted, and a healthy one
+untouched. Target work is reachable only from `phase === "operating"`.
+
+**Z0–Z12: 13/13, 0 failing, 0 vacuous.** Natural call domain: **94 / 225** operating party-days at
+20 y / 50 y, **0** zero, fractional, non-finite or below-minimum calls, labour range **2..7** — and
+the proof is structural, because after this change an invalid count throws and both runs completed.
+Natural occurrence of the defect is **zero**: this closes an exported contract, not an observed
+misbehaviour.
+
+**Inert for every valid party**, verified against the 34E tree rather than committed files: all 34E
+artifacts, all 34-family suites and AUDIT-27 through CORRECTION-33 are byte-identical modulo
+`generatedAt`. No frozen evidence changed. **Not claimed:** that a party of one is a sensible
+expedition, that ordinary play was hitting this, anything about the harvest equation, or any outcome
+or performance change. **Roadmap Item 4 remains unstarted** and no minimum-party policy was modified.
+Evidence: `docs/evidence/shared-use-physical-presence-authority-34/ZERO_LABOR_TARGET_WORK_CONTRACT.md`.
+
+---
+
 ### EXPEDITION TARGET-WORK LABOUR PROVENANCE — CORRECTION-34E — **ROADMAP ITEM 3 STAYS OPEN / ITEM 4 UNSTARTED / DO NOT MERGE**
 
 **Branch** `checkpoint/shared-use-physical-presence-authority-34`, continuing `c8df1ea`.
@@ -8917,6 +8963,7 @@ exception; daughter colours related-but-distinct and never visually confusing.
 
 ## Checkpoint Log
 
+- **CORRECTION-34F** (`checkpoint/shared-use-physical-presence-authority-34`) — the target-work labour count must be a positive integer; zero, fractional and non-finite labour can no longer produce an observation, a physical request, stock removal, cargo or support, and the rounding that laundered them is gone. Bound is 1, not the expedition minimum, which stays in expedition.ts. Z0-Z12 13/13, 0 vacuous; inert for every valid party. Item 4 unstarted.
 - **CORRECTION-34E** (`checkpoint/shared-use-physical-presence-authority-34`) — expedition target work now uses the productive labour physically standing at the target, not the residential cohort; a required `options.partyWorkers` with no default makes the invariant structural; distant harvest, depletion, fauna pressure, cargo and recorded labour all follow the party; the same-day residential path keeps its own authority and is byte-identical over the comparable window. T1-T14 14/14, 0 vacuous. Item 4 unstarted.
 - **CORRECTION-34D** (`checkpoint/shared-use-physical-presence-authority-34`) — expedition physical headcount separated from productive party labour; consumption on bodies, work/carrying on labour, pace on both; prepared commitment distinguished from physical absence; fission founders from physically-available people; corrupt legacy state retired as a labelled non-historical repair. H1-H14 14/14. Item 4 unstarted.
 
