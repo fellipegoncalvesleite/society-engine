@@ -1409,7 +1409,11 @@ function advanceExpeditionOneDay(
         withProvisions.routeTileIds,
         day,
         "food_resource_check",
-        { verifyOnly: true },
+        // CORRECTION-34E §7 — a verification party looks without taking, but WHO looks is still
+        // its own people. Effort enters the physical lookup identically for verification and
+        // exploitation; only the take is suppressed. Residential labour must not alter a distant
+        // verification result any more than it may alter a distant harvest.
+        { verifyOnly: true, partyWorkers: getExpeditionProductiveWorkers(withProvisions) },
       );
       const harvest = verification.record.physicalFoodHarvest;
       const observation: ExpeditionObservation = {
@@ -1485,6 +1489,8 @@ function advanceExpeditionOneDay(
       withProvisions.routeTileIds,
       day,
       "food_resource_check",
+      // CORRECTION-34E — the work at the target is done by the party standing at the target.
+      { partyWorkers: getExpeditionProductiveWorkers(withProvisions) },
     );
     const taken = work.record.physicalFoodHarvest?.usableSupport ?? 0;
     const capacity = withProvisions.cargo.carryCapacityUnits;

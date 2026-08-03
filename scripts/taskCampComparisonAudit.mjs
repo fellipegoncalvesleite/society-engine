@@ -60,7 +60,8 @@ try {
     if (route === undefined || route[route.length - 1] !== tile.id) continue;
     const probe = trips.resolveExpeditionTargetWork(
       world, band, makeMemory(tile), tile.id, d, route, Number(world.time.day ?? 0), "food_resource_check",
-      { verifyOnly: true },
+      // CORRECTION-34E — party labour is now explicit rather than derived from the residence.
+      { verifyOnly: true, partyWorkers: 2 },
     );
     const availability = probe.record.physicalFoodHarvest?.physicalAvailability ?? 0;
     if (probe.record.physicalFoodHarvest?.physicalSourceFound !== true || availability < 0.08) continue;

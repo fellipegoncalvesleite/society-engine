@@ -187,12 +187,38 @@ export function resolveExpeditionTargetWork(
   routeTiles: readonly TileId[],
   day: DayNumber,
   cause: IntraSeasonTripCause,
-  // §10 — verification parties look WITHOUT taking: the physical lookup runs (source
-  // found? availability? depletion?) but the harvest is forced ineligible, so no stock
-  // is depleted and no cargo/food can exist. The record still carries the physical
-  // presence evidence the party will walk home.
-  options?: { readonly verifyOnly?: boolean },
+  options: {
+    // §10 — verification parties look WITHOUT taking: the physical lookup runs (source
+    // found? availability? depletion?) but the harvest is forced ineligible, so no stock
+    // is depleted and no cargo/food can exist. The record still carries the physical
+    // presence evidence the party will walk home.
+    readonly verifyOnly?: boolean;
+    /**
+     * CORRECTION-34E — THE PRODUCTIVE LABOUR PHYSICALLY STANDING AT THIS TARGET.
+     *
+     * Required, and deliberately without a fallback. This resolver used to hand the whole
+     * residential `band` to `buildTripRecord`, which derived a task-group size from
+     * `workingAdults` MINUS the workers already committed to expeditions — the labour left AT
+     * HOME. The party doing the work was never consulted. Measured on one real patch: the same
+     * five-worker party removed 0.0086 of stock with one adult at home and 0.0354 with
+     * twenty-five, a 4.1x difference in distant physical depletion decided by people who never
+     * left camp, while changing the party from two workers to five changed nothing.
+     *
+     * A default here would silently restore that defect for any caller that forgot, so there is
+     * none: an expedition that cannot say how many of its people are working cannot resolve work.
+     */
+    readonly partyWorkers: number;
+  },
 ): { readonly world: WorldState; readonly record: IntraSeasonTripRecord } {
+  const productiveWorkers = options?.partyWorkers;
+
+  if (typeof productiveWorkers !== "number" || !Number.isFinite(productiveWorkers) || productiveWorkers < 0) {
+    throw new Error(
+      "resolveExpeditionTargetWork requires options.partyWorkers — the productive labour physically " +
+      "present in the party. Falling back to residential labour is the CORRECTION-34E defect.",
+    );
+  }
+
   const time = getWorldTimeForDay(day);
   const faunaGeo = deriveFaunaStockGeography(world);
   // EXPEDITIONARY-4 §5.2 (multi-tile patch) — a remembered patch is anchored to an
@@ -222,6 +248,7 @@ export function resolveExpeditionTargetWork(
   // proven cause of the generic target_not_found dominance (218/362 in the 40y audit).
   const baseRecord = buildTripRecord(world, band, candidate, day, time.tick, time.season, faunaGeo, {
     physicallyAtTarget: true,
+    productiveWorkers: Math.max(0, Math.round(productiveWorkers)),
   });
   // Override the route with the expedition's real, already-walked physical route so
   // `routeReached` reflects where the party is genuinely standing rather than
@@ -1421,11 +1448,18 @@ function buildTripRecord(
   tick: TickNumber,
   season: IntraSeasonTripRecord["season"],
   faunaGeo: FaunaStockGeography,
-  // EXPEDITIONARY-4 §5 — set only by the expedition work day: the party has already
-  // physically walked the route and is standing at the target, so the same-day
-  // travel-uncertainty gates must not zero its work request. Same-day trips never
-  // pass this and remain byte-identical.
-  presence?: { readonly physicallyAtTarget: boolean },
+  // EXPEDITIONARY-4 §5 / CORRECTION-34E — set ONLY by the expedition work day. It marks two
+  // facts a same-day trip cannot have: the party has already walked the route and is standing at
+  // the target (so the same-day travel-uncertainty gates must not zero its work request), and the
+  // productive labour doing the work is the PARTY's, not whatever is left at the residence.
+  //
+  // Same-day trips never pass this and keep deriving their own residential task-group size through
+  // `estimateTaskGroupPeople`, unchanged.
+  partyWork?: {
+    readonly physicallyAtTarget: boolean;
+    /** Authoritative. Never derived here, never floored to one — a party of zero workers works none. */
+    readonly productiveWorkers: number;
+  },
 ): IntraSeasonTripRecord {
   const roundTripTiles = candidate.distanceTiles * 2;
   const estimatedDurationDays = Math.max(1, Math.ceil(roundTripTiles / SAME_DAY_ROUND_TRIP_TILE_BUDGET));
@@ -1452,7 +1486,16 @@ function buildTripRecord(
     : isPlantTraceTrip && targetTile !== undefined
       ? derivePlantGatherReturnFactor(world, targetTile, world.time)
       : 1;
-  const estimatedPeopleCount = estimateTaskGroupPeople(band, taskGroupType);
+  // CORRECTION-34E — ONE variable feeds outcome classification, the resource-return value, the
+  // fauna trace, the shadow record and the record field itself, so choosing it correctly here
+  // propagates to every labour-dependent consumer by construction rather than by enumeration.
+  //
+  // The party path takes the party's own productive labour and applies NO floor of one: the
+  // residential estimator's `Math.max(1, ...)` exists so a band always fields someone at home, and
+  // importing it would let a party with no working members still request a person's work.
+  const estimatedPeopleCount = partyWork === undefined
+    ? estimateTaskGroupPeople(band, taskGroupType)
+    : Math.max(0, Math.round(partyWork.productiveWorkers));
   const objective = deriveObjective(candidate.cause);
   const pathTiles = buildOutboundPathTiles(world, band.position, candidate.targetTileId);
   const endDay = (Number(day) + estimatedDurationDays - 1) as DayNumber;
@@ -1469,7 +1512,7 @@ function buildTripRecord(
     day,
     faunaReturnFactor,
     plantReturnFactor,
-    presence?.physicallyAtTarget === true,
+    partyWork?.physicallyAtTarget === true,
   );
   // ECO-SEASON-1: realized seasonal ecology the group observes at its target this season.
   // Recorded on the trip (debug) and used to scale the SHADOW estimate only — never the

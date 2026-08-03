@@ -84,6 +84,7 @@ try {
       selectionTrials += 1;
       const probe = trips.resolveExpeditionTargetWork(
         world, trialBand(b, trialParty(t, r0)), m, t, d, r0, day, "food_resource_check",
+        { partyWorkers: 5 },
       );
       const h = probe.record.physicalFoodHarvest;
       if (h?.physicalSourceFound === true && (h.physicalAvailability ?? 0) > 0 &&
@@ -137,12 +138,24 @@ try {
   });
 
   // Does the production resolver accept a party-labour authority at all?
-  // Detect by BEHAVIOUR, not by arity: resolve the identical party twice, once with the option and
-  // once without. If production ignores it the two records are identical, which is the before-arm
-  // finding stated rather than assumed.
-  const capA = trips.resolveExpeditionTargetWork(world, mkBand(30, 5, 0), memory, targetTileId, distanceTiles, route, day, "food_resource_check").record;
-  const capB = trips.resolveExpeditionTargetWork(world, mkBand(30, 5, 0), memory, targetTileId, distanceTiles, route, day, "food_resource_check", { partyWorkers: 5 }).record;
-  const acceptsPartyLabour = capA.estimatedPeopleCount !== capB.estimatedPeopleCount;
+  // Detect by BEHAVIOUR, not by arity, and stay valid on BOTH trees. Resolve the identical party
+  // once WITHOUT the party-labour option: the before arm silently ignores it and returns a
+  // residentially-derived count; the after arm refuses to resolve at all. Either answer identifies
+  // the tree without the probe assuming which one it is on.
+  let acceptsPartyLabour;
+  let refusesWithoutPartyLabour = false;
+  try {
+    const capA = trips.resolveExpeditionTargetWork(
+      world, mkBand(30, 5, 0), memory, targetTileId, distanceTiles, route, day, "food_resource_check").record;
+    const capB = trips.resolveExpeditionTargetWork(
+      world, mkBand(30, 5, 0), memory, targetTileId, distanceTiles, route, day, "food_resource_check",
+      { partyWorkers: 5 }).record;
+    acceptsPartyLabour = capA.estimatedPeopleCount !== capB.estimatedPeopleCount;
+  } catch {
+    // The resolver will not resolve expedition work without being told who is working.
+    acceptsPartyLabour = true;
+    refusesWithoutPartyLabour = true;
+  }
 
   // One measurement through the real chain.
   const measure = (band, opts) => {
@@ -174,7 +187,7 @@ try {
     };
   };
 
-  const partyOpts = (workers) => acceptsPartyLabour ? { partyWorkers: workers } : undefined;
+  const partyOpts = (workers) => ({ partyWorkers: workers });
 
   // ── W1 — same party, different residential labour ───────────────────────────────────────────
   const w1Low = measure(mkBand(6, 5, 0), partyOpts(5));    // 6 adults, 5 away -> 1 at home
@@ -214,6 +227,7 @@ try {
     audit: "CORRECTION-34E-EXPEDITION-TARGET-WORK-LABOR",
     phase: PHASE,
     productionAcceptsPartyLabourAuthority: acceptsPartyLabour,
+    productionRefusesToResolveWithoutPartyLabour: refusesWithoutPartyLabour,
     target: String(targetTileId),
     band: String(base.id),
     patchId: String(memory.patchId),
@@ -257,6 +271,7 @@ try {
 console.log(JSON.stringify({
   phase: out.phase,
   productionAcceptsPartyLabourAuthority: out.productionAcceptsPartyLabourAuthority,
+  productionRefusesToResolveWithoutPartyLabour: out.productionRefusesToResolveWithoutPartyLabour,
   headlines: out.headlines,
   W1: {
     home1: out.W1_same_party_different_residential_labor.arms.residentialAdultsAtHome_1.estimatedPeopleCount,
