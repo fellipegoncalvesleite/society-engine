@@ -1,0 +1,299 @@
+{
+  "audit": "ITEM-3-LIFECYCLE-DETERMINISM",
+  "seed": "audit27:natural:s1",
+  "spanDays": 18000,
+  "verdict": "ALL_FOUR_MODES_IDENTICAL_ON_THE_DERIVED_LIFECYCLE",
+  "allModesIdentical": true,
+  "digests": {
+    "daily": "0d85a396a2a20a81edabb3441c6389a6",
+    "weekly": "0d85a396a2a20a81edabb3441c6389a6",
+    "monthly": "0d85a396a2a20a81edabb3441c6389a6",
+    "seasonal": "0d85a396a2a20a81edabb3441c6389a6"
+  },
+  "sampledEveryDays": 90,
+  "sampledAlongTheTrajectory": "the whole trajectory is hashed, not the end state. A place cools, releases and may drop out of bounded access memory long before the run ends, so an end-of-span sample can read `none` everywhere while the lifecycle ran repeatedly in between.",
+  "lifecycleOccurrenceSummedOverSamples": {
+    "none": 14182,
+    "active": 29,
+    "cooling": 6,
+    "released_historical": 0
+  },
+  "lifecycleTimeline": [
+    {
+      "day": 3330,
+      "none": 70,
+      "active": 2,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 3420,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 3510,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 3600,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 3690,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 3780,
+      "none": 70,
+      "active": 1,
+      "cooling": 1,
+      "released_historical": 0
+    },
+    {
+      "day": 4050,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 4140,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 4230,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 4320,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 4410,
+      "none": 70,
+      "active": 2,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 4500,
+      "none": 70,
+      "active": 1,
+      "cooling": 1,
+      "released_historical": 0
+    },
+    {
+      "day": 4590,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 4680,
+      "none": 71,
+      "active": 0,
+      "cooling": 1,
+      "released_historical": 0
+    },
+    {
+      "day": 10530,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 12420,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 12510,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 12600,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 12690,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 12780,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 12870,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 12960,
+      "none": 71,
+      "active": 0,
+      "cooling": 1,
+      "released_historical": 0
+    },
+    {
+      "day": 13050,
+      "none": 71,
+      "active": 0,
+      "cooling": 1,
+      "released_historical": 0
+    },
+    {
+      "day": 14490,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 14580,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 14670,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 14760,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 14850,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 14940,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 15030,
+      "none": 71,
+      "active": 1,
+      "cooling": 0,
+      "released_historical": 0
+    },
+    {
+      "day": 15120,
+      "none": 71,
+      "active": 0,
+      "cooling": 1,
+      "released_historical": 0
+    }
+  ],
+  "nonVacuity": {
+    "predicate": "the compared trajectory must actually contain a cooling or released place, or the identity is an identity about nothing",
+    "lifecycleOccurs": true,
+    "coolingPlaceSamples": 6,
+    "releasedPlaceSamples": 0,
+    "activePlaceSamples": 29
+  },
+  "activePartyAcrossADemographicBoundary": {
+    "question": "was a party still physically away on a day the annual demographic step ran?",
+    "annualBoundariesObserved": 50,
+    "boundaryDaysWithAtLeastOnePartyAway": 34,
+    "maxPartiesAwayOnABoundaryDay": 6,
+    "samples": [
+      {
+        "day": 2880,
+        "year": 8,
+        "partiesPhysicallyAway": 5
+      },
+      {
+        "day": 3240,
+        "year": 9,
+        "partiesPhysicallyAway": 1
+      },
+      {
+        "day": 3600,
+        "year": 10,
+        "partiesPhysicallyAway": 6
+      },
+      {
+        "day": 3960,
+        "year": 11,
+        "partiesPhysicallyAway": 1
+      },
+      {
+        "day": 4320,
+        "year": 12,
+        "partiesPhysicallyAway": 1
+      },
+      {
+        "day": 4680,
+        "year": 13,
+        "partiesPhysicallyAway": 1
+      },
+      {
+        "day": 5040,
+        "year": 14,
+        "partiesPhysicallyAway": 3
+      },
+      {
+        "day": 5760,
+        "year": 16,
+        "partiesPhysicallyAway": 2
+      }
+    ],
+    "sampledDaily": true,
+    "note": "sampled DAILY on purpose. CORRECTION-34A and -34D both record that a season-boundary sample reports zero here and is a sampling artefact, not a fact about the world.",
+    "verdict": "OBSERVED_A_PARTY_AWAY_ACROSS_AN_ANNUAL_DEMOGRAPHIC_BOUNDARY"
+  },
+  "publicTimeControlNote": "the public Day/Season simplification remains DEFERRED and unimplemented; all four modes are batch sizes over one daily kernel."
+}
