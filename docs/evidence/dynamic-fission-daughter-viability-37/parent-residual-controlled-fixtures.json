@@ -1,0 +1,865 @@
+{
+  "generatedAt": "2026-08-03T15:29:02.022Z",
+  "checkpoint": "ROADMAP ITEM 4 — parent residual viability controlled fixtures",
+  "authority": "src/sim/agents/fissionParentResidualViability.ts",
+  "fixtures": [
+    {
+      "id": "PR1",
+      "claim": "a real natural fission (seed audit27:natural:s1) leaves a coherent parent and is permitted",
+      "status": "PASS",
+      "nonVacuityNote": "splitCausedDamage > 0 — the departure genuinely deteriorated the parent",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "request": 18,
+      "result": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.21,
+        "directTolerance": 0.51,
+        "priorFragility": 0.04,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 29,
+        "residualWorkingAdultsAtCamp": 18,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR2",
+      "claim": "a real natural fission (seed audit27:natural:map2:s1) leaves a coherent parent and is permitted",
+      "status": "PASS",
+      "nonVacuityNote": "splitCausedDamage > 0 — the departure genuinely deteriorated the parent",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 6
+      },
+      "request": 18,
+      "result": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.2,
+        "directTolerance": 0.51,
+        "priorFragility": 0.04,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 29,
+        "residualWorkingAdultsAtCamp": 18,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR3",
+      "claim": "a departure the successor could sustain is refused because the parent could not",
+      "status": "PASS",
+      "nonVacuityNote": "the departing group holds productive labour of its own, so the refusal is about the parent",
+      "parent": {
+        "workingAdults": 4,
+        "dependents": 30,
+        "elders": 16
+      },
+      "request": 20,
+      "result": {
+        "verdict": "residual_nonviable",
+        "blockKind": "split_caused_damage_exceeds_tolerance",
+        "directVerdict": "residual_nonviable",
+        "directSplitCausedDamage": 0.56,
+        "directTolerance": 0.36,
+        "priorFragility": 0.46,
+        "revisedFounderRequest": null,
+        "departureBlocked": true,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 4,
+        "residualWorkingAdultsAtCamp": 2,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR4",
+      "claim": "a request that strands the parent is answered with the largest smaller one that does not",
+      "status": "PASS",
+      "nonVacuityNote": "the revision search evaluated candidates rather than returning at once",
+      "parent": {
+        "workingAdults": 10,
+        "dependents": 26,
+        "elders": 14
+      },
+      "request": 18,
+      "result": {
+        "verdict": "residual_viable_only_after_revision",
+        "blockKind": "none",
+        "directVerdict": "residual_nonviable",
+        "directSplitCausedDamage": 0.27,
+        "directTolerance": 0.18,
+        "priorFragility": 1,
+        "revisedFounderRequest": 8,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 10,
+        "campWorkingAdultsBefore": 10,
+        "residualWorkingAdultsAtCamp": 6,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      },
+      "atRevisedRequest": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.15,
+        "directTolerance": 0.18,
+        "priorFragility": 1,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 10,
+        "residualWorkingAdultsAtCamp": 8,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR5",
+      "claim": "when no permitted request leaves a coherent parent, the search is exhausted and the departure is blocked",
+      "status": "PASS",
+      "nonVacuityNote": "more than one smaller request was actually evaluated and rejected",
+      "parent": {
+        "workingAdults": 2,
+        "dependents": 40,
+        "elders": 8
+      },
+      "request": 20,
+      "result": {
+        "verdict": "residual_nonviable",
+        "blockKind": "split_caused_damage_exceeds_tolerance",
+        "directVerdict": "residual_nonviable",
+        "directSplitCausedDamage": 0.56,
+        "directTolerance": 0.35,
+        "priorFragility": 0.49,
+        "revisedFounderRequest": null,
+        "departureBlocked": true,
+        "revisionCandidatesEvaluated": 18,
+        "campWorkingAdultsBefore": 2,
+        "residualWorkingAdultsAtCamp": 1,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR6",
+      "claim": "a dependent-heavy parent is assessed on its actual composition, not a re-derived one",
+      "status": "PASS",
+      "nonVacuityNote": "the allocation balanced cohort by cohort, so the composition under test is the real one",
+      "parent": {
+        "workingAdults": 12,
+        "dependents": 30,
+        "elders": 8
+      },
+      "request": 18,
+      "result": {
+        "verdict": "residual_viable_only_after_revision",
+        "blockKind": "none",
+        "directVerdict": "residual_nonviable",
+        "directSplitCausedDamage": 0.49,
+        "directTolerance": 0.42,
+        "priorFragility": 0.29,
+        "revisedFounderRequest": 17,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 1,
+        "campWorkingAdultsBefore": 12,
+        "residualWorkingAdultsAtCamp": 6,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR7",
+      "claim": "an elder-heavy parent is assessed on its actual composition",
+      "status": "PASS",
+      "nonVacuityNote": "the allocation balanced cohort by cohort",
+      "parent": {
+        "workingAdults": 12,
+        "dependents": 8,
+        "elders": 30
+      },
+      "request": 18,
+      "result": {
+        "verdict": "residual_viable_only_after_revision",
+        "blockKind": "none",
+        "directVerdict": "residual_nonviable",
+        "directSplitCausedDamage": 0.49,
+        "directTolerance": 0.42,
+        "priorFragility": 0.29,
+        "revisedFounderRequest": 17,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 1,
+        "campWorkingAdultsBefore": 12,
+        "residualWorkingAdultsAtCamp": 6,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR8",
+      "claim": "a labour-thin parent carries prior fragility from its own composition, before any hardship",
+      "status": "PASS",
+      "nonVacuityNote": "nutrition and embodied condition are both sound, so the fragility is compositional",
+      "parent": {
+        "workingAdults": 8,
+        "dependents": 24,
+        "elders": 18
+      },
+      "request": 18,
+      "result": {
+        "verdict": "residual_viable_only_after_revision",
+        "blockKind": "none",
+        "directVerdict": "residual_nonviable",
+        "directSplitCausedDamage": 0.56,
+        "directTolerance": 0.38,
+        "priorFragility": 0.4,
+        "revisedFounderRequest": 17,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 1,
+        "campWorkingAdultsBefore": 8,
+        "residualWorkingAdultsAtCamp": 4,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR9",
+      "claim": "severe existing hunger with LITTLE split-caused worsening does not block the split",
+      "status": "PASS",
+      "nonVacuityNote": "the hunger is real and is recorded as opposition — it simply does not decide",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "request": 6,
+      "result": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.11,
+        "directTolerance": 0.39,
+        "priorFragility": 0.38,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 29,
+        "residualWorkingAdultsAtCamp": 24,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR10",
+      "claim": "the SAME severe hunger with MATERIAL split-caused worsening does refuse the departure as asked",
+      "status": "PASS",
+      "nonVacuityNote": "prior fragility is IDENTICAL to PR9 — only the departure differs, so the flip is the split's doing",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "request": 40,
+      "result": {
+        "verdict": "residual_viable_only_after_revision",
+        "blockKind": "none",
+        "directVerdict": "residual_nonviable",
+        "directSplitCausedDamage": 0.49,
+        "directTolerance": 0.39,
+        "priorFragility": 0.38,
+        "revisedFounderRequest": 36,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 4,
+        "campWorkingAdultsBefore": 29,
+        "residualWorkingAdultsAtCamp": 5,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR11",
+      "claim": "the SAME departure is permitted when the parent is not hungry — hardship narrows tolerance, it does not decide",
+      "status": "PASS",
+      "nonVacuityNote": "split-caused damage is IDENTICAL across the two arms — only the tolerance differs",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "request": 40,
+      "hungryResult": {
+        "verdict": "residual_viable_only_after_revision",
+        "blockKind": "none",
+        "directVerdict": "residual_nonviable",
+        "directSplitCausedDamage": 0.49,
+        "directTolerance": 0.39,
+        "priorFragility": 0.38,
+        "revisedFounderRequest": 36,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 4,
+        "campWorkingAdultsBefore": 29,
+        "residualWorkingAdultsAtCamp": 5,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      },
+      "soundResult": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.49,
+        "directTolerance": 0.51,
+        "priorFragility": 0.04,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 29,
+        "residualWorkingAdultsAtCamp": 5,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR12",
+      "claim": "existing illness alone does not block a departure that does little damage",
+      "status": "PASS",
+      "nonVacuityNote": "the embodied hardship is real and recorded",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "request": 6,
+      "result": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.11,
+        "directTolerance": 0.41,
+        "priorFragility": 0.32,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 29,
+        "residualWorkingAdultsAtCamp": 24,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR13",
+      "claim": "a parent that owes more labour than it holds is an absolute impossibility, and the search is not run",
+      "status": "PASS",
+      "nonVacuityNote": "the allocation itself was legal, so the refusal is this authority's own",
+      "parent": {
+        "workingAdults": 20,
+        "dependents": 20,
+        "elders": 10
+      },
+      "request": 18,
+      "result": {
+        "verdict": "residual_nonviable",
+        "blockKind": "absolute_physical_impossibility",
+        "directVerdict": "residual_nonviable",
+        "directSplitCausedDamage": 0.55,
+        "directTolerance": 0.39,
+        "priorFragility": 0.38,
+        "revisedFounderRequest": null,
+        "departureBlocked": true,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": -2,
+        "residualWorkingAdultsAtCamp": -10,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR14",
+      "claim": "people physically away belong to the parent but are not at camp, and the labour question is about camp",
+      "status": "PASS",
+      "nonVacuityNote": "the away party genuinely moved the camp labour reading",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "request": 18,
+      "withAway": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.28,
+        "directTolerance": 0.51,
+        "priorFragility": 0.04,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 21,
+        "residualWorkingAdultsAtCamp": 10,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      },
+      "withoutAway": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.21,
+        "directTolerance": 0.51,
+        "priorFragility": 0.04,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 29,
+        "residualWorkingAdultsAtCamp": 18,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR15",
+      "claim": "labour promised to a party about to depart is committed, and is charged to the camp before the split",
+      "status": "PASS",
+      "nonVacuityNote": "the prepared commitment genuinely moved the pre-split camp labour reading",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "request": 18,
+      "withPrepared": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.35,
+        "directTolerance": 0.49,
+        "priorFragility": 0.08,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 17,
+        "residualWorkingAdultsAtCamp": 6,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      },
+      "withoutPrepared": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.21,
+        "directTolerance": 0.51,
+        "priorFragility": 0.04,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 29,
+        "residualWorkingAdultsAtCamp": 18,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR16",
+      "claim": "the verdict flips exactly once across a swept input, at the published damage-versus-tolerance boundary",
+      "status": "PASS",
+      "nonVacuityNote": "the sweep genuinely contains both verdicts — a single-verdict sweep tests no boundary",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "request": 30,
+      "sweep": [
+        {
+          "mobilityCapabilityAfter": 1,
+          "verdict": "residual_viable",
+          "splitCausedDamage": 0.34,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.95,
+          "verdict": "residual_viable",
+          "splitCausedDamage": 0.35,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.9,
+          "verdict": "residual_viable",
+          "splitCausedDamage": 0.36,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.85,
+          "verdict": "residual_viable",
+          "splitCausedDamage": 0.37,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.8,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.39,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.75,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.4,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.7,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.41,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.65,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.42,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.6,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.43,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.55,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.44,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.5,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.45,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.45,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.46,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.4,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.47,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.35,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.48,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.3,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.5,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.25,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.51,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.2,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.52,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.15,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.53,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.1,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.54,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0.05,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.55,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        },
+        {
+          "mobilityCapabilityAfter": 0,
+          "verdict": "residual_nonviable",
+          "splitCausedDamage": 0.56,
+          "tolerance": 0.39,
+          "agreesWithPublishedNumbers": true
+        }
+      ],
+      "flips": 1
+    },
+    {
+      "id": "PR17",
+      "claim": "the same allocation and the same context produce a byte-identical assessment",
+      "status": "PASS",
+      "nonVacuityNote": "the compared assessment is substantive rather than an empty object",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "request": 18,
+      "identical": true
+    },
+    {
+      "id": "PR18",
+      "claim": "information the authority has no field for cannot reach the verdict",
+      "status": "PASS",
+      "nonVacuityNote": "unrelated keys were genuinely present on the input object",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "request": 18,
+      "pollutedKeys": [
+        "world",
+        "worldPopulation",
+        "hiddenTargetRichness",
+        "otherBandPositions",
+        "splitPressure",
+        "territorialPressure",
+        "neighbouringBandCount",
+        "knownContactCount",
+        "daughterMinPopulation",
+        "seed"
+      ],
+      "identical": true
+    },
+    {
+      "id": "PR19",
+      "claim": "a departure that causes NO deterioration is never refused, at maximum prior fragility",
+      "status": "PASS",
+      "nonVacuityNote": "prior fragility is at its ceiling, so this is the hardest case for the guarantee",
+      "parent": {
+        "workingAdults": 12,
+        "dependents": 30,
+        "elders": 8
+      },
+      "allocation": {
+        "requestedFounders": 8,
+        "allocatedFounders": 8,
+        "successor": {
+          "workingAdults": 0,
+          "dependents": 8,
+          "elders": 0
+        },
+        "parentRemainder": {
+          "workingAdults": 12,
+          "dependents": 22,
+          "elders": 8
+        },
+        "remainderDrawOrder": [
+          "workingAdults",
+          "dependents",
+          "elders"
+        ],
+        "exact": true
+      },
+      "result": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "splitCausedDamage": 0,
+        "priorFragility": 1,
+        "tolerance": 0.18,
+        "separationHolds": true
+      }
+    },
+    {
+      "id": "PR20",
+      "claim": "an unmeasured channel earns neither fragility nor credit, and is named",
+      "status": "PASS",
+      "nonVacuityNote": "all three optional channels were genuinely withheld",
+      "parent": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "request": 18,
+      "unmeasured": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.21,
+        "directTolerance": 0.51,
+        "priorFragility": 0.04,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 29,
+        "residualWorkingAdultsAtCamp": 18,
+        "unmeasuredInputs": [
+          "nutrition",
+          "embodiedCondition",
+          "ecologicalPosition"
+        ],
+        "separationHolds": true
+      },
+      "measuredSound": {
+        "verdict": "residual_viable",
+        "blockKind": "none",
+        "directVerdict": "residual_viable",
+        "directSplitCausedDamage": 0.21,
+        "directTolerance": 0.51,
+        "priorFragility": 0.04,
+        "revisedFounderRequest": null,
+        "departureBlocked": false,
+        "revisionCandidatesEvaluated": 0,
+        "campWorkingAdultsBefore": 29,
+        "residualWorkingAdultsAtCamp": 18,
+        "unmeasuredInputs": [],
+        "separationHolds": true
+      }
+    }
+  ],
+  "unreachableInspection": [
+    {
+      "id": "residual_has_no_bodies_at_camp",
+      "emitted": false,
+      "finding": "NOT CONSTRUCTED, deliberately. It requires `physicallyAwayPeople` to exceed the entire residual. That is reachable in principle, but the away count is drawn from the same population the residual is, so forcing it means handing the authority an input the departure seam cannot produce. Building a fixture purely to light the enum would be the fabricated-fixture the brief forbids. Recorded as not constructed rather than counted as a pass."
+    },
+    {
+      "id": "residual_has_no_productive_labour_at_camp",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "residual_labour_committed_beyond_its_workforce",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "split_removes_productive_labour_from_camp",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "split_worsens_dependency_load",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "split_reduces_mobility_capability",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "parent_already_carried_nutritional_deficit",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "parent_already_carried_embodied_hardship",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "parent_already_in_adverse_ecological_position",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "parent_camp_labour_share_already_thin",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "parent_dependency_load_already_high",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "split_leaves_camp_labour_intact",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "split_does_not_worsen_dependency_load",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "parent_carried_no_nutritional_deficit",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "parent_carried_no_embodied_hardship",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "residual_retains_labour_beyond_its_commitments",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "parent_condition_partly_unmeasured",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "founder_request_revised_downward_to_protect_the_parent",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    },
+    {
+      "id": "no_permitted_founder_request_leaves_a_coherent_parent",
+      "emitted": true,
+      "finding": "EMITTED by at least one fixture"
+    }
+  ],
+  "summary": {
+    "total": 20,
+    "passing": 20,
+    "failing": 0,
+    "vacuous": 0,
+    "errored": 0,
+    "reasonIdsInVocabulary": 19,
+    "reasonIdsEmitted": 18,
+    "reasonIdsNotEmitted": 1,
+    "reasonIdsNotEmittedWithoutAFinding": 0
+  }
+}
