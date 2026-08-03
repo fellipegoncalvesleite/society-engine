@@ -20,7 +20,10 @@ import type {
 // CORRECTION-34C — the away-party headcount, read from the same leaf authority
 // `deriveAvailableMobilityPools` and the shared-catchment effort term use, so a fission cannot
 // disagree with them about who is physically at camp. `bandMobility` imports only types.
-import { deriveCommittedMobilityPools, partyCompositionTotal } from "./bandMobility";
+import {
+  derivePhysicallyAwayPartyPeople,
+  derivePreparedCommitmentPartyPeople,
+} from "./bandMobility";
 import { createDaughterDeepHistory } from "./bandHistory";
 import {
   inheritAdaptiveHumanForDaughter,
@@ -871,11 +874,32 @@ function createDaughterBand(
   //
   // This is the minimum ownership boundary Item 3 needs. Full dynamic fission, daughter viability
   // and successor groups remain Roadmap Item 4 and are NOT started here.
-  const awayPartyPeople = partyCompositionTotal(deriveCommittedMobilityPools(parent));
-  const residentiallyAvailable = Math.max(0, parentPopulationBefore - awayPartyPeople);
+  //
+  // ── CORRECTION-34D §8 — PHYSICALLY AWAY IS NOT THE SAME AS UNAVAILABLE. ──────────────────────
+  //
+  // CORRECTION-34C used `partyCompositionTotal(deriveCommittedMobilityPools(parent))`, which
+  // counts `prepared` parties — people standing in this very camp, whose labour is promised but
+  // whose bodies never went anywhere. Calling them physically absent was simply false, and it
+  // conflated two different reasons a person cannot found a daughter.
+  //
+  // They are now separated and both are honoured, each under its own name:
+  //
+  //   PHYSICALLY AWAY — bodies on a route or at a target. They cannot walk out of a camp they are
+  //   not standing in. This is the physical-headcount authority, the same one that places them on
+  //   the map.
+  //
+  //   PREPARED COMMITMENT — bodies here, hands already promised to a party about to depart. They
+  //   are inside the residential physical headcount and are NOT distant. They are withheld from
+  //   founding as a PRIOR LABOUR COMMITMENT, which is a policy choice and is named as one:
+  //   cancelling a prepared party to free founders is a fission decision, and dynamic fission is
+  //   Roadmap Item 4. Nothing here cancels a party as a side effect of a demographic step.
+  const physicallyAwayPeople = derivePhysicallyAwayPartyPeople(parent);
+  const preparedCommitmentPeople = derivePreparedCommitmentPartyPeople(parent);
+  const residentialPhysicalPeople = Math.max(0, parentPopulationBefore - physicallyAwayPeople);
+  const foundersActuallyAvailable = Math.max(0, residentialPhysicalPeople - preparedCommitmentPeople);
   const daughterPopulation = Math.min(
     getDaughterPopulation(parentPopulationBefore),
-    residentiallyAvailable,
+    foundersActuallyAvailable,
   );
 
   if (daughterPopulation < DAUGHTER_MIN_POPULATION) {

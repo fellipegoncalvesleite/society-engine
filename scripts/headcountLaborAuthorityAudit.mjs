@@ -62,85 +62,104 @@ try {
     expeditions: [party],
   };
 
-  // ── Every authority §3 names ────────────────────────────────────────────────────────────────
-  const presence = crowding.getBandPhysicalPresence(band);
-  const awayPresence = presence.filter((s) => s.kind === "away_party");
-  const homePresence = presence.find((s) => s.kind === "residential_remainder");
-  const e = band.expeditions[0];
-
-  const committedPools = mobility.deriveCommittedMobilityPools(band);
-  const availablePools = mobility.deriveAvailableMobilityPools(band);
-  const paceFactor = mobility.derivePartyPaceFactor(e.partyComposition);
-  const pace = mobility.deriveTravelPace(band, "resource_expedition", {
-    loadRatio: 0, urgency: 0, injuryLoad: 0, partyComposition: e.partyComposition,
-  });
-
-  // Physical headcount authority: what production reads to place bodies (crowding.ts:109).
-  const physicalAwayHeadcount = awayPresence.reduce((n, s) => n + s.people, 0);
-  // Productive-labour authority: what production reads for work/pace/carrying.
-  const productivePartyWorkers = mobility.partyCompositionTotal(e.partyComposition);
-
   // Provisions: expedition.ts consumeProvisions / provisionsExhausted (module-private, published
   // arithmetic — the constant itself is exported).
   const RATE = expedition.EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY;
   const MAX_DAYS = expedition.EXPEDITION_MAX_DURATION_DAYS;
+  const AWAY_PHASES = ["prepared", "outbound", "operating", "returning"];
 
-  // Catchment: sharedCatchment.getBandForagingDraw is module-private; its arithmetic is
-  // published in its own comment block and reproduced here, labelled as such.
-  const committedAway = mobility.partyCompositionTotal(mobility.deriveCommittedMobilityPools(band));
-  const catchmentAdults = Math.max(0, band.demography.workingAdults - committedAway);
-  const agedAwayOverflow = Math.max(0, committedAway - Math.max(0, band.demography.workingAdults));
-  const catchmentElders = Math.max(0, Math.max(0, band.demography.elders) - agedAwayOverflow);
-  const catchmentDependents = Math.max(0, band.demography.dependents);
-  const catchmentDraw = Math.max(1, catchmentAdults * 1.0 + catchmentDependents * 0.65 + catchmentElders * 0.85);
+  // ── Every authority §3 names, read off one band ─────────────────────────────────────────────
+  const measure = (b) => {
+    const presence = crowding.getBandPhysicalPresence(b);
+    const awayPresence = presence.filter((s) => s.kind === "away_party");
+    const homePresence = presence.find((s) => s.kind === "residential_remainder");
+    const e = b.expeditions[0];
+    const nonWorking = Math.max(0, e.nonWorkingPartyPeople ?? 0);
 
-  // Target work labour: the expedition's on-site work resolves through `resolveExpeditionTargetWork`
-  // -> `buildTripRecord`, whose task-group size comes from `estimateTaskGroupPeople`
-  // (intraSeasonTrips.ts:3004, module-private): workingAdults MINUS away partyWorkers.
-  const awayWorkersAsReadByTripLabour = (band.expeditions ?? [])
-    .filter((x) => ["prepared", "outbound", "operating", "returning"].includes(x.phase))
-    .reduce((n, x) => n + x.partyWorkers, 0);
-  const residentialLabourForTargetWork = Math.max(
-    0, Math.round(band.demography.workingAdults - awayWorkersAsReadByTripLabour),
-  );
+    const committedPools = mobility.deriveCommittedMobilityPools(b);
+    const availablePools = mobility.deriveAvailableMobilityPools(b);
+    // `derivePartyPaceFactor` gained an optional second argument in this checkpoint; passing it on
+    // the BEFORE arm is harmless (extra arguments are ignored) so both arms run one expression.
+    const paceFactor = mobility.derivePartyPaceFactor(e.partyComposition, nonWorking);
+    const pace = mobility.deriveTravelPace(b, "resource_expedition", {
+      loadRatio: 0, urgency: 0, injuryLoad: 0,
+      partyComposition: e.partyComposition, nonWorkingPartyPeople: nonWorking,
+    });
 
-  const measurements = {
-    physicalAwayHeadcount,
-    residentialPhysicalHeadcount: homePresence?.people ?? 0,
-    totalWorkingAdults: band.demography.workingAdults,
-    partyWorkers: e.partyWorkers,
-    partyComposition: e.partyComposition,
-    partyCompositionTotal: productivePartyWorkers,
-    committedMobilityPoolTotal: mobility.partyCompositionTotal(committedPools),
-    availableMobilityPoolTotal: availablePools.limited + availablePools.typical + availablePools.high,
-    travelPaceTilesPerDay: pace.tilesPerTravelDay,
-    travelPacePartyFactor: paceFactor,
-    carryCapacityUnits: expedition.deriveCarryCapacityUnits(band, e.partyWorkers, 0, tick),
-    provisionConsumptionPerDay: Number((e.partyWorkers * RATE).toFixed(6)),
-    maximumProvisionBudget: Number((e.partyWorkers * RATE * MAX_DAYS).toFixed(6)),
-    targetWorkResidentialLabour: residentialLabourForTargetWork,
-    catchmentAdults, catchmentElders, catchmentDependents,
-    catchmentAgedAwayOverflow: agedAwayOverflow,
-    catchmentForagingDraw: Number(catchmentDraw.toFixed(4)),
-    totalRepresentedPopulation: presence.reduce((n, s) => n + s.people, 0),
-    commitmentAccounting: expedition.getBandCommitmentAccounting(band),
+    const physicalAwayHeadcount = awayPresence.reduce((n, s) => n + s.people, 0);
+    const productivePartyWorkers = e.partyComposition === undefined
+      ? e.partyWorkers : mobility.partyCompositionTotal(e.partyComposition);
+    const physicalPartyPeople = e.partyWorkers + nonWorking;
+
+    // Catchment: sharedCatchment.getBandForagingDraw is module-private; its arithmetic is
+    // published in its own comment block and reproduced here, labelled as such. BOTH arms'
+    // arithmetic is reproduced so the comparison is like-for-like.
+    const committedAwayWorkers = mobility.partyCompositionTotal(committedPools);
+    const awayNonWorking = (b.expeditions ?? [])
+      .filter((x) => AWAY_PHASES.includes(x.phase))
+      .reduce((n, x) => n + Math.max(0, x.nonWorkingPartyPeople ?? 0), 0);
+    const catchmentAdults = Math.max(0, b.demography.workingAdults - committedAwayWorkers);
+    // BEFORE: elders lose an INFERRED overflow. AFTER: elders lose the RECORDED non-working count.
+    const inferredAgedAwayOverflow =
+      Math.max(0, committedAwayWorkers - Math.max(0, b.demography.workingAdults));
+    const eldersSubtrahend = awayNonWorking > 0 ? awayNonWorking : inferredAgedAwayOverflow;
+    const catchmentElders = Math.max(0, Math.max(0, b.demography.elders) - eldersSubtrahend);
+    const catchmentDependents = Math.max(0, b.demography.dependents);
+    const catchmentDraw = Math.max(1, catchmentAdults * 1.0 + catchmentDependents * 0.65 + catchmentElders * 0.85);
+
+    // Target work labour: the expedition's on-site work resolves through
+    // `resolveExpeditionTargetWork` -> `buildTripRecord`, whose task-group size comes from
+    // `estimateTaskGroupPeople` (module-private): workingAdults MINUS away partyWorkers.
+    const residentialLabourForTargetWork = Math.max(0, Math.round(
+      b.demography.workingAdults - (b.expeditions ?? [])
+        .filter((x) => AWAY_PHASES.includes(x.phase))
+        .reduce((n, x) => n + x.partyWorkers, 0),
+    ));
+
+    return {
+      physicalAwayHeadcount,
+      residentialPhysicalHeadcount: homePresence?.people ?? 0,
+      totalWorkingAdults: b.demography.workingAdults,
+      partyWorkers: e.partyWorkers,
+      partyPhase: e.phase,
+      partyOutcomeReason: e.outcomeReason ?? null,
+      nonWorkingPartyPeople: nonWorking,
+      physicalPartyPeople,
+      partyComposition: e.partyComposition,
+      partyCompositionTotal: productivePartyWorkers,
+      committedMobilityPoolTotal: committedAwayWorkers,
+      availableMobilityPoolTotal: availablePools.limited + availablePools.typical + availablePools.high,
+      travelPaceTilesPerDay: pace.tilesPerTravelDay,
+      travelPacePartyFactor: Number(paceFactor.toFixed(6)),
+      carryCapacityUnits: expedition.deriveCarryCapacityUnits(b, e.partyWorkers, 0, tick),
+      // Consumption is charged on BODIES after the repair and on `partyWorkers` before it; both
+      // arms report the quantity production actually consumes, which is the point of comparison.
+      provisionConsumptionPerDay: Number((physicalPartyPeople * RATE).toFixed(6)),
+      maximumProvisionBudget: Number((physicalPartyPeople * RATE * MAX_DAYS).toFixed(6)),
+      targetWorkResidentialLabour: residentialLabourForTargetWork,
+      catchmentAdults, catchmentElders, catchmentDependents,
+      catchmentEldersSubtrahend: eldersSubtrahend,
+      catchmentForagingDraw: Number(catchmentDraw.toFixed(4)),
+      totalRepresentedPopulation: presence.reduce((n, s) => n + s.people, 0),
+      commitmentAccounting: expedition.getBandCommitmentAccounting(b),
+    };
   };
+
+  const asHandedIn = measure(band);
+  // The SAME production entry point the daily kernel calls at the head of `expeditionDailyAction`.
+  const reconciledBand = expedition.reconcileExpeditionCommitment(band, tick);
+  const afterProductionReconciliation = measure(reconciledBand);
 
   // ── The §3 headline ─────────────────────────────────────────────────────────────────────────
   //
-  // The split is present when a party is granted MORE productive labour than the whole band's
-  // working-adult cohort holds. `partyCompositionTotal` IS the productive-labour authority every
-  // work/pace/carrying reader consumes, so it exceeding `workingAdults` means the party performs
-  // labour nobody in the band can supply.
-  const labourExceedsCohort = productivePartyWorkers > band.demography.workingAdults;
-  // Distinctness would mean the two authorities can differ. They cannot: both read `partyWorkers`
-  // / `partyComposition`, and no field separates them.
-  const distinctAuthorities =
-    physicalAwayHeadcount !== productivePartyWorkers ||
-    // or: a named field exists that separates them
-    e.physicalPartyPeople !== undefined || e.nonWorkingPartyPeople !== undefined;
+  // Judged on what production PRODUCES, not on what a test hands it: after the band's own daily
+  // reconciliation, does the party still supply more productive labour than the whole band's
+  // working-adult cohort holds — and are the two quantities separable in state at all?
+  const r = afterProductionReconciliation;
+  const labourExceedsCohort = r.partyCompositionTotal > r.totalWorkingAdults;
+  const distinctAuthorities = r.physicalAwayHeadcount !== r.partyCompositionTotal;
 
-  const headline = !labourExceedsCohort || distinctAuthorities
+  const headline = !labourExceedsCohort && distinctAuthorities
     ? "PHYSICAL HEADCOUNT AND PRODUCTIVE LABOR ARE DISTINCT"
     : "PARTY HEADCOUNT STILL ACTS AS IMPOSSIBLE LABOR";
 
@@ -150,21 +169,22 @@ try {
     constructedState: {
       population: band.demography.population, workingAdults: band.demography.workingAdults,
       elders: band.demography.elders, dependents: band.demography.dependents,
-      parties: 1, partyPhase: e.phase,
+      parties: 1, partyPhase: band.expeditions[0].phase,
     },
     headline,
     split: {
-      labourGrantedToParty: productivePartyWorkers,
-      bandWorkingAdultCohort: band.demography.workingAdults,
-      impossibleLabourGranted: Math.max(0, productivePartyWorkers - band.demography.workingAdults),
+      labourGrantedToParty: r.partyCompositionTotal,
+      bandWorkingAdultCohort: r.totalWorkingAdults,
+      impossibleLabourGranted: Math.max(0, r.partyCompositionTotal - r.totalWorkingAdults),
+      physicalHeadcountUnchangedByReconciliation:
+        r.physicalAwayHeadcount === asHandedIn.physicalAwayHeadcount,
       physicalHeadcountAndLabourSeparableInState: distinctAuthorities,
       fieldsPresentOnRecord: {
-        partyWorkers: e.partyWorkers !== undefined,
-        physicalPartyPeople: e.physicalPartyPeople !== undefined,
-        nonWorkingPartyPeople: e.nonWorkingPartyPeople !== undefined,
+        partyWorkers: band.expeditions[0].partyWorkers !== undefined,
+        nonWorkingPartyPeople: reconciledBand.expeditions[0].nonWorkingPartyPeople !== undefined,
       },
     },
-    measurements,
+    measurements: { asHandedIn, afterProductionReconciliation },
     privateReaderArithmeticReproduced: [
       "sharedCatchment.getBandForagingDraw (module-private; arithmetic published in its own comment)",
       "intraSeasonTrips.estimateTaskGroupPeople (module-private; reads workingAdults minus away partyWorkers)",

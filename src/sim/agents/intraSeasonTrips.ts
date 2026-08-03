@@ -476,6 +476,11 @@ function executePendingInvestigation(
   // (4) LABOUR. Adults away on an expedition are not at camp; adults already out on today's
   // ordinary trip are already spent. The party can never exceed what is left, and a band
   // with nobody left sends nobody — the real `insufficient_labor` case, not a floor of one.
+  //
+  // CORRECTION-34D — this is a LABOUR question, so it correctly reads `partyWorkers`, which is now
+  // productive labour only. A non-working party member is deliberately NOT subtracted here: they
+  // are drawn from no cohort this sum counts, and subtracting them would charge the residence for
+  // labour that was never in `workingAdults`.
   const awayWorkers = (band.expeditions ?? [])
     .filter((expedition) =>
       expedition.phase === "prepared" ||
@@ -3007,6 +3012,9 @@ function estimateTaskGroupPeople(band: Band, taskGroupType: IntraSeasonTripTaskG
   // the party departed and return to availability only when it comes home. This is read
   // straight off band state (rather than importing the expedition module) to keep the
   // dependency direction one-way: expedition -> intraSeasonTrips, never back.
+  //
+  // CORRECTION-34D — a labour question against a labour cohort, so `partyWorkers` (productive
+  // labour) is the right term and non-working party members are correctly absent from it.
   const awayWorkers = (band.expeditions ?? [])
     .filter((expedition) =>
       expedition.phase === "prepared" ||

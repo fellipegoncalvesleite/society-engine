@@ -122,7 +122,10 @@ export function Mobility({
             <article key={expedition.id} className="practice-feedback-overview">
               <span className="practice-feedback-kicker">Away party — {expedition.taskKind.replace(/_/g, " ")}</span>
               <p className="condition-note">
-                {expedition.partyWorkers} adults
+                {expedition.partyWorkers + (expedition.nonWorkingPartyPeople ?? 0)} people
+                {(expedition.nonWorkingPartyPeople ?? 0) > 0
+                  ? ` (${expedition.partyWorkers} working, ${expedition.nonWorkingPartyPeople ?? 0} not)`
+                  : ""}
                 {expedition.partyComposition === undefined
                   ? ""
                   : ` (${expedition.partyComposition.high} strong / ${expedition.partyComposition.typical} ordinary / ${expedition.partyComposition.limited} limited)`}{" "}
@@ -170,7 +173,7 @@ export function Mobility({
             {outcomes.map((outcome) => (
               <li key={outcome.id}>
                 {outcome.taskKind.replace(/_/g, " ")} to {String(outcome.targetTileId)} ({outcome.distanceTiles} tiles, {outcome.totalDays}d,{" "}
-                {outcome.partyWorkers} adults): <strong>{outcome.outcomeReason.replace(/_/g, " ")}</strong>
+                {outcome.partyPeople ?? outcome.partyWorkers} adults): <strong>{outcome.outcomeReason.replace(/_/g, " ")}</strong>
                 {outcome.deliveredHarvestUnits > 0 ? ` — brought home ${outcome.deliveredHarvestUnits} units` : ""}
                 {outcome.usedTaskCamp ? <Chip>task camp</Chip> : null}
                 {(outcome.observations ?? []).length > 0 ? ` · returned knowledge: ${(outcome.observations ?? []).map((o) => o.kind.replace(/_/g, " ")).join(", ")}` : ""}

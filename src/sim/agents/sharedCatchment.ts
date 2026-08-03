@@ -280,24 +280,47 @@ function getFallbackFootprintCandidateIds(
 // `deriveAvailableMobilityPools` uses, so "who is at camp" cannot diverge between the two readers.
 function getBandForagingDraw(band: Band): number {
   const demo = band.demography;
-  const committedAway = partyCompositionTotal(deriveCommittedMobilityPools(band));
 
-  // CORRECTION-34C — the away headcount can exceed the working-adult cohort, and that is
-  // LEGITIMATE rather than a defect: a party is staffed from working adults, but one of them can
-  // age into the elder cohort while still standing at the target. `demography.ts` reclassifies
-  // them (`adults -= adultsAged; elders += adultsAged;`) without moving anybody.
+  // ── CORRECTION-34D — THE AWAY NON-WORKING COUNT IS READ, NOT INFERRED. ──────────────────────
   //
-  // Subtracting the away headcount from adults alone would then leave that person counted in
-  // `elders`, contributing 0.85 of LOCAL extraction effort from an expedition tile. The overflow —
-  // away people the working-adult cohort can no longer account for — is therefore taken out of
-  // elders, which is the only cohort an away adult can have aged into. Dependents are never
-  // reduced: a party is not staffed from them, so an away person can never be one.
-  const adults = Math.max(0, demo.workingAdults - committedAway);
-  const agedAwayOverflow = Math.max(0, committedAway - Math.max(0, demo.workingAdults));
-  const elders = Math.max(0, Math.max(0, demo.elders) - agedAwayOverflow);
+  // CORRECTION-34C derived the non-working away people as `max(0, committedAway - workingAdults)`.
+  // That expression only detects the case where the WHOLE cohort has fallen below the committed
+  // total, so a band with twenty adults and a party of six saw an adult age and inferred an
+  // overflow of zero — correct arithmetic, but it was being presented as knowledge about where a
+  // person was, which it never was.
+  //
+  // The party now records its own non-working members, so both quantities are READ from the
+  // record. Away productive workers come out of the adult cohort; away non-working people come out
+  // of `elders`, which is the only cohort an away adult can be reclassified into by the ordinary
+  // annual step (`adults -= adultsAged; elders += adultsAged;`). That allocation is an AGGREGATE
+  // CONVENTION and is named as one — the model has cohorts, not people, and cannot observe which
+  // cohort an away individual now belongs to.
+  //
+  // Dependents are never reduced: a party is not staffed from them, so an away person can never be
+  // one. The 0.65/0.85 weights are deliberately NOT retuned — this changes WHO is counted, never
+  // how strongly each person counts.
+  const awayWorkers = partyCompositionTotal(deriveCommittedMobilityPools(band));
+  let awayNonWorking = 0;
+
+  for (const expedition of band.expeditions ?? []) {
+    if (isAwayPhaseForEffort(expedition.phase)) {
+      awayNonWorking += Math.max(0, expedition.nonWorkingPartyPeople ?? 0);
+    }
+  }
+
+  const adults = Math.max(0, demo.workingAdults - awayWorkers);
+  const elders = Math.max(0, Math.max(0, demo.elders) - awayNonWorking);
   const dependents = Math.max(0, demo.dependents);
 
   return Math.max(1, adults * 1.0 + dependents * 0.65 + elders * 0.85);
+}
+
+/**
+ * The LABOUR-committed phases, matching `deriveCommittedMobilityPools`, so the worker term and the
+ * non-working term are drawn over exactly the same set of parties.
+ */
+function isAwayPhaseForEffort(phase: string): boolean {
+  return phase === "prepared" || phase === "outbound" || phase === "operating" || phase === "returning";
 }
 
 function distanceDecay(distance: number): number {

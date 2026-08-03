@@ -2,6 +2,7 @@ import type { ReasonId, TickNumber, TileId } from "../core/types";
 import type { WorldState } from "../world/types";
 import { enforceResourceKnowledgeCap } from "./resourceKnowledge";
 import { deriveCareTreatmentRelief } from "./adaptationBoundary";
+import { getExpeditionPhysicalPeople } from "./bandMobility";
 // EXPEDITIONARY-4 §14 — the provisioning scale an away party's exposure is judged
 // against (single definition site; no duplicated constants).
 import {
@@ -460,8 +461,12 @@ function deriveAcuteRiskCandidates(world: WorldState, band: Band): readonly Acut
     const loadRatio = clamp01(
       expedition.cargo.harvestUnits / Math.max(0.0001, expedition.cargo.carryCapacityUnits),
     );
+    // CORRECTION-34D — the budget must be drawn over the same people `consumeProvisions` feeds, or
+    // this share reads as exhaustion the moment a party carries a non-working member.
     const provisionBudget =
-      expedition.partyWorkers * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * EXPEDITION_MAX_DURATION_DAYS;
+      getExpeditionPhysicalPeople(expedition) *
+      EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY *
+      EXPEDITION_MAX_DURATION_DAYS;
     const provisionShare = clamp01(expedition.cargo.provisionUnitsConsumed / Math.max(0.0001, provisionBudget));
     const partyTile = world.tiles[expedition.positionTileId];
     const exposureRisk = partyTile === undefined

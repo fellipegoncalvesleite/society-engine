@@ -28,7 +28,12 @@ import { deriveCarriedWaterRelief, deriveCarryingRelief } from "./adaptationBoun
 import {
   KM_PER_TILE,
   deriveAvailableMobilityPools,
+  derivePhysicallyAwayPartyPeople,
+  derivePreparedCommitmentPartyPeople,
   deriveTravelPace,
+  getExpeditionPhysicalPeople,
+  getExpeditionProductiveWorkers,
+  isPhysicallyAwayPhase,
   recordExpeditionDistance,
   recordWalkingDay,
   selectPartyComposition,
@@ -168,14 +173,31 @@ export function deriveExpeditionId(
 }
 
 /**
- * Working adults currently committed to away parties. The residential band physically
- * does not have these people: they are subtracted exactly once, here, and become
- * available again only when the party reaches home (or is declared lost).
+ * PRODUCTIVE LABOUR currently committed to away parties — CORRECTION-34D.
+ *
+ * This is the LABOUR authority, not the body authority. It answers "how much of the band's
+ * working-adult capacity is already spoken for", which is why it counts `prepared` parties (people
+ * at camp whose hands are already promised) and why it counts only `partyWorkers`. A party member
+ * who has stopped supplying labour is still standing with the party and is NOT counted here.
+ *
+ * For bodies use `getCommittedExpeditionPeople` (below) or, for where those bodies actually are,
+ * `derivePhysicallyAwayPartyPeople` in bandMobility.
  */
 export function getCommittedExpeditionWorkers(band: Band): number {
   return (band.expeditions ?? [])
     .filter((expedition) => isExpeditionAway(expedition.phase))
-    .reduce((total, expedition) => total + expedition.partyWorkers, 0);
+    .reduce((total, expedition) => total + getExpeditionProductiveWorkers(expedition), 0);
+}
+
+/**
+ * PHYSICAL BODIES held by parties that are physically elsewhere — CORRECTION-34D.
+ *
+ * Prepared parties are excluded: their people are standing in the residence. This is the quantity
+ * population conservation is about, and it is the same one `getBandPhysicalPresence` places on the
+ * map, derived through the same leaf helpers so the two cannot disagree.
+ */
+export function getCommittedExpeditionPeople(band: Band): number {
+  return derivePhysicallyAwayPartyPeople(band);
 }
 
 /** Working adults still physically at the residential camp and available for local work. */
@@ -201,10 +223,10 @@ export const EXPEDITION_MIN_PARTY_WORKERS = 2;
  * subtracts already-committed workers through `getResidentialWorkingAdults`, caps the party at a
  * third of the workforce and reserves two at camp, and `attachExpedition` caps concurrent parties
  * at `EXPEDITION_ACTIVE_CAP`. What none of that can bound is the FUTURE. `demography.ts`,
- * `viability.ts` and `demographicRenewal.ts` contain no reference to expeditions, and
- * `partyWorkers` is written once at creation and never reduced — so an annual demographic step or
- * a fission transfer landing while a party is away can drop the workforce below what is already
- * committed. That is the only way `sum(away workers) > population` is reachable.
+ * `viability.ts` and `demographicRenewal.ts` contain no reference to expeditions, and at the time
+ * `partyWorkers` was written once at creation and never reduced — so an annual demographic step or
+ * a fission transfer landing while a party is away could drop the workforce below what was already
+ * committed. That was the only way `sum(away workers) > population` was reachable.
  *
  * The physical reading is that the people who left are among those the band lost, so the PARTY
  * shrinks. The loss is never absorbed silently by the residential remainder, and it is never
@@ -245,12 +267,42 @@ export const EXPEDITION_MIN_PARTY_WORKERS = 2;
  * PHASE-APPROPRIATE TERMINATION. `prepared` means labour committed AT CAMP, not yet departed
  * (types.ts). Those people never left, so calling them `lost` would be a false death. A prepared
  * party that can no longer be staffed is `aborted` with `commitment_unsupported` — it holds no
- * body either way, and the people are already inside the residential remainder. Only a party that
- * is physically AWAY and falls below `EXPEDITION_MIN_PARTY_WORKERS` is `lost`, which is the
- * existing terminal transition: no cargo and no information reach camp.
+ * body either way, and the people are already inside the residential remainder.
  *
- * Pure. Returns the same object when nothing is overcommitted, so the common case allocates
- * nothing and the daily call is a single comparison.
+ * ── CORRECTION-34D — TWO BOUNDS, BECAUSE THERE ARE TWO QUANTITIES ─────────────────────────────
+ *
+ * CORRECTION-34C moved this function's bound from `workingAdults` to `population` and stopped
+ * cohort aging teleporting a body home. What it could not do with one field was stop the party
+ * being granted labour the band does not have: with five working adults and six committed, the
+ * party still supplied six workers' worth of composition, carry ceiling and pace. Documentation
+ * said headcount and labour were different; production had one number for both.
+ *
+ * They are now two, and each bound acts on its own quantity:
+ *
+ *   LABOUR (`reconcileExpeditionLabor`) — ordinary, expected, non-defensive. A party may never
+ *   perform more productive labour than the band's working-adult cohort holds. When the cohort
+ *   falls, the reduction is allocated RESIDENCE-FIRST (see the rule below); only once the
+ *   residential adults are exhausted does an away party convert workers into non-working members.
+ *   NOTHING MOVES. The bodies stay exactly where they were standing.
+ *
+ *   BODIES (`repairInvalidPhysicalCommitment`) — defensive only. A band cannot have more people
+ *   physically away than it has people. Ordinary demography can no longer reach this: aging moves
+ *   nobody, fission is bounded by residential availability, and deaths reduce a party only through
+ *   its own physical outcome. If it fires, the state was already invalid, and it is retired as a
+ *   labelled NON-HISTORICAL repair rather than dressed up as something that happened.
+ *
+ * THE RESIDENTIAL-FIRST ALLOCATION RULE, NAMED AS THE CONVENTION IT IS. When the working-adult
+ * cohort falls while a party is away, the model cannot see which person changed. It therefore
+ * allocates the change to the residential working adults first, for as long as enough of them
+ * exist, and only charges an away party once the residence can absorb no more. This is an
+ * AGGREGATE ACCOUNTING CONVENTION, deterministic and stated, and it is emphatically NOT the claim
+ * that "this person aged in the party" — with twenty adults and a party of six, one adult aging
+ * charges the residence and the party is untouched, because the model has no basis for saying
+ * otherwise. Locating a cohort transition inside a party needs the future individual/household
+ * layer and is not attempted here.
+ *
+ * Pure. Returns the same object when neither bound binds, so the common case allocates nothing and
+ * the daily call is two comparisons.
  */
 function reduceCompositionNeverFaster(
   composition: ExpeditionPartyComposition,
@@ -273,105 +325,170 @@ function reduceCompositionNeverFaster(
   return { limited, typical, high };
 }
 
-export function reconcileExpeditionCommitment(band: Band, currentTick: number): Band {
-  const expeditions = band.expeditions ?? [];
+/**
+ * Reduce a party's PRODUCTIVE LABOUR to `reducedWorkers` while keeping every body.
+ *
+ * The workers who stop working become `nonWorkingPartyPeople` at the same tile, so the physical
+ * headcount is invariant across this operation by construction. Composition, carry ceiling and
+ * cargo all move with the reduced worker count, because a party's capability is not one number.
+ */
+function applyReducedProductiveLabor(
+  band: Band,
+  expedition: ExpeditionRecord,
+  reducedWorkers: number,
+  currentTick: number,
+): ExpeditionRecord {
+  const workers = getExpeditionProductiveWorkers(expedition);
+  const removed = Math.max(0, workers - reducedWorkers);
+  // The ceiling the REDUCED party justifies. `Math.min` guarantees reconciliation can never raise
+  // a ceiling even if a learned carrying practice changed in the meantime. A non-working member
+  // contributes nothing here: §6's carrying comparison selected ZERO PRODUCTIVE CARRYING over a
+  // partial share or an explicit burden, because the alternatives need per-person physiology this
+  // architecture has no state for, and a bounded zero cannot grant capability through a loss.
+  const capacity = round4(Math.min(
+    expedition.cargo.carryCapacityUnits,
+    deriveCarryCapacityUnits(band, reducedWorkers, expedition.injuryLoad ?? 0, currentTick),
+  ));
+  const carried = expedition.cargo.harvestUnits;
+  const abandoned = round4(Math.max(0, carried - capacity));
 
-  if (expeditions.length === 0) {
+  return {
+    ...expedition,
+    partyWorkers: reducedWorkers,
+    nonWorkingPartyPeople: Math.max(0, expedition.nonWorkingPartyPeople ?? 0) + removed,
+    ...(expedition.partyComposition === undefined
+      ? {}
+      : { partyComposition: reduceCompositionNeverFaster(expedition.partyComposition, removed) }),
+    cargo: {
+      ...expedition.cargo,
+      carryCapacityUnits: capacity,
+      harvestUnits: round4(carried - abandoned),
+      lostUnits: round4((expedition.cargo.lostUnits ?? 0) + abandoned),
+    },
+  };
+}
+
+/**
+ * BOUND 1 — PRODUCTIVE LABOUR. Ordinary, expected, and it moves nobody.
+ *
+ * Residence-first: while the band still has residential working adults to absorb a cohort change,
+ * away parties are untouched. Only when the whole working-adult cohort falls below what is already
+ * committed does a party convert workers into non-working members — newest commitment first, and
+ * high -> typical -> limited inside a party so capability is never improved by a loss.
+ */
+function reconcileExpeditionLabor(band: Band, currentTick: number): Band {
+  const workingAdults = Math.max(0, band.demography?.workingAdults ?? 0);
+  let committedLabor = getCommittedExpeditionWorkers(band);
+
+  if (committedLabor <= workingAdults) {
     return band;
   }
 
-  // ── CORRECTION-34C — THE BOUND IS BODIES, NOT LABOUR. ───────────────────────────────────────
-  //
-  // This function used to bound the party by `demography.workingAdults`, which made every fall in
-  // the working-adult cohort permission to delete a body from a distant party. `workingAdults` is
-  // a LABOUR CLASSIFICATION and it falls for reasons that move nobody — most obviously ordinary
-  // aging, where `demography.ts` does `adults -= adultsAged; elders += adultsAged;` with
-  // `population` untouched. Measured on a band whose workforce had already declined to its party
-  // size, one adult-to-elder transition moved a person from the expedition tile to the residence
-  // with no route, return, communication, death or transfer: `COHORT AGING TELEPORTS AWAY BODY`.
-  //
-  // A party's headcount is a count of PHYSICAL BODIES. The only thing that can make a body
-  // impossible is the band not having that person at all, so the bound is `population`. An adult
-  // who becomes an elder while away is still standing exactly where they were; they are now an
-  // elder who happens to be on an expedition. Their labour is handled separately and correctly by
-  // `getResidentialWorkingAdults`, which clamps at zero.
-  //
-  // WHAT THIS FUNCTION NOW MEANS. With a population bound it can no longer fire on ordinary
-  // demography. `population` falling below the committed headcount is not an event the simulation
-  // produces through any normal path — fission is bounded by residential availability
-  // (`createDaughterBand`), deaths reduce population and the party together only through explicit
-  // party outcomes, and the launch authority cannot overcommit. So this is a DEFENSIVE REPAIR for
-  // corrupted or legacy state, not a demographic response. It deliberately does NOT claim to know
-  // a physical mechanism for the reduction, because there isn't one: when it fires, something
-  // upstream is already wrong.
-  //
-  // Party-local loss must come from a party-local physical outcome (`party_lost` past the hard
-  // deadline, injury-forced return, provisions exhausted). It is never inferred from cohort aging.
-  const physicalPeople = Math.max(0, band.demography?.population ?? band.size ?? 0);
-  let committed = getCommittedExpeditionWorkers(band);
+  const next = [...(band.expeditions ?? [])];
 
-  if (committed <= physicalPeople) {
-    return band;
-  }
-
-  const next = [...expeditions];
-
-  for (let index = next.length - 1; index >= 0 && committed > physicalPeople; index -= 1) {
+  for (let index = next.length - 1; index >= 0 && committedLabor > workingAdults; index -= 1) {
     const expedition = next[index];
 
     if (!isExpeditionAway(expedition.phase)) {
       continue;
     }
 
-    const workers = Math.max(0, expedition.partyWorkers ?? 0);
-    const reduced = Math.max(0, workers - (committed - physicalPeople));
+    const workers = getExpeditionProductiveWorkers(expedition);
 
-    if (reduced < EXPEDITION_MIN_PARTY_WORKERS) {
-      // A prepared party never departed: its people are standing in camp and are already inside
-      // the residential remainder. Declaring them lost would invent a death.
-      const terminal = expedition.phase === "prepared"
-        ? { phase: "aborted" as const, outcomeReason: "commitment_unsupported" as const }
-        : { phase: "lost" as const, outcomeReason: "party_lost" as const };
+    if (workers <= 0) {
+      continue;
+    }
 
+    const reduced = Math.max(0, workers - (committedLabor - workingAdults));
+
+    if (reduced < EXPEDITION_MIN_PARTY_WORKERS && expedition.phase === "prepared") {
+      // Never departed. Its people are standing in camp and are already inside the residential
+      // remainder, so cancelling is a labour decision — not a movement and not a death.
       next[index] = {
         ...expedition,
-        ...terminal,
+        phase: "aborted",
+        outcomeReason: "commitment_unsupported",
         partyWorkers: 0,
+        nonWorkingPartyPeople: 0,
         ...(expedition.partyComposition === undefined
           ? {}
           : { partyComposition: { limited: 0, typical: 0, high: 0 } }),
       };
-      committed -= workers;
+      committedLabor -= workers;
       continue;
     }
 
-    const removed = workers - reduced;
-    // The ceiling the REDUCED party justifies. `Math.min` guarantees reconciliation can never
-    // raise a ceiling even if a learned carrying practice changed in the meantime.
-    const capacity = round4(Math.min(
-      expedition.cargo.carryCapacityUnits,
-      deriveCarryCapacityUnits(band, reduced, expedition.injuryLoad ?? 0, currentTick),
-    ));
-    const carried = expedition.cargo.harvestUnits;
-    const abandoned = round4(Math.max(0, carried - capacity));
+    const reconciled = applyReducedProductiveLabor(band, expedition, reduced, currentTick);
 
-    next[index] = {
-      ...expedition,
-      partyWorkers: reduced,
-      ...(expedition.partyComposition === undefined
-        ? {}
-        : { partyComposition: reduceCompositionNeverFaster(expedition.partyComposition, removed) }),
-      cargo: {
-        ...expedition.cargo,
-        carryCapacityUnits: capacity,
-        harvestUnits: round4(carried - abandoned),
-        lostUnits: round4((expedition.cargo.lostUnits ?? 0) + abandoned),
-      },
-    };
-    committed -= removed;
+    next[index] =
+      reduced < EXPEDITION_MIN_PARTY_WORKERS
+        // A physically away party below the minimum still EXISTS: its people are three days' walk
+        // out and did not stop existing because a cohort was reclassified at home. It can no longer
+        // do the work it left for, so it turns for home with every body it has. CORRECTION-34C
+        // declared this case `lost`, which invented a death out of an accounting change.
+        ? { ...reconciled, phase: "returning" as const, outcomeReason: "party_labor_unsupported" as const }
+        : reconciled;
+    committedLabor -= workers - reduced;
   }
 
   return { ...band, expeditions: next };
+}
+
+/**
+ * BOUND 2 — PHYSICAL BODIES. Defensive only, and explicitly not a history.
+ *
+ * A band cannot have more people standing away than it has people. No ordinary path reaches this
+ * once fission is bounded by residential availability and cohort transitions no longer move
+ * bodies, so when it fires the state handed in was already invalid. The record is retired whole,
+ * under an outcome reason that names it as a repair — never partially and silently shrunk, which
+ * would delete people and then describe the result as something that happened in the world.
+ */
+function repairInvalidPhysicalCommitment(band: Band, currentTick: number): Band {
+  void currentTick;
+  const population = Math.max(0, band.demography?.population ?? band.size ?? 0);
+  let awayPeople = derivePhysicallyAwayPartyPeople(band);
+
+  if (awayPeople <= population) {
+    return band;
+  }
+
+  const next = [...(band.expeditions ?? [])];
+
+  for (let index = next.length - 1; index >= 0 && awayPeople > population; index -= 1) {
+    const expedition = next[index];
+
+    if (!isPhysicallyAwayPhase(expedition.phase)) {
+      continue;
+    }
+
+    const people = getExpeditionPhysicalPeople(expedition);
+
+    if (people <= 0) {
+      continue;
+    }
+
+    next[index] = {
+      ...expedition,
+      phase: "aborted",
+      outcomeReason: "invalid_state_repaired",
+      partyWorkers: 0,
+      nonWorkingPartyPeople: 0,
+      ...(expedition.partyComposition === undefined
+        ? {}
+        : { partyComposition: { limited: 0, typical: 0, high: 0 } }),
+    };
+    awayPeople -= people;
+  }
+
+  return { ...band, expeditions: next };
+}
+
+export function reconcileExpeditionCommitment(band: Band, currentTick: number): Band {
+  if ((band.expeditions ?? []).length === 0) {
+    return band;
+  }
+
+  return repairInvalidPhysicalCommitment(reconcileExpeditionLabor(band, currentTick), currentTick);
 }
 
 /**
@@ -385,30 +502,48 @@ export function getBandCommitmentAccounting(band: Band): {
   readonly population: number;
   readonly workingAdults: number;
   readonly committedAwayWorkers: number;
+  readonly physicallyAwayPeople: number;
+  readonly preparedCommitmentPeople: number;
+  readonly awayNonWorkingPeople: number;
   readonly dependents: number;
   readonly conserved: boolean;
+  readonly laborBounded: boolean;
   readonly awayHeadcountExceedsWorkingAdults: boolean;
 } {
   const demography = band.demography;
   const population = Math.max(0, demography?.population ?? band.size ?? 0);
   const workingAdults = Math.max(0, demography?.workingAdults ?? 0);
   const committedAwayWorkers = getCommittedExpeditionWorkers(band);
+  const physicallyAwayPeople = derivePhysicallyAwayPartyPeople(band);
+  const preparedCommitmentPeople = derivePreparedCommitmentPartyPeople(band);
+  let awayNonWorkingPeople = 0;
+
+  for (const expedition of band.expeditions ?? []) {
+    if (isExpeditionAway(expedition.phase)) {
+      awayNonWorkingPeople += Math.max(0, expedition.nonWorkingPartyPeople ?? 0);
+    }
+  }
 
   return {
     population,
     workingAdults,
     committedAwayWorkers,
+    physicallyAwayPeople,
+    preparedCommitmentPeople,
+    awayNonWorkingPeople,
     dependents: Math.max(0, demography?.dependents ?? 0),
-    // CORRECTION-34C — CONSERVATION IS ABOUT BODIES. `committedAwayWorkers` is a headcount of
-    // people standing somewhere else, so the only conservation question is whether the band has
-    // that many people. It is NOT a defect for the away headcount to exceed `workingAdults`: an
-    // adult who ages to elder while away is still away, and the band then legitimately has more
-    // people committed than it has working adults. Labour availability is a separate question,
-    // answered by `getResidentialWorkingAdults`, which clamps at zero.
-    conserved: committedAwayWorkers <= population,
-    // Reported separately so a caller can see the labour picture without it being mistaken for a
-    // conservation failure.
-    awayHeadcountExceedsWorkingAdults: committedAwayWorkers > workingAdults,
+    // CORRECTION-34D — CONSERVATION IS ABOUT BODIES, AND ONLY THE ONES THAT LEFT. A prepared
+    // party's people are standing in the residence, so they are already inside the residential
+    // remainder and cannot also be away. This is now the same quantity `getBandPhysicalPresence`
+    // places on the map, derived through the same leaf helper.
+    conserved: physicallyAwayPeople <= population,
+    // The separate labour question: a party may never perform more work than the band's
+    // working-adult cohort holds. Maintained by `reconcileExpeditionLabor`.
+    laborBounded: committedAwayWorkers <= workingAdults,
+    // CORRECTION-34C — reported separately because it is LEGITIMATE, not a conservation failure:
+    // a party can hold more bodies than the band has working adults once some of them have
+    // stopped supplying labour. That is the whole point of the split.
+    awayHeadcountExceedsWorkingAdults: physicallyAwayPeople > workingAdults,
   };
 }
 
@@ -462,6 +597,9 @@ function deriveTilesPerDay(band: Band, expedition: ExpeditionRecord, currentTick
     urgency,
     injuryLoad: expedition.injuryLoad,
     partyComposition: expedition.partyComposition,
+    // CORRECTION-34D — a non-working member walks with the party, so the party cannot be timed as
+    // though they were not there.
+    nonWorkingPartyPeople: expedition.nonWorkingPartyPeople,
   });
   // Practiced carrying/water handling (public adaptation boundary only) recovers part of
   // the load cost — learned technique, kept distinct from bodily conditioning.
@@ -578,9 +716,17 @@ const CAMPLESS_BACKTRACK_TILES_PER_WORK_DAY = 4;
 /** §16 — the nightly shuttle also costs extra provisions (in worker-day equivalents). */
 const CAMPLESS_EXTRA_PROVISION_WORKER_DAYS = 0.5;
 
-/** Provisions the party eats today. Consumed from what it carries — never from a band store. */
+/**
+ * Provisions the party eats today. Consumed from what it carries — never from a band store.
+ *
+ * CORRECTION-34D — EVERY PHYSICAL PERSON EATS. This is the one place where the split makes a
+ * party's life harder rather than easier: a member who has stopped supplying labour has not
+ * stopped needing food, so the cost is charged on the headcount while the carry ceiling and the
+ * work are charged on the labour. Computing this from productive workers alone would have fed a
+ * body for free.
+ */
 function consumeProvisions(expedition: ExpeditionRecord): ExpeditionCargo {
-  const eaten = round4(expedition.partyWorkers * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY);
+  const eaten = round4(getExpeditionPhysicalPeople(expedition) * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY);
   return {
     ...expedition.cargo,
     provisionUnitsConsumed: round4(expedition.cargo.provisionUnitsConsumed + eaten),
@@ -593,8 +739,13 @@ function consumeProvisions(expedition: ExpeditionRecord): ExpeditionCargo {
  * that forces an early return rather than a free extension.
  */
 function provisionsExhausted(expedition: ExpeditionRecord): boolean {
+  // CORRECTION-34D — the budget is drawn for the people who are actually eating, so it scales
+  // with the physical headcount exactly as `consumeProvisions` does. A party that loses labour
+  // does not thereby gain a longer trip.
   const budget = round4(
-    expedition.partyWorkers * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * EXPEDITION_MAX_DURATION_DAYS,
+    getExpeditionPhysicalPeople(expedition) *
+      EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY *
+      EXPEDITION_MAX_DURATION_DAYS,
   );
   return expedition.cargo.provisionUnitsConsumed > budget;
 }
@@ -660,7 +811,10 @@ function summarizeOutcome(
     outcomeReason: reason,
     distanceTiles: Math.max(0, expedition.routeTileIds.length - 1),
     totalDays: expedition.travelDaysElapsed + expedition.workDaysElapsed,
-    partyWorkers: expedition.partyWorkers,
+    partyWorkers: getExpeditionProductiveWorkers(expedition),
+    // CORRECTION-34D — the bodies that walked out. Every human-facing sentence about a party
+    // ("N adults left and were never seen again") must count people, not labour.
+    partyPeople: getExpeditionPhysicalPeople(expedition),
     deliveredHarvestUnits: round4(deliveredUnits),
     provisionUnitsConsumed: expedition.cargo.provisionUnitsConsumed,
     lostUnits: expedition.cargo.lostUnits,
@@ -1169,7 +1323,8 @@ function advanceExpeditionOneDay(
     const establishedCamp = arrived ? deriveTaskCampForOperating(world, moved, day) : undefined;
     const setupCost =
       arrived && establishedCamp !== undefined && moved.taskCamp === undefined
-        ? round4(moved.partyWorkers * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * TASK_CAMP_SETUP_PROVISION_WORKER_DAYS)
+        // CORRECTION-34D — a camp is set up for, and eaten by, everyone standing at it.
+        ? round4(getExpeditionPhysicalPeople(moved) * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * TASK_CAMP_SETUP_PROVISION_WORKER_DAYS)
         : 0;
     return {
       world,
@@ -1346,7 +1501,8 @@ function advanceExpeditionOneDay(
     const campless = camp === undefined;
     const backtrackKm = campless ? CAMPLESS_BACKTRACK_TILES_PER_WORK_DAY * KM_PER_TILE : 0;
     const backtrackProvisions = campless
-      ? round4(withProvisions.partyWorkers * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * CAMPLESS_EXTRA_PROVISION_WORKER_DAYS)
+      // CORRECTION-34D — the nightly shuttle is walked and eaten by every body in the party.
+      ? round4(getExpeditionPhysicalPeople(withProvisions) * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * CAMPLESS_EXTRA_PROVISION_WORKER_DAYS)
       : 0;
     return {
       world: work.world,

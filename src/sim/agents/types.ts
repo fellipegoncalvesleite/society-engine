@@ -976,6 +976,19 @@ export type ExpeditionOutcomeReason =
   // standing in camp and are already inside the residential remainder, so calling them
   // `party_lost` would invent a death. Reached only from `reconcileExpeditionCommitment`.
   | "commitment_unsupported"
+  // CORRECTION-34D §9 — the band's working-adult cohort can no longer support the productive
+  // labour this party was staffed with, and the reduction has driven it below
+  // EXPEDITION_MIN_PARTY_WORKERS. The party still EXISTS: every body is where it was, and it
+  // turns for home carrying whatever it has. This is not a death, not a loss and not an injury —
+  // it is a party that can no longer do the work it walked out to do.
+  | "party_labor_unsupported"
+  // CORRECTION-34D §9 — NOT A PHYSICAL HISTORY. The record described more people than the band
+  // has, which no ordinary path can produce once fission is bounded by residential availability
+  // and cohort transitions no longer move bodies. Reaching this means the state handed to the
+  // simulation was already invalid (corrupt, hand-assembled or pre-dating the bound), so the
+  // record is retired as a labelled non-historical repair. It must never be read as a death, a
+  // return, a party-local loss or anything that happened in the world.
+  | "invalid_state_repaired"
   // CORRECTION-17 §9/§10 — frontier-exploration terminations. Every one is a physical
   // reason a party stopped going outward; none of them is "success by timeout".
   //
@@ -1062,12 +1075,39 @@ export interface ExpeditionRecord {
   readonly hardDeadlineDay: DayNumber;
   readonly travelDaysElapsed: number;
   readonly workDaysElapsed: number;
-  /** Aggregate composition — never individual people. */
+  /**
+   * PRODUCTIVE LABOUR, not bodies. Aggregate composition — never individual people.
+   *
+   * CORRECTION-34D — this field used to answer two incompatible questions. It was the physical
+   * headcount for presence, conservation and fission, and simultaneously the productive labour
+   * for work, pace, carrying and provisioning. Those separate here: `partyWorkers` is the labour
+   * the party can currently perform, and the physical headcount is
+   * `partyWorkers + nonWorkingPartyPeople`.
+   */
   readonly partyWorkers: number;
+  /**
+   * CORRECTION-34D — party members who are physically present and still consume, but currently
+   * grant no productive labour, mobility-role capability or carrying capacity.
+   *
+   * Absent means zero, which is exactly what every record written before this field existed
+   * meant: headcount and labour were equal at launch and nothing could separate them. A legacy
+   * record therefore upgrades without reinterpretation.
+   *
+   * A person enters this count when the band's working-adult cohort can no longer support the
+   * labour already committed away — an AGGREGATE ALLOCATION, never an observation of which
+   * individual aged, was injured or was reclassified. The model has cohorts, not people, and
+   * cannot locate a cohort transition inside a party. It never leaves the count while the party
+   * is away: a reclassification is not reversed by the residence gaining an adult elsewhere.
+   */
+  readonly nonWorkingPartyPeople?: number;
   /**
    * EXPEDITIONARY-4 §8 — which mobility-role pools these workers were drawn from
    * (limited/typical/high). Aggregate counts, conserved against the band's pools; a
    * high-capacity adult committed here is unavailable to every other party until return.
+   *
+   * CORRECTION-34D — this totals `partyWorkers`, the PRODUCTIVE labour. It deliberately does not
+   * total the physical headcount: a non-working member draws from no mobility pool because they
+   * supply no mobility capability.
    */
   readonly partyComposition?: ExpeditionPartyComposition;
   readonly cargo: ExpeditionCargo;
@@ -1461,7 +1501,14 @@ export interface ExpeditionOutcomeSummary {
   readonly outcomeReason: ExpeditionOutcomeReason;
   readonly distanceTiles: number;
   readonly totalDays: number;
+  /** Productive labour the party carried (CORRECTION-34D — not its headcount). */
   readonly partyWorkers: number;
+  /**
+   * CORRECTION-34D — bodies that walked out. Absent on records written before the split, where
+   * it equalled `partyWorkers`; read it as `partyPeople ?? partyWorkers`. Human-facing text
+   * ("N adults left and were never seen again") must use THIS, not the labour count.
+   */
+  readonly partyPeople?: number;
   /** Physical units that actually reached the residential camp (0 for information-only/failed). */
   readonly deliveredHarvestUnits: number;
   readonly provisionUnitsConsumed: number;

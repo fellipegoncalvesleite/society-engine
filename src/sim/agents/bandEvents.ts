@@ -2097,8 +2097,18 @@ function deriveExpeditionEvents(world: WorldState, band: Band): readonly BandRea
       continue;
     }
 
+    // CORRECTION-34D §9 — a defensive state repair is NOT something that happened in the world, so
+    // it never becomes a story about a journey, a loss or a homecoming. It is skipped here rather
+    // than narrated with softer wording, because any sentence at all would be a false history.
+    if (outcome.outcomeReason === "invalid_state_repaired") {
+      continue;
+    }
+
     const totalKm = outcome.distanceTiles * 2 * kmPerTile;
     const lost = outcome.phase === "lost";
+    // CORRECTION-34D — human-facing counts are BODIES. `partyWorkers` is productive labour, and a
+    // party that lost labour on the way did not lose the people.
+    const partyPeople = outcome.partyPeople ?? outcome.partyWorkers;
     const hurt = outcome.outcomeReason === "injury_forced_return";
     const majorReturn = outcome.deliveredHarvestUnits > 0 && outcome.distanceTiles >= 12;
     const exceptionalJourney = totalKm >= 60;
@@ -2124,15 +2134,15 @@ function deriveExpeditionEvents(world: WorldState, band: Band): readonly BandRea
               ? "A party returned from far country with food"
               : "Scouts brought back word of distant country",
       description: lost
-        ? `${outcome.partyWorkers} adults left for ${String(outcome.targetTileId)} and were never seen again.`
+        ? `${partyPeople} adults left for ${String(outcome.targetTileId)} and were never seen again.`
         : hurt
           ? `A hurt party abandoned part of its load and limped home from ${String(outcome.targetTileId)}.`
           : exceptionalJourney
             ? `A party walked roughly ${Math.round(totalKm)} km out and back over ${outcome.totalDays} days.`
             : majorReturn
-              ? `${outcome.partyWorkers} adults carried ${outcome.deliveredHarvestUnits} units home from ${outcome.distanceTiles} tiles away.`
+              ? `${partyPeople} adults carried ${outcome.deliveredHarvestUnits} units home from ${outcome.distanceTiles} tiles away.`
               : `A small party confirmed what the band remembered about ${String(outcome.targetTileId)}.`,
-      detail: `task ${outcome.taskKind}; outcome ${outcome.outcomeReason}; ${outcome.distanceTiles} tiles; ${outcome.totalDays} days; ${outcome.partyWorkers} adults; delivered ${outcome.deliveredHarvestUnits}; provisions ${outcome.provisionUnitsConsumed}; task camp ${outcome.usedTaskCamp}`,
+      detail: `task ${outcome.taskKind}; outcome ${outcome.outcomeReason}; ${outcome.distanceTiles} tiles; ${outcome.totalDays} days; ${partyPeople} adults (${outcome.partyWorkers} working); delivered ${outcome.deliveredHarvestUnits}; provisions ${outcome.provisionUnitsConsumed}; task camp ${outcome.usedTaskCamp}`,
       stateKey: `expedition:${outcome.id}`,
       rawSource: "Band.recentExpeditionOutcomes",
       rawReason: `${outcome.taskKind}; ${outcome.outcomeReason}; distanceTiles=${outcome.distanceTiles}; deliveredUnits=${outcome.deliveredHarvestUnits}`,

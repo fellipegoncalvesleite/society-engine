@@ -8,6 +8,7 @@ import {
   getSalientMemorySummary,
   type TickContextCache,
 } from "./contextCache";
+import { getExpeditionPhysicalPeople, isPhysicallyAwayPhase } from "./bandMobility";
 import type { BandId, TileId } from "../core/types";
 import { getTile, getTileAtCoord } from "../world/generate";
 import type { Tile, WorldState } from "../world/types";
@@ -72,7 +73,9 @@ export function getNearbyBandPressure(
 // Party SIZE carries through the existing population weight, so a 2-worker party scatters roughly
 // 1/15 of a 30-person band's weight and mostly falls under the 0.02 contribution floor beyond
 // distance 1. No new radius and no new constant is introduced for scale.
-const PHYSICALLY_AWAY_PHASES: ReadonlySet<string> = new Set(["outbound", "operating", "returning"]);
+// CORRECTION-34D — the phase test and the headcount derivation both moved to `bandMobility`, the
+// leaf that already owns "who is committed away", so presence and conservation cannot drift apart.
+// The set that used to live here is gone rather than kept in parallel.
 
 export interface PhysicalPresenceSource {
   readonly tileId: TileId;
@@ -102,20 +105,23 @@ export function getBandPhysicalPresence(band: Band): readonly PhysicalPresenceSo
   let awayPeople = 0;
 
   for (const expedition of band.expeditions ?? []) {
-    if (!PHYSICALLY_AWAY_PHASES.has(expedition.phase)) {
+    if (!isPhysicallyAwayPhase(expedition.phase)) {
       continue;
     }
 
-    const workers = Math.max(0, expedition.partyWorkers ?? 0);
+    // CORRECTION-34D — BODIES, NOT LABOUR. This used to read `partyWorkers`, which is the party's
+    // productive labour; a member who had stopped supplying labour therefore vanished from the map
+    // while still standing at the target. Presence counts people.
+    const people = getExpeditionPhysicalPeople(expedition);
 
-    if (workers <= 0 || expedition.positionTileId === undefined) {
+    if (people <= 0 || expedition.positionTileId === undefined) {
       continue;
     }
 
-    awayPeople += workers;
+    awayPeople += people;
     sources.push({
       tileId: expedition.positionTileId,
-      people: workers,
+      people,
       kind: "away_party",
       expeditionId: expedition.id,
     });
