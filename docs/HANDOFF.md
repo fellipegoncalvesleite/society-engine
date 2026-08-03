@@ -181,6 +181,61 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### EXPEDITION TARGET-WORK LABOUR PROVENANCE — CORRECTION-34E — **ROADMAP ITEM 3 STAYS OPEN / ITEM 4 UNSTARTED / DO NOT MERGE**
+
+**Branch** `checkpoint/shared-use-physical-presence-authority-34`, continuing `c8df1ea`.
+`main` untouched at `0a43083a`. **PRODUCTION BEHAVIOUR CHANGED — two files.**
+
+**The defect, and a correction to CORRECTION-34D's own ledger.** 34D listed
+`getExpeditionProductiveWorkers` as the authority for "composition, pace, carrying, **target
+work**". Target work was never touched. `resolveExpeditionTargetWork` handed the whole band to
+`buildTripRecord`, which sized the working group with `estimateTaskGroupPeople(band)` — residential
+working adults minus committed party workers, capped by a task share, **floored at one**. Reproduced
+through real production: one identical five-worker party removed **0.0086** with one adult at home
+and **0.0354** with twenty-five, a **4.1×** difference in distant depletion (patch 0.2198 → 0.4094
+versus 0.2198 → **1.0, exhausted**), while changing the party from two workers to five changed
+nothing at all.
+
+**The fix — Option A, at the seam that already knows the party.**
+`resolveExpeditionTargetWork` takes a **required** `options.partyWorkers` with **no default**, so a
+caller that cannot say who is working cannot resolve work; `buildTripRecord` branches once, taking
+the party's productive labour for an expedition and `estimateTaskGroupPeople` for a same-day trip.
+`expedition.ts` supplies `getExpeditionProductiveWorkers` at both call sites, exploitation and
+verification. No floor of one on the party branch, no synthetic band, no post-hoc cargo scaling, no
+second harvest equation, and the `* 0.035` equation itself is untouched — the authority was fixed,
+the strength deliberately not tuned.
+
+**After.** Target work is invariant to residential labour (5 people, 0.0354 removed, with 1 or 25
+adults at home) and follows party labour (2 → 0.0226, 5 → 0.0354, residence held identical).
+
+**Evidence.** T1–T14 **14/14, 0 failing, 0 vacuous, 0 not-constructed**, with non-vacuity
+**asserted** per fixture rather than declared. T4: non-working bodies consume and burden pace
+without granting work or carrying. T5: a reconciled party (bodies 6 → 6, workers 6 → 3, nobody
+moved) moves its target work with the labour. T6: a party of five with an empty residence reads
+five, not the floor of one. T12: two parties read neither each other nor their sum. T7 in two
+halves — a single-tree positive control plus a cross-tree digest of **2,034 same-day trip records
+over 729 days to the same sha256** at `c8df1ea` and here, stopping at the first expedition work day
+by design. Numeric chain measured on an uncapped fauna target so the request is directly observable.
+
+**Natural, sampled daily: 87 target work-days at 20 y and 213 at 50 y, 0 adverse on every counter,
+and 87/87 and 213/213 work-days where a residence-derived count would have DIFFERED.** Unlike
+CORRECTION-34D this change is **not inert in ordinary play**.
+
+**Five instrument errors in this pass's own probes are recorded**, the worst being that the
+before/after probe's stock reading measured nothing (tile-keyed lookup against a patch-keyed store,
+`false` in every arm of both trees); both arms were regenerated with the corrected probe.
+
+**Regressions were compared rerun-to-rerun on `c8df1ea` and this tree, not against committed files**
+(several predate CORRECTION-28..-32). **Verdicts identical in all nine suites.** No frozen-evidence
+incident occurred. 34D's artifacts were deliberately not regenerated; the movement 34E causes is
+recorded in `target-work-regression-delta.json`. **Not claimed:** the equation's magnitude, any
+outcome improvement, anything about who *within* a party works, any performance conclusion, or a
+200-year matrix. **Roadmap Item 4 remains unstarted** and the CORRECTION-34A same-day
+current-presence deferral is preserved exactly. Evidence:
+`docs/evidence/shared-use-physical-presence-authority-34/EXPEDITION_TARGET_WORK_LABOR_PROVENANCE.md`.
+
+---
+
 ### EXPEDITION PHYSICAL HEADCOUNT vs PRODUCTIVE PARTY LABOUR — CORRECTION-34D — **ROADMAP ITEM 3 STAYS OPEN / ITEM 4 UNSTARTED / DO NOT MERGE**
 
 **Branch** `checkpoint/shared-use-physical-presence-authority-34`, continuing `e9b9655`.
@@ -8862,6 +8917,7 @@ exception; daughter colours related-but-distinct and never visually confusing.
 
 ## Checkpoint Log
 
+- **CORRECTION-34E** (`checkpoint/shared-use-physical-presence-authority-34`) — expedition target work now uses the productive labour physically standing at the target, not the residential cohort; a required `options.partyWorkers` with no default makes the invariant structural; distant harvest, depletion, fauna pressure, cargo and recorded labour all follow the party; the same-day residential path keeps its own authority and is byte-identical over the comparable window. T1-T14 14/14, 0 vacuous. Item 4 unstarted.
 - **CORRECTION-34D** (`checkpoint/shared-use-physical-presence-authority-34`) — expedition physical headcount separated from productive party labour; consumption on bodies, work/carrying on labour, pace on both; prepared commitment distinguished from physical absence; fission founders from physically-available people; corrupt legacy state retired as a labelled non-historical repair. H1-H14 14/14. Item 4 unstarted.
 
 - **RESOURCE INVESTIGATION PHYSICAL EXECUTION CORRECTION-26** — *2026-08-01, PASS —
