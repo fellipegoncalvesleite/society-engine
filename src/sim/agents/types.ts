@@ -90,6 +90,12 @@ export interface SocialPressureProfile {
   readonly demographicPressure: number;
   readonly fissionPressure: number;
   readonly leadershipStress: number;
+  /**
+   * CORRECTION-35 — INERT, AND IT ALWAYS WAS. Set to 0.08 by `getInitialSocialPressure()` and
+   * carried forward unchanged by `applyDemographyToSocialPressure`'s spread. It has NO reader
+   * anywhere in the repository — it is a separate field from `Band.territorialPressure`, and the
+   * two must not be conflated.
+   */
   readonly territorialPressure: number;
   readonly stateAvoidancePressure: number;
   readonly cohesionStress: number;
@@ -6569,6 +6575,22 @@ export interface Band {
   readonly mobilityCostTolerance: number;
   readonly storageCapacity: number;
   readonly hungerPressure: number;
+  /**
+   * CORRECTION-35 — BEHAVIOURALLY INERT AND RETAINED FOR SCHEMA AND HISTORY ONLY.
+   *
+   * Written once at spawn as the constant 0.12, and once more when a daughter takes
+   * `clamp01(parent * 0.72 + 0.04)`. NO lived process writes it: not crowding, not encounters,
+   * not friction, not access expectation, not contested use, not resource sharing, not culture.
+   * It used to reach behaviour through three readers — `pressure.ts` (x0.08 into
+   * `mobilityPressure`), `rules/mobilityIntent.ts` (x0.12 into intent scoring) and
+   * `rules/bandDecision.ts` (x0.14 into a reason's reported pressure) — which gave every band a
+   * territorial motive to move simply for having been created. All three are removed.
+   *
+   * It is kept in state so serialized worlds, the UI projection and decision-context records stay
+   * readable, and so a future cultural or institutional territoriality has a name to claim. Such a
+   * system must arrive with its OWN lived writer; re-attaching this constant to behaviour without
+   * one would restore the defect.
+   */
   readonly territorialPressure: number;
   readonly demography: BandDemography;
   readonly biomeAdaptation: BiomeAdaptationProfile;

@@ -5541,7 +5541,10 @@ function sideCountryResourceEvidence(memory: ResourcePatchMemory): number {
 function getMobilityPressure(band: Band, scoreBreakdown: ScoreBreakdown): number {
   return clamp01(
     getCanonicalFoodStress(band) * 0.34 +
-      band.territorialPressure * 0.14 +
+      // CORRECTION-35 — `band.territorialPressure * 0.14` was here and is REMOVED. This one is
+      // ATTRIBUTION rather than score: it fills the `pressure` figure a reason record carries. A
+      // reason that names a pressure inflated by a phantom territorial term is a false
+      // explanation, which Item 3 requires it not to be.
       band.demography.foodPerPersonStress * 0.18 +
       band.demography.splitPressure * 0.12 +
       (1 - scoreBreakdown.foodValue) * 0.2 +

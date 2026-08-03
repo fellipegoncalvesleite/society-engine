@@ -290,7 +290,13 @@ export function deriveBandPressureState(
       // so a crowded residence LIFTS the alternatives rather than being penalised a second time.
       crowdingPenalty * 0.2 +
       daughterDispersal.daughterDispersalPressure * 0.16 +
-      band.territorialPressure * 0.08 +
+      // CORRECTION-35 — `band.territorialPressure * 0.08` was here and is REMOVED. The field is
+      // written once at spawn as a constant and once more as a daughter's share of its parent's
+      // copy; no lived process writes it, so it gave every band a territorial motive to move
+      // simply for existing. Every shared-range consequence Item 3 recognises is already owned by
+      // a signal with real provenance — physical crowding above, attributable friction and access
+      // expectation through `protoAccessMemory`. A future cultural or institutional territoriality
+      // must arrive with its own lived writer; see docs/evidence/shared-range-release-territorial-authority-35/.
       deathCaution * 0.08 +
       acuteStress * 0.14 +
       acuteCaution * 0.08 +
