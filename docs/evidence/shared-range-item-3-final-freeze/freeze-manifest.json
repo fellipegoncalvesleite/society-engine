@@ -1,9 +1,9 @@
 {
   "manifest": "ROADMAP-ITEM-3-FREEZE-MANIFEST",
-  "status": "CANDIDATE FOR CLOSURE — NOT FROZEN. One blocker found; see blockers[]. The executor may not declare the item frozen.",
+  "status": "CANDIDATE FOR CLOSURE \u2014 NOT FROZEN. One blocker found; see blockers[]. The executor may not declare the item frozen.",
   "repository": "fellipegoncalvesleite/human-nomad-simulator",
   "branch": "checkpoint/shared-range-item-3-final-freeze",
-  "candidateFreezeHead": "PLACEHOLDER_SET_AT_COMMIT",
+  "candidateFreezeHead": "ec6f59676fdb91ddb8ed24a99df0b971420f2fd5",
   "branchedFrom": "df349eb60940d3ee3995fa6bccac7c902578fd3e",
   "mainHead": "0a43083a3a9103bc6b8f693b8823a604ae2c6a8d",
   "mergeBaseWithMain": "0a43083a3a9103bc6b8f693b8823a604ae2c6a8d",
@@ -94,7 +94,7 @@
     {
       "name": "CORRECTION-34F zero-labour target-work contract",
       "sha": "df349eb60940d3ee3995fa6bccac7c902578fd3e",
-      "status": "ACCEPTED AND FROZEN — the Item 3 base for this audit"
+      "status": "ACCEPTED AND FROZEN \u2014 the Item 3 base for this audit"
     }
   ],
   "ancestryVerified": "every SHA above is an ancestor of the next, and main (0a43083a) is an ancestor of the freeze candidate. Verified with git merge-base --is-ancestor, not read from a prompt.",
@@ -119,7 +119,7 @@
     "src/ui/band/Mobility.tsx"
   ],
   "productionDiffAcrossItemThree": "b352c31..df349eb -- src/ : 18 files, +1654 -402",
-  "productionChangedByThisCheckpoint": "NONE — audit only. git diff df349eb..HEAD -- src/ is empty.",
+  "productionChangedByThisCheckpoint": "NONE \u2014 audit only. git diff df349eb..HEAD -- src/ is empty.",
   "evidenceDirectories": [
     "docs/evidence/crowding-shared-range-authority-27/",
     "docs/evidence/crowding-physical-memory-separation-28/",
@@ -173,5 +173,6 @@
       "evidence": "released-place-probe.json",
       "smallestCorrection": "derive socialEvidencePhase === released_historical only when the max surviving weight is exactly 0, and keep 0 < weight < SOCIAL_EVIDENCE_ACTIVE_MIN_WEIGHT labelled cooling. A derived read-model field only; the contribution curve is already correct, continuous and monotone."
     }
-  ]
+  ],
+  "candidateFreezeHeadNote": "the manifest is committed one commit before this SHA exists, so it is stamped here and the stamping commit is the tip; a commit cannot contain its own hash."
 }

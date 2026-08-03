@@ -13,6 +13,7 @@ Machine-readable form: `freeze-manifest.json`.
 | repository | `fellipegoncalvesleite/human-nomad-simulator` |
 | audit branch | `checkpoint/shared-range-item-3-final-freeze` |
 | branched from | `df349eb60940d3ee3995fa6bccac7c902578fd3e` (CORRECTION-34F, accepted and frozen) |
+| candidate freeze HEAD | `ec6f59676fdb91ddb8ed24a99df0b971420f2fd5` plus the commit that stamps it — a commit cannot contain its own hash |
 | main | `0a43083a3a9103bc6b8f693b8823a604ae2c6a8d` — **untouched** |
 | merge base with main | `0a43083a3a9103bc6b8f693b8823a604ae2c6a8d` |
 
