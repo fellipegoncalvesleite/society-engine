@@ -188,22 +188,31 @@ try {
     const after = rec(collapsed);
     const s = snap(after);
     const e = after.expeditions[0];
-    // The outcome is EXPLICIT either way: a reduction that stays at or above
-    // EXPEDITION_MIN_PARTY_WORKERS is a partial reduction, below it the party is terminal. An
-    // earlier version of this fixture asserted `phase === "lost"` and failed — that assertion was
-    // wrong, not production: 6 reduced to 3 is above the minimum, so partial is correct. What the
-    // fixture actually has to establish is that the outcome is explicit and people are conserved.
+    // ── CORRECTED BY CORRECTION-34D §9. ───────────────────────────────────────────────────────
+    //
+    // This fixture used to accept `phase: "operating", outcomeReason: null, partyWorkers 6 -> 3`
+    // as EXPLICIT_OUTCOME_AND_STATED_MODEL_LIMIT. It was neither. Three people were deleted from a
+    // party with no named cause, and the three that remained were left `operating` — so the record
+    // went on describing a journey in progress, which is a false physical history. The fixture's
+    // own text asserted a terminal outcome while the party was not terminal.
+    //
+    // The corrected requirement is that the mechanism NAME ITSELF as a repair: the record is
+    // retired whole under `invalid_state_repaired`, which is not a death, not a return, not a
+    // party-local loss, and which `bandEvents` refuses to narrate at all.
     const explicitOutcome =
-      (e.phase === "lost" && e.partyWorkers === 0) ||
-      (e.partyWorkers >= 2 && e.partyWorkers === s.awayPeople);
+      e.phase === "aborted" && e.outcomeReason === "invalid_state_repaired" &&
+      e.partyWorkers === 0 && (e.nonWorkingPartyPeople ?? 0) === 0;
     add("L10_population_collapse_below_away_headcount",
-      s.represented === s.population && explicitOutcome
-        ? "EXPLICIT_OUTCOME_AND_STATED_MODEL_LIMIT" : "UNEXPECTED",
+      s.represented === s.population && explicitOutcome && s.awayPeople === 0
+        ? "LABELLED_NON_HISTORICAL_REPAIR_AND_STATED_MODEL_LIMIT" : "UNEXPECTED",
       { after: s, partyPhase: e.phase, outcomeReason: e.outcomeReason ?? null,
-        outcomeKind: e.phase === "lost" ? "terminal" : "partial_reduction_above_minimum",
-        residentialRemainderIsZero: s.residentialPeople === 0,
+        outcomeKind: "labelled_non_historical_state_repair",
+        retiredWholeRatherThanSilentlyShrunk: e.partyWorkers === 0,
+        narratedInEventFeed: false,
         modelLimit:
-          "population below the away headcount is not reachable through any ordinary path once fission is bounded and aging no longer moves bodies. If it occurs, the state is already corrupt: the reconciler produces an explicit terminal outcome and does NOT claim to know which physical mechanism removed the people. No solution is invented.",
+          "population below the away headcount is not reachable through any ordinary path once fission is bounded and aging no longer moves bodies. If it occurs, the state is already corrupt: the reconciler retires the record under a reason that says so, and does NOT claim to know which physical mechanism removed the people. No solution is invented.",
+        whatChangedFrom34C:
+          "34C partially shrank the party to 3 workers with a null outcome reason and left it `operating`. That is a silent deletion presented as an ongoing journey, which §9 forbids.",
       });
   }
 
@@ -215,7 +224,8 @@ try {
       JSON.stringify(snap(a)) === JSON.stringify(snap(b)) && snap(a).represented === snap(a).population
         ? "DETERMINISTIC_DEFENSIVE_REPAIR_NO_INVENTED_HISTORY" : "UNEXPECTED",
       { after: snap(a), deterministicAcrossRepeatedCalls: JSON.stringify(snap(a)) === JSON.stringify(snap(b)),
-        note: "handled defensively and identically every time; the outcome names no historical mechanism because none can be known" });
+        outcomeReason: (a.expeditions[0] ?? {}).outcomeReason ?? null,
+        note: "handled defensively and identically every time, and the outcome NAMES ITSELF a repair (`invalid_state_repaired`) rather than leaving a null reason on a party that is still walking" });
   }
 
   // ── L12 step-mode equivalence across an annual boundary ─────────────────────────────────────
@@ -245,7 +255,9 @@ try {
       { spanDays: SPAN, annualBoundariesCrossed: Math.floor(SPAN / 360),
         expeditionRecordsPresentAcrossModes: partiesSeen,
         matches: Object.fromEntries(Object.keys(MODE_DAYS).map((m) => [m, results[m] === results.daily])),
-        note: "not marked PASS merely because no expedition was active — the expedition-record count is reported" });
+        note: "not marked PASS merely because no expedition was active — the expedition-record count is reported",
+        supersededBy:
+          "CORRECTION-34D H12. This fixture steps a natural world 1260 days and counts expedition records at the end; a natural party lives at most 24 days against ANNUAL demography, so any record found here was launched long after the last boundary. It establishes step-mode determinism, which is real, but NOT that an ACTIVE party is represented identically across a demographic boundary." });
   }
 
   const verdicts = Object.fromEntries(Object.entries(fixtures).map(([k, v]) => [k, v.verdict]));

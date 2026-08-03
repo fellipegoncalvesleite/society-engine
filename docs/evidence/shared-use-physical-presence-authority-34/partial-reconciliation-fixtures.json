@@ -12,7 +12,7 @@
     "R1_valid_no_op": "BYTE_IDENTICAL_SAME_OBJECT",
     "R2_partial_reduction_six_to_five": "ALL_AUTHORITIES_AGREE",
     "R3_larger_partial_eight_to_four": "CARGO_RECONCILED_AT_SCALE",
-    "R4_reduction_below_minimum": "AWAY_PARTY_TERMINAL_NO_BODY",
+    "R4_reduction_below_minimum": "AWAY_PARTY_TURNS_FOR_HOME_KEEPING_EVERY_BODY",
     "R5_two_concurrent_parties": "NEWEST_REDUCED_FIRST_DETERMINISTIC",
     "R6_prepared_party_cancelled_not_lost": "CANCELLED_AT_CAMP_NOT_DECLARED_LOST",
     "R7_outbound_party": "PHASE_AND_ROUTE_PRESERVED",
@@ -50,6 +50,9 @@
       "checks": {
         "workersOk": true,
         "committedOk": true,
+        "laborWithinCohort": true,
+        "bodiesWithinPopulation": true,
+        "workersWithinBodies": true,
         "withinWorkforce": true,
         "presenceOk": true,
         "capacityOk": true,
@@ -60,6 +63,8 @@
     "R3_larger_partial_eight_to_four": {
       "verdict": "CARGO_RECONCILED_AT_SCALE",
       "partyWorkers": 4,
+      "nonWorkingPartyPeople": 4,
+      "physicalPartyPeople": 8,
       "compositionTotal": 4,
       "composition": {
         "limited": 2,
@@ -76,6 +81,9 @@
       "checks": {
         "workersOk": true,
         "committedOk": true,
+        "laborWithinCohort": true,
+        "bodiesWithinPopulation": true,
+        "workersWithinBodies": true,
         "withinWorkforce": true,
         "presenceOk": true,
         "capacityOk": true,
@@ -84,15 +92,17 @@
       }
     },
     "R4_reduction_below_minimum": {
-      "verdict": "AWAY_PARTY_TERMINAL_NO_BODY",
-      "phase": "lost",
-      "outcomeReason": "party_lost",
-      "partyWorkers": 0,
-      "compositionTotal": 0,
-      "awaySources": 0,
-      "represented": 1,
-      "population": 1,
-      "note": "an away party below the minimum is lost — the existing terminal transition; no cargo or information reaches camp"
+      "verdict": "AWAY_PARTY_TURNS_FOR_HOME_KEEPING_EVERY_BODY",
+      "phase": "returning",
+      "outcomeReason": "party_labor_unsupported",
+      "partyWorkers": 1,
+      "nonWorkingPartyPeople": 5,
+      "physicalPartyPeople": 6,
+      "compositionTotal": 1,
+      "awaySources": 1,
+      "represented": 7,
+      "population": 7,
+      "correctedSemantics": "CORRECTION-34C declared this case `lost`. That invented a death out of an accounting change: the working-adult cohort fell at HOME, and six people three days' walk away did not stop existing because of it. The party can no longer do the work it left for, so it turns for home with every body — which is also why the old assertion `partyWorkers === 0 && away.length === 0` is not merely rephrased here but reversed."
     },
     "R5_two_concurrent_parties": {
       "verdict": "NEWEST_REDUCED_FIRST_DETERMINISTIC",
@@ -112,6 +122,9 @@
       "checks": {
         "workersOk": true,
         "committedOk": true,
+        "laborWithinCohort": true,
+        "bodiesWithinPopulation": true,
+        "workersWithinBodies": true,
         "withinWorkforce": true,
         "presenceOk": true,
         "capacityOk": true,
@@ -125,8 +138,8 @@
       "outcomeReason": "commitment_unsupported",
       "partyWorkers": 0,
       "awaySources": 0,
-      "represented": 1,
-      "population": 1,
+      "represented": 7,
+      "population": 7,
       "note": "prepared = labour committed AT CAMP, not yet departed; these people never left, so party_lost would invent a death. They are already inside the residential remainder."
     },
     "R7_outbound_party": {
@@ -144,6 +157,9 @@
       "checks": {
         "workersOk": true,
         "committedOk": true,
+        "laborWithinCohort": true,
+        "bodiesWithinPopulation": true,
+        "workersWithinBodies": true,
         "withinWorkforce": true,
         "presenceOk": true,
         "capacityOk": true,
@@ -176,11 +192,13 @@
       "verdict": "PARTY_DOES_NOT_REGROW",
       "workersAfterReduction": 5,
       "workersAfterRecovery": 5,
+      "nonWorkingAfterRecovery": 1,
       "compositionAfterRecovery": {
         "limited": 1,
         "typical": 4,
         "high": 0
       },
+      "reclassificationIsOneWayToo": "the non-working member does not become a worker again because the residence gained adults elsewhere — an elder does not become an adult, and the model would be claiming to know which body recovered",
       "note": "reconciliation is one-way; people do not walk back to a distant party because the cohort recovered at home"
     },
     "R11_terminal_records_ignored": {
@@ -188,12 +206,14 @@
       "committedWorkers": 0,
       "committedPools": 0,
       "reconciliationWasNoOp": true,
-      "represented": 2,
-      "population": 2
+      "represented": 14,
+      "population": 14
     },
     "R12_legacy_party_without_composition": {
       "verdict": "LEGACY_FALLBACK_DETERMINISTIC_AND_CONSISTENT",
       "partyWorkers": 5,
+      "nonWorkingPartyPeople": 1,
+      "physicalPartyPeople": 6,
       "compositionPresent": false,
       "committedWorkers": 5,
       "committedPools": 5,

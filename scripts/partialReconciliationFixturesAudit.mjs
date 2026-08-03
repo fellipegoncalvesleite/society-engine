@@ -47,17 +47,26 @@ try {
     cargo: { harvestUnits: 0, carryCapacityUnits: cap(6), provisionUnitsConsumed: 0, lostUnits: 0 },
     ...over,
   });
-  // CORRECTION-34C — these fixtures exercise PARTIAL REDUCTION, whose trigger is now POPULATION
-  // (physical bodies), not the working-adult cohort. The first argument is therefore the body
-  // count the band actually has. A cohort reclassification no longer resizes a party at all, which
-  // is what fixtures L1-L12 prove; these fixtures keep proving that WHEN a reduction does happen,
-  // every derived quantity moves with it.
-  const band = (bodies, expeditions, population) => ({
+  // CORRECTION-34D — RE-POINTED AT THE LABOUR TRIGGER, AND THE POPULATION IS NO LONGER THE COHORT.
+  //
+  // CORRECTION-34C pointed these fixtures at a POPULATION trigger and, because one number answered
+  // both questions, set `population === workingAdults`. With bodies and labour separated that
+  // construction now describes a band whose party holds MORE PEOPLE THAN THE BAND HAS, which is
+  // the corrupt-state case R4/H11 cover — not partial reduction. Every fixture here was measuring
+  // the defensive path by accident.
+  //
+  // Partial reduction is now a LABOUR event: the working-adult cohort falls below what is
+  // committed while every body stays where it is. So the first argument is the WORKING-ADULT
+  // COHORT, and the population defaults to the party's bodies plus those adults at home — a band
+  // that physically has its people, with a workforce too small to keep them all working.
+  const partyBodies = (expeditions) => (expeditions ?? [])
+    .reduce((n, e) => n + e.partyWorkers + (e.nonWorkingPartyPeople ?? 0), 0);
+  const band = (workingAdults, expeditions, population) => ({
     ...base,
     demography: {
       ...base.demography,
-      population: population ?? bodies,
-      workingAdults: bodies,
+      population: population ?? (workingAdults + partyBodies(expeditions)),
+      workingAdults,
       elders: 0,
       dependents: 0,
     },
@@ -77,13 +86,22 @@ try {
       e.phase === "prepared" || e.phase === "outbound" || e.phase === "operating" || e.phase === "returning");
     const workersOk = active.every((e) => e.partyComposition === undefined || e.partyWorkers === compTotal(e));
     const committedOk = expedition.getCommittedExpeditionWorkers(b) === committedPools(b);
-    const withinWorkforce = expedition.getCommittedExpeditionWorkers(b) <= b.demography.population;
+    // CORRECTION-34D — the ONE conflated bound becomes TWO, each on its own quantity. This is
+    // strictly stronger than what it replaces: the old check could be satisfied by a party whose
+    // labour exceeded the whole cohort.
+    const laborWithinCohort = expedition.getCommittedExpeditionWorkers(b) <= b.demography.workingAdults;
+    const bodiesWithinPopulation = expedition.getCommittedExpeditionPeople(b) <= b.demography.population;
+    const withinWorkforce = laborWithinCohort && bodiesWithinPopulation;
+    const workersWithinBodies = active.every((e) =>
+      e.partyWorkers >= 0 && e.partyWorkers <= e.partyWorkers + (e.nonWorkingPartyPeople ?? 0));
     const presenceOk = total(b) === b.demography.population;
     const capacityOk = active.every((e) =>
       e.cargo.carryCapacityUnits <= expedition.deriveCarryCapacityUnits(b, e.partyWorkers, e.injuryLoad ?? 0, tick) + 1e-9);
     const cargoWithinCap = active.every((e) => e.cargo.harvestUnits <= e.cargo.carryCapacityUnits + 1e-9);
-    return { workersOk, committedOk, withinWorkforce, presenceOk, capacityOk, cargoWithinCap,
-      all: workersOk && committedOk && withinWorkforce && presenceOk && capacityOk && cargoWithinCap };
+    return { workersOk, committedOk, laborWithinCohort, bodiesWithinPopulation, workersWithinBodies,
+      withinWorkforce, presenceOk, capacityOk, cargoWithinCap,
+      all: workersOk && committedOk && withinWorkforce && workersWithinBodies && presenceOk &&
+        capacityOk && cargoWithinCap };
   };
 
   // ---------------------------------------------------------------- R1 valid no-op
@@ -122,8 +140,13 @@ try {
     const r = rec(b);
     const e = r.expeditions[0];
     const c = consistent(r);
-    add("R3_larger_partial_eight_to_four", c.all && e.partyWorkers === 4 ? "CARGO_RECONCILED_AT_SCALE" : "UNEXPECTED",
-      { partyWorkers: e.partyWorkers, compositionTotal: compTotal(e), composition: e.partyComposition,
+    add("R3_larger_partial_eight_to_four",
+      c.all && e.partyWorkers === 4 && (e.nonWorkingPartyPeople ?? 0) === 4 &&
+      e.partyWorkers + (e.nonWorkingPartyPeople ?? 0) === 8
+        ? "CARGO_RECONCILED_AT_SCALE" : "UNEXPECTED",
+      { partyWorkers: e.partyWorkers, nonWorkingPartyPeople: e.nonWorkingPartyPeople ?? 0,
+        physicalPartyPeople: e.partyWorkers + (e.nonWorkingPartyPeople ?? 0),
+        compositionTotal: compTotal(e), composition: e.partyComposition,
         capacityBefore: cap(8), capacityAfter: e.cargo.carryCapacityUnits, capacityForFour: cap(4),
         harvestBefore: carried, harvestAfter: e.cargo.harvestUnits, abandoned: e.cargo.lostUnits,
         cargoConserved: Math.abs(carried - (e.cargo.harvestUnits + e.cargo.lostUnits)) < 1e-9,
@@ -136,10 +159,16 @@ try {
     const r = rec(b);
     const e = r.expeditions[0];
     const away = crowding.getBandPhysicalPresence(r).filter((s) => s.kind === "away_party");
-    add("R4_reduction_below_minimum", e.phase === "lost" && e.partyWorkers === 0 && away.length === 0 ? "AWAY_PARTY_TERMINAL_NO_BODY" : "UNEXPECTED",
+    const bodies = e.partyWorkers + (e.nonWorkingPartyPeople ?? 0);
+    add("R4_reduction_below_minimum",
+      e.phase === "returning" && e.outcomeReason === "party_labor_unsupported" &&
+      bodies === 6 && away.length === 1 && away[0].people === 6 && total(r) === r.demography.population
+        ? "AWAY_PARTY_TURNS_FOR_HOME_KEEPING_EVERY_BODY" : "UNEXPECTED",
       { phase: e.phase, outcomeReason: e.outcomeReason, partyWorkers: e.partyWorkers,
+        nonWorkingPartyPeople: e.nonWorkingPartyPeople ?? 0, physicalPartyPeople: bodies,
         compositionTotal: compTotal(e), awaySources: away.length, represented: total(r), population: r.demography.population,
-        note: "an away party below the minimum is lost — the existing terminal transition; no cargo or information reaches camp" });
+        correctedSemantics:
+          "CORRECTION-34C declared this case `lost`. That invented a death out of an accounting change: the working-adult cohort fell at HOME, and six people three days' walk away did not stop existing because of it. The party can no longer do the work it left for, so it turns for home with every body — which is also why the old assertion `partyWorkers === 0 && away.length === 0` is not merely rephrased here but reversed." });
   }
 
   // ---------------------------------------------------------------- R5 two concurrent parties
@@ -226,9 +255,13 @@ try {
     const recovered = rec({ ...reduced, demography: { ...reduced.demography, workingAdults: 15 } });
     const e = recovered.expeditions[0];
     add("R10_workforce_recovery_no_regrow",
-      e.partyWorkers === 5 && compTotal(e) === 5 ? "PARTY_DOES_NOT_REGROW" : "UNEXPECTED",
+      e.partyWorkers === 5 && compTotal(e) === 5 && (e.nonWorkingPartyPeople ?? 0) === 1
+        ? "PARTY_DOES_NOT_REGROW" : "UNEXPECTED",
       { workersAfterReduction: reduced.expeditions[0].partyWorkers, workersAfterRecovery: e.partyWorkers,
+        nonWorkingAfterRecovery: e.nonWorkingPartyPeople ?? 0,
         compositionAfterRecovery: e.partyComposition,
+        reclassificationIsOneWayToo:
+          "the non-working member does not become a worker again because the residence gained adults elsewhere — an elder does not become an adult, and the model would be claiming to know which body recovered",
         note: "reconciliation is one-way; people do not walk back to a distant party because the cohort recovered at home" });
   }
 
@@ -255,9 +288,12 @@ try {
     const e = r.expeditions[0];
     add("R12_legacy_party_without_composition",
       e.partyWorkers === 5 && e.partyComposition === undefined &&
+      (e.nonWorkingPartyPeople ?? 0) === 1 && e.partyWorkers + (e.nonWorkingPartyPeople ?? 0) === 6 &&
       expedition.getCommittedExpeditionWorkers(r) === committedPools(r)
         ? "LEGACY_FALLBACK_DETERMINISTIC_AND_CONSISTENT" : "UNEXPECTED",
-      { partyWorkers: e.partyWorkers, compositionPresent: e.partyComposition !== undefined,
+      { partyWorkers: e.partyWorkers, nonWorkingPartyPeople: e.nonWorkingPartyPeople ?? 0,
+        physicalPartyPeople: e.partyWorkers + (e.nonWorkingPartyPeople ?? 0),
+        compositionPresent: e.partyComposition !== undefined,
         committedWorkers: expedition.getCommittedExpeditionWorkers(r), committedPools: committedPools(r),
         note: "deriveCommittedMobilityPools treats a composition-less party as typical walkers, so the two totals still agree" });
   }

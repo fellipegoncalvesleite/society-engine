@@ -4,15 +4,14 @@
   "arm": "after",
   "scenario": "map2",
   "seed": "audit27:natural:map2:s1",
-  "years": 6,
+  "years": 20,
   "samplingResolution": "DAILY",
   "authorityPresentOnThisArm": true,
-  "generatedAt": "2026-08-02T21:21:53.269Z",
+  "generatedAt": "2026-08-03T01:12:33.327Z",
   "summary": {
     "fixtures": 10,
     "vacuous": [
-      "P8_P18_terminal_records_occupy_nothing",
-      "P9_concurrent_parties"
+      "P8_P18_terminal_records_occupy_nothing"
     ],
     "deferred": [
       "P15_P16_P17_same_day_parties_deferred"
@@ -24,7 +23,7 @@
       "P2_P3_P5_away_party_presence": "AWAY_BODIES_AT_THEIR_OWN_POSITION",
       "P4_temporary_task_camp": "TASK_CAMP_PRESENCE_TIED_TO_EXPEDITION",
       "P8_P18_terminal_records_occupy_nothing": "VACUOUS_NO_TERMINAL_RECORDS_OBSERVED",
-      "P9_concurrent_parties": "VACUOUS_NO_CONCURRENT_PARTIES_OBSERVED",
+      "P9_concurrent_parties": "CONCURRENT_PARTIES_CONSERVED",
       "P12_own_party_is_not_a_foreign_band": "OWN_PARTY_NEVER_FOREIGN",
       "P10_P14_party_scale": "PARTY_SCALE_FOLLOWS_PARTY_SIZE",
       "P15_P16_P17_same_day_parties_deferred": "DEFERRED_SAME_DAY_PRESENCE_NOT_IMPLEMENTED",
@@ -35,7 +34,7 @@
     {
       "id": "P22_person_conservation",
       "intent": "for every band on every observed day, residential remainder + away-party people must equal the represented population",
-      "bandDaysChecked": 2160,
+      "bandDaysChecked": 7200,
       "failures": 0,
       "failureDetail": [],
       "verdict": "PEOPLE_CONSERVED"
@@ -43,30 +42,30 @@
     {
       "id": "P1_no_away_party_control",
       "intent": "with nobody away, the presence set is exactly the residence holding the whole population",
-      "maxSourcesPerBand": 2,
+      "maxSourcesPerBand": 3,
       "note": "a band with no away party yields exactly one source, kind=residential_remainder",
       "verdict": "RESIDENCE_ONLY_WHEN_NOBODY_IS_AWAY"
     },
     {
       "id": "P2_P3_P5_away_party_presence",
       "intent": "a physically away party must exist as bodies at its OWN position, not at home",
-      "partyDays": 202,
-      "partyDaysBeyondCrowdingRadius": 123,
-      "shareBeyondRadius": 0.6089,
-      "awayWorkerDaysRepresentedAtTheirOwnPosition": 505,
+      "partyDays": 854,
+      "partyDaysBeyondCrowdingRadius": 502,
+      "shareBeyondRadius": 0.5878,
+      "awayWorkerDaysRepresentedAtTheirOwnPosition": 2059,
       "awayWorkerDaysRepresentedNowhere": 0,
       "ghostWorkerDaysStillFullyWeightedAtHome": 0,
       "phaseDays": {
-        "outbound": 97,
-        "returning": 89,
-        "operating": 16
+        "outbound": 389,
+        "returning": 371,
+        "operating": 94
       },
       "verdict": "AWAY_BODIES_AT_THEIR_OWN_POSITION"
     },
     {
       "id": "P4_temporary_task_camp",
       "intent": "a task camp keeps its party's presence tied to the expedition and creates no residence",
-      "taskCampDays": 27,
+      "taskCampDays": 211,
       "note": "task camps are observable only at DAILY resolution; a seasonal sample measured 0",
       "verdict": "TASK_CAMP_PRESENCE_TIED_TO_EXPEDITION"
     },
@@ -80,22 +79,22 @@
     {
       "id": "P9_concurrent_parties",
       "intent": "two concurrent parties from one band each get bounded presence and are each subtracted exactly once",
-      "bandDaysWithTwoOrMoreAwayParties": 0,
-      "maxPresenceSourcesPerBand": 2,
+      "bandDaysWithTwoOrMoreAwayParties": 1,
+      "maxPresenceSourcesPerBand": 3,
       "personConservationFailures": 0,
-      "verdict": "VACUOUS_NO_CONCURRENT_PARTIES_OBSERVED"
+      "verdict": "CONCURRENT_PARTIES_CONSERVED"
     },
     {
       "id": "P12_own_party_is_not_a_foreign_band",
       "intent": "a band must not read its own away party as foreign crowding",
-      "partyTileSelfReads": 202,
+      "partyTileSelfReads": 854,
       "ownPartyCountedAsForeign": 0,
       "verdict": "OWN_PARTY_NEVER_FOREIGN"
     },
     {
       "id": "P10_P14_party_scale",
       "intent": "a small party contributes according to party size, never the parent band's whole population",
-      "sampledPartyDays": 202,
+      "sampledPartyDays": 400,
       "weightedCrowdingAtPartyTiles": [
         {
           "workers": 2,
@@ -186,8 +185,8 @@
     {
       "id": "P25_boundedness",
       "intent": "presence entries, sources per band and contributors per tile stay bounded",
-      "maxPresenceSourcesPerBand": 2,
-      "maxContributorsPerTile": 1,
+      "maxPresenceSourcesPerBand": 3,
+      "maxContributorsPerTile": 2,
       "note": "sources per band = 1 residence + at most the active-expedition cap",
       "verdict": "BOUNDED"
     }
