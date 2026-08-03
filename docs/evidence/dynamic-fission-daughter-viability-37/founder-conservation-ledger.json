@@ -1,0 +1,274 @@
+{
+  "audit": "ITEM-4-FOUNDER-COHORT-ALLOCATION-FIXTURES",
+  "defectClosed": "L1 — cohorts were re-derived from fixed ratios on both sides; they are now allocated from the parent's actual composition",
+  "summary": {
+    "total": 7,
+    "passing": 7,
+    "failing": 0,
+    "failingIds": [],
+    "vacuous": 0,
+    "vacuousIds": [],
+    "notConstructed": 0,
+    "notConstructedIds": [],
+    "deferred": 0,
+    "unsupported": 0
+  },
+  "verdicts": {
+    "A1_real_fission_seed_s1": "EVERY_COHORT_LINE_BALANCES_ON_THE_REAL_PARENT_COMPOSITION",
+    "A2_real_fission_seed_map2_s1": "EVERY_COHORT_LINE_BALANCES_ON_THE_REAL_PARENT_COMPOSITION",
+    "A3_aged_parent_is_not_laundered_healthy": "THE_SUCCESSOR_LOOKS_LIKE_THE_BAND_IT_CAME_FROM",
+    "A4_exhaustive_conservation_sweep": "EVERY_ACCEPTED_ALLOCATION_BALANCES",
+    "A5_refuses_rather_than_repairing_silently": "EVERY_INFEASIBLE_CASE_IS_REFUSED_BY_ITS_OWN_NAME",
+    "A7_successor_labour_refusal_is_a_measured_zero": "STRUCTURALLY_UNREACHABLE_UNDER_THE_CURRENT_DRAW_ORDER_AND_MEASURED_AS_SUCH",
+    "A6_deterministic": "IDENTICAL_ON_REPEAT_AND_ON_A_FRESH_OBJECT"
+  },
+  "scopeNote": "this suite proves the ALLOCATION AUTHORITY only. It does not prove that production calls it — that is the departure seam, and it is not yet wired. No production behaviour has changed.",
+  "fixtures": {
+    "A1_real_fission_seed_s1": {
+      "verdict": "EVERY_COHORT_LINE_BALANCES_ON_THE_REAL_PARENT_COMPOSITION",
+      "vacuous": false,
+      "seed": "audit27:natural:s1",
+      "parentBefore": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 7
+      },
+      "requestedFounders": 18,
+      "successor": {
+        "workingAdults": 11,
+        "dependents": 5,
+        "elders": 2
+      },
+      "parentRemainder": {
+        "workingAdults": 18,
+        "dependents": 9,
+        "elders": 5
+      },
+      "allocatedFounders": 18,
+      "exact": true,
+      "productionPredicateSaysConserving": true,
+      "whatTheOldCodeDid": {
+        "successor": {
+          "workingAdults": 10,
+          "dependents": 6,
+          "elders": 2
+        },
+        "parentAfter": {
+          "workingAdults": 18,
+          "dependents": 12,
+          "elders": 3
+        },
+        "dependentsManufactured": 4,
+        "workingAdultsDestroyed": 1,
+        "eldersDestroyed": 2
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "this exact parent composition and request previously MANUFACTURED dependents, so a balanced result here is a repair rather than an empty check",
+        "dependentsPreviouslyManufactured": 4
+      }
+    },
+    "A2_real_fission_seed_map2_s1": {
+      "verdict": "EVERY_COHORT_LINE_BALANCES_ON_THE_REAL_PARENT_COMPOSITION",
+      "vacuous": false,
+      "seed": "audit27:natural:map2:s1",
+      "parentBefore": {
+        "workingAdults": 29,
+        "dependents": 14,
+        "elders": 6
+      },
+      "requestedFounders": 18,
+      "successor": {
+        "workingAdults": 11,
+        "dependents": 5,
+        "elders": 2
+      },
+      "parentRemainder": {
+        "workingAdults": 18,
+        "dependents": 9,
+        "elders": 4
+      },
+      "allocatedFounders": 18,
+      "exact": true,
+      "productionPredicateSaysConserving": true,
+      "whatTheOldCodeDid": {
+        "successor": {
+          "workingAdults": 10,
+          "dependents": 6,
+          "elders": 2
+        },
+        "parentAfter": {
+          "workingAdults": 17,
+          "dependents": 11,
+          "elders": 3
+        },
+        "dependentsManufactured": 3,
+        "workingAdultsDestroyed": 2,
+        "eldersDestroyed": 1
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "this exact parent composition and request previously MANUFACTURED dependents, so a balanced result here is a repair rather than an empty check",
+        "dependentsPreviouslyManufactured": 3
+      }
+    },
+    "A3_aged_parent_is_not_laundered_healthy": {
+      "verdict": "THE_SUCCESSOR_LOOKS_LIKE_THE_BAND_IT_CAME_FROM",
+      "vacuous": false,
+      "parentBefore": {
+        "workingAdults": 6,
+        "dependents": 8,
+        "elders": 16
+      },
+      "requestedFounders": 10,
+      "successor": {
+        "workingAdults": 3,
+        "dependents": 2,
+        "elders": 5
+      },
+      "parentRemainder": {
+        "workingAdults": 3,
+        "dependents": 6,
+        "elders": 11
+      },
+      "oldFixedRatioWouldHaveGiven": {
+        "dependents": 4,
+        "elders": 1
+      },
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the parent is genuinely elder-heavy and the allocation genuinely carries that forward, so this is not a comparison of similar structures",
+        "successorElders": 5,
+        "fixedRatioElders": 1
+      }
+    },
+    "A4_exhaustive_conservation_sweep": {
+      "verdict": "EVERY_ACCEPTED_ALLOCATION_BALANCES",
+      "vacuous": false,
+      "allocationsChecked": 5036,
+      "conserving": 5036,
+      "failures": [],
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "a large space of real compositions and requests was accepted and checked",
+        "checked": 5036
+      }
+    },
+    "A5_refuses_rather_than_repairing_silently": {
+      "verdict": "EVERY_INFEASIBLE_CASE_IS_REFUSED_BY_ITS_OWN_NAME",
+      "vacuous": false,
+      "rows": [
+        {
+          "name": "parent_left_without_labour",
+          "parent": {
+            "workingAdults": 1,
+            "dependents": 9,
+            "elders": 9
+          },
+          "req": 18,
+          "expect": "parent_would_have_no_productive_labour",
+          "refused": true,
+          "refusal": "parent_would_have_no_productive_labour",
+          "matched": true
+        },
+        {
+          "name": "single_worker_band_leaves_parent_without_labour",
+          "parent": {
+            "workingAdults": 1,
+            "dependents": 30,
+            "elders": 0
+          },
+          "req": 3,
+          "expect": "parent_would_have_no_productive_labour",
+          "refused": true,
+          "refusal": "parent_would_have_no_productive_labour",
+          "matched": true
+        },
+        {
+          "name": "request_equals_population",
+          "parent": {
+            "workingAdults": 5,
+            "dependents": 5,
+            "elders": 5
+          },
+          "req": 15,
+          "expect": "request_out_of_range",
+          "refused": true,
+          "refusal": "request_out_of_range",
+          "matched": true
+        },
+        {
+          "name": "request_zero",
+          "parent": {
+            "workingAdults": 5,
+            "dependents": 5,
+            "elders": 5
+          },
+          "req": 0,
+          "expect": "request_out_of_range",
+          "refused": true,
+          "refusal": "request_out_of_range",
+          "matched": true
+        },
+        {
+          "name": "fractional_request",
+          "parent": {
+            "workingAdults": 5,
+            "dependents": 5,
+            "elders": 5
+          },
+          "req": 2.5,
+          "expect": "request_out_of_range",
+          "refused": true,
+          "refusal": "request_out_of_range",
+          "matched": true
+        },
+        {
+          "name": "negative_cohort",
+          "parent": {
+            "workingAdults": -1,
+            "dependents": 5,
+            "elders": 5
+          },
+          "req": 3,
+          "expect": "parent_cohorts_inconsistent",
+          "refused": true,
+          "refusal": "parent_cohorts_inconsistent",
+          "matched": true
+        }
+      ],
+      "note": "a refusal returns NO allocation. A caller that wanted a departure must revise its request explicitly and record why; it may not quietly take a different group than the one it asked for.",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "six distinct infeasible shapes were each genuinely refused"
+      }
+    },
+    "A7_successor_labour_refusal_is_a_measured_zero": {
+      "verdict": "STRUCTURALLY_UNREACHABLE_UNDER_THE_CURRENT_DRAW_ORDER_AND_MEASURED_AS_SUCH",
+      "vacuous": false,
+      "allocationsSwept": 420876,
+      "accepted": 341314,
+      "refusalHits": {
+        "parent_would_have_no_productive_labour": 79562,
+        "successor_would_have_no_productive_labour": 0
+      },
+      "finding": "the remainder is drawn working-adults-first, so whenever the parent holds a working adult and the proportional floor rounds the successor's share to zero, the remainder immediately restores one. The successor is protected BY CONSTRUCTION, not by the check.",
+      "whyTheCheckIsKept": "the guarantee is a property of the current draw order, not of the type. A future allocation convention that changed that order would need this check on its first day.",
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the sweep genuinely accepted many allocations AND genuinely fired the other refusal, so the zero is specific rather than an inert instrument",
+        "accepted": 341314,
+        "parentRefusals": 79562
+      }
+    },
+    "A6_deterministic": {
+      "verdict": "IDENTICAL_ON_REPEAT_AND_ON_A_FRESH_OBJECT",
+      "vacuous": false,
+      "identical": true,
+      "nonVacuousPredicate": true,
+      "nonVacuous": {
+        "predicate": "the repeated call genuinely produced an allocation rather than a refusal"
+      }
+    }
+  }
+}
