@@ -181,7 +181,66 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### ROADMAP ITEM 3 FINAL FREEZE AUDIT — **FINAL FREEZE CANDIDATE / AWAITING BROWSER GPT ACCEPTANCE / DO NOT MERGE**
+### ROADMAP ITEM 4 — DYNAMIC FISSION / DAUGHTER VIABILITY / SUCCESSOR GROUPS — **PROGRESS: AUDIT AND ARCHITECTURE COMPLETE, IMPLEMENTATION NOT STARTED / DO NOT MERGE**
+
+```text
+Roadmap Item 3:
+accepted and frozen
+
+Roadmap Item 4:
+candidate implementation — awaiting Browser GPT audit
+
+Roadmap Item 5:
+not started
+```
+
+**Branch** `checkpoint/dynamic-fission-daughter-viability-37`, from the Item 3 final freeze audit
+head `ef76971`. `main` untouched at `0a43083a`. **AUDIT ONLY — `git diff ef76971..HEAD -- src/` is
+empty.**
+
+**What fission does today**, measured over 200 simulated years on two seeds, two natural fissions:
+
+> **CURRENT FISSION CREATES A PERMANENT DAUGHTER SEVEN TILES AWAY IN A SINGLE DAY, WITH NO JOURNEY,
+> NO ESTABLISHMENT AND NO POSSIBILITY OF FAILURE — AND THE SPLIT MANUFACTURES DEPENDENTS WHILE
+> DESTROYING WORKING ADULTS AND ELDERS ON BOTH SIDES.**
+
+Six defects: instantaneous; **the daughter teleports** (5 and 7 tiles, 0 co-resident); **cohorts are
+re-derived rather than allocated** — conserved in **0 of 2** on all three counts, dependents **+4
+and +3** while working adults and elders are destroyed, every daughter carrying the identical
+`0.3333` / `0.1111` structure; viability is one inequality; failure is impossible; and the event's
+`fissionPopulationConserved` is **assigned**, reporting `true` while one fission created a person
+(world 197 → 198).
+
+**What is already correct and must be preserved:** founder availability excludes away and prepared
+people and blocks rather than borrowing; destination selection reads only band-known tiles;
+knowledge inheritance is partial (13.4% and 14.8%, 0 clones, clone guard); support and commitments
+are reset at birth.
+
+**Direction D selected, not implemented:** a reversible attempt holding no bodies, resolving at one
+departure event into a provisional successor that must travel, establish, and then stabilize or
+return. Direction C — the smallest diff — was rejected because it cannot fix the teleport, the
+instantaneity or the impossibility of failure.
+
+**The implementation is deliberately not started.** Direction D is one coherent change and this
+repository requires 26 fixtures, three natural horizons on multiple seeds, four-way and
+fresh-process determinism over a span containing a real attempt, and the full Item 3 regression
+before a change of that size is credible. Half of it would be the half-state §18 forbids.
+
+**Natural frequency is feasible: 2 fissions in 400 simulated band-years**, so the implementation
+will have a natural arm without injection.
+
+**One instrument error recorded:** the provisional-state probe first matched pre-existing unrelated
+keys and would have claimed the very state whose absence is the central finding. Corrected and
+re-run.
+
+**Realism scores the CURRENT system: 14 ✅, 6 🟨, 3 ⬜, 11 ❌ — the eleven ❌ are the case for
+Item 4.** Accepted evidence verified identical over 635 files; every Item 3 branch unmodified.
+
+Evidence: `docs/evidence/dynamic-fission-daughter-viability-37/`.
+
+---
+
+### ROADMAP ITEM 3 FINAL FREEZE AUDIT — **ACCEPTED AND FROZEN**
 
 ```text
 Roadmap Item 3:
@@ -8752,9 +8811,20 @@ UI in `src/ui/BandPanel.tsx`, audit + `--targeted-cause-event-check` in
 
 ## Recommended Next Step
 
-**CURRENT (ITEM 3 FINAL FREEZE AUDIT, 2026-08-03).** Awaiting Browser GPT acceptance of the pushed
-`checkpoint/shared-range-item-3-final-freeze-36`. **Roadmap Item 3 is a FINAL FREEZE CANDIDATE and
-is NOT frozen; Roadmap Item 4 is NOT started.**
+**CURRENT (ROADMAP ITEM 4, 2026-08-03).** Awaiting Browser GPT audit of the pushed
+`checkpoint/dynamic-fission-daughter-viability-37`. **Roadmap Item 3 is ACCEPTED AND FROZEN.
+Roadmap Item 4 is ACTIVE — its audit and architecture are complete and its implementation is NOT
+started. Roadmap Item 5 is NOT started.**
+
+The decision in front of the supervisor is whether to authorise the Direction D implementation as
+its own checkpoint, from this measured baseline, or to redirect the architecture before any code is
+written.
+
+**The six Item 3 seams below remain OPEN and are closed by nothing in Item 4.**
+
+---
+
+**SUPERSEDED (ITEM 3 FINAL FREEZE AUDIT, 2026-08-03).** Accepted and frozen.
 
 The audit is complete and audit-only. Both blockers are certified closed, the six seams below are
 carried forward verbatim, and the decision in front of the supervisor is a single one: **may Item 3
@@ -11051,3 +11121,24 @@ exception; daughter colours related-but-distinct and never visually confusing.
   reported VACUOUS before it reported a pass. **The six carried-forward seams are copied verbatim
   and classified; freezing Item 3 closes none of them. Item 4 not started.** Evidence:
   `docs/evidence/shared-range-item-3-final-freeze-36/`.
+
+- **ROADMAP ITEM 4 — DYNAMIC FISSION / DAUGHTER VIABILITY / SUCCESSOR GROUPS — AUDIT AND
+  ARCHITECTURE** (2026-08-03, branch `checkpoint/dynamic-fission-daughter-viability-37` from the
+  Item 3 final freeze audit head `ef76971`). **PROGRESS — audit and architecture complete,
+  implementation NOT started. AUDIT ONLY; `git diff -- src/` is empty.** Measured current fission
+  over 200 simulated years on two seeds and found two natural fissions exhibiting six defects: the
+  daughter appears complete in one day; it **teleports 5 and 7 tiles** with no journey; **cohorts
+  are re-derived rather than allocated**, conserved in **0 of 2** on all three counts, so the split
+  **manufactures dependents** (+4, +3) while destroying working adults and elders; viability is one
+  inequality; failure is impossible; and the event's conservation flag is assigned rather than
+  measured, reporting `true` while one fission created a person. Founder availability, band-known
+  destination selection and partial knowledge inheritance are already correct and are named for
+  preservation. Research constraints published with every claim classified and seven encodings
+  explicitly forbidden. Four architectures compared; **Direction D selected** — a reversible attempt
+  holding no bodies, resolving at one departure into a provisional successor that travels,
+  establishes, and stabilizes or returns — with Direction C rejected for being unable to fix the
+  teleport, the instantaneity or the impossibility of failure. Implementation deliberately deferred
+  rather than half-shipped. One instrument error recorded. Realism scores the current system
+  14 ✅ / 6 🟨 / 3 ⬜ / 11 ❌. Accepted evidence identical over 635 files; Item 3 frozen and
+  untouched; **Item 5 not started.** Evidence:
+  `docs/evidence/dynamic-fission-daughter-viability-37/`.
