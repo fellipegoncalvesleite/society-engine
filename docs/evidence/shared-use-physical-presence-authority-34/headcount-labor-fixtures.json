@@ -1,0 +1,883 @@
+{
+  "audit": "CORRECTION-34D-HEADCOUNT-LABOR-FIXTURES",
+  "summary": {
+    "fixtures": 14,
+    "failing": 0,
+    "vacuous": 0
+  },
+  "verdicts": {
+    "H1_ordinary_valid_party": "ALL_AUTHORITIES_AGREE",
+    "H2_aging_allocated_to_residence": "RESIDENCE_ABSORBS_THE_TRANSITION_PARTY_UNTOUCHED",
+    "H3_forced_away_labor_reduction": "LABOR_REDUCES_THROUGH_ONE_AUTHORITY_NO_BODY_MOVES",
+    "H4_non_working_person_remains_with_party": "PRESENT_AND_CONSUMING_WITHOUT_GRANTING_LABOR",
+    "H5_two_concurrent_parties": "LABOR_ALLOCATED_DETERMINISTICALLY_WITHOUT_MOVING_BODIES",
+    "H6_prepared_party": "RESIDENTIAL_BODY_COMMITTED_LABOR_UNAVAILABLE_FOUNDER",
+    "H7_fission_with_an_away_party": "FOUNDERS_ONLY_FROM_PHYSICALLY_RESIDENTIAL_PEOPLE",
+    "H8_fission_with_a_prepared_party": "PREPARED_WITHHELD_AS_LABOR_COMMITMENT_NOT_CLASSIFIED_AS_ABSENT",
+    "H9_catchment_after_cohort_transition": "NO_AWAY_PERSON_DRAWS_LOCALLY_AND_NO_COHORT_IS_SUBTRACTED_TWICE",
+    "H10_return_after_labor_reduction": "HEADCOUNT_RETURNS_EXACTLY_ONCE_NO_COHORT_CREATED_OR_DELETED",
+    "H11_corrupt_legacy_state": "LABELLED_NON_HISTORICAL_REPAIR_NO_SILENT_DELETION",
+    "H12_active_annual_boundary_equivalence": "IDENTICAL_ACROSS_ALL_FOUR_MODES_WITH_AN_ACTIVE_PARTY",
+    "H13_no_natural_overlap_control": "NATURAL_ZERO_REPORTED_NOT_SUBSTITUTED",
+    "H14_legacy_record_migration": "UPGRADED_DETERMINISTICALLY_AND_CONSERVATIVELY"
+  },
+  "fixtures": {
+    "H1_ordinary_valid_party": {
+      "verdict": "ALL_AUTHORITIES_AGREE",
+      "snapshot": {
+        "population": 22,
+        "workingAdults": 12,
+        "elders": 4,
+        "dependents": 6,
+        "residentialPeople": 16,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 6,
+            "nonWorking": 0,
+            "people": 6,
+            "composition": {
+              "limited": 1,
+              "typical": 4,
+              "high": 1
+            },
+            "compositionTotal": 6,
+            "carryCapacityUnits": 0.72,
+            "paceFactor": 0.991667,
+            "provisionsPerDay": 0.0048
+          }
+        ],
+        "represented": 22,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 6,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 0
+      },
+      "invariants": {
+        "workersWithinPeople": true,
+        "compositionEqualsWorkers": true,
+        "awayWithinPopulation": true,
+        "presenceSumsToPopulation": true,
+        "preparedAreResidential": true
+      },
+      "nonVacuous": {
+        "partyPeople": 6,
+        "partyWorkers": 6
+      },
+      "note": "at launch headcount IS labour; every authority reads 6 and no reconciliation fires"
+    },
+    "H2_aging_allocated_to_residence": {
+      "verdict": "RESIDENCE_ABSORBS_THE_TRANSITION_PARTY_UNTOUCHED",
+      "before": {
+        "population": 29,
+        "workingAdults": 20,
+        "elders": 3,
+        "dependents": 6,
+        "residentialPeople": 23,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 6,
+            "nonWorking": 0,
+            "people": 6,
+            "composition": {
+              "limited": 1,
+              "typical": 4,
+              "high": 1
+            },
+            "compositionTotal": 6,
+            "carryCapacityUnits": 0.72,
+            "paceFactor": 0.991667,
+            "provisionsPerDay": 0.0048
+          }
+        ],
+        "represented": 29,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 6,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 0
+      },
+      "afterAging": {
+        "population": 29,
+        "workingAdults": 19,
+        "elders": 4,
+        "dependents": 6,
+        "residentialPeople": 23,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 6,
+            "nonWorking": 0,
+            "people": 6,
+            "composition": {
+              "limited": 1,
+              "typical": 4,
+              "high": 1
+            },
+            "compositionTotal": 6,
+            "carryCapacityUnits": 0.72,
+            "paceFactor": 0.991667,
+            "provisionsPerDay": 0.0048
+          }
+        ],
+        "represented": 29,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 6,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 0
+      },
+      "invariants": {
+        "workersWithinPeople": true,
+        "compositionEqualsWorkers": true,
+        "awayWithinPopulation": true,
+        "presenceSumsToPopulation": true,
+        "preparedAreResidential": true
+      },
+      "nonVacuous": {
+        "workingAdultsFell": "20 -> 19",
+        "partyWorkersUnchanged": 6
+      },
+      "allocationRule": "AGGREGATE CONVENTION, NOT AN OBSERVATION. With 19 adults still holding 6 committed away, the reduction is charged to the 13 residential adults. The model has cohorts, not people, and does NOT claim to know whether the person who aged was at camp or in the party."
+    },
+    "H3_forced_away_labor_reduction": {
+      "verdict": "LABOR_REDUCES_THROUGH_ONE_AUTHORITY_NO_BODY_MOVES",
+      "before": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 6,
+            "nonWorking": 0,
+            "people": 6,
+            "composition": {
+              "limited": 1,
+              "typical": 4,
+              "high": 1
+            },
+            "compositionTotal": 6,
+            "carryCapacityUnits": 0.72,
+            "paceFactor": 0.991667,
+            "provisionsPerDay": 0.0048
+          }
+        ],
+        "represented": 20,
+        "conserved": true,
+        "laborBounded": false,
+        "committedAwayWorkers": 6,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 0
+      },
+      "after": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 5,
+            "nonWorking": 1,
+            "people": 6,
+            "composition": {
+              "limited": 1,
+              "typical": 4,
+              "high": 0
+            },
+            "compositionTotal": 5,
+            "carryCapacityUnits": 0.6,
+            "paceFactor": 0.933333,
+            "provisionsPerDay": 0.0048
+          }
+        ],
+        "represented": 20,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 5,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 1
+      },
+      "invariants": {
+        "workersWithinPeople": true,
+        "compositionEqualsWorkers": true,
+        "awayWithinPopulation": true,
+        "presenceSumsToPopulation": true,
+        "preparedAreResidential": true
+      },
+      "nonVacuous": {
+        "headcount": "6 -> 6",
+        "labour": "6 -> 5",
+        "carry": "0.72 -> 0.6",
+        "pace": "0.991667 -> 0.933333"
+      },
+      "note": "workers, composition, carry ceiling and pace move together through one function; the high pool is emptied first so a loss can never make the party faster"
+    },
+    "H4_non_working_person_remains_with_party": {
+      "verdict": "PRESENT_AND_CONSUMING_WITHOUT_GRANTING_LABOR",
+      "before": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 6,
+            "nonWorking": 0,
+            "people": 6,
+            "composition": {
+              "limited": 1,
+              "typical": 4,
+              "high": 1
+            },
+            "compositionTotal": 6,
+            "carryCapacityUnits": 0.72,
+            "paceFactor": 0.991667,
+            "provisionsPerDay": 0.0048
+          }
+        ],
+        "represented": 20,
+        "conserved": true,
+        "laborBounded": false,
+        "committedAwayWorkers": 6,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 0
+      },
+      "after": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 5,
+            "nonWorking": 1,
+            "people": 6,
+            "composition": {
+              "limited": 1,
+              "typical": 4,
+              "high": 0
+            },
+            "compositionTotal": 5,
+            "carryCapacityUnits": 0.6,
+            "paceFactor": 0.933333,
+            "provisionsPerDay": 0.0048
+          }
+        ],
+        "represented": 20,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 5,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 1
+      },
+      "afterReturn": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 20,
+        "awayPeople": 0,
+        "awayTiles": [],
+        "parties": [],
+        "represented": 20,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 0,
+        "physicallyAwayPeople": 0,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 0
+      },
+      "invariants": {
+        "workersWithinPeople": true,
+        "compositionEqualsWorkers": true,
+        "awayWithinPopulation": true,
+        "presenceSumsToPopulation": true,
+        "preparedAreResidential": true
+      },
+      "nonVacuous": {
+        "presenceUnchanged": "6 -> 6",
+        "provisionsUnchanged": "0.0048 -> 0.0048",
+        "carryFell": "0.72 -> 0.6",
+        "paceNotImproved": true,
+        "returnedOnce": "20 residential, 0 away"
+      },
+      "carryingRule": "ZERO PRODUCTIVE CARRYING was selected over a partial share or an explicit burden on the remaining workers: the alternatives need per-person physiology this architecture has no state for. Stated, not hidden."
+    },
+    "H5_two_concurrent_parties": {
+      "verdict": "LABOR_ALLOCATED_DETERMINISTICALLY_WITHOUT_MOVING_BODIES",
+      "before": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110",
+          "tile:79:111"
+        ],
+        "parties": [
+          {
+            "id": "e:a",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 3,
+            "nonWorking": 0,
+            "people": 3,
+            "composition": {
+              "limited": 1,
+              "typical": 2,
+              "high": 0
+            },
+            "compositionTotal": 3,
+            "carryCapacityUnits": 0.72,
+            "paceFactor": 0.933333,
+            "provisionsPerDay": 0.0024
+          },
+          {
+            "id": "e:b",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 3,
+            "nonWorking": 0,
+            "people": 3,
+            "composition": {
+              "limited": 0,
+              "typical": 2,
+              "high": 1
+            },
+            "compositionTotal": 3,
+            "carryCapacityUnits": 0.72,
+            "paceFactor": 1.05,
+            "provisionsPerDay": 0.0024
+          }
+        ],
+        "represented": 20,
+        "conserved": true,
+        "laborBounded": false,
+        "committedAwayWorkers": 6,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 0
+      },
+      "after": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110",
+          "tile:79:111"
+        ],
+        "parties": [
+          {
+            "id": "e:a",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 3,
+            "nonWorking": 0,
+            "people": 3,
+            "composition": {
+              "limited": 1,
+              "typical": 2,
+              "high": 0
+            },
+            "compositionTotal": 3,
+            "carryCapacityUnits": 0.72,
+            "paceFactor": 0.933333,
+            "provisionsPerDay": 0.0024
+          },
+          {
+            "id": "e:b",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 2,
+            "nonWorking": 1,
+            "people": 3,
+            "composition": {
+              "limited": 0,
+              "typical": 2,
+              "high": 0
+            },
+            "compositionTotal": 2,
+            "carryCapacityUnits": 0.24,
+            "paceFactor": 0.933333,
+            "provisionsPerDay": 0.0024
+          }
+        ],
+        "represented": 20,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 5,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 1
+      },
+      "invariants": {
+        "workersWithinPeople": true,
+        "compositionEqualsWorkers": true,
+        "awayWithinPopulation": true,
+        "presenceSumsToPopulation": true,
+        "preparedAreResidential": true
+      },
+      "nonVacuous": {
+        "totalHeadcountUnchanged": "6 -> 6",
+        "perPartyWorkers": [
+          "e:a:3w+0nw",
+          "e:b:2w+1nw"
+        ],
+        "deterministicAcrossRepeatedCalls": true
+      },
+      "note": "6 committed against 5 adults; the NEWEST party absorbs the reduction (array order is launch order) and both parties keep every body at their own tiles"
+    },
+    "H6_prepared_party": {
+      "verdict": "RESIDENTIAL_BODY_COMMITTED_LABOR_UNAVAILABLE_FOUNDER",
+      "snapshot": {
+        "population": 22,
+        "workingAdults": 12,
+        "elders": 4,
+        "dependents": 6,
+        "residentialPeople": 22,
+        "awayPeople": 0,
+        "awayTiles": [],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "prepared",
+            "outcomeReason": null,
+            "workers": 6,
+            "nonWorking": 0,
+            "people": 6,
+            "composition": {
+              "limited": 1,
+              "typical": 4,
+              "high": 1
+            },
+            "compositionTotal": 6,
+            "carryCapacityUnits": 0.72,
+            "paceFactor": 0.991667,
+            "provisionsPerDay": 0.0048
+          }
+        ],
+        "represented": 22,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 6,
+        "physicallyAwayPeople": 0,
+        "preparedCommitmentPeople": 6,
+        "awayNonWorkingPeople": 0
+      },
+      "invariants": {
+        "workersWithinPeople": true,
+        "compositionEqualsWorkers": true,
+        "awayWithinPopulation": true,
+        "presenceSumsToPopulation": true,
+        "preparedAreResidential": true
+      },
+      "nonVacuous": {
+        "physicalResidence": 22,
+        "physicallyAway": 0,
+        "labourCommitment": 6,
+        "preparedCommitment": 6
+      },
+      "threeDistinctFacts": {
+        "physicalResidence": "all 22 people are standing at the camp; the party has not departed",
+        "labourCommitment": "6 of them have promised their hands to this party, so no other party or task group may staff them",
+        "foundingAvailability": "those 6 are withheld from founding a daughter as a PRIOR LABOUR COMMITMENT — a named policy, not a claim that they are elsewhere"
+      }
+    },
+    "H7_fission_with_an_away_party": {
+      "verdict": "FOUNDERS_ONLY_FROM_PHYSICALLY_RESIDENTIAL_PEOPLE",
+      "population": 60,
+      "physicallyAwayPeople": 48,
+      "uncapped": 20,
+      "residentialPhysical": 12,
+      "preparedCommitted": 0,
+      "available": 12,
+      "capped": 12,
+      "blocked": true,
+      "nonVacuous": {
+        "uncappedDrawWouldHaveBeen": 20,
+        "physicallyAtCamp": 12
+      },
+      "awayUnchanged": "createDaughterBand reads the away headcount and never writes to an expedition; the party's headcount and productive labour are untouched by a blocked or an allowed fission alike",
+      "note": "the parent is numerically large and physically thin at home. The daughter is not founded rather than borrowing bodies standing on an expedition route."
+    },
+    "H8_fission_with_a_prepared_party": {
+      "verdict": "PREPARED_WITHHELD_AS_LABOR_COMMITMENT_NOT_CLASSIFIED_AS_ABSENT",
+      "population": 60,
+      "preparedCommitmentPeople": 48,
+      "uncapped": 20,
+      "residentialPhysical": 60,
+      "preparedCommitted": 48,
+      "available": 12,
+      "capped": 12,
+      "blocked": true,
+      "nonVacuous": {
+        "residentialPhysicalHeadcount": 60,
+        "foundersActuallyAvailable": 12,
+        "sameOutcomeAsIfAway": true
+      },
+      "policy": "SELECTED POLICY: a prepared commitment blocks founding as a PRIOR LABOUR COMMITMENT. The two alternatives §8 permits — cancelling the party before founding, or another justified rule — both require a fission that can take decisions about parties, which is Roadmap Item 4. Nothing here cancels a party as a side effect of a demographic step.",
+      "distinction": "The founding outcome is numerically the same as H7, and the REASON is not: in H7 the 48 are not here, in H8 they are here and spoken for. Physical residence reads 60, not 12."
+    },
+    "H9_catchment_after_cohort_transition": {
+      "verdict": "NO_AWAY_PERSON_DRAWS_LOCALLY_AND_NO_COHORT_IS_SUBTRACTED_TWICE",
+      "awayWorkers": 5,
+      "awayNonWorking": 1,
+      "catchmentAdults": 0,
+      "catchmentElders": 6,
+      "catchmentDependents": 8,
+      "localExtractionBodies": 14,
+      "residentialPhysicalPeople": 14,
+      "foragingDraw": 10.3,
+      "nonVacuous": {
+        "eldersBefore": 7,
+        "eldersCounted": 6,
+        "subtracted": 1
+      },
+      "privateReader": "sharedCatchment.getBandForagingDraw — module-private; arithmetic published in its own comment block and reproduced here",
+      "allocation": "the away non-working person is removed from ELDERS by the stated aggregate convention (the only cohort the annual step can move an adult into), and is READ from the record rather than inferred from a cohort comparison"
+    },
+    "H10_return_after_labor_reduction": {
+      "verdict": "HEADCOUNT_RETURNS_EXACTLY_ONCE_NO_COHORT_CREATED_OR_DELETED",
+      "beforeReturn": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 14,
+        "awayPeople": 6,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 5,
+            "nonWorking": 1,
+            "people": 6,
+            "composition": {
+              "limited": 1,
+              "typical": 4,
+              "high": 0
+            },
+            "compositionTotal": 5,
+            "carryCapacityUnits": 0.6,
+            "paceFactor": 0.933333,
+            "provisionsPerDay": 0.0048
+          }
+        ],
+        "represented": 20,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 5,
+        "physicallyAwayPeople": 6,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 1
+      },
+      "afterReturn": {
+        "population": 20,
+        "workingAdults": 5,
+        "elders": 7,
+        "dependents": 8,
+        "residentialPeople": 20,
+        "awayPeople": 0,
+        "awayTiles": [],
+        "parties": [],
+        "represented": 20,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 0,
+        "physicallyAwayPeople": 0,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 0
+      },
+      "invariants": {
+        "workersWithinPeople": true,
+        "compositionEqualsWorkers": true,
+        "awayWithinPopulation": true,
+        "presenceSumsToPopulation": true,
+        "preparedAreResidential": true
+      },
+      "nonVacuous": {
+        "awayBefore": 6,
+        "awayAfter": 0,
+        "residentialBefore": 14,
+        "residentialAfter": 20,
+        "cohortsUnchanged": "5/7/8 -> 5/7/8",
+        "idempotentOnRepeatedReconciliation": true,
+        "outcomeRecordsBodiesAndLabourSeparately": "6 people, 5 working"
+      },
+      "note": "the reduced worker and the non-working member both walk home inside the same six bodies; the elder cohort keeps the transition it was given and no cohort is reconciled twice"
+    },
+    "H11_corrupt_legacy_state": {
+      "verdict": "LABELLED_NON_HISTORICAL_REPAIR_NO_SILENT_DELETION",
+      "after": {
+        "population": 12,
+        "workingAdults": 4,
+        "elders": 4,
+        "dependents": 4,
+        "residentialPeople": 12,
+        "awayPeople": 0,
+        "awayTiles": [],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "aborted",
+            "outcomeReason": "invalid_state_repaired",
+            "workers": 0,
+            "nonWorking": 0,
+            "people": 0,
+            "composition": {
+              "limited": 0,
+              "typical": 0,
+              "high": 0
+            },
+            "compositionTotal": 0,
+            "carryCapacityUnits": 0.48,
+            "paceFactor": 1,
+            "provisionsPerDay": 0
+          }
+        ],
+        "represented": 12,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 0,
+        "physicallyAwayPeople": 0,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 0
+      },
+      "partyPhase": "aborted",
+      "outcomeReason": "invalid_state_repaired",
+      "deterministicAcrossRepeatedCalls": true,
+      "nonVacuous": {
+        "populationHeld": 12,
+        "partyClaimed": 20,
+        "retiredWhole": true
+      },
+      "whatTheMechanismDoes": "The record described 20 people away from a band of 12, which no ordinary path can produce once fission is bounded by residential availability and cohort transitions no longer move bodies. The record is RETIRED WHOLE under `invalid_state_repaired`, and `bandEvents` refuses to narrate that reason at all — no journey, no loss, no homecoming.",
+      "whatItIsNot": "not a death, not a return, not a party-local loss, not a historical outcome. CORRECTION-34C partially shrank such a party to 3 workers with `outcomeReason: null` while it stayed `operating`, which deleted people and then presented the survivors as an ongoing journey."
+    },
+    "H12_active_annual_boundary_equivalence": {
+      "verdict": "IDENTICAL_ACROSS_ALL_FOUR_MODES_WITH_AN_ACTIVE_PARTY",
+      "setupDaysBeforeInjection": 1070,
+      "comparedSpanDays": 630,
+      "annualBoundariesInsideComparedSpan": [
+        1080,
+        1440
+      ],
+      "boundaryCrossedWhileTheInjectedPartyWasWalking": 1080,
+      "activeAcrossBoundary": {
+        "daily": {
+          "dayAtInjection": 1070,
+          "daysToNextAnnualBoundary": 10,
+          "injectedParties": 9,
+          "stillOnRecord": 0,
+          "resolvedToOutcome": 9
+        },
+        "weekly": {
+          "dayAtInjection": 1070,
+          "daysToNextAnnualBoundary": 10,
+          "injectedParties": 9,
+          "stillOnRecord": 0,
+          "resolvedToOutcome": 9
+        },
+        "monthly": {
+          "dayAtInjection": 1070,
+          "daysToNextAnnualBoundary": 10,
+          "injectedParties": 9,
+          "stillOnRecord": 0,
+          "resolvedToOutcome": 9
+        },
+        "seasonal": {
+          "dayAtInjection": 1070,
+          "daysToNextAnnualBoundary": 10,
+          "injectedParties": 9,
+          "stillOnRecord": 0,
+          "resolvedToOutcome": 9
+        }
+      },
+      "matches": {
+        "daily": true,
+        "weekly": true,
+        "monthly": true,
+        "seasonal": true
+      },
+      "nonVacuous": {
+        "dayAtInjection": 1070,
+        "daysToNextAnnualBoundary": 10,
+        "injectedParties": 9,
+        "stillOnRecord": 0,
+        "resolvedToOutcome": 9
+      },
+      "instrumentErrorRecorded": "The first version of this fixture stepped the SETUP span with `stepSim(w, 1080/days, mode)`. 1080/7 is 154.29, so the weekly arm was handed a fractional step count and landed on a different day from the other three — it reported DIVERGENT, and the divergence was the audit's own arithmetic, not production. The setup now runs through `advanceWorldByDays` (identical in every arm) and only the compared span sits on the 630-day grid.",
+      "whyTheOldFixtureWasInsufficient": "L12 stepped a natural world 1260 days and counted expedition records at the end. A natural party lasts at most 24 days against ANNUAL demography, so any record it found had been launched long after the last boundary. It proved step-mode determinism, which is real, but not that an ACTIVE party is represented identically across a demographic boundary — which is the property this checkpoint changes."
+    },
+    "H13_no_natural_overlap_control": {
+      "verdict": "NATURAL_ZERO_REPORTED_NOT_SUBSTITUTED",
+      "boundariesObserved": 6,
+      "naturalBoundariesCrossedByAnActiveParty": 0,
+      "partyRecordsSeenAtSampledBoundaries": 0,
+      "nonVacuous": {
+        "boundariesObserved": 6,
+        "sampledDaily": true
+      },
+      "statement": "ZERO natural overlap in the sampled window. This is REPORTED, and it is explicitly NOT evidence that the behaviour is correct — a party lives at most 24 days against an annual step, so the overlap is structurally rare. H12 constructs the case; this fixture only measures how often nature reaches it."
+    },
+    "H14_legacy_record_migration": {
+      "verdict": "UPGRADED_DETERMINISTICALLY_AND_CONSERVATIVELY",
+      "untouchedLegacy": {
+        "population": 22,
+        "workingAdults": 12,
+        "elders": 4,
+        "dependents": 6,
+        "residentialPeople": 18,
+        "awayPeople": 4,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 4,
+            "nonWorking": 0,
+            "people": 4,
+            "compositionTotal": null,
+            "carryCapacityUnits": 0.72,
+            "paceFactor": 1,
+            "provisionsPerDay": 0.0032
+          }
+        ],
+        "represented": 22,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 4,
+        "physicallyAwayPeople": 4,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 0
+      },
+      "legacyUnderCohortFall": {
+        "population": 22,
+        "workingAdults": 3,
+        "elders": 10,
+        "dependents": 9,
+        "residentialPeople": 18,
+        "awayPeople": 4,
+        "awayTiles": [
+          "tile:78:110"
+        ],
+        "parties": [
+          {
+            "id": "e:h",
+            "phase": "operating",
+            "outcomeReason": null,
+            "workers": 3,
+            "nonWorking": 1,
+            "people": 4,
+            "compositionTotal": null,
+            "carryCapacityUnits": 0.36,
+            "paceFactor": 0.8,
+            "provisionsPerDay": 0.0032
+          }
+        ],
+        "represented": 22,
+        "conserved": true,
+        "laborBounded": true,
+        "committedAwayWorkers": 3,
+        "physicallyAwayPeople": 4,
+        "preparedCommitmentPeople": 0,
+        "awayNonWorkingPeople": 1
+      },
+      "invariants": {
+        "untouched": {
+          "workersWithinPeople": true,
+          "compositionEqualsWorkers": true,
+          "awayWithinPopulation": true,
+          "presenceSumsToPopulation": true,
+          "preparedAreResidential": true
+        },
+        "stressed": {
+          "workersWithinPeople": true,
+          "compositionEqualsWorkers": true,
+          "awayWithinPopulation": true,
+          "presenceSumsToPopulation": true,
+          "preparedAreResidential": true
+        }
+      },
+      "nonVacuous": {
+        "absentFieldReadsAsZero": true,
+        "headcountEqualsLabourOnUntouchedLegacy": true,
+        "legacyCompositionFallbackTotal": 4,
+        "underCohortFall": "3 working + 1 not = 4 bodies"
+      },
+      "rule": "An absent `nonWorkingPartyPeople` reads as ZERO, which is exactly what every pre-split record meant: headcount and labour were equal at launch and nothing could separate them. No record is reinterpreted, no body is invented, and a legacy party with no composition at all still reconciles — its workers fall to 3 and the fourth body stays with it."
+    }
+  }
+}
