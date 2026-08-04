@@ -18,7 +18,7 @@ import type {
   SeasonalHungerClassification,
 } from "./types";
 import { deriveProtoCampResourceReasonFactors } from "./resourceEcologyFoundation";
-import { isProvisionalSuccessor } from "./bandLifecycle";
+import { isBandTerminal, isProvisionalSuccessor } from "./bandLifecycle";
 
 const PROTO_CAMP_MEMORY_CAP = 8;
 const MAX_CANDIDATE_TILE_IDS = 18;
@@ -983,7 +983,10 @@ function getKnownKinContactNearby(
 
   let best = 0;
   for (const other of Object.values(world.bands)) {
-    if (other.id === band.id || other.status === "dispersed" || other.viability?.status === "absorbed" || other.viability?.status === "extinct") {
+    // Routed through the canonical predicate rather than re-inlining the three terminal values.
+    // Behaviour-identical — `isBandTerminal` is exactly this disjunction — and it is what keeps the
+    // module inside the lifecycle boundary now that it is migrated.
+    if (other.id === band.id || isBandTerminal(other)) {
       continue;
     }
     const otherTile = getTile(world, other.position);
