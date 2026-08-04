@@ -114,6 +114,24 @@ export interface PhaseContract {
   readonly onTimeout?: FissionLifecyclePhase;
   /** What must be cleared from current state when the phase is left. */
   readonly clearsOnExit: readonly string[];
+  /**
+   * ROADMAP ITEM 4 §3 — MAY ELAPSED TIME ALONE PUT THE LIFECYCLE INTO THIS PHASE?
+   *
+   * The measured defect this closes: `returning` timed out into `reintegrated`, whose own contract
+   * says "rejoined the parent; the provisional entity is removed exactly once" — and nothing removed
+   * it, because the reintegration writer does not exist. A group that had gone nowhere and come back
+   * from nothing was promoted to ordinary status by a clock.
+   *
+   * It is the exact mirror of the property this table was already proud of: `establishing` routes its
+   * timeout to `failed_early` precisely so a timer alone can never STABILIZE, and then a timer alone
+   * was allowed to REINTEGRATE. Naming the requirement per phase is what makes the two symmetric.
+   *
+   * `physical_event` phases assert something happened in the world — bodies met, a group functioned.
+   * Only an adapter that WITNESSED it may request them, and `assertSingleOwnership` additionally
+   * refuses any contract whose `onTimeout` points at one, so the defect cannot be re-entered by
+   * editing this table.
+   */
+  readonly entryRequires: "elapsed_time_permitted" | "physical_event";
 }
 
 /**
@@ -128,10 +146,21 @@ export const TRAVEL_MAX_DAYS = 180;
 export const ESTABLISHMENT_MAX_DAYS = 360;
 export const FAILED_EARLY_MAX_DAYS = 30;
 export const RETURN_MAX_DAYS = 180;
+/**
+ * How many times a lineage may go round the return/establish cycle before the resolver stops
+ * advancing it. An AUTHORITY BOUNDARY, not a measured number of attempts.
+ *
+ * The bound is on the CHURN, not on the group. When it is exhausted the group is still alive, still
+ * physically somewhere, and still has three exits — reaching its parent, demonstrating establishment,
+ * or dying. What it no longer has is a clock that moves it between phases on no new evidence.
+ */
+export const MAX_RETURN_ESTABLISH_CYCLES = 3;
 
 const CONTRACTS: readonly PhaseContract[] = [
   {
     phase: "proposed",
+    // nobody has moved; a proposal may arise and lapse on its own.
+    entryRequires: "elapsed_time_permitted",
     side: "attempt",
     bodiesHaveMoved: false,
     bodyOwner: "parent",
@@ -146,6 +175,8 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "committed",
+    // still nobody moved.
+    entryRequires: "elapsed_time_permitted",
     side: "attempt",
     bodiesHaveMoved: false,
     bodyOwner: "parent",
@@ -162,6 +193,8 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "departure_ready",
+    // the people are packed and still at home.
+    entryRequires: "elapsed_time_permitted",
     side: "attempt",
     bodiesHaveMoved: false,
     bodyOwner: "parent",
@@ -176,6 +209,8 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "abandoned",
+    // abandoning a plan nobody acted on is exactly what elapsed time SHOULD produce.
+    entryRequires: "elapsed_time_permitted",
     side: "attempt",
     bodiesHaveMoved: false,
     bodyOwner: "parent",
@@ -188,6 +223,8 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "departed",
+    // bodies physically leave a camp; a clock may never move people.
+    entryRequires: "physical_event",
     side: "attempt",
     bodiesHaveMoved: true,
     // The attempt is over. The bodies that left are the SUCCESSOR's from this instant, and the
@@ -203,6 +240,8 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "travelling",
+    // entered only as the consequence of a departure that already happened.
+    entryRequires: "elapsed_time_permitted",
     side: "successor",
     bodiesHaveMoved: true,
     bodyOwner: "successor",
@@ -219,6 +258,8 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "establishing",
+    // a TRIAL, not an outcome — "this group is attempting to live where it stands", whether it arrived or gave up on the walk home; the success gate is `stabilized`, and that one is physical.
+    entryRequires: "elapsed_time_permitted",
     side: "successor",
     bodiesHaveMoved: true,
     bodyOwner: "successor",
@@ -236,6 +277,8 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "failed_early",
+    // a window closing without evidence IS the failure; nothing is claimed.
+    entryRequires: "elapsed_time_permitted",
     side: "successor",
     bodiesHaveMoved: true,
     bodyOwner: "successor",
@@ -252,23 +295,47 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "returning",
+    // deciding to walk home is a decision, not an arrival.
+    entryRequires: "elapsed_time_permitted",
     side: "successor",
     bodiesHaveMoved: true,
     bodyOwner: "successor",
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
     transitionWriter: "provisionalReturn (world adapter)",
-    permittedNext: ["reintegrated", "provisional_extinguished"],
+    // `establishing` is reachable because §4's answer to a failed return is that the group tries to
+    // live where it is standing. Without it the re-routed timeout is `transition_not_permitted` and
+    // the group STICKS in `returning` forever — which this audit caught, and which is the immortality
+    // failure wearing the opposite mask.
+    permittedNext: ["reintegrated", "establishing", "provisional_extinguished"],
     terminal: false,
     maxDays: RETURN_MAX_DAYS,
-    // A group that cannot reach its parent does not evaporate. Timing out of the return is still a
-    // reintegration event for the ledger; where the bodies physically are when it happens is the
-    // adapter's problem, and Item 6 owns anything worse than that.
-    onTimeout: "reintegrated",
+    // ── §4 — WHAT HAPPENS WHEN LIVING PEOPLE TRY TO GO HOME AND CANNOT. ────────────────────────
+    //
+    // This used to read `onTimeout: "reintegrated"`, and the comment justifying it said the ledger
+    // could call it a reintegration and leave "where the bodies physically are" to the adapter. There
+    // was no adapter. The measured result was a group promoted to ordinary status by a clock.
+    //
+    // The replacement is the smallest physically honest option: **the return attempt is abandoned and
+    // the group tries to live where it is standing.** It is not killed (a timer may not kill people),
+    // not declared home (it is not), not declared established (`establishing` is a TRIAL and
+    // `stabilized` still demands lived evidence), and not left churning (the cycle is bounded below).
+    //
+    // Alternatives compared and rejected:
+    //   - **a distinct `stranded` phase** — it needs its own bounded exit, which is the same question
+    //     one name later, and it would add a phase whose only content is "the previous answer failed";
+    //   - **route contradiction re-deciding immediately** — the group has no new evidence at the
+    //     instant a bound expires; deciding again on the same evidence is not a decision;
+    //   - **`failed_early`** — it means "establishment did not work", and a group that never
+    //     established has not failed at establishing; reusing it would put a false cause in the record;
+    //   - **death on expiry** — forbidden, and it is the exact defect in the other direction.
+    onTimeout: "establishing",
     clearsOnExit: [],
   },
   {
     phase: "reintegrated",
+    // THE DEFECT THIS CLOSES — it asserts the people physically reached their parent and were handed back; a timer asserting it produced a group that had gone nowhere and come back from nothing.
+    entryRequires: "physical_event",
     side: "successor",
     bodiesHaveMoved: true,
     // The people are the parent's again. The provisional entity is removed exactly once.
@@ -282,6 +349,8 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "provisional_extinguished",
+    // zero bodies is itself the physical observation; the resolver WITNESSES it rather than waiting for it.
+    entryRequires: "physical_event",
     side: "successor",
     bodiesHaveMoved: true,
     // Nobody is left to own anything. `none` is the honest owner, and it is what stops a resolver
@@ -296,6 +365,8 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "stabilized",
+    // it asserts a group demonstrably functioned; MIN_LIVED_EVIDENCE_FOR_STABILIZATION already guards the request, and this makes the same rule structural in the table.
+    entryRequires: "physical_event",
     side: "successor",
     bodiesHaveMoved: true,
     bodyOwner: "successor",
@@ -335,7 +406,11 @@ export type LifecycleRejection =
   /** Departure requires an endorsed founder count from the residual authority. */
   | "departure_without_endorsed_founder_count"
   /** Establishment may not conclude in stabilization without lived evidence. */
-  | "stabilization_without_lived_evidence";
+  | "stabilization_without_lived_evidence"
+  /** §3 — elapsed time may not produce a phase that asserts something happened in the world. */
+  | "terminal_outcome_requires_a_physical_event"
+  /** Reintegration asserts the bodies physically reached the parent. Nothing else may assert it. */
+  | "reintegration_without_proven_co_location";
 
 export interface LifecycleState {
   readonly phase: FissionLifecyclePhase;
@@ -367,6 +442,23 @@ export interface TransitionRequest {
    * refuses the transition unless the adapter passes lived evidence it gathered.
    */
   readonly livedEvidenceCount?: number;
+  /**
+   * §3 — WHAT IS ASKING FOR THIS TRANSITION: something that happened in the world, or a clock.
+   *
+   * **Required, with no default.** A default would silently restore the defect for every caller that
+   * forgot, which is precisely how `returning -> reintegrated` survived: it needed nothing, so it got
+   * nothing, and the absence read as permission. Making it required makes the invariant structural
+   * rather than a rule someone has to remember — the same reasoning CORRECTION-34E used for the
+   * target-work labour count.
+   */
+  readonly cause: "physical_event" | "elapsed_time";
+  /**
+   * Required for `returning -> reintegrated`. The adapter must have PHYSICALLY OBSERVED the successor
+   * and a valid receiving parent at the same place. The kernel cannot check a position — it holds no
+   * world — so it checks that the caller claims to have checked, and `provisionalReturn` is the only
+   * module that can honestly make the claim.
+   */
+  readonly physicalCoLocationProven?: boolean;
 }
 
 /** How many independent lived-evidence signals stabilization requires. An authority boundary. */
@@ -392,6 +484,16 @@ export function requestTransition(request: TransitionRequest): LifecycleTransiti
     if (evidence < MIN_LIVED_EVIDENCE_FOR_STABILIZATION) {
       return { ok: false, rejection: "stabilization_without_lived_evidence" };
     }
+  }
+  // ── §3 — THE CENTRAL GUARD. ──
+  //
+  // Checked for EVERY target phase, not only the two that happen to be terminal today, so a future
+  // phase classified `physical_event` is protected the moment it is added to the table.
+  if (getPhaseContract(request.to).entryRequires === "physical_event" && request.cause !== "physical_event") {
+    return { ok: false, rejection: "terminal_outcome_requires_a_physical_event" };
+  }
+  if (request.to === "reintegrated" && request.physicalCoLocationProven !== true) {
+    return { ok: false, rejection: "reintegration_without_proven_co_location" };
   }
 
   return { ok: true, state: enter(request.current, request.to, request.today), timedOut: false };
@@ -421,7 +523,12 @@ export function resolveTimeout(current: LifecycleState, today: number): Lifecycl
   if (today - current.phaseEnteredDay < contract.maxDays) {
     return { ok: true, state: current, timedOut: false };
   }
-  return { ok: true, state: enter(current, contract.onTimeout, today), timedOut: true };
+  // Routed through `requestTransition` rather than calling `enter` directly. The old form bypassed
+  // every guard in this module — including the lived-evidence check — so a contract pointing its
+  // timeout at a success phase would have produced one silently. It cannot now: the request carries
+  // `cause: "elapsed_time"`, which is exactly what the §3 guard refuses.
+  const result = requestTransition({ current, to: contract.onTimeout, today, cause: "elapsed_time" });
+  return result.ok === true ? { ok: true, state: result.state, timedOut: true } : result;
 }
 
 export function beginAttempt(today: number): LifecycleState {
@@ -462,6 +569,14 @@ export function assertSingleOwnership(): readonly string[] {
     }
     if (c.terminal && c.permittedNext.length > 0) {
       problems.push(`${c.phase}: terminal phase with permitted successors`);
+    }
+    // §3 — THE INVARIANT THAT MAKES THE DEFECT UNRE-ENTERABLE BY EDITING THIS TABLE. A timeout is
+    // elapsed time by definition, so pointing one at a phase that asserts a world event is the
+    // `returning -> reintegrated` defect regardless of which phases are involved.
+    if (c.onTimeout !== undefined && BY_PHASE.get(c.onTimeout)?.entryRequires === "physical_event") {
+      problems.push(
+        `${c.phase}: times out into ${String(c.onTimeout)}, which requires a physical event — a clock cannot witness one`,
+      );
     }
     // `none` is legal only for a terminal phase in which nobody is left alive.
     if (c.bodyOwner === "none" && (!c.terminal || c.phase !== "provisional_extinguished")) {

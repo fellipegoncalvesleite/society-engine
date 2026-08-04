@@ -74,6 +74,24 @@ export interface FissionLifecycleRecord {
   readonly reasonIds?: readonly string[];
   /** The band-known destination this attempt named. Never hidden world truth. */
   readonly targetTileId?: TileId;
+  /**
+   * ROADMAP ITEM 4 §4 — how many times this lineage has gone round the return/establish cycle.
+   *
+   * Removing timer-only reintegration exposes a real boundedness problem: a group that tried to walk
+   * home and could not is ALIVE, SOMEWHERE, and must not be killed by a timer, declared home, declared
+   * established, or left churning forever. The bound is on the CHURN, not on the group: once it is
+   * exhausted the resolver stops advancing phases, and every remaining exit is physical — reaching
+   * the parent, demonstrating establishment, or dying.
+   */
+  readonly resolutionCycles?: number;
+  /**
+   * The tile the founders physically left from, retained so a return has a destination it LEGITIMATELY
+   * KNOWS. It is the last place this group actually saw its parent — deliberately NOT the parent's
+   * current position, which the travellers have no channel to observe.
+   */
+  readonly departureTileId?: TileId;
+  /** Bounded outbound trail, newest last, so a return can retrace ground the group actually walked. */
+  readonly trail?: readonly TileId[];
 }
 
 export type BandStatus =

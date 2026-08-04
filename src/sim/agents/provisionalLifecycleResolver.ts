@@ -35,7 +35,7 @@
  */
 
 import { isProvisionalSuccessor } from "./bandLifecycle";
-import { getPhaseContract, requestTransition } from "./fissionLifecycleKernel";
+import { getPhaseContract, MAX_RETURN_ESTABLISH_CYCLES, requestTransition } from "./fissionLifecycleKernel";
 import type { Band, FissionLifecycleRecord } from "./types";
 import type { BandId } from "../core/types";
 import type { WorldState } from "../world/types";
@@ -46,7 +46,9 @@ export interface ProvisionalResolution {
   readonly fromPhase: string;
   readonly toPhase: string;
   readonly populationAtResolution: number;
-  readonly reason: "zero_physical_population" | "phase_bound_expired";
+  readonly reason: "zero_physical_population" | "phase_bound_expired" | "cycle_bound_reached_every_remaining_exit_is_physical";
+  /** How many return/establish cycles this lineage had completed at the moment of the resolution. */
+  readonly resolutionCycles: number;
 }
 
 export interface ProvisionalResolverResult {
@@ -88,6 +90,9 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
         current: { phase: record.phase, phaseEnteredDay: record.phaseEnteredDay, history: record.history },
         to: "provisional_extinguished",
         today,
+        // A PHYSICAL OBSERVATION, not a clock: this resolver has just read that nobody is left. It is
+        // not waiting for a bound to expire, so it is entitled to claim the event.
+        cause: "physical_event",
       });
       if (transition.ok === true) {
         changed = true;
@@ -98,6 +103,7 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
           toPhase: "provisional_extinguished",
           populationAtResolution: population,
           reason: "zero_physical_population",
+          resolutionCycles: record.resolutionCycles ?? 0,
         });
         bands[String(band.id)] = {
           ...band,
@@ -119,32 +125,73 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
 
     // ── an expired bound ──
     const contract = getPhaseContract(record.phase);
-    if (contract.maxDays !== undefined && today - record.phaseEnteredDay >= contract.maxDays && contract.onTimeout !== undefined) {
-      const transition = requestTransition({
-        current: { phase: record.phase, phaseEnteredDay: record.phaseEnteredDay, history: record.history },
-        to: contract.onTimeout,
-        today,
+    const expired =
+      contract.maxDays !== undefined &&
+      today - record.phaseEnteredDay >= contract.maxDays &&
+      contract.onTimeout !== undefined;
+    if (!expired) {
+      continue;
+    }
+    const cycles = record.resolutionCycles ?? 0;
+
+    // ── §4 — THE BOUND IS ON THE CHURN, NOT ON THE GROUP. ──────────────────────────────────────
+    //
+    // Removing timer-only reintegration leaves a real question: what happens to living people who
+    // tried to walk home and could not? They may not be killed by a timer, declared home, declared
+    // established, or left cycling forever. So the cycling is what is bounded.
+    //
+    // Once the bound is reached this resolver STOPS ADVANCING THE PHASE and says so. The group is
+    // still alive, still physically somewhere, and still has three exits — **reaching its parent,
+    // demonstrating establishment, or dying** — every one of which is a physical event witnessed by a
+    // real writer. What it no longer has is a clock shuffling it between phases on no new evidence.
+    //
+    // It is reported rather than silent: `hasUnresolvedProvisionalGroup` counts it, so an immortal
+    // provisional group is a VISIBLE finding instead of an invisible one.
+    if (cycles >= MAX_RETURN_ESTABLISH_CYCLES) {
+      resolutions.push({
+        bandId: String(band.id),
+        lineageId: record.lineageId,
+        fromPhase: record.phase,
+        toPhase: record.phase,
+        populationAtResolution: population,
+        reason: "cycle_bound_reached_every_remaining_exit_is_physical",
+        resolutionCycles: cycles,
       });
-      if (transition.ok === true) {
-        changed = true;
-        resolutions.push({
-          bandId: String(band.id),
-          lineageId: record.lineageId,
-          fromPhase: record.phase,
-          toPhase: contract.onTimeout,
-          populationAtResolution: population,
-          reason: "phase_bound_expired",
-        });
-        bands[String(band.id)] = {
-          ...band,
-          provisionalSuccessor: {
-            ...record,
-            phase: transition.state.phase,
-            phaseEnteredDay: transition.state.phaseEnteredDay,
-            history: transition.state.history,
-          },
-        };
-      }
+      continue;
+    }
+
+    const transition = requestTransition({
+      current: { phase: record.phase, phaseEnteredDay: record.phaseEnteredDay, history: record.history },
+      to: contract.onTimeout as NonNullable<typeof contract.onTimeout>,
+      today,
+      // A bound expired. That is elapsed time and nothing else, and the kernel refuses any target
+      // phase that asserts something happened in the world.
+      cause: "elapsed_time",
+    });
+    if (transition.ok === true) {
+      changed = true;
+      // One completed cycle is a return attempt that ended without reaching anybody. Counted at that
+      // exact edge so an ordinary arrival, failure or death does not consume the budget.
+      const completedCycle = record.phase === "returning" && transition.state.phase === "establishing";
+      resolutions.push({
+        bandId: String(band.id),
+        lineageId: record.lineageId,
+        fromPhase: record.phase,
+        toPhase: transition.state.phase,
+        populationAtResolution: population,
+        reason: "phase_bound_expired",
+        resolutionCycles: completedCycle ? cycles + 1 : cycles,
+      });
+      bands[String(band.id)] = {
+        ...band,
+        provisionalSuccessor: {
+          ...record,
+          phase: transition.state.phase,
+          phaseEnteredDay: transition.state.phaseEnteredDay,
+          history: transition.state.history,
+          resolutionCycles: completedCycle ? cycles + 1 : cycles,
+        },
+      };
     }
   }
 
@@ -162,6 +209,11 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
  */
 export function hasUnresolvedProvisionalGroup(world: WorldState): boolean {
   return Object.values(world.bands).some(
-    (band) => isProvisionalSuccessor(band) && Math.round(band.demography.population) <= 0,
+    (band) =>
+      isProvisionalSuccessor(band) &&
+      (Math.round(band.demography.population) <= 0 ||
+        // §4 — a group that has exhausted its return/establish budget. It is not stuck by accident:
+        // it is alive somewhere with only physical exits left, and saying so out loud is the point.
+        (band.provisionalSuccessor?.resolutionCycles ?? 0) >= MAX_RETURN_ESTABLISH_CYCLES),
   );
 }

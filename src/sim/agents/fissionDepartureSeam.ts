@@ -249,6 +249,9 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
     current: attemptState,
     to: "departed",
     today,
+    // Bodies physically leave a camp. This seam is the writer that moves them, so it is the one
+    // caller entitled to claim the event.
+    cause: "physical_event",
     endorsedFounderCount: allocation.allocatedFounders,
   });
   if (transition.ok !== true) {

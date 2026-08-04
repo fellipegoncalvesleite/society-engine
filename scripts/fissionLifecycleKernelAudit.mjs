@@ -44,7 +44,14 @@ try {
     fixtures.push({ id, claim, status: !nonVacuous ? "VACUOUS" : passed ? "PASS" : "FAIL", nonVacuityNote, ...rest });
   };
 
-  const step = (state, to, day, extra = {}) => k.requestTransition({ current: state, to, today: day, ...extra });
+  // ROADMAP ITEM 4 §3 — `cause` is now REQUIRED on every transition request, and a caller that omits
+  // it is refused. These fixtures exercise the PERMITTED-SET and precondition machinery rather than
+  // the cause guard, which has its own suite in `provisionalLifecycleExitAudit.mjs`, so the helper
+  // presents itself as a witnessed physical event and supplies the co-location proof `reintegrated`
+  // demands. `E7` in the exit audit asserts that an UNDECLARED caller is still refused, so nothing is
+  // hidden by this default.
+  const step = (state, to, day, extra = {}) =>
+    k.requestTransition({ current: state, to, today: day, cause: "physical_event", physicalCoLocationProven: true, ...extra });
 
   // ── K1 — the contract table is internally coherent ──────────────────────────────────────────
   record("K1", "every non-terminal phase has a bound and a destination, and no quantity is owned twice", () => {
@@ -216,7 +223,7 @@ try {
     for (const c of k.PHASE_CONTRACTS.filter((x) => !x.terminal)) {
       const state = { phase: c.phase, phaseEnteredDay: 0, history: [] };
       for (const t of k.PHASE_CONTRACTS) {
-        const r = step(state, t.phase, 5, { endorsedFounderCount: 5, livedEvidenceCount: 9 });
+        const r = step(state, t.phase, 5, { endorsedFounderCount: 5, livedEvidenceCount: 9, physicalCoLocationProven: true });
         if (c.permittedNext.includes(t.phase)) {
           if (r.ok === true) permitted += 1;
         } else if (r.ok === false && r.rejection === "transition_not_permitted") {
