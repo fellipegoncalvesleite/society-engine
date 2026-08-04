@@ -28,6 +28,8 @@ import { expeditionDailyAction } from "./expedition";
 import { intraSeasonTripDailyAction } from "./intraSeasonTrips";
 import { provisionalTravelDailyAction } from "./provisionalTravel";
 import { provisionalSubsistenceDailyAction } from "./provisionalTravelSubsistence";
+import { provisionalReturnDecisionDailyAction } from "./provisionalReturnDecision";
+import { provisionalEstablishmentDailyAction } from "./provisionalEstablishment";
 
 /**
  * The default daily-action registry advanced by `advanceWorldByDays`.
@@ -47,4 +49,9 @@ export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   // actually camps on rather than the one it left that morning. Same no-op property: it touches only
   // live provisional successors, and no natural path creates one.
   provisionalSubsistenceDailyAction,
+  // ROADMAP ITEM 4 — then the group reads the day it has just lived. Giving up comes before trying
+  // harder: a group that has decided to walk home does not spend the same day accumulating evidence
+  // about a site it is leaving.
+  provisionalReturnDecisionDailyAction,
+  provisionalEstablishmentDailyAction,
 ];

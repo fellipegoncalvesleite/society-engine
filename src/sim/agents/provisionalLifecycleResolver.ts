@@ -147,17 +147,34 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
     //
     // It is reported rather than silent: `hasUnresolvedProvisionalGroup` counts it, so an immortal
     // provisional group is a VISIBLE finding instead of an invisible one.
-    if (cycles >= MAX_RETURN_ESTABLISH_CYCLES) {
-      resolutions.push({
-        bandId: String(band.id),
-        lineageId: record.lineageId,
-        fromPhase: record.phase,
-        toPhase: record.phase,
-        populationAtResolution: population,
-        reason: "cycle_bound_reached_every_remaining_exit_is_physical",
-        resolutionCycles: cycles,
-      });
-      continue;
+    // ── ROADMAP ITEM 4 §18 — WHAT ACTUALLY HAPPENS AT THE BOUND. ────────────────────────────────
+    //
+    // The bound used to freeze the group wherever it stood, and a smoke run showed what that means in
+    // practice: a group that had spent its attempts sat in `returning` for nineteen hundred days,
+    // walking nowhere, unable to stabilize because `stabilized` is only reachable from `establishing`,
+    // and resolving only by starving at the decline cap. "Every remaining exit is physical" was true
+    // and one of the exits was unreachable.
+    //
+    // So the bound now permits EXACTLY ONE more transition, and only one that lands the group in
+    // `establishing` — the bounded establishment reassessment §18 requires. It is not a reprieve and it
+    // is not a success: `establishing` is a trial, `stabilized` still demands lived evidence, and after
+    // this the resolver advances nothing at all. The group's exits are then real and all reachable:
+    // demonstrate it can live here, be found by its parent, or die.
+    const atBound = cycles >= MAX_RETURN_ESTABLISH_CYCLES;
+    const settleHere = atBound && record.phase !== "establishing" && contract.onTimeout === "establishing";
+    if (atBound) {
+      if (!settleHere) {
+        resolutions.push({
+          bandId: String(band.id),
+          lineageId: record.lineageId,
+          fromPhase: record.phase,
+          toPhase: record.phase,
+          populationAtResolution: population,
+          reason: "cycle_bound_reached_every_remaining_exit_is_physical",
+          resolutionCycles: cycles,
+        });
+        continue;
+      }
     }
 
     const transition = requestTransition({
@@ -171,8 +188,10 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
     if (transition.ok === true) {
       changed = true;
       // One completed cycle is a return attempt that ended without reaching anybody. Counted at that
-      // exact edge so an ordinary arrival, failure or death does not consume the budget.
-      const completedCycle = record.phase === "returning" && transition.state.phase === "establishing";
+      // exact edge so an ordinary arrival, failure or death does not consume the budget — and NOT on
+      // the settle-here transition, which is the END of the attempts rather than another one. Counting
+      // it there pushed the ledger to four against a bound of three, which E6 caught.
+      const completedCycle = !settleHere && record.phase === "returning" && transition.state.phase === "establishing";
       resolutions.push({
         bandId: String(band.id),
         lineageId: record.lineageId,

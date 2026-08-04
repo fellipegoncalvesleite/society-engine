@@ -266,7 +266,13 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
     transitionWriter: "provisionalEstablishment (world adapter)",
-    permittedNext: ["stabilized", "failed_early", "returning", "provisional_extinguished"],
+    // `reintegrated` is reachable from here for one physical reason: a group that has settled for
+    // where it is standing, having spent its return attempts, is still a group its parent can walk up
+    // to. Without it the only exit a stranded group had was starvation, because `stabilized` is
+    // reachable only from this phase and a meeting was only recognised from `returning`. It changes
+    // nothing about what a clock may do — `reintegrated` still requires a physical event AND proven
+    // co-location, and no timeout may point at it.
+    permittedNext: ["stabilized", "failed_early", "returning", "reintegrated", "provisional_extinguished"],
     terminal: false,
     maxDays: ESTABLISHMENT_MAX_DAYS,
     // **A TIMER ALONE MAY NOT STABILIZE.** The window expiring without lived evidence is a failure,

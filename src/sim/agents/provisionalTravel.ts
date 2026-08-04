@@ -34,7 +34,7 @@
 import { isProvisionalSuccessor } from "./bandLifecycle";
 import { getPhaseContract, requestTransition } from "./fissionLifecycleKernel";
 import { deriveTravelPace } from "./bandMobility";
-import { deriveTravelEffortSplit } from "./provisionalTravelSubsistence";
+import { closeOpenTravelInterval, deriveTravelEffortSplit } from "./provisionalTravelSubsistence";
 import { getNeighborTiles, getTile } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
 import type { Band, FissionLifecycleRecord } from "./types";
@@ -147,13 +147,18 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
         });
         if (transition.ok === true) {
           changed = true;
+          // The journey's interval closes at the journey's end. What the group learned about eating
+          // while WALKING says nothing about whether it can eat HERE, and carrying the walk's deficit
+          // into the site's record would condemn the site for the road's failures.
+          const arrived = closeOpenTravelInterval(band, day);
           bands[String(band.id)] = {
-            ...band,
+            ...arrived,
             provisionalSuccessor: {
-              ...record,
+              ...(arrived.provisionalSuccessor as FissionLifecycleRecord),
               phase: transition.state.phase,
               phaseEnteredDay: transition.state.phaseEnteredDay,
               history: transition.state.history,
+              blockedStepDays: 0,
             },
           };
         }
@@ -213,6 +218,15 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
       // A real contradiction: the group wanted to go that way and the ground refused. It is recorded
       // rather than routed around, because "there is no way forward from here" is exactly the evidence
       // a later return decision needs, and inventing a detour would be inventing knowledge.
+      //
+      // It is now RETAINED as well as recorded, because a refusal the group forgets by tomorrow cannot
+      // become a reason for anything. The counter is the group's own experience of being stopped; it
+      // says nothing about what lies beyond the tiles that refused it.
+      changed = true;
+      bands[String(band.id)] = {
+        ...band,
+        provisionalSuccessor: { ...record, blockedStepDays: (record.blockedStepDays ?? 0) + 1 },
+      };
       steps.push({ ...paced, refusal: "every_step_toward_the_destination_is_impassable", impassableNeighboursRefused: impassable });
       continue;
     }

@@ -104,6 +104,72 @@ export interface FissionLifecycleRecord {
    * Bounded by construction: running sums plus a small ring of recent days.
    */
   readonly travelSubsistence?: TravelSubsistenceState;
+  /**
+   * ROADMAP ITEM 4 — the group's attempt to live where it is standing, and what it has learned there.
+   *
+   * Present only while a group is in `establishing`. Reset whenever the group enters that phase again,
+   * because evidence gathered at one site says nothing about another.
+   */
+  readonly establishment?: ProvisionalEstablishmentState;
+  /**
+   * Days the group wanted to go on and the ground refused every step toward its destination. Retained
+   * because "there is no way forward from here" is exactly the evidence a return decision needs, and
+   * it is the group's OWN experience of being stopped rather than knowledge of what lies beyond.
+   */
+  readonly blockedStepDays?: number;
+  /** Why the group turned for home, when it did. A reason id, never prose. */
+  readonly returnCause?: ProvisionalReturnCause;
+}
+
+/**
+ * Why a group decided to walk home. Every one of these is something the group has LIVED and can
+ * measure on itself; none reads the parent, the destination or the future.
+ */
+export type ProvisionalReturnCause =
+  | "measured_support_failed_at_this_site"
+  | "no_water_where_the_group_is_standing"
+  | "every_way_forward_is_blocked"
+  | "not_enough_working_people_left"
+  | "embodied_burden_beyond_what_the_group_can_carry";
+
+/** A named lived-evidence signal, with where it came from and when it was earned. */
+export interface ProvisionalEvidenceSignal {
+  readonly id: ProvisionalEvidenceId;
+  /** The production authority the signal is read from. Never a UI or read-model field. */
+  readonly sourceAuthority: string;
+  /** The day the signal first held. Absent while it does not hold. */
+  readonly acquiredDay?: number;
+  readonly holds: boolean;
+  /** The measured quantity behind the verdict, so a reader can check it rather than trust it. */
+  readonly measured: number;
+  readonly required: number;
+}
+
+export type ProvisionalEvidenceId =
+  | "measured_support_intervals_at_this_site"
+  | "measured_support_covered_a_real_share_of_demand"
+  | "food_repeatedly_taken_from_local_sources"
+  | "water_reachable_where_the_group_lives"
+  | "productive_labour_retained"
+  | "embodied_burden_bounded"
+  | "long_enough_to_reject_one_lucky_day";
+
+export interface ProvisionalEstablishmentState {
+  readonly siteTileId: TileId;
+  readonly sinceDay: number;
+  /** The interval count the group carried into this site, so intervals HERE can be counted. */
+  readonly closedIntervalsAtEntry: number;
+  /** The day the current bounded evidence window opened. A window forces a decision, not an outcome. */
+  readonly windowOpenedDay: number;
+  readonly windowsAssessed: number;
+  /** Days the group has physically been at this site. */
+  readonly daysAtSite: number;
+  /** Cumulative days at this site on which a gathering attempt took something real. */
+  readonly productiveGatheringDaysAtSite: number;
+  /** Cumulative measured water stress over the days at this site. */
+  readonly waterStressDaySumAtSite: number;
+  readonly signals: readonly ProvisionalEvidenceSignal[];
+  readonly satisfiedSignals: number;
 }
 
 /**

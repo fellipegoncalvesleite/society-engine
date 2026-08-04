@@ -186,7 +186,13 @@ export function performAtomicReintegration(request: ReintegrationRequest): Reint
   if (successorRaw === undefined) {
     return { ok: false, refusal: "successor_not_found" };
   }
-  if (!isProvisionalSuccessor(successorRaw) || successorRaw.provisionalSuccessor?.phase !== "returning") {
+  // `returning` is the ordinary case. `establishing` is the stranded one: a group that spent its
+  // return attempts and settled for where it stands is still a group its parent can walk up to, and
+  // refusing it here would make the meeting depend on a phase label rather than on the two groups
+  // being in the same place.
+  const rejoinablePhase = successorRaw.provisionalSuccessor?.phase === "returning" ||
+    successorRaw.provisionalSuccessor?.phase === "establishing";
+  if (!isProvisionalSuccessor(successorRaw) || !rejoinablePhase) {
     return { ok: false, refusal: "successor_is_not_returning", detail: successorRaw.provisionalSuccessor?.phase ?? "no record" };
   }
   // ── THE JOURNEY ENDS HERE, SO THE INTERVAL MEASURING IT CLOSES HERE. ──
