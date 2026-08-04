@@ -195,6 +195,16 @@ export function auditFissionLineageOwnership(bands: readonly Band[]): readonly F
   const currentSuccessorsByLineage = new Map<string, string[]>();
   const provenanceByLineage = new Map<string, string[]>();
   const departedAttemptsByLineage = new Map<string, string[]>();
+  /**
+   * Every lineage that HAS a successor record, current or resolved.
+   *
+   * Distinct from `currentSuccessorsByLineage` and the distinction only became visible once a lineage
+   * could actually finish: after reintegration the successor's record is terminal, so the current map
+   * no longer holds it, and `departed_attempt_without_a_successor` fired on a departure that had
+   * resolved exactly as intended. The defect that check exists to catch is "a departure happened and
+   * NO successor was ever created" — which is a question about existence, not about currency.
+   */
+  const anySuccessorByLineage = new Set<string>();
 
   for (const band of bands) {
     const id = String(band.id);
@@ -221,10 +231,13 @@ export function auditFissionLineageOwnership(bands: readonly Band[]): readonly F
         departedAttemptsByLineage.set(attempt.lineageId, departed);
       }
     }
-    if (successor !== undefined && !isTerminalPhase(successor.phase)) {
-      const list = currentSuccessorsByLineage.get(successor.lineageId) ?? [];
-      list.push(id);
-      currentSuccessorsByLineage.set(successor.lineageId, list);
+    if (successor !== undefined) {
+      anySuccessorByLineage.add(successor.lineageId);
+      if (!isTerminalPhase(successor.phase)) {
+        const list = currentSuccessorsByLineage.get(successor.lineageId) ?? [];
+        list.push(id);
+        currentSuccessorsByLineage.set(successor.lineageId, list);
+      }
     }
   }
 
@@ -237,7 +250,7 @@ export function auditFissionLineageOwnership(bands: readonly Band[]): readonly F
     }
   }
   for (const [lineageId, ids] of departedAttemptsByLineage) {
-    if (!currentSuccessorsByLineage.has(lineageId)) {
+    if (!anySuccessorByLineage.has(lineageId)) {
       findings.push({ defect: "departed_attempt_without_a_successor", lineageId, bandIds: ids });
     }
   }

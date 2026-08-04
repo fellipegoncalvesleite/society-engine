@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T15:45:48.424Z",
+  "generatedAt": "2026-08-04T19:58:21.053Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "observeDays": 400,
@@ -58,7 +58,7 @@
         "residentialAnchor": 0,
         "knownTiles": 15,
         "storageCapacity": 0,
-        "provisionalPhase": "returning"
+        "provisionalPhase": "establishing"
       },
       "changedFields": [
         "dependents",
@@ -248,7 +248,7 @@
         "movedOnlyWhileQuarantined": [
           "provisionalPhase"
         ],
-        "finalPhase": "returning"
+        "finalPhase": "establishing"
       }
     },
     {
@@ -401,7 +401,7 @@
         "status": "NOT_REPRODUCED_IN_THIS_WINDOW",
         "quarantineEndedAfterDays": 400,
         "windowDays": 400,
-        "finalPhase": "returning",
+        "finalPhase": "establishing",
         "stillInTheWorld": true,
         "isEstablishedBandNow": false,
         "populationStillHeld": 11,

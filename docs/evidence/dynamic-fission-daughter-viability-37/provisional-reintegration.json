@@ -1,0 +1,200 @@
+{
+  "generatedAt": "2026-08-04T19:58:26.810Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "parentId": "band:varied-river-mid",
+  "successorId": "band:varied-river-mid:provisional:1",
+  "departureTile": "tile:110:57",
+  "targetTile": "tile:108:55",
+  "awayTile": "tile:108:55",
+  "afterReturnWalk": "tile:110:57",
+  "ledger": {
+    "demographic": {
+      "parentBefore": {
+        "workingAdults": 12,
+        "dependents": 8,
+        "elders": 3
+      },
+      "successorBefore": {
+        "workingAdults": 7,
+        "dependents": 3,
+        "elders": 1
+      },
+      "parentAfter": {
+        "workingAdults": 19,
+        "dependents": 11,
+        "elders": 4
+      },
+      "worldPopulationBefore": 235,
+      "worldPopulationAfter": 235,
+      "populationConserved": true,
+      "workingAdultsConserved": true,
+      "dependentsConserved": true,
+      "eldersConserved": true,
+      "measuredFromResultingWorld": true,
+      "fixedRatioRecomputeUsed": false
+    },
+    "physical": {
+      "parentTileId": "tile:110:57",
+      "successorTileId": "tile:110:57",
+      "coLocated": true,
+      "journeyTiles": 8
+    },
+    "embodied": {
+      "parentHungerBefore": 0.14,
+      "successorHunger": 0.14,
+      "parentHungerAfter": 0.13999999999999999,
+      "parentReliefedByAbsorbingAHungrierGroup": false,
+      "successorAcuteRiskEpisodes": 10,
+      "acuteRiskEpisodesNotMerged": 10,
+      "claim": "no_unearned_relief"
+    },
+    "entity": {
+      "successorStillLiving": false,
+      "successorStillHoldsBodies": false,
+      "successorPhase": "reintegrated",
+      "removedExactlyOnce": true
+    }
+  },
+  "summary": {
+    "fixtures": 9,
+    "passing": 9,
+    "failing": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "R1_reintegration_is_refused_at_a_distance",
+      "claim": "a returning group that is not standing on its parent's tile cannot be reintegrated — reintegration at a distance is the teleport this item exists to remove, in the opposite direction",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "successorTile": "tile:108:55",
+        "parentTile": "tile:110:57",
+        "refusal": "not_physically_co_located",
+        "detail": "parent at tile:110:57, successor at tile:108:55"
+      }
+    },
+    {
+      "id": "R2_the_return_is_a_physical_walk_back",
+      "claim": "the group walks back toward the tile it physically left from — the last place it actually saw its parent — rather than being retargeted at a position it has no channel to observe",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "departureTile": "tile:110:57",
+        "awayTile": "tile:108:55",
+        "afterReturnWalk": "tile:110:57",
+        "parentTileNow": "tile:110:57",
+        "trailLength": 8
+      }
+    },
+    {
+      "id": "R3_co_located_reintegration_conserves_every_cohort_line",
+      "claim": "the parent's working adults, dependents and elders each gain EXACTLY what the returning group held — cohorts are added line by line, never re-derived at fixed ratios, which is the mechanism that manufactured dependents in 0 of 2 measured natural fissions",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "parentBefore": {
+          "workingAdults": 12,
+          "dependents": 8,
+          "elders": 3
+        },
+        "successorBefore": {
+          "workingAdults": 7,
+          "dependents": 3,
+          "elders": 1
+        },
+        "parentAfter": {
+          "workingAdults": 19,
+          "dependents": 11,
+          "elders": 4
+        },
+        "worldPopulation": {
+          "before": 235,
+          "after": 235
+        },
+        "conserved": {
+          "population": true,
+          "workingAdults": true,
+          "dependents": true,
+          "elders": true
+        }
+      }
+    },
+    {
+      "id": "R4_the_provisional_entity_is_removed_exactly_once",
+      "claim": "after reintegration the successor holds no bodies, is terminal, and a SECOND reintegration is refused — the contract said the entity is removed exactly once, and nothing used to remove it at all",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "entity": {
+          "successorStillLiving": false,
+          "successorStillHoldsBodies": false,
+          "successorPhase": "reintegrated",
+          "removedExactlyOnce": true
+        },
+        "stillInWorldAsRecord": true,
+        "populationAfter": 0,
+        "isLivingBand": false,
+        "isBandTerminal": true,
+        "secondAttempt": "successor_is_not_returning"
+      }
+    },
+    {
+      "id": "R5_no_unearned_relief_from_absorbing_the_returning_group",
+      "claim": "absorbing a HUNGRIER group never leaves the parent better fed than it was; the merged value is population-weighted, so the returning group's hardship is shared rather than erased",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "parentHungerBefore": 0.14,
+        "successorHunger": 0.14,
+        "parentHungerAfter": 0.13999999999999999,
+        "parentReliefedByAbsorbingAHungrierGroup": false,
+        "successorAcuteRiskEpisodes": 10,
+        "acuteRiskEpisodesNotMerged": 10,
+        "claim": "no_unearned_relief"
+      }
+    },
+    {
+      "id": "R6_a_parent_that_has_moved_prevents_remote_reintegration",
+      "claim": "the group reaches the meeting place, its parent is not there, and it is NOT reintegrated, NOT retargeted at a position it has no channel to observe, and NOT made to disappear — it keeps its people and stays provisional",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "successorTile": "tile:110:57",
+        "parentTile": "tile:109:57",
+        "refusal": "not_physically_co_located",
+        "successorStillHoldsPeople": 11,
+        "successorStillProvisional": true,
+        "NOT_RESOLVED_HERE": "what becomes of a group that cannot find its parent is the return vertical's remaining open end; it is bounded by the return/establish cycle and by zero-population extinguishment, and nothing here fabricates a resolution"
+      }
+    },
+    {
+      "id": "R7_a_terminal_parent_cannot_receive_anybody",
+      "claim": "co-location with a dispersed parent is refused — handing people to an archived band would resurrect it through the fission path",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "refusal": "parent_is_terminal"
+      }
+    },
+    {
+      "id": "R8_a_group_with_no_bodies_is_not_reintegrated",
+      "claim": "an empty group is refused rather than handed back — routing it through reintegration would transfer bodies that do not exist, and zero population is the extinguishment resolver's case",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "refusal": "successor_has_no_bodies"
+      }
+    },
+    {
+      "id": "R9_reintegration_is_deterministic",
+      "claim": "two identical reintegration requests produce a byte-identical world",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "comparedBands": 10
+      }
+    }
+  ]
+}
