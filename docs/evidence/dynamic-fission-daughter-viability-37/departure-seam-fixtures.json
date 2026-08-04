@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T04:35:21.109Z",
+  "generatedAt": "2026-08-04T14:55:11.037Z",
   "checkpoint": "ROADMAP ITEM 4 §11 — atomic departure seam controlled gates",
   "authority": "src/sim/agents/fissionDepartureSeam.ts",
   "scopeLimit": "The seam is NOT reachable from ordinary fission — D16 reads the sources to prove it. These gates drive the production writer directly. They prove the departure TRANSITION is truthful; they prove nothing about travel, return or stabilization, none of which exist, and nothing about natural occurrence.",
@@ -88,6 +88,9 @@
       "status": "PASS",
       "nonVacuityNote": "the parent HAS storage, so the successor's zero is an honest absence rather than a world with no storage at all",
       "material": {
+        "inheritedDecisionRecords": 0,
+        "inheritedResidentialMoveEvents": 0,
+        "inheritedProtoCampMemory": 0,
         "successorStorageCapacity": 0,
         "storageCapacityCreatedFromNothing": false,
         "successorInheritedExpeditions": 0,

@@ -190,7 +190,11 @@ try {
       nonVacuityNote: "the parent HAS storage, so the successor's zero is an honest absence rather than a world with no storage at all",
       passed:
         m.storageCapacityCreatedFromNothing === false && m.successorStorageCapacity === 0 &&
-        m.successorInheritedExpeditions === 0 && m.successorInheritedReceipts === 0,
+        m.successorInheritedExpeditions === 0 && m.successorInheritedReceipts === 0 &&
+        // Added after the admission audit measured a real successor inheriting the parent's 20
+        // decision records, 4 move events and its proto-camp memory through the spread.
+        m.inheritedDecisionRecords === 0 && m.inheritedResidentialMoveEvents === 0 &&
+        m.inheritedProtoCampMemory === 0,
     };
   });
 

@@ -188,9 +188,9 @@ Roadmap Item 3:
 accepted and frozen
 
 Roadmap Item 4:
-active — controlled atomic departure and first full provisional day
-complete locally; travel and bounded resolution not complete;
-not an implementation candidate
+active — atomic departure implemented locally; truthful one-day
+provisional integration NOT complete (earlier claim withdrawn);
+travel not authorized; not an implementation candidate
 
 Roadmap Item 5:
 not started
@@ -11438,3 +11438,29 @@ exception; daughter colours related-but-distinct and never visually confusing.
   **INCOMPLETE**, 2/12 readers migrated. **T10 proves a world with no departure carries no attempt
   and no provisional record at all.** tsc both, build, graph 221/764 and import boundary 85 unchanged;
   no frozen evidence touched. Item 3 frozen; **Item 5 not started.**
+
+- **ROADMAP ITEM 4 — THE "VERTICAL SLICE CLOSED" CLAIM IS WITHDRAWN (2026-08-03) — PROGRESS: MEASURED
+  READER ADMISSION / NOT PUSHED / TRAVEL NOT AUTHORIZED.** The previous report concluded the
+  departure slice was closed because a successor was alive after a season. **That proves only that
+  ordinary viability did not delete it.** `provisionalReaderAdmissionAudit.mjs` now advances a real
+  world **one day at a time** with a provisional successor in it, samples every observable after every
+  day, and samples an ordinary band in the same world with the identical instrument so a zero can be
+  told from a quiet world. **Result: the successor was admitted by SIX production paths and was
+  behaving as an ordinary established band.** It **MOVED** — `tile:111:57` → `tile:111:55`, free
+  movement with no travel authority, so the `no_free_movement` claim **FAILS**; it ran **24 same-day
+  subsistence trips**; it **earned food receipts** from them; it received **2 ordinary seasonal
+  decisions**; its status flipped `foraging`/`moving`; and its provisional phase timed out
+  `travelling → returning` (the resolver working correctly). **Only `viability` was correctly
+  excluded**, and the control band moved on the same days, so that one is a real exclusion.
+  **A SECOND DEFECT WAS FOUND IN THE SEAM ITSELF, BY MEASUREMENT RATHER THAN BY READING IT:** the
+  `{ ...parent }` spread handed the newborn group the parent's **20 decision records, 4 residential
+  move events, its proto-camp memory and its activity summaries**. The legacy `createDaughterBand`
+  maintains a registered non-cloneable field list and a clone guard for exactly this, and the seam
+  bypassed all of it — a group that has existed for zero days cannot have deliberated twenty times.
+  **Fixed: those records are reset at construction and D7 now asserts it** (`acuteRisk` is
+  deliberately NOT reset — L5). **Still open, and the reason travel stays unauthorized:** the ordinary
+  decision loop, `intraSeasonTrips`, residential movement and proto-camp formation all still admit a
+  provisional group, so it continues to acquire decisions, moves and a camp during the run. Those are
+  edits to hot production paths and were not attempted without budget to verify them. tsc both, build,
+  graph 221/764 and import boundary 85 unchanged; D1-D18 18/18; no frozen evidence touched. Item 3
+  frozen; **Item 5 not started.**

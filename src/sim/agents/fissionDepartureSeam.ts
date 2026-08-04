@@ -87,6 +87,9 @@ export interface DepartureLedger {
     readonly storageCapacityCreatedFromNothing: boolean;
     readonly successorInheritedExpeditions: number;
     readonly successorInheritedReceipts: number;
+    readonly inheritedDecisionRecords: number;
+    readonly inheritedResidentialMoveEvents: number;
+    readonly inheritedProtoCampMemory: number;
   };
   /** L2 + L5 — no unearned improvement. No exactness is claimed for these; they are intensities. */
   readonly embodied: {
@@ -280,6 +283,33 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
     expeditions: [],
     seasonalFoodReceipts: undefined,
     recentIntraSeasonTrips: [],
+    // ── STATE THE `{ ...parent }` SPREAD WOULD OTHERWISE LAUNDER ──────────────────────────────
+    //
+    // Found by `provisionalReaderAdmissionAudit.mjs` measuring a real successor rather than by
+    // reading this file: the spread handed the newborn group the parent's **20 decision records,
+    // 4 residential move events, its proto-camp memory and its acute-risk state**. The legacy
+    // `createDaughterBand` maintains a registered `DAUGHTER_NON_CLONEABLE_FIELDS` list and an
+    // `assertDaughterFissionStateNotCloned` guard for exactly this, and this seam bypassed all of
+    // it — a group that has existed for zero days cannot have deliberated twenty times or moved
+    // camp four times.
+    //
+    // These are RESET rather than projected because each is a RECORD of something that happened to
+    // the parent, not an intensity the successor inherits a share of. `SPLIT_POLICY_MATRIX.md`
+    // classifies history and debug rings as reset-with-retained-lineage.
+    decisionHistory: [],
+    recentResidentialMoveEvents: [],
+    recentInvestigationOutcomes: [],
+    pendingInvestigation: undefined,
+    // Proto-camp memory describes a residence this group does not have; it is a derived summary of
+    // the PARENT's camp, and carrying it would be the stale established-camp projection L7 forbids.
+    protoCampMemory: undefined,
+    activityLaborSummary: undefined,
+    activityOutcomeSummary: undefined,
+    activityShadowSubsistenceSummary: undefined,
+    activityMemoryUpdateSummary: undefined,
+    // `acuteRisk` is DELIBERATELY NOT reset — L5. Injury and acute hardship are embodied condition
+    // that travels with the people, and clearing it here is precisely the cure-by-reset the legacy
+    // path performed and the realism checklist forbids.
     fissionAttempt: undefined,
     provisionalSuccessor: {
       phase: successorLifecycle.phase,
@@ -341,6 +371,10 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       fixedRatioRecomputeUsed: false,
     },
     material: {
+      // Records the parent held that a zero-day-old group cannot have. Measured, not assumed.
+      inheritedDecisionRecords: (successor.decisionHistory ?? []).length,
+      inheritedResidentialMoveEvents: (successor.recentResidentialMoveEvents ?? []).length,
+      inheritedProtoCampMemory: successor.protoCampMemory === undefined ? 0 : 1,
       successorStorageCapacity: successor.storageCapacity ?? 0,
       storageCapacityCreatedFromNothing: (successor.storageCapacity ?? 0) > 0,
       successorInheritedExpeditions: successor.expeditions?.length ?? 0,
