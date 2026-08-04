@@ -33,6 +33,7 @@ import { inheritAnimalPatternKnowledgeForDaughter } from "./animalLearning";
 import { inheritResourceKnowledgeForDaughter } from "./resourceKnowledge";
 import { deriveReportedKnowledgeTargetBias } from "./reportedKnowledge";
 import { deriveDaughterColor } from "./lineageColor";
+import { deriveLegacyNonCloneableFields } from "./fissionFieldTransferPolicy";
 import { getLocalUsePressureValue } from "./pressure";
 import {
   getCrowdingPenalty,
@@ -751,7 +752,22 @@ function applyDemographyUpdate(
 // `{ ...parent }` spread — each is explicitly inherited (partial), reset, or
 // degraded in createDaughterBand. `satisfies readonly (keyof Band)[]` keeps the
 // list valid if a field is renamed. 2K.1D-A.
-const DAUGHTER_NON_CLONEABLE_FIELDS = [
+//
+// ── ROADMAP ITEM 4 §5 — THIS LIST IS NO LONGER THE POLICY, IT IS A CONSUMER OF IT. ────────────
+//
+// The literal below is RETAINED VERBATIM as the historical record of what this path registered,
+// and the value actually used is now derived from `fissionFieldTransferPolicy.ts`, which classifies
+// all 133 `keyof Band` rather than the 67 someone remembered. Two policies for one question is how
+// they drift; there is now one, and the daughter path and the Direction-D successor read the same
+// table.
+//
+// The derived set is a SUPERSET of this literal by exactly two fields — `pendingInvestigation` and
+// `recentInvestigationOutcomes` — and adding them is provably inert rather than merely believed to
+// be: the guard fires only when `parentValue !== undefined && daughter[field] === parentValue`, and
+// `createDaughterBand` writes `undefined` to both explicitly, so the second condition can hold only
+// when the first is false. `scripts/fissionFieldTransferAudit.mjs` asserts the derived set against
+// this literal on every run, so a future edit to either cannot silently separate them.
+export const DAUGHTER_NON_CLONEABLE_FIELDS_HISTORICAL_LITERAL = [
   "knowledge", // inherit: partial known tiles
   "placeMemory", // inherit: partial
   "travelCorridors", // inherit: partial
@@ -820,6 +836,9 @@ const DAUGHTER_NON_CLONEABLE_FIELDS = [
   "causalTraces", // reset to [own trace]
   "deepHistory", // inherit: OWN founding snapshot + bounded inherited summaries (DEEP-TIME-HISTORY-TECH-1) — never the parent's history object
 ] as const satisfies readonly (keyof Band)[];
+
+/** The value the guard actually iterates: one policy, two consumers. See the note above. */
+const DAUGHTER_NON_CLONEABLE_FIELDS = deriveLegacyNonCloneableFields();
 
 // Structural guard (2K.1D-A): fail loudly when a non-cloneable field still points
 // at the parent's object/array (i.e. it slipped through the spread unhandled).
@@ -1939,7 +1958,7 @@ function makeFissionReason(
   };
 }
 
-function inheritKnowledgeState(
+export function inheritKnowledgeState(
   world: WorldState,
   parent: Band,
   daughterBandId: BandId,
@@ -2099,7 +2118,7 @@ function selectInheritedKnownTileRecords(
   return records.slice(0, inheritedLimit);
 }
 
-function inheritPlaceMemory(
+export function inheritPlaceMemory(
   parent: Band,
   knowledge: KnowledgeState,
 ): Readonly<Record<TileId, PlaceMemoryRecord>> {
@@ -2125,7 +2144,7 @@ function inheritPlaceMemory(
   return inherited as Readonly<Record<TileId, PlaceMemoryRecord>>;
 }
 
-function inheritCrossingMemories(
+export function inheritCrossingMemories(
   parent: Band,
   knowledge: KnowledgeState,
 ): Readonly<Record<string, KnownCrossingMemory>> {
@@ -2152,7 +2171,7 @@ function inheritCrossingMemories(
   return inherited as Readonly<Record<string, KnownCrossingMemory>>;
 }
 
-function inheritTravelCorridors(
+export function inheritTravelCorridors(
   parent: Band,
   knowledge: KnowledgeState,
 ): Readonly<Record<RouteId, TravelCorridorMemory>> {
@@ -2176,7 +2195,7 @@ function inheritTravelCorridors(
   return inherited as Readonly<Record<RouteId, TravelCorridorMemory>>;
 }
 
-function getInheritanceProfile(
+export function getInheritanceProfile(
   parent: Band,
   knowledge: KnowledgeState,
   memories: Readonly<Record<TileId, PlaceMemoryRecord>>,
@@ -3406,7 +3425,7 @@ function normalizeVector(vector: Coord): Coord | undefined {
 
 // RANGE-2: colours of currently-active bands, so a new daughter colour can be pushed clear of
 // them (display-only — band.color affects no decision, fingerprint, or baseline).
-function activeBandColors(world: WorldState): readonly string[] {
+export function activeBandColors(world: WorldState): readonly string[] {
   return Object.values(world.bands)
     .filter((band) => band.viability?.status !== "absorbed" && band.viability?.status !== "extinct")
     .map((band) => band.color);

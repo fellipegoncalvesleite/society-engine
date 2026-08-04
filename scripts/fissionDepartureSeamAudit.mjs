@@ -36,7 +36,12 @@ try {
   const makeParent = (cohorts, opts = {}) => ({
     id: "parent",
     name: "Parent",
-    color: "#111",
+    // A WELL-FORMED 7-digit hex, and the reason is a real finding rather than tidiness: the previous
+    // "#111" is 4-digit shorthand, `hexToHsl` cannot parse it, and `deriveDaughterColor`'s non-hex
+    // guard then RETURNS THE PARENT'S COLOUR VERBATIM. The transfer policy caught that as
+    // `color:identical_to_the_parent` and refused the departure — correctly, because two bands the
+    // viewer cannot tell apart at the moment of a split is exactly what the identity class is for.
+    color: "#3366cc",
     position: "tile:10:10",
     size: cohorts.workingAdults + cohorts.dependents + cohorts.elders,
     status: "foraging",
@@ -55,6 +60,22 @@ try {
     recentIntraSeasonTrips: [{ id: "t1" }],
     daughterBandIds: [],
     fissionEvents: [],
+    // ROADMAP ITEM 4 §4 — the seam now routes the successor's knowledge through the SAME canonical
+    // degrading inheritors the legacy daughter path uses, so it reads the parent's knowledge stores
+    // and the world's tiles. These fixtures test conservation and ownership, not knowledge transfer,
+    // so they supply the EMPTY shapes: present and well-formed, carrying nothing to transfer. The
+    // suite crashed before this was added, and that is worth recording — a synthetic world with no
+    // `tiles` map at all is not a world, and the fixture was passing only because the seam had never
+    // needed to look.
+    knowledge: opts.knowledge ?? {
+      selfBandId: "parent", observedTiles: {}, compressedKnownTileSummaries: [], knownAreaSummaries: [],
+      knownBands: [], knownSettlements: [], knownRoutes: [], placeAttachments: [],
+      tileObservationHistory: [], rumors: [],
+    },
+    placeMemory: {},
+    travelCorridors: {},
+    crossingMemories: {},
+    technologies: [],
     viability: opts.parentViability ?? { status: "viable" },
     fissionAttempt: opts.attempt ?? {
       phase: "departure_ready",
@@ -77,7 +98,7 @@ try {
 
   const depart = (parent, residual = {}, day = 100) =>
     seam.performAtomicDeparture({
-      world: { bands: { parent }, time: { day, tick: 1 } },
+      world: { bands: { parent }, tiles: {}, time: { day, tick: 1 } },
       parentId: "parent",
       today: day,
       residualContext: { ...RESIDUAL_SOUND, ...residual },

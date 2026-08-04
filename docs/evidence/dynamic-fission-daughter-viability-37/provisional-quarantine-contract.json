@@ -1,0 +1,413 @@
+{
+  "generatedAt": "2026-08-04T15:45:48.424Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "observeDays": 400,
+  "parentId": "band:varied-river-mid",
+  "successorId": "band:varied-river-mid:provisional:1",
+  "method": "WITH-MINUS-WITHOUT: two worlds identical but for the successor's `provisionalSuccessor` record, advanced day by day over the same window. A field moving in RELEASED and not in QUARANTINED was blocked by the gate on this band on these days.",
+  "arms": {
+    "quarantined": {
+      "first": {
+        "position": "tile:110:57",
+        "population": 11,
+        "workingAdults": 7,
+        "dependents": 3,
+        "elders": 1,
+        "status": "foraging",
+        "hungerPressure": 0.14,
+        "diseaseBurden": 0.08,
+        "injuryBurden": 0.06,
+        "mortalityRisk": 0.08,
+        "acuteRisk": 1,
+        "acuteRiskEpisodes": 10,
+        "deathMemory": 1,
+        "viability": null,
+        "decisions": 0,
+        "trips": 0,
+        "expeditions": 0,
+        "receipts": 0,
+        "moveEvents": 0,
+        "protoCamp": 0,
+        "residentialAnchor": 0,
+        "knownTiles": 15,
+        "storageCapacity": 0,
+        "provisionalPhase": "travelling"
+      },
+      "last": {
+        "position": "tile:110:57",
+        "population": 11,
+        "workingAdults": 8,
+        "dependents": 2,
+        "elders": 1,
+        "status": "foraging",
+        "hungerPressure": 0.93,
+        "diseaseBurden": 0.08,
+        "injuryBurden": 0.06,
+        "mortalityRisk": 0.08,
+        "acuteRisk": 1,
+        "acuteRiskEpisodes": 10,
+        "deathMemory": 1,
+        "viability": null,
+        "decisions": 0,
+        "trips": 0,
+        "expeditions": 0,
+        "receipts": 0,
+        "moveEvents": 0,
+        "protoCamp": 0,
+        "residentialAnchor": 0,
+        "knownTiles": 15,
+        "storageCapacity": 0,
+        "provisionalPhase": "returning"
+      },
+      "changedFields": [
+        "dependents",
+        "hungerPressure",
+        "provisionalPhase",
+        "workingAdults"
+      ]
+    },
+    "released": {
+      "first": {
+        "position": "tile:110:57",
+        "population": 11,
+        "workingAdults": 7,
+        "dependents": 3,
+        "elders": 1,
+        "status": "foraging",
+        "hungerPressure": 0.14,
+        "diseaseBurden": 0.08,
+        "injuryBurden": 0.06,
+        "mortalityRisk": 0.08,
+        "acuteRisk": 1,
+        "acuteRiskEpisodes": 10,
+        "deathMemory": 1,
+        "viability": null,
+        "decisions": 0,
+        "trips": 0,
+        "expeditions": 0,
+        "receipts": 0,
+        "moveEvents": 0,
+        "protoCamp": 0,
+        "residentialAnchor": 0,
+        "knownTiles": 15,
+        "storageCapacity": 0,
+        "provisionalPhase": null
+      },
+      "last": {
+        "position": "tile:108:54",
+        "population": 11,
+        "workingAdults": 8,
+        "dependents": 2,
+        "elders": 1,
+        "status": "moving",
+        "hungerPressure": 0.69,
+        "diseaseBurden": 0.08,
+        "injuryBurden": 0.06,
+        "mortalityRisk": 0.08,
+        "acuteRisk": 1,
+        "acuteRiskEpisodes": 10,
+        "deathMemory": 1,
+        "viability": "fragile",
+        "decisions": 4,
+        "trips": 24,
+        "expeditions": 0,
+        "receipts": 1,
+        "moveEvents": 4,
+        "protoCamp": 1,
+        "residentialAnchor": 0,
+        "knownTiles": 40,
+        "storageCapacity": 0.16,
+        "provisionalPhase": null
+      },
+      "changedFields": [
+        "decisions",
+        "dependents",
+        "expeditions",
+        "hungerPressure",
+        "knownTiles",
+        "moveEvents",
+        "position",
+        "protoCamp",
+        "receipts",
+        "status",
+        "storageCapacity",
+        "trips",
+        "viability",
+        "workingAdults"
+      ]
+    },
+    "blockedByTheGate": [
+      "decisions",
+      "expeditions",
+      "knownTiles",
+      "moveEvents",
+      "position",
+      "protoCamp",
+      "receipts",
+      "status",
+      "storageCapacity",
+      "trips",
+      "viability"
+    ],
+    "movedInBothArms": [
+      "dependents",
+      "hungerPressure",
+      "workingAdults"
+    ],
+    "movedOnlyWhileQuarantined": [
+      "provisionalPhase"
+    ]
+  },
+  "summary": {
+    "fixtures": 9,
+    "passing": 9,
+    "failing": 0,
+    "vacuous": 0,
+    "fieldsBlockedByTheGate": 11
+  },
+  "fixtures": [
+    {
+      "id": "Q1_ordinary_residential_systems_are_blocked",
+      "claim": "no ordinary residential field moves on the quarantined successor across the observed window",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "quarantinedDays": 400,
+        "ordinaryAdmitted": [],
+        "ordinaryProvenBlocked": [
+          "position",
+          "decisions",
+          "trips",
+          "moveEvents",
+          "protoCamp",
+          "viability",
+          "expeditions",
+          "receipts"
+        ],
+        "releasedMoved": [
+          "decisions",
+          "dependents",
+          "expeditions",
+          "hungerPressure",
+          "knownTiles",
+          "moveEvents",
+          "position",
+          "protoCamp",
+          "receipts",
+          "status",
+          "storageCapacity",
+          "trips",
+          "viability",
+          "workingAdults"
+        ],
+        "quarantinedMoved": [
+          "dependents",
+          "hungerPressure",
+          "provisionalPhase",
+          "workingAdults"
+        ]
+      }
+    },
+    {
+      "id": "Q2_each_block_is_a_positive_control_not_an_absence",
+      "claim": "removing ONLY the provisional record — changing nothing else about the band, the world, the seed or the days — lets these fields move, so each block is a measured refusal rather than a system that would have done nothing anyway",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "blockedByTheGate": [
+          "decisions",
+          "expeditions",
+          "knownTiles",
+          "moveEvents",
+          "position",
+          "protoCamp",
+          "receipts",
+          "status",
+          "storageCapacity",
+          "trips",
+          "viability"
+        ],
+        "movedInBothArms": [
+          "dependents",
+          "hungerPressure",
+          "workingAdults"
+        ],
+        "movedOnlyWhileQuarantined": [
+          "provisionalPhase"
+        ],
+        "note": "movedOnlyWhileQuarantined SHOULD contain provisionalPhase and nothing else: the provisional lifecycle resolver is the one authority permitted to touch a quarantined group."
+      }
+    },
+    {
+      "id": "Q3_the_resolver_is_the_only_authority_that_moves_a_quarantined_group",
+      "claim": "the only field that moves in the quarantined arm and not in the released one is the lifecycle phase, written by the provisional resolver",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "movedOnlyWhileQuarantined": [
+          "provisionalPhase"
+        ],
+        "finalPhase": "returning"
+      }
+    },
+    {
+      "id": "Q4_bodily_processes_still_reach_a_quarantined_group",
+      "claim": "the ANNUAL demographic step runs on the group while it is still quarantined, and its hunger moves — the quarantine excludes RESIDENTIAL BEHAVIOUR, not physiology, and a group nothing can harm is a group that cannot fail, which is defect 5 restored under a new name",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "bodilyAdmittedWhileQuarantined": [
+          "workingAdults",
+          "dependents",
+          "hungerPressure"
+        ],
+        "bodilyAdmittedWhenReleased": [
+          "workingAdults",
+          "dependents",
+          "hungerPressure"
+        ],
+        "bodilyBlockedByQuarantine": [],
+        "populationOverWindow": {
+          "first": 11,
+          "last": 11
+        },
+        "demographyRanWhileProvisional": true,
+        "demographyRunDayOffset": 60
+      }
+    },
+    {
+      "id": "Q5_bodily_change_follows_the_demographic_cadence",
+      "claim": "population moves on at most one day per simulated year, which is the annual demographic step — more would mean a second writer is reaching the quarantined group",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "quarantinedDays": 400,
+        "populationChangeDays": [],
+        "allowedChanges": 3
+      }
+    },
+    {
+      "id": "Q6_the_embodied_burden_is_not_cleared_by_the_quarantine",
+      "claim": "the successor still holds the acute-risk record and its hunger has not been silently zeroed by a system that skipped it",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "acuteRisk": {
+          "first": 1,
+          "last": 1
+        },
+        "hungerPressure": {
+          "first": 0.14,
+          "last": 0.93
+        }
+      }
+    },
+    {
+      "id": "Q7_the_gate_holds_in_every_live_phase_not_only_in_transit",
+      "claim": "the predicate the production gates read is true in all four live phases and false in all three terminal ones — and the transit predicate would have READMITTED the phases listed, which is why the gates do not use it",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "phaseRows": [
+          {
+            "phase": "travelling",
+            "terminal": false,
+            "isProvisionalSuccessor": true,
+            "isProvisionalGroupInTransit": true,
+            "isEstablishedBand": false,
+            "isLivingBand": true,
+            "isFissionEligibleParent": false
+          },
+          {
+            "phase": "establishing",
+            "terminal": false,
+            "isProvisionalSuccessor": true,
+            "isProvisionalGroupInTransit": false,
+            "isEstablishedBand": false,
+            "isLivingBand": true,
+            "isFissionEligibleParent": false
+          },
+          {
+            "phase": "failed_early",
+            "terminal": false,
+            "isProvisionalSuccessor": true,
+            "isProvisionalGroupInTransit": false,
+            "isEstablishedBand": false,
+            "isLivingBand": true,
+            "isFissionEligibleParent": false
+          },
+          {
+            "phase": "returning",
+            "terminal": false,
+            "isProvisionalSuccessor": true,
+            "isProvisionalGroupInTransit": true,
+            "isEstablishedBand": false,
+            "isLivingBand": true,
+            "isFissionEligibleParent": false
+          },
+          {
+            "phase": "reintegrated",
+            "terminal": true,
+            "isProvisionalSuccessor": false,
+            "isProvisionalGroupInTransit": false,
+            "isEstablishedBand": true,
+            "isLivingBand": true,
+            "isFissionEligibleParent": true
+          },
+          {
+            "phase": "stabilized",
+            "terminal": true,
+            "isProvisionalSuccessor": false,
+            "isProvisionalGroupInTransit": false,
+            "isEstablishedBand": true,
+            "isLivingBand": true,
+            "isFissionEligibleParent": true
+          },
+          {
+            "phase": "provisional_extinguished",
+            "terminal": true,
+            "isProvisionalSuccessor": false,
+            "isProvisionalGroupInTransit": false,
+            "isEstablishedBand": true,
+            "isLivingBand": true,
+            "isFissionEligibleParent": true
+          }
+        ],
+        "transitPredicateWouldHaveReadmitted": [
+          "establishing",
+          "failed_early"
+        ]
+      }
+    },
+    {
+      "id": "Q8_a_quarantined_group_is_still_physically_present",
+      "claim": "the successor remains a LIVING band holding bodies at a tile throughout — excluding it from presence would recreate the ghosts CORRECTION-34 removed",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "population": 11,
+        "position": "tile:110:57",
+        "isLivingBand": true,
+        "isEstablishedBand": false
+      }
+    },
+    {
+      "id": "Q9_FINDING_a_group_can_leave_quarantine_on_a_timer_into_ordinary_status",
+      "claim": "advanced past the return bound, the successor reaches the terminal `reintegrated` phase whose contract says the provisional entity is REMOVED — and it is not: it becomes an ordinary independent band, having demonstrated nothing, because the physical reintegration writer does not exist yet",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "status": "NOT_REPRODUCED_IN_THIS_WINDOW",
+        "quarantineEndedAfterDays": 400,
+        "windowDays": 400,
+        "finalPhase": "returning",
+        "stillInTheWorld": true,
+        "isEstablishedBandNow": false,
+        "populationStillHeld": 11,
+        "contractSays": "reintegrated — terminal: rejoined the parent. The provisional entity is removed exactly once.",
+        "whyNotRepairedHere": "reintegration is the return vertical; this pass is explicitly forbidden to begin travel or return work"
+      }
+    }
+  ]
+}

@@ -49,8 +49,28 @@ import {
 } from "./fissionParentResidualViability";
 import { getPhaseContract, requestTransition, beginProvisionalSuccessor, type LifecycleState } from "./fissionLifecycleKernel";
 import { auditFissionLineageOwnership } from "./bandLifecycle";
+import {
+  auditSuccessorTransfer,
+  buildPolicyStructuralResets,
+  FISSION_FIELD_TRANSFER_POLICY,
+  pendingRecomputeFields,
+  type TransferPolicyViolation,
+} from "./fissionFieldTransferPolicy";
+import {
+  activeBandColors,
+  getInheritanceProfile,
+  inheritCrossingMemories,
+  inheritKnowledgeState,
+  inheritPlaceMemory,
+  inheritTravelCorridors,
+} from "./demography";
+import { inheritResourceKnowledgeForDaughter } from "./resourceKnowledge";
+import { inheritAnimalPatternKnowledgeForDaughter } from "./animalLearning";
+import { degradeInheritedExploitationSkill } from "./exploitationSkill";
+import { inheritAdaptiveHumanForDaughter, inheritPracticalAdaptationForDaughter } from "./adaptationBoundary";
+import { deriveDaughterColor } from "./lineageColor";
 import type { Band } from "./types";
-import type { BandId } from "../core/types";
+import type { BandId, TileId } from "../core/types";
 import type { WorldState } from "../world/types";
 
 export type DepartureRefusal =
@@ -59,7 +79,8 @@ export type DepartureRefusal =
   | "allocation_refused"
   | "residual_authority_blocked_the_departure"
   | "kernel_refused_the_departure_transition"
-  | "ownership_invariant_violated_after_mutation";
+  | "ownership_invariant_violated_after_mutation"
+  | "successor_violated_the_field_transfer_policy";
 
 /**
  * The five separate claims. **One generic `conserved: true` is insufficient** — `SPLIT_POLICY_MATRIX`
@@ -113,6 +134,22 @@ export interface DepartureLedger {
     readonly viabilityAssertedAtDeparture: boolean;
     readonly bodyCampLogisticsRecomputed: boolean;
     readonly note: string;
+  };
+  /**
+   * §4 — what actually crossed the boundary, checked against the policy over all 133 `keyof Band`.
+   *
+   * Published as its own section rather than folded into the others because "the split conserved
+   * people" and "the successor inherited nothing it did not earn" are different claims, and one
+   * number for both is the false precision `SPLIT_POLICY_MATRIX.md` §1 rules out.
+   */
+  readonly transfer: {
+    readonly bandFieldsClassified: number;
+    readonly policyViolations: readonly TransferPolicyViolation[];
+    /** Fields still holding the parent's derived value because the recompute is not routed yet. */
+    readonly pendingRecomputeFields: readonly string[];
+    /** Measured, not asserted: how many populated fields are STILL the parent's own object. */
+    readonly fieldsStillHoldingTheParentsObject: number;
+    readonly sharedByReferenceFields: readonly string[];
   };
 }
 
@@ -256,61 +293,53 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       : [...parent.daughterBandIds, request.successorBandId],
   };
 
-  // ── 6. the successor, constructed at the PARENT'S tile ──
+  // ── 6. the successor, constructed at the PARENT'S tile, THROUGH THE TRANSFER POLICY ──
+  //
+  // The previous form of this block was a hand-written list of eighteen overrides on top of
+  // `{ ...parent }`, and a per-field probe of a real departure found **86 of the 125 populated
+  // fields were still the parent's own object** — the parent's complete knowledge and place memory,
+  // its camp and catchment, its social world, its whole biography, and every derived quantity
+  // computed from a population more than three times the successor's.
+  //
+  // Enumerating them here would have fixed those 86 and left the eighty-seventh to the next person
+  // who adds a `Band` field. So the construction is driven by `fissionFieldTransferPolicy.ts`, which
+  // classifies all 133 `keyof Band` and fails to typecheck when one is unclassified:
+  //
+  //   `buildPolicyStructuralResets()` supplies every absent/empty/zero field BY CLASSIFICATION, so a
+  //   newly classified field is reset without touching this file at all;
+  //   the block below supplies only what must be COMPUTED, and nothing else;
+  //   `auditSuccessorTransfer` then checks the constructed band against the table field by field,
+  //   and a violation REFUSES the departure rather than shipping a laundered successor.
   const successorLifecycle = beginProvisionalSuccessor(today);
+  const successorId = request.successorBandId;
+  const successorDemography = {
+    ...parent.demography,
+    population: totalOf(successorCohorts),
+    workingAdults: successorCohorts.workingAdults,
+    dependents: successorCohorts.dependents,
+    elders: successorCohorts.elders,
+  };
+  // Partial and degraded, through the SAME canonical helpers the legacy daughter path uses. A
+  // perfect copy is what the spread was doing; re-implementing the degradation here would be a
+  // second answer to a question that already has one.
+  const inheritedKnowledge = inheritKnowledgeState(world, parent, successorId, parent.position);
+  const inheritedPlaceMemory = inheritPlaceMemory(parent, inheritedKnowledge);
+  const inheritedCrossings = inheritCrossingMemories(parent, inheritedKnowledge);
+  const inheritedCorridors = inheritTravelCorridors(parent, inheritedKnowledge);
+
   const successor: Band = {
     ...parent,
-    id: request.successorBandId,
+    ...buildPolicyStructuralResets(),
+
+    // ── NEW_SUCCESSOR_IDENTITY ──
+    id: successorId,
     name: `${parent.name} successor`,
-    // **The parent's current tile. Never the target.** Defect 2 is closed here, structurally: this
-    // seam does not read `attempt.targetTileId` when placing anybody.
-    position: parent.position,
-    size: totalOf(successorCohorts),
-    demography: {
-      ...parent.demography,
-      population: totalOf(successorCohorts),
-      workingAdults: successorCohorts.workingAdults,
-      dependents: successorCohorts.dependents,
-      elders: successorCohorts.elders,
-    },
-    // L4 — viability is NOT asserted. The provisional lifecycle owns that question, and declaring it
-    // here would decide the very outcome Item 4 exists to test.
-    viability: undefined,
-    // L3 — no material capability is created. The legacy path hardcoded `storageCapacity: 0.16`
-    // regardless of the parent; honest absence is zero.
-    storageCapacity: 0,
-    // Current commitments are never duplicated — bodies cannot be in two parties.
-    expeditions: [],
-    seasonalFoodReceipts: undefined,
-    recentIntraSeasonTrips: [],
-    // ── STATE THE `{ ...parent }` SPREAD WOULD OTHERWISE LAUNDER ──────────────────────────────
-    //
-    // Found by `provisionalReaderAdmissionAudit.mjs` measuring a real successor rather than by
-    // reading this file: the spread handed the newborn group the parent's **20 decision records,
-    // 4 residential move events, its proto-camp memory and its acute-risk state**. The legacy
-    // `createDaughterBand` maintains a registered `DAUGHTER_NON_CLONEABLE_FIELDS` list and an
-    // `assertDaughterFissionStateNotCloned` guard for exactly this, and this seam bypassed all of
-    // it — a group that has existed for zero days cannot have deliberated twenty times or moved
-    // camp four times.
-    //
-    // These are RESET rather than projected because each is a RECORD of something that happened to
-    // the parent, not an intensity the successor inherits a share of. `SPLIT_POLICY_MATRIX.md`
-    // classifies history and debug rings as reset-with-retained-lineage.
-    decisionHistory: [],
-    recentResidentialMoveEvents: [],
-    recentInvestigationOutcomes: [],
-    pendingInvestigation: undefined,
-    // Proto-camp memory describes a residence this group does not have; it is a derived summary of
-    // the PARENT's camp, and carrying it would be the stale established-camp projection L7 forbids.
-    protoCampMemory: undefined,
-    activityLaborSummary: undefined,
-    activityOutcomeSummary: undefined,
-    activityShadowSubsistenceSummary: undefined,
-    activityMemoryUpdateSummary: undefined,
-    // `acuteRisk` is DELIBERATELY NOT reset — L5. Injury and acute hardship are embodied condition
-    // that travels with the people, and clearing it here is precisely the cure-by-reset the legacy
-    // path performed and the realism checklist forbids.
-    fissionAttempt: undefined,
+    // The seam produced a band with the PARENT'S OWN COLOUR, so the two halves were indistinguishable
+    // on the map at the exact moment a viewer most needs to tell them apart.
+    color: deriveDaughterColor(parent.color, parent.daughterBandIds.length + 1, activeBandColors(world)),
+
+    // ── CURRENT_LINEAGE_PROVENANCE ──
+    parentBandId: parent.id,
     provisionalSuccessor: {
       phase: successorLifecycle.phase,
       phaseEnteredDay: successorLifecycle.phaseEnteredDay,
@@ -320,8 +349,59 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       endorsedFounders: allocation.allocatedFounders,
       targetTileId: attempt.targetTileId,
     },
-    daughterBandIds: [],
+
+    // ── EXACT_COHORT_TRANSFER, and SHARED_HISTORICAL_FACT for location ──
+    //
+    // **The parent's current tile. Never the target.** Defect 2 is closed structurally: this seam
+    // does not read `attempt.targetTileId` when placing anybody.
+    position: parent.position,
+    size: totalOf(successorCohorts),
+    demography: successorDemography,
+
+    // ── FOUNDER_CARRIED_EMBODIED_BURDEN ──
+    //
+    // `acuteRisk` is DELIBERATELY NOT cleared — L5. Injury and acute hardship are embodied condition
+    // that travels with the people, and clearing it is the cure-by-reset the realism checklist
+    // forbids. But it is RE-IDENTIFIED: the parent's object carries the parent's `bandId`, so
+    // sharing it made every episode the successor holds claim to have happened to another band.
+    acuteRisk: parent.acuteRisk === undefined ? undefined : { ...parent.acuteRisk, bandId: successorId },
+
+    // ── DEGRADED_OR_PARTIAL_INHERITANCE ──
+    knowledge: inheritedKnowledge,
+    placeMemory: inheritedPlaceMemory,
+    crossingMemories: inheritedCrossings,
+    travelCorridors: inheritedCorridors,
+    resourceKnowledgeState: inheritResourceKnowledgeForDaughter(parent.resourceKnowledgeState, {
+      parentBandId: parent.id,
+      daughterBandId: successorId,
+      daughterTileId: parent.position,
+      currentTick: world.time.tick,
+      inheritedKnownTileIds: new Set(Object.keys(inheritedKnowledge.observedTiles) as TileId[]),
+    }),
+    animalPatternKnowledge: inheritAnimalPatternKnowledgeForDaughter(parent.animalPatternKnowledge, successorId, world.time.tick),
+    exploitationSkill: degradeInheritedExploitationSkill(parent.exploitationSkill, successorId, world.time.tick),
+    adaptiveHuman: inheritAdaptiveHumanForDaughter(parent.adaptiveHuman, successorId, world.time.tick),
+    practicalAdaptation: inheritPracticalAdaptationForDaughter(parent.practicalAdaptation, successorId, world.time.tick),
+    technologies: parent.technologies.filter((technology) => technology === "basic_foraging"),
+
+    // ── RECOMPUTE_FROM_SUCCESSOR_TRUTH ──
+    inheritanceProfile: getInheritanceProfile(parent, inheritedKnowledge, inheritedPlaceMemory, inheritedCrossings, inheritedCorridors),
   };
+
+  // ── 6b. THE TRANSFER POLICY IS A GATE, NOT A COMMENT ──
+  //
+  // Checked on the CONSTRUCTED band, before it reaches the world, over every classified field. A
+  // violation refuses the departure and returns the original world: shipping a successor that
+  // inherited the parent's camp or the parent's social world would be worse than not splitting,
+  // because the resulting group looks finished.
+  const transferViolations = auditSuccessorTransfer(parent, successor);
+  if (transferViolations.length > 0) {
+    return {
+      ok: false,
+      refusal: "successor_violated_the_field_transfer_policy",
+      detail: transferViolations.map((v) => `${String(v.field)}:${v.defect}`).join(","),
+    };
+  }
 
   const nextWorld: WorldState = {
     ...world,
@@ -353,6 +433,17 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
 
   const parentHungerBefore = parent.hungerPressure ?? 0;
   const successorHunger = successor.hungerPressure ?? 0;
+
+  // MEASURED on the two objects rather than restated from the construction above: which fields the
+  // successor still holds the parent's own object for. The permitted ones are `SHARED_HISTORICAL_FACT`
+  // — one remembered death may not become two independent bereavements, which is exactly why sharing
+  // the reference is correct there — and the field is reported in full so the list is checkable.
+  const sharedByReference = (Object.keys(FISSION_FIELD_TRANSFER_POLICY) as (keyof Band)[])
+    .filter((key) => {
+      const parentValue = parent[key];
+      return typeof parentValue === "object" && parentValue !== null && successor[key] === parentValue;
+    })
+    .map(String);
 
   const ledger: DepartureLedger = {
     demographic: {
@@ -403,6 +494,15 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       bodyCampLogisticsRecomputed: false,
       note:
         "L7 — body/camp summaries are NOT recomputed here. They are derived state and must follow honest cohorts, condition, material capability, location and travel state, which the provisional lifecycle establishes. Recomputing them at this seam would be recomputing from inputs that are not yet complete.",
+    },
+    transfer: {
+      bandFieldsClassified: Object.keys(FISSION_FIELD_TRANSFER_POLICY).length,
+      // Zero by construction at this point — a non-empty list refused above. Carried so a reader of
+      // the ledger sees the check ran rather than inferring it from the absence of a refusal.
+      policyViolations: transferViolations,
+      pendingRecomputeFields: pendingRecomputeFields().map(String),
+      fieldsStillHoldingTheParentsObject: sharedByReference.length,
+      sharedByReferenceFields: sharedByReference,
     },
   };
 

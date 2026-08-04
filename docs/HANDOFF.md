@@ -181,6 +181,37 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### ROADMAP ITEM 4 — PROVISIONAL QUARANTINE CONTRACT — **PROGRESS: FIELD-TRANSFER POLICY BUILT AND THE QUARANTINE CONTRACT CLOSED / TRAVEL NOT STARTED / DO NOT MERGE / NOT PUSHED**
+
+A per-field probe of a **real** departure found **86 of the 125 populated `Band` fields were still the
+parent's own object** — its complete knowledge and place memory (the legacy daughter inherits 13-15%,
+degraded), every field the legacy path deliberately degrades, `verificationEvidence` CORRECTION-23B
+forbids, six quantities derived from the parent's 34 people while the group holds 11, its camp and
+annual round, its whole biography and social world, and **its own colour**.
+
+`src/sim/agents/fissionFieldTransferPolicy.ts` classifies **all 133 `keyof Band`** into twelve classes,
+exactly once each, enforced three independent ways — the `Record<keyof Band, ...>` annotation (**which
+fired on its first compile and caught `position`**), an audit re-deriving `keyof Band` from `types.ts`
+independently of the compiler, and a runtime check that **refuses the departure**. Structural resets
+come from the classification, so a newly classified field is reset with **no edit to the seam**.
+Result **86 → 5, 0 violations**; observed tiles 58 → 15, place memory 42 → 5, storage 0.16 → 0, hunger
+unchanged, `acuteRisk` re-identified. `demography.ts` now **derives** its clone registry from the same
+table, and **33 fields of legacy debt are published rather than repaired** — including `expeditions`,
+a word `demography.ts` never contains, so a legacy daughter holds the parent's away-party records by
+reference.
+
+The quarantine contract closes with a **with-minus-without counterfactual**: 11 fields blocked, each a
+positive control; the resolver is the only writer that moves a quarantined group; and the **annual
+demographic step still runs on it**, so a quarantine is not a freezer.
+
+**FINDING, published and not fixed: a group can leave quarantine ON A TIMER into ordinary status.**
+`returning` times out to the terminal `reintegrated`, whose contract says the provisional entity is
+removed exactly once — and nothing removes it, because the reintegration writer does not exist.
+Reproduced at 359 days with the band still holding 11 people. Not repaired because reintegration is the
+return vertical this pass may not begin. **That is the next real blocker after travel.**
+
+See `docs/evidence/dynamic-fission-daughter-viability-37/FIELD_TRANSFER_POLICY.md`.
+
 ### ROADMAP ITEM 4 — IMPLEMENTATION-38 — **PROGRESS: TWO PURE AUTHORITIES BUILT, LIFECYCLE STATE MACHINE NOT BUILT / DO NOT MERGE / NOT PUSHED**
 
 ```text
@@ -11488,3 +11519,17 @@ exception; daughter colours related-but-distinct and never visually confusing.
   travel is what closes it. `trips` reads INCONCLUSIVE against the control because the control ran
   none either; that exclusion is proven by the 24→0 before/after arms instead. Item 3 frozen;
   **Item 5 not started.**
+
+- **2026-08-04 — ROADMAP ITEM 4 PROVISIONAL QUARANTINE CONTRACT — PROGRESS / TRAVEL NOT STARTED / NOT
+  PUSHED.** Measured that the departure seam's `{ ...parent }` spread left **86 of 125 populated
+  fields as the parent's own object**, and replaced the hand-written override list with an exhaustive
+  `Record<keyof Band, ...>` policy over all **133** fields, enforced by the type system, by an
+  independent structural audit, and by a runtime gate that refuses a departure. **86 → 5, 0
+  violations.** Knowledge now transfers partially through the same canonical inheritors the legacy
+  daughter uses; embodied burden travels re-identified and may never soften; `demography.ts` derives
+  its clone registry from the one table. The quarantine contract is closed with a with-minus-without
+  counterfactual — **11 fields blocked, each a positive control**, and the annual demographic step
+  still reaches the quarantined group. T1-T12 12/12, Q1-Q9 9/9, D1-D18 18/18, 0 vacuous. **Published
+  and NOT fixed: 33 fields of legacy clone debt (including `expeditions`), and a group leaving
+  quarantine on a TIMER into ordinary status because `returning` times out into a terminal
+  `reintegrated` with no writer behind it.** Item 3 frozen; **Item 5 not started.**
