@@ -26,6 +26,7 @@
 import type { DailyAction } from "./dailyActions";
 import { expeditionDailyAction } from "./expedition";
 import { intraSeasonTripDailyAction } from "./intraSeasonTrips";
+import { provisionalTravelDailyAction } from "./provisionalTravel";
 
 /**
  * The default daily-action registry advanced by `advanceWorldByDays`.
@@ -36,4 +37,9 @@ import { intraSeasonTripDailyAction } from "./intraSeasonTrips";
 export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   intraSeasonTripDailyAction,
   expeditionDailyAction,
+  // ROADMAP ITEM 4 — provisional travel runs LAST on a shared day, after ordinary trips and
+  // expeditions, so a walking group's step is taken against a world whose ordinary activity for that
+  // day has already resolved. It is a no-op for every band that is not a walking provisional
+  // successor, and nothing in ordinary play creates one.
+  provisionalTravelDailyAction,
 ];

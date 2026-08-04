@@ -351,6 +351,12 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       requestedFounders,
       endorsedFounders: allocation.allocatedFounders,
       targetTileId: attempt.targetTileId,
+      // The tile the founders physically left from, so a later return has a destination it
+      // LEGITIMATELY KNOWS. It is the last place this group actually saw its parent — deliberately
+      // not the parent's current position, which the travellers have no channel to observe.
+      departureTileId: parent.position,
+      resolutionCycles: 0,
+      trail: [],
     },
 
     // ── EXACT_COHORT_TRANSFER, and SHARED_HISTORICAL_FACT for location ──

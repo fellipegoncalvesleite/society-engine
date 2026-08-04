@@ -1,0 +1,182 @@
+{
+  "generatedAt": "2026-08-04T19:53:44.752Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "observeDays": 180,
+  "parentId": "band:varied-river-mid",
+  "successorId": "band:varied-river-mid:provisional:1",
+  "targetTileId": "tile:108:55",
+  "departureTileId": "tile:110:57",
+  "straightLineDistance": 4,
+  "journey": {
+    "distinctPositions": 5,
+    "arrivedOnDay": 4,
+    "path": [
+      "tile:110:57",
+      "tile:109:57",
+      "tile:109:56",
+      "tile:108:56",
+      "tile:108:55"
+    ],
+    "phaseTrail": [
+      "travelling",
+      "establishing"
+    ]
+  },
+  "sampleStepRecord": {
+    "bandId": "band:varied-river-mid:provisional:1",
+    "lineageId": "LIN-TRAVEL-1",
+    "phase": "travelling",
+    "fromTileId": "tile:110:57",
+    "toTileId": "tile:109:57",
+    "destinationTileId": "tile:108:55",
+    "moved": true,
+    "kmPerActiveDay": 1.974,
+    "daysPerTile": 1,
+    "distanceRemaining": 3,
+    "impassableNeighboursRefused": 1,
+    "arrived": false
+  },
+  "summary": {
+    "fixtures": 10,
+    "passing": 10,
+    "failing": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "V1_outbound_starts_on_the_parents_tile",
+      "claim": "the successor begins its journey on the tile the founders physically left from, not at the destination — defect 2 was a daughter appearing 5 and 7 tiles away in a single day",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "startTile": "tile:110:57",
+        "parentTile": "tile:110:57",
+        "targetTile": "tile:108:55",
+        "distanceToTarget": 4
+      }
+    },
+    {
+      "id": "V2_every_step_is_contiguous",
+      "claim": "consecutive positions are always exactly one tile apart — the group walks rather than appearing somewhere",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "distinctPositions": 5,
+        "nonContiguous": [],
+        "path": [
+          "tile:110:57",
+          "tile:109:57",
+          "tile:109:56",
+          "tile:108:56",
+          "tile:108:55"
+        ]
+      }
+    },
+    {
+      "id": "V3_the_group_never_stands_anywhere_it_could_not_walk",
+      "claim": "world passability is a physical execution constraint on every step, so no position in the whole journey is a tile people cannot occupy",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "impassableStops": []
+      }
+    },
+    {
+      "id": "V4_arrival_produces_establishing_not_stabilized",
+      "claim": "reaching the destination earns only the right to try to live there; `stabilized` still demands lived evidence and is never produced by arriving",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "arrivedOnDay": 4,
+        "phaseTrail": [
+          "travelling",
+          "establishing"
+        ],
+        "finalPhase": "establishing",
+        "finalPosition": "tile:108:55"
+      }
+    },
+    {
+      "id": "V5_the_trail_is_ground_actually_walked_and_is_bounded",
+      "claim": "the retained trail is the sequence of tiles the group physically left, capped so a long journey cannot grow unbounded state — it is what a return retraces instead of re-deriving a route the group never had",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "trailLength": 4,
+        "cap": 64,
+        "trailIsPrefixOfPath": true,
+        "trail": [
+          "tile:110:57",
+          "tile:109:57",
+          "tile:109:56",
+          "tile:108:56"
+        ]
+      }
+    },
+    {
+      "id": "V6_pace_responds_to_real_burden",
+      "claim": "an injured column is slower than a whole one — measured through the CANONICAL `deriveTravelPace` authority rather than a second pace model invented here",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "whole": {
+          "kmPerActiveDay": 1.974,
+          "daysPerTile": 1
+        },
+        "injured": {
+          "kmPerActiveDay": 0.963,
+          "daysPerTile": 2
+        }
+      }
+    },
+    {
+      "id": "V7_no_ordinary_system_moves_a_provisional_group",
+      "claim": "with the group held in a non-travel phase, sixty days of ordinary daily actions and seasonal processing move it exactly nowhere — so the position changes above are the travel authority's and nothing else's",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "startTile": "tile:110:57",
+        "after60Days": "tile:110:57",
+        "travelArmDistinctPositions": 5
+      }
+    },
+    {
+      "id": "V8_the_journey_is_deterministic",
+      "claim": "two identical departures walk the identical sequence of tiles",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "firstRunSteps": 5,
+        "secondRunSteps": 5
+      }
+    },
+    {
+      "id": "V9_travel_creates_no_material_capability",
+      "claim": "no receipt, no storage and no ration appears during the journey — travel subsistence is UNBUILT and is not faked",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "receiptsDuringTravel": 0,
+        "storageCapacity": 0,
+        "NOT_IMPLEMENTED": "route foraging by the travelling bodies, and a physically debited carried provision stock; both need an authority that does not exist yet and neither is faked here"
+      }
+    },
+    {
+      "id": "V10_FINDING_hunger_improves_during_travel_because_absent_support_reads_as_no_stress",
+      "claim": "the group's hunger FALLS while it walks with nothing to eat, because its `seasonalSupport` is absent by policy and the canonical nutrition derivation treats absent as unstressed — an unearned improvement produced by a correct reset",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "status": "REPRODUCED",
+        "hunger": {
+          "atDeparture": 0.14,
+          "atEnd": 0
+        },
+        "mechanism": "Band.seasonalSupport is INVALIDATE_UNTIL_LATER_PHASE (absent); all three hungerPressure writers derive it from that support through deriveCanonicalNutritionState, which reads absent as no stress",
+        "whyNotRepairedHere": "the fix is a travel subsistence authority (route foraging, or a debited carried stock); a hunger floor would be a tuned number standing in for a mechanism",
+        "consequence": "travel is currently EASIER than standing still, which is the opposite of the interim this pass wanted, and it is the blocking item for the travel-subsistence work"
+      }
+    }
+  ]
+}
