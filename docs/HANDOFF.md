@@ -8930,21 +8930,35 @@ UI in `src/ui/BandPanel.tsx`, audit + `--targeted-cause-event-check` in
 ACCEPTED AND FROZEN. Roadmap Item 4 is ACTIVE — two pure authorities are implemented and audited,
 and the Direction D lifecycle is NOT started. Roadmap Item 5 is NOT started.**
 
+**The representation decision is MADE** (`PROVISIONAL_REPRESENTATION_DECISION.md`): the provisional
+successor is a **flagged `Band` in `world.bands`**, with `bandLifecycle.ts` — which already owns
+`isBandTerminal` / `isLivingBand` and is imported by only three modules — becoming the **mandatory**
+predicate module, enforced by a boundary audit in the `adaptationBoundaryAudit.mjs` pattern. The
+reader surface is **41 true enumerations, not 160**, of which **21 need a change** and 16 are safe
+unchanged, all classified in `PROVISIONAL_READER_MATRIX.md`.
+
 **The exact next safe action** is to build the Direction D lifecycle as one coherent change, in this
 order, because each step is the next one's precondition:
 
-1. `FissionAttempt` state on `Band` — proposal, commitment, departure-ready — bounded, holding no
-   bodies, with a resolver that cannot leave it open. Nothing else may be built first, because every
-   later phase needs an identity to hang off.
-2. The **departure transition**: the one seam where population moves. It calls
-   `allocateFounderCohorts` and then `assessParentResidualWithRevision`, honours
-   `permittedFounderCount`, and proves the cohort-by-cohort invariant at that single point.
-3. The **provisional successor**, constructed at the parent's position — never at the target — with
+1. **Layer 1, the pure kernel.** `FissionAttempt` and provisional lifecycle state as bounded,
+   deterministic transitions with explicit body/labour/location owners, timeouts and terminal
+   outcomes. Nothing else may be built first, because every later phase needs an identity to hang off
+   — and no state may persist indefinitely.
+2. **Extend `bandLifecycle.ts`** with `isProvisionalBand` / `isEstablishedBand`, keeping
+   `isLivingBand` meaning what it means today (a provisional group *is* living), and add the boundary
+   audit that fails the run on an enumeration bypassing the module.
+3. The **departure transition**: the one seam where population moves. It calls
+   `allocateFounderCohorts`, then `assessParentResidualWithRevision`, honours
+   `permittedFounderCount`, and proves the cohort-by-cohort invariant at that single point by
+   **measuring** `getWorldPopulation` after, never by restating the before value.
+4. The **provisional successor**, constructed at the parent's position — never at the target — with
    the runner transition chosen so it cannot be processed twice on its departure day.
-4. The 144 enumeration sites, decided against the classification already published in
-   `provisional-reader-surface.json`.
-5. Travel, establishment, return, reintegration, early failure, stabilization.
-6. Proposal causality last, so the lifecycle is exercised before the thing that triggers it is tuned.
+5. The **21 reader changes** from the matrix: 9 guards, 6 blocks, 5 adapters, plus the fission gate.
+6. Travel, establishment, return, reintegration, early failure, stabilization.
+7. Proposal causality last, so the lifecycle is exercised before the thing that triggers it is tuned.
+
+Only after 1-7, and after natural occurrence and the validation package, does Item 4 become an
+implementation candidate.
 
 **Do not push this branch until 1-6 exist end to end.** The two committed authorities are pure
 leaves with no callers; pushing now would publish a checkpoint whose title claims a lifecycle it
@@ -11293,3 +11307,24 @@ exception; daughter colours related-but-distinct and never visually confusing.
   import boundary 85 all unchanged; no frozen evidence touched; **`createDaughterBand` untouched and
   all six measured defects still live in production.** Item 3 frozen and untouched; **Item 5 not
   started.** Evidence: `docs/evidence/dynamic-fission-daughter-viability-37/PARENT_RESIDUAL_DECISION.md`.
+
+- **ROADMAP ITEM 4 — PROVISIONAL REPRESENTATION DECISION (2026-08-03, `115b493`) — PROGRESS: STATUS
+  CORRECTED, REPRESENTATION DECIDED, LIFECYCLE STILL NOT BUILT / NOT PUSHED / DO NOT MERGE.** The
+  lexical reader scan's **160 sites / 144 unguarded is inflated 3.9x** and is superseded: a
+  multi-line filter-reduce is one enumeration counted five times, `world.bands[id]` is a keyed lookup
+  a departed group cannot wander into, and accumulator writes are not world reads. **The real surface
+  is 41 true enumerations across 23 files plus 29 irrelevant lookups.** **`bandLifecycle.ts` already
+  exists and already owns the lifecycle predicate, and only 3 modules import it** while the rest
+  inline the same test by hand and `contextCache` keeps a fourth private spelling — so **Representation
+  A (flagged `Band`) is a routing problem with an existing destination, not a new architecture.** A
+  separate collection was rejected because `Band` already owns all nine quantities the brief wants one
+  owner for; the party model was rejected on a specific fact — **an expedition record has no cohort
+  structure, so L1 could not even be expressed inside it**; the shared physical-group interface is
+  recorded as the right long-run successor when a third kind of physical group appears. **The matrix
+  classifies all 41: 16 safe unchanged, 9 guards, 6 blocked, 5 adapters, 5 false positives — 21
+  changes, not 144.** **Documentation status corrected in all three files: Item 4 is ACTIVE with two
+  pure authorities and NO lifecycle, and is NOT an implementation candidate** — the previous wording
+  put a caveat under a misleading headline. `.probe-tmp.mjs` is now accounted for in `PROVENANCE.md`.
+  tsc both, graph 221/764 and import boundary 85 all unchanged; PR1-PR20 20/20; no frozen evidence
+  touched; **no production file changed.** Item 3 frozen; **Item 5 not started.** Evidence:
+  `PROVISIONAL_REPRESENTATION_DECISION.md`, `PROVISIONAL_READER_MATRIX.md`.
