@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T01:48:26.536Z",
+  "generatedAt": "2026-08-04T04:35:06.835Z",
   "checkpoint": "ROADMAP ITEM 4 §4 — band lifecycle boundary",
   "boundary": "src/sim/agents/bandLifecycle.ts",
   "boundaryExports": [
@@ -30,6 +30,11 @@
     {
       "file": "src/sim/agents/contextCache.ts",
       "action": "adapter",
+      "migrated": true
+    },
+    {
+      "file": "src/sim/agents/viability.ts",
+      "action": "blocked",
       "migrated": true
     }
   ],
@@ -80,11 +85,6 @@
       "importsBoundary": true
     },
     {
-      "file": "src/sim/agents/viability.ts",
-      "action": "blocked",
-      "importsBoundary": false
-    },
-    {
       "file": "src/sim/runner/simRunner.ts",
       "action": "adapter",
       "importsBoundary": false
@@ -120,7 +120,7 @@
     ]
   },
   "summary": {
-    "filesScanned": 147,
+    "filesScanned": 148,
     "canonicalSinglebandPredicates": 7,
     "canonicalPairRelations": 1,
     "canonicalReducers": 1,
@@ -129,15 +129,18 @@
     "privateDuplicatePredicates": 0,
     "legacyMarkerViolations": 0,
     "boundaryIntegrityViolations": 0,
-    "migratedReaders": 1,
-    "pendingReaders": 11,
+    "migratedReaders": 2,
+    "pendingReaders": 10,
     "pendingAdapters": 4,
     "pendingGuards": 4,
-    "pendingBlocked": 5,
+    "pendingBlocked": 4,
     "safeUnchangedReaders": 16,
     "inlineTerminalitySitesOutsideBoundary": 56,
+    "terminalityOwningModules": [
+      "src/sim/agents/viability.ts"
+    ],
     "migratedScopeStructurallyClean": true,
-    "migrationCompleteness": "1/12 load-bearing readers migrated",
+    "migrationCompleteness": "2/12 load-bearing readers migrated",
     "verdict": "INCOMPLETE",
     "verdictNote": "migrated scope is structurally clean, but load-bearing readers remain unmigrated. A migration PASS requires no unresolved load-bearing reader."
   }

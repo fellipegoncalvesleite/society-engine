@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T01:48:26.261Z",
+  "generatedAt": "2026-08-04T04:35:37.358Z",
   "checkpoint": "ROADMAP ITEM 4 §5 — pure lifecycle kernel fixtures",
   "authority": "src/sim/agents/fissionLifecycleKernel.ts",
   "scopeLimit": "The kernel is pure. Nothing here proves the lifecycle is CONNECTED to the simulation — that is the world adapter's evidence and it does not exist yet. These fixtures prove only that the state machine cannot be driven into an illegal, unbounded or double-owned state.",
@@ -10,7 +10,7 @@
       "status": "PASS",
       "nonVacuityNote": "all eleven phases are present in the production table",
       "problems": [],
-      "phaseCount": 11
+      "phaseCount": 12
     },
     {
       "id": "K2",
@@ -119,11 +119,12 @@
       "id": "K8",
       "claim": "no transition leaves a terminal phase",
       "status": "PASS",
-      "nonVacuityNote": "all four terminal phases were exercised against every possible destination",
+      "nonVacuityNote": "every terminal phase in the production table was exercised against every possible destination",
       "rows": {
         "abandoned": true,
         "departed": true,
         "reintegrated": true,
+        "provisional_extinguished": true,
         "stabilized": true
       }
     },
@@ -132,21 +133,22 @@
       "claim": "every transition outside the permitted set is refused",
       "status": "PASS",
       "nonVacuityNote": "both permitted and refused transitions genuinely occur in the sweep",
-      "refused": 64,
-      "permitted": 13,
-      "expectedPermitted": 13,
-      "totalPairs": 77
+      "refused": 67,
+      "permitted": 17,
+      "expectedPermitted": 17,
+      "totalPairs": 84
     },
     {
       "id": "K10",
       "claim": "early failure leads only to returning — never to stabilization, never to a stop",
       "status": "PASS",
-      "nonVacuityNote": "the phase genuinely has exactly one exit in the production table",
+      "nonVacuityNote": "the phase's exits are enumerated from the production table and none of them is a success",
       "toStabilized": "transition_not_permitted",
       "toEstablishing": "transition_not_permitted",
       "toReturning": "returning",
       "permittedNext": [
-        "returning"
+        "returning",
+        "provisional_extinguished"
       ]
     },
     {
@@ -167,6 +169,7 @@
         "failed_early:successor",
         "returning:successor",
         "reintegrated:parent",
+        "provisional_extinguished:none",
         "stabilized:successor"
       ]
     },

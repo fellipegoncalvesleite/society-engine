@@ -8,6 +8,7 @@ import type { BandId, DayNumber, ReasonId, TileId } from "../core/types";
 // CORRECTION-26 — a band that leaves activity cannot send the party it selected. The
 // record is retired with a named cause rather than frozen mid-flight, so no selected
 // investigation can vanish without an outcome.
+import { isProvisionalSuccessor } from "./bandLifecycle";
 import { retirePendingInvestigation } from "./pendingInvestigation";
 import { getTile } from "../world/generate";
 import type { WorldState } from "../world/types";
@@ -20,18 +21,44 @@ const MINIMUM_VIABLE_POPULATION = 14;
 // reach it) but makes prolonged, physically nonviable collapse reachable.
 const LOW_POPULATION_COLLAPSE_RISK = 0.76;
 
+/**
+ * ROADMAP ITEM 4 — this function owns ESTABLISHED-BAND viability, and only that.
+ *
+ * Its five responsibilities were separated in `PROVISIONAL_READER_MATRIX.md`: derive
+ * `Band.viability`; absorb a nonviable band into a neighbour; collapse one on low population or thin
+ * labour; terminalize one whose derived viability reads `extinct`; publish the fate. The first three
+ * and the fifth are Item 6's business and apply to established bands only.
+ *
+ * **A provisional successor is skipped here — but NOT simply ignored.** The fourth responsibility,
+ * noticing that a band has reached zero people, is the one thing a blanket filter would have
+ * silently removed, leaving a dead provisional group living forever because nothing could see it.
+ * That physical fact is re-homed in `provisionalLifecycleResolver.ts`, which resolves it through the
+ * fission lifecycle instead of through ordinary extinction. Skipping without that resolver would be
+ * trading "Item 6 kills the newborn too early" for "nothing can ever resolve it", which is worse.
+ *
+ * `viability === undefined` on a provisional successor is therefore INTENTIONAL and means "not yet
+ * established". It does not mean healthy, it does not mean nonviable, and no reader may default it.
+ */
 export function updateBandViabilityStates(world: WorldState): WorldState {
   let bandsById: Record<string, Band> = Object.values(world.bands)
     .sort(compareBands)
     .reduce<Record<string, Band>>((output, band) => {
-      output[band.id] = {
-        ...band,
-        viability: deriveBandViabilityState(world, band),
-      };
+      output[band.id] = isProvisionalSuccessor(band)
+        ? band
+        : {
+            ...band,
+            viability: deriveBandViabilityState(world, band),
+          };
       return output;
     }, {});
 
   for (const band of Object.values(bandsById).sort(compareBands)) {
+    // Ordinary absorption and collapse are Item 6's, and a group that has not yet had a chance to
+    // establish has not failed at anything an established band could be judged for.
+    if (isProvisionalSuccessor(band)) {
+      continue;
+    }
+
     if (band.viability?.status === "extinct") {
       if (band.status !== "dispersed") {
         bandsById[band.id] = terminalizeExtinctBand(world, band, "demographic_zero");
@@ -330,6 +357,9 @@ function getAbsorptionTarget(world: WorldState, band: Band): Band | undefined {
   return Object.values(world.bands)
     .filter((candidate) =>
       candidate.id !== band.id &&
+      // A provisional successor cannot absorb anybody: it has not established, and handing it a
+      // failing band's people would make it larger than the departure that created it.
+      !isProvisionalSuccessor(candidate) &&
       candidate.status !== "dispersed" &&
       candidate.viability?.status !== "absorbed" &&
       candidate.viability?.status !== "extinct" &&

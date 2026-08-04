@@ -188,8 +188,8 @@ Roadmap Item 3:
 accepted and frozen
 
 Roadmap Item 4:
-active — controlled departure world adapter complete locally;
-travel and bounded resolution not built;
+active — controlled atomic departure and first full provisional day
+complete locally; travel and bounded resolution not complete;
 not an implementation candidate
 
 Roadmap Item 5:
@@ -11409,3 +11409,32 @@ exception; daughter colours related-but-distinct and never visually confusing.
   live and WILL see the successor, and it is not yet migrated** — a production-reachable successor
   could be removed by Item 6 cleanup. tsc both, build, graph 221/764 and import boundary 85 all
   unchanged; no frozen evidence touched. Item 3 frozen; **Item 5 not started.**
+
+- **ROADMAP ITEM 4 — THE PROVISIONAL SUCCESSOR SURVIVES A REAL RUNNER SEASON (2026-08-03) —
+  PROGRESS: DEPARTURE VERTICAL SLICE CLOSED LOCALLY; TRAVEL NOT BUILT / NOT PUSHED / DO NOT MERGE.**
+  **T1-T10 10/10, 0 vacuous, measured on a REAL warmed map2 world.** Parent `band:varied-river-mid`
+  34 (19/11/4) → parent 23 (12/8/3) + successor 11 (7/3/1); **world population 235 → 235; all four
+  demographic lines conserved, measured from the resulting world.** The successor then went through
+  the REAL `advanceWorldByDays` for a full season and came out **alive, at population 11, status
+  `foraging`, `viability` still `null`, still provisional, not absorbed and not collapsed** — while
+  the parent in the same world reads `viable`. **§3's birth-tick question is answered structurally:
+  `advanceWorldByDays` runs `runDailyActions` for every day UP TO AND INCLUDING the boundary and only
+  THEN runs the seasonal tick containing fission — so the founders' demand and ecological impact are
+  already resolved as part of the PARENT before the departure exists. The successor exerting no
+  separate depletion that tick is the absence of a SECOND charge, not a free day.** That is read from
+  the runner's control flow, and it is labelled a structural argument rather than a measurement
+  because production has no per-founder demand attribution to read. **§4: `viability.ts` is split by
+  responsibility rather than blanket-filtered.** Derivation, absorption, collapse and fate become
+  established-only; **the zero-body detector — the one thing a blanket filter would have silently
+  removed, leaving a dead provisional group living forever — is re-homed in the new
+  `provisionalLifecycleResolver.ts`**, wired into `advance.ts` and inert while no provisional
+  successor exists. **A new terminal kernel phase `provisional_extinguished` is distinct from
+  `failed_early`**: early failure means "walk home" and has people to walk, while a group at zero has
+  nobody to return and routing it through `returning` would transfer bodies that do not exist. **T8
+  measures it firing exactly once, retaining lineage provenance.** The boundary audit gains a
+  structural check that **`performAtomicDeparture` stays unreachable from `demography.ts` and
+  `advance.ts`**, and a stated allowlist for terminality-OWNING modules — `viability.ts` writes
+  `dispersed`, so it cannot consume a predicate for values it is itself deciding. Verdict
+  **INCOMPLETE**, 2/12 readers migrated. **T10 proves a world with no departure carries no attempt
+  and no provisional record at all.** tsc both, build, graph 221/764 and import boundary 85 unchanged;
+  no frozen evidence touched. Item 3 frozen; **Item 5 not started.**

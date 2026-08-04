@@ -31,14 +31,21 @@ const SRC = join(ROOT, "src", "sim");
 const EVIDENCE = "docs/evidence/dynamic-fission-daughter-viability-37";
 const OUT = arg("out", `${EVIDENCE}/band-lifecycle-boundary.json`);
 const BOUNDARY = "src/sim/agents/bandLifecycle.ts";
+// Modules that WRITE terminal state and therefore legitimately name the terminal values inline.
+// `viability.ts` is the producer of `status: "dispersed"` and the reader of its own derived
+// `viability.status === "extinct"`; it cannot consume a predicate for values it is itself deciding,
+// and forcing it to would be a circular migration that proved nothing. Its Item 4 obligation is
+// different and IS enforced below: it must import the boundary and skip provisional successors.
+const TERMINALITY_OWNING_MODULES = ["src/sim/agents/viability.ts"];
 
 // Modules the reader matrix marks as needing a guard, a block or an adapter. Until a module is
 // migrated it is listed as PENDING rather than failing the run — an audit that fails on work that is
 // honestly not started yet would have to be disabled to make progress, and a disabled audit proves
 // nothing. `migrated: true` moves it into the enforced set.
+const NATURAL_PATH_FILES = ["src/sim/agents/demography.ts", "src/sim/tick/advance.ts"];
 const MATRIX_MODULES = [
   { file: "src/sim/agents/contextCache.ts", action: "adapter", migrated: true },
-  { file: "src/sim/agents/viability.ts", action: "blocked", migrated: false },
+  { file: "src/sim/agents/viability.ts", action: "blocked", migrated: true },
   { file: "src/sim/agents/demography.ts", action: "blocked + guard", migrated: false },
   { file: "src/sim/agents/expedition.ts", action: "blocked while travelling", migrated: false },
   { file: "src/sim/agents/intraSeasonTrips.ts", action: "blocked while travelling", migrated: false },
@@ -115,7 +122,7 @@ for (const full of files) {
     if (isComment(line)) return;
     if (rel !== BOUNDARY && INLINE_TERMINALITY.test(line)) {
       inlineTerminalitySitesOutsideBoundary += 1;
-      if (migrated.has(rel)) {
+      if (migrated.has(rel) && !TERMINALITY_OWNING_MODULES.includes(rel)) {
         violations.push({ kind: "inlined_terminality_in_migrated_module", file: rel, line: i + 1, text: line.trim().slice(0, 140) });
       }
     }
@@ -141,6 +148,14 @@ for (const full of files) {
   }
 }
 
+// ── check 3b: a terminality-owning module must still exclude provisional successors ──
+for (const rel of TERMINALITY_OWNING_MODULES) {
+  const raw = readFileSync(join(ROOT, rel), "utf8");
+  if (!/isProvisionalSuccessor/.test(raw)) {
+    violations.push({ kind: "terminality_owner_does_not_guard_provisional_successors", file: rel });
+  }
+}
+
 // ── check 4: the boundary stays curated ──
 const boundaryRaw = readFileSync(join(ROOT, BOUNDARY), "utf8");
 const boundaryExports = [...boundaryRaw.matchAll(/export\s+function\s+(\w+)/g)].map((m) => m[1]);
@@ -149,6 +164,19 @@ if (isBarrel) violations.push({ kind: "boundary_became_a_barrel", file: BOUNDARY
 for (const name of CANONICAL) {
   if (!boundaryExports.includes(name)) {
     violations.push({ kind: "canonical_predicate_missing_from_boundary", file: BOUNDARY, name });
+  }
+}
+
+// ── check 5b (§10): performAtomicDeparture stays unreachable from the natural path ──
+//
+// Structural, not remembered. Until travel and resolution exist, a future edit must not be able to
+// wire the departure seam into ordinary fission — a production-reachable successor nothing can
+// resolve is worse than the defect it replaces. `resolveProvisionalLifecycles` IS allowed in
+// advance.ts: it only ever acts on a provisional successor, and none can exist without the seam.
+for (const rel of NATURAL_PATH_FILES) {
+  const raw = readFileSync(join(ROOT, rel), "utf8");
+  if (/performAtomicDeparture|fissionDepartureSeam/.test(raw)) {
+    violations.push({ kind: "departure_seam_reachable_from_the_natural_path", file: rel });
   }
 }
 
@@ -233,6 +261,7 @@ const out = {
     pendingBlocked: pending.filter((p) => p.action.includes("blocked")).length,
     safeUnchangedReaders: 16,
     inlineTerminalitySitesOutsideBoundary,
+    terminalityOwningModules: TERMINALITY_OWNING_MODULES,
 
     // Structural cleanliness of the MIGRATED scope is not the same claim as migration being done,
     // and folding them into one PASS is exactly how a half-finished migration looks finished.

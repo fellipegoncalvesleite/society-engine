@@ -1,0 +1,205 @@
+{
+  "generatedAt": "2026-08-04T04:34:19.131Z",
+  "checkpoint": "ROADMAP ITEM 4 §3 + §9 — provisional successor through the real runner",
+  "seed": "audit27:natural:s1",
+  "warmDays": 1800,
+  "method": "A real world from initSimWorld, warmed, then a departure through the PRODUCTION seam, then advanced through the REAL advanceWorldByDays. The seam has no callers so it cannot fire inside a tick; it is applied between runner calls at the point the seam occupies. That is a CONTROLLED APPROXIMATION of the in-tick seam and is labelled as one.",
+  "founderAccountingOnDayD": {
+    "finding": "advanceWorldByDays runs runDailyActions for every day UP TO AND INCLUDING the season boundary, and only THEN runs runSeasonalCompatibilityTick, which contains demography and fission. So on the departure day the founders' food demand, consumption and ecological impact are already resolved AS PART OF THE PARENT, before the departure exists.",
+    "consequence": "The successor exerting no separate depletion on its birth tick is therefore NOT a free day — it is the absence of a SECOND charge for bodies that already ate once that day as part of the parent. Charging them again as a successor would be the double-count.",
+    "readFrom": "src/sim/tick/advance.ts advanceWorldByDays",
+    "caveat": "This is read from the runner's control flow rather than from a per-founder demand ledger, because production has no per-founder demand attribution to read. It is a structural argument, and it is labelled as one rather than as a measurement."
+  },
+  "parentBefore": {
+    "id": "band:varied-river-mid",
+    "population": 34,
+    "workingAdults": 19,
+    "dependents": 11,
+    "elders": 4,
+    "position": "tile:111:57"
+  },
+  "departure": {
+    "requestedFounders": 11,
+    "endorsedFounders": 11,
+    "revisionApplied": false,
+    "ledger": {
+      "demographic": {
+        "worldPopulationBefore": 235,
+        "worldPopulationAfter": 235,
+        "parentBefore": {
+          "workingAdults": 19,
+          "dependents": 11,
+          "elders": 4
+        },
+        "parentAfter": {
+          "workingAdults": 12,
+          "dependents": 8,
+          "elders": 3
+        },
+        "successor": {
+          "workingAdults": 7,
+          "dependents": 3,
+          "elders": 1
+        },
+        "populationConserved": true,
+        "workingAdultsConserved": true,
+        "dependentsConserved": true,
+        "eldersConserved": true,
+        "measuredFromResultingWorld": true,
+        "fixedRatioRecomputeUsed": false
+      },
+      "material": {
+        "successorStorageCapacity": 0,
+        "storageCapacityCreatedFromNothing": false,
+        "successorInheritedExpeditions": 0,
+        "successorInheritedReceipts": 0
+      },
+      "embodied": {
+        "parentHungerBefore": 0.62,
+        "successorHunger": 0.62,
+        "hungerImprovedByTheSplit": false,
+        "acuteRiskCarried": true,
+        "claim": "no_unearned_improvement",
+        "exactnessClaimed": false
+      },
+      "provenance": {
+        "parentDeathMemorySourceEvents": 1,
+        "successorDeathMemorySourceEvents": 1,
+        "deathMemoryErased": false,
+        "deathMemoryDuplicatedAsUnrelatedEvents": false
+      },
+      "derived": {
+        "viabilityAssertedAtDeparture": false,
+        "bodyCampLogisticsRecomputed": false,
+        "note": "L7 — body/camp summaries are NOT recomputed here. They are derived state and must follow honest cohorts, condition, material capability, location and travel state, which the provisional lifecycle establishes. Recomputing them at this seam would be recomputing from inputs that are not yet complete."
+      }
+    }
+  },
+  "gates": [
+    {
+      "id": "T1",
+      "claim": "the departure conserves population and cohorts in a REAL world",
+      "status": "PASS",
+      "nonVacuityNote": "people genuinely moved in a real world",
+      "worldPopBefore": 235,
+      "worldPopAfterDeparture": 235,
+      "ledger": {
+        "worldPopulationBefore": 235,
+        "worldPopulationAfter": 235,
+        "parentBefore": {
+          "workingAdults": 19,
+          "dependents": 11,
+          "elders": 4
+        },
+        "parentAfter": {
+          "workingAdults": 12,
+          "dependents": 8,
+          "elders": 3
+        },
+        "successor": {
+          "workingAdults": 7,
+          "dependents": 3,
+          "elders": 1
+        },
+        "populationConserved": true,
+        "workingAdultsConserved": true,
+        "dependentsConserved": true,
+        "eldersConserved": true,
+        "measuredFromResultingWorld": true,
+        "fixedRatioRecomputeUsed": false
+      }
+    },
+    {
+      "id": "T2",
+      "claim": "the successor exists in the real world at the parent's tile",
+      "status": "PASS",
+      "nonVacuityNote": "the successor was genuinely created",
+      "successorPosition": "tile:111:57",
+      "parentPosition": "tile:111:57"
+    },
+    {
+      "id": "T3",
+      "claim": "the successor SURVIVES a full real runner season — not absorbed, not collapsed, not dispersed",
+      "status": "PASS",
+      "nonVacuityNote": "the successor was alive when the runner started",
+      "existsAfter": true,
+      "statusAfter": "foraging",
+      "livingAfter": true,
+      "populationBirth": 11,
+      "populationAfter": 11
+    },
+    {
+      "id": "T4",
+      "claim": "established viability never claims the provisional successor",
+      "status": "PASS",
+      "nonVacuityNote": "the successor survived to be checked",
+      "viabilityAfter": null,
+      "stillProvisional": true,
+      "parentViabilityAfter": "viable"
+    },
+    {
+      "id": "T5",
+      "claim": "the successor is not established and cannot fission after a real season",
+      "status": "PASS",
+      "nonVacuityNote": "the parent IS established in the same world, so the successor's false is discriminating",
+      "established": false,
+      "fissionEligible": false
+    },
+    {
+      "id": "T6",
+      "claim": "the band count grew by exactly one and nobody else vanished",
+      "status": "PASS",
+      "nonVacuityNote": "the world genuinely had bands before",
+      "bandCountBefore": 9,
+      "bandCountAfterDeparture": 10,
+      "bandCountAfterSeason": 10
+    },
+    {
+      "id": "T7",
+      "claim": "no provisional group is left unresolved at zero population",
+      "status": "PASS",
+      "nonVacuityNote": "a provisional group genuinely existed through the season",
+      "unresolved": false
+    },
+    {
+      "id": "T8",
+      "claim": "a provisional group that loses everybody resolves through the fission lifecycle, not Item 6",
+      "status": "PASS",
+      "nonVacuityNote": "the group genuinely was unresolved at zero population before the resolver ran",
+      "resolutions": [
+        {
+          "bandId": "band:varied-river-mid:provisional:1",
+          "lineageId": "LIN-REAL-1",
+          "fromPhase": "travelling",
+          "toPhase": "provisional_extinguished",
+          "populationAtResolution": 0,
+          "reason": "zero_physical_population"
+        }
+      ],
+      "phaseAfter": "provisional_extinguished",
+      "statusAfter": "dispersed"
+    },
+    {
+      "id": "T9",
+      "claim": "the parent and successor are lineage-linked, and a third band is not",
+      "status": "PASS",
+      "nonVacuityNote": "both halves survived to be compared",
+      "pairLinked": true
+    },
+    {
+      "id": "T10",
+      "claim": "a world in which no departure happens is unaffected by everything added",
+      "status": "PASS",
+      "nonVacuityNote": "the control world genuinely has bands and history",
+      "controlBandCount": 9,
+      "anyProvisional": false,
+      "anyAttempt": false
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passing": 10,
+    "failing": 0,
+    "vacuous": 0
+  }
+}

@@ -200,8 +200,11 @@ try {
     }
     return {
       rows,
-      nonVacuous: Object.keys(rows).length === 4,
-      nonVacuityNote: "all four terminal phases were exercised against every possible destination",
+      // FIVE since the zero-population terminal was added. The count is read from the production
+      // table rather than hardcoded, so adding a phase cannot silently make this fixture vacuous
+      // again — which is exactly what it did the first time.
+      nonVacuous: Object.keys(rows).length === k.PHASE_CONTRACTS.filter((c) => c.terminal).length,
+      nonVacuityNote: "every terminal phase in the production table was exercised against every possible destination",
       passed: Object.values(rows).every(Boolean),
     };
   });
@@ -246,8 +249,9 @@ try {
       toEstablishing: toEstablish.ok === true ? "ACCEPTED" : toEstablish.rejection,
       toReturning: toReturn.ok === true ? toReturn.state.phase : `REJECTED:${toReturn.rejection}`,
       permittedNext: contract.permittedNext,
-      nonVacuous: contract.permittedNext.length === 1,
-      nonVacuityNote: "the phase genuinely has exactly one exit in the production table",
+      // Two exits now: walk home, or nobody is left to walk. Both are failures; neither is a success.
+      nonVacuous: contract.permittedNext.length >= 1 && !contract.permittedNext.includes("stabilized"),
+      nonVacuityNote: "the phase's exits are enumerated from the production table and none of them is a success",
       passed:
         toStable.ok === false && toEstablish.ok === false &&
         toReturn.ok === true && toReturn.state.phase === "returning" && !contract.terminal,
@@ -267,7 +271,11 @@ try {
         // before departure the parent owns everything, because the attempt holds no bodies
         preDeparture.every((c) => c.bodyOwner === "parent" && c.productiveLabourOwner === "parent" && c.physicalLocationOwner === "parent") &&
         // after departure exactly one entity owns each quantity, never both
-        postDeparture.every((c) => c.bodyOwner === "parent" || c.bodyOwner === "successor") &&
+        // `none` is legal for exactly one phase: the terminal in which nobody is left alive.
+        postDeparture.every(
+          (c) => c.bodyOwner === "parent" || c.bodyOwner === "successor" ||
+            (c.bodyOwner === "none" && c.terminal && c.phase === "provisional_extinguished"),
+        ) &&
         // reintegration hands ownership back
         k.getPhaseContract("reintegrated").bodyOwner === "parent" &&
         k.getPhaseContract("stabilized").bodyOwner === "successor",

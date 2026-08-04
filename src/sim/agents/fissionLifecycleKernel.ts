@@ -64,7 +64,18 @@ export type ProvisionalSuccessorPhase =
   /** Terminal: rejoined the parent. The provisional entity is removed exactly once. */
   | "reintegrated"
   /** Terminal: bounded early functioning demonstrated. Becomes an ordinary band. */
-  | "stabilized";
+  | "stabilized"
+  /**
+   * Terminal: every body in the provisional group died before it resolved.
+   *
+   * DISTINCT FROM `failed_early`, and the distinction is physical rather than bookkeeping. Early
+   * failure means "this is not working, walk home" — it has people to walk. A group at zero
+   * population has nobody to return and nothing to reintegrate, so routing it through `returning`
+   * would transfer bodies that do not exist. It is also NOT ordinary extinction: Item 6 owns the
+   * dissolution of established bands, and a provisional group that dies before establishing is the
+   * fission lifecycle's outcome to record, not Item 6's.
+   */
+  | "provisional_extinguished";
 
 export type FissionLifecyclePhase = FissionAttemptPhase | ProvisionalSuccessorPhase;
 
@@ -198,7 +209,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
     transitionWriter: "provisionalTravel (world adapter)",
-    permittedNext: ["establishing", "returning"],
+    permittedNext: ["establishing", "returning", "provisional_extinguished"],
     terminal: false,
     maxDays: TRAVEL_MAX_DAYS,
     // A journey that has run out of time turns for home. It does not arrive by expiry, and it does
@@ -214,7 +225,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
     transitionWriter: "provisionalEstablishment (world adapter)",
-    permittedNext: ["stabilized", "failed_early", "returning"],
+    permittedNext: ["stabilized", "failed_early", "returning", "provisional_extinguished"],
     terminal: false,
     maxDays: ESTABLISHMENT_MAX_DAYS,
     // **A TIMER ALONE MAY NOT STABILIZE.** The window expiring without lived evidence is a failure,
@@ -233,7 +244,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     transitionWriter: "provisionalEstablishment (world adapter)",
     // Only one way out. A failed successor still holds living people who are somewhere, so it must
     // walk back; it may not stabilize, and it may not stop existing here.
-    permittedNext: ["returning"],
+    permittedNext: ["returning", "provisional_extinguished"],
     terminal: false,
     maxDays: FAILED_EARLY_MAX_DAYS,
     onTimeout: "returning",
@@ -247,7 +258,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
     transitionWriter: "provisionalReturn (world adapter)",
-    permittedNext: ["reintegrated"],
+    permittedNext: ["reintegrated", "provisional_extinguished"],
     terminal: false,
     maxDays: RETURN_MAX_DAYS,
     // A group that cannot reach its parent does not evaporate. Timing out of the return is still a
@@ -265,6 +276,20 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "parent",
     physicalLocationOwner: "parent",
     transitionWriter: "provisionalReturn (world adapter)",
+    permittedNext: [],
+    terminal: true,
+    clearsOnExit: ["provisionalState"],
+  },
+  {
+    phase: "provisional_extinguished",
+    side: "successor",
+    bodiesHaveMoved: true,
+    // Nobody is left to own anything. `none` is the honest owner, and it is what stops a resolver
+    // trying to hand bodies back to the parent.
+    bodyOwner: "none",
+    productiveLabourOwner: "none",
+    physicalLocationOwner: "none",
+    transitionWriter: "provisionalZeroPopulation (world adapter)",
     permittedNext: [],
     terminal: true,
     clearsOnExit: ["provisionalState"],
@@ -437,6 +462,10 @@ export function assertSingleOwnership(): readonly string[] {
     }
     if (c.terminal && c.permittedNext.length > 0) {
       problems.push(`${c.phase}: terminal phase with permitted successors`);
+    }
+    // `none` is legal only for a terminal phase in which nobody is left alive.
+    if (c.bodyOwner === "none" && (!c.terminal || c.phase !== "provisional_extinguished")) {
+      problems.push(`${c.phase}: claims no body owner but is not the zero-population terminal`);
     }
     if (!c.bodiesHaveMoved && c.bodyOwner !== "parent") {
       problems.push(`${c.phase}: bodies have not moved but the parent does not own them`);
