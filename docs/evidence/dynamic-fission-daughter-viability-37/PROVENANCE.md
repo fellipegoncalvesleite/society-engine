@@ -85,3 +85,31 @@ No Item 3 branch was modified. The six carried-forward seams are unchanged and u
 checkpoint. The three inert territorial names remain inert; nothing here gives any of them a writer.
 
 **Roadmap Item 5 was not started and was not prepared.**
+
+---
+
+## `.probe-tmp.mjs` — what it proved, and its disposition
+
+An untracked, ad-hoc 53-line probe left behind by the interrupted implementation pass. It drove the
+then-uncommitted `fissionParentResidualViability.ts` over twelve constructed parents and printed a
+one-line summary per case. It is recorded here so it is never an unexplained file.
+
+**What it proved, and it is the finding that reshaped the module:** the interrupted single-aggregate
+model refused a struggling parent on a score dominated by hardship the split did not cause, and the
+refusal was invariant to the founder count. Its `all-bad` and `all-bad-small-min` rows — identical
+`strain 0.92`, identical `blocked: true`, with the minimum founder request differing 18 against 2 —
+are the raw evidence for that claim.
+
+**Where its content now lives, so nothing rests on the temporary file:**
+
+- its raw output for the decisive rows is quoted verbatim in `PARENT_RESIDUAL_DECISION.md` §2;
+- its arithmetic is reconstructed constant-for-constant, and its `0.92` reproduced to the digit as
+  `0.9213`, by `scripts/fissionParentResidualReproductionAudit.mjs` →
+  `parent-residual-prior-strain-reproduction.json`;
+- its twelve constructed parents are superseded by the twenty controlled fixtures in
+  `scripts/fissionParentResidualFixturesAudit.mjs` →
+  `parent-residual-controlled-fixtures.json`.
+
+**Disposition: it is retained during active work as the brief requires, and carries no remaining
+evidential load.** It is deleted normally before the final candidate; nothing cites it, and this
+entry is the record that survives the deletion.

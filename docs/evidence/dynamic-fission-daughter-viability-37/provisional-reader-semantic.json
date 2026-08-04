@@ -1,0 +1,478 @@
+{
+  "generatedAt": "2026-08-04T00:45:46.994Z",
+  "checkpoint": "ROADMAP ITEM 4 §4 — semantic reader audit",
+  "supersedes": "The lexical counts in provisional-reader-surface.json (160 sites / 144 unguarded). Those were DISCOVERY evidence; these are the counts that describe the actual decision surface.",
+  "method": "Distinguishes a TRUE enumeration of the band set (Object.values/keys/entries(world.bands)) from a KEYED LOOKUP (world.bands[id], where the caller already holds the id and a provisional successor cannot wander in) and from writes into a local accumulator. For each true enumeration it records whether the lifecycle filter routes through the canonical bandLifecycle predicate, is hand-inlined, or is absent.",
+  "canonicalPredicateModule": {
+    "file": "src/sim/agents/bandLifecycle.ts",
+    "exports": [
+      "isBandTerminal",
+      "isLivingBand",
+      "preserveTerminalBandSnapshots"
+    ],
+    "importedBy": [
+      "src/sim/agents/contextCache.ts",
+      "src/sim/agents/faunaStock.ts",
+      "src/sim/agents/socialContext.ts"
+    ],
+    "importedByCount": 3,
+    "finding": "The seam a provisional lifecycle would attach to ALREADY EXISTS and is ALREADY the canonical answer to 'is this band still an ordinary living band?'. It is imported by very few modules; most readers inline the same test by hand. That ratio is the real cost of Representation A, and it is a routing problem with an existing destination rather than a new architecture."
+  },
+  "summary": {
+    "filesScanned": 145,
+    "trueEnumerations": 41,
+    "keyedLookups": 29,
+    "enumViaCanonicalPredicate": 2,
+    "enumViaInlineStatus": 8,
+    "enumWithNoLifecycleFilter": 31,
+    "lexicalClaimedEnumerationSites": 160,
+    "lexicalOverstatementFactor": 3.9
+  },
+  "perFile": [
+    {
+      "file": "src/sim/agents/demography.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 6,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 155,
+          "filter": "none",
+          "text": "const bandOrder = Object.values(world.bands).sort(compareBands);"
+        },
+        {
+          "line": 402,
+          "filter": "none",
+          "text": "Object.keys(world.bands).length >= MAX_BANDS &&"
+        },
+        {
+          "line": 526,
+          "filter": "none",
+          "text": "const canCreateMoreBands = Object.keys(world.bands).length < MAX_BANDS;"
+        },
+        {
+          "line": 702,
+          "filter": "none",
+          "text": "bandCount: Object.keys(world.bands).length,"
+        },
+        {
+          "line": 3366,
+          "filter": "none",
+          "text": "return Object.values(world.bands).reduce("
+        },
+        {
+          "line": 3410,
+          "filter": "inline_status_test",
+          "text": "return Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/spawn.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 6,
+      "keyedLookups": 2,
+      "enumerations": [
+        {
+          "line": 499,
+          "filter": "none",
+          "text": "for (const band of Object.values(world.bands)) {"
+        },
+        {
+          "line": 536,
+          "filter": "none",
+          "text": "for (const band of Object.values(world.bands).sort((left, right) => String(left.id).localeCompare(String(right.id)))) {"
+        },
+        {
+          "line": 679,
+          "filter": "none",
+          "text": "if (reservedTileIds.has(tileId) || Object.values(world.bands).some((band) => band.position === tileId)) {"
+        },
+        {
+          "line": 705,
+          "filter": "none",
+          "text": "for (const band of Object.values(world.bands)) {"
+        },
+        {
+          "line": 727,
+          "filter": "none",
+          "text": "const usedColors = new Set(Object.values(world.bands).map((band) => band.color));"
+        },
+        {
+          "line": 778,
+          "filter": "none",
+          "text": "const allBands = addNearbyBandKnowledge(world, [...Object.values(world.bands), ...addedBands]);"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/socialContext.ts",
+      "importsCanonicalPredicate": true,
+      "trueEnumerations": 5,
+      "keyedLookups": 2,
+      "enumerations": [
+        {
+          "line": 134,
+          "filter": "none",
+          "text": "const bands = Object.entries(world.bands)"
+        },
+        {
+          "line": 1044,
+          "filter": "none",
+          "text": "const bandsById: Record<string, Band> = Object.values(world.bands)"
+        },
+        {
+          "line": 1626,
+          "filter": "inline_status_test",
+          "text": "return Object.values(world.bands).reduce((total, otherBand) => {"
+        },
+        {
+          "line": 1660,
+          "filter": "inline_status_test",
+          "text": "return Object.values(world.bands).filter((band) => {"
+        },
+        {
+          "line": 2006,
+          "filter": "inline_status_test",
+          "text": "return Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/viability.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 3,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 24,
+          "filter": "none",
+          "text": "let bandsById: Record<string, Band> = Object.values(world.bands)"
+        },
+        {
+          "line": 330,
+          "filter": "inline_status_test",
+          "text": "return Object.values(world.bands)"
+        },
+        {
+          "line": 474,
+          "filter": "none",
+          "text": "const kin = Object.values(world.bands).filter((candidate) => candidate.id !== band.id && isKin(band, candidate));"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/contextCache.ts",
+      "importsCanonicalPredicate": true,
+      "trueEnumerations": 2,
+      "keyedLookups": 5,
+      "enumerations": [
+        {
+          "line": 131,
+          "filter": "canonical_predicate",
+          "text": "const allBands = Object.values(world.bands);"
+        },
+        {
+          "line": 183,
+          "filter": "none",
+          "text": "return Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/protoCamps.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 2,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 37,
+          "filter": "none",
+          "text": "const bands = Object.values(world.bands)"
+        },
+        {
+          "line": 978,
+          "filter": "inline_status_test",
+          "text": "for (const other of Object.values(world.bands)) {"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/accessNorms.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 86,
+          "filter": "none",
+          "text": "const bands = Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/acuteRisk.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 55,
+          "filter": "none",
+          "text": "const bands = Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/bandEvents.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 1,
+      "enumerations": [
+        {
+          "line": 73,
+          "filter": "none",
+          "text": "const bands = Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/bandHistory.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 315,
+          "filter": "none",
+          "text": "for (const band of Object.values(world.bands).sort(compareBands)) {"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/bodyCampLogistics.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 63,
+          "filter": "none",
+          "text": "const bands = Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/carryingCapacity.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 360,
+          "filter": "inline_status_test",
+          "text": "Object.values(world.bands).filter((candidate) => candidate.status !== \"dispersed\").length,"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/crowding.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 3,
+      "enumerations": [
+        {
+          "line": 885,
+          "filter": "inline_status_test",
+          "text": "return Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/expedition.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 1,
+      "enumerations": [
+        {
+          "line": 2479,
+          "filter": "none",
+          "text": "for (const band of Object.values(world.bands).sort(compareExpeditionBands)) {"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/faunaStock.ts",
+      "importsCanonicalPredicate": true,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 1350,
+          "filter": "canonical_predicate",
+          "text": "for (const band of Object.values(world.bands)) {"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/foragingAdaptation.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 63,
+          "filter": "none",
+          "text": "const bands = Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/intraSeasonTrips.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 312,
+          "filter": "none",
+          "text": "for (const band of Object.values(world.bands).sort(compareBands)) {"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/relationshipMemory.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 53,
+          "filter": "none",
+          "text": "const bands = Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/resourceEcologyFoundation.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 259,
+          "filter": "none",
+          "text": "const bands = Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/visibleNature.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 376,
+          "filter": "none",
+          "text": "const bands = Object.values(world.bands)"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/runner/simRunner.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 1,
+      "enumerations": [
+        {
+          "line": 607,
+          "filter": "none",
+          "text": "const bands = Object.values(world.bands);"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/world/depletion.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 138,
+          "filter": "none",
+          "text": "for (const band of Object.values(world.bands)) {"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/world/mapEdits.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 1,
+      "keyedLookups": 0,
+      "enumerations": [
+        {
+          "line": 386,
+          "filter": "none",
+          "text": "const bands = Object.values(world.bands).sort((left, right) =>"
+        }
+      ]
+    },
+    {
+      "file": "src/sim/agents/bandChronicle.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 0,
+      "keyedLookups": 5,
+      "enumerations": []
+    },
+    {
+      "file": "src/sim/agents/frontierResidence.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 0,
+      "keyedLookups": 1,
+      "enumerations": []
+    },
+    {
+      "file": "src/sim/agents/memoryReferents.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 0,
+      "keyedLookups": 1,
+      "enumerations": []
+    },
+    {
+      "file": "src/sim/agents/rangeFriction.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 0,
+      "keyedLookups": 2,
+      "enumerations": []
+    },
+    {
+      "file": "src/sim/agents/reportedKnowledge.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 0,
+      "keyedLookups": 2,
+      "enumerations": []
+    },
+    {
+      "file": "src/sim/agents/sharedCatchment.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 0,
+      "keyedLookups": 1,
+      "enumerations": []
+    },
+    {
+      "file": "src/sim/agents/socialEcologicalDiffusion.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 0,
+      "keyedLookups": 1,
+      "enumerations": []
+    },
+    {
+      "file": "src/sim/rules/bandDecision.ts",
+      "importsCanonicalPredicate": false,
+      "trueEnumerations": 0,
+      "keyedLookups": 1,
+      "enumerations": []
+    }
+  ]
+}

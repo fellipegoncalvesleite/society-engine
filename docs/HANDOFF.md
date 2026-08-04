@@ -188,21 +188,20 @@ Roadmap Item 3:
 accepted and frozen
 
 Roadmap Item 4:
-implementation candidate — awaiting Browser GPT audit
+active — two pure authorities complete; lifecycle not built;
+not an implementation candidate
 
 Roadmap Item 5:
 not started
 ```
 
-> **READ THIS BEFORE ACTING ON THE LINE ABOVE.** "Implementation candidate" describes the
-> checkpoint, **not** the Direction D lifecycle. As of `42951ea` the lifecycle is **NOT
-> IMPLEMENTED**. What exists is **two pure leaves with ZERO PRODUCTION CALLERS**
-> (`fissionFounderAllocation.ts`, `fissionParentResidualViability.ts`) and three audits.
-> `createDaughterBand` is **untouched**, and every one of the six measured defects — instantaneous
-> creation, the teleport, the manufactured dependents, viability-as-one-inequality, the
-> impossibility of failure, and the restated conservation flag — is **still live in production**.
-> **Item 4 must not be described as implemented, and this checkpoint must not be pushed**, until the
-> lifecycle exists end to end.
+**What that means concretely.** Two pure leaves exist with **zero production callers**
+(`fissionFounderAllocation.ts`, `fissionParentResidualViability.ts`), plus the representation
+decision and reader matrix. **`createDaughterBand` is untouched**, and every one of the six measured
+defects — instantaneous creation, the teleport, the manufactured dependents,
+viability-as-one-inequality, the impossibility of failure, and the restated conservation flag — is
+**still live in production**. Item 4 becomes an implementation candidate only when the complete
+lifecycle, natural occurrence, validation and evidence package exist.
 
 **Branch** `checkpoint/dynamic-fission-provisional-successor-38`, from the accepted
 audit/architecture tip `ab29864`. **Local HEAD `42951ea`; remote still at `87859eb`; three local
