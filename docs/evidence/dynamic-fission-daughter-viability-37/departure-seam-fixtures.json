@@ -1,0 +1,222 @@
+{
+  "generatedAt": "2026-08-04T01:48:07.127Z",
+  "checkpoint": "ROADMAP ITEM 4 §11 — atomic departure seam controlled gates",
+  "authority": "src/sim/agents/fissionDepartureSeam.ts",
+  "scopeLimit": "The seam is NOT reachable from ordinary fission — D16 reads the sources to prove it. These gates drive the production writer directly. They prove the departure TRANSITION is truthful; they prove nothing about travel, return or stabilization, none of which exist, and nothing about natural occurrence.",
+  "fixtures": [
+    {
+      "id": "D1",
+      "claim": "a departure_ready attempt with a viable residual departs",
+      "status": "PASS",
+      "nonVacuityNote": "the seam genuinely produced a departure; every later gate reads this world",
+      "ok": true,
+      "endorsed": 18
+    },
+    {
+      "id": "D2",
+      "claim": "population and all three cohorts are conserved exactly, measured after the mutation",
+      "status": "PASS",
+      "nonVacuityNote": "people genuinely moved, so the conservation is over a real transfer",
+      "ledger": {
+        "worldPopulationBefore": 50,
+        "worldPopulationAfter": 50,
+        "parentBefore": {
+          "workingAdults": 29,
+          "dependents": 14,
+          "elders": 7
+        },
+        "parentAfter": {
+          "workingAdults": 18,
+          "dependents": 9,
+          "elders": 5
+        },
+        "successor": {
+          "workingAdults": 11,
+          "dependents": 5,
+          "elders": 2
+        },
+        "populationConserved": true,
+        "workingAdultsConserved": true,
+        "dependentsConserved": true,
+        "eldersConserved": true,
+        "measuredFromResultingWorld": true,
+        "fixedRatioRecomputeUsed": false
+      },
+      "conserving": true
+    },
+    {
+      "id": "D3",
+      "claim": "a deliberately corrupted ledger is detected rather than reported conserved",
+      "status": "PASS",
+      "nonVacuityNote": "the healthy ledger passes in the same run, so the detections are detections",
+      "healthy": true,
+      "populationCorrupted": false,
+      "cohortCorrupted": false
+    },
+    {
+      "id": "D4",
+      "claim": "the successor is created at the parent's tile, never at the target",
+      "status": "PASS",
+      "nonVacuityNote": "the target genuinely differs from the parent tile, so co-residence is a choice",
+      "successorPosition": "tile:10:10",
+      "parentPosition": "tile:10:10",
+      "attemptTarget": "tile:17:17"
+    },
+    {
+      "id": "D5",
+      "claim": "the successor is living, is not established, and cannot fission",
+      "status": "PASS",
+      "nonVacuityNote": "the PARENT is established in the same world, so the successor's false is discriminating",
+      "living": true,
+      "established": false,
+      "fissionEligible": false,
+      "provisional": true,
+      "parentEstablished": true
+    },
+    {
+      "id": "D6",
+      "claim": "no viable status is asserted at departure",
+      "status": "PASS",
+      "nonVacuityNote": "the parent DOES carry a viability status, so the successor's absence is deliberate",
+      "successorViability": null,
+      "asserted": false,
+      "parentViability": "viable"
+    },
+    {
+      "id": "D7",
+      "claim": "no storage, expedition or receipt is created by departing",
+      "status": "PASS",
+      "nonVacuityNote": "the parent HAS storage, so the successor's zero is an honest absence rather than a world with no storage at all",
+      "material": {
+        "successorStorageCapacity": 0,
+        "storageCapacityCreatedFromNothing": false,
+        "successorInheritedExpeditions": 0,
+        "successorInheritedReceipts": 0
+      },
+      "parentStorage": 0.5
+    },
+    {
+      "id": "D8",
+      "claim": "the split does not make anybody less hungry",
+      "status": "PASS",
+      "nonVacuityNote": "the parent was genuinely hungry, so 'not improved' is a real claim",
+      "embodied": {
+        "parentHungerBefore": 0.7,
+        "successorHunger": 0.7,
+        "hungerImprovedByTheSplit": false,
+        "acuteRiskCarried": true,
+        "claim": "no_unearned_improvement",
+        "exactnessClaimed": false
+      }
+    },
+    {
+      "id": "D9",
+      "claim": "acute condition and death memory are carried, not reset and not duplicated",
+      "status": "PASS",
+      "nonVacuityNote": "the parent genuinely carried acute risk and a death memory",
+      "provenance": {
+        "parentDeathMemorySourceEvents": 1,
+        "successorDeathMemorySourceEvents": 1,
+        "deathMemoryErased": false,
+        "deathMemoryDuplicatedAsUnrelatedEvents": false
+      },
+      "acuteRiskCarried": true,
+      "successorHasAcuteRisk": true
+    },
+    {
+      "id": "D10",
+      "claim": "the resulting world has exactly one current owner for the departure",
+      "status": "PASS",
+      "nonVacuityNote": "the parent genuinely retains its attempt record as provenance",
+      "findings": [],
+      "parentAttemptPhase": "departed",
+      "parentHasCurrentAttempt": false
+    },
+    {
+      "id": "D11",
+      "claim": "parent and successor are recognised as one split; an unrelated band is not",
+      "status": "PASS",
+      "nonVacuityNote": "the real pair IS protected, so the stranger's false is a real negative",
+      "pairProtected": true,
+      "strangerProtected": false
+    },
+    {
+      "id": "D12",
+      "claim": "a departure is refused from every phase except departure_ready",
+      "status": "PASS",
+      "nonVacuityNote": "departure_ready IS accepted in the same run",
+      "rows": {
+        "proposed": "parent_attempt_not_departure_ready",
+        "committed": "parent_attempt_not_departure_ready",
+        "abandoned": "parent_attempt_not_departure_ready",
+        "departed": "parent_attempt_not_departure_ready"
+      },
+      "readyAccepted": true
+    },
+    {
+      "id": "D13",
+      "claim": "a departure that would strand the parent is refused by the residual authority",
+      "status": "PASS",
+      "nonVacuityNote": "a healthy parent DOES depart in the same run, so the refusal is not a broken seam",
+      "outcome": "residual_authority_blocked_the_departure",
+      "detail": "split_caused_damage_exceeds_tolerance"
+    },
+    {
+      "id": "D14",
+      "claim": "when the residual authority revises the request down, the smaller group is the one that leaves",
+      "status": "PASS",
+      "nonVacuityNote": "a revision genuinely occurred; without one this gate would prove nothing",
+      "requested": 18,
+      "endorsed": 8,
+      "revisionApplied": true,
+      "actualSuccessorSize": 8,
+      "conserving": true
+    },
+    {
+      "id": "D15",
+      "claim": "the parent's cohorts after are its own minus the departing group, not a re-derived shape",
+      "status": "PASS",
+      "nonVacuityNote": "the fixed-ratio shape genuinely differs from the true remainder here, so the check discriminates",
+      "parentAfter": {
+        "workingAdults": 18,
+        "dependents": 9,
+        "elders": 5
+      },
+      "whatFixedRatioRecomputeWouldHaveGiven": {
+        "dependents": 11,
+        "elders": 3
+      }
+    },
+    {
+      "id": "D16",
+      "claim": "nothing in production calls this seam, so ordinary behaviour cannot change",
+      "status": "PASS",
+      "nonVacuityNote": "the legacy path genuinely still exists in demography.ts",
+      "callers": [],
+      "legacyPathIntact": true
+    },
+    {
+      "id": "D17",
+      "claim": "the same request produces a byte-identical world and ledger",
+      "status": "PASS",
+      "nonVacuityNote": "the compared ledger is substantive",
+      "identical": true
+    },
+    {
+      "id": "D18",
+      "claim": "a refused departure returns the original world with nobody moved",
+      "status": "PASS",
+      "nonVacuityNote": "the departure was genuinely refused",
+      "refusal": "parent_attempt_not_departure_ready",
+      "worldUnchanged": true,
+      "bandCount": 1
+    }
+  ],
+  "summary": {
+    "total": 18,
+    "passing": 18,
+    "failing": 0,
+    "vacuous": 0,
+    "errored": 0
+  }
+}

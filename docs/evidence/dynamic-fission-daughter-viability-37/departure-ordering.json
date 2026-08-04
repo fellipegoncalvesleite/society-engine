@@ -1,0 +1,104 @@
+{
+  "generatedAt": "2026-08-04T01:48:07.127Z",
+  "checkpoint": "ROADMAP ITEM 4 §5 — runner sub-step ordering and departure seam selection",
+  "seasonalTickSubSteps": [
+    {
+      "step": 1,
+      "name": "buildTickContextCache (pre-decision)",
+      "movesBands": false
+    },
+    {
+      "step": 2,
+      "name": "updateBandContextStates",
+      "movesBands": false
+    },
+    {
+      "step": 3,
+      "name": "applyAcuteRiskContext",
+      "movesBands": false
+    },
+    {
+      "step": 4,
+      "name": "per-band decision loop (evaluateBandDecision + applyBandDecision)",
+      "movesBands": true,
+      "note": "iterates a bandOrder SNAPSHOT taken before the loop"
+    },
+    {
+      "step": 5,
+      "name": "buildTickContextCache (post-decision)",
+      "movesBands": false,
+      "note": "this cache feeds every ecology step below"
+    },
+    {
+      "step": 6,
+      "name": "applyRangeSaturationContext",
+      "movesBands": false
+    },
+    {
+      "step": 7,
+      "name": "applyEncounterContext",
+      "movesBands": false
+    },
+    {
+      "step": 8,
+      "name": "updateBandsDemographyAndFission",
+      "movesBands": false,
+      "note": "THE CHOSEN SEAM. Iterates its own bandOrder SNAPSHOT taken at entry"
+    },
+    {
+      "step": 9,
+      "name": "updateBandViabilityStates",
+      "movesBands": false,
+      "note": "enumerates world.bands live — sees a band created at step 8. This is the reader that must be blocked"
+    },
+    {
+      "step": 10,
+      "name": "applyBandDeepHistoryContext",
+      "movesBands": false
+    },
+    {
+      "step": 11,
+      "name": "advanceTileDepletion / Fauna / Plant / Forest",
+      "movesBands": false,
+      "note": "consume the step-5 cache, so a band created at step 8 exerts no depletion this tick"
+    },
+    {
+      "step": 12,
+      "name": "deriveFinalReadModelContext + updateBandContextStates",
+      "movesBands": false,
+      "note": "partial rebuild when the active band set changed, so the successor enters the read model this tick"
+    }
+  ],
+  "chosenSeam": {
+    "step": 8,
+    "writer": "src/sim/agents/fissionDepartureSeam.ts performAtomicDeparture",
+    "why": "Both the decision loop's bandOrder and updateBandsDemographyAndFission's own bandOrder are snapshots taken before their loops begin, so a band created at step 8 is in NEITHER. It therefore cannot receive a decision this tick (no free movement, no double movement) and cannot receive a demographic update this tick (no double update). It gets its first of each on the next tick, exactly once. This is also exactly where the legacy path already sits.",
+    "acceptedConsequence": "The ecology steps consume the step-5 cache, so the successor exerts no depletion on its birth tick. This is IDENTICAL to what the legacy daughter does today, so it is a preserved property rather than a new defect."
+  },
+  "rejectedSeams": [
+    {
+      "step": 4,
+      "why": "bands physically move here, so a successor created mid-loop could be handed a decision and move on its birth day — free movement"
+    },
+    {
+      "step": 11,
+      "why": "after the ecology advance the successor would miss viability and the read-model pass, appearing only in the next tick's cache — a one-tick disappearance from physical presence"
+    },
+    {
+      "name": "runDailyActions",
+      "why": "wrong cadence entirely; fission is annual and a daily writer would need its own resolution bound"
+    }
+  ],
+  "doubleProcessingRisks": {
+    "consumedTwice": "prevented — the successor is not in step 4's snapshot",
+    "noConsumption": "accepted for the birth tick, identical to the legacy daughter",
+    "twoDemographicUpdates": "prevented — the successor is not in step 8's snapshot",
+    "movedForFree": "prevented — no decision is evaluated for it this tick",
+    "duplicateReceipts": "prevented — seasonalFoodReceipts is reset to undefined at construction",
+    "absentFromPresence": "prevented — step 12 rebuilds the read model with the changed band set",
+    "ownedByBoth": "prevented — the attempt resolves to the terminal `departed` phase, so hasCurrentFissionAttempt reads false"
+  },
+  "stillOpen": {
+    "viabilityCleanup": "step 9 enumerates world.bands live and WILL see the successor. It is listed `blocked` in PROVISIONAL_READER_MATRIX.md and is NOT yet migrated. Until it is, a production-reachable successor could be removed by Item 6 cleanup — which is one of the reasons this seam is deliberately not connected to natural fission."
+  }
+}

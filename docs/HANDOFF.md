@@ -188,8 +188,8 @@ Roadmap Item 3:
 accepted and frozen
 
 Roadmap Item 4:
-active — pure authorities, provisional representation and lifecycle
-kernel complete; controlled world adapter under implementation;
+active — controlled departure world adapter complete locally;
+travel and bounded resolution not built;
 not an implementation candidate
 
 Roadmap Item 5:
@@ -11384,3 +11384,28 @@ exception; daughter colours related-but-distinct and never visually confusing.
   221/764 and import boundary 85 unchanged; no frozen evidence touched. **`createDaughterBand` is
   still untouched and all six measured defects are still live.** Item 3 frozen; **Item 5 not
   started.**
+
+- **ROADMAP ITEM 4 — CONTROLLED ATOMIC DEPARTURE SEAM (2026-08-03) — PROGRESS: DEPARTURE COMPLETE
+  LOCALLY AND UNREACHABLE; TRAVEL AND RESOLUTION NOT BUILT / NOT PUSHED / DO NOT MERGE.** The one
+  place population moves between entities now exists as a production writer,
+  `fissionDepartureSeam.performAtomicDeparture`. **D16 reads `demography.ts` and `advance.ts` and
+  proves NOTHING CALLS IT** — the legacy path is untouched and ordinary behaviour cannot have
+  changed. **§5 seam analysis published (`departure-ordering.json`): the twelve seasonal sub-steps,
+  the chosen writer and three rejected alternatives.** The chosen seam is step 8, where the legacy
+  path already sits, and that is a FINDING: both the decision loop's `bandOrder` and
+  `updateBandsDemographyAndFission`'s own `bandOrder` are **snapshots taken before their loops
+  begin**, so a band created at step 8 is in NEITHER — it cannot be given a decision this tick (no
+  free movement) and cannot be given a demographic update this tick (no double update). The one
+  accepted consequence is stated: ecology consumes the step-5 cache so the successor exerts no
+  depletion on its birth tick, **identical to what the legacy daughter does today**. **Cohorts move
+  by SUBTRACTION — `recomputeDemographicCounts` is not called on either side, and D15 shows the
+  fixed-ratio shape it would have produced differs from the true remainder.** **Five separate ledgers**
+  — demographic, material, embodied, provenance, derived — because one `conserved: true` for all of
+  them is the false precision `SPLIT_POLICY_MATRIX` §1 forbids. **World population is MEASURED from
+  the resulting world**, closing defect 6's restatement. **D1-D18: 18 passing, 0 failing, 0 vacuous.**
+  Two of my own fixture defects are recorded: D11's "stranger" was built through a helper whose `??`
+  fallback silently handed it the parent's lineage id, and D16 used CommonJS `require` in ESM.
+  **Still open and why the seam stays disconnected: `viability.ts` (step 9) enumerates `world.bands`
+  live and WILL see the successor, and it is not yet migrated** — a production-reachable successor
+  could be removed by Item 6 cleanup. tsc both, build, graph 221/764 and import boundary 85 all
+  unchanged; no frozen evidence touched. Item 3 frozen; **Item 5 not started.**

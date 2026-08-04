@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T01:38:15.217Z",
+  "generatedAt": "2026-08-04T01:48:26.261Z",
   "checkpoint": "ROADMAP ITEM 4 §5 — pure lifecycle kernel fixtures",
   "authority": "src/sim/agents/fissionLifecycleKernel.ts",
   "scopeLimit": "The kernel is pure. Nothing here proves the lifecycle is CONNECTED to the simulation — that is the world adapter's evidence and it does not exist yet. These fixtures prove only that the state machine cannot be driven into an illegal, unbounded or double-owned state.",

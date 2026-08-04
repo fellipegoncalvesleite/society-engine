@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T01:38:02.458Z",
+  "generatedAt": "2026-08-04T01:48:26.417Z",
   "checkpoint": "ROADMAP ITEM 4 §3 + §5 — lifecycle ownership and lineage-protection duration",
   "authority": "src/sim/agents/bandLifecycle.ts",
   "scopeLimit": "These prove the PREDICATES are right. They do NOT prove any production reader calls them — none does yet. Minimal Band-shaped objects, no stepped world.",
