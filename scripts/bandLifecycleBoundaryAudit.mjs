@@ -51,7 +51,11 @@ const MATRIX_MODULES = [
   { file: "src/sim/runner/simRunner.ts", action: "adapter", migrated: false },
 ];
 
-const CANONICAL = [
+// SEVEN single-band predicates. `shareCurrentFissionLineage` is a PAIR RELATION, not a predicate
+// about one band, and `preserveTerminalBandSnapshots` is a reducer rather than either. The three
+// kinds are listed separately because an earlier report described "seven predicates" while exporting
+// eight boolean-returning helpers, which is the kind of undercount that hides a semantic question.
+const CANONICAL_PREDICATES = [
   "isBandTerminal",
   "isLivingBand",
   "isProvisionalSuccessor",
@@ -59,9 +63,23 @@ const CANONICAL = [
   "isEstablishedBand",
   "isFissionEligibleParent",
   "isProvisionalGroupInTransit",
-  "shareCurrentFissionLineage",
-  "preserveTerminalBandSnapshots",
 ];
+const CANONICAL_PAIR_RELATIONS = ["shareCurrentFissionLineage"];
+const CANONICAL_REDUCERS = ["preserveTerminalBandSnapshots"];
+const CANONICAL = [...CANONICAL_PREDICATES, ...CANONICAL_PAIR_RELATIONS, ...CANONICAL_REDUCERS];
+
+// ── §4: the legacy `"splitting"` marker ─────────────────────────────────────────────────────────
+//
+// `band.status` has exactly FIVE writers in the whole simulation — two `"foraging"` (spawn and
+// daughter creation), one `"splitting"` (the PARENT, at `demography.ts:1160`, when a fission
+// completes) and two `"dispersed"` (terminal). `"camped"`, `"moving"`, `"settled"` and `"stressed"`
+// have ZERO PRODUCERS and are structurally unreachable.
+//
+// `"splitting"` is therefore an ACTIVITY / READ-MODEL marker, not a lifecycle phase, and it must not
+// become a parallel lifecycle authority at cutover. This check forbids any NEW writer of it outside
+// the one sanctioned site, and forbids reading it to answer a lifecycle question.
+const LEGACY_MARKER_SANCTIONED_WRITERS = ["src/sim/agents/demography.ts"];
+const LEGACY_MARKER_KNOWN_READERS = ["src/sim/agents/familiarCountry.ts", "src/ui/bandSummary.ts"];
 
 const files = [];
 (function walk(dir) {
@@ -134,6 +152,42 @@ for (const name of CANONICAL) {
   }
 }
 
+// ── check 5 (§4): the legacy `"splitting"` marker gains no new lifecycle writer ──
+const legacyWriters = [];
+const legacyReaders = [];
+for (const full of files.concat([join(ROOT, "src", "ui", "bandSummary.ts")])) {
+  let rel;
+  try {
+    rel = relative(ROOT, full);
+    const lines = readFileSync(full, "utf8").split("\n");
+    lines.forEach((line, i) => {
+      if (isComment(line)) return;
+      if (/status:\s*"splitting"/.test(line)) {
+        legacyWriters.push({ file: rel, line: i + 1 });
+        if (!LEGACY_MARKER_SANCTIONED_WRITERS.includes(rel)) {
+          violations.push({ kind: "new_writer_of_legacy_splitting_marker", file: rel, line: i + 1 });
+        }
+      }
+      if (/status\s*===\s*"splitting"/.test(line)) {
+        legacyReaders.push({ file: rel, line: i + 1 });
+        if (!LEGACY_MARKER_KNOWN_READERS.includes(rel)) {
+          violations.push({ kind: "new_reader_of_legacy_splitting_marker", file: rel, line: i + 1 });
+        }
+      }
+    });
+  } catch {
+    // the ui file is outside src/sim and may not exist in a trimmed tree; not a violation
+  }
+}
+// The marker must never be consulted to answer a lifecycle question — that is what would make it a
+// parallel authority. A file that reads it AND imports the boundary is the shape to catch.
+for (const r of legacyReaders) {
+  const raw = readFileSync(join(ROOT, r.file), "utf8");
+  if (/from\s+"\.\/bandLifecycle"/.test(raw) && /status\s*===\s*"splitting"/.test(raw)) {
+    violations.push({ kind: "legacy_marker_read_alongside_the_lifecycle_boundary", file: r.file, line: r.line });
+  }
+}
+
 const out = {
   generatedAt: new Date().toISOString(),
   checkpoint: "ROADMAP ITEM 4 §4 — band lifecycle boundary",
@@ -147,14 +201,51 @@ const out = {
   privateDuplicateSpellings: privateDuplicates,
   inlineTerminalitySitesOutsideBoundary,
   violations,
+  legacySplittingMarker: {
+    note:
+      "band.status has exactly five writers in the whole simulation. `camped`, `moving`, `settled` and `stressed` have ZERO PRODUCERS and are structurally unreachable. `splitting` is an activity/read-model marker, not a lifecycle phase, and must not become a parallel lifecycle authority.",
+    writers: legacyWriters,
+    readers: legacyReaders,
+    sanctionedWriters: LEGACY_MARKER_SANCTIONED_WRITERS,
+    knownReaders: LEGACY_MARKER_KNOWN_READERS,
+  },
+  // ── §2: the categories reported separately, never folded into one boolean ──
   summary: {
     filesScanned: files.length,
-    enforced: MATRIX_MODULES.filter((m) => m.migrated).length,
-    pending: pending.length,
-    violations: violations.length,
-    privateDuplicates: privateDuplicates.length,
+    canonicalSinglebandPredicates: CANONICAL_PREDICATES.length,
+    canonicalPairRelations: CANONICAL_PAIR_RELATIONS.length,
+    canonicalReducers: CANONICAL_REDUCERS.length,
+    canonicalExportsTotal: CANONICAL.length,
+
+    structuralViolationsInMigratedScope: violations.filter((v) =>
+      v.kind === "inlined_terminality_in_migrated_module" || v.kind === "migrated_module_does_not_import_the_boundary",
+    ).length,
+    privateDuplicatePredicates: privateDuplicates.length,
+    legacyMarkerViolations: violations.filter((v) => v.kind.includes("legacy_splitting")).length,
+    boundaryIntegrityViolations: violations.filter((v) =>
+      v.kind === "boundary_became_a_barrel" || v.kind === "canonical_predicate_missing_from_boundary",
+    ).length,
+
+    migratedReaders: MATRIX_MODULES.filter((m) => m.migrated).length,
+    pendingReaders: pending.length,
+    pendingAdapters: pending.filter((p) => p.action.includes("adapter")).length,
+    pendingGuards: pending.filter((p) => p.action.includes("guard")).length,
+    pendingBlocked: pending.filter((p) => p.action.includes("blocked")).length,
+    safeUnchangedReaders: 16,
     inlineTerminalitySitesOutsideBoundary,
-    verdict: violations.length === 0 ? "PASS" : "FAIL",
+
+    // Structural cleanliness of the MIGRATED scope is not the same claim as migration being done,
+    // and folding them into one PASS is exactly how a half-finished migration looks finished.
+    migratedScopeStructurallyClean: violations.length === 0,
+    migrationCompleteness: `${MATRIX_MODULES.filter((m) => m.migrated).length}/${MATRIX_MODULES.length} load-bearing readers migrated`,
+    verdict:
+      violations.length > 0 ? "FAIL" : pending.length > 0 ? "INCOMPLETE" : "PASS",
+    verdictNote:
+      violations.length > 0
+        ? "structural violations exist in migrated scope"
+        : pending.length > 0
+          ? "migrated scope is structurally clean, but load-bearing readers remain unmigrated. A migration PASS requires no unresolved load-bearing reader."
+          : "every load-bearing reader is migrated and the migrated scope is clean",
   },
 };
 

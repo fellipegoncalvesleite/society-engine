@@ -1,0 +1,150 @@
+{
+  "generatedAt": "2026-08-04T01:38:02.458Z",
+  "checkpoint": "ROADMAP ITEM 4 §3 + §5 — lifecycle ownership and lineage-protection duration",
+  "authority": "src/sim/agents/bandLifecycle.ts",
+  "scopeLimit": "These prove the PREDICATES are right. They do NOT prove any production reader calls them — none does yet. Minimal Band-shaped objects, no stepped world.",
+  "lineageProtectionPolicy": "Protection holds only while a CURRENT provisional successor record exists whose lineage matches the other band. It covers immediate co-residence, travel, failure and return, and ends at BOTH exits: the record is cleared at stabilized, and the entity is removed at reintegrated. The parent retains its attempt record as provenance, and provenance alone confers nothing — LP4 is the proof, and an earlier form of the predicate failed it by granting permanent immunity.",
+  "fixtures": [
+    {
+      "id": "LP1",
+      "claim": "the parent and its successor are recognised as one split through travel, failure and return",
+      "status": "PASS",
+      "nonVacuityNote": "all four live successor phases were exercised",
+      "rows": {
+        "travelling": true,
+        "establishing": true,
+        "failed_early": true,
+        "returning": true
+      }
+    },
+    {
+      "id": "LP2",
+      "claim": "a band with no lifecycle relationship is not protected",
+      "status": "PASS",
+      "nonVacuityNote": "the real pair IS protected in the same run, so a false here is a real negative",
+      "strangerVsParent": false,
+      "strangerVsSuccessor": false,
+      "controlPairProtected": true
+    },
+    {
+      "id": "LP3",
+      "claim": "a band carrying a DIFFERENT lineage id is not protected",
+      "status": "PASS",
+      "nonVacuityNote": "the matching lineage IS protected in the same run",
+      "wrongLineage": false,
+      "rightLineage": true
+    },
+    {
+      "id": "LP4",
+      "claim": "a stabilized daughter meets its parent on ordinary terms — provenance alone confers nothing",
+      "status": "PASS",
+      "nonVacuityNote": "the pair WAS protected while travelling, and the parent still carries the provenance afterwards — so the false is an ending, not an absence",
+      "whileTravelling": true,
+      "afterStabilizationRecordCleared": false,
+      "afterStabilizationRecordPresent": false,
+      "parentStillCarriesProvenance": "L1"
+    },
+    {
+      "id": "LP5",
+      "claim": "a reintegrated successor is not a separate interaction candidate",
+      "status": "PASS",
+      "nonVacuityNote": "a RETURNING successor does read as provisional, so the reintegrated false is a real ending",
+      "protectedWhileReintegrated": false,
+      "isProvisional": false
+    },
+    {
+      "id": "LP6",
+      "claim": "a provisional successor is living, is not established, and cannot fission",
+      "status": "PASS",
+      "nonVacuityNote": "an ordinary band IS established in the same run, so the successor's false is discriminating",
+      "successor": {
+        "living": true,
+        "established": false,
+        "fissionEligible": false,
+        "provisional": true,
+        "inTransit": true,
+        "terminal": false
+      },
+      "ordinary": {
+        "living": true,
+        "established": true,
+        "fissionEligible": true
+      }
+    },
+    {
+      "id": "LP7",
+      "claim": "a parent already attempting a split is not fission-eligible",
+      "status": "PASS",
+      "nonVacuityNote": "the attempt is genuinely current",
+      "whileAttempting": false,
+      "afterAbandonment": true
+    },
+    {
+      "id": "O1",
+      "claim": "two current successors for one lineage are detected",
+      "status": "PASS",
+      "nonVacuityNote": "a correctly-formed parent/successor pair produces ZERO findings in the same run, so a detection is a detection and not a permanently-firing check",
+      "findings": [
+        "two_current_successors_for_one_lineage"
+      ],
+      "healthyPairFindings": []
+    },
+    {
+      "id": "O2",
+      "claim": "one band holding two current lifecycle records is detected",
+      "status": "PASS",
+      "nonVacuityNote": "a correctly-formed parent/successor pair produces ZERO findings in the same run, so a detection is a detection and not a permanently-firing check",
+      "findings": [
+        "duplicate_current_ownership_on_one_band"
+      ],
+      "healthyPairFindings": []
+    },
+    {
+      "id": "O3",
+      "claim": "a successor with no parent provenance anywhere is detected",
+      "status": "PASS",
+      "nonVacuityNote": "a correctly-formed parent/successor pair produces ZERO findings in the same run, so a detection is a detection and not a permanently-firing check",
+      "findings": [
+        "successor_without_parent_provenance"
+      ],
+      "healthyPairFindings": []
+    },
+    {
+      "id": "O4",
+      "claim": "a departed attempt with no current successor is detected",
+      "status": "PASS",
+      "nonVacuityNote": "a correctly-formed parent/successor pair produces ZERO findings in the same run, so a detection is a detection and not a permanently-firing check",
+      "findings": [
+        "departed_attempt_without_a_successor"
+      ],
+      "healthyPairFindings": []
+    },
+    {
+      "id": "O5",
+      "claim": "two parents carrying the same lineage are detected",
+      "status": "PASS",
+      "nonVacuityNote": "a correctly-formed parent/successor pair produces ZERO findings in the same run, so a detection is a detection and not a permanently-firing check",
+      "findings": [
+        "two_current_attempts_for_one_parent"
+      ],
+      "healthyPairFindings": []
+    },
+    {
+      "id": "O6",
+      "claim": "terminal lifecycle records do not make a band provisional or ineligible",
+      "status": "PASS",
+      "nonVacuityNote": "a non-terminal record DOES read as provisional in the same run",
+      "abandonedParentEligible": true,
+      "stabilizedIsProvisional": false,
+      "stabilizedIsEstablished": true,
+      "reintegratedIsProvisional": false
+    }
+  ],
+  "summary": {
+    "total": 13,
+    "passing": 13,
+    "failing": 0,
+    "vacuous": 0,
+    "errored": 0
+  }
+}

@@ -188,8 +188,8 @@ Roadmap Item 3:
 accepted and frozen
 
 Roadmap Item 4:
-active — two pure authorities and representation decision complete;
-lifecycle under implementation;
+active — pure authorities, provisional representation and lifecycle
+kernel complete; controlled world adapter under implementation;
 not an implementation candidate
 
 Roadmap Item 5:
@@ -11356,3 +11356,31 @@ exception; daughter colours related-but-distinct and never visually confusing.
   unchanged; no frozen evidence touched. **`createDaughterBand` is still untouched and all six
   measured defects are still live.** Item 3 frozen; **Item 5 not started.** Evidence:
   `LIFECYCLE_SEMANTICS_DECISION.md`.
+
+- **ROADMAP ITEM 4 — LIFECYCLE OWNERSHIP, LEGACY MARKER AND LINEAGE DURATION (2026-08-03) —
+  PROGRESS: WORLD ADAPTER STILL NOT BUILT / NOT PUSHED / DO NOT MERGE.** **The boundary audit now
+  reports INCOMPLETE**, separating structural violations in migrated scope (0), private duplicate
+  predicates (0), migrated readers (1), pending adapters (4), pending guards (4), pending blocked
+  (5), safe-unchanged (16) and migration completeness (1/12) — **a clean migrated scope is not the
+  same claim as a finished migration, and folding them into one PASS is how a half-finished migration
+  looks finished.** The predicate count is corrected: **nine exported semantic helpers — seven
+  single-band predicates, one PAIR RELATION and one reducer** — not "seven predicates".
+  **§4, the legacy `"splitting"` marker, inspected: `band.status` has EXACTLY FIVE WRITERS in the
+  whole simulation, and FOUR of the seven `BandStatus` values (`camped`, `moving`, `settled`,
+  `stressed`) have ZERO PRODUCERS and are structurally unreachable** — the same shape as the
+  producer-less `Reason<"territorial_pressure">` the Item 3 freeze audit recorded. **And `"splitting"`
+  is STICKY: nothing ever clears it, so `familiarCountry.ts:316` classifies a band that split two
+  hundred years ago as still moving.** Both **found, not fixed** — each needs its own before/after
+  evidence. Decision: retain it as a read-model marker, write it at cutover exactly as today (not
+  writing it would smuggle an unrelated behaviour change into a fission checkpoint), and **forbid it
+  any lifecycle meaning structurally** — a new writer, a new reader, or reading it in a file that
+  also imports the lifecycle boundary are all violations. **§5, lineage-protection duration: the
+  first implementation was WRONG and fixture LP4 caught it.** It matched on any shared lineage id, and
+  because §3 requires the parent to RETAIN its attempt as provenance, it would have granted
+  **permanent immunity from ordinary inter-band rules** — a stabilized daughter never becoming a
+  stranger to its parent. Corrected to hold only while a CURRENT provisional record exists, ending at
+  both exits. **§3 ownership is now a production invariant**, `auditFissionLineageOwnership`, not
+  prose. **LP1-LP7 + O1-O6: 13 passing, 0 failing, 0 vacuous; K1-K14 14/14.** tsc both, build, graph
+  221/764 and import boundary 85 unchanged; no frozen evidence touched. **`createDaughterBand` is
+  still untouched and all six measured defects are still live.** Item 3 frozen; **Item 5 not
+  started.**

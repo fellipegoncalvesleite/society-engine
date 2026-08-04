@@ -65,6 +65,13 @@ The brief lists six, and each has exactly one predicate in `bandLifecycle.ts`:
 | terminal archival band | `isBandTerminal` | unchanged |
 | — plus the pair relation | `shareCurrentFissionLineage` | direct provenance, no kinship |
 
+**Counted accurately, and an earlier report undercounted them.** The boundary exports **nine**
+semantic helpers: **seven single-band predicates** (the rows above), **one pair relation**
+(`shareCurrentFissionLineage` — it takes two bands and is not a property of either), and **one
+reducer** (`preserveTerminalBandSnapshots`, which is neither). Describing "seven predicates" while
+exporting eight boolean-returning helpers hid the fact that the pair relation answers a genuinely
+different kind of question. The boundary audit now reports the three counts separately.
+
 **`isActiveBand` is gone.** It lived privately in `contextCache.ts` as a literal
 `return isLivingBand(band)` — a fourth spelling of a question that already had a canonical answer.
 Removed, and its two call sites now use the boundary. The change is provably behaviour-identical
@@ -115,3 +122,89 @@ would prove nothing. `migrated: true` moves a module into the enforced set as it
 **56 hand-inlined terminality sites remain outside the boundary** across the tree. That is a measured
 figure, not a defect list: most are in modules the matrix marks *safe unchanged*, and they become
 violations only for modules the matrix marks migrated.
+
+---
+
+## 8. §4 — the legacy `"splitting"` marker
+
+**Inspected before deciding, and the inspection found two things worth recording.**
+
+`band.status` has **exactly five writers in the whole simulation**:
+
+| site | value | when |
+|---|---|---|
+| `spawn.ts:907` | `"foraging"` | at spawn |
+| `demography.ts:1001` | `"foraging"` | the daughter, at creation |
+| `demography.ts:1160` | `"splitting"` | **the PARENT**, when a fission completes |
+| `viability.ts:90`, `viability.ts:169` | `"dispersed"` | terminal |
+
+**Finding 1 — four of the seven `BandStatus` values have ZERO PRODUCERS.** `"camped"`, `"moving"`,
+`"settled"` and `"stressed"` are declared and structurally unreachable, exactly like the
+producer-less `Reason<"territorial_pressure">` the Item 3 freeze audit recorded. **Found, not
+patched** — removing them is a type change with its own blast radius and no bearing on Item 4.
+
+**Finding 2 — `"splitting"` is STICKY, and that is a latent defect in production today.** Nothing
+ever writes the parent back to `"foraging"`. A band that fissioned once carries `"splitting"`
+permanently, and `familiarCountry.ts:316` folds it into an `isMoving` classification — so **a band
+that split two hundred years ago is still classified as moving**. `ui/bandSummary.ts:75` shows it as
+"moving" for the same reason. **Found, not fixed:** changing it moves behaviour in a system Item 4
+does not otherwise touch, so it needs its own before/after evidence and its own checkpoint.
+
+**What it means:** an **activity / read-model marker**, with two readers, neither of which asks a
+lifecycle question. It is **not** a lifecycle authority today.
+
+**Decision — retain as a read-model marker, deny it any lifecycle meaning, and make that
+structural.** At cutover the departure seam writes `"splitting"` to the parent exactly as
+`demography.ts:1160` does now, because *not* writing it would silently change `familiarCountry`'s
+classification — an unrelated behaviour change smuggled in under a fission checkpoint. Removing the
+value (option a) and mapping it from lifecycle (option c) were both rejected for that reason: each
+changes behaviour this checkpoint has no evidence for.
+
+The boundary audit now enforces it: **any new writer of `status: "splitting"` outside
+`demography.ts`, any new reader outside the two known ones, and any file that reads the marker while
+also importing the lifecycle boundary** are all violations. That last check is the one that matters —
+it is the shape a parallel lifecycle authority would take.
+
+## 9. §5 — how long parent/successor protection lasts
+
+**The duration is the hard part, and the first implementation got it wrong.**
+
+That form asked only whether two bands shared a lineage id anywhere. But §3 requires the parent to
+**retain its attempt record as bounded provenance** after departure, and `departed` is terminal — so
+the predicate would have matched **forever**, granting the pair **permanent immunity from ordinary
+inter-band rules**. A stabilized daughter would never have become a stranger to its parent, at any
+distance, for the rest of the run. That is precisely what §5 forbids, and **fixture LP4 is what
+caught it.**
+
+**The bounded end condition, selected:** protection holds only while a **CURRENT provisional
+successor record** exists whose lineage matches the other band.
+
+| requirement | how it is met |
+|---|---|
+| immediate co-residence after departure | the successor opens in `travelling`; LP1 |
+| travel while the relationship is current | LP1 covers all four live phases |
+| physical return | `returning` is a live phase; LP1 |
+| reintegration not treated as an ordinary encounter | `reintegrated` is terminal, so the entity is not provisional and not an interaction candidate; LP5 |
+| **no permanent immunity after stabilization** | the kernel clears the record at `stabilized`; LP4 |
+
+**A short post-stabilization familiarity window was considered and rejected.** The repository already
+has a lived channel for exactly that — direct contact memory, earned through CORRECTION-29's
+proximity gate. Inventing a second, lineage-derived one would be a social fact nobody observed. After
+stabilization the pair meets on ordinary terms and builds ordinary contact memory.
+
+**No kinship is invented.** The authority is the `lineageId` written at the departure event.
+
+## 10. §3 — ownership, as a production invariant rather than prose
+
+`auditFissionLineageOwnership(bands)` is an exported pure function over a band set, detecting the
+five defects the departure seam must be unable to write: two current successors for one lineage; one
+band holding two current records that both claim its bodies; a successor with no parent provenance
+anywhere; a departed attempt with no successor; two parents carrying one lineage. **O1-O5 construct
+each one; every case runs a correctly-formed pair in the same breath and requires it to produce ZERO
+findings**, so a detection is a detection and not a permanently-firing check.
+
+**LP1-LP7 and O1-O6: 13 passing, 0 failing, 0 vacuous.**
+
+**Scope limit, stated:** these prove the predicates are right. **They do not prove any production
+reader calls them — none does yet.**
+
