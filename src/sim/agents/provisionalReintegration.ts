@@ -28,10 +28,63 @@
  */
 import { auditFissionLineageOwnership, isBandTerminal, isProvisionalSuccessor } from "./bandLifecycle";
 import { requestTransition } from "./fissionLifecycleKernel";
+import { mergeAcuteRiskOnReintegration, type AcuteRiskMergeLedger } from "./acuteRisk";
+import { deriveCanonicalNutritionState, recordSupportInterval } from "./seasonalSurvival";
+import { closeOpenTravelInterval } from "./provisionalTravelSubsistence";
+import { getWorldTimeForDay } from "../tick/time";
 import type { CohortCounts } from "./fissionFounderAllocation";
-import type { Band, FissionLifecycleRecord } from "./types";
-import type { BandId } from "../core/types";
+import type { Band, FissionLifecycleRecord, SeasonalSupportSample } from "./types";
+import type { BandId, DayNumber } from "../core/types";
 import type { WorldState } from "../world/types";
+
+/**
+ * ROADMAP ITEM 4 §11 — WHAT ELSE COMES HOME IN THE BODIES, AND WHAT MAY NOT.
+ *
+ * Adding cohorts to a parent while leaving every per-capita summary at the parent's old value is a
+ * quiet lie in both directions: it can relieve a hungry parent by importing people it never fed, and it
+ * can leave a returning group's suffering in a record nobody reads. So every embodied and derived
+ * field is classified once, here, and the classification is the code rather than a comment.
+ *
+ *   EXACT AGGREGATE MERGE — cohorts (added line by line, never re-derived at ratios); acute-risk
+ *     episodes (union by id, effect rederived); the demographic accumulators, which are fractional
+ *     COUNTS OF PEOPLE and add exactly like the people do.
+ *   CONSERVATIVE BURDEN — the current nutritional condition, written as ONE population-weighted
+ *     sample REPLACING the parent's current one rather than extending its window. It is the arithmetic
+ *     of a merged group and it is checked in the direction that matters: absorbing a hungrier group
+ *     never leaves the parent better fed.
+ *   INVALIDATE — the successor's own travel subsistence interval. It measured a group that no longer
+ *     exists walking country it no longer occupies; carrying it into a camp's record would make a
+ *     march look like a season.
+ *   RECOMPUTE AT THE NEXT LEGITIMATE CADENCE — carrying capacity, population demand, per-capita
+ *     return, range saturation and body-camp logistics. All are derived from the parent's headcount,
+ *     which has just changed, and all have their own writer at the next seasonal boundary. Nothing here
+ *     writes them, and nothing here pretends they are current.
+ *   HISTORICAL ONLY — death memory, which is DELIBERATELY shared by reference from the departure so
+ *     that one remembered death cannot become two bereavements, and the successor's lifecycle record,
+ *     retained terminal so the journey stays readable after the group that made it is gone.
+ */
+export type ReintegrationFieldTreatment =
+  | "exact_aggregate_merge"
+  | "conservative_burden"
+  | "invalidate"
+  | "recompute_at_next_cadence"
+  | "historical_only";
+
+export const REINTEGRATION_FIELD_TREATMENTS: Readonly<Record<string, ReintegrationFieldTreatment>> = {
+  "demography.cohorts": "exact_aggregate_merge",
+  "demography.accumulators": "exact_aggregate_merge",
+  acuteRisk: "exact_aggregate_merge",
+  seasonalSupport: "conservative_burden",
+  hungerPressure: "conservative_burden",
+  "provisionalSuccessor.travelSubsistence": "invalidate",
+  carryingCapacity: "recompute_at_next_cadence",
+  populationDemand: "recompute_at_next_cadence",
+  perCapitaReturn: "recompute_at_next_cadence",
+  rangeSaturation: "recompute_at_next_cadence",
+  bodyCampLogistics: "recompute_at_next_cadence",
+  deathMemory: "historical_only",
+  provisionalSuccessor: "historical_only",
+};
 
 export type ReintegrationRefusal =
   | "successor_not_found"
@@ -76,7 +129,11 @@ export interface ReintegrationLedger {
     readonly parentHungerAfter: number;
     readonly parentReliefedByAbsorbingAHungrierGroup: boolean;
     readonly successorAcuteRiskEpisodes: number;
-    readonly acuteRiskEpisodesNotMerged: number;
+    /** The merge's own account of what happened to two bounded rings. */
+    readonly acuteRiskMerge: AcuteRiskMergeLedger;
+    /** Measured on the resulting parent: burden that walked home is still in the world. */
+    readonly returningOnlyBurdenSurvived: boolean;
+    readonly fieldTreatments: Readonly<Record<string, ReintegrationFieldTreatment>>;
     readonly claim: "no_unearned_relief";
   };
   /** The entity is removed exactly once, and that is measured rather than asserted. */
@@ -125,13 +182,20 @@ const measureWorldPopulation = (world: WorldState): number =>
  */
 export function performAtomicReintegration(request: ReintegrationRequest): ReintegrationOutcome {
   const { world, successorId, today } = request;
-  const successor = world.bands[successorId];
-  if (successor === undefined) {
+  const successorRaw = world.bands[successorId];
+  if (successorRaw === undefined) {
     return { ok: false, refusal: "successor_not_found" };
   }
-  if (!isProvisionalSuccessor(successor) || successor.provisionalSuccessor?.phase !== "returning") {
-    return { ok: false, refusal: "successor_is_not_returning", detail: successor.provisionalSuccessor?.phase ?? "no record" };
+  if (!isProvisionalSuccessor(successorRaw) || successorRaw.provisionalSuccessor?.phase !== "returning") {
+    return { ok: false, refusal: "successor_is_not_returning", detail: successorRaw.provisionalSuccessor?.phase ?? "no record" };
   }
+  // ── THE JOURNEY ENDS HERE, SO THE INTERVAL MEASURING IT CLOSES HERE. ──
+  //
+  // A returning group has been living out in the country on days nobody has asked about yet. Merging
+  // its condition before closing that interval would hand the parent a reading from whenever the group
+  // was last measured, which on a short return is the day it left. The close is the same writer every
+  // other interval goes through; it adds no food and invents no reading.
+  const successor = closeOpenTravelInterval(successorRaw, today);
   const record = successor.provisionalSuccessor as FissionLifecycleRecord;
   const successorBefore = cohortsOf(successor);
   if (totalOf(successorBefore) <= 0) {
@@ -204,16 +268,56 @@ export function performAtomicReintegration(request: ReintegrationRequest): Reint
     (parentHungerBefore * parentPeople + successorHunger * successorPeople) / (parentPeople + successorPeople);
 
   const successorEpisodes = successor.acuteRisk?.recentEpisodes?.length ?? 0;
-  // If the parent carries no acute-risk record the returning group's is adopted, re-identified. If both
-  // carry one, the parent's is kept and the successor's episode count is PUBLISHED as unmerged rather
-  // than silently dropped — merging two bounded episode rings needs an authority that does not exist.
-  const mergedAcuteRisk =
-    parent.acuteRisk !== undefined
-      ? parent.acuteRisk
-      : successor.acuteRisk === undefined
-        ? undefined
-        : { ...successor.acuteRisk, bandId: parent.id };
-  const episodesNotMerged = parent.acuteRisk !== undefined ? successorEpisodes : 0;
+  // ── L5 — THE BURDEN MERGE. ──
+  //
+  // The previous pass published this gap and could not close it: the parent's ring was kept and the
+  // returning group's was dropped, so a group could go out, be hurt, walk home and arrive healed. The
+  // authority now lives in `acuteRisk.ts`, which owns the ring, the cap and the effect derivation, so
+  // there is one place that knows what an episode is.
+  const acuteRiskMerge = mergeAcuteRiskOnReintegration(parent, successor, world.time.tick);
+
+  // ── CONSERVATIVE BURDEN — the merged group's current nutritional condition. ──
+  //
+  // One population-weighted sample appended to the parent's own record through the one support-interval
+  // writer. It is the honest arithmetic of a merged group: the people who come home bring the condition
+  // they are in, and the average of a group IS its average. What it may never do is relieve the parent
+  // by absorbing somebody hungrier, which the ledger measures rather than assumes.
+  const mergedSupport = ((): Band["seasonalSupport"] => {
+    const parentSupport = parent.seasonalSupport;
+    const parentSample = parentSupport?.currentSeasonSupport;
+    const successorSample = successor.seasonalSupport?.currentSeasonSupport;
+    if (parentSupport === undefined || parentSample === undefined) return successor.seasonalSupport;
+    if (successorSample === undefined) return parentSupport;
+    const weigh = (a: number, b: number): number =>
+      (a * parentPeople + b * successorPeople) / (parentPeople + successorPeople);
+    const time = getWorldTimeForDay(today as DayNumber);
+    const sample: SeasonalSupportSample = {
+      ...parentSample,
+      tick: time.tick,
+      year: time.year,
+      season: time.season,
+      rawSupportRatio: weigh(parentSample.rawSupportRatio, successorSample.rawSupportRatio),
+      clampedSupportRatio: weigh(parentSample.clampedSupportRatio, successorSample.clampedSupportRatio),
+      perCapitaReturn: weigh(parentSample.perCapitaReturn, successorSample.perCapitaReturn),
+      foodStress: weigh(parentSample.foodStress, successorSample.foodStress),
+      waterStress: weigh(parentSample.waterStress, successorSample.waterStress),
+      deficitRatio: weigh(parentSample.deficitRatio, successorSample.deficitRatio),
+    };
+    // ── THE MERGED SAMPLE REPLACES THE PARENT'S CURRENT ONE; IT DOES NOT EXTEND THE WINDOW. ──
+    //
+    // Appending was tried first and R5 CAUGHT IT: absorbing a group at hunger 0.99 left a parent at
+    // 0.14 reading 0.01. The weighted mean was right and the derived value was not, because a ninth
+    // sample pushed the oldest bad season out of the eight-slot ring and the rolling windows, streaks
+    // and classification all recomputed over a shifted history. **A reintegration is not another season
+    // lived; it is a re-reading of the season the camp is in, by a camp that now has more people in
+    // it.** Replacing the current sample keeps the history exactly as long and exactly as it was, so
+    // the only thing that moves is the thing that actually changed.
+    const previous = { ...parentSupport, recentSamples: parentSupport.recentSamples.slice(0, -1) };
+    return recordSupportInterval(previous, sample, parent, time, {
+      topSeasonalSupportReasons: [`${successorPeople} people rejoined carrying their own condition`],
+      replaceSameTickSample: false,
+    });
+  })();
 
   const parentAfter: Band = {
     ...parent,
@@ -223,10 +327,23 @@ export function performAtomicReintegration(request: ReintegrationRequest): Reint
       workingAdults: parentAfterCohorts.workingAdults,
       dependents: parentAfterCohorts.dependents,
       elders: parentAfterCohorts.elders,
+      // EXACT AGGREGATE MERGE — these are fractional COUNTS OF PEOPLE part-way to a birth, a cohort
+      // transition or a death. They add exactly as the people do; dropping the returning group's would
+      // silently discard demographic events already most of the way to happening.
+      dependentToAdultAccumulator:
+        (parent.demography.dependentToAdultAccumulator ?? 0) + (successor.demography.dependentToAdultAccumulator ?? 0),
+      adultToElderAccumulator:
+        (parent.demography.adultToElderAccumulator ?? 0) + (successor.demography.adultToElderAccumulator ?? 0),
+      elderMortalityAccumulator:
+        (parent.demography.elderMortalityAccumulator ?? 0) + (successor.demography.elderMortalityAccumulator ?? 0),
+      birthAccumulator: (parent.demography.birthAccumulator ?? 0) + (successor.demography.birthAccumulator ?? 0),
     },
     size: totalOf(parentAfterCohorts),
-    hungerPressure: mergedHunger,
-    acuteRisk: mergedAcuteRisk,
+    seasonalSupport: mergedSupport,
+    hungerPressure: deriveCanonicalNutritionState(mergedSupport).nutritionStateAvailable
+      ? deriveCanonicalNutritionState(mergedSupport).foodMovementPressure
+      : mergedHunger,
+    acuteRisk: acuteRiskMerge.state,
     // The attempt is over in every sense now. It is retained as terminal provenance rather than
     // cleared, so the lineage remains readable — and because the successor's record is terminal too,
     // `shareCurrentFissionLineage` stops protecting the pair, which is the bounded end §5 required.
@@ -303,7 +420,20 @@ export function performAtomicReintegration(request: ReintegrationRequest): Reint
         parentReliefedByAbsorbingAHungrierGroup:
           successorHunger > parentHungerBefore && (nextWorld.bands[parentId].hungerPressure ?? 0) < parentHungerBefore,
         successorAcuteRiskEpisodes: successorEpisodes,
-        acuteRiskEpisodesNotMerged: episodesNotMerged,
+        acuteRiskMerge: acuteRiskMerge.ledger,
+        // MEASURED on the resulting parent: an episode that existed only on the returning group is
+        // still in the world afterwards. This is the anti-cure assertion, and it is a read of the
+        // merged ring rather than a restatement of the merge's own intent.
+        returningOnlyBurdenSurvived: ((): boolean => {
+          const parentIds = new Set((parent.acuteRisk?.recentEpisodes ?? []).map((episode) => episode.id));
+          const returningOnly = (successor.acuteRisk?.recentEpisodes ?? []).filter((episode) => !parentIds.has(episode.id));
+          if (returningOnly.length === 0) return true;
+          const afterIds = new Set(
+            (nextWorld.bands[parentId].acuteRisk?.recentEpisodes ?? []).map((episode) => episode.id),
+          );
+          return returningOnly.some((episode) => afterIds.has(episode.id));
+        })(),
+        fieldTreatments: REINTEGRATION_FIELD_TREATMENTS,
         claim: "no_unearned_relief",
       },
       entity: {

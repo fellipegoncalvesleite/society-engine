@@ -406,6 +406,28 @@ export function closeTravelSupportInterval(
 }
 
 /**
+ * Close whatever interval a group has open, because its journey has ended.
+ *
+ * An interval is a unit of measurement, and the natural end of one is the end of the situation it was
+ * measuring. A group that reaches its parent, or stabilizes where it stands, has finished a stretch of
+ * living out in the country, and leaving that stretch unmeasured is the same defect at a smaller
+ * scale: the days would have been lived and never asked about. A group with nothing to close is
+ * returned untouched.
+ */
+export function closeOpenTravelInterval(band: Band, day: number): Band {
+  const record = band.provisionalSuccessor;
+  const subsistence = record?.travelSubsistence;
+  if (record === undefined || subsistence === undefined || subsistence.daysElapsed <= 0) return band;
+  const closure = closeTravelSupportInterval(band, subsistence, day);
+  return {
+    ...band,
+    seasonalSupport: closure.support,
+    hungerPressure: deriveTravelHunger({ ...band, seasonalSupport: closure.support }, closure.next),
+    provisionalSuccessor: { ...record, travelSubsistence: closure.next },
+  };
+}
+
+/**
  * The group's current embodied hunger: the worse of what its last CLOSED measurement said and what its
  * RUNNING interval is saying now.
  *
