@@ -181,6 +181,35 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### ROADMAP ITEM 4 — PHYSICAL TRAVEL AND RETURN VERTICAL — **PROGRESS: THE SUCCESSOR WALKS AND COMES HOME AT A PLACE / STABILIZATION NOT BEGUN / DO NOT MERGE / NOT PUSHED**
+
+**Timer-only reintegration is gone.** Every lifecycle phase declares whether elapsed time alone may
+enter it; `reintegrated` and `stabilized` require a physical event; `requestTransition` takes a
+**required** `cause` (a default would have restored the defect for any caller that forgot — which is
+exactly how it survived); `reintegrated` also demands proven co-location; `resolveTimeout` routes
+through the same guards; and the contract table refuses any timeout pointing at a physical-event
+phase, so it cannot be re-entered by editing a line.
+
+**A failed return** abandons the attempt and the group tries to live where it stands, with the churn
+bounded at 3 cycles and its end reported — after which every exit is physical.
+
+**The successor physically walks.** `provisionalTravel.ts` is the one writer of a provisional body:
+local next-step planning plus a retained trail, one world-truth read (passability may **refuse** a
+step), pace via the canonical whole-band column authority. Measured 5 contiguous tiles, arrival on
+day 4, arrival producing `establishing` and never `stabilized`.
+
+**Reintegration is a place.** `provisionalReintegration.ts` requires the **same tile** as a living
+parent, adds cohorts line by line (**235 → 235** world population), and removes the entity exactly
+once. A parent that has moved prevents it, and the travellers are not retargeted at a position they
+cannot observe.
+
+**FINDING, published and not fixed: travel makes a group LESS hungry.** It walks on nothing and its
+hunger falls to zero, because `seasonalSupport` is correctly reset and the nutrition derivation reads
+absent as no stress — an absence taken for contentment. **That is the blocking item for travel
+subsistence.**
+
+See `docs/evidence/dynamic-fission-daughter-viability-37/`.
+
 ### ROADMAP ITEM 4 — PROVISIONAL QUARANTINE CONTRACT — **PROGRESS: FIELD-TRANSFER POLICY BUILT AND THE QUARANTINE CONTRACT CLOSED / TRAVEL NOT STARTED / DO NOT MERGE / NOT PUSHED**
 
 A per-field probe of a **real** departure found **86 of the 125 populated `Band` fields were still the
@@ -11533,3 +11562,16 @@ exception; daughter colours related-but-distinct and never visually confusing.
   and NOT fixed: 33 fields of legacy clone debt (including `expeditions`), and a group leaving
   quarantine on a TIMER into ordinary status because `returning` times out into a terminal
   `reintegrated` with no writer behind it.** Item 3 frozen; **Item 5 not started.**
+
+- **2026-08-04 — ROADMAP ITEM 4 PHYSICAL TRAVEL AND RETURN VERTICAL — PROGRESS / STABILIZATION NOT
+  BEGUN / NOT PUSHED.** Removed timer-only reintegration by classifying every phase's entry
+  requirement, making `cause` a required argument, demanding proven co-location for `reintegrated`,
+  routing `resolveTimeout` through the guards, and forbidding any timeout that points at a
+  physical-event phase. A failed return now tries to live where it stands, bounded at 3 cycles.
+  Built `provisionalTravel.ts` (contiguous local stepping, retained trail, canonical column pace,
+  passability may refuse a step) and `provisionalReintegration.ts` (same-tile precondition, cohort-by-
+  cohort conservation, entity removed exactly once, moved parent prevents it). E1-E7+A1-A3 10/10,
+  V1-V10 10/10, R1-R9 9/9, every prior suite unchanged, 0 vacuous; step-mode invariance holds on both
+  maps with a new daily action registered. **Published and NOT fixed: travel makes a group less
+  hungry because a correctly reset support history reads as no stress**; ten acute-risk episodes walk
+  home unmerged. Item 3 frozen; **Item 5 not started.**
