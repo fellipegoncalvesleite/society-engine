@@ -1,0 +1,104 @@
+{
+  "generatedAt": "2026-08-04T01:27:18.069Z",
+  "checkpoint": "ROADMAP ITEM 4 §4 — band lifecycle boundary",
+  "boundary": "src/sim/agents/bandLifecycle.ts",
+  "boundaryExports": [
+    "isBandTerminal",
+    "isLivingBand",
+    "isProvisionalSuccessor",
+    "hasCurrentFissionAttempt",
+    "isEstablishedBand",
+    "isFissionEligibleParent",
+    "isProvisionalGroupInTransit",
+    "shareCurrentFissionLineage",
+    "preserveTerminalBandSnapshots"
+  ],
+  "canonicalPredicates": [
+    "isBandTerminal",
+    "isLivingBand",
+    "isProvisionalSuccessor",
+    "hasCurrentFissionAttempt",
+    "isEstablishedBand",
+    "isFissionEligibleParent",
+    "isProvisionalGroupInTransit",
+    "shareCurrentFissionLineage",
+    "preserveTerminalBandSnapshots"
+  ],
+  "whatThisDoesNotForbid": "Keyed lookups (world.bands[id]) and physical-group readers that enumerate every living band. Both are legitimate: a provisional successor holds real bodies and must appear in presence, depletion, consumption, health and demography. Excluding it from those would recreate the ghost bodies CORRECTION-34 removed.",
+  "enforcedModules": [
+    {
+      "file": "src/sim/agents/contextCache.ts",
+      "action": "adapter",
+      "migrated": true
+    }
+  ],
+  "pendingModules": [
+    {
+      "file": "src/sim/agents/bandEvents.ts",
+      "action": "adapter",
+      "importsBoundary": false
+    },
+    {
+      "file": "src/sim/agents/bandHistory.ts",
+      "action": "adapter",
+      "importsBoundary": false
+    },
+    {
+      "file": "src/sim/agents/bodyCampLogistics.ts",
+      "action": "adapter",
+      "importsBoundary": false
+    },
+    {
+      "file": "src/sim/agents/demography.ts",
+      "action": "blocked + guard",
+      "importsBoundary": false
+    },
+    {
+      "file": "src/sim/agents/expedition.ts",
+      "action": "blocked while travelling",
+      "importsBoundary": false
+    },
+    {
+      "file": "src/sim/agents/intraSeasonTrips.ts",
+      "action": "blocked while travelling",
+      "importsBoundary": false
+    },
+    {
+      "file": "src/sim/agents/protoCamps.ts",
+      "action": "blocked while travelling + pair guard",
+      "importsBoundary": false
+    },
+    {
+      "file": "src/sim/agents/relationshipMemory.ts",
+      "action": "pair guard",
+      "importsBoundary": false
+    },
+    {
+      "file": "src/sim/agents/socialContext.ts",
+      "action": "pair guard",
+      "importsBoundary": true
+    },
+    {
+      "file": "src/sim/agents/viability.ts",
+      "action": "blocked",
+      "importsBoundary": false
+    },
+    {
+      "file": "src/sim/runner/simRunner.ts",
+      "action": "adapter",
+      "importsBoundary": false
+    }
+  ],
+  "privateDuplicateSpellings": [],
+  "inlineTerminalitySitesOutsideBoundary": 56,
+  "violations": [],
+  "summary": {
+    "filesScanned": 146,
+    "enforced": 1,
+    "pending": 11,
+    "violations": 0,
+    "privateDuplicates": 0,
+    "inlineTerminalitySitesOutsideBoundary": 56,
+    "verdict": "PASS"
+  }
+}

@@ -49,6 +49,32 @@ import type {
   Reason,
 } from "../rules/types";
 import type { BiomeKind, RiverCrossingClass } from "../world/types";
+import type { FissionLifecyclePhase } from "./fissionLifecycleKernel";
+
+/**
+ * ROADMAP ITEM 4 — the bounded lifecycle record carried on a band.
+ *
+ * The phase vocabulary and every transition rule live in the pure kernel
+ * (`fissionLifecycleKernel.ts`); this is only the shape stored in canonical state. `lineageId` ties
+ * a parent's attempt to the successor it produced, so parent/successor co-residence can be
+ * recognised from DIRECT LIFECYCLE PROVENANCE rather than from invented kinship.
+ */
+export interface FissionLifecycleRecord {
+  readonly phase: FissionLifecyclePhase;
+  readonly phaseEnteredDay: number;
+  /** Bounded, newest last, capped by the kernel. */
+  readonly history: readonly FissionLifecyclePhase[];
+  /** Shared by the parent's attempt and the successor it produced. */
+  readonly lineageId: string;
+  /** The count originally requested, retained even when the residual authority revised it down. */
+  readonly requestedFounders?: number;
+  /** The count the parent residual authority actually endorsed, when it differed. */
+  readonly endorsedFounders?: number;
+  /** Why a revision happened, or why the attempt was refused. Reason ids, never prose. */
+  readonly reasonIds?: readonly string[];
+  /** The band-known destination this attempt named. Never hidden world truth. */
+  readonly targetTileId?: TileId;
+}
 
 export type BandStatus =
   | "foraging"
@@ -6562,6 +6588,31 @@ export interface Band {
   readonly position: TileId;
   readonly size: number;
   readonly status: BandStatus;
+  /**
+   * ROADMAP ITEM 4 — the PARENT side of a Direction D fission attempt, when one is current.
+   *
+   * Present only while this band is trying to split. **It holds no bodies at any phase**; the people
+   * it concerns are still this band's until the departure transition. Absent on every band that is
+   * not currently attempting a split, so `fissionAttempt !== undefined` is the whole question and no
+   * reader has to destructure a role to ask it.
+   *
+   * Deliberately NOT folded into `BandStatus`: that union is already residential activity
+   * (`foraging`, `camped`, `moving`, `settled`, `stressed`), a transient fission marker (`splitting`,
+   * written to the parent after a fission completes) and one terminal lifecycle value (`dispersed`).
+   * See `LIFECYCLE_SEMANTICS_DECISION.md`.
+   */
+  readonly fissionAttempt?: FissionLifecycleRecord;
+  /**
+   * ROADMAP ITEM 4 — the SUCCESSOR side: this band IS a provisional successor while present.
+   *
+   * A provisional successor is **physically real** — it holds bodies at a tile, it eats, it can fall
+   * ill and it can die — but it is **not yet an ordinary stabilized daughter**. It is cleared exactly
+   * once, at `stabilized` or at `reintegrated`.
+   *
+   * `isLivingBand` keeps its current meaning for such a band: it IS living. "Established" is a
+   * different question and has its own predicate.
+   */
+  readonly provisionalSuccessor?: FissionLifecycleRecord;
   readonly mobilityStrategy: MobilityStrategy;
   readonly subsistenceModes: readonly SubsistenceMode[];
   readonly technologies: readonly TechnologyTag[];

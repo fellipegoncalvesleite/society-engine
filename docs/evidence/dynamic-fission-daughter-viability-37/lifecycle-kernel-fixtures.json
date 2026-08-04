@@ -1,0 +1,203 @@
+{
+  "generatedAt": "2026-08-04T01:27:17.959Z",
+  "checkpoint": "ROADMAP ITEM 4 §5 — pure lifecycle kernel fixtures",
+  "authority": "src/sim/agents/fissionLifecycleKernel.ts",
+  "scopeLimit": "The kernel is pure. Nothing here proves the lifecycle is CONNECTED to the simulation — that is the world adapter's evidence and it does not exist yet. These fixtures prove only that the state machine cannot be driven into an illegal, unbounded or double-owned state.",
+  "fixtures": [
+    {
+      "id": "K1",
+      "claim": "every non-terminal phase has a bound and a destination, and no quantity is owned twice",
+      "status": "PASS",
+      "nonVacuityNote": "all eleven phases are present in the production table",
+      "problems": [],
+      "phaseCount": 11
+    },
+    {
+      "id": "K2",
+      "claim": "proposal to stabilization is reachable through permitted transitions only",
+      "status": "PASS",
+      "nonVacuityNote": "the walk visited all four attempt phases and all three successor phases of the happy path",
+      "path": [
+        "proposed",
+        "committed",
+        "departure_ready",
+        "departed",
+        "successor:travelling",
+        "successor:establishing",
+        "successor:stabilized"
+      ]
+    },
+    {
+      "id": "K3",
+      "claim": "a provisional successor opens in travelling, never in establishing",
+      "status": "PASS",
+      "nonVacuityNote": "establishing exists as a phase, so opening in travelling is a choice rather than an absence",
+      "openingPhase": "travelling"
+    },
+    {
+      "id": "K4",
+      "claim": "an attempt can be abandoned from every pre-departure phase",
+      "status": "PASS",
+      "nonVacuityNote": "all three pre-departure phases were exercised",
+      "results": {
+        "proposed": "abandoned",
+        "committed": "abandoned",
+        "departure_ready": "abandoned"
+      }
+    },
+    {
+      "id": "K5",
+      "claim": "departure is refused without a founder count the residual authority endorsed",
+      "status": "PASS",
+      "nonVacuityNote": "a valid endorsed count DOES depart, so the refusals are refusals and not an inert gate",
+      "missing": "departure_without_endorsed_founder_count",
+      "zero": "departure_without_endorsed_founder_count",
+      "fractional": "departure_without_endorsed_founder_count",
+      "valid": "departed"
+    },
+    {
+      "id": "K6",
+      "claim": "stabilization is refused without lived evidence, and the establishment timeout is a FAILURE",
+      "status": "PASS",
+      "nonVacuityNote": "sufficient evidence DOES stabilize, so the refusals are not an unreachable gate",
+      "noEvidence": "stabilization_without_lived_evidence",
+      "thin": "stabilization_without_lived_evidence",
+      "enough": "stabilized",
+      "onTimeout": "failed_early"
+    },
+    {
+      "id": "K7",
+      "claim": "every non-terminal phase resolves when its bound expires, and never into a success",
+      "status": "PASS",
+      "nonVacuityNote": "every non-terminal phase in the production table was driven past its bound",
+      "rows": [
+        {
+          "phase": "proposed",
+          "maxDays": 90,
+          "beforeBound": "proposed/timedOut=false",
+          "atBound": "abandoned/timedOut=true"
+        },
+        {
+          "phase": "committed",
+          "maxDays": 90,
+          "beforeBound": "committed/timedOut=false",
+          "atBound": "abandoned/timedOut=true"
+        },
+        {
+          "phase": "departure_ready",
+          "maxDays": 30,
+          "beforeBound": "departure_ready/timedOut=false",
+          "atBound": "abandoned/timedOut=true"
+        },
+        {
+          "phase": "travelling",
+          "maxDays": 180,
+          "beforeBound": "travelling/timedOut=false",
+          "atBound": "returning/timedOut=true"
+        },
+        {
+          "phase": "establishing",
+          "maxDays": 360,
+          "beforeBound": "establishing/timedOut=false",
+          "atBound": "failed_early/timedOut=true"
+        },
+        {
+          "phase": "failed_early",
+          "maxDays": 30,
+          "beforeBound": "failed_early/timedOut=false",
+          "atBound": "returning/timedOut=true"
+        },
+        {
+          "phase": "returning",
+          "maxDays": 180,
+          "beforeBound": "returning/timedOut=false",
+          "atBound": "reintegrated/timedOut=true"
+        }
+      ]
+    },
+    {
+      "id": "K8",
+      "claim": "no transition leaves a terminal phase",
+      "status": "PASS",
+      "nonVacuityNote": "all four terminal phases were exercised against every possible destination",
+      "rows": {
+        "abandoned": true,
+        "departed": true,
+        "reintegrated": true,
+        "stabilized": true
+      }
+    },
+    {
+      "id": "K9",
+      "claim": "every transition outside the permitted set is refused",
+      "status": "PASS",
+      "nonVacuityNote": "both permitted and refused transitions genuinely occur in the sweep",
+      "refused": 64,
+      "permitted": 13,
+      "expectedPermitted": 13,
+      "totalPairs": 77
+    },
+    {
+      "id": "K10",
+      "claim": "early failure leads only to returning — never to stabilization, never to a stop",
+      "status": "PASS",
+      "nonVacuityNote": "the phase genuinely has exactly one exit in the production table",
+      "toStabilized": "transition_not_permitted",
+      "toEstablishing": "transition_not_permitted",
+      "toReturning": "returning",
+      "permittedNext": [
+        "returning"
+      ]
+    },
+    {
+      "id": "K11",
+      "claim": "no phase lets the parent and the successor own the same quantity",
+      "status": "PASS",
+      "nonVacuityNote": "both sides of the departure are represented in the table",
+      "preDepartureOwners": [
+        "proposed:parent",
+        "committed:parent",
+        "departure_ready:parent",
+        "abandoned:parent"
+      ],
+      "postDepartureOwners": [
+        "departed:successor",
+        "travelling:successor",
+        "establishing:successor",
+        "failed_early:successor",
+        "returning:successor",
+        "reintegrated:parent",
+        "stabilized:successor"
+      ]
+    },
+    {
+      "id": "K12",
+      "claim": "lifecycle history cannot grow without bound",
+      "status": "PASS",
+      "nonVacuityNote": "the drive genuinely exceeded the cap",
+      "historyLength": 12,
+      "cap": 12
+    },
+    {
+      "id": "K13",
+      "claim": "the same request produces a byte-identical result",
+      "status": "PASS",
+      "nonVacuityNote": "the compared result is substantive",
+      "identical": true
+    },
+    {
+      "id": "K14",
+      "claim": "information the kernel has no field for cannot alter a transition",
+      "status": "PASS",
+      "nonVacuityNote": "unrelated keys were genuinely present on the request",
+      "identical": true
+    }
+  ],
+  "summary": {
+    "total": 14,
+    "passing": 14,
+    "failing": 0,
+    "vacuous": 0,
+    "errored": 0
+  }
+}

@@ -188,7 +188,8 @@ Roadmap Item 3:
 accepted and frozen
 
 Roadmap Item 4:
-active — two pure authorities complete; lifecycle not built;
+active — two pure authorities and representation decision complete;
+lifecycle under implementation;
 not an implementation candidate
 
 Roadmap Item 5:
@@ -11328,3 +11329,30 @@ exception; daughter colours related-but-distinct and never visually confusing.
   tsc both, graph 221/764 and import boundary 85 all unchanged; PR1-PR20 20/20; no frozen evidence
   touched; **no production file changed.** Item 3 frozen; **Item 5 not started.** Evidence:
   `PROVISIONAL_REPRESENTATION_DECISION.md`, `PROVISIONAL_READER_MATRIX.md`.
+
+- **ROADMAP ITEM 4 — LIFECYCLE SEMANTICS, PURE KERNEL AND CANONICAL PREDICATE BOUNDARY (2026-08-03)
+  — PROGRESS: LAYER 1 LANDED, WORLD ADAPTER AND NATURAL CAUSALITY NOT BUILT / NOT PUSHED / DO NOT
+  MERGE.** Lifecycle phase is encoded as **two dedicated fields, not one and not `Band.status`**:
+  `Band.fissionAttempt` on the parent (reversible, **holds no bodies at any phase**) and
+  `Band.provisionalSuccessor` on the successor (physically real, owns its own bodies), sharing a
+  `lineageId` so co-residence is recognised from **direct lifecycle provenance rather than invented
+  kinship**. `Band.status` was rejected on inspection: it already conflates residential activity,
+  a transient `"splitting"` marker written to the PARENT after a fission completes, and the terminal
+  `"dispersed"` — adding phases would make one field answer a fourth question, which is
+  CORRECTION-35's defect with more values. **`bandLifecycle.ts` becomes the canonical boundary with
+  seven predicates that ARE the reader's intent**, and `isLivingBand` deliberately keeps its meaning
+  — **a provisional successor IS living**, and redefining it would hide real bodies and recreate
+  CORRECTION-34's ghosts. **The private duplicate `isActiveBand` is removed** from `contextCache.ts`
+  (it was a literal `return isLivingBand(band)`), provably behaviour-identical. **The pure kernel
+  `fissionLifecycleKernel.ts` gives all eleven phases a body/labour/location owner, a transition
+  writer, permitted successors, a bound and a timeout destination.** Two properties are structural
+  rather than remembered: **no non-terminal phase can persist indefinitely**, and **a timeout can
+  never manufacture a success** — `establishing` times out to `failed_early`, so **a timer alone
+  cannot stabilize a group**. Departure additionally refuses without the founder count the residual
+  authority ENDORSED. **K1-K14: 14 passing, 0 failing, 0 vacuous** (K2 honestly reported VACUOUS on a
+  miscounted predicate before passing). **The boundary audit enforces 1 migrated module and lists 11
+  pending rather than failing on work not started**; 0 violations, 0 private duplicates, 56 inline
+  terminality sites measured tree-wide. tsc both, build, graph 221/764 and import boundary 85 all
+  unchanged; no frozen evidence touched. **`createDaughterBand` is still untouched and all six
+  measured defects are still live.** Item 3 frozen; **Item 5 not started.** Evidence:
+  `LIFECYCLE_SEMANTICS_DECISION.md`.
