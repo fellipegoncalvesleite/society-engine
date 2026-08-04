@@ -92,6 +92,72 @@ export interface FissionLifecycleRecord {
   readonly departureTileId?: TileId;
   /** Bounded outbound trail, newest last, so a return can retrace ground the group actually walked. */
   readonly trail?: readonly TileId[];
+  /**
+   * ROADMAP ITEM 4 — THE GROUP'S OWN, RUNNING, PHYSICAL SUBSISTENCE INTERVAL.
+   *
+   * A band working a residential catchment is measured once a season, because that is the unit its
+   * food arrives in. A group walking across country has no camp, no catchment and no season-long
+   * arrangement — so measuring it on the residential cadence measured it never, and an unasked
+   * question read as contentment. This is the successor's OWN interval: what it physically took,
+   * what its bodies physically needed over the same days, and what the ground gave it to drink.
+   *
+   * Bounded by construction: running sums plus a small ring of recent days.
+   */
+  readonly travelSubsistence?: TravelSubsistenceState;
+}
+
+/**
+ * ROADMAP ITEM 4 — a provisional group's running subsistence interval.
+ *
+ * Every positive unit in `supportUnits` came from a real physical source that was really depleted, was
+ * carried by real workers who therefore walked less far that day, and is credited exactly once.
+ * `demandUnits` is the same quantity on the other side of the ledger: what these bodies needed over
+ * exactly these days, at the canonical adult-equivalent demand.
+ */
+export interface TravelSubsistenceState {
+  /** Day this interval began. An interval is closed and restarted, never extended indefinitely. */
+  readonly intervalStartDay: number;
+  /** The last day this interval was advanced, so a day can never be charged twice. */
+  readonly lastAdvancedDay: number;
+  readonly daysElapsed: number;
+  /** Accumulated adult-equivalent demand over the interval's days. Bodies, not workers. */
+  readonly demandUnits: number;
+  /** Accumulated USABLE support physically extracted over the interval's days, after losses. */
+  readonly supportUnits: number;
+  /** Accumulated raw harvest before transport/processing losses, published so the losses are visible. */
+  readonly harvestUnits: number;
+  readonly processingLossUnits: number;
+  /** Accumulated depletion applied to real world sources. The other side of every support unit. */
+  readonly depletionApplied: number;
+  /** Days a gathering attempt was made at all (workers were allocated to it). */
+  readonly gatheringDays: number;
+  /** Days a gathering attempt found a physical source and took something from it. */
+  readonly gatheringDaysWithAnyTake: number;
+  /** Summed measured water stress over the interval's days, at the ground the group stood on. */
+  readonly waterStressDaySum: number;
+  /** Days the group stood where it could not drink. A real consequence, not a label. */
+  readonly daysWithoutWater: number;
+  /** Bounded evidence ring, newest last. */
+  readonly recentDays: readonly TravelSubsistenceDay[];
+  /** How many intervals this group has closed. Evidence that independence was measured repeatedly. */
+  readonly closedIntervals: number;
+}
+
+export interface TravelSubsistenceDay {
+  readonly day: number;
+  readonly tileId: TileId;
+  /** Share of the day's worker effort spent looking for food rather than covering ground. */
+  readonly gatherShare: number;
+  readonly gatheringWorkers: number;
+  readonly requestedUnits: number;
+  readonly harvestedUnits: number;
+  readonly usableUnits: number;
+  readonly depletionApplied: number;
+  readonly demandUnits: number;
+  readonly waterStress: number;
+  readonly sourceKind: "plant_patch" | "none";
+  readonly sourceId?: string;
+  readonly failureReason?: "no_workers_allocated" | "physical_source_absent" | "physically_exhausted" | "activity_failed";
 }
 
 export type BandStatus =

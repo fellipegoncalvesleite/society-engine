@@ -69,8 +69,9 @@ import { inheritAnimalPatternKnowledgeForDaughter } from "./animalLearning";
 import { degradeInheritedExploitationSkill } from "./exploitationSkill";
 import { inheritAdaptiveHumanForDaughter, inheritPracticalAdaptationForDaughter } from "./adaptationBoundary";
 import { deriveDaughterColor } from "./lineageColor";
-import type { Band } from "./types";
-import type { BandId, TileId } from "../core/types";
+import { deriveCanonicalNutritionState, recordSupportInterval } from "./seasonalSurvival";
+import type { Band, SeasonalSupportSample, SeasonalSupportState } from "./types";
+import type { BandId, TileId, WorldTime } from "../core/types";
 import type { WorldState } from "../world/types";
 
 export type DepartureRefusal =
@@ -80,7 +81,59 @@ export type DepartureRefusal =
   | "residual_authority_blocked_the_departure"
   | "kernel_refused_the_departure_transition"
   | "ownership_invariant_violated_after_mutation"
-  | "successor_violated_the_field_transfer_policy";
+  | "successor_violated_the_field_transfer_policy"
+  /** L2 — a group that departs unmeasured is a group whose hunger reads as zero forever. */
+  | "successor_would_depart_nutritionally_unmeasured"
+  /** L2 — walking out of a hungry camp is not eating. */
+  | "successor_would_depart_less_hungry_than_the_camp_it_left";
+
+/**
+ * The founders' embodied nutritional condition at the moment they walk out.
+ *
+ * ── WHY THIS IS NOT THE INHERITANCE THE TRANSFER POLICY FORBIDS ─────────────────────────────────
+ *
+ * The policy's original reason for resetting `seasonalSupport` listed it beside `carryingCapacity`,
+ * `populationDemand`, `perCapitaReturn` and `rangeSaturation` — all EXTENSIVE quantities, derived from
+ * the parent's 34 people and meaningless for the 11 who left. A support RATIO is not one of those. It
+ * is INTENSIVE: a camp supported at 0.4 of its demand was supporting these eleven at 0.4 too, and they
+ * were exactly as hungry as everybody else standing in it.
+ *
+ * And chronicity is embodied. Two years of deficit is a physiological fact about the people who lived
+ * it, not a fact about the camp's name. Carrying only the newest sample and dropping the streaks made
+ * `chronicFoodStress` fall from 1 to 0.13 at the instant of departure — a fifth of the group's hunger
+ * evaporating because the group had been renamed.
+ *
+ * So the samples travel, re-identified, and every derived quantity is REBUILT from them by the one
+ * writer rather than copied. What does NOT travel is anything computed from the parent's HEADCOUNT,
+ * which is every field the policy grouped this one with. The window is bounded and self-clearing: each
+ * interval the successor closes pushes an inherited sample out, so within eight of its own
+ * measurements the group's record is entirely its own.
+ *
+ * If the parent has no measured state either, neither does the successor, and the seam refuses the
+ * departure rather than inventing a reading.
+ */
+function buildOpeningEmbodiedSupport(
+  parent: Band,
+  successorId: BandId,
+  time: WorldTime,
+): SeasonalSupportState | undefined {
+  const parentSupport = parent.seasonalSupport;
+  if (parentSupport === undefined) return undefined;
+  const founderBand: Band = { ...parent, id: successorId };
+  const samples: readonly SeasonalSupportSample[] = parentSupport.recentSamples.length > 0
+    ? parentSupport.recentSamples
+    : [parentSupport.currentSeasonSupport];
+  let state: SeasonalSupportState | undefined;
+  for (const sample of samples) {
+    state = recordSupportInterval(state, sample, founderBand, time, {
+      topSeasonalSupportReasons: ["the condition the founders walked out with"],
+      // Each inherited sample is a distinct lived interval. Replacing on a shared tick would collapse
+      // the whole history into its last entry, which is the relief this function exists to prevent.
+      replaceSameTickSample: false,
+    });
+  }
+  return state;
+}
 
 /**
  * The five separate claims. **One generic `conserved: true` is insufficient** — `SPLIT_POLICY_MATRIX`
@@ -375,6 +428,20 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
     // sharing it made every episode the successor holds claim to have happened to another band.
     acuteRisk: parent.acuteRisk === undefined ? undefined : { ...parent.acuteRisk, bandId: successorId },
 
+    // ── FOUNDER_CARRIED_EMBODIED_BURDEN — THE OPENING MEASURED INTERVAL ──
+    //
+    // The support HISTORY is invalidated: eight seasons of a camp this group never was cannot be its
+    // record. But the BODIES' CONDITION is not history, and resetting it to absent is what made
+    // walking away a cure — `deriveCanonicalNutritionState(undefined)` returns every stress term at 0,
+    // so a starving group became a comfortable one at the instant of departure and stayed that way
+    // until an interval closed, which for a group standing on unobserved ground is never.
+    //
+    // So the successor departs MEASURED, with exactly ONE sample: the season these bodies just lived,
+    // re-identified. No streaks, no rolling window, no classification earned by a camp — one honest
+    // reading of how fed these people are, which is the same reading they had yesterday, because
+    // yesterday they were standing in the same place eating the same food.
+    seasonalSupport: buildOpeningEmbodiedSupport(parent, successorId, world.time),
+
     // ── DEGRADED_OR_PARTIAL_INHERITANCE ──
     knowledge: inheritedKnowledge,
     placeMemory: inheritedPlaceMemory,
@@ -409,6 +476,37 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       ok: false,
       refusal: "successor_violated_the_field_transfer_policy",
       detail: transferViolations.map((v) => `${String(v.field)}:${v.defect}`).join(","),
+    };
+  }
+
+  // ── 6c. A SUCCESSOR MAY NOT DEPART NUTRITIONALLY UNMEASURED, AND MAY NOT DEPART RELIEVED ──
+  //
+  // Two structural refusals rather than two remembered rules, because the previous defect survived
+  // precisely by needing nothing: an absent support state asked no question, and the absence read as
+  // permission. `nutritionStateAvailable` must be true, and the founders' measured food stress may not
+  // be BELOW the camp's — walking out of a hungry camp does not feed anybody.
+  const successorNutrition = deriveCanonicalNutritionState(successor.seasonalSupport);
+  const parentNutrition = deriveCanonicalNutritionState(parent.seasonalSupport);
+  if (parentNutrition.nutritionStateAvailable && !successorNutrition.nutritionStateAvailable) {
+    return { ok: false, refusal: "successor_would_depart_nutritionally_unmeasured" };
+  }
+  // Term by term, not on an average — the CORRECTION-34-era rule that a burden must not be softened on
+  // one axis while another rises to hide it. Both consequence terms are checked because they weight
+  // the same four inputs differently, so one can fall while the other holds.
+  if (
+    successorNutrition.currentFoodStress < parentNutrition.currentFoodStress ||
+    successorNutrition.chronicFoodStress < parentNutrition.chronicFoodStress ||
+    successorNutrition.foodMovementPressure < parentNutrition.foodMovementPressure ||
+    successorNutrition.foodDemographicPressure < parentNutrition.foodDemographicPressure
+  ) {
+    return {
+      ok: false,
+      refusal: "successor_would_depart_less_hungry_than_the_camp_it_left",
+      detail:
+        `current ${parentNutrition.currentFoodStress}->${successorNutrition.currentFoodStress}, ` +
+        `chronic ${parentNutrition.chronicFoodStress}->${successorNutrition.chronicFoodStress}, ` +
+        `movement ${parentNutrition.foodMovementPressure}->${successorNutrition.foodMovementPressure}, ` +
+        `demographic ${parentNutrition.foodDemographicPressure}->${successorNutrition.foodDemographicPressure}`,
     };
   }
 

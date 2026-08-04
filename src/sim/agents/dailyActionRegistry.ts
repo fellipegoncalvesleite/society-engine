@@ -27,6 +27,7 @@ import type { DailyAction } from "./dailyActions";
 import { expeditionDailyAction } from "./expedition";
 import { intraSeasonTripDailyAction } from "./intraSeasonTrips";
 import { provisionalTravelDailyAction } from "./provisionalTravel";
+import { provisionalSubsistenceDailyAction } from "./provisionalTravelSubsistence";
 
 /**
  * The default daily-action registry advanced by `advanceWorldByDays`.
@@ -42,4 +43,8 @@ export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   // day has already resolved. It is a no-op for every band that is not a walking provisional
   // successor, and nothing in ordinary play creates one.
   provisionalTravelDailyAction,
+  // ROADMAP ITEM 4 — subsistence runs AFTER the step, so the group feeds itself on the tile it
+  // actually camps on rather than the one it left that morning. Same no-op property: it touches only
+  // live provisional successors, and no natural path creates one.
+  provisionalSubsistenceDailyAction,
 ];

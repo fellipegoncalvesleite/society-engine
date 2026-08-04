@@ -256,48 +256,47 @@ try {
   // reason it is acceptable as an interim: the group is HARSHER off, never freer. Its hunger still
   // rises through ordinary nutrition, and nothing here creates support from nothing.
   const receipts = finalBand?.seasonalFoodReceipts === undefined ? 0 : 1;
+  const subsistence = finalBand?.provisionalSuccessor?.travelSubsistence;
   const hungerFirst = base.hungerPressure;
   const hungerLast = finalBand?.hungerPressure ?? null;
   record(
-    "V9_travel_creates_no_material_capability",
-    "no receipt, no storage and no ration appears during the journey — travel subsistence is UNBUILT and is not faked",
-    receipts === 0 && (finalBand?.storageCapacity ?? 0) === 0,
+    "V9_travel_support_is_physically_sourced_or_absent",
+    "no ration, storage or capability appears from nothing — every support unit the group holds came from a real source that was really depleted, and a group that found nothing holds nothing",
+    (finalBand?.storageCapacity ?? 0) === 0 &&
+      (subsistence === undefined || subsistence.supportUnits <= 0 || subsistence.depletionApplied > 0),
     positions.length > 1,
     {
-      receiptsDuringTravel: receipts,
+      residentialReceiptsDuringTravel: receipts,
       storageCapacity: finalBand?.storageCapacity ?? null,
-      NOT_IMPLEMENTED: "route foraging by the travelling bodies, and a physically debited carried provision stock; both need an authority that does not exist yet and neither is faked here",
+      travelSupportUnits: subsistence?.supportUnits ?? null,
+      travelDepletionApplied: subsistence?.depletionApplied ?? null,
+      note: "travel receipts are successor-owned and live on the lifecycle record; `seasonalFoodReceipts` describes receipts from a residential camp, which a walking group does not have",
     },
   );
 
-  // ── V10 — FINDING: A WALKING GROUP GETS LESS HUNGRY, AND THE CAUSE IS AN ABSENCE READ AS ZERO ──
+  // ── V10 — THE FINDING THIS AUDIT PUBLISHED IS NOW A GATE ────────────────────────────────────────
   //
-  // Caught by this audit rather than by reading the code, and it inverts the claim an earlier form of
-  // V9 made. `hungerPressure` has three real writers and every one derives it from the band's
-  // `seasonalSupport` through the canonical nutrition state. The transfer policy resets
-  // `seasonalSupport` to ABSENT — correctly, because it is a history of seasons this group did not
-  // live as itself — and `deriveCanonicalNutritionState` reads absent as NO STRESS.
+  // The earlier form of this fixture RECORDED a defect it could not repair: a group with no camp, no
+  // receipts and no way to forage walked its hunger down to zero, because `seasonalSupport` was reset
+  // to absent by policy and `deriveCanonicalNutritionState` read absent as no stress. The group was
+  // not measured as comfortable — it was never asked.
   //
-  // So the reset that exists to prevent an unearned INHERITANCE produces an unearned IMPROVEMENT: a
-  // group with no camp, no receipts and no way to forage walks its hunger down to zero. It is the same
-  // shape as the `cause` field this pass made required — an absence read as permission — and it is an
-  // L2 violation appearing in a place L2 was not previously looked for.
-  //
-  // NOT REPAIRED HERE. The honest fix is a real travel subsistence authority: bodies that eat what they
-  // physically gather on the route, or a stock debited from a real source before departure. Both need
-  // authorities that do not exist, and inventing a hunger floor instead would be a tuned number
-  // standing in for a mechanism.
+  // The successor now departs MEASURED, carrying the samples its bodies actually lived, and its
+  // hunger moves only when a physical source is really taken from. So the fixture that documented the
+  // improvement now FORBIDS it: hunger may not fall over the journey unless support was physically
+  // extracted, and the depletion is the proof it was.
+  const earnedSupport = subsistence?.supportUnits ?? 0;
+  const appliedDepletion = subsistence?.depletionApplied ?? 0;
   record(
-    "V10_FINDING_hunger_improves_during_travel_because_absent_support_reads_as_no_stress",
-    "the group's hunger FALLS while it walks with nothing to eat, because its `seasonalSupport` is absent by policy and the canonical nutrition derivation treats absent as unstressed — an unearned improvement produced by a correct reset",
-    true, // a published finding, not a gate — see the note above
+    "V10_hunger_never_improves_without_physically_extracted_support",
+    "the group's hunger over the journey may fall only if it physically took food from a real source and depleted it; walking is not eating",
+    hungerLast === null || hungerLast >= hungerFirst || (earnedSupport > 0 && appliedDepletion > 0),
     hungerLast !== null,
     {
-      status: (hungerLast !== null && hungerLast < hungerFirst) ? "REPRODUCED" : "NOT_REPRODUCED_IN_THIS_WINDOW",
       hunger: { atDeparture: hungerFirst, atEnd: hungerLast },
-      mechanism: "Band.seasonalSupport is INVALIDATE_UNTIL_LATER_PHASE (absent); all three hungerPressure writers derive it from that support through deriveCanonicalNutritionState, which reads absent as no stress",
-      whyNotRepairedHere: "the fix is a travel subsistence authority (route foraging, or a debited carried stock); a hunger floor would be a tuned number standing in for a mechanism",
-      consequence: "travel is currently EASIER than standing still, which is the opposite of the interim this pass wanted, and it is the blocking item for the travel-subsistence work",
+      travelSupportUnits: earnedSupport,
+      travelDepletionApplied: appliedDepletion,
+      mechanism: "the departure seam supplies an opening measured interval from the founders' own lived samples, and provisionalTravelSubsistence closes further intervals from what the group physically extracted",
     },
   );
 

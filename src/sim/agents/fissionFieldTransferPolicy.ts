@@ -197,7 +197,19 @@ export const FISSION_FIELD_TRANSFER_POLICY: Record<keyof Band, FieldTransferPoli
   populationDemand: entry("INVALIDATE_UNTIL_LATER_PHASE", "absent", false, "the parent's demand describes the parent's population"),
   perCapitaReturn: entry("INVALIDATE_UNTIL_LATER_PHASE", "absent", false, "a return per head the successor has not yet earned a single unit of"),
   rangeSaturation: entry("INVALIDATE_UNTIL_LATER_PHASE", "absent", false, "saturation of a range the group has not yet used"),
-  seasonalSupport: entry("INVALIDATE_UNTIL_LATER_PHASE", "absent", true, "a support history belonging to seasons this group did not live as itself"),
+  // ROADMAP ITEM 4 — RECLASSIFIED, and the reason is a measured defect rather than a preference.
+  //
+  // As `absent` this was right about the HISTORY and wrong about the BODIES. Eight seasons of streaks
+  // and classifications belong to a camp this group never was, so inheriting them is an unearned
+  // inheritance — but resetting the whole field to absent made `deriveCanonicalNutritionState` return
+  // every stress term at 0, so a group walked out of a starving camp measurably comfortable and
+  // stayed that way, because a group standing on unobserved ground never closes another interval.
+  // The reset that prevented an unearned INHERITANCE produced an unearned IMPROVEMENT.
+  //
+  // The seam now supplies ONE sample — the season these bodies just lived, re-identified, with no
+  // streaks and no window — and refuses the departure if the result is unmeasured or less hungry than
+  // the camp it left.
+  seasonalSupport: entry("FOUNDER_CARRIED_EMBODIED_BURDEN", "computed", true, "the support HISTORY is a camp's and does not travel; the bodies' current condition is not history and does not improve by walking"),
   returnTrend: entry("INVALIDATE_UNTIL_LATER_PHASE", "absent", false, "a trend over returns nobody in this group made"),
   resourceEcology: entry("INVALIDATE_UNTIL_LATER_PHASE", "absent", true, "recomputed from current support, activity and inherited knowledge, none of which the successor has yet"),
   visibleNature: entry("INVALIDATE_UNTIL_LATER_PHASE", "absent", true, "visible animals and plants require the group's own known range and its own trips"),

@@ -236,7 +236,43 @@ export function updateSeasonalSupportState(
     }),
   };
 
-  const sameTick = previous !== undefined && Number(previous.lastUpdatedTick) === Number(time.tick);
+  return recordSupportInterval(previous, sample, band, time, {
+    topSeasonalSupportReasons: getTopSeasonalSupportReasons(carrying, sample),
+    replaceSameTickSample: true,
+  });
+}
+
+/**
+ * ROADMAP ITEM 4 — THE ONE WRITER OF DERIVED SUPPORT STATE.
+ *
+ * Extracted from `updateSeasonalSupportState` so that a measured interval can come from more than one
+ * PHYSICAL SITUATION without there being more than one answer to "how fed is this group".
+ *
+ * There are exactly two producers of a sample and they describe genuinely different physical
+ * arrangements — a band working a residential catchment, and a group walking across country with no
+ * camp at all — but the rolling windows, the streaks, the hunger classification and the canonical
+ * nutrition consequences are computed HERE, once, for both. A second copy of this arithmetic is how a
+ * travelling group would have acquired a second, divergent definition of hunger.
+ *
+ * It adds no food. A sample is a measurement; every quantity below is derived from samples.
+ */
+export function recordSupportInterval(
+  previous: SeasonalSupportState | undefined,
+  sample: SeasonalSupportSample,
+  band: Band,
+  time: WorldTime,
+  options: {
+    readonly topSeasonalSupportReasons: readonly string[];
+    /**
+     * True for the seasonal writer, which runs up to three times per tick and must converge to one
+     * sample per tick. False for interval producers whose intervals are their own unit and may close
+     * more than once inside a season — replacing there would silently delete a real measurement.
+     */
+    readonly replaceSameTickSample: boolean;
+  },
+): SeasonalSupportState {
+  const sameTick = options.replaceSameTickSample &&
+    previous !== undefined && Number(previous.lastUpdatedTick) === Number(time.tick);
   const baseSamples = sameTick ? previous.recentSamples.slice(0, -1) : previous?.recentSamples ?? [];
   const recentSamples = [...baseSamples, sample].slice(-SEASONAL_MEMORY_WINDOW);
   const lastSeasonSupport = baseSamples[baseSamples.length - 1];
@@ -299,7 +335,7 @@ export function updateSeasonalSupportState(
     hungerClassification,
     chronicDeficitClassification,
     populationStableDespiteRecurringHunger: hasStablePopulationButRecurringHunger(band, deficitSeasonsLast8),
-    topSeasonalSupportReasons: getTopSeasonalSupportReasons(carrying, sample),
+    topSeasonalSupportReasons: options.topSeasonalSupportReasons,
     reasonIds: makeSeasonalSupportReasonIds(band, time, hungerClassification),
   };
   const nutrition = deriveCanonicalNutritionState(baseState);

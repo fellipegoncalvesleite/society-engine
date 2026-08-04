@@ -34,6 +34,7 @@
 import { isProvisionalSuccessor } from "./bandLifecycle";
 import { getPhaseContract, requestTransition } from "./fissionLifecycleKernel";
 import { deriveTravelPace } from "./bandMobility";
+import { deriveTravelEffortSplit } from "./provisionalTravelSubsistence";
 import { getNeighborTiles, getTile } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
 import type { Band, FissionLifecycleRecord } from "./types";
@@ -61,6 +62,8 @@ export interface TravelStepRecord {
   readonly moved: boolean;
   readonly refusal?: TravelRefusal;
   readonly kmPerActiveDay: number;
+  /** Share of the day's workers spent looking for food instead of covering ground. */
+  readonly gatherShare: number;
   readonly daysPerTile: number;
   readonly distanceRemaining: number;
   readonly impassableNeighboursRefused: number;
@@ -117,6 +120,7 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
       destinationTileId: String(destination ?? "none"),
       moved: false,
       kmPerActiveDay: 0,
+      gatherShare: 0,
       daysPerTile: 0,
       distanceRemaining: -1,
       impassableNeighboursRefused: 0,
@@ -169,12 +173,19 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
     // the wrong quantity here.
     const injuryLoad = Math.min(1, Math.max(0, band.acuteRisk?.activeEffect?.movementCautionBump ?? 0));
     const pace = deriveTravelPace(band, "whole_band_residential_move", { injuryLoad });
-    const tilesPerTravelDay = Math.max(0, pace.tilesPerTravelDay);
-    const kmPerActiveDay = Math.max(0, pace.kmPerTravelDay);
+    // ── THE TRADEOFF, APPLIED TO THE GROUND ACTUALLY COVERED ──
+    //
+    // A day has one set of workers in it. Whatever share of them spends the day looking for food is
+    // not spending it covering distance, so a group that stops to gather genuinely travels slower and
+    // a group that presses on genuinely arrives hungrier. The split is derived from the group's own
+    // measured condition by the subsistence authority; this module only spends it.
+    const effort = deriveTravelEffortSplit(band);
+    const tilesPerTravelDay = Math.max(0, pace.tilesPerTravelDay * effort.movementShare);
+    const kmPerActiveDay = Math.max(0, pace.kmPerTravelDay * effort.movementShare);
     // A column slower than a tile a day RESTS between steps rather than teleporting a fraction of one.
     const daysPerTile = tilesPerTravelDay <= 0 ? Number.POSITIVE_INFINITY : Math.max(1, Math.ceil(1 / tilesPerTravelDay));
     const daysInPhase = day - record.phaseEnteredDay;
-    const paced = { ...base, kmPerActiveDay, daysPerTile, distanceRemaining: remaining };
+    const paced = { ...base, kmPerActiveDay, gatherShare: effort.gatherShare, daysPerTile, distanceRemaining: remaining };
 
     if (!Number.isFinite(daysPerTile) || daysInPhase < 0 || daysInPhase % daysPerTile !== 0) {
       steps.push({ ...paced, refusal: "resting_on_this_day_at_current_pace" });
