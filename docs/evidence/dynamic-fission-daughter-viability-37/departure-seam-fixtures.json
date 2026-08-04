@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T14:55:11.037Z",
+  "generatedAt": "2026-08-04T15:09:30.612Z",
   "checkpoint": "ROADMAP ITEM 4 §11 — atomic departure seam controlled gates",
   "authority": "src/sim/agents/fissionDepartureSeam.ts",
   "scopeLimit": "The seam is NOT reachable from ordinary fission — D16 reads the sources to prove it. These gates drive the production writer directly. They prove the departure TRANSITION is truthful; they prove nothing about travel, return or stabilization, none of which exist, and nothing about natural occurrence.",

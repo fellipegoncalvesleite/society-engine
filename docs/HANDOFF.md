@@ -188,9 +188,10 @@ Roadmap Item 3:
 accepted and frozen
 
 Roadmap Item 4:
-active — atomic departure implemented locally; truthful one-day
-provisional integration NOT complete (earlier claim withdrawn);
-travel not authorized; not an implementation candidate
+active — atomic departure implemented locally and ordinary-band
+admission removed from all live provisional phases; travel authority
+not built, so the successor is inert rather than truthful;
+not an implementation candidate
 
 Roadmap Item 5:
 not started
@@ -11464,3 +11465,26 @@ exception; daughter colours related-but-distinct and never visually confusing.
   edits to hot production paths and were not attempted without budget to verify them. tsc both, build,
   graph 221/764 and import boundary 85 unchanged; D1-D18 18/18; no frozen evidence touched. Item 3
   frozen; **Item 5 not started.**
+
+- **ROADMAP ITEM 4 — ORDINARY-BAND ADMISSION REMOVED FROM EVERY LIVE PROVISIONAL PHASE (2026-08-03)
+  — PROGRESS / NOT PUSHED / TRAVEL STILL NOT AUTHORIZED.** Four production paths gated on
+  `isProvisionalSuccessor`, which is true in **every** live provisional phase — travelling,
+  establishing, failed_early and returning — rather than only in transit: the **seasonal decision
+  loop** (`advance.ts`), **same-day subsistence trips** (`intraSeasonTrips.ts`), **expedition launch**
+  (`expedition.ts`) and **proto-camp formation** (`protoCamps.ts`). **Re-measured day by day on a real
+  world: position 1→0, decisions 2→0, status 2→0, trips 24→0, all against a control band that still
+  moved, decided and received viability on the same days**, so each is a real exclusion and not a
+  quiet seed. **All six assertable admission claims now hold, 0 failing**, including
+  `no_free_movement`, which FAILED before this change. Only `provisionalPhase` is still admitted, by
+  the provisional resolver, which is the one authority that should touch it. **REGRESSION: step-mode
+  invariance `fullCanonicalStateMatch: true` / `firstDivergence: null` on BOTH maps, season-order
+  invariance PASS, graph 221/764 and import boundary 85 unchanged** — the gates are inert for every
+  band that exists in ordinary play, because nothing creates a provisional successor there.
+  D1-D18 18/18, K1-K14 14/14, LP/O 13/13, PR1-PR20 20/20, T1-T10 10/10, all 0 vacuous. Boundary audit
+  **INCOMPLETE**, 5/12 readers migrated. **HONEST LIMIT: the successor is now INERT rather than
+  truthful.** It is excluded from residential behaviour and has no travel authority to replace it, so
+  it stands still and eats nothing of its own. That is the correct intermediate state — a group doing
+  the wrong thing is worse than a group doing nothing — but it is NOT a truthful provisional day, and
+  travel is what closes it. `trips` reads INCONCLUSIVE against the control because the control ran
+  none either; that exclusion is proven by the 24→0 before/after arms instead. Item 3 frozen;
+  **Item 5 not started.**

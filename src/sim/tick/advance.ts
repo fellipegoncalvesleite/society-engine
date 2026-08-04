@@ -15,6 +15,7 @@ import {
 } from "../agents/socialContext";
 import { updateBandViabilityStates } from "../agents/viability";
 import { resolveProvisionalLifecycles } from "../agents/provisionalLifecycleResolver";
+import { isProvisionalSuccessor } from "../agents/bandLifecycle";
 import type { BandId, DayNumber, DecisionId } from "../core/types";
 import { SEASON_LENGTH_DAYS } from "../core/types";
 import {
@@ -196,6 +197,21 @@ function runSeasonalCompatibilityTick(
       currentBand.viability?.status === "absorbed" ||
       currentBand.viability?.status === "extinct"
     ) {
+      continue;
+    }
+
+    // ROADMAP ITEM 4 — ORDINARY SEASONAL DELIBERATION IS AN ESTABLISHED-BAND BEHAVIOUR.
+    //
+    // A provisional successor is a group that has walked out of a camp and has not yet established
+    // one. It has no residence to deliberate about, and letting it take an ordinary decision is how
+    // the admission audit measured a newborn group MOVING TILES with no travel authority and
+    // choosing residential actions on its second day. Its movement belongs to the travel authority,
+    // which does not exist yet — so until it does, it takes no decision at all.
+    //
+    // Gated on `isProvisionalSuccessor`, which is true in EVERY live provisional phase — travelling,
+    // establishing, failed_early and returning — not only in transit. INERT for every band that
+    // exists today: nothing creates a provisional successor in ordinary play.
+    if (isProvisionalSuccessor(currentBand)) {
       continue;
     }
 

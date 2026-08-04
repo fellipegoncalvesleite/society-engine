@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T04:35:06.835Z",
+  "generatedAt": "2026-08-04T15:09:36.820Z",
   "checkpoint": "ROADMAP ITEM 4 §4 — band lifecycle boundary",
   "boundary": "src/sim/agents/bandLifecycle.ts",
   "boundaryExports": [
@@ -62,17 +62,17 @@
     {
       "file": "src/sim/agents/expedition.ts",
       "action": "blocked while travelling",
-      "importsBoundary": false
+      "importsBoundary": true
     },
     {
       "file": "src/sim/agents/intraSeasonTrips.ts",
       "action": "blocked while travelling",
-      "importsBoundary": false
+      "importsBoundary": true
     },
     {
       "file": "src/sim/agents/protoCamps.ts",
       "action": "blocked while travelling + pair guard",
-      "importsBoundary": false
+      "importsBoundary": true
     },
     {
       "file": "src/sim/agents/relationshipMemory.ts",

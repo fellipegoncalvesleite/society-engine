@@ -24,6 +24,7 @@ import { hashSeedString } from "../core/seededVariation";
 import { getWorldTimeForDay } from "../tick/time";
 import type { WorldState } from "../world/types";
 import type { DailyAction } from "./dailyActions";
+import { isProvisionalSuccessor } from "./bandLifecycle";
 import { deriveCarriedWaterRelief, deriveCarryingRelief } from "./adaptationBoundary";
 import {
   KM_PER_TILE,
@@ -2478,6 +2479,13 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
 
   for (const band of Object.values(world.bands).sort(compareExpeditionBands)) {
     if (!isActiveExpeditionBand(band)) {
+      continue;
+    }
+
+    // ROADMAP ITEM 4 — a group days from anywhere cannot also dispatch a party from a camp it does
+    // not have. Departure clears `expeditions`, so there is no inherited work to reconcile either;
+    // this gate stops a LAUNCH. Inert today.
+    if (isProvisionalSuccessor(band)) {
       continue;
     }
 

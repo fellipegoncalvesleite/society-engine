@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T04:34:19.131Z",
+  "generatedAt": "2026-08-04T15:09:36.733Z",
   "checkpoint": "ROADMAP ITEM 4 §3 + §9 — provisional successor through the real runner",
   "seed": "audit27:natural:s1",
   "warmDays": 1800,
@@ -49,6 +49,9 @@
         "fixedRatioRecomputeUsed": false
       },
       "material": {
+        "inheritedDecisionRecords": 0,
+        "inheritedResidentialMoveEvents": 0,
+        "inheritedProtoCampMemory": 0,
         "successorStorageCapacity": 0,
         "storageCapacityCreatedFromNothing": false,
         "successorInheritedExpeditions": 0,
@@ -123,7 +126,7 @@
       "status": "PASS",
       "nonVacuityNote": "the successor was alive when the runner started",
       "existsAfter": true,
-      "statusAfter": "foraging",
+      "statusAfter": "moving",
       "livingAfter": true,
       "populationBirth": 11,
       "populationAfter": 11

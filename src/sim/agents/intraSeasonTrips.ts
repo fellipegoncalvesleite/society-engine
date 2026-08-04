@@ -34,6 +34,7 @@ import type {
   PhysicalFoodHarvestRecord,
 } from "./types";
 import type { DailyAction } from "./dailyActions";
+import { isProvisionalSuccessor } from "./bandLifecycle";
 import { deriveBaseHabitatPotential } from "./habitatYield";
 import {
   applyFaunaTripDepletion,
@@ -311,6 +312,14 @@ function applyTripDay(world: WorldState, day: number): WorldState {
 
   for (const band of Object.values(world.bands).sort(compareBands)) {
     if (!isActiveBand(band)) {
+      continue;
+    }
+
+    // ROADMAP ITEM 4 — an ordinary same-day subsistence trip runs OUT FROM A RESIDENCE and back to
+    // it. A provisional successor has no residence yet, and the admission audit measured one running
+    // TWENTY-FOUR of these while a control band ran none. Whatever a travelling group eats is the
+    // travel authority's to model; it may not borrow the residential one. Inert today.
+    if (isProvisionalSuccessor(band)) {
       continue;
     }
 

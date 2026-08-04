@@ -18,6 +18,7 @@ import type {
   SeasonalHungerClassification,
 } from "./types";
 import { deriveProtoCampResourceReasonFactors } from "./resourceEcologyFoundation";
+import { isProvisionalSuccessor } from "./bandLifecycle";
 
 const PROTO_CAMP_MEMORY_CAP = 8;
 const MAX_CANDIDATE_TILE_IDS = 18;
@@ -37,10 +38,16 @@ export function applyProtoCampContext(world: WorldState): WorldState {
   const bands = Object.values(world.bands)
     .sort(compareBands)
     .reduce<Record<string, Band>>((bandsById, band) => {
-      bandsById[String(band.id)] = {
-        ...band,
-        protoCampMemory: advanceProtoCampMemory(world, band),
-      };
+      // ROADMAP ITEM 4 — a proto-camp is the beginning of an ESTABLISHED residence. A provisional
+      // successor is precisely the group that has not established one, and the admission audit
+      // measured a newborn group acquiring proto-camp state anyway. Its establishment is the
+      // provisional lifecycle's to decide, not this pass's. Inert today.
+      bandsById[String(band.id)] = isProvisionalSuccessor(band)
+        ? band
+        : {
+            ...band,
+            protoCampMemory: advanceProtoCampMemory(world, band),
+          };
 
       return bandsById;
     }, {});
