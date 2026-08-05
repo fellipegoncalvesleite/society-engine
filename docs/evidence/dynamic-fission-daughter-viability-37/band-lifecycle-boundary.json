@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T15:10:39.959Z",
+  "generatedAt": "2026-08-05T19:35:50.720Z",
   "checkpoint": "ROADMAP ITEM 4 §4 — band lifecycle boundary",
   "boundary": "src/sim/agents/bandLifecycle.ts",
   "boundaryExports": [
@@ -98,7 +98,7 @@
     "writers": [
       {
         "file": "src/sim/agents/demography.ts",
-        "line": 1160
+        "line": 1179
       }
     ],
     "readers": [
@@ -120,7 +120,7 @@
     ]
   },
   "summary": {
-    "filesScanned": 148,
+    "filesScanned": 154,
     "canonicalSinglebandPredicates": 7,
     "canonicalPairRelations": 1,
     "canonicalReducers": 1,

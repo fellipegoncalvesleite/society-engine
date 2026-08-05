@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T19:58:23.792Z",
+  "generatedAt": "2026-08-05T19:35:33.184Z",
   "seed": "audit27:natural:s1",
   "warmDays": 1800,
   "parentId": "band:varied-river-mid",
@@ -33,10 +33,10 @@
     "FORBIDDEN_TO_COPY": 40,
     "SHARED_HISTORICAL_FACT": 7,
     "EXACT_COHORT_TRANSFER": 2,
-    "FOUNDER_CARRIED_EMBODIED_BURDEN": 3,
+    "FOUNDER_CARRIED_EMBODIED_BURDEN": 4,
     "DEGRADED_OR_PARTIAL_INHERITANCE": 13,
     "RECOMPUTE_FROM_SUCCESSOR_TRUTH": 3,
-    "INVALIDATE_UNTIL_LATER_PHASE": 33,
+    "INVALIDATE_UNTIL_LATER_PHASE": 32,
     "RESET_ACTIVE_COMMITMENT": 16,
     "REBUILD_READ_MODEL": 8,
     "LEGACY_COMPATIBILITY_GATED": 2
@@ -67,10 +67,10 @@
           "FORBIDDEN_TO_COPY": 40,
           "SHARED_HISTORICAL_FACT": 7,
           "EXACT_COHORT_TRANSFER": 2,
-          "FOUNDER_CARRIED_EMBODIED_BURDEN": 3,
+          "FOUNDER_CARRIED_EMBODIED_BURDEN": 4,
           "DEGRADED_OR_PARTIAL_INHERITANCE": 13,
           "RECOMPUTE_FROM_SUCCESSOR_TRUTH": 3,
-          "INVALIDATE_UNTIL_LATER_PHASE": 33,
+          "INVALIDATE_UNTIL_LATER_PHASE": 32,
           "RESET_ACTIVE_COMMITMENT": 16,
           "REBUILD_READ_MODEL": 8,
           "LEGACY_COMPATIBILITY_GATED": 2
@@ -314,11 +314,11 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "absentByPolicy": 84,
+        "absentByPolicy": 83,
         "absentButPresent": [],
         "emptyByPolicy": 16,
         "notEmpty": [],
-        "resetKeys": 102
+        "resetKeys": 101
       }
     },
     {
@@ -327,7 +327,7 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "successorDigestLength": 88342
+        "successorDigestLength": 91390
       }
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T19:58:13.270Z",
+  "generatedAt": "2026-08-05T19:35:29.921Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "observeDays": 1200,
@@ -101,32 +101,27 @@
             "cycles": 0
           },
           {
-            "dayOffset": 420,
-            "phase": "failed_early",
-            "cycles": 0
+            "dayOffset": 15,
+            "phase": "returning",
+            "cycles": 1
+          },
+          {
+            "dayOffset": 240,
+            "phase": "establishing",
+            "cycles": 2
+          },
+          {
+            "dayOffset": 254,
+            "phase": "returning",
+            "cycles": 3
           },
           {
             "dayOffset": 510,
-            "phase": "returning",
-            "cycles": 0
-          },
-          {
-            "dayOffset": 690,
             "phase": "establishing",
-            "cycles": 1
-          },
-          {
-            "dayOffset": 1050,
-            "phase": "failed_early",
-            "cycles": 1
-          },
-          {
-            "dayOffset": 1140,
-            "phase": "returning",
-            "cycles": 1
+            "cycles": 3
           }
         ],
-        "finalPhase": "returning",
+        "finalPhase": "establishing",
         "becameOrdinaryAt": null,
         "stillProvisional": true
       }
@@ -137,10 +132,20 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "resolutionCycles": 1,
+        "resolutionCycles": 3,
         "maxCycles": 3,
-        "reportedAsUnresolved": false,
-        "finalResolutions": []
+        "reportedAsUnresolved": true,
+        "finalResolutions": [
+          {
+            "bandId": "band:varied-river-mid:provisional:1",
+            "lineageId": "LIN-EXIT-1",
+            "fromPhase": "establishing",
+            "toPhase": "establishing",
+            "populationAtResolution": 11,
+            "reason": "cycle_bound_reached_every_remaining_exit_is_physical",
+            "resolutionCycles": 3
+          }
+        ]
       }
     },
     {

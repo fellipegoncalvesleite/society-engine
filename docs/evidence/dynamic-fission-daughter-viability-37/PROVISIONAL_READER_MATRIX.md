@@ -137,3 +137,28 @@ competes for nothing under the current model. Recorded so freezing Item 3 or shi
 be read as resolving it.
 
 **Every classification above is a specification, not an implementation.** No reader has been edited.
+
+---
+
+## E. Readers this pass created or moved — travel subsistence, burden merge, return, stabilization
+
+Added by the travel-subsistence / evidence-based-resolution pass. Each row names the reader, the
+authority it reads through, and whether the migration is genuinely done. **The overall Item 4 reader
+migration is NOT complete** and is not claimed to be: `bandLifecycleBoundaryAudit` reports
+`5/12 load-bearing readers migrated`, verdict `INCOMPLETE`, with seven pending and named.
+
+| reader | reads through | status | note |
+|---|---|---|---|
+| travel extraction | `plantStock.resolvePlantFoodHarvest` | **migrated** | the same canonical harvest owner every ordinary gather uses; no second extraction path exists |
+| travel receipts | `FissionLifecycleRecord.travelSubsistence` | **migrated** | successor-owned. Deliberately NOT `seasonalFoodReceipts`, which describes receipts from a residential camp a walking group does not have |
+| nutrition | `seasonalSurvival.recordSupportInterval` | **migrated** | ONE writer of derived support state, two sample producers (residential carrying capacity, travel interval) |
+| water | the standing tile's own `resourceProfile.waterAccess` + `adaptationBoundary.deriveCarriedWaterRelief` | **migrated** | a physical execution constraint of the same class as passability; carried water only where a learned practice already exists |
+| acute risk | `acuteRisk.mergeAcuteRiskOnReintegration` | **migrated** | union by episode id, effect rederived, cap enforced, drops counted |
+| mortality / demography | unchanged — `demography.ts` reads `seasonalSupport` as it always did | **migrated by consequence** | the group's hunger is now measured, so the annual step reads a real deficit rather than a neutral absence |
+| return intent | `provisionalReturnDecision.deriveProvisionalReturnDecision` | **migrated** | takes a band and a day, no world; the single writer of the transition into `returning` |
+| establishment evidence | `provisionalEstablishment.assessEstablishmentEvidence` | **migrated** | pure over the band and its own site record |
+| stabilization transition | `provisionalEstablishment` via `fissionLifecycleKernel.requestTransition` | **migrated** | physical event + measured evidence count; a timer is refused |
+| post-stabilization admission | `bandLifecycle.isProvisionalSuccessor` | **migrated** | terminal phase ⇒ no longer provisional ⇒ every ordinary gate admits it, and not one moment earlier |
+| reintegration merge | `provisionalReintegration.REINTEGRATION_FIELD_TREATMENTS` | **migrated** | every embodied and derived field classified once, in code |
+| **serialization** | `WorldState.bands[].provisionalSuccessor` | **PENDING** | the whole record is part of `Band`, so a structural clone carries it — but `simRunner`'s **selected-band panel projection carries no lifecycle field at all**, so a UI reading that projection cannot see a journey, an interval or an evidence signal |
+| **history / read-model projection** | none | **PENDING** | no Chronicle entry, no band event and no UI surface exists for departure, travel, return cause, evidence acquisition or stabilization. The lifecycle is fully readable in state and invisible in the product |

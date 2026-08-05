@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T19:58:16.641Z",
+  "generatedAt": "2026-08-05T19:35:22.226Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "observeDays": 180,
@@ -9,18 +9,23 @@
   "departureTileId": "tile:110:57",
   "straightLineDistance": 4,
   "journey": {
-    "distinctPositions": 5,
-    "arrivedOnDay": 4,
+    "distinctPositions": 9,
+    "arrivedOnDay": 10,
     "path": [
       "tile:110:57",
       "tile:109:57",
       "tile:109:56",
       "tile:108:56",
-      "tile:108:55"
+      "tile:108:55",
+      "tile:108:56",
+      "tile:109:56",
+      "tile:109:57",
+      "tile:110:57"
     ],
     "phaseTrail": [
       "travelling",
-      "establishing"
+      "establishing",
+      "returning"
     ]
   },
   "sampleStepRecord": {
@@ -28,14 +33,16 @@
     "lineageId": "LIN-TRAVEL-1",
     "phase": "travelling",
     "fromTileId": "tile:110:57",
-    "toTileId": "tile:109:57",
+    "toTileId": "tile:110:57",
     "destinationTileId": "tile:108:55",
-    "moved": true,
-    "kmPerActiveDay": 1.974,
-    "daysPerTile": 1,
-    "distanceRemaining": 3,
-    "impassableNeighboursRefused": 1,
-    "arrived": false
+    "moved": false,
+    "kmPerActiveDay": 1.496292,
+    "gatherShare": 0.242,
+    "daysPerTile": 2,
+    "distanceRemaining": 4,
+    "impassableNeighboursRefused": 0,
+    "arrived": false,
+    "refusal": "resting_on_this_day_at_current_pace"
   },
   "summary": {
     "fixtures": 10,
@@ -62,14 +69,18 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "distinctPositions": 5,
+        "distinctPositions": 9,
         "nonContiguous": [],
         "path": [
           "tile:110:57",
           "tile:109:57",
           "tile:109:56",
           "tile:108:56",
-          "tile:108:55"
+          "tile:108:55",
+          "tile:108:56",
+          "tile:109:56",
+          "tile:109:57",
+          "tile:110:57"
         ]
       }
     },
@@ -88,13 +99,14 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "arrivedOnDay": 4,
+        "arrivedOnDay": 10,
         "phaseTrail": [
           "travelling",
-          "establishing"
+          "establishing",
+          "returning"
         ],
-        "finalPhase": "establishing",
-        "finalPosition": "tile:108:55"
+        "finalPhase": "returning",
+        "finalPosition": "tile:110:57"
       }
     },
     {
@@ -103,14 +115,18 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "trailLength": 4,
+        "trailLength": 8,
         "cap": 64,
         "trailIsPrefixOfPath": true,
         "trail": [
           "tile:110:57",
           "tile:109:57",
           "tile:109:56",
-          "tile:108:56"
+          "tile:108:56",
+          "tile:108:55",
+          "tile:108:56",
+          "tile:109:56",
+          "tile:109:57"
         ]
       }
     },
@@ -121,12 +137,12 @@
       "nonVacuous": true,
       "detail": {
         "whole": {
-          "kmPerActiveDay": 1.974,
-          "daysPerTile": 1
+          "kmPerActiveDay": 1.496292,
+          "daysPerTile": 2
         },
         "injured": {
-          "kmPerActiveDay": 0.963,
-          "daysPerTile": 2
+          "kmPerActiveDay": 0.729954,
+          "daysPerTile": 3
         }
       }
     },
@@ -138,7 +154,7 @@
       "detail": {
         "startTile": "tile:110:57",
         "after60Days": "tile:110:57",
-        "travelArmDistinctPositions": 5
+        "travelArmDistinctPositions": 9
       }
     },
     {
@@ -147,35 +163,36 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "firstRunSteps": 5,
-        "secondRunSteps": 5
+        "firstRunSteps": 9,
+        "secondRunSteps": 9
       }
     },
     {
-      "id": "V9_travel_creates_no_material_capability",
-      "claim": "no receipt, no storage and no ration appears during the journey — travel subsistence is UNBUILT and is not faked",
+      "id": "V9_travel_support_is_physically_sourced_or_absent",
+      "claim": "no ration, storage or capability appears from nothing — every support unit the group holds came from a real source that was really depleted, and a group that found nothing holds nothing",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "receiptsDuringTravel": 0,
+        "residentialReceiptsDuringTravel": 0,
         "storageCapacity": 0,
-        "NOT_IMPLEMENTED": "route foraging by the travelling bodies, and a physically debited carried provision stock; both need an authority that does not exist yet and neither is faked here"
+        "travelSupportUnits": 0,
+        "travelDepletionApplied": 0,
+        "note": "travel receipts are successor-owned and live on the lifecycle record; `seasonalFoodReceipts` describes receipts from a residential camp, which a walking group does not have"
       }
     },
     {
-      "id": "V10_FINDING_hunger_improves_during_travel_because_absent_support_reads_as_no_stress",
-      "claim": "the group's hunger FALLS while it walks with nothing to eat, because its `seasonalSupport` is absent by policy and the canonical nutrition derivation treats absent as unstressed — an unearned improvement produced by a correct reset",
+      "id": "V10_hunger_never_improves_without_physically_extracted_support",
+      "claim": "the group's hunger over the journey may fall only if it physically took food from a real source and depleted it; walking is not eating",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "status": "REPRODUCED",
         "hunger": {
           "atDeparture": 0.14,
-          "atEnd": 0
+          "atEnd": 1
         },
-        "mechanism": "Band.seasonalSupport is INVALIDATE_UNTIL_LATER_PHASE (absent); all three hungerPressure writers derive it from that support through deriveCanonicalNutritionState, which reads absent as no stress",
-        "whyNotRepairedHere": "the fix is a travel subsistence authority (route foraging, or a debited carried stock); a hunger floor would be a tuned number standing in for a mechanism",
-        "consequence": "travel is currently EASIER than standing still, which is the opposite of the interim this pass wanted, and it is the blocking item for the travel-subsistence work"
+        "travelSupportUnits": 0,
+        "travelDepletionApplied": 0,
+        "mechanism": "the departure seam supplies an opening measured interval from the founders' own lived samples, and provisionalTravelSubsistence closes further intervals from what the group physically extracted"
       }
     }
   ]

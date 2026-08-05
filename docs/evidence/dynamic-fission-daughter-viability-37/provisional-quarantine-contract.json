@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T19:58:21.053Z",
+  "generatedAt": "2026-08-05T19:35:43.651Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "observeDays": 400,
@@ -41,7 +41,7 @@
         "dependents": 2,
         "elders": 1,
         "status": "foraging",
-        "hungerPressure": 0.93,
+        "hungerPressure": 1,
         "diseaseBurden": 0.08,
         "injuryBurden": 0.06,
         "mortalityRisk": 0.08,
@@ -58,7 +58,7 @@
         "residentialAnchor": 0,
         "knownTiles": 15,
         "storageCapacity": 0,
-        "provisionalPhase": "establishing"
+        "provisionalPhase": "returning"
       },
       "changedFields": [
         "dependents",
@@ -101,7 +101,7 @@
         "dependents": 2,
         "elders": 1,
         "status": "moving",
-        "hungerPressure": 0.69,
+        "hungerPressure": 0.72,
         "diseaseBurden": 0.08,
         "injuryBurden": 0.06,
         "mortalityRisk": 0.08,
@@ -248,7 +248,7 @@
         "movedOnlyWhileQuarantined": [
           "provisionalPhase"
         ],
-        "finalPhase": "establishing"
+        "finalPhase": "returning"
       }
     },
     {
@@ -299,7 +299,7 @@
         },
         "hungerPressure": {
           "first": 0.14,
-          "last": 0.93
+          "last": 1
         }
       }
     },
@@ -401,7 +401,7 @@
         "status": "NOT_REPRODUCED_IN_THIS_WINDOW",
         "quarantineEndedAfterDays": 400,
         "windowDays": 400,
-        "finalPhase": "establishing",
+        "finalPhase": "returning",
         "stillInTheWorld": true,
         "isEstablishedBandNow": false,
         "populationStillHeld": 11,

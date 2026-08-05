@@ -1,0 +1,936 @@
+{
+  "generatedAt": "2026-08-05T19:35:18.897Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "donorBandId": "band:varied-river-mid",
+  "controlledTiles": {
+    "withPatch": "tile:17:0",
+    "withoutPatch": "tile:1:0"
+  },
+  "summary": {
+    "total": 38,
+    "passing": 38,
+    "failing": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "N1_hunger_does_not_fall_when_no_support_exists",
+      "claim": "a day of walking on ground that holds no edible plants leaves every measured stress term exactly where it was — walking is not eating",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "before": {
+          "currentFoodStress": 0,
+          "recentFoodStress": 0.31,
+          "chronicFoodStress": 0.21,
+          "recoveryRelief": 0.25,
+          "nutritionalSurplus": 0,
+          "foodMovementPressure": 0.14,
+          "foodDemographicPressure": 0.15,
+          "nutritionStateAvailable": true
+        },
+        "after": {
+          "currentFoodStress": 0,
+          "recentFoodStress": 0.31,
+          "chronicFoodStress": 0.21,
+          "recoveryRelief": 0.25,
+          "nutritionalSurplus": 0,
+          "foodMovementPressure": 0.14,
+          "foodDemographicPressure": 0.15,
+          "nutritionStateAvailable": true
+        },
+        "day": {
+          "day": 2101,
+          "tileId": "tile:1:0",
+          "gatherShare": 0.242,
+          "gatheringWorkers": 1,
+          "requestedUnits": 0.035,
+          "harvestedUnits": 0,
+          "usableUnits": 0,
+          "depletionApplied": 0,
+          "demandUnits": 0.0756,
+          "waterStress": 0.4932,
+          "sourceKind": "none",
+          "failureReason": "physical_source_absent"
+        }
+      }
+    },
+    {
+      "id": "N10_zero_support_contributes_to_decline",
+      "claim": "the day is CHARGED: real demand accumulates against zero support, so an interval closed on such days reads a deficit rather than silence",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "interval": {
+          "intervalStartDay": 2101,
+          "lastAdvancedDay": 2101,
+          "daysElapsed": 1,
+          "demandUnits": 0.0756,
+          "supportUnits": 0,
+          "harvestUnits": 0,
+          "processingLossUnits": 0,
+          "depletionApplied": 0,
+          "gatheringDays": 1,
+          "gatheringDaysWithAnyTake": 0,
+          "waterStressDaySum": 0.4932,
+          "daysWithoutWater": 1,
+          "recentDays": [
+            {
+              "day": 2101,
+              "tileId": "tile:1:0",
+              "gatherShare": 0.242,
+              "gatheringWorkers": 1,
+              "requestedUnits": 0.035,
+              "harvestedUnits": 0,
+              "usableUnits": 0,
+              "depletionApplied": 0,
+              "demandUnits": 0.0756,
+              "waterStress": 0.4932,
+              "sourceKind": "none",
+              "failureReason": "physical_source_absent"
+            }
+          ],
+          "closedIntervals": 0
+        }
+      }
+    },
+    {
+      "id": "N2_missing_seasonal_support_is_not_permanent_neutral_relief",
+      "claim": "a successor cannot be constructed nutritionally unmeasured: the seam supplies the founders' own lived samples and REFUSES the departure otherwise, so the neutral branch is unreachable for the group this item is about",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "unmeasuredBranchStillReadsNeutral": true,
+        "constructedIsMeasured": true,
+        "constructedCurrentFoodStress": 0,
+        "refusalIfAny": null
+      }
+    },
+    {
+      "id": "N3_physical_route_extraction_can_produce_bounded_support",
+      "claim": "standing on ground that holds an edible patch, the group's gathering workers take a real, bounded amount through the canonical plant-harvest owner",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "day": {
+          "day": 2101,
+          "tileId": "tile:17:0",
+          "gatherShare": 0.242,
+          "gatheringWorkers": 1,
+          "requestedUnits": 0.035,
+          "harvestedUnits": 0.035,
+          "usableUnits": 0.0302,
+          "depletionApplied": 0.035,
+          "demandUnits": 0.0756,
+          "waterStress": 0.4752,
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:17:0:roots_tubers_uso"
+        }
+      }
+    },
+    {
+      "id": "N4_extraction_depletes_the_physical_source",
+      "claim": "the patch the group ate from is measurably more depleted afterwards — support and depletion are the two sides of one physical act",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "patchId": "plant:tile:17:0:roots_tubers_uso",
+        "depletionBefore": 0,
+        "depletionAfter": 0.9722,
+        "applied": 0.035
+      }
+    },
+    {
+      "id": "N5_no_duplicate_receipt_for_the_same_day",
+      "claim": "advancing the same day twice charges the day exactly once — a re-entrant caller or a differently batched step mode cannot feed a group twice",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "once": {
+          "intervalStartDay": 2101,
+          "lastAdvancedDay": 2101,
+          "daysElapsed": 1,
+          "demandUnits": 0.0756,
+          "supportUnits": 0.0302,
+          "harvestUnits": 0.035,
+          "processingLossUnits": 0.0048,
+          "depletionApplied": 0.035,
+          "gatheringDays": 1,
+          "gatheringDaysWithAnyTake": 1,
+          "waterStressDaySum": 0.4752,
+          "daysWithoutWater": 1,
+          "recentDays": [
+            {
+              "day": 2101,
+              "tileId": "tile:17:0",
+              "gatherShare": 0.242,
+              "gatheringWorkers": 1,
+              "requestedUnits": 0.035,
+              "harvestedUnits": 0.035,
+              "usableUnits": 0.0302,
+              "depletionApplied": 0.035,
+              "demandUnits": 0.0756,
+              "waterStress": 0.4752,
+              "sourceKind": "plant_patch",
+              "sourceId": "plant:tile:17:0:roots_tubers_uso"
+            }
+          ],
+          "closedIntervals": 0
+        },
+        "twice": {
+          "intervalStartDay": 2101,
+          "lastAdvancedDay": 2101,
+          "daysElapsed": 1,
+          "demandUnits": 0.0756,
+          "supportUnits": 0.0302,
+          "harvestUnits": 0.035,
+          "processingLossUnits": 0.0048,
+          "depletionApplied": 0.035,
+          "gatheringDays": 1,
+          "gatheringDaysWithAnyTake": 1,
+          "waterStressDaySum": 0.4752,
+          "daysWithoutWater": 1,
+          "recentDays": [
+            {
+              "day": 2101,
+              "tileId": "tile:17:0",
+              "gatherShare": 0.242,
+              "gatheringWorkers": 1,
+              "requestedUnits": 0.035,
+              "harvestedUnits": 0.035,
+              "usableUnits": 0.0302,
+              "depletionApplied": 0.035,
+              "demandUnits": 0.0756,
+              "waterStress": 0.4752,
+              "sourceKind": "plant_patch",
+              "sourceId": "plant:tile:17:0:roots_tubers_uso"
+            }
+          ],
+          "closedIntervals": 0
+        }
+      }
+    },
+    {
+      "id": "N6_no_ordinary_trip_executes_for_a_walking_group",
+      "claim": "the quarantine still holds: a provisional group runs no same-day subsistence trips and earns no residential food receipts, so its support can only come from the travel authority",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "trips": 0,
+        "residentialReceipts": "absent",
+        "travelDays": 12
+      }
+    },
+    {
+      "id": "N7_movement_and_gathering_compete_for_worker_effort",
+      "claim": "a group with a measured deficit on ground that HAS been giving spends more of the day looking for food and correspondingly less of it covering distance; the two shares always sum to one",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "fed": {
+          "gatherShare": 0.2,
+          "gatheringWorkers": 1,
+          "movementShare": 0.8,
+          "measuredNeed": 0
+        },
+        "hungry": {
+          "gatherShare": 0.8,
+          "gatheringWorkers": 3,
+          "movementShare": 0.2,
+          "measuredNeed": 1
+        }
+      }
+    },
+    {
+      "id": "N8_water_absence_has_a_real_consequence",
+      "claim": "the water the group can reach is measured on the ground it is standing on, and standing somewhere dry produces a measurably worse day than standing somewhere wet",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "dry": {
+          "tile": "tile:34:3",
+          "waterAccess": 0,
+          "waterStress": 0.52
+        },
+        "wet": {
+          "tile": "tile:86:72",
+          "waterAccess": 1,
+          "waterStress": 0
+        }
+      }
+    },
+    {
+      "id": "N9_no_unearned_carried_provisions",
+      "claim": "no support ever appears without an extraction that depleted a real source: on every day the ground held nothing the group got nothing, and across the whole window support and depletion rise together — there is no stock carried out of the parent's camp, because production has none to debit",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "openInterval": {
+          "intervalStartDay": 2114,
+          "lastAdvancedDay": 2120,
+          "daysElapsed": 6,
+          "demandUnits": 0.4536,
+          "supportUnits": 0.029,
+          "harvestUnits": 0.0336,
+          "processingLossUnits": 0.0046,
+          "depletionApplied": 0.0336,
+          "gatheringDays": 6,
+          "gatheringDaysWithAnyTake": 1,
+          "waterStressDaySum": 2.9509,
+          "daysWithoutWater": 6,
+          "closedIntervals": 1
+        },
+        "daysObserved": 6,
+        "daysWithNoSource": 2,
+        "supportOnSourcelessDays": 0
+      }
+    },
+    {
+      "id": "B11_successor_only_injury_survives_reintegration",
+      "claim": "an episode the group earned on the road is still in the parent's ring afterwards — walking home is not a cure",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "merge": {
+          "parentEpisodesBefore": 10,
+          "returningEpisodesBefore": 5,
+          "sharedEpisodeIds": 4,
+          "returningOnlyEpisodes": 1,
+          "mergedEpisodes": 11,
+          "retainedEpisodes": 10,
+          "droppedByCap": 1,
+          "activeEpisodesRetained": 5,
+          "activeEpisodesDropped": 0,
+          "effectRederivedFromMergedRing": true,
+          "noEpisodeReplayed": true,
+          "cohortAttributionUnavailable": true
+        },
+        "roadInjuryRetained": true
+      }
+    },
+    {
+      "id": "B12_duplicate_episode_ids_are_merged_once",
+      "claim": "the episodes the founders carried out exist on BOTH sides under the same ids, and each appears exactly once afterwards — one injury does not become two recoveries",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "merge": {
+          "parentEpisodesBefore": 10,
+          "returningEpisodesBefore": 5,
+          "sharedEpisodeIds": 4,
+          "returningOnlyEpisodes": 1,
+          "mergedEpisodes": 11,
+          "retainedEpisodes": 10,
+          "droppedByCap": 1,
+          "activeEpisodesRetained": 5,
+          "activeEpisodesDropped": 0,
+          "effectRederivedFromMergedRing": true,
+          "noEpisodeReplayed": true,
+          "cohortAttributionUnavailable": true
+        }
+      }
+    },
+    {
+      "id": "B13_parent_burden_is_retained",
+      "claim": "no episode the parent already held is dropped in favour of the returning group's",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "parentBefore": 10,
+        "retained": 10
+      }
+    },
+    {
+      "id": "B14_the_ring_cap_is_deterministic",
+      "claim": "the merged ring never exceeds the production cap and everything the cap removes is counted rather than lost",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "retained": 10,
+        "dropped": 1
+      }
+    },
+    {
+      "id": "B15_the_active_effect_is_rederived_from_the_merged_ring",
+      "claim": "the merged group's active effect is recomputed from the merged episodes rather than carried from either side, so a burden in the record is a burden in the world",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "rederived": {
+          "activityEfficiencyPenalty": 0.18,
+          "extraSeasonalStress": 0.14,
+          "mortalityRiskBump": 0.06,
+          "movementCautionBump": 0.18,
+          "knowledgeUpdateWeight": 0.5,
+          "recoverySeasons": 3
+        },
+        "roadInjuryRecoverySeasons": 3
+      }
+    },
+    {
+      "id": "B16_no_episode_is_replayed",
+      "claim": "no episode's recovery timer is reset and no consequence is re-applied — an episode is a record of something that happened, and merging two records does not make it happen again",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "noReplay": true
+      }
+    },
+    {
+      "id": "B17_returned_hunger_does_not_become_instant_relief",
+      "claim": "absorbing a group that is measurably hungrier never leaves the camp better fed than it was, and the merged reading replaces the camp's current one rather than extending its window",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "parentHungerBefore": 0.14,
+        "successorHunger": 0.14,
+        "parentHungerAfter": 0.3,
+        "parentReliefedByAbsorbingAHungrierGroup": false,
+        "successorAcuteRiskEpisodes": 10,
+        "returningOnlyBurdenSurvived": true,
+        "fieldTreatments": {
+          "demography.cohorts": "exact_aggregate_merge",
+          "demography.accumulators": "exact_aggregate_merge",
+          "acuteRisk": "exact_aggregate_merge",
+          "seasonalSupport": "conservative_burden",
+          "hungerPressure": "conservative_burden",
+          "provisionalSuccessor.travelSubsistence": "invalidate",
+          "carryingCapacity": "recompute_at_next_cadence",
+          "populationDemand": "recompute_at_next_cadence",
+          "perCapitaReturn": "recompute_at_next_cadence",
+          "rangeSaturation": "recompute_at_next_cadence",
+          "bodyCampLogistics": "recompute_at_next_cadence",
+          "deathMemory": "historical_only",
+          "provisionalSuccessor": "historical_only"
+        },
+        "claim": "no_unearned_relief"
+      }
+    },
+    {
+      "id": "B18_world_cohorts_remain_conserved",
+      "claim": "every cohort line adds exactly and world population is measured from the resulting world rather than restated from the before value",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "popBefore": 243,
+        "popAfter": 243,
+        "demographic": {
+          "parentBefore": {
+            "workingAdults": 19,
+            "dependents": 11,
+            "elders": 4
+          },
+          "successorBefore": {
+            "workingAdults": 4,
+            "dependents": 3,
+            "elders": 1
+          },
+          "parentAfter": {
+            "workingAdults": 23,
+            "dependents": 14,
+            "elders": 5
+          },
+          "worldPopulationBefore": 243,
+          "worldPopulationAfter": 243,
+          "populationConserved": true,
+          "workingAdultsConserved": true,
+          "dependentsConserved": true,
+          "eldersConserved": true,
+          "measuredFromResultingWorld": true,
+          "fixedRatioRecomputeUsed": false
+        }
+      }
+    },
+    {
+      "id": "C19_worsening_lived_conditions_can_trigger_return_intent",
+      "claim": "a group whose own measured support covered a tenth of what its bodies needed over twenty days decides to walk home, and names why",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "shouldReturn": true,
+        "cause": "measured_support_failed_at_this_site",
+        "measured": {
+          "measuredDays": 20,
+          "supportRatio": 0.05,
+          "noWaterDayShare": 0.1,
+          "blockedStepDays": 0,
+          "workingAdults": 4,
+          "mortalityBump": 0.06
+        }
+      }
+    },
+    {
+      "id": "C20_good_lived_conditions_do_not_trigger_the_same_return",
+      "claim": "the identical group with the identical machinery, differing only in what it managed to eat, does not decide to leave — the trigger reads evidence rather than firing on a schedule",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "shouldReturn": false,
+        "measured": {
+          "measuredDays": 20,
+          "supportRatio": 1.1,
+          "noWaterDayShare": 0,
+          "blockedStepDays": 0,
+          "workingAdults": 4,
+          "mortalityBump": 0.06
+        }
+      }
+    },
+    {
+      "id": "C21_hidden_parent_movement_is_not_read",
+      "claim": "moving the parent and collapsing it to one person changes the decision NOT AT ALL — the authority takes a band and a day and has no world to read a parent from",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "withParentHome": "measured_support_failed_at_this_site",
+        "withParentMovedAndCollapsed": "measured_support_failed_at_this_site"
+      }
+    },
+    {
+      "id": "C22_return_intent_does_not_teleport",
+      "claim": "deciding to go home changes the phase and NOT the position; the walk itself is still the contiguous travel writer's",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "phase": "returning",
+        "position": "tile:17:0",
+        "cause": "measured_support_failed_at_this_site"
+      }
+    },
+    {
+      "id": "C23_parent_absence_prevents_reintegration",
+      "claim": "the group walks to the tile it left from, finds nobody, and is refused — it keeps its people, is not retargeted at a position it cannot observe, and does not disappear",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "refusal": "not_physically_co_located",
+        "detail": "parent at tile:1:0, successor at tile:110:57"
+      }
+    },
+    {
+      "id": "S24_arrival_alone_cannot_stabilize",
+      "claim": "a group that has only just arrived holds none of the site evidence and stays provisional",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "assessment": {
+          "bandId": "band:fixture:provisional",
+          "siteTileId": "tile:17:0",
+          "signals": [
+            {
+              "id": "measured_support_intervals_at_this_site",
+              "sourceAuthority": "provisionalTravelSubsistence.closeTravelSupportInterval -> seasonalSurvival.recordSupportInterval",
+              "holds": false,
+              "measured": 0,
+              "required": 2
+            },
+            {
+              "id": "measured_support_covered_a_real_share_of_demand",
+              "sourceAuthority": "seasonalSurvival.deriveCanonicalNutritionState over the intervals closed at this site",
+              "holds": true,
+              "measured": 1,
+              "required": 0.35,
+              "acquiredDay": 2101
+            },
+            {
+              "id": "food_repeatedly_taken_from_local_sources",
+              "sourceAuthority": "plantStock.resolvePlantFoodHarvest, counted on days the take was real",
+              "holds": false,
+              "measured": 0,
+              "required": 4
+            },
+            {
+              "id": "water_reachable_where_the_group_lives",
+              "sourceAuthority": "the standing tile's own water access, measured daily by provisionalTravelSubsistence",
+              "holds": false,
+              "measured": 1,
+              "required": 0.4
+            },
+            {
+              "id": "productive_labour_retained",
+              "sourceAuthority": "Band.demography.workingAdults",
+              "holds": true,
+              "measured": 4,
+              "required": 2,
+              "acquiredDay": 2101
+            },
+            {
+              "id": "embodied_burden_bounded",
+              "sourceAuthority": "acuteRisk.activeEffect.mortalityRiskBump",
+              "holds": true,
+              "measured": 0.06,
+              "required": 0.3,
+              "acquiredDay": 2101
+            },
+            {
+              "id": "long_enough_to_reject_one_lucky_day",
+              "sourceAuthority": "days physically spent at this site",
+              "holds": false,
+              "measured": 0,
+              "required": 30
+            }
+          ],
+          "satisfiedSignals": 3,
+          "requiredSignals": 3,
+          "windowClosed": false,
+          "outcome": "keep_trying"
+        }
+      }
+    },
+    {
+      "id": "S25_elapsed_time_alone_cannot_stabilize",
+      "claim": "three hundred days at a site with no measured support, no local take and no water evidence produce a NEXT WINDOW, never a success — a timer can end the trying and can never end it well",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "outcome": "next_window",
+        "satisfied": 5,
+        "signals": [
+          {
+            "id": "measured_support_intervals_at_this_site",
+            "sourceAuthority": "provisionalTravelSubsistence.closeTravelSupportInterval -> seasonalSurvival.recordSupportInterval",
+            "holds": false,
+            "measured": 0,
+            "required": 2
+          },
+          {
+            "id": "measured_support_covered_a_real_share_of_demand",
+            "sourceAuthority": "seasonalSurvival.deriveCanonicalNutritionState over the intervals closed at this site",
+            "holds": true,
+            "measured": 1,
+            "required": 0.35,
+            "acquiredDay": 2101
+          },
+          {
+            "id": "food_repeatedly_taken_from_local_sources",
+            "sourceAuthority": "plantStock.resolvePlantFoodHarvest, counted on days the take was real",
+            "holds": false,
+            "measured": 0,
+            "required": 4
+          },
+          {
+            "id": "water_reachable_where_the_group_lives",
+            "sourceAuthority": "the standing tile's own water access, measured daily by provisionalTravelSubsistence",
+            "holds": true,
+            "measured": 0,
+            "required": 0.4,
+            "acquiredDay": 2101
+          },
+          {
+            "id": "productive_labour_retained",
+            "sourceAuthority": "Band.demography.workingAdults",
+            "holds": true,
+            "measured": 4,
+            "required": 2,
+            "acquiredDay": 2101
+          },
+          {
+            "id": "embodied_burden_bounded",
+            "sourceAuthority": "acuteRisk.activeEffect.mortalityRiskBump",
+            "holds": true,
+            "measured": 0.06,
+            "required": 0.3,
+            "acquiredDay": 2101
+          },
+          {
+            "id": "long_enough_to_reject_one_lucky_day",
+            "sourceAuthority": "days physically spent at this site",
+            "holds": true,
+            "measured": 300,
+            "required": 30,
+            "acquiredDay": 2101
+          }
+        ]
+      }
+    },
+    {
+      "id": "S26_inherited_parent_support_cannot_stabilize",
+      "claim": "the parent's own support record, carried whole, does not satisfy the site signals: the intervals, the local takes and the water all have to be measured HERE",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "satisfied": 5,
+        "failing": [
+          "measured_support_intervals_at_this_site",
+          "food_repeatedly_taken_from_local_sources"
+        ]
+      }
+    },
+    {
+      "id": "S28_one_lucky_day_is_insufficient",
+      "claim": "a group with real food, real water and two measured intervals still does not stabilize after three days — the duration signal is a separate necessary condition, not a tie-breaker",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "satisfied": 5,
+        "signals": [
+          {
+            "id": "measured_support_intervals_at_this_site",
+            "holds": true,
+            "measured": 2
+          },
+          {
+            "id": "measured_support_covered_a_real_share_of_demand",
+            "holds": true,
+            "measured": 0.8
+          },
+          {
+            "id": "food_repeatedly_taken_from_local_sources",
+            "holds": false,
+            "measured": 3
+          },
+          {
+            "id": "water_reachable_where_the_group_lives",
+            "holds": true,
+            "measured": 0.1
+          },
+          {
+            "id": "productive_labour_retained",
+            "holds": true,
+            "measured": 4
+          },
+          {
+            "id": "embodied_burden_bounded",
+            "holds": true,
+            "measured": 0.06
+          },
+          {
+            "id": "long_enough_to_reject_one_lucky_day",
+            "holds": false,
+            "measured": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "S27_physical_support_evidence_can_contribute",
+      "claim": "the food and water signals are earned from measured physical facts and DO hold when those facts are there — the null in S25 is a real null and not an insensitive instrument",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "signals": [
+          {
+            "id": "measured_support_intervals_at_this_site",
+            "holds": true,
+            "measured": 2,
+            "required": 2
+          },
+          {
+            "id": "measured_support_covered_a_real_share_of_demand",
+            "holds": true,
+            "measured": 0.8,
+            "required": 0.35
+          },
+          {
+            "id": "food_repeatedly_taken_from_local_sources",
+            "holds": true,
+            "measured": 20,
+            "required": 4
+          },
+          {
+            "id": "water_reachable_where_the_group_lives",
+            "holds": true,
+            "measured": 0.1,
+            "required": 0.4
+          },
+          {
+            "id": "productive_labour_retained",
+            "holds": true,
+            "measured": 4,
+            "required": 2
+          },
+          {
+            "id": "embodied_burden_bounded",
+            "holds": true,
+            "measured": 0.06,
+            "required": 0.3
+          },
+          {
+            "id": "long_enough_to_reject_one_lucky_day",
+            "holds": true,
+            "measured": 60,
+            "required": 30
+          }
+        ]
+      }
+    },
+    {
+      "id": "S29_sustained_measured_independence_can_stabilize",
+      "claim": "sixty days of feeding and watering itself at one site, with intervals measured there, makes the group an ordinary band — poor and fragile is allowed; unmeasured is not",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "phase": "stabilized",
+        "satisfied": 7,
+        "acquiredDays": [
+          {
+            "id": "measured_support_intervals_at_this_site",
+            "acquiredDay": 2101
+          },
+          {
+            "id": "measured_support_covered_a_real_share_of_demand",
+            "acquiredDay": 2101
+          },
+          {
+            "id": "food_repeatedly_taken_from_local_sources",
+            "acquiredDay": 2101
+          },
+          {
+            "id": "water_reachable_where_the_group_lives",
+            "acquiredDay": 2101
+          },
+          {
+            "id": "productive_labour_retained",
+            "acquiredDay": 2101
+          },
+          {
+            "id": "embodied_burden_bounded",
+            "acquiredDay": 2101
+          },
+          {
+            "id": "long_enough_to_reject_one_lucky_day",
+            "acquiredDay": 2101
+          }
+        ]
+      }
+    },
+    {
+      "id": "S30_stabilization_enables_established_behaviour_only_afterwards",
+      "claim": "before the transition the group is excluded from every ordinary system; after it, the lifecycle predicate stops calling it provisional and it is admitted — and not one moment earlier",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "beforeProvisional": true,
+        "afterProvisional": false
+      }
+    },
+    {
+      "id": "S31_no_same_tick_double_processing",
+      "claim": "running the establishment authority again on the same day does nothing to a group that has already stabilized — the phase is terminal and the writer skips it",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "secondPassAssessments": 0
+      }
+    },
+    {
+      "id": "S32_no_viability_storage_or_proto_camp_is_gifted",
+      "claim": "stabilizing grants exactly one thing — admission to the ordinary systems — and no viability, no storage, no camp and no receipt comes with it",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "viability": null,
+        "storageCapacity": 0,
+        "protoCamp": "absent",
+        "receipts": "absent"
+      }
+    },
+    {
+      "id": "Z33_failed_return_cycles_cannot_continue_forever",
+      "claim": "a lineage that has spent its return attempts gets exactly ONE more transition — into trying to live where it stands — and neither the resolver nor the evidence-based trigger will start another journey",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "afterBound": "establishing",
+        "afterAnotherFourHundredDays": "establishing",
+        "causalRetryDecisions": 0,
+        "cycles": 3,
+        "maxCycles": 3
+      }
+    },
+    {
+      "id": "Z34_no_timer_kills_living_people",
+      "claim": "no expiry anywhere in the table resolves a living group to a terminal outcome; every timeout lands on a phase the group can still act from",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "timeouts": [
+          {
+            "from": "proposed",
+            "to": "abandoned",
+            "targetTerminal": true
+          },
+          {
+            "from": "committed",
+            "to": "abandoned",
+            "targetTerminal": true
+          },
+          {
+            "from": "departure_ready",
+            "to": "abandoned",
+            "targetTerminal": true
+          },
+          {
+            "from": "travelling",
+            "to": "returning",
+            "targetTerminal": false
+          },
+          {
+            "from": "establishing",
+            "to": "failed_early",
+            "targetTerminal": false
+          },
+          {
+            "from": "failed_early",
+            "to": "returning",
+            "targetTerminal": false
+          },
+          {
+            "from": "returning",
+            "to": "establishing",
+            "targetTerminal": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "Z35_no_timer_reintegrates",
+      "claim": "elapsed time cannot claim the people reached their parent, even when it also claims co-location",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "ok": false,
+        "rejection": "terminal_outcome_requires_a_physical_event"
+      }
+    },
+    {
+      "id": "Z36_no_timer_stabilizes",
+      "claim": "elapsed time cannot claim a group functioned, even when it also claims a full set of evidence",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "ok": false,
+        "rejection": "terminal_outcome_requires_a_physical_event"
+      }
+    },
+    {
+      "id": "Z37_every_constructed_lineage_resolves_within_its_declared_bound",
+      "claim": "a group at zero bodies resolves to `provisional_extinguished` through the fission lifecycle rather than sitting in the world unreachable by anything",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "resolutions": [
+          {
+            "bandId": "band:fixture:provisional",
+            "lineageId": "LIN-FIXTURE",
+            "fromPhase": "establishing",
+            "toPhase": "provisional_extinguished",
+            "populationAtResolution": 0,
+            "reason": "zero_physical_population",
+            "resolutionCycles": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "Z38_zero_bodies_resolve_exactly_once",
+      "claim": "the resolver does not resolve the same dead group a second time — the phase is terminal and the kernel refuses",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "secondPassResolutions": 0
+      }
+    }
+  ]
+}

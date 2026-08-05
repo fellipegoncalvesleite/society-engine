@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T15:09:36.733Z",
+  "generatedAt": "2026-08-05T19:35:39.310Z",
   "checkpoint": "ROADMAP ITEM 4 §3 + §9 — provisional successor through the real runner",
   "seed": "audit27:natural:s1",
   "warmDays": 1800,
@@ -75,6 +75,21 @@
         "viabilityAssertedAtDeparture": false,
         "bodyCampLogisticsRecomputed": false,
         "note": "L7 — body/camp summaries are NOT recomputed here. They are derived state and must follow honest cohorts, condition, material capability, location and travel state, which the provisional lifecycle establishes. Recomputing them at this seam would be recomputing from inputs that are not yet complete."
+      },
+      "transfer": {
+        "bandFieldsClassified": 133,
+        "policyViolations": [],
+        "pendingRecomputeFields": [
+          "socialPressure"
+        ],
+        "fieldsStillHoldingTheParentsObject": 5,
+        "sharedByReferenceFields": [
+          "health",
+          "subsistenceModes",
+          "deathMemory",
+          "socialPressure",
+          "biomeAdaptation"
+        ]
       }
     }
   },
@@ -176,7 +191,8 @@
           "fromPhase": "travelling",
           "toPhase": "provisional_extinguished",
           "populationAtResolution": 0,
-          "reason": "zero_physical_population"
+          "reason": "zero_physical_population",
+          "resolutionCycles": 0
         }
       ],
       "phaseAfter": "provisional_extinguished",

@@ -184,7 +184,12 @@ export function deriveTravelEffortSplit(band: Band): {
     gatherShare: round4(gatherShare),
     // Workers, not bodies. CORRECTION-34D's rule: consumption is charged on bodies and work on
     // productive labour, so dependents and elders eat here and gather nothing.
-    gatheringWorkers: Math.floor(workers * gatherShare),
+    //
+    // Rounded rather than floored, with a floor of one for any group that has a worker at all: a
+    // fixture caught `Math.floor` allocating ZERO gatherers to a group of four at a fifth of a day,
+    // so a small comfortable group walked past every patch it stood on without anyone looking. People
+    // walking through country keep an eye out; what varies is how much of the day goes to it.
+    gatheringWorkers: workers <= 0 ? 0 : Math.max(1, Math.round(workers * gatherShare)),
     movementShare: round4(1 - gatherShare),
     measuredNeed: round4(measuredNeed),
   };

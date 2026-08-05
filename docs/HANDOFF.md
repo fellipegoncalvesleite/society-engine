@@ -11575,3 +11575,35 @@ exception; daughter colours related-but-distinct and never visually confusing.
   maps with a new daily action registered. **Published and NOT fixed: travel makes a group less
   hungry because a correctly reset support history reads as no stress**; ten acute-risk episodes walk
   home unmerged. Item 3 frozen; **Item 5 not started.**
+
+- **2026-08-05 — ROADMAP ITEM 4 TRAVEL SUBSISTENCE, EMBODIED RETURN AND EVIDENCE-BASED RESOLUTION —
+  PROGRESS / NATURAL CUTOVER NOT BEGUN / NOT PUSHED.** **The hunger relief was not a missing floor.**
+  Traced link by link on a real departure: the departure resets `seasonalSupport` correctly, the group
+  then walks onto ground it has **never observed**, `deriveCarryingCapacity` refuses without an observed
+  record of the band's own position, `updateSeasonalSupportState` returns its absent previous value, and
+  `deriveCanonicalNutritionState(undefined)` returns every stress term at 0. **The group was never
+  asked** — and the food ledger was reporting `rawSupportRatio: 0` / `foodStress: 1` the whole time.
+  The successor now departs **measured**, carrying the samples its own bodies lived (`seasonalSupport`
+  reclassified `FOUNDER_CARRIED_EMBODIED_BURDEN / computed` because a support ratio is INTENSIVE and
+  chronicity is embodied), and the seam **refuses** a departure that would leave it unmeasured or better
+  off on any of four nutrition terms. `recordSupportInterval` is extracted from
+  `updateSeasonalSupportState`, so one writer serves two sample producers. New
+  `provisionalTravelSubsistence.ts` gives a walking group a day — workers split between ground and food,
+  extraction through the canonical `resolvePlantFoodHarvest` with real depletion and no transport loss,
+  water off the standing tile with carried water only through the existing learned-practice authority,
+  and an interval of its own. **Debited carried provisions was rejected on inspection: there is no such
+  stock.** New `provisionalReturnDecision.ts` is the single writer of the transition into `returning`
+  and takes **a band and a day and no world**. New `provisionalEstablishment.ts` requires **seven named
+  lived-evidence signals, every one of which must hold**, with the stay-floor equal to the go-home
+  floor. `acuteRisk.ts` gains the burden merge: union by episode id, effect rederived, active episodes
+  outranking remembered ones at the cap. **38/38 fixtures, 0 failing, 0 vacuous.** Step-mode invariance
+  `fullCanonicalStateMatch: true` on both maps with three new daily actions registered; season-order,
+  food pipeline, mobility authority and catchment invariants all PASS; graph 221/764 and import boundary
+  85 unchanged. **Four of this pass's own fixtures caught real defects in its own code** (R5's appended
+  sample, E6's four-against-three cycle ledger, N3/N4's floored gatherers) and two more reported a
+  production defect that was **entirely the instrument's**. **Published and NOT done: fauna and aquatic
+  travel extraction; any history, Chronicle or UI surface for the whole lifecycle; the selected-band
+  projection carries no lifecycle field at all; the reader migration is INCOMPLETE at 5/12; nothing
+  calls the departure seam, so there is no natural-occurrence evidence for any of it.** Item 3 frozen;
+  **Item 5 not started.** Evidence: `TRAVEL_SUBSISTENCE_DECISION.md`,
+  `travel-subsistence-reproduction.json`, `provisional-subsistence-lifecycle.json`.
