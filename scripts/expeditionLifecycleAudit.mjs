@@ -36,12 +36,24 @@ try {
   const registry = await server.ssrLoadModule("/sim/agents/dailyActionRegistry.ts");
 
   // Slice A: the registry is a real, ordered, non-cyclic boundary.
+  //
+  // This asserted `length === 2`, which was true when Item 3 froze and stopped being true the moment
+  // ROADMAP ITEM 4 registered its four provisional daily actions. The audit then reported FAIL for a
+  // registry that was perfectly correct — a stale magic number standing in for the property it was
+  // supposed to protect, and it had been failing since `4a272e5` without being noticed, because a
+  // verification pass ran the Item 4 suites and not this one.
+  //
+  // The PROPERTY is what this check is for: the two Item 3 actions exist, in that order, ahead of
+  // everything registered later, and every entry is a real applicable action. A new action appended by
+  // a later item is not a regression; one that displaces trips or expeditions is.
+  const actionIds = (registry.DEFAULT_DAILY_ACTIONS ?? []).map((action) => action?.id);
   const registryOk =
     Array.isArray(registry.DEFAULT_DAILY_ACTIONS) &&
-    registry.DEFAULT_DAILY_ACTIONS.length === 2 &&
+    registry.DEFAULT_DAILY_ACTIONS.length >= 2 &&
     registry.DEFAULT_DAILY_ACTIONS.every((action) => typeof action?.apply === "function") &&
-    registry.DEFAULT_DAILY_ACTIONS[0].id === "intra-season-trips" &&
-    registry.DEFAULT_DAILY_ACTIONS[1].id === "expeditions";
+    actionIds[0] === "intra-season-trips" &&
+    actionIds[1] === "expeditions" &&
+    new Set(actionIds).size === actionIds.length;
 
   // §1: the duration boundary is real and is what splits the two paths.
   const durationBoundary = {

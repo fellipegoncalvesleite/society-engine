@@ -144,8 +144,25 @@ be read as resolving it.
 
 Added by the travel-subsistence / evidence-based-resolution pass. Each row names the reader, the
 authority it reads through, and whether the migration is genuinely done. **The overall Item 4 reader
-migration is NOT complete** and is not claimed to be: `bandLifecycleBoundaryAudit` reports
-`5/12 load-bearing readers migrated`, verdict `INCOMPLETE`, with seven pending and named.
+migration is NOT complete** and is not claimed to be.
+
+**TWO DIFFERENT COUNTS APPEAR IN THIS DOCUMENT AND THEY MEASURE DIFFERENT THINGS.** A verification
+pass found them coexisting without names, which reads as a contradiction. They are both true:
+
+```text
+SOURCE-MODULE MIGRATION:   5/12   — `bandLifecycleBoundaryAudit`, verdict INCOMPLETE.
+                                    Counts SOURCE FILES that read band state and must learn that a
+                                    provisional successor is not an ordinary band. Seven pending and
+                                    named: bandEvents, bandHistory, bodyCampLogistics, demography,
+                                    relationshipMemory, socialContext, simRunner.
+
+FUNCTIONAL-SEAM COVERAGE: 11/13   — the table below.
+                                    Counts the Item 4 SEAMS this pass was asked to migrate. Two
+                                    pending: serialization and history/read-model projection.
+```
+
+A seam can be migrated while modules that read around it are not, which is why the smaller number is
+the binding one. **Neither count may be cited as "Item 4 reader migration complete".**
 
 | reader | reads through | status | note |
 |---|---|---|---|
