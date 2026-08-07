@@ -31,8 +31,27 @@ let ordering;
 try {
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
+  const survival = await server.ssrLoadModule("/sim/agents/seasonalSurvival.ts");
 
   /** A parent carrying an attempt at departure_ready, plus everything the boundary reads. */
+  /**
+   * A support state produced the way production produces one: a sample handed to the single writer,
+   * which derives the windows, the streaks and the classification. `foodStress: 0.7` matches the
+   * `hungerPressure: 0.7` these fixtures give the parent, so the camp is hungry AND measured — which
+   * is the only combination a real band can be in.
+   */
+  const makeMeasuredSupport = (bandId) => survival.recordSupportInterval(
+    undefined,
+    {
+      tick: 1, year: 1, season: "summer",
+      rawSupportRatio: 0.3, clampedSupportRatio: 0.3, perCapitaReturn: 0.3,
+      seasonalModifier: 1, foodStress: 0.7, waterStress: 0.1, deficitRatio: 0.7, mode: "lean",
+    },
+    { id: bandId, demography: { population: 50, workingAdults: 29, dependents: 14, elders: 7 } },
+    { tick: 1, year: 1, season: "summer", day: 100 },
+    { topSeasonalSupportReasons: ["fixture: a measured, hungry camp"], replaceSameTickSample: true },
+  );
+
   const makeParent = (cohorts, opts = {}) => ({
     id: "parent",
     name: "Parent",
@@ -52,6 +71,18 @@ try {
       elders: cohorts.elders,
     },
     hungerPressure: opts.hungerPressure ?? 0.7,
+    // ── A MEASURED CAMP, because an unmeasured one is not a camp production can build ──
+    //
+    // These fixtures used to hand a parent `hungerPressure: 0.7` and NO `seasonalSupport`, which is a
+    // band that has never completed a physical-food interval yet somehow knows it is hungry. Production
+    // cannot produce that pairing: hunger is derived FROM the support state. The seam now refuses to
+    // send anybody out of an unmeasured camp — unconditionally, because guarding that refusal on the
+    // parent being measured was the exact hole it existed to close — so the omission stopped being
+    // invisible and started refusing D1, which cascaded into twelve errors downstream.
+    //
+    // Built through the production writer rather than by hand, so the fixture cannot invent a shape
+    // the real one would not produce. The sample is deliberately consistent with the hunger above.
+    seasonalSupport: opts.seasonalSupport ?? makeMeasuredSupport("parent"),
     acuteRisk: opts.acuteRisk ?? { severity: 0.4 },
     deathMemory: opts.deathMemory ?? { sourceEventIds: ["death:1"] },
     storageCapacity: opts.storageCapacity ?? 0.5,

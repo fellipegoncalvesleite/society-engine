@@ -436,10 +436,19 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
     // so a starving group became a comfortable one at the instant of departure and stayed that way
     // until an interval closed, which for a group standing on unobserved ground is never.
     //
-    // So the successor departs MEASURED, with exactly ONE sample: the season these bodies just lived,
-    // re-identified. No streaks, no rolling window, no classification earned by a camp — one honest
-    // reading of how fed these people are, which is the same reading they had yesterday, because
-    // yesterday they were standing in the same place eating the same food.
+    // So the successor departs MEASURED, carrying the founders' own lived samples re-identified, with
+    // every derived quantity — the rolling windows, the streaks, the classification — REBUILT from
+    // them by `recordSupportInterval` rather than copied. That is the whole window and its chronicity,
+    // deliberately: two years of deficit is a physiological fact about these bodies, and carrying only
+    // the newest sample dropped `chronicFoodStress` from 1 to 0.13 at the instant of departure.
+    //
+    // (An earlier revision of this comment claimed "exactly ONE sample, no streaks, no rolling window".
+    // That was never what `buildOpeningEmbodiedSupport` does — it loops over every inherited sample —
+    // and a verification pass caught the comment contradicting the function's own header. The header
+    // was right.)
+    //
+    // The window is bounded and self-clearing: each interval the successor closes pushes an inherited
+    // sample out, so within eight of its own measurements the record is entirely its own.
     seasonalSupport: buildOpeningEmbodiedSupport(parent, successorId, world.time),
 
     // ── DEGRADED_OR_PARTIAL_INHERITANCE ──
@@ -487,7 +496,23 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
   // be BELOW the camp's — walking out of a hungry camp does not feed anybody.
   const successorNutrition = deriveCanonicalNutritionState(successor.seasonalSupport);
   const parentNutrition = deriveCanonicalNutritionState(parent.seasonalSupport);
-  if (parentNutrition.nutritionStateAvailable && !successorNutrition.nutritionStateAvailable) {
+  // UNCONDITIONAL, and it was not. Guarding this on the PARENT being measured left the exact hole the
+  // refusal exists to close: an unmeasured parent produces an unmeasured successor, the antecedent is
+  // false, the departure is admitted, and `deriveCanonicalNutritionState(undefined)` hands every
+  // behavioural nutrition reader — demography's annual step, viability, foraging, storage suitability,
+  // resource ecology — a full set of zeroes to read as comfort. `hungerPressure` stays honest through
+  // FOUNDER_CARRIED_EMBODIED_BURDEN and travel hunger is therefore right, which is exactly what made
+  // the hole hard to see: one field told the truth while five readers were told nothing and assumed
+  // the best.
+  //
+  // The condition the successor needs is not a condition ABOUT the parent, so it does not mention one.
+  // This is CORRECTION-33's rule applied to a conjunct instead of a parameter: an invariant that reads
+  // less is an invariant that cannot be dodged by arranging for its antecedent to be false.
+  //
+  // Deferring the departure is the honest outcome, not a cost. Need does not guarantee departure, and
+  // a camp that cannot yet say how fed it is cannot yet send anybody out measured. The state is
+  // transient for production bands — one closed interval on an observed tile supplies it.
+  if (!successorNutrition.nutritionStateAvailable) {
     return { ok: false, refusal: "successor_would_depart_nutritionally_unmeasured" };
   }
   // Term by term, not on an average — the CORRECTION-34-era rule that a burden must not be softened on
