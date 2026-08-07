@@ -523,7 +523,8 @@ try {
     const emptyEst = {
       siteTileId: withPatch.id, sinceDay: day0, closedIntervalsAtEntry: 0,
       windowOpenedDay: day0, windowsAssessed: 0, daysAtSite: 0,
-      productiveGatheringDaysAtSite: 0, waterStressDaySumAtSite: 0, signals: [], satisfiedSignals: 0,
+      productiveGatheringDaysAtSite: 0, waterStressDaySumAtSite: 0,
+      supportUnitsAtSite: 0, demandUnitsAtSite: 0, signals: [], satisfiedSignals: 0,
     };
     // S24 — arrival alone.
     const justArrived = makeSuccessor(base, { phase: "establishing", position: withPatch.id, establishment: emptyEst });
@@ -585,7 +586,18 @@ try {
       r28.assessments[0].satisfiedSignals >= 4,
       { satisfied: r28.assessments[0].satisfiedSignals, signals: r28.assessments[0].signals.map((s) => ({ id: s.id, holds: s.holds, measured: s.measured })) },
     );
-    const sustained = { ...luckyDay, daysAtSite: 60, productiveGatheringDaysAtSite: 20, waterStressDaySumAtSite: 6 };
+    // ── UNIT / EVALUATOR INPUT — HAND-ASSIGNED, AND DECLARED AS SUCH ──
+    //
+    // Every number here is written by the fixture, not lived by anybody: the days at site, the
+    // productive days, the closed intervals and now the site support ledger. This exercises the
+    // EVALUATOR — given a record that says sixty independent days, does it stabilize exactly once and
+    // grant nothing it should not. It is NOT evidence that a group can reach this record by living,
+    // and §7 of the supervising contract forbids citing it as such. The production-pipeline attempt
+    // is P1 below, and it does not get here.
+    const sustained = {
+      ...luckyDay, daysAtSite: 60, productiveGatheringDaysAtSite: 20, waterStressDaySumAtSite: 6,
+      supportUnitsAtSite: 3.4, demandUnitsAtSite: 4.5,
+    };
     const independent = makeSuccessor(base, {
       phase: "establishing", position: wetPatch.id, phaseEnteredDay: day0 - 60,
       establishment: sustained, seasonalSupport: goodSupport,
@@ -601,8 +613,8 @@ try {
       { signals: r29.assessments[0].signals.map((s) => ({ id: s.id, holds: s.holds, measured: s.measured, required: s.required })) },
     );
     record(
-      "S29_sustained_measured_independence_can_stabilize",
-      "sixty days of feeding and watering itself at one site, with intervals measured there, makes the group an ordinary band — poor and fragile is allowed; unmeasured is not",
+      "S29_UNIT_evaluator_stabilizes_a_record_that_says_sustained_independence",
+      "UNIT/EVALUATOR, NOT PIPELINE: given a HAND-ASSIGNED record asserting sixty days, twenty productive days, two intervals and a site support ledger above the floor, the evaluator stabilizes exactly once — poor and fragile is allowed, unmeasured is not. This fixture says nothing about whether a group can reach that record by living; see P1",
       stabilizedBand.provisionalSuccessor.phase === "stabilized",
       r29.assessments[0].outcome === "stabilize",
       { phase: stabilizedBand.provisionalSuccessor.phase, satisfied: r29.assessments[0].satisfiedSignals, acquiredDays: r29.assessments[0].signals.map((s) => ({ id: s.id, acquiredDay: s.acquiredDay })) },
@@ -637,6 +649,87 @@ try {
         storageCapacity: stabilizedBand.storageCapacity ?? 0,
         protoCamp: stabilizedBand.protoCampMemory === undefined ? "absent" : "present",
         receipts: stabilizedBand.seasonalFoodReceipts === undefined ? "absent" : "present",
+      },
+    );
+  }
+
+  // ══ P — PRODUCTION PIPELINE ═════════════════════════════════════════════════════════════════════
+  //
+  // §8 asked for an end-to-end positive stabilization case driven by the real daily runner, with
+  // nothing hand-assigned. It cannot be built, and the reason is physical rather than procedural.
+  // P1 runs the attempt anyway and records exactly where it stops, so the blocker is in the evidence
+  // tree rather than only in a report.
+  {
+    // The BEST case the world offers: the nearest well-watered tile the parent already knows, so the
+    // group arrives in one step and spends its days living rather than walking. Choosing the most
+    // favourable reachable site is deliberate — the claim is that even here the bar cannot be met.
+    const pipeTarget = Object.keys(donor.knowledge.observedTiles)
+      .map((id) => generate.getTile(base, id))
+      .filter((t) => t !== undefined && passability.isBandPassableDestination(t) &&
+        String(t.id) !== String(donor.position))
+      .sort((a, b) => b.resourceProfile.waterAccess - a.resourceProfile.waterAccess)[0];
+    const dep = seam.performAtomicDeparture({
+      world: {
+        ...base,
+        bands: {
+          ...base.bands,
+          [donor.id]: {
+            ...base.bands[donor.id],
+            fissionAttempt: {
+              phase: "departure_ready", phaseEnteredDay: day0 - 5, history: ["proposed", "committed"],
+              lineageId: "LIN-PIPE", requestedFounders: 8, targetTileId: String(pipeTarget.id),
+            },
+          },
+        },
+      },
+      parentId: donor.id, today: day0,
+      residualContext: {
+        physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
+        foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
+        acuteRiskSeverity: 0, sicknessBurden: 0, careTravelBurden: 0, embodiedConditionMeasured: true,
+        ecologicalRisk: 0, ecologicalPositionMeasured: true,
+        mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1, minimumFounderRequest: 2,
+      },
+      successorBandId: "band:pipe:succ", lineageId: "LIN-PIPE",
+    });
+
+    let w = dep.ok === true ? dep.world : base;
+    const trace = [];
+    let peakSatisfied = 0, peakSignals = [], everStabilized = false, sawEstablishing = false;
+    if (dep.ok === true) {
+      for (let i = 1; i <= 200; i += 1) {
+        w = advance.advanceWorldByDays(w, 1);
+        const b = w.bands["band:pipe:succ"];
+        if (b === undefined) break;
+        const rec = b.provisionalSuccessor;
+        if (rec === undefined) break;
+        if (rec.phase === "establishing") sawEstablishing = true;
+        if (rec.phase === "stabilized") { everStabilized = true; break; }
+        const e = rec.establishment;
+        if (e !== undefined && e.satisfiedSignals >= peakSatisfied) {
+          peakSatisfied = e.satisfiedSignals;
+          peakSignals = (e.signals ?? []).map((s) => ({ id: s.id, holds: s.holds, measured: s.measured, required: s.required }));
+        }
+        if (i % 40 === 0 || rec.phase === "returning") {
+          trace.push({ day: i, phase: rec.phase, daysAtSite: e?.daysAtSite ?? 0,
+            supAtSite: e?.supportUnitsAtSite ?? 0, demAtSite: e?.demandUnitsAtSite ?? 0,
+            hunger: b.hungerPressure });
+        }
+        if (["reintegrated", "provisional_extinguished"].includes(rec.phase)) break;
+      }
+    }
+    const failing = peakSignals.filter((s) => !s.holds).map((s) => s.id);
+    record(
+      "P1_PRODUCTION_PIPELINE_a_real_group_cannot_reach_the_site_evidence_bar",
+      "BLOCKER, recorded as evidence: driven by the real daily runner from a real atomic departure, with nothing hand-assigned, a group arrives, establishes, and CANNOT satisfy the site-local support signal — one plant patch is physically_exhausted after two days and does not regrow inside the thirty-day residence the evidence requires, while an establishing group does not move and moving would reset the record. Evidence-based stabilization is unreachable without a foraging-catchment authority for non-residential groups, which does not exist",
+      everStabilized === false && sawEstablishing === true && failing.includes("measured_support_covered_a_real_share_of_demand"),
+      dep.ok === true && sawEstablishing === true && peakSignals.length === 7,
+      {
+        departureOk: dep.ok, reachedEstablishing: sawEstablishing, everStabilized,
+        peakSatisfiedSignals: peakSatisfied, ofRequired: 7,
+        signalsAtPeak: peakSignals, failingSignals: failing,
+        trace,
+        blocker: "single-tile plant extraction cannot cover a group's demand over a 30-day residence",
       },
     );
   }

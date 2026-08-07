@@ -168,6 +168,18 @@ export interface ProvisionalEstablishmentState {
   readonly productiveGatheringDaysAtSite: number;
   /** Cumulative measured water stress over the days at this site. */
   readonly waterStressDaySumAtSite: number;
+  /**
+   * Support and demand accumulated FROM THE DAYS LIVED AT THIS SITE, and from nowhere else.
+   *
+   * These exist because the support-share signal used to read `Band.seasonalSupport` — the whole
+   * rolling state, which at that point still holds the samples the founders walked out with. The
+   * conjunction was probably safe, since requiring two intervals closed here implies the current
+   * sample is one of them, but the evidence was leaning on ANOTHER predicate's ordering to make its
+   * own source claim true. Evidence has to own the causality it asserts, so the site now accumulates
+   * its own numerator and denominator from the same daily records every other site signal reads.
+   */
+  readonly supportUnitsAtSite: number;
+  readonly demandUnitsAtSite: number;
   readonly signals: readonly ProvisionalEvidenceSignal[];
   readonly satisfiedSignals: number;
 }

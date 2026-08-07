@@ -38,7 +38,6 @@ import {
 } from "./fissionLifecycleKernel";
 import { closeOpenTravelInterval, TRAVEL_NO_WATER_STRESS } from "./provisionalTravelSubsistence";
 import { RETURN_SUPPORT_RATIO_FLOOR } from "./provisionalReturnDecision";
-import { deriveCanonicalNutritionState } from "./seasonalSurvival";
 import type {
   Band,
   FissionLifecycleRecord,
@@ -95,9 +94,20 @@ export function assessEstablishmentEvidence(
     : establishment.waterStressDaySumAtSite / establishment.daysAtSite;
   const mortalityBump = band.acuteRisk?.activeEffect?.mortalityRiskBump ?? 0;
   const workingAdults = Math.max(0, Math.round(band.demography.workingAdults));
-  // The group's OWN last measured reading, produced by the intervals it closed here. Once two of them
-  // are required, the current sample is the group's own and not the condition it walked out with.
-  const measuredSupportShare = 1 - deriveCanonicalNutritionState(band.seasonalSupport).currentFoodStress;
+  // ── SITE-LOCAL, AND IT SAYS SO BECAUSE IT IS ──
+  //
+  // This used to be `1 - deriveCanonicalNutritionState(band.seasonalSupport).currentFoodStress`, which
+  // reads the group's WHOLE rolling state — including the samples the founders carried out of the
+  // parent camp. The conjunction was probably still safe: `measured_support_intervals_at_this_site`
+  // requires two intervals closed here, and closing one overwrites `currentSeasonSupport`, so by the
+  // time both held the reading was the group's own. But "probably safe because another predicate
+  // orders it" is not the same as "this site demonstrated support", and only the second is evidence.
+  //
+  // Now it is the ratio of what this ground gave to what these bodies needed, over the days lived
+  // here. Unmeasured — a site with no days yet — is not a passing reading, it is no reading.
+  const measuredSupportShare = establishment.demandUnitsAtSite <= 0
+    ? 0
+    : establishment.supportUnitsAtSite / establishment.demandUnitsAtSite;
 
   const signal = (
     id: ProvisionalEvidenceSignal["id"],
@@ -129,7 +139,7 @@ export function assessEstablishmentEvidence(
     ),
     signal(
       "measured_support_covered_a_real_share_of_demand",
-      "seasonalSurvival.deriveCanonicalNutritionState over the intervals closed at this site",
+      "ProvisionalEstablishmentState.supportUnitsAtSite / demandUnitsAtSite — accumulated only from TravelSubsistenceDay records lived at this site",
       measuredSupportShare,
       RETURN_SUPPORT_RATIO_FLOOR,
       measuredSupportShare >= RETURN_SUPPORT_RATIO_FLOOR,
@@ -182,6 +192,10 @@ function openEstablishment(band: Band, record: FissionLifecycleRecord, today: nu
     daysAtSite: 0,
     productiveGatheringDaysAtSite: 0,
     waterStressDaySumAtSite: 0,
+    // Opened at zero, every time. A group that moves opens a fresh record, so support demonstrated at
+    // the last place cannot be spent proving independence at this one.
+    supportUnitsAtSite: 0,
+    demandUnitsAtSite: 0,
     signals: [],
     satisfiedSignals: 0,
   };
@@ -229,6 +243,12 @@ export function advanceProvisionalEstablishment(world: WorldState, today: number
       productiveGatheringDaysAtSite:
         base.productiveGatheringDaysAtSite + (livedToday && todayRecord.usableUnits > 0 ? 1 : 0),
       waterStressDaySumAtSite: round4(base.waterStressDaySumAtSite + (livedToday ? todayRecord.waterStress : 0)),
+      // The same day record, on both sides of the ledger. `usableUnits` is what this ground gave after
+      // the patch's own processing loss; `demandUnits` is what these bodies needed for that day. Both
+      // are charged only on days actually lived here, so the ratio below cannot contain a single unit
+      // the group did not earn at this site.
+      supportUnitsAtSite: round4(base.supportUnitsAtSite + (livedToday ? todayRecord.usableUnits : 0)),
+      demandUnitsAtSite: round4(base.demandUnitsAtSite + (livedToday ? todayRecord.demandUnits : 0)),
     };
 
     const signals = assessEstablishmentEvidence(band, accumulated, today);
