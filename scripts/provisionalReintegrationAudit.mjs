@@ -126,24 +126,51 @@ try {
     { successorTile: awayTile, parentTile: String(w.bands[parent.id].position), refusal: awayAttempt.ok ? "ACCEPTED" : awayAttempt.refusal, detail: awayAttempt.detail },
   );
 
-  // ── walk it home ──
+  // ── walk it home, and STOP ONE TILE SHORT ──
+  //
+  // FIXTURE REPAIR — the physical-return pass wired `provisional_reintegration` into the daily runner,
+  // so production now merges a returning group ON THE DAY IT ARRIVES. This loop used to walk until the
+  // successor stood on its parent's tile, which is now exactly one day too far: the runner had already
+  // performed the merge, and R3-R9 — every fixture that tests the WRITER's own properties — ran against
+  // a spent successor holding no bodies and reported `successor_is_not_returning`.
+  //
+  // The subject of R3-R9 is the authority, not the schedule, so the loop now stops while the group is
+  // still live and adjacent; the `coLocated` construction below then places it on the parent's tile and
+  // the manual call is the first merge, exactly as before. RX1/RX2 in
+  // `provisionalReturnReachabilityAudit.mjs` cover the runner-driven path this repair steps around.
+  const tileDistance = (world_, aId, bId) => {
+    const a = generate.getTile(world_, aId);
+    const b = generate.getTile(world_, bId);
+    if (a === undefined || b === undefined) throw new Error("HARNESS HARD FAIL: missing tile in return walk");
+    return Math.abs(a.coord.x - b.coord.x) + Math.abs(a.coord.y - b.coord.y);
+  };
   let rw = turnAround(w);
   for (let day = 1; day <= 60; day += 1) {
-    rw = advance.advanceWorldByDays(rw, 1);
-    const b = rw.bands[succId];
+    const next = advance.advanceWorldByDays(rw, 1);
+    const b = next.bands[succId];
     if (b === undefined || !lc.isProvisionalSuccessor(b)) break;
-    if (String(b.position) === String(rw.bands[parent.id].position)) break;
+    rw = next;
+    if (tileDistance(rw, b.position, rw.bands[parent.id].position) <= 1) break;
   }
   const homeTile = String(rw.bands[succId]?.position ?? "gone");
   const parentTileNow = String(rw.bands[parent.id].position);
 
   // ── R2 — the return is a contiguous physical walk ──
+  // The stopping point moved with the loop repair above: the walk is halted while the group is still
+  // live and adjacent, so "arrived at the tile" is no longer the observable. The claim is unchanged and
+  // is now stated as the thing that was always meant — the distance to the tile it left from FELL,
+  // under its own steps, to within one tile.
+  const awayDistanceToDeparture = tileDistance(w, awayTile, departureTile);
+  const homeDistanceToDeparture = tileDistance(rw, homeTile, departureTile);
   record(
     "R2_the_return_is_a_physical_walk_back",
     "the group walks back toward the tile it physically left from — the last place it actually saw its parent — rather than being retargeted at a position it has no channel to observe",
-    homeTile === departureTile || homeTile === parentTileNow,
-    awayTile !== departureTile,
-    { departureTile, awayTile, afterReturnWalk: homeTile, parentTileNow, trailLength: (rw.bands[succId]?.provisionalSuccessor?.trail ?? []).length },
+    homeDistanceToDeparture < awayDistanceToDeparture && homeDistanceToDeparture <= 1,
+    awayTile !== departureTile && awayDistanceToDeparture > 1,
+    { departureTile, awayTile, afterReturnWalk: homeTile, parentTileNow,
+      awayDistanceToDeparture, homeDistanceToDeparture,
+      trailLength: (rw.bands[succId]?.provisionalSuccessor?.trail ?? []).length,
+      note: "halted adjacent by design so R3-R9 can exercise the writer on a live successor; the runner-driven arrival is covered by RX1/RX2" },
   );
 
   // ── R3 — co-located: reintegration succeeds and conserves every cohort line ──

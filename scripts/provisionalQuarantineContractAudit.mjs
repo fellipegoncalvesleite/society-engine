@@ -36,7 +36,14 @@ const SEED = arg("seed", "audit27:natural:s1");
 // inside the quarantine, so "bodily processes still reach the group" is measured rather than assumed.
 // CORRECTION-34D and -34A both record the same class of error: a cadence sampled outside its period
 // reports a structural zero.
-const WARM_DAYS = Number(arg("warm-days", "2100"));
+// The departure day is CHOSEN so the quarantine window spans the annual demographic boundary at day
+// 2160. That matters now and did not before: the old fixture left the successor motionless on its
+// parent's tile, so the quarantine lasted 359 days and swallowed a demographic step by accident. A
+// real separated successor resolves its lifecycle in roughly twenty-five days, so if the window does
+// not cross the boundary, Q4's "demography still reaches a quarantined group" has nothing to observe
+// and is honestly VACUOUS. Selecting the day is scenario choice through production; no state is
+// manufactured, no phase is assigned, and nothing is held open artificially.
+const WARM_DAYS = Number(arg("warm-days", "2150"));
 // 400 rather than 200: demography is ANNUAL (360 days), so a shorter window cannot observe a
 // quarantined group ageing or dying at all, and Q4 would pass on hunger alone — which would be a
 // weak basis for the claim that failure is still possible.
@@ -66,6 +73,9 @@ try {
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
   const kernel = await server.ssrLoadModule("/sim/agents/fissionLifecycleKernel.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
+  const generate = await server.ssrLoadModule("/sim/world/generate.ts");
+  const passability = await server.ssrLoadModule("/sim/world/passability.ts");
+  const scoring = await server.ssrLoadModule("/sim/rules/decisionScoring.ts");
 
   let world = runner.initSimWorld({ kind: "map2" }, SEED);
   world = advance.advanceWorldByDays(world, WARM_DAYS);
@@ -76,6 +86,25 @@ try {
 
   const dayD = Number(world.time.day ?? 0);
   const requested = Math.max(2, Math.floor(parent.demography.population * 0.35));
+  // ── FIXTURE REPAIR — A QUARANTINE FIXTURE MUST OBSERVE A REAL PROVISIONAL SUCCESSOR. ──
+  //
+  // This arm departed to `parent.position`, so the successor was co-located with its living parent
+  // from birth. That was inert while nothing could act on co-location; once `provisional_reintegration`
+  // was wired into the daily runner the group reached a rejoinable phase on day 1 and was CORRECTLY
+  // handed back, collapsing the quarantine window to ZERO days and making five arms vacuous.
+  //
+  // The contract under test is "while this entity is a live provisional successor, ordinary-band
+  // systems must not admit it" — never "the successor must sit motionless on its parent's tile". So
+  // the target is a real place at distance and the window is however long the group is genuinely
+  // provisional, which is what the window was always supposed to be.
+  const quarHome = generate.getTile(world, parent.position);
+  const quarTarget = Object.keys(parent.knowledge.observedTiles)
+    .map((id) => generate.getTile(world, id))
+    .filter((t) => t !== undefined && passability.isBandPassableDestination(t) &&
+      scoring.getGridDistance(quarHome, t) >= 4)
+    .sort((a, b) => scoring.getGridDistance(quarHome, b) - scoring.getGridDistance(quarHome, a) ||
+      String(a.id).localeCompare(String(b.id)))[0];
+  if (quarTarget === undefined) throw new Error("no known passable target at distance >= 4");
   const departure = seam.performAtomicDeparture({
     world: {
       ...world,
@@ -85,7 +114,7 @@ try {
           ...parent,
           fissionAttempt: {
             phase: "departure_ready", phaseEnteredDay: dayD - 5, history: ["proposed", "committed"],
-            lineageId: "LIN-QUAR-1", requestedFounders: requested, targetTileId: String(parent.position),
+            lineageId: "LIN-QUAR-1", requestedFounders: requested, targetTileId: String(quarTarget.id),
           },
         },
       },
@@ -133,6 +162,8 @@ try {
       knownTiles: Object.keys(band.knowledge?.observedTiles ?? {}).length,
       storageCapacity: band.storageCapacity,
       provisionalPhase: band.provisionalSuccessor?.phase ?? null,
+      isLivingBand: lc.isLivingBand(band),
+      isBandTerminal: lc.isBandTerminal(band),
     };
   };
 
@@ -194,7 +225,17 @@ try {
   const movedOnlyWhileQuarantined = quarantined.changed.filter((f) => !released.changed.includes(f));
 
   // ── Q1 — the ordinary residential systems are blocked, and the block is a REAL refusal ──
-  const ORDINARY_RESIDENTIAL = ["position", "decisions", "trips", "moveEvents", "protoCamp", "residentialAnchor", "viability", "expeditions", "receipts"];
+  // `position` is deliberately NOT in this list. It was, when a provisional successor had no way to
+  // move and any movement therefore had to come from an ordinary residential writer. `provisionalTravel`
+  // is now the ONE authority permitted to move a provisional body, and §10 of the quarantine contract
+  // is explicit that the boundary is against ORDINARY GROUP BEHAVIOUR, not against being alive and on
+  // the move. Provisional movement is asserted separately, as a positive control, in Q3.
+  const ORDINARY_RESIDENTIAL = ["decisions", "trips", "moveEvents", "protoCamp", "residentialAnchor", "viability", "expeditions", "receipts"];
+  // The three things a LIVE provisional successor's own authorities write: its lifecycle phase
+  // (`provisionalLifecycleResolver`), its position (`provisionalTravel`) and its nutritional condition
+  // (`provisionalTravelSubsistence`). A quarantine that stopped any of these would be blocking
+  // physiology and movement rather than ordinary group behaviour, which §10 forbids.
+  const PROVISIONAL_PHYSICAL = ["provisionalPhase", "position", "hungerPressure"];
   const ordinaryAdmitted = ORDINARY_RESIDENTIAL.filter((f) => quarantined.changed.includes(f));
   const ordinaryProvenBlocked = ORDINARY_RESIDENTIAL.filter((f) => blockedByTheGate.includes(f));
   record(
@@ -222,11 +263,15 @@ try {
 
   // ── Q3 — the resolver is the only writer that moves the quarantined group's own state ──
   record(
-    "Q3_the_resolver_is_the_only_authority_that_moves_a_quarantined_group",
-    "the only field that moves in the quarantined arm and not in the released one is the lifecycle phase, written by the provisional resolver",
-    movedOnlyWhileQuarantined.every((f) => f === "provisionalPhase"),
+    "Q3_only_the_provisional_authorities_move_a_quarantined_group",
+    "every field that moves in the quarantined arm and NOT in the released one is written by a provisional authority — the lifecycle phase by the resolver, the position by the provisional travel writer — and nothing ordinary reaches the group",
+    movedOnlyWhileQuarantined.every((f) => PROVISIONAL_PHYSICAL.includes(f)),
     movedOnlyWhileQuarantined.length > 0,
-    { movedOnlyWhileQuarantined, finalPhase: quarantined.last.provisionalPhase },
+    { movedOnlyWhileQuarantined, provisionalPhysicalWriters: PROVISIONAL_PHYSICAL,
+      unexpectedMovers: movedOnlyWhileQuarantined.filter((f) => !PROVISIONAL_PHYSICAL.includes(f)),
+      finalPhase: quarantined.last.provisionalPhase,
+      startPosition: quarantined.first.position, endPosition: quarantined.last.position,
+      provisionalGroupPhysicallyMoved: quarantined.first.position !== quarantined.last.position },
   );
 
   // ── Q4 — BODILY PROCESSES: a quarantine is not a freezer ──
@@ -351,17 +396,25 @@ try {
   //
   // CORRECTION-34 removed ghost bodies by making presence read real positions. Hiding a quarantined
   // group from the physical layer would put them straight back.
-  const finalSucc = quarantined.world.bands[succId];
+  // FIXTURE REPAIR — this read `quarantined.world`, the world AFTER the arm stopped, which is one step
+  // past the end of the quarantine. That was harmless while the lifecycle could not resolve; now the
+  // group legitimately reintegrates on the step that ends the arm, so the old read reported a
+  // terminal, emptied band and called it a quarantine failure. The subject is the last day the group
+  // was STILL a live provisional successor, which is exactly what `runArm` retains as `last`.
+  const lastQuarantinedDay = quarantined.last;
   record(
     "Q8_a_quarantined_group_is_still_physically_present",
-    "the successor remains a LIVING band holding bodies at a tile throughout — excluding it from presence would recreate the ghosts CORRECTION-34 removed",
-    finalSucc !== undefined && lc.isLivingBand(finalSucc) && !lc.isBandTerminal(finalSucc) && finalSucc.demography.population > 0,
-    true,
+    "on every day it is quarantined the successor is a LIVING band holding bodies at a tile — excluding it from presence would recreate the ghosts CORRECTION-34 removed",
+    lastQuarantinedDay !== null && lastQuarantinedDay.isLivingBand === true &&
+      lastQuarantinedDay.isBandTerminal === false && lastQuarantinedDay.population > 0,
+    quarantined.days > 0,
     {
-      population: Math.round(finalSucc?.demography.population ?? 0),
-      position: String(finalSucc?.position ?? "none"),
-      isLivingBand: finalSucc === undefined ? false : lc.isLivingBand(finalSucc),
-      isEstablishedBand: finalSucc === undefined ? false : lc.isEstablishedBand(finalSucc),
+      quarantinedDays: quarantined.days,
+      population: lastQuarantinedDay?.population ?? 0,
+      position: lastQuarantinedDay?.position ?? "none",
+      isLivingBand: lastQuarantinedDay?.isLivingBand ?? false,
+      isBandTerminal: lastQuarantinedDay?.isBandTerminal ?? null,
+      phaseOnLastQuarantinedDay: lastQuarantinedDay?.provisionalPhase ?? null,
     },
   );
 
@@ -390,12 +443,13 @@ try {
     lc.isEstablishedBand(finalBand) &&
     finalBand.provisionalSuccessor?.phase === "reintegrated";
   record(
-    "Q9_FINDING_a_group_can_leave_quarantine_on_a_timer_into_ordinary_status",
-    "advanced past the return bound, the successor reaches the terminal `reintegrated` phase whose contract says the provisional entity is REMOVED — and it is not: it becomes an ordinary independent band, having demonstrated nothing, because the physical reintegration writer does not exist yet",
-    true, // a published finding, not a gate — see the note above
+    "Q9_CLOSED_a_group_can_no_longer_leave_quarantine_on_a_timer_into_ordinary_status",
+    "the escape this audit published is CLOSED: `reintegrated` is now reachable only through the physical writer, which requires a living co-located parent and REMOVES the entity — so no band reaches that phase while still holding bodies and reading as an ordinary established band",
+    escapedByTimeout === false,
     finalBand !== undefined,
     {
-      status: escapedByTimeout ? "REPRODUCED" : "NOT_REPRODUCED_IN_THIS_WINDOW",
+      status: escapedByTimeout ? "STILL_REPRODUCED" : "CLOSED_NOT_REPRODUCED",
+      closedBy: "provisional_reintegration daily action + performAtomicReintegration; a timer can no longer reach `reintegrated` because the kernel demands physicalCoLocationProven",
       quarantineEndedAfterDays: quarantined.days,
       windowDays: OBSERVE_DAYS,
       finalPhase: finalBand?.provisionalSuccessor?.phase ?? null,
@@ -403,7 +457,7 @@ try {
       isEstablishedBandNow: finalBand === undefined ? false : lc.isEstablishedBand(finalBand),
       populationStillHeld: Math.round(finalBand?.demography.population ?? 0),
       contractSays: "reintegrated — terminal: rejoined the parent. The provisional entity is removed exactly once.",
-      whyNotRepairedHere: "reintegration is the return vertical; this pass is explicitly forbidden to begin travel or return work",
+      populationHeldIfStillProvisionalEscape: Math.round(finalBand?.demography.population ?? 0),
     },
   );
 

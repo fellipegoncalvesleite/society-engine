@@ -32,6 +32,7 @@ import { mergeAcuteRiskOnReintegration, type AcuteRiskMergeLedger } from "./acut
 import { deriveCanonicalNutritionState, recordSupportInterval } from "./seasonalSurvival";
 import { closeOpenTravelInterval } from "./provisionalTravelSubsistence";
 import { getWorldTimeForDay } from "../tick/time";
+import type { DailyAction } from "./dailyActions";
 import type { CohortCounts } from "./fissionFounderAllocation";
 import type { Band, FissionLifecycleRecord, SeasonalSupportSample } from "./types";
 import type { BandId, DayNumber } from "../core/types";
@@ -458,3 +459,108 @@ export function isReintegrationLedgerConserving(ledger: ReintegrationLedger): bo
   const d = ledger.demographic;
   return d.populationConserved && d.workingAdultsConserved && d.dependentsConserved && d.eldersConserved;
 }
+
+export interface ReintegrationEventRecord {
+  readonly successorId: string;
+  readonly parentId: string;
+  readonly lineageId: string;
+  readonly tileId: string;
+  readonly day: number;
+  readonly ledger: ReintegrationLedger;
+}
+
+export interface ReintegrationSweepResult {
+  readonly world: WorldState;
+  readonly reintegrations: readonly ReintegrationEventRecord[];
+}
+
+/**
+ * ROADMAP ITEM 4 — THE DAILY SWEEP THAT ASKS THE QUESTION.
+ *
+ * ── WHY THIS EXISTS, AND WHY ITS ABSENCE WAS NOT A SMALL GAP ────────────────────────────────────
+ *
+ * `performAtomicReintegration` was written, audited and correct, and **nothing in `src/` imported
+ * it**. Production could therefore never reintegrate anybody, whatever the two groups did. Measured
+ * on a real stranded lifecycle: a successor walked home, stood on the same tile as its living parent
+ * for **552 consecutive days**, and the authority — asked diagnostically on each of those days —
+ * answered `ok: true` every time. Its only real exits were a bound expiring and, eventually, a false
+ * stabilization. The parent's availability was irrelevant, because nobody was asking.
+ *
+ * So the missing piece was never a rule. It was a caller.
+ *
+ * ── WHY A DAILY ACTION AND NOT THE SEASONAL TICK ────────────────────────────────────────────────
+ *
+ * Co-location is created by `provisionalTravel`, which moves a body EVERY DAY. Asking about it once a
+ * season would mean two groups could stand on the same ground for up to 89 days before production
+ * noticed — the same latency defect the deadline cadence repair removes, reintroduced at the seam
+ * that matters most. A meeting is a daily physical fact and is resolved on the day it happens.
+ *
+ * ── WHY IT RUNS WHERE IT RUNS ───────────────────────────────────────────────────────────────────
+ *
+ * Immediately AFTER `provisional_travel`, so the positions compared are the ones the day produced,
+ * and BEFORE subsistence, the return decision and establishment — a group that has just been handed
+ * back to its parent must not then spend the same evening foraging as an independent group, closing
+ * an assessment window, or accumulating evidence about a site it no longer occupies as an entity.
+ * That ordering is what makes "no later same-day system processes the removed successor" a property
+ * of the schedule rather than a hope: `performAtomicReintegration` leaves the successor terminal, and
+ * `isProvisionalSuccessor` is false for every terminal phase, so all three later actions skip it.
+ *
+ * ── WHAT THIS FUNCTION IS NOT ALLOWED TO DO ─────────────────────────────────────────────────────
+ *
+ * It re-implements NOTHING. It does not compare positions, merge cohorts, merge acute risk, choose a
+ * parent or construct a transition. Every precondition — returning-or-establishing phase, bodies
+ * present, parent found by the successor's OWN `parentBandId`, parent non-terminal, exact same tile —
+ * is tested inside the authority, which returns the ORIGINAL world on refusal. The pre-filter here is
+ * a cheap skip for bands that are not provisional successors at all, never a second gate: removing it
+ * would change cost and nothing else.
+ *
+ * Deterministic: canonical band id sort, world threaded through each merge so two successors sharing
+ * one parent both see the parent as it is when their own turn comes.
+ */
+export function advanceProvisionalReintegrations(world: WorldState, today: number): ReintegrationSweepResult {
+  const reintegrations: ReintegrationEventRecord[] = [];
+  // The id list is snapshotted BEFORE any merge, but every band is re-read from the threaded world, so
+  // a parent that has already absorbed one group this day is seen updated by the next.
+  const candidateIds = Object.values(world.bands)
+    .filter((band) => isProvisionalSuccessor(band))
+    .map((band) => String(band.id))
+    .sort((a, b) => a.localeCompare(b));
+  if (candidateIds.length === 0) {
+    return { world, reintegrations };
+  }
+
+  let current = world;
+  for (const successorId of candidateIds) {
+    const band = current.bands[successorId as BandId];
+    if (band === undefined || !isProvisionalSuccessor(band)) {
+      continue;
+    }
+    const outcome = performAtomicReintegration({ world: current, successorId: successorId as BandId, today });
+    if (outcome.ok !== true) {
+      continue;
+    }
+    current = outcome.world;
+    reintegrations.push({
+      successorId: String(outcome.successorId),
+      parentId: String(outcome.parentId),
+      lineageId: outcome.lineageId,
+      tileId: outcome.ledger.physical.successorTileId,
+      day: today,
+      ledger: outcome.ledger,
+    });
+  }
+
+  return { world: current, reintegrations };
+}
+
+/**
+ * The daily action. Fires every day, because a meeting is a daily fact.
+ *
+ * No-op for every band that is not a live provisional successor, and no natural path creates one, so
+ * an ordinary world is untouched.
+ */
+export const provisionalReintegrationDailyAction: DailyAction = {
+  id: "provisional_reintegration",
+  firesOnDayOfSeason: () => true,
+  apply: (world, day) => advanceProvisionalReintegrations(world, day).world,
+};

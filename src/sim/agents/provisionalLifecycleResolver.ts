@@ -36,6 +36,7 @@
 
 import { isProvisionalSuccessor } from "./bandLifecycle";
 import { getPhaseContract, MAX_RETURN_ESTABLISH_CYCLES, requestTransition } from "./fissionLifecycleKernel";
+import type { DailyAction } from "./dailyActions";
 import type { Band, FissionLifecycleRecord } from "./types";
 import type { BandId } from "../core/types";
 import type { WorldState } from "../world/types";
@@ -219,6 +220,62 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
     resolutions,
   };
 }
+
+/**
+ * ROADMAP ITEM 4 — THE DEADLINE CADENCE, AND WHY A DAY-BOUND MUST BE RESOLVED DAILY.
+ *
+ * ── THE DEFECT THIS CLOSES ──────────────────────────────────────────────────────────────────────
+ *
+ * Every bound in `PHASE_CONTRACTS` is declared in DAYS — `TRAVEL_MAX_DAYS = 180`,
+ * `ESTABLISHMENT_MAX_DAYS = 360`, `RETURN_MAX_DAYS = 180`, `FAILED_EARLY_MAX_DAYS = 30`. This resolver
+ * was called from exactly one place, `runSeasonalCompatibilityTick`, which runs at SEASON BOUNDARIES,
+ * 90 days apart. So `today - phaseEnteredDay >= contract.maxDays` was only ever EVALUATED on one day in
+ * ninety, and a bound expiring on day 2,299 was not noticed until day 2,340.
+ *
+ * Measured on a real lifecycle, twice in one run: a 180-day return bound resolved **41 days late**
+ * (entered day+19, due day+199, fired day+240) and again **76 days late** (entered day+254, due
+ * day+434, fired day+510). The declared maximum lateness of the old cadence is 89 days — a bound
+ * labelled 180 days could bind at 269, which is not the same contract wearing a rounding error.
+ *
+ * ── WHY THE FULL RESOLVER, AND WHY THE SEASONAL CALL STAYS ──────────────────────────────────────
+ *
+ * Three architectures were compared.
+ *
+ *   A — move the whole resolver to the daily tick and delete the seasonal call. REJECTED: the
+ *       zero-population branch exists precisely because provisional successors are excluded from
+ *       `updateBandViabilityStates`, and the seasonal call sits immediately AFTER that pass so a group
+ *       emptied by the annual demographic step is resolved in the same tick. Daily actions run BEFORE
+ *       `runSeasonalCompatibilityTick` on a boundary day, so deleting the seasonal call would push that
+ *       detection a full day past the step that caused it, for no gain.
+ *   B — SELECTED. Register the SAME authority as an additional daily action and keep the seasonal
+ *       call. Deadlines then resolve within one daily tick of their declared day, the post-demography
+ *       zero-population detection keeps its exact existing position, and there is one implementation.
+ *   C — a separate day-scale deadline-only resolver. REJECTED as a second authority for a question
+ *       this module already owns: two functions deciding when a phase expires is the split authority
+ *       CORRECTION-34B removed elsewhere, and the duplicate would be free to drift.
+ *
+ * Running twice on a boundary day is safe by construction rather than by luck: every transition writes
+ * a fresh `phaseEnteredDay`, so the second evaluation measures zero elapsed days against the new
+ * contract and cannot advance a second phase; and a terminal phase declares `permittedNext: []`, so a
+ * re-entered zero-population branch is refused by the kernel and falls through unchanged.
+ *
+ * ── WHAT THIS DOES NOT TOUCH ────────────────────────────────────────────────────────────────────
+ *
+ * This resolver never writes `stabilized`. Establishment is evaluated by
+ * `provisionalEstablishmentDailyAction`, which ALREADY ran daily before this change and is not
+ * reordered by it, so no stabilization predicate runs more often than it did. The one real consequence
+ * is stated rather than buried: a truthful `returning` bound puts a group into `establishing` EARLIER,
+ * so a group that was going to stabilize does so earlier by the lateness that has been removed. That
+ * moves an existing outcome to its correct day; it does not create one.
+ */
+export const provisionalLifecycleDeadlineDailyAction: DailyAction = {
+  id: "provisional_lifecycle_deadline",
+  firesOnDayOfSeason: () => true,
+  // LAST in the provisional block: a bound is checked against a day that has physically happened, so a
+  // group that gives up today still walked, ate and read its ground today. The remaining lag is at most
+  // one daily tick, against the 89 days the seasonal-only cadence permitted.
+  apply: (world, day) => resolveProvisionalLifecycles(world, day).world,
+};
 
 /**
  * Exported so audits assert the PRODUCTION predicate rather than re-implementing it.

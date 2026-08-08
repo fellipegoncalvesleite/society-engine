@@ -40,6 +40,10 @@ try {
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
   const resolver = await server.ssrLoadModule("/sim/agents/provisionalLifecycleResolver.ts");
+  const generate = await server.ssrLoadModule("/sim/world/generate.ts");
+  const passability = await server.ssrLoadModule("/sim/world/passability.ts");
+  const reint = await server.ssrLoadModule("/sim/agents/provisionalReintegration.ts");
+  const scoring = await server.ssrLoadModule("/sim/rules/decisionScoring.ts");
 
   const SEASON = 90;
   let world = runner.initSimWorld({ kind: "map2" }, SEED);
@@ -67,6 +71,28 @@ try {
 
   // ── the departure, through the production writer ──
   const requested = Math.max(2, Math.floor(parent.demography.population * 0.35));
+  // ── FIXTURE REPAIR — THE TARGET IS NOW A REAL PLACE, AND THE WINDOW IS THE QUARANTINE ITSELF. ──
+  //
+  // This arm used to depart to `parent.position`: a "departure" to the tile the group was already
+  // standing on, with no journey at all. That was inert while nothing in production could act on
+  // co-location, and it became decisive the moment `provisional_reintegration` was wired into the
+  // daily runner — such a group is co-located with its living parent from birth, reaches a rejoinable
+  // phase on day 1 and is CORRECTLY handed straight back. T3/T4/T9 then had no live subject.
+  //
+  // Physical co-location was never relevant to what T3, T4 and T9 actually claim. Their subject is a
+  // LIVE PROVISIONAL SUCCESSOR, and the invariant is that no ordinary system claims it while it is
+  // one. So the target is a real tile at distance, and the assertions are sampled on EVERY DAY the
+  // successor is genuinely provisional rather than at one arbitrary end-of-season instant — which
+  // also removes the old risk that an assertion passes because the subject vanished.
+  const homeTile = generate.getTile(world, parent.position);
+  const targetTile = Object.keys(parent.knowledge.observedTiles)
+    .map((id) => generate.getTile(world, id))
+    .filter((t) => t !== undefined && passability.isBandPassableDestination(t) &&
+      scoring.getGridDistance(homeTile, t) >= 4)
+    .sort((a, b) => scoring.getGridDistance(homeTile, b) - scoring.getGridDistance(homeTile, a) ||
+      String(a.id).localeCompare(String(b.id)))[0];
+  if (targetTile === undefined) throw new Error("no known passable target at distance >= 4");
+  const targetDistance = scoring.getGridDistance(homeTile, targetTile);
   const worldWithAttempt = {
     ...world,
     bands: {
@@ -79,7 +105,7 @@ try {
           history: ["proposed", "committed"],
           lineageId: "LIN-REAL-1",
           requestedFounders: requested,
-          targetTileId: String(parent.position),
+          targetTileId: String(targetTile.id),
         },
       },
     },
@@ -107,10 +133,55 @@ try {
   const afterDeparture = departure.world;
   const succAtBirth = afterDeparture.bands[succId];
 
-  // ── advance the REAL runner one full season past the departure ──
-  const afterOneSeason = advance.advanceWorldByDays(afterDeparture, SEASON);
+  // ── advance the REAL runner one full season past the departure, SAMPLING EVERY DAY ──
+  //
+  // Every day on which the successor is still a live provisional successor is a day the ordinary
+  // systems had a chance to claim it and must not have. The lifecycle now genuinely RESOLVES inside a
+  // season — by reintegration when the group walks back to its parent, or by stabilization — so a
+  // single end-of-season read no longer has a provisional subject to look at. The claim is unchanged;
+  // the window is the one the claim was always about.
+  const provisionalDays = [];
+  let resolution = null;
+  let stepWorld = afterDeparture;
+  for (let day = 1; day <= SEASON; day += 1) {
+    stepWorld = advance.advanceWorldByDays(stepWorld, 1);
+    const b = stepWorld.bands[succId];
+    const p = stepWorld.bands[String(parent.id)];
+    if (b === undefined) { resolution = { day, phase: null, reason: "band removed from world" }; break; }
+    if (!lc.isProvisionalSuccessor(b)) {
+      resolution = {
+        day, phase: b.provisionalSuccessor?.phase ?? null, status: String(b.status),
+        population: Math.round(b.demography.population),
+        reason: "lifecycle reached a terminal phase — a NAMED outcome, not a disappearance",
+      };
+      break;
+    }
+    // What the reintegration authority would have said on this day. Never applied.
+    const probe = reint.performAtomicReintegration({ world: stepWorld, successorId: succId, today: dayD + day });
+    provisionalDays.push({
+      day,
+      successorPosition: String(b.position),
+      parentPosition: String(p.position),
+      distance: scoring.getGridDistance(generate.getTile(stepWorld, b.position), generate.getTile(stepWorld, p.position)),
+      phase: b.provisionalSuccessor?.phase ?? null,
+      population: Math.round(b.demography.population),
+      status: String(b.status),
+      isLiving: lc.isLivingBand(b),
+      viability: b.viability?.status ?? null,
+      isEstablished: lc.isEstablishedBand(b),
+      isFissionEligible: lc.isFissionEligibleParent(b),
+      lineageLinkedToParent: lc.shareCurrentFissionLineage(p, b),
+      thirdBandsSharingLineage: Object.values(stepWorld.bands).filter((x) =>
+        String(x.id) !== succId && String(x.id) !== String(parent.id) && lc.shareCurrentFissionLineage(x, b)).length,
+      parentViability: p.viability?.status ?? null,
+      reintegrationProbe: probe.ok === true ? "WOULD_ACCEPT" : probe.refusal,
+    });
+  }
+  const afterOneSeason = stepWorld;
   const succAfter = afterOneSeason.bands[succId];
   const parentAfter = afterOneSeason.bands[String(parent.id)];
+  const separatedDays = provisionalDays.filter((d) => d.distance > 0);
+  const lastProvisional = provisionalDays[provisionalDays.length - 1] ?? null;
 
   const worldPopAfterDeparture = Object.values(afterDeparture.bands).reduce((t, b) => t + Math.round(b.demography.population), 0);
 
@@ -124,40 +195,49 @@ try {
     seam.isDepartureLedgerConserving(departure.ledger) && worldPopAfterDeparture === worldPopBefore,
     { worldPopBefore, worldPopAfterDeparture, ledger: departure.ledger.demographic });
 
+  // T2 is the one gate for which co-location IS the subject: a successor is BORN on its parent's tile,
+  // because that is where the people were standing when they separated. Unchanged.
   gate("T2", "the successor exists in the real world at the parent's tile",
     succAtBirth !== undefined,
     "the successor was genuinely created",
     succAtBirth !== undefined && String(succAtBirth.position) === parentBefore.position,
     { successorPosition: String(succAtBirth?.position), parentPosition: parentBefore.position });
 
-  gate("T3", "the successor SURVIVES a full real runner season — not absorbed, not collapsed, not dispersed",
-    succAtBirth !== undefined && Math.round(succAtBirth.demography.population) > 0,
-    "the successor was alive when the runner started",
-    succAfter !== undefined && succAfter.status !== "dispersed" && lc.isLivingBand(succAfter),
+  gate("T3", "the successor is a live, undispersed, body-holding band on EVERY day it is provisional, and it leaves that state only through a NAMED lifecycle outcome",
+    provisionalDays.length > 0 && separatedDays.length > 0,
+    `observed ${provisionalDays.length} provisional band-days, ${separatedDays.length} of them physically separated from the parent (max distance ${separatedDays.length ? Math.max(...separatedDays.map((d) => d.distance)) : 0})`,
+    provisionalDays.length > 0 &&
+      provisionalDays.every((d) => d.isLiving === true && d.status !== "dispersed" && d.population > 0) &&
+      resolution !== null && resolution.reason !== "band removed from world",
     {
-      existsAfter: succAfter !== undefined,
-      statusAfter: succAfter?.status,
-      livingAfter: succAfter === undefined ? null : lc.isLivingBand(succAfter),
-      populationBirth: succAtBirth?.demography.population,
-      populationAfter: succAfter?.demography.population,
+      provisionalBandDays: provisionalDays.length,
+      separatedBandDays: separatedDays.length,
+      maxDistanceFromParent: separatedDays.length ? Math.max(...separatedDays.map((d) => d.distance)) : 0,
+      targetTile: String(targetTile.id), targetDistance,
+      daysNotLiving: provisionalDays.filter((d) => !d.isLiving || d.status === "dispersed" || d.population <= 0).length,
+      resolution,
+      dailySamples: provisionalDays,
     });
 
   gate("T4", "established viability never claims the provisional successor",
-    succAfter !== undefined,
-    "the successor survived to be checked",
-    succAfter !== undefined && succAfter.viability === undefined && lc.isProvisionalSuccessor(succAfter),
+    provisionalDays.length > 0 && provisionalDays.some((d) => d.parentViability !== null),
+    "the PARENT carries an established viability verdict on the same days, so the successor's absence of one is discriminating rather than a system that ran for nobody",
+    provisionalDays.length > 0 && provisionalDays.every((d) => d.viability === null),
     {
-      viabilityAfter: succAfter?.viability?.status ?? null,
-      stillProvisional: succAfter === undefined ? null : lc.isProvisionalSuccessor(succAfter),
-      // the control: the PARENT does get established viability in the same world
-      parentViabilityAfter: parentAfter?.viability?.status ?? null,
+      provisionalBandDays: provisionalDays.length,
+      daysWithSuccessorViability: provisionalDays.filter((d) => d.viability !== null).length,
+      daysWithParentViability: provisionalDays.filter((d) => d.parentViability !== null).length,
+      parentViabilitySeen: [...new Set(provisionalDays.map((d) => d.parentViability))],
+      successorViabilitySeen: [...new Set(provisionalDays.map((d) => d.viability))],
     });
 
   gate("T5", "the successor is not established and cannot fission after a real season",
-    succAfter !== undefined && lc.isEstablishedBand(parentAfter) === true,
+    provisionalDays.length > 0 && lc.isEstablishedBand(parentAfter) === true,
     "the parent IS established in the same world, so the successor's false is discriminating",
-    succAfter !== undefined && lc.isEstablishedBand(succAfter) === false && lc.isFissionEligibleParent(succAfter) === false,
-    { established: succAfter === undefined ? null : lc.isEstablishedBand(succAfter), fissionEligible: succAfter === undefined ? null : lc.isFissionEligibleParent(succAfter) });
+    provisionalDays.length > 0 && provisionalDays.every((d) => d.isEstablished === false && d.isFissionEligible === false),
+    { provisionalBandDays: provisionalDays.length,
+      daysEstablished: provisionalDays.filter((d) => d.isEstablished).length,
+      daysFissionEligible: provisionalDays.filter((d) => d.isFissionEligible).length });
 
   gate("T6", "the band count grew by exactly one and nobody else vanished",
     bandCountBefore > 0,
@@ -195,11 +275,14 @@ try {
 
   // ── T9: the parent/successor pair does not become strangers on the birth tick ──
   gate("T9", "the parent and successor are lineage-linked, and a third band is not",
-    succAfter !== undefined,
-    "both halves survived to be compared",
-    succAfter !== undefined && lc.shareCurrentFissionLineage(parentAfter, succAfter) === true &&
-      Object.values(afterOneSeason.bands).filter((b) => String(b.id) !== succId && String(b.id) !== String(parent.id) && lc.shareCurrentFissionLineage(b, succAfter)).length === 0,
-    { pairLinked: succAfter === undefined ? null : lc.shareCurrentFissionLineage(parentAfter, succAfter) });
+    provisionalDays.length > 0,
+    "both halves were live and comparable on every sampled day",
+    provisionalDays.length > 0 &&
+      provisionalDays.every((d) => d.lineageLinkedToParent === true && d.thirdBandsSharingLineage === 0),
+    { provisionalBandDays: provisionalDays.length,
+      daysLinkedToParent: provisionalDays.filter((d) => d.lineageLinkedToParent).length,
+      daysWithAThirdBandSharingLineage: provisionalDays.filter((d) => d.thirdBandsSharingLineage > 0).length,
+      note: "the pair link is asserted only while BOTH records are current; the lineage is deliberately released once the successor's record goes terminal, which is the bounded end the reintegration writer documents" });
 
   // ── T10: ordinary behaviour is untouched — a world with no attempt is byte-identical ──
   const controlA = advance.advanceWorldByDays(runner.initSimWorld({ kind: "map2" }, SEED), WARM_DAYS + SEASON);

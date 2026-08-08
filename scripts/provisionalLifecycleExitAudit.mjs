@@ -61,6 +61,8 @@ try {
   const resolver = await server.ssrLoadModule("/sim/agents/provisionalLifecycleResolver.ts");
   const policy = await server.ssrLoadModule("/sim/agents/fissionFieldTransferPolicy.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
+  const generate = await server.ssrLoadModule("/sim/world/generate.ts");
+  const passability = await server.ssrLoadModule("/sim/world/passability.ts");
 
   // ── E1 — every phase is classified, and the two successful terminals require a world event ──
   const contracts = kernel.PHASE_CONTRACTS;
@@ -152,6 +154,19 @@ try {
   if (parent === undefined) throw new Error("no suitable parent band");
   const dayD = Number(world.time.day ?? 0);
   const requested = Math.max(2, Math.floor(parent.demography.population * 0.35));
+  // FIXTURE REPAIR — this arm used to depart to `parent.position`, i.e. to the tile the group was
+  // already standing on. That was harmless while nothing could act on co-location, but the physical
+  // return pass wired reintegration into the daily runner, and a group that departs to its own camp is
+  // co-located with its parent from birth: it arrived on day 1, entered `establishing`, and was
+  // correctly handed straight back. The arm measured a lifecycle that never travelled. A real target at
+  // distance restores the journey this fixture exists to observe.
+  const exitHome = generate.getTile(world, parent.position);
+  const exitTarget = Object.keys(parent.knowledge.observedTiles)
+    .map((id) => generate.getTile(world, id))
+    .filter((t) => t !== undefined && passability.isBandPassableDestination(t) &&
+      Math.abs(t.coord.x - exitHome.coord.x) + Math.abs(t.coord.y - exitHome.coord.y) >= 4)
+    .sort((a, b) => String(a.id).localeCompare(String(b.id)))[0];
+  if (exitTarget === undefined) throw new Error("no known passable target at distance >= 4 for the exit arm");
   const departure = seam.performAtomicDeparture({
     world: {
       ...world,
@@ -161,7 +176,7 @@ try {
           ...parent,
           fissionAttempt: {
             phase: "departure_ready", phaseEnteredDay: dayD - 5, history: ["proposed", "committed"],
-            lineageId: "LIN-EXIT-1", requestedFounders: requested, targetTileId: String(parent.position),
+            lineageId: "LIN-EXIT-1", requestedFounders: requested, targetTileId: String(exitTarget.id),
           },
         },
       },
@@ -189,6 +204,7 @@ try {
   let lastPhase = w.bands[succId]?.provisionalSuccessor?.phase ?? null;
   phaseTrail.push({ dayOffset: 0, phase: lastPhase });
   let becameOrdinary = null;
+  let exitWasPhysical = null;
   for (let day = 1; day <= OBSERVE_DAYS; day += 1) {
     w = advance.advanceWorldByDays(w, 1);
     const b = w.bands[succId];
@@ -201,17 +217,26 @@ try {
     if (becameOrdinary === null && !lc.isProvisionalSuccessor(b) && lc.isEstablishedBand(b)) {
       becameOrdinary = { dayOffset: day, phase, population: Math.round(b.demography.population) };
     }
+    if (exitWasPhysical === null && phase === "reintegrated") {
+      // The claim is about ELAPSED TIME, not about the phase name. `reintegrated` is now reachable —
+      // by proven co-location and nothing else — so the fixture records HOW it was reached instead of
+      // treating its mere presence as the defect.
+      exitWasPhysical = String(b.position) === String(w.bands[parent.id].position);
+    }
   }
   const finalBand = w.bands[succId];
   const finalPhase = finalBand?.provisionalSuccessor?.phase ?? null;
   record(
     "E5_a_group_can_no_longer_leave_quarantine_on_a_timer",
-    "the same world, seed and instrument that previously reproduced `reintegrated` at day 359 now never reaches it, and the successor never becomes an ordinary established band by elapsed time alone",
-    becameOrdinary === null && finalPhase !== "reintegrated" && finalPhase !== "stabilized",
+    "the same world, seed and instrument that previously reproduced `reintegrated` at day 359 by ELAPSED TIME never does so again: the successor never becomes an ordinary established band, and any reintegration it does reach was earned by standing on its parent's tile",
+    becameOrdinary === null && (finalPhase !== "reintegrated" || exitWasPhysical === true),
     // Non-vacuity: the lifecycle must actually have MOVED, or "never reached reintegrated" is a claim
     // about a band that did nothing.
     phaseTrail.length > 1,
-    { observedDays: OBSERVE_DAYS, phaseTrail, finalPhase, becameOrdinaryAt: becameOrdinary, stillProvisional: finalBand === undefined ? null : lc.isProvisionalSuccessor(finalBand) },
+    { observedDays: OBSERVE_DAYS, phaseTrail, finalPhase, becameOrdinaryAt: becameOrdinary,
+      exitWasPhysicalCoLocation: exitWasPhysical,
+      departureTargetTile: String(exitTarget.id),
+      stillProvisional: finalBand === undefined ? null : lc.isProvisionalSuccessor(finalBand) },
   );
 
   // ── E6 — the return/establish churn is bounded, and the end of it is REPORTED ──
