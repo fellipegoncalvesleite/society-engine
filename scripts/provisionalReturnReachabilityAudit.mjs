@@ -405,6 +405,12 @@ try {
     ["returning", kernel.RETURN_MAX_DAYS, "establishing"],
     ["travelling", kernel.TRAVEL_MAX_DAYS, "returning"],
     ["failed_early", kernel.FAILED_EARLY_MAX_DAYS, "returning"],
+    // `establishing` was the one declared bound with no CADENCE control. The kernel suite's K6 proves
+    // the CONTRACT — it calls `resolveTimeout` directly and asserts the target is `failed_early` rather
+    // than a success — but it never advances a world, so it cannot say when production notices. That is
+    // exactly the gap the day-scale repair closed for the other three, and it is the longest bound of
+    // the four, so a seasonal-only cadence had the most room to hide in it.
+    ["establishing", kernel.ESTABLISHMENT_MAX_DAYS, "failed_early"],
   ]) {
     const bandId = `band:rr:bound:${phase}`;
     const d = depart(barren, bandId, `LIN-RR-${phase}`, day0);
