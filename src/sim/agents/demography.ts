@@ -24,6 +24,7 @@ import {
   derivePhysicallyAwayPartyPeople,
   derivePreparedCommitmentPartyPeople,
 } from "./bandMobility";
+import { isFissionEligibleParent } from "./bandLifecycle";
 import { createDaughterDeepHistory } from "./bandHistory";
 import {
   inheritAdaptiveHumanForDaughter,
@@ -647,7 +648,25 @@ function computeBandDemography(
     viableFrontier !== undefined &&
     demographicState.splitPressure >= 0.48 &&
     hasFissionCooldownElapsed(world.time, band, population);
+  // ── THE LIFECYCLE GATE, AND IT IS FIRST BECAUSE IT IS A QUESTION ABOUT WHO MAY ASK ──
+  //
+  // `isFissionEligibleParent` — established, and not already splitting — is the canonical boundary,
+  // and until now NOTHING IN PRODUCTION CALLED IT. Only audits did, so the predicate asserted a rule
+  // the annual step did not enforce: this loop skips `dispersed`/`absorbed`/`extinct` and nothing
+  // else, a provisional successor is none of those, and the eligibility below is pure split
+  // pressure plus cooldown. A group whose own viability is the open question could therefore reach
+  // `createDaughterBand` and split a split.
+  //
+  // The gate belongs HERE, at the producer, rather than at the single call site: `shouldCreateDaughter`
+  // is derived from this, and a field that reads true for a band no caller may act on is a field that
+  // lies. Gating the one caller instead would leave the next caller to rediscover the rule.
+  //
+  // It gates DAUGHTER CREATION ONLY. Everything above — cohorts, births, deaths, nutrition, the whole
+  // annual bodily step — is computed before this line and is untouched, because a provisional group is
+  // a LIVING band: `bandLifecycle` says so in as many words, and hiding its bodies from the physical
+  // layer would recreate the ghosts CORRECTION-34 removed. Quarantine is not immunity.
   const eligible =
+    isFissionEligibleParent(band) &&
     deferredReason === undefined &&
     (demographicState.splitPressure >= SPLIT_PRESSURE_THRESHOLD || crisisBreakawayCreatesDaughter) &&
     hasFissionCooldownElapsed(world.time, band, population);
