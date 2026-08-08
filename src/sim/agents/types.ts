@@ -122,6 +122,25 @@ export interface FissionLifecycleRecord {
   readonly lastActionRelativeToDeparture?: ProvisionalActionRelativeToDeparture;
   readonly lastActionRelativeToDepartureDay?: number;
   /**
+   * ROADMAP ITEM 4 — WHAT THIS GROUP HAS DEMONSTRATED ABOUT ITSELF, AS OPPOSED TO ABOUT A PLACE.
+   *
+   * The previous model asked one question — "did it stay somewhere thirty days and live off that
+   * tile" — and a production-pipeline fixture proved no group can answer yes: the best patch the
+   * parent knows is `physically_exhausted` after two days, an `establishing` group does not move, and
+   * moving reset the record. Independence was defined as sedentary persistence, which this ecology
+   * cannot produce and which the project does not require of a human group anyway.
+   *
+   * So the evidence splits. `ProvisionalEstablishmentState` keeps LOCALITY evidence — what this
+   * particular place demonstrated, correctly discarded when the group leaves it. These fields are
+   * SUCCESSOR-LEVEL: what these people have shown they can do, wherever they did it. Feeding
+   * yourself at one place and then at another is not weaker evidence of independence than feeding
+   * yourself twice at the same place. It is stronger.
+   *
+   * None of them is a day count. Elapsed time is not an achievement, and a group that survives on
+   * zero support because mortality is slow has demonstrated nothing.
+   */
+  readonly independence?: ProvisionalIndependenceState;
+  /**
    * ROADMAP ITEM 4 — THE GROUP'S OWN, RUNNING, PHYSICAL SUBSISTENCE INTERVAL.
    *
    * A band working a residential catchment is measured once a season, because that is the unit its
@@ -154,6 +173,14 @@ export interface FissionLifecycleRecord {
  * Why a group decided to walk home. Every one of these is something the group has LIVED and can
  * measure on itself; none reads the parent, the destination or the future.
  */
+/**
+ * What a provisional group physically did on a day, measured against the tile it left from.
+ *
+ * An observation, not a decision label — deliberately NOT named `continue`, `recommit`,
+ * `choose_independence` or `refuse_return`. A step away from home may be a chosen departure, a
+ * relocation forced by barren ground, or an artefact of which adjacent tile sorted first; this type
+ * records the movement and says nothing about which.
+ */
 export type ProvisionalActionRelativeToDeparture =
   | "toward_departure"
   | "away_from_departure"
@@ -180,14 +207,134 @@ export interface ProvisionalEvidenceSignal {
   readonly required: number;
 }
 
+/**
+ * ROADMAP ITEM 4 — the evidence a successor may earn.
+ *
+ * SPLIT DELIBERATELY. The first three are SUCCESSOR-LEVEL: they are about what these people have
+ * demonstrated and they survive relocation, because feeding yourself at two places is not weaker
+ * evidence than feeding yourself twice at one. The next three are CONDITION-LEVEL: read off the
+ * group's current body and current ground, and true or false wherever it stands. The last two are
+ * LOCALITY-level, retained because they describe a place honestly, and NOT required for stabilization
+ * — requiring them is what made independence mean sedentism.
+ */
 export type ProvisionalEvidenceId =
-  | "measured_support_intervals_at_this_site"
-  | "measured_support_covered_a_real_share_of_demand"
-  | "food_repeatedly_taken_from_local_sources"
+  // successor-level — survives movement
+  | "fed_itself_through_measured_intervals"
+  | "took_food_from_more_than_one_place"
+  | "no_support_came_from_the_parent"
+  // condition-level — read where it stands
   | "water_reachable_where_the_group_lives"
   | "productive_labour_retained"
   | "embodied_burden_bounded"
+  // locality-level — retained, reported, NOT required
+  | "measured_support_intervals_at_this_site"
+  | "measured_support_covered_a_real_share_of_demand"
+  | "food_repeatedly_taken_from_local_sources"
   | "long_enough_to_reject_one_lucky_day";
+
+/**
+ * ROADMAP ITEM 4 — SUCCESSOR-LEVEL INDEPENDENCE EVIDENCE.
+ *
+ * Accumulated from the moment of departure and never reset by movement, because the question it
+ * answers is about the people rather than the ground: have these founders shown they can physically
+ * provision themselves without the parent?
+ *
+ * Every field is a count of something that PHYSICALLY HAPPENED. There is deliberately no day count
+ * and no elapsed-time field: a group that walks for a year taking nothing has demonstrated nothing,
+ * and the whole defect this replaces was a contract that could be satisfied by persistence.
+ */
+/**
+ * ONE LOCALITY, WORKED — the measurement unit of a mobile group's subsistence.
+ *
+ * Replaces the 30-day support interval as the unit independence is judged in. That interval was sized
+ * for a TRAVEL LEG: thirty days of a group crossing country toward a named destination. A group that
+ * is trying to live somewhere cycles localities every few days, so thirty days averages seven of them
+ * together and answers a question nobody asked. Worse, two of them took sixty days while the return
+ * decision acts at fourteen, so a group was told to give up four times over before it could finish
+ * measuring itself.
+ *
+ * An episode closes on PHYSICAL CAUSE — the ground stopped giving and the group moved on — with an
+ * observation cap that forces reassessment rather than granting success.
+ */
+export interface SubsistenceEpisode {
+  /** Every locality this assessment spanned. Relocation no longer bounds a measurement. */
+  readonly tileIds: readonly TileId[];
+  /** The subset where a real take physically depleted a real source. Geography, not time-slicing. */
+  readonly provisioningTileIds: readonly TileId[];
+  readonly startDay: number;
+  readonly endDay: number;
+  readonly days: number;
+  /** Physically taken, after the patch's own processing loss. */
+  readonly supportUnits: number;
+  /** What these bodies needed over exactly these days. */
+  readonly demandUnits: number;
+  readonly productiveDays: number;
+  readonly waterStressDaySum: number;
+  readonly workerDays: number;
+  readonly depletionApplied: number;
+  /**
+   * Why the sample stopped accumulating — never why it succeeded or failed.
+   * `demand_window_complete` is the ordinary closer and is outcome-blind by construction.
+   */
+  readonly closedBy: "demand_window_complete" | "attempt_ended";
+  /**
+   * Real support from real extraction. NOT a comfort threshold: a poor group feeding itself badly is
+   * independent, and calling that dependence would keep people provisional for being hungry.
+   */
+  readonly selfProvisioned: boolean;
+}
+
+/**
+ * ROADMAP ITEM 4 — SUCCESSOR-LEVEL INDEPENDENCE EVIDENCE, SCOPED TO AN ATTEMPT.
+ *
+ * ── WHY THE ATTEMPT SCOPE EXISTS (E5) ───────────────────────────────────────────────────────────
+ *
+ * The first version of this state accumulated from departure and never reset, and a fixture caught
+ * what that means: a group travelled, failed, spent 240 days failing to walk home, was dropped into
+ * `establishing` by the cycle bound, and stabilized THE NEXT DAY — because the evidence it had
+ * gathered while failing to return already satisfied every requirement. Failing to get home had become
+ * a résumé.
+ *
+ * So the record splits along the only line that matters here: what is HISTORICALLY TRUE about these
+ * people, and what the CURRENT attempt has demonstrated. History is never erased — the group really
+ * did feed itself, and pretending otherwise would be its own lie. But stabilization reads the current
+ * attempt, and a failed return closes the attempt that failed.
+ */
+export interface ProvisionalIndependenceState {
+  // ── LIFETIME HISTORY — never erased, never sufficient on its own ──
+  readonly lifetimeProductiveDays: number;
+  readonly lifetimeEpisodes: number;
+  readonly lifetimeSelfProvisionedEpisodes: number;
+  /** Distinct tiles this group has ever physically depleted. Breadth, not persistence. */
+  readonly lifetimeProvisioningTileIds: readonly TileId[];
+  /**
+   * True the moment anything credits this group from the parent, and it never becomes false again: a
+   * group fed by the camp it left has not demonstrated independence from it, whatever else it did.
+   */
+  readonly receivedParentSupport: boolean;
+
+  // ── THE CURRENT INDEPENDENCE ATTEMPT — closed by failure, reopened by a new attempt ──
+  /** The day the current attempt began. A cycle-bound reassessment starts a new one. */
+  readonly attemptStartedDay: number;
+  /** Episodes closed DURING the current attempt, bounded, newest last. Stabilization reads these. */
+  readonly attemptEpisodes: readonly SubsistenceEpisode[];
+  /** The locality currently being worked, if the group is in a phase that earns credit. */
+  readonly openEpisode?: OpenSubsistenceEpisode;
+}
+
+/** The running locality, before it closes into a `SubsistenceEpisode`. */
+export interface OpenSubsistenceEpisode {
+  readonly tileIds: readonly TileId[];
+  readonly provisioningTileIds: readonly TileId[];
+  readonly startDay: number;
+  readonly days: number;
+  readonly supportUnits: number;
+  readonly demandUnits: number;
+  readonly productiveDays: number;
+  readonly waterStressDaySum: number;
+  readonly workerDays: number;
+  readonly depletionApplied: number;
+}
 
 export interface ProvisionalEstablishmentState {
   readonly siteTileId: TileId;

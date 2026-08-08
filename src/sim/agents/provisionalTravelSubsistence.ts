@@ -60,6 +60,9 @@ import { getWorldTimeForDay } from "../tick/time";
 import type {
   Band,
   FissionLifecycleRecord,
+  OpenSubsistenceEpisode,
+  ProvisionalIndependenceState,
+  SubsistenceEpisode,
   SeasonalSupportSample,
   SeasonalSupportState,
   TravelSubsistenceDay,
@@ -321,10 +324,12 @@ export function advanceProvisionalSubsistence(world: WorldState, day: number): T
     const shouldClose = advanced.daysElapsed >= TRAVEL_SUPPORT_INTERVAL_DAYS;
     let seasonalSupport: SeasonalSupportState | undefined = live.seasonalSupport;
     let subsistence = advanced;
+    let closedSample: SeasonalSupportSample | undefined;
     if (shouldClose) {
       const closure = closeTravelSupportInterval(live, advanced, day);
       seasonalSupport = closure.support;
       subsistence = closure.next;
+      closedSample = closure.sample;
       closed.push(closure.sample);
     }
 
@@ -335,7 +340,17 @@ export function advanceProvisionalSubsistence(world: WorldState, day: number): T
       // The compatibility mirror `socialContext.ts` maintains for every ordinary band, maintained here
       // for the one kind of band that never reaches that writer. It is a mirror, not a second state.
       hungerPressure: deriveTravelHunger({ ...live, seasonalSupport }, subsistence),
-      provisionalSuccessor: { ...record, travelSubsistence: subsistence },
+      provisionalSuccessor: {
+        ...record,
+        travelSubsistence: subsistence,
+        // Charged on the same day record as everything else, so a day cannot count towards
+        // independence without having been physically lived and physically charged.
+        // Phase-scoped: `establishing` earns attempt credit, everything else only lifetime history.
+        independence: advanceIndependence(
+          record.independence, dayRecord, record.phase, split.gatheringWorkers,
+          Math.max(0, derivePopulationDemand(live).adultEquivalentDemand),
+        ),
+      },
     };
   }
 
@@ -345,6 +360,288 @@ export function advanceProvisionalSubsistence(world: WorldState, day: number): T
       : current,
     days,
     closedIntervals: closed,
+  };
+}
+
+/** Distinct tiles a group is credited with having provisioned itself from. Bounded: breadth, not a log. */
+export const PROVISIONING_TILE_CAP = 16;
+
+/**
+ * What makes an interval one the group PROVISIONED ITSELF through.
+ *
+ * ── WHY THIS IS NOT A SHARE-OF-DEMAND THRESHOLD ─────────────────────────────────────────────────
+ *
+ * It was, briefly, at 0.2, and that was the sedentism error wearing different clothes. A share-of-
+ * demand floor asks "is this group getting enough to live comfortably", and a group that answers no is
+ * not thereby dependent on its parent — it is a poor group feeding itself badly, which is a thing
+ * humans have been for most of history. Item 4's question is whether the founders now operate as their
+ * own group. Whether that group then survives its ecology belongs to demography and to Item 6.
+ *
+ * So the test is that the interval contained REAL SUPPORT FROM REAL EXTRACTION: somebody physically
+ * took something from a physical source that was really depleted. Zero support is not independence —
+ * a group living on nothing has demonstrated nothing, and that arm stays refused. But 0.15 of demand,
+ * taken by these people from ground they found themselves, is independence at its poorest, and calling
+ * it dependence would keep a group provisional for being hungry.
+ *
+ * The guard against a single lucky take is not a bigger number here. It is the other two signals:
+ * TWO such intervals, and food from MORE THAN ONE PLACE.
+ */
+export function intervalWasSelfProvisioned(subsistence: TravelSubsistenceState): boolean {
+  return subsistence.supportUnits > 0 && subsistence.depletionApplied > 0;
+}
+
+/** Episodes retained for the CURRENT attempt. Bounded: evidence, not a journal. */
+export const ATTEMPT_EPISODE_CAP = 8;
+
+/**
+ * THE MEASUREMENT UNIT: one assessment closes when the group has incurred this fraction of a
+ * season's adult-equivalent demand.
+ *
+ * ── WHY DEMAND AND NOT DAYS ─────────────────────────────────────────────────────────────────────
+ *
+ * The question an assessment answers is "what did these people obtain against what their bodies
+ * needed", so the denominator is the honest thing to measure the window in. A day count answers it
+ * only for one group size; eleven people and four people accumulate need at different rates, and a
+ * fixed day window would sample them unequally while claiming to compare them.
+ *
+ * STATED HONESTLY: for a group whose composition does not change, demand accrues at a near-constant
+ * rate, so this window is numerically about ten days. The invariance being bought is across group
+ * SIZE and composition, not across time — this is not a timer wearing a disguise, but neither is it
+ * independent of elapsed time for a stable group, and pretending otherwise would be the kind of
+ * claim this project keeps catching.
+ *
+ * ONE NINTH, because `derivePopulationDemand` returns a SEASON and a season is the cadence at which
+ * the residential system asks the same question. A ninth of it is short enough that a group gets
+ * several readings before the return decision acts at fourteen days, and long enough that a single
+ * day's luck cannot fill it.
+ *
+ * It closes a SAMPLE, never an outcome: a rich window and a sterile window close by the same rule
+ * and produce the same schema.
+ */
+export const ASSESSMENT_DEMAND_FRACTION_OF_SEASON = 1 / 9;
+
+/**
+ * THE PHASES IN WHICH A SUCCESSOR IS TRYING TO OPERATE INDEPENDENTLY.
+ *
+ * ── WHY `travelling` BELONGS HERE, AND WHY EXCLUDING IT WAS WRONG ───────────────────────────────
+ *
+ * This was `["establishing"]`, on the reasoning that a group crossing country has not yet tried to
+ * live anywhere. A day-by-day trace falsified it from the other side: the independence attempt begins
+ * when the departure physically succeeds. From that instant the founders have left, the parent no
+ * longer owns those bodies, the successor owns its own hunger and water and burden, and no parent
+ * receipt is available to it. A group feeding itself on the road is doing the thing this evidence
+ * exists to measure.
+ *
+ * And the exclusion had a measured consequence. Ground that gives raises `gatherShare`, so a group
+ * that FINDS FOOD travels slower — the movement-versus-subsistence tradeoff working exactly as
+ * designed. In the adversarial arms the fed groups therefore never reached `establishing` at all,
+ * while the starving group walked straight there. Every arm that provisioned itself generated zero
+ * evidence, and the only arms that opened a window were the ones with nothing to record.
+ *
+ * ── WHAT IS STILL EXCLUDED, AND WHY THAT IS NOT SYMMETRIC ───────────────────────────────────────
+ *
+ * `returning` and `failed_early` are the group walking away from an attempt that did not work. It
+ * still eats, still drinks, still starves — all of that stays physically real and keeps changing its
+ * body — but none of it is evidence that the CURRENT attempt is succeeding, because there is no
+ * current attempt. That asymmetry is the E5 defect's fix and it is preserved exactly.
+ *
+ * The terminal phases own no attempt: `reintegrated` and `provisional_extinguished` ended it,
+ * `stabilized` resolved it.
+ */
+export function isAttemptActivePhase(phase: string): boolean {
+  return phase === "travelling" || phase === "establishing";
+}
+
+/** Retained as the published list for audits; `isAttemptActivePhase` is the authority. */
+export const ATTEMPT_CREDIT_PHASES: readonly string[] = ["travelling", "establishing"];
+
+export function emptyIndependence(day: number): ProvisionalIndependenceState {
+  return {
+    lifetimeProductiveDays: 0,
+    lifetimeEpisodes: 0,
+    lifetimeSelfProvisionedEpisodes: 0,
+    lifetimeProvisioningTileIds: [],
+    receivedParentSupport: false,
+    attemptStartedDay: day,
+    attemptEpisodes: [],
+  };
+}
+
+/**
+ * Close the current independence attempt, keeping every historical fact and discarding the claim that
+ * THIS attempt is working.
+ *
+ * Called when the group gives up and turns back, and again when a cycle-bound reassessment drops it
+ * into a fresh `establishing`. The second call is what stops the timer from laundering stale credit:
+ * the group arrives at its new attempt with its history intact and its evidence at zero, and has to
+ * demonstrate independence where it now stands.
+ */
+export function closeIndependenceAttempt(
+  previous: ProvisionalIndependenceState | undefined,
+  day: number,
+): ProvisionalIndependenceState {
+  const base = previous ?? emptyIndependence(day);
+  const closed = base.openEpisode === undefined
+    ? base
+    : foldEpisode(base, closeOpenEpisode(base.openEpisode, day, "attempt_ended"), false);
+  return { ...closed, attemptStartedDay: day, attemptEpisodes: [], openEpisode: undefined };
+}
+
+/**
+ * Accumulate one physically lived day, and one closed interval when the interval closed today.
+ *
+ * WHAT THIS DELIBERATELY DOES NOT COUNT: days. There is no elapsed-time field here and there must not
+ * be one. The contract this replaces could be satisfied by a group standing still long enough, which
+ * is how a fixture came to assign sixty days rather than live them. Every quantity below required
+ * somebody to physically take something from somewhere.
+ *
+ * `provisioningTileIds` is the one that makes mobility legible as evidence rather than as failure: a
+ * group that fed itself at four different places has demonstrated more about its ability to provision
+ * itself than one that got lucky at the same place four times.
+ */
+/** Turn a running locality into a measured episode. Zero support closes as a barren episode, not silence. */
+export function closeOpenEpisode(
+  open: OpenSubsistenceEpisode,
+  endDay: number,
+  closedBy: SubsistenceEpisode["closedBy"],
+): SubsistenceEpisode {
+  return {
+    tileIds: open.tileIds,
+    provisioningTileIds: open.provisioningTileIds,
+    startDay: open.startDay,
+    endDay,
+    days: open.days,
+    supportUnits: round4(open.supportUnits),
+    demandUnits: round4(open.demandUnits),
+    productiveDays: open.productiveDays,
+    waterStressDaySum: round4(open.waterStressDaySum),
+    workerDays: open.workerDays,
+    depletionApplied: round4(open.depletionApplied),
+    closedBy,
+    // Real support from real extraction, and nothing about comfort.
+    selfProvisioned: open.supportUnits > 0 && open.depletionApplied > 0,
+  };
+}
+
+/** Record a closed episode: always into lifetime history, into the attempt only when it was earned there. */
+function foldEpisode(
+  base: ProvisionalIndependenceState,
+  episode: SubsistenceEpisode,
+  creditsAttempt: boolean,
+): ProvisionalIndependenceState {
+  // Every locality that physically yielded during this assessment, not the window's first tile.
+  const tiles = episode.selfProvisioned
+    ? [...new Set([...base.lifetimeProvisioningTileIds, ...episode.provisioningTileIds])].slice(-PROVISIONING_TILE_CAP)
+    : base.lifetimeProvisioningTileIds;
+  return {
+    ...base,
+    lifetimeEpisodes: base.lifetimeEpisodes + 1,
+    lifetimeSelfProvisionedEpisodes: base.lifetimeSelfProvisionedEpisodes + (episode.selfProvisioned ? 1 : 0),
+    lifetimeProvisioningTileIds: tiles,
+    attemptEpisodes: creditsAttempt
+      ? [...base.attemptEpisodes, episode].slice(-ATTEMPT_EPISODE_CAP)
+      : base.attemptEpisodes,
+  };
+}
+
+/**
+ * Accumulate one physically lived day.
+ *
+ * TWO SEPARATE LEDGERS, and which one a day reaches is decided by the phase the group is in — see
+ * `ATTEMPT_CREDIT_PHASES`. Lifetime history takes every physical fact, because they all happened.
+ * The attempt takes only days lived while actually trying to live somewhere.
+ *
+ * There is still no elapsed-time field anywhere in here. An episode is closed by the ground running
+ * out or by an observation cap; neither of those is an achievement, and a barren episode closes as
+ * barren.
+ */
+export function advanceIndependence(
+  previous: ProvisionalIndependenceState | undefined,
+  day: TravelSubsistenceDay,
+  phase: string,
+  workersToday: number,
+  /** A season's adult-equivalent demand for THIS group, so the window scales with the bodies in it. */
+  seasonalDemand: number,
+): ProvisionalIndependenceState {
+  const assessmentWindowDemand = Math.max(1e-6, seasonalDemand * ASSESSMENT_DEMAND_FRACTION_OF_SEASON);
+  const base = previous ?? emptyIndependence(day.day);
+  const tookSomething = day.usableUnits > 0;
+  const withLifetime: ProvisionalIndependenceState = {
+    ...base,
+    lifetimeProductiveDays: base.lifetimeProductiveDays + (tookSomething ? 1 : 0),
+  };
+
+  // ── OUTSIDE A CREDITING PHASE THE ATTEMPT IS OVER, AND ITS CREDIT GOES WITH IT (E5) ──
+  //
+  // The group still lives here — the day already changed its body upstream, it still eats, still
+  // starves — and every physical fact still lands in lifetime history, because it happened. What it
+  // does not keep is the claim that its current attempt is working, because there is no current
+  // attempt: it is walking home, or it has failed early.
+  //
+  // Clearing `attemptEpisodes` is the whole fix. Without it a group spent 240 days failing to reach
+  // its parent, was dropped into `establishing` by the cycle bound, and stabilized the next day on
+  // evidence it had gathered while failing. A new attempt has to be demonstrated where it now stands.
+  if (!isAttemptActivePhase(phase)) {
+    const closed = withLifetime.openEpisode === undefined
+      ? withLifetime
+      : foldEpisode(withLifetime, closeOpenEpisode(withLifetime.openEpisode, day.day, "attempt_ended"), false);
+    if (closed.attemptEpisodes.length === 0 && closed.openEpisode === undefined) return closed;
+    return { ...closed, attemptStartedDay: day.day, attemptEpisodes: [], openEpisode: undefined };
+  }
+
+  // ── RELOCATION NO LONGER CLOSES THE MEASUREMENT ──────────────────────────────────────────────
+  //
+  // It used to, and that made the whole instrument answer a different question than it claimed.
+  // An assessment closed on relocation, and relocation only happens after two barren days — so a
+  // locality that FAILED produced a closed measurement every 3-4 days while a locality that WORKED
+  // produced one only when the 10-day cap expired. Failure was sampled three times as often as
+  // success, and the adversarial matrix showed the endpoint of that: rich localities A-D closed no
+  // measurements at all inside the group's lifespan while the sterile arm E closed seven.
+  //
+  // "This place is finished" is a fact about the GROUND. "Here is what these people obtained against
+  // what their bodies needed" is a fact about the GROUP. Closing the second whenever the first
+  // happened is what tied the measurement unit to failure.
+  //
+  // So the locality is now recorded ON the assessment (`tileIds`) rather than bounding it, and the
+  // assessment closes on one uniform rule below that does not care whether the ground was good.
+  const open = withLifetime.openEpisode;
+  if (open === undefined) return { ...withLifetime, openEpisode: openEpisodeAt(day, workersToday) };
+  const spannedTiles = open.tileIds.includes(day.tileId) ? open.tileIds : [...open.tileIds, day.tileId];
+
+  const advanced: OpenSubsistenceEpisode = {
+    ...open,
+    tileIds: spannedTiles,
+    provisioningTileIds: tookSomething && !open.provisioningTileIds.includes(day.tileId)
+      ? [...open.provisioningTileIds, day.tileId]
+      : open.provisioningTileIds,
+    days: open.days + 1,
+    supportUnits: round4(open.supportUnits + day.usableUnits),
+    demandUnits: round4(open.demandUnits + day.demandUnits),
+    productiveDays: open.productiveDays + (tookSomething ? 1 : 0),
+    waterStressDaySum: round4(open.waterStressDaySum + day.waterStress),
+    workerDays: open.workerDays + workersToday,
+    depletionApplied: round4(open.depletionApplied + day.depletionApplied),
+  };
+  // One uniform, outcome-blind closer. A rich window and a sterile window both end here.
+  if (advanced.demandUnits >= assessmentWindowDemand) {
+    const folded = foldEpisode(withLifetime, closeOpenEpisode(advanced, day.day, "demand_window_complete"), true);
+    return { ...folded, openEpisode: undefined };
+  }
+  return { ...withLifetime, openEpisode: advanced };
+}
+
+function openEpisodeAt(day: TravelSubsistenceDay, workersToday: number): OpenSubsistenceEpisode {
+  return {
+    tileIds: [day.tileId],
+    provisioningTileIds: day.usableUnits > 0 ? [day.tileId] : [],
+    startDay: day.day,
+    days: 1,
+    supportUnits: round4(day.usableUnits),
+    demandUnits: round4(day.demandUnits),
+    productiveDays: day.usableUnits > 0 ? 1 : 0,
+    waterStressDaySum: round4(day.waterStress),
+    workerDays: workersToday,
+    depletionApplied: round4(day.depletionApplied),
   };
 }
 

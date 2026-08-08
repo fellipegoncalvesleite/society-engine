@@ -60,8 +60,51 @@ export const REQUIRED_PRODUCTIVE_GATHERING_DAYS = 4;
 export const REQUIRED_WORKING_ADULTS = 2;
 /** Above this the group is carrying more injury than an independent group can absorb. */
 export const MAX_ESTABLISHED_MORTALITY_BUMP = 0.3;
-/** Long enough that a single good day cannot account for the record. */
+/**
+ * Long enough that a single good day cannot account for the record.
+ *
+ * RETAINED AS A LOCALITY DESCRIPTION, NO LONGER REQUIRED FOR STABILIZATION. Requiring it is what made
+ * "independent" mean "sedentary": a production-pipeline fixture showed the best patch the parent knows
+ * is exhausted after two days, so thirty days in one place is not a thing this ecology permits a group
+ * to survive, and the project does not require a human group to settle in order to be a group.
+ */
 export const REQUIRED_DAYS_AT_SITE = 30;
+
+/**
+ * ── WHAT REPLACES IT ────────────────────────────────────────────────────────────────────────────
+ *
+ * Two intervals the group actually fed itself through, and food taken from more than one place.
+ *
+ * TWO, because one is an event and two is a capability — the same reason the site-interval count was
+ * two. It is a count of MEASURED INTERVALS, not of days: an interval only closes after the group has
+ * lived it, and it only counts here if the ratio it measured cleared the floor. A group cannot reach
+ * this by persisting.
+ */
+export const REQUIRED_SELF_PROVISIONED_INTERVALS = 2;
+
+/**
+ * MORE THAN ONE PLACE, because that is what provisioning looks like for a group that cannot strip a
+ * tile and stay. This is the signal that makes mobility legible as evidence instead of as failure, and
+ * it is the one that would have been impossible to satisfy under the old contract, which reset the
+ * record the moment the group moved.
+ */
+export const REQUIRED_PROVISIONING_PLACES = 2;
+
+/**
+ * The signals a successor must hold to stop being provisional.
+ *
+ * The three successor-level ones plus the three condition-level ones. The four locality signals are
+ * assessed, reported and retained — they describe the ground honestly — but a group is not kept
+ * provisional for failing to settle down.
+ */
+export const STABILIZATION_REQUIRED_SIGNALS: readonly ProvisionalEvidenceSignal["id"][] = [
+  "fed_itself_through_measured_intervals",
+  "took_food_from_more_than_one_place",
+  "no_support_came_from_the_parent",
+  "water_reachable_where_the_group_lives",
+  "productive_labour_retained",
+  "embodied_burden_bounded",
+];
 
 const round4 = (value: number): number => Math.round(value * 10000) / 10000;
 
@@ -88,7 +131,31 @@ export function assessEstablishmentEvidence(
   today: number,
 ): readonly ProvisionalEvidenceSignal[] {
   const subsistence = band.provisionalSuccessor?.travelSubsistence;
+  const independence = band.provisionalSuccessor?.independence;
   const intervalsHere = (subsistence?.closedIntervals ?? 0) - establishment.closedIntervalsAtEntry;
+  // ── READ THE CURRENT ATTEMPT, NOT THE LIFETIME RECORD (E5) ──
+  //
+  // These used to read the lifetime totals, and a fixture caught what that permits: a group that spent
+  // 240 days failing to walk home was dropped into `establishing` by the cycle bound and stabilized the
+  // next day, because everything it had accumulated while failing still counted. Failing to get home
+  // had become a résumé.
+  //
+  // Stabilization asks whether THIS attempt is working. The lifetime record is retained, and it is
+  // true, and it is not what makes a group independent today.
+  const attemptEpisodes = independence?.attemptEpisodes ?? [];
+  const selfProvisionedEpisodes = attemptEpisodes.filter((entry) => entry.selfProvisioned).length;
+  // ── GEOGRAPHY, AND ONLY GEOGRAPHY THAT ACTUALLY FED THEM ──
+  //
+  // An assessment now spans whatever ground the group covered while the window was open, so the
+  // window's tile list is where it WAS, not where it ATE. Counting the former would let a group
+  // manufacture locality diversity by walking, and counting one tile per window would let it
+  // manufacture diversity by waiting — §9's "do not duplicate geography by slicing time" in both
+  // directions. Only tiles a real take physically depleted are counted, unioned across the attempt's
+  // windows so the same place found twice is still one place.
+  const provisioningPlaces = new Set(
+    attemptEpisodes.flatMap((entry) => entry.provisioningTileIds.map((id) => String(id))),
+  ).size;
+  const parentFed = independence?.receivedParentSupport ?? false;
   const meanWaterStress = establishment.daysAtSite <= 0
     ? 1
     : establishment.waterStressDaySumAtSite / establishment.daysAtSite;
@@ -130,6 +197,29 @@ export function assessEstablishmentEvidence(
   };
 
   return [
+    // ── SUCCESSOR-LEVEL: what these people have shown, wherever they showed it ──
+    signal(
+      "fed_itself_through_measured_intervals",
+      "FissionLifecycleRecord.independence.attemptEpisodes — subsistence episodes closed DURING THE CURRENT ATTEMPT in which real extraction really depleted a real source",
+      selfProvisionedEpisodes,
+      REQUIRED_SELF_PROVISIONED_INTERVALS,
+      selfProvisionedEpisodes >= REQUIRED_SELF_PROVISIONED_INTERVALS,
+    ),
+    signal(
+      "took_food_from_more_than_one_place",
+      "distinct tiles among the CURRENT ATTEMPT's self-provisioned episodes — a real take physically depleted each one",
+      provisioningPlaces,
+      REQUIRED_PROVISIONING_PLACES,
+      provisioningPlaces >= REQUIRED_PROVISIONING_PLACES,
+    ),
+    signal(
+      "no_support_came_from_the_parent",
+      "FissionLifecycleRecord.independence.receivedParentSupport — set true by any parent credit, and it must stay false",
+      parentFed ? 1 : 0,
+      0,
+      parentFed === false,
+    ),
+    // ── LOCALITY-LEVEL: retained and reported, NOT required ──
     signal(
       "measured_support_intervals_at_this_site",
       "provisionalTravelSubsistence.closeTravelSupportInterval -> seasonalSurvival.recordSupportInterval",
@@ -151,11 +241,20 @@ export function assessEstablishmentEvidence(
       REQUIRED_PRODUCTIVE_GATHERING_DAYS,
       establishment.productiveGatheringDaysAtSite >= REQUIRED_PRODUCTIVE_GATHERING_DAYS,
     ),
+    // ── THE NAME AND THE NUMBER NOW AGREE ──
+    //
+    // This reported `meanWaterStress` — a quantity where LOWER is better — under a name where higher
+    // is better, and held on `measured < required` while every other signal in this list holds on
+    // `measured >= required`. A reader checking the published evidence against the verdict would have
+    // read `0.271 < 0.4` under the word "reachable" and had to guess which way the inequality ran.
+    //
+    // Behaviour is unchanged and deliberately so: `stress < 0.4` is exactly `reachability > 0.6`. What
+    // changes is that the signal now publishes the quantity its own name claims.
     signal(
       "water_reachable_where_the_group_lives",
-      "the standing tile's own water access, measured daily by provisionalTravelSubsistence",
-      meanWaterStress,
-      TRAVEL_NO_WATER_STRESS,
+      "1 - mean daily water stress at this site; stress is the standing tile's own waterAccess through provisionalTravelSubsistence, so this is measured reachability and higher is better",
+      1 - meanWaterStress,
+      1 - TRAVEL_NO_WATER_STRESS,
       meanWaterStress < TRAVEL_NO_WATER_STRESS,
     ),
     signal(
@@ -270,7 +369,19 @@ export function advanceProvisionalEstablishment(world: WorldState, today: number
     // three facts that describe a group which has not died yet, not one that is operating. Each signal
     // is a NECESSARY condition for an independent human group at a place; the kernel's own floor stays
     // as the outer guard so a caller that gathered nothing is still refused.
-    if (satisfied === signals.length && satisfied >= MIN_LIVED_EVIDENCE_FOR_STABILIZATION) {
+    // ── THE REQUIRED SET, NOT EVERY SIGNAL ──
+    //
+    // This was `satisfied === signals.length`: every signal, including the four that describe how long
+    // the group had stayed in one place. That is the sedentism requirement in one line, and it made
+    // stabilization unreachable — the locality signals cannot hold in an ecology where a patch is
+    // exhausted after two days and an establishing group could not move without resetting the record.
+    //
+    // The locality signals are still assessed and still stored. They are simply not what independence
+    // is made of.
+    const requiredHeld = STABILIZATION_REQUIRED_SIGNALS.every(
+      (id) => signals.find((entry) => entry.id === id)?.holds === true,
+    );
+    if (requiredHeld && satisfied >= MIN_LIVED_EVIDENCE_FOR_STABILIZATION) {
       const stabilized = stabilizeGroup(band, record, withSignals, satisfied, today);
       if (stabilized !== undefined) {
         outcome = "stabilize";
