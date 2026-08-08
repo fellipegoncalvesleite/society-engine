@@ -93,6 +93,35 @@ export interface FissionLifecycleRecord {
   /** Bounded outbound trail, newest last, so a return can retrace ground the group actually walked. */
   readonly trail?: readonly TileId[];
   /**
+   * ROADMAP ITEM 4 — TWO PHYSICAL OBSERVATIONS, AND THE FOUR THINGS THEY DO NOT MEAN.
+   *
+   * A red-team pass tried to derive "this group had an alternative and did not take it" from `trail`
+   * and `blockedStepDays`, and both were the wrong instruments. `trail` is an append-only breadcrumb
+   * written in EVERY movement phase, capped at 64 with the OLDEST entries evicted — so a long journey
+   * loses the home end first — and nothing routes by it. `blockedStepDays` counts refusals toward
+   * WHATEVER the current phase is aiming at, so it describes the outbound direction while travelling
+   * and the homeward one while returning, and it is reset on entry to `returning`. Neither can answer
+   * whether going home was physically open.
+   *
+   * These two fields answer only what they say, and the names are chosen so they cannot be read as
+   * more. They are OBSERVATIONS OF PHYSICAL FACT written by the movement authority, never decisions.
+   *
+   * `homewardStepFromHereWasAvailable` means EXACTLY: on the day stamped, at least one tile adjacent
+   * to where this group was standing was passable AND strictly closer to `departureTileId`.
+   *
+   * It does NOT mean: the parent is still there (the group has no channel to know); the whole route
+   * home is open (only the first step was tested); a return would succeed; or that anybody weighed
+   * the option. It is the ground's answer to one step, nothing else.
+   *
+   * `lastActionRelativeToDeparture` records what the group PHYSICALLY DID that day measured against
+   * `departureTileId`. It is deliberately not named for any intention. While `returning` it reads
+   * `toward_departure` by construction, because that is the phase's own destination.
+   */
+  readonly homewardStepFromHereWasAvailable?: boolean;
+  readonly homewardStepObservedOnDay?: number;
+  readonly lastActionRelativeToDeparture?: ProvisionalActionRelativeToDeparture;
+  readonly lastActionRelativeToDepartureDay?: number;
+  /**
    * ROADMAP ITEM 4 — THE GROUP'S OWN, RUNNING, PHYSICAL SUBSISTENCE INTERVAL.
    *
    * A band working a residential catchment is measured once a season, because that is the unit its
@@ -125,6 +154,12 @@ export interface FissionLifecycleRecord {
  * Why a group decided to walk home. Every one of these is something the group has LIVED and can
  * measure on itself; none reads the parent, the destination or the future.
  */
+export type ProvisionalActionRelativeToDeparture =
+  | "toward_departure"
+  | "away_from_departure"
+  | "lateral_to_departure"
+  | "stayed";
+
 export type ProvisionalReturnCause =
   | "measured_support_failed_at_this_site"
   | "no_water_where_the_group_is_standing"

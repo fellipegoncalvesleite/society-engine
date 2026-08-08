@@ -37,7 +37,7 @@ import { deriveTravelPace } from "./bandMobility";
 import { closeOpenTravelInterval, deriveTravelEffortSplit } from "./provisionalTravelSubsistence";
 import { getNeighborTiles, getTile } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
-import type { Band, FissionLifecycleRecord } from "./types";
+import type { Band, FissionLifecycleRecord, ProvisionalActionRelativeToDeparture } from "./types";
 import type { BandId, TileId } from "../core/types";
 import type { WorldState } from "../world/types";
 import type { DailyAction } from "./dailyActions";
@@ -102,8 +102,14 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
   const bands: Record<string, Band> = { ...world.bands };
   let changed = false;
 
+  // Captured for EVERY live provisional successor, including the ones this loop skips — a group that
+  // did not move is exactly the `stayed` observation, and it would be invisible if only movers were
+  // recorded.
+  const positionsBefore = new Map<string, { readonly position: TileId }>();
+
   for (const band of Object.values(world.bands).sort((a, b) => String(a.id).localeCompare(String(b.id)))) {
     if (!isProvisionalSuccessor(band)) continue;
+    positionsBefore.set(String(band.id), { position: band.position });
     const record = band.provisionalSuccessor as FissionLifecycleRecord;
     if (record.phase !== "travelling" && record.phase !== "returning") continue;
 
@@ -248,6 +254,84 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
       distanceRemaining: next.distance,
       impassableNeighboursRefused: impassable,
     });
+  }
+
+  // ── THE TWO PHYSICAL CHOICE OBSERVATIONS ──────────────────────────────────────────────────────
+  //
+  // Written in ONE pass, after the movement loop, deliberately: interleaving them with the movement
+  // branches would have meant touching six `continue` paths and would have made it easy for a future
+  // edit to let an observation change a step. Here they can only READ what movement already decided.
+  //
+  // They reuse the movement authority's own geometry — `getNeighborTiles`, `isBandPassableDestination`
+  // and the same `manhattan` — because a second passability or distance implementation is how two
+  // readers start disagreeing about the same ground.
+  //
+  // The world is legitimately visible HERE: this module is the physical mover and already holds the
+  // grid. What is stored is bounded and band-local, so the later disposition authority can read it
+  // without a `world` parameter and without gaining any world truth beyond "the ground answered this".
+  for (const [bandId, before] of positionsBefore) {
+    const after = bands[bandId];
+    if (after === undefined || !isProvisionalSuccessor(after)) continue;
+    const record = after.provisionalSuccessor as FissionLifecycleRecord;
+    const departure = record.departureTileId;
+    if (departure === undefined) continue;
+    const departureTile = getTile(world, departure);
+    const beforeTile = getTile(world, before.position);
+    const standingTile = getTile(world, after.position);
+    if (departureTile === undefined || beforeTile === undefined || standingTile === undefined) continue;
+
+    // ── observation 1 — does the ground admit ONE step homeward FROM WHERE THE GROUP NOW STANDS? ──
+    //
+    // Measured at the position the group occupies at the END of this day, which is what the field name
+    // says and the only thing a later reader can act on. An earlier form of this measured the position
+    // the group stood on BEFORE its step — a fact about a place it no longer occupies — and the audit
+    // caught it on the one day the two disagree: the departure day itself, where the group starts ON
+    // its departure tile (no step can reduce a distance of zero) and ends one tile out (where a step
+    // home plainly exists). A field called "from here" must mean here.
+    //
+    // Attempt-active phases only. A `returning` group is already walking home, so asking whether it
+    // could is not a question about an alternative; and a terminal group is not standing anywhere.
+    const attemptActive = record.phase === "travelling" || record.phase === "establishing";
+    const distanceBefore = manhattan(beforeTile.coord, departureTile.coord);
+    const distanceNow = manhattan(standingTile.coord, departureTile.coord);
+    const homewardAvailable = attemptActive
+      ? getNeighborTiles(world, after.position).some(
+          (tile) => isBandPassableDestination(tile) && manhattan(tile.coord, departureTile.coord) < distanceNow,
+        )
+      : undefined;
+
+    // ── observation 2 — what did the group physically DO, measured against home? ──
+    const distanceAfter = distanceNow;
+    const action: ProvisionalActionRelativeToDeparture =
+      String(after.position) === String(before.position)
+        ? "stayed"
+        : distanceAfter < distanceBefore
+          ? "toward_departure"
+          : distanceAfter > distanceBefore
+            ? "away_from_departure"
+            : "lateral_to_departure";
+
+    // BOTH observations are re-stamped every day they are taken, and the homeward pair is CLEARED on
+    // any day it is not. An earlier form wrote only when a value changed, which froze the day stamp:
+    // a group that walked for a fortnight with a step home open throughout carried a fourteen-day-old
+    // `observedOnDay` on a field describing right now, so a reader could not tell a current
+    // observation from a stale one. The invariant is therefore structural — IF the homeward field is
+    // present, it was measured TODAY — and the clearing is what stops a `travelling` group's last
+    // reading surviving into `returning` as though it still described the ground.
+    //
+    // No counters. Two current-state values and two day stamps is the whole representation; a running
+    // total here would be a `>= N` gate waiting for somebody to write it.
+    changed = true;
+    bands[bandId] = {
+      ...after,
+      provisionalSuccessor: {
+        ...record,
+        homewardStepFromHereWasAvailable: homewardAvailable,
+        homewardStepObservedOnDay: homewardAvailable === undefined ? undefined : day,
+        lastActionRelativeToDeparture: action,
+        lastActionRelativeToDepartureDay: day,
+      },
+    };
   }
 
   return { world: changed ? { ...world, bands: bands as Readonly<Record<BandId, Band>> } : world, steps };
