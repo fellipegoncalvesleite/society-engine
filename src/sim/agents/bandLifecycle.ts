@@ -52,12 +52,11 @@ export function isLivingBand(band: Band): boolean {
 }
 
 /**
- * This band is currently a provisional successor: it has physically departed and has not yet either
- * stabilized or rejoined its parent.
+ * This band is currently a living provisional successor: it has physically departed and has not yet
+ * reached any terminal lifecycle outcome.
  *
- * The record is cleared exactly once, at `stabilized` or `reintegrated`, so a terminal phase never
- * leaves a band looking provisional. The `isTerminalPhase` guard covers a record observed
- * mid-transition.
+ * Terminal records are retained as bounded provenance. The `isTerminalPhase` guard makes every
+ * terminal outcome read non-provisional without pretending the history was erased.
  */
 export function isProvisionalSuccessor(band: Band): boolean {
   const record = band.provisionalSuccessor;
@@ -138,10 +137,10 @@ function lineageIdsOn(band: Band): readonly string[] {
  *
  * **The bounded end condition, chosen over the alternatives:** protection holds only while a
  * **CURRENT provisional successor record** exists on one side and its lineage matches the other.
- * That gives precisely the four cases §5 requires it to cover — immediate co-residence, travel,
- * return and reintegration — and ends it at both exits, because the kernel clears the provisional
- * record at `stabilized` and the entity is removed at `reintegrated`. The parent keeps its
- * provenance, and provenance alone confers nothing.
+ * That covers immediate co-residence, travel, establishment trial, return, and the event-bounded
+ * unresolved living condition. It ends at every terminal outcome because terminal records no longer
+ * satisfy `isProvisionalSuccessor`. The parent keeps its provenance, and provenance alone confers
+ * nothing.
  *
  * A short post-stabilization familiarity window was considered and REJECTED for Item 4: the
  * repository already has a lived channel for exactly that — direct contact memory, earned through

@@ -5,8 +5,8 @@
 //   N  nutrition and subsistence — hunger is measured, and it moves only when food is really taken;
 //   B  burden and reintegration  — what walks home is neither cured nor duplicated;
 //   C  return causality          — a group turns back because of something it lived;
-//   S  stabilization             — arrival, time and inheritance cannot produce success; evidence can;
-//   Z  boundedness               — every constructed lineage resolves, and no timer resolves it.
+//   S  descriptive establishment — arrival, time, inheritance and rich diagnostics cannot produce success;
+//   Z  resolution shape          — actions are timed, living unresolved conditions are event-bounded.
 //
 // Every fixture carries a NON-VACUITY PREDICATE and the harness relabels it `VACUOUS` and fails the
 // run when the predicate is false, so a fixture cannot pass by measuring an empty set.
@@ -101,7 +101,6 @@ try {
         lineageId: overrides.lineageId ?? "LIN-FIXTURE",
         targetTileId: overrides.targetTileId,
         departureTileId: overrides.departureTileId ?? donor.position,
-        resolutionCycles: overrides.resolutionCycles ?? 0,
         trail: overrides.trail ?? [],
         travelSubsistence: overrides.travelSubsistence,
         establishment: overrides.establishment,
@@ -518,7 +517,7 @@ try {
     );
   }
 
-  // ══ S — STABILIZATION ═══════════════════════════════════════════════════════════════════════════
+  // ══ S — DESCRIPTIVE ESTABLISHMENT, WITH ZERO STABILIZATION AUTHORITY ════════════════════════════
   {
     const emptyEst = {
       siteTileId: withPatch.id, sinceDay: day0, closedIntervalsAtEntry: 0,
@@ -560,7 +559,8 @@ try {
       r26.assessments.length === 1,
       { satisfied: r26.assessments[0].satisfiedSignals, failing: r26.assessments[0].signals.filter((s) => !s.holds).map((s) => s.id) },
     );
-    // S27 / S28 / S29 — evidence contributes, one day is not enough, sustained independence stabilizes.
+    // S27 / S28 / S29 — diagnostics remain sensitive, but even a rich hand-assigned record cannot
+    // decide identity or stabilization.
     const wetPatch = [...tilesAround]
       .filter((t) => passability.isBandPassableDestination(t) && t.resourceProfile.waterAccess > 0.6)
       .find((t) => plantStock.resolvePlantFoodHarvest(base, t, time0, 0.2, true).harvestedAmount > 0) ?? withPatch;
@@ -580,85 +580,81 @@ try {
     const r28 = est.advanceProvisionalEstablishment(lucky, day0 + 1);
     record(
       "S28_one_lucky_day_is_insufficient",
-      "a group with real food, real water and two measured intervals still does not stabilize after three days — the duration signal is a separate necessary condition, not a tie-breaker",
+      "a group with real food, real water and two measured intervals remains provisional; the duration diagnostic reports false but is not an outcome gate",
       succ(r28.world).provisionalSuccessor.phase === "establishing" &&
         r28.assessments[0].signals.find((s) => s.id === "long_enough_to_reject_one_lucky_day").holds === false,
       r28.assessments[0].satisfiedSignals >= 4,
       { satisfied: r28.assessments[0].satisfiedSignals, signals: r28.assessments[0].signals.map((s) => ({ id: s.id, holds: s.holds, measured: s.measured })) },
     );
-    // ── UNIT / EVALUATOR INPUT — HAND-ASSIGNED, AND DECLARED AS SUCH ──
+    // ── UNIT / DESCRIPTIVE INPUT — HAND-ASSIGNED, AND DECLARED AS SUCH ──
     //
     // Every number here is written by the fixture, not lived by anybody: the days at site, the
     // productive days, the closed intervals and now the site support ledger. This exercises the
-    // EVALUATOR — given a record that says sixty independent days, does it stabilize exactly once and
-    // grant nothing it should not. It is NOT evidence that a group can reach this record by living,
-    // and §7 of the supervising contract forbids citing it as such. The production-pipeline attempt
-    // is P1 below, and it does not get here.
+    // descriptive reader only. The fixture deliberately makes every retained diagnostic hold and
+    // proves that the establishment writer still has zero lifecycle authority.
     const sustained = {
       ...luckyDay, daysAtSite: 60, productiveGatheringDaysAtSite: 20, waterStressDaySumAtSite: 6,
       supportUnitsAtSite: 3.4, demandUnitsAtSite: 4.5,
     };
-    const independent = makeSuccessor(base, {
+    const richlyMeasured = makeSuccessor(base, {
       phase: "establishing", position: wetPatch.id, phaseEnteredDay: day0 - 60,
       establishment: sustained, seasonalSupport: goodSupport,
       travelSubsistence: { ...sub.emptyTravelSubsistence(day0), closedIntervals: 2 },
     });
-    const r29 = est.advanceProvisionalEstablishment(independent, day0 + 1);
-    const stabilizedBand = succ(r29.world);
+    const r29 = est.advanceProvisionalEstablishment(richlyMeasured, day0 + 1);
+    const measuredBand = succ(r29.world);
     record(
       "S27_physical_support_evidence_can_contribute",
-      "the food and water signals are earned from measured physical facts and DO hold when those facts are there — the null in S25 is a real null and not an insensitive instrument",
+      "the food and water diagnostics report the hand-assigned physical facts when those facts are present — the null in S25 is a real null and not an insensitive instrument",
       r29.assessments[0].signals.filter((s) => s.holds).length >= 5,
       r29.assessments.length === 1,
-      { signals: r29.assessments[0].signals.map((s) => ({ id: s.id, holds: s.holds, measured: s.measured, required: s.required })) },
+      { signals: r29.assessments[0].signals.map((s) => ({ id: s.id, holds: s.holds, measured: s.measured, reference: s.reference })) },
     );
     record(
-      "S29_UNIT_evaluator_stabilizes_a_record_that_says_sustained_independence",
-      "UNIT/EVALUATOR, NOT PIPELINE: given a HAND-ASSIGNED record asserting sixty days, twenty productive days, two intervals and a site support ledger above the floor, the evaluator stabilizes exactly once — poor and fragile is allowed, unmeasured is not. This fixture says nothing about whether a group can reach that record by living; see P1",
-      stabilizedBand.provisionalSuccessor.phase === "stabilized",
-      r29.assessments[0].outcome === "stabilize",
-      { phase: stabilizedBand.provisionalSuccessor.phase, satisfied: r29.assessments[0].satisfiedSignals, acquiredDays: r29.assessments[0].signals.map((s) => ({ id: s.id, acquiredDay: s.acquiredDay })) },
+      "S29_rich_descriptive_record_has_zero_lifecycle_authority",
+      "even a HAND-ASSIGNED record with every retained diagnostic holding remains `establishing`; physical description is not positive commitment or identity",
+      measuredBand.provisionalSuccessor.phase === "establishing" &&
+        !["stabilize", "stabilized"].includes(r29.assessments[0].outcome),
+      r29.assessments[0].signals.every((s) => s.holds),
+      { phase: measuredBand.provisionalSuccessor.phase, outcome: r29.assessments[0].outcome, satisfied: r29.assessments[0].satisfiedSignals, acquiredDays: r29.assessments[0].signals.map((s) => ({ id: s.id, acquiredDay: s.acquiredDay })) },
     );
     record(
-      "S30_stabilization_enables_established_behaviour_only_afterwards",
-      "before the transition the group is excluded from every ordinary system; after it, the lifecycle predicate stops calling it provisional and it is admitted — and not one moment earlier",
-      lc.isProvisionalSuccessor(succ(independent)) === true &&
-        lc.isProvisionalSuccessor(stabilizedBand) === false &&
-        kernel.isTerminalPhase(stabilizedBand.provisionalSuccessor.phase) === true,
-      stabilizedBand.provisionalSuccessor.phase === "stabilized",
-      { beforeProvisional: lc.isProvisionalSuccessor(succ(independent)), afterProvisional: lc.isProvisionalSuccessor(stabilizedBand) },
+      "S30_descriptive_measurement_never_opens_ordinary_band_readers",
+      "the richly measured group remains provisional and excluded from ordinary-band readers because no positive-commitment writer exists",
+      lc.isProvisionalSuccessor(succ(richlyMeasured)) === true &&
+        lc.isProvisionalSuccessor(measuredBand) === true &&
+        kernel.isTerminalPhase(measuredBand.provisionalSuccessor.phase) === false,
+      r29.assessments[0].signals.every((s) => s.holds),
+      { beforeProvisional: lc.isProvisionalSuccessor(succ(richlyMeasured)), afterProvisional: lc.isProvisionalSuccessor(measuredBand) },
     );
     const again = est.advanceProvisionalEstablishment(r29.world, day0 + 1);
     record(
       "S31_no_same_tick_double_processing",
-      "running the establishment authority again on the same day does nothing to a group that has already stabilized — the phase is terminal and the writer skips it",
-      again.assessments.length === 0 && succ(again.world).provisionalSuccessor.phase === "stabilized",
-      r29.assessments[0].outcome === "stabilize",
+      "running the descriptive writer again cannot smuggle in a lifecycle transition; the group remains provisional",
+      again.assessments.length === 1 && succ(again.world).provisionalSuccessor.phase === "establishing",
+      r29.assessments.length === 1,
       { secondPassAssessments: again.assessments.length },
     );
     record(
       "S32_no_viability_storage_or_proto_camp_is_gifted",
-      "stabilizing grants exactly one thing — admission to the ordinary systems — and no viability, no storage, no camp and no receipt comes with it",
-      (stabilizedBand.viability ?? null) === null &&
-        (stabilizedBand.storageCapacity ?? 0) === 0 &&
-        stabilizedBand.protoCampMemory === undefined &&
-        stabilizedBand.seasonalFoodReceipts === undefined,
-      stabilizedBand.provisionalSuccessor.phase === "stabilized",
+      "descriptive measurement grants no viability, storage, camp or residential receipt and does not admit the group to ordinary systems",
+      (measuredBand.viability ?? null) === null &&
+        (measuredBand.storageCapacity ?? 0) === 0 &&
+        measuredBand.protoCampMemory === undefined &&
+        measuredBand.seasonalFoodReceipts === undefined,
+      measuredBand.provisionalSuccessor.phase === "establishing",
       {
-        viability: stabilizedBand.viability ?? null,
-        storageCapacity: stabilizedBand.storageCapacity ?? 0,
-        protoCamp: stabilizedBand.protoCampMemory === undefined ? "absent" : "present",
-        receipts: stabilizedBand.seasonalFoodReceipts === undefined ? "absent" : "present",
+        viability: measuredBand.viability ?? null,
+        storageCapacity: measuredBand.storageCapacity ?? 0,
+        protoCamp: measuredBand.protoCampMemory === undefined ? "absent" : "present",
+        receipts: measuredBand.seasonalFoodReceipts === undefined ? "absent" : "present",
       },
     );
   }
 
   // ══ P — PRODUCTION PIPELINE ═════════════════════════════════════════════════════════════════════
   //
-  // §8 asked for an end-to-end positive stabilization case driven by the real daily runner, with
-  // nothing hand-assigned. It cannot be built, and the reason is physical rather than procedural.
-  // P1 runs the attempt anyway and records exactly where it stops, so the blocker is in the evidence
-  // tree rather than only in a report.
+  // A real daily run now proves the cleanup boundary: no current production path may stabilize.
   {
     // The BEST case the world offers: the nearest well-watered tile the parent already knows, so the
     // group arrives in one step and spends its days living rather than walking. Choosing the most
@@ -708,7 +704,7 @@ try {
         const e = rec.establishment;
         if (e !== undefined && e.satisfiedSignals >= peakSatisfied) {
           peakSatisfied = e.satisfiedSignals;
-          peakSignals = (e.signals ?? []).map((s) => ({ id: s.id, holds: s.holds, measured: s.measured, required: s.required }));
+          peakSignals = (e.signals ?? []).map((s) => ({ id: s.id, holds: s.holds, measured: s.measured, reference: s.reference }));
         }
         if (i % 40 === 0 || rec.phase === "returning") {
           trace.push({ day: i, phase: rec.phase, daysAtSite: e?.daysAtSite ?? 0,
@@ -720,26 +716,26 @@ try {
     }
     const failing = peakSignals.filter((s) => !s.holds).map((s) => s.id);
     record(
-      "P1_PRODUCTION_PIPELINE_a_real_group_cannot_reach_the_site_evidence_bar",
-      "BLOCKER, recorded as evidence: driven by the real daily runner from a real atomic departure, with nothing hand-assigned, a group arrives, establishes, and CANNOT satisfy the site-local support signal — one plant patch is physically_exhausted after two days and does not regrow inside the thirty-day residence the evidence requires, while an establishing group does not move and moving would reset the record. Evidence-based stabilization is unreachable without a foraging-catchment authority for non-residential groups, which does not exist",
-      everStabilized === false && sawEstablishing === true && failing.includes("measured_support_covered_a_real_share_of_demand"),
-      dep.ok === true && sawEstablishing === true && peakSignals.length === 7,
+      "P1_PRODUCTION_PIPELINE_has_no_stabilization_writer",
+      "driven by the real daily runner from a real atomic departure, the group reaches establishment and never stabilizes because descriptive measurements have no lifecycle authority",
+      everStabilized === false && sawEstablishing === true,
+      dep.ok === true && sawEstablishing === true,
       {
         departureOk: dep.ok, reachedEstablishing: sawEstablishing, everStabilized,
-        peakSatisfiedSignals: peakSatisfied, ofRequired: 7,
+        peakHoldingDiagnostics: peakSatisfied, diagnosticCount: 7,
         signalsAtPeak: peakSignals, failingSignals: failing,
         trace,
-        blocker: "single-tile plant extraction cannot cover a group's demand over a 30-day residence",
+        boundary: "positive commitment and sufficient operation semantics remain unimplemented",
       },
     );
   }
 
-  // ══ Z — BOUNDEDNESS ════════════════════════════════════════════════════════════════════════════
+  // ══ Z — TEMPORALLY BOUNDED ACTIONS, EVENT-BOUNDED LIVING CONDITION ══════════════════════════════
   {
-    // Z33 / Z35 / Z36 — the cycle bound binds on BOTH paths, and no timer resolves anything well.
+    // Z33 / Z35 / Z36 — failed return enters a named unresolved living state, and no timer resolves
+    // anything well.
     const spent = makeSuccessor(base, {
       phase: "returning", phaseEnteredDay: day0 - kernel.RETURN_MAX_DAYS - 1,
-      resolutionCycles: kernel.MAX_RETURN_ESTABLISH_CYCLES,
       travelSubsistence: { ...sub.emptyTravelSubsistence(day0), daysElapsed: 30, demandUnits: 3, supportUnits: 0 },
     });
     const settled = resolver.resolveProvisionalLifecycles(spent, day0);
@@ -747,18 +743,17 @@ try {
     const again = resolver.resolveProvisionalLifecycles(settled.world, day0 + 400);
     const causalRetry = ret.advanceProvisionalReturnDecisions(settled.world, day0 + 1);
     record(
-      "Z33_failed_return_cycles_cannot_continue_forever",
-      "a lineage that has spent its return attempts gets exactly ONE more transition — into trying to live where it stands — and neither the resolver nor the evidence-based trigger will start another journey",
-      settledBand.provisionalSuccessor.phase === "establishing" &&
-        succ(again.world).provisionalSuccessor.phase === "establishing" &&
-        succ(causalRetry.world).provisionalSuccessor.phase === "establishing",
+      "Z33_failed_return_becomes_explicitly_unresolved",
+      "expiry ends only the return action; it enters a living event-bounded condition and neither the resolver nor return decision manufactures another attempt",
+      settledBand.provisionalSuccessor.phase === "unresolved_after_failed_return" &&
+        succ(again.world).provisionalSuccessor.phase === "unresolved_after_failed_return" &&
+        succ(causalRetry.world).provisionalSuccessor.phase === "unresolved_after_failed_return",
       settled.resolutions.length >= 1,
       {
         afterBound: settledBand.provisionalSuccessor.phase,
         afterAnotherFourHundredDays: succ(again.world).provisionalSuccessor.phase,
         causalRetryDecisions: causalRetry.decisions.length,
-        cycles: settledBand.provisionalSuccessor.resolutionCycles,
-        maxCycles: kernel.MAX_RETURN_ESTABLISH_CYCLES,
+        resolutionKind: kernel.getPhaseContract(settledBand.provisionalSuccessor.phase).resolutionKind,
       },
     );
     record(
@@ -798,7 +793,6 @@ try {
     // Z37 — a constructed lineage that cannot feed itself resolves within its declared bound.
     const doomed = makeSuccessor(base, {
       phase: "establishing", position: withoutPatch.id, population: 1, workingAdults: 1, dependents: 0, elders: 0,
-      resolutionCycles: kernel.MAX_RETURN_ESTABLISH_CYCLES,
     });
     let w = { ...doomed, bands: { ...doomed.bands, "band:fixture:provisional": { ...succ(doomed), demography: { ...succ(doomed).demography, population: 0, workingAdults: 0, dependents: 0, elders: 0 } } } };
     const resolved = resolver.resolveProvisionalLifecycles(w, day0 + 1);

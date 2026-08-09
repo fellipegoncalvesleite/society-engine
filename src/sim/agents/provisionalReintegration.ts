@@ -187,12 +187,11 @@ export function performAtomicReintegration(request: ReintegrationRequest): Reint
   if (successorRaw === undefined) {
     return { ok: false, refusal: "successor_not_found" };
   }
-  // `returning` is the ordinary case. `establishing` is the stranded one: a group that spent its
-  // return attempts and settled for where it stands is still a group its parent can walk up to, and
-  // refusing it here would make the meeting depend on a phase label rather than on the two groups
-  // being in the same place.
+  // `returning` is the ordinary case. An `unresolved_after_failed_return` group remains living and
+  // physically separate, so its parent may still find it. Exact co-location, not the phase label,
+  // remains the physical authority.
   const rejoinablePhase = successorRaw.provisionalSuccessor?.phase === "returning" ||
-    successorRaw.provisionalSuccessor?.phase === "establishing";
+    successorRaw.provisionalSuccessor?.phase === "unresolved_after_failed_return";
   if (!isProvisionalSuccessor(successorRaw) || !rejoinablePhase) {
     return { ok: false, refusal: "successor_is_not_returning", detail: successorRaw.provisionalSuccessor?.phase ?? "no record" };
   }
@@ -218,7 +217,7 @@ export function performAtomicReintegration(request: ReintegrationRequest): Reint
   }
   if (isBandTerminal(parent)) {
     // A dispersed, absorbed or extinct parent cannot receive anybody. The group stays provisional and
-    // keeps its people; what becomes of it is the establishment question, not this writer's.
+    // keeps its people; what becomes of it awaits a truthful future social authority, not this writer.
     return { ok: false, refusal: "parent_is_terminal", detail: String(parent.status) };
   }
 
@@ -508,7 +507,7 @@ export interface ReintegrationSweepResult {
  * ── WHAT THIS FUNCTION IS NOT ALLOWED TO DO ─────────────────────────────────────────────────────
  *
  * It re-implements NOTHING. It does not compare positions, merge cohorts, merge acute risk, choose a
- * parent or construct a transition. Every precondition — returning-or-establishing phase, bodies
+ * parent or construct a transition. Every precondition — returning-or-unresolved phase, bodies
  * present, parent found by the successor's OWN `parentBandId`, parent non-terminal, exact same tile —
  * is tested inside the authority, which returns the ORIGINAL world on refusal. The pre-filter here is
  * a cheap skip for bands that are not provisional successors at all, never a second gate: removing it

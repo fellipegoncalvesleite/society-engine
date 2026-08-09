@@ -33,7 +33,7 @@
  * not how bad failure is, and no natural run was used to fit one.
  */
 import { isProvisionalSuccessor } from "./bandLifecycle";
-import { MAX_RETURN_ESTABLISH_CYCLES, requestTransition } from "./fissionLifecycleKernel";
+import { requestTransition } from "./fissionLifecycleKernel";
 import { closeOpenTravelInterval, measuredTravelSupportRatio } from "./provisionalTravelSubsistence";
 import type { Band, FissionLifecycleRecord, ProvisionalReturnCause } from "./types";
 import type { BandId } from "../core/types";
@@ -80,8 +80,7 @@ export function deriveProvisionalReturnDecision(band: Band, today: number): Prov
   const subsistence = record?.travelSubsistence;
   // A group that has just arrived somewhere has not tested it. Measuring days IN THE CURRENT PHASE as
   // well as in the interval is what stops a group condemning a site on the road's evidence — and it is
-  // what stopped the `establishing -> returning` churn a smoke run caught, where a group arrived, gave
-  // up the same day on a record made entirely of walking, and did it again every time it got home.
+  // what stops a newly arrived group condemning a site on a record made entirely while walking.
   const daysInPhase = record === undefined ? 0 : today - record.phaseEnteredDay;
   const measuredDays = Math.min(subsistence?.daysElapsed ?? 0, Math.max(0, daysInPhase));
   const supportRatio = measuredTravelSupportRatio(subsistence);
@@ -92,15 +91,6 @@ export function deriveProvisionalReturnDecision(band: Band, today: number): Prov
 
   const measured = { measuredDays, supportRatio, noWaterDayShare, blockedStepDays, workingAdults, mortalityBump };
 
-  // ── THE CYCLE BOUND BINDS ON THE CAUSAL PATH TOO ──
-  //
-  // The resolver bounds the churn a TIMER can produce. A trigger that reads real evidence could push a
-  // group round the same loop forever without ever touching that bound, so it is checked here as well:
-  // once a lineage has spent its return attempts, its remaining exits are physical — demonstrate
-  // establishment where it stands, meet its parent, or die. It may no longer set off again.
-  if ((record?.resolutionCycles ?? 0) >= MAX_RETURN_ESTABLISH_CYCLES) {
-    return { shouldReturn: false, measured };
-  }
   if (workingAdults < RETURN_MIN_WORKING_ADULTS) {
     return { shouldReturn: true, cause: "not_enough_working_people_left", measured };
   }
@@ -190,9 +180,6 @@ export function advanceProvisionalReturnDecisions(world: WorldState, today: numb
         phaseEnteredDay: transition.state.phaseEnteredDay,
         history: transition.state.history,
         returnCause: decision.cause,
-        // A completed round of trying-then-giving-up. Counted at the same edge the resolver counts its
-        // own, so a lineage cannot buy extra attempts by alternating between the two causes.
-        resolutionCycles: (record.resolutionCycles ?? 0) + (record.phase === "establishing" ? 1 : 0),
         // Evidence about a place the group is walking away from is not evidence about anywhere else.
         establishment: undefined,
         // A fresh journey's refusals are its own.

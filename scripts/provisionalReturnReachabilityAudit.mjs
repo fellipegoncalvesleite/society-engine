@@ -170,7 +170,9 @@ try {
     // CREATED on its parent's tile and has not walked yet, so it was trivially co-located while still
     // `departed`, and the fixture reported a 29-day latency that was really the outbound journey.
     // Co-location only means anything once the group is in a phase that can rejoin.
-    const rejoinable = ["returning", "establishing"].includes(bandBefore?.provisionalSuccessor?.phase ?? "");
+    const rejoinable = ["returning", "unresolved_after_failed_return"].includes(
+      bandBefore?.provisionalSuccessor?.phase ?? "",
+    );
     const coLocatedEntering =
       bandBefore !== undefined && lc.isProvisionalSuccessor(bandBefore) && rejoinable &&
       String(bandBefore.position) === String(parentBefore.position);
@@ -402,7 +404,7 @@ try {
   if (farTile === undefined) throw new Error("HARNESS HARD FAIL: no holding tile far from both parent and target");
   const boundCases = [];
   for (const [phase, maxDays, expectedNext] of [
-    ["returning", kernel.RETURN_MAX_DAYS, "establishing"],
+    ["returning", kernel.RETURN_MAX_DAYS, "unresolved_after_failed_return"],
     ["travelling", kernel.TRAVEL_MAX_DAYS, "returning"],
     ["failed_early", kernel.FAILED_EARLY_MAX_DAYS, "returning"],
     // `establishing` was the one declared bound with no CADENCE control. The kernel suite's K6 proves

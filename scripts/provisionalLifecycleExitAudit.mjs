@@ -120,8 +120,8 @@ try {
   const timedOut = kernel.resolveTimeout({ phase: "returning", phaseEnteredDay: 0, history: [] }, kernel.RETURN_MAX_DAYS + 1);
   record(
     "E4_the_timeout_resolver_does_not_bypass_the_guards",
-    "`resolveTimeout` on an expired `returning` produces `establishing` — the group tries to live where it stands — and cannot produce `reintegrated` by any path",
-    timedOut.ok === true && timedOut.state.phase === "establishing" && timedOut.timedOut === true,
+    "`resolveTimeout` on an expired `returning` produces the named event-bounded living condition — it cannot manufacture establishment or reintegration",
+    timedOut.ok === true && timedOut.state.phase === "unresolved_after_failed_return" && timedOut.timedOut === true,
     true,
     { resultPhase: timedOut.ok ? timedOut.state.phase : timedOut.rejection, timedOut: timedOut.ok ? timedOut.timedOut : null },
   );
@@ -211,7 +211,7 @@ try {
     if (b === undefined) break;
     const phase = b.provisionalSuccessor?.phase ?? null;
     if (phase !== lastPhase) {
-      phaseTrail.push({ dayOffset: day, phase, cycles: b.provisionalSuccessor?.resolutionCycles ?? 0 });
+      phaseTrail.push({ dayOffset: day, phase });
       lastPhase = phase;
     }
     if (becameOrdinary === null && !lc.isProvisionalSuccessor(b) && lc.isEstablishedBand(b)) {
@@ -239,18 +239,42 @@ try {
       stillProvisional: finalBand === undefined ? null : lc.isProvisionalSuccessor(finalBand) },
   );
 
-  // ── E6 — the return/establish churn is bounded, and the end of it is REPORTED ──
-  const cycles = finalBand?.provisionalSuccessor?.resolutionCycles ?? 0;
-  const reportedUnresolved = resolver.hasUnresolvedProvisionalGroup(w);
-  const finalResolutions = resolver.resolveProvisionalLifecycles(w, Number(w.time.day ?? 0)).resolutions
-    .filter((r) => r.bandId === succId);
+  // ── E6 — failed return is a named event-bounded living condition, not attempt #2 ──
+  const unresolvedDay = dayD + kernel.RETURN_MAX_DAYS + 1;
+  const returnExpiredWorld = {
+    ...departure.world,
+    bands: {
+      ...departure.world.bands,
+      [succId]: {
+        ...departure.world.bands[succId],
+        provisionalSuccessor: {
+          ...departure.world.bands[succId].provisionalSuccessor,
+          phase: "returning",
+          phaseEnteredDay: dayD,
+        },
+      },
+    },
+  };
+  const unresolvedResult = resolver.resolveProvisionalLifecycles(returnExpiredWorld, unresolvedDay);
+  const unresolvedBand = unresolvedResult.world.bands[succId];
+  const laterResult = resolver.resolveProvisionalLifecycles(unresolvedResult.world, unresolvedDay + 1000);
+  const laterBand = laterResult.world.bands[succId];
+  const reportedUnresolved = resolver.hasUnresolvedProvisionalGroup(unresolvedResult.world);
   record(
-    "E6_the_return_establish_cycle_is_bounded_and_its_end_is_named",
-    "the lineage stops being shuffled between phases once its cycle budget is spent, and that state is REPORTED as unresolved rather than sitting silently immortal — every exit it has left is physical: reach the parent, demonstrate establishment, or die",
-    cycles <= kernel.MAX_RETURN_ESTABLISH_CYCLES &&
-      (cycles < kernel.MAX_RETURN_ESTABLISH_CYCLES || reportedUnresolved),
-    true,
-    { resolutionCycles: cycles, maxCycles: kernel.MAX_RETURN_ESTABLISH_CYCLES, reportedAsUnresolved: reportedUnresolved, finalResolutions },
+    "E6_failed_return_is_named_without_manufacturing_attempt_two",
+    "an expired return enters `unresolved_after_failed_return`, is reported as unresolved, and remains there under later elapsed time because only a real physical/social event may resolve it",
+    unresolvedBand?.provisionalSuccessor?.phase === "unresolved_after_failed_return" &&
+      laterBand?.provisionalSuccessor?.phase === "unresolved_after_failed_return" &&
+      reportedUnresolved && laterResult.resolutions.length === 0 &&
+      kernel.getPhaseContract("unresolved_after_failed_return").resolutionKind === "event_bounded_living_condition",
+    unresolvedResult.resolutions.some((r) => r.fromPhase === "returning" && r.toPhase === "unresolved_after_failed_return"),
+    {
+      firstResolutions: unresolvedResult.resolutions,
+      laterResolutions: laterResult.resolutions,
+      phaseAfterBound: unresolvedBand?.provisionalSuccessor?.phase ?? null,
+      phaseAfterAnotherThousandDays: laterBand?.provisionalSuccessor?.phase ?? null,
+      reportedAsUnresolved: reportedUnresolved,
+    },
   );
 
   // ── A1..A5 — ALIAS SAFETY FOR THE FIVE DELIBERATELY SHARED REFERENCES ──

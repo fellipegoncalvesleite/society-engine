@@ -44,6 +44,7 @@ try {
   const timeMod = await server.ssrLoadModule("/sim/tick/time.ts");
   const scoring = await server.ssrLoadModule("/sim/rules/decisionScoring.ts");
   const travel = await server.ssrLoadModule("/sim/agents/provisionalTravel.ts");
+  const kernel = await server.ssrLoadModule("/sim/agents/fissionLifecycleKernel.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
 
   const base = advance.advanceWorldByDays(runner.initSimWorld({ kind: "map2" }, SEED), WARM_DAYS);
@@ -102,10 +103,10 @@ try {
     });
     if (["stabilized", "reintegrated", "provisional_extinguished"].includes(r.phase)) break;
   }
-  const attemptActive = trace.filter((t) => t.phase === "travelling" || t.phase === "establishing");
+  const outboundOrArrivalTrial = trace.filter((t) => t.phase === "travelling" || t.phase === "establishing");
 
   // H1 — a clear homeward step is reported available.
-  const h1 = attemptActive.filter((t) => t.independentlyRecomputed === true);
+  const h1 = outboundOrArrivalTrial.filter((t) => t.independentlyRecomputed === true);
   record("H1_a_clear_homeward_step_is_reported_available",
     "on days where the grid independently shows a passable neighbour strictly closer to the departure tile, the stored observation is true",
     h1.length > 0 && h1.every((t) => t.storedHomewardAvailable === true), h1.length > 0,
@@ -113,16 +114,16 @@ try {
       sample: h1.slice(0, 3) });
 
   // H2 — no neighbour reduces distance → unavailable. The natural run never produces this case, so it
-  // is CONSTRUCTED rather than counted: an attempt-active group standing on its own departure tile,
+  // is CONSTRUCTED rather than counted: a live provisional group standing on its own departure tile,
   // where no step can reduce a distance of zero. The verdict is deliberately the degenerate-but-true
   // one — "no step homeward is available" is exactly right for a group already standing there, and a
   // future reader that wants "already home" must ask that question separately rather than reading this
   // false as evidence of a blocked route.
-  const naturalH2 = attemptActive.filter((t) => t.independentlyRecomputed === false);
+  const naturalH2 = outboundOrArrivalTrial.filter((t) => t.independentlyRecomputed === false);
   const atDeparture = (() => {
     const b = dep.world.bands[SID];
     if (b === undefined || !lc.isProvisionalSuccessor(b)) return undefined;
-    // `establishing` is attempt-active AND has no destination, so the group stays put for this one day
+    // `establishing` is live AND has no destination, so the group stays put for this one day
     // and the observation is taken exactly where it was parked. A `travelling` group would walk off the
     // tile before the measurement, which — correctly, under the repaired semantics — would then be a
     // measurement of somewhere else.
@@ -142,7 +143,7 @@ try {
       closerNeighboursOnTheGrid: 0 };
   })();
   record("H2_no_closer_neighbour_is_reported_unavailable",
-    "where no passable neighbour is strictly closer to the departure tile the stored observation is false — constructed by parking an attempt-active group ON its departure tile, because the natural run never reaches that geometry",
+    "where no passable neighbour is strictly closer to the departure tile the stored observation is false — constructed by parking a live provisional group ON its departure tile, because the natural run never reaches that geometry",
     naturalH2.every((t) => t.storedHomewardAvailable === false) &&
       atDeparture !== undefined && atDeparture.stored === false && atDeparture.closerNeighboursOnTheGrid === 0,
     atDeparture !== undefined,
@@ -160,9 +161,9 @@ try {
   // on that row is still today — and an earlier form of this fixture called it a failure. It is the
   // same sampling-artefact class CORRECTION-34A and -34D both recorded.
   const staleStamps = trace.filter((t) => t.storedHomewardAvailable !== null && t.storedHomewardDay !== day0 + t.day);
-  const isAttemptActive = (t) => t.phase === "travelling" || t.phase === "establishing";
+  const isOutboundOrArrivalTrial = (t) => t.phase === "travelling" || t.phase === "establishing";
   const transitionDays = trace.filter((t, i) => i > 0 && t.phase !== trace[i - 1].phase).map((t) => t.day);
-  const settledOffAttempt = trace.filter((t) => !isAttemptActive(t) && !transitionDays.includes(t.day));
+  const settledOffAttempt = trace.filter((t) => !isOutboundOrArrivalTrial(t) && !transitionDays.includes(t.day));
   record("H2b_a_present_observation_was_taken_today",
     "whenever the homeward field carries a value its day stamp is TODAY, and on every settled day the question is not asked the field is cleared rather than left holding an older answer",
     staleStamps.length === 0 && settledOffAttempt.length > 0 && settledOffAttempt.every((t) => t.storedHomewardAvailable === null),
@@ -175,23 +176,23 @@ try {
       actionStampsAlwaysToday: trace.every((t) => t.storedActionDay === day0 + t.day) });
 
   // H3/H4 — the observation is INDEPENDENT of the outbound direction.
-  const blockedOutbound = attemptActive.filter((t) => t.blockedStepDays > 0);
+  const blockedOutbound = outboundOrArrivalTrial.filter((t) => t.blockedStepDays > 0);
   record("H3_outbound_blockage_does_not_suppress_a_homeward_step",
     "days on which the outbound direction was refused still report homeward availability from the grid, because the two directions are different physical questions",
     blockedOutbound.every((t) => t.storedHomewardAvailable === t.independentlyRecomputed),
     // Non-vacuity is asserted on the SEPARATION, not on this run happening to be blocked: the stored
     // value must track the recomputed one across every distinct blockedStepDays value observed.
-    new Set(attemptActive.map((t) => t.blockedStepDays)).size >= 1 && attemptActive.length > 0,
-    { blockedDays: blockedOutbound.length, distinctBlockedValues: [...new Set(attemptActive.map((t) => t.blockedStepDays))],
-      agreementOnEveryAttemptActiveDay: attemptActive.every((t) => t.storedHomewardAvailable === t.independentlyRecomputed),
+    new Set(outboundOrArrivalTrial.map((t) => t.blockedStepDays)).size >= 1 && outboundOrArrivalTrial.length > 0,
+    { blockedDays: blockedOutbound.length, distinctBlockedValues: [...new Set(outboundOrArrivalTrial.map((t) => t.blockedStepDays))],
+      agreementOnEveryOutboundOrArrivalTrialDay: outboundOrArrivalTrial.every((t) => t.storedHomewardAvailable === t.independentlyRecomputed),
       note: "blockedStepDays counts refusals toward the CURRENT PHASE's target; the homeward observation is computed against departureTileId only, so the two are structurally independent" });
 
   record("H4_the_observation_is_computed_against_the_departure_tile_alone",
-    "the stored value equals a fresh independent recomputation on EVERY attempt-active day, so it cannot be tracking the outbound target",
-    attemptActive.length > 0 && attemptActive.every((t) => t.storedHomewardAvailable === t.independentlyRecomputed),
-    attemptActive.length > 0,
-    { attemptActiveDays: attemptActive.length,
-      disagreements: attemptActive.filter((t) => t.storedHomewardAvailable !== t.independentlyRecomputed).length });
+    "the stored value equals a fresh independent recomputation on EVERY outbound-or-arrival-trial day, so it cannot be tracking the outbound target",
+    outboundOrArrivalTrial.length > 0 && outboundOrArrivalTrial.every((t) => t.storedHomewardAvailable === t.independentlyRecomputed),
+    outboundOrArrivalTrial.length > 0,
+    { outboundOrArrivalTrialDays: outboundOrArrivalTrial.length,
+      disagreements: outboundOrArrivalTrial.filter((t) => t.storedHomewardAvailable !== t.independentlyRecomputed).length });
 
   // H5 — moving the parent must not change the measurement.
   const lastDay = trace[trace.length - 1];
@@ -259,19 +260,24 @@ try {
   const targetsByPhase = {
     travelling: "record.targetTileId — written ONCE by fissionDepartureSeam, never rewritten anywhere in src/",
     returning: "record.departureTileId — written ONCE by fissionDepartureSeam, deliberately frozen",
-    establishing: "NONE — destinationFor() returns undefined; movement comes only from relocationStepFor()",
+    establishing: "NONE — destinationFor() returns undefined and there is no local relocation writer",
+    unresolved_after_failed_return: "NONE — the failed return ended without manufacturing a new target or choice",
   };
-  const establishingReachableFromTravelling = true;
+  const failedReturn = kernel.resolveTimeout(
+    { phase: "returning", phaseEnteredDay: 0, history: ["travelling", "establishing", "failed_early"] },
+    kernel.RETURN_MAX_DAYS,
+  );
   record("P1_after_a_failed_return_there_is_no_target_at_all",
-    "the first post-return movement is a LOCAL RELOCATION MECHANIC, not a target: `establishing` has no destination, and `travelling` — the only phase that reads targetTileId — is unreachable once the group has arrived, so the stale target is inert",
-    targetsByPhase.establishing.startsWith("NONE") && establishingReachableFromTravelling,
+    "a failed return enters a named event-bounded living condition with no destination and no relocation writer; elapsed time creates neither another establishment attempt nor another movement choice",
+    targetsByPhase.establishing.startsWith("NONE") &&
+      failedReturn.ok === true && failedReturn.state.phase === "unresolved_after_failed_return" &&
+      kernel.getPhaseContract("unresolved_after_failed_return").onTimeout === undefined,
     true,
     { targetsByPhase,
-      establishingPermittedNext: ["stabilized", "failed_early", "returning", "reintegrated", "provisional_extinguished"],
-      travellingReachableFromEstablishing: false,
-      relocationRule: `only after RELOCATION_BARREN_DAYS=${travel.RELOCATION_BARREN_DAYS} consecutive zero-take days at the current tile; candidate = adjacent, passable, unworked-first, TIES BROKEN BY TILE ID`,
-      consequence: "the DIRECTION of a post-return relocation step is an artefact of tile-id sort order and carries no intent — an outward step is NOT recommitment",
-      classification: "D — no target / relocation derived locally" });
+      failedReturnPhase: failedReturn.ok === true ? failedReturn.state.phase : failedReturn.rejection,
+      relocationRule: "RETIRED — truthful tested-place memory does not exist yet",
+      consequence: "the living group stays physically where the bounded return action ended until a real event resolves it",
+      classification: "no target and no local relocation authority" });
 
   // P2 — FIRST-ATTEMPT ACTION PROVENANCE.
   record("P2_a_first_attempt_outward_step_executes_the_departure_target",

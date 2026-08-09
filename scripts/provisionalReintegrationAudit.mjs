@@ -265,7 +265,7 @@ try {
       refusal: movedAttempt.ok === true ? "ACCEPTED" : movedAttempt.refusal,
       successorStillHoldsPeople: Math.round(succAfterRefusal?.demography.population ?? 0),
       successorStillProvisional: succAfterRefusal === undefined ? null : lc.isProvisionalSuccessor(succAfterRefusal),
-      NOT_RESOLVED_HERE: "what becomes of a group that cannot find its parent is the return vertical's remaining open end; it is bounded by the return/establish cycle and by zero-population extinguishment, and nothing here fabricates a resolution",
+      NOT_RESOLVED_HERE: "after the bounded return action, a living separate group enters the named event-bounded unresolved state; later co-location or zero population can resolve it, and nothing here fabricates another outcome",
     },
   );
 

@@ -50,8 +50,8 @@ export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   // ROADMAP ITEM 4 — the meeting is resolved on the day it happens, immediately after the step that
   // can create it and BEFORE anything else reads the group. Two consequences, both deliberate: the
   // positions compared are the ones today produced, and a group handed back to its parent does not
-  // then spend the same evening foraging as an independent entity, closing an assessment window, or
-  // gathering evidence about a site it no longer occupies. `performAtomicReintegration` leaves the
+  // then spend the same evening foraging as a separate entity, closing an assessment window, or
+  // gathering diagnostics about a site it no longer occupies. `performAtomicReintegration` leaves the
   // successor terminal and `isProvisionalSuccessor` is false for every terminal phase, so the three
   // actions below skip it structurally rather than by an added guard.
   provisionalReintegrationDailyAction,
@@ -60,7 +60,7 @@ export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   // live provisional successors, and no natural path creates one.
   provisionalSubsistenceDailyAction,
   // ROADMAP ITEM 4 — then the group reads the day it has just lived. Giving up comes before trying
-  // harder: a group that has decided to walk home does not spend the same day accumulating evidence
+  // harder: a group that has decided to walk home does not spend the same day accumulating diagnostics
   // about a site it is leaving.
   provisionalReturnDecisionDailyAction,
   provisionalEstablishmentDailyAction,

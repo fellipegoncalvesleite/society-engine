@@ -45,18 +45,6 @@ import type { DailyAction } from "./dailyActions";
 /** Bounded: a trail is for retracing a journey, not a log of one. */
 export const TRAVEL_TRAIL_CAP = 64;
 
-/**
- * Consecutive days a group must have physically worked its current ground and taken NOTHING before it
- * will move on.
- *
- * TWO, and the number is the ecology's rather than a preference: the measured patch behaviour is a
- * real take on the first day, a small one on the second, and `physically_exhausted` from the third.
- * So two barren days is the earliest a group can honestly know the place is finished rather than
- * merely poor today. Below this a group would abandon ground on one bad day; far above it, the group
- * starves on ground it has already proved is empty.
- */
-export const RELOCATION_BARREN_DAYS = 2;
-
 /** Why a group that should be walking did not move today. Measured, never inferred. */
 export type TravelRefusal =
   | "no_destination_known"
@@ -100,48 +88,10 @@ const manhattan = (a: { readonly x: number; readonly y: number }, b: { readonly 
 function destinationFor(record: FissionLifecycleRecord): TileId | undefined {
   if (record.phase === "travelling") return record.targetTileId;
   if (record.phase === "returning") return record.departureTileId;
-  // `establishing` has no named destination. A group that is trying to live somewhere is not walking
-  // to anywhere — but it may still MOVE, one contiguous step, when the ground it is on has stopped
-  // giving. That is `relocationStepFor`, below, and it is a different question from "where is this
-  // group headed", which is why it is not answered here.
+  // `establishing` and `unresolved_after_failed_return` have no named destination. A truthful local
+  // relocation authority needs remembered tested/barren places and loop avoidance; it does not exist
+  // yet, so neither phase moves through this writer.
   return undefined;
-}
-
-/**
- * ROADMAP ITEM 4 — WHY AN ESTABLISHING GROUP IS ALLOWED TO MOVE AT ALL.
- *
- * It was not, and that was the defect. The model asked a group to prove independence by remaining on
- * one strategic tile for thirty days, and a production-pipeline fixture showed the best patch the
- * parent knows is `physically_exhausted` after two days. Staying was not a way to demonstrate
- * competence; it was a way to starve while a record filled up.
- *
- * So a group whose locality has stopped giving takes ONE CONTIGUOUS STEP to adjacent ground, through
- * the same writer every other provisional move goes through. This is not an activity range and not a
- * catchment: the whole group moves, together, one tile, and there is no split of bodies between an
- * anchor and a foray. Item 13 may later generalise that; this pass does not need it and does not
- * invent it.
- *
- * The destination uses only what the group can legitimately see: adjacent, passable, and preferring
- * ground it has not already stripped. It reads no hidden richness and no other band.
- */
-function relocationStepFor(world: WorldState, band: Band, record: FissionLifecycleRecord): TileId | undefined {
-  if (record.phase !== "establishing") return undefined;
-  const subsistence = record.travelSubsistence;
-  if (subsistence === undefined) return undefined;
-  // "Stopped giving" is measured, not assumed: the group has actually tried here, on consecutive days,
-  // and taken nothing. A group that is feeding itself has no reason to move and does not.
-  const recent = subsistence.recentDays.filter((entry) => String(entry.tileId) === String(band.position));
-  if (recent.length < RELOCATION_BARREN_DAYS) return undefined;
-  const lastN = recent.slice(-RELOCATION_BARREN_DAYS);
-  if (lastN.some((entry) => entry.usableUnits > 0)) return undefined;
-
-  const alreadyWorked = new Set((record.independence?.lifetimeProvisioningTileIds ?? []).map((id: TileId) => String(id)));
-  if (getTile(world, band.position) === undefined) return undefined;
-  const neighbours = getNeighborTiles(world, band.position)
-    .filter((tile) => isBandPassableDestination(tile))
-    .sort((a, b) => String(a.id).localeCompare(String(b.id)));
-  // Unworked ground first, then anything passable. Deterministic on tile id in both arms.
-  return neighbours.find((tile) => !alreadyWorked.has(String(tile.id)))?.id ?? neighbours[0]?.id;
 }
 
 /**
@@ -164,12 +114,9 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
     if (!isProvisionalSuccessor(band)) continue;
     positionsBefore.set(String(band.id), { position: band.position });
     const record = band.provisionalSuccessor as FissionLifecycleRecord;
-    // `establishing` is admitted ONLY when its locality has measurably stopped giving, and then only
-    // for one contiguous step. A group that is feeding itself never reaches `relocationStepFor`.
-    const relocation = record.phase === "establishing" ? relocationStepFor(world, band, record) : undefined;
-    if (record.phase !== "travelling" && record.phase !== "returning" && relocation === undefined) continue;
+    if (record.phase !== "travelling" && record.phase !== "returning") continue;
 
-    const destination = relocation ?? destinationFor(record);
+    const destination = destinationFor(record);
     const here = getTile(world, band.position);
     const target = destination === undefined ? undefined : getTile(world, destination);
 
@@ -196,10 +143,11 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
 
     const remaining = manhattan(here.coord, target.coord);
     if (remaining === 0) {
-      // ARRIVAL IS NOT SUCCESS. Reaching the place only earns the right to try to live there, and
-      // `establishing` is a trial: `stabilized` still demands lived evidence. A `returning` group that
-      // has arrived is NOT resolved here — reintegration is a separate writer with its own
-      // preconditions, because being at the right tile is not the same as your parent being there.
+      // ARRIVAL IS NOT SUCCESS. Reaching the place only earns the right to try to live there; it does
+      // not supply the positive commitment or operation contract a future stabilization writer would
+      // require. A `returning` group that has arrived is NOT resolved here — reintegration is a
+      // separate writer with its own preconditions, because being at the right tile is not the same as
+      // your parent being there.
       if (record.phase === "travelling") {
         const transition = requestTransition({
           current: { phase: record.phase, phaseEnteredDay: record.phaseEnteredDay, history: record.history },
@@ -345,12 +293,13 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
     // its departure tile (no step can reduce a distance of zero) and ends one tile out (where a step
     // home plainly exists). A field called "from here" must mean here.
     //
-    // Attempt-active phases only. A `returning` group is already walking home, so asking whether it
-    // could is not a question about an alternative; and a terminal group is not standing anywhere.
-    const attemptActive = record.phase === "travelling" || record.phase === "establishing";
+    // Outbound travel and the arrival trial only. A `returning` group is already walking home, so
+    // asking whether it could is not a question about an alternative; this classification creates no
+    // social attempt or credit.
+    const outboundOrArrivalTrial = record.phase === "travelling" || record.phase === "establishing";
     const distanceBefore = manhattan(beforeTile.coord, departureTile.coord);
     const distanceNow = manhattan(standingTile.coord, departureTile.coord);
-    const homewardAvailable = attemptActive
+    const homewardAvailable = outboundOrArrivalTrial
       ? getNeighborTiles(world, after.position).some(
           (tile) => isBandPassableDestination(tile) && manhattan(tile.coord, departureTile.coord) < distanceNow,
         )

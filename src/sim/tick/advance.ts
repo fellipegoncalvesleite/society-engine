@@ -209,8 +209,8 @@ function runSeasonalCompatibilityTick(
     // which does not exist yet — so until it does, it takes no decision at all.
     //
     // Gated on `isProvisionalSuccessor`, which is true in EVERY live provisional phase — travelling,
-    // establishing, failed_early and returning — not only in transit. INERT for every band that
-    // exists today: nothing creates a provisional successor in ordinary play.
+    // establishing, failed_early, returning and unresolved after failed return — not only in transit.
+    // INERT for every band that exists today: nothing creates a provisional successor in ordinary play.
     if (isProvisionalSuccessor(currentBand)) {
       continue;
     }

@@ -155,7 +155,7 @@ try {
   const finalPhase = finalBand?.provisionalSuccessor?.phase ?? null;
   record(
     "V4_arrival_produces_establishing_not_stabilized",
-    "reaching the destination earns only the right to try to live there; `stabilized` still demands lived evidence and is never produced by arriving",
+    "reaching the destination earns only the right to try to live there; arrival supplies neither positive commitment nor stabilization authority",
     arrivedOnDay === null || (phases.includes("establishing") && !phases.includes("stabilized")),
     arrivedOnDay !== null,
     { arrivedOnDay, phaseTrail: phases, finalPhase, finalPosition: String(finalBand?.position ?? "gone") },
@@ -248,13 +248,7 @@ try {
     { firstRunSteps: positions.length, secondRunSteps: positions2.length },
   );
 
-  // ── V9 — TRAVEL SUBSISTENCE IS NOT IMPLEMENTED, AND THAT IS STATED RATHER THAN HIDDEN ──
-  //
-  // A walking group cannot run ordinary same-day trips (the quarantine blocks them, correctly — it has
-  // no camp to run them from), and no route-foraging authority exists yet. So travel currently produces
-  // NO food and consumes no travel-specific ration. The direction of that error matters and is the
-  // reason it is acceptable as an interim: the group is HARSHER off, never freer. Its hunger still
-  // rises through ordinary nutrition, and nothing here creates support from nothing.
+  // ── V9 — PROVISIONAL SUBSISTENCE STAYS PHYSICAL AND OUTSIDE RESIDENTIAL ACCOUNTING ──
   const receipts = finalBand?.seasonalFoodReceipts === undefined ? 0 : 1;
   const subsistence = finalBand?.provisionalSuccessor?.travelSubsistence;
   const hungerFirst = base.hungerPressure;
@@ -262,7 +256,7 @@ try {
   record(
     "V9_travel_support_is_physically_sourced_or_absent",
     "no ration, storage or capability appears from nothing — every support unit the group holds came from a real source that was really depleted, and a group that found nothing holds nothing",
-    (finalBand?.storageCapacity ?? 0) === 0 &&
+    receipts === 0 && (finalBand?.storageCapacity ?? 0) === 0 &&
       (subsistence === undefined || subsistence.supportUnits <= 0 || subsistence.depletionApplied > 0),
     positions.length > 1,
     {

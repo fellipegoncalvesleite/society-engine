@@ -6,7 +6,8 @@
 // The kernel is pure, so these fixtures need no world and no clock — which is the point. Nothing
 // here proves the lifecycle is CONNECTED to anything; that is the world adapter's evidence and it
 // does not exist yet. This audit proves only that the state machine cannot be driven into an
-// illegal, unbounded or double-owned state.
+// illegal or double-owned state, and that action bounds are distinguished from event-bounded living
+// conditions.
 import { createServer } from "vite";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
@@ -54,19 +55,19 @@ try {
     k.requestTransition({ current: state, to, today: day, cause: "physical_event", physicalCoLocationProven: true, ...extra });
 
   // ── K1 — the contract table is internally coherent ──────────────────────────────────────────
-  record("K1", "every non-terminal phase has a bound and a destination, and no quantity is owned twice", () => {
+  record("K1", "every phase declares a coherent temporal, event-bounded or terminal resolution kind, and no quantity is owned twice", () => {
     const problems = k.assertSingleOwnership();
     return {
       problems,
       phaseCount: k.PHASE_CONTRACTS.length,
       nonVacuous: k.PHASE_CONTRACTS.length >= 11,
-      nonVacuityNote: "all eleven phases are present in the production table",
+      nonVacuityNote: "the complete production phase table is present",
       passed: problems.length === 0,
     };
   });
 
   // ── K2 — the happy path, end to end ─────────────────────────────────────────────────────────
-  record("K2", "proposal to stabilization is reachable through permitted transitions only", () => {
+  record("K2", "the kernel retains stabilization as legal future vocabulary behind explicit guarded transitions", () => {
     let s = k.beginAttempt(0);
     const path = [s.phase];
     for (const [to, day, extra] of [["committed", 10, {}], ["departure_ready", 20, {}], ["departed", 25, { endorsedFounderCount: 12 }]]) {
@@ -90,7 +91,7 @@ try {
       // honestly reported VACUOUS on a walk that was complete — the fixture was miscounted, not the
       // kernel.
       nonVacuous: path.length === 7 && path.filter((p) => p.startsWith("successor:")).length === 3,
-      nonVacuityNote: "the walk visited all four attempt phases and all three successor phases of the happy path",
+      nonVacuityNote: "the pure kernel exercised the reserved legal path; this is not a production-writer claim",
       passed: s.phase === "departed" && p.phase === "stabilized" && k.isTerminalPhase(p.phase),
     };
   });
@@ -148,7 +149,7 @@ try {
   });
 
   // ── K6 — a timer alone may not stabilize ────────────────────────────────────────────────────
-  record("K6", "stabilization is refused without lived evidence, and the establishment timeout is a FAILURE", () => {
+  record("K6", "the reserved stabilization transition keeps its kernel guard, while an establishment timeout is a failure", () => {
     let p = k.beginProvisionalSuccessor(0);
     p = step(p, "establishing", 30).state;
     const noEvidence = step(p, "stabilized", 40);
@@ -161,7 +162,7 @@ try {
       enough: enough.ok === true ? enough.state.phase : `REJECTED:${enough.rejection}`,
       onTimeout: expired.ok === true ? expired.state.phase : `REJECTED:${expired.rejection}`,
       nonVacuous: enough.ok === true && enough.state.phase === "stabilized",
-      nonVacuityNote: "sufficient evidence DOES stabilize, so the refusals are not an unreachable gate",
+      nonVacuityNote: "an explicit synthetic physical-event request can exercise the legal placeholder; no production adapter is implied",
       passed:
         noEvidence.ok === false && noEvidence.rejection === "stabilization_without_lived_evidence" &&
         thin.ok === false && enough.ok === true &&
@@ -170,30 +171,38 @@ try {
     };
   });
 
-  // ── K7 — no non-terminal state persists indefinitely ────────────────────────────────────────
-  record("K7", "every non-terminal phase resolves when its bound expires, and never into a success", () => {
-    const rows = [];
-    for (const c of k.PHASE_CONTRACTS.filter((x) => !x.terminal)) {
+  // ── K7 — actions are time-bounded; living conditions are event-bounded ──────────────────────
+  record("K7", "every action resolves at its temporal bound while a living condition refuses timeout authority", () => {
+    const timedRows = [];
+    for (const c of k.PHASE_CONTRACTS.filter((x) => x.resolutionKind === "temporally_bounded_action")) {
       const state = { phase: c.phase, phaseEnteredDay: 0, history: [] };
       const before = k.resolveTimeout(state, c.maxDays - 1);
       const after = k.resolveTimeout(state, c.maxDays);
-      rows.push({
+      timedRows.push({
         phase: c.phase,
         maxDays: c.maxDays,
         beforeBound: before.ok === true ? `${before.state.phase}/timedOut=${before.timedOut}` : before.rejection,
         atBound: after.ok === true ? `${after.state.phase}/timedOut=${after.timedOut}` : after.rejection,
       });
     }
+    const eventRows = k.PHASE_CONTRACTS
+      .filter((x) => x.resolutionKind === "event_bounded_living_condition")
+      .map((c) => {
+        const result = k.resolveTimeout({ phase: c.phase, phaseEnteredDay: 0, history: [] }, 1_000_000);
+        return { phase: c.phase, result: result.ok === true ? result.state.phase : result.rejection };
+      });
     const successPhases = new Set(["stabilized", "departed"]);
     return {
-      rows,
-      nonVacuous: rows.length >= 7,
-      nonVacuityNote: "every non-terminal phase in the production table was driven past its bound",
+      timedRows,
+      eventRows,
+      nonVacuous: timedRows.length >= 7 && eventRows.length > 0,
+      nonVacuityNote: "every timed action crossed its bound and every event-bounded living phase received a timeout attempt",
       passed:
-        rows.every((r) => r.beforeBound.endsWith("timedOut=false")) &&
-        rows.every((r) => r.atBound.endsWith("timedOut=true")) &&
+        timedRows.every((r) => r.beforeBound.endsWith("timedOut=false")) &&
+        timedRows.every((r) => r.atBound.endsWith("timedOut=true")) &&
         // a timeout may never manufacture a success
-        !rows.some((r) => successPhases.has(r.atBound.split("/")[0])),
+        !timedRows.some((r) => successPhases.has(r.atBound.split("/")[0])) &&
+        eventRows.every((r) => r.result === "event_bounded_phase_has_no_timeout"),
     };
   });
 
@@ -353,7 +362,7 @@ try {
     checkpoint: "ROADMAP ITEM 4 §5 — pure lifecycle kernel fixtures",
     authority: "src/sim/agents/fissionLifecycleKernel.ts",
     scopeLimit:
-      "The kernel is pure. Nothing here proves the lifecycle is CONNECTED to the simulation — that is the world adapter's evidence and it does not exist yet. These fixtures prove only that the state machine cannot be driven into an illegal, unbounded or double-owned state.",
+      "The kernel is pure. These fixtures prove only its legal vocabulary, action bounds, event-bounded living condition and ownership table. They do not prove a production stabilization writer exists; the cleanup source audit proves none does.",
     fixtures,
     summary: { total: fixtures.length, passing: counts.PASS, failing: counts.FAIL, vacuous: counts.VACUOUS, errored: counts.ERROR },
   };

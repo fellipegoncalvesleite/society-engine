@@ -48,10 +48,10 @@ try {
     fixtures.push({ id, claim, status: !nonVacuous ? "VACUOUS" : passed ? "PASS" : "FAIL", nonVacuityNote, ...rest });
   };
 
-  const LIVE_SUCCESSOR_PHASES = ["travelling", "establishing", "failed_early", "returning"];
+  const LIVE_SUCCESSOR_PHASES = ["travelling", "establishing", "failed_early", "returning", "unresolved_after_failed_return"];
 
   // ── LP1 — protected through every phase the split is actually under way ─────────────────────
-  record("LP1", "the parent and its successor are recognised as one split through travel, failure and return", () => {
+  record("LP1", "the parent and its successor are recognised as one split through travel, failure, return and the unresolved living condition", () => {
     const rows = {};
     for (const phase of LIVE_SUCCESSOR_PHASES) {
       const parent = band("parent", { attempt: rec("departed", "L1") });
@@ -60,8 +60,8 @@ try {
     }
     return {
       rows,
-      nonVacuous: Object.keys(rows).length === 4,
-      nonVacuityNote: "all four live successor phases were exercised",
+      nonVacuous: Object.keys(rows).length === LIVE_SUCCESSOR_PHASES.length,
+      nonVacuityNote: "every live successor phase was exercised",
       passed: Object.values(rows).every(Boolean),
     };
   });

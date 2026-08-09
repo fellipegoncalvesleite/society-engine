@@ -408,7 +408,6 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       // LEGITIMATELY KNOWS. It is the last place this group actually saw its parent — deliberately
       // not the parent's current position, which the travellers have no channel to observe.
       departureTileId: parent.position,
-      resolutionCycles: 0,
       trail: [],
     },
 

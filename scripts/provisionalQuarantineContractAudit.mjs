@@ -360,7 +360,7 @@ try {
   // `isProvisionalGroupInTransit` is true only in `travelling` and `returning`. Gating ordinary
   // systems on it would readmit a group in `establishing` or `failed_early` through the same doors.
   // This constructs each live phase and asks the production predicates directly.
-  const LIVE_PHASES = ["travelling", "establishing", "failed_early", "returning"];
+  const LIVE_PHASES = ["travelling", "establishing", "failed_early", "returning", "unresolved_after_failed_return"];
   const TERMINAL_PHASES = ["reintegrated", "stabilized", "provisional_extinguished"];
   const phaseRows = [];
   for (const phase of [...LIVE_PHASES, ...TERMINAL_PHASES]) {
@@ -383,12 +383,12 @@ try {
   const transitWouldHaveMissed = liveRows.filter((r) => !r.isProvisionalGroupInTransit).map((r) => r.phase);
   record(
     "Q7_the_gate_holds_in_every_live_phase_not_only_in_transit",
-    "the predicate the production gates read is true in all four live phases and false in all three terminal ones — and the transit predicate would have READMITTED the phases listed, which is why the gates do not use it",
+    "the predicate the production gates read is true in every live phase and false in all three terminal ones — and the transit predicate would have READMITTED the phases listed, which is why the gates do not use it",
     gateHoldsInEveryLivePhase && TERMINAL_PHASES.every((p) => {
       const r = phaseRows.find((x) => x.phase === p);
       return !r.isProvisionalSuccessor && r.isEstablishedBand === r.isLivingBand;
     }),
-    liveRows.length === 4 && transitWouldHaveMissed.length > 0,
+    liveRows.length === LIVE_PHASES.length && transitWouldHaveMissed.length > 0,
     { phaseRows, transitPredicateWouldHaveReadmitted: transitWouldHaveMissed },
   );
 

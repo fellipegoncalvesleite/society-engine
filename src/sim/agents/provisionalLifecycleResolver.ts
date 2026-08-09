@@ -1,7 +1,8 @@
 /**
  * ROADMAP ITEM 4 — THE PROVISIONAL LIFECYCLE RESOLVER.
  *
- * The authority that keeps a provisional successor from becoming immortal.
+ * The authority that resolves bounded actions and terminalizes the physical fact of zero bodies.
+ * A living event-bounded condition is allowed to persist until a real event resolves it.
  *
  * WHY THIS EXISTS, AND WHY A FILTER ON `viability.ts` WOULD HAVE BEEN A DEFECT.
  *
@@ -35,7 +36,7 @@
  */
 
 import { isProvisionalSuccessor } from "./bandLifecycle";
-import { getPhaseContract, MAX_RETURN_ESTABLISH_CYCLES, requestTransition } from "./fissionLifecycleKernel";
+import { getPhaseContract, requestTransition } from "./fissionLifecycleKernel";
 import type { DailyAction } from "./dailyActions";
 import type { Band, FissionLifecycleRecord } from "./types";
 import type { BandId } from "../core/types";
@@ -47,9 +48,7 @@ export interface ProvisionalResolution {
   readonly fromPhase: string;
   readonly toPhase: string;
   readonly populationAtResolution: number;
-  readonly reason: "zero_physical_population" | "phase_bound_expired" | "cycle_bound_reached_every_remaining_exit_is_physical";
-  /** How many return/establish cycles this lineage had completed at the moment of the resolution. */
-  readonly resolutionCycles: number;
+  readonly reason: "zero_physical_population" | "phase_bound_expired";
 }
 
 export interface ProvisionalResolverResult {
@@ -104,7 +103,6 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
           toPhase: "provisional_extinguished",
           populationAtResolution: population,
           reason: "zero_physical_population",
-          resolutionCycles: record.resolutionCycles ?? 0,
         });
         bands[String(band.id)] = {
           ...band,
@@ -133,51 +131,6 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
     if (!expired) {
       continue;
     }
-    const cycles = record.resolutionCycles ?? 0;
-
-    // ── §4 — THE BOUND IS ON THE CHURN, NOT ON THE GROUP. ──────────────────────────────────────
-    //
-    // Removing timer-only reintegration leaves a real question: what happens to living people who
-    // tried to walk home and could not? They may not be killed by a timer, declared home, declared
-    // established, or left cycling forever. So the cycling is what is bounded.
-    //
-    // Once the bound is reached this resolver STOPS ADVANCING THE PHASE and says so. The group is
-    // still alive, still physically somewhere, and still has three exits — **reaching its parent,
-    // demonstrating establishment, or dying** — every one of which is a physical event witnessed by a
-    // real writer. What it no longer has is a clock shuffling it between phases on no new evidence.
-    //
-    // It is reported rather than silent: `hasUnresolvedProvisionalGroup` counts it, so an immortal
-    // provisional group is a VISIBLE finding instead of an invisible one.
-    // ── ROADMAP ITEM 4 §18 — WHAT ACTUALLY HAPPENS AT THE BOUND. ────────────────────────────────
-    //
-    // The bound used to freeze the group wherever it stood, and a smoke run showed what that means in
-    // practice: a group that had spent its attempts sat in `returning` for nineteen hundred days,
-    // walking nowhere, unable to stabilize because `stabilized` is only reachable from `establishing`,
-    // and resolving only by starving at the decline cap. "Every remaining exit is physical" was true
-    // and one of the exits was unreachable.
-    //
-    // So the bound now permits EXACTLY ONE more transition, and only one that lands the group in
-    // `establishing` — the bounded establishment reassessment §18 requires. It is not a reprieve and it
-    // is not a success: `establishing` is a trial, `stabilized` still demands lived evidence, and after
-    // this the resolver advances nothing at all. The group's exits are then real and all reachable:
-    // demonstrate it can live here, be found by its parent, or die.
-    const atBound = cycles >= MAX_RETURN_ESTABLISH_CYCLES;
-    const settleHere = atBound && record.phase !== "establishing" && contract.onTimeout === "establishing";
-    if (atBound) {
-      if (!settleHere) {
-        resolutions.push({
-          bandId: String(band.id),
-          lineageId: record.lineageId,
-          fromPhase: record.phase,
-          toPhase: record.phase,
-          populationAtResolution: population,
-          reason: "cycle_bound_reached_every_remaining_exit_is_physical",
-          resolutionCycles: cycles,
-        });
-        continue;
-      }
-    }
-
     const transition = requestTransition({
       current: { phase: record.phase, phaseEnteredDay: record.phaseEnteredDay, history: record.history },
       to: contract.onTimeout as NonNullable<typeof contract.onTimeout>,
@@ -188,11 +141,6 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
     });
     if (transition.ok === true) {
       changed = true;
-      // One completed cycle is a return attempt that ended without reaching anybody. Counted at that
-      // exact edge so an ordinary arrival, failure or death does not consume the budget — and NOT on
-      // the settle-here transition, which is the END of the attempts rather than another one. Counting
-      // it there pushed the ledger to four against a bound of three, which E6 caught.
-      const completedCycle = !settleHere && record.phase === "returning" && transition.state.phase === "establishing";
       resolutions.push({
         bandId: String(band.id),
         lineageId: record.lineageId,
@@ -200,7 +148,6 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
         toPhase: transition.state.phase,
         populationAtResolution: population,
         reason: "phase_bound_expired",
-        resolutionCycles: completedCycle ? cycles + 1 : cycles,
       });
       bands[String(band.id)] = {
         ...band,
@@ -209,7 +156,6 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
           phase: transition.state.phase,
           phaseEnteredDay: transition.state.phaseEnteredDay,
           history: transition.state.history,
-          resolutionCycles: completedCycle ? cycles + 1 : cycles,
         },
       };
     }
@@ -261,12 +207,10 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
  *
  * ── WHAT THIS DOES NOT TOUCH ────────────────────────────────────────────────────────────────────
  *
- * This resolver never writes `stabilized`. Establishment is evaluated by
- * `provisionalEstablishmentDailyAction`, which ALREADY ran daily before this change and is not
- * reordered by it, so no stabilization predicate runs more often than it did. The one real consequence
- * is stated rather than buried: a truthful `returning` bound puts a group into `establishing` EARLIER,
- * so a group that was going to stabilize does so earlier by the lateness that has been removed. That
- * moves an existing outcome to its correct day; it does not create one.
+ * This resolver never writes `stabilized`, and `provisionalEstablishmentDailyAction` is descriptive
+ * only. The real consequence is stated rather than buried: a truthful `returning` bound now ends the
+ * return action in `unresolved_after_failed_return`. That living state has no timeout because elapsed
+ * time cannot manufacture commitment, reintegration, stabilization, or death.
  */
 export const provisionalLifecycleDeadlineDailyAction: DailyAction = {
   id: "provisional_lifecycle_deadline",
@@ -280,16 +224,15 @@ export const provisionalLifecycleDeadlineDailyAction: DailyAction = {
 /**
  * Exported so audits assert the PRODUCTION predicate rather than re-implementing it.
  *
- * True when no provisional successor anywhere is stuck: none holds bodies it cannot account for, and
- * none sits at zero population while still reading as a living provisional group.
+ * True when a living provisional successor is explicitly waiting for a real physical/social event,
+ * or when zero population has not yet been terminalized. Event-bounded unresolved state is visible,
+ * intentional state rather than silent phase churn.
  */
 export function hasUnresolvedProvisionalGroup(world: WorldState): boolean {
   return Object.values(world.bands).some(
     (band) =>
       isProvisionalSuccessor(band) &&
       (Math.round(band.demography.population) <= 0 ||
-        // §4 — a group that has exhausted its return/establish budget. It is not stuck by accident:
-        // it is alive somewhere with only physical exits left, and saying so out loud is the point.
-        (band.provisionalSuccessor?.resolutionCycles ?? 0) >= MAX_RETURN_ESTABLISH_CYCLES),
+        band.provisionalSuccessor?.phase === "unresolved_after_failed_return"),
   );
 }

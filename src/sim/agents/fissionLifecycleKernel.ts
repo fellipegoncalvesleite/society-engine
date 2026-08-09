@@ -32,8 +32,9 @@
  * It does not move bodies, allocate cohorts, decide viability, choose a destination, or know what a
  * day is. Departure is represented here only as the transition `departure_ready -> departed`, and the
  * actual transfer of population is the world adapter's job at a single seam. The kernel's whole
- * contribution is that **no phase can be reached except through a permitted transition, and no
- * non-terminal phase can persist past its bound.**
+ * contribution is that **no phase can be reached except through a permitted transition, and every
+ * action/decision phase is time-bounded.** A living condition that no clock can honestly resolve is
+ * instead explicitly event-bounded.
  */
 
 // ── phases ──────────────────────────────────────────────────────────────────────────────────────
@@ -61,6 +62,8 @@ export type ProvisionalSuccessorPhase =
   | "failed_early"
   /** Walking back, on knowledge it legitimately holds. */
   | "returning"
+  /** Living and separate after the bounded return action failed; awaits a real physical/social event. */
+  | "unresolved_after_failed_return"
   /** Terminal: rejoined the parent. The provisional entity is removed exactly once. */
   | "reintegrated"
   /** Terminal: bounded early functioning demonstrated. Becomes an ordinary band. */
@@ -105,9 +108,18 @@ export interface PhaseContract {
   /** True when the phase ends the lifecycle and keeps only a bounded record. */
   readonly terminal: boolean;
   /**
-   * How many days this phase may remain current before it MUST resolve. `undefined` only for
-   * terminal phases. No non-terminal phase may be unbounded — that is the "no proposal may remain
-   * unresolved indefinitely" requirement, made structural.
+   * Why this phase cannot silently persist.
+   *
+   * Decisions and actions are temporally bounded. A living physical condition may be event-bounded
+   * when elapsed time cannot honestly manufacture commitment, stabilization, reintegration, or death.
+   */
+  readonly resolutionKind:
+    | "temporally_bounded_action"
+    | "event_bounded_living_condition"
+    | "terminal";
+  /**
+   * How many days a temporally bounded action may remain current before it MUST resolve.
+   * Undefined for event-bounded living conditions and terminal phases.
    */
   readonly maxDays?: number;
   /** Where the phase resolves if its bound expires. Terminal phases have none. */
@@ -135,9 +147,8 @@ export interface PhaseContract {
 }
 
 /**
- * Bounds, stated as AUTHORITY BOUNDARIES rather than calibrated magnitudes — the CORRECTION-32 /
- * -34E distinction. They exist so that no state can persist indefinitely; none is offered as a
- * measured duration of anything, and no natural run was used to fit them.
+ * Temporal action bounds, stated as AUTHORITY BOUNDARIES rather than calibrated magnitudes — the
+ * CORRECTION-32 / -34E distinction. None is offered as a measured duration of a human condition.
  */
 export const PROPOSAL_MAX_DAYS = 90;
 export const COMMITMENT_MAX_DAYS = 90;
@@ -146,15 +157,6 @@ export const TRAVEL_MAX_DAYS = 180;
 export const ESTABLISHMENT_MAX_DAYS = 360;
 export const FAILED_EARLY_MAX_DAYS = 30;
 export const RETURN_MAX_DAYS = 180;
-/**
- * How many times a lineage may go round the return/establish cycle before the resolver stops
- * advancing it. An AUTHORITY BOUNDARY, not a measured number of attempts.
- *
- * The bound is on the CHURN, not on the group. When it is exhausted the group is still alive, still
- * physically somewhere, and still has three exits — reaching its parent, demonstrating establishment,
- * or dying. What it no longer has is a clock that moves it between phases on no new evidence.
- */
-export const MAX_RETURN_ESTABLISH_CYCLES = 3;
 
 const CONTRACTS: readonly PhaseContract[] = [
   {
@@ -169,6 +171,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     transitionWriter: "fissionProposal (world adapter)",
     permittedNext: ["committed", "abandoned"],
     terminal: false,
+    resolutionKind: "temporally_bounded_action",
     maxDays: PROPOSAL_MAX_DAYS,
     onTimeout: "abandoned",
     clearsOnExit: [],
@@ -187,6 +190,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     // are abandoned and groups turn back; making commitment irreversible would encode the opposite.
     permittedNext: ["departure_ready", "abandoned"],
     terminal: false,
+    resolutionKind: "temporally_bounded_action",
     maxDays: COMMITMENT_MAX_DAYS,
     onTimeout: "abandoned",
     clearsOnExit: [],
@@ -203,6 +207,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     transitionWriter: "fissionDeparture (world adapter)",
     permittedNext: ["departed", "abandoned"],
     terminal: false,
+    resolutionKind: "temporally_bounded_action",
     maxDays: DEPARTURE_READY_MAX_DAYS,
     onTimeout: "abandoned",
     clearsOnExit: [],
@@ -219,6 +224,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     transitionWriter: "fissionProposal (world adapter)",
     permittedNext: [],
     terminal: true,
+    resolutionKind: "terminal",
     clearsOnExit: ["currentAttempt"],
   },
   {
@@ -236,6 +242,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     transitionWriter: "fissionDeparture (world adapter)",
     permittedNext: [],
     terminal: true,
+    resolutionKind: "terminal",
     clearsOnExit: ["currentAttempt"],
   },
   {
@@ -250,6 +257,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     transitionWriter: "provisionalTravel (world adapter)",
     permittedNext: ["establishing", "returning", "provisional_extinguished"],
     terminal: false,
+    resolutionKind: "temporally_bounded_action",
     maxDays: TRAVEL_MAX_DAYS,
     // A journey that has run out of time turns for home. It does not arrive by expiry, and it does
     // not vanish — `RESEARCH_CONSTRAINTS.md` §5: departures fail and end in reintegration.
@@ -258,7 +266,8 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "establishing",
-    // a TRIAL, not an outcome — "this group is attempting to live where it stands", whether it arrived or gave up on the walk home; the success gate is `stabilized`, and that one is physical.
+    // A bounded trial entered by physical arrival at the named destination. It is not reused after a
+    // failed return: that would manufacture another establishment choice from elapsed time alone.
     entryRequires: "elapsed_time_permitted",
     side: "successor",
     bodiesHaveMoved: true,
@@ -266,14 +275,12 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
     transitionWriter: "provisionalEstablishment (world adapter)",
-    // `reintegrated` is reachable from here for one physical reason: a group that has settled for
-    // where it is standing, having spent its return attempts, is still a group its parent can walk up
-    // to. Without it the only exit a stranded group had was starvation, because `stabilized` is
-    // reachable only from this phase and a meeting was only recognised from `returning`. It changes
-    // nothing about what a clock may do — `reintegrated` still requires a physical event AND proven
-    // co-location, and no timeout may point at it.
+    // The table retains later positive outcomes as legal lifecycle vocabulary, but this cleanup
+    // supplies no production stabilization writer. Any physical reintegration must still be witnessed
+    // by the dedicated adapter; no timeout may point at it.
     permittedNext: ["stabilized", "failed_early", "returning", "reintegrated", "provisional_extinguished"],
     terminal: false,
+    resolutionKind: "temporally_bounded_action",
     maxDays: ESTABLISHMENT_MAX_DAYS,
     // **A TIMER ALONE MAY NOT STABILIZE.** The window expiring without lived evidence is a failure,
     // not a success, and routing the timeout to `failed_early` is what makes that structural rather
@@ -295,6 +302,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     // walk back; it may not stabilize, and it may not stop existing here.
     permittedNext: ["returning", "provisional_extinguished"],
     terminal: false,
+    resolutionKind: "temporally_bounded_action",
     maxDays: FAILED_EARLY_MAX_DAYS,
     onTimeout: "returning",
     clearsOnExit: [],
@@ -309,12 +317,9 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
     transitionWriter: "provisionalReturn (world adapter)",
-    // `establishing` is reachable because §4's answer to a failed return is that the group tries to
-    // live where it is standing. Without it the re-routed timeout is `transition_not_permitted` and
-    // the group STICKS in `returning` forever — which this audit caught, and which is the immortality
-    // failure wearing the opposite mask.
-    permittedNext: ["reintegrated", "establishing", "provisional_extinguished"],
+    permittedNext: ["reintegrated", "unresolved_after_failed_return", "provisional_extinguished"],
     terminal: false,
+    resolutionKind: "temporally_bounded_action",
     maxDays: RETURN_MAX_DAYS,
     // ── §4 — WHAT HAPPENS WHEN LIVING PEOPLE TRY TO GO HOME AND CANNOT. ────────────────────────
     //
@@ -322,20 +327,27 @@ const CONTRACTS: readonly PhaseContract[] = [
     // could call it a reintegration and leave "where the bodies physically are" to the adapter. There
     // was no adapter. The measured result was a group promoted to ordinary status by a clock.
     //
-    // The replacement is the smallest physically honest option: **the return attempt is abandoned and
-    // the group tries to live where it is standing.** It is not killed (a timer may not kill people),
-    // not declared home (it is not), not declared established (`establishing` is a TRIAL and
-    // `stabilized` still demands lived evidence), and not left churning (the cycle is bounded below).
-    //
-    // Alternatives compared and rejected:
-    //   - **a distinct `stranded` phase** — it needs its own bounded exit, which is the same question
-    //     one name later, and it would add a phase whose only content is "the previous answer failed";
-    //   - **route contradiction re-deciding immediately** — the group has no new evidence at the
-    //     instant a bound expires; deciding again on the same evidence is not a decision;
-    //   - **`failed_early`** — it means "establishment did not work", and a group that never
-    //     established has not failed at establishing; reusing it would put a false cause in the record;
-    //   - **death on expiry** — forbidden, and it is the exact defect in the other direction.
-    onTimeout: "establishing",
+    // Expiry ends only the return ACTION. It enters a named living condition and manufactures no
+    // establishment attempt, commitment, success, reintegration, or death.
+    onTimeout: "unresolved_after_failed_return",
+    clearsOnExit: [],
+  },
+  {
+    phase: "unresolved_after_failed_return",
+    // A clock may truthfully establish that the bounded return action ended without reintegration. It
+    // cannot decide what these living, separate people become next.
+    entryRequires: "elapsed_time_permitted",
+    side: "successor",
+    bodiesHaveMoved: true,
+    bodyOwner: "successor",
+    productiveLabourOwner: "successor",
+    physicalLocationOwner: "successor",
+    transitionWriter: "provisionalLifecycleResolver (world adapter)",
+    // Event-bounded: physical co-location can reintegrate; zero bodies can extinguish. A future real
+    // positive-commitment writer may add a social exit, but none exists in this patch.
+    permittedNext: ["reintegrated", "provisional_extinguished"],
+    terminal: false,
+    resolutionKind: "event_bounded_living_condition",
     clearsOnExit: [],
   },
   {
@@ -351,6 +363,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     transitionWriter: "provisionalReturn (world adapter)",
     permittedNext: [],
     terminal: true,
+    resolutionKind: "terminal",
     clearsOnExit: ["provisionalState"],
   },
   {
@@ -367,20 +380,23 @@ const CONTRACTS: readonly PhaseContract[] = [
     transitionWriter: "provisionalZeroPopulation (world adapter)",
     permittedNext: [],
     terminal: true,
+    resolutionKind: "terminal",
     clearsOnExit: ["provisionalState"],
   },
   {
     phase: "stabilized",
-    // it asserts a group demonstrably functioned; MIN_LIVED_EVIDENCE_FOR_STABILIZATION already guards the request, and this makes the same rule structural in the table.
+    // Reserved for a later positive-commitment plus physical-operation authority. No current
+    // production adapter requests this transition.
     entryRequires: "physical_event",
     side: "successor",
     bodiesHaveMoved: true,
     bodyOwner: "successor",
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
-    transitionWriter: "provisionalEstablishment (world adapter)",
+    transitionWriter: "future positive-commitment authority (not implemented)",
     permittedNext: [],
     terminal: true,
+    resolutionKind: "terminal",
     clearsOnExit: ["provisionalState"],
   },
 ];
@@ -416,7 +432,9 @@ export type LifecycleRejection =
   /** §3 — elapsed time may not produce a phase that asserts something happened in the world. */
   | "terminal_outcome_requires_a_physical_event"
   /** Reintegration asserts the bodies physically reached the parent. Nothing else may assert it. */
-  | "reintegration_without_proven_co_location";
+  | "reintegration_without_proven_co_location"
+  /** Event-bounded living conditions have no honest timeout transition. */
+  | "event_bounded_phase_has_no_timeout";
 
 export interface LifecycleState {
   readonly phase: FissionLifecyclePhase;
@@ -517,13 +535,18 @@ function enter(current: LifecycleState, to: FissionLifecyclePhase, today: number
 /**
  * Resolve a phase that has outlived its bound.
  *
- * **This is what makes "no state may persist indefinitely" structural rather than aspirational.** It
- * is deterministic, it is driven by the contract table rather than by a second copy of the rules, and
- * it never invents a success: every timeout routes to abandonment, return or failure.
+ * This applies only to temporally bounded action/decision phases. Event-bounded living conditions are
+ * deliberately not resolved by a clock because time alone cannot witness their honest exits.
  */
 export function resolveTimeout(current: LifecycleState, today: number): LifecycleTransitionResult {
   const contract = getPhaseContract(current.phase);
-  if (contract.terminal || contract.maxDays === undefined || contract.onTimeout === undefined) {
+  if (contract.terminal) {
+    return { ok: false, rejection: "phase_is_terminal" };
+  }
+  if (contract.resolutionKind === "event_bounded_living_condition") {
+    return { ok: false, rejection: "event_bounded_phase_has_no_timeout" };
+  }
+  if (contract.maxDays === undefined || contract.onTimeout === undefined) {
     return { ok: false, rejection: "phase_is_terminal" };
   }
   if (today - current.phaseEnteredDay < contract.maxDays) {
@@ -563,15 +586,26 @@ export function isUnresolved(state: LifecycleState): boolean {
 /**
  * Exported so audits assert the PRODUCTION predicate rather than re-implementing it.
  *
- * Checks that no quantity is owned by two entities at once in any phase, and that every non-terminal
- * phase has both a bound and somewhere to go when it expires. A structural check over the contract
- * table, so a future phase added without a bound fails the audit rather than shipping.
+ * Checks ownership and the declared resolution kind. Temporal actions require a bound and timeout;
+ * event-bounded living conditions forbid both; terminal phases permit neither.
  */
 export function assertSingleOwnership(): readonly string[] {
   const problems: string[] = [];
   for (const c of CONTRACTS) {
-    if (!c.terminal && (c.maxDays === undefined || c.onTimeout === undefined)) {
-      problems.push(`${c.phase}: non-terminal phase without a bound or a timeout destination`);
+    if (c.resolutionKind === "temporally_bounded_action" &&
+      (c.terminal || c.maxDays === undefined || c.onTimeout === undefined)) {
+      problems.push(`${c.phase}: temporally bounded action lacks a bound and timeout destination`);
+    }
+    if (c.resolutionKind === "event_bounded_living_condition" &&
+      (c.terminal || c.maxDays !== undefined || c.onTimeout !== undefined)) {
+      problems.push(`${c.phase}: event-bounded living condition declares terminality or a timeout`);
+    }
+    if (c.resolutionKind === "terminal" &&
+      (!c.terminal || c.maxDays !== undefined || c.onTimeout !== undefined)) {
+      problems.push(`${c.phase}: terminal resolution kind disagrees with terminal/bound fields`);
+    }
+    if (c.terminal !== (c.resolutionKind === "terminal")) {
+      problems.push(`${c.phase}: terminal flag disagrees with resolution kind`);
     }
     if (c.terminal && c.permittedNext.length > 0) {
       problems.push(`${c.phase}: terminal phase with permitted successors`);
