@@ -70,7 +70,7 @@ try {
   record("K2", "the kernel retains stabilization as legal future vocabulary behind explicit guarded transitions", () => {
     let s = k.beginAttempt(0);
     const path = [s.phase];
-    for (const [to, day, extra] of [["committed", 10, {}], ["departure_ready", 20, {}], ["departed", 25, { endorsedFounderCount: 12 }]]) {
+    for (const [to, day, extra] of [["departure_planned", 10, {}], ["departure_ready", 20, {}], ["departed", 25, { endorsedFounderCount: 12 }]]) {
       const r = step(s, to, day, extra);
       if (r.ok !== true) return { failedAt: to, rejection: r.rejection, nonVacuous: true, nonVacuityNote: "n/a", passed: false };
       s = r.state;
@@ -110,9 +110,9 @@ try {
   // ── K4 — abandonment before departure ───────────────────────────────────────────────────────
   record("K4", "an attempt can be abandoned from every pre-departure phase", () => {
     const results = {};
-    for (const [phase, day] of [["proposed", 0], ["committed", 10], ["departure_ready", 20]]) {
+    for (const [phase, day] of [["proposed", 0], ["departure_planned", 10], ["departure_ready", 20]]) {
       let s = k.beginAttempt(0);
-      if (phase !== "proposed") s = step(s, "committed", 5).state;
+      if (phase !== "proposed") s = step(s, "departure_planned", 5).state;
       if (phase === "departure_ready") s = step(s, "departure_ready", 10).state;
       const r = step(s, "abandoned", day + 1);
       results[phase] = r.ok === true ? r.state.phase : `REJECTED:${r.rejection}`;
@@ -128,7 +128,7 @@ try {
   // ── K5 — departure requires an endorsed founder count ───────────────────────────────────────
   record("K5", "departure is refused without a founder count the residual authority endorsed", () => {
     let s = k.beginAttempt(0);
-    s = step(s, "committed", 5).state;
+    s = step(s, "departure_planned", 5).state;
     s = step(s, "departure_ready", 10).state;
     const missing = step(s, "departed", 12);
     const zero = step(s, "departed", 12, { endorsedFounderCount: 0 });
@@ -321,9 +321,9 @@ try {
   // ── K13 — determinism ───────────────────────────────────────────────────────────────────────
   record("K13", "the same request produces a byte-identical result", () => {
     const s = k.beginAttempt(3);
-    const a = JSON.stringify(step(s, "committed", 9));
-    const b = JSON.stringify(step({ ...s }, "committed", 9));
-    const c = JSON.stringify(step(k.beginAttempt(3), "committed", 9));
+    const a = JSON.stringify(step(s, "departure_planned", 9));
+    const b = JSON.stringify(step({ ...s }, "departure_planned", 9));
+    const c = JSON.stringify(step(k.beginAttempt(3), "departure_planned", 9));
     return {
       identical: a === b && b === c,
       nonVacuous: a.length > 40,
@@ -335,11 +335,11 @@ try {
   // ── K14 — the kernel cannot read anything it was not given ──────────────────────────────────
   record("K14", "information the kernel has no field for cannot alter a transition", () => {
     const s = k.beginAttempt(0);
-    const clean = JSON.stringify(step(s, "committed", 5));
+    const clean = JSON.stringify(step(s, "departure_planned", 5));
     const polluted = JSON.stringify(
       k.requestTransition({
         current: s,
-        to: "committed",
+        to: "departure_planned",
         today: 5,
         world: { bands: { a: 1 } },
         splitPressure: 0.99,

@@ -73,7 +73,7 @@ try {
         [parent.id]: {
           ...parent,
           fissionAttempt: {
-            phase: "departure_ready", phaseEnteredDay: dayD - 5, history: ["proposed", "committed"],
+            phase: "departure_ready", phaseEnteredDay: dayD - 5, history: ["proposed", "departure_planned"],
             lineageId: "LIN-REIN-1", requestedFounders: requested, targetTileId: String(targetTile.id),
           },
         },

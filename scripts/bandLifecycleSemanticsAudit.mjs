@@ -170,7 +170,7 @@ try {
 
   // ── LP7 — a parent mid-attempt cannot start a second one ────────────────────────────────────
   record("LP7", "a parent already attempting a split is not fission-eligible", () => {
-    const attempting = band("p", { attempt: rec("committed", "L1") });
+    const attempting = band("p", { attempt: rec("departure_planned", "L1") });
     const finished = band("p", { attempt: rec("abandoned", "L1") });
     return {
       whileAttempting: lc.isFissionEligibleParent(attempting),
@@ -193,7 +193,7 @@ try {
     {
       id: "O2",
       claim: "one band holding two current lifecycle records is detected",
-      bands: [band("x", { attempt: rec("committed", "L1"), successor: rec("travelling", "L1") })],
+      bands: [band("x", { attempt: rec("departure_planned", "L1"), successor: rec("travelling", "L1") })],
       expect: "duplicate_current_ownership_on_one_band",
     },
     {

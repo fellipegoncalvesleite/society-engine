@@ -121,7 +121,7 @@ try {
           [parent.id]: {
             ...world.bands[parent.id],
             fissionAttempt: {
-              phase: "departure_ready", phaseEnteredDay: today - 5, history: ["proposed", "committed"],
+              phase: "departure_ready", phaseEnteredDay: today - 5, history: ["proposed", "departure_planned"],
               lineageId, requestedFounders: 8, targetTileId: String(target.t.id),
             },
           },

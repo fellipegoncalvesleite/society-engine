@@ -68,7 +68,7 @@ try {
   const depart = (world, id, lineage, targetId, today) => {
     const d = seam.performAtomicDeparture({
       world: { ...world, bands: { ...world.bands, [parent.id]: { ...world.bands[parent.id],
-        fissionAttempt: { phase: "departure_ready", phaseEnteredDay: today - 5, history: ["proposed", "committed"],
+        fissionAttempt: { phase: "departure_ready", phaseEnteredDay: today - 5, history: ["proposed", "departure_planned"],
           lineageId: lineage, requestedFounders: 8, targetTileId: String(targetId) } } } },
       parentId: parent.id, today, residualContext: RES, successorBandId: id, lineageId: lineage });
     if (d.ok !== true) throw new Error(`departure refused: ${d.refusal}`);

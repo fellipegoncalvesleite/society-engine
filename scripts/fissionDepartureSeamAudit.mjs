@@ -111,7 +111,7 @@ try {
     fissionAttempt: opts.attempt ?? {
       phase: "departure_ready",
       phaseEnteredDay: 0,
-      history: ["proposed", "committed"],
+      history: ["proposed", "departure_planned"],
       lineageId: "LIN-1",
       requestedFounders: opts.requestedFounders ?? 18,
       targetTileId: "tile:17:17",
@@ -317,7 +317,7 @@ try {
   // ── D12 — the seam refuses without departure_ready ──────────────────────────────────────────
   record("D12", "a departure is refused from every phase except departure_ready", () => {
     const rows = {};
-    for (const phase of ["proposed", "committed", "abandoned", "departed"]) {
+    for (const phase of ["proposed", "departure_planned", "abandoned", "departed"]) {
       const r = depart(makeParent(NATURAL, { attempt: { phase, phaseEnteredDay: 0, history: [], lineageId: "LIN-1", requestedFounders: 18, targetTileId: "tile:17:17" } }));
       rows[phase] = r.ok === true ? "ACCEPTED" : r.refusal;
     }

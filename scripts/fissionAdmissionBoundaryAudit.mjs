@@ -64,7 +64,7 @@ try {
     .filter((t) => t !== undefined && passability.isBandPassableDestination(t) && String(t.id) !== String(parent.position))[0];
   const dep = seam.performAtomicDeparture({
     world: { ...base, bands: { ...base.bands, [parent.id]: { ...base.bands[parent.id],
-      fissionAttempt: { phase: "departure_ready", phaseEnteredDay: day0 - 5, history: ["proposed", "committed"],
+      fissionAttempt: { phase: "departure_ready", phaseEnteredDay: day0 - 5, history: ["proposed", "departure_planned"],
         lineageId: "LIN-FA", requestedFounders: 12, targetTileId: String(target.id) } } } },
     parentId: parent.id, today: day0, residualContext: RES, successorBandId: SID, lineageId: "LIN-FA" });
   if (dep.ok !== true) throw new Error(`departure refused: ${dep.refusal}`);
@@ -216,7 +216,7 @@ try {
   // pre-departure Item-4 attempt must not ALSO create a legacy daughter underneath it.
   const attemptingParent = {
     ...establishedArmed,
-    fissionAttempt: { phase: "committed", phaseEnteredDay: day0 - 3, history: ["proposed"],
+    fissionAttempt: { phase: "departure_planned", phaseEnteredDay: day0 - 3, history: ["proposed"],
       lineageId: "LIN-FA-2", requestedFounders: 8, targetTileId: String(target.id) },
   };
   const afterAttempt = runAnnual("mid-attempt", { [parent.id]: attemptingParent });
@@ -227,7 +227,7 @@ try {
     attDaughters.length === 0,
     // Non-vacuous BECAUSE F3 is the same band, same arming, same day, differing only in the attempt.
     estDaughters.length > 0,
-    { attemptPhase: "committed", differsFromF3ByOnly: "the presence of a live fissionAttempt",
+    { attemptPhase: "departure_planned", differsFromF3ByOnly: "the presence of a live fissionAttempt",
       newBandIds: attNewIds, daughtersOfTheParent: attDaughters,
       f3ProducedDaughters: estDaughters.length,
       hasCurrentAttemptAfter: afterAttempt.bands[parent.id] === undefined ? null : lc.hasCurrentFissionAttempt(afterAttempt.bands[parent.id]),

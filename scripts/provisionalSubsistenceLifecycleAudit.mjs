@@ -319,7 +319,7 @@ try {
           [donor.id]: {
             ...parent,
             fissionAttempt: {
-              phase: "departure_ready", phaseEnteredDay: day0 - 5, history: ["proposed", "committed"],
+              phase: "departure_ready", phaseEnteredDay: day0 - 5, history: ["proposed", "departure_planned"],
               lineageId, requestedFounders: 8, targetTileId: String(target.id),
             },
           },
@@ -672,7 +672,7 @@ try {
           [donor.id]: {
             ...base.bands[donor.id],
             fissionAttempt: {
-              phase: "departure_ready", phaseEnteredDay: day0 - 5, history: ["proposed", "committed"],
+              phase: "departure_ready", phaseEnteredDay: day0 - 5, history: ["proposed", "departure_planned"],
               lineageId: "LIN-PIPE", requestedFounders: 8, targetTileId: String(pipeTarget.id),
             },
           },

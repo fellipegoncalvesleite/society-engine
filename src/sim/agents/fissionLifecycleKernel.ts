@@ -43,8 +43,21 @@
 export type FissionAttemptPhase =
   /** Separation is being considered, and why. Freely abandonable. */
   | "proposed"
-  /** Specific aggregate founders and a specific band-known destination are named. */
-  | "committed"
+  /**
+   * A founder configuration and a band-known destination have been NAMED. Planning content, not
+   * consent.
+   *
+   * This phase was called `committed` and the name overstated it by exactly the distance this
+   * checkpoint exists to close: nothing in production ever wrote it, its declared `fissionProposal`
+   * adapter does not exist, `requestTransition` never inspects `history`, and the departure seam
+   * asks only whether the attempt IS `departure_ready` — never whether it passed through here. A
+   * phase that proves "who and where are written down" must not be named for a decision nobody made.
+   *
+   * The positive decision now lives in `fissionCommitment.ts` as an event with its own evidence and
+   * its own binding, because a commitment has to say WHICH founders accepted WHAT, and a phase name
+   * can say neither.
+   */
+  | "departure_planned"
   /** Everything is arranged; the next permitted step is the physical departure itself. */
   | "departure_ready"
   /** Terminal: the attempt ended without anyone leaving. */
@@ -151,7 +164,7 @@ export interface PhaseContract {
  * CORRECTION-32 / -34E distinction. None is offered as a measured duration of a human condition.
  */
 export const PROPOSAL_MAX_DAYS = 90;
-export const COMMITMENT_MAX_DAYS = 90;
+export const DEPARTURE_PLANNED_MAX_DAYS = 90;
 export const DEPARTURE_READY_MAX_DAYS = 30;
 export const TRAVEL_MAX_DAYS = 180;
 export const ESTABLISHMENT_MAX_DAYS = 360;
@@ -169,7 +182,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "parent",
     physicalLocationOwner: "parent",
     transitionWriter: "fissionProposal (world adapter)",
-    permittedNext: ["committed", "abandoned"],
+    permittedNext: ["departure_planned", "abandoned"],
     terminal: false,
     resolutionKind: "temporally_bounded_action",
     maxDays: PROPOSAL_MAX_DAYS,
@@ -177,8 +190,8 @@ const CONTRACTS: readonly PhaseContract[] = [
     clearsOnExit: [],
   },
   {
-    phase: "committed",
-    // still nobody moved.
+    phase: "departure_planned",
+    // still nobody moved, and still nobody has agreed to.
     entryRequires: "elapsed_time_permitted",
     side: "attempt",
     bodiesHaveMoved: false,
@@ -186,12 +199,12 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "parent",
     physicalLocationOwner: "parent",
     transitionWriter: "fissionProposal (world adapter)",
-    // A commitment may still be abandoned. `RESEARCH_CONSTRAINTS.md` §5 records that attempted moves
-    // are abandoned and groups turn back; making commitment irreversible would encode the opposite.
+    // A plan may still be abandoned. `RESEARCH_CONSTRAINTS.md` §5 records that attempted moves are
+    // abandoned and groups turn back; making a named plan irreversible would encode the opposite.
     permittedNext: ["departure_ready", "abandoned"],
     terminal: false,
     resolutionKind: "temporally_bounded_action",
-    maxDays: COMMITMENT_MAX_DAYS,
+    maxDays: DEPARTURE_PLANNED_MAX_DAYS,
     onTimeout: "abandoned",
     clearsOnExit: [],
   },

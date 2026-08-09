@@ -102,7 +102,7 @@ try {
         fissionAttempt: {
           phase: "departure_ready",
           phaseEnteredDay: dayD - 5,
-          history: ["proposed", "committed"],
+          history: ["proposed", "departure_planned"],
           lineageId: "LIN-REAL-1",
           requestedFounders: requested,
           targetTileId: String(targetTile.id),
