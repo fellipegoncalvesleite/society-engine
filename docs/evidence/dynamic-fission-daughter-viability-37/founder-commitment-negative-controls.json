@@ -1,11 +1,18 @@
 {
-  "checkpoint": "ROADMAP ITEM 4 \u2014 founder-commitment causal inputs and live authorization semantics",
-  "method": "each mutation was applied to the real production module, the full A-V suite was run, and the module was restored from a pre-mutation copy; production was verified byte-identical by sha256 afterwards",
-  "pristineSha256": "86790947781578c67b4c4213e33194bd2175ac2366cb27dcb9731a8e0540b45f",
+  "checkpoint": "ROADMAP ITEM 4 \u2014 unknown consequence + pre/post-departure authority semantics",
+  "method": "each mutation applied to the real production module, the full A-Y suite run, module restored from a pre-mutation copy; production verified byte-identical by sha256 afterwards",
+  "pristineSha256": "f4ed5871d6e9508dfdc4ec4d364711e84269d5379d36b5d61ee808293081c18a",
   "controls": [
     {
+      "control": "A3: optional + `?? 0` restored",
+      "expected_to_bite": "X (unknown becomes zero)",
+      "fixtures_failing": [
+        "X"
+      ]
+    },
+    {
       "control": "reason-count-as-cost restored",
-      "expected_to_bite": "L / O",
+      "expected_to_bite": "O",
       "fixtures_failing": [
         "O"
       ]
@@ -18,8 +25,8 @@
       ]
     },
     {
-      "control": "authorization stops checking liveness",
-      "expected_to_bite": "R / S / T / U",
+      "control": "permit stops checking liveness",
+      "expected_to_bite": "P/Q/R/S/T/U",
       "fixtures_failing": [
         "Q",
         "R",
@@ -29,16 +36,25 @@
       ]
     },
     {
-      "control": "terminal authorization can be re-ended",
-      "expected_to_bite": "S / U",
+      "control": "terminal permit can be re-ended",
+      "expected_to_bite": "S/T/U",
       "fixtures_failing": [
         "S",
+        "T",
         "U"
+      ]
+    },
+    {
+      "control": "unreachable status re-advertised",
+      "expected_to_bite": "Y",
+      "fixtures_failing": [
+        "T",
+        "Y"
       ]
     }
   ],
   "notes": [
-    "Control 1 (reason-count-as-cost) fails O but NOT L, and the reason is structural rather than a weakness: the corrected request type no longer carries the six-ledger `reasonIds` list at all, so the ORIGINAL defect \u2014 counting supporting evidence, prior fragility and uncertainty as harm \u2014 is no longer constructible through the boundary. The nearest expressible mutation counts only the already-narrowed split-caused provenance, which is identical across L's two arms. L is proven by direct measurement instead: the same departure publishes splitCausedDamage 0.21 in both arms while the authority's own reasonId counts differ (5 vs 4), and the three SUPPORTING reasons alone would have produced 0.75 of 1.0 under the old model.",
-    "Control 2 (additive readiness) is the proof that the third change is load-bearing rather than cosmetic."
+    "Control 6 re-advertises `ended_by_return` as a declared status. It fails Y (unreachable member advertised) AND T, because T asserts the removed cause appears nowhere in production code \u2014 two independent fixtures catch the same regression from different directions.",
+    "Control 4 fails Q as well as R/S/T/U: a permit that stops checking liveness also stops refusing a superseded one."
   ]
 }

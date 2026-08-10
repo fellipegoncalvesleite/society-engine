@@ -94,8 +94,10 @@ export function foundersMatch(a: FounderCohortBinding, b: FounderCohortBinding):
  * IMMUTABLE. This is the historical fact that the acceptance happened, and nothing may edit it —
  * not a return, not a failure, not a later attempt.
  *
- * IT CARRIES NO STATUS, AND THAT IS THE POINT. Whether the acceptance is still in force is a
- * question about the present, answered by the separate `FounderCohortAuthorization` record below.
+ * IT CARRIES NO STATUS, AND THAT IS THE POINT. Whether the acceptance may still move bodies is a
+ * question about the present, answered by the separate `FounderDepartureAuthorization` below; and
+ * once the bodies have moved, whether the group still stands separated is answered by the
+ * SUCCESSOR'S OWN LIFECYCLE, not by anything here.
  * An earlier version of this module claimed that separation already existed on the strength of a
  * terms-comparison function; it did not, because a comparison of parent, lineage, cohort and
  * destination can never express withdrawn, consumed or ended. Keeping the status off this record is
@@ -126,7 +128,17 @@ export type FounderCommitmentRefusal =
   /** The destination is not in the parent's own observed tiles. A group cannot accept going nowhere it knows. */
   | "destination_not_known_to_the_band"
   /** Weighed and declined: the group is not willing on the evidence it holds. */
-  | "not_willing_on_held_evidence";
+  | "not_willing_on_held_evidence"
+  /**
+   * NOBODY HAS ASSESSED WHAT THIS SEPARATION WOULD DO TO THE PARENT, so there is nothing to weigh.
+   *
+   * Distinct from every refusal above, and distinct from a measured zero: this is not a decision the
+   * cohort took, it is a decision that could not be reached. It exists because the previous form
+   * read an absent consequence as `?? 0` — turning "nobody looked" into "the split costs the parent
+   * nothing", the most permissive answer available, in a module whose own documentation said the two
+   * must never be confused.
+   */
+  | "parent_separation_consequence_not_measured";
 
 export interface FounderCommitmentEvidence {
   /** The band's own accumulated split pressure. Motive to separate. */
@@ -137,20 +149,26 @@ export interface FounderCommitmentEvidence {
   readonly embodiedCapacity: number;
   /**
    * What THIS SEPARATION ITSELF would do to the people who stay, measured by the parent-residual
-   * authority from before→after movements only. Bounded 0..1.
+   * authority from before→after movements only. Bounded 0..1, or the literal `"not_measured"`.
    *
    * Named for its source quantity rather than for a role, because the previous field was called
    * `residualCost` and held `reasonIds.length / 4` — a count of explanations, including SUPPORTING
    * ones, standing in for a magnitude. Prior fragility, uncertainty and tolerance are all excluded
    * by construction; see `ParentSeparationConsequence`.
+   *
+   * THE `"not_measured"` MEMBER IS NOT DECORATION. Published evidence must never show `0` for a
+   * quantity nobody measured, or the report repeats the defect the decision no longer commits.
    */
-  readonly splitCausedDamage: number;
+  readonly splitCausedDamage: number | "not_measured";
   /** How much of a motive this group can act on: a known destination AND an unhurt body, conjunctively. */
   readonly readiness: number;
   /** Bounded per-band disposition. Modulates; never decides alone. */
   readonly tendencyDelta: number;
-  /** The combined willingness the decision compared against its threshold. */
-  readonly willingness: number;
+  /**
+   * The combined willingness the decision compared against its threshold, or `"not_measured"` when
+   * the separation's cost was never assessed and no willingness could honestly be computed.
+   */
+  readonly willingness: number | "not_measured";
 }
 
 export type FounderCommitmentDecision =
@@ -190,10 +208,20 @@ export interface FounderCommitmentRequest {
    * whole assessment over would let this module reach `tolerance`, `priorFragility`, `verdict` and
    * every reason ledger, and the first person to need a number would combine some of them into a
    * second definition of residual harm. One authority computes the consequence; this one interprets
-   * it. Absent means the residual authority has not run, which contributes no cost and no evidence —
-   * an unmeasured channel is not a measurement of zero, and nothing here pretends otherwise.
+   * it.
+   *
+   * REQUIRED, WITH NO DEFAULT, AND THE ABSENCE OF A DEFAULT IS THE INVARIANT — the same construction
+   * CORRECTION-34E used for `partyWorkers` and for the same reason: a default silently restores the
+   * defect for any caller that forgets. A commitment decision that does not know what the separation
+   * costs the people who stay is not a decision, so it may not be constructed. TypeScript refuses it
+   * at compile time; `assessFounderCohortCommitment` additionally refuses it at runtime with a named
+   * refusal, because an untyped caller — an audit, a future adapter — can still pass nothing.
+   *
+   * There is no legitimate unmeasured case to accommodate: `deriveParentSeparationConsequence` is
+   * always producible once the residual authority has run, and if the allocation is incoherent the
+   * feasibility refusals below fire first anyway.
    */
-  readonly parentSeparationConsequence?: ParentSeparationConsequence;
+  readonly parentSeparationConsequence: ParentSeparationConsequence;
   readonly today: number;
 }
 
@@ -307,8 +335,23 @@ export function assessFounderCohortCommitment(
   // ledgers, so a parent publishing four SUPPORTING reasons (camp labour intact, dependency load
   // unchanged, no nutritional deficit, no embodied hardship) scored the MAXIMUM cost this model can
   // express, and an admission of ignorance scored the same as real deterioration.
+  //
+  // AND UNKNOWN IS NOT ZERO. The first corrected form read `consequence?.splitCausedDamage ?? 0`
+  // while its own documentation said an absent consequence means the residual authority has not run.
+  // Those two statements cannot both be true: `?? 0` resolves "nobody looked at what this does to
+  // the parent" into the single most permissive answer the model can hold. A measured zero is a
+  // finding; an absent measurement is not a finding at all, and the two must not be behaviourally
+  // interchangeable. The consequence is now required by the type, and this is the runtime half of
+  // that contract for callers TypeScript does not check.
   const consequence = request.parentSeparationConsequence;
-  const splitCausedDamage = clamp01(consequence?.splitCausedDamage ?? 0);
+  const measuredDamage =
+    consequence !== undefined &&
+    typeof consequence.splitCausedDamage === "number" &&
+    Number.isFinite(consequence.splitCausedDamage) &&
+    consequence.splitCausedDamage >= 0 &&
+    consequence.splitCausedDamage <= 1
+      ? consequence.splitCausedDamage
+      : undefined;
   const splitCausedReasonIds = consequence?.splitCausedReasonIds ?? [];
 
   // Bounded per-band disposition. `exploration` is the urge to go beyond the known range and
@@ -359,14 +402,19 @@ export function assessFounderCohortCommitment(
   // ground, which makes "pressure alone cannot force acceptance" a property of the shape rather than
   // of where the threshold happens to sit. No constant was moved to achieve it; two were removed.
   const readiness = clamp01(destinationFamiliarity * embodiedCapacity);
-  const base = clamp01(motive * readiness - splitCausedDamage * SPLIT_DAMAGE_WEIGHT);
-  const willingness = round4(clamp01(base + tendencyDelta));
+  // Willingness is only computable once the separation's cost is known. When it is not, the evidence
+  // says so in the field rather than publishing a number nobody measured.
+  const willingnessValue =
+    measuredDamage === undefined
+      ? undefined
+      : round4(clamp01(clamp01(motive * readiness - measuredDamage * SPLIT_DAMAGE_WEIGHT) + tendencyDelta));
+  const willingness = willingnessValue ?? ("not_measured" as const);
 
   const evidence: FounderCommitmentEvidence = {
     motive: round4(motive),
     destinationFamiliarity: round4(destinationFamiliarity),
     embodiedCapacity: round4(embodiedCapacity),
-    splitCausedDamage: round4(splitCausedDamage),
+    splitCausedDamage: measuredDamage === undefined ? "not_measured" : round4(measuredDamage),
     readiness: round4(readiness),
     tendencyDelta,
     willingness,
@@ -390,8 +438,27 @@ export function assessFounderCohortCommitment(
     };
   }
 
+  // ── nothing to weigh: the separation's cost to the parent was never measured ──
+  //
+  // Deliberately AFTER the feasibility checks: an incoherent allocation or an unknown destination
+  // means there is no departure to assess at all, and naming the missing measurement first would
+  // describe the smaller problem.
+  if (measuredDamage === undefined || willingnessValue === undefined) {
+    return {
+      accepted: false,
+      refusal: "parent_separation_consequence_not_measured",
+      evidence,
+      reasonIds: bounded([
+        "parent_separation_consequence_not_measured",
+        ...(consequence === undefined
+          ? ["parent_separation_consequence_absent"]
+          : ["parent_separation_consequence_not_a_bounded_fraction"]),
+      ]),
+    };
+  }
+
   // ── the decision ──
-  if (willingness < COMMITMENT_WILLINGNESS_THRESHOLD) {
+  if (willingnessValue < COMMITMENT_WILLINGNESS_THRESHOLD) {
     return {
       accepted: false,
       refusal: "not_willing_on_held_evidence",
@@ -401,7 +468,7 @@ export function assessFounderCohortCommitment(
         ...(motive < 0.4 ? ["weak_motive_to_separate"] : []),
         ...(destinationFamiliarity < 0.3 ? ["destination_barely_known"] : []),
         ...(embodiedCapacity < 0.6 ? ["group_is_carrying_injury"] : []),
-        ...(splitCausedDamage > 0 ? ["separation_costs_those_who_stay"] : []),
+        ...(measuredDamage > 0 ? ["separation_costs_those_who_stay"] : []),
       ]),
     };
   }
@@ -452,8 +519,11 @@ export interface DepartureTerms {
  *
  * What it genuinely proves is worth keeping and is now named for it: a commitment concerns EXACTLY
  * the departure it was taken for, so a revised allocation cannot reuse it — which is the whole
- * reason the binding excludes `requestedFounders`. Whether that acceptance is still LIVE is the
- * separate question `FounderCohortAuthorization` answers below.
+ * reason the binding excludes `requestedFounders`. Whether that acceptance may still be acted on is
+ * the separate question `FounderDepartureAuthorization` answers below.
+ *
+ * IT IS NOT A STABILIZATION GATE AND MUST NEVER BE USED AS ONE. It answers "these are the terms that
+ * were once accepted", so it stays TRUE for a group that departed, gave up and walked home.
  */
 export function commitmentTermsMatchDeparture(
   commitment: FounderCohortCommitment,
@@ -467,93 +537,113 @@ export function commitmentTermsMatchDeparture(
   );
 }
 
-// ── the live authorization ──────────────────────────────────────────────────────────────────────
+// ── the pre-departure authorization ─────────────────────────────────────────────────────────────
 //
-// FOUR FACTS, KEPT APART, AND THE `committed` DEFECT IS WHY.
+// WHAT THIS AUTHORIZES, STATED BEFORE THE TYPE RATHER THAN INFERRED FROM IT.
 //
-//   attempt logistics phase   — `departure_planned`: a configuration and a destination are named.
-//   commitment (event)        — a founder cohort accepted a separation. IMMUTABLE, FOREVER TRUE.
-//   authorization (this)      — that acceptance is CURRENTLY IN FORCE, or has ended and why.
-//   successor lifecycle phase — where the group that left now is.
+// Exactly one question: MAY THIS COMMITMENT MOVE THESE BODIES, ONCE? It is a permit for a single
+// physical transfer. It exists from the moment a founder cohort accepts a separation until that
+// separation physically happens, is abandoned, or has its terms changed underneath it. After the
+// bodies move there is no longer any permission to hold, because the thing it permitted has
+// occurred — a spent permit is not a lapsed one, it is a used one.
 //
-// The renamed phase was one name doing two jobs. Collapsing any two of these would repeat it, so
-// the authorization is its own record referencing a `commitmentId` rather than a status field on
-// the event or another entry in the lifecycle enum. Two architectures were compared against the
-// invariants a later pass has to prove:
+// THE PREVIOUS FORM CLAIMED A SECOND JOB IT COULD NOT DO. It also carried `ended_by_return`, meaning
+// "the separation is over because the group came back". That status was UNREACHABLE and the
+// contradiction is arithmetic, not stylistic: `endDepartureAuthorization` may only act on a `live`
+// record, and `consumed_by_departure` is terminal, so `live -> consumed -> ended_by_return` is
+// refused. The one remaining path was `live -> ended_by_return` — a return by a group that never
+// left. An enum member reachable only through a physically impossible sequence is a claim the
+// system cannot honour, so it is removed rather than kept because it was already written.
 //
-//   - MUTABLE STATUS ON THE EVENT — rejected. It forces the choice this design exists to avoid:
-//     either the record is edited (history is lost) or the authority outlives the separation.
-//   - DERIVED FROM LIFECYCLE PHASES — rejected, and it is the more tempting of the two. Phases can
-//     distinguish "before departure" from "after", but not WITHDRAWN from SUPERSEDED BY NEW TERMS,
-//     and a phase-derived validity would put the departure seam back to reading the enum for a fact
-//     the enum does not carry. That is the `committed` defect wearing the opposite mask.
+// FOUR ARCHITECTURES WERE COMPARED AGAINST THE ACTUAL SUCCESSOR LIFECYCLE.
 //
-// OWNER: the parent's own attempt record (`Band.fissionAttempt`), which already holds the lineage,
-// the endorsed founder count and the target this authorization is about. The FIELD IS DELIBERATELY
-// NOT ADDED IN THIS PASS: nothing writes a commitment yet, so attaching it now would put an
-// unwritten field into canonical state — the decorative-state anti-pattern — and would add a
-// serialization and determinism surface to a pass that changes no behaviour. The type below is
-// shaped so that attachment is one optional field when a writer exists.
+//   1. PRE-DEPARTURE PERMIT ONLY — SELECTED. One fact, one owner, one terminal ending per outcome.
+//   2. A CONTINUING "SEPARATION STILL IN FORCE" AUTHORITY — rejected. It requires departure NOT to
+//      terminalize the record, which means double-departure prevention has to be reintroduced
+//      somewhere else, and it duplicates the successor lifecycle: `returning`,
+//      `unresolved_after_failed_return` and `reintegrated` ALREADY record, physically, whether a
+//      group has abandoned its separation. A social ledger tracking the same thing is a second
+//      answer to a question that has one.
+//   3. TWO BOUNDED FACTS — a pre-departure permit plus a post-departure standing record. Rejected
+//      because the second fact has no content the successor lifecycle does not already carry, and
+//      the brief's own warning applies: it risks duplicating authority.
+//   4. LIFECYCLE-DERIVED VALIDITY — rejected in the previous pass and still rejected: phases cannot
+//      distinguish withdrawn from superseded.
+//
+// SO HOW WILL A LATER STABILIZATION KNOW THE SUCCESSOR STILL STANDS SEPARATED? Not from this record,
+// and NOT from the historical commitment either — that is a statement about one past day and stays
+// true forever, so treating it as sufficient would let a group that walked home stabilize on the
+// strength of having once agreed to leave. It must inspect the SUCCESSOR'S OWN LIFECYCLE, which is
+// physical and already exists: a successor whose phase or history contains `returning`,
+// `unresolved_after_failed_return` or `reintegrated` has abandoned or ended the separation, whatever
+// the parent once accepted. The full contract a future stabilization must satisfy is:
+//
+//   a positive commitment exists (historical, by `commitmentId`)
+//   AND that commitment's departure authorization reached `consumed_by_departure`
+//   AND the successor's own lifecycle has never entered a return
+//   AND the successor's lived physical evidence supports establishment
+//
+// The first three are representable today. The fourth is stabilization itself and is NOT built.
 
-export type FounderAuthorizationStatus =
-  /** In force: a cohort accepted these terms and nothing has ended it. */
+export type DepartureAuthorizationStatus =
+  /** In force: a cohort accepted these terms, and the bodies have not moved. */
   | "live"
-  /** The terms changed under it — a different allocation or a different destination. */
+  /** The terms changed under it — a different allocation, or a different destination. */
   | "superseded_by_revised_terms"
   /** The attempt was abandoned before anyone left. */
   | "withdrawn_before_departure"
-  /** Spent: the physical departure it authorized has happened. */
-  | "consumed_by_departure"
-  /** The separation is over — the group physically came back. */
-  | "ended_by_return";
+  /** Spent: the one physical departure it permitted has happened. */
+  | "consumed_by_departure";
 
 /**
- * Why an authorization stopped being in force. REQUIRED at every ending, never defaulted.
+ * Why a departure authorization stopped being in force. REQUIRED at every ending, never defaulted.
  *
  * The kernel learned this the hard way: `requestTransition` originally allowed an unnamed cause and
  * a timer quietly reintegrated a band, because a thing that needs nothing gets nothing and the
  * absence reads as permission. An ending with no stated cause would be the same hole here.
+ *
+ * There is deliberately NO cause for a return. A return is not something that happens to this
+ * permit — by then the permit is already spent — it is something that happens to the successor, and
+ * the successor's lifecycle is where it is recorded.
  */
-export type FounderAuthorizationEndCause =
+export type DepartureAuthorizationEndCause =
   | "founder_allocation_changed"
   | "destination_changed"
   | "attempt_abandoned_before_departure"
-  | "physical_departure_consumed_it"
-  | "successor_physically_returned";
+  | "physical_departure_consumed_it";
 
 /**
- * ONE current authorization for ONE commitment.
+ * ONE permit for ONE physical departure, derived from ONE commitment.
  *
- * It carries the terms rather than pointing at them so that the question "does this still authorize
- * THIS departure" is answerable from the authorization alone, and so that the historical event is
- * never consulted for a fact about the present.
+ * It carries the terms rather than pointing at them, so "does this still permit THIS departure" is
+ * answerable from the permit alone and the historical event is never consulted for a fact about the
+ * present.
  */
-export interface FounderCohortAuthorization {
-  /** The acceptance this authority came from. The historical event is never edited. */
+export interface FounderDepartureAuthorization {
+  /** The acceptance this permit came from. The historical event is never edited. */
   readonly commitmentId: string;
   readonly parentBandId: BandId;
   readonly lineageId: string;
   readonly founders: FounderCohortBinding;
   readonly targetTileId: TileId;
-  readonly status: FounderAuthorizationStatus;
+  readonly status: DepartureAuthorizationStatus;
   readonly openedDay: number;
   /** Set together with a terminal status, never separately. */
   readonly endedDay?: number;
-  readonly endedBecause?: FounderAuthorizationEndCause;
+  readonly endedBecause?: DepartureAuthorizationEndCause;
 }
 
-const END_CAUSE_STATUS: Readonly<Record<FounderAuthorizationEndCause, FounderAuthorizationStatus>> = {
+const END_CAUSE_STATUS: Readonly<Record<DepartureAuthorizationEndCause, DepartureAuthorizationStatus>> = {
   founder_allocation_changed: "superseded_by_revised_terms",
   destination_changed: "superseded_by_revised_terms",
   attempt_abandoned_before_departure: "withdrawn_before_departure",
   physical_departure_consumed_it: "consumed_by_departure",
-  successor_physically_returned: "ended_by_return",
 };
 
-/** Open the one authorization a positive commitment creates. In force from the day it was accepted. */
-export function openFounderAuthorization(
+/** Open the one permit a positive commitment creates. In force from the day it was accepted. */
+export function openDepartureAuthorization(
   commitment: FounderCohortCommitment,
-): FounderCohortAuthorization {
+): FounderDepartureAuthorization {
   return {
     commitmentId: commitment.commitmentId,
     parentBandId: commitment.parentBandId,
@@ -565,25 +655,24 @@ export function openFounderAuthorization(
   };
 }
 
-export function authorizationIsLive(authorization: FounderCohortAuthorization): boolean {
+export function authorizationIsLive(authorization: FounderDepartureAuthorization): boolean {
   return authorization.status === "live";
 }
 
 /**
- * End an authorization for a named reason. Returns `undefined` when the ending is REFUSED.
+ * End a permit for a named reason. Returns `undefined` when the ending is REFUSED.
  *
- * A terminal authorization cannot be ended again and can never return to `live`. That refusal is
- * what makes two of the required invariants structural rather than conventional: a spent
- * authorization cannot authorize a second physical departure, and elapsed time or survival after a
- * failed return cannot reactivate a separation nobody re-accepted. There is no reopen function, and
- * that absence is the design — a new separation needs a NEW commitment, which is exactly what
- * "no implicit recommitment" means.
+ * Every terminal status is final and none may be re-entered, which is what makes the invariants
+ * structural rather than conventional: a spent permit cannot authorize a second physical departure,
+ * and no elapsed time, survival or later event can restore one. There is no reopen function, and
+ * that absence is the design — going again requires agreeing again, which means a NEW commitment
+ * with a new deterministic id and a new permit.
  */
-export function endFounderAuthorization(
-  authorization: FounderCohortAuthorization,
-  cause: FounderAuthorizationEndCause,
+export function endDepartureAuthorization(
+  authorization: FounderDepartureAuthorization,
+  cause: DepartureAuthorizationEndCause,
   day: number,
-): FounderCohortAuthorization | undefined {
+): FounderDepartureAuthorization | undefined {
   if (authorization.status !== "live") return undefined;
   return {
     ...authorization,
@@ -594,18 +683,18 @@ export function endFounderAuthorization(
 }
 
 /**
- * Does a CURRENT authorization permit THIS departure?
+ * Does a CURRENT permit allow THIS departure?
  *
- * Both halves, and neither alone: the authority must still be in force, and the terms must be the
- * ones that were accepted. This is the function a departure gate would call.
+ * Both halves, and neither alone: the permit must still be in force, and the terms must be the ones
+ * that were accepted. This is the function a departure gate would call.
  *
  * NOT WIRED THIS PASS. `performAtomicDeparture` does not call it and still gates on phase alone,
  * because the endorsed allocation does not exist until the residual assessment inside the seam has
- * already run — so there is nothing truthful for a commitment to bind to that early yet. Moving
- * that assessment ahead of the seam is the next slice, and this function is what it will connect.
+ * already run — so there is nothing truthful for a commitment to bind to that early yet. Moving that
+ * assessment ahead of the seam is the next slice, and this function is what it will connect.
  */
 export function authorizationPermitsDeparture(
-  authorization: FounderCohortAuthorization,
+  authorization: FounderDepartureAuthorization,
   departure: DepartureTerms,
 ): boolean {
   return (

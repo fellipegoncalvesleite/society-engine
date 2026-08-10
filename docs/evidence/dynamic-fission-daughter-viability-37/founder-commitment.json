@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-08-10T00:57:10.253Z",
+  "generatedAt": "2026-08-10T01:51:41.391Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "parentBandId": "band:varied-river-mid",
   "wellKnownTarget": "tile:108:56",
   "summary": {
-    "total": 22,
-    "passed": 22,
+    "total": 25,
+    "passed": 25,
     "failed": 0,
     "vacuous": 0
   },
@@ -32,17 +32,19 @@
           "reasonIds": [
             "founder_cohort_accepted_separation",
             "strong_motive_to_separate",
-            "destination_is_known_ground"
+            "destination_is_known_ground",
+            "split_removes_productive_labour_from_camp",
+            "split_worsens_dependency_load"
           ]
         },
         "evidence": {
           "motive": 0.9,
           "destinationFamiliarity": 1,
           "embodiedCapacity": 0.88,
-          "splitCausedDamage": 0,
+          "splitCausedDamage": 0.21,
           "readiness": 0.88,
           "tendencyDelta": 0.1043,
-          "willingness": 0.8963
+          "willingness": 0.8333
         },
         "allocationSuccessor": {
           "workingAdults": 6,
@@ -57,13 +59,14 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "acceptedWillingness": 0.8963,
+        "acceptedWillingness": 0.8333,
         "declinedWeakMotive": {
-          "willingness": 0.1483,
+          "willingness": 0.1043,
           "refusal": "not_willing_on_held_evidence",
           "reasons": [
             "not_willing_on_held_evidence",
-            "weak_motive_to_separate"
+            "weak_motive_to_separate",
+            "separation_costs_those_who_stay"
           ]
         },
         "declinedInjured": {
@@ -98,10 +101,10 @@
           "not_willing_on_held_evidence"
         ],
         "willingnessAcrossDays": [
-          0.1483,
-          0.1483,
-          0.1483,
-          0.1483
+          0.1043,
+          0.1043,
+          0.1043,
+          0.1043
         ],
         "note": "willingness is identical across every day because no term reads elapsed time"
       }
@@ -196,7 +199,7 @@
       "nonVacuous": true,
       "detail": {
         "worldStateReferencesInCode": [],
-        "codeLinesSearched": 279,
+        "codeLinesSearched": 300,
         "commentProseExcluded": true,
         "hiddenRichnessRaisedTo": 1,
         "decisionByteIdenticalAfterHiddenChange": true,
@@ -494,28 +497,25 @@
       }
     },
     {
-      "id": "T_a_return_ends_the_separation_authority_and_the_acceptance_remains_a_fact",
-      "claim": "the authorization ends as `ended_by_return` and permits nothing further, while the immutable commitment still records that the cohort accepted the separation",
+      "id": "T_a_return_is_a_successor_lifecycle_fact_and_never_edits_the_departure_permit",
+      "claim": "the permit carries no return cause and cannot be transitioned after departure consumed it; a return is recorded by the successor's own physical lifecycle, and the historical commitment stays true without ever becoming a stabilization gate",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "endedByReturn": {
-          "commitmentId": "commit:4298e920c497bdfc",
-          "parentBandId": "band:varied-river-mid",
-          "lineageId": "LIN-FC",
-          "founders": {
-            "workingAdults": 6,
-            "dependents": 2,
-            "elders": 0
-          },
-          "targetTileId": "tile:108:56",
-          "status": "ended_by_return",
-          "openedDay": 2100,
-          "endedDay": 2500,
-          "endedBecause": "successor_physically_returned"
-        },
-        "theAcceptanceIsStillTrue": true,
-        "note": "this transition is representable and is NOT wired to return behaviour in this pass"
+        "successorReturnPhasesPresentInKernel": [
+          "returning",
+          "unresolved_after_failed_return",
+          "reintegrated"
+        ],
+        "permitHasNoReturnCause": true,
+        "anyTransitionAfterConsumption": "refused",
+        "historicalCommitmentStillTrue": true,
+        "whatStabilizationMustInspectInstead": [
+          "a positive commitment exists, by commitmentId",
+          "its departure authorization reached consumed_by_departure",
+          "the successor's own lifecycle has never entered returning / unresolved_after_failed_return / reintegrated",
+          "the successor's lived physical evidence supports establishment (NOT BUILT)"
+        ]
       }
     },
     {
@@ -524,7 +524,7 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "attemptsRun": 45,
+        "attemptsRun": 36,
         "allRefused": true,
         "anyPermittedDeparture": false,
         "reopenLikeExports": [],
@@ -562,6 +562,161 @@
           "targetTileId"
         ],
         "protects": "if a future change puts a mutable status on the commitment, this fails — that collapse is the `committed` defect this checkpoint removed"
+      }
+    },
+    {
+      "id": "W_a_measured_zero_is_used_as_a_measured_zero",
+      "claim": "a genuine consequence measuring zero split-caused damage is consumed as zero cost — willingness is exactly motive x readiness plus disposition, with nothing subtracted",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "willingnessAtMeasuredZero": 0.8963,
+        "expectedFromMotiveTimesReadiness": 0.8963,
+        "naturalDamageByFounderCount": [
+          {
+            "founders": 2,
+            "damage": 0.07
+          },
+          {
+            "founders": 3,
+            "damage": 0.11
+          },
+          {
+            "founders": 4,
+            "damage": 0.1
+          },
+          {
+            "founders": 5,
+            "damage": 0.14
+          },
+          {
+            "founders": 6,
+            "damage": 0.18
+          },
+          {
+            "founders": 7,
+            "damage": 0.16
+          },
+          {
+            "founders": 8,
+            "damage": 0.21
+          },
+          {
+            "founders": 9,
+            "damage": 0.19
+          },
+          {
+            "founders": 10,
+            "damage": 0.18
+          },
+          {
+            "founders": 11,
+            "damage": 0.22
+          },
+          {
+            "founders": 12,
+            "damage": 0.26
+          }
+        ],
+        "smallestDamageTheAuthorityCanProduce": 0.07,
+        "finding": "the residual authority never emits zero for a non-empty allocation — every real departure removes camp labour — so the old `?? 0` substituted a value the measuring authority cannot produce"
+      }
+    },
+    {
+      "id": "X_an_unmeasured_consequence_is_refused_and_never_read_as_zero",
+      "claim": "omitting the parent-separation consequence produces the named refusal `parent_separation_consequence_not_measured` rather than a decision, publishes no willingness and no damage figure, and is therefore not interchangeable with the measured zero of fixture W; malformed magnitudes are refused rather than clamped into plausibility",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "unmeasured": {
+          "accepted": false,
+          "refusal": "parent_separation_consequence_not_measured",
+          "publishedDamage": "not_measured",
+          "publishedWillingness": "not_measured",
+          "reasons": [
+            "parent_separation_consequence_not_measured",
+            "parent_separation_consequence_absent"
+          ]
+        },
+        "measuredZero": {
+          "accepted": true,
+          "publishedDamage": 0,
+          "publishedWillingness": 0.8963
+        },
+        "malformed": [
+          {
+            "label": "NaN",
+            "refusal": "parent_separation_consequence_not_measured",
+            "publishedDamage": "not_measured",
+            "reasons": [
+              "parent_separation_consequence_not_measured",
+              "parent_separation_consequence_not_a_bounded_fraction"
+            ]
+          },
+          {
+            "label": "above_one",
+            "refusal": "parent_separation_consequence_not_measured",
+            "publishedDamage": "not_measured",
+            "reasons": [
+              "parent_separation_consequence_not_measured",
+              "parent_separation_consequence_not_a_bounded_fraction"
+            ]
+          },
+          {
+            "label": "negative",
+            "refusal": "parent_separation_consequence_not_measured",
+            "publishedDamage": "not_measured",
+            "reasons": [
+              "parent_separation_consequence_not_measured",
+              "parent_separation_consequence_not_a_bounded_fraction"
+            ]
+          },
+          {
+            "label": "infinite",
+            "refusal": "parent_separation_consequence_not_measured",
+            "publishedDamage": "not_measured",
+            "reasons": [
+              "parent_separation_consequence_not_measured",
+              "parent_separation_consequence_not_a_bounded_fraction"
+            ]
+          }
+        ],
+        "requiredInTypeSignature": true
+      }
+    },
+    {
+      "id": "Y_every_advertised_authorization_status_is_reachable_from_production",
+      "claim": "each declared status is produced either by opening a permit or by a declared end cause acting on a live permit, and each declared cause produces one — no status is advertised that the lifecycle cannot reach",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "declaredStatuses": [
+          "live",
+          "superseded_by_revised_terms",
+          "withdrawn_before_departure",
+          "consumed_by_departure"
+        ],
+        "declaredCauses": [
+          "founder_allocation_changed",
+          "destination_changed",
+          "attempt_abandoned_before_departure",
+          "physical_departure_consumed_it"
+        ],
+        "causeProducts": {
+          "founder_allocation_changed": "superseded_by_revised_terms",
+          "destination_changed": "superseded_by_revised_terms",
+          "attempt_abandoned_before_departure": "withdrawn_before_departure",
+          "physical_departure_consumed_it": "consumed_by_departure"
+        },
+        "reachable": [
+          "consumed_by_departure",
+          "live",
+          "superseded_by_revised_terms",
+          "withdrawn_before_departure"
+        ],
+        "unreachableStatuses": [],
+        "causesProducingNothing": [],
+        "removedBecauseUnreachable": "ended_by_return — endings act only on a live permit and consumed_by_departure is terminal, so its only path was a return by a group that never left"
       }
     }
   ]

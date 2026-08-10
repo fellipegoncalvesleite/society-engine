@@ -85,10 +85,16 @@ try {
   const unwilling = withEvidence({ splitPressure: 0.05 });
   const hurt = withEvidence({ splitPressure: 0.9, acuteRisk: injured });
 
+  // A commitment decision is now UNCONSTRUCTIBLE without a measured parent-separation consequence,
+  // so every arm supplies one. `ask` defaults to the real baseline measurement; the unmeasured case
+  // is reached deliberately, by A2, passing `omitConsequence`.
   const ask = (band, over = {}) => commitment.assessFounderCohortCommitment({
     band, allocation: over.allocation ?? A8, lineageId: over.lineageId ?? "LIN-FC",
     targetTileId: over.targetTileId ?? wellKnown.id,
-    parentSeparationConsequence: over.parentSeparationConsequence, today: over.today ?? day0,
+    parentSeparationConsequence: over.omitConsequence === true
+      ? undefined
+      : (over.parentSeparationConsequence ?? baselineConsequence),
+    today: over.today ?? day0,
   });
 
   // ── the parent-side consequence comes from the authority that owns it ──
@@ -118,6 +124,7 @@ try {
     const assessment = residual.assessParentResidualWithRevision(residualInput(over));
     return { assessment, consequence: residual.deriveParentSeparationConsequence(assessment) };
   };
+  const baselineConsequence = consequenceOf({}).consequence;
 
   const accepted = ask(willing);
   const declined = ask(unwilling);
@@ -467,7 +474,7 @@ try {
   // ══════════════════════════════════════════════════════════════════════════════════════════════
 
   const authTerms = (allocation, over = {}) => departureOf(allocation, over);
-  const liveAuth = held === undefined ? undefined : commitment.openFounderAuthorization(held);
+  const liveAuth = held === undefined ? undefined : commitment.openDepartureAuthorization(held);
 
   // ══ P — a positive commitment opens exactly one live authorization on the accepted terms ══
   record("P_a_positive_commitment_opens_one_live_authorization_on_the_accepted_terms",
@@ -489,8 +496,8 @@ try {
   // ══ Q — changed terms invalidate it, without anything having to be ended ══
   const qAlloc = commitment.authorizationPermitsDeparture(liveAuth, authTerms(A10));
   const qTarget = commitment.authorizationPermitsDeparture(liveAuth, authTerms(A8, { targetTileId: barelyKnown.id }));
-  const qSupersededAlloc = commitment.endFounderAuthorization(liveAuth, "founder_allocation_changed", day0 + 3);
-  const qSupersededTarget = commitment.endFounderAuthorization(liveAuth, "destination_changed", day0 + 3);
+  const qSupersededAlloc = commitment.endDepartureAuthorization(liveAuth, "founder_allocation_changed", day0 + 3);
+  const qSupersededTarget = commitment.endDepartureAuthorization(liveAuth, "destination_changed", day0 + 3);
   record("Q_changed_founder_allocation_or_destination_invalidates_the_authorization",
     "a live authorization refuses a departure by a different represented cohort or to a different destination, and both changes can be recorded explicitly as superseded terms with a named cause",
     qAlloc === false && qTarget === false &&
@@ -507,7 +514,7 @@ try {
 
   // ══ R — abandoning before departure ends the authority and leaves the history intact ══
   const historyBefore = JSON.stringify(held ?? null);
-  const withdrawn = commitment.endFounderAuthorization(liveAuth, "attempt_abandoned_before_departure", day0 + 10);
+  const withdrawn = commitment.endDepartureAuthorization(liveAuth, "attempt_abandoned_before_departure", day0 + 10);
   const historyAfter = JSON.stringify(held ?? null);
   record("R_abandoning_before_departure_ends_the_authority_and_leaves_the_commitment_true",
     "withdrawal ends the authorization with its own named cause and day, no longer permits any departure, and does not touch the historical event",
@@ -525,10 +532,10 @@ try {
       eventStillDescribesTheseTerms: held === undefined ? null : commitment.commitmentTermsMatchDeparture(held, authTerms(A8)) });
 
   // ══ S — a physical departure consumes it exactly once ══
-  const consumed = commitment.endFounderAuthorization(liveAuth, "physical_departure_consumed_it", day0 + 20);
+  const consumed = commitment.endDepartureAuthorization(liveAuth, "physical_departure_consumed_it", day0 + 20);
   const secondDeparture = consumed === undefined
     ? undefined
-    : commitment.endFounderAuthorization(consumed, "physical_departure_consumed_it", day0 + 21);
+    : commitment.endDepartureAuthorization(consumed, "physical_departure_consumed_it", day0 + 21);
   record("S_a_spent_authorization_cannot_authorize_a_second_physical_departure",
     "consumption is terminal: the authorization no longer permits a departure, a second consumption is REFUSED rather than recorded, and the commitment survives as successor provenance",
     consumed?.status === "consumed_by_departure" &&
@@ -540,41 +547,61 @@ try {
     { consumed: consumed ?? null, secondConsumptionRefused: secondDeparture === undefined,
       commitmentStillAvailableAsProvenance: held?.commitmentId ?? null });
 
-  // ══ T — a return ends the separation authority without erasing the acceptance ══
-  const returned = commitment.endFounderAuthorization(liveAuth, "successor_physically_returned", day0 + 400);
-  record("T_a_return_ends_the_separation_authority_and_the_acceptance_remains_a_fact",
-    "the authorization ends as `ended_by_return` and permits nothing further, while the immutable commitment still records that the cohort accepted the separation",
-    returned?.status === "ended_by_return" &&
-      returned?.endedBecause === "successor_physically_returned" &&
-      commitment.authorizationIsLive(returned) === false &&
-      commitment.authorizationPermitsDeparture(returned, authTerms(A8)) === false &&
-      held.commitmentId === returned.commitmentId &&
-      commitment.commitmentTermsMatchDeparture(held, authTerms(A8)) === true,
-    liveAuth !== undefined,
-    { endedByReturn: returned ?? null,
-      theAcceptanceIsStillTrue: held === undefined ? null : commitment.commitmentTermsMatchDeparture(held, authTerms(A8)),
-      note: "this transition is representable and is NOT wired to return behaviour in this pass" });
+  // ══ T — A RETURN DOES NOT TOUCH THIS RECORD, AND THE COMMITMENT IS NOT A STABILIZATION GATE ══
+  //
+  // The removed `ended_by_return` was unreachable: endings act only on a `live` record and
+  // `consumed_by_departure` is terminal, so the only path to it was a return by a group that never
+  // left. A return is a fact about the SUCCESSOR, and the successor lifecycle already carries it.
+  const kernelSource = readFileSync("src/sim/agents/fissionLifecycleKernel.ts", "utf8");
+  const returnPhases = ["returning", "unresolved_after_failed_return", "reintegrated"];
+  const phasesExist = returnPhases.every((ph) => kernelSource.includes(`| "${ph}"`));
+  const consumedThenReturn = consumed === undefined
+    ? undefined
+    : commitment.endDepartureAuthorization(consumed, "physical_departure_consumed_it", day0 + 400);
+  // Reuses fixture I's comment-stripped view of the module: a word ban that matched documentation
+  // would fail on the paragraph EXPLAINING the removal, which is the trap I was rebuilt to avoid.
+  const noReturnCause = !/successor_physically_returned/.test(codeLines) && !/ended_by_return/.test(codeLines);
+  record("T_a_return_is_a_successor_lifecycle_fact_and_never_edits_the_departure_permit",
+    "the permit carries no return cause and cannot be transitioned after departure consumed it; a return is recorded by the successor's own physical lifecycle, and the historical commitment stays true without ever becoming a stabilization gate",
+    phasesExist && noReturnCause &&
+      consumedThenReturn === undefined &&
+      // the acceptance is still a true statement about the past...
+      commitment.commitmentTermsMatchDeparture(held, authTerms(A8)) === true &&
+      // ...which is exactly why it may not stand in for "still separated": it says the same thing
+      // for a group that departed, gave up and walked home.
+      commitment.authorizationPermitsDeparture(consumed, authTerms(A8)) === false,
+    held !== undefined,
+    { successorReturnPhasesPresentInKernel: returnPhases.filter((ph) => kernelSource.includes(`| "${ph}"`)),
+      permitHasNoReturnCause: noReturnCause,
+      anyTransitionAfterConsumption: consumedThenReturn === undefined ? "refused" : "accepted",
+      historicalCommitmentStillTrue: held === undefined ? null : commitment.commitmentTermsMatchDeparture(held, authTerms(A8)),
+      whatStabilizationMustInspectInstead: [
+        "a positive commitment exists, by commitmentId",
+        "its departure authorization reached consumed_by_departure",
+        "the successor's own lifecycle has never entered returning / unresolved_after_failed_return / reintegrated",
+        "the successor's lived physical evidence supports establishment (NOT BUILT)",
+      ] });
 
   // ══ U — no implicit recommitment: nothing revives a terminal authorization ══
   //
   // Elapsed time and survival must not be able to restore a separation authority nobody re-accepted.
   // Structural rather than tested case by case: there is no reopen function, and every ending of an
   // already-terminal record is refused.
-  const terminalArms = ["withdrawn_before_departure", "consumed_by_departure", "ended_by_return"]
+  const terminalArms = ["withdrawn_before_departure", "consumed_by_departure", "superseded_by_revised_terms"]
     .map((status) => ({ ...liveAuth, status, endedDay: day0 + 1, endedBecause: "attempt_abandoned_before_departure" }));
   const everyCause = ["founder_allocation_changed", "destination_changed",
-    "attempt_abandoned_before_departure", "physical_departure_consumed_it", "successor_physically_returned"];
+    "attempt_abandoned_before_departure", "physical_departure_consumed_it"];
   const revivalAttempts = terminalArms.flatMap((auth) =>
     everyCause.flatMap((cause) => [day0 + 2, day0 + 900, day0 + 90000].map((d) => ({
       from: auth.status, cause, day: d,
-      result: commitment.endFounderAuthorization(auth, cause, d) === undefined ? "refused" : "accepted",
+      result: commitment.endDepartureAuthorization(auth, cause, d) === undefined ? "refused" : "accepted",
       permits: commitment.authorizationPermitsDeparture(auth, authTerms(A8)) }))));
   const reopenExports = Object.keys(commitment).filter((k) => /reopen|revive|restore|reactivat/i.test(k));
   record("U_time_or_survival_cannot_reactivate_a_terminal_authorization",
     "every ending of an already-terminal authorization is refused at every cause and every elapsed day, none permits a departure, and the module exports no way to reopen one — a new separation needs a new commitment",
     revivalAttempts.every((a) => a.result === "refused" && a.permits === false) &&
       reopenExports.length === 0,
-    revivalAttempts.length === 45,
+    revivalAttempts.length === 36,
     { attemptsRun: revivalAttempts.length, allRefused: revivalAttempts.every((a) => a.result === "refused"),
       anyPermittedDeparture: revivalAttempts.some((a) => a.permits === true),
       reopenLikeExports: reopenExports,
@@ -595,6 +622,111 @@ try {
     { commitmentFields: eventKeys, statusLikeFieldsOnTheEvent: statusLike,
       authorizationFields: authKeys,
       protects: "if a future change puts a mutable status on the commitment, this fails — that collapse is the `committed` defect this checkpoint removed" });
+
+  // ══════════════════════════════════════════════════════════════════════════════════════════════
+  // W-X — UNKNOWN IS NOT ZERO
+  //
+  // The decision previously read `consequence?.splitCausedDamage ?? 0` while documenting that an
+  // absent consequence means the residual authority has not run. "Nobody looked at what this does to
+  // the parent" resolved into the single most permissive answer available.
+  // ══════════════════════════════════════════════════════════════════════════════════════════════
+
+  // ══ W (A1) — A MEASURED ZERO IS USABLE AS A MEASURED ZERO ══
+  //
+  // Also reports whether the residual authority can produce one at all. It cannot for any non-empty
+  // allocation — every real departure removes some camp labour — which is what made the old `?? 0`
+  // especially wrong: it substituted a value the measuring authority never emits.
+  const measuredZero = { source: "parent_residual_authority", splitCausedDamage: 0, splitCausedReasonIds: [] };
+  const zeroArm = ask(willing, { parentSeparationConsequence: measuredZero });
+  const naturalDamages = [];
+  for (let founders = 2; founders <= 12; founders += 1) {
+    const r = allocation.allocateFounderCohorts(cohortsOf(parent), founders);
+    if (r.ok !== true) continue;
+    naturalDamages.push({ founders,
+      damage: consequenceOf({ allocation: r.allocation }).consequence.splitCausedDamage });
+  }
+  const smallestNaturalDamage = Math.min(...naturalDamages.map((d) => d.damage));
+  const expectedZeroWillingness = Number(
+    (Math.min(1, Math.max(0, Math.min(1, Math.max(0, zeroArm.evidence.motive * zeroArm.evidence.readiness)) + zeroArm.evidence.tendencyDelta))).toFixed(4));
+  record("W_a_measured_zero_is_used_as_a_measured_zero",
+    "a genuine consequence measuring zero split-caused damage is consumed as zero cost — willingness is exactly motive x readiness plus disposition, with nothing subtracted",
+    zeroArm.accepted === true &&
+      zeroArm.evidence.splitCausedDamage === 0 &&
+      Math.abs(zeroArm.evidence.willingness - expectedZeroWillingness) < 1e-9,
+    naturalDamages.length > 0,
+    { willingnessAtMeasuredZero: zeroArm.evidence.willingness,
+      expectedFromMotiveTimesReadiness: expectedZeroWillingness,
+      naturalDamageByFounderCount: naturalDamages,
+      smallestDamageTheAuthorityCanProduce: smallestNaturalDamage,
+      finding: smallestNaturalDamage > 0
+        ? "the residual authority never emits zero for a non-empty allocation — every real departure removes camp labour — so the old `?? 0` substituted a value the measuring authority cannot produce"
+        : "a genuine zero is producible naturally" });
+
+  // ══ X (A2) — NOT MEASURED IS NOT BEHAVIOURALLY EQUIVALENT TO MEASURED ZERO ══
+  //
+  // The decisive fixture for defect A. TypeScript makes the omission unconstructible; this asserts
+  // the runtime half, for the untyped callers TypeScript never sees.
+  const unmeasuredArm = ask(willing, { omitConsequence: true });
+  const malformedArms = [
+    { label: "NaN", c: { source: "parent_residual_authority", splitCausedDamage: Number.NaN, splitCausedReasonIds: [] } },
+    { label: "above_one", c: { source: "parent_residual_authority", splitCausedDamage: 1.7, splitCausedReasonIds: [] } },
+    { label: "negative", c: { source: "parent_residual_authority", splitCausedDamage: -0.4, splitCausedReasonIds: [] } },
+    { label: "infinite", c: { source: "parent_residual_authority", splitCausedDamage: Number.POSITIVE_INFINITY, splitCausedReasonIds: [] } },
+  ].map((arm) => ({ label: arm.label, result: ask(willing, { parentSeparationConsequence: arm.c }) }));
+  const requiredInType = /readonly parentSeparationConsequence: ParentSeparationConsequence;/.test(source);
+  record("X_an_unmeasured_consequence_is_refused_and_never_read_as_zero",
+    "omitting the parent-separation consequence produces the named refusal `parent_separation_consequence_not_measured` rather than a decision, publishes no willingness and no damage figure, and is therefore not interchangeable with the measured zero of fixture W; malformed magnitudes are refused rather than clamped into plausibility",
+    unmeasuredArm.accepted === false &&
+      unmeasuredArm.refusal === "parent_separation_consequence_not_measured" &&
+      unmeasuredArm.evidence.splitCausedDamage === "not_measured" &&
+      unmeasuredArm.evidence.willingness === "not_measured" &&
+      unmeasuredArm.reasonIds.includes("parent_separation_consequence_absent") &&
+      // not equivalent to A1's measured zero, which ACCEPTED
+      zeroArm.accepted === true &&
+      // and no laundering: an impossible magnitude is refused, not clamped
+      malformedArms.every((a) => a.result.accepted === false &&
+        a.result.refusal === "parent_separation_consequence_not_measured" &&
+        a.result.evidence.splitCausedDamage === "not_measured") &&
+      requiredInType,
+    // Non-vacuous only because the measured-zero arm exists and decides.
+    zeroArm.accepted === true,
+    { unmeasured: { accepted: unmeasuredArm.accepted, refusal: unmeasuredArm.refusal,
+        publishedDamage: unmeasuredArm.evidence.splitCausedDamage,
+        publishedWillingness: unmeasuredArm.evidence.willingness, reasons: unmeasuredArm.reasonIds },
+      measuredZero: { accepted: zeroArm.accepted, publishedDamage: zeroArm.evidence.splitCausedDamage,
+        publishedWillingness: zeroArm.evidence.willingness },
+      malformed: malformedArms.map((a) => ({ label: a.label, refusal: a.result.refusal,
+        publishedDamage: a.result.evidence.splitCausedDamage, reasons: a.result.reasonIds })),
+      requiredInTypeSignature: requiredInType });
+
+  // ══ Y (B9) — EVERY ADVERTISED STATUS HAS A WRITER; NO IMPOSSIBLE MEMBER IS ADVERTISED ══
+  //
+  // The removed `ended_by_return` was reachable only from `live`, i.e. only by a group returning
+  // from a departure that never happened. A status a caller can read about but never reach is a
+  // claim the system cannot honour, so this fixture derives reachability from production itself.
+  const declaredStatuses = (source.match(/export type DepartureAuthorizationStatus =([\s\S]*?);/) ?? ["", ""])[1]
+    .match(/"([a-z_]+)"/g)?.map((q) => q.replace(/"/g, "")) ?? [];
+  const declaredCauses = (source.match(/export type DepartureAuthorizationEndCause =([\s\S]*?);/) ?? ["", ""])[1]
+    .match(/"([a-z_]+)"/g)?.map((q) => q.replace(/"/g, "")) ?? [];
+  const reachable = new Set(["live"]);            // produced by openDepartureAuthorization
+  const causeProducts = {};
+  for (const cause of declaredCauses) {
+    const ended = commitment.endDepartureAuthorization(liveAuth, cause, day0 + 1);
+    if (ended !== undefined) { reachable.add(ended.status); causeProducts[cause] = ended.status; }
+  }
+  const unreachable = declaredStatuses.filter((st) => !reachable.has(st));
+  const causesWithNoProduct = declaredCauses.filter((c) => causeProducts[c] === undefined);
+  record("Y_every_advertised_authorization_status_is_reachable_from_production",
+    "each declared status is produced either by opening a permit or by a declared end cause acting on a live permit, and each declared cause produces one — no status is advertised that the lifecycle cannot reach",
+    declaredStatuses.length > 0 && declaredCauses.length > 0 &&
+      unreachable.length === 0 && causesWithNoProduct.length === 0 &&
+      // and the removed member is genuinely gone from the declaration
+      !declaredStatuses.includes("ended_by_return"),
+    declaredStatuses.length >= 3,
+    { declaredStatuses, declaredCauses, causeProducts,
+      reachable: [...reachable].sort(), unreachableStatuses: unreachable,
+      causesProducingNothing: causesWithNoProduct,
+      removedBecauseUnreachable: "ended_by_return — endings act only on a live permit and consumed_by_departure is terminal, so its only path was a return by a group that never left" });
 
   const failing = fixtures.filter((f) => f.verdict === "FAIL");
   const vacuous = fixtures.filter((f) => f.verdict === "VACUOUS");
