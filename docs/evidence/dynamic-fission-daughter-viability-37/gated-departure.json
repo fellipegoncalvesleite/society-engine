@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-08-10T22:51:02.321Z",
+  "generatedAt": "2026-08-10T23:07:54.603Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "parentBandId": "band:varied-river-mid",
   "targetTileId": "tile:108:54",
   "summary": {
-    "total": 16,
-    "passed": 16,
+    "total": 19,
+    "passed": 19,
     "failed": 0,
     "vacuous": 0
   },
@@ -118,6 +118,55 @@
       "detail": {
         "refusal": "prepared_departure_is_incoherent",
         "worldUnchanged": true
+      }
+    },
+    {
+      "id": "D2_a_departure_cannot_execute_a_destination_the_cohort_never_accepted",
+      "claim": "with the commitment, the allocation, the live permit and the parent's condition ALL unchanged and valid, moving only the execution target to a second well-known tile refuses the departure BY ITS OWN NAME: no successor, no cohort line moves, the world is byte-identical, the permit is untouched and the commitment is not rewritten",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "acceptedDestination": "tile:108:54",
+        "executionDestination": "tile:108:55",
+        "refusal": "attempt_names_a_different_destination_than_the_commitment",
+        "detail": "accepted tile:108:54 != execution tile:108:55",
+        "worldUnchanged": true,
+        "successorCreated": false,
+        "permitStatus": "live",
+        "commitmentTargetStillA": "tile:108:54",
+        "bothTilesAreWellKnown": {
+          "A": 5,
+          "B": 4
+        },
+        "controlInTheSameRun": "the unretargeted world DEPARTED"
+      }
+    },
+    {
+      "id": "D3_the_successor_walks_toward_the_destination_its_founders_accepted",
+      "claim": "the successor's provisional lifecycle target — the field `provisionalTravel` reads to choose every step — is the commitment's destination, and the parent's terminal attempt record carries the same one; there is a single answer to where these founders are going",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "commitmentTarget": "tile:108:54",
+        "permitTarget": "tile:108:54",
+        "successorLifecycleTarget": "tile:108:54",
+        "parentTerminalRecordTarget": "tile:108:54",
+        "successorPosition": "tile:110:57",
+        "parentPosition": "tile:110:57"
+      }
+    },
+    {
+      "id": "D4_a_destination_change_supersedes_the_terms_and_authorizes_neither_destination",
+      "claim": "superseding for `destination_changed` ends the permit `superseded_by_revised_terms`, leaves the historical acceptance of A intact, and refuses a departure to A AND a departure to B — going somewhere else requires agreeing again",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "permitStatus": "superseded_by_revised_terms",
+        "endedBecause": "destination_changed",
+        "historicalCommitmentTarget": "tile:108:54",
+        "historicalCommitmentIdUnchanged": true,
+        "departureToA": "departure_authorization_not_live",
+        "departureToB": "attempt_names_a_different_destination_than_the_commitment"
       }
     },
     {
@@ -356,10 +405,19 @@
             "permitAfterFirst": "live",
             "replayedDeparture": "DEPARTED AGAIN",
             "controlHolds": true
+          },
+          {
+            "id": "P5_restore_the_self_compared_destination_and_the_attempt_sourced_successor_target",
+            "applied": true,
+            "fixture": "D2",
+            "brokenBy": "departed toward tile:108:55 under a commitment for tile:108:54",
+            "acceptedDestination": "tile:108:54",
+            "executedDestination": "tile:108:55",
+            "controlHolds": true
           }
         ],
         "productionRestoredByteIdentically": true,
-        "sha256": "e15b222bb406853b8c2f5fa0cef3f8d0e407764526a059b6e6a13f8fee138c99"
+        "sha256": "57b1491dd259fe1899246e4d568664114c881054fe059ce8105c33f9e6dc8e48"
       }
     }
   ]

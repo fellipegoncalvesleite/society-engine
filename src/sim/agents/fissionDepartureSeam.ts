@@ -112,6 +112,18 @@ export type DepartureRefusal =
   | "authorization_does_not_reference_the_commitment"
   /** Withdrawn, superseded, or already spent. */
   | "departure_authorization_not_live"
+  /** The attempt names no destination at all, so there is nothing to compare or to execute. */
+  | "attempt_names_no_destination"
+  /**
+   * The departure being executed goes somewhere other than where the founder cohort agreed to go.
+   *
+   * Named apart from the general terms mismatch because it implies a specific next action: the
+   * prepared terms must be SUPERSEDED and a new acceptance taken. Silently retargeting the group, or
+   * silently ignoring the attempt's destination, are the two ways this could have been "handled" and
+   * both are forbidden — one moves people somewhere nobody accepted, the other makes an edit that
+   * looks like a retarget do nothing.
+   */
+  | "attempt_names_a_different_destination_than_the_commitment"
   /** The accepted terms are not the terms of THIS departure. */
   | "commitment_terms_do_not_match_the_departure"
   /** The permit's terms are not the terms of THIS departure. */
@@ -362,11 +374,50 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
   // accepted accepted one of those.
   const allocation = prepared.allocation;
   const parentBefore = cohortsOf(parent);
+
+  // ── 2a. WHERE ARE THESE FOUNDERS GOING? ONE ANSWER, AND IT IS CHECKED RATHER THAN ASSUMED. ──
+  //
+  // THE DEFECT THIS CLOSES. `terms.targetTileId` was `prepared.commitment.targetTileId`, so
+  // `commitmentTermsMatchDeparture` proved that the commitment's destination matched its own
+  // destination, and `authorizationPermitsDeparture` — whose permit was opened FROM that commitment —
+  // proved the same thing a second time. Both were VACUOUS on that field. Meanwhile the successor's
+  // lifecycle received `attempt.targetTileId`, and `provisionalTravel` walks the group toward exactly
+  // that. So this state was representable and would have departed:
+  //
+  //   commitment A, permit A, prepared record A, parent fresh, cohort intact
+  //   attempt.targetTileId changed to B
+  //   -> gate compares A against A, passes
+  //   -> founders walk to B under a permit for A
+  //
+  // The accepted destination and the executed destination were two authorities that could disagree,
+  // which is the whole defect class this checkpoint family exists to remove.
+  //
+  // THE ATTEMPT'S TARGET IS THE INDEPENDENT SIDE OF THE COMPARISON. It is what the attempt names and
+  // what preparation read when it asked the founder cohort to accept, so comparing the commitment
+  // against it is a real question. Checked FIRST and by its own name, because "you are trying to send
+  // them somewhere else" implies a different next action from a cohort or lineage mismatch: the terms
+  // must be superseded and a new acceptance taken.
+  const acceptedDestination = prepared.commitment.targetTileId;
+  const executionDestination = attempt.targetTileId;
+  if (executionDestination === undefined) {
+    return { ok: false, refusal: "attempt_names_no_destination" };
+  }
+  if (String(executionDestination) !== String(acceptedDestination)) {
+    return {
+      ok: false,
+      refusal: "attempt_names_a_different_destination_than_the_commitment",
+      detail: `accepted ${String(acceptedDestination)} != execution ${String(executionDestination)}`,
+    };
+  }
+
   const terms: DepartureTerms = {
     parentBandId: parentId,
     lineageId: request.lineageId,
     allocation,
-    targetTileId: prepared.commitment.targetTileId,
+    // The ATTEMPT's destination, so the two predicates below are asking a real question. They now
+    // fail if the commitment or the permit names anywhere other than where this departure is
+    // actually going.
+    targetTileId: executionDestination,
   };
   if (!commitmentTermsMatchDeparture(prepared.commitment, terms)) {
     return { ok: false, refusal: "commitment_terms_do_not_match_the_departure" };
@@ -505,7 +556,11 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       // This seam no longer runs that authority, so restating its conclusions would be quoting a
       // measurement it did not take.
       reasonIds: prepared.commitment.reasonIds,
-      targetTileId: attempt.targetTileId,
+      // THE ACCEPTED DESTINATION, not the attempt's copy of it. §2a has just proven the two are the
+      // same string, so no value moves — what moves is which record is the AUTHORITY. Reading the
+      // attempt here would leave the executed destination owned by a mutable field that the
+      // acceptance does not govern, which is the split-brain this correction removes.
+      targetTileId: acceptedDestination,
       // The prepared record is retained with its permit now SPENT. Retained rather than cleared
       // because it is the parent's own account of what it agreed to and what became of that
       // agreement; spent rather than removed because "this was used" and "this never existed" are
@@ -571,7 +626,11 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       lineageId: request.lineageId,
       requestedFounders,
       endorsedFounders: allocation.allocatedFounders,
-      targetTileId: attempt.targetTileId,
+      // WHERE THIS GROUP IS ACTUALLY WALKING, and it is the destination its founders accepted.
+      // `provisionalTravel` reads this field to choose every step, so it is the executed destination
+      // in the most literal sense. Sourced from the commitment rather than from the attempt for the
+      // same reason as above: proven equal at the gate, but owned by the record that governs it.
+      targetTileId: acceptedDestination,
       // The tile the founders physically left from, so a later return has a destination it
       // LEGITIMATELY KNOWS. It is the last place this group actually saw its parent — deliberately
       // not the parent's current position, which the travellers have no channel to observe.

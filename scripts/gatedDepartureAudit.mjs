@@ -205,6 +205,117 @@ try {
     { refusal: corrupt.ok === false ? corrupt.refusal : "ACCEPTED",
       worldUnchanged: JSON.stringify(corruptWorld) === corruptBefore });
 
+  // ══ D2 — THE ACCEPTED DESTINATION AND THE EXECUTED DESTINATION ARE ONE FACT ══
+  //
+  // THE DECISIVE FIXTURE OF THIS CORRECTION, and the state it constructs used to DEPART.
+  //
+  // The gate compared the commitment's destination against `prepared.commitment.targetTileId` — its
+  // own — so the check was vacuous, while the successor's lifecycle received `attempt.targetTileId`
+  // and `provisionalTravel` walks the group toward exactly that. Everything else here is left
+  // untouched and valid: the same commitment, the same allocation, the same live permit, the same
+  // fresh parent, the same phase. ONLY the execution target moves, to a second tile the band also
+  // genuinely knows — so a refusal cannot be freshness, nutrition, cohort, phase or familiarity.
+  const targetB = (() => {
+    const here = generate.getTile(base, parent.position);
+    const dist = (t) => Math.abs(t.coord.x - here.coord.x) + Math.abs(t.coord.y - here.coord.y);
+    return Object.keys(parent.knowledge.observedTiles)
+      .map((id) => ({ id, record: parent.knowledge.observedTiles[id], tile: generate.getTile(base, id) }))
+      .filter((e) => e.tile !== undefined && passability.isBandPassableDestination(e.tile)
+        && String(e.id) !== String(target.id) && dist(e.tile) >= 4)
+      .sort((a, b) => (b.record.visits ?? 0) - (a.record.visits ?? 0)
+        || String(a.id).localeCompare(String(b.id)))[0]?.tile;
+  })();
+  const retargetedWorld = targetB === undefined ? undefined : (() => {
+    const a = readyWorld.world.bands[parent.id].fissionAttempt;
+    return { ...readyWorld.world, bands: { ...readyWorld.world.bands,
+      [parent.id]: { ...readyWorld.world.bands[parent.id],
+        fissionAttempt: { ...a, targetTileId: String(targetB.id) } } } };
+  })();
+  const retargetBefore = retargetedWorld === undefined ? "" : JSON.stringify(retargetedWorld);
+  const retargeted = retargetedWorld === undefined ? undefined : departFrom(retargetedWorld);
+  const retargetAttemptAfter = retargetedWorld?.bands[parent.id].fissionAttempt;
+  record("D2_a_departure_cannot_execute_a_destination_the_cohort_never_accepted",
+    "with the commitment, the allocation, the live permit and the parent's condition ALL unchanged and valid, moving only the execution target to a second well-known tile refuses the departure BY ITS OWN NAME: no successor, no cohort line moves, the world is byte-identical, the permit is untouched and the commitment is not rewritten",
+    targetB !== undefined &&
+      retargeted.ok === false &&
+      retargeted.refusal === "attempt_names_a_different_destination_than_the_commitment" &&
+      JSON.stringify(retargetedWorld) === retargetBefore &&
+      retargetedWorld.bands[SID] === undefined &&
+      retargetedWorld.bands[parent.id].demography.workingAdults === parent.demography.workingAdults &&
+      retargetedWorld.bands[parent.id].demography.dependents === parent.demography.dependents &&
+      retargetedWorld.bands[parent.id].demography.elders === parent.demography.elders &&
+      retargetAttemptAfter.preparedDeparture.authorization.status === "live" &&
+      String(retargetAttemptAfter.preparedDeparture.commitment.targetTileId) === String(target.id),
+    // NON-VACUITY, AND IT IS THE WHOLE POINT: the identical world with the target left ALONE departs
+    // successfully in the same run, so the only difference between departing and refusing is the
+    // destination — the refusal cannot be attributed to anything else.
+    targetB !== undefined && ordinary.ok === true,
+    { acceptedDestination: String(target.id), executionDestination: String(targetB?.id ?? "none"),
+      refusal: retargeted === undefined ? "NOT CONSTRUCTED"
+        : (retargeted.ok === false ? retargeted.refusal : "DEPARTED TO A DESTINATION NOBODY ACCEPTED"),
+      detail: retargeted?.ok === false ? retargeted.detail : null,
+      worldUnchanged: JSON.stringify(retargetedWorld) === retargetBefore,
+      successorCreated: retargetedWorld?.bands[SID] !== undefined,
+      permitStatus: retargetAttemptAfter?.preparedDeparture.authorization.status ?? null,
+      commitmentTargetStillA: String(retargetAttemptAfter?.preparedDeparture.commitment.targetTileId ?? ""),
+      bothTilesAreWellKnown: {
+        A: parent.knowledge.observedTiles[String(target.id)]?.visits ?? 0,
+        B: parent.knowledge.observedTiles[String(targetB?.id)]?.visits ?? 0 },
+      controlInTheSameRun: ordinary.ok === true ? "the unretargeted world DEPARTED" : "did not depart" });
+
+  // ══ D3 — THE EXECUTED DESTINATION IS THE ACCEPTED ONE, AND TRAVEL READS IT ══
+  record("D3_the_successor_walks_toward_the_destination_its_founders_accepted",
+    "the successor's provisional lifecycle target — the field `provisionalTravel` reads to choose every step — is the commitment's destination, and the parent's terminal attempt record carries the same one; there is a single answer to where these founders are going",
+    ordinary.ok === true &&
+      String(succ.provisionalSuccessor.targetTileId) === String(prepared.commitment.targetTileId) &&
+      String(succ.provisionalSuccessor.targetTileId) === String(prepared.authorization.targetTileId) &&
+      String(parentAfter.fissionAttempt.targetTileId) === String(prepared.commitment.targetTileId) &&
+      String(succ.provisionalSuccessor.targetTileId) === String(target.id) &&
+      // and the successor is placed at the PARENT's tile, never at the destination
+      String(succ.position) === String(parent.position),
+    ordinary.ok === true,
+    { commitmentTarget: String(prepared.commitment.targetTileId),
+      permitTarget: String(prepared.authorization.targetTileId),
+      successorLifecycleTarget: String(succ?.provisionalSuccessor.targetTileId ?? ""),
+      parentTerminalRecordTarget: String(parentAfter?.fissionAttempt.targetTileId ?? ""),
+      successorPosition: String(succ?.position ?? ""), parentPosition: String(parent.position) });
+
+  // ══ D4 — THE LEGITIMATE DESTINATION CHANGE ══
+  //
+  // Changing where the group is going is a change of ACCEPTED TERMS, so it goes through supersession.
+  // The historical commitment to A survives — a cohort did accept it, and that stays true — while the
+  // permit becomes terminal and can authorize neither A nor B.
+  const supersededByDestination = prep.supersedePreparedDeparture(
+    readyWorld.world, parent.id, "destination_changed", day0 + 2);
+  const supersededRecord = supersededByDestination.ok === true
+    ? supersededByDestination.world.bands[parent.id].fissionAttempt.preparedDeparture : undefined;
+  const afterSupersedeToA = supersededByDestination.ok !== true ? undefined
+    : departFrom(supersededByDestination.world);
+  const afterSupersedeToB = supersededByDestination.ok !== true || targetB === undefined ? undefined
+    : (() => {
+      const a = supersededByDestination.world.bands[parent.id].fissionAttempt;
+      return departFrom({ ...supersededByDestination.world, bands: { ...supersededByDestination.world.bands,
+        [parent.id]: { ...supersededByDestination.world.bands[parent.id],
+          fissionAttempt: { ...a, targetTileId: String(targetB.id) } } } });
+    })();
+  record("D4_a_destination_change_supersedes_the_terms_and_authorizes_neither_destination",
+    "superseding for `destination_changed` ends the permit `superseded_by_revised_terms`, leaves the historical acceptance of A intact, and refuses a departure to A AND a departure to B — going somewhere else requires agreeing again",
+    supersededByDestination.ok === true &&
+      supersededRecord.authorization.status === "superseded_by_revised_terms" &&
+      supersededRecord.authorization.endedBecause === "destination_changed" &&
+      String(supersededRecord.commitment.targetTileId) === String(target.id) &&
+      supersededRecord.commitment.commitmentId === prepared.commitment.commitmentId &&
+      afterSupersedeToA?.ok === false &&
+      afterSupersedeToA.refusal === "departure_authorization_not_live" &&
+      afterSupersedeToB?.ok === false,
+    targetB !== undefined,
+    { permitStatus: supersededRecord?.authorization.status ?? null,
+      endedBecause: supersededRecord?.authorization.endedBecause ?? null,
+      historicalCommitmentTarget: String(supersededRecord?.commitment.targetTileId ?? ""),
+      historicalCommitmentIdUnchanged: supersededRecord?.commitment.commitmentId === prepared.commitment.commitmentId,
+      departureToA: afterSupersedeToA?.ok === false ? afterSupersedeToA.refusal : "ACCEPTED",
+      departureToB: afterSupersedeToB?.ok === false ? afterSupersedeToB.refusal : "ACCEPTED" });
+
   // ══ E — A TERMINAL PERMIT AUTHORIZES NOTHING ══
   const endedRows = {};
   for (const [name, cause] of [["withdrawn", "attempt_abandoned_before_departure"],
@@ -501,11 +612,34 @@ try {
     { id: "P4_fail_to_consume_the_permit",
       expect: "F", from: `      preparedDeparture: { ...prepared, authorization: consumedAuthorization },`,
       to: `      preparedDeparture: { ...prepared },` },
+    // THE DEFECT THIS CORRECTION REMOVED, RESTORED IN FULL. Both halves are needed to reproduce it:
+    // the destination compared against ITSELF (so nothing refuses), and the successor's lifecycle
+    // target read off the ATTEMPT (so the group physically walks to the unaccepted tile). Restoring
+    // only the first would show a departure that should have been refused, but not the founders
+    // walking somewhere nobody agreed to go — which is the part that matters.
+    { id: "P5_restore_the_self_compared_destination_and_the_attempt_sourced_successor_target",
+      expect: "D2",
+      from: `  if (String(executionDestination) !== String(acceptedDestination)) {`,
+      to: `  if (false && String(executionDestination) !== String(acceptedDestination)) {`,
+      alsoEdits: [
+        { from: `    targetTileId: executionDestination,`, to: `    targetTileId: acceptedDestination,` },
+        { from: `      targetTileId: acceptedDestination,
+      // The tile the founders physically left from`,
+          to: `      targetTileId: attempt.targetTileId,
+      // The tile the founders physically left from` },
+      ] },
   ];
   for (const m of mutations) {
     const src = readFileSync(`${SEAM_SRC}.gatebak`, "utf8");
     if (!src.includes(m.from)) { controls.push({ ...m, applied: false, note: "anchor not found" }); continue; }
-    writeFileSync(SEAM_SRC, src.replace(m.from, m.to));
+    let mutated = src.replace(m.from, m.to);
+    let missing;
+    for (const edit of m.alsoEdits ?? []) {
+      if (!mutated.includes(edit.from)) { missing = edit.from.slice(0, 60); break; }
+      mutated = mutated.replace(edit.from, edit.to);
+    }
+    if (missing !== undefined) { controls.push({ ...m, applied: false, note: `secondary anchor not found: ${missing}` }); continue; }
+    writeFileSync(SEAM_SRC, mutated);
     const mutant = await createServer({ root: `${process.cwd()}/src`,
       cacheDir: `node_modules/.vite-i4gatemut-${process.pid}-${m.id}`, configFile: false, appType: "custom",
       server: { middlewareMode: true, hmr: false }, logLevel: "error" });
@@ -537,6 +671,18 @@ try {
         const moved = r.ok === true ? cohortsOf(r.world.bands[SID]) : null;
         row = { fixture: "B", movedCohort: moved, preparedCohort: alloc,
           controlHolds: r.ok !== true || moved.dependents !== alloc.dependents };
+      } else if (m.expect === "D2") {
+        // Restoring the self-comparison must let a group depart toward a destination its founders
+        // never accepted — the state that used to be representable.
+        const r = go(retargetedWorld, `${parent.id}:provisional:retarget`);
+        const walkedTo = r.ok === true
+          ? String(r.world.bands[`${parent.id}:provisional:retarget`].provisionalSuccessor.targetTileId)
+          : null;
+        row = { fixture: "D2",
+          brokenBy: r.ok === true ? `departed toward ${walkedTo} under a commitment for ${String(target.id)}`
+            : `still refused: ${r.refusal}`,
+          acceptedDestination: String(target.id), executedDestination: walkedTo,
+          controlHolds: r.ok === true };
       } else {
         // The second attempt is replayed against the UNCHANGED parent carrying the attempt record as
         // the first departure left it. Under production that record's permit reads
