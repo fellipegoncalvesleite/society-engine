@@ -27,6 +27,8 @@ import type { TemporaryWatercraftAssessment } from "./storageSuitability";
 import type { VisibleNatureState } from "./visibleNature";
 import type { ProbeRecencyMemory } from "./probeMemory";
 import type { InvestigationOutcomeRingEntry, PendingInvestigationRecord } from "./pendingInvestigation";
+import type { FounderAllocation } from "./fissionFounderAllocation";
+import type { FounderCohortCommitment, FounderDepartureAuthorization } from "./fissionCommitment";
 import type { ResourceScoutDebug, ScoutLearningRingEntry } from "./resourceScout";
 import type { PlantUseTestEvent, PlantUseTestRingEntry } from "./plantUseTesting";
 import type {
@@ -59,6 +61,78 @@ import type { FissionLifecyclePhase } from "./fissionLifecycleKernel";
  * a parent's attempt to the successor it produced, so parent/successor co-residence can be
  * recognised from DIRECT LIFECYCLE PROVENANCE rather than from invented kinship.
  */
+/**
+ * ROADMAP ITEM 4 — WHAT WAS ASSESSED, ACCEPTED AND PERMITTED, BEFORE ANYONE LEAVES.
+ *
+ * WHY THIS IS ONE NESTED RECORD RATHER THAN FIVE OPTIONAL FIELDS.
+ *
+ * The prepared facts are not independently meaningful: a commitment describes ONE allocation, a
+ * permit authorizes ONE commitment's terms, and a freshness fingerprint measures the parent the
+ * assessment actually read. Five optional fields on the attempt would admit thirty-one partial
+ * states, nearly all incoherent — commitment A paired with allocation B being the one that matters,
+ * because it is exactly the defect this whole family exists to prevent. One optional nested record
+ * is written and cleared atomically by one writer, so those pairings are unconstructible rather than
+ * merely discouraged.
+ *
+ * It does NOT create a second authority for any fact it holds. The allocation is still
+ * `allocateFounderCohorts`'s, the commitment still `assessFounderCohortCommitment`'s, the permit
+ * still `openDepartureAuthorization`'s. This record is the BINDING that says they were produced
+ * together, for one departure, from one reading of one parent.
+ */
+export interface PreparedFissionDeparture {
+  /** The day preparation ran. Supplied, never read from a hidden clock. */
+  readonly preparedOnDay: number;
+  /**
+   * The EXACT allocation that was assessed and accepted — not a headcount.
+   *
+   * A count cannot say whether eight founders are 5 adults + 2 dependents + 1 elder or some other
+   * composition, and the residual authority's verdict and the cohort's acceptance were both about
+   * one specific composition. The later physical departure must be able to prove it is moving those
+   * represented founders, so the composition is stored rather than recomputed.
+   */
+  readonly allocation: FounderAllocation;
+  /** Retained so a reader can see whether the residual authority revised the request downward. */
+  readonly requestedFounders: number;
+  /** What the residual authority endorsed. Equal to the request when no revision was needed. */
+  readonly endorsedFounders: number;
+  /** The immutable historical fact that a represented founder cohort accepted these terms. */
+  readonly commitment: FounderCohortCommitment;
+  /**
+   * The measured evidence the acceptance rested on, as bounded rounded numbers.
+   *
+   * Reason ids alone cannot answer this later: they are threshold-crossed labels, and every quantity
+   * behind them — split pressure, embodied burden, destination familiarity — moves as the band
+   * lives. Once the parent changes, nothing could reconstruct how close the decision was, so a
+   * reader would have the commitment's conclusion and no way to check it. Seven rounded numbers per
+   * prepared departure, replaced wholesale rather than appended, so this does not grow.
+   */
+  readonly commitmentEvidence: PreparedCommitmentEvidence;
+  /** The one-use permit for this departure. Its status is the live authority; see fissionCommitment. */
+  readonly authorization: FounderDepartureAuthorization;
+  /**
+   * A deterministic fingerprint of EVERY input the parent-residual authority read.
+   *
+   * Preparation and departure are separated by up to `DEPARTURE_READY_MAX_DAYS`, and the parent is
+   * not still during them: the annual demographic step moves cohorts, expeditions commit and release
+   * bodies daily, nutrition and acute condition move seasonally. A commitment describes terms
+   * assessed against one reading of the parent, so a later departure needs a way to ask whether that
+   * reading still holds. The fingerprint covers the whole closed input struct rather than a chosen
+   * subset, so no load-bearing field can be forgotten.
+   */
+  readonly residualInputFingerprint: string;
+}
+
+/** Bounded, all-numeric. Only written on acceptance, where every term was measurable. */
+export interface PreparedCommitmentEvidence {
+  readonly motive: number;
+  readonly destinationFamiliarity: number;
+  readonly embodiedCapacity: number;
+  readonly splitCausedDamage: number;
+  readonly readiness: number;
+  readonly tendencyDelta: number;
+  readonly willingness: number;
+}
+
 export interface FissionLifecycleRecord {
   readonly phase: FissionLifecyclePhase;
   readonly phaseEnteredDay: number;
@@ -74,6 +148,14 @@ export interface FissionLifecycleRecord {
   readonly reasonIds?: readonly string[];
   /** The band-known destination this attempt named. Never hidden world truth. */
   readonly targetTileId?: TileId;
+  /**
+   * Everything that was assessed, accepted and permitted before anyone leaves.
+   *
+   * Present only on an attempt that `prepareFissionDeparture` carried through the whole chain, and
+   * that writer is the only thing that sets it. Absent means preparation has not happened — NOT that
+   * it happened and produced nothing.
+   */
+  readonly preparedDeparture?: PreparedFissionDeparture;
   /**
    * The tile the founders physically left from, retained so a return has a destination it LEGITIMATELY
    * KNOWS. It is the last place this group actually saw its parent — deliberately NOT the parent's

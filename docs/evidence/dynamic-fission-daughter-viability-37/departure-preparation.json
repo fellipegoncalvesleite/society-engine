@@ -1,0 +1,301 @@
+{
+  "generatedAt": "2026-08-10T16:48:31.204Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "parentBandId": "band:varied-river-mid",
+  "wellKnownTarget": "tile:108:56",
+  "summary": {
+    "total": 16,
+    "passed": 16,
+    "failed": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "A_a_valid_plan_prepares_a_complete_commitment_backed_departure",
+      "claim": "a coherent parent, a known destination and willing founders produce a final endorsed allocation, a positive commitment on exactly that allocation, a live one-use permit and `departure_ready` — with nobody moving",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "phase": "departure_ready",
+        "allocationSuccessor": {
+          "workingAdults": 6,
+          "dependents": 2,
+          "elders": 0
+        },
+        "endorsedFounders": 8,
+        "commitmentId": "commit:4fb5ec940652bd00",
+        "authorizationStatus": "live",
+        "evidence": {
+          "motive": 0.9,
+          "destinationFamiliarity": 1,
+          "embodiedCapacity": 0.88,
+          "splitCausedDamage": 0.21,
+          "readiness": 0.88,
+          "tendencyDelta": 0.1043,
+          "willingness": 0.8333
+        }
+      }
+    },
+    {
+      "id": "B_a_downward_revision_happens_before_commitment_and_binds_the_revised_terms",
+      "claim": "when the residual authority revises the request downward, the commitment and the permit bind the REVISED endorsed allocation and never the original request",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "requested": 12,
+        "endorsed": 11,
+        "committedCohort": {
+          "workingAdults": 7,
+          "dependents": 3,
+          "elders": 1
+        },
+        "originalRequestedCohort": {
+          "workingAdults": 8,
+          "dependents": 3,
+          "elders": 1
+        },
+        "revisionSweep": [
+          {
+            "requested": 6,
+            "outcome": "as_requested",
+            "endorsed": 6
+          },
+          {
+            "requested": 8,
+            "outcome": "as_requested",
+            "endorsed": 8
+          },
+          {
+            "requested": 10,
+            "outcome": "as_requested",
+            "endorsed": 10
+          },
+          {
+            "requested": 12,
+            "outcome": "revised",
+            "endorsed": 11
+          }
+        ]
+      }
+    },
+    {
+      "id": "C_the_committed_cohort_is_the_revised_composition_not_the_requested_one",
+      "claim": "the requested and endorsed allocations differ in at least one cohort line, and the stored commitment carries the revised composition — a headcount alone could not distinguish them",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "requestedComposition": {
+          "workingAdults": 8,
+          "dependents": 3,
+          "elders": 1
+        },
+        "committedComposition": {
+          "workingAdults": 7,
+          "dependents": 3,
+          "elders": 1
+        },
+        "note": "both allocations exist; the fixture asserts the commitment tracks the endorsed one"
+      }
+    },
+    {
+      "id": "D_a_blocked_residual_produces_no_commitment_no_permit_and_no_departure_ready",
+      "claim": "when the parent residual authority blocks the departure at every permitted size, preparation refuses by name and writes nothing at all",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "refusal": "residual_authority_blocked_the_departure",
+        "detail": "split_caused_damage_exceeds_tolerance",
+        "phaseAfter": "departure_planned",
+        "preparedRecordWritten": false
+      }
+    },
+    {
+      "id": "E_a_physically_feasible_split_the_cohort_declines_produces_no_permit",
+      "claim": "a departure the residual authority permits but the represented founder cohort does not accept refuses as `founder_cohort_declined`, leaves the attempt at `departure_planned` and creates no permit",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "weakMotive": {
+          "refusal": "founder_cohort_declined",
+          "reasons": "not_willing_on_held_evidence,weak_motive_to_separate,separation_costs_those_who_stay"
+        },
+        "injured": {
+          "refusal": "founder_cohort_declined"
+        },
+        "controlAccepted": true
+      }
+    },
+    {
+      "id": "F_the_writer_cannot_reach_a_commitment_without_a_measured_residual_consequence",
+      "claim": "the preparation writer derives the parent-separation consequence from the residual assessment and passes it to the real decision authority; it never hand-builds a commitment or a permit",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "derivesConsequence": true,
+        "passesConsequenceToDecision": true,
+        "fabricatesARecord": false
+      }
+    },
+    {
+      "id": "G_an_unknown_or_absent_destination_produces_no_commitment_and_no_permit",
+      "claim": "a destination the parent has never observed, and an attempt naming no destination at all, both refuse by name and write nothing",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "unknownDestination": "destination_not_known_to_the_band",
+        "noTargetNamed": "attempt_names_no_target"
+      }
+    },
+    {
+      "id": "H_the_exact_represented_allocation_is_canonical_and_survives_serialization",
+      "claim": "the prepared record serializes and reloads with the three cohort integers of the allocation that was actually assessed and accepted — a headcount alone would not identify it",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "serializedCohort": {
+          "workingAdults": 6,
+          "dependents": 2,
+          "elders": 0
+        },
+        "committedCohort": {
+          "workingAdults": 6,
+          "dependents": 2,
+          "elders": 0
+        },
+        "byteIdenticalRoundTrip": true
+      }
+    },
+    {
+      "id": "I_preparation_moves_no_bodies_and_creates_no_successor",
+      "claim": "world population, the parent's own cohorts, its position and the number of bands are all unchanged by a successful preparation — the people are packed and still at home",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "worldPopulation": {
+          "before": 235,
+          "after": 235
+        },
+        "bands": {
+          "before": 9,
+          "after": 9
+        },
+        "parentCohorts": {
+          "before": {
+            "workingAdults": 19,
+            "dependents": 11,
+            "elders": 4
+          },
+          "after": {
+            "workingAdults": 19,
+            "dependents": 11,
+            "elders": 4
+          }
+        },
+        "successorCreated": false
+      }
+    },
+    {
+      "id": "J_identical_canonical_input_produces_an_identical_prepared_state",
+      "claim": "running preparation twice on the same canonical input yields byte-identical prepared state, the same commitment id and the same permit",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "commitmentId": "commit:4fb5ec940652bd00",
+        "identical": true
+      }
+    },
+    {
+      "id": "K_repeated_preparation_and_failure_cannot_grow_canonical_state",
+      "claim": "forty refused preparations write no record at all, and ten successful ones REPLACE a single bounded record rather than appending — the prepared state is one optional field, not a ledger",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "refusedRuns": 40,
+        "recordAfterRefusals": "none",
+        "successfulRuns": 10,
+        "bytesAfterTenSuccesses": 1242,
+        "bytesAfterOne": 1242,
+        "historyLength": 11
+      }
+    },
+    {
+      "id": "L_a_parent_that_changes_after_preparation_is_detected_as_stale",
+      "claim": "the prepared terms verify as fresh against the parent they were assessed on, and as STALE the moment a real load-bearing input moves — cohort composition (annual demography) or bodies away from camp (daily expeditions)",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "freshAgainstOriginalParent": true,
+        "staleAfterOneAdultAged": true,
+        "staleAfterThreeBodiesLeaveOnAParty": true,
+        "fingerprint": "residual:4c7328db4c0dc7a1",
+        "note": "cohorts move at the annual demographic step and away bodies daily, so both can change inside DEPARTURE_READY_MAX_DAYS"
+      }
+    },
+    {
+      "id": "M_changed_founder_terms_or_destination_cannot_reuse_the_old_permit",
+      "claim": "the live permit refuses a different allocation and a different destination, and superseding it records a named cause and ends its authority over the original terms too",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "permitsBiggerAllocation": false,
+        "supersededStatus": "superseded_by_revised_terms",
+        "commitmentUnchanged": true
+      }
+    },
+    {
+      "id": "N_abandonment_withdraws_the_permit_keeps_the_commitment_and_moves_nobody",
+      "claim": "abandoning before departure ends the permit as `withdrawn_before_departure`, leaves the historical commitment intact as provenance, authorizes nothing further, and moves no bodies",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "phase": "abandoned",
+        "permitStatus": "withdrawn_before_departure",
+        "commitmentStillTrue": true,
+        "worldPopulation": {
+          "before": 235,
+          "afterAbandon": 235
+        }
+      }
+    },
+    {
+      "id": "O_departure_ready_is_no_longer_reachable_by_elapsed_time_alone",
+      "claim": "the kernel refuses `departure_planned -> departure_ready` unless the adapter claims a completed preparation, so the phase now asserts something instead of only naming it",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "withoutClaim": "departure_ready_without_completed_preparation",
+        "withClaim": "departure_ready",
+        "note": "production still allows a hand-built departure_ready record to reach performAtomicDeparture directly; closing that is the next slice"
+      }
+    },
+    {
+      "id": "P_the_preparation_writer_has_no_natural_callers_and_departure_is_unchanged",
+      "claim": "no demographic, runner, decision or annual-fission path reaches the preparation writer, and `performAtomicDeparture` still requires no permit — this pass builds the authority, not its reachability",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "naturalCallers": [
+          {
+            "file": "src/sim/agents/demography.ts",
+            "mentions": false
+          },
+          {
+            "file": "src/sim/tick/advance.ts",
+            "mentions": false
+          },
+          {
+            "file": "src/sim/rules/bandDecision.ts",
+            "mentions": false
+          },
+          {
+            "file": "src/sim/runner/simRunner.ts",
+            "mentions": false
+          }
+        ],
+        "departureSeamMentionsPermitOrPreparedTerms": false,
+        "statedGap": "a hand-built departure_ready record can still reach performAtomicDeparture with no commitment behind it"
+      }
+    }
+  ]
+}

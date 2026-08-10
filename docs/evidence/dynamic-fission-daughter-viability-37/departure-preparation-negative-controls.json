@@ -1,0 +1,40 @@
+{
+  "checkpoint": "ROADMAP ITEM 4 \u2014 canonical pre-departure preparation authority",
+  "method": "each mutation applied to the real production module, the full A-P suite run, the module restored from a pre-mutation copy; production verified byte-identical by sha256 afterwards",
+  "pristineSha256": {
+    "fissionDeparturePreparation.ts": "e5b055f973964ca1b94cc5ea26025eabc91ff66bceaee21a05b6d2e200f0b6e7",
+    "fissionLifecycleKernel.ts": "bb2fcb65b1b79b49e1aee8844361dc6f1d4498ea2e05346d631b894be64f909b"
+  },
+  "controls": [
+    {
+      "control": "bind commitment to the REQUESTED allocation",
+      "expected_to_bite": "B / C",
+      "fixtures_failing_or_vacuous": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "control": "manufactured willingness \u2014 the writer overrides the band's own held evidence",
+      "expected_to_bite": "E",
+      "fixtures_failing_or_vacuous": [
+        "E"
+      ],
+      "note": "a first form used `if (false)` on the refusal branch; that made the writer dereference an undefined commitment and the audit errored before reaching E, so it proved nothing about the decision being real. Replaced with a mutation that expresses the actual defect."
+    },
+    {
+      "control": "freshness fingerprint made constant",
+      "expected_to_bite": "L",
+      "fixtures_failing_or_vacuous": [
+        "L"
+      ]
+    },
+    {
+      "control": "kernel prerequisite removed",
+      "expected_to_bite": "O",
+      "fixtures_failing_or_vacuous": [
+        "O"
+      ]
+    }
+  ]
+}

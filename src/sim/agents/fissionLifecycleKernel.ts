@@ -446,6 +446,15 @@ export type LifecycleRejection =
   | "terminal_outcome_requires_a_physical_event"
   /** Reintegration asserts the bodies physically reached the parent. Nothing else may assert it. */
   | "reintegration_without_proven_co_location"
+  /**
+   * `departure_ready` was requested without the adapter claiming a completed preparation.
+   *
+   * The phase asserts that the exact departure terms were assessed, positively accepted and given a
+   * live one-use permit. The kernel holds no world and cannot check any of that, so — exactly as for
+   * `reintegration_without_proven_co_location` — it checks that the caller claims to have checked,
+   * and `fissionDeparturePreparation` is the only module that can honestly make the claim.
+   */
+  | "departure_ready_without_completed_preparation"
   /** Event-bounded living conditions have no honest timeout transition. */
   | "event_bounded_phase_has_no_timeout";
 
@@ -496,6 +505,17 @@ export interface TransitionRequest {
    * module that can honestly make the claim.
    */
   readonly physicalCoLocationProven?: boolean;
+  /**
+   * Required for `departure_planned -> departure_ready`. The adapter must have run the whole
+   * preparation chain — final endorsed allocation, parent-separation consequence, a POSITIVE founder
+   * cohort commitment on those exact terms, and a live one-use permit — and written it canonically.
+   *
+   * Same construction and same reason as `physicalCoLocationProven`: required, no default, because a
+   * default silently restores the defect for any caller that forgets. Before this, `departure_ready`
+   * was reachable by elapsed time alone, which is how a phase named for a settled plan could be
+   * entered by a record that had settled nothing.
+   */
+  readonly preparedDepartureProven?: boolean;
 }
 
 /** How many independent lived-evidence signals stabilization requires. An authority boundary. */
@@ -531,6 +551,9 @@ export function requestTransition(request: TransitionRequest): LifecycleTransiti
   }
   if (request.to === "reintegrated" && request.physicalCoLocationProven !== true) {
     return { ok: false, rejection: "reintegration_without_proven_co_location" };
+  }
+  if (request.to === "departure_ready" && request.preparedDepartureProven !== true) {
+    return { ok: false, rejection: "departure_ready_without_completed_preparation" };
   }
 
   return { ok: true, state: enter(request.current, request.to, request.today), timedOut: false };

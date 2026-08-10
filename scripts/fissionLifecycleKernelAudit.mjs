@@ -52,7 +52,8 @@ try {
   // demands. `E7` in the exit audit asserts that an UNDECLARED caller is still refused, so nothing is
   // hidden by this default.
   const step = (state, to, day, extra = {}) =>
-    k.requestTransition({ current: state, to, today: day, cause: "physical_event", physicalCoLocationProven: true, ...extra });
+    k.requestTransition({ current: state, to, today: day, cause: "physical_event",
+      physicalCoLocationProven: true, preparedDepartureProven: true, ...extra });
 
   // ── K1 — the contract table is internally coherent ──────────────────────────────────────────
   record("K1", "every phase declares a coherent temporal, event-bounded or terminal resolution kind, and no quantity is owned twice", () => {
