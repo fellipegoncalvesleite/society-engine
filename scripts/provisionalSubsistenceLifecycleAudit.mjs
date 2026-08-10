@@ -11,6 +11,7 @@
 // Every fixture carries a NON-VACUITY PREDICATE and the harness relabels it `VACUOUS` and fails the
 // run when the predicate is false, so a fixture cannot pass by measuring an empty set.
 import { createServer } from "vite";
+import { prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -49,6 +50,7 @@ try {
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
   const kernel = await server.ssrLoadModule("/sim/agents/fissionLifecycleKernel.ts");
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const sub = await server.ssrLoadModule("/sim/agents/provisionalTravelSubsistence.ts");
   const ret = await server.ssrLoadModule("/sim/agents/provisionalReturnDecision.ts");
   const est = await server.ssrLoadModule("/sim/agents/provisionalEstablishment.ts");
@@ -307,34 +309,13 @@ try {
 
   function departFrom(world, lineageId, successorBandId, parentOverrides = {}) {
     const parent = { ...world.bands[donor.id], ...parentOverrides };
-    const target = Object.keys(parent.knowledge.observedTiles)
-      .map((id) => generate.getTile(world, id))
-      .filter((t) => t !== undefined && passability.isBandPassableDestination(t))
-      .sort((a, b) => String(a.id).localeCompare(String(b.id)))[0];
-    return seam.performAtomicDeparture({
-      world: {
-        ...world,
-        bands: {
-          ...world.bands,
-          [donor.id]: {
-            ...parent,
-            fissionAttempt: {
-              phase: "departure_ready", phaseEnteredDay: day0 - 5, history: ["proposed", "departure_planned"],
-              lineageId, requestedFounders: 8, targetTileId: String(target.id),
-            },
-          },
-        },
-      },
-      parentId: donor.id, today: day0,
-      residualContext: {
-        physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
-        foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
-        acuteRiskSeverity: 0, sicknessBurden: 0, careTravelBurden: 0, embodiedConditionMeasured: true,
-        ecologicalRisk: 0, ecologicalPositionMeasured: true,
-        mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1, minimumFounderRequest: 2,
-      },
-      successorBandId, lineageId,
-    });
+    // Best-KNOWN rather than alphabetically first: the founder cohort refuses ground it has barely
+    // seen, and an alphabetical pick has no relationship to how well the band knows the place.
+    const target = bestKnownTargetAtDistance(generate, passability, world, parent, 0);
+    return prepareAndDepart({
+      prep, seam, world, parentId: donor.id, today: day0, band: parentOverrides,
+      lineageId, requestedFounders: 8, targetTileId: String(target.id), successorBandId,
+    }).departure;
   }
 
   {
@@ -664,30 +645,11 @@ try {
       .filter((t) => t !== undefined && passability.isBandPassableDestination(t) &&
         String(t.id) !== String(donor.position))
       .sort((a, b) => b.resourceProfile.waterAccess - a.resourceProfile.waterAccess)[0];
-    const dep = seam.performAtomicDeparture({
-      world: {
-        ...base,
-        bands: {
-          ...base.bands,
-          [donor.id]: {
-            ...base.bands[donor.id],
-            fissionAttempt: {
-              phase: "departure_ready", phaseEnteredDay: day0 - 5, history: ["proposed", "departure_planned"],
-              lineageId: "LIN-PIPE", requestedFounders: 8, targetTileId: String(pipeTarget.id),
-            },
-          },
-        },
-      },
-      parentId: donor.id, today: day0,
-      residualContext: {
-        physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
-        foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
-        acuteRiskSeverity: 0, sicknessBurden: 0, careTravelBurden: 0, embodiedConditionMeasured: true,
-        ecologicalRisk: 0, ecologicalPositionMeasured: true,
-        mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1, minimumFounderRequest: 2,
-      },
-      successorBandId: "band:pipe:succ", lineageId: "LIN-PIPE",
-    });
+    const dep = prepareAndDepart({
+    prep, seam, world: base, parentId: donor.id, today: day0,
+    lineageId: "LIN-PIPE", requestedFounders: 8, targetTileId: String(pipeTarget.id),
+    successorBandId: "band:pipe:succ",
+  }).departure;
 
     let w = dep.ok === true ? dep.world : base;
     const trace = [];

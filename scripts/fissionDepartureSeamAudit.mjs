@@ -8,6 +8,7 @@
 // TRANSITION is truthful. They prove nothing about travel, return or stabilization, none of which
 // exist, and nothing about natural occurrence.
 import { createServer } from "vite";
+import { prepareAndDepart } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -30,6 +31,7 @@ let out;
 let ordering;
 try {
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
   const survival = await server.ssrLoadModule("/sim/agents/seasonalSurvival.ts");
 
@@ -69,6 +71,10 @@ try {
       workingAdults: cohorts.workingAdults,
       dependents: cohorts.dependents,
       elders: cohorts.elders,
+      // A REASON TO SEPARATE. The departure now runs through a real founder-cohort decision, and a
+      // group with no motive declines — correctly. This is the band's own canonical field, not a
+      // relaxed gate.
+      splitPressure: opts.splitPressure ?? 1,
     },
     hungerPressure: opts.hungerPressure ?? 0.7,
     // ── A MEASURED CAMP, because an unmeasured one is not a camp production can build ──
@@ -99,7 +105,13 @@ try {
     // `tiles` map at all is not a world, and the fixture was passing only because the seam had never
     // needed to look.
     knowledge: opts.knowledge ?? {
-      selfBandId: "parent", observedTiles: {}, compressedKnownTileSummaries: [], knownAreaSummaries: [],
+      // THE DESTINATION HAS TO BE SOMEWHERE THE BAND HAS ACTUALLY BEEN. `observedTiles` used to be
+      // empty here, which is a band being asked to accept a move to a place it has never seen — the
+      // commitment refuses that by name. One observed record, earned the way production earns them.
+      selfBandId: "parent",
+      observedTiles: { "tile:17:17": { tileId: "tile:17:17", visits: 6,
+        seasonsObserved: ["spring", "summer", "autumn", "winter"] } },
+      compressedKnownTileSummaries: [], knownAreaSummaries: [],
       knownBands: [], knownSettlements: [], knownRoutes: [], placeAttachments: [],
       tileObservationHistory: [], rumors: [],
     },
@@ -109,33 +121,46 @@ try {
     technologies: [],
     viability: opts.parentViability ?? { status: "viable" },
     fissionAttempt: opts.attempt ?? {
-      phase: "departure_ready",
+      // THE PLANNING STAGE, NOT `departure_ready`. A fixture cannot hand-build the phase any more:
+      // reaching it requires a completed preparation, which is exactly the bypass this pass closed.
+      phase: "departure_planned",
       phaseEnteredDay: 0,
-      history: ["proposed", "departure_planned"],
+      history: ["proposed"],
       lineageId: "LIN-1",
       requestedFounders: opts.requestedFounders ?? 18,
       targetTileId: "tile:17:17",
     },
   });
 
-  const RESIDUAL_SOUND = {
-    physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
-    foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
-    acuteRiskSeverity: 0, sicknessBurden: 0, careTravelBurden: 0, embodiedConditionMeasured: true,
-    ecologicalRisk: 0, ecologicalPositionMeasured: true,
-    mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1,
-    minimumFounderRequest: 2,
+  // THE WHOLE CHAIN, because half of it is no longer reachable on its own.
+  //
+  // `RESIDUAL_SOUND` is gone: there is no caller-supplied residual reading any more, so a fixture
+  // that wants a fragile or over-committed parent BUILDS one and the authority reads it off the band.
+  // `prepare` returns the preparation so a fixture can assert on a refusal from either half.
+  const worldOf = (parent, day = 100) => ({ bands: { parent }, tiles: {}, time: { day, tick: 1 } });
+
+  const prepare = (parent, day = 100, policy = {}) => prep.prepareFissionDeparture({
+    world: worldOf(parent, day), parentId: "parent", today: day,
+    policy: { minimumFounderRequest: 2, ...policy },
+  });
+
+  const depart = (parent, policy = {}, day = 100) => {
+    const preparation = prepare(parent, day, policy);
+    if (preparation.ok !== true) {
+      return { ok: false, refusal: `preparation:${preparation.refusal}`, detail: preparation.detail, preparation };
+    }
+    const result = seam.performAtomicDeparture({
+      world: preparation.world, parentId: "parent", today: day,
+      successorBandId: "successor", lineageId: "LIN-1",
+    });
+    return result.ok === true ? { ...result, preparation } : { ...result, preparation };
   };
 
-  const depart = (parent, residual = {}, day = 100) =>
-    seam.performAtomicDeparture({
-      world: { bands: { parent }, tiles: {}, time: { day, tick: 1 } },
-      parentId: "parent",
-      today: day,
-      residualContext: { ...RESIDUAL_SOUND, ...residual },
-      successorBandId: "successor",
-      lineageId: "LIN-1",
-    });
+  /** The world a departure would run against — already prepared, ready for the seam to be poked. */
+  const preparedWorld = (parent, day = 100, policy = {}) => {
+    const preparation = prepare(parent, day, policy);
+    return preparation.ok === true ? preparation.world : undefined;
+  };
 
   const fixtures = [];
   const record = (id, claim, run) => {
@@ -315,17 +340,26 @@ try {
   });
 
   // ── D12 — the seam refuses without departure_ready ──────────────────────────────────────────
-  record("D12", "a departure is refused from every phase except departure_ready", () => {
+  // The phase gate is now probed on an ALREADY PREPARED world whose attempt phase is then moved,
+  // because preparation itself only ever runs from `departure_planned`. So this asks the question it
+  // always meant to ask: with a complete, live, coherent prepared departure in hand, does the seam
+  // still refuse every phase but `departure_ready`?
+  record("D12", "a departure is refused from every phase except departure_ready, even with a complete prepared record", () => {
+    const world = preparedWorld(makeParent(NATURAL));
     const rows = {};
     for (const phase of ["proposed", "departure_planned", "abandoned", "departed"]) {
-      const r = depart(makeParent(NATURAL, { attempt: { phase, phaseEnteredDay: 0, history: [], lineageId: "LIN-1", requestedFounders: 18, targetTileId: "tile:17:17" } }));
+      const moved = { ...world, bands: { parent: { ...world.bands.parent,
+        fissionAttempt: { ...world.bands.parent.fissionAttempt, phase } } } };
+      const r = seam.performAtomicDeparture({ world: moved, parentId: "parent", today: 100,
+        successorBandId: "successor", lineageId: "LIN-1" });
       rows[phase] = r.ok === true ? "ACCEPTED" : r.refusal;
     }
     return {
       rows,
       readyAccepted: baseline.ok,
-      nonVacuous: baseline.ok === true,
-      nonVacuityNote: "departure_ready IS accepted in the same run",
+      preparedRecordPresent: world?.bands.parent.fissionAttempt.preparedDeparture !== undefined,
+      nonVacuous: baseline.ok === true && world?.bands.parent.fissionAttempt.preparedDeparture !== undefined,
+      nonVacuityNote: "departure_ready with the SAME prepared record IS accepted in the same run, so the refusals are the phase and not the record",
       passed: Object.values(rows).every((v) => v === "parent_attempt_not_departure_ready"),
     };
   });
@@ -338,28 +372,52 @@ try {
       detail: stranded.ok ? null : stranded.detail,
       nonVacuous: baseline.ok === true,
       nonVacuityNote: "a healthy parent DOES depart in the same run, so the refusal is not a broken seam",
-      passed: stranded.ok === false && stranded.refusal === "residual_authority_blocked_the_departure",
+      // The refusal moved to PREPARATION, and that is the repair rather than a relaxation: the
+      // residual authority no longer runs inside the transfer, so a parent it will not let split is
+      // stopped before a permit exists at all.
+      passed: stranded.ok === false && stranded.refusal === "preparation:residual_authority_blocked_the_departure",
     };
   });
 
   // ── D14 — a revision is APPLIED, not merely recorded ────────────────────────────────────────
   record("D14", "when the residual authority revises the request down, the smaller group is the one that leaves", () => {
-    const revised = depart(
-      makeParent({ workingAdults: 10, dependents: 26, elders: 14 }, { requestedFounders: 18 }),
-      { foodDemographicPressure: 1, chronicFoodStress: 1, chronicDeficitStreak: 12, acuteRiskSeverity: 1, sicknessBurden: 1, careTravelBurden: 1, ecologicalRisk: 0.9, mobilityCapabilityBefore: 0.1, mobilityCapabilityAfter: 0.1, minimumFounderRequest: 2 },
-    );
-    if (revised.ok !== true) return { outcome: revised.refusal, nonVacuous: true, nonVacuityNote: "n/a", passed: false };
-    const succTotal = revised.ledger.demographic.successor.workingAdults + revised.ledger.demographic.successor.dependents + revised.ledger.demographic.successor.elders;
+    // The fragility is BUILT ON THE BAND now (there is no context to assert), and the request size is
+    // SEARCHED rather than guessed — the same correction the preparation audit had to make when a
+    // hard-coded count was simply permitted and the fixture reported an honest VACUOUS.
+    const burdened = (requestedFounders) => makeParent({ workingAdults: 10, dependents: 26, elders: 14 }, {
+      requestedFounders,
+      bodyCampLogistics: {
+        behavior: { sicknessActivityPenalty: 0.9 },
+        careTravelBurden: { dependentCarryBurden: 0.9, elderTravelCaution: 0.9, pregnancyNursingBurden: 0.9,
+          sickCareBurden: 0.9, wholeBandCrossingBurden: 0.9, longMoveBurden: 0.9, coldHeatVulnerability: 0.9,
+          adultLaborAvailable: 0.1, reasonIds: [], aggregateOnly: true },
+      },
+      pressureState: { riskPressure: 0.9, fatiguePressure: 0.6 },
+    });
+    const sweep = [];
+    let revised;
+    for (let ask = 4; ask <= 24; ask += 2) {
+      const attempt = depart(burdened(ask));
+      sweep.push({ requested: ask, outcome: attempt.ok === true
+        ? (attempt.revisionApplied ? "revised" : "as_requested") : attempt.refusal });
+      if (attempt.ok === true && attempt.revisionApplied === true) { revised = attempt; break; }
+    }
+    if (revised === undefined) {
+      return { sweep, nonVacuous: false, nonVacuityNote: "no request size produced a revision on this parent", passed: false };
+    }
+    const succTotal = revised.ledger.demographic.successor.workingAdults
+      + revised.ledger.demographic.successor.dependents + revised.ledger.demographic.successor.elders;
     return {
       requested: revised.requestedFounders,
       endorsed: revised.endorsedFounders,
       revisionApplied: revised.revisionApplied,
       actualSuccessorSize: succTotal,
       conserving: seam.isDepartureLedgerConserving(revised.ledger),
+      sweep,
       nonVacuous: revised.revisionApplied === true,
       nonVacuityNote: "a revision genuinely occurred; without one this gate would prove nothing",
-      // the group that actually left must be the ENDORSED size, not the requested one
-      passed: succTotal === revised.endorsedFounders && succTotal < revised.requestedFounders && seam.isDepartureLedgerConserving(revised.ledger),
+      passed: succTotal === revised.endorsedFounders && succTotal < revised.requestedFounders
+        && seam.isDepartureLedgerConserving(revised.ledger),
     };
   });
 
@@ -415,7 +473,7 @@ try {
     const parent = makeParent(NATURAL, { attempt: { phase: "proposed", phaseEnteredDay: 0, history: [], lineageId: "LIN-1", requestedFounders: 18 } });
     const world = { bands: { parent }, time: { day: 100, tick: 1 } };
     const before = JSON.stringify(world);
-    const r = seam.performAtomicDeparture({ world, parentId: "parent", today: 100, residualContext: RESIDUAL_SOUND, successorBandId: "successor", lineageId: "LIN-1" });
+    const r = seam.performAtomicDeparture({ world, parentId: "parent", today: 100, successorBandId: "successor", lineageId: "LIN-1" });
     return {
       refusal: r.ok ? "ACCEPTED" : r.refusal,
       worldUnchanged: JSON.stringify(world) === before,

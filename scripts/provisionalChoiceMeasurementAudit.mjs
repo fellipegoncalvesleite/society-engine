@@ -11,6 +11,7 @@
 // route home is open, that a step away from home is a decision, or that the trail has any bearing on
 // it. Every assertion below is about physical fact only.
 import { createServer } from "vite";
+import { prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -38,6 +39,7 @@ try {
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
   const advance = await server.ssrLoadModule("/sim/tick/advance.ts");
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const generate = await server.ssrLoadModule("/sim/world/generate.ts");
   const passability = await server.ssrLoadModule("/sim/world/passability.ts");
   const plantStock = await server.ssrLoadModule("/sim/agents/plantStock.ts");
@@ -58,7 +60,10 @@ try {
 
   const known = Object.keys(parent.knowledge.observedTiles).map((id) => generate.getTile(base, id))
     .filter((t) => t !== undefined && passability.isBandPassableDestination(t) && String(t.id) !== String(parent.position));
-  const far = known.map((t) => ({ t, d: scoring.getGridDistance(home, t) })).sort((a, b) => b.d - a.d)[0];
+  // Best-KNOWN at distance, not farthest/nearest: the founder cohort refuses ground it has barely
+  // seen (`destination_barely_known`), which is a real decision rather than a gate to route around.
+  const bestKnownFar = bestKnownTargetAtDistance(generate, passability, base, parent, 3);
+  const far = { t: bestKnownFar, d: scoring.getGridDistance(home, bestKnownFar) };
 
   const RES = { physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
     foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
@@ -66,11 +71,10 @@ try {
     ecologicalRisk: 0, ecologicalPositionMeasured: true,
     mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1, minimumFounderRequest: 2 };
   const depart = (world, id, lineage, targetId, today) => {
-    const d = seam.performAtomicDeparture({
-      world: { ...world, bands: { ...world.bands, [parent.id]: { ...world.bands[parent.id],
-        fissionAttempt: { phase: "departure_ready", phaseEnteredDay: today - 5, history: ["proposed", "departure_planned"],
-          lineageId: lineage, requestedFounders: 8, targetTileId: String(targetId) } } } },
-      parentId: parent.id, today, residualContext: RES, successorBandId: id, lineageId: lineage });
+    const d = prepareAndDepart({
+      prep, seam, world, parentId: parent.id, today,
+      lineageId: lineage, requestedFounders: 8, targetTileId: String(targetId), successorBandId: id,
+    }).departure;
     if (d.ok !== true) throw new Error(`departure refused: ${d.refusal}`);
     return d;
   };

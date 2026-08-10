@@ -5,6 +5,7 @@
 // reintegration, demography and extinction writers. Every fixture carries a positive non-vacuity
 // predicate, and VACUOUS fails the run exactly like FAIL.
 import { createServer } from "vite";
+import { prepareAndDepart } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
@@ -56,6 +57,7 @@ try {
   const lifecycle = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
   const kernel = await server.ssrLoadModule("/sim/agents/fissionLifecycleKernel.ts");
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const subsistence = await server.ssrLoadModule("/sim/agents/provisionalTravelSubsistence.ts");
   const establishment = await server.ssrLoadModule("/sim/agents/provisionalEstablishment.ts");
   const resolver = await server.ssrLoadModule("/sim/agents/provisionalLifecycleResolver.ts");
@@ -208,30 +210,10 @@ try {
 
   const depart = (successorBandId, lineageId) => {
     const requested = Math.max(2, Math.floor(donor.demography.population * 0.35));
-    const result = seam.performAtomicDeparture({
-      world: {
-        ...base,
-        bands: {
-          ...base.bands,
-          [donor.id]: {
-            ...base.bands[donor.id],
-            fissionAttempt: {
-              phase: "departure_ready",
-              phaseEnteredDay: day0 - 5,
-              history: ["proposed", "departure_planned"],
-              lineageId,
-              requestedFounders: requested,
-              targetTileId: String(target.id),
-            },
-          },
-        },
-      },
-      parentId: donor.id,
-      today: day0,
-      residualContext: RESIDUAL,
-      successorBandId,
-      lineageId,
-    });
+    const result = prepareAndDepart({
+      prep, seam, world: base, parentId: donor.id, today: day0,
+      lineageId, requestedFounders: requested, targetTileId: String(target.id), successorBandId,
+    }).departure;
     if (result.ok !== true) throw new Error(`HARNESS HARD FAIL: departure refused: ${result.refusal}`);
     return result;
   };

@@ -13,6 +13,7 @@
 // production threshold, creates no daughter. F3 and F4 are the controls that stop this being a
 // global switch-off.
 import { createServer } from "vite";
+import { prepareAndDepart } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -41,6 +42,7 @@ try {
   const advance = await server.ssrLoadModule("/sim/tick/advance.ts");
   const demography = await server.ssrLoadModule("/sim/agents/demography.ts");
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const generate = await server.ssrLoadModule("/sim/world/generate.ts");
   const passability = await server.ssrLoadModule("/sim/world/passability.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
@@ -62,11 +64,11 @@ try {
   const SID = "band:fa:successor";
   const target = Object.keys(parent.knowledge.observedTiles).map((id) => generate.getTile(base, id))
     .filter((t) => t !== undefined && passability.isBandPassableDestination(t) && String(t.id) !== String(parent.position))[0];
-  const dep = seam.performAtomicDeparture({
-    world: { ...base, bands: { ...base.bands, [parent.id]: { ...base.bands[parent.id],
-      fissionAttempt: { phase: "departure_ready", phaseEnteredDay: day0 - 5, history: ["proposed", "departure_planned"],
-        lineageId: "LIN-FA", requestedFounders: 12, targetTileId: String(target.id) } } } },
-    parentId: parent.id, today: day0, residualContext: RES, successorBandId: SID, lineageId: "LIN-FA" });
+  const dep = prepareAndDepart({
+    prep, seam, world: base, parentId: parent.id, today: day0,
+    lineageId: "LIN-FA", requestedFounders: 12, targetTileId: String(target.id),
+    successorBandId: SID,
+  }).departure;
   if (dep.ok !== true) throw new Error(`departure refused: ${dep.refusal}`);
 
   // ── arm EVERY legacy fission precondition, not just the obvious one ──

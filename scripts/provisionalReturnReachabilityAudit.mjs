@@ -17,6 +17,7 @@
 // NON-VACUITY IS ASSERTED PER FIXTURE. A fixture whose predicate holds over an empty set is relabelled
 // VACUOUS and fails the run, so a zero here is a measured zero.
 import { createServer } from "vite";
+import { prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -50,6 +51,7 @@ try {
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
   const advance = await server.ssrLoadModule("/sim/tick/advance.ts");
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const reint = await server.ssrLoadModule("/sim/agents/provisionalReintegration.ts");
   const resolver = await server.ssrLoadModule("/sim/agents/provisionalLifecycleResolver.ts");
   const kernel = await server.ssrLoadModule("/sim/agents/fissionLifecycleKernel.ts");
@@ -87,10 +89,10 @@ try {
   const known = Object.keys(parent.knowledge.observedTiles)
     .map((id) => generate.getTile(base, id))
     .filter((t) => t !== undefined && passability.isBandPassableDestination(t) && String(t.id) !== String(parent.position));
-  const target = known
-    .map((t) => ({ t, d: distOf(base, parent.position, t.id) }))
-    .filter((x) => x.d >= 2 && x.d <= 4)
-    .sort((a, b) => b.d - a.d)[0];
+  // Best-KNOWN at distance, not farthest/nearest: the founder cohort refuses ground it has barely
+  // seen (`destination_barely_known`), which is a real decision rather than a gate to route around.
+  const bestFar = bestKnownTargetAtDistance(generate, passability, base, parent, 2);
+  const target = bestFar === undefined ? undefined : { t: bestFar, d: distOf(base, parent.position, bestFar.id) };
   if (target === undefined) throw new Error("no known passable target at distance 2..4");
 
   // Barren country, through the canonical patch store: the attempt must FAIL so the group turns for
@@ -113,22 +115,10 @@ try {
     mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1, minimumFounderRequest: 2,
   };
   const depart = (world, successorBandId, lineageId, today) => {
-    const d = seam.performAtomicDeparture({
-      world: {
-        ...world,
-        bands: {
-          ...world.bands,
-          [parent.id]: {
-            ...world.bands[parent.id],
-            fissionAttempt: {
-              phase: "departure_ready", phaseEnteredDay: today - 5, history: ["proposed", "departure_planned"],
-              lineageId, requestedFounders: 8, targetTileId: String(target.t.id),
-            },
-          },
-        },
-      },
-      parentId: parent.id, today, residualContext: RESIDUAL, successorBandId, lineageId,
-    });
+    const d = prepareAndDepart({
+      prep, seam, world, parentId: parent.id, today,
+      lineageId, requestedFounders: 8, targetTileId: String(target.t.id), successorBandId,
+    }).departure;
     if (d.ok !== true) throw new Error(`departure refused: ${d.refusal}`);
     return d;
   };

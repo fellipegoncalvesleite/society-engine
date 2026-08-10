@@ -14,6 +14,7 @@
 // never been measured: whether a provisional successor placed in a real world is still there, still
 // itself, and still unresolved-free after the real runner has had a full pass at it.
 import { createServer } from "vite";
+import { prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -38,6 +39,7 @@ try {
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
   const advance = await server.ssrLoadModule("/sim/tick/advance.ts");
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
   const resolver = await server.ssrLoadModule("/sim/agents/provisionalLifecycleResolver.ts");
   const generate = await server.ssrLoadModule("/sim/world/generate.ts");
@@ -85,12 +87,9 @@ try {
   // successor is genuinely provisional rather than at one arbitrary end-of-season instant — which
   // also removes the old risk that an assertion passes because the subject vanished.
   const homeTile = generate.getTile(world, parent.position);
-  const targetTile = Object.keys(parent.knowledge.observedTiles)
-    .map((id) => generate.getTile(world, id))
-    .filter((t) => t !== undefined && passability.isBandPassableDestination(t) &&
-      scoring.getGridDistance(homeTile, t) >= 4)
-    .sort((a, b) => scoring.getGridDistance(homeTile, b) - scoring.getGridDistance(homeTile, a) ||
-      String(a.id).localeCompare(String(b.id)))[0];
+  // Best-KNOWN at distance, not farthest/nearest: the founder cohort refuses ground it has barely
+  // seen (`destination_barely_known`), which is a real decision rather than a gate to route around.
+  const targetTile = bestKnownTargetAtDistance(generate, passability, world, parent, 4);
   if (targetTile === undefined) throw new Error("no known passable target at distance >= 4");
   const targetDistance = scoring.getGridDistance(homeTile, targetTile);
   const worldWithAttempt = {
@@ -111,21 +110,11 @@ try {
     },
   };
 
-  const departure = seam.performAtomicDeparture({
-    world: worldWithAttempt,
-    parentId: parent.id,
-    today: dayD,
-    residualContext: {
-      physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
-      foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
-      acuteRiskSeverity: 0, sicknessBurden: 0, careTravelBurden: 0, embodiedConditionMeasured: true,
-      ecologicalRisk: 0, ecologicalPositionMeasured: true,
-      mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1,
-      minimumFounderRequest: 2,
-    },
+  const departure = prepareAndDepart({
+    prep, seam, world: worldWithAttempt, parentId: parent.id, today: dayD,
+    lineageId: "LIN-REAL-1", requestedFounders: requested, targetTileId: String(targetTile.id),
     successorBandId: `${parent.id}:provisional:1`,
-    lineageId: "LIN-REAL-1",
-  });
+  }).departure;
 
   if (departure.ok !== true) throw new Error(`departure refused: ${departure.refusal} ${departure.detail ?? ""}`);
 

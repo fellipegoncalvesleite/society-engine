@@ -41,12 +41,18 @@
  * property rather than a new defect, and it is recorded in the ledger.
  */
 
-import { allocateFounderCohorts, type CohortCounts } from "./fissionFounderAllocation";
+import type { CohortCounts } from "./fissionFounderAllocation";
 import {
-  assessParentResidualWithRevision,
-  permittedFounderCount,
-  type ParentResidualInput,
-} from "./fissionParentResidualViability";
+  authorizationIsLive,
+  authorizationPermitsDeparture,
+  commitmentTermsMatchDeparture,
+  endDepartureAuthorization,
+  type DepartureTerms,
+} from "./fissionCommitment";
+import {
+  deriveCurrentPreparedFingerprint,
+  isPreparedDepartureCoherent,
+} from "./fissionDeparturePreparation";
 import { getPhaseContract, requestTransition, beginProvisionalSuccessor, type LifecycleState } from "./fissionLifecycleKernel";
 import { auditFissionLineageOwnership } from "./bandLifecycle";
 import {
@@ -70,15 +76,50 @@ import { degradeInheritedExploitationSkill } from "./exploitationSkill";
 import { inheritAdaptiveHumanForDaughter, inheritPracticalAdaptationForDaughter } from "./adaptationBoundary";
 import { deriveDaughterColor } from "./lineageColor";
 import { deriveCanonicalNutritionState, recordSupportInterval } from "./seasonalSurvival";
-import type { Band, SeasonalSupportSample, SeasonalSupportState } from "./types";
+import type { FounderDepartureAuthorization } from "./fissionCommitment";
+import type {
+  Band,
+  ConsumedDepartureProvenance,
+  SeasonalSupportSample,
+  SeasonalSupportState,
+} from "./types";
 import type { BandId, TileId, WorldTime } from "../core/types";
 import type { WorldState } from "../world/types";
 
+/**
+ * WHY THESE ARE ENUMERATED RATHER THAN COLLAPSED INTO ONE `prepared_departure_invalid`.
+ *
+ * A caller that learns only "invalid" learns nothing it can act on. A departure blocked because the
+ * permit was already spent needs a new commitment; one blocked because the parent's condition moved
+ * needs a fresh preparation on the same terms; one blocked because the cohort is no longer physically
+ * present needs a different allocation entirely. Three different next actions, so three names.
+ *
+ * `allocation_refused` and `residual_authority_blocked_the_departure` are GONE from this union, and
+ * their absence is the change: this seam no longer allocates founders or assesses residual viability,
+ * so it can no longer be refused for either reason. A refusal member that cannot be produced is a
+ * claim about behaviour that does not exist.
+ */
 export type DepartureRefusal =
   | "parent_not_found"
   | "parent_attempt_not_departure_ready"
-  | "allocation_refused"
-  | "residual_authority_blocked_the_departure"
+  /** No preparation ever ran. The old bypass: a phase alone is not a decision. */
+  | "departure_not_prepared"
+  /** The prepared record does not agree with itself, so nothing in it can be trusted. */
+  | "prepared_departure_is_incoherent"
+  /** The record carries no positive founder-cohort commitment. */
+  | "prepared_departure_carries_no_positive_commitment"
+  /** The permit references a different commitment than the record's own. */
+  | "authorization_does_not_reference_the_commitment"
+  /** Withdrawn, superseded, or already spent. */
+  | "departure_authorization_not_live"
+  /** The accepted terms are not the terms of THIS departure. */
+  | "commitment_terms_do_not_match_the_departure"
+  /** The permit's terms are not the terms of THIS departure. */
+  | "authorization_terms_do_not_match_the_departure"
+  /** The parent has changed since the assessment the acceptance rested on. */
+  | "prepared_terms_are_stale"
+  /** The exact cohort that was accepted cannot be drawn from the parent as it now stands. */
+  | "prepared_cohort_is_no_longer_present_in_the_parent"
   | "kernel_refused_the_departure_transition"
   | "ownership_invariant_violated_after_mutation"
   | "successor_violated_the_field_transfer_policy"
@@ -214,20 +255,41 @@ export interface DepartureResult {
   readonly lineageId: string;
   readonly requestedFounders: number;
   readonly endorsedFounders: number;
+  /** Whether the residual authority revised the request down — decided at PREPARATION, not here. */
   readonly revisionApplied: boolean;
-  readonly residualReasonIds: readonly string[];
+  /**
+   * The reason ids the founder cohort recorded when it accepted.
+   *
+   * Renamed from `residualReasonIds`, because this seam no longer runs the residual authority and
+   * publishing its conclusions under that name would be attributing a measurement to a reader.
+   */
+  readonly commitmentReasonIds: readonly string[];
+  /** The spent permit, so a caller can see consumption happened without re-reading the world. */
+  readonly consumedAuthorization: FounderDepartureAuthorization;
+  /** Exactly what the successor carries about the departure that produced it. */
+  readonly successorDepartureProvenance: ConsumedDepartureProvenance;
   readonly ledger: DepartureLedger;
 }
 
 export type DepartureOutcome = DepartureResult | { readonly ok: false; readonly refusal: DepartureRefusal; readonly detail?: string };
 
+/**
+ * THE REQUEST NO LONGER CARRIES A RESIDUAL READING, AND THAT IS A STRUCTURAL REPAIR.
+ *
+ * It used to take `Omit<ParentResidualInput, "parentBefore" | "allocation">` — sixteen numbers the
+ * caller reported about the band whose bodies it was asking to move. The seam assessed them, revised
+ * on them, and re-allocated on the result, so a caller could decide who left by choosing what to
+ * report. Worse, once a freshness fingerprint existed, re-sending an OLD reading was enough to make
+ * a departure assessed against a vanished parent look current.
+ *
+ * The field is removed rather than validated. There is no longer any way to express the attack: the
+ * seam derives the parent's condition from the parent, and a caller has nowhere to put a number.
+ */
 export interface DepartureRequest {
   readonly world: WorldState;
   readonly parentId: BandId;
   /** The day the departure happens. Supplied, never read from a hidden clock. */
   readonly today: number;
-  /** Everything the residual authority needs, minus the two fields this seam supplies itself. */
-  readonly residualContext: Omit<ParentResidualInput, "parentBefore" | "allocation">;
   /** Deterministic id for the successor band. Supplied so the seam invents no identity of its own. */
   readonly successorBandId: BandId;
   /** Deterministic lineage id shared by both sides. */
@@ -265,36 +327,115 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
   if (attempt === undefined || attempt.phase !== "departure_ready") {
     return { ok: false, refusal: "parent_attempt_not_departure_ready", detail: attempt?.phase ?? "no attempt" };
   }
-  const requestedFounders = attempt.requestedFounders ?? 0;
 
-  // ── 2. founder allocation — the ONE authority for who leaves. Never re-derived here. ──
+  // ── 2. THE ONE-USE PERMIT GATE — nothing below this block may move a body ──
+  //
+  // WHAT THIS REPLACES. The whole of the old steps 2 and 3 lived here: the seam read
+  // `attempt.requestedFounders`, allocated a cohort, ran the residual authority on a caller-supplied
+  // context, took its revision, and RE-ALLOCATED. So there were two answers to "who exactly is
+  // leaving" — one that a founder cohort had accepted, and one the transfer code produced while the
+  // transfer was already under way — and two moments at which the parent-side terms could change.
+  // A phase alone (`departure_ready`) was the only thing standing between a hand-built record and
+  // eleven people walking out of a camp with nothing recording that leaving had been chosen.
+  //
+  // It is now execution of an already-settled decision. Every fact below is READ from canonical
+  // state; not one is derived, revised or repaired here. The gate FAILS CLOSED — each check is a
+  // refusal, and the refusals are named for what a caller would have to do about them.
+  const prepared = attempt.preparedDeparture;
+  if (prepared === undefined) {
+    return { ok: false, refusal: "departure_not_prepared" };
+  }
+  // The record's own internal agreement, through the preparation module's exported predicate rather
+  // than re-implemented here — a second copy of the coherence rule is a second rule.
+  if (!isPreparedDepartureCoherent(prepared)) {
+    return { ok: false, refusal: "prepared_departure_is_incoherent" };
+  }
+  if (prepared.commitment.actorResolution !== "aggregate_founder_cohort" || prepared.commitment.commitmentId === "") {
+    return { ok: false, refusal: "prepared_departure_carries_no_positive_commitment" };
+  }
+  if (prepared.authorization.commitmentId !== prepared.commitment.commitmentId) {
+    return { ok: false, refusal: "authorization_does_not_reference_the_commitment" };
+  }
+
+  // THE EXACT PREPARED ALLOCATION IS THE PHYSICAL TRANSFER. Read, never recomputed from a headcount:
+  // a count cannot say whether eight founders are `{5,2,1}` or `{4,3,1}`, and the cohort that
+  // accepted accepted one of those.
+  const allocation = prepared.allocation;
   const parentBefore = cohortsOf(parent);
-  const firstAllocation = allocateFounderCohorts(parentBefore, requestedFounders);
-  if (firstAllocation.ok !== true) {
-    return { ok: false, refusal: "allocation_refused", detail: firstAllocation.refusal };
+  const terms: DepartureTerms = {
+    parentBandId: parentId,
+    lineageId: request.lineageId,
+    allocation,
+    targetTileId: prepared.commitment.targetTileId,
+  };
+  if (!commitmentTermsMatchDeparture(prepared.commitment, terms)) {
+    return { ok: false, refusal: "commitment_terms_do_not_match_the_departure" };
+  }
+  // Liveness and terms together, and neither alone. Split out from the terms check above so a spent
+  // permit and a mismatched permit are distinguishable — they mean different things.
+  if (!authorizationIsLive(prepared.authorization)) {
+    return {
+      ok: false,
+      refusal: "departure_authorization_not_live",
+      detail: `${prepared.authorization.status}${prepared.authorization.endedBecause === undefined ? "" : `:${prepared.authorization.endedBecause}`}`,
+    };
+  }
+  if (!authorizationPermitsDeparture(prepared.authorization, terms)) {
+    return { ok: false, refusal: "authorization_terms_do_not_match_the_departure" };
   }
 
-  // ── 3. parent residual viability, and it may revise the request DOWNWARD ──
-  const assessment = assessParentResidualWithRevision({
-    ...request.residualContext,
-    parentBefore,
-    allocation: firstAllocation.allocation,
-  });
-  const endorsed = permittedFounderCount(assessment, requestedFounders);
-  if (endorsed === undefined) {
-    return { ok: false, refusal: "residual_authority_blocked_the_departure", detail: assessment.blockKind };
+  // ── 2b. TRUSTED FRESHNESS — measured off the parent, never off the request ──
+  //
+  // The parent is not still between preparation and departure: the annual demographic step moves
+  // cohorts, expeditions commit and release bodies daily, nutrition and acute condition move
+  // seasonally, and `DEPARTURE_READY_MAX_DAYS` is thirty. So the reading the acceptance rested on
+  // may simply no longer describe this band.
+  //
+  // The comparison derives the CURRENT reading from the band itself and fingerprints it. There is no
+  // caller-supplied residual context to compare against and no way to introduce one, which is what
+  // makes the stale-context attack structurally impossible rather than merely tested for.
+  //
+  // STALE REFUSES; IT NEVER SILENTLY RE-FITS. Recomputing an allocation to match the parent's new
+  // condition would move people the cohort never agreed to move, under a commitment that describes a
+  // different departure. The honest outcome is a fresh preparation and, where the terms changed, a
+  // fresh acceptance. This seam does not supersede the permit itself — a refusal returns the
+  // ORIGINAL world untouched (§10), so recording the supersession belongs to the caller, through
+  // `supersedePreparedDeparture`. The consequence is stated rather than hidden: a stale record keeps
+  // a `live` permit until someone acts on it, and that permit authorizes nothing, because this gate
+  // re-derives freshness on every single attempt.
+  const currentFingerprint = deriveCurrentPreparedFingerprint(prepared, parent);
+  if (currentFingerprint !== prepared.residualInputFingerprint) {
+    return {
+      ok: false,
+      refusal: "prepared_terms_are_stale",
+      detail: `prepared ${prepared.residualInputFingerprint} != current ${currentFingerprint}`,
+    };
   }
 
-  // The endorsed count is the REVISED one whenever a revision was required. Re-allocating on it is
-  // what makes the revision real rather than recorded — a caller that departed on the original
-  // request would reintroduce exactly the stranding the residual authority exists to prevent.
-  const finalAllocation = endorsed === requestedFounders
-    ? firstAllocation
-    : allocateFounderCohorts(parentBefore, endorsed);
-  if (finalAllocation.ok !== true) {
-    return { ok: false, refusal: "allocation_refused", detail: finalAllocation.refusal };
+  // ── 2c. the accepted cohort must still be physically drawable from this parent ──
+  //
+  // Freshness and executability are different questions and both are asked. The fingerprint covers
+  // the residual authority's inputs; this covers the arithmetic the transfer itself depends on. A
+  // parent that cannot supply the exact cohort is REFUSED rather than trimmed — trimming is the
+  // silent re-fit one line up, wearing a smaller name.
+  const successorCohorts = allocation.successor;
+  const parentAfterCohorts = allocation.parentRemainder;
+  if (
+    successorCohorts.workingAdults + parentAfterCohorts.workingAdults !== parentBefore.workingAdults ||
+    successorCohorts.dependents + parentAfterCohorts.dependents !== parentBefore.dependents ||
+    successorCohorts.elders + parentAfterCohorts.elders !== parentBefore.elders
+  ) {
+    return {
+      ok: false,
+      refusal: "prepared_cohort_is_no_longer_present_in_the_parent",
+      detail:
+        `prepared ${successorCohorts.workingAdults}/${successorCohorts.dependents}/${successorCohorts.elders}` +
+        ` + ${parentAfterCohorts.workingAdults}/${parentAfterCohorts.dependents}/${parentAfterCohorts.elders}` +
+        ` != now ${parentBefore.workingAdults}/${parentBefore.dependents}/${parentBefore.elders}`,
+    };
   }
-  const allocation = finalAllocation.allocation;
+
+  const requestedFounders = prepared.requestedFounders;
 
   // ── 4. the kernel gates the transition itself ──
   const attemptState: LifecycleState = { phase: attempt.phase, phaseEnteredDay: attempt.phaseEnteredDay, history: attempt.history };
@@ -316,11 +457,30 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
   // `recomputeDemographicCounts` is NOT called on either side. That function is the mechanism of L1:
   // it re-derives cohorts from a population total at fixed ratios (dependents 35%, elders 10%), which
   // is what manufactured dependents in 0 of 2 measured natural fissions. The parent's remainder comes
-  // from `allocateFounderCohorts`, which computed it by subtraction, and is written verbatim.
-  const successorCohorts = allocation.successor;
-  const parentAfterCohorts = allocation.parentRemainder;
-
+  // from `allocateFounderCohorts`, which computed it by subtraction, and is written verbatim — and
+  // §2c above has already proven those two lines still add up to this parent.
   const worldPopulationBefore = measureWorldPopulation(world);
+
+  // ── 5b. THE PERMIT IS SPENT, IN THE SAME VALUE THAT MOVES THE BODIES ──
+  //
+  // Computed here and written into `parentAfter` below, so consumption and transfer are the same
+  // object. There is no intermediate state in which the permit reads `consumed_by_departure` and the
+  // bodies have not moved, and none in which they have moved and it does not — every remaining
+  // validation refuses by RETURNING, and a return abandons this whole value along with `nextWorld`.
+  //
+  // `endDepartureAuthorization` refuses a non-live record and there is no reopen, so a second
+  // departure on the same permit is impossible by construction rather than by a re-check.
+  const consumedAuthorization = endDepartureAuthorization(
+    prepared.authorization,
+    "physical_departure_consumed_it",
+    today,
+  );
+  if (consumedAuthorization === undefined) {
+    // Unreachable: liveness was proven at the gate and nothing between then and here can end a
+    // permit. Named rather than asserted, because an impossible branch that throws is worse than one
+    // that refuses.
+    return { ok: false, refusal: "departure_authorization_not_live", detail: prepared.authorization.status };
+  }
 
   const parentAfter: Band = {
     ...parent,
@@ -341,8 +501,16 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       lineageId: request.lineageId,
       requestedFounders,
       endorsedFounders: allocation.allocatedFounders,
-      reasonIds: assessment.reasonIds,
+      // The reason ids the COHORT recorded when it accepted, not a residual assessment run here.
+      // This seam no longer runs that authority, so restating its conclusions would be quoting a
+      // measurement it did not take.
+      reasonIds: prepared.commitment.reasonIds,
       targetTileId: attempt.targetTileId,
+      // The prepared record is retained with its permit now SPENT. Retained rather than cleared
+      // because it is the parent's own account of what it agreed to and what became of that
+      // agreement; spent rather than removed because "this was used" and "this never existed" are
+      // different histories.
+      preparedDeparture: { ...prepared, authorization: consumedAuthorization },
     },
     daughterBandIds: parent.daughterBandIds.includes(request.successorBandId)
       ? parent.daughterBandIds
@@ -409,6 +577,25 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       // not the parent's current position, which the travellers have no channel to observe.
       departureTileId: parent.position,
       trail: [],
+      // ── WHAT THIS GROUP CAN PROVE ABOUT WHERE IT CAME FROM, WITHOUT ASKING THE PARENT ──
+      //
+      // A future stabilization has to establish that THIS successor originated from THAT positive
+      // commitment. Reconstructing it later from "same parent, similar founder count" is not proof:
+      // a parent may attempt more than one separation, and two attempts of eleven are
+      // indistinguishable under that rule. So the link is written once, here, where it is true.
+      //
+      // Five fields, and deliberately not the whole `PreparedFissionDeparture` — that record holds a
+      // permit, and a permit is an authority to move bodies. Copying it would hand a group that has
+      // just departed a second authorization to depart, recreating the exact defect this gate
+      // exists to close through the provenance meant to describe it. The successor needs history,
+      // not permission, and `authorizationStatus` states that the permission is spent.
+      departureProvenance: {
+        commitmentId: prepared.commitment.commitmentId,
+        commitmentDecisionDay: prepared.commitment.decisionDay,
+        departedOnDay: today,
+        founders: prepared.commitment.founders,
+        authorizationStatus: "consumed_by_departure",
+      },
     },
 
     // ── EXACT_COHORT_TRANSFER, and SHARED_HISTORICAL_FACT for location ──
@@ -645,8 +832,10 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
     lineageId: request.lineageId,
     requestedFounders,
     endorsedFounders: allocation.allocatedFounders,
-    revisionApplied: endorsed !== requestedFounders,
-    residualReasonIds: assessment.reasonIds,
+    revisionApplied: prepared.endorsedFounders !== prepared.requestedFounders,
+    commitmentReasonIds: prepared.commitment.reasonIds,
+    consumedAuthorization,
+    successorDepartureProvenance: successor.provisionalSuccessor?.departureProvenance as ConsumedDepartureProvenance,
     ledger,
   };
 }

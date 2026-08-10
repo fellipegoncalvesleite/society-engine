@@ -17,6 +17,7 @@
 // A reader is NOT classified safe because the tested seed happened to take no action. Every "no
 // change" line is reported next to the control band's line for the same field on the same days.
 import { createServer } from "vite";
+import { prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -42,6 +43,9 @@ try {
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
   const advance = await server.ssrLoadModule("/sim/tick/advance.ts");
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const generate = await server.ssrLoadModule("/sim/world/generate.ts");
+  const passability = await server.ssrLoadModule("/sim/world/passability.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
 
   let world = runner.initSimWorld({ kind: "map2" }, SEED);
@@ -54,32 +58,17 @@ try {
 
   const dayD = Number(world.time.day ?? 0);
   const requested = Math.max(2, Math.floor(parent.demography.population * 0.35));
-  const departure = seam.performAtomicDeparture({
-    world: {
-      ...world,
-      bands: {
-        ...world.bands,
-        [parent.id]: {
-          ...parent,
-          fissionAttempt: {
-            phase: "departure_ready", phaseEnteredDay: dayD - 5, history: ["proposed", "departure_planned"],
-            lineageId: "LIN-ADM-1", requestedFounders: requested, targetTileId: String(parent.position),
-          },
-        },
-      },
-    },
-    parentId: parent.id,
-    today: dayD,
-    residualContext: {
-      physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
-      foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
-      acuteRiskSeverity: 0, sicknessBurden: 0, careTravelBurden: 0, embodiedConditionMeasured: true,
-      ecologicalRisk: 0, ecologicalPositionMeasured: true,
-      mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1, minimumFounderRequest: 2,
-    },
+  // A REAL destination at distance, chosen from the tiles the parent knows best. The fixture used to
+  // name the parent's own tile, which is a journey of zero days: the group arrived instantly, failed
+  // to establish, walked home and reintegrated well inside the window, so the days it spent as a
+  // live provisional group — the only days this audit's contract is about — were very few.
+  const admTarget = bestKnownTargetAtDistance(generate, passability, world, parent, 4);
+  if (admTarget === undefined) throw new Error("no known passable target at distance >= 4");
+  const departure = prepareAndDepart({
+    prep, seam, world: world, parentId: parent.id, today: dayD,
+    lineageId: "LIN-ADM-1", requestedFounders: requested, targetTileId: String(admTarget.id),
     successorBandId: `${parent.id}:provisional:1`,
-    lineageId: "LIN-ADM-1",
-  });
+  }).departure;
   if (departure.ok !== true) throw new Error(`departure refused: ${departure.refusal}`);
 
   const succId = String(departure.successorId);
@@ -119,12 +108,39 @@ try {
   const succSeries = [observe(w.bands[succId])];
   const ctrlSeries = [observe(w.bands[controlId])];
   const days = [Number(w.time.day ?? 0)];
+  // SAMPLING STOPS WHEN THE ENTITY STOPS BEING A LIVE PROVISIONAL SUCCESSOR, AND THAT IS A REPAIR.
+  //
+  // The contract under test is "while this entity is a live provisional successor, ordinary-band
+  // systems must not admit it". Sampling past its resolution measures the RESOLVER, not an ordinary
+  // system: a reintegrated group is removed exactly once, which zeroes its cohorts and gives it a
+  // terminal viability — and the old loop counted both as an ordinary system having claimed it.
+  //
+  // This only became visible now because the departure runs the canonical chain, which produces a
+  // world in which the group actually resolves inside the window. The claim was never true of the
+  // days after resolution; before, the window simply never reached them.
+  let liveDays = 0;
   for (let i = 0; i < OBSERVE_DAYS; i += 1) {
     w = advance.advanceWorldByDays(w, 1);
+    const band = w.bands[succId];
+    if (band === undefined || !lc.isProvisionalSuccessor(band) || lc.isTerminalProvisionalPhase?.(band.provisionalSuccessor?.phase) === true) break;
     days.push(Number(w.time.day ?? 0));
-    succSeries.push(observe(w.bands[succId]));
+    succSeries.push(observe(band));
     ctrlSeries.push(observe(w.bands[controlId]));
+    liveDays += 1;
   }
+
+  // Every distinct tile the successor stood on, and the travel authority's own record of the ground
+  // it walked. `trail` is written only by `provisionalTravel`, so a position absent from it (and from
+  // the departure tile the group started on) was reached by something with no authority to move it.
+  const finalSuccessor = w.bands[succId];
+  const occupiedPositions = [...new Set(succSeries.filter((e) => e !== null).map((e) => e.position))];
+  const walkedGround = new Set([
+    ...(finalSuccessor?.provisionalSuccessor?.trail ?? []).map(String),
+    String(finalSuccessor?.provisionalSuccessor?.departureTileId ?? ""),
+    String(finalSuccessor?.position ?? ""),
+  ]);
+  const accountedPositions = occupiedPositions.filter((id) => walkedGround.has(id));
+  const unaccountedPositions = occupiedPositions.filter((id) => !walkedGround.has(id));
 
   /** Count how many days a field's value differed from the previous day. */
   const changeCount = (series, field) => {
@@ -176,14 +192,22 @@ try {
   const ctrlPop = changeCount(ctrlSeries, "population");
 
   const claims = {
+    // THE CLAIM IS UPDATED, AND THE UPDATE IS STATED. Its old form asserted the position must NEVER
+    // change, on the grounds that "travel does not exist yet". Travel exists: `provisionalTravel.ts`
+    // is the ONE writer permitted to move a provisional body, and it records every step it takes in
+    // the group's own trail. So the truthful claim is not that the group never moves — it is that
+    // every tile it stood on was put there by that authority and by nothing else.
     no_free_movement: {
-      question: "did the successor's position ever change while it has no travel authority?",
+      question: "was every position the successor occupied recorded by the provisional travel authority's own trail?",
       successorPositionChanges: posChanges.changes,
       controlPositionChanges: changeCount(ctrlSeries, "position").changes,
+      positionsOccupied: occupiedPositions.length,
+      positionsAccountedForByTheTrail: accountedPositions.length,
+      unaccountedPositions,
       detail: posChanges.at,
-      holds: posChanges.changes === 0,
+      holds: unaccountedPositions.length === 0,
       note:
-        "Travel does not exist yet, so ANY position change would be movement nothing authorised. The control's count says whether bands in this world move at all over the observed span.",
+        "A position change is legitimate ONLY if the travel authority recorded that step. Anything else would be an ordinary movement path having claimed a provisional group. The control's count says whether bands in this world move at all over the observed span.",
     },
     demographic_cadence: {
       question: "how many times did the successor's population change over the observed span?",
@@ -245,7 +269,9 @@ try {
       "A real warmed map2 world with a provisional successor created by the production seam, advanced ONE DAY AT A TIME through the real advanceWorldByDays. Every observable is sampled after every day. An ordinary established band in the same world is sampled with the identical instrument on the identical days, so a zero on the successor can be distinguished from a quiet world.",
     seed: SEED,
     warmDays: WARM_DAYS,
-    observedDays: OBSERVE_DAYS,
+    observedDays: liveDays,
+    observeDaysRequested: OBSERVE_DAYS,
+    observationStoppedBecause: liveDays < OBSERVE_DAYS ? "the successor resolved and is no longer a live provisional group" : "window elapsed",
     successorId: succId,
     controlBandId: String(controlId),
     successorAtBirth: succSeries[0],

@@ -9,6 +9,7 @@
 // tile it left and finds nobody must NOT be reintegrated, must not be retargeted at a position it has
 // no way to know, and must not quietly disappear.
 import { createServer } from "vite";
+import { prepareAndDepart } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -42,6 +43,7 @@ try {
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
   const advance = await server.ssrLoadModule("/sim/tick/advance.ts");
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const reint = await server.ssrLoadModule("/sim/agents/provisionalReintegration.ts");
   const travel = await server.ssrLoadModule("/sim/agents/provisionalTravel.ts");
   const generate = await server.ssrLoadModule("/sim/world/generate.ts");
@@ -65,30 +67,11 @@ try {
 
   const dayD = Number(world.time.day ?? 0);
   const requested = Math.max(2, Math.floor(parent.demography.population * 0.35));
-  const departure = seam.performAtomicDeparture({
-    world: {
-      ...world,
-      bands: {
-        ...world.bands,
-        [parent.id]: {
-          ...parent,
-          fissionAttempt: {
-            phase: "departure_ready", phaseEnteredDay: dayD - 5, history: ["proposed", "departure_planned"],
-            lineageId: "LIN-REIN-1", requestedFounders: requested, targetTileId: String(targetTile.id),
-          },
-        },
-      },
-    },
-    parentId: parent.id, today: dayD,
-    residualContext: {
-      physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
-      foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
-      acuteRiskSeverity: 0, sicknessBurden: 0, careTravelBurden: 0, embodiedConditionMeasured: true,
-      ecologicalRisk: 0, ecologicalPositionMeasured: true,
-      mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1, minimumFounderRequest: 2,
-    },
-    successorBandId: `${parent.id}:provisional:1`, lineageId: "LIN-REIN-1",
-  });
+  const departure = prepareAndDepart({
+    prep, seam, world: world, parentId: parent.id, today: dayD,
+    lineageId: "LIN-REIN-1", requestedFounders: requested, targetTileId: String(targetTile.id),
+    successorBandId: `${parent.id}:provisional:1`,
+  }).departure;
   if (departure.ok !== true) throw new Error(`departure refused: ${departure.refusal}`);
   const succId = String(departure.successorId);
   const departureTile = String(departure.world.bands[succId].position);

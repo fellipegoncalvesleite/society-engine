@@ -12,6 +12,7 @@
 // objects and running the world: an in-place write throws in module strict mode, so a silent
 // cross-band mutation becomes a loud failure instead of a belief.
 import { createServer } from "vite";
+import { prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -57,6 +58,7 @@ try {
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
   const advance = await server.ssrLoadModule("/sim/tick/advance.ts");
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const kernel = await server.ssrLoadModule("/sim/agents/fissionLifecycleKernel.ts");
   const resolver = await server.ssrLoadModule("/sim/agents/provisionalLifecycleResolver.ts");
   const policy = await server.ssrLoadModule("/sim/agents/fissionFieldTransferPolicy.ts");
@@ -161,36 +163,16 @@ try {
   // correctly handed straight back. The arm measured a lifecycle that never travelled. A real target at
   // distance restores the journey this fixture exists to observe.
   const exitHome = generate.getTile(world, parent.position);
-  const exitTarget = Object.keys(parent.knowledge.observedTiles)
-    .map((id) => generate.getTile(world, id))
-    .filter((t) => t !== undefined && passability.isBandPassableDestination(t) &&
-      Math.abs(t.coord.x - exitHome.coord.x) + Math.abs(t.coord.y - exitHome.coord.y) >= 4)
-    .sort((a, b) => String(a.id).localeCompare(String(b.id)))[0];
+  // Best-KNOWN at distance, not farthest/nearest: the founder cohort refuses ground it has barely
+  // seen (`destination_barely_known`), which is a real decision rather than a gate to route around.
+  void exitHome;
+  const exitTarget = bestKnownTargetAtDistance(generate, passability, world, parent, 4);
   if (exitTarget === undefined) throw new Error("no known passable target at distance >= 4 for the exit arm");
-  const departure = seam.performAtomicDeparture({
-    world: {
-      ...world,
-      bands: {
-        ...world.bands,
-        [parent.id]: {
-          ...parent,
-          fissionAttempt: {
-            phase: "departure_ready", phaseEnteredDay: dayD - 5, history: ["proposed", "departure_planned"],
-            lineageId: "LIN-EXIT-1", requestedFounders: requested, targetTileId: String(exitTarget.id),
-          },
-        },
-      },
-    },
-    parentId: parent.id, today: dayD,
-    residualContext: {
-      physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
-      foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
-      acuteRiskSeverity: 0, sicknessBurden: 0, careTravelBurden: 0, embodiedConditionMeasured: true,
-      ecologicalRisk: 0, ecologicalPositionMeasured: true,
-      mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1, minimumFounderRequest: 2,
-    },
-    successorBandId: `${parent.id}:provisional:1`, lineageId: "LIN-EXIT-1",
-  });
+  const departure = prepareAndDepart({
+    prep, seam, world: world, parentId: parent.id, today: dayD,
+    lineageId: "LIN-EXIT-1", requestedFounders: requested, targetTileId: String(exitTarget.id),
+    successorBandId: `${parent.id}:provisional:1`,
+  }).departure;
   if (departure.ok !== true) throw new Error(`departure refused: ${departure.refusal} ${departure.detail ?? ""}`);
   const succId = String(departure.successorId);
 

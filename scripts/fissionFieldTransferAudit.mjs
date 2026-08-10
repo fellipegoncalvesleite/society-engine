@@ -15,6 +15,7 @@
 // VACUOUS and fails the run, because "the successor inherited no place memory" is worthless evidence
 // when the parent had none either.
 import { createServer } from "vite";
+import { prepareAndDepart } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -78,6 +79,7 @@ try {
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
   const advance = await server.ssrLoadModule("/sim/tick/advance.ts");
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const policy = await server.ssrLoadModule("/sim/agents/fissionFieldTransferPolicy.ts");
   const demography = await server.ssrLoadModule("/sim/agents/demography.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
@@ -166,33 +168,13 @@ try {
 
   const dayD = Number(world.time.day ?? 0);
   const requested = Math.max(2, Math.floor(parent.demography.population * 0.35));
-  const makeRequest = (successorBandId, lineageId) => ({
-    world: {
-      ...world,
-      bands: {
-        ...world.bands,
-        [parent.id]: {
-          ...parent,
-          fissionAttempt: {
-            phase: "departure_ready", phaseEnteredDay: dayD - 5, history: ["proposed", "departure_planned"],
-            lineageId, requestedFounders: requested, targetTileId: String(parent.position),
-          },
-        },
-      },
-    },
-    parentId: parent.id,
-    today: dayD,
-    residualContext: {
-      physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
-      foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
-      acuteRiskSeverity: 0, sicknessBurden: 0, careTravelBurden: 0, embodiedConditionMeasured: true,
-      ecologicalRisk: 0, ecologicalPositionMeasured: true,
-      mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1, minimumFounderRequest: 2,
-    },
-    successorBandId, lineageId,
-  });
+  // The whole canonical chain, because a hand-built `departure_ready` record no longer departs.
+  const makeDeparture = (successorBandId, lineageId) => prepareAndDepart({
+    prep, seam, world, parentId: parent.id, today: dayD,
+    lineageId, requestedFounders: requested, targetTileId: String(parent.position), successorBandId,
+  }).departure;
 
-  const departure = seam.performAtomicDeparture(makeRequest(`${parent.id}:provisional:1`, "LIN-XFER-1"));
+  const departure = makeDeparture(`${parent.id}:provisional:1`, "LIN-XFER-1");
   if (departure.ok !== true) throw new Error(`departure refused: ${departure.refusal} ${departure.detail ?? ""}`);
   const successor = departure.world.bands[departure.successorId];
   const transfer = departure.ledger.transfer;
@@ -332,7 +314,7 @@ try {
   );
 
   // ── T12 — determinism ──
-  const again = seam.performAtomicDeparture(makeRequest(`${parent.id}:provisional:1`, "LIN-XFER-1"));
+  const again = makeDeparture(`${parent.id}:provisional:1`, "LIN-XFER-1");
   if (again.ok !== true) throw new Error("second departure refused");
   const digest = (b) => JSON.stringify(b, (k, v) => (v === undefined ? "<undefined>" : v));
   record(

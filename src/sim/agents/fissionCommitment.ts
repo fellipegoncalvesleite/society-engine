@@ -30,12 +30,17 @@
  * binding: parent, lineage, the represented allocation, the destination, the day, and the reasons
  * that were live when it was taken.
  *
- * WHAT THIS MODULE DELIBERATELY DOES NOT DO IN THIS PASS.
+ * WHAT IS NOW WIRED, AND WHAT STILL IS NOT.
  *
- * Nothing calls it. `performAtomicDeparture` is unchanged and still gates on phase alone; the
- * residual assessment still runs inside the seam; no natural proposal path exists; stabilization
- * still has zero production writers. Wiring it into departure is the next slice, deliberately
- * separated so the authority can be inspected before it is able to block or authorize body movement.
+ * WIRED: `prepareFissionDeparture` takes the decision and opens the permit; `performAtomicDeparture`
+ * refuses to move a body without a live permit whose terms match the departure. The paragraph that
+ * stood here — "nothing calls it, the seam gates on phase alone" — described the state of two passes
+ * ago and is corrected rather than left standing.
+ *
+ * STILL NOT: no NATURAL path reaches any of it. No demographic step, annual fission, band decision or
+ * runner path proposes a separation or prepares a departure, so a commitment only ever exists because
+ * a controlled caller asked for one. Stabilization still has zero production writers, and this
+ * historical record is explicitly NOT a stabilization gate — see `authorizationPermitsDeparture`.
  */
 
 import { deriveBandTendencies, TENDENCY_INFLUENCE_CAP } from "./bandTendency";
@@ -686,12 +691,11 @@ export function endDepartureAuthorization(
  * Does a CURRENT permit allow THIS departure?
  *
  * Both halves, and neither alone: the permit must still be in force, and the terms must be the ones
- * that were accepted. This is the function a departure gate would call.
+ * that were accepted.
  *
- * NOT WIRED THIS PASS. `performAtomicDeparture` does not call it and still gates on phase alone,
- * because the endorsed allocation does not exist until the residual assessment inside the seam has
- * already run — so there is nothing truthful for a commitment to bind to that early yet. Moving that
- * assessment ahead of the seam is the next slice, and this function is what it will connect.
+ * WIRED. `performAtomicDeparture` calls this before it moves a body, alongside
+ * `commitmentTermsMatchDeparture` and a freshness check derived from the parent itself. A
+ * hand-built `departure_ready` record is no longer sufficient to move anybody.
  */
 export function authorizationPermitsDeparture(
   authorization: FounderDepartureAuthorization,

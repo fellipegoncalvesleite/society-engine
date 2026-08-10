@@ -1,0 +1,366 @@
+{
+  "generatedAt": "2026-08-10T22:51:02.321Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "parentBandId": "band:varied-river-mid",
+  "targetTileId": "tile:108:54",
+  "summary": {
+    "total": 16,
+    "passed": 16,
+    "failed": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "A_a_hand_built_departure_ready_record_moves_nobody",
+      "claim": "an attempt constructed directly at `departure_ready`, with a founder count and a band-known destination and no preparation behind it, is REFUSED BY NAME — it used to move eleven people with nothing recording that leaving had been chosen",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "refusal": "departure_not_prepared",
+        "worldUnchanged": true,
+        "successorCreated": false,
+        "parentPopulation": 34
+      }
+    },
+    {
+      "id": "B_a_prepared_departure_transfers_exactly_the_accepted_cohort_and_spends_the_permit",
+      "claim": "the exact prepared allocation moves, the parent loses exactly those three cohort lines, world population is conserved, and the one-use permit ends `consumed_by_departure` in the same mutation",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "preparedCohort": {
+          "workingAdults": 6,
+          "dependents": 2,
+          "elders": 0
+        },
+        "transferredCohort": {
+          "workingAdults": 6,
+          "dependents": 2,
+          "elders": 0
+        },
+        "parentBefore": {
+          "workingAdults": 19,
+          "dependents": 11,
+          "elders": 4
+        },
+        "parentAfter": {
+          "workingAdults": 13,
+          "dependents": 9,
+          "elders": 4
+        },
+        "worldPopulation": {
+          "before": 235,
+          "after": 235
+        },
+        "permitStatus": "consumed_by_departure"
+      }
+    },
+    {
+      "id": "C_the_revised_cohort_is_what_physically_moves",
+      "claim": "when the residual authority revised the request downward, the bodies that leave are the ENDORSED allocation — not the original request and not a count the transfer recomputed for itself",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "requested": 20,
+        "endorsed": 19,
+        "preparedCohort": {
+          "workingAdults": 11,
+          "dependents": 6,
+          "elders": 2
+        },
+        "transferredCohort": {
+          "workingAdults": 11,
+          "dependents": 6,
+          "elders": 2
+        },
+        "revisionSweep": [
+          {
+            "requested": 6,
+            "outcome": "as_requested"
+          },
+          {
+            "requested": 8,
+            "outcome": "as_requested"
+          },
+          {
+            "requested": 10,
+            "outcome": "as_requested"
+          },
+          {
+            "requested": 12,
+            "outcome": "as_requested"
+          },
+          {
+            "requested": 14,
+            "outcome": "as_requested"
+          },
+          {
+            "requested": 16,
+            "outcome": "as_requested"
+          },
+          {
+            "requested": 18,
+            "outcome": "as_requested"
+          },
+          {
+            "requested": 20,
+            "outcome": "revised"
+          }
+        ]
+      }
+    },
+    {
+      "id": "D_a_mutated_cohort_line_is_refused_without_mutation",
+      "claim": "moving one dependent between the successor and the remainder makes the record disagree with itself and with the accepted commitment; the departure is refused and the world is returned untouched",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "refusal": "prepared_departure_is_incoherent",
+        "worldUnchanged": true
+      }
+    },
+    {
+      "id": "E_a_withdrawn_superseded_or_spent_permit_moves_nobody",
+      "claim": "every terminal permit status refuses the departure by name and creates no successor — liveness is the authority, and there is no reopen",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "withdrawn": {
+          "status": "withdrawn_before_departure",
+          "refusal": "departure_authorization_not_live",
+          "successorCreated": false
+        },
+        "superseded": {
+          "status": "superseded_by_revised_terms",
+          "refusal": "departure_authorization_not_live",
+          "successorCreated": false
+        },
+        "consumed": {
+          "status": "consumed_by_departure",
+          "refusal": "departure_authorization_not_live",
+          "successorCreated": false
+        }
+      }
+    },
+    {
+      "id": "F_the_same_commitment_cannot_move_bodies_twice",
+      "claim": "re-running the departure on the resulting world is refused, and it is still refused when the attempt phase is forced back to `departure_ready` — so the barrier is the SPENT PERMIT and not merely the terminal phase",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "withTerminalPhase": "parent_attempt_not_departure_ready",
+        "withPhaseForcedBack": "departure_authorization_not_live",
+        "secondSuccessorCreated": false
+      }
+    },
+    {
+      "id": "G_a_parent_that_moved_after_preparation_cannot_depart_on_the_old_terms",
+      "claim": "cohorts, away bodies, nutrition and embodied condition each move on their own real cadence and each is read off the band; moving any ONE of them makes the prepared terms stale and refuses the departure",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "arms": {
+          "cohortsAged": "prepared_terms_are_stale",
+          "bodiesLeftOnAParty": "prepared_terms_are_stale",
+          "nutritionMoved": "prepared_terms_are_stale",
+          "acuteRiskAppeared": "prepared_terms_are_stale"
+        },
+        "note": "the unmodified world departs successfully in the same run (fixture B), so these are refusals and not a broken seam"
+      }
+    },
+    {
+      "id": "H_an_old_residual_reading_cannot_be_resent_to_fake_freshness",
+      "claim": "the departure request declares no residual field at all, so a caller that attaches its stale reading under any name is ignored and the departure is still refused as stale — the check reads the band, and the band is the only thing that can answer for it",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "refusalWithSmuggledReading": "prepared_terms_are_stale",
+        "seamDeclaresAnyResidualField": false,
+        "seamMentionsResidualContextOnlyInProse": false,
+        "preparationDeclaresAResidualContextField": false,
+        "preparationDerivesItsOwnReading": true,
+        "note": "the extra request fields are ignored by the type and by the implementation; the refusal comes from the DERIVED reading disagreeing with the stored fingerprint"
+      }
+    },
+    {
+      "id": "I_facts_the_assessment_never_read_do_not_invalidate_a_prepared_departure",
+      "claim": "renaming the band, recording a trip and recording a decision leave the prepared terms fresh, while a newly PREPARED party — which is committed labour and a real residual input — correctly makes them stale",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "arms": {
+          "nameChanged": "DEPARTED",
+          "tripHistoryGrew": "DEPARTED",
+          "decisionRecorded": "DEPARTED",
+          "preparedPartyAppeared": "prepared_terms_are_stale"
+        },
+        "note": "the discriminating control is the last row: without it, three DEPARTEDs would be consistent with a fingerprint that measures nothing"
+      }
+    },
+    {
+      "id": "J_a_late_validation_refusal_leaves_the_permit_unspent_and_nobody_moved",
+      "claim": "a departure that passes the whole gate and is then refused by the field-transfer policy returns the ORIGINAL world: no successor, the parent's cohorts untouched, and the permit still `live` — there is no state in which a permit is spent and no bodies moved",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "refusal": "successor_violated_the_field_transfer_policy",
+        "detail": "color:identical_to_the_parent",
+        "worldUnchanged": true,
+        "permitStatusAfterRefusal": "live",
+        "successorCreated": false
+      }
+    },
+    {
+      "id": "K_the_successor_can_prove_which_commitment_produced_it_without_holding_a_permit",
+      "claim": "the successor carries the commitment id, its decision day, the departure day, the exact represented cohort and the spent status — enough to connect lineage, commitment, allocation and physical departure without consulting the parent — and carries NO live permit and no prepared record",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "provenance": {
+          "commitmentId": "commit:0178155cf65f8538",
+          "commitmentDecisionDay": 2100,
+          "departedOnDay": 2101,
+          "founders": {
+            "workingAdults": 6,
+            "dependents": 2,
+            "elders": 0
+          },
+          "authorizationStatus": "consumed_by_departure"
+        },
+        "bytes": 195,
+        "successorHoldsAPreparedRecord": false,
+        "successorHoldsAnAttempt": false
+      }
+    },
+    {
+      "id": "L_no_live_permit_survives_an_abandoned_attempt",
+      "claim": "explicit abandonment ends the permit `withdrawn_before_departure` while keeping the commitment as a true historical fact; and a timeout that ended the phase WITHOUT touching the permit is still refused, so the two barriers are independent",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "permitAfterAbandonment": "withdrawn_before_departure",
+        "commitmentRetained": true,
+        "departureAfterAbandonment": "parent_attempt_not_departure_ready",
+        "kernelTimeoutTarget": "abandoned",
+        "departureAfterTimeoutWithPermitUntouched": "parent_attempt_not_departure_ready",
+        "productionCallersOfResolveTimeout": [],
+        "resolverHandlesTheParentAttempt": false,
+        "statedGap": "no production adapter resolves the parent attempt's timeout; `departure_ready -> abandoned` is declared in the contract table and driven by nothing"
+      }
+    },
+    {
+      "id": "M_every_demographic_line_is_conserved_exactly",
+      "claim": "world population and all three cohort lines are read from the RESULTING world and balance exactly — never restated from before, and never re-derived at fixed ratios",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "before": {
+          "pop": 235,
+          "workingAdults": 19,
+          "dependents": 11,
+          "elders": 4
+        },
+        "after": {
+          "pop": 235,
+          "workingAdults": 19,
+          "dependents": 11,
+          "elders": 4
+        },
+        "ledgerConserving": true
+      }
+    },
+    {
+      "id": "N_the_same_prepared_input_produces_a_byte_identical_result",
+      "claim": "preparing and departing twice from the same canonical world produces identical ledgers, provenance, permits and cohorts",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "identical": true,
+        "bytes": 2232
+      }
+    },
+    {
+      "id": "O_ordinary_ecology_still_cannot_reach_any_of_this",
+      "claim": "no demographic, runner, decision or annual-fission path calls the preparation writer or the departure seam, and `createDaughterBand` remains the only route ordinary ecology can take",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "naturalFiles": [
+          {
+            "file": "src/sim/agents/demography.ts",
+            "reachesTheSeam": false,
+            "reachesPreparation": false
+          },
+          {
+            "file": "src/sim/tick/advance.ts",
+            "reachesTheSeam": false,
+            "reachesPreparation": false
+          },
+          {
+            "file": "src/sim/rules/bandDecision.ts",
+            "reachesTheSeam": false,
+            "reachesPreparation": false
+          },
+          {
+            "file": "src/sim/runner/simRunner.ts",
+            "reachesTheSeam": false,
+            "reachesPreparation": false
+          }
+        ],
+        "legacyPathIntact": true
+      }
+    },
+    {
+      "id": "P_negative_controls_each_defect_breaks_a_named_fixture",
+      "claim": "removing the prepared-departure gate, trusting the stored fingerprint instead of re-deriving it, transferring a cohort other than the prepared one, and failing to consume the permit each make a named fixture fail — and production is restored byte-identically",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "controls": [
+          {
+            "id": "P1_remove_the_prepared_departure_gate",
+            "applied": true,
+            "fixture": "A",
+            "brokenBy": "threw instead of refusing: Cannot read properties of undefined (reading 'allocation')",
+            "controlHolds": true
+          },
+          {
+            "id": "P2_trust_the_stored_fingerprint_instead_of_re_deriving_it",
+            "applied": true,
+            "fixture": "G",
+            "brokenBy": "a stale parent DEPARTED",
+            "controlHolds": true
+          },
+          {
+            "id": "P3_transfer_a_cohort_other_than_the_one_that_was_accepted",
+            "applied": true,
+            "fixture": "B",
+            "movedCohort": {
+              "workingAdults": 13,
+              "dependents": 9,
+              "elders": 4
+            },
+            "preparedCohort": {
+              "workingAdults": 6,
+              "dependents": 2,
+              "elders": 0
+            },
+            "controlHolds": true
+          },
+          {
+            "id": "P4_fail_to_consume_the_permit",
+            "applied": true,
+            "fixture": "F",
+            "firstDeparture": "DEPARTED",
+            "permitAfterFirst": "live",
+            "replayedDeparture": "DEPARTED AGAIN",
+            "controlHolds": true
+          }
+        ],
+        "productionRestoredByteIdentically": true,
+        "sha256": "e15b222bb406853b8c2f5fa0cef3f8d0e407764526a059b6e6a13f8fee138c99"
+      }
+    }
+  ]
+}

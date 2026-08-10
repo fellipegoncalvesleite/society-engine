@@ -53,11 +53,36 @@ try {
   const wellKnown = knownTargets[0];
   const unknownTile = Object.keys(base.tiles).find((id) => parent.knowledge.observedTiles[id] === undefined);
 
-  const RES = { physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
-    foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
-    acuteRiskSeverity: 0, sicknessBurden: 0, careTravelBurden: 0, embodiedConditionMeasured: true,
-    ecologicalRisk: 0, ecologicalPositionMeasured: true,
-    mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1, minimumFounderRequest: 2 };
+  // THE RESIDUAL READING IS NO LONGER SOMETHING A FIXTURE CAN ASSERT.
+  //
+  // These sixteen numbers used to be passed in as `residualContext`, which meant a fixture could
+  // describe a parent that did not exist. `deriveCurrentParentResidualInput` now reads them off the
+  // band, so a fixture that wants a fragile parent has to BUILD one — which is also what makes the
+  // freshness fixtures below meaningful: changing a real field is the only way to move the reading.
+  const POLICY = { minimumFounderRequest: 2 };
+
+  // Prior fragility, expressed through the canonical fields each residual input is read from.
+  const fragileState = (level) => ({
+    seasonalSupport: {
+      ...parent.seasonalSupport,
+      currentSeasonSupport: { ...parent.seasonalSupport?.currentSeasonSupport, foodStress: level },
+      rolling4SeasonSupport: 1 - level,
+      rolling8SeasonRawSupport: 1 - level,
+      chronicDeficitStreak: Math.round(level * 8),
+      deficitSeasonsLast8: Math.round(level * 8),
+      seasonalRecoveryStreak: 0,
+    },
+    acuteRisk: { ...(parent.acuteRisk ?? { bandId: parent.id, episodes: [] }),
+      activeEffect: { activityEfficiencyPenalty: level, extraSeasonalStress: level,
+        mortalityRiskBump: 0, movementCautionBump: 0, knowledgeUpdateWeight: 0, recoverySeasons: 4 } },
+    bodyCampLogistics: { ...(parent.bodyCampLogistics ?? {}),
+      behavior: { ...(parent.bodyCampLogistics?.behavior ?? {}), sicknessActivityPenalty: level },
+      careTravelBurden: { ...(parent.bodyCampLogistics?.careTravelBurden ?? {}),
+        dependentCarryBurden: level, elderTravelCaution: level, pregnancyNursingBurden: level,
+        sickCareBurden: level, wholeBandCrossingBurden: level, longMoveBurden: level,
+        coldHeatVulnerability: level, adultLaborAvailable: 1 - level, reasonIds: [], aggregateOnly: true } },
+    pressureState: { ...(parent.pressureState ?? {}), riskPressure: level },
+  });
 
   const cohortsOf = (b) => ({
     workingAdults: b.demography.workingAdults, dependents: b.demography.dependents, elders: b.demography.elders });
@@ -84,8 +109,8 @@ try {
     };
     return { ...base, bands: { ...base.bands, [parent.id]: band } };
   };
-  const run = (over = {}, res = {}) => prep.prepareFissionDeparture({
-    world: planned(over), parentId: parent.id, today: day0, residualContext: { ...RES, ...res } });
+  const run = (over = {}, policy = {}) => prep.prepareFissionDeparture({
+    world: planned(over), parentId: parent.id, today: day0, policy: { ...POLICY, ...policy } });
 
   const ordinary = run();
   const preparedAttempt = ordinary.ok === true ? ordinary.world.bands[parent.id].fissionAttempt : undefined;
@@ -121,12 +146,17 @@ try {
   // the residual authority simply permitted it, so B and C reported VACUOUS — an honest empty test
   // rather than a false pass. The sweep pairs a narrowed tolerance (heavy prior fragility) with
   // ascending request sizes and takes the first that genuinely produces a downward revision.
-  const FRAGILE = { foodDemographicPressure: 0.9, chronicFoodStress: 0.9, chronicDeficitStreak: 8,
-    acuteRiskSeverity: 0.9, sicknessBurden: 0.9, careTravelBurden: 0.9, ecologicalRisk: 0.9 };
+  //
+  // The fragility is now BUILT ON THE BAND rather than asserted in a context struct. `fragileState`
+  // deliberately leaves `mortalityRiskBump` and `movementCautionBump` at zero, because those two are
+  // the only acute-risk terms the COMMITMENT reads: a fragile parent must narrow the residual
+  // authority's tolerance without also making the founder cohort decline, or the fixture would be
+  // measuring the wrong refusal.
+  const FRAGILE = { band: fragileState(0.9) };
   const revisionSweep = [];
   let revisedRun; let bigRequest = 0;
   for (let ask = 6; ask <= Math.max(6, parent.demography.workingAdults + 6); ask += 2) {
-    const attempt = run({ requestedFounders: ask }, FRAGILE);
+    const attempt = run({ requestedFounders: ask, ...FRAGILE });
     revisionSweep.push({ requested: ask,
       outcome: attempt.ok === true ? (attempt.founderRequestWasRevisedDownward ? "revised" : "as_requested") : attempt.refusal,
       endorsed: attempt.ok === true ? attempt.prepared.endorsedFounders : null });
@@ -181,11 +211,18 @@ try {
       note: "both allocations exist; the fixture asserts the commitment tracks the endorsed one" });
 
   // ══ D — RESIDUAL BLOCKED ══
-  const blocked = run({ requestedFounders: 8 }, {
-    mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 0,
-    foodDemographicPressure: 1, chronicFoodStress: 1, chronicDeficitStreak: 8,
-    acuteRiskSeverity: 1, sicknessBurden: 1, careTravelBurden: 1, ecologicalRisk: 1,
-    minimumFounderRequest: 8 });
+  // A HARD PHYSICAL BLOCK, BUILT ON THE BAND, so the claim "at every permitted size" is exact.
+  //
+  // Prior fragility alone could not produce this and should not: the residual authority's own
+  // guarantee is that a departure changing nothing is never refused however fragile the parent, so a
+  // fixture that expected fragility to block would have been asserting the opposite of a property
+  // this family deliberately built. What DOES block absolutely is a residual with no labour left at
+  // camp — here because the whole workforce is already committed to away parties, which CORRECTION-34C
+  // records as a legitimate state. It is invariant to founder count, so the revision search has
+  // nothing to find.
+  const allAwayBand = { expeditions: [{ id: "audit:committed:1", phase: "operating",
+    partyWorkers: parent.demography.workingAdults, nonWorkingPartyPeople: 0 }] };
+  const blocked = run({ requestedFounders: 8, band: allAwayBand });
   const blockedWorld = blocked.ok === true ? blocked.world : planned({ requestedFounders: 8 });
   record("D_a_blocked_residual_produces_no_commitment_no_permit_and_no_departure_ready",
     "when the parent residual authority blocks the departure at every permitted size, preparation refuses by name and writes nothing at all",
@@ -305,20 +342,19 @@ try {
   //
   // Repeated failures write nothing, and repeated successes REPLACE rather than append, so canonical
   // history cannot grow with attempts.
-  let churn = planned();
+  // Same construction as D — a hard block no founder count can escape — so all forty runs refuse.
+  let churn = planned({ band: allAwayBand });
   for (let i = 0; i < 40; i += 1) {
     const failed = prep.prepareFissionDeparture({
       world: churn, parentId: parent.id, today: day0 + i,
-      residualContext: { ...RES, mobilityCapabilityAfter: 0, minimumFounderRequest: 8,
-        foodDemographicPressure: 1, chronicFoodStress: 1, chronicDeficitStreak: 8,
-        acuteRiskSeverity: 1, sicknessBurden: 1, careTravelBurden: 1, ecologicalRisk: 1 } });
+      policy: POLICY });
     if (failed.ok === true) churn = failed.world;
   }
   const churnAttempt = churn.bands[parent.id].fissionAttempt;
   let repeatedSuccess = planned();
   for (let i = 0; i < 10; i += 1) {
     const okRun = prep.prepareFissionDeparture({
-      world: repeatedSuccess, parentId: parent.id, today: day0, residualContext: RES });
+      world: repeatedSuccess, parentId: parent.id, today: day0, policy: POLICY });
     if (okRun.ok === true) repeatedSuccess = { ...okRun.world,
       bands: { ...okRun.world.bands, [parent.id]: { ...okRun.world.bands[parent.id],
         fissionAttempt: { ...okRun.world.bands[parent.id].fissionAttempt, phase: "departure_planned" } } } };
@@ -341,16 +377,19 @@ try {
   //
   // The parent changes underneath a prepared departure through a REAL load-bearing input — its own
   // cohorts, which the annual demographic step moves. The fingerprint must notice.
-  const currentInputFor = (band, alloc) => ({ ...RES,
-    parentBefore: cohortsOf(band), allocation: alloc });
-  const freshStillMatches = prepared === undefined ? false : prep.preparedTermsAreStillFresh(
-    prepared, currentInputFor(parent, prepared.allocation));
+  // `preparedTermsAreStillFresh` now takes the BAND. There is no residual struct to hand it, so a
+  // fixture that wants to move the reading has to move a real field on a real band — which is the
+  // whole point of the change and why these three arms are now genuine.
+  const freshStillMatches = prepared === undefined ? false : prep.preparedTermsAreStillFresh(prepared, parent);
   const agedParent = { ...parent, demography: { ...parent.demography,
     workingAdults: parent.demography.workingAdults - 1, elders: parent.demography.elders + 1 } };
-  const staleDetected = prepared === undefined ? false : prep.preparedTermsAreStillFresh(
-    prepared, currentInputFor(agedParent, prepared.allocation)) === false;
-  const awayChanged = prepared === undefined ? false : prep.preparedTermsAreStillFresh(
-    prepared, { ...currentInputFor(parent, prepared.allocation), physicallyAwayWorkers: 3, physicallyAwayPeople: 3 }) === false;
+  const staleDetected = prepared === undefined ? false
+    : prep.preparedTermsAreStillFresh(prepared, agedParent) === false;
+  const awayParent = { ...parent, expeditions: [...(parent.expeditions ?? []),
+    { ...(parent.expeditions?.[0] ?? {}), id: "audit:away:1", phase: "operating",
+      partyWorkers: 3, nonWorkingPartyPeople: 0 }] };
+  const awayChanged = prepared === undefined ? false
+    : prep.preparedTermsAreStillFresh(prepared, awayParent) === false;
   record("L_a_parent_that_changes_after_preparation_is_detected_as_stale",
     "the prepared terms verify as fresh against the parent they were assessed on, and as STALE the moment a real load-bearing input moves — cohort composition (annual demography) or bodies away from camp (daily expeditions)",
     freshStillMatches === true && staleDetected === true && awayChanged === true,
@@ -435,21 +474,32 @@ try {
     true,
     { withoutClaim: kernelWithout.ok === false ? kernelWithout.rejection : "ACCEPTED",
       withClaim: kernelWith.ok === true ? kernelWith.state.phase : "REFUSED",
-      note: "production still allows a hand-built departure_ready record to reach performAtomicDeparture directly; closing that is the next slice" });
+      note: "the departure seam additionally refuses a `departure_ready` record carrying no prepared departure; see the gated-departure audit's fixture A" });
 
   // ══ P — PRODUCTION REACHABILITY ══
   const natural = ["src/sim/agents/demography.ts", "src/sim/tick/advance.ts",
     "src/sim/rules/bandDecision.ts", "src/sim/runner/simRunner.ts"]
     .map((f) => ({ file: f, mentions: /prepareFissionDeparture|fissionDeparturePreparation/.test(readFileSync(f, "utf8")) }));
   const seamSource = readFileSync("src/sim/agents/fissionDepartureSeam.ts", "utf8");
-  record("P_the_preparation_writer_has_no_natural_callers_and_departure_is_unchanged",
-    "no demographic, runner, decision or annual-fission path reaches the preparation writer, and `performAtomicDeparture` still requires no permit — this pass builds the authority, not its reachability",
+  // THE SECOND HALF OF THIS FIXTURE IS INVERTED, AND THE INVERSION IS THE POINT.
+  //
+  // It used to assert that the departure seam does NOT mention the permit or the prepared terms —
+  // a truthful record of the gap this family had not yet closed. That gap is closed, so the same
+  // assertion now has to say the opposite: the seam MUST consume both, or the old bypass is back.
+  // Natural reachability is unchanged and is still asserted to be zero.
+  const seamConsumesPreparedTerms =
+    /authorizationPermitsDeparture/.test(seamSource) && /preparedDeparture/.test(seamSource);
+  const seamStillTakesResidualContext = /residualContext/.test(seamSource);
+  record("P_the_preparation_writer_has_no_natural_callers_and_departure_now_requires_it",
+    "no demographic, runner, decision or annual-fission path reaches the preparation writer, while `performAtomicDeparture` now consumes the prepared terms and the permit and no longer accepts a caller-supplied residual reading at all",
     natural.every((n) => n.mentions === false) &&
-      !/authorizationPermitsDeparture|preparedDeparture/.test(seamSource),
+      seamConsumesPreparedTerms === true &&
+      seamStillTakesResidualContext === false,
     true,
     { naturalCallers: natural,
-      departureSeamMentionsPermitOrPreparedTerms: /authorizationPermitsDeparture|preparedDeparture/.test(seamSource),
-      statedGap: "a hand-built departure_ready record can still reach performAtomicDeparture with no commitment behind it" });
+      departureSeamConsumesPermitAndPreparedTerms: seamConsumesPreparedTerms,
+      departureSeamStillAcceptsCallerResidualContext: seamStillTakesResidualContext,
+      statedGap: "the controlled path is truthful; it is NOT natural — nothing in ordinary ecology proposes, prepares or executes a separation" });
 
   const failing = fixtures.filter((f) => f.verdict === "FAIL");
   const vacuous = fixtures.filter((f) => f.verdict === "VACUOUS");

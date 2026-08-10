@@ -28,7 +28,12 @@ import type { VisibleNatureState } from "./visibleNature";
 import type { ProbeRecencyMemory } from "./probeMemory";
 import type { InvestigationOutcomeRingEntry, PendingInvestigationRecord } from "./pendingInvestigation";
 import type { FounderAllocation } from "./fissionFounderAllocation";
-import type { FounderCohortCommitment, FounderDepartureAuthorization } from "./fissionCommitment";
+import type {
+  FounderCohortBinding,
+  FounderCohortCommitment,
+  FounderDepartureAuthorization,
+} from "./fissionCommitment";
+import type { ParentResidualPolicy } from "./fissionResidualMeasurement";
 import type { ResourceScoutDebug, ScoutLearningRingEntry } from "./resourceScout";
 import type { PlantUseTestEvent, PlantUseTestRingEntry } from "./plantUseTesting";
 import type {
@@ -120,6 +125,54 @@ export interface PreparedFissionDeparture {
    * subset, so no load-bearing field can be forgotten.
    */
   readonly residualInputFingerprint: string;
+  /**
+   * The one part of the residual reading that is NOT a fact about the parent, kept so the fingerprint
+   * can be RECONSTRUCTED rather than trusted.
+   *
+   * Every other residual input is derived from the band by `fissionResidualMeasurement`, so a later
+   * departure can re-read them and see whether they moved. `minimumFounderRequest` cannot be derived
+   * from anything — it is the smallest departure the caller was willing to accept — so without it
+   * stored, the departure seam could not rebuild the same closed input and the comparison would be
+   * against a different struct. Storing it is what keeps the fingerprint exhaustive over
+   * `keyof ParentResidualInput` at BOTH ends instead of only at the writing end.
+   */
+  readonly residualPolicy: ParentResidualPolicy;
+}
+
+/**
+ * ROADMAP ITEM 4 — WHAT THE SUCCESSOR CARRIES OUT OF THE DEPARTURE THAT ACTUALLY HAPPENED.
+ *
+ * WHY THE SUCCESSOR NEEDS ANY OF THIS. A future stabilization authority must be able to prove that
+ * THIS group came from THAT positive commitment. Reconstructing it later from "same parent, similar
+ * founder count" is not proof — a parent can attempt more than one separation over its life, and two
+ * attempts of eleven founders are indistinguishable under that rule. So the link is carried, once,
+ * at the moment it is true.
+ *
+ * WHY IT IS FIVE FIELDS AND NOT THE WHOLE `PreparedFissionDeparture`. The prepared record contains a
+ * LIVE ONE-USE PERMIT, and a permit is an authority to move bodies. Copying it onto the successor
+ * would hand a group that has already departed a second authorization to depart — the exact double-
+ * departure this pass exists to make impossible, recreated by the provenance that was supposed to
+ * describe it. What the successor needs is historical: which commitment, which exact cohort, when it
+ * was decided, when it was executed, and that the permit is SPENT.
+ *
+ * It is also why this cannot simply be read off the parent later: the parent's attempt is terminal
+ * after departure and a future cleanup may clear it, while the successor's own account of where it
+ * came from must survive as long as the successor does.
+ */
+export interface ConsumedDepartureProvenance {
+  /** The commitment this departure executed. The join key to the parent's historical record. */
+  readonly commitmentId: string;
+  /** The day the cohort accepted these terms. */
+  readonly commitmentDecisionDay: number;
+  /** The day the bodies actually moved. Never equal to the decision day by construction. */
+  readonly departedOnDay: number;
+  /** The exact represented cohort — the same three integers the commitment bound to. */
+  readonly founders: FounderCohortBinding;
+  /**
+   * Literal, not a boolean: this record exists only because a permit was spent, and naming the
+   * status means a reader never has to infer "it must have been consumed, because here we are".
+   */
+  readonly authorizationStatus: "consumed_by_departure";
 }
 
 /** Bounded, all-numeric. Only written on acceptance, where every term was measurable. */
@@ -156,6 +209,15 @@ export interface FissionLifecycleRecord {
    * it happened and produced nothing.
    */
   readonly preparedDeparture?: PreparedFissionDeparture;
+  /**
+   * Bounded historical evidence of the departure that actually happened.
+   *
+   * Written ONLY on the SUCCESSOR's record, by the atomic departure seam, in the same world mutation
+   * that moves the bodies — so its presence and the transfer are the same event. The parent's attempt
+   * never carries it: the parent keeps the prepared record, which holds the spent permit, and one
+   * fact recorded twice in two shapes is how the two sides start to disagree.
+   */
+  readonly departureProvenance?: ConsumedDepartureProvenance;
   /**
    * The tile the founders physically left from, retained so a return has a destination it LEGITIMATELY
    * KNOWS. It is the last place this group actually saw its parent — deliberately NOT the parent's

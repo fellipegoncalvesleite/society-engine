@@ -33,16 +33,17 @@
  * and the decision stays `assessFounderCohortCommitment`'s. This module orders them and records what
  * they jointly produced.
  *
- * WHAT IT DELIBERATELY DOES NOT DO.
+ * WHAT IT DOES NOT DO.
  *
- * IT MOVES NO BODIES. `performAtomicDeparture` is untouched by this pass and still gates on phase
- * alone, so a hand-built `departure_ready` record can still reach it directly without any of this.
- * That gap is real, it is stated rather than papered over, and closing it is the next slice's whole
- * job. What exists now is a canonical path capable of producing the commitment-backed state that
- * gate will require.
+ * IT MOVES NO BODIES. It settles terms; `performAtomicDeparture` executes them. The paragraph that
+ * stood here said the seam "still gates on phase alone, so a hand-built `departure_ready` record can
+ * still reach it" — that gap is CLOSED: the seam now requires the record this module writes, refuses
+ * a permit that is not live, and re-derives the parent's condition to check the terms are still
+ * fresh. The statement is corrected rather than left standing.
  *
- * It also has ZERO natural callers. No demographic step, annual fission, band decision or runner
- * path reaches it; `createDaughterBand` remains the only route ordinary ecology can take.
+ * It still has ZERO natural callers. No demographic step, annual fission, band decision or runner
+ * path reaches it; `createDaughterBand` remains the only route ordinary ecology can take. The
+ * controlled path is now truthful; it is not yet natural, and those are different claims.
  */
 
 import { allocateFounderCohorts, type CohortCounts, type FounderAllocation } from "./fissionFounderAllocation";
@@ -59,6 +60,7 @@ import {
   type FounderCommitmentRefusal,
 } from "./fissionCommitment";
 import { requestTransition, type LifecycleState } from "./fissionLifecycleKernel";
+import { deriveCurrentParentResidualInput, type ParentResidualPolicy } from "./fissionResidualMeasurement";
 import type { Band, PreparedCommitmentEvidence, PreparedFissionDeparture } from "./types";
 import type { WorldState } from "../world/types";
 import type { BandId } from "../core/types";
@@ -110,14 +112,19 @@ export interface DeparturePreparationRequest {
   /** The day preparation happens. Supplied, never read from a hidden clock. */
   readonly today: number;
   /**
-   * Everything the residual authority needs, minus the two fields this module derives itself.
+   * THE ONLY RESIDUAL INPUT A CALLER SUPPLIES, AND IT IS NOT A FACT ABOUT THE PARENT.
    *
-   * The same shape `performAtomicDeparture` already takes, and for the same reason: the residual
-   * input is a closed struct, so a caller cannot smuggle world truth in through an object it
-   * happened to have. Deriving these from the band is a later natural writer's job, and it will be
-   * named there rather than invented here.
+   * This used to be `Omit<ParentResidualInput, "parentBefore" | "allocation">` — sixteen measurements
+   * the caller reported about the band it was asking to split. It was an interim seam API, and it was
+   * load-bearing in the wrong direction: the freshness fingerprint is built from these values, so a
+   * caller that re-sent a stale reading could make a departure assessed against a parent that no
+   * longer exists look current. Every measurement now comes from
+   * `deriveCurrentParentResidualInput(band, ...)`, so the reading and the parent cannot disagree.
+   *
+   * What survives is the policy: how small a departure the caller will still accept after a
+   * downward revision. Nothing about the parent could produce that, and it cannot go stale.
    */
-  readonly residualContext: Omit<ParentResidualInput, "parentBefore" | "allocation">;
+  readonly policy: ParentResidualPolicy;
 }
 
 const cohortsOf = (band: Band): CohortCounts => ({
@@ -173,7 +180,16 @@ export function deriveResidualInputFingerprint(input: ParentResidualInput): stri
 }
 
 /**
- * Do these prepared terms still describe the parent as it stands now?
+ * Do these prepared terms still describe the parent AS IT STANDS NOW?
+ *
+ * IT TAKES THE BAND, NOT A REPORTED READING, AND THAT IS THE WHOLE POINT. An earlier form of this
+ * function accepted a `ParentResidualInput` from its caller, which made it possible to satisfy the
+ * check by handing back the same numbers preparation was given. The band is the only argument now,
+ * so the comparison is always against what the band actually holds and there is no surface through
+ * which a caller can assert otherwise.
+ *
+ * The stored allocation and policy are read from the prepared record rather than re-decided, because
+ * this asks whether the CONDITIONS moved, not whether the terms should be different.
  *
  * The freshness architecture, stated plainly: preparation and departure are separated by up to
  * `DEPARTURE_READY_MAX_DAYS`, and every load-bearing input moves on its own cadence — cohorts at the
@@ -186,14 +202,21 @@ export function deriveResidualInputFingerprint(input: ParentResidualInput): stri
  * STALE MEANS SUPERSEDED, NEVER SILENTLY ADJUSTED. The terms the cohort accepted are the terms it
  * accepted; if the parent has moved underneath them the answer is a new decision, not a quiet
  * re-fit. `supersedePreparedDeparture` is how that is recorded.
- *
- * NOT WIRED THIS PASS — `performAtomicDeparture` does not call this yet.
  */
-export function preparedTermsAreStillFresh(
-  prepared: PreparedFissionDeparture,
-  currentResidualInput: ParentResidualInput,
-): boolean {
-  return prepared.residualInputFingerprint === deriveResidualInputFingerprint(currentResidualInput);
+export function preparedTermsAreStillFresh(prepared: PreparedFissionDeparture, band: Band): boolean {
+  return prepared.residualInputFingerprint === deriveCurrentPreparedFingerprint(prepared, band);
+}
+
+/**
+ * The fingerprint the parent WOULD produce right now, for the terms already prepared.
+ *
+ * Exported so the departure seam can report both sides of a staleness refusal instead of only the
+ * verdict — a refusal that cannot say what moved is a refusal nobody can act on.
+ */
+export function deriveCurrentPreparedFingerprint(prepared: PreparedFissionDeparture, band: Band): string {
+  return deriveResidualInputFingerprint(
+    deriveCurrentParentResidualInput(band, prepared.allocation, prepared.residualPolicy),
+  );
 }
 
 /** True only while the prepared departure can still authorize the transfer it was prepared for. */
@@ -258,12 +281,14 @@ export function prepareFissionDeparture(request: DeparturePreparationRequest): D
     return { ok: false, refusal: "allocation_refused", detail: candidate.refusal };
   }
 
-  // ── 2. residual assessment, and any downward revision it demands ──
-  const residualInputForCandidate: ParentResidualInput = {
-    ...request.residualContext,
-    parentBefore,
-    allocation: candidate.allocation,
-  };
+  // ── 2. residual assessment of the parent AS IT STANDS, and any downward revision it demands ──
+  //
+  // The reading comes from the band, not from the caller. See `fissionResidualMeasurement`.
+  const residualInputForCandidate: ParentResidualInput = deriveCurrentParentResidualInput(
+    parent,
+    candidate.allocation,
+    request.policy,
+  );
   const assessment = assessParentResidualWithRevision(residualInputForCandidate);
   const endorsed = permittedFounderCount(assessment, requestedFounders);
   if (endorsed === undefined) {
@@ -291,7 +316,7 @@ export function prepareFissionDeparture(request: DeparturePreparationRequest): D
   const finalAssessment =
     endorsed === requestedFounders
       ? assessment
-      : assessParentResidualWithRevision({ ...request.residualContext, parentBefore, allocation });
+      : assessParentResidualWithRevision(deriveCurrentParentResidualInput(parent, allocation, request.policy));
   const consequence = deriveParentSeparationConsequence(finalAssessment);
 
   // ── 5. the positive decision — actually taken, never manufactured ──
@@ -356,11 +381,12 @@ export function prepareFissionDeparture(request: DeparturePreparationRequest): D
     commitment: decision.commitment,
     commitmentEvidence,
     authorization,
-    residualInputFingerprint: deriveResidualInputFingerprint({
-      ...request.residualContext,
-      parentBefore,
-      allocation,
-    }),
+    // Fingerprinted against the FINAL allocation, so the reading stored is the one describing the
+    // departure that will actually be attempted rather than the candidate that was revised away.
+    residualInputFingerprint: deriveResidualInputFingerprint(
+      deriveCurrentParentResidualInput(parent, allocation, request.policy),
+    ),
+    residualPolicy: request.policy,
   };
 
   const preparedWorld: WorldState = {

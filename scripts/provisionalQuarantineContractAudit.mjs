@@ -20,6 +20,7 @@
 // ill and dying is not a quarantine, it is a freezer — and a group that cannot die cannot fail, which
 // is defect 5 restored under a new name.
 import { createServer } from "vite";
+import { prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -71,6 +72,7 @@ try {
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
   const advance = await server.ssrLoadModule("/sim/tick/advance.ts");
   const seam = await server.ssrLoadModule("/sim/agents/fissionDepartureSeam.ts");
+  const prep = await server.ssrLoadModule("/sim/agents/fissionDeparturePreparation.ts");
   const kernel = await server.ssrLoadModule("/sim/agents/fissionLifecycleKernel.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
   const generate = await server.ssrLoadModule("/sim/world/generate.ts");
@@ -98,39 +100,17 @@ try {
   // the target is a real place at distance and the window is however long the group is genuinely
   // provisional, which is what the window was always supposed to be.
   const quarHome = generate.getTile(world, parent.position);
-  const quarTarget = Object.keys(parent.knowledge.observedTiles)
-    .map((id) => generate.getTile(world, id))
-    .filter((t) => t !== undefined && passability.isBandPassableDestination(t) &&
-      scoring.getGridDistance(quarHome, t) >= 4)
-    .sort((a, b) => scoring.getGridDistance(quarHome, b) - scoring.getGridDistance(quarHome, a) ||
-      String(a.id).localeCompare(String(b.id)))[0];
+  // The BEST-KNOWN tile at distance, not the farthest. Sorting by distance picked ground the band had
+  // barely seen, and the founder cohort refused it by name (`destination_barely_known`) — a real
+  // decision, not a gate to work around, so the fixture asks for a departure a group would take.
+  const quarTarget = bestKnownTargetAtDistance(generate, passability, world, parent, 4);
+  void quarHome;
   if (quarTarget === undefined) throw new Error("no known passable target at distance >= 4");
-  const departure = seam.performAtomicDeparture({
-    world: {
-      ...world,
-      bands: {
-        ...world.bands,
-        [parent.id]: {
-          ...parent,
-          fissionAttempt: {
-            phase: "departure_ready", phaseEnteredDay: dayD - 5, history: ["proposed", "departure_planned"],
-            lineageId: "LIN-QUAR-1", requestedFounders: requested, targetTileId: String(quarTarget.id),
-          },
-        },
-      },
-    },
-    parentId: parent.id,
-    today: dayD,
-    residualContext: {
-      physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
-      foodDemographicPressure: 0, chronicFoodStress: 0, chronicDeficitStreak: 0, nutritionMeasured: true,
-      acuteRiskSeverity: 0, sicknessBurden: 0, careTravelBurden: 0, embodiedConditionMeasured: true,
-      ecologicalRisk: 0, ecologicalPositionMeasured: true,
-      mobilityCapabilityBefore: 1, mobilityCapabilityAfter: 1, minimumFounderRequest: 2,
-    },
+  const departure = prepareAndDepart({
+    prep, seam, world: world, parentId: parent.id, today: dayD,
+    lineageId: "LIN-QUAR-1", requestedFounders: requested, targetTileId: String(quarTarget.id),
     successorBandId: `${parent.id}:provisional:1`,
-    lineageId: "LIN-QUAR-1",
-  });
+  }).departure;
   if (departure.ok !== true) throw new Error(`departure refused: ${departure.refusal} ${departure.detail ?? ""}`);
   const succId = String(departure.successorId);
 
