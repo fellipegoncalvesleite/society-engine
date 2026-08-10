@@ -40,6 +40,7 @@ try {
   const generate = await server.ssrLoadModule("/sim/world/generate.ts");
   const passability = await server.ssrLoadModule("/sim/world/passability.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
+  const residual = await server.ssrLoadModule("/sim/agents/fissionParentResidualViability.ts");
 
   const base = advance.advanceWorldByDays(runner.initSimWorld({ kind: "map2" }, SEED), WARM_DAYS);
   const day0 = Number(base.time.day ?? 0);
@@ -87,13 +88,41 @@ try {
   const ask = (band, over = {}) => commitment.assessFounderCohortCommitment({
     band, allocation: over.allocation ?? A8, lineageId: over.lineageId ?? "LIN-FC",
     targetTileId: over.targetTileId ?? wellKnown.id,
-    residualReasonIds: over.residualReasonIds, today: over.today ?? day0,
+    parentSeparationConsequence: over.parentSeparationConsequence, today: over.today ?? day0,
   });
+
+  // ── the parent-side consequence comes from the authority that owns it ──
+  //
+  // Every arm below runs the REAL `assessParentResidualWithRevision` and publishes its result
+  // through the REAL `deriveParentSeparationConsequence`. Nothing here hand-builds a damage figure,
+  // so a change to the residual authority's own arithmetic moves these fixtures with it.
+  const residualInput = (over = {}) => ({
+    parentBefore: cohortsOf(parent),
+    allocation: over.allocation ?? A8,
+    physicallyAwayPeople: 0, physicallyAwayWorkers: 0, preparedCommitmentWorkers: 0,
+    foodDemographicPressure: over.foodDemographicPressure ?? 0,
+    chronicFoodStress: over.chronicFoodStress ?? 0,
+    chronicDeficitStreak: over.chronicDeficitStreak ?? 0,
+    nutritionMeasured: over.nutritionMeasured ?? true,
+    acuteRiskSeverity: over.acuteRiskSeverity ?? 0,
+    sicknessBurden: over.sicknessBurden ?? 0,
+    careTravelBurden: over.careTravelBurden ?? 0,
+    embodiedConditionMeasured: over.embodiedConditionMeasured ?? true,
+    ecologicalRisk: over.ecologicalRisk ?? 0,
+    ecologicalPositionMeasured: over.ecologicalPositionMeasured ?? true,
+    mobilityCapabilityBefore: over.mobilityCapabilityBefore ?? 1,
+    mobilityCapabilityAfter: over.mobilityCapabilityAfter ?? 1,
+    minimumFounderRequest: over.minimumFounderRequest ?? 2,
+  });
+  const consequenceOf = (over = {}) => {
+    const assessment = residual.assessParentResidualWithRevision(residualInput(over));
+    return { assessment, consequence: residual.deriveParentSeparationConsequence(assessment) };
+  };
 
   const accepted = ask(willing);
   const declined = ask(unwilling);
   const declinedInjured = ask(hurt, {
-    residualReasonIds: ["residual_labour_thin", "residual_care_burden", "residual_mobility_loss", "residual_food_thin"] });
+    parentSeparationConsequence: consequenceOf({ mobilityCapabilityAfter: 0.4 }).consequence });
 
   // ══ A — a positive commitment is constructible and carries its provenance ══
   record("A_a_positive_commitment_is_constructible_with_bounded_provenance",
@@ -144,7 +173,7 @@ try {
   const maxPressureButUnknown = unknownTile === undefined ? undefined
     : ask(withEvidence({ splitPressure: 1 }), { targetTileId: unknownTile });
   const maxPressureButHurt = ask(withEvidence({ splitPressure: 1, acuteRisk: injured }),
-    { residualReasonIds: ["residual_labour_thin", "residual_care_burden", "residual_mobility_loss", "residual_food_thin"] });
+    { parentSeparationConsequence: consequenceOf({ mobilityCapabilityAfter: 0.4 }).consequence });
   record("D_extreme_split_pressure_does_not_force_acceptance",
     "split pressure at its ceiling still yields non-acceptance when the destination is unknown to the band or the group is hurt and the separation is costly to those who stay",
     maxPressureButUnknown !== undefined &&
@@ -176,40 +205,40 @@ try {
   record("E_a_commitment_cannot_authorize_a_different_represented_cohort",
     "the binding compares the endorsed cohort lines: an identical allocation matches, one more working adult does not, and a revised allocation of a different size cannot reuse the commitment",
     held !== undefined &&
-      commitment.commitmentAuthorizesDeparture(held, departureOf(sameAllocationAgain)) === true &&
-      commitment.commitmentAuthorizesDeparture(held, departureOf(bumpedWorkingAdults)) === false &&
+      commitment.commitmentTermsMatchDeparture(held, departureOf(sameAllocationAgain)) === true &&
+      commitment.commitmentTermsMatchDeparture(held, departureOf(bumpedWorkingAdults)) === false &&
       revisedDownward !== undefined &&
-      commitment.commitmentAuthorizesDeparture(held, departureOf(revisedDownward)) === false,
+      commitment.commitmentTermsMatchDeparture(held, departureOf(revisedDownward)) === false,
     held !== undefined && revisedDownward !== undefined,
     { committedFounders: held?.founders ?? null,
-      identicalReallocationMatches: held === undefined ? null : commitment.commitmentAuthorizesDeparture(held, departureOf(sameAllocationAgain)),
-      oneMoreWorkingAdultMatches: held === undefined ? null : commitment.commitmentAuthorizesDeparture(held, departureOf(bumpedWorkingAdults)),
+      identicalReallocationMatches: held === undefined ? null : commitment.commitmentTermsMatchDeparture(held, departureOf(sameAllocationAgain)),
+      oneMoreWorkingAdultMatches: held === undefined ? null : commitment.commitmentTermsMatchDeparture(held, departureOf(bumpedWorkingAdults)),
       differentSizedAllocation: revisedDownward?.successor ?? null,
       differentSizedMatches: held === undefined || revisedDownward === undefined ? null
-        : commitment.commitmentAuthorizesDeparture(held, departureOf(revisedDownward)),
+        : commitment.commitmentTermsMatchDeparture(held, departureOf(revisedDownward)),
       whyRequestCountIsExcluded: "the residual authority may revise the request downward and the seam re-allocates on the revised count, so a commitment bound to the request would authorize different people" });
 
   // ══ F — parent and lineage are identity-bearing ══
   record("F_a_commitment_belongs_to_one_parent_and_one_lineage",
     "the same represented cohort under a different parent or a different lineage is not the same commitment",
     held !== undefined &&
-      commitment.commitmentAuthorizesDeparture(held, departureOf(A8, { parentBandId: "band:someone-else" })) === false &&
-      commitment.commitmentAuthorizesDeparture(held, departureOf(A8, { lineageId: "LIN-OTHER" })) === false &&
-      commitment.commitmentAuthorizesDeparture(held, departureOf(A8)) === true,
+      commitment.commitmentTermsMatchDeparture(held, departureOf(A8, { parentBandId: "band:someone-else" })) === false &&
+      commitment.commitmentTermsMatchDeparture(held, departureOf(A8, { lineageId: "LIN-OTHER" })) === false &&
+      commitment.commitmentTermsMatchDeparture(held, departureOf(A8)) === true,
     held !== undefined,
-    { sameEverything: held === undefined ? null : commitment.commitmentAuthorizesDeparture(held, departureOf(A8)),
-      otherParent: held === undefined ? null : commitment.commitmentAuthorizesDeparture(held, departureOf(A8, { parentBandId: "band:someone-else" })),
-      otherLineage: held === undefined ? null : commitment.commitmentAuthorizesDeparture(held, departureOf(A8, { lineageId: "LIN-OTHER" })) });
+    { sameEverything: held === undefined ? null : commitment.commitmentTermsMatchDeparture(held, departureOf(A8)),
+      otherParent: held === undefined ? null : commitment.commitmentTermsMatchDeparture(held, departureOf(A8, { parentBandId: "band:someone-else" })),
+      otherLineage: held === undefined ? null : commitment.commitmentTermsMatchDeparture(held, departureOf(A8, { lineageId: "LIN-OTHER" })) });
 
   // ══ G — the destination is identity-bearing, and that is a decision worth stating ══
   record("G_the_destination_is_part_of_what_was_accepted",
     "a commitment authorizes the separation it concerns, not a separation to somewhere else: accepting a move to one known place does not authorize departing for another",
     held !== undefined && barelyKnown !== undefined &&
       String(barelyKnown.id) !== String(wellKnown.id) &&
-      commitment.commitmentAuthorizesDeparture(held, departureOf(A8, { targetTileId: barelyKnown.id })) === false,
+      commitment.commitmentTermsMatchDeparture(held, departureOf(A8, { targetTileId: barelyKnown.id })) === false,
     held !== undefined && barelyKnown !== undefined && String(barelyKnown.id) !== String(wellKnown.id),
     { committedTarget: String(wellKnown.id), otherKnownTarget: String(barelyKnown?.id ?? ""),
-      authorizesOtherTarget: held === undefined ? null : commitment.commitmentAuthorizesDeparture(held, departureOf(A8, { targetTileId: barelyKnown.id })),
+      authorizesOtherTarget: held === undefined ? null : commitment.commitmentTermsMatchDeparture(held, departureOf(A8, { targetTileId: barelyKnown.id })),
       rationale: "a group accepts going SOMEWHERE; the destination is what makes the journey they accepted the one they get" });
 
   // ══ H — determinism ══
@@ -255,7 +284,9 @@ try {
       inputsRead: ["band.demography.splitPressure", "band.knowledge.observedTiles[target]", "band.acuteRisk.activeEffect", "band identity via deriveBandTendencies", "the endorsed allocation", "residual reason ids", "the day"] });
 
   // ══ J — boundedness ══
-  const manyReasons = ask(willing, { residualReasonIds: Array.from({ length: 50 }, (_, i) => `r${i}`) });
+  const wideProvenance = { ...consequenceOf({ mobilityCapabilityAfter: 0.4 }).consequence,
+    splitCausedReasonIds: Array.from({ length: 50 }, (_, i) => `r${i}`) };
+  const manyReasons = ask(willing, { parentSeparationConsequence: wideProvenance });
   const repeatedAttempts = Array.from({ length: 200 }, (_, i) => ask(willing, { today: day0 + i, lineageId: `LIN-${i}` }));
   const maxReasons = Math.max(...repeatedAttempts.map((r) => r.reasonIds.length), manyReasons.reasonIds.length);
   record("J_repeated_decisions_cannot_grow_state_without_bound",
@@ -285,6 +316,285 @@ try {
     { founderBindingKeys: founderKeys, allValuesAreIntegers: allIntegers,
       actorResolution: held?.actorResolution ?? null,
       protects: "if a future change adds founder ids or a person list to the binding, this fixture fails rather than quietly upgrading the claim" });
+
+  // ══════════════════════════════════════════════════════════════════════════════════════════════
+  // L-O — THE COMMITMENT'S SEPARATION COST IS A MEASURED MAGNITUDE, NOT A COUNT OF EXPLANATIONS
+  //
+  // The corrected input reads `limiting.splitCausedDamage`. These four fixtures prove that the four
+  // things which are NOT split-caused damage — supporting evidence, prior fragility, uncertainty and
+  // sheer verbosity — cannot reach the willingness figure. Each holds everything else identical.
+  // ══════════════════════════════════════════════════════════════════════════════════════════════
+
+  // ══ L — SUPPORTING REASONS CANNOT RAISE THE COST ══
+  //
+  // The decisive one. Two assessments of the SAME departure: one where every channel is measured and
+  // healthy (so the authority emits supporting reasons — good news), one where the same channels are
+  // simply UNMEASURED (so it emits none, and an uncertainty reason instead). Under the old model the
+  // healthy parent scored the HIGHER cost, purely for having more to say about itself.
+  const richlySupported = consequenceOf({});
+  const unmeasured = consequenceOf({
+    nutritionMeasured: false, embodiedConditionMeasured: false, ecologicalPositionMeasured: false });
+  const supportCount = richlySupported.assessment.supporting.length;
+  const askSupported = ask(willing, { parentSeparationConsequence: richlySupported.consequence });
+  const askUnmeasured = ask(willing, { parentSeparationConsequence: unmeasured.consequence });
+  const reasonCountsDiffer =
+    richlySupported.assessment.reasonIds.length !== unmeasured.assessment.reasonIds.length;
+  record("L_supporting_reasons_cannot_increase_the_separation_cost",
+    "two assessments of the identical departure, one emitting supporting reasons and one emitting none, publish the SAME split-caused damage and produce the SAME willingness — good news about the parent is not a cost",
+    richlySupported.consequence.splitCausedDamage === unmeasured.consequence.splitCausedDamage &&
+      askSupported.evidence.splitCausedDamage === askUnmeasured.evidence.splitCausedDamage &&
+      askSupported.evidence.willingness === askUnmeasured.evidence.willingness &&
+      askSupported.accepted === askUnmeasured.accepted &&
+      // and the supporting reasons really are inside the authority's own reasonIds list, which is
+      // exactly why counting that list was false.
+      richlySupported.assessment.reasonIds.length >= supportCount && supportCount > 0,
+    // Non-vacuous only if the two arms genuinely differ in how much they say.
+    reasonCountsDiffer,
+    { supportingReasonsEmitted: richlySupported.assessment.supporting.map((r) => r.id),
+      reasonIdCounts: { measuredHealthy: richlySupported.assessment.reasonIds.length,
+        unmeasured: unmeasured.assessment.reasonIds.length },
+      splitCausedDamage: { measuredHealthy: richlySupported.consequence.splitCausedDamage,
+        unmeasured: unmeasured.consequence.splitCausedDamage },
+      willingness: { measuredHealthy: askSupported.evidence.willingness,
+        unmeasured: askUnmeasured.evidence.willingness },
+      wouldHaveBeenUnderTheOldModel: {
+        measuredHealthy: Math.min(1, richlySupported.assessment.reasonIds.length / 4),
+        unmeasured: Math.min(1, unmeasured.assessment.reasonIds.length / 4),
+        // The sharpest form of the defect: the SUPPORTING reasons alone — every one of them good
+        // news about the parent — would have produced this much cost, out of a maximum of 1.
+        costTheSupportingReasonsAloneWouldHaveProduced: Math.min(1, supportCount / 4) },
+      note: "reasonIds is [...opposing, ...supporting] across six ledgers, so a count charged support as cost" });
+
+  // ══ M — PRIOR FRAGILITY IS NOT SPLIT-CAUSED COST ══
+  //
+  // Identical departure, identical mobility before and after, identical allocation: only the
+  // hardship the parent ALREADY carried differs. The residual authority narrows its own tolerance on
+  // that fragility — its business — but the magnitude the commitment consumes may not move, because
+  // a departure does not become more damaging by happening to a parent that was already suffering.
+  //
+  // AN INSTRUMENT ERROR IN THIS FIXTURE'S OWN FIRST FORM IS RECORDED. It varied fragility at
+  // `mobilityCapabilityAfter: 0.7`, where the damage is 0.27. Heavy fragility narrows the residual
+  // authority's tolerance to 0.23, so that arm was REFUSED and `assessParentResidualWithRevision`
+  // revised the founder request downward — leaving the fragile arm describing a SMALLER departure
+  // with damage 0.20 and, absurdly, a HIGHER willingness (0.8903 against 0.8693). The two arms were
+  // no longer the same separation. That is verbatim the trap PR10/PR11 recorded on this same
+  // authority. The `noRevisionEitherArm` assertion below is what refused to let it pass, and the
+  // repair is to hold the departure inside both tolerances rather than to relax the assertion.
+  const fedParent = consequenceOf({});
+  const fragileParent = consequenceOf({
+    foodDemographicPressure: 0.9, chronicFoodStress: 0.9, chronicDeficitStreak: 8,
+    acuteRiskSeverity: 0.9, sicknessBurden: 0.9, careTravelBurden: 0.9, ecologicalRisk: 0.9 });
+  const askFed = ask(willing, { parentSeparationConsequence: fedParent.consequence });
+  const askFragile = ask(willing, { parentSeparationConsequence: fragileParent.consequence });
+  const fragilityMoved =
+    fragileParent.assessment.limiting.priorFragility > fedParent.assessment.limiting.priorFragility;
+  const noRevisionEitherArm =
+    fedParent.assessment.requiresFounderRequestRevision === false &&
+    fragileParent.assessment.requiresFounderRequestRevision === false;
+  record("M_prior_fragility_does_not_enter_the_commitments_separation_cost",
+    "a parent already carrying heavy nutritional, embodied and ecological hardship publishes the SAME split-caused damage for the SAME departure as a well-fed one, and the commitment's willingness is identical",
+    fedParent.consequence.splitCausedDamage === fragileParent.consequence.splitCausedDamage &&
+      askFed.evidence.splitCausedDamage === askFragile.evidence.splitCausedDamage &&
+      askFed.evidence.willingness === askFragile.evidence.willingness &&
+      noRevisionEitherArm,
+    // Non-vacuous only if the fragility arm really is more fragile.
+    fragilityMoved,
+    { priorFragility: { fed: fedParent.assessment.limiting.priorFragility,
+        fragile: fragileParent.assessment.limiting.priorFragility },
+      tolerance: { fed: fedParent.assessment.limiting.tolerance,
+        fragile: fragileParent.assessment.limiting.tolerance },
+      splitCausedDamage: { fed: fedParent.consequence.splitCausedDamage,
+        fragile: fragileParent.consequence.splitCausedDamage },
+      willingness: { fed: askFed.evidence.willingness, fragile: askFragile.evidence.willingness },
+      neitherArmWasRevised: noRevisionEitherArm,
+      instrumentErrorRecorded: "the first form varied fragility at damage 0.27, which the fragile arm's narrowed tolerance (0.23) refused; the revision search then shrank the request and the arms stopped describing the same departure",
+      note: "tolerance narrows with fragility inside the residual authority — which is why the commitment consumes the DAMAGE and not the verdict" });
+
+  // ══ N — REAL SPLIT-CAUSED DAMAGE DOES MOVE THE DECISION ══
+  //
+  // The other half of L and M: having proved what cannot reach willingness, prove that the thing
+  // which should, does. Same band, same motive, same readiness, same allocation and target — only
+  // the mobility the parent is left with after the split differs, which is a genuine before→after
+  // movement.
+  const damageLadder = [1, 0.8, 0.55, 0.3].map((after) => {
+    const c = consequenceOf({ mobilityCapabilityAfter: after });
+    return { after, damage: c.consequence.splitCausedDamage,
+      willingness: ask(willing, { parentSeparationConsequence: c.consequence }).evidence.willingness };
+  });
+  const damageRises = damageLadder.every((row, i) => i === 0 || row.damage >= damageLadder[i - 1].damage);
+  const willingnessFalls = damageLadder.every((row, i) => i === 0 || row.willingness <= damageLadder[i - 1].willingness);
+  record("N_real_split_caused_damage_moves_willingness_in_the_intended_direction",
+    "holding motive, readiness, allocation and destination constant, rising measured split-caused damage produces monotonically falling willingness",
+    damageRises && willingnessFalls &&
+      damageLadder[damageLadder.length - 1].willingness < damageLadder[0].willingness,
+    // Non-vacuous only if the damage figure actually moved across the ladder.
+    damageLadder[damageLadder.length - 1].damage > damageLadder[0].damage,
+    { ladder: damageLadder,
+      note: "the only varied input is mobilityCapabilityAfter — a before→after movement, which is exactly what splitCausedDamage is made of" });
+
+  // ══ O — REASON VERBOSITY CANNOT CHANGE BEHAVIOUR ══
+  //
+  // The same physical assessment, with its provenance list duplicated, reordered and padded. Under a
+  // count-based cost every one of these arms would decide differently.
+  const plain = consequenceOf({ mobilityCapabilityAfter: 0.5 }).consequence;
+  const verbose = [
+    { label: "as_published", c: plain },
+    { label: "reordered", c: { ...plain, splitCausedReasonIds: [...plain.splitCausedReasonIds].reverse() } },
+    { label: "duplicated", c: { ...plain, splitCausedReasonIds: [...plain.splitCausedReasonIds, ...plain.splitCausedReasonIds] } },
+    { label: "padded_to_forty", c: { ...plain, splitCausedReasonIds: [...plain.splitCausedReasonIds, ...Array.from({ length: 40 }, (_, i) => `pad_${i}`)] } },
+    { label: "emptied", c: { ...plain, splitCausedReasonIds: [] } },
+  ].map((arm) => {
+    const r = ask(willing, { parentSeparationConsequence: arm.c });
+    return { label: arm.label, ids: arm.c.splitCausedReasonIds.length, accepted: r.accepted,
+      willingness: r.evidence.willingness, splitCausedDamage: r.evidence.splitCausedDamage,
+      commitmentId: r.accepted === true ? r.commitment.commitmentId : null };
+  });
+  const first = verbose[0];
+  record("O_reason_verbosity_cannot_change_the_commitment",
+    "duplicating, reordering, padding or emptying the provenance list while the measured assessment is unchanged leaves the decision, the willingness and the commitment identity identical",
+    verbose.every((v) => v.accepted === first.accepted && v.willingness === first.willingness &&
+      v.splitCausedDamage === first.splitCausedDamage && v.commitmentId === first.commitmentId),
+    // Non-vacuous only if the arms really did carry different numbers of ids.
+    new Set(verbose.map((v) => v.ids)).size > 1,
+    { arms: verbose,
+      note: "provenance is carried onto the accepted record as evidence; it is never read as a magnitude" });
+
+  // ══════════════════════════════════════════════════════════════════════════════════════════════
+  // P-V — HISTORICAL COMMITMENT vs LIVE AUTHORIZATION
+  //
+  // The event says a cohort once agreed. The authorization says whether that agreement is still in
+  // force. These fixtures prove the two can be true and false at the same time.
+  // ══════════════════════════════════════════════════════════════════════════════════════════════
+
+  const authTerms = (allocation, over = {}) => departureOf(allocation, over);
+  const liveAuth = held === undefined ? undefined : commitment.openFounderAuthorization(held);
+
+  // ══ P — a positive commitment opens exactly one live authorization on the accepted terms ══
+  record("P_a_positive_commitment_opens_one_live_authorization_on_the_accepted_terms",
+    "opening an authorization from the commitment yields exactly one live record carrying the same commitmentId, parent, lineage, cohort and destination, and it permits the departure it was accepted for",
+    liveAuth !== undefined &&
+      liveAuth.status === "live" &&
+      commitment.authorizationIsLive(liveAuth) === true &&
+      liveAuth.commitmentId === held.commitmentId &&
+      String(liveAuth.parentBandId) === String(held.parentBandId) &&
+      liveAuth.lineageId === held.lineageId &&
+      String(liveAuth.targetTileId) === String(held.targetTileId) &&
+      commitment.foundersMatch(liveAuth.founders, held.founders) &&
+      liveAuth.openedDay === held.decisionDay &&
+      liveAuth.endedDay === undefined && liveAuth.endedBecause === undefined &&
+      commitment.authorizationPermitsDeparture(liveAuth, authTerms(A8)) === true,
+    held !== undefined,
+    { authorization: liveAuth ?? null, commitmentId: held?.commitmentId ?? null });
+
+  // ══ Q — changed terms invalidate it, without anything having to be ended ══
+  const qAlloc = commitment.authorizationPermitsDeparture(liveAuth, authTerms(A10));
+  const qTarget = commitment.authorizationPermitsDeparture(liveAuth, authTerms(A8, { targetTileId: barelyKnown.id }));
+  const qSupersededAlloc = commitment.endFounderAuthorization(liveAuth, "founder_allocation_changed", day0 + 3);
+  const qSupersededTarget = commitment.endFounderAuthorization(liveAuth, "destination_changed", day0 + 3);
+  record("Q_changed_founder_allocation_or_destination_invalidates_the_authorization",
+    "a live authorization refuses a departure by a different represented cohort or to a different destination, and both changes can be recorded explicitly as superseded terms with a named cause",
+    qAlloc === false && qTarget === false &&
+      commitment.authorizationPermitsDeparture(liveAuth, authTerms(A8)) === true &&
+      qSupersededAlloc?.status === "superseded_by_revised_terms" &&
+      qSupersededAlloc?.endedBecause === "founder_allocation_changed" &&
+      qSupersededTarget?.status === "superseded_by_revised_terms" &&
+      qSupersededTarget?.endedBecause === "destination_changed" &&
+      commitment.authorizationPermitsDeparture(qSupersededAlloc, authTerms(A8)) === false,
+    liveAuth !== undefined,
+    { permitsOriginalTerms: commitment.authorizationPermitsDeparture(liveAuth, authTerms(A8)),
+      permitsRevisedAllocation: qAlloc, permitsOtherDestination: qTarget,
+      supersededByAllocation: qSupersededAlloc ?? null, supersededByTarget: qSupersededTarget ?? null });
+
+  // ══ R — abandoning before departure ends the authority and leaves the history intact ══
+  const historyBefore = JSON.stringify(held ?? null);
+  const withdrawn = commitment.endFounderAuthorization(liveAuth, "attempt_abandoned_before_departure", day0 + 10);
+  const historyAfter = JSON.stringify(held ?? null);
+  record("R_abandoning_before_departure_ends_the_authority_and_leaves_the_commitment_true",
+    "withdrawal ends the authorization with its own named cause and day, no longer permits any departure, and does not touch the historical event",
+    withdrawn?.status === "withdrawn_before_departure" &&
+      withdrawn?.endedBecause === "attempt_abandoned_before_departure" &&
+      withdrawn?.endedDay === day0 + 10 &&
+      commitment.authorizationIsLive(withdrawn) === false &&
+      commitment.authorizationPermitsDeparture(withdrawn, authTerms(A8)) === false &&
+      // the event is untouched and STILL TRUE about the past
+      historyBefore === historyAfter &&
+      commitment.commitmentTermsMatchDeparture(held, authTerms(A8)) === true,
+    liveAuth !== undefined,
+    { withdrawn: withdrawn ?? null,
+      historicalEventUnchanged: historyBefore === historyAfter,
+      eventStillDescribesTheseTerms: held === undefined ? null : commitment.commitmentTermsMatchDeparture(held, authTerms(A8)) });
+
+  // ══ S — a physical departure consumes it exactly once ══
+  const consumed = commitment.endFounderAuthorization(liveAuth, "physical_departure_consumed_it", day0 + 20);
+  const secondDeparture = consumed === undefined
+    ? undefined
+    : commitment.endFounderAuthorization(consumed, "physical_departure_consumed_it", day0 + 21);
+  record("S_a_spent_authorization_cannot_authorize_a_second_physical_departure",
+    "consumption is terminal: the authorization no longer permits a departure, a second consumption is REFUSED rather than recorded, and the commitment survives as successor provenance",
+    consumed?.status === "consumed_by_departure" &&
+      consumed?.endedBecause === "physical_departure_consumed_it" &&
+      commitment.authorizationPermitsDeparture(consumed, authTerms(A8)) === false &&
+      secondDeparture === undefined &&
+      commitment.commitmentTermsMatchDeparture(held, authTerms(A8)) === true,
+    liveAuth !== undefined,
+    { consumed: consumed ?? null, secondConsumptionRefused: secondDeparture === undefined,
+      commitmentStillAvailableAsProvenance: held?.commitmentId ?? null });
+
+  // ══ T — a return ends the separation authority without erasing the acceptance ══
+  const returned = commitment.endFounderAuthorization(liveAuth, "successor_physically_returned", day0 + 400);
+  record("T_a_return_ends_the_separation_authority_and_the_acceptance_remains_a_fact",
+    "the authorization ends as `ended_by_return` and permits nothing further, while the immutable commitment still records that the cohort accepted the separation",
+    returned?.status === "ended_by_return" &&
+      returned?.endedBecause === "successor_physically_returned" &&
+      commitment.authorizationIsLive(returned) === false &&
+      commitment.authorizationPermitsDeparture(returned, authTerms(A8)) === false &&
+      held.commitmentId === returned.commitmentId &&
+      commitment.commitmentTermsMatchDeparture(held, authTerms(A8)) === true,
+    liveAuth !== undefined,
+    { endedByReturn: returned ?? null,
+      theAcceptanceIsStillTrue: held === undefined ? null : commitment.commitmentTermsMatchDeparture(held, authTerms(A8)),
+      note: "this transition is representable and is NOT wired to return behaviour in this pass" });
+
+  // ══ U — no implicit recommitment: nothing revives a terminal authorization ══
+  //
+  // Elapsed time and survival must not be able to restore a separation authority nobody re-accepted.
+  // Structural rather than tested case by case: there is no reopen function, and every ending of an
+  // already-terminal record is refused.
+  const terminalArms = ["withdrawn_before_departure", "consumed_by_departure", "ended_by_return"]
+    .map((status) => ({ ...liveAuth, status, endedDay: day0 + 1, endedBecause: "attempt_abandoned_before_departure" }));
+  const everyCause = ["founder_allocation_changed", "destination_changed",
+    "attempt_abandoned_before_departure", "physical_departure_consumed_it", "successor_physically_returned"];
+  const revivalAttempts = terminalArms.flatMap((auth) =>
+    everyCause.flatMap((cause) => [day0 + 2, day0 + 900, day0 + 90000].map((d) => ({
+      from: auth.status, cause, day: d,
+      result: commitment.endFounderAuthorization(auth, cause, d) === undefined ? "refused" : "accepted",
+      permits: commitment.authorizationPermitsDeparture(auth, authTerms(A8)) }))));
+  const reopenExports = Object.keys(commitment).filter((k) => /reopen|revive|restore|reactivat/i.test(k));
+  record("U_time_or_survival_cannot_reactivate_a_terminal_authorization",
+    "every ending of an already-terminal authorization is refused at every cause and every elapsed day, none permits a departure, and the module exports no way to reopen one — a new separation needs a new commitment",
+    revivalAttempts.every((a) => a.result === "refused" && a.permits === false) &&
+      reopenExports.length === 0,
+    revivalAttempts.length === 45,
+    { attemptsRun: revivalAttempts.length, allRefused: revivalAttempts.every((a) => a.result === "refused"),
+      anyPermittedDeparture: revivalAttempts.some((a) => a.permits === true),
+      reopenLikeExports: reopenExports,
+      daysTried: [day0 + 2, day0 + 900, day0 + 90000] });
+
+  // ══ V — the four facts stay four: the event carries no lifecycle status ══
+  const eventKeys = held === undefined ? [] : Object.keys(held).sort();
+  const statusLike = eventKeys.filter((k) => /status|phase|active|live|withdraw|consum|revok/i.test(k));
+  const authKeys = liveAuth === undefined ? [] : Object.keys(liveAuth).sort();
+  record("V_the_immutable_event_carries_no_status_and_the_authorization_is_a_separate_record",
+    "the commitment record has no status, phase or liveness field of any kind; current authority lives in a separate record that references it by commitmentId — so a status can end without history being edited",
+    held !== undefined && liveAuth !== undefined &&
+      statusLike.length === 0 &&
+      authKeys.includes("status") &&
+      authKeys.includes("commitmentId") &&
+      liveAuth.commitmentId === held.commitmentId,
+    held !== undefined,
+    { commitmentFields: eventKeys, statusLikeFieldsOnTheEvent: statusLike,
+      authorizationFields: authKeys,
+      protects: "if a future change puts a mutable status on the commitment, this fails — that collapse is the `committed` defect this checkpoint removed" });
 
   const failing = fixtures.filter((f) => f.verdict === "FAIL");
   const vacuous = fixtures.filter((f) => f.verdict === "VACUOUS");

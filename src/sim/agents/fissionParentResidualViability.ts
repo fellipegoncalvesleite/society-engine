@@ -902,3 +902,76 @@ export function isPriorHardshipSeparatedFromSplitDamage(assessment: ParentResidu
     assessment.blockKind !== "split_caused_damage_exceeds_tolerance";
   return disjoint && zeroDamageNeverBlocks && assessment.limiting.tolerance >= assessment.limiting.toleranceFloor;
 }
+
+// ── what this authority publishes to a decision that must weigh the split ─────────────────────────
+
+/**
+ * WHAT THE SEPARATION ITSELF WOULD COST THE PEOPLE WHO STAY — one bounded measured quantity.
+ *
+ * WHY THIS EXISTS AT ALL. A consumer that wants "how much does this departure hurt the parent"
+ * previously had no published answer narrow enough to use, and the founder-commitment authority
+ * improvised one from `assessment.reasonIds.length`. That is false, and this module's own
+ * `ParentResidualReasonLedger` is what proves it: `reasonIds` is assembled at the end of
+ * `assessParentResidual` as `[...opposing, ...supporting]`, so it mixes SIX ledgers —
+ * `hard_block`, `split_caused`, `prior_fragility`, `support`, `uncertainty` and `revision`.
+ *
+ *   - A parent that emits FOUR SUPPORTING reasons — camp labour intact, dependency load unchanged,
+ *     no nutritional deficit, no embodied hardship — is a parent for whom the split is CHEAP, and
+ *     a count-based cost read it as the most expensive case there is.
+ *   - `parent_condition_partly_unmeasured` is an admission of ignorance. It is not damage.
+ *   - `parent_already_carried_nutritional_deficit` is hardship the departure did not cause and
+ *     cannot change, which this module separates out precisely so nobody charges it to the split.
+ *
+ * More reasons never meant more harm. Verbosity is not severity.
+ *
+ * WHY `splitCausedDamage` AND NOT SOMETHING ELSE. Three representations were compared against the
+ * question a commitment actually asks — *how much would THIS separation itself do to the people
+ * remaining?*
+ *
+ *   1. `limiting.splitCausedDamage` — SELECTED. Already bounded 0..1, already computed from
+ *      before→after movements ONLY (camp labour removed, dependency load worsened, mobility lost),
+ *      and already the published figure the verdict itself decides on since the PR16 repair. Its
+ *      magnitude means exactly what its name says, so it needs no reinterpretation.
+ *   2. A projection recombined from `ledger === "split_caused"` reason STRENGTHS — REJECTED. Those
+ *      reasons are threshold-gated views of the same three terms, so combining them would be a
+ *      SECOND definition of a quantity that already has one, in a second module. That is the
+ *      duplicate-authority defect this checkpoint family exists to remove.
+ *   3. The `verdict` / `blockKind` / `departureBlocked` triple — REJECTED, and for a reason worth
+ *      keeping: the verdict compares damage against a `tolerance` that is NARROWED BY
+ *      `priorFragility`. Consuming it would smuggle pre-existing hardship back into the commitment's
+ *      magnitude through the back door, undoing the separation. It is also a boolean, and a
+ *      willingness model needs a degree.
+ *
+ * Reason ids are carried as PROVENANCE ONLY, and only the split-caused ones, so the record names
+ * what the magnitude is about and can never again be mistaken for the magnitude itself.
+ */
+export interface ParentSeparationConsequence {
+  /** Named so a reader can see this was measured by the residual authority, not inferred elsewhere. */
+  readonly source: "parent_residual_authority";
+  /**
+   * Bounded 0..1. Before→after deterioration caused BY THIS DEPARTURE, containing no prior
+   * fragility, no tolerance, no uncertainty and no supporting evidence.
+   */
+  readonly splitCausedDamage: number;
+  /** Bounded provenance for the figure above. NEVER a magnitude — see the note on this interface. */
+  readonly splitCausedReasonIds: readonly ParentResidualReasonId[];
+}
+
+/**
+ * Publish the parent-side consequence of a separation, for a decision authority to interpret.
+ *
+ * A pure read of what the assessment already decided. Nothing is recomputed here: camp labour
+ * damage, dependency worsening, mobility loss, tolerance and residual viability all remain this
+ * module's business, and a consumer receives the one figure that answers its question.
+ */
+export function deriveParentSeparationConsequence(
+  assessment: ParentResidualAssessment,
+): ParentSeparationConsequence {
+  return {
+    source: "parent_residual_authority",
+    splitCausedDamage: clamp01(assessment.limiting.splitCausedDamage),
+    splitCausedReasonIds: assessment.opposing
+      .filter((reason) => reason.ledger === "split_caused")
+      .map((reason) => reason.id),
+  };
+}

@@ -1,0 +1,568 @@
+{
+  "generatedAt": "2026-08-10T00:57:10.253Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "parentBandId": "band:varied-river-mid",
+  "wellKnownTarget": "tile:108:56",
+  "summary": {
+    "total": 22,
+    "passed": 22,
+    "failed": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "A_a_positive_commitment_is_constructible_with_bounded_provenance",
+      "claim": "legitimate held evidence and one endorsed allocation produce an acceptance carrying parent, lineage, the represented cohort, the destination and the day",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "commitment": {
+          "commitmentId": "commit:4298e920c497bdfc",
+          "actorResolution": "aggregate_founder_cohort",
+          "parentBandId": "band:varied-river-mid",
+          "lineageId": "LIN-FC",
+          "founders": {
+            "workingAdults": 6,
+            "dependents": 2,
+            "elders": 0
+          },
+          "targetTileId": "tile:108:56",
+          "decisionDay": 2100,
+          "reasonIds": [
+            "founder_cohort_accepted_separation",
+            "strong_motive_to_separate",
+            "destination_is_known_ground"
+          ]
+        },
+        "evidence": {
+          "motive": 0.9,
+          "destinationFamiliarity": 1,
+          "embodiedCapacity": 0.88,
+          "splitCausedDamage": 0,
+          "readiness": 0.88,
+          "tendencyDelta": 0.1043,
+          "willingness": 0.8963
+        },
+        "allocationSuccessor": {
+          "workingAdults": 6,
+          "dependents": 2,
+          "elders": 0
+        }
+      }
+    },
+    {
+      "id": "B_the_same_feasible_departure_can_be_declined_on_held_evidence",
+      "claim": "the identical parent, allocation and destination are ACCEPTED under one set of legitimately held evidence and DECLINED under another — so the authority decides rather than authorizes",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "acceptedWillingness": 0.8963,
+        "declinedWeakMotive": {
+          "willingness": 0.1483,
+          "refusal": "not_willing_on_held_evidence",
+          "reasons": [
+            "not_willing_on_held_evidence",
+            "weak_motive_to_separate"
+          ]
+        },
+        "declinedInjured": {
+          "willingness": 0.1043,
+          "refusal": "not_willing_on_held_evidence",
+          "reasons": [
+            "not_willing_on_held_evidence",
+            "group_is_carrying_injury",
+            "separation_costs_those_who_stay"
+          ]
+        },
+        "threshold": 0.5,
+        "differsOnlyBy": "the band's own split pressure, embodied burden and what the split costs those who stay — allocation, parent, lineage and target are identical"
+      }
+    },
+    {
+      "id": "C_elapsed_time_alone_cannot_produce_a_commitment",
+      "claim": "advancing only the decision day never converts a declined proposal into an accepted one; the day is recorded provenance, not a cause",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "daysTried": [
+          2100,
+          2190,
+          2500,
+          7100
+        ],
+        "outcomes": [
+          "not_willing_on_held_evidence",
+          "not_willing_on_held_evidence",
+          "not_willing_on_held_evidence",
+          "not_willing_on_held_evidence"
+        ],
+        "willingnessAcrossDays": [
+          0.1483,
+          0.1483,
+          0.1483,
+          0.1483
+        ],
+        "note": "willingness is identical across every day because no term reads elapsed time"
+      }
+    },
+    {
+      "id": "D_extreme_split_pressure_does_not_force_acceptance",
+      "claim": "split pressure at its ceiling still yields non-acceptance when the destination is unknown to the band or the group is hurt and the separation is costly to those who stay",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "pressureUsed": 1,
+        "unknownDestination": {
+          "refusal": "destination_not_known_to_the_band",
+          "willingness": 0.1043
+        },
+        "hurtAndCostly": {
+          "refusal": "not_willing_on_held_evidence",
+          "willingness": 0.1043,
+          "evidence": {
+            "motive": 1,
+            "destinationFamiliarity": 1,
+            "embodiedCapacity": 0,
+            "splitCausedDamage": 0.34,
+            "readiness": 0,
+            "tendencyDelta": 0.1043,
+            "willingness": 0.1043
+          }
+        }
+      }
+    },
+    {
+      "id": "E_a_commitment_cannot_authorize_a_different_represented_cohort",
+      "claim": "the binding compares the endorsed cohort lines: an identical allocation matches, one more working adult does not, and a revised allocation of a different size cannot reuse the commitment",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "committedFounders": {
+          "workingAdults": 6,
+          "dependents": 2,
+          "elders": 0
+        },
+        "identicalReallocationMatches": true,
+        "oneMoreWorkingAdultMatches": false,
+        "differentSizedAllocation": {
+          "workingAdults": 6,
+          "dependents": 3,
+          "elders": 1
+        },
+        "differentSizedMatches": false,
+        "whyRequestCountIsExcluded": "the residual authority may revise the request downward and the seam re-allocates on the revised count, so a commitment bound to the request would authorize different people"
+      }
+    },
+    {
+      "id": "F_a_commitment_belongs_to_one_parent_and_one_lineage",
+      "claim": "the same represented cohort under a different parent or a different lineage is not the same commitment",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "sameEverything": true,
+        "otherParent": false,
+        "otherLineage": false
+      }
+    },
+    {
+      "id": "G_the_destination_is_part_of_what_was_accepted",
+      "claim": "a commitment authorizes the separation it concerns, not a separation to somewhere else: accepting a move to one known place does not authorize departing for another",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "committedTarget": "tile:108:56",
+        "otherKnownTarget": "tile:112:55",
+        "authorizesOtherTarget": false,
+        "rationale": "a group accepts going SOMEWHERE; the destination is what makes the journey they accepted the one they get"
+      }
+    },
+    {
+      "id": "H_identical_input_gives_an_identical_decision_and_identity",
+      "claim": "the same held evidence produces a byte-identical decision and the same deterministic commitment id, in the same process and on a fresh object",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "commitmentId": "commit:4298e920c497bdfc",
+        "repeatIdentical": true,
+        "freshObjectIdentical": true,
+        "idIsDeterministicNotRandom": "derived by hashing the bound facts; no UUID and no wall clock"
+      }
+    },
+    {
+      "id": "I_the_decision_core_cannot_read_world_truth",
+      "claim": "the authority takes the actor's own band and no WorldState, so changing hidden destination truth cannot move it — the property is structural rather than tested",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "worldStateReferencesInCode": [],
+        "codeLinesSearched": 279,
+        "commentProseExcluded": true,
+        "hiddenRichnessRaisedTo": 1,
+        "decisionByteIdenticalAfterHiddenChange": true,
+        "inputsRead": [
+          "band.demography.splitPressure",
+          "band.knowledge.observedTiles[target]",
+          "band.acuteRisk.activeEffect",
+          "band identity via deriveBandTendencies",
+          "the endorsed allocation",
+          "residual reason ids",
+          "the day"
+        ]
+      }
+    },
+    {
+      "id": "J_repeated_decisions_cannot_grow_state_without_bound",
+      "claim": "reason ids are capped and each decision returns one bounded record; two hundred attempts accumulate nothing",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "attemptsRun": 200,
+        "maxReasonIdsSeen": 8,
+        "cap": 8,
+        "fiftyResidualReasonsProduced": 8,
+        "note": "the authority is pure and returns a value; it holds no accumulator of its own"
+      }
+    },
+    {
+      "id": "K_the_commitment_represents_a_cohort_and_never_named_individuals",
+      "claim": "the binding is exactly the three cohort integers and the actor resolution says so; no per-person identity is represented, because none exists in canonical state",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "founderBindingKeys": [
+          "dependents",
+          "elders",
+          "workingAdults"
+        ],
+        "allValuesAreIntegers": true,
+        "actorResolution": "aggregate_founder_cohort",
+        "protects": "if a future change adds founder ids or a person list to the binding, this fixture fails rather than quietly upgrading the claim"
+      }
+    },
+    {
+      "id": "L_supporting_reasons_cannot_increase_the_separation_cost",
+      "claim": "two assessments of the identical departure, one emitting supporting reasons and one emitting none, publish the SAME split-caused damage and produce the SAME willingness — good news about the parent is not a cost",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "supportingReasonsEmitted": [
+          "parent_carried_no_nutritional_deficit",
+          "parent_carried_no_embodied_hardship",
+          "residual_retains_labour_beyond_its_commitments"
+        ],
+        "reasonIdCounts": {
+          "measuredHealthy": 5,
+          "unmeasured": 4
+        },
+        "splitCausedDamage": {
+          "measuredHealthy": 0.21,
+          "unmeasured": 0.21
+        },
+        "willingness": {
+          "measuredHealthy": 0.8333,
+          "unmeasured": 0.8333
+        },
+        "wouldHaveBeenUnderTheOldModel": {
+          "measuredHealthy": 1,
+          "unmeasured": 1,
+          "costTheSupportingReasonsAloneWouldHaveProduced": 0.75
+        },
+        "note": "reasonIds is [...opposing, ...supporting] across six ledgers, so a count charged support as cost"
+      }
+    },
+    {
+      "id": "M_prior_fragility_does_not_enter_the_commitments_separation_cost",
+      "claim": "a parent already carrying heavy nutritional, embodied and ecological hardship publishes the SAME split-caused damage for the SAME departure as a well-fed one, and the commitment's willingness is identical",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "priorFragility": {
+          "fed": 0.04,
+          "fragile": 0.84
+        },
+        "tolerance": {
+          "fed": 0.51,
+          "fragile": 0.23
+        },
+        "splitCausedDamage": {
+          "fed": 0.21,
+          "fragile": 0.21
+        },
+        "willingness": {
+          "fed": 0.8333,
+          "fragile": 0.8333
+        },
+        "neitherArmWasRevised": true,
+        "instrumentErrorRecorded": "the first form varied fragility at damage 0.27, which the fragile arm's narrowed tolerance (0.23) refused; the revision search then shrank the request and the arms stopped describing the same departure",
+        "note": "tolerance narrows with fragility inside the residual authority — which is why the commitment consumes the DAMAGE and not the verdict"
+      }
+    },
+    {
+      "id": "N_real_split_caused_damage_moves_willingness_in_the_intended_direction",
+      "claim": "holding motive, readiness, allocation and destination constant, rising measured split-caused damage produces monotonically falling willingness",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "ladder": [
+          {
+            "after": 1,
+            "damage": 0.21,
+            "willingness": 0.8333
+          },
+          {
+            "after": 0.8,
+            "damage": 0.25,
+            "willingness": 0.8213
+          },
+          {
+            "after": 0.55,
+            "damage": 0.31,
+            "willingness": 0.8033
+          },
+          {
+            "after": 0.3,
+            "damage": 0.36,
+            "willingness": 0.7883
+          }
+        ],
+        "note": "the only varied input is mobilityCapabilityAfter — a before→after movement, which is exactly what splitCausedDamage is made of"
+      }
+    },
+    {
+      "id": "O_reason_verbosity_cannot_change_the_commitment",
+      "claim": "duplicating, reordering, padding or emptying the provenance list while the measured assessment is unchanged leaves the decision, the willingness and the commitment identity identical",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "arms": [
+          {
+            "label": "as_published",
+            "ids": 3,
+            "accepted": true,
+            "willingness": 0.8003,
+            "splitCausedDamage": 0.32,
+            "commitmentId": "commit:4298e920c497bdfc"
+          },
+          {
+            "label": "reordered",
+            "ids": 3,
+            "accepted": true,
+            "willingness": 0.8003,
+            "splitCausedDamage": 0.32,
+            "commitmentId": "commit:4298e920c497bdfc"
+          },
+          {
+            "label": "duplicated",
+            "ids": 6,
+            "accepted": true,
+            "willingness": 0.8003,
+            "splitCausedDamage": 0.32,
+            "commitmentId": "commit:4298e920c497bdfc"
+          },
+          {
+            "label": "padded_to_forty",
+            "ids": 43,
+            "accepted": true,
+            "willingness": 0.8003,
+            "splitCausedDamage": 0.32,
+            "commitmentId": "commit:4298e920c497bdfc"
+          },
+          {
+            "label": "emptied",
+            "ids": 0,
+            "accepted": true,
+            "willingness": 0.8003,
+            "splitCausedDamage": 0.32,
+            "commitmentId": "commit:4298e920c497bdfc"
+          }
+        ],
+        "note": "provenance is carried onto the accepted record as evidence; it is never read as a magnitude"
+      }
+    },
+    {
+      "id": "P_a_positive_commitment_opens_one_live_authorization_on_the_accepted_terms",
+      "claim": "opening an authorization from the commitment yields exactly one live record carrying the same commitmentId, parent, lineage, cohort and destination, and it permits the departure it was accepted for",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "authorization": {
+          "commitmentId": "commit:4298e920c497bdfc",
+          "parentBandId": "band:varied-river-mid",
+          "lineageId": "LIN-FC",
+          "founders": {
+            "workingAdults": 6,
+            "dependents": 2,
+            "elders": 0
+          },
+          "targetTileId": "tile:108:56",
+          "status": "live",
+          "openedDay": 2100
+        },
+        "commitmentId": "commit:4298e920c497bdfc"
+      }
+    },
+    {
+      "id": "Q_changed_founder_allocation_or_destination_invalidates_the_authorization",
+      "claim": "a live authorization refuses a departure by a different represented cohort or to a different destination, and both changes can be recorded explicitly as superseded terms with a named cause",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "permitsOriginalTerms": true,
+        "permitsRevisedAllocation": false,
+        "permitsOtherDestination": false,
+        "supersededByAllocation": {
+          "commitmentId": "commit:4298e920c497bdfc",
+          "parentBandId": "band:varied-river-mid",
+          "lineageId": "LIN-FC",
+          "founders": {
+            "workingAdults": 6,
+            "dependents": 2,
+            "elders": 0
+          },
+          "targetTileId": "tile:108:56",
+          "status": "superseded_by_revised_terms",
+          "openedDay": 2100,
+          "endedDay": 2103,
+          "endedBecause": "founder_allocation_changed"
+        },
+        "supersededByTarget": {
+          "commitmentId": "commit:4298e920c497bdfc",
+          "parentBandId": "band:varied-river-mid",
+          "lineageId": "LIN-FC",
+          "founders": {
+            "workingAdults": 6,
+            "dependents": 2,
+            "elders": 0
+          },
+          "targetTileId": "tile:108:56",
+          "status": "superseded_by_revised_terms",
+          "openedDay": 2100,
+          "endedDay": 2103,
+          "endedBecause": "destination_changed"
+        }
+      }
+    },
+    {
+      "id": "R_abandoning_before_departure_ends_the_authority_and_leaves_the_commitment_true",
+      "claim": "withdrawal ends the authorization with its own named cause and day, no longer permits any departure, and does not touch the historical event",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "withdrawn": {
+          "commitmentId": "commit:4298e920c497bdfc",
+          "parentBandId": "band:varied-river-mid",
+          "lineageId": "LIN-FC",
+          "founders": {
+            "workingAdults": 6,
+            "dependents": 2,
+            "elders": 0
+          },
+          "targetTileId": "tile:108:56",
+          "status": "withdrawn_before_departure",
+          "openedDay": 2100,
+          "endedDay": 2110,
+          "endedBecause": "attempt_abandoned_before_departure"
+        },
+        "historicalEventUnchanged": true,
+        "eventStillDescribesTheseTerms": true
+      }
+    },
+    {
+      "id": "S_a_spent_authorization_cannot_authorize_a_second_physical_departure",
+      "claim": "consumption is terminal: the authorization no longer permits a departure, a second consumption is REFUSED rather than recorded, and the commitment survives as successor provenance",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "consumed": {
+          "commitmentId": "commit:4298e920c497bdfc",
+          "parentBandId": "band:varied-river-mid",
+          "lineageId": "LIN-FC",
+          "founders": {
+            "workingAdults": 6,
+            "dependents": 2,
+            "elders": 0
+          },
+          "targetTileId": "tile:108:56",
+          "status": "consumed_by_departure",
+          "openedDay": 2100,
+          "endedDay": 2120,
+          "endedBecause": "physical_departure_consumed_it"
+        },
+        "secondConsumptionRefused": true,
+        "commitmentStillAvailableAsProvenance": "commit:4298e920c497bdfc"
+      }
+    },
+    {
+      "id": "T_a_return_ends_the_separation_authority_and_the_acceptance_remains_a_fact",
+      "claim": "the authorization ends as `ended_by_return` and permits nothing further, while the immutable commitment still records that the cohort accepted the separation",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "endedByReturn": {
+          "commitmentId": "commit:4298e920c497bdfc",
+          "parentBandId": "band:varied-river-mid",
+          "lineageId": "LIN-FC",
+          "founders": {
+            "workingAdults": 6,
+            "dependents": 2,
+            "elders": 0
+          },
+          "targetTileId": "tile:108:56",
+          "status": "ended_by_return",
+          "openedDay": 2100,
+          "endedDay": 2500,
+          "endedBecause": "successor_physically_returned"
+        },
+        "theAcceptanceIsStillTrue": true,
+        "note": "this transition is representable and is NOT wired to return behaviour in this pass"
+      }
+    },
+    {
+      "id": "U_time_or_survival_cannot_reactivate_a_terminal_authorization",
+      "claim": "every ending of an already-terminal authorization is refused at every cause and every elapsed day, none permits a departure, and the module exports no way to reopen one — a new separation needs a new commitment",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "attemptsRun": 45,
+        "allRefused": true,
+        "anyPermittedDeparture": false,
+        "reopenLikeExports": [],
+        "daysTried": [
+          2102,
+          3000,
+          92100
+        ]
+      }
+    },
+    {
+      "id": "V_the_immutable_event_carries_no_status_and_the_authorization_is_a_separate_record",
+      "claim": "the commitment record has no status, phase or liveness field of any kind; current authority lives in a separate record that references it by commitmentId — so a status can end without history being edited",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "commitmentFields": [
+          "actorResolution",
+          "commitmentId",
+          "decisionDay",
+          "founders",
+          "lineageId",
+          "parentBandId",
+          "reasonIds",
+          "targetTileId"
+        ],
+        "statusLikeFieldsOnTheEvent": [],
+        "authorizationFields": [
+          "commitmentId",
+          "founders",
+          "lineageId",
+          "openedDay",
+          "parentBandId",
+          "status",
+          "targetTileId"
+        ],
+        "protects": "if a future change puts a mutable status on the commitment, this fails — that collapse is the `committed` defect this checkpoint removed"
+      }
+    }
+  ]
+}
