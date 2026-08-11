@@ -41,9 +41,10 @@
  * a permit that is not live, and re-derives the parent's condition to check the terms are still
  * fresh. The statement is corrected rather than left standing.
  *
- * It still has ZERO natural callers. No demographic step, annual fission, band decision or runner
- * path reaches it; `createDaughterBand` remains the only route ordinary ecology can take. The
- * controlled path is now truthful; it is not yet natural, and those are different claims.
+ * ROADMAP ITEM 4'S PRE-DEPARTURE CUTOVER now gives this authority exactly ONE natural caller:
+ * `naturalFissionPreDeparture`. Annual demography opens a proposal, a later day names the plan, and
+ * a still later day calls this canonical chain. The physical seam remains disconnected from ordinary
+ * ecology, so accepted terms may become `departure_ready` but no body or successor is created here.
  */
 
 import { allocateFounderCohorts, type CohortCounts, type FounderAllocation } from "./fissionFounderAllocation";

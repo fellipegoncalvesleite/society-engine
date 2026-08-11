@@ -4,8 +4,8 @@
 // harness relabels a fixture VACUOUS and fails the run when its predicate is false.
 //
 // The kernel is pure, so these fixtures need no world and no clock — which is the point. Nothing
-// here proves the lifecycle is CONNECTED to anything; that is the world adapter's evidence and it
-// does not exist yet. This audit proves only that the state machine cannot be driven into an
+// here proves the lifecycle is connected; natural reachability and parent deadlines now have their
+// own world-adapter audit. This audit proves only that the state machine cannot be driven into an
 // illegal or double-owned state, and that action bounds are distinguished from event-bounded living
 // conditions.
 import { createServer } from "vite";

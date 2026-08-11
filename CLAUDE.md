@@ -136,6 +136,27 @@ Other cited commits — all CONFIRMED present in `git log --all`:
   736214f39728767b77b4e7989dc33c7b16642239.
 
 Last updated:
+  2026-08-10 (ROADMAP ITEM 4 — NATURAL PRE-DEPARTURE REACHABILITY + PARENT ATTEMPT DEADLINE
+  AUTHORITY + LEGACY CUTOVER PREPARATION — PROGRESS / ITEM 4 ACTIVE / NO NATURAL PHYSICAL
+  DEPARTURE / STABILIZATION WRITERS 0 / unresolved_after_failed_return UNTOUCHED / ITEM 5
+  UNSTARTED. Recovered the exact remote checkpoint 22da95c into a new clean worktree, leaving the
+  old dirty ordinary-exploration checkout untouched. Architecture A+C keeps annual demography as
+  the old causal evidence producer and gives a dedicated adapter ownership of bounded proposal and
+  lifecycle progression. Natural progression is one phase per day: proposed on D, planned no
+  earlier than D+1, canonical preparation no earlier than D+2. An untouched seed reaches proposed
+  naturally on day 43,920 without a daughter, event or body transfer and later records a real
+  founder decline; a controlled warmed condition reaches departure_ready through the real
+  allocation, parent-residual, positive-commitment and one-use-permit authorities. A daily parent
+  deadline action runs before progression, delegates to the kernel timeout decision and existing
+  abandonment path, and withdraws a live permit on ready expiry. `createDaughterBand` is
+  byte-identical with zero production calls; `prepareFissionDeparture` has one natural caller;
+  `performAtomicDeparture` has zero natural callers. No natural provisional successor exists.
+  A–M 13/13 and seven mutation controls 7/7, all with zero vacuous fixtures and byte-identical
+  mutant restoration; full regression, determinism, step-mode, graph/import and build gates pass.
+  The exact next dependency is physical cutover, separately authorized; stabilization and the
+  unresolved failed-return debt remain later Item-4 work.)
+
+Previously updated:
   2026-08-10 (ROADMAP ITEM 4 — ATOMIC DEPARTURE GATE CORRECTION: THE EXECUTED DESTINATION IS THE
   ACCEPTED DESTINATION — PROGRESS / SUPERVISOR CORRECTION ON 5cc2532, THE GATE IS RETAINED / ITEM 4
   ACTIVE / NATURAL CALLERS STILL 0 / STABILIZATION WRITERS STILL 0 / createDaughterBand UNTOUCHED /
@@ -1884,16 +1905,16 @@ Implemented checkpoint:
       (context lifecycle 4→2 rebuilds). See §25.2.
 
 Current active checkpoint:
-  DYNAMIC FISSION / DAUGHTER VIABILITY / SUCCESSOR GROUPS (roadmap item 4) — **ACTIVE. TWO PURE
-  AUTHORITIES BUILT AND AUDITED; THE DIRECTION D LIFECYCLE IS NOT BUILT.** Branch
-  `checkpoint/dynamic-fission-provisional-successor-38`, local HEAD `42951ea`, remote `87859eb`,
-  three commits ahead and **deliberately unpushed**. `fissionFounderAllocation.ts` (cohorts
-  allocated, not re-derived) and `fissionParentResidualViability.ts` (the missing parent-side
-  authority) both exist, are typechecked and are covered by controlled fixtures — and **both have
-  ZERO PRODUCTION CALLERS. `createDaughterBand` is untouched and all six measured defects are still
-  live.** The reader surface a provisional successor would join is now counted: 160
-  band-enumeration sites, 144 unguarded, 104 status branches, 17 subsystems classified. **Item 4 is
-  NOT implemented and must not be described as such.** Historical context follows.
+  DYNAMIC FISSION / DAUGHTER VIABILITY / SUCCESSOR GROUPS (roadmap item 4) — **ACTIVE, PROGRESS,
+  DO NOT MERGE.** Branch `checkpoint/dynamic-fission-provisional-successor-38`, recovered from
+  remote tip `22da95c`. Natural PRE-DEPARTURE reachability is implemented: ordinary annual
+  demography can open a bounded attempt proposal, a dedicated adapter advances it at most one phase
+  per day through the existing planning and preparation authorities, and a daily parent-attempt
+  resolver enforces deadlines before progression. `createDaughterBand` is unchanged with zero
+  calls; `prepareFissionDeparture` has one natural caller; `performAtomicDeparture` has zero natural
+  callers. No natural provisional successor, physical transfer, stabilization writer or Item-5
+  work exists. `unresolved_after_failed_return` remains untouched and still blocks Item-4 freeze.
+  Historical context follows.
   The audit/architecture checkpoint that preceded it: branch
   `checkpoint/dynamic-fission-daughter-viability-37` from `ef76971`, audit-only (`git diff -- src/`
   is empty). The before-audit measured six defects over 200 years on two seeds, of which three are

@@ -66,6 +66,46 @@ import type { FissionLifecyclePhase } from "./fissionLifecycleKernel";
  * a parent's attempt to the successor it produced, so parent/successor co-residence can be
  * recognised from DIRECT LIFECYCLE PROVENANCE rather than from invented kinship.
  */
+
+/**
+ * The ordinary-ecology evidence that caused one parent-side fission attempt to begin.
+ *
+ * This is proposal content, not a completed plan and not a departure event. The target and founder
+ * count are the specific separation the parent is considering; they become the canonical
+ * `targetTileId` and `requestedFounders` only after the planning adapter re-validates them on a later
+ * simulated day. Keeping the two names apart is what prevents `proposed` from silently claiming the
+ * `departure_planned` contract.
+ *
+ * One record replaces the previous one when a later annual ecological condition opens a new attempt,
+ * so the state is bounded. Every quantity is either ordinary demographic evidence or band-known
+ * destination evidence; there is no hidden-world target here.
+ */
+export interface NaturalFissionProposalEvidence {
+  readonly authority: "annual_demography";
+  readonly cause: "accumulated_split_pressure" | "crisis_breakaway_pressure";
+  readonly proposedOnDay: number;
+  readonly evidenceTick: TickNumber;
+  readonly splitPressure: number;
+  /** The old demographic sizing model's requested cohort before physical-availability capping. */
+  readonly ecologicalFounderRequest: number;
+  /** The bounded cohort this specific proposal is considering after current availability is read. */
+  readonly proposedFounders: number;
+  /** Bodies at the residence and not already promised to a prepared expedition on proposal day. */
+  readonly foundersAvailableAtProposal: number;
+  /** Existing legacy minimum, retained as the natural revision floor rather than inventing one. */
+  readonly minimumFounderRequest: number;
+  /** A tile in the parent's own observed record; still only a proposal candidate at this phase. */
+  readonly proposedTargetTileId: TileId;
+  readonly proposedTargetScore: number;
+  readonly proposedTargetReason:
+    | "frontier_split"
+    | "river_corridor_split"
+    | "coastal_split"
+    | "crossing_enabled_split";
+  /** Bounded causal provenance from the annual evidence producer. */
+  readonly reasonIds: readonly string[];
+}
+
 /**
  * ROADMAP ITEM 4 — WHAT WAS ASSESSED, ACCEPTED AND PERMITTED, BEFORE ANYONE LEAVES.
  *
@@ -193,6 +233,8 @@ export interface FissionLifecycleRecord {
   readonly history: readonly FissionLifecyclePhase[];
   /** Shared by the parent's attempt and the successor it produced. */
   readonly lineageId: string;
+  /** Present only when ordinary ecology opened this attempt; never copied to a successor. */
+  readonly naturalProposal?: NaturalFissionProposalEvidence;
   /** The count originally requested, retained even when the residual authority revised it down. */
   readonly requestedFounders?: number;
   /** The count the parent residual authority actually endorsed, when it differed. */

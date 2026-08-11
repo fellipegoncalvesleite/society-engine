@@ -1,4 +1,4 @@
-// ROADMAP ITEM 4 — WHO MAY ENTER THE LEGACY DAUGHTER-CREATION PATH.
+// ROADMAP ITEM 4 — WHO MAY ENTER THE NATURAL PRE-DEPARTURE PATH.
 //
 // `isFissionEligibleParent` has said since it was written that a provisional successor may not
 // propose a split of its own — "it has not demonstrated that it can function, so a split of a split
@@ -10,8 +10,8 @@
 // These fixtures hold the repaired boundary from BOTH sides, because a gate that blocks everything
 // passes the half of the test that is easy to pass. F1 proves the annual bodily step still reaches a
 // provisional group's people; F2 proves the same group, on the same day, at split pressure ABOVE the
-// production threshold, creates no daughter. F3 and F4 are the controls that stop this being a
-// global switch-off.
+// production threshold, opens no attempt. F3 proves the established control opens the new proposal
+// without creating a daughter, and F4 proves a current attempt cannot be replaced.
 import { createServer } from "vite";
 import { prepareAndDepart } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -194,28 +194,32 @@ try {
       fissionEligible: afterSucc.bands[SID] === undefined ? null : lc.isFissionEligibleParent(afterSucc.bands[SID]),
       gateValuesProductionUsed: gateRows.provisional ?? null });
 
-  // ══ F3 — ESTABLISHED CONTROL: the legacy path is NOT globally disabled ══
+  // ══ F3 — ESTABLISHED CONTROL: THE NEW NATURAL PROPOSAL PATH IS LIVE ══
   //
-  // The same arming, on an ordinary established band, must still reach `createDaughterBand`. Without
-  // this, F2 would be satisfied by a gate that refuses everybody.
+  // The same arming, on an ordinary established band, must open a proposal and nothing physical.
+  // Without this, F2 would be satisfied by a gate that refuses everybody.
   const afterEst = runAnnual("established", { [parent.id]: establishedArmed });
   const estNewIds = bandIdsOf(afterEst).filter((id) => !beforeIds.includes(id));
   const estDaughters = estNewIds.filter((id) => afterEst.bands[id]?.parentBandId === parent.id);
-  record("F3_an_established_band_still_reaches_the_legacy_path",
-    "the identical arming on an ordinary established band still produces a legacy daughter — the gate refuses a class, not everybody, and natural fission is NOT cut over",
-    estDaughters.length > 0,
+  const estAttempt = afterEst.bands[parent.id]?.fissionAttempt;
+  record("F3_an_established_band_reaches_the_natural_proposal_path",
+    "the identical arming on an ordinary established band opens a production proposal while producing no legacy daughter or completed fission event",
+    estAttempt?.phase === "proposed" && estAttempt.naturalProposal?.authority === "annual_demography" &&
+      estDaughters.length === 0 && estNewIds.length === 0 &&
+      (afterEst.bands[parent.id]?.fissionEvents ?? []).length === 0,
     true,
     { parentId: String(parent.id), splitPressureArmedAt: ABOVE,
       newBandIds: estNewIds, daughtersOfTheParent: estDaughters,
-      daughterPopulation: estDaughters.map((id) => Math.round(afterEst.bands[id].demography.population)),
+      attemptPhase: estAttempt?.phase ?? null,
+      proposalAuthority: estAttempt?.naturalProposal?.authority ?? null,
       parentFissionEvents: (afterEst.bands[parent.id]?.fissionEvents ?? []).length,
       gateValuesProductionUsed: gateRows.established ?? null,
-      note: "this is the positive control that makes F2 a refusal rather than an empty patch" });
+      note: "this is the positive control that makes F2 a lifecycle refusal rather than a global switch-off" });
 
   // ══ F4 — CURRENT-ATTEMPT CONTROL: no two split authorities on one parent ══
   //
   // The other half of what `isFissionEligibleParent` promises. An established band holding a live
-  // pre-departure Item-4 attempt must not ALSO create a legacy daughter underneath it.
+  // pre-departure Item-4 attempt must not receive a second proposal or create a legacy daughter.
   const attemptingParent = {
     ...establishedArmed,
     fissionAttempt: { phase: "departure_planned", phaseEnteredDay: day0 - 3, history: ["proposed"],
@@ -224,27 +228,32 @@ try {
   const afterAttempt = runAnnual("mid-attempt", { [parent.id]: attemptingParent });
   const attNewIds = bandIdsOf(afterAttempt).filter((id) => !beforeIds.includes(id));
   const attDaughters = attNewIds.filter((id) => afterAttempt.bands[id]?.parentBandId === parent.id);
-  record("F4_a_parent_mid_attempt_cannot_also_create_a_legacy_daughter",
-    "an established band holding a live pre-departure fission attempt creates no legacy daughter, so one parent never runs two split authorities at once",
-    attDaughters.length === 0,
-    // Non-vacuous BECAUSE F3 is the same band, same arming, same day, differing only in the attempt.
-    estDaughters.length > 0,
+  record("F4_a_parent_mid_attempt_cannot_receive_a_second_attempt",
+    "an established band holding a live pre-departure attempt retains that exact attempt and creates neither a second proposal nor a legacy daughter",
+    attDaughters.length === 0 && attNewIds.length === 0 &&
+      afterAttempt.bands[parent.id]?.fissionAttempt?.lineageId === "LIN-FA-2" &&
+      afterAttempt.bands[parent.id]?.fissionAttempt?.phase === "departure_planned",
+    // Non-vacuous BECAUSE F3 is the same band, same arming and same day and opens a proposal.
+    estAttempt?.phase === "proposed",
     { attemptPhase: "departure_planned", differsFromF3ByOnly: "the presence of a live fissionAttempt",
       newBandIds: attNewIds, daughtersOfTheParent: attDaughters,
-      f3ProducedDaughters: estDaughters.length,
+      f3OpenedProposal: estAttempt?.phase === "proposed",
       hasCurrentAttemptAfter: afterAttempt.bands[parent.id] === undefined ? null : lc.hasCurrentFissionAttempt(afterAttempt.bands[parent.id]),
       gateValuesProductionUsed: gateRows["mid-attempt"] ?? null });
 
   // ══ F5 — NON-VACUITY, STATED AS A MEASUREMENT ══
   //
-  // The arming really is above the gate: the SAME construction on an established band fissions (F3),
-  // so the provisional refusal in F2 cannot be "the pressure was never high enough".
-  record("F5_the_arming_is_provably_above_the_legacy_threshold",
-    "the split pressure used for the provisional arm is the same value that makes an established band fission on the same day, so F2 measures the lifecycle gate and nothing else",
-    estDaughters.length > 0 && succDaughtersOfSuccessor.length === 0,
+  // The arming really is above the gate: the SAME construction opens a proposal on the established
+  // band, so the provisional refusal in F2 cannot be "the pressure was never high enough".
+  record("F5_the_arming_is_provably_above_the_natural_proposal_threshold",
+    "the split pressure used for the provisional arm is the same value that opens a proposal on an established band on the same day, so F2 measures the lifecycle gate and nothing else",
+    estAttempt?.phase === "proposed" &&
+      afterSucc.bands[SID]?.fissionAttempt === undefined &&
+      succDaughtersOfSuccessor.length === 0,
     true,
-    { armedSplitPressure: ABOVE, establishedFissioned: estDaughters.length > 0,
-      provisionalFissioned: succDaughtersOfSuccessor.length > 0,
+    { armedSplitPressure: ABOVE, establishedOpenedProposal: estAttempt?.phase === "proposed",
+      provisionalOpenedProposal: afterSucc.bands[SID]?.fissionAttempt !== undefined,
+      provisionalCreatedDaughter: succDaughtersOfSuccessor.length > 0,
       identicalExceptFor: "which band the arming was applied to",
       observedGateValues: gateRows });
 

@@ -25,6 +25,7 @@ import {
   derivePreparedCommitmentPartyPeople,
 } from "./bandMobility";
 import { isFissionEligibleParent } from "./bandLifecycle";
+import { beginNaturalFissionProposal } from "./naturalFissionPreDeparture";
 import { createDaughterDeepHistory } from "./bandHistory";
 import {
   inheritAdaptiveHumanForDaughter,
@@ -101,6 +102,7 @@ interface DemographyComputation {
   readonly viableFrontier: FissionTargetCandidate | undefined;
   readonly shouldCreateDaughter: boolean;
   readonly deferredReason: Reason | undefined;
+  readonly naturalFissionCause: "accumulated_split_pressure" | "crisis_breakaway_pressure" | undefined;
 }
 
 interface FissionTargetCandidate {
@@ -181,23 +183,43 @@ export function updateBandsDemographyAndFission(
     };
     const computation = computeBandDemography(currentWorld, band, contextCache, diagnostics);
     const bandWithDemography = applyDemographyUpdate(currentWorld, band, computation);
-    const maybeFission =
-      computation.shouldCreateDaughter && Object.keys(bandsById).length < MAX_BANDS
-        ? createDaughterBand(currentWorld, bandWithDemography, computation)
+    // ROADMAP ITEM 4 — CUTOVER PREPARATION, NOT PHYSICAL CUTOVER.
+    //
+    // This exact legacy eligibility boundary used to call `createDaughterBand` and immediately move
+    // bodies into an ordinary daughter. It now opens ONE parent-side proposal through the dedicated
+    // natural adapter. `createDaughterBand` remains in source unchanged as compatibility/debt, but
+    // ordinary ecology no longer calls it. No daughter, event or population transfer is produced.
+    const worldWithUpdatedParent: WorldState = {
+      ...currentWorld,
+      bands: { ...currentWorld.bands, [bandWithDemography.id]: bandWithDemography },
+    };
+    const proposed =
+      computation.shouldCreateDaughter &&
+      computation.viableFrontier !== undefined &&
+      computation.naturalFissionCause !== undefined &&
+      Object.keys(bandsById).length < MAX_BANDS
+        ? beginNaturalFissionProposal({
+            world: worldWithUpdatedParent,
+            parentId: bandWithDemography.id,
+            today: Number(world.time.day ?? Number(world.time.tick) * 90),
+            input: {
+              cause: computation.naturalFissionCause,
+              splitPressure: computation.demography.splitPressure,
+              ecologicalFounderRequest: getDaughterPopulation(computation.demography.population),
+              minimumFounderRequest: DAUGHTER_MIN_POPULATION,
+              targetTileId: computation.viableFrontier.tileId,
+              targetScore: computation.viableFrontier.score,
+              targetReason: computation.viableFrontier.reasonType,
+              reasonIds: [computation.primaryReason.id],
+            },
+          })
         : undefined;
-
-    if (maybeFission === undefined) {
-      bandsById = {
-        ...bandsById,
-        [bandWithDemography.id]: bandWithDemography,
-      };
-      continue;
-    }
 
     bandsById = {
       ...bandsById,
-      [maybeFission.parent.id]: maybeFission.parent,
-      [maybeFission.daughter.id]: maybeFission.daughter,
+      [bandWithDemography.id]: proposed?.ok === true
+        ? proposed.world.bands[bandWithDemography.id] ?? bandWithDemography
+        : bandWithDemography,
     };
   }
 
@@ -651,20 +673,18 @@ function computeBandDemography(
   // ── THE LIFECYCLE GATE, AND IT IS FIRST BECAUSE IT IS A QUESTION ABOUT WHO MAY ASK ──
   //
   // `isFissionEligibleParent` — established, and not already splitting — is the canonical boundary,
-  // and until now NOTHING IN PRODUCTION CALLED IT. Only audits did, so the predicate asserted a rule
-  // the annual step did not enforce: this loop skips `dispersed`/`absorbed`/`extinct` and nothing
-  // else, a provisional successor is none of those, and the eligibility below is pure split
-  // pressure plus cooldown. A group whose own viability is the open question could therefore reach
-  // `createDaughterBand` and split a split.
+  // It was originally added before production consumed it, so the annual step once let a
+  // provisional successor satisfy pure split-pressure/cooldown checks and reach the legacy instant
+  // daughter path. It now guards the natural proposal boundary itself.
   //
   // The gate belongs HERE, at the producer, rather than at the single call site: `shouldCreateDaughter`
   // is derived from this, and a field that reads true for a band no caller may act on is a field that
   // lies. Gating the one caller instead would leave the next caller to rediscover the rule.
   //
-  // It gates DAUGHTER CREATION ONLY. Everything above — cohorts, births, deaths, nutrition, the whole
-  // annual bodily step — is computed before this line and is untouched, because a provisional group is
-  // a LIVING band: `bandLifecycle` says so in as many words, and hiding its bodies from the physical
-  // layer would recreate the ghosts CORRECTION-34 removed. Quarantine is not immunity.
+  // It gates PROPOSAL INITIATION ONLY. Everything above — cohorts, births, deaths, nutrition, the
+  // whole annual bodily step — is computed before this line and is untouched, because a provisional
+  // group is a LIVING band: `bandLifecycle` says so in as many words, and hiding its bodies from the
+  // physical layer would recreate the ghosts CORRECTION-34 removed. Quarantine is not immunity.
   const eligible =
     isFissionEligibleParent(band) &&
     deferredReason === undefined &&
@@ -744,6 +764,11 @@ function computeBandDemography(
     viableFrontier,
     shouldCreateDaughter: eligible && !isFissionSuppressedForAudit(),
     deferredReason,
+    naturalFissionCause: eligible
+      ? crisisBreakawayCreatesDaughter
+        ? "crisis_breakaway_pressure"
+        : "accumulated_split_pressure"
+      : undefined,
   };
 }
 

@@ -4,12 +4,11 @@
  * The one place population moves between entities. `ARCHITECTURE_DECISION.md` §3 names it as the
  * single point at which conservation must be proven, and this module is that point.
  *
- * **IT IS NOT REACHABLE FROM ORDINARY FISSION.** Nothing in `demography.ts` calls it. The legacy
- * `createDaughterBand` path is still the only one ordinary ecology can reach, and it is unchanged.
- * This is the production writer the natural path will later call — deliberately not a test-only
- * duplicate — but until travel, return, early failure and stabilization provide a bounded resolver,
- * connecting it would create a production-reachable successor nothing can resolve, which is the
- * half-state `CLAUDE.md` §18 forbids.
+ * **IT IS NOT REACHABLE FROM ORDINARY FISSION.** Nothing in `demography.ts` or the natural
+ * pre-departure adapter calls it. Ordinary ecology now stops at `departure_ready`; the legacy
+ * `createDaughterBand` implementation remains in source but its old annual call site has been
+ * retired. This seam is the production writer a later physical-cutover pass may connect —
+ * deliberately not a test-only duplicate. Connecting it is outside this subpass.
  *
  * WHY THIS SEAM, AND WHERE IT SITS.
  *

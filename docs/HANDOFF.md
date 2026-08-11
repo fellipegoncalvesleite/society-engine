@@ -181,6 +181,31 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### ROADMAP ITEM 4 — NATURAL PRE-DEPARTURE REACHABILITY + PARENT ATTEMPT DEADLINE AUTHORITY — **PROGRESS / PHYSICAL CUTOVER NOT STARTED / DO NOT MERGE**
+
+The exact remote checkpoint `22da95c9ff4631c909647f704d3b3e6652218d55` was recovered into a new
+clean worktree; the old dirty `checkpoint/ordinary-exploration-capacity-24` checkout was left
+untouched. Annual demography remains the causal evidence producer at the old fission boundary, and
+a dedicated adapter now records bounded natural proposal evidence and progresses the existing
+parent attempt lifecycle at most one phase per day: proposed on D, planned no earlier than D+1, and
+canonical preparation no earlier than D+2.
+
+An untouched seed naturally reaches `proposed` on day 43,920 without creating a daughter, event or
+body transfer, reaches `departure_planned` on day 43,921, and truthfully abandons on day 43,922 when
+the represented founder cohort declines. A controlled warmed condition reaches `departure_ready`
+through the real founder allocation, parent-residual, positive-commitment and one-use-permit chain.
+A daily parent-attempt deadline action runs before progression and withdraws a live permit through
+the existing abandonment authority when a ready attempt expires.
+
+Static authority status: `createDaughterBand` is byte-identical to the recovered checkpoint and has
+zero production calls; `prepareFissionDeparture` has exactly one natural production caller;
+`performAtomicDeparture` has zero natural production callers. Therefore this subpass creates no
+natural provisional successor, emits no fission event and transfers no bodies. A–M is 13/13 and the
+seven required mutation controls are 7/7, all non-vacuous, with production restored byte-identically.
+The full fission/provisional regression matrix, build, graph/import boundary, deterministic replay,
+step-mode and season-order gates are green. `unresolved_after_failed_return` and stabilization are
+untouched; Item 5 remains unstarted.
+
 ### ROADMAP ITEM 4 — PHYSICAL TRAVEL AND RETURN VERTICAL — **PROGRESS: THE SUCCESSOR WALKS AND COMES HOME AT A PLACE / STABILIZATION NOT BEGUN / DO NOT MERGE / NOT PUSHED**
 
 **Timer-only reintegration is gone.** Every lifecycle phase declares whether elapsed time alone may
@@ -8988,6 +9013,17 @@ UI in `src/ui/BandPanel.tsx`, audit + `--targeted-cause-event-check` in
 
 ## Recommended Next Step
 
+**CURRENT (ROADMAP ITEM 4, 2026-08-10).** The exact next dependency is a separately authorized
+physical-cutover pass: connect a naturally `departure_ready` parent attempt to the existing
+`performAtomicDeparture` gate and thereby create the provisional successor naturally, while
+preserving the accepted allocation, commitment, permit, freshness and destination checks. That
+work must remove or permanently bypass the legacy daughter call without rewriting or deleting
+`createDaughterBand`, and must prove that no legacy/new duplicate can occur. **Do not implement it
+in this checkpoint.** Stabilization and resolution of `unresolved_after_failed_return` remain later,
+separately bounded Item-4 dependencies; Item 5 remains unstarted.
+
+---
+
 **CURRENT (ROADMAP ITEM 4, 2026-08-03, at local `42951ea` — UNPUSHED).** **Roadmap Item 3 is
 ACCEPTED AND FROZEN. Roadmap Item 4 is ACTIVE — two pure authorities are implemented and audited,
 and the Direction D lifecycle is NOT started. Roadmap Item 5 is NOT started.**
@@ -9514,6 +9550,8 @@ exception; daughter colours related-but-distinct and never visually confusing.
 ---
 
 ## Checkpoint Log
+
+- **ROADMAP ITEM 4 — NATURAL PRE-DEPARTURE REACHABILITY + PARENT ATTEMPT DEADLINE AUTHORITY** (`checkpoint/dynamic-fission-provisional-successor-38`, continuing recovered tip `22da95c`) — architecture A+C preserves annual demographic causality while a dedicated adapter opens and progresses bounded parent attempts one phase per day. Natural proposal and planning are demonstrated on an untouched seed; canonical positive commitment and live permit are reachable under a controlled real condition; the daily parent deadline resolver precedes progression and ready timeout withdraws the permit. `createDaughterBand` unchanged/zero calls, preparation one natural caller, physical seam zero natural callers. A–M 13/13, mutations 7/7, full regressions green. Item 4 remains active; no physical cutover, stabilization, failed-return resolution or Item-5 work.
 
 - **ROADMAP ITEM 3 FINAL INTEGRATION AUDIT** (`checkpoint/shared-range-item-3-final-freeze`) — audit-only integration pass over the whole Shared Range item; I1-I16 16/16 with 0 vacuous, 0 adverse over 200 natural years, determinism identical on both arms, 222 frozen fixtures unchanged. PROGRESS, not frozen: one blocker, a place labelled released_historical can still move behaviour by <= 0.02. Item 4 not started.
 - **CORRECTION-34F** (`checkpoint/shared-use-physical-presence-authority-34`) — the target-work labour count must be a positive integer; zero, fractional and non-finite labour can no longer produce an observation, a physical request, stock removal, cargo or support, and the rounding that laundered them is gone. Bound is 1, not the expedition minimum, which stays in expedition.ts. Z0-Z12 13/13, 0 vacuous; inert for every valid party. Item 4 unstarted.

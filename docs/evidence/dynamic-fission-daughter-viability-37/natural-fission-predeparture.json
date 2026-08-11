@@ -1,0 +1,681 @@
+{
+  "audit": "ROADMAP-ITEM-4-NATURAL-PRE-DEPARTURE-AND-PARENT-DEADLINES",
+  "generatedAt": "2026-08-11T00:59:17.727Z",
+  "naturalRun": {
+    "seed": "audit27:natural:s1",
+    "maxDays": 45000,
+    "observedProposalDay": 43920,
+    "observedParentId": "band:varied-estuary",
+    "seasonSteps": 488,
+    "startedWithAttempt": false
+  },
+  "controlledRun": {
+    "seed": "audit27:natural:s1",
+    "warmDays": 2100,
+    "annualDay": 2160,
+    "selectedParentId": "band:varied-river-mid",
+    "candidateSweep": [
+      {
+        "parentId": "band:varied-dry-corridor-mid",
+        "proposal": "not_created"
+      },
+      {
+        "parentId": "band:varied-dry-corridor-upper",
+        "proposal": "not_created"
+      },
+      {
+        "parentId": "band:varied-estuary",
+        "proposal": "created",
+        "afterPlanning": "departure_planned",
+        "afterPreparation": "abandoned",
+        "permit": null
+      },
+      {
+        "parentId": "band:varied-lake-east",
+        "proposal": "created",
+        "afterPlanning": "departure_planned",
+        "afterPreparation": "abandoned",
+        "permit": null
+      },
+      {
+        "parentId": "band:varied-lake-north",
+        "proposal": "created",
+        "afterPlanning": "departure_planned",
+        "afterPreparation": "abandoned",
+        "permit": null
+      },
+      {
+        "parentId": "band:varied-lake-west",
+        "proposal": "created",
+        "afterPlanning": "departure_planned",
+        "afterPreparation": "abandoned",
+        "permit": null
+      },
+      {
+        "parentId": "band:varied-pass-frontier",
+        "proposal": "created",
+        "afterPlanning": "departure_planned",
+        "afterPreparation": "abandoned",
+        "permit": null
+      },
+      {
+        "parentId": "band:varied-plains-creek",
+        "proposal": "created",
+        "afterPlanning": "departure_planned",
+        "afterPreparation": "abandoned",
+        "permit": null
+      },
+      {
+        "parentId": "band:varied-river-mid",
+        "proposal": "created",
+        "afterPlanning": "departure_planned",
+        "afterPreparation": "departure_ready",
+        "permit": "live"
+      }
+    ]
+  },
+  "phaseOrdering": {
+    "proposalDay": 2160,
+    "planDay": 2161,
+    "readyDay": 2162,
+    "maximumOnePhasePerParentPerDay": true,
+    "deadlineRunsBeforeProgression": true
+  },
+  "writerReaderMap": {
+    "fissionAttemptPropertyWriters": [
+      {
+        "file": "src/sim/agents/fissionDeparturePreparation.ts",
+        "line": 399
+      },
+      {
+        "file": "src/sim/agents/fissionDeparturePreparation.ts",
+        "line": 463
+      },
+      {
+        "file": "src/sim/agents/fissionDeparturePreparation.ts",
+        "line": 509
+      },
+      {
+        "file": "src/sim/agents/fissionDepartureSeam.ts",
+        "line": 547
+      },
+      {
+        "file": "src/sim/agents/fissionFieldTransferPolicy.ts",
+        "line": 146
+      },
+      {
+        "file": "src/sim/agents/naturalFissionPreDeparture.ts",
+        "line": 127
+      },
+      {
+        "file": "src/sim/agents/naturalFissionPreDeparture.ts",
+        "line": 282
+      }
+    ],
+    "fissionAttemptReaders": [
+      {
+        "file": "src/sim/agents/bandLifecycle.ts",
+        "line": 73
+      },
+      {
+        "file": "src/sim/agents/bandLifecycle.ts",
+        "line": 117
+      },
+      {
+        "file": "src/sim/agents/bandLifecycle.ts",
+        "line": 210
+      },
+      {
+        "file": "src/sim/agents/fissionDeparturePreparation.ts",
+        "line": 265
+      },
+      {
+        "file": "src/sim/agents/fissionDeparturePreparation.ts",
+        "line": 438
+      },
+      {
+        "file": "src/sim/agents/fissionDeparturePreparation.ts",
+        "line": 494
+      },
+      {
+        "file": "src/sim/agents/fissionDepartureSeam.ts",
+        "line": 337
+      },
+      {
+        "file": "src/sim/agents/naturalFissionPreDeparture.ts",
+        "line": 175
+      },
+      {
+        "file": "src/sim/agents/naturalFissionPreDeparture.ts",
+        "line": 223
+      },
+      {
+        "file": "src/sim/agents/naturalFissionPreDeparture.ts",
+        "line": 229
+      },
+      {
+        "file": "src/sim/agents/parentFissionAttemptResolver.ts",
+        "line": 51
+      },
+      {
+        "file": "src/sim/agents/parentFissionAttemptResolver.ts",
+        "line": 51
+      },
+      {
+        "file": "src/sim/agents/parentFissionAttemptResolver.ts",
+        "line": 57
+      },
+      {
+        "file": "src/sim/agents/parentFissionAttemptResolver.ts",
+        "line": 70
+      }
+    ],
+    "phaseAuthorities": {
+      "proposed": [
+        "naturalFissionPreDeparture.beginNaturalFissionProposal -> kernel.beginAttempt"
+      ],
+      "departure_planned": [
+        "naturalFissionPreDeparture.advanceNaturalFissionPreDeparture -> kernel.requestTransition"
+      ],
+      "departure_ready": [
+        "fissionDeparturePreparation.prepareFissionDeparture -> kernel.requestTransition"
+      ],
+      "abandoned": [
+        "naturalFissionPreDeparture -> fissionDeparturePreparation.abandonPreparedDeparture",
+        "parentFissionAttemptResolver -> fissionDeparturePreparation.abandonPreparedDeparture"
+      ],
+      "departed": [
+        "fissionDepartureSeam.performAtomicDeparture (controlled-only; zero production callers)"
+      ]
+    },
+    "preparedAuthorizationAuthorities": {
+      "live": [
+        "fissionDeparturePreparation.prepareFissionDeparture -> openDepartureAuthorization"
+      ],
+      "withdrawn_before_departure": [
+        "fissionDeparturePreparation.abandonPreparedDeparture -> endDepartureAuthorization"
+      ],
+      "superseded_by_revised_terms": [
+        "fissionDeparturePreparation.supersedePreparedDeparture -> endDepartureAuthorization"
+      ],
+      "consumed_by_departure": [
+        "fissionDepartureSeam.performAtomicDeparture -> endDepartureAuthorization"
+      ]
+    },
+    "legacyDaughter": {
+      "implementationDefinitions": [
+        {
+          "file": "src/sim/agents/demography.ts",
+          "line": 910
+        }
+      ],
+      "productionCallers": []
+    },
+    "callers": {
+      "beginNaturalFissionProposal": [
+        {
+          "file": "src/sim/agents/demography.ts",
+          "line": 201
+        }
+      ],
+      "prepareFissionDeparture": [
+        {
+          "file": "src/sim/agents/naturalFissionPreDeparture.ts",
+          "line": 305
+        }
+      ],
+      "performAtomicDeparture": [],
+      "createDaughterBand": [],
+      "resolveTimeout": [
+        {
+          "file": "src/sim/agents/parentFissionAttemptResolver.ts",
+          "line": 60
+        }
+      ],
+      "resolveParentFissionAttemptDeadlines": [
+        {
+          "file": "src/sim/agents/parentFissionAttemptResolver.ts",
+          "line": 93
+        }
+      ]
+    }
+  },
+  "eventHistoryAudit": {
+    "proposalAndPlanWriteNoBandFissionEvent": true,
+    "proposalAndPlanWriteNoDaughterLineage": true,
+    "commitmentStoredOnlyInsidePreparedAttempt": {
+      "commitmentId": "commit:ae5f2a6d0390504b",
+      "actorResolution": "aggregate_founder_cohort",
+      "parentBandId": "band:varied-river-mid",
+      "lineageId": "fission-lineage:band:varied-river-mid:24:tile:108:56",
+      "founders": {
+        "workingAdults": 11,
+        "dependents": 6,
+        "elders": 3
+      },
+      "targetTileId": "tile:108:56",
+      "decisionDay": 2162,
+      "reasonIds": [
+        "founder_cohort_accepted_separation",
+        "strong_motive_to_separate",
+        "destination_is_known_ground",
+        "split_removes_productive_labour_from_camp",
+        "split_worsens_dependency_load",
+        "split_reduces_mobility_capability"
+      ]
+    },
+    "physicalFissionEventWritersRemainInsideUncalledLegacyImplementation": true,
+    "historyReadersContinueToReadCompletedFissionEvents": [
+      "src/sim/agents/bandHistory.ts",
+      "src/sim/agents/bandChronicle.ts",
+      "src/sim/agents/eventSystem.ts",
+      "src/ui/band/History.tsx"
+    ]
+  },
+  "summary": {
+    "total": 13,
+    "passed": 13,
+    "failed": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "A_real_ecology_can_create_a_proposal",
+      "claim": "an untouched seeded world reaches proposed through ordinary annual ecology; the proposal's only delta is fissionAttempt, so it creates no daughter, event, population transfer or positional move",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "seed": "audit27:natural:s1",
+        "proposalDay": 43920,
+        "proposalTick": 488,
+        "parentId": "band:varied-estuary",
+        "cause": "accumulated_split_pressure",
+        "splitPressure": 0.65,
+        "targetTileId": "tile:187:88",
+        "targetConfidence": 1,
+        "parentPopulationBeforeAnnual": 50,
+        "parentPopulationAfterAnnual": 51,
+        "totalPopulationBeforeAnnual": 197,
+        "totalPopulationAfterAnnual": 198,
+        "note": "annual births/deaths may change population; the suppressed counterfactual proves the proposal itself changes only fissionAttempt"
+      }
+    },
+    {
+      "id": "B_natural_proposal_becomes_a_real_plan",
+      "claim": "the next production day names a deterministic lineage, bounded founder count and target from the parent's own observed record, without claiming commitment",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "lineageId": "fission-lineage:band:varied-estuary:488:tile:187:88",
+        "requestedFounders": 18,
+        "targetTileId": "tile:187:88",
+        "targetConfidence": 1,
+        "history": [
+          "proposed"
+        ],
+        "directAdapterMatchesRegisteredDailyAction": true
+      }
+    },
+    {
+      "id": "C_natural_positive_commitment_is_reachable",
+      "claim": "production annual evidence, next-day planning and the following day's canonical preparation reach departure_ready with exact allocation, positive commitment, live one-use permit and current-parent residual evidence, while moving nobody",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "parentId": "band:varied-river-mid",
+        "proposalDay": 2160,
+        "plannedDay": 2161,
+        "readyDay": 2162,
+        "requestedFounders": 20,
+        "endorsedFounders": 20,
+        "exactAllocation": {
+          "requestedFounders": 20,
+          "allocatedFounders": 20,
+          "successor": {
+            "workingAdults": 11,
+            "dependents": 6,
+            "elders": 3
+          },
+          "parentRemainder": {
+            "workingAdults": 21,
+            "dependents": 13,
+            "elders": 6
+          },
+          "remainderDrawOrder": [
+            "workingAdults",
+            "dependents",
+            "elders"
+          ],
+          "exact": true
+        },
+        "commitmentId": "commit:ae5f2a6d0390504b",
+        "commitmentDecisionDay": 2162,
+        "permitStatus": "live",
+        "targetTileId": "tile:108:56",
+        "storedResidualFingerprint": "residual:de586340a4b7fb9c",
+        "currentResidualFingerprint": "residual:de586340a4b7fb9c",
+        "controlledCandidateSweep": [
+          {
+            "parentId": "band:varied-dry-corridor-mid",
+            "proposal": "not_created"
+          },
+          {
+            "parentId": "band:varied-dry-corridor-upper",
+            "proposal": "not_created"
+          },
+          {
+            "parentId": "band:varied-estuary",
+            "proposal": "created",
+            "afterPlanning": "departure_planned",
+            "afterPreparation": "abandoned",
+            "permit": null
+          },
+          {
+            "parentId": "band:varied-lake-east",
+            "proposal": "created",
+            "afterPlanning": "departure_planned",
+            "afterPreparation": "abandoned",
+            "permit": null
+          },
+          {
+            "parentId": "band:varied-lake-north",
+            "proposal": "created",
+            "afterPlanning": "departure_planned",
+            "afterPreparation": "abandoned",
+            "permit": null
+          },
+          {
+            "parentId": "band:varied-lake-west",
+            "proposal": "created",
+            "afterPlanning": "departure_planned",
+            "afterPreparation": "abandoned",
+            "permit": null
+          },
+          {
+            "parentId": "band:varied-pass-frontier",
+            "proposal": "created",
+            "afterPlanning": "departure_planned",
+            "afterPreparation": "abandoned",
+            "permit": null
+          },
+          {
+            "parentId": "band:varied-plains-creek",
+            "proposal": "created",
+            "afterPlanning": "departure_planned",
+            "afterPreparation": "abandoned",
+            "permit": null
+          },
+          {
+            "parentId": "band:varied-river-mid",
+            "proposal": "created",
+            "afterPlanning": "departure_planned",
+            "afterPreparation": "departure_ready",
+            "permit": "live"
+          }
+        ]
+      }
+    },
+    {
+      "id": "D_real_decline_remains_real",
+      "claim": "an untouched-seed natural plan whose represented founders decline is abandoned without a manufactured commitment, permit or readiness",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "response": {
+          "parentId": "band:varied-estuary",
+          "lineageId": "fission-lineage:band:varied-estuary:488:tile:187:88",
+          "day": 43922,
+          "fromPhase": "departure_planned",
+          "toPhase": "abandoned",
+          "kind": "attempt_abandoned_after_founder_decline",
+          "detail": "founder_cohort_declined:not_willing_on_held_evidence,separation_costs_those_who_stay"
+        },
+        "finalPhase": "abandoned",
+        "preparedDeparturePresent": false,
+        "directAdapterMatchesRegisteredDailyAction": true
+      }
+    },
+    {
+      "id": "E_proposed_timeout",
+      "claim": "the canonical parent resolver abandons proposed exactly at its production kernel bound without moving bodies",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "boundDays": 90,
+        "resolution": {
+          "parentId": "band:varied-estuary",
+          "lineageId": "fission-lineage:band:varied-estuary:488:tile:187:88",
+          "fromPhase": "proposed",
+          "toPhase": "abandoned",
+          "day": 44010
+        }
+      }
+    },
+    {
+      "id": "F_planned_timeout",
+      "claim": "the same parent resolver abandons departure_planned exactly at its production kernel bound without moving bodies",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "boundDays": 90,
+        "resolution": {
+          "parentId": "band:varied-estuary",
+          "lineageId": "fission-lineage:band:varied-estuary:488:tile:187:88",
+          "fromPhase": "departure_planned",
+          "toPhase": "abandoned",
+          "day": 44011
+        }
+      }
+    },
+    {
+      "id": "G_ready_timeout_withdraws_live_permit",
+      "claim": "an actually prepared live-permitted ready attempt expires to abandoned with its immutable commitment/allocation retained and its permit terminally withdrawn, with no successor or cohort movement",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "boundDays": 30,
+        "resolution": {
+          "parentId": "band:varied-river-mid",
+          "lineageId": "fission-lineage:band:varied-river-mid:24:tile:108:56",
+          "fromPhase": "departure_ready",
+          "toPhase": "abandoned",
+          "day": 2192,
+          "permitStatusBefore": "live",
+          "permitStatusAfter": "withdrawn_before_departure"
+        },
+        "commitmentRetained": {
+          "commitmentId": "commit:ae5f2a6d0390504b",
+          "actorResolution": "aggregate_founder_cohort",
+          "parentBandId": "band:varied-river-mid",
+          "lineageId": "fission-lineage:band:varied-river-mid:24:tile:108:56",
+          "founders": {
+            "workingAdults": 11,
+            "dependents": 6,
+            "elders": 3
+          },
+          "targetTileId": "tile:108:56",
+          "decisionDay": 2162,
+          "reasonIds": [
+            "founder_cohort_accepted_separation",
+            "strong_motive_to_separate",
+            "destination_is_known_ground",
+            "split_removes_productive_labour_from_camp",
+            "split_worsens_dependency_load",
+            "split_reduces_mobility_capability"
+          ]
+        },
+        "allocationRetained": {
+          "requestedFounders": 20,
+          "allocatedFounders": 20,
+          "successor": {
+            "workingAdults": 11,
+            "dependents": 6,
+            "elders": 3
+          },
+          "parentRemainder": {
+            "workingAdults": 21,
+            "dependents": 13,
+            "elders": 6
+          },
+          "remainderDrawOrder": [
+            "workingAdults",
+            "dependents",
+            "elders"
+          ],
+          "exact": true
+        },
+        "permitAfter": {
+          "commitmentId": "commit:ae5f2a6d0390504b",
+          "parentBandId": "band:varied-river-mid",
+          "lineageId": "fission-lineage:band:varied-river-mid:24:tile:108:56",
+          "founders": {
+            "workingAdults": 11,
+            "dependents": 6,
+            "elders": 3
+          },
+          "targetTileId": "tile:108:56",
+          "status": "withdrawn_before_departure",
+          "openedDay": 2162,
+          "endedDay": 2192,
+          "endedBecause": "attempt_abandoned_before_departure"
+        }
+      }
+    },
+    {
+      "id": "H_one_day_before_deadline_does_nothing",
+      "claim": "one day before each parent-side bound the production resolver is a byte-identical no-op",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "earlyRows": [
+          {
+            "phase": "proposed",
+            "unchanged": true,
+            "resolutions": 0
+          },
+          {
+            "phase": "departure_planned",
+            "unchanged": true,
+            "resolutions": 0
+          },
+          {
+            "phase": "departure_ready",
+            "unchanged": true,
+            "resolutions": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "I_step_mode_equivalence",
+      "claim": "daily, weekly, monthly and seasonal stepping over the same 630-day span produce byte-identical complete worlds from a real ready attempt, proving the daily resolver keeps one calendar authority",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "spanDays": 630,
+        "rows": [
+          {
+            "mode": "daily",
+            "steps": 630,
+            "finalDay": 2792,
+            "finalTick": 31,
+            "hash": "c0fece16fcd0312622c81816d49757c665ffecddf06f166a02f5f52d0091a3e4",
+            "matchesDaily": true,
+            "finalAttemptPhase": "abandoned",
+            "finalAttemptPhaseEnteredDay": 2552,
+            "finalPermitStatus": "withdrawn_before_departure"
+          },
+          {
+            "mode": "weekly",
+            "steps": 90,
+            "finalDay": 2792,
+            "finalTick": 31,
+            "hash": "c0fece16fcd0312622c81816d49757c665ffecddf06f166a02f5f52d0091a3e4",
+            "matchesDaily": true,
+            "finalAttemptPhase": "abandoned",
+            "finalAttemptPhaseEnteredDay": 2552,
+            "finalPermitStatus": "withdrawn_before_departure"
+          },
+          {
+            "mode": "monthly",
+            "steps": 21,
+            "finalDay": 2792,
+            "finalTick": 31,
+            "hash": "c0fece16fcd0312622c81816d49757c665ffecddf06f166a02f5f52d0091a3e4",
+            "matchesDaily": true,
+            "finalAttemptPhase": "abandoned",
+            "finalAttemptPhaseEnteredDay": 2552,
+            "finalPermitStatus": "withdrawn_before_departure"
+          },
+          {
+            "mode": "seasonal",
+            "steps": 7,
+            "finalDay": 2792,
+            "finalTick": 31,
+            "hash": "c0fece16fcd0312622c81816d49757c665ffecddf06f166a02f5f52d0091a3e4",
+            "matchesDaily": true,
+            "finalAttemptPhase": "abandoned",
+            "finalAttemptPhaseEnteredDay": 2552,
+            "finalPermitStatus": "withdrawn_before_departure"
+          }
+        ]
+      }
+    },
+    {
+      "id": "J_no_provisional_successor_appears",
+      "claim": "performAtomicDeparture has zero production call sites and every natural/prepared/expired evidence world contains no provisional successor",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "performAtomicDepartureDefinitions": [
+          {
+            "file": "src/sim/agents/fissionDepartureSeam.ts",
+            "line": 329
+          }
+        ],
+        "performAtomicDepartureProductionCallers": [],
+        "noProvisionalInEvidenceWorlds": true
+      }
+    },
+    {
+      "id": "K_no_legacy_new_duplicate",
+      "claim": "the same armed causal split creates exactly the new proposal and no legacy daughter/event/body delta; createDaughterBand still exists but has zero production call sites",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "newBandIds": [],
+        "parentFissionEventCount": 0,
+        "parentDaughterIds": [],
+        "createDaughterBandDefinitions": [
+          {
+            "file": "src/sim/agents/demography.ts",
+            "line": 910
+          }
+        ],
+        "createDaughterBandProductionCallers": []
+      }
+    },
+    {
+      "id": "L_provisional_successor_cannot_propose",
+      "claim": "the production eligibility boundary refuses the same valid proposal on a live provisional successor while accepting the established positive control",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "establishedControl": "proposal_created",
+        "provisionalResult": "parent_not_eligible",
+        "provisionalPhase": "travelling"
+      }
+    },
+    {
+      "id": "M_deterministic_replay",
+      "claim": "the same seed/state produces byte-identical proposal, plan, real commitment, live permit and ready-timeout result",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "bytes": 6130,
+        "hashA": "8eb1771fc3cedd06b8f8151d005b7d0975fb942e9ecc8b55608c32c59494af29",
+        "hashB": "8eb1771fc3cedd06b8f8151d005b7d0975fb942e9ecc8b55608c32c59494af29"
+      }
+    }
+  ]
+}

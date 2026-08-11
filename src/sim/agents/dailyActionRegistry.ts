@@ -32,6 +32,8 @@ import { provisionalSubsistenceDailyAction } from "./provisionalTravelSubsistenc
 import { provisionalReturnDecisionDailyAction } from "./provisionalReturnDecision";
 import { provisionalEstablishmentDailyAction } from "./provisionalEstablishment";
 import { provisionalLifecycleDeadlineDailyAction } from "./provisionalLifecycleResolver";
+import { parentFissionAttemptDeadlineDailyAction } from "./parentFissionAttemptResolver";
+import { naturalFissionPreDepartureDailyAction } from "./naturalFissionPreDeparture";
 
 /**
  * The default daily-action registry advanced by `advanceWorldByDays`.
@@ -42,6 +44,11 @@ import { provisionalLifecycleDeadlineDailyAction } from "./provisionalLifecycleR
 export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   intraSeasonTripDailyAction,
   expeditionDailyAction,
+  // ROADMAP ITEM 4 — parent-side attempt bounds are declared in DAYS and are therefore checked
+  // daily. Deadline comes before progression so a phase cannot advance on the day it is due and
+  // thereby evade its maximum. Both reducers move no bodies.
+  parentFissionAttemptDeadlineDailyAction,
+  naturalFissionPreDepartureDailyAction,
   // ROADMAP ITEM 4 — provisional travel runs LAST on a shared day, after ordinary trips and
   // expeditions, so a walking group's step is taken against a world whose ordinary activity for that
   // day has already resolved. It is a no-op for every band that is not a walking provisional

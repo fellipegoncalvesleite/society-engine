@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-10T23:07:54.603Z",
+  "generatedAt": "2026-08-11T00:58:19.608Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "parentBandId": "band:varied-river-mid",
@@ -284,7 +284,7 @@
     },
     {
       "id": "L_no_live_permit_survives_an_abandoned_attempt",
-      "claim": "explicit abandonment ends the permit `withdrawn_before_departure` while keeping the commitment as a true historical fact; and a timeout that ended the phase WITHOUT touching the permit is still refused, so the two barriers are independent",
+      "claim": "explicit abandonment and the production deadline resolver both retain the historical commitment while withdrawing the live permit; the seam's phase gate independently refuses a malformed abandoned record",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
@@ -292,10 +292,23 @@
         "commitmentRetained": true,
         "departureAfterAbandonment": "parent_attempt_not_departure_ready",
         "kernelTimeoutTarget": "abandoned",
+        "productionTimeoutResolution": {
+          "parentId": "band:varied-river-mid",
+          "lineageId": "LIN-GATE-1",
+          "fromPhase": "departure_ready",
+          "toPhase": "abandoned",
+          "day": 2130,
+          "permitStatusBefore": "live",
+          "permitStatusAfter": "withdrawn_before_departure"
+        },
+        "permitAfterProductionTimeout": "withdrawn_before_departure",
+        "departureAfterProductionTimeout": "parent_attempt_not_departure_ready",
         "departureAfterTimeoutWithPermitUntouched": "parent_attempt_not_departure_ready",
-        "productionCallersOfResolveTimeout": [],
-        "resolverHandlesTheParentAttempt": false,
-        "statedGap": "no production adapter resolves the parent attempt's timeout; `departure_ready -> abandoned` is declared in the contract table and driven by nothing"
+        "productionCallersOfResolveTimeout": [
+          "src/sim/agents/parentFissionAttemptResolver.ts"
+        ],
+        "resolverHandlesTheParentAttempt": true,
+        "statedBoundary": "one parent resolver owns timeout termination and delegates permit withdrawal to the existing abandonment authority"
       }
     },
     {
@@ -330,34 +343,46 @@
       }
     },
     {
-      "id": "O_ordinary_ecology_still_cannot_reach_any_of_this",
-      "claim": "no demographic, runner, decision or annual-fission path calls the preparation writer or the departure seam, and `createDaughterBand` remains the only route ordinary ecology can take",
+      "id": "O_ordinary_ecology_reaches_preparation_but_not_physical_departure",
+      "claim": "the natural adapter is the sole ordinary caller of canonical preparation, every ordinary physical-seam caller remains absent, and the retained createDaughterBand definition has no call site",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
         "naturalFiles": [
           {
             "file": "src/sim/agents/demography.ts",
-            "reachesTheSeam": false,
-            "reachesPreparation": false
+            "callsTheSeam": false,
+            "callsPreparation": false
+          },
+          {
+            "file": "src/sim/agents/naturalFissionPreDeparture.ts",
+            "callsTheSeam": false,
+            "callsPreparation": true
+          },
+          {
+            "file": "src/sim/agents/dailyActionRegistry.ts",
+            "callsTheSeam": false,
+            "callsPreparation": false
           },
           {
             "file": "src/sim/tick/advance.ts",
-            "reachesTheSeam": false,
-            "reachesPreparation": false
+            "callsTheSeam": false,
+            "callsPreparation": false
           },
           {
             "file": "src/sim/rules/bandDecision.ts",
-            "reachesTheSeam": false,
-            "reachesPreparation": false
+            "callsTheSeam": false,
+            "callsPreparation": false
           },
           {
             "file": "src/sim/runner/simRunner.ts",
-            "reachesTheSeam": false,
-            "reachesPreparation": false
+            "callsTheSeam": false,
+            "callsPreparation": false
           }
         ],
-        "legacyPathIntact": true
+        "createDaughterBandDefinitionStillExists": true,
+        "createDaughterBandOccurrencesIncludingDefinition": 1,
+        "createDaughterBandCallSites": 0
       }
     },
     {
@@ -417,7 +442,7 @@
           }
         ],
         "productionRestoredByteIdentically": true,
-        "sha256": "57b1491dd259fe1899246e4d568664114c881054fe059ce8105c33f9e6dc8e48"
+        "sha256": "a641c7e4d1b2f9f8cf85426a48f28f086724c7da66ecd1890d3088174205e28b"
       }
     }
   ]

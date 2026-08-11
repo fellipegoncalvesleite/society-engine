@@ -12,7 +12,7 @@
 // there is no longer any surface to fake it through), J (a late refusal leaves the permit unspent)
 // and F (the same permit cannot move bodies twice).
 import { createServer } from "vite";
-import { mkdirSync, writeFileSync, readFileSync, copyFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync, copyFileSync, unlinkSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { dirname } from "node:path";
 import { bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
@@ -48,6 +48,7 @@ try {
   const commitment = await server.ssrLoadModule("/sim/agents/fissionCommitment.ts");
   const measurement = await server.ssrLoadModule("/sim/agents/fissionResidualMeasurement.ts");
   const kernel = await server.ssrLoadModule("/sim/agents/fissionLifecycleKernel.ts");
+  const parentResolver = await server.ssrLoadModule("/sim/agents/parentFissionAttemptResolver.ts");
   const generate = await server.ssrLoadModule("/sim/world/generate.ts");
   const passability = await server.ssrLoadModule("/sim/world/passability.ts");
   const lc = await server.ssrLoadModule("/sim/agents/bandLifecycle.ts");
@@ -498,10 +499,10 @@ try {
 
   // ══ L — ABANDONMENT AND THE TIMEOUT PATH ══
   //
-  // Two independent barriers, and the second matters because production has NO adapter that resolves
-  // the parent attempt's timeout at all: `resolveTimeout` has zero callers in `src/`, and
-  // `resolveProvisionalLifecycles` reads `provisionalSuccessor` only. So even if a future adapter
-  // times the attempt out WITHOUT touching the permit, the phase gate still refuses.
+  // Two independent barriers remain, and production now exercises BOTH: the canonical parent
+  // resolver delegates timeout to `abandonPreparedDeparture`, which withdraws the permit; the seam's
+  // phase gate independently refuses even a deliberately malformed abandoned record whose permit
+  // was left live.
   const abandoned = prep.abandonPreparedDeparture(readyWorld.world, parent.id, day0 + 3);
   const abandonedWorld = abandoned.ok === true ? abandoned.world : undefined;
   const afterAbandon = abandonedWorld === undefined ? undefined : departFrom(abandonedWorld);
@@ -514,28 +515,42 @@ try {
       [parent.id]: { ...readyWorld.world.bands[parent.id], fissionAttempt: { ...a, phase: "abandoned" } } } };
   })();
   const afterTimeoutOnly = departFrom(timeoutOnlyWorld);
-  const resolverSource = readFileSync("src/sim/agents/provisionalLifecycleResolver.ts", "utf8");
-  const productionTimeoutCallers = ["src/sim/agents/provisionalLifecycleResolver.ts", "src/sim/tick/advance.ts",
+  const productionResolved = parentResolver.resolveParentFissionAttemptDeadlines(
+    readyWorld.world, day0 + kernel.DEPARTURE_READY_MAX_DAYS);
+  const productionResolvedAttempt = productionResolved.world.bands[parent.id].fissionAttempt;
+  const afterProductionTimeout = departFrom(productionResolved.world);
+  const parentResolverSource = readFileSync("src/sim/agents/parentFissionAttemptResolver.ts", "utf8");
+  const productionTimeoutCallers = ["src/sim/agents/parentFissionAttemptResolver.ts",
+    "src/sim/agents/provisionalLifecycleResolver.ts", "src/sim/tick/advance.ts",
     "src/sim/agents/demography.ts"].filter((f) => /resolveTimeout\s*\(/.test(readFileSync(f, "utf8")));
   record("L_no_live_permit_survives_an_abandoned_attempt",
-    "explicit abandonment ends the permit `withdrawn_before_departure` while keeping the commitment as a true historical fact; and a timeout that ended the phase WITHOUT touching the permit is still refused, so the two barriers are independent",
+    "explicit abandonment and the production deadline resolver both retain the historical commitment while withdrawing the live permit; the seam's phase gate independently refuses a malformed abandoned record",
     abandoned.ok === true &&
       abandonedWorld.bands[parent.id].fissionAttempt.preparedDeparture.authorization.status === "withdrawn_before_departure" &&
       abandonedWorld.bands[parent.id].fissionAttempt.preparedDeparture.commitment.commitmentId === prepared.commitment.commitmentId &&
       afterAbandon.ok === false &&
+      productionResolvedAttempt.phase === "abandoned" &&
+      productionResolvedAttempt.preparedDeparture.authorization.status === "withdrawn_before_departure" &&
+      productionResolvedAttempt.preparedDeparture.commitment.commitmentId === prepared.commitment.commitmentId &&
+      productionResolved.resolutions.length === 1 &&
+      afterProductionTimeout.ok === false &&
       afterTimeoutOnly.ok === false &&
       afterTimeoutOnly.refusal === "parent_attempt_not_departure_ready" &&
       timedOut.ok === true && timedOut.state.phase === "abandoned" &&
-      productionTimeoutCallers.length === 0,
+      productionTimeoutCallers.length === 1 &&
+      productionTimeoutCallers[0] === "src/sim/agents/parentFissionAttemptResolver.ts",
     true,
     { permitAfterAbandonment: abandonedWorld?.bands[parent.id].fissionAttempt.preparedDeparture.authorization.status ?? null,
       commitmentRetained: abandonedWorld?.bands[parent.id].fissionAttempt.preparedDeparture.commitment.commitmentId === prepared.commitment.commitmentId,
       departureAfterAbandonment: afterAbandon?.ok === false ? afterAbandon.refusal : "ACCEPTED",
       kernelTimeoutTarget: timedOut.ok === true ? timedOut.state.phase : timedOut.rejection,
+      productionTimeoutResolution: productionResolved.resolutions[0] ?? null,
+      permitAfterProductionTimeout: productionResolvedAttempt.preparedDeparture.authorization.status,
+      departureAfterProductionTimeout: afterProductionTimeout.ok === false ? afterProductionTimeout.refusal : "ACCEPTED",
       departureAfterTimeoutWithPermitUntouched: afterTimeoutOnly.ok === false ? afterTimeoutOnly.refusal : "ACCEPTED",
       productionCallersOfResolveTimeout: productionTimeoutCallers,
-      resolverHandlesTheParentAttempt: /fissionAttempt/.test(resolverSource),
-      statedGap: "no production adapter resolves the parent attempt's timeout; `departure_ready -> abandoned` is declared in the contract table and driven by nothing" });
+      resolverHandlesTheParentAttempt: /fissionAttempt/.test(parentResolverSource),
+      statedBoundary: "one parent resolver owns timeout termination and delegates permit withdrawal to the existing abandonment authority" });
 
   // ══ M — CONSERVATION, MEASURED ON THE RESULTING WORLD ══
   const before = { pop: beforePop, ...cohortsOf(parent) };
@@ -568,20 +583,27 @@ try {
     ordinary.ok === true,
     { identical: digest(rerun) === digest(ordinary), bytes: digest(ordinary).length });
 
-  // ══ O — NO NATURAL CUTOVER ══
-  const naturalFiles = ["src/sim/agents/demography.ts", "src/sim/tick/advance.ts",
+  // ══ O — NATURAL PRE-DEPARTURE IS LIVE; PHYSICAL CUTOVER IS NOT ══
+  const naturalFiles = ["src/sim/agents/demography.ts", "src/sim/agents/naturalFissionPreDeparture.ts",
+    "src/sim/agents/dailyActionRegistry.ts", "src/sim/tick/advance.ts",
     "src/sim/rules/bandDecision.ts", "src/sim/runner/simRunner.ts"]
     .map((f) => ({ file: f, source: readFileSync(f, "utf8") }))
     .map((e) => ({ file: e.file,
-      reachesTheSeam: /performAtomicDeparture|fissionDepartureSeam/.test(e.source),
-      reachesPreparation: /prepareFissionDeparture|fissionDeparturePreparation/.test(e.source) }));
+      callsTheSeam: /\bperformAtomicDeparture\s*\(/.test(e.source),
+      callsPreparation: /\bprepareFissionDeparture\s*\(/.test(e.source) }));
   const demographySource = readFileSync("src/sim/agents/demography.ts", "utf8");
-  record("O_ordinary_ecology_still_cannot_reach_any_of_this",
-    "no demographic, runner, decision or annual-fission path calls the preparation writer or the departure seam, and `createDaughterBand` remains the only route ordinary ecology can take",
-    naturalFiles.every((e) => e.reachesTheSeam === false && e.reachesPreparation === false) &&
-      demographySource.includes("createDaughterBand"),
-    demographySource.includes("createDaughterBand"),
-    { naturalFiles, legacyPathIntact: demographySource.includes("createDaughterBand") });
+  const legacyOccurrences = [...demographySource.matchAll(/\bcreateDaughterBand\s*\(/g)].length;
+  record("O_ordinary_ecology_reaches_preparation_but_not_physical_departure",
+    "the natural adapter is the sole ordinary caller of canonical preparation, every ordinary physical-seam caller remains absent, and the retained createDaughterBand definition has no call site",
+    naturalFiles.filter((entry) => entry.callsPreparation).map((entry) => entry.file).join("|") ===
+      "src/sim/agents/naturalFissionPreDeparture.ts" &&
+      naturalFiles.every((entry) => entry.callsTheSeam === false) &&
+      legacyOccurrences === 1,
+    /function createDaughterBand\s*\(/.test(demographySource),
+    { naturalFiles,
+      createDaughterBandDefinitionStillExists: /function createDaughterBand\s*\(/.test(demographySource),
+      createDaughterBandOccurrencesIncludingDefinition: legacyOccurrences,
+      createDaughterBandCallSites: Math.max(0, legacyOccurrences - 1) });
 
   // ══ P — NEGATIVE CONTROLS ══
   //
@@ -715,6 +737,7 @@ try {
     controls.push({ id: m.id, applied: true, ...row });
   }
   copyFileSync(`${SEAM_SRC}.gatebak`, SEAM_SRC);
+  unlinkSync(`${SEAM_SRC}.gatebak`);
   const shaAfter = sha(SEAM_SRC);
   record("P_negative_controls_each_defect_breaks_a_named_fixture",
     "removing the prepared-departure gate, trusting the stored fingerprint instead of re-deriving it, transferring a cohort other than the prepared one, and failing to consume the permit each make a named fixture fail — and production is restored byte-identically",

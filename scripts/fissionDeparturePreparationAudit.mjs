@@ -477,29 +477,36 @@ try {
       note: "the departure seam additionally refuses a `departure_ready` record carrying no prepared departure; see the gated-departure audit's fixture A" });
 
   // ══ P — PRODUCTION REACHABILITY ══
-  const natural = ["src/sim/agents/demography.ts", "src/sim/tick/advance.ts",
-    "src/sim/rules/bandDecision.ts", "src/sim/runner/simRunner.ts"]
-    .map((f) => ({ file: f, mentions: /prepareFissionDeparture|fissionDeparturePreparation/.test(readFileSync(f, "utf8")) }));
+  const demographySource = readFileSync("src/sim/agents/demography.ts", "utf8");
+  const naturalAdapterSource = readFileSync("src/sim/agents/naturalFissionPreDeparture.ts", "utf8");
   const seamSource = readFileSync("src/sim/agents/fissionDepartureSeam.ts", "utf8");
   // THE SECOND HALF OF THIS FIXTURE IS INVERTED, AND THE INVERSION IS THE POINT.
   //
   // It used to assert that the departure seam does NOT mention the permit or the prepared terms —
   // a truthful record of the gap this family had not yet closed. That gap is closed, so the same
   // assertion now has to say the opposite: the seam MUST consume both, or the old bypass is back.
-  // Natural reachability is unchanged and is still asserted to be zero.
+  // Natural PRE-DEPARTURE reachability is now expected to be exactly one adapter call; physical
+  // seam reachability remains zero.
   const seamConsumesPreparedTerms =
     /authorizationPermitsDeparture/.test(seamSource) && /preparedDeparture/.test(seamSource);
   const seamStillTakesResidualContext = /residualContext/.test(seamSource);
-  record("P_the_preparation_writer_has_no_natural_callers_and_departure_now_requires_it",
-    "no demographic, runner, decision or annual-fission path reaches the preparation writer, while `performAtomicDeparture` now consumes the prepared terms and the permit and no longer accepts a caller-supplied residual reading at all",
-    natural.every((n) => n.mentions === false) &&
+  const naturalPreparationCalls = [...naturalAdapterSource.matchAll(/\bprepareFissionDeparture\s*\(/g)].length;
+  const naturalSeamCalls = [...naturalAdapterSource.matchAll(/\bperformAtomicDeparture\s*\(/g)].length;
+  record("P_the_preparation_writer_has_one_natural_adapter_caller_and_departure_still_requires_it",
+    "annual demography opens the natural proposal, exactly one natural adapter calls canonical preparation, and the physical seam remains uncalled while continuing to require the prepared terms",
+    /beginNaturalFissionProposal\s*\(\{/.test(demographySource) &&
+      naturalPreparationCalls === 1 &&
+      naturalSeamCalls === 0 &&
       seamConsumesPreparedTerms === true &&
       seamStillTakesResidualContext === false,
     true,
-    { naturalCallers: natural,
+    { annualProposalInitiatorPresent: /beginNaturalFissionProposal\s*\(\{/.test(demographySource),
+      naturalPreparationCaller: "src/sim/agents/naturalFissionPreDeparture.ts",
+      naturalPreparationCallCount: naturalPreparationCalls,
+      naturalPhysicalSeamCallCount: naturalSeamCalls,
       departureSeamConsumesPermitAndPreparedTerms: seamConsumesPreparedTerms,
       departureSeamStillAcceptsCallerResidualContext: seamStillTakesResidualContext,
-      statedGap: "the controlled path is truthful; it is NOT natural — nothing in ordinary ecology proposes, prepares or executes a separation" });
+      statedBoundary: "ordinary ecology can propose, plan and prepare; it still cannot execute a physical separation" });
 
   const failing = fixtures.filter((f) => f.verdict === "FAIL");
   const vacuous = fixtures.filter((f) => f.verdict === "VACUOUS");

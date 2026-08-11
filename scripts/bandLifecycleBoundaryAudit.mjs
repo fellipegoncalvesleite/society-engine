@@ -42,7 +42,12 @@ const TERMINALITY_OWNING_MODULES = ["src/sim/agents/viability.ts"];
 // migrated it is listed as PENDING rather than failing the run — an audit that fails on work that is
 // honestly not started yet would have to be disabled to make progress, and a disabled audit proves
 // nothing. `migrated: true` moves it into the enforced set.
-const NATURAL_PATH_FILES = ["src/sim/agents/demography.ts", "src/sim/tick/advance.ts"];
+const NATURAL_PATH_FILES = [
+  "src/sim/agents/demography.ts",
+  "src/sim/agents/naturalFissionPreDeparture.ts",
+  "src/sim/agents/dailyActionRegistry.ts",
+  "src/sim/tick/advance.ts",
+];
 const MATRIX_MODULES = [
   { file: "src/sim/agents/contextCache.ts", action: "adapter", migrated: true },
   { file: "src/sim/agents/viability.ts", action: "blocked", migrated: true },
@@ -169,13 +174,12 @@ for (const name of CANONICAL) {
 
 // ── check 5b (§10): performAtomicDeparture stays unreachable from the natural path ──
 //
-// Structural, not remembered. Until travel and resolution exist, a future edit must not be able to
-// wire the departure seam into ordinary fission — a production-reachable successor nothing can
-// resolve is worse than the defect it replaces. `resolveProvisionalLifecycles` IS allowed in
-// advance.ts: it only ever acts on a provisional successor, and none can exist without the seam.
+// Structural, not remembered. This subpass permits ordinary proposal/planning/preparation but
+// explicitly forbids physical cutover. `resolveProvisionalLifecycles` remains allowed in advance.ts:
+// it acts only on a provisional successor, and ordinary production still creates none.
 for (const rel of NATURAL_PATH_FILES) {
   const raw = readFileSync(join(ROOT, rel), "utf8");
-  if (/performAtomicDeparture|fissionDepartureSeam/.test(raw)) {
+  if (/\bperformAtomicDeparture\s*\(|from\s+["'][^"']*fissionDepartureSeam["']/.test(raw)) {
     violations.push({ kind: "departure_seam_reachable_from_the_natural_path", file: rel });
   }
 }

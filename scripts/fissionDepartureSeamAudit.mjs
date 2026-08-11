@@ -440,19 +440,26 @@ try {
   });
 
   // ── D16 — the seam is not reachable from ordinary fission ───────────────────────────────────
-  record("D16", "nothing in production calls this seam, so ordinary behaviour cannot change", () => {
+  record("D16", "natural pre-departure is live but nothing in ordinary production calls this physical seam", () => {
     // Read from the actual source rather than asserted.
     const demography = readFileSync("src/sim/agents/demography.ts", "utf8");
+    const natural = readFileSync("src/sim/agents/naturalFissionPreDeparture.ts", "utf8");
+    const registry = readFileSync("src/sim/agents/dailyActionRegistry.ts", "utf8");
     const advance = readFileSync("src/sim/tick/advance.ts", "utf8");
-    const callers = ["demography.ts", "advance.ts"].filter((_, i) =>
-      [demography, advance][i].includes("performAtomicDeparture") || [demography, advance][i].includes("fissionDepartureSeam"),
-    );
+    const sources = [["demography.ts", demography], ["naturalFissionPreDeparture.ts", natural],
+      ["dailyActionRegistry.ts", registry], ["advance.ts", advance]];
+    const callers = sources.filter(([, source]) => /\bperformAtomicDeparture\s*\(/.test(source)).map(([file]) => file);
+    const legacyOccurrences = [...demography.matchAll(/\bcreateDaughterBand\s*\(/g)].length;
     return {
       callers,
-      legacyPathIntact: demography.includes("createDaughterBand"),
-      nonVacuous: demography.includes("createDaughterBand"),
-      nonVacuityNote: "the legacy path genuinely still exists in demography.ts",
-      passed: callers.length === 0,
+      naturalPreparationCalls: [...natural.matchAll(/\bprepareFissionDeparture\s*\(/g)].length,
+      legacyImplementationExists: /function createDaughterBand\s*\(/.test(demography),
+      legacyCallSites: Math.max(0, legacyOccurrences - 1),
+      nonVacuous: baseline.ok === true,
+      nonVacuityNote: "the controlled audit really executed this seam, so zero ordinary callers is a caller-boundary claim rather than an inert function",
+      passed: callers.length === 0 &&
+        [...natural.matchAll(/\bprepareFissionDeparture\s*\(/g)].length === 1 &&
+        legacyOccurrences === 1,
     };
   });
 

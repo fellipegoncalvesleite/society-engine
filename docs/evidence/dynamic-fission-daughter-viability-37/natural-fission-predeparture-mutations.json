@@ -1,0 +1,143 @@
+{
+  "audit": "ROADMAP-ITEM-4-NATURAL-PRE-DEPARTURE-MUTATION-CONTROLS",
+  "generatedAt": "2026-08-11T01:10:19.587Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "parentId": "band:varied-river-mid",
+  "restoration": {
+    "restoredByteIdentically": true,
+    "startingHashes": {
+      "src/sim/agents/naturalFissionPreDeparture.ts": "4f099524f65604dae71ed7ea131a6a223ab578ec595c313c47720ccb5b29dfba",
+      "src/sim/agents/fissionLifecycleKernel.ts": "6230f0cfce5136c7be644e8a6fc32abd316a788e80258213ea4986a5951b8351",
+      "src/sim/agents/fissionDeparturePreparation.ts": "4353b4b7add3e368e6528a619cee04499f348798aae20335c9841fa4eb34e4b6",
+      "src/sim/agents/parentFissionAttemptResolver.ts": "18aae57d5989b3e2b4c0a9d14f65d168ccf89013fd7ee43510bcafd4b625a45a",
+      "src/sim/agents/demography.ts": "b6a7821c4257be382a8674d7fd290ff2754fc088ecb1d5b0c4cd85c77f66b3fc",
+      "src/sim/agents/bandLifecycle.ts": "e8e3cb1577b4e0bc5b93a3399791abbb76cc8725c064698dc38a67540da6a4b7"
+    },
+    "endingHashes": {
+      "src/sim/agents/naturalFissionPreDeparture.ts": "4f099524f65604dae71ed7ea131a6a223ab578ec595c313c47720ccb5b29dfba",
+      "src/sim/agents/fissionLifecycleKernel.ts": "6230f0cfce5136c7be644e8a6fc32abd316a788e80258213ea4986a5951b8351",
+      "src/sim/agents/fissionDeparturePreparation.ts": "4353b4b7add3e368e6528a619cee04499f348798aae20335c9841fa4eb34e4b6",
+      "src/sim/agents/parentFissionAttemptResolver.ts": "18aae57d5989b3e2b4c0a9d14f65d168ccf89013fd7ee43510bcafd4b625a45a",
+      "src/sim/agents/demography.ts": "b6a7821c4257be382a8674d7fd290ff2754fc088ecb1d5b0c4cd85c77f66b3fc",
+      "src/sim/agents/bandLifecycle.ts": "e8e3cb1577b4e0bc5b93a3399791abbb76cc8725c064698dc38a67540da6a4b7"
+    }
+  },
+  "summary": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0,
+    "vacuous": 0
+  },
+  "controls": [
+    {
+      "id": "MUT1_parent_eligibility_gate",
+      "barrier": "bypassing the natural adapter's parent gate lets a parent with a current attempt silently receive another proposal",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "baseline": "parent_not_eligible",
+        "mutant": "proposal_replaced_current_attempt"
+      }
+    },
+    {
+      "id": "MUT2_real_plan_required",
+      "barrier": "bypassing plan revalidation promotes a destination no longer present in the band's observed record into departure_planned",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "baselinePhase": "abandoned",
+        "mutantPhase": "departure_planned",
+        "targetStillKnown": false
+      }
+    },
+    {
+      "id": "MUT3_completed_preparation_required_for_ready",
+      "barrier": "removing the kernel proof admits departure_ready without a prepared allocation, positive commitment or live permit",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "baseline": "departure_ready_without_completed_preparation",
+        "mutant": {
+          "ok": true,
+          "state": {
+            "phase": "departure_ready",
+            "phaseEnteredDay": 11,
+            "history": [
+              "proposed",
+              "departure_planned"
+            ]
+          },
+          "timedOut": false
+        }
+      }
+    },
+    {
+      "id": "MUT4_ready_timeout_must_withdraw_permit",
+      "barrier": "replacing the withdrawn authorization with the old authorization leaves an abandoned attempt's permit live",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "baselinePermit": "withdrawn_before_departure",
+        "mutantPhase": "abandoned",
+        "mutantPermit": "live"
+      }
+    },
+    {
+      "id": "MUT5_daily_deadline_resolver_is_load_bearing",
+      "barrier": "disabling the registered resolver lets a live-permitted ready attempt outlive its declared daily maximum",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "boundDays": 30,
+        "elapsedDays": 31,
+        "mutantPhase": "departure_ready",
+        "mutantPermit": "live"
+      }
+    },
+    {
+      "id": "MUT6_legacy_and_new_paths_must_not_both_fire",
+      "barrier": "reconnecting the retained legacy daughter body-transfer under the same causal branch creates both a proposal and a completed daughter/event",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "mutantAttemptPhase": "proposed",
+        "mutantNewBandIds": [
+          "band:varied-river-mid:daughter:1:t24"
+        ],
+        "mutantFissionEventCount": 1
+      }
+    },
+    {
+      "id": "MUT7_provisional_successor_quarantine",
+      "barrier": "weakening fission eligibility from established to merely living lets a provisional successor propose its own fission",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "correspondingFixtureWouldFail": true,
+      "detail": {
+        "baseline": "parent_not_eligible",
+        "mutant": "proposal_created"
+      }
+    }
+  ]
+}

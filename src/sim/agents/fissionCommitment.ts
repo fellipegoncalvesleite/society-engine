@@ -37,10 +37,11 @@
  * stood here — "nothing calls it, the seam gates on phase alone" — described the state of two passes
  * ago and is corrected rather than left standing.
  *
- * STILL NOT: no NATURAL path reaches any of it. No demographic step, annual fission, band decision or
- * runner path proposes a separation or prepares a departure, so a commitment only ever exists because
- * a controlled caller asked for one. Stabilization still has zero production writers, and this
- * historical record is explicitly NOT a stabilization gate — see `authorizationPermitsDeparture`.
+ * NATURAL PRE-DEPARTURE REACHABILITY now exists: annual demography can open a proposal and the daily
+ * natural adapter can reach the real preparation chain, so an ordinary parent may truthfully accept
+ * and hold a live permit. Ordinary ecology still has no caller of the physical departure seam.
+ * Stabilization still has zero production writers, and this historical record is explicitly NOT a
+ * stabilization gate — see `authorizationPermitsDeparture`.
  */
 
 import { deriveBandTendencies, TENDENCY_INFLUENCE_CAP } from "./bandTendency";
