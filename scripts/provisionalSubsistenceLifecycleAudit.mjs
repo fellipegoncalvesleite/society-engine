@@ -678,8 +678,8 @@ try {
     }
     const failing = peakSignals.filter((s) => !s.holds).map((s) => s.id);
     record(
-      "P1_PRODUCTION_PIPELINE_has_no_stabilization_writer",
-      "driven by the real daily runner from a real atomic departure, the group reaches establishment and never stabilizes because descriptive measurements have no lifecycle authority",
+      "P1_descriptive_diagnostics_do_not_bypass_the_operation_contract",
+      "driven by the real daily runner from a real atomic departure, this failing group reaches establishment but its descriptive signal count cannot manufacture stabilization",
       everStabilized === false && sawEstablishing === true,
       dep.ok === true && sawEstablishing === true,
       {
@@ -687,7 +687,7 @@ try {
         peakHoldingDiagnostics: peakSatisfied, diagnosticCount: 7,
         signalsAtPeak: peakSignals, failingSignals: failing,
         trace,
-        boundary: "positive commitment and sufficient operation semantics remain unimplemented",
+        boundary: "descriptive `satisfiedSignals` remains outside the production stabilization proof",
       },
     );
   }
@@ -736,7 +736,13 @@ try {
     });
     const timerStabilization = kernel.requestTransition({
       current: { phase: "establishing", phaseEnteredDay: day0 - 400, history: [] },
-      to: "stabilized", today: day0, cause: "elapsed_time", livedEvidenceCount: 6,
+      to: "stabilized", today: day0, cause: "elapsed_time",
+      stabilizationProof: {
+        independentOperationProven: true,
+        consumedDepartureProvenanceProven: true,
+        neverEnteredReturnPathProven: true,
+        quarantineReleaseInitialized: true,
+      },
     });
     record(
       "Z35_no_timer_reintegrates",

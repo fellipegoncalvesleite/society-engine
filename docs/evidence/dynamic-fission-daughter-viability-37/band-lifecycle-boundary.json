@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-05T19:35:50.720Z",
+  "generatedAt": "2026-08-11T22:55:16.484Z",
   "checkpoint": "ROADMAP ITEM 4 §4 — band lifecycle boundary",
   "boundary": "src/sim/agents/bandLifecycle.ts",
   "boundaryExports": [
@@ -57,7 +57,7 @@
     {
       "file": "src/sim/agents/bandEvents.ts",
       "action": "adapter",
-      "importsBoundary": false
+      "importsBoundary": true
     },
     {
       "file": "src/sim/agents/bandHistory.ts",
@@ -72,7 +72,7 @@
     {
       "file": "src/sim/agents/demography.ts",
       "action": "blocked + guard",
-      "importsBoundary": false
+      "importsBoundary": true
     },
     {
       "file": "src/sim/agents/relationshipMemory.ts",
@@ -87,7 +87,7 @@
     {
       "file": "src/sim/runner/simRunner.ts",
       "action": "adapter",
-      "importsBoundary": false
+      "importsBoundary": true
     }
   ],
   "privateDuplicateSpellings": [],
@@ -98,7 +98,7 @@
     "writers": [
       {
         "file": "src/sim/agents/demography.ts",
-        "line": 1179
+        "line": 1223
       }
     ],
     "readers": [
@@ -120,7 +120,7 @@
     ]
   },
   "summary": {
-    "filesScanned": 154,
+    "filesScanned": 162,
     "canonicalSinglebandPredicates": 7,
     "canonicalPairRelations": 1,
     "canonicalReducers": 1,

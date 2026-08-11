@@ -126,7 +126,7 @@ try {
   //
   // Every day on which the successor is still a live provisional successor is a day the ordinary
   // systems had a chance to claim it and must not have. The lifecycle may resolve inside a season by
-  // physical reintegration or extinction; there is deliberately no production stabilization writer.
+  // physical reintegration, stabilization or extinction; each terminal outcome has its own writer.
   // A single end-of-season read may therefore have no provisional subject, so the claim is sampled
   // across the whole window.
   const provisionalDays = [];

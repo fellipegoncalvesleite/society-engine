@@ -1,6 +1,6 @@
 {
   "audit": "ROADMAP-ITEM-4-NATURAL-PRE-DEPARTURE-AND-PARENT-DEADLINES",
-  "generatedAt": "2026-08-11T00:59:17.727Z",
+  "generatedAt": "2026-08-11T22:52:36.497Z",
   "naturalRun": {
     "seed": "audit27:natural:s1",
     "maxDays": 45000,
@@ -97,7 +97,7 @@
       },
       {
         "file": "src/sim/agents/fissionDepartureSeam.ts",
-        "line": 547
+        "line": 551
       },
       {
         "file": "src/sim/agents/fissionFieldTransferPolicy.ts",
@@ -110,6 +110,10 @@
       {
         "file": "src/sim/agents/naturalFissionPreDeparture.ts",
         "line": 282
+      },
+      {
+        "file": "src/sim/agents/successorStabilization.ts",
+        "line": 525
       }
     ],
     "fissionAttemptReaders": [
@@ -139,7 +143,7 @@
       },
       {
         "file": "src/sim/agents/fissionDepartureSeam.ts",
-        "line": 337
+        "line": 341
       },
       {
         "file": "src/sim/agents/naturalFissionPreDeparture.ts",
@@ -168,6 +172,22 @@
       {
         "file": "src/sim/agents/parentFissionAttemptResolver.ts",
         "line": 70
+      },
+      {
+        "file": "src/sim/agents/successorStabilization.ts",
+        "line": 271
+      },
+      {
+        "file": "src/sim/agents/successorStabilization.ts",
+        "line": 522
+      },
+      {
+        "file": "src/sim/agents/successorStabilization.ts",
+        "line": 523
+      },
+      {
+        "file": "src/sim/agents/successorStabilization.ts",
+        "line": 526
       }
     ],
     "phaseAuthorities": {
@@ -579,7 +599,7 @@
             "steps": 630,
             "finalDay": 2792,
             "finalTick": 31,
-            "hash": "c0fece16fcd0312622c81816d49757c665ffecddf06f166a02f5f52d0091a3e4",
+            "hash": "349d55eae5fa2a9ca7958db513b63ee4d14c78be1f30425d1788b36c98402043",
             "matchesDaily": true,
             "finalAttemptPhase": "abandoned",
             "finalAttemptPhaseEnteredDay": 2552,
@@ -590,7 +610,7 @@
             "steps": 90,
             "finalDay": 2792,
             "finalTick": 31,
-            "hash": "c0fece16fcd0312622c81816d49757c665ffecddf06f166a02f5f52d0091a3e4",
+            "hash": "349d55eae5fa2a9ca7958db513b63ee4d14c78be1f30425d1788b36c98402043",
             "matchesDaily": true,
             "finalAttemptPhase": "abandoned",
             "finalAttemptPhaseEnteredDay": 2552,
@@ -601,7 +621,7 @@
             "steps": 21,
             "finalDay": 2792,
             "finalTick": 31,
-            "hash": "c0fece16fcd0312622c81816d49757c665ffecddf06f166a02f5f52d0091a3e4",
+            "hash": "349d55eae5fa2a9ca7958db513b63ee4d14c78be1f30425d1788b36c98402043",
             "matchesDaily": true,
             "finalAttemptPhase": "abandoned",
             "finalAttemptPhaseEnteredDay": 2552,
@@ -612,7 +632,7 @@
             "steps": 7,
             "finalDay": 2792,
             "finalTick": 31,
-            "hash": "c0fece16fcd0312622c81816d49757c665ffecddf06f166a02f5f52d0091a3e4",
+            "hash": "349d55eae5fa2a9ca7958db513b63ee4d14c78be1f30425d1788b36c98402043",
             "matchesDaily": true,
             "finalAttemptPhase": "abandoned",
             "finalAttemptPhaseEnteredDay": 2552,
@@ -630,7 +650,7 @@
         "performAtomicDepartureDefinitions": [
           {
             "file": "src/sim/agents/fissionDepartureSeam.ts",
-            "line": 329
+            "line": 333
           }
         ],
         "performAtomicDepartureProductionCallers": [],

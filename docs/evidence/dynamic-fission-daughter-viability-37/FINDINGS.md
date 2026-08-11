@@ -1,5 +1,14 @@
 # Roadmap Item 4 — findings
 
+> **Current implementation overlay (2026-08-11).** The audit-only finding below is historical. On
+> branch `checkpoint/dynamic-fission-provisional-successor-38`, Direction D now includes a
+> controlled-only positive stabilization authority: direct consumed-departure provenance + real
+> post-departure physical operation + monotonic never-returned proof -> atomic release from
+> provisional quarantine. Controlled fixtures pass 27/27 and the six required source mutations pass
+> 6/6 with byte-identical restoration. Natural physical departure remains disconnected,
+> `createDaughterBand` remains unchanged/unreachable, and `unresolved_after_failed_return` remains
+> the next open Item-4 dependency. Item 5 is unstarted.
+
 **Branch** `checkpoint/dynamic-fission-daughter-viability-37`, from the Item 3 final freeze audit
 head `ef76971bd66a7413313183349b9468a879405970`.
 

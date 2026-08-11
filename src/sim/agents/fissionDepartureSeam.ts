@@ -75,14 +75,18 @@ import { degradeInheritedExploitationSkill } from "./exploitationSkill";
 import { inheritAdaptiveHumanForDaughter, inheritPracticalAdaptationForDaughter } from "./adaptationBoundary";
 import { deriveDaughterColor } from "./lineageColor";
 import { deriveCanonicalNutritionState, recordSupportInterval } from "./seasonalSurvival";
+import { beginProvisionalSeparationCourse } from "./provisionalSeparationCourse";
+import { appendSuccessorDepartureRecord } from "./successorHistory";
+import { getWorldTimeForDay } from "../tick/time";
 import type { FounderDepartureAuthorization } from "./fissionCommitment";
 import type {
   Band,
   ConsumedDepartureProvenance,
   SeasonalSupportSample,
   SeasonalSupportState,
+  SuccessorDepartureRecord,
 } from "./types";
-import type { BandId, TileId, WorldTime } from "../core/types";
+import type { BandId, DayNumber, EventId, ReasonId, TileId, WorldTime } from "../core/types";
 import type { WorldState } from "../world/types";
 
 /**
@@ -532,7 +536,7 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
     return { ok: false, refusal: "departure_authorization_not_live", detail: prepared.authorization.status };
   }
 
-  const parentAfter: Band = {
+  const parentAfterBase: Band = {
     ...parent,
     demography: {
       ...parent.demography,
@@ -605,6 +609,50 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
   const inheritedCrossings = inheritCrossingMemories(parent, inheritedKnowledge);
   const inheritedCorridors = inheritTravelCorridors(parent, inheritedKnowledge);
 
+  // ── THE DEPARTURE FACT, DISTINCT FROM LATER SUCCESS ──────────────────────────────────────────
+  //
+  // The parent's `fissionAttempt` is a CURRENT slot and can legitimately hold a later attempt. It is
+  // therefore not durable enough to be the only join for a successor that may travel for months.
+  // This bounded record says only what became true here: bodies left, from this tile, toward this
+  // accepted target, under this positive commitment, and the one-use permit was spent. It is written
+  // identically to both sides. No lineage link, founding snapshot or success claim exists yet.
+  const departureTime = getWorldTimeForDay(today as DayNumber);
+  const departureRecordId =
+    `event:successor-departure:${String(parent.id)}:${String(successorId)}:${today}` as EventId;
+  const departureRecord: SuccessorDepartureRecord = {
+    id: departureRecordId,
+    time: departureTime,
+    tick: departureTime.tick,
+    lineageId: request.lineageId,
+    parentBandId: parent.id,
+    successorBandId: successorId,
+    relation:
+      attempt.naturalProposal?.proposedTargetReason === "frontier_split"
+        ? "frontier_split"
+        : attempt.naturalProposal?.cause === "crisis_breakaway_pressure"
+          ? "stress_split"
+          : "pressure_split",
+    commitmentId: prepared.commitment.commitmentId,
+    commitmentDecisionDay: prepared.commitment.decisionDay,
+    departedOnDay: today,
+    originTileId: parent.position,
+    targetTileId: acceptedDestination,
+    founders: prepared.commitment.founders,
+    authorizationStatus: "consumed_by_departure",
+    parentPopulationBefore: totalOf(parentBefore),
+    parentPopulationAfter: totalOf(parentAfterCohorts),
+    successorPopulationAtDeparture: totalOf(successorCohorts),
+    inheritedKnowledgeCount: Object.keys(inheritedKnowledge.observedTiles).length,
+    inheritedMemoryCount: Object.keys(inheritedPlaceMemory).length,
+    inheritedCrossingCount: Object.keys(inheritedCrossings).length,
+    inheritedCorridorCount: Object.keys(inheritedCorridors).length,
+    reasonIds: prepared.commitment.reasonIds.slice(0, 12).map((id) => String(id) as ReasonId),
+  };
+  const parentAfter: Band = {
+    ...parentAfterBase,
+    successorDepartureRecords: appendSuccessorDepartureRecord(parent.successorDepartureRecords, departureRecord),
+  };
+
   const successor: Band = {
     ...parent,
     ...buildPolicyStructuralResets(),
@@ -648,13 +696,19 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       // exists to close through the provenance meant to describe it. The successor needs history,
       // not permission, and `authorizationStatus` states that the permission is spent.
       departureProvenance: {
+        departureRecordId,
         commitmentId: prepared.commitment.commitmentId,
         commitmentDecisionDay: prepared.commitment.decisionDay,
         departedOnDay: today,
         founders: prepared.commitment.founders,
         authorizationStatus: "consumed_by_departure",
       },
+      separationCourse: beginProvisionalSeparationCourse(today),
     },
+
+    // The same immutable departure fact the parent holds. This is not inherited parent history: the
+    // successor receives only the record of the departure that physically produced THIS entity.
+    successorDepartureRecords: [departureRecord],
 
     // ── EXACT_COHORT_TRANSFER, and SHARED_HISTORICAL_FACT for location ──
     //
@@ -693,7 +747,7 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
     //
     // The window is bounded and self-clearing: each interval the successor closes pushes an inherited
     // sample out, so within eight of its own measurements the record is entirely its own.
-    seasonalSupport: buildOpeningEmbodiedSupport(parent, successorId, world.time),
+    seasonalSupport: buildOpeningEmbodiedSupport(parent, successorId, departureTime),
 
     // ── DEGRADED_OR_PARTIAL_INHERITANCE ──
     knowledge: inheritedKnowledge,

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-05T19:35:18.897Z",
+  "generatedAt": "2026-08-11T14:42:53.642Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "donorBandId": "band:varied-river-mid",
@@ -8,8 +8,8 @@
     "withoutPatch": "tile:1:0"
   },
   "summary": {
-    "total": 38,
-    "passing": 38,
+    "total": 39,
+    "passing": 39,
     "failing": 0,
     "vacuous": 0
   },
@@ -523,36 +523,35 @@
               "sourceAuthority": "provisionalTravelSubsistence.closeTravelSupportInterval -> seasonalSurvival.recordSupportInterval",
               "holds": false,
               "measured": 0,
-              "required": 2
+              "reference": 2
             },
             {
               "id": "measured_support_covered_a_real_share_of_demand",
-              "sourceAuthority": "seasonalSurvival.deriveCanonicalNutritionState over the intervals closed at this site",
-              "holds": true,
-              "measured": 1,
-              "required": 0.35,
-              "acquiredDay": 2101
+              "sourceAuthority": "ProvisionalEstablishmentState.supportUnitsAtSite / demandUnitsAtSite — accumulated only from TravelSubsistenceDay records lived at this site",
+              "holds": false,
+              "measured": 0,
+              "reference": 0.35
             },
             {
               "id": "food_repeatedly_taken_from_local_sources",
               "sourceAuthority": "plantStock.resolvePlantFoodHarvest, counted on days the take was real",
               "holds": false,
               "measured": 0,
-              "required": 4
+              "reference": 4
             },
             {
               "id": "water_reachable_where_the_group_lives",
-              "sourceAuthority": "the standing tile's own water access, measured daily by provisionalTravelSubsistence",
+              "sourceAuthority": "1 - mean daily water stress at this site; stress is the standing tile's own waterAccess through provisionalTravelSubsistence, so this is measured reachability and higher is better",
               "holds": false,
-              "measured": 1,
-              "required": 0.4
+              "measured": 0,
+              "reference": 0.6
             },
             {
               "id": "productive_labour_retained",
               "sourceAuthority": "Band.demography.workingAdults",
               "holds": true,
               "measured": 4,
-              "required": 2,
+              "reference": 2,
               "acquiredDay": 2101
             },
             {
@@ -560,7 +559,7 @@
               "sourceAuthority": "acuteRisk.activeEffect.mortalityRiskBump",
               "holds": true,
               "measured": 0.06,
-              "required": 0.3,
+              "reference": 0.3,
               "acquiredDay": 2101
             },
             {
@@ -568,13 +567,12 @@
               "sourceAuthority": "days physically spent at this site",
               "holds": false,
               "measured": 0,
-              "required": 30
+              "reference": 30
             }
           ],
-          "satisfiedSignals": 3,
-          "requiredSignals": 3,
+          "satisfiedSignals": 2,
           "windowClosed": false,
-          "outcome": "keep_trying"
+          "outcome": "keep_measuring"
         }
       }
     },
@@ -585,36 +583,35 @@
       "nonVacuous": true,
       "detail": {
         "outcome": "next_window",
-        "satisfied": 5,
+        "satisfied": 4,
         "signals": [
           {
             "id": "measured_support_intervals_at_this_site",
             "sourceAuthority": "provisionalTravelSubsistence.closeTravelSupportInterval -> seasonalSurvival.recordSupportInterval",
             "holds": false,
             "measured": 0,
-            "required": 2
+            "reference": 2
           },
           {
             "id": "measured_support_covered_a_real_share_of_demand",
-            "sourceAuthority": "seasonalSurvival.deriveCanonicalNutritionState over the intervals closed at this site",
-            "holds": true,
-            "measured": 1,
-            "required": 0.35,
-            "acquiredDay": 2101
+            "sourceAuthority": "ProvisionalEstablishmentState.supportUnitsAtSite / demandUnitsAtSite — accumulated only from TravelSubsistenceDay records lived at this site",
+            "holds": false,
+            "measured": 0,
+            "reference": 0.35
           },
           {
             "id": "food_repeatedly_taken_from_local_sources",
             "sourceAuthority": "plantStock.resolvePlantFoodHarvest, counted on days the take was real",
             "holds": false,
             "measured": 0,
-            "required": 4
+            "reference": 4
           },
           {
             "id": "water_reachable_where_the_group_lives",
-            "sourceAuthority": "the standing tile's own water access, measured daily by provisionalTravelSubsistence",
+            "sourceAuthority": "1 - mean daily water stress at this site; stress is the standing tile's own waterAccess through provisionalTravelSubsistence, so this is measured reachability and higher is better",
             "holds": true,
-            "measured": 0,
-            "required": 0.4,
+            "measured": 1,
+            "reference": 0.6,
             "acquiredDay": 2101
           },
           {
@@ -622,7 +619,7 @@
             "sourceAuthority": "Band.demography.workingAdults",
             "holds": true,
             "measured": 4,
-            "required": 2,
+            "reference": 2,
             "acquiredDay": 2101
           },
           {
@@ -630,7 +627,7 @@
             "sourceAuthority": "acuteRisk.activeEffect.mortalityRiskBump",
             "holds": true,
             "measured": 0.06,
-            "required": 0.3,
+            "reference": 0.3,
             "acquiredDay": 2101
           },
           {
@@ -638,7 +635,7 @@
             "sourceAuthority": "days physically spent at this site",
             "holds": true,
             "measured": 300,
-            "required": 30,
+            "reference": 30,
             "acquiredDay": 2101
           }
         ]
@@ -650,20 +647,21 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "satisfied": 5,
+        "satisfied": 4,
         "failing": [
           "measured_support_intervals_at_this_site",
+          "measured_support_covered_a_real_share_of_demand",
           "food_repeatedly_taken_from_local_sources"
         ]
       }
     },
     {
       "id": "S28_one_lucky_day_is_insufficient",
-      "claim": "a group with real food, real water and two measured intervals still does not stabilize after three days — the duration signal is a separate necessary condition, not a tie-breaker",
+      "claim": "a group with real food, real water and two measured intervals remains provisional; the duration diagnostic reports false but is not an outcome gate",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "satisfied": 5,
+        "satisfied": 4,
         "signals": [
           {
             "id": "measured_support_intervals_at_this_site",
@@ -672,8 +670,8 @@
           },
           {
             "id": "measured_support_covered_a_real_share_of_demand",
-            "holds": true,
-            "measured": 0.8
+            "holds": false,
+            "measured": 0
           },
           {
             "id": "food_repeatedly_taken_from_local_sources",
@@ -683,7 +681,7 @@
           {
             "id": "water_reachable_where_the_group_lives",
             "holds": true,
-            "measured": 0.1
+            "measured": 0.9
           },
           {
             "id": "productive_labour_retained",
@@ -705,7 +703,7 @@
     },
     {
       "id": "S27_physical_support_evidence_can_contribute",
-      "claim": "the food and water signals are earned from measured physical facts and DO hold when those facts are there — the null in S25 is a real null and not an insensitive instrument",
+      "claim": "the food and water diagnostics report the hand-assigned physical facts when those facts are present — the null in S25 is a real null and not an insensitive instrument",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
@@ -714,54 +712,55 @@
             "id": "measured_support_intervals_at_this_site",
             "holds": true,
             "measured": 2,
-            "required": 2
+            "reference": 2
           },
           {
             "id": "measured_support_covered_a_real_share_of_demand",
             "holds": true,
-            "measured": 0.8,
-            "required": 0.35
+            "measured": 0.7556,
+            "reference": 0.35
           },
           {
             "id": "food_repeatedly_taken_from_local_sources",
             "holds": true,
             "measured": 20,
-            "required": 4
+            "reference": 4
           },
           {
             "id": "water_reachable_where_the_group_lives",
             "holds": true,
-            "measured": 0.1,
-            "required": 0.4
+            "measured": 0.9,
+            "reference": 0.6
           },
           {
             "id": "productive_labour_retained",
             "holds": true,
             "measured": 4,
-            "required": 2
+            "reference": 2
           },
           {
             "id": "embodied_burden_bounded",
             "holds": true,
             "measured": 0.06,
-            "required": 0.3
+            "reference": 0.3
           },
           {
             "id": "long_enough_to_reject_one_lucky_day",
             "holds": true,
             "measured": 60,
-            "required": 30
+            "reference": 30
           }
         ]
       }
     },
     {
-      "id": "S29_sustained_measured_independence_can_stabilize",
-      "claim": "sixty days of feeding and watering itself at one site, with intervals measured there, makes the group an ordinary band — poor and fragile is allowed; unmeasured is not",
+      "id": "S29_rich_descriptive_record_has_zero_lifecycle_authority",
+      "claim": "even a HAND-ASSIGNED record with every retained diagnostic holding remains `establishing`; physical description is not positive commitment or identity",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "phase": "stabilized",
+        "phase": "establishing",
+        "outcome": "keep_measuring",
         "satisfied": 7,
         "acquiredDays": [
           {
@@ -796,27 +795,27 @@
       }
     },
     {
-      "id": "S30_stabilization_enables_established_behaviour_only_afterwards",
-      "claim": "before the transition the group is excluded from every ordinary system; after it, the lifecycle predicate stops calling it provisional and it is admitted — and not one moment earlier",
+      "id": "S30_descriptive_measurement_never_opens_ordinary_band_readers",
+      "claim": "the richly measured group remains provisional and excluded from ordinary-band readers because no positive-commitment writer exists",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
         "beforeProvisional": true,
-        "afterProvisional": false
+        "afterProvisional": true
       }
     },
     {
       "id": "S31_no_same_tick_double_processing",
-      "claim": "running the establishment authority again on the same day does nothing to a group that has already stabilized — the phase is terminal and the writer skips it",
+      "claim": "running the descriptive writer again cannot smuggle in a lifecycle transition; the group remains provisional",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "secondPassAssessments": 0
+        "secondPassAssessments": 1
       }
     },
     {
       "id": "S32_no_viability_storage_or_proto_camp_is_gifted",
-      "claim": "stabilizing grants exactly one thing — admission to the ordinary systems — and no viability, no storage, no camp and no receipt comes with it",
+      "claim": "descriptive measurement grants no viability, storage, camp or residential receipt and does not admit the group to ordinary systems",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
@@ -827,16 +826,97 @@
       }
     },
     {
-      "id": "Z33_failed_return_cycles_cannot_continue_forever",
-      "claim": "a lineage that has spent its return attempts gets exactly ONE more transition — into trying to live where it stands — and neither the resolver nor the evidence-based trigger will start another journey",
+      "id": "P1_descriptive_diagnostics_do_not_bypass_the_operation_contract",
+      "claim": "driven by the real daily runner from a real atomic departure, this failing group reaches establishment but its descriptive signal count cannot manufacture stabilization",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "afterBound": "establishing",
-        "afterAnotherFourHundredDays": "establishing",
+        "departureOk": true,
+        "reachedEstablishing": true,
+        "everStabilized": false,
+        "peakHoldingDiagnostics": 3,
+        "diagnosticCount": 7,
+        "signalsAtPeak": [
+          {
+            "id": "measured_support_intervals_at_this_site",
+            "holds": false,
+            "measured": 0,
+            "reference": 2
+          },
+          {
+            "id": "measured_support_covered_a_real_share_of_demand",
+            "holds": false,
+            "measured": 0,
+            "reference": 0.35
+          },
+          {
+            "id": "food_repeatedly_taken_from_local_sources",
+            "holds": false,
+            "measured": 0,
+            "reference": 4
+          },
+          {
+            "id": "water_reachable_where_the_group_lives",
+            "holds": true,
+            "measured": 0.847,
+            "reference": 0.6
+          },
+          {
+            "id": "productive_labour_retained",
+            "holds": true,
+            "measured": 6,
+            "reference": 2
+          },
+          {
+            "id": "embodied_burden_bounded",
+            "holds": true,
+            "measured": 0.06,
+            "reference": 0.3
+          },
+          {
+            "id": "long_enough_to_reject_one_lucky_day",
+            "holds": false,
+            "measured": 14,
+            "reference": 30
+          }
+        ],
+        "failingSignals": [
+          "measured_support_intervals_at_this_site",
+          "measured_support_covered_a_real_share_of_demand",
+          "food_repeatedly_taken_from_local_sources",
+          "long_enough_to_reject_one_lucky_day"
+        ],
+        "trace": [
+          {
+            "day": 16,
+            "phase": "returning",
+            "daysAtSite": 0,
+            "supAtSite": 0,
+            "demAtSite": 0,
+            "hunger": 0.76
+          },
+          {
+            "day": 17,
+            "phase": "returning",
+            "daysAtSite": 0,
+            "supAtSite": 0,
+            "demAtSite": 0,
+            "hunger": 1
+          }
+        ],
+        "boundary": "descriptive `satisfiedSignals` remains outside the production stabilization proof"
+      }
+    },
+    {
+      "id": "Z33_failed_return_becomes_explicitly_unresolved",
+      "claim": "expiry ends only the return action; it enters a living event-bounded condition and neither the resolver nor return decision manufactures another attempt",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "afterBound": "unresolved_after_failed_return",
+        "afterAnotherFourHundredDays": "unresolved_after_failed_return",
         "causalRetryDecisions": 0,
-        "cycles": 3,
-        "maxCycles": 3
+        "resolutionKind": "event_bounded_living_condition"
       }
     },
     {
@@ -852,7 +932,7 @@
             "targetTerminal": true
           },
           {
-            "from": "committed",
+            "from": "departure_planned",
             "to": "abandoned",
             "targetTerminal": true
           },
@@ -878,7 +958,7 @@
           },
           {
             "from": "returning",
-            "to": "establishing",
+            "to": "unresolved_after_failed_return",
             "targetTerminal": false
           }
         ]
@@ -917,8 +997,7 @@
             "fromPhase": "establishing",
             "toPhase": "provisional_extinguished",
             "populationAtResolution": 0,
-            "reason": "zero_physical_population",
-            "resolutionCycles": 3
+            "reason": "zero_physical_population"
           }
         ]
       }

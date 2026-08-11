@@ -17,6 +17,7 @@ import type { StepMode, TickNumber } from "../sim/core/types";
 import type { IconName } from "./icons";
 import type { BandStatusSummary, StatusTone } from "./bandSummary";
 import { deriveBandStatus, deriveBandStatusWithRange } from "./bandSummary";
+import { isProvisionalSuccessor } from "../sim/agents/bandLifecycle";
 
 export interface LifeChip {
   readonly label: string;
@@ -65,6 +66,14 @@ export interface CampLifeDisplay {
   readonly dependents: number;
   readonly elders: number;
   readonly chips: readonly LifeChip[];
+}
+
+function hasCompletedDaughterIdentity(band: Band): boolean {
+  return band.lineage !== undefined ||
+    band.deepHistory?.founding.kind === "fission_daughter" ||
+    (band.successorStabilizationEvents ?? []).some(
+      (event) => String(event.successorBandId) === String(band.id),
+    );
 }
 
 type ActivityCategoryKey =
@@ -149,13 +158,28 @@ export function deriveBandLifeSummary(
   const pressure = derivePressureChip(band);
   const daughterPressure = band.daughterColonization?.pressure ?? 0;
   const latestMove = band.recentResidentialMoveEvents?.[0];
+  const provisional = isProvisionalSuccessor(band);
+  const completedDaughter = hasCompletedDaughterIdentity(band);
 
   const status = ((): BandStatusSummary => {
     if (baseStatus.tone === "gone" || baseStatus.tone === "struggling" || baseStatus.tone === "pressure") {
       return baseStatus;
     }
+    if (provisional) {
+      const phase = band.provisionalSuccessor?.phase;
+      return {
+        label:
+          phase === "travelling" ? "Provisional group travelling" :
+          phase === "returning" ? "Provisional group returning" :
+          phase === "establishing" ? "Testing independent life" :
+          phase === "failed_early" ? "Early separation failed" :
+          "Unresolved provisional group",
+        tone: phase === "returning" || phase === "failed_early" ? "pressure" : "exploring",
+        icon: phase === "travelling" || phase === "returning" ? "move" : "founding",
+      };
+    }
     if (rangeContext === "founding_new_range" || daughterPressure >= 0.42) {
-      return { label: band.parentBandId === undefined ? "Founding range" : "Daughter range", tone: "exploring", icon: "founding" };
+      return { label: completedDaughter ? "Daughter range" : "Founding range", tone: "exploring", icon: "founding" };
     }
     if (latestTripDisplay !== undefined && stepMode === "daily") {
       return {
@@ -178,12 +202,14 @@ export function deriveBandLifeSummary(
   const movementLine = deriveMovementLine(band, rangeContext, latestMove);
   const intentLine = deriveIntentLine(band, latestTripDisplay, rangeContext, currentTick);
   const reasonLine = deriveReasonLine(band, latestTripDisplay, rangeContext, activitySummary, currentTick);
-  const daughterChip: LifeChip = { label: "Daughter band", icon: "lineage", tone: "exploring" };
+  const lineageChip: LifeChip = provisional
+    ? { label: "Provisional separation", icon: "lineage", tone: "exploring" }
+    : { label: "Established daughter band", icon: "lineage", tone: "exploring" };
   const chips = [
     ...(latestTripDisplay === undefined ? [] : [makeTripChip(latestTripDisplay, latestTrip)]),
     { label: rangeLabel.label, icon: rangeLabel.icon, tone: rangeLabel.tone },
     ...(pressure === undefined ? [] : [pressure]),
-    ...(band.parentBandId === undefined ? [] : [daughterChip]),
+    ...(provisional || completedDaughter ? [lineageChip] : []),
   ].slice(0, 4);
 
   return {
@@ -640,9 +666,9 @@ function deriveMovementLine(
     case "leaving_familiar_country":
       return "Moving beyond the range they know well.";
     case "founding_new_range":
-      return band.parentBandId === undefined
-        ? "Trying to make a new familiar country."
-        : "Trying to establish a daughter range.";
+      return hasCompletedDaughterIdentity(band)
+        ? "Trying to extend an established daughter range."
+        : "Trying to make a new familiar country.";
     case "unsettled_no_range":
       return "Still building a map of useful places.";
   }
@@ -656,7 +682,10 @@ function deriveIntentLine(
 ): string {
   const pressure = band.daughterColonization?.pressure ?? 0;
 
-  if (pressure >= 0.45 && band.parentBandId !== undefined) {
+  if (isProvisionalSuccessor(band)) {
+    return "Short-term intent: test the chosen separation without assuming it will succeed.";
+  }
+  if (pressure >= 0.45 && hasCompletedDaughterIdentity(band)) {
     return "Short-term intent: build enough separate use-space to stop leaning on the parent core.";
   }
   if (rangeContext === "range_edge_probe" || rangeContext === "founding_new_range") {
@@ -729,7 +758,7 @@ function fallbackActivityLine(
     case "range_edge_probe":
       return "Scouting the edge of known country";
     case "founding_new_range":
-      return band.parentBandId === undefined ? "Searching for a new range" : "Establishing a daughter range";
+      return hasCompletedDaughterIdentity(band) ? "Extending a daughter range" : "Searching for a new range";
     case "seasonal_round":
       return "Following a familiar route";
     default:

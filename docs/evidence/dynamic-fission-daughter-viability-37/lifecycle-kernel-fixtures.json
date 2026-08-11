@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-08-05T19:35:30.031Z",
+  "generatedAt": "2026-08-11T14:42:49.946Z",
   "checkpoint": "ROADMAP ITEM 4 §5 — pure lifecycle kernel fixtures",
   "authority": "src/sim/agents/fissionLifecycleKernel.ts",
-  "scopeLimit": "The kernel is pure. Nothing here proves the lifecycle is CONNECTED to the simulation — that is the world adapter's evidence and it does not exist yet. These fixtures prove only that the state machine cannot be driven into an illegal, unbounded or double-owned state.",
+  "scopeLimit": "The kernel is pure. These fixtures prove its legal vocabulary, conjunctive stabilization gate, action bounds, event-bounded living condition and ownership table. The world-level stabilization audit proves the production adapter.",
   "fixtures": [
     {
       "id": "K1",
-      "claim": "every non-terminal phase has a bound and a destination, and no quantity is owned twice",
+      "claim": "every phase declares a coherent temporal, event-bounded or terminal resolution kind, and no quantity is owned twice",
       "status": "PASS",
-      "nonVacuityNote": "all eleven phases are present in the production table",
+      "nonVacuityNote": "the complete production phase table is present",
       "problems": [],
-      "phaseCount": 12
+      "phaseCount": 13
     },
     {
       "id": "K2",
-      "claim": "proposal to stabilization is reachable through permitted transitions only",
+      "claim": "the kernel admits stabilization only behind the complete named proof",
       "status": "PASS",
-      "nonVacuityNote": "the walk visited all four attempt phases and all three successor phases of the happy path",
+      "nonVacuityNote": "the pure kernel exercised the reserved legal path; this is not a production-writer claim",
       "path": [
         "proposed",
-        "committed",
+        "departure_planned",
         "departure_ready",
         "departed",
         "successor:travelling",
@@ -41,7 +41,7 @@
       "nonVacuityNote": "all three pre-departure phases were exercised",
       "results": {
         "proposed": "abandoned",
-        "committed": "abandoned",
+        "departure_planned": "abandoned",
         "departure_ready": "abandoned"
       }
     },
@@ -57,20 +57,23 @@
     },
     {
       "id": "K6",
-      "claim": "stabilization is refused without lived evidence, and the establishment timeout is a FAILURE",
+      "claim": "all four stabilization claims are independently required, while an establishment timeout is a failure",
       "status": "PASS",
-      "nonVacuityNote": "sufficient evidence DOES stabilize, so the refusals are not an unreachable gate",
-      "noEvidence": "stabilization_without_lived_evidence",
-      "thin": "stabilization_without_lived_evidence",
+      "nonVacuityNote": "the complete conjunction succeeds, so each named refusal isolates a missing claim",
+      "noEvidence": "stabilization_without_independent_operation",
+      "missingOperation": "stabilization_without_independent_operation",
+      "missingProvenance": "stabilization_without_consumed_departure_provenance",
+      "returned": "stabilization_after_return_path",
+      "unreleased": "stabilization_without_quarantine_release",
       "enough": "stabilized",
       "onTimeout": "failed_early"
     },
     {
       "id": "K7",
-      "claim": "every non-terminal phase resolves when its bound expires, and never into a success",
+      "claim": "every action resolves at its temporal bound while a living condition refuses timeout authority",
       "status": "PASS",
-      "nonVacuityNote": "every non-terminal phase in the production table was driven past its bound",
-      "rows": [
+      "nonVacuityNote": "every timed action crossed its bound and every event-bounded living phase received a timeout attempt",
+      "timedRows": [
         {
           "phase": "proposed",
           "maxDays": 90,
@@ -78,9 +81,9 @@
           "atBound": "abandoned/timedOut=true"
         },
         {
-          "phase": "committed",
+          "phase": "departure_planned",
           "maxDays": 90,
-          "beforeBound": "committed/timedOut=false",
+          "beforeBound": "departure_planned/timedOut=false",
           "atBound": "abandoned/timedOut=true"
         },
         {
@@ -111,7 +114,13 @@
           "phase": "returning",
           "maxDays": 180,
           "beforeBound": "returning/timedOut=false",
-          "atBound": "establishing/timedOut=true"
+          "atBound": "unresolved_after_failed_return/timedOut=true"
+        }
+      ],
+      "eventRows": [
+        {
+          "phase": "unresolved_after_failed_return",
+          "result": "event_bounded_phase_has_no_timeout"
         }
       ]
     },
@@ -133,10 +142,10 @@
       "claim": "every transition outside the permitted set is refused",
       "status": "PASS",
       "nonVacuityNote": "both permitted and refused transitions genuinely occur in the sweep",
-      "refused": 65,
-      "permitted": 19,
-      "expectedPermitted": 19,
-      "totalPairs": 84
+      "refused": 83,
+      "permitted": 21,
+      "expectedPermitted": 21,
+      "totalPairs": 104
     },
     {
       "id": "K10",
@@ -158,7 +167,7 @@
       "nonVacuityNote": "both sides of the departure are represented in the table",
       "preDepartureOwners": [
         "proposed:parent",
-        "committed:parent",
+        "departure_planned:parent",
         "departure_ready:parent",
         "abandoned:parent"
       ],
@@ -168,6 +177,7 @@
         "establishing:successor",
         "failed_early:successor",
         "returning:successor",
+        "unresolved_after_failed_return:successor",
         "reintegrated:parent",
         "provisional_extinguished:none",
         "stabilized:successor"

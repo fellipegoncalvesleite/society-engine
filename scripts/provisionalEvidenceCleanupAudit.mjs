@@ -237,10 +237,12 @@ try {
   });
   const richResult = establishment.advanceProvisionalEstablishment(richState, day0 + 1);
   const richBand = richResult.world.bands["band:cleanup:c1"];
+  const stabilizationAuthorityPath = join("src", "sim", "agents", "successorStabilization.ts");
   record(
-    "C1_no_current_production_path_can_reach_stabilized",
-    "source contains no production request whose target is `stabilized`, and a record with every retained diagnostic holding remains provisional",
-    stabilizationCallSites.length === 0 &&
+    "C1_only_the_dedicated_positive_authority_can_request_stabilized",
+    "the sole production request for `stabilized` belongs to the dedicated successor authority; descriptive establishment remains unable to graduate even a rich diagnostic record",
+    stabilizationCallSites.length === 1 &&
+      stabilizationCallSites[0].path.endsWith(stabilizationAuthorityPath) &&
       kernel.PHASE_CONTRACTS.every((contract) => contract.onTimeout !== "stabilized") &&
       richBand.provisionalSuccessor.phase === "establishing" &&
       richResult.assessments[0].signals.every((signal) => signal.holds),

@@ -35,6 +35,7 @@ export type {
   TerrainPaintKind,
 } from "../world/mapEdits";
 import type { Band } from "../agents/types";
+import { isProvisionalSuccessor } from "../agents/bandLifecycle";
 import type { BandId, SimulationSeed, StepMode, TileId } from "../core/types";
 import type { Decision } from "../rules/types";
 import { advanceWorldByDays } from "../tick/advance";
@@ -254,6 +255,7 @@ export interface SimLiveMarker {
   readonly position: string;
   readonly color: string;
   readonly isDaughter: boolean;
+  readonly isProvisional: boolean;
   readonly separationActive: boolean;
   // CAUSAL-REPAIR-2 — true while the RESIDENTIAL band is displayed mid-route on
   // its recorded seasonal travel (sub-season playback only). Render-only.
@@ -321,6 +323,12 @@ export interface SimSelectedBandLiveSummary {
   readonly parentBandId?: Band["parentBandId"];
   readonly daughterBandIds: Band["daughterBandIds"];
   readonly lineage?: Band["lineage"];
+  readonly provisionalSuccessor?: Band["provisionalSuccessor"];
+  readonly successorDepartureRecords?: Band["successorDepartureRecords"];
+  readonly successorStabilizationEvents?: Band["successorStabilizationEvents"];
+  readonly deepHistory?: Band["deepHistory"];
+  readonly lineageReadability?: Band["lineageReadability"];
+  readonly currentCampTileId?: Band["currentCampTileId"];
   readonly currentIntent?: Band["currentIntent"];
   readonly intentHistory?: Band["intentHistory"];
   readonly movementHistory: Band["movementHistory"];
@@ -470,6 +478,12 @@ function projectSelectedBandLiveSummary(band: Band): SimSelectedBandLiveSummary 
     ...(band.parentBandId === undefined ? {} : { parentBandId: band.parentBandId }),
     daughterBandIds: band.daughterBandIds,
     ...(band.lineage === undefined ? {} : { lineage: band.lineage }),
+    ...(band.provisionalSuccessor === undefined ? {} : { provisionalSuccessor: band.provisionalSuccessor }),
+    ...(band.successorDepartureRecords === undefined ? {} : { successorDepartureRecords: band.successorDepartureRecords }),
+    ...(band.successorStabilizationEvents === undefined ? {} : { successorStabilizationEvents: band.successorStabilizationEvents }),
+    ...(band.deepHistory === undefined ? {} : { deepHistory: band.deepHistory }),
+    ...(band.lineageReadability === undefined ? {} : { lineageReadability: band.lineageReadability }),
+    ...(band.currentCampTileId === undefined ? {} : { currentCampTileId: band.currentCampTileId }),
     ...(band.currentIntent === undefined ? {} : { currentIntent: band.currentIntent }),
     ...(band.intentHistory === undefined ? {} : { intentHistory: band.intentHistory.slice(-SELECTED_PANEL_MOVEMENT_HISTORY_CAP) }),
     movementHistory: band.movementHistory.slice(-SELECTED_PANEL_MOVEMENT_HISTORY_CAP),
@@ -636,7 +650,13 @@ export function takeLiveOverlay(
       id: String(band.id),
       position: display.position,
       color: band.color,
-      isDaughter: band.parentBandId !== undefined,
+      isDaughter:
+        band.lineage !== undefined ||
+        band.deepHistory?.founding.kind === "fission_daughter" ||
+        (band.successorStabilizationEvents ?? []).some(
+          (event) => String(event.successorBandId) === String(band.id),
+        ),
+      isProvisional: isProvisionalSuccessor(band),
       separationActive: band.temporarySeparation?.active === true,
       ...(display.traveling ? { traveling: true } : {}),
       recentActivity: projectRecentActivity(band),

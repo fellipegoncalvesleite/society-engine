@@ -1,0 +1,991 @@
+{
+  "generatedAt": "2026-08-11T23:03:00.595Z",
+  "checkpoint": "ROADMAP ITEM 4 — positive successor stabilization authority",
+  "controlledSeamOnly": true,
+  "fixtures": [
+    {
+      "id": "S1_canonical_positive_commitment_and_spent_permit",
+      "claim": "the physical successor comes from a positive founder-cohort commitment and the exact one-use permit is consumed by departure",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "commitmentId": "commit:c03c3540e27ef19c",
+        "decisionDay": 2100,
+        "departureDay": 2100,
+        "founders": {
+          "workingAdults": 3,
+          "dependents": 0,
+          "elders": 0
+        },
+        "permitBefore": "live",
+        "permitAfter": "consumed_by_departure"
+      }
+    },
+    {
+      "id": "S2_departure_is_a_separate_bounded_historical_fact",
+      "claim": "departure writes the same direct record to parent and successor but writes no completed lineage, founding snapshot, stabilization event or legacy instantaneous-fission event",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "departureRecord": {
+          "id": "event:successor-departure:band:varied-estuary:band:successor-stabilization-positive:2100",
+          "time": {
+            "tick": 23,
+            "seasonTick": 23,
+            "day": 2100,
+            "dayOfSeason": 30,
+            "seasonLengthDays": 90,
+            "daysPerYear": 360,
+            "year": 5,
+            "season": "winter",
+            "seasonIndex": 3,
+            "generation": {
+              "index": 0,
+              "yearWithinGeneration": 5,
+              "tickWithinGeneration": 23
+            }
+          },
+          "tick": 23,
+          "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+          "parentBandId": "band:varied-estuary",
+          "successorBandId": "band:successor-stabilization-positive",
+          "relation": "pressure_split",
+          "commitmentId": "commit:c03c3540e27ef19c",
+          "commitmentDecisionDay": 2100,
+          "departedOnDay": 2100,
+          "originTileId": "tile:195:89",
+          "targetTileId": "tile:193:87",
+          "founders": {
+            "workingAdults": 3,
+            "dependents": 0,
+            "elders": 0
+          },
+          "authorizationStatus": "consumed_by_departure",
+          "parentPopulationBefore": 30,
+          "parentPopulationAfter": 27,
+          "successorPopulationAtDeparture": 3,
+          "inheritedKnowledgeCount": 15,
+          "inheritedMemoryCount": 5,
+          "inheritedCrossingCount": 0,
+          "inheritedCorridorCount": 2,
+          "reasonIds": [
+            "founder_cohort_accepted_separation",
+            "strong_motive_to_separate",
+            "destination_is_known_ground",
+            "split_removes_productive_labour_from_camp",
+            "split_worsens_dependency_load",
+            "split_reduces_mobility_capability"
+          ]
+        },
+        "successorCompletionAbsent": true,
+        "legacyFissionEvents": 0
+      }
+    },
+    {
+      "id": "S3_travel_is_contiguous_and_arrival_precedes_success",
+      "claim": "the founders begin at the parent camp, walk only adjacent steps, reach the accepted target, enter establishing and stabilize later without teleporting",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "physicalMoves": [
+          {
+            "from": "tile:195:89",
+            "to": "tile:194:89",
+            "manhattan": 1
+          },
+          {
+            "from": "tile:194:89",
+            "to": "tile:193:89",
+            "manhattan": 1
+          },
+          {
+            "from": "tile:193:89",
+            "to": "tile:193:88",
+            "manhattan": 1
+          },
+          {
+            "from": "tile:193:88",
+            "to": "tile:193:87",
+            "manhattan": 1
+          }
+        ],
+        "phaseTrail": [
+          {
+            "offset": 1,
+            "day": 2101,
+            "phase": "travelling",
+            "position": "tile:194:89",
+            "moved": true,
+            "population": 3,
+            "workingAdults": 3
+          },
+          {
+            "offset": 2,
+            "day": 2102,
+            "phase": "travelling",
+            "position": "tile:193:89",
+            "moved": true,
+            "population": 3,
+            "workingAdults": 3
+          },
+          {
+            "offset": 3,
+            "day": 2103,
+            "phase": "travelling",
+            "position": "tile:193:88",
+            "moved": true,
+            "population": 3,
+            "workingAdults": 3
+          },
+          {
+            "offset": 4,
+            "day": 2104,
+            "phase": "travelling",
+            "position": "tile:193:87",
+            "moved": true,
+            "population": 3,
+            "workingAdults": 3
+          },
+          {
+            "offset": 5,
+            "day": 2105,
+            "phase": "establishing",
+            "position": "tile:193:87",
+            "moved": false,
+            "population": 3,
+            "workingAdults": 3
+          },
+          {
+            "offset": 6,
+            "day": 2106,
+            "phase": "establishing",
+            "position": "tile:193:87",
+            "moved": false,
+            "population": 3,
+            "workingAdults": 3
+          },
+          {
+            "offset": 7,
+            "day": 2107,
+            "phase": "establishing",
+            "position": "tile:193:87",
+            "moved": false,
+            "population": 3,
+            "workingAdults": 3
+          },
+          {
+            "offset": 8,
+            "day": 2108,
+            "phase": "establishing",
+            "position": "tile:193:87",
+            "moved": false,
+            "population": 3,
+            "workingAdults": 3
+          },
+          {
+            "offset": 9,
+            "day": 2109,
+            "phase": "establishing",
+            "position": "tile:193:87",
+            "moved": false,
+            "population": 3,
+            "workingAdults": 3
+          },
+          {
+            "offset": 10,
+            "day": 2110,
+            "phase": "establishing",
+            "position": "tile:193:87",
+            "moved": false,
+            "population": 3,
+            "workingAdults": 3
+          },
+          {
+            "offset": 11,
+            "day": 2111,
+            "phase": "stabilized",
+            "position": "tile:193:87",
+            "moved": false,
+            "population": 3,
+            "workingAdults": 3
+          }
+        ],
+        "departureTile": "tile:195:89",
+        "target": "tile:193:87"
+      }
+    },
+    {
+      "id": "S4_independent_operation_is_a_non_vacuous_conjunction",
+      "claim": "one outcome-blind demand window contains demand, worker-days, usable physical take, matching depletion, water and surviving bodies; every named conjunct holds",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "authority": "successor_independent_operation_v1",
+        "successorBandId": "band:successor-stabilization-positive",
+        "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+        "assessedOnDay": 2111,
+        "departureDay": 2100,
+        "arrivalDay": 2105,
+        "assessmentWindow": {
+          "startDay": 2101,
+          "endDay": 2111,
+          "days": 11,
+          "tileIds": [
+            "tile:194:89",
+            "tile:193:89",
+            "tile:193:88",
+            "tile:193:87"
+          ],
+          "supportUnits": 0.1412,
+          "demandUnits": 0.3663,
+          "supportRatio": 0.3855,
+          "daysWithAnyPhysicalTake": 6,
+          "workerDays": 12,
+          "depletionApplied": 0.1618,
+          "meanWaterStress": 0,
+          "closedBy": "demand_window_complete"
+        },
+        "currentCondition": {
+          "population": 3,
+          "workingAdults": 3,
+          "mortalityRiskBump": 0.022,
+          "returnDecisionWouldAbandon": false
+        },
+        "requirements": {
+          "physicallyArrivedAtAcceptedTarget": true,
+          "postDepartureDemandWindowCompleted": true,
+          "demandWasMeasured": true,
+          "productiveLaborWasLived": true,
+          "realFoodWasTakenAndDepleted": true,
+          "supportStayedAboveReturnFailureFloor": true,
+          "waterStayedBelowNoWaterFailureLine": true,
+          "livingPopulationRemains": true,
+          "workingPopulationRemains": true,
+          "embodiedBurdenRemainsBelowReturnLine": true,
+          "currentReturnAuthorityDoesNotAbandon": true
+        },
+        "allRequirementsMet": true,
+        "sourceAuthorities": [
+          "provisionalTravel.requestTransition(travelling -> establishing)",
+          "provisionalTravelSubsistence.ProvisionalOperationHistory",
+          "plantStock.resolvePlantFoodHarvest",
+          "carryingCapacity.derivePopulationDemand",
+          "provisionalTravelSubsistence standing-tile water stress",
+          "Band.demography cohorts",
+          "Band.acuteRisk active embodied effect",
+          "provisionalReturnDecision.deriveProvisionalReturnDecision"
+        ]
+      }
+    },
+    {
+      "id": "S5_mobile_operation_not_sedentary_prosperity",
+      "claim": "the qualifying measurement may span several physically occupied tiles and succeeds at the existing return-failure floor rather than requiring prosperity or a fixed residence duration",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "tiles": [
+          "tile:194:89",
+          "tile:193:89",
+          "tile:193:88",
+          "tile:193:87"
+        ],
+        "supportRatio": 0.3855,
+        "returnFailureFloor": 0.35,
+        "hungerPressure": 0.51
+      }
+    },
+    {
+      "id": "S6_atomic_stabilization_conserves_people_and_creates_no_duplicate_band",
+      "claim": "stabilization changes identity/history only: population and location are unchanged and departure created exactly one successor",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "warmPopulation": 235,
+        "departurePopulation": 235,
+        "stabilizedPopulation": 235,
+        "bandCounts": [
+          9,
+          10,
+          10
+        ]
+      }
+    },
+    {
+      "id": "S7_quarantine_release_is_complete_and_minimal",
+      "claim": "the successful transition initializes the camp, lineage, founding snapshot, completion event and stored lineage readability while leaving viability, residential-anchor and proto-camp claims to their own writers",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "phase": "stabilized",
+        "currentCampTileId": "tile:193:87",
+        "formationStatus": "established_daughter",
+        "deferredFields": {
+          "viability": "absent",
+          "residentialAnchor": "absent",
+          "protoCampMemory": "absent"
+        }
+      }
+    },
+    {
+      "id": "S8_parent_and_successor_history_agree_without_rewriting_departure",
+      "claim": "parent and successor retain the identical completion object, which points to the earlier departure record; founding time/location are stabilization facts and origin remains a departure fact",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "departureDay": 2100,
+        "departureOrigin": "tile:195:89",
+        "stabilizationDay": 2111,
+        "stabilizationTile": "tile:193:87",
+        "parentSuccessorEventByteEqual": true
+      }
+    },
+    {
+      "id": "S9_established_readers_show_truthful_completed_identity",
+      "claim": "lineage, event, life, identity and chronicle readers distinguish a completed daughter from a provisional separation, while the parent's objective record creates no invented event/contact channel",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "successorEvent": {
+          "id": "canonical-event:band:successor-stabilization-positive:successor-stabilized:event:successor-stabilized:band:varied-estuary:band:successor-stabilization-positive:2111",
+          "type": "successor_stabilized",
+          "family": "origin_lineage",
+          "memoryScope": "recent",
+          "livedStatus": "personally_lived",
+          "provenance": "direct_sim_transition",
+          "sourceSystem": "successor_stabilization_record",
+          "startYear": 5,
+          "endYear": 5,
+          "season": "winter",
+          "title": "Independent band life established",
+          "summary": "This group became an established band in Year 5 after 11 measured days of independent physical operation across 4 lived places.",
+          "consequence": "Provisional quarantine ended; departure and stabilization remain separate historical facts.",
+          "actualCause": "measured independent physical operation with direct consumed-departure provenance",
+          "severity": 0.62,
+          "significance": 0.82,
+          "grouped": false,
+          "groupedCount": 1,
+          "involvedBandIds": [
+            "band:varied-estuary",
+            "band:successor-stabilization-positive"
+          ],
+          "involvedTileIds": [
+            "tile:193:87"
+          ],
+          "involvedRouteIds": [],
+          "sourceEventIds": [
+            "event:successor-stabilized:band:varied-estuary:band:successor-stabilization-positive:2111",
+            "event:successor-departure:band:varied-estuary:band:successor-stabilization-positive:2100"
+          ],
+          "sourceReasonIds": [
+            "founder_cohort_accepted_separation",
+            "strong_motive_to_separate",
+            "destination_is_known_ground",
+            "split_removes_productive_labour_from_camp",
+            "split_worsens_dependency_load"
+          ],
+          "sourceHistoryIds": [
+            "event:successor-departure:band:varied-estuary:band:successor-stabilization-positive:2100"
+          ],
+          "evidenceChips": [
+            {
+              "kind": "successor_stabilization",
+              "label": "independent operation completed",
+              "sourceIds": [
+                "event:successor-stabilized:band:varied-estuary:band:successor-stabilization-positive:2111"
+              ]
+            },
+            {
+              "kind": "physical_subsistence",
+              "label": "6 extraction days",
+              "sourceIds": []
+            },
+            {
+              "kind": "departure_provenance",
+              "label": "spent departure permit",
+              "sourceIds": [
+                "event:successor-departure:band:varied-estuary:band:successor-stabilization-positive:2100"
+              ]
+            }
+          ],
+          "chronicleLinkIds": [
+            "event:event:successor-stabilized:band:varied-estuary:band:successor-stabilization-positive:2111",
+            "year:5"
+          ],
+          "chronicleSectionIds": [
+            "article-history",
+            "article-long-memory"
+          ],
+          "relatedReferentIds": [],
+          "relatedTalkIds": [],
+          "talkMentionCount": 0,
+          "referentHookCount": 0
+        },
+        "parentCanonicalEventAbsent": true,
+        "parentObjectiveHistoryPresent": true,
+        "lifeChips": [
+          {
+            "label": "Inside familiar country",
+            "icon": "range",
+            "tone": "settled"
+          },
+          {
+            "label": "Established daughter band",
+            "icon": "lineage",
+            "tone": "exploring"
+          }
+        ],
+        "identityTitle": "A daughter band carrying inherited memory",
+        "chronicleArcKinds": [
+          "hunger",
+          "movement",
+          "lineage"
+        ]
+      }
+    },
+    {
+      "id": "S10_daily_order_prevents_same_day_graduation_bonuses",
+      "claim": "recognition runs after subsistence, return and descriptive establishment, before only the deadline, and skips season boundaries; ordinary activity therefore starts no earlier than a later cycle",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "actionIds": [
+          "intra-season-trips",
+          "expeditions",
+          "parent_fission_attempt_deadline",
+          "natural_fission_pre_departure",
+          "provisional_travel",
+          "provisional_reintegration",
+          "provisional_travel_subsistence",
+          "provisional_return_decision",
+          "provisional_establishment",
+          "successor_stabilization",
+          "provisional_lifecycle_deadline"
+        ],
+        "stabilizationDayOfSeason": 41,
+        "sameDayTrips": 0
+      }
+    },
+    {
+      "id": "S11_deferred_ordinary_state_has_real_next_writers",
+      "claim": "fields not fabricated at release are accepted by their existing ordinary writers, which may judge the small band harshly and do not reinterpret absence as comfort",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "viabilityVerdict": {
+          "bandId": "band:successor-stabilization-positive",
+          "population": 3,
+          "minimumViablePopulation": 14,
+          "viabilityPressure": 0.72,
+          "extinctionRisk": 0.56,
+          "absorptionOpportunity": 0.52,
+          "status": "absorbed",
+          "weakBandClassification": "absorbed",
+          "weakBandFate": "absorbed",
+          "supportSeekingTargetBandId": "band:varied-estuary",
+          "supportSeekingGrounding": "parent lineage",
+          "routeConfidenceToSupport": 0.49,
+          "lastSupportState": "crisis_deficit",
+          "lastStressSummary": "support=crisis_deficit food=0 water=0",
+          "reasonIds": [
+            "reason:viability:band:successor-stabilization-positive:23:band_became_nonviable",
+            "reason:viability:band:successor-stabilization-positive:23:absorption_preferred_over_extinction"
+          ],
+          "absorbedByBandId": "band:varied-estuary",
+          "populationTransferred": 3,
+          "populationRemoved": 0,
+          "populationConservationSummary": "transferred 3; removed 0"
+        },
+        "protoCampState": "none"
+      }
+    },
+    {
+      "id": "S12_registered_positive_path_is_deterministic_and_bounded",
+      "claim": "two identical controlled departures produce byte-identical stabilization state, and every retained history obeys its production cap",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "byteIdentical": true,
+        "lifecycleHistory": 2,
+        "operationWindows": 1,
+        "departureRecords": 1,
+        "stabilizationEvents": 1
+      }
+    },
+    {
+      "id": "N1_newly_departed_successor_cannot_stabilize_immediately",
+      "claim": "an exact real departure with bodies and valid provenance but no completed operation window is refused",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "refusal": {
+          "successorBandId": "band:successor-stabilization-positive",
+          "day": 2100,
+          "refusal": "no_completed_operation_window"
+        },
+        "stabilized": [],
+        "successorPhase": "establishing",
+        "completionAbsent": true
+      }
+    },
+    {
+      "id": "N2_time_alone_fails_never_stabilizes",
+      "claim": "even a complete claimed proof cannot enter a physical-event phase by elapsed time, and an expired unmeasured establishment trial becomes failed_early",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "elapsedKernelAttempt": {
+          "ok": false,
+          "rejection": "terminal_outcome_requires_a_physical_event"
+        },
+        "timeoutResolution": [
+          {
+            "bandId": "band:successor-stabilization-positive",
+            "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+            "fromPhase": "establishing",
+            "toPhase": "failed_early",
+            "populationAtResolution": 3,
+            "reason": "phase_bound_expired"
+          }
+        ]
+      }
+    },
+    {
+      "id": "N3_hidden_richness_cannot_replace_lived_operation",
+      "claim": "placing the successor on a tile with physically available edible plants grants no success before it actually gathers, depletes and closes a demand window",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "physicalAvailability": 0.1248,
+        "harvestedByProbeOnly": 0.1248,
+        "result": [
+          {
+            "successorBandId": "band:successor-stabilization-positive",
+            "day": 2100,
+            "refusal": "no_completed_operation_window"
+          }
+        ]
+      }
+    },
+    {
+      "id": "N4_population_alone_cannot_stabilize",
+      "claim": "many living and working bodies do not replace a completed physical-operation record",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": [
+        {
+          "successorBandId": "band:successor-stabilization-positive",
+          "day": 2100,
+          "refusal": "no_completed_operation_window"
+        }
+      ]
+    },
+    {
+      "id": "N5_historical_commitment_and_consumed_permit_are_not_success",
+      "claim": "the direct commitment/departure join can be fully valid while stabilization still refuses because nobody has yet operated independently",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "commitmentProven": true,
+        "refusal": {
+          "successorBandId": "band:successor-stabilization-positive",
+          "day": 2100,
+          "refusal": "no_completed_operation_window"
+        }
+      }
+    },
+    {
+      "id": "N6_return_path_survives_bounded_history_overflow",
+      "claim": "a genuine return transition sets one absorbing course record; even when the capped phase ring no longer contains returning and old positive operation evidence is restored, stabilization is refused",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "returnDecision": {
+          "bandId": "band:successor-stabilization-positive",
+          "fromPhase": "establishing",
+          "cause": "not_enough_working_people_left",
+          "measured": {
+            "measuredDays": 6,
+            "supportRatio": 0.2634,
+            "noWaterDayShare": 0,
+            "blockedStepDays": 0,
+            "workingAdults": 1,
+            "mortalityBump": 0.022
+          },
+          "tileId": "tile:193:87"
+        },
+        "separationCourse": {
+          "status": "return_path_entered",
+          "initializedOnDay": 2100,
+          "firstEnteredOnDay": 2111,
+          "enteredFromPhase": "establishing",
+          "trigger": "lived_return_decision"
+        },
+        "overflowedHistory": [
+          "travelling",
+          "establishing",
+          "travelling",
+          "establishing",
+          "travelling",
+          "establishing",
+          "travelling",
+          "establishing",
+          "travelling",
+          "establishing",
+          "travelling",
+          "establishing"
+        ],
+        "refusal": {
+          "successorBandId": "band:successor-stabilization-positive",
+          "day": 2111,
+          "refusal": "never_returned_proof_not_satisfied",
+          "evidence": {
+            "authority": "successor_independent_operation_v1",
+            "successorBandId": "band:successor-stabilization-positive",
+            "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+            "assessedOnDay": 2111,
+            "departureDay": 2100,
+            "arrivalDay": 2105,
+            "assessmentWindow": {
+              "startDay": 2101,
+              "endDay": 2111,
+              "days": 11,
+              "tileIds": [
+                "tile:194:89",
+                "tile:193:89",
+                "tile:193:88",
+                "tile:193:87"
+              ],
+              "supportUnits": 0.1412,
+              "demandUnits": 0.3663,
+              "supportRatio": 0.3855,
+              "daysWithAnyPhysicalTake": 6,
+              "workerDays": 12,
+              "depletionApplied": 0.1618,
+              "meanWaterStress": 0,
+              "closedBy": "demand_window_complete"
+            },
+            "currentCondition": {
+              "population": 3,
+              "workingAdults": 3,
+              "mortalityRiskBump": 0.022,
+              "returnDecisionWouldAbandon": false
+            },
+            "requirements": {
+              "physicallyArrivedAtAcceptedTarget": true,
+              "postDepartureDemandWindowCompleted": true,
+              "demandWasMeasured": true,
+              "productiveLaborWasLived": true,
+              "realFoodWasTakenAndDepleted": true,
+              "supportStayedAboveReturnFailureFloor": true,
+              "waterStayedBelowNoWaterFailureLine": true,
+              "livingPopulationRemains": true,
+              "workingPopulationRemains": true,
+              "embodiedBurdenRemainsBelowReturnLine": true,
+              "currentReturnAuthorityDoesNotAbandon": true
+            },
+            "allRequirementsMet": true,
+            "sourceAuthorities": [
+              "provisionalTravel.requestTransition(travelling -> establishing)",
+              "provisionalTravelSubsistence.ProvisionalOperationHistory",
+              "plantStock.resolvePlantFoodHarvest",
+              "carryingCapacity.derivePopulationDemand",
+              "provisionalTravelSubsistence standing-tile water stress",
+              "Band.demography cohorts",
+              "Band.acuteRisk active embodied effect",
+              "provisionalReturnDecision.deriveProvisionalReturnDecision"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "N7_fabricated_or_mismatched_provenance_is_refused",
+      "claim": "an otherwise qualifying physical record cannot stabilize when its claimed commitment does not match the immutable two-sided departure record",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "successorBandId": "band:successor-stabilization-positive",
+        "day": 2111,
+        "refusal": "consumed_departure_provenance_not_proven",
+        "detail": "direct departure record disagrees with lifecycle or conservation facts",
+        "evidence": {
+          "authority": "successor_independent_operation_v1",
+          "successorBandId": "band:successor-stabilization-positive",
+          "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+          "assessedOnDay": 2111,
+          "departureDay": 2100,
+          "arrivalDay": 2105,
+          "assessmentWindow": {
+            "startDay": 2101,
+            "endDay": 2111,
+            "days": 11,
+            "tileIds": [
+              "tile:194:89",
+              "tile:193:89",
+              "tile:193:88",
+              "tile:193:87"
+            ],
+            "supportUnits": 0.1412,
+            "demandUnits": 0.3663,
+            "supportRatio": 0.3855,
+            "daysWithAnyPhysicalTake": 6,
+            "workerDays": 12,
+            "depletionApplied": 0.1618,
+            "meanWaterStress": 0,
+            "closedBy": "demand_window_complete"
+          },
+          "currentCondition": {
+            "population": 3,
+            "workingAdults": 3,
+            "mortalityRiskBump": 0.022,
+            "returnDecisionWouldAbandon": false
+          },
+          "requirements": {
+            "physicallyArrivedAtAcceptedTarget": true,
+            "postDepartureDemandWindowCompleted": true,
+            "demandWasMeasured": true,
+            "productiveLaborWasLived": true,
+            "realFoodWasTakenAndDepleted": true,
+            "supportStayedAboveReturnFailureFloor": true,
+            "waterStayedBelowNoWaterFailureLine": true,
+            "livingPopulationRemains": true,
+            "workingPopulationRemains": true,
+            "embodiedBurdenRemainsBelowReturnLine": true,
+            "currentReturnAuthorityDoesNotAbandon": true
+          },
+          "allRequirementsMet": true,
+          "sourceAuthorities": [
+            "provisionalTravel.requestTransition(travelling -> establishing)",
+            "provisionalTravelSubsistence.ProvisionalOperationHistory",
+            "plantStock.resolvePlantFoodHarvest",
+            "carryingCapacity.derivePopulationDemand",
+            "provisionalTravelSubsistence standing-tile water stress",
+            "Band.demography cohorts",
+            "Band.acuteRisk active embodied effect",
+            "provisionalReturnDecision.deriveProvisionalReturnDecision"
+          ]
+        }
+      }
+    },
+    {
+      "id": "N8_zero_population_cannot_stabilize",
+      "claim": "old physical evidence cannot turn a zero-body provisional entity into an established band",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "successorBandId": "band:successor-stabilization-positive",
+        "day": 2111,
+        "refusal": "zero_physical_population"
+      }
+    },
+    {
+      "id": "N9_no_completion_history_before_successful_transition",
+      "claim": "even qualifying evidence has no lineage/founding/completion record before transition, and the sole release writer refuses an establishing state",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "completionAbsentBefore": true,
+        "prematureRelease": {
+          "ok": false,
+          "refusal": "historical_completion_before_stabilization"
+        }
+      }
+    },
+    {
+      "id": "N10_unresolved_failed_return_is_not_a_stabilization_escape",
+      "claim": "the explicit living debt remains unchanged and cannot consume old establishment evidence as an escape hatch",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "phase": "unresolved_after_failed_return",
+        "stabilized": []
+      }
+    },
+    {
+      "id": "N11_release_refuses_preexisting_completed_identity",
+      "claim": "the adapter will not overwrite or merge a half-created lineage/history state",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "successorBandId": "band:successor-stabilization-positive",
+        "day": 2111,
+        "refusal": "quarantine_release_preconditions_not_met",
+        "evidence": {
+          "authority": "successor_independent_operation_v1",
+          "successorBandId": "band:successor-stabilization-positive",
+          "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+          "assessedOnDay": 2111,
+          "departureDay": 2100,
+          "arrivalDay": 2105,
+          "assessmentWindow": {
+            "startDay": 2101,
+            "endDay": 2111,
+            "days": 11,
+            "tileIds": [
+              "tile:194:89",
+              "tile:193:89",
+              "tile:193:88",
+              "tile:193:87"
+            ],
+            "supportUnits": 0.1412,
+            "demandUnits": 0.3663,
+            "supportRatio": 0.3855,
+            "daysWithAnyPhysicalTake": 6,
+            "workerDays": 12,
+            "depletionApplied": 0.1618,
+            "meanWaterStress": 0,
+            "closedBy": "demand_window_complete"
+          },
+          "currentCondition": {
+            "population": 3,
+            "workingAdults": 3,
+            "mortalityRiskBump": 0.022,
+            "returnDecisionWouldAbandon": false
+          },
+          "requirements": {
+            "physicallyArrivedAtAcceptedTarget": true,
+            "postDepartureDemandWindowCompleted": true,
+            "demandWasMeasured": true,
+            "productiveLaborWasLived": true,
+            "realFoodWasTakenAndDepleted": true,
+            "supportStayedAboveReturnFailureFloor": true,
+            "waterStayedBelowNoWaterFailureLine": true,
+            "livingPopulationRemains": true,
+            "workingPopulationRemains": true,
+            "embodiedBurdenRemainsBelowReturnLine": true,
+            "currentReturnAuthorityDoesNotAbandon": true
+          },
+          "allRequirementsMet": true,
+          "sourceAuthorities": [
+            "provisionalTravel.requestTransition(travelling -> establishing)",
+            "provisionalTravelSubsistence.ProvisionalOperationHistory",
+            "plantStock.resolvePlantFoodHarvest",
+            "carryingCapacity.derivePopulationDemand",
+            "provisionalTravelSubsistence standing-tile water stress",
+            "Band.demography cohorts",
+            "Band.acuteRisk active embodied effect",
+            "provisionalReturnDecision.deriveProvisionalReturnDecision"
+          ]
+        }
+      }
+    },
+    {
+      "id": "L1_success_does_not_claim_permanent_safety",
+      "claim": "the positive arm really reaches stabilized, after which ordinary viability may retain or absorb the small band without rewriting its successful provisional outcome",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "stabilizationDay": 2111,
+        "horizonDay": 2291,
+        "population": 0,
+        "viability": {
+          "bandId": "band:successor-stabilization-positive",
+          "population": 3,
+          "minimumViablePopulation": 14,
+          "viabilityPressure": 1,
+          "extinctionRisk": 0.69,
+          "absorptionOpportunity": 0.77,
+          "status": "absorbed",
+          "weakBandClassification": "absorbed",
+          "weakBandFate": "absorbed",
+          "supportSeekingTargetBandId": "band:varied-estuary",
+          "supportSeekingGrounding": "parent lineage",
+          "routeConfidenceToSupport": 1,
+          "lastSupportState": "crisis_deficit",
+          "lastStressSummary": "support=crisis_deficit food=0.51 water=0.02",
+          "reasonIds": [
+            "reason:viability:band:successor-stabilization-positive:24:band_became_nonviable",
+            "reason:viability:band:successor-stabilization-positive:24:absorption_preferred_over_extinction"
+          ],
+          "absorbedByBandId": "band:varied-estuary",
+          "populationTransferred": 3,
+          "populationRemoved": 0,
+          "populationConservationSummary": "transferred 3; removed 0"
+        },
+        "status": "dispersed"
+      }
+    },
+    {
+      "id": "L2_failure_path_still_gives_up_and_physically_reintegrates",
+      "claim": "a different real successor reaches establishing, chooses returning from lived conditions and physically rejoins without being swallowed by the success authority",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "target": "tile:108:55",
+        "trace": [
+          {
+            "offset": 1,
+            "day": 2101,
+            "phase": "travelling",
+            "position": "tile:110:57",
+            "population": 11
+          },
+          {
+            "offset": 11,
+            "day": 2111,
+            "phase": "establishing",
+            "position": "tile:108:55",
+            "population": 11
+          },
+          {
+            "offset": 25,
+            "day": 2125,
+            "phase": "returning",
+            "position": "tile:108:55",
+            "population": 11
+          },
+          {
+            "offset": 30,
+            "day": 2130,
+            "phase": "reintegrated",
+            "position": "tile:110:57",
+            "population": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "L3_expired_trial_still_fails_early",
+      "claim": "a controlled successor that physically arrived but did not receive a positive completion before the establishment bound follows the existing failed_early path",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "firstEstablishingDay": 2105,
+        "resolutions": [
+          {
+            "bandId": "band:successor-stabilization-positive",
+            "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+            "fromPhase": "establishing",
+            "toPhase": "failed_early",
+            "populationAtResolution": 3,
+            "reason": "phase_bound_expired"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L4_zero_body_control_uses_provisional_extinction_not_success",
+      "claim": "when the existing resolver is presented with the truthful physical fact of zero remaining bodies, it records provisional_extinguished and never stabilization",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "resolutions": [
+          {
+            "bandId": "band:successor-stabilization-positive",
+            "lineageId": "LIN-SUCCESSOR-STABILIZATION-POSITIVE",
+            "fromPhase": "travelling",
+            "toPhase": "provisional_extinguished",
+            "populationAtResolution": 0,
+            "reason": "zero_physical_population"
+          }
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total": 27,
+    "passing": 27,
+    "failing": 0,
+    "vacuous": 0
+  }
+}

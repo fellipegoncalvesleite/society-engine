@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-05T19:35:25.196Z",
+  "generatedAt": "2026-08-11T22:54:06.880Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "parentId": "band:varied-river-mid",
@@ -7,7 +7,7 @@
   "departureTile": "tile:110:57",
   "targetTile": "tile:108:55",
   "awayTile": "tile:108:55",
-  "afterReturnWalk": "tile:110:57",
+  "afterReturnWalk": "tile:109:57",
   "ledger": {
     "demographic": {
       "parentBefore": {
@@ -38,7 +38,7 @@
       "parentTileId": "tile:110:57",
       "successorTileId": "tile:110:57",
       "coLocated": true,
-      "journeyTiles": 8
+      "journeyTiles": 7
     },
     "embodied": {
       "parentHungerBefore": 0.14,
@@ -112,9 +112,12 @@
       "detail": {
         "departureTile": "tile:110:57",
         "awayTile": "tile:108:55",
-        "afterReturnWalk": "tile:110:57",
+        "afterReturnWalk": "tile:109:57",
         "parentTileNow": "tile:110:57",
-        "trailLength": 8
+        "awayDistanceToDeparture": 4,
+        "homeDistanceToDeparture": 1,
+        "trailLength": 7,
+        "note": "halted adjacent by design so R3-R9 can exercise the writer on a live successor; the runner-driven arrival is covered by RX1/RX2"
       }
     },
     {
@@ -224,7 +227,7 @@
         "refusal": "not_physically_co_located",
         "successorStillHoldsPeople": 11,
         "successorStillProvisional": true,
-        "NOT_RESOLVED_HERE": "what becomes of a group that cannot find its parent is the return vertical's remaining open end; it is bounded by the return/establish cycle and by zero-population extinguishment, and nothing here fabricates a resolution"
+        "NOT_RESOLVED_HERE": "after the bounded return action, a living separate group enters the named event-bounded unresolved state; later co-location or zero population can resolve it, and nothing here fabricates another outcome"
       }
     },
     {

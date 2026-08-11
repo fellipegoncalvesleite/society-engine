@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-08-03T15:33:18.013Z",
+  "generatedAt": "2026-08-11T22:55:22.508Z",
   "checkpoint": "ROADMAP ITEM 4 §8 — provisional-successor reader surface",
   "method": "LEXICAL scan of src/sim for band enumeration and lifecycle-status branching. It measures a SURFACE of sites requiring a decision, NOT a defect list. It cannot see a reader handed an already-filtered array, and a site with no status filter is not thereby wrong.",
   "summary": {
-    "filesScanned": 145,
-    "filesTouchingBandsOrStatus": 41,
-    "totalEnumerationSites": 160,
-    "totalEnumerationSitesWithoutNearbyTerminalFilter": 144,
+    "filesScanned": 162,
+    "filesTouchingBandsOrStatus": 52,
+    "totalEnumerationSites": 192,
+    "totalEnumerationSitesWithoutNearbyTerminalFilter": 177,
     "totalStatusBranchSites": 104,
     "subsystemsClassified": 17,
     "decisions": {
@@ -382,112 +382,107 @@
     },
     {
       "file": "src/sim/agents/demography.ts",
-      "enumerationSites": 17,
-      "enumerationSitesWithoutNearbyTerminalFilter": 14,
+      "enumerationSites": 16,
+      "enumerationSitesWithoutNearbyTerminalFilter": 13,
       "statusBranchSites": 4,
       "sites": {
         "enumeration": [
           {
-            "line": 154,
+            "line": 158,
             "guarded": false,
             "text": "let bandsById: Readonly<Record<BandId, Band>> = world.bands;"
           },
           {
-            "line": 155,
+            "line": 159,
             "guarded": false,
             "text": "const bandOrder = Object.values(world.bands).sort(compareBands);"
           },
           {
-            "line": 158,
+            "line": 162,
             "guarded": true,
             "text": "const band = bandsById[orderedBand.id];"
           },
           {
-            "line": 169,
+            "line": 173,
             "guarded": true,
             "text": "bandsById = {"
           },
           {
-            "line": 170,
+            "line": 174,
             "guarded": false,
             "text": "...bandsById,"
           },
           {
-            "line": 178,
+            "line": 182,
             "guarded": false,
             "text": "bands: bandsById,"
           },
           {
-            "line": 183,
+            "line": 200,
             "guarded": false,
-            "text": "computation.shouldCreateDaughter && Object.keys(bandsById).length < MAX_BANDS"
+            "text": "Object.keys(bandsById).length < MAX_BANDS"
           },
           {
-            "line": 188,
-            "guarded": false,
-            "text": "bandsById = {"
-          },
-          {
-            "line": 189,
-            "guarded": false,
-            "text": "...bandsById,"
-          },
-          {
-            "line": 195,
+            "line": 218,
             "guarded": false,
             "text": "bandsById = {"
           },
           {
-            "line": 196,
+            "line": 219,
             "guarded": false,
             "text": "...bandsById,"
           },
           {
-            "line": 204,
+            "line": 221,
+            "guarded": false,
+            "text": "? proposed.world.bands[bandWithDemography.id] ?? bandWithDemography"
+          },
+          {
+            "line": 228,
             "guarded": false,
             "text": "bands: bandsById,"
           },
           {
-            "line": 402,
+            "line": 426,
             "guarded": false,
             "text": "Object.keys(world.bands).length >= MAX_BANDS &&"
           },
           {
-            "line": 526,
+            "line": 550,
             "guarded": false,
             "text": "const canCreateMoreBands = Object.keys(world.bands).length < MAX_BANDS;"
           },
           {
-            "line": 702,
+            "line": 742,
             "guarded": false,
             "text": "bandCount: Object.keys(world.bands).length,"
           },
           {
-            "line": 3366,
+            "line": 3429,
             "guarded": false,
             "text": "return Object.values(world.bands).reduce("
           },
           {
-            "line": 3410,
+            "line": 3473,
             "guarded": true,
             "text": "return Object.values(world.bands)"
           }
         ],
         "statusBranch": [
           {
-            "line": 165,
+            "line": 169,
             "text": "band.status === \"dispersed\" ||"
           },
           {
-            "line": 166,
+            "line": 170,
             "text": "band.viability?.status === \"absorbed\" ||"
           },
           {
-            "line": 167,
+            "line": 171,
             "text": "band.viability?.status === \"extinct\""
           },
           {
-            "line": 3411,
+            "line": 3474,
             "text": ".filter((band) => band.viability?.status !== \"absorbed\" && band.viability?.status !== \"extinct\")"
           }
         ]
@@ -501,92 +496,92 @@
       "sites": {
         "enumeration": [
           {
-            "line": 24,
+            "line": 43,
             "guarded": false,
             "text": "let bandsById: Record<string, Band> = Object.values(world.bands)"
           },
           {
-            "line": 34,
+            "line": 55,
             "guarded": true,
             "text": "for (const band of Object.values(bandsById).sort(compareBands)) {"
           },
           {
-            "line": 37,
+            "line": 64,
             "guarded": true,
             "text": "bandsById[band.id] = terminalizeExtinctBand(world, band, \"demographic_zero\");"
           },
           {
-            "line": 53,
+            "line": 80,
             "guarded": false,
             "text": "bands: bandsById as Readonly<Record<BandId, Band>>,"
           },
           {
-            "line": 59,
+            "line": 86,
             "guarded": false,
             "text": "const absorbingBand = bandsById[target.id];"
           },
           {
-            "line": 77,
+            "line": 104,
             "guarded": false,
             "text": "bandsById[target.id] = {"
           },
           {
-            "line": 87,
+            "line": 114,
             "guarded": true,
             "text": "bandsById[band.id] = {"
           },
           {
-            "line": 135,
+            "line": 162,
             "guarded": false,
             "text": "bandsById[band.id] = terminalizeExtinctBand("
           },
           {
-            "line": 145,
+            "line": 172,
             "guarded": false,
             "text": "bands: bandsById as Readonly<Record<BandId, Band>>,"
           },
           {
-            "line": 330,
+            "line": 357,
             "guarded": true,
             "text": "return Object.values(world.bands)"
           },
           {
-            "line": 474,
+            "line": 504,
             "guarded": false,
             "text": "const kin = Object.values(world.bands).filter((candidate) => candidate.id !== band.id && isKin(band, candidate));"
           }
         ],
         "statusBranch": [
           {
-            "line": 35,
+            "line": 62,
             "text": "if (band.viability?.status === \"extinct\") {"
           },
           {
-            "line": 36,
+            "line": 63,
             "text": "if (band.status !== \"dispersed\") {"
           },
           {
-            "line": 44,
+            "line": 71,
             "text": "band.viability.status !== \"nonviable\" ||"
           },
           {
-            "line": 45,
+            "line": 72,
             "text": "band.status === \"dispersed\""
           },
           {
-            "line": 233,
+            "line": 260,
             "text": "if (band.viability?.status === \"absorbed\" || band.viability?.status === \"extinct\") {"
           },
           {
-            "line": 333,
+            "line": 363,
             "text": "candidate.status !== \"dispersed\" &&"
           },
           {
-            "line": 334,
+            "line": 364,
             "text": "candidate.viability?.status !== \"absorbed\" &&"
           },
           {
-            "line": 335,
+            "line": 365,
             "text": "candidate.viability?.status !== \"extinct\" &&"
           }
         ]
@@ -600,27 +595,27 @@
       "sites": {
         "enumeration": [
           {
-            "line": 2353,
+            "line": 2366,
             "guarded": false,
             "text": "const parentName = world.bands[lineage.parentBandId]?.name ?? \"Parent band\";"
           },
           {
-            "line": 2366,
+            "line": 2379,
             "guarded": false,
             "text": "const daughterName = world.bands[daughterId]?.name ?? \"Daughter band\";"
           },
           {
-            "line": 2379,
+            "line": 2392,
             "guarded": false,
             "text": "const absorber = world.bands[band.viability.absorbedByBandId]?.name ?? \"Known absorbing band\";"
           },
           {
-            "line": 2392,
+            "line": 2405,
             "guarded": false,
             "text": "const otherName = world.bands[reputation.otherBandId]?.name ?? \"Known band\";"
           },
           {
-            "line": 4370,
+            "line": 4387,
             "guarded": false,
             "text": ": world.bands[lineage.parentBandId]?.name;"
           }
@@ -671,7 +666,7 @@
             "text": "const status = band.viability?.status === \"extinct\" || band.viability?.weakBandFate === \"collapsed\""
           },
           {
-            "line": 2473,
+            "line": 2486,
             "text": "signalKind: band.viability?.status === \"extinct\" ? \"collapse\" : \"decline\","
           }
         ]
@@ -685,62 +680,62 @@
       "sites": {
         "enumeration": [
           {
-            "line": 73,
+            "line": 74,
             "guarded": false,
             "text": "const bands = Object.values(world.bands)"
           },
           {
-            "line": 75,
+            "line": 76,
             "guarded": false,
             "text": ".reduce<Record<string, Band>>((bandsById, band) => {"
           },
           {
-            "line": 76,
+            "line": 77,
             "guarded": false,
             "text": "bandsById[String(band.id)] = {"
           },
           {
-            "line": 84,
+            "line": 85,
             "guarded": false,
             "text": "return bandsById;"
           },
           {
-            "line": 3481,
+            "line": 3516,
             "guarded": false,
             "text": "const parent = world.bands[parentId];"
           }
         ],
         "statusBranch": [
           {
-            "line": 2038,
+            "line": 2053,
             "text": "band.viability?.status === \"absorbed\" ? \"absorbed\" :"
           },
           {
-            "line": 2039,
+            "line": 2054,
             "text": "band.viability?.status === \"extinct\" ? \"extinct\" :"
           },
           {
-            "line": 2040,
+            "line": 2055,
             "text": "band.status === \"dispersed\" ? \"dispersed\" :"
           },
           {
-            "line": 2793,
+            "line": 2813,
             "text": "detail: `status ${viability.status}; classification ${viability.weakBandClassification ?? \"unclassified\"}; target ${viability.supportSeekingTargetBandId ?? \"non"
           },
           {
-            "line": 2794,
+            "line": 2814,
             "text": "stateKey: `weak:${viability.status}:${viability.weakBandFate}:${viability.weakBandClassification ?? \"none\"}:${viability.supportSeekingTargetBandId ?? viability."
           },
           {
-            "line": 2799,
+            "line": 2819,
             "text": "repeatWindowTicks: viability.status === \"absorbed\" || viability.status === \"extinct\" ? 9999 : 8,"
           },
           {
-            "line": 3508,
+            "line": 3543,
             "text": "if (band.viability?.status === \"absorbed\") {"
           },
           {
-            "line": 3512,
+            "line": 3547,
             "text": "if (band.viability?.status === \"extinct\") {"
           }
         ]
@@ -862,47 +857,47 @@
       "sites": {
         "enumeration": [
           {
-            "line": 685,
+            "line": 686,
             "guarded": false,
             "text": "const campingBand = world.bands[expedition.bandId];"
           },
           {
-            "line": 2475,
+            "line": 2476,
             "guarded": false,
             "text": "const bandsById: Record<string, Band> = { ...world.bands };"
           },
           {
-            "line": 2479,
+            "line": 2480,
             "guarded": false,
             "text": "for (const band of Object.values(world.bands).sort(compareExpeditionBands)) {"
           },
           {
-            "line": 2488,
+            "line": 2496,
             "guarded": false,
             "text": "const beforeReconcile = bandsById[band.id] ?? band;"
           },
           {
-            "line": 2492,
+            "line": 2500,
             "guarded": false,
             "text": "bandsById[band.id] = reconciled;"
           },
           {
-            "line": 2499,
+            "line": 2507,
             "guarded": false,
             "text": "bandsById[band.id] = launched;"
           },
           {
-            "line": 2906,
+            "line": 2914,
             "guarded": false,
             "text": "bandsById[band.id] = {"
           },
           {
-            "line": 2921,
+            "line": 2929,
             "guarded": false,
             "text": "bandsById[band.id] = {"
           },
           {
-            "line": 2947,
+            "line": 2955,
             "guarded": false,
             "text": "return changed ? { ...currentWorld, bands: bandsById as WorldState[\"bands\"] } : world;"
           }
@@ -918,47 +913,47 @@
       "sites": {
         "enumeration": [
           {
-            "line": 298,
+            "line": 299,
             "guarded": false,
             "text": "const bandsById: Record<string, Band> = { ...world.bands };"
           },
           {
-            "line": 312,
+            "line": 313,
             "guarded": false,
             "text": "for (const band of Object.values(world.bands).sort(compareBands)) {"
           },
           {
-            "line": 361,
+            "line": 370,
             "guarded": false,
             "text": "bandsById[band.id] = {"
           },
           {
-            "line": 392,
+            "line": 401,
             "guarded": false,
             "text": "for (const band of Object.values(bandsById).sort(compareBands)) {"
           },
           {
-            "line": 416,
+            "line": 425,
             "guarded": false,
             "text": "bandsById[band.id] = executed;"
           },
           {
-            "line": 423,
+            "line": 432,
             "guarded": false,
             "text": "bands: bandsById as Readonly<Record<BandId, Band>>,"
           }
         ],
         "statusBranch": [
           {
-            "line": 3858,
+            "line": 3867,
             "text": "band.status !== \"dispersed\" &&"
           },
           {
-            "line": 3859,
+            "line": 3868,
             "text": "band.viability?.status !== \"absorbed\" &&"
           },
           {
-            "line": 3860,
+            "line": 3869,
             "text": "band.viability?.status !== \"extinct\""
           }
         ]
@@ -1028,41 +1023,41 @@
       "sites": {
         "enumeration": [
           {
-            "line": 313,
+            "line": 412,
             "guarded": false,
             "text": "const bandsById: Record<string, Band> = {};"
           },
           {
-            "line": 315,
+            "line": 414,
             "guarded": false,
             "text": "for (const band of Object.values(world.bands).sort(compareBands)) {"
           },
           {
-            "line": 317,
+            "line": 416,
             "guarded": false,
             "text": "bandsById[band.id] = advanced;"
           },
           {
-            "line": 330,
+            "line": 429,
             "guarded": false,
             "text": "bands: bandsById as Readonly<Record<BandId, Band>>,"
           }
         ],
         "statusBranch": [
           {
-            "line": 342,
+            "line": 441,
             "text": "band.status === \"dispersed\" ||"
           },
           {
-            "line": 343,
+            "line": 442,
             "text": "band.viability?.status === \"absorbed\" ||"
           },
           {
-            "line": 344,
+            "line": 443,
             "text": "band.viability?.status === \"extinct\";"
           },
           {
-            "line": 1128,
+            "line": 1265,
             "text": "const absorbed = viability?.status === \"absorbed\";"
           }
         ]
@@ -1076,42 +1071,42 @@
       "sites": {
         "enumeration": [
           {
-            "line": 182,
+            "line": 184,
             "guarded": false,
             "text": "const bandsById: Record<string, Band> = { ...worldBeforeDecisionsWithAcuteRisk.bands };"
           },
           {
-            "line": 191,
+            "line": 193,
             "guarded": true,
             "text": "const currentBand = bandsById[band.id] ?? band;"
           },
           {
-            "line": 203,
+            "line": 220,
             "guarded": false,
             "text": "bands: bandsById,"
           },
           {
-            "line": 217,
+            "line": 234,
             "guarded": false,
             "text": "bandsById[updatedBand.id] = updatedBand;"
           },
           {
-            "line": 224,
+            "line": 241,
             "guarded": false,
             "text": "bands: bandsById as Readonly<Record<BandId, Band>>,"
           }
         ],
         "statusBranch": [
           {
-            "line": 194,
+            "line": 196,
             "text": "currentBand.status === \"dispersed\" ||"
           },
           {
-            "line": 195,
+            "line": 197,
             "text": "currentBand.viability?.status === \"absorbed\" ||"
           },
           {
-            "line": 196,
+            "line": 198,
             "text": "currentBand.viability?.status === \"extinct\""
           }
         ]
@@ -1203,80 +1198,152 @@
       "sites": {
         "enumeration": [
           {
-            "line": 192,
+            "line": 193,
             "guarded": false,
             "text": "bands: world.bands,"
           },
           {
-            "line": 402,
+            "line": 410,
             "guarded": false,
             "text": "const band = world.bands[selectedBandId as BandId];"
           },
           {
-            "line": 607,
+            "line": 621,
             "guarded": false,
             "text": "const bands = Object.values(world.bands);"
           }
         ],
         "statusBranch": [
           {
-            "line": 466,
+            "line": 474,
             "text": "status: band.status,"
           },
           {
-            "line": 617,
+            "line": 631,
             "text": "if (band.viability?.status === \"absorbed\") {"
           },
           {
-            "line": 622,
+            "line": 636,
             "text": "if (band.viability?.status === \"extinct\") {"
           },
           {
-            "line": 627,
+            "line": 641,
             "text": "if (band.status === \"dispersed\") {"
           }
         ]
       }
     },
     {
-      "file": "src/sim/agents/protoCamps.ts",
-      "enumerationSites": 5,
-      "enumerationSitesWithoutNearbyTerminalFilter": 4,
-      "statusBranchSites": 1,
+      "file": "src/sim/agents/fissionDeparturePreparation.ts",
+      "enumerationSites": 6,
+      "enumerationSitesWithoutNearbyTerminalFilter": 6,
+      "statusBranchSites": 0,
       "sites": {
         "enumeration": [
           {
-            "line": 37,
+            "line": 261,
+            "guarded": false,
+            "text": "const parent = world.bands[parentId];"
+          },
+          {
+            "line": 396,
+            "guarded": false,
+            "text": "...world.bands,"
+          },
+          {
+            "line": 436,
+            "guarded": false,
+            "text": "const parent = world.bands[parentId];"
+          },
+          {
+            "line": 460,
+            "guarded": false,
+            "text": "...world.bands,"
+          },
+          {
+            "line": 492,
+            "guarded": false,
+            "text": "const parent = world.bands[parentId];"
+          },
+          {
+            "line": 506,
+            "guarded": false,
+            "text": "...world.bands,"
+          }
+        ],
+        "statusBranch": []
+      }
+    },
+    {
+      "file": "src/sim/agents/protoCamps.ts",
+      "enumerationSites": 5,
+      "enumerationSitesWithoutNearbyTerminalFilter": 5,
+      "statusBranchSites": 0,
+      "sites": {
+        "enumeration": [
+          {
+            "line": 38,
             "guarded": false,
             "text": "const bands = Object.values(world.bands)"
           },
           {
-            "line": 39,
+            "line": 40,
             "guarded": false,
             "text": ".reduce<Record<string, Band>>((bandsById, band) => {"
           },
           {
-            "line": 40,
+            "line": 45,
             "guarded": false,
-            "text": "bandsById[String(band.id)] = {"
+            "text": "bandsById[String(band.id)] = isProvisionalSuccessor(band)"
           },
           {
-            "line": 45,
+            "line": 52,
             "guarded": false,
             "text": "return bandsById;"
           },
           {
-            "line": 978,
-            "guarded": true,
+            "line": 985,
+            "guarded": false,
             "text": "for (const other of Object.values(world.bands)) {"
           }
         ],
-        "statusBranch": [
+        "statusBranch": []
+      }
+    },
+    {
+      "file": "src/sim/agents/provisionalReintegration.ts",
+      "enumerationSites": 5,
+      "enumerationSitesWithoutNearbyTerminalFilter": 5,
+      "statusBranchSites": 0,
+      "sites": {
+        "enumeration": [
           {
-            "line": 979,
-            "text": "if (other.id === band.id || other.status === \"dispersed\" || other.viability?.status === \"absorbed\" || other.viability?.status === \"extinct\") {"
+            "line": 176,
+            "guarded": false,
+            "text": "Object.values(world.bands).reduce((total, band) => total + Math.round(band.demography.population), 0);"
+          },
+          {
+            "line": 186,
+            "guarded": false,
+            "text": "const successorRaw = world.bands[successorId];"
+          },
+          {
+            "line": 214,
+            "guarded": false,
+            "text": "const parent = parentId === undefined ? undefined : world.bands[parentId];"
+          },
+          {
+            "line": 379,
+            "guarded": false,
+            "text": "bands: { ...world.bands, [parentId]: parentAfter, [successorId]: successorAfter } as Readonly<Record<BandId, Band>>,"
+          },
+          {
+            "line": 523,
+            "guarded": false,
+            "text": "const candidateIds = Object.values(world.bands)"
           }
-        ]
+        ],
+        "statusBranch": []
       }
     },
     {
@@ -1442,6 +1509,37 @@
       }
     },
     {
+      "file": "src/sim/agents/fissionDepartureSeam.ts",
+      "enumerationSites": 3,
+      "enumerationSitesWithoutNearbyTerminalFilter": 3,
+      "statusBranchSites": 1,
+      "sites": {
+        "enumeration": [
+          {
+            "line": 323,
+            "guarded": false,
+            "text": "return Object.values(world.bands).reduce((total, band) => total + Math.round(band.demography.population), 0);"
+          },
+          {
+            "line": 335,
+            "guarded": false,
+            "text": "const parent = world.bands[parentId];"
+          },
+          {
+            "line": 839,
+            "guarded": false,
+            "text": "...world.bands,"
+          }
+        ],
+        "statusBranch": [
+          {
+            "line": 922,
+            "text": "successorViabilityStatus: successor.viability?.status,"
+          }
+        ]
+      }
+    },
+    {
       "file": "src/sim/agents/foragingAdaptation.ts",
       "enumerationSites": 4,
       "enumerationSitesWithoutNearbyTerminalFilter": 4,
@@ -1504,6 +1602,37 @@
       }
     },
     {
+      "file": "src/sim/agents/successorStabilization.ts",
+      "enumerationSites": 4,
+      "enumerationSitesWithoutNearbyTerminalFilter": 4,
+      "statusBranchSites": 0,
+      "sites": {
+        "enumeration": [
+          {
+            "line": 220,
+            "guarded": false,
+            "text": "const parent = world.bands[parentId];"
+          },
+          {
+            "line": 346,
+            "guarded": false,
+            "text": "bands: { ...input.world.bands, [released.id]: released },"
+          },
+          {
+            "line": 389,
+            "guarded": false,
+            "text": "for (const snapshot of Object.values(world.bands).sort((a, b) => String(a.id).localeCompare(String(b.id)))) {"
+          },
+          {
+            "line": 568,
+            "guarded": false,
+            "text": "return Object.values(world.bands).reduce("
+          }
+        ],
+        "statusBranch": []
+      }
+    },
+    {
       "file": "src/sim/world/depletion.ts",
       "enumerationSites": 1,
       "enumerationSitesWithoutNearbyTerminalFilter": 1,
@@ -1541,15 +1670,15 @@
         "enumeration": [],
         "statusBranch": [
           {
-            "line": 6,
+            "line": 36,
             "text": "return band.status === \"dispersed\" ||"
           },
           {
-            "line": 7,
+            "line": 37,
             "text": "band.viability?.status === \"absorbed\" ||"
           },
           {
-            "line": 8,
+            "line": 38,
             "text": "band.viability?.status === \"extinct\";"
           }
         ]
@@ -1599,6 +1728,58 @@
             "text": "if (population <= 0 || band.viability?.status === \"extinct\") kind = \"extinct\";"
           }
         ]
+      }
+    },
+    {
+      "file": "src/sim/agents/naturalFissionPreDeparture.ts",
+      "enumerationSites": 3,
+      "enumerationSitesWithoutNearbyTerminalFilter": 3,
+      "statusBranchSites": 0,
+      "sites": {
+        "enumeration": [
+          {
+            "line": 77,
+            "guarded": false,
+            "text": "const parent = request.world.bands[request.parentId];"
+          },
+          {
+            "line": 140,
+            "guarded": false,
+            "text": "bands: { ...request.world.bands, [parent.id]: nextParent },"
+          },
+          {
+            "line": 222,
+            "guarded": false,
+            "text": "const parentIds = Object.values(world.bands)"
+          }
+        ],
+        "statusBranch": []
+      }
+    },
+    {
+      "file": "src/sim/agents/provisionalLifecycleResolver.ts",
+      "enumerationSites": 3,
+      "enumerationSitesWithoutNearbyTerminalFilter": 3,
+      "statusBranchSites": 0,
+      "sites": {
+        "enumeration": [
+          {
+            "line": 75,
+            "guarded": false,
+            "text": "const bands: Record<string, Band> = { ...world.bands };"
+          },
+          {
+            "line": 77,
+            "guarded": false,
+            "text": "for (const band of Object.values(world.bands).sort((a, b) => String(a.id).localeCompare(String(b.id)))) {"
+          },
+          {
+            "line": 243,
+            "guarded": false,
+            "text": "return Object.values(world.bands).some("
+          }
+        ],
+        "statusBranch": []
       }
     },
     {
@@ -1687,6 +1868,90 @@
       }
     },
     {
+      "file": "src/sim/agents/provisionalEstablishment.ts",
+      "enumerationSites": 2,
+      "enumerationSitesWithoutNearbyTerminalFilter": 2,
+      "statusBranchSites": 0,
+      "sites": {
+        "enumeration": [
+          {
+            "line": 223,
+            "guarded": false,
+            "text": "const bands: Record<string, Band> = { ...world.bands };"
+          },
+          {
+            "line": 226,
+            "guarded": false,
+            "text": "for (const band of Object.values(world.bands).sort((a, b) => String(a.id).localeCompare(String(b.id)))) {"
+          }
+        ],
+        "statusBranch": []
+      }
+    },
+    {
+      "file": "src/sim/agents/provisionalReturnDecision.ts",
+      "enumerationSites": 2,
+      "enumerationSitesWithoutNearbyTerminalFilter": 2,
+      "statusBranchSites": 0,
+      "sites": {
+        "enumeration": [
+          {
+            "line": 145,
+            "guarded": false,
+            "text": "const bands: Record<string, Band> = { ...world.bands };"
+          },
+          {
+            "line": 148,
+            "guarded": false,
+            "text": "for (const band of Object.values(world.bands).sort((a, b) => String(a.id).localeCompare(String(b.id)))) {"
+          }
+        ],
+        "statusBranch": []
+      }
+    },
+    {
+      "file": "src/sim/agents/provisionalTravel.ts",
+      "enumerationSites": 2,
+      "enumerationSitesWithoutNearbyTerminalFilter": 2,
+      "statusBranchSites": 0,
+      "sites": {
+        "enumeration": [
+          {
+            "line": 105,
+            "guarded": false,
+            "text": "const bands: Record<string, Band> = { ...world.bands };"
+          },
+          {
+            "line": 113,
+            "guarded": false,
+            "text": "for (const band of Object.values(world.bands).sort((a, b) => String(a.id).localeCompare(String(b.id)))) {"
+          }
+        ],
+        "statusBranch": []
+      }
+    },
+    {
+      "file": "src/sim/agents/provisionalTravelSubsistence.ts",
+      "enumerationSites": 2,
+      "enumerationSitesWithoutNearbyTerminalFilter": 2,
+      "statusBranchSites": 0,
+      "sites": {
+        "enumeration": [
+          {
+            "line": 234,
+            "guarded": false,
+            "text": "const bands: Record<string, Band> = { ...world.bands };"
+          },
+          {
+            "line": 237,
+            "guarded": false,
+            "text": "for (const band of Object.values(world.bands).sort((a, b) => String(a.id).localeCompare(String(b.id)))) {"
+          }
+        ],
+        "statusBranch": []
+      }
+    },
+    {
       "file": "src/sim/agents/publicHumanStory.ts",
       "enumerationSites": 0,
       "enumerationSitesWithoutNearbyTerminalFilter": 0,
@@ -1769,6 +2034,22 @@
             "line": 936,
             "guarded": false,
             "text": "const otherBand = world.bands[reputation.otherBandId];"
+          }
+        ],
+        "statusBranch": []
+      }
+    },
+    {
+      "file": "src/sim/agents/parentFissionAttemptResolver.ts",
+      "enumerationSites": 1,
+      "enumerationSitesWithoutNearbyTerminalFilter": 1,
+      "statusBranchSites": 0,
+      "sites": {
+        "enumeration": [
+          {
+            "line": 50,
+            "guarded": false,
+            "text": "const parentIds = Object.values(world.bands)"
           }
         ],
         "statusBranch": []

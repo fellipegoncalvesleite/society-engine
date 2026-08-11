@@ -288,9 +288,9 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
     transitionWriter: "provisionalEstablishment (world adapter)",
-    // The table retains later positive outcomes as legal lifecycle vocabulary, but this cleanup
-    // supplies no production stabilization writer. Any physical reintegration must still be witnessed
-    // by the dedicated adapter; no timeout may point at it.
+    // Positive stabilization is owned by a separate production adapter with a named conjunctive
+    // proof. Any physical reintegration must still be witnessed by its dedicated adapter; no timeout
+    // may point at either physical-event outcome.
     permittedNext: ["stabilized", "failed_early", "returning", "reintegrated", "provisional_extinguished"],
     terminal: false,
     resolutionKind: "temporally_bounded_action",
@@ -398,15 +398,15 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "stabilized",
-    // Reserved for a later positive-commitment plus physical-operation authority. No current
-    // production adapter requests this transition.
+    // Entered only by the positive successor-stabilization adapter after a complete, conjunctive
+    // physical-operation proof and an atomic quarantine-release plan. Never by a timeout.
     entryRequires: "physical_event",
     side: "successor",
     bodiesHaveMoved: true,
     bodyOwner: "successor",
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
-    transitionWriter: "future positive-commitment authority (not implemented)",
+    transitionWriter: "successorStabilization (world adapter)",
     permittedNext: [],
     terminal: true,
     resolutionKind: "terminal",
@@ -440,8 +440,14 @@ export type LifecycleRejection =
   | "parent_already_has_a_current_attempt"
   /** Departure requires an endorsed founder count from the residual authority. */
   | "departure_without_endorsed_founder_count"
-  /** Establishment may not conclude in stabilization without lived evidence. */
-  | "stabilization_without_lived_evidence"
+  /** Establishment may not conclude without the named physical-operation conjunction. */
+  | "stabilization_without_independent_operation"
+  /** Historical positive commitment and its consumed one-use permit were not directly proven. */
+  | "stabilization_without_consumed_departure_provenance"
+  /** The monotonic course record says return was entered, or cannot prove otherwise. */
+  | "stabilization_after_return_path"
+  /** The adapter has not prepared the state ordinary established readers require. */
+  | "stabilization_without_quarantine_release"
   /** §3 — elapsed time may not produce a phase that asserts something happened in the world. */
   | "terminal_outcome_requires_a_physical_event"
   /** Reintegration asserts the bodies physically reached the parent. Nothing else may assert it. */
@@ -473,6 +479,20 @@ export type LifecycleTransitionResult =
   | { readonly ok: true; readonly state: LifecycleState; readonly timedOut: boolean }
   | { readonly ok: false; readonly rejection: LifecycleRejection };
 
+/**
+ * Four independent claims the pure kernel requires for `establishing -> stabilized`.
+ *
+ * This replaces the old `livedEvidenceCount >= 3` gate. A count allowed heterogeneous diagnostics
+ * to compensate for one another and gave the descriptive establishment score identity authority.
+ * These claims are conjunctive and differently sourced; omitting any one produces a named refusal.
+ */
+export interface StabilizationTransitionProof {
+  readonly independentOperationProven: boolean;
+  readonly consumedDepartureProvenanceProven: boolean;
+  readonly neverEnteredReturnPathProven: boolean;
+  readonly quarantineReleaseInitialized: boolean;
+}
+
 export interface TransitionRequest {
   readonly current: LifecycleState;
   readonly to: FissionLifecyclePhase;
@@ -483,11 +503,8 @@ export interface TransitionRequest {
    * so a caller cannot depart on a request the authority did not endorse.
    */
   readonly endorsedFounderCount?: number;
-  /**
-   * Required for `establishing -> stabilized`. **A timer alone may not stabilize**, so the kernel
-   * refuses the transition unless the adapter passes lived evidence it gathered.
-   */
-  readonly livedEvidenceCount?: number;
+  /** Required for `establishing -> stabilized`; each independent claim is checked separately. */
+  readonly stabilizationProof?: StabilizationTransitionProof;
   /**
    * §3 — WHAT IS ASKING FOR THIS TRANSITION: something that happened in the world, or a clock.
    *
@@ -518,9 +535,6 @@ export interface TransitionRequest {
   readonly preparedDepartureProven?: boolean;
 }
 
-/** How many independent lived-evidence signals stabilization requires. An authority boundary. */
-export const MIN_LIVED_EVIDENCE_FOR_STABILIZATION = 3;
-
 export function requestTransition(request: TransitionRequest): LifecycleTransitionResult {
   const contract = getPhaseContract(request.current.phase);
 
@@ -537,9 +551,18 @@ export function requestTransition(request: TransitionRequest): LifecycleTransiti
     }
   }
   if (request.to === "stabilized") {
-    const evidence = request.livedEvidenceCount ?? 0;
-    if (evidence < MIN_LIVED_EVIDENCE_FOR_STABILIZATION) {
-      return { ok: false, rejection: "stabilization_without_lived_evidence" };
+    const proof = request.stabilizationProof;
+    if (proof?.independentOperationProven !== true) {
+      return { ok: false, rejection: "stabilization_without_independent_operation" };
+    }
+    if (proof.consumedDepartureProvenanceProven !== true) {
+      return { ok: false, rejection: "stabilization_without_consumed_departure_provenance" };
+    }
+    if (proof.neverEnteredReturnPathProven !== true) {
+      return { ok: false, rejection: "stabilization_after_return_path" };
+    }
+    if (proof.quarantineReleaseInitialized !== true) {
+      return { ok: false, rejection: "stabilization_without_quarantine_release" };
     }
   }
   // ── §3 — THE CENTRAL GUARD. ──

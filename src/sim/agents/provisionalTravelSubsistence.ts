@@ -406,7 +406,8 @@ export const RECENT_ASSESSMENT_WINDOW_CAP = 8;
  * day's luck cannot fill it.
  *
  * It closes a SAMPLE, never an outcome: a rich window and a sterile window close by the same rule and
- * produce the same schema. No production stabilization reader consumes this constant or its windows.
+ * produce the same schema. The separate stabilization authority may consume a completed window, but
+ * the closer remains outcome-blind and has no lifecycle authority of its own.
  */
 export const ASSESSMENT_DEMAND_FRACTION_OF_SEASON = 1 / 9;
 
@@ -460,6 +461,23 @@ function foldAssessmentWindow(
     lifetimeTileIdsWithAnyPhysicalTake: tiles,
     recentAssessmentWindows: [...base.recentAssessmentWindows, window].slice(-RECENT_ASSESSMENT_WINDOW_CAP),
   };
+}
+
+/**
+ * Close the bounded physical-operation measurement when provisional life ends.
+ *
+ * This preserves the final partial sample without pretending it completed the outcome-blind demand
+ * window. Stabilization eligibility is derived before this close and accepts only
+ * `demand_window_complete`, so a lifecycle end can never manufacture its own positive evidence.
+ */
+export function closeOperationHistoryForLifecycleEnd(
+  history: ProvisionalOperationHistory | undefined,
+  endDay: number,
+): ProvisionalOperationHistory | undefined {
+  const open = history?.openAssessmentWindow;
+  if (history === undefined || open === undefined) return history;
+  const folded = foldAssessmentWindow(history, closeOpenAssessmentWindow(open, endDay, "lifecycle_ended"));
+  return { ...folded, openAssessmentWindow: undefined };
 }
 
 /**

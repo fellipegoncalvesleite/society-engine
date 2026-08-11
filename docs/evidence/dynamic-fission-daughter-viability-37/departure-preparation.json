@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-10T16:48:31.204Z",
+  "generatedAt": "2026-08-11T22:51:48.155Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "parentBandId": "band:varied-river-mid",
@@ -30,10 +30,10 @@
           "motive": 0.9,
           "destinationFamiliarity": 1,
           "embodiedCapacity": 0.88,
-          "splitCausedDamage": 0.21,
+          "splitCausedDamage": 0.22,
           "readiness": 0.88,
           "tendencyDelta": 0.1043,
-          "willingness": 0.8333
+          "willingness": 0.8303
         }
       }
     },
@@ -105,7 +105,7 @@
       "nonVacuous": true,
       "detail": {
         "refusal": "residual_authority_blocked_the_departure",
-        "detail": "split_caused_damage_exceeds_tolerance",
+        "detail": "absolute_physical_impossibility",
         "phaseAfter": "departure_planned",
         "preparedRecordWritten": false
       }
@@ -214,8 +214,8 @@
         "refusedRuns": 40,
         "recordAfterRefusals": "none",
         "successfulRuns": 10,
-        "bytesAfterTenSuccesses": 1242,
-        "bytesAfterOne": 1242,
+        "bytesAfterTenSuccesses": 1323,
+        "bytesAfterOne": 1323,
         "historyLength": 11
       }
     },
@@ -228,7 +228,7 @@
         "freshAgainstOriginalParent": true,
         "staleAfterOneAdultAged": true,
         "staleAfterThreeBodiesLeaveOnAParty": true,
-        "fingerprint": "residual:4c7328db4c0dc7a1",
+        "fingerprint": "residual:154a732d16dc2a0b",
         "note": "cohorts move at the annual demographic step and away bodies daily, so both can change inside DEPARTURE_READY_MAX_DAYS"
       }
     },
@@ -266,35 +266,22 @@
       "detail": {
         "withoutClaim": "departure_ready_without_completed_preparation",
         "withClaim": "departure_ready",
-        "note": "production still allows a hand-built departure_ready record to reach performAtomicDeparture directly; closing that is the next slice"
+        "note": "the departure seam additionally refuses a `departure_ready` record carrying no prepared departure; see the gated-departure audit's fixture A"
       }
     },
     {
-      "id": "P_the_preparation_writer_has_no_natural_callers_and_departure_is_unchanged",
-      "claim": "no demographic, runner, decision or annual-fission path reaches the preparation writer, and `performAtomicDeparture` still requires no permit — this pass builds the authority, not its reachability",
+      "id": "P_the_preparation_writer_has_one_natural_adapter_caller_and_departure_still_requires_it",
+      "claim": "annual demography opens the natural proposal, exactly one natural adapter calls canonical preparation, and the physical seam remains uncalled while continuing to require the prepared terms",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "naturalCallers": [
-          {
-            "file": "src/sim/agents/demography.ts",
-            "mentions": false
-          },
-          {
-            "file": "src/sim/tick/advance.ts",
-            "mentions": false
-          },
-          {
-            "file": "src/sim/rules/bandDecision.ts",
-            "mentions": false
-          },
-          {
-            "file": "src/sim/runner/simRunner.ts",
-            "mentions": false
-          }
-        ],
-        "departureSeamMentionsPermitOrPreparedTerms": false,
-        "statedGap": "a hand-built departure_ready record can still reach performAtomicDeparture with no commitment behind it"
+        "annualProposalInitiatorPresent": true,
+        "naturalPreparationCaller": "src/sim/agents/naturalFissionPreDeparture.ts",
+        "naturalPreparationCallCount": 1,
+        "naturalPhysicalSeamCallCount": 0,
+        "departureSeamConsumesPermitAndPreparedTerms": true,
+        "departureSeamStillAcceptsCallerResidualContext": false,
+        "statedBoundary": "ordinary ecology can propose, plan and prepare; it still cannot execute a physical separation"
       }
     }
   ]

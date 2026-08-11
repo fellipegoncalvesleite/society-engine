@@ -200,6 +200,8 @@ export interface PreparedFissionDeparture {
  * came from must survive as long as the successor does.
  */
 export interface ConsumedDepartureProvenance {
+  /** Direct join to the bounded physical-departure record shared by parent and successor. */
+  readonly departureRecordId: EventId;
   /** The commitment this departure executed. The join key to the parent's historical record. */
   readonly commitmentId: string;
   /** The day the cohort accepted these terms. */
@@ -213,6 +215,139 @@ export interface ConsumedDepartureProvenance {
    * status means a reader never has to infer "it must have been consumed, because here we are".
    */
   readonly authorizationStatus: "consumed_by_departure";
+}
+
+/**
+ * A bounded, immutable record of what became true at the physical seam — and no more.
+ *
+ * This record says bodies left under one positive commitment and one spent permit. It deliberately
+ * says nothing about whether the successor later established. The identical record is retained on
+ * both sides of the split, so a later reader does not have to reconstruct a departure from a founder
+ * count, a date, or a parent name after the parent's current-attempt slot has moved on.
+ */
+export interface SuccessorDepartureRecord {
+  readonly id: EventId;
+  readonly time: WorldTime;
+  readonly tick: TickNumber;
+  readonly lineageId: string;
+  readonly parentBandId: BandId;
+  readonly successorBandId: BandId;
+  readonly relation: BandLineageRelation;
+  readonly commitmentId: string;
+  readonly commitmentDecisionDay: number;
+  readonly departedOnDay: number;
+  readonly originTileId: TileId;
+  readonly targetTileId: TileId;
+  readonly founders: FounderCohortBinding;
+  readonly authorizationStatus: "consumed_by_departure";
+  readonly parentPopulationBefore: number;
+  readonly parentPopulationAfter: number;
+  readonly successorPopulationAtDeparture: number;
+  readonly inheritedKnowledgeCount: number;
+  readonly inheritedMemoryCount: number;
+  readonly inheritedCrossingCount: number;
+  readonly inheritedCorridorCount: number;
+  readonly reasonIds: readonly ReasonId[];
+}
+
+/**
+ * Monotonic answer to a question the bounded lifecycle phase ring cannot answer forever.
+ *
+ * `return_path_entered` is absorbing. No writer changes it back to `outbound_trial`, so stabilization
+ * cannot become possible merely because `FissionLifecycleRecord.history` evicted an old `returning`
+ * entry. Optional only for compatibility with pre-seam fixtures and serialized worlds; the positive
+ * stabilization authority requires it and the physical seam always initializes it.
+ */
+export type ProvisionalSeparationCourse =
+  | {
+      readonly status: "outbound_trial";
+      readonly initializedOnDay: number;
+    }
+  | {
+      readonly status: "return_path_entered";
+      readonly initializedOnDay: number;
+      readonly firstEnteredOnDay: number;
+      readonly enteredFromPhase: FissionLifecyclePhase;
+      readonly trigger: "lived_return_decision" | "phase_bound_expired";
+    };
+
+/**
+ * The named physical-operation proof consumed by stabilization.
+ *
+ * It is a conjunction, not a score. Each boolean has one source authority and none can compensate
+ * for another: plentiful food cannot pay for no water, many bodies cannot replace work, and a rich
+ * tile cannot replace a closed window of actual extraction. The window may span localities, which is
+ * why this proves mobile group operation rather than sedentary residence.
+ */
+export interface SuccessorIndependentOperationEvidence {
+  readonly authority: "successor_independent_operation_v1";
+  readonly successorBandId: BandId;
+  readonly lineageId: string;
+  readonly assessedOnDay: number;
+  readonly departureDay: number;
+  readonly arrivalDay: number;
+  readonly assessmentWindow: {
+    readonly startDay: number;
+    readonly endDay: number;
+    readonly days: number;
+    readonly tileIds: readonly TileId[];
+    readonly supportUnits: number;
+    readonly demandUnits: number;
+    readonly supportRatio: number;
+    readonly daysWithAnyPhysicalTake: number;
+    readonly workerDays: number;
+    readonly depletionApplied: number;
+    readonly meanWaterStress: number;
+    readonly closedBy: SubsistenceAssessmentWindow["closedBy"];
+  };
+  readonly currentCondition: {
+    readonly population: number;
+    readonly workingAdults: number;
+    readonly mortalityRiskBump: number;
+    readonly returnDecisionWouldAbandon: boolean;
+  };
+  readonly requirements: {
+    readonly physicallyArrivedAtAcceptedTarget: boolean;
+    readonly postDepartureDemandWindowCompleted: boolean;
+    readonly demandWasMeasured: boolean;
+    readonly productiveLaborWasLived: boolean;
+    readonly realFoodWasTakenAndDepleted: boolean;
+    readonly supportStayedAboveReturnFailureFloor: boolean;
+    readonly waterStayedBelowNoWaterFailureLine: boolean;
+    readonly livingPopulationRemains: boolean;
+    readonly workingPopulationRemains: boolean;
+    readonly embodiedBurdenRemainsBelowReturnLine: boolean;
+    readonly currentReturnAuthorityDoesNotAbandon: boolean;
+  };
+  readonly allRequirementsMet: boolean;
+  readonly sourceAuthorities: readonly string[];
+}
+
+/**
+ * The positive completion fact written only after the successor actually stabilizes.
+ *
+ * Departure remains a separate earlier record, preventing either teleport fiction (stabilization
+ * stamped on departure day) or premature success (departure claiming establishment). The identical
+ * bounded object is appended to parent and successor in the same atomic world update.
+ */
+export interface SuccessorStabilizationEvent {
+  readonly id: EventId;
+  readonly time: WorldTime;
+  readonly tick: TickNumber;
+  readonly stabilizedOnDay: number;
+  readonly departureRecordId: EventId;
+  readonly lineageId: string;
+  readonly parentBandId: BandId;
+  readonly successorBandId: BandId;
+  readonly relation: BandLineageRelation;
+  readonly stabilizedTileId: TileId;
+  readonly successorPopulationAtStabilization: number;
+  readonly successorWorkingAdultsAtStabilization: number;
+  readonly successorDependentsAtStabilization: number;
+  readonly successorEldersAtStabilization: number;
+  readonly neverEnteredReturnPath: true;
+  readonly independentOperation: SuccessorIndependentOperationEvidence;
+  readonly reasonIds: readonly ReasonId[];
 }
 
 /** Bounded, all-numeric. Only written on acceptance, where every term was measurable. */
@@ -260,6 +395,10 @@ export interface FissionLifecycleRecord {
    * fact recorded twice in two shapes is how the two sides start to disagree.
    */
   readonly departureProvenance?: ConsumedDepartureProvenance;
+  /** Monotonic return/abandonment history; unlike `history`, it cannot roll an old return away. */
+  readonly separationCourse?: ProvisionalSeparationCourse;
+  /** Direct join to the positive completion event, present only after `stabilized`. */
+  readonly stabilizationEventId?: EventId;
   /**
    * The tile the founders physically left from, retained so a return has a destination it LEGITIMATELY
    * KNOWS. It is the last place this group actually saw its parent — deliberately NOT the parent's
@@ -2756,6 +2895,7 @@ export interface BandLineageReadabilityState {
   readonly lineagePath: readonly BandId[];
   readonly activeStatus: "active" | "dispersed" | "absorbed" | "extinct";
   readonly absorbedByBandId?: BandId;
+  readonly formationStatus: "origin" | "provisional_separation" | "established_daughter" | "failed_separation_record";
   readonly relationCategory?: SocialRelationCategory;
   readonly displayLabel: string;
   readonly rawSource: string;
@@ -3570,6 +3710,8 @@ export type BandFoundingKind = "origin_spawn" | "fission_daughter";
 export type HistoryEvidenceKind =
   | "creation_record"
   | "fission_event"
+  | "successor_departure_event"
+  | "successor_stabilization_event"
   | "lineage_link"
   | "demographic_churn"
   | "seasonal_support"
@@ -7108,6 +7250,10 @@ export interface Band {
   readonly daughterBandIds: readonly BandId[];
   readonly lineage?: BandLineageLink;
   readonly fissionEvents: readonly BandFissionEvent[];
+  /** Bounded physical departures, distinct from the legacy instantaneous completed-fission event. */
+  readonly successorDepartureRecords?: readonly SuccessorDepartureRecord[];
+  /** Bounded positive completion events, shared identically by parent and stabilized successor. */
+  readonly successorStabilizationEvents?: readonly SuccessorStabilizationEvent[];
   readonly initialSpawnReason?: InitialSpawnReason;
   readonly currentIntent?: MobilityIntent;
   readonly intentHistory?: readonly MobilityIntent[];

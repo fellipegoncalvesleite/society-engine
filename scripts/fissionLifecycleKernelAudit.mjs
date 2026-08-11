@@ -54,6 +54,12 @@ try {
   const step = (state, to, day, extra = {}) =>
     k.requestTransition({ current: state, to, today: day, cause: "physical_event",
       physicalCoLocationProven: true, preparedDepartureProven: true, ...extra });
+  const fullStabilizationProof = {
+    independentOperationProven: true,
+    consumedDepartureProvenanceProven: true,
+    neverEnteredReturnPathProven: true,
+    quarantineReleaseInitialized: true,
+  };
 
   // ── K1 — the contract table is internally coherent ──────────────────────────────────────────
   record("K1", "every phase declares a coherent temporal, event-bounded or terminal resolution kind, and no quantity is owned twice", () => {
@@ -68,7 +74,7 @@ try {
   });
 
   // ── K2 — the happy path, end to end ─────────────────────────────────────────────────────────
-  record("K2", "the kernel retains stabilization as legal future vocabulary behind explicit guarded transitions", () => {
+  record("K2", "the kernel admits stabilization only behind the complete named proof", () => {
     let s = k.beginAttempt(0);
     const path = [s.phase];
     for (const [to, day, extra] of [["departure_planned", 10, {}], ["departure_ready", 20, {}], ["departed", 25, { endorsedFounderCount: 12 }]]) {
@@ -79,7 +85,7 @@ try {
     }
     let p = k.beginProvisionalSuccessor(25);
     path.push(`successor:${p.phase}`);
-    for (const [to, day, extra] of [["establishing", 60, {}], ["stabilized", 300, { livedEvidenceCount: 4 }]]) {
+    for (const [to, day, extra] of [["establishing", 60, {}], ["stabilized", 300, { stabilizationProof: fullStabilizationProof }]]) {
       const r = step(p, to, day, extra);
       if (r.ok !== true) return { failedAt: to, rejection: r.rejection, nonVacuous: true, nonVacuityNote: "n/a", passed: false };
       p = r.state;
@@ -150,23 +156,41 @@ try {
   });
 
   // ── K6 — a timer alone may not stabilize ────────────────────────────────────────────────────
-  record("K6", "the reserved stabilization transition keeps its kernel guard, while an establishment timeout is a failure", () => {
+  record("K6", "all four stabilization claims are independently required, while an establishment timeout is a failure", () => {
     let p = k.beginProvisionalSuccessor(0);
     p = step(p, "establishing", 30).state;
     const noEvidence = step(p, "stabilized", 40);
-    const thin = step(p, "stabilized", 40, { livedEvidenceCount: k.MIN_LIVED_EVIDENCE_FOR_STABILIZATION - 1 });
-    const enough = step(p, "stabilized", 40, { livedEvidenceCount: k.MIN_LIVED_EVIDENCE_FOR_STABILIZATION });
+    const missingOperation = step(p, "stabilized", 40, {
+      stabilizationProof: { ...fullStabilizationProof, independentOperationProven: false },
+    });
+    const missingProvenance = step(p, "stabilized", 40, {
+      stabilizationProof: { ...fullStabilizationProof, consumedDepartureProvenanceProven: false },
+    });
+    const returned = step(p, "stabilized", 40, {
+      stabilizationProof: { ...fullStabilizationProof, neverEnteredReturnPathProven: false },
+    });
+    const unreleased = step(p, "stabilized", 40, {
+      stabilizationProof: { ...fullStabilizationProof, quarantineReleaseInitialized: false },
+    });
+    const enough = step(p, "stabilized", 40, { stabilizationProof: fullStabilizationProof });
     const expired = k.resolveTimeout(p, 30 + k.ESTABLISHMENT_MAX_DAYS);
     return {
       noEvidence: noEvidence.ok === true ? "ACCEPTED" : noEvidence.rejection,
-      thin: thin.ok === true ? "ACCEPTED" : thin.rejection,
+      missingOperation: missingOperation.ok === true ? "ACCEPTED" : missingOperation.rejection,
+      missingProvenance: missingProvenance.ok === true ? "ACCEPTED" : missingProvenance.rejection,
+      returned: returned.ok === true ? "ACCEPTED" : returned.rejection,
+      unreleased: unreleased.ok === true ? "ACCEPTED" : unreleased.rejection,
       enough: enough.ok === true ? enough.state.phase : `REJECTED:${enough.rejection}`,
       onTimeout: expired.ok === true ? expired.state.phase : `REJECTED:${expired.rejection}`,
       nonVacuous: enough.ok === true && enough.state.phase === "stabilized",
-      nonVacuityNote: "an explicit synthetic physical-event request can exercise the legal placeholder; no production adapter is implied",
+      nonVacuityNote: "the complete conjunction succeeds, so each named refusal isolates a missing claim",
       passed:
-        noEvidence.ok === false && noEvidence.rejection === "stabilization_without_lived_evidence" &&
-        thin.ok === false && enough.ok === true &&
+        noEvidence.ok === false && noEvidence.rejection === "stabilization_without_independent_operation" &&
+        missingOperation.ok === false && missingOperation.rejection === "stabilization_without_independent_operation" &&
+        missingProvenance.ok === false && missingProvenance.rejection === "stabilization_without_consumed_departure_provenance" &&
+        returned.ok === false && returned.rejection === "stabilization_after_return_path" &&
+        unreleased.ok === false && unreleased.rejection === "stabilization_without_quarantine_release" &&
+        enough.ok === true &&
         // the window expiring must NOT be a success
         expired.ok === true && expired.timedOut === true && expired.state.phase === "failed_early",
     };
@@ -212,7 +236,10 @@ try {
     const rows = {};
     for (const c of k.PHASE_CONTRACTS.filter((x) => x.terminal)) {
       const state = { phase: c.phase, phaseEnteredDay: 0, history: [] };
-      const attempts = k.PHASE_CONTRACTS.map((t) => step(state, t.phase, 10, { endorsedFounderCount: 5, livedEvidenceCount: 9 }));
+      const attempts = k.PHASE_CONTRACTS.map((t) => step(state, t.phase, 10, {
+        endorsedFounderCount: 5,
+        stabilizationProof: fullStabilizationProof,
+      }));
       rows[c.phase] = attempts.every((r) => r.ok === false && r.rejection === "phase_is_terminal");
     }
     return {
@@ -233,7 +260,11 @@ try {
     for (const c of k.PHASE_CONTRACTS.filter((x) => !x.terminal)) {
       const state = { phase: c.phase, phaseEnteredDay: 0, history: [] };
       for (const t of k.PHASE_CONTRACTS) {
-        const r = step(state, t.phase, 5, { endorsedFounderCount: 5, livedEvidenceCount: 9, physicalCoLocationProven: true });
+        const r = step(state, t.phase, 5, {
+          endorsedFounderCount: 5,
+          stabilizationProof: fullStabilizationProof,
+          physicalCoLocationProven: true,
+        });
         if (c.permittedNext.includes(t.phase)) {
           if (r.ok === true) permitted += 1;
         } else if (r.ok === false && r.rejection === "transition_not_permitted") {
@@ -257,7 +288,7 @@ try {
   // ── K10 — a failed successor cannot vanish or succeed ───────────────────────────────────────
   record("K10", "early failure leads only to returning — never to stabilization, never to a stop", () => {
     const state = { phase: "failed_early", phaseEnteredDay: 0, history: [] };
-    const toStable = step(state, "stabilized", 5, { livedEvidenceCount: 99 });
+    const toStable = step(state, "stabilized", 5, { stabilizationProof: fullStabilizationProof });
     const toEstablish = step(state, "establishing", 5);
     const toReturn = step(state, "returning", 5);
     const contract = k.getPhaseContract("failed_early");
@@ -363,7 +394,7 @@ try {
     checkpoint: "ROADMAP ITEM 4 §5 — pure lifecycle kernel fixtures",
     authority: "src/sim/agents/fissionLifecycleKernel.ts",
     scopeLimit:
-      "The kernel is pure. These fixtures prove only its legal vocabulary, action bounds, event-bounded living condition and ownership table. They do not prove a production stabilization writer exists; the cleanup source audit proves none does.",
+      "The kernel is pure. These fixtures prove its legal vocabulary, conjunctive stabilization gate, action bounds, event-bounded living condition and ownership table. The world-level stabilization audit proves the production adapter.",
     fixtures,
     summary: { total: fixtures.length, passing: counts.PASS, failing: counts.FAIL, vacuous: counts.VACUOUS, errored: counts.ERROR },
   };

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-05T19:35:43.768Z",
+  "generatedAt": "2026-08-11T22:55:16.625Z",
   "checkpoint": "ROADMAP ITEM 4 §3 + §5 — lifecycle ownership and lineage-protection duration",
   "authority": "src/sim/agents/bandLifecycle.ts",
   "scopeLimit": "These prove the PREDICATES are right. They do NOT prove any production reader calls them — none does yet. Minimal Band-shaped objects, no stepped world.",
@@ -7,14 +7,15 @@
   "fixtures": [
     {
       "id": "LP1",
-      "claim": "the parent and its successor are recognised as one split through travel, failure and return",
+      "claim": "the parent and its successor are recognised as one split through travel, failure, return and the unresolved living condition",
       "status": "PASS",
-      "nonVacuityNote": "all four live successor phases were exercised",
+      "nonVacuityNote": "every live successor phase was exercised",
       "rows": {
         "travelling": true,
         "establishing": true,
         "failed_early": true,
-        "returning": true
+        "returning": true,
+        "unresolved_after_failed_return": true
       }
     },
     {

@@ -95,13 +95,22 @@ try {
   // ── E3 — the kernel refuses elapsed time as a cause for a physical-event phase ──
   const returning = { phase: "returning", phaseEnteredDay: 0, history: ["travelling"] };
   const establishing = { phase: "establishing", phaseEnteredDay: 0, history: ["travelling"] };
+  const fullStabilizationProof = {
+    independentOperationProven: true,
+    consumedDepartureProvenanceProven: true,
+    neverEnteredReturnPathProven: true,
+    quarantineReleaseInitialized: true,
+  };
   const byTime = kernel.requestTransition({ current: returning, to: "reintegrated", today: 500, cause: "elapsed_time" });
-  const byTimeStabilize = kernel.requestTransition({ current: establishing, to: "stabilized", today: 900, cause: "elapsed_time", livedEvidenceCount: 99 });
+  const byTimeStabilize = kernel.requestTransition({
+    current: establishing, to: "stabilized", today: 900, cause: "elapsed_time",
+    stabilizationProof: fullStabilizationProof,
+  });
   const byEventNoProof = kernel.requestTransition({ current: returning, to: "reintegrated", today: 500, cause: "physical_event" });
   const byEventProven = kernel.requestTransition({ current: returning, to: "reintegrated", today: 500, cause: "physical_event", physicalCoLocationProven: true });
   record(
     "E3_elapsed_time_cannot_request_a_physical_event_phase",
-    "a transition to `reintegrated` or `stabilized` carrying `cause: elapsed_time` is REFUSED, even when every other precondition is satisfied — the stabilize arm passes 99 units of lived evidence and is still refused",
+    "a transition to `reintegrated` or `stabilized` carrying `cause: elapsed_time` is REFUSED, even when every other named proof is satisfied",
     byTime.ok === false && byTime.rejection === "terminal_outcome_requires_a_physical_event" &&
       byTimeStabilize.ok === false && byTimeStabilize.rejection === "terminal_outcome_requires_a_physical_event" &&
       byEventNoProof.ok === false && byEventNoProof.rejection === "reintegration_without_proven_co_location" &&
@@ -109,7 +118,7 @@ try {
     true,
     {
       elapsedTimeToReintegrated: byTime.ok ? "ACCEPTED" : byTime.rejection,
-      elapsedTimeToStabilizedWith99Evidence: byTimeStabilize.ok ? "ACCEPTED" : byTimeStabilize.rejection,
+      elapsedTimeToStabilizedWithFullProof: byTimeStabilize.ok ? "ACCEPTED" : byTimeStabilize.rejection,
       physicalEventWithoutCoLocationProof: byEventNoProof.ok ? "ACCEPTED" : byEventNoProof.rejection,
       physicalEventWithCoLocationProof: byEventProven.ok ? "ACCEPTED" : byEventProven.rejection,
     },
@@ -134,7 +143,10 @@ try {
   // `returning -> reintegrated` survived in the first place — it needed nothing, so it got nothing,
   // and the absence read as permission.
   const undeclared = kernel.requestTransition({ current: returning, to: "reintegrated", today: 500, physicalCoLocationProven: true });
-  const undeclaredStabilize = kernel.requestTransition({ current: establishing, to: "stabilized", today: 900, livedEvidenceCount: 99 });
+  const undeclaredStabilize = kernel.requestTransition({
+    current: establishing, to: "stabilized", today: 900,
+    stabilizationProof: fullStabilizationProof,
+  });
   record(
     "E7_a_caller_that_declares_no_cause_is_refused",
     "omitting `cause` entirely does not read as permission — both successful terminals refuse an undeclared caller even with every other precondition satisfied",

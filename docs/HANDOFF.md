@@ -181,6 +181,29 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### ROADMAP ITEM 4 — POSITIVE SUCCESSOR STABILIZATION AUTHORITY — **PROGRESS / CONTROLLED-ONLY / NATURAL DEPARTURE STILL DISCONNECTED / DO NOT MERGE**
+
+From accepted starting tip `bf0823da4090723246753092198e7ce12b6a7c6b`, the controlled seam can
+now reach a truthful positive outcome: canonical preparation -> atomic departure -> contiguous
+travel -> establishing -> real local operation -> `stabilized`. The selected A+C architecture uses
+a dedicated world adapter consuming a separate conjunctive independent-operation proof. It joins
+direct positive commitment/consumed permit/immutable departure provenance, real post-departure
+demand/support/take/depletion/water/worker-day evidence, surviving bodies and workers, tolerable
+embodied mortality and a monotonic bounded proof that the successor never entered a return path.
+The bounded lifecycle history ring is not used to prove that negative, and elapsed time can only
+fail a trial, never stabilize it.
+
+The successful transition atomically releases quarantine with `currentCamp` at the physically
+reached tile, completed lineage, honest deep history, shared parent/successor completion records and
+updated established-reader identity. It does not move population, create another band, manufacture
+viability/storage/residential anchors, or resurrect the legacy `BandFissionEvent`. Departure and
+stabilization remain separate historical facts. The registered daily action is inert in natural
+runs: `performAtomicDeparture` still has zero natural callers and `createDaughterBand` remains
+unchanged/unreachable. Controlled fixtures are 27/27 and the six required source mutations are 6/6,
+all non-vacuous with byte-identical restoration. `unresolved_after_failed_return` remains untouched;
+it is the exact next separately authorized Item-4 dependency. Physical cutover follows later, and
+Item 5 remains unstarted.
+
 ### ROADMAP ITEM 4 — NATURAL PRE-DEPARTURE REACHABILITY + PARENT ATTEMPT DEADLINE AUTHORITY — **PROGRESS / PHYSICAL CUTOVER NOT STARTED / DO NOT MERGE**
 
 The exact remote checkpoint `22da95c9ff4631c909647f704d3b3e6652218d55` was recovered into a new
@@ -9013,14 +9036,12 @@ UI in `src/ui/BandPanel.tsx`, audit + `--targeted-cause-event-check` in
 
 ## Recommended Next Step
 
-**CURRENT (ROADMAP ITEM 4, 2026-08-10).** The exact next dependency is a separately authorized
-physical-cutover pass: connect a naturally `departure_ready` parent attempt to the existing
-`performAtomicDeparture` gate and thereby create the provisional successor naturally, while
-preserving the accepted allocation, commitment, permit, freshness and destination checks. That
-work must remove or permanently bypass the legacy daughter call without rewriting or deleting
-`createDaughterBand`, and must prove that no legacy/new duplicate can occur. **Do not implement it
-in this checkpoint.** Stabilization and resolution of `unresolved_after_failed_return` remain later,
-separately bounded Item-4 dependencies; Item 5 remains unstarted.
+**CURRENT (ROADMAP ITEM 4, 2026-08-11).** The exact next dependency is a separately authorized pass
+to resolve the living `unresolved_after_failed_return` state without using stabilization as an escape
+hatch. **Do not implement it in this checkpoint.** Only after that boundary is closed should a later
+physical-cutover pass connect naturally `departure_ready` attempts to `performAtomicDeparture` while
+permanently bypassing the legacy daughter call without rewriting/deleting `createDaughterBand` and
+proving no legacy/new duplicate can occur. Item 5 remains unstarted.
 
 ---
 

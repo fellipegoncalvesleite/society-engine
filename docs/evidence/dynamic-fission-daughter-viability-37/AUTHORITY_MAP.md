@@ -1,7 +1,19 @@
 # Roadmap Item 4 — authority map
 
-**Left column: what fission does today.** **Right column: what Direction D requires.** Nothing in
-the right column is implemented.
+> **Current implementation overlay (2026-08-11, branch
+> `checkpoint/dynamic-fission-provisional-successor-38`).** This file began as the audit-only map at
+> `ef76971`; the tables below are retained as the measured baseline. The current controlled-only
+> positive outcome uses a dedicated `successorStabilization.ts` adapter plus a separate conjunctive
+> proof object. Its authorities are direct commitment/consumed-permit/departure provenance,
+> post-departure operation history, canonical cohort/embodied state and monotonic separation-course
+> state. Stabilization atomically initializes completed lineage/history/current-camp/read-model state.
+> Timeout cannot succeed, bounded lifecycle history cannot prove “never returned,” and no legacy
+> fission event is recreated. Natural physical departure remains disconnected;
+> `performAtomicDeparture` has zero natural callers and `createDaughterBand` remains unchanged and
+> unreachable. `unresolved_after_failed_return` is still open and is the next Item-4 dependency.
+
+**Historical baseline below:** left column is what fission did at `ef76971`; right column is what
+Direction D required at that time.
 
 ---
 

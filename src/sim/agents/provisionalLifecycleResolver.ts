@@ -37,6 +37,7 @@
 
 import { isProvisionalSuccessor } from "./bandLifecycle";
 import { getPhaseContract, requestTransition } from "./fissionLifecycleKernel";
+import { markProvisionalReturnPathEntered } from "./provisionalSeparationCourse";
 import type { DailyAction } from "./dailyActions";
 import type { Band, FissionLifecycleRecord } from "./types";
 import type { BandId } from "../core/types";
@@ -156,6 +157,16 @@ export function resolveProvisionalLifecycles(world: WorldState, today: number): 
           phase: transition.state.phase,
           phaseEnteredDay: transition.state.phaseEnteredDay,
           history: transition.state.history,
+          ...(transition.state.phase === "returning"
+            ? {
+                separationCourse: markProvisionalReturnPathEntered(
+                  record,
+                  today,
+                  record.phase,
+                  "phase_bound_expired",
+                ),
+              }
+            : {}),
         },
       };
     }

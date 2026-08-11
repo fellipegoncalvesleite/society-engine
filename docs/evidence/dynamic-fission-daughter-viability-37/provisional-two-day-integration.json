@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-05T19:35:39.310Z",
+  "generatedAt": "2026-08-11T22:54:12.924Z",
   "checkpoint": "ROADMAP ITEM 4 §3 + §9 — provisional successor through the real runner",
   "seed": "audit27:natural:s1",
   "warmDays": 1800,
@@ -77,7 +77,7 @@
         "note": "L7 — body/camp summaries are NOT recomputed here. They are derived state and must follow honest cohorts, condition, material capability, location and travel state, which the provisional lifecycle establishes. Recomputing them at this seam would be recomputing from inputs that are not yet complete."
       },
       "transfer": {
-        "bandFieldsClassified": 133,
+        "bandFieldsClassified": 135,
         "policyViolations": [],
         "pendingRecomputeFields": [
           "socialPressure"
@@ -137,31 +137,201 @@
     },
     {
       "id": "T3",
-      "claim": "the successor SURVIVES a full real runner season — not absorbed, not collapsed, not dispersed",
+      "claim": "the successor is a live, undispersed, body-holding band on EVERY day it is provisional, and it leaves that state only through a NAMED lifecycle outcome",
       "status": "PASS",
-      "nonVacuityNote": "the successor was alive when the runner started",
-      "existsAfter": true,
-      "statusAfter": "moving",
-      "livingAfter": true,
-      "populationBirth": 11,
-      "populationAfter": 11
+      "nonVacuityNote": "observed 9 provisional band-days, 8 of them physically separated from the parent (max distance 4)",
+      "provisionalBandDays": 9,
+      "separatedBandDays": 8,
+      "maxDistanceFromParent": 4,
+      "targetTile": "tile:108:56",
+      "targetDistance": 4,
+      "daysNotLiving": 0,
+      "resolution": {
+        "day": 10,
+        "phase": "stabilized",
+        "status": "moving",
+        "population": 11,
+        "reason": "lifecycle reached a terminal phase — a NAMED outcome, not a disappearance"
+      },
+      "dailySamples": [
+        {
+          "day": 1,
+          "successorPosition": "tile:111:57",
+          "parentPosition": "tile:111:57",
+          "distance": 0,
+          "phase": "travelling",
+          "population": 11,
+          "status": "moving",
+          "isLiving": true,
+          "viability": null,
+          "isEstablished": false,
+          "isFissionEligible": false,
+          "lineageLinkedToParent": true,
+          "thirdBandsSharingLineage": 0,
+          "parentViability": "fragile",
+          "reintegrationProbe": "successor_is_not_returning"
+        },
+        {
+          "day": 2,
+          "successorPosition": "tile:110:57",
+          "parentPosition": "tile:111:57",
+          "distance": 1,
+          "phase": "travelling",
+          "population": 11,
+          "status": "moving",
+          "isLiving": true,
+          "viability": null,
+          "isEstablished": false,
+          "isFissionEligible": false,
+          "lineageLinkedToParent": true,
+          "thirdBandsSharingLineage": 0,
+          "parentViability": "fragile",
+          "reintegrationProbe": "successor_is_not_returning"
+        },
+        {
+          "day": 3,
+          "successorPosition": "tile:110:57",
+          "parentPosition": "tile:111:57",
+          "distance": 1,
+          "phase": "travelling",
+          "population": 11,
+          "status": "moving",
+          "isLiving": true,
+          "viability": null,
+          "isEstablished": false,
+          "isFissionEligible": false,
+          "lineageLinkedToParent": true,
+          "thirdBandsSharingLineage": 0,
+          "parentViability": "fragile",
+          "reintegrationProbe": "successor_is_not_returning"
+        },
+        {
+          "day": 4,
+          "successorPosition": "tile:109:57",
+          "parentPosition": "tile:111:57",
+          "distance": 2,
+          "phase": "travelling",
+          "population": 11,
+          "status": "moving",
+          "isLiving": true,
+          "viability": null,
+          "isEstablished": false,
+          "isFissionEligible": false,
+          "lineageLinkedToParent": true,
+          "thirdBandsSharingLineage": 0,
+          "parentViability": "fragile",
+          "reintegrationProbe": "successor_is_not_returning"
+        },
+        {
+          "day": 5,
+          "successorPosition": "tile:109:57",
+          "parentPosition": "tile:111:57",
+          "distance": 2,
+          "phase": "travelling",
+          "population": 11,
+          "status": "moving",
+          "isLiving": true,
+          "viability": null,
+          "isEstablished": false,
+          "isFissionEligible": false,
+          "lineageLinkedToParent": true,
+          "thirdBandsSharingLineage": 0,
+          "parentViability": "fragile",
+          "reintegrationProbe": "successor_is_not_returning"
+        },
+        {
+          "day": 6,
+          "successorPosition": "tile:109:56",
+          "parentPosition": "tile:111:57",
+          "distance": 3,
+          "phase": "travelling",
+          "population": 11,
+          "status": "moving",
+          "isLiving": true,
+          "viability": null,
+          "isEstablished": false,
+          "isFissionEligible": false,
+          "lineageLinkedToParent": true,
+          "thirdBandsSharingLineage": 0,
+          "parentViability": "fragile",
+          "reintegrationProbe": "successor_is_not_returning"
+        },
+        {
+          "day": 7,
+          "successorPosition": "tile:109:56",
+          "parentPosition": "tile:111:57",
+          "distance": 3,
+          "phase": "travelling",
+          "population": 11,
+          "status": "moving",
+          "isLiving": true,
+          "viability": null,
+          "isEstablished": false,
+          "isFissionEligible": false,
+          "lineageLinkedToParent": true,
+          "thirdBandsSharingLineage": 0,
+          "parentViability": "fragile",
+          "reintegrationProbe": "successor_is_not_returning"
+        },
+        {
+          "day": 8,
+          "successorPosition": "tile:108:56",
+          "parentPosition": "tile:111:57",
+          "distance": 4,
+          "phase": "travelling",
+          "population": 11,
+          "status": "moving",
+          "isLiving": true,
+          "viability": null,
+          "isEstablished": false,
+          "isFissionEligible": false,
+          "lineageLinkedToParent": true,
+          "thirdBandsSharingLineage": 0,
+          "parentViability": "fragile",
+          "reintegrationProbe": "successor_is_not_returning"
+        },
+        {
+          "day": 9,
+          "successorPosition": "tile:108:56",
+          "parentPosition": "tile:111:57",
+          "distance": 4,
+          "phase": "establishing",
+          "population": 11,
+          "status": "moving",
+          "isLiving": true,
+          "viability": null,
+          "isEstablished": false,
+          "isFissionEligible": false,
+          "lineageLinkedToParent": true,
+          "thirdBandsSharingLineage": 0,
+          "parentViability": "fragile",
+          "reintegrationProbe": "successor_is_not_returning"
+        }
+      ]
     },
     {
       "id": "T4",
       "claim": "established viability never claims the provisional successor",
       "status": "PASS",
-      "nonVacuityNote": "the successor survived to be checked",
-      "viabilityAfter": null,
-      "stillProvisional": true,
-      "parentViabilityAfter": "viable"
+      "nonVacuityNote": "the PARENT carries an established viability verdict on the same days, so the successor's absence of one is discriminating rather than a system that ran for nobody",
+      "provisionalBandDays": 9,
+      "daysWithSuccessorViability": 0,
+      "daysWithParentViability": 9,
+      "parentViabilitySeen": [
+        "fragile"
+      ],
+      "successorViabilitySeen": [
+        null
+      ]
     },
     {
       "id": "T5",
       "claim": "the successor is not established and cannot fission after a real season",
       "status": "PASS",
       "nonVacuityNote": "the parent IS established in the same world, so the successor's false is discriminating",
-      "established": false,
-      "fissionEligible": false
+      "provisionalBandDays": 9,
+      "daysEstablished": 0,
+      "daysFissionEligible": 0
     },
     {
       "id": "T6",
@@ -191,8 +361,7 @@
           "fromPhase": "travelling",
           "toPhase": "provisional_extinguished",
           "populationAtResolution": 0,
-          "reason": "zero_physical_population",
-          "resolutionCycles": 0
+          "reason": "zero_physical_population"
         }
       ],
       "phaseAfter": "provisional_extinguished",
@@ -202,8 +371,11 @@
       "id": "T9",
       "claim": "the parent and successor are lineage-linked, and a third band is not",
       "status": "PASS",
-      "nonVacuityNote": "both halves survived to be compared",
-      "pairLinked": true
+      "nonVacuityNote": "both halves were live and comparable on every sampled day",
+      "provisionalBandDays": 9,
+      "daysLinkedToParent": 9,
+      "daysWithAThirdBandSharingLineage": 0,
+      "note": "the pair link is asserted only while BOTH records are current; the lineage is deliberately released once the successor's record goes terminal, which is the bounded end the reintegration writer documents"
     },
     {
       "id": "T10",

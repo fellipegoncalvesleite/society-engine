@@ -2,15 +2,15 @@
  * ROADMAP ITEM 4 — DESCRIPTIVE EARLY-ESTABLISHMENT MEASUREMENT.
  *
  * This module records what a group physically experiences after arrival. It does not write any
- * lifecycle transition. In particular, it cannot request `stabilized`: positive commitment and a
- * sufficient physical-operation contract do not yet have production writers.
+ * lifecycle transition. In particular, it cannot request `stabilized`: the separate successor
+ * stabilization authority derives its physical-operation contract from canonical operation history.
  *
  * ── WHAT COUNTS AS EVIDENCE, AND WHY NOT PROSPERITY ─────────────────────────────────────────────
  *
  * The retained signals describe what a group and its current locality physically experienced. They
- * answer "how is this going?", not "has this group become independent?". Positive commitment and the
- * sufficient physical-operation contract do not yet have production writers, so this module has no
- * authority to request `stabilized`.
+ * answer "how is this going?", not "has this group become independent?". The positive commitment and
+ * physical-operation proof are validated elsewhere, so this module has no authority to request
+ * `stabilized` and its heterogeneous signal count remains purely descriptive.
  *
  * ── WHY THE SIGNALS ARE SEPARATE AND NAMED ──────────────────────────────────────────────────────
  *

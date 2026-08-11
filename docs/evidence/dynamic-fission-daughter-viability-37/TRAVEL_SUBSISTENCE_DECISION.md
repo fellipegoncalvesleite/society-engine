@@ -1,5 +1,11 @@
 # Roadmap Item 4 — travel subsistence, embodied return, evidence-based resolution
 
+> **Current implementation addendum (2026-08-11).** The historical stabilization design below was
+> superseded by the conjunctive A+C authority documented in `SUCCESSOR_STABILIZATION_DECISION.md`.
+> Production now has a controlled-only positive stabilization adapter based on real closed operation
+> evidence, direct consumed-departure provenance and monotonic never-returned proof. It does not use
+> a signal count, and ordinary ecology still cannot call physical departure.
+
 Decisions, comparisons and measured evidence for the pass that turns "walking correctly" into
 **living during the journey, interpreting what happened, and reaching a real physical resolution.**
 

@@ -1039,6 +1039,7 @@ export function LineageReadabilityDetails({ band }: { readonly band: Band }) {
           <Detail label="depth" value={`${lineage.generationDepth} · ${lineage.generationLabel}`} />
           <Detail label="path" value={lineage.lineagePath.map(String).join(" → ")} />
           <Detail label="active status" value={lineage.activeStatus} />
+          <Detail label="formation status" value={lineage.formationStatus} />
           <Detail label="absorbed by" value={lineage.absorbedByBandId === undefined ? "none" : String(lineage.absorbedByBandId)} />
           <Detail label="relation category" value={lineage.relationCategory ?? "none grounded"} />
           <Detail label="raw source" value={lineage.rawSource} />

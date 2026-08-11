@@ -26,6 +26,7 @@ import type {
   SeasonalHungerClassification,
   SocialRelationCategory,
 } from "./types";
+import { isProvisionalSuccessor } from "./bandLifecycle";
 
 const RECENT_EVENT_LIMIT = 48;
 const LAST_10_YEAR_EVENT_LIMIT = 80;
@@ -2034,6 +2035,20 @@ export function deriveBandLineageReadability(
   const relationCategory = band.parentBandId === undefined
     ? "us"
     : findLineageRelationCategory(band);
+  const completedDaughter =
+    band.lineage !== undefined ||
+    band.deepHistory?.founding.kind === "fission_daughter" ||
+    (band.successorStabilizationEvents ?? []).some(
+      (event) => String(event.successorBandId) === String(band.id),
+    );
+  const formationStatus: BandLineageReadabilityState["formationStatus"] =
+    band.parentBandId === undefined
+      ? "origin"
+      : isProvisionalSuccessor(band)
+        ? "provisional_separation"
+        : completedDaughter
+          ? "established_daughter"
+          : "failed_separation_record";
   const activeStatus: BandLineageReadabilityState["activeStatus"] =
     band.viability?.status === "absorbed" ? "absorbed" :
     band.viability?.status === "extinct" ? "extinct" :
@@ -2052,12 +2067,17 @@ export function deriveBandLineageReadability(
     lineagePath,
     activeStatus,
     absorbedByBandId: band.viability?.absorbedByBandId,
+    formationStatus,
     relationCategory,
     displayLabel:
-      generationDepth === 0
+      formationStatus === "origin"
         ? "origin band"
-        : `${generationLabel} of ${String(originBandId)}`,
-    rawSource: "Band.parentBandId + daughterBandIds + lineage + viability status",
+        : formationStatus === "provisional_separation"
+          ? `provisional separation from ${String(band.parentBandId)}`
+          : formationStatus === "established_daughter"
+            ? `${generationLabel} of ${String(originBandId)}`
+            : `uncompleted separation record from ${String(band.parentBandId)}`,
+    rawSource: "Band.parentBandId + provisional lifecycle + completed lineage/history + viability status",
   };
 }
 
@@ -2911,15 +2931,30 @@ function deriveLineageEvents(band: Band): readonly BandReadableEventCandidate[] 
     return [];
   }
 
+  const provisional = isProvisionalSuccessor(band);
+  const completed =
+    band.lineage !== undefined ||
+    band.deepHistory?.founding.kind === "fission_daughter" ||
+    (band.successorStabilizationEvents ?? []).some(
+      (event) => String(event.successorBandId) === String(band.id),
+    );
   return [{
     category: "lineage",
-    salience: "low",
-    title: "Lineage branch readable",
-    description: `This band is a daughter branch of ${String(band.parentBandId ?? band.lineage?.parentBandId)}.`,
-    detail: `daughter count ${band.daughterBandIds.length}; relation ${band.lineage?.relation ?? "parent link"}`,
-    stateKey: `lineage:${band.parentBandId ?? band.lineage?.parentBandId ?? "none"}`,
-    rawSource: "Band.parentBandId + Band.lineage",
-    rawReason: band.lineage?.relation ?? "parentBandId present",
+    salience: provisional ? "medium" : "low",
+    title: provisional
+      ? "Separation trial underway"
+      : completed
+        ? "Established lineage branch readable"
+        : "Uncompleted separation recorded",
+    description: provisional
+      ? `This group physically left ${String(band.parentBandId)} but has not yet become an established daughter band.`
+      : completed
+        ? `This band is an established daughter branch of ${String(band.parentBandId ?? band.lineage?.parentBandId)}.`
+        : `This entity retains provenance from a separation that did not complete as an established daughter band.`,
+    detail: `daughter count ${band.daughterBandIds.length}; relation ${band.lineage?.relation ?? (provisional ? "not completed" : "parent link")}`,
+    stateKey: `lineage:${band.parentBandId ?? band.lineage?.parentBandId ?? "none"}:${provisional ? band.provisionalSuccessor?.phase : completed ? "completed" : "uncompleted"}`,
+    rawSource: "Band.parentBandId + Band.provisionalSuccessor + Band.lineage + stabilization history",
+    rawReason: band.lineage?.relation ?? (provisional ? `provisional:${band.provisionalSuccessor?.phase}` : "parent provenance only"),
     sourceReasonIds: band.lineage?.reasonIds ?? [],
     relatedBandId: band.parentBandId ?? band.lineage?.parentBandId,
     repeatWindowTicks: 9999,

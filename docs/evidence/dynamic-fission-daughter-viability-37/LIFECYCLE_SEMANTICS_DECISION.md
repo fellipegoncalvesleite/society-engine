@@ -1,5 +1,12 @@
 # Roadmap Item 4 §3 — how lifecycle phase is encoded in canonical state
 
+> **Current implementation addendum (2026-08-11).** The historical sections below describe the
+> kernel-only checkpoint as it existed then. Stabilization no longer uses
+> `livedEvidenceCount >= N`: the kernel consumes four explicit conjunctive claims — real independent
+> operation, consumed departure provenance, monotonic never-returned proof and atomic release
+> initialization. `successorStabilization.ts` is now its controlled-only production adapter; timeout
+> still cannot produce success. See `SUCCESSOR_STABILIZATION_DECISION.md`.
+
 `PROVISIONAL_REPRESENTATION_DECISION.md` settled *where* a departed provisional successor lives: a
 flagged `Band` inside `world.bands`. It did not settle *how the phase is encoded*. This does.
 
@@ -92,9 +99,11 @@ Two properties follow from the table rather than from discipline:
   `stabilized` — so **a timer alone cannot stabilize a group**, which is §9's requirement made
   structural rather than remembered. K6 asserts it.
 
-Stabilization additionally requires `livedEvidenceCount >= MIN_LIVED_EVIDENCE_FOR_STABILIZATION`,
-refused at the kernel boundary, and departure requires an `endorsedFounderCount` — the count the
-parent residual authority endorsed, which is the **revised** one whenever a revision was required.
+At this historical checkpoint stabilization additionally required
+`livedEvidenceCount >= MIN_LIVED_EVIDENCE_FOR_STABILIZATION`. That placeholder has since been
+replaced by the explicit conjunctive proof named in the addendum above. Departure continues to
+require an `endorsedFounderCount` — the count the parent residual authority endorsed, which is the
+**revised** one whenever a revision was required.
 
 ## 6. Fixtures
 
@@ -111,9 +120,9 @@ corrected.
 
 ## 7. Status, and what this is not
 
-**The kernel is pure and has no callers.** Nothing here connects the lifecycle to the simulation —
-that is the world adapter (§6) and it does not exist. `createDaughterBand` is untouched and all six
-measured defects are live.
+**At this historical checkpoint the kernel was pure and had no callers.** The controlled lifecycle
+and stabilization adapters now exist, while natural physical departure remains deliberately
+disconnected. `createDaughterBand` is still untouched and unreachable.
 
 The boundary audit currently **enforces one module and lists eleven as pending**, honestly, rather
 than failing the run on work that has not started. An audit that had to be disabled to make progress
@@ -207,4 +216,3 @@ findings**, so a detection is a detection and not a permanently-firing check.
 
 **Scope limit, stated:** these prove the predicates are right. **They do not prove any production
 reader calls them — none does yet.**
-

@@ -1,11 +1,13 @@
 {
-  "generatedAt": "2026-08-04T15:11:17.027Z",
+  "generatedAt": "2026-08-11T22:55:22.348Z",
   "checkpoint": "ROADMAP ITEM 4 §3 — measured reader admission for a provisional successor",
   "supersedes": "The previous report's claim that \"the departure vertical slice is closed locally\". A successor being alive at the end of a season proves only that ordinary viability did not delete it. This audit measures what actually touched it.",
   "method": "A real warmed map2 world with a provisional successor created by the production seam, advanced ONE DAY AT A TIME through the real advanceWorldByDays. Every observable is sampled after every day. An ordinary established band in the same world is sampled with the identical instrument on the identical days, so a zero on the successor can be distinguished from a quiet world.",
   "seed": "audit27:natural:s1",
   "warmDays": 1800,
-  "observedDays": 200,
+  "observedDays": 9,
+  "observeDaysRequested": 200,
+  "observationStoppedBecause": "the successor resolved and is no longer a live provisional group",
   "successorId": "band:varied-river-mid:provisional:1",
   "controlBandId": "band:varied-lake-north",
   "successorAtBirth": {
@@ -28,7 +30,7 @@
     "protoCamp": 0
   },
   "successorAtEnd": {
-    "position": "tile:111:57",
+    "position": "tile:108:56",
     "population": 11,
     "workingAdults": 7,
     "dependents": 3,
@@ -43,16 +45,37 @@
     "decisions": 0,
     "moveEvents": 0,
     "status": "moving",
-    "provisionalPhase": "returning",
+    "provisionalPhase": "establishing",
     "protoCamp": 0
   },
   "admission": [
     {
       "field": "position",
-      "successorChanges": 0,
-      "controlChanges": 1,
-      "successorFirstChanges": [],
-      "finding": "NOT ADMITTED — the control band moved on the same days, so this is a real exclusion rather than a quiet world"
+      "successorChanges": 4,
+      "controlChanges": 0,
+      "successorFirstChanges": [
+        {
+          "day": 1802,
+          "from": "tile:111:57",
+          "to": "tile:110:57"
+        },
+        {
+          "day": 1804,
+          "from": "tile:110:57",
+          "to": "tile:109:57"
+        },
+        {
+          "day": 1806,
+          "from": "tile:109:57",
+          "to": "tile:109:56"
+        },
+        {
+          "day": 1808,
+          "from": "tile:109:56",
+          "to": "tile:108:56"
+        }
+      ],
+      "finding": "ADMITTED — a production path moved this on the successor"
     },
     {
       "field": "population",
@@ -106,9 +129,9 @@
     {
       "field": "viability",
       "successorChanges": 0,
-      "controlChanges": 2,
+      "controlChanges": 0,
       "successorFirstChanges": [],
-      "finding": "NOT ADMITTED — the control band moved on the same days, so this is a real exclusion rather than a quiet world"
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
     },
     {
       "field": "acuteRisk",
@@ -127,9 +150,9 @@
     {
       "field": "decisions",
       "successorChanges": 0,
-      "controlChanges": 2,
+      "controlChanges": 0,
       "successorFirstChanges": [],
-      "finding": "NOT ADMITTED — the control band moved on the same days, so this is a real exclusion rather than a quiet world"
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
     },
     {
       "field": "moveEvents",
@@ -141,9 +164,9 @@
     {
       "field": "status",
       "successorChanges": 0,
-      "controlChanges": 2,
+      "controlChanges": 0,
       "successorFirstChanges": [],
-      "finding": "NOT ADMITTED — the control band moved on the same days, so this is a real exclusion rather than a quiet world"
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
     },
     {
       "field": "provisionalPhase",
@@ -151,9 +174,9 @@
       "controlChanges": 0,
       "successorFirstChanges": [
         {
-          "day": 1980,
+          "day": 1809,
           "from": "travelling",
-          "to": "returning"
+          "to": "establishing"
         }
       ],
       "finding": "ADMITTED — a production path moved this on the successor"
@@ -168,12 +191,36 @@
   ],
   "claims": {
     "no_free_movement": {
-      "question": "did the successor's position ever change while it has no travel authority?",
-      "successorPositionChanges": 0,
-      "controlPositionChanges": 1,
-      "detail": [],
+      "question": "was every position the successor occupied recorded by the provisional travel authority's own trail?",
+      "successorPositionChanges": 4,
+      "controlPositionChanges": 0,
+      "positionsOccupied": 5,
+      "positionsAccountedForByTheTrail": 5,
+      "unaccountedPositions": [],
+      "detail": [
+        {
+          "day": 1802,
+          "from": "tile:111:57",
+          "to": "tile:110:57"
+        },
+        {
+          "day": 1804,
+          "from": "tile:110:57",
+          "to": "tile:109:57"
+        },
+        {
+          "day": 1806,
+          "from": "tile:109:57",
+          "to": "tile:109:56"
+        },
+        {
+          "day": 1808,
+          "from": "tile:109:56",
+          "to": "tile:108:56"
+        }
+      ],
       "holds": true,
-      "note": "Travel does not exist yet, so ANY position change would be movement nothing authorised. The control's count says whether bands in this world move at all over the observed span."
+      "note": "A position change is legitimate ONLY if the travel authority recorded that step. Anything else would be an ordinary movement path having claimed a provisional group. The control's count says whether bands in this world move at all over the observed span."
     },
     "demographic_cadence": {
       "question": "how many times did the successor's population change over the observed span?",
@@ -213,7 +260,7 @@
       "question": "did Band.viability ever become defined on the successor?",
       "successorViabilityChanges": 0,
       "finalViability": null,
-      "controlViabilityChanges": 2,
+      "controlViabilityChanges": 0,
       "holds": true,
       "note": "The control's changes show established viability IS live in this world on the same days."
     },
@@ -226,18 +273,14 @@
   },
   "summary": {
     "fieldsObserved": 16,
-    "admitted": 1,
-    "excluded": 4,
-    "inconclusive": 11,
+    "admitted": 2,
+    "excluded": 0,
+    "inconclusive": 14,
     "admittedFields": [
+      "position",
       "provisionalPhase"
     ],
-    "excludedFields": [
-      "position",
-      "viability",
-      "decisions",
-      "status"
-    ],
+    "excludedFields": [],
     "inconclusiveFields": [
       "population",
       "workingAdults",
@@ -246,9 +289,12 @@
       "expeditions",
       "trips",
       "receipts",
+      "viability",
       "acuteRisk",
       "fissionEvents",
+      "decisions",
       "moveEvents",
+      "status",
       "protoCamp"
     ],
     "claimsHolding": 6,

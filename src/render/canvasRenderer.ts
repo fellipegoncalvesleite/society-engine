@@ -13,6 +13,7 @@ import type { SimLiveActivityTrip, SimLiveOverlay } from "../sim/runner/simRunne
 import { getTileAtCoord } from "../sim/world/generate";
 import { deriveFamiliarCountry } from "../sim/agents/familiarCountry";
 import { deriveLineageIdentity } from "../sim/agents/lineageIdentity";
+import { isProvisionalSuccessor } from "../sim/agents/bandLifecycle";
 import {
   deriveForestPatchesForTile,
   estimateForestSuitability,
@@ -219,6 +220,7 @@ interface RenderBand {
   readonly position: TileId;
   readonly color: string;
   readonly isDaughter: boolean;
+  readonly isProvisional: boolean;
   readonly separationActive: boolean;
   readonly recentActivity: readonly RenderActivityTrip[];
 }
@@ -271,6 +273,7 @@ function getRenderBands(snapshot: CanvasRenderSnapshot): readonly RenderBand[] {
         position: marker.position as TileId,
         color: marker.color,
         isDaughter: marker.isDaughter,
+        isProvisional: marker.isProvisional,
         separationActive: marker.separationActive,
         recentActivity: marker.recentActivity.map(projectOverlayActivityTrip),
       }))
@@ -289,7 +292,13 @@ function getRenderBands(snapshot: CanvasRenderSnapshot): readonly RenderBand[] {
       id: band.id,
       position: band.position,
       color: band.color,
-      isDaughter: band.parentBandId !== undefined,
+      isDaughter:
+        band.lineage !== undefined ||
+        band.deepHistory?.founding.kind === "fission_daughter" ||
+        (band.successorStabilizationEvents ?? []).some(
+          (event) => String(event.successorBandId) === String(band.id),
+        ),
+      isProvisional: isProvisionalSuccessor(band),
       separationActive: band.temporarySeparation?.active === true,
       recentActivity: (band.recentIntraSeasonTrips ?? []).map(projectWorldActivityTrip),
     }));
@@ -2315,6 +2324,16 @@ function drawBands(
       context.strokeStyle = band.color;
       context.lineWidth = 1.6;
       context.stroke();
+    }
+    if (band.isProvisional && isSelected) {
+      context.save();
+      context.beginPath();
+      context.setLineDash([3, 3]);
+      context.arc(markerX, markerY, radius + 4, 0, Math.PI * 2);
+      context.strokeStyle = band.color;
+      context.lineWidth = 1.6;
+      context.stroke();
+      context.restore();
     }
 
     context.beginPath();

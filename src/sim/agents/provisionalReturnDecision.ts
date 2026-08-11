@@ -35,6 +35,7 @@
 import { isProvisionalSuccessor } from "./bandLifecycle";
 import { requestTransition } from "./fissionLifecycleKernel";
 import { closeOpenTravelInterval, measuredTravelSupportRatio } from "./provisionalTravelSubsistence";
+import { markProvisionalReturnPathEntered } from "./provisionalSeparationCourse";
 import type { Band, FissionLifecycleRecord, ProvisionalReturnCause } from "./types";
 import type { BandId } from "../core/types";
 import type { WorldState } from "../world/types";
@@ -179,6 +180,12 @@ export function advanceProvisionalReturnDecisions(world: WorldState, today: numb
         phase: transition.state.phase,
         phaseEnteredDay: transition.state.phaseEnteredDay,
         history: transition.state.history,
+        separationCourse: markProvisionalReturnPathEntered(
+          record,
+          today,
+          record.phase,
+          "lived_return_decision",
+        ),
         returnCause: decision.cause,
         // Evidence about a place the group is walking away from is not evidence about anywhere else.
         establishment: undefined,

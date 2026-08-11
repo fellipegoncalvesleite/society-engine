@@ -2,12 +2,21 @@ import type { Band, IntraSeasonTripTaskGroupType, ResidentialMoveEvent } from ".
 import type { BandId, EventId, ReasonId, RouteId, TileId } from "../core/types";
 import type { WorldState } from "../world/types";
 import { deriveCanonicalEvents, type CanonicalEvent } from "./eventSystem";
+import { isProvisionalSuccessor } from "./bandLifecycle";
 
 const IDENTITY_CARD_CAP = 8;
 const EVIDENCE_PER_CARD_CAP = 4;
 const LINK_PER_CARD_CAP = 4;
 const SUMMARY_LINE_CAP = 3;
 const SOURCE_SAMPLE_CAP = 10;
+
+function hasCompletedDaughterIdentity(band: Band): boolean {
+  return band.deepHistory?.founding.kind === "fission_daughter" ||
+    band.lineage !== undefined ||
+    (band.successorStabilizationEvents ?? []).some(
+      (event) => String(event.successorBandId) === String(band.id),
+    );
+}
 
 export type BandIdentityDimension =
   | "subsistence"
@@ -364,7 +373,7 @@ function buildMobilityCard(band: Band, events: readonly CanonicalEvent[]): CardD
   const routeEvents = events.filter((event) => event.family === "route_crossing" || /route|move|camp/i.test(`${event.title} ${event.summary}`));
   const routeUse = Object.values(band.travelCorridors).reduce((sum, route) => sum + route.useCount, 0);
   const returnPlaceCount = Object.values(band.placeMemory).filter((place) => place.isReturnPlace || place.attachment >= 0.5).length;
-  const daughter = band.deepHistory?.founding.kind === "fission_daughter" || band.parentBandId !== undefined;
+  const daughter = hasCompletedDaughterIdentity(band);
 
   if (moveEvents.length > 0) {
     evidence.push(residentialMoveEvidence(moveEvents[0], moveEvents.length));
@@ -516,7 +525,10 @@ function buildSocialDemographicCard(band: Band, events: readonly CanonicalEvent[
   evidence.push(...demographicEvents.slice(0, 2).map((event) => eventEvidence(event, "people changes")));
 
   const laborThin = band.demography.workingAdults <= band.demography.dependents + band.demography.elders;
-  const recentSplit = band.fissionEvents.length > 0 || events.some((event) => event.type === "fission_split");
+  const recentSplit =
+    band.fissionEvents.length > 0 ||
+    (band.successorStabilizationEvents?.length ?? 0) > 0 ||
+    events.some((event) => event.type === "fission_split" || event.type === "successor_stabilized");
   const score = clamp01(Math.abs(dependentShare - 0.32) + elderShare * 0.6 + (laborThin ? 0.25 : 0) + demographicEvents.length * 0.12 + (recentSplit ? 0.18 : 0));
   const title = recentSplit
     ? "A recent split shapes the group"
@@ -548,7 +560,8 @@ function buildInheritanceCard(band: Band, events: readonly CanonicalEvent[]): Ca
   const evidence: BandIdentityEvidenceRef[] = [];
   const history = band.deepHistory;
   const inheritedEvents = events.filter((event) => event.memoryScope === "inherited" || event.livedStatus === "inherited_not_personally_lived");
-  const daughter = history?.founding.kind === "fission_daughter" || band.parentBandId !== undefined;
+  const daughter = hasCompletedDaughterIdentity(band);
+  const provisional = isProvisionalSuccessor(band);
 
   if (history !== undefined) {
     evidence.push(foundingEvidence(band, daughter ? "daughter founding" : "origin beginning"));
@@ -568,10 +581,16 @@ function buildInheritanceCard(band: Band, events: readonly CanonicalEvent[]): Ca
   if (evidence.length === 0) {
     evidence.push({
       kind: "founding_snapshot",
-      label: band.parentBandId === undefined ? "origin beginning" : "parent link",
+      label: band.parentBandId === undefined
+        ? "origin beginning"
+        : provisional
+          ? "provisional separation provenance"
+          : daughter
+            ? "completed parent link"
+            : "uncompleted parent provenance",
       sourceId: `identity-origin:${String(band.id)}`,
       scope: "current",
-      livedStatus: band.parentBandId === undefined ? "personally_lived" : "inherited_not_personally_lived",
+      livedStatus: daughter ? "inherited_not_personally_lived" : "personally_lived",
       confidence: 0.4,
       reasonIds: [],
     });
@@ -579,11 +598,15 @@ function buildInheritanceCard(band: Band, events: readonly CanonicalEvent[]): Ca
 
   const inheritedCount = evidence.filter((entry) => entry.livedStatus === "inherited_not_personally_lived").length;
   const score = clamp01((daughter ? 0.45 : 0.2) + inheritedCount * 0.16 + (history?.ancestryLine.length ?? 0) * 0.08);
-  const title = daughter || inheritedCount > 0
-    ? "A daughter band carrying parent memory"
+  const title = provisional
+    ? "A provisional group carrying partial parent memory"
+    : daughter || inheritedCount > 0
+      ? "A daughter band carrying parent memory"
     : "Most of the portrait comes from their own life";
-  const summary = daughter || inheritedCount > 0
-    ? "Parent history travels with the band, but this band should not be read as a clone of the parent."
+  const summary = provisional
+    ? "The group carries degraded parent knowledge while its independent band identity remains unresolved."
+    : daughter || inheritedCount > 0
+      ? "Parent history travels with the band, but this band should not be read as a clone of the parent."
     : "The clues come mostly from this band's own beginning, movement, memory, and events.";
 
   return makeDraft("inheritance", title, summary, score, evidence);

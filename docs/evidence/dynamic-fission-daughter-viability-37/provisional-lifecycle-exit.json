@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-05T19:35:29.921Z",
+  "generatedAt": "2026-08-11T14:42:55.404Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "observeDays": 1200,
@@ -31,7 +31,7 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "phases": 12,
+        "phases": 13,
         "unclassified": [],
         "physicalEventPhases": [
           "departed",
@@ -53,23 +53,23 @@
     },
     {
       "id": "E3_elapsed_time_cannot_request_a_physical_event_phase",
-      "claim": "a transition to `reintegrated` or `stabilized` carrying `cause: elapsed_time` is REFUSED, even when every other precondition is satisfied — the stabilize arm passes 99 units of lived evidence and is still refused",
+      "claim": "a transition to `reintegrated` or `stabilized` carrying `cause: elapsed_time` is REFUSED, even when every other named proof is satisfied",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
         "elapsedTimeToReintegrated": "terminal_outcome_requires_a_physical_event",
-        "elapsedTimeToStabilizedWith99Evidence": "terminal_outcome_requires_a_physical_event",
+        "elapsedTimeToStabilizedWithFullProof": "terminal_outcome_requires_a_physical_event",
         "physicalEventWithoutCoLocationProof": "reintegration_without_proven_co_location",
         "physicalEventWithCoLocationProof": "ACCEPTED"
       }
     },
     {
       "id": "E4_the_timeout_resolver_does_not_bypass_the_guards",
-      "claim": "`resolveTimeout` on an expired `returning` produces `establishing` — the group tries to live where it stands — and cannot produce `reintegrated` by any path",
+      "claim": "`resolveTimeout` on an expired `returning` produces the named event-bounded living condition — it cannot manufacture establishment or reintegration",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "resultPhase": "establishing",
+        "resultPhase": "unresolved_after_failed_return",
         "timedOut": true
       }
     },
@@ -85,7 +85,7 @@
     },
     {
       "id": "E5_a_group_can_no_longer_leave_quarantine_on_a_timer",
-      "claim": "the same world, seed and instrument that previously reproduced `reintegrated` at day 359 now never reaches it, and the successor never becomes an ordinary established band by elapsed time alone",
+      "claim": "the same world, seed and instrument that previously reproduced `reintegrated` at day 359 by ELAPSED TIME never does so again: the successor never becomes an ordinary established band, and any reintegration it does reach was earned by standing on its parent's tile",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
@@ -96,56 +96,45 @@
             "phase": "travelling"
           },
           {
-            "dayOffset": 1,
-            "phase": "establishing",
-            "cycles": 0
+            "dayOffset": 13,
+            "phase": "establishing"
           },
           {
-            "dayOffset": 15,
-            "phase": "returning",
-            "cycles": 1
+            "dayOffset": 27,
+            "phase": "returning"
           },
           {
-            "dayOffset": 240,
-            "phase": "establishing",
-            "cycles": 2
-          },
-          {
-            "dayOffset": 254,
-            "phase": "returning",
-            "cycles": 3
-          },
-          {
-            "dayOffset": 510,
-            "phase": "establishing",
-            "cycles": 3
+            "dayOffset": 33,
+            "phase": "reintegrated"
           }
         ],
-        "finalPhase": "establishing",
+        "finalPhase": "reintegrated",
         "becameOrdinaryAt": null,
-        "stillProvisional": true
+        "exitWasPhysicalCoLocation": true,
+        "departureTargetTile": "tile:108:54",
+        "stillProvisional": false
       }
     },
     {
-      "id": "E6_the_return_establish_cycle_is_bounded_and_its_end_is_named",
-      "claim": "the lineage stops being shuffled between phases once its cycle budget is spent, and that state is REPORTED as unresolved rather than sitting silently immortal — every exit it has left is physical: reach the parent, demonstrate establishment, or die",
+      "id": "E6_failed_return_is_named_without_manufacturing_attempt_two",
+      "claim": "an expired return enters `unresolved_after_failed_return`, is reported as unresolved, and remains there under later elapsed time because only a real physical/social event may resolve it",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "resolutionCycles": 3,
-        "maxCycles": 3,
-        "reportedAsUnresolved": true,
-        "finalResolutions": [
+        "firstResolutions": [
           {
             "bandId": "band:varied-river-mid:provisional:1",
             "lineageId": "LIN-EXIT-1",
-            "fromPhase": "establishing",
-            "toPhase": "establishing",
+            "fromPhase": "returning",
+            "toPhase": "unresolved_after_failed_return",
             "populationAtResolution": 11,
-            "reason": "cycle_bound_reached_every_remaining_exit_is_physical",
-            "resolutionCycles": 3
+            "reason": "phase_bound_expired"
           }
-        ]
+        ],
+        "laterResolutions": [],
+        "phaseAfterBound": "unresolved_after_failed_return",
+        "phaseAfterAnotherThousandDays": "unresolved_after_failed_return",
+        "reportedAsUnresolved": true
       }
     },
     {
@@ -162,9 +151,7 @@
           "biomeAdaptation"
         ],
         "mutationError": null,
-        "replacedRatherThanEdited": [
-          "socialPressure"
-        ],
+        "replacedRatherThanEdited": [],
         "note": "replacedRatherThanEdited lists fields whose content moved while frozen — only achievable by replacing the object, so it is evidence FOR immutability, not against it"
       }
     },
@@ -209,8 +196,7 @@
         "divergedButAliased": [],
         "stillAliasedAfter400Days": [
           "health",
-          "subsistenceModes",
-          "deathMemory"
+          "subsistenceModes"
         ],
         "successorSurvived": true
       }

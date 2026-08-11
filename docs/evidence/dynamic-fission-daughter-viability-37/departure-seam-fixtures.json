@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-05T19:35:30.452Z",
+  "generatedAt": "2026-08-11T22:53:41.957Z",
   "checkpoint": "ROADMAP ITEM 4 §11 — atomic departure seam controlled gates",
   "authority": "src/sim/agents/fissionDepartureSeam.ts",
   "scopeLimit": "The seam is NOT reachable from ordinary fission — D16 reads the sources to prove it. These gates drive the production writer directly. They prove the departure TRANSITION is truthful; they prove nothing about travel, return or stabilization, none of which exist, and nothing about natural occurrence.",
@@ -145,23 +145,24 @@
     },
     {
       "id": "D12",
-      "claim": "a departure is refused from every phase except departure_ready",
+      "claim": "a departure is refused from every phase except departure_ready, even with a complete prepared record",
       "status": "PASS",
-      "nonVacuityNote": "departure_ready IS accepted in the same run",
+      "nonVacuityNote": "departure_ready with the SAME prepared record IS accepted in the same run, so the refusals are the phase and not the record",
       "rows": {
         "proposed": "parent_attempt_not_departure_ready",
-        "committed": "parent_attempt_not_departure_ready",
+        "departure_planned": "parent_attempt_not_departure_ready",
         "abandoned": "parent_attempt_not_departure_ready",
         "departed": "parent_attempt_not_departure_ready"
       },
-      "readyAccepted": true
+      "readyAccepted": true,
+      "preparedRecordPresent": true
     },
     {
       "id": "D13",
       "claim": "a departure that would strand the parent is refused by the residual authority",
       "status": "PASS",
       "nonVacuityNote": "a healthy parent DOES depart in the same run, so the refusal is not a broken seam",
-      "outcome": "residual_authority_blocked_the_departure",
+      "outcome": "preparation:residual_authority_blocked_the_departure",
       "detail": "split_caused_damage_exceeds_tolerance"
     },
     {
@@ -169,11 +170,37 @@
       "claim": "when the residual authority revises the request down, the smaller group is the one that leaves",
       "status": "PASS",
       "nonVacuityNote": "a revision genuinely occurred; without one this gate would prove nothing",
-      "requested": 18,
-      "endorsed": 8,
+      "requested": 14,
+      "endorsed": 12,
       "revisionApplied": true,
-      "actualSuccessorSize": 8,
-      "conserving": true
+      "actualSuccessorSize": 12,
+      "conserving": true,
+      "sweep": [
+        {
+          "requested": 4,
+          "outcome": "as_requested"
+        },
+        {
+          "requested": 6,
+          "outcome": "as_requested"
+        },
+        {
+          "requested": 8,
+          "outcome": "as_requested"
+        },
+        {
+          "requested": 10,
+          "outcome": "as_requested"
+        },
+        {
+          "requested": 12,
+          "outcome": "as_requested"
+        },
+        {
+          "requested": 14,
+          "outcome": "revised"
+        }
+      ]
     },
     {
       "id": "D15",
@@ -192,11 +219,13 @@
     },
     {
       "id": "D16",
-      "claim": "nothing in production calls this seam, so ordinary behaviour cannot change",
+      "claim": "natural pre-departure is live but nothing in ordinary production calls this physical seam",
       "status": "PASS",
-      "nonVacuityNote": "the legacy path genuinely still exists in demography.ts",
+      "nonVacuityNote": "the controlled audit really executed this seam, so zero ordinary callers is a caller-boundary claim rather than an inert function",
       "callers": [],
-      "legacyPathIntact": true
+      "naturalPreparationCalls": 1,
+      "legacyImplementationExists": true,
+      "legacyCallSites": 0
     },
     {
       "id": "D17",

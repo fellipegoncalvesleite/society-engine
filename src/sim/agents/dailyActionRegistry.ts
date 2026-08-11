@@ -31,6 +31,7 @@ import { provisionalReintegrationDailyAction } from "./provisionalReintegration"
 import { provisionalSubsistenceDailyAction } from "./provisionalTravelSubsistence";
 import { provisionalReturnDecisionDailyAction } from "./provisionalReturnDecision";
 import { provisionalEstablishmentDailyAction } from "./provisionalEstablishment";
+import { successorStabilizationDailyAction } from "./successorStabilization";
 import { provisionalLifecycleDeadlineDailyAction } from "./provisionalLifecycleResolver";
 import { parentFissionAttemptDeadlineDailyAction } from "./parentFissionAttemptResolver";
 import { naturalFissionPreDepartureDailyAction } from "./naturalFissionPreDeparture";
@@ -71,6 +72,10 @@ export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   // about a site it is leaving.
   provisionalReturnDecisionDailyAction,
   provisionalEstablishmentDailyAction,
+  // Positive recognition runs only AFTER today's subsistence, return decision and descriptive
+  // establishment measurement. It skips season-boundary days, so a group cannot graduate into the
+  // later seasonal pipeline and receive ordinary behavior on the same simulated day.
+  successorStabilizationDailyAction,
   // ROADMAP ITEM 4 — LAST: a lifecycle bound declared in DAYS is evaluated every day. It used to be
   // evaluated only inside the seasonal tick, so a 180-day bound could bind at 269; measured lateness
   // was 41 and 76 days on one real run. Placed after the day's physical actions so a group that gives

@@ -146,6 +146,8 @@ export const FISSION_FIELD_TRANSFER_POLICY: Record<keyof Band, FieldTransferPoli
   fissionAttempt: entry("FORBIDDEN_TO_COPY", "absent", false, "the attempt is the PARENT's record and is terminal after departure; a successor holding it would be a second body owner"),
   provisionalSuccessor: entry("CURRENT_LINEAGE_PROVENANCE", "computed", false, "the successor's own lifecycle record — the field that makes it provisional at all"),
   fissionEvents: entry("FORBIDDEN_TO_COPY", "empty_array", true, "the parent's earlier splits happened to a group this one is not — and `BandFissionEvent` describes an INSTANTANEOUS completed fission, the exact shape Direction D exists to replace, so the successor writes none at departure"),
+  successorDepartureRecords: entry("CURRENT_LINEAGE_PROVENANCE", "computed", false, "the successor receives only the immutable physical-departure record that produced it; prior departures belong to the parent and are not inherited"),
+  successorStabilizationEvents: entry("FORBIDDEN_TO_COPY", "empty_array", false, "no positive completion event is true at departure; the stabilization authority appends one only after lived independent operation"),
 
   // ── bodies ──────────────────────────────────────────────────────────────────────────────────
   //

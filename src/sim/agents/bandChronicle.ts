@@ -1962,10 +1962,17 @@ function detectLineageArc(context: ChronicleContext): ArcDraft | undefined {
   const { band, events } = context;
   const lineageEvents = events.filter((event) => event.category === "lineage");
   const lineage = band.lineageReadability;
-  const fissionCount = band.fissionEvents.length;
+  const successorCompletions = band.successorStabilizationEvents ?? [];
+  const completedDaughterBranches = successorCompletions.filter(
+    (event) => String(event.parentBandId) === String(band.id),
+  );
+  const ownStabilization = successorCompletions.find(
+    (event) => String(event.successorBandId) === String(band.id),
+  );
+  const fissionCount = band.fissionEvents.length + completedDaughterBranches.length;
   const hasLineageStory =
     lineage !== undefined &&
-    (lineage.parentBandId !== undefined || lineage.daughterBandIds.length > 0 || lineage.activeStatus !== "active" || fissionCount > 0);
+    (lineage.parentBandId !== undefined || lineage.daughterBandIds.length > 0 || lineage.activeStatus !== "active" || fissionCount > 0 || ownStabilization !== undefined);
 
   if (!hasLineageStory && lineageEvents.length === 0) {
     return undefined;
@@ -1973,6 +1980,7 @@ function detectLineageArc(context: ChronicleContext): ArcDraft | undefined {
 
   const causes = uniqueStrings([
     lineage?.parentBandId !== undefined ? "this band began as a daughter branch" : undefined,
+    ownStabilization !== undefined ? "its provisional separation completed through lived independent operation" : undefined,
     lineage !== undefined && lineage.daughterBandIds.length > 0 ? "it later produced daughter bands" : undefined,
     fissionCount > 0 ? "recorded fission events changed the lineage" : undefined,
     lineage?.activeStatus === "absorbed" ? "its independent line ended through absorption" : undefined,
@@ -1981,7 +1989,11 @@ function detectLineageArc(context: ChronicleContext): ArcDraft | undefined {
   return {
     kind: "lineage",
     title: "Lineage and band continuity",
-    startYear: lineageEvents[0]?.year ?? band.fissionEvents[0]?.time.year ?? context.world.time.year,
+    startYear:
+      lineageEvents[0]?.year ??
+      band.fissionEvents[0]?.time.year ??
+      successorCompletions[0]?.time.year ??
+      context.world.time.year,
     endYear: context.world.time.year,
     score: 32 + lineageEvents.length * 10 + fissionCount * 8 + causes.length * 8,
     summary: causes.length === 0
@@ -1997,6 +2009,7 @@ function detectLineageArc(context: ChronicleContext): ArcDraft | undefined {
     sourceReasonIds: capReasonIds([
       ...lineageEvents.flatMap((event) => event.sourceReasonIds),
       ...band.fissionEvents.map((event) => event.splitReason.id),
+      ...successorCompletions.flatMap((event) => event.reasonIds),
     ]),
     scoringReasons: ["lineage events", "parent/daughter links", "fission or absorption state"],
     linkLabels: causes,
@@ -4075,6 +4088,10 @@ function evidenceKindLabel(kind: string): string {
       return "founding record";
     case "fission_event":
       return "split record";
+    case "successor_departure_event":
+      return "physical departure record";
+    case "successor_stabilization_event":
+      return "independent founding record";
     case "lineage_link":
       return "lineage link";
     case "demographic_churn":

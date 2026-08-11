@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-05T19:35:22.226Z",
+  "generatedAt": "2026-08-11T22:53:54.876Z",
   "seed": "audit27:natural:s1",
   "warmDays": 2100,
   "observeDays": 180,
@@ -25,7 +25,8 @@
     "phaseTrail": [
       "travelling",
       "establishing",
-      "returning"
+      "returning",
+      "reintegrated"
     ]
   },
   "sampleStepRecord": {
@@ -95,7 +96,7 @@
     },
     {
       "id": "V4_arrival_produces_establishing_not_stabilized",
-      "claim": "reaching the destination earns only the right to try to live there; `stabilized` still demands lived evidence and is never produced by arriving",
+      "claim": "reaching the destination earns only the right to try to live there; arrival supplies neither positive commitment nor stabilization authority",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
@@ -103,9 +104,10 @@
         "phaseTrail": [
           "travelling",
           "establishing",
-          "returning"
+          "returning",
+          "reintegrated"
         ],
-        "finalPhase": "returning",
+        "finalPhase": "reintegrated",
         "finalPosition": "tile:110:57"
       }
     },
@@ -188,7 +190,7 @@
       "detail": {
         "hunger": {
           "atDeparture": 0.14,
-          "atEnd": 1
+          "atEnd": 0.85
         },
         "travelSupportUnits": 0,
         "travelDepletionApplied": 0,

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-05T19:35:43.651Z",
+  "generatedAt": "2026-08-11T22:55:10.905Z",
   "seed": "audit27:natural:s1",
-  "warmDays": 2100,
+  "warmDays": 2150,
   "observeDays": 400,
   "parentId": "band:varied-river-mid",
   "successorId": "band:varied-river-mid:provisional:1",
@@ -32,16 +32,18 @@
         "residentialAnchor": 0,
         "knownTiles": 15,
         "storageCapacity": 0,
-        "provisionalPhase": "travelling"
+        "provisionalPhase": "travelling",
+        "isLivingBand": true,
+        "isBandTerminal": false
       },
       "last": {
-        "position": "tile:110:57",
+        "position": "tile:109:56",
         "population": 11,
         "workingAdults": 8,
         "dependents": 2,
         "elders": 1,
         "status": "foraging",
-        "hungerPressure": 1,
+        "hungerPressure": 0.74,
         "diseaseBurden": 0.08,
         "injuryBurden": 0.06,
         "mortalityRisk": 0.08,
@@ -58,11 +60,14 @@
         "residentialAnchor": 0,
         "knownTiles": 15,
         "storageCapacity": 0,
-        "provisionalPhase": "returning"
+        "provisionalPhase": "returning",
+        "isLivingBand": true,
+        "isBandTerminal": false
       },
       "changedFields": [
         "dependents",
         "hungerPressure",
+        "position",
         "provisionalPhase",
         "workingAdults"
       ]
@@ -92,16 +97,18 @@
         "residentialAnchor": 0,
         "knownTiles": 15,
         "storageCapacity": 0,
-        "provisionalPhase": null
+        "provisionalPhase": null,
+        "isLivingBand": true,
+        "isBandTerminal": false
       },
       "last": {
-        "position": "tile:108:54",
+        "position": "tile:109:56",
         "population": 11,
         "workingAdults": 8,
         "dependents": 2,
         "elders": 1,
         "status": "moving",
-        "hungerPressure": 0.72,
+        "hungerPressure": 0.61,
         "diseaseBurden": 0.08,
         "injuryBurden": 0.06,
         "mortalityRisk": 0.08,
@@ -109,16 +116,18 @@
         "acuteRiskEpisodes": 10,
         "deathMemory": 1,
         "viability": "fragile",
-        "decisions": 4,
-        "trips": 24,
+        "decisions": 1,
+        "trips": 9,
         "expeditions": 0,
         "receipts": 1,
-        "moveEvents": 4,
+        "moveEvents": 1,
         "protoCamp": 1,
         "residentialAnchor": 0,
-        "knownTiles": 40,
+        "knownTiles": 30,
         "storageCapacity": 0.16,
-        "provisionalPhase": null
+        "provisionalPhase": null,
+        "isLivingBand": true,
+        "isBandTerminal": false
       },
       "changedFields": [
         "decisions",
@@ -142,7 +151,6 @@
       "expeditions",
       "knownTiles",
       "moveEvents",
-      "position",
       "protoCamp",
       "receipts",
       "status",
@@ -153,6 +161,7 @@
     "movedInBothArms": [
       "dependents",
       "hungerPressure",
+      "position",
       "workingAdults"
     ],
     "movedOnlyWhileQuarantined": [
@@ -164,7 +173,7 @@
     "passing": 9,
     "failing": 0,
     "vacuous": 0,
-    "fieldsBlockedByTheGate": 11
+    "fieldsBlockedByTheGate": 10
   },
   "fixtures": [
     {
@@ -173,10 +182,9 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "quarantinedDays": 400,
+        "quarantinedDays": 34,
         "ordinaryAdmitted": [],
         "ordinaryProvenBlocked": [
-          "position",
           "decisions",
           "trips",
           "moveEvents",
@@ -204,6 +212,7 @@
         "quarantinedMoved": [
           "dependents",
           "hungerPressure",
+          "position",
           "provisionalPhase",
           "workingAdults"
         ]
@@ -220,7 +229,6 @@
           "expeditions",
           "knownTiles",
           "moveEvents",
-          "position",
           "protoCamp",
           "receipts",
           "status",
@@ -231,6 +239,7 @@
         "movedInBothArms": [
           "dependents",
           "hungerPressure",
+          "position",
           "workingAdults"
         ],
         "movedOnlyWhileQuarantined": [
@@ -240,15 +249,24 @@
       }
     },
     {
-      "id": "Q3_the_resolver_is_the_only_authority_that_moves_a_quarantined_group",
-      "claim": "the only field that moves in the quarantined arm and not in the released one is the lifecycle phase, written by the provisional resolver",
+      "id": "Q3_only_the_provisional_authorities_move_a_quarantined_group",
+      "claim": "every field that moves in the quarantined arm and NOT in the released one is written by a provisional authority — the lifecycle phase by the resolver, the position by the provisional travel writer — and nothing ordinary reaches the group",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
         "movedOnlyWhileQuarantined": [
           "provisionalPhase"
         ],
-        "finalPhase": "returning"
+        "provisionalPhysicalWriters": [
+          "provisionalPhase",
+          "position",
+          "hungerPressure"
+        ],
+        "unexpectedMovers": [],
+        "finalPhase": "returning",
+        "startPosition": "tile:110:57",
+        "endPosition": "tile:109:56",
+        "provisionalGroupPhysicallyMoved": true
       }
     },
     {
@@ -273,7 +291,7 @@
           "last": 11
         },
         "demographyRanWhileProvisional": true,
-        "demographyRunDayOffset": 60
+        "demographyRunDayOffset": 10
       }
     },
     {
@@ -282,9 +300,9 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "quarantinedDays": 400,
+        "quarantinedDays": 34,
         "populationChangeDays": [],
-        "allowedChanges": 3
+        "allowedChanges": 2
       }
     },
     {
@@ -299,13 +317,13 @@
         },
         "hungerPressure": {
           "first": 0.14,
-          "last": 1
+          "last": 0.74
         }
       }
     },
     {
       "id": "Q7_the_gate_holds_in_every_live_phase_not_only_in_transit",
-      "claim": "the predicate the production gates read is true in all four live phases and false in all three terminal ones — and the transit predicate would have READMITTED the phases listed, which is why the gates do not use it",
+      "claim": "the predicate the production gates read is true in every live phase and false in all three terminal ones — and the transit predicate would have READMITTED the phases listed, which is why the gates do not use it",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
@@ -347,6 +365,15 @@
             "isFissionEligibleParent": false
           },
           {
+            "phase": "unresolved_after_failed_return",
+            "terminal": false,
+            "isProvisionalSuccessor": true,
+            "isProvisionalGroupInTransit": false,
+            "isEstablishedBand": false,
+            "isLivingBand": true,
+            "isFissionEligibleParent": false
+          },
+          {
             "phase": "reintegrated",
             "terminal": true,
             "isProvisionalSuccessor": false,
@@ -376,37 +403,41 @@
         ],
         "transitPredicateWouldHaveReadmitted": [
           "establishing",
-          "failed_early"
+          "failed_early",
+          "unresolved_after_failed_return"
         ]
       }
     },
     {
       "id": "Q8_a_quarantined_group_is_still_physically_present",
-      "claim": "the successor remains a LIVING band holding bodies at a tile throughout — excluding it from presence would recreate the ghosts CORRECTION-34 removed",
+      "claim": "on every day it is quarantined the successor is a LIVING band holding bodies at a tile — excluding it from presence would recreate the ghosts CORRECTION-34 removed",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
+        "quarantinedDays": 34,
         "population": 11,
-        "position": "tile:110:57",
+        "position": "tile:109:56",
         "isLivingBand": true,
-        "isEstablishedBand": false
+        "isBandTerminal": false,
+        "phaseOnLastQuarantinedDay": "returning"
       }
     },
     {
-      "id": "Q9_FINDING_a_group_can_leave_quarantine_on_a_timer_into_ordinary_status",
-      "claim": "advanced past the return bound, the successor reaches the terminal `reintegrated` phase whose contract says the provisional entity is REMOVED — and it is not: it becomes an ordinary independent band, having demonstrated nothing, because the physical reintegration writer does not exist yet",
+      "id": "Q9_CLOSED_a_group_can_no_longer_leave_quarantine_on_a_timer_into_ordinary_status",
+      "claim": "the escape this audit published is CLOSED: `reintegrated` is now reachable only through the physical writer, which requires a living co-located parent and REMOVES the entity — so no band reaches that phase while still holding bodies and reading as an ordinary established band",
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "status": "NOT_REPRODUCED_IN_THIS_WINDOW",
-        "quarantineEndedAfterDays": 400,
+        "status": "CLOSED_NOT_REPRODUCED",
+        "closedBy": "provisional_reintegration daily action + performAtomicReintegration; a timer can no longer reach `reintegrated` because the kernel demands physicalCoLocationProven",
+        "quarantineEndedAfterDays": 34,
         "windowDays": 400,
-        "finalPhase": "returning",
+        "finalPhase": "reintegrated",
         "stillInTheWorld": true,
         "isEstablishedBandNow": false,
-        "populationStillHeld": 11,
+        "populationStillHeld": 0,
         "contractSays": "reintegrated — terminal: rejoined the parent. The provisional entity is removed exactly once.",
-        "whyNotRepairedHere": "reintegration is the return vertical; this pass is explicitly forbidden to begin travel or return work"
+        "populationHeldIfStillProvisionalEscape": 0
       }
     }
   ]

@@ -1,0 +1,362 @@
+{
+  "generatedAt": "2026-08-11T22:55:07.261Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "donorBandId": "band:varied-river-mid",
+  "targetTileId": "tile:108:55",
+  "physicalPatchTileId": "tile:17:0",
+  "summary": {
+    "total": 12,
+    "passing": 12,
+    "failing": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "C1_only_the_dedicated_positive_authority_can_request_stabilized",
+      "claim": "the sole production request for `stabilized` belongs to the dedicated successor authority; descriptive establishment remains unable to graduate even a rich diagnostic record",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "productionTypeScriptFilesSearched": 177,
+        "stabilizationCallSites": [
+          {
+            "path": "/Users/fellipegoncalvesleite/Documents/Codex/2026-08-10/files-mentioned-by-the-user-hard/work/human-nomad-simulator-item4/src/sim/agents/successorStabilization.ts",
+            "offset": 21894
+          }
+        ],
+        "richRecord": {
+          "phase": "establishing",
+          "outcome": "keep_measuring",
+          "holdingDiagnostics": 7,
+          "diagnosticCount": 7
+        }
+      }
+    },
+    {
+      "id": "C2_assessment_windows_record_physical_quantities_without_lifecycle_authority",
+      "claim": "the uniform demand window closes with real support, demand and depletion totals but contains no phase or outcome field",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "history": {
+          "lifetimeDaysWithAnyPhysicalTake": 10,
+          "lifetimeAssessmentWindows": 1,
+          "lifetimeWindowsWithAnyPhysicalTake": 1,
+          "lifetimeTileIdsWithAnyPhysicalTake": [
+            "tile:17:0"
+          ],
+          "recentAssessmentWindows": [
+            {
+              "tileIds": [
+                "tile:17:0"
+              ],
+              "tileIdsWithAnyPhysicalTake": [
+                "tile:17:0"
+              ],
+              "startDay": 2101,
+              "endDay": 2110,
+              "days": 10,
+              "supportUnits": 0.2,
+              "demandUnits": 1,
+              "daysWithAnyPhysicalTake": 10,
+              "waterStressDaySum": 2,
+              "workerDays": 20,
+              "depletionApplied": 0.2,
+              "closedBy": "demand_window_complete",
+              "hadAnyOwnPhysicalTake": true
+            }
+          ]
+        },
+        "window": {
+          "tileIds": [
+            "tile:17:0"
+          ],
+          "tileIdsWithAnyPhysicalTake": [
+            "tile:17:0"
+          ],
+          "startDay": 2101,
+          "endDay": 2110,
+          "days": 10,
+          "supportUnits": 0.2,
+          "demandUnits": 1,
+          "daysWithAnyPhysicalTake": 10,
+          "waterStressDaySum": 2,
+          "workerDays": 20,
+          "depletionApplied": 0.2,
+          "closedBy": "demand_window_complete",
+          "hadAnyOwnPhysicalTake": true
+        }
+      }
+    },
+    {
+      "id": "C3_microscopic_take_records_only_the_truthful_fact",
+      "claim": "a microscopic extracted amount sets `hadAnyOwnPhysicalTake`, while its tiny support share has no stabilization effect",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "window": {
+          "tileIds": [
+            "tile:17:0"
+          ],
+          "tileIdsWithAnyPhysicalTake": [
+            "tile:17:0"
+          ],
+          "startDay": 2101,
+          "endDay": 2110,
+          "days": 10,
+          "supportUnits": 0.0001,
+          "demandUnits": 1,
+          "daysWithAnyPhysicalTake": 1,
+          "waterStressDaySum": 2,
+          "workerDays": 20,
+          "depletionApplied": 0.0001,
+          "closedBy": "demand_window_complete",
+          "hadAnyOwnPhysicalTake": true
+        },
+        "resultingPhase": "establishing"
+      }
+    },
+    {
+      "id": "C4_locality_count_is_descriptive_only",
+      "claim": "one-locality and multi-locality histories retain different physical provenance and neither decides group identity",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "oneLocality": [
+          "tile:17:0"
+        ],
+        "twoLocalities": [
+          "tile:17:0",
+          "tile:16:0"
+        ],
+        "phases": [
+          "establishing",
+          "establishing"
+        ]
+      }
+    },
+    {
+      "id": "C5_parent_support_gate_is_gone_without_a_fictitious_writer",
+      "claim": "no speculative parent-support field exists; the future comment distinguishes lifetime history from a real committed-attempt fact",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "forbiddenSupportNames": [
+          "receivedParentSupport",
+          "everReceivedParentSupport",
+          "receivedParentSupportDuringAttempt"
+        ],
+        "supportNameHits": []
+      }
+    },
+    {
+      "id": "C6_failed_return_cannot_become_establishing_from_time",
+      "claim": "both the pure kernel and world resolver route an expired return into the named unresolved living condition, never attempt #2",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "kernelFailedReturn": {
+          "ok": true,
+          "state": {
+            "phase": "unresolved_after_failed_return",
+            "phaseEnteredDay": 180,
+            "history": [
+              "travelling",
+              "establishing",
+              "failed_early",
+              "returning"
+            ]
+          },
+          "timedOut": true
+        },
+        "resolutions": [
+          {
+            "bandId": "band:cleanup:c6",
+            "lineageId": "LIN-CLEANUP",
+            "fromPhase": "returning",
+            "toPhase": "unresolved_after_failed_return",
+            "populationAtResolution": 8,
+            "reason": "phase_bound_expired"
+          }
+        ]
+      }
+    },
+    {
+      "id": "C7_unresolved_living_group_keeps_physical_body_processing",
+      "claim": "the unresolved group takes and depletes real food, accrues demand/water/hunger history, remains living, and receives the next annual demographic update",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "physicalDay": {
+          "day": 2101,
+          "tileId": "tile:17:0",
+          "gatherShare": 0.242,
+          "gatheringWorkers": 6,
+          "requestedUnits": 0.21,
+          "harvestedUnits": 0.036,
+          "usableUnits": 0.0311,
+          "depletionApplied": 0.036,
+          "demandUnits": 0.3911,
+          "waterStress": 0.4752,
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:17:0:roots_tubers_uso"
+        },
+        "patchCumulativeUse": {
+          "before": 0,
+          "after": 0.036
+        },
+        "hungerPressure": 0.9205,
+        "demographicUpdateDay": {
+          "before": 1800,
+          "after": 2160
+        },
+        "phaseAfterAnnual": "unresolved_after_failed_return",
+        "populationAfterAnnual": 40
+      }
+    },
+    {
+      "id": "C8_unresolved_group_can_physically_reintegrate",
+      "claim": "a genuinely co-located unresolved successor is handed back through the same conserving physical writer",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "ledger": {
+          "demographic": {
+            "parentBefore": {
+              "workingAdults": 12,
+              "dependents": 8,
+              "elders": 3
+            },
+            "successorBefore": {
+              "workingAdults": 7,
+              "dependents": 3,
+              "elders": 1
+            },
+            "parentAfter": {
+              "workingAdults": 19,
+              "dependents": 11,
+              "elders": 4
+            },
+            "worldPopulationBefore": 235,
+            "worldPopulationAfter": 235,
+            "populationConserved": true,
+            "workingAdultsConserved": true,
+            "dependentsConserved": true,
+            "eldersConserved": true,
+            "measuredFromResultingWorld": true,
+            "fixedRatioRecomputeUsed": false
+          },
+          "physical": {
+            "parentTileId": "tile:110:57",
+            "successorTileId": "tile:110:57",
+            "coLocated": true,
+            "journeyTiles": 0
+          },
+          "embodied": {
+            "parentHungerBefore": 0.14,
+            "successorHunger": 0.14,
+            "parentHungerAfter": 0.14,
+            "parentReliefedByAbsorbingAHungrierGroup": false,
+            "successorAcuteRiskEpisodes": 10,
+            "acuteRiskMerge": {
+              "parentEpisodesBefore": 10,
+              "returningEpisodesBefore": 10,
+              "sharedEpisodeIds": 10,
+              "returningOnlyEpisodes": 0,
+              "mergedEpisodes": 10,
+              "retainedEpisodes": 10,
+              "droppedByCap": 0,
+              "activeEpisodesRetained": 4,
+              "activeEpisodesDropped": 0,
+              "effectRederivedFromMergedRing": true,
+              "noEpisodeReplayed": true,
+              "cohortAttributionUnavailable": true
+            },
+            "returningOnlyBurdenSurvived": true,
+            "fieldTreatments": {
+              "demography.cohorts": "exact_aggregate_merge",
+              "demography.accumulators": "exact_aggregate_merge",
+              "acuteRisk": "exact_aggregate_merge",
+              "seasonalSupport": "conservative_burden",
+              "hungerPressure": "conservative_burden",
+              "provisionalSuccessor.travelSubsistence": "invalidate",
+              "carryingCapacity": "recompute_at_next_cadence",
+              "populationDemand": "recompute_at_next_cadence",
+              "perCapitaReturn": "recompute_at_next_cadence",
+              "rangeSaturation": "recompute_at_next_cadence",
+              "bodyCampLogistics": "recompute_at_next_cadence",
+              "deathMemory": "historical_only",
+              "provisionalSuccessor": "historical_only"
+            },
+            "claim": "no_unearned_relief"
+          },
+          "entity": {
+            "successorStillLiving": false,
+            "successorStillHoldsBodies": false,
+            "successorPhase": "reintegrated",
+            "removedExactlyOnce": true
+          }
+        }
+      }
+    },
+    {
+      "id": "C9_unresolved_zero_population_reaches_provisional_extinction",
+      "claim": "zero bodies in the event-bounded state are physically observed and terminalized exactly once",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "resolutions": [
+          {
+            "bandId": "band:cleanup:c9",
+            "lineageId": "LIN-CLEANUP-C9",
+            "fromPhase": "unresolved_after_failed_return",
+            "toPhase": "provisional_extinguished",
+            "populationAtResolution": 0,
+            "reason": "zero_physical_population"
+          }
+        ]
+      }
+    },
+    {
+      "id": "C10_establishing_no_longer_relocates_after_two_barren_days",
+      "claim": "even an adversarial establishing record with two barren days and many blocked steps remains on the same tile",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "before": "tile:17:0",
+        "after": "tile:17:0",
+        "steps": []
+      }
+    },
+    {
+      "id": "C11_V4_arrival_never_false_stabilizes",
+      "claim": "a real contiguous journey reaches the target and the same daily runner leaves it `establishing`, never `stabilized`",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "arrivalDay": 10,
+        "phases": [
+          "travelling",
+          "establishing"
+        ],
+        "target": "tile:108:55",
+        "finalPosition": "tile:108:55"
+      }
+    },
+    {
+      "id": "C12_V9_no_residential_receipt_or_storage_leak",
+      "claim": "all descriptive signals may hold and the group still stays provisional with zero residential storage and no residential food receipts",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "phase": "establishing",
+        "outcome": "keep_measuring",
+        "holdingDiagnostics": 7,
+        "diagnosticCount": 7,
+        "seasonalFoodReceipts": null,
+        "storageCapacity": 0
+      }
+    }
+  ]
+}
