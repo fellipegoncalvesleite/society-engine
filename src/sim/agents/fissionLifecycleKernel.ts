@@ -77,10 +77,14 @@ export type ProvisionalSuccessorPhase =
   | "returning"
   /** Living and separate after the bounded return action failed; awaits a real physical/social event. */
   | "unresolved_after_failed_return"
+  /** A fresh survivor cohort has committed to a new independent course after the failed return. */
+  | "continuing_after_failed_return"
   /** Terminal: rejoined the parent. The provisional entity is removed exactly once. */
   | "reintegrated"
   /** Terminal: bounded early functioning demonstrated. Becomes an ordinary band. */
   | "stabilized"
+  /** Terminal: fresh post-return commitment plus later physical operation established the group. */
+  | "established_after_failed_return"
   /**
    * Terminal: every body in the provisional group died before it resolved.
    *
@@ -356,9 +360,25 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
     transitionWriter: "provisionalLifecycleResolver (world adapter)",
-    // Event-bounded: physical co-location can reintegrate; zero bodies can extinguish. A future real
-    // positive-commitment writer may add a social exit, but none exists in this patch.
-    permittedNext: ["reintegrated", "provisional_extinguished"],
+    // Event-bounded: reunion can reintegrate; zero bodies can extinguish; a fresh survivor-cohort
+    // decision can begin a NEW course without resurrecting the founder commitment.
+    permittedNext: ["reintegrated", "continuing_after_failed_return", "provisional_extinguished"],
+    terminal: false,
+    resolutionKind: "event_bounded_living_condition",
+    clearsOnExit: [],
+  },
+  {
+    phase: "continuing_after_failed_return",
+    // The decision is current authority, but it is not success. The group must still physically
+    // reach its own named place and earn a complete operation window after the decision.
+    entryRequires: "physical_event",
+    side: "successor",
+    bodiesHaveMoved: true,
+    bodyOwner: "successor",
+    productiveLabourOwner: "successor",
+    physicalLocationOwner: "successor",
+    transitionWriter: "postReturnContinuation (world adapter)",
+    permittedNext: ["established_after_failed_return", "provisional_extinguished"],
     terminal: false,
     resolutionKind: "event_bounded_living_condition",
     clearsOnExit: [],
@@ -412,6 +432,22 @@ const CONTRACTS: readonly PhaseContract[] = [
     resolutionKind: "terminal",
     clearsOnExit: ["provisionalState"],
   },
+  {
+    phase: "established_after_failed_return",
+    // Historically distinct from ordinary stabilization: the return path remains permanently true,
+    // a NEW survivor commitment exists, and all qualifying operation was earned after it.
+    entryRequires: "physical_event",
+    side: "successor",
+    bodiesHaveMoved: true,
+    bodyOwner: "successor",
+    productiveLabourOwner: "successor",
+    physicalLocationOwner: "successor",
+    transitionWriter: "postReturnContinuation (world adapter)",
+    permittedNext: [],
+    terminal: true,
+    resolutionKind: "terminal",
+    clearsOnExit: ["provisionalState"],
+  },
 ];
 
 const BY_PHASE = new Map<FissionLifecyclePhase, PhaseContract>(CONTRACTS.map((c) => [c.phase, c]));
@@ -448,6 +484,12 @@ export type LifecycleRejection =
   | "stabilization_after_return_path"
   /** The adapter has not prepared the state ordinary established readers require. */
   | "stabilization_without_quarantine_release"
+  /** The unresolved group has no canonically assessed fresh survivor-cohort commitment. */
+  | "post_return_continuation_without_fresh_commitment"
+  /** The post-return outcome lacks physical operation earned after the fresh commitment. */
+  | "post_return_establishment_without_fresh_operation"
+  /** The post-return outcome has not initialized every established reader atomically. */
+  | "post_return_establishment_without_quarantine_release"
   /** §3 — elapsed time may not produce a phase that asserts something happened in the world. */
   | "terminal_outcome_requires_a_physical_event"
   /** Reintegration asserts the bodies physically reached the parent. Nothing else may assert it. */
@@ -493,6 +535,12 @@ export interface StabilizationTransitionProof {
   readonly quarantineReleaseInitialized: boolean;
 }
 
+export interface PostReturnEstablishmentTransitionProof {
+  readonly freshCommitmentProven: boolean;
+  readonly postCommitmentOperationProven: boolean;
+  readonly quarantineReleaseInitialized: boolean;
+}
+
 export interface TransitionRequest {
   readonly current: LifecycleState;
   readonly to: FissionLifecyclePhase;
@@ -505,6 +553,10 @@ export interface TransitionRequest {
   readonly endorsedFounderCount?: number;
   /** Required for `establishing -> stabilized`; each independent claim is checked separately. */
   readonly stabilizationProof?: StabilizationTransitionProof;
+  /** Required for the unresolved -> continuing social transition. */
+  readonly postReturnCommitmentProven?: boolean;
+  /** Required for the distinct post-return established outcome. */
+  readonly postReturnEstablishmentProof?: PostReturnEstablishmentTransitionProof;
   /**
    * §3 — WHAT IS ASKING FOR THIS TRANSITION: something that happened in the world, or a clock.
    *
@@ -563,6 +615,21 @@ export function requestTransition(request: TransitionRequest): LifecycleTransiti
     }
     if (proof.quarantineReleaseInitialized !== true) {
       return { ok: false, rejection: "stabilization_without_quarantine_release" };
+    }
+  }
+  if (request.to === "continuing_after_failed_return" && request.postReturnCommitmentProven !== true) {
+    return { ok: false, rejection: "post_return_continuation_without_fresh_commitment" };
+  }
+  if (request.to === "established_after_failed_return") {
+    const proof = request.postReturnEstablishmentProof;
+    if (proof?.freshCommitmentProven !== true) {
+      return { ok: false, rejection: "post_return_continuation_without_fresh_commitment" };
+    }
+    if (proof.postCommitmentOperationProven !== true) {
+      return { ok: false, rejection: "post_return_establishment_without_fresh_operation" };
+    }
+    if (proof.quarantineReleaseInitialized !== true) {
+      return { ok: false, rejection: "post_return_establishment_without_quarantine_release" };
     }
   }
   // ── §3 — THE CENTRAL GUARD. ──

@@ -60,6 +60,11 @@ try {
     neverEnteredReturnPathProven: true,
     quarantineReleaseInitialized: true,
   };
+  const fullPostReturnEstablishmentProof = {
+    freshCommitmentProven: true,
+    postCommitmentOperationProven: true,
+    quarantineReleaseInitialized: true,
+  };
 
   // ── K1 — the contract table is internally coherent ──────────────────────────────────────────
   record("K1", "every phase declares a coherent temporal, event-bounded or terminal resolution kind, and no quantity is owned twice", () => {
@@ -216,7 +221,7 @@ try {
         const result = k.resolveTimeout({ phase: c.phase, phaseEnteredDay: 0, history: [] }, 1_000_000);
         return { phase: c.phase, result: result.ok === true ? result.state.phase : result.rejection };
       });
-    const successPhases = new Set(["stabilized", "departed"]);
+    const successPhases = new Set(["stabilized", "established_after_failed_return", "departed"]);
     return {
       timedRows,
       eventRows,
@@ -244,7 +249,7 @@ try {
     }
     return {
       rows,
-      // FIVE since the zero-population terminal was added. The count is read from the production
+      // The count is read from the production
       // table rather than hardcoded, so adding a phase cannot silently make this fixture vacuous
       // again — which is exactly what it did the first time.
       nonVacuous: Object.keys(rows).length === k.PHASE_CONTRACTS.filter((c) => c.terminal).length,
@@ -263,6 +268,8 @@ try {
         const r = step(state, t.phase, 5, {
           endorsedFounderCount: 5,
           stabilizationProof: fullStabilizationProof,
+          postReturnCommitmentProven: true,
+          postReturnEstablishmentProof: fullPostReturnEstablishmentProof,
           physicalCoLocationProven: true,
         });
         if (c.permittedNext.includes(t.phase)) {

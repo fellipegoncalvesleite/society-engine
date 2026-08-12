@@ -463,10 +463,12 @@ try {
     { transitions: timedCases.map((c) => ({ phase: c.phase, firedTo: c.firedTo, expected: c.expectedNext })) },
   );
 
-  const physicalEventPhases = ["stabilized", "reintegrated", "provisional_extinguished", "departed"];
+  const physicalEventPhases = kernel.PHASE_CONTRACTS
+    .filter((contract) => contract.entryRequires === "physical_event")
+    .map((contract) => contract.phase);
   record(
     "DL3_a_timer_alone_produces_no_physical_terminal_outcome",
-    "no elapsed-time transition lands in stabilized, reintegrated, extinguished or departed",
+    "no elapsed-time transition lands in any phase whose contract requires a physical event",
     timedCases.every((c) => !physicalEventPhases.includes(c.firedTo)),
     timedCases.length > 0,
     { firedTargets: timedCases.map((c) => c.firedTo), forbiddenTargets: physicalEventPhases },

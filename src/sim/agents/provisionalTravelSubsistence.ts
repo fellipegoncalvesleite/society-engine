@@ -121,6 +121,7 @@ export const SUBSISTENCE_PHASES: readonly string[] = [
   "failed_early",
   "returning",
   "unresolved_after_failed_return",
+  "continuing_after_failed_return",
 ];
 
 export function isSubsistencePhase(phase: string): boolean {

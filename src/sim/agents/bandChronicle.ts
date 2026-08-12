@@ -1963,16 +1963,24 @@ function detectLineageArc(context: ChronicleContext): ArcDraft | undefined {
   const lineageEvents = events.filter((event) => event.category === "lineage");
   const lineage = band.lineageReadability;
   const successorCompletions = band.successorStabilizationEvents ?? [];
+  const postReturnCompletions = band.successorPostReturnEstablishmentEvents ?? [];
   const completedDaughterBranches = successorCompletions.filter(
+    (event) => String(event.parentBandId) === String(band.id),
+  );
+  const completedPostReturnBranches = postReturnCompletions.filter(
     (event) => String(event.parentBandId) === String(band.id),
   );
   const ownStabilization = successorCompletions.find(
     (event) => String(event.successorBandId) === String(band.id),
   );
-  const fissionCount = band.fissionEvents.length + completedDaughterBranches.length;
+  const ownPostReturnEstablishment = postReturnCompletions.find(
+    (event) => String(event.successorBandId) === String(band.id),
+  );
+  const fissionCount = band.fissionEvents.length + completedDaughterBranches.length + completedPostReturnBranches.length;
   const hasLineageStory =
     lineage !== undefined &&
-    (lineage.parentBandId !== undefined || lineage.daughterBandIds.length > 0 || lineage.activeStatus !== "active" || fissionCount > 0 || ownStabilization !== undefined);
+    (lineage.parentBandId !== undefined || lineage.daughterBandIds.length > 0 || lineage.activeStatus !== "active" ||
+      fissionCount > 0 || ownStabilization !== undefined || ownPostReturnEstablishment !== undefined);
 
   if (!hasLineageStory && lineageEvents.length === 0) {
     return undefined;
@@ -1981,6 +1989,9 @@ function detectLineageArc(context: ChronicleContext): ArcDraft | undefined {
   const causes = uniqueStrings([
     lineage?.parentBandId !== undefined ? "this band began as a daughter branch" : undefined,
     ownStabilization !== undefined ? "its provisional separation completed through lived independent operation" : undefined,
+    ownPostReturnEstablishment !== undefined
+      ? "its return attempt failed before the surviving cohort chose and earned a new independent life"
+      : undefined,
     lineage !== undefined && lineage.daughterBandIds.length > 0 ? "it later produced daughter bands" : undefined,
     fissionCount > 0 ? "recorded fission events changed the lineage" : undefined,
     lineage?.activeStatus === "absorbed" ? "its independent line ended through absorption" : undefined,
@@ -1993,6 +2004,7 @@ function detectLineageArc(context: ChronicleContext): ArcDraft | undefined {
       lineageEvents[0]?.year ??
       band.fissionEvents[0]?.time.year ??
       successorCompletions[0]?.time.year ??
+      postReturnCompletions[0]?.time.year ??
       context.world.time.year,
     endYear: context.world.time.year,
     score: 32 + lineageEvents.length * 10 + fissionCount * 8 + causes.length * 8,
@@ -2010,6 +2022,7 @@ function detectLineageArc(context: ChronicleContext): ArcDraft | undefined {
       ...lineageEvents.flatMap((event) => event.sourceReasonIds),
       ...band.fissionEvents.map((event) => event.splitReason.id),
       ...successorCompletions.flatMap((event) => event.reasonIds),
+      ...postReturnCompletions.flatMap((event) => event.reasonIds),
     ]),
     scoringReasons: ["lineage events", "parent/daughter links", "fission or absorption state"],
     linkLabels: causes,
@@ -4092,6 +4105,10 @@ function evidenceKindLabel(kind: string): string {
       return "physical departure record";
     case "successor_stabilization_event":
       return "independent founding record";
+    case "post_return_continuation_commitment":
+      return "post-return survivor commitment";
+    case "successor_post_return_establishment_event":
+      return "failed-return recovery founding record";
     case "lineage_link":
       return "lineage link";
     case "demographic_churn":

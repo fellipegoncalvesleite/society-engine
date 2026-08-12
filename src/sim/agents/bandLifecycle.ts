@@ -109,7 +109,12 @@ export function isFissionEligibleParent(band: Band): boolean {
  */
 export function isProvisionalGroupInTransit(band: Band): boolean {
   const record = band.provisionalSuccessor;
-  return record !== undefined && (record.phase === "travelling" || record.phase === "returning");
+  return record !== undefined && (
+    record.phase === "travelling" ||
+    record.phase === "returning" ||
+    (record.phase === "continuing_after_failed_return" &&
+      String(band.position) !== String(record.postReturnCommitment?.targetTileId))
+  );
 }
 
 /** Every lineage id a band carries, whether as provenance or as a current provisional record. */

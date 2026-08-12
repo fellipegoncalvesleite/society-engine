@@ -73,6 +73,9 @@ function hasCompletedDaughterIdentity(band: Band): boolean {
     band.deepHistory?.founding.kind === "fission_daughter" ||
     (band.successorStabilizationEvents ?? []).some(
       (event) => String(event.successorBandId) === String(band.id),
+    ) ||
+    (band.successorPostReturnEstablishmentEvents ?? []).some(
+      (event) => String(event.successorBandId) === String(band.id),
     );
 }
 
@@ -173,6 +176,7 @@ export function deriveBandLifeSummary(
           phase === "returning" ? "Provisional group returning" :
           phase === "establishing" ? "Testing independent life" :
           phase === "failed_early" ? "Early separation failed" :
+          phase === "continuing_after_failed_return" ? "Rebuilding independent life" :
           "Unresolved provisional group",
         tone: phase === "returning" || phase === "failed_early" ? "pressure" : "exploring",
         icon: phase === "travelling" || phase === "returning" ? "move" : "founding",
@@ -683,7 +687,9 @@ function deriveIntentLine(
   const pressure = band.daughterColonization?.pressure ?? 0;
 
   if (isProvisionalSuccessor(band)) {
-    return "Short-term intent: test the chosen separation without assuming it will succeed.";
+    return band.provisionalSuccessor?.phase === "continuing_after_failed_return"
+      ? "Short-term intent: carry the survivors' new course through physical work without treating it as success yet."
+      : "Short-term intent: test the chosen separation without assuming it will succeed.";
   }
   if (pressure >= 0.45 && hasCompletedDaughterIdentity(band)) {
     return "Short-term intent: build enough separate use-space to stop leaning on the parent core.";

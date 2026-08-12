@@ -297,6 +297,9 @@ function getRenderBands(snapshot: CanvasRenderSnapshot): readonly RenderBand[] {
         band.deepHistory?.founding.kind === "fission_daughter" ||
         (band.successorStabilizationEvents ?? []).some(
           (event) => String(event.successorBandId) === String(band.id),
+        ) ||
+        (band.successorPostReturnEstablishmentEvents ?? []).some(
+          (event) => String(event.successorBandId) === String(band.id),
         ),
       isProvisional: isProvisionalSuccessor(band),
       separationActive: band.temporarySeparation?.active === true,

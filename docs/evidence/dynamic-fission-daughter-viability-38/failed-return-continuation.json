@@ -1,0 +1,1421 @@
+{
+  "audit": "ROADMAP ITEM 4 — failed-return resolution",
+  "verdict": "PASS",
+  "architectures": {
+    "A_fresh_recommitment": "SELECTED as a distinct current-survivor commitment",
+    "B_renewed_return_search": "REJECTED: no new parent location or information exists",
+    "C_independent_relocation": "SELECTED only inside provisional travel and only to current/observed country",
+    "D_distinct_terminal_outcome": "SELECTED: established_after_failed_return",
+    "E_generalize_stabilized": "REJECTED: would weaken provesNeverEnteredReturnPath",
+    "F_source_derived": "two-step commitment then strictly post-commitment operation"
+  },
+  "counts": {
+    "total": 25,
+    "passing": 25,
+    "failing": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "F1_source_dead_end_was_exact",
+      "claim": "before the new disposition, unresolved-after-failed-return was event-bounded and the only existing exits were physical reintegration or zero-population extinction",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "currentContract": {
+          "phase": "unresolved_after_failed_return",
+          "entryRequires": "elapsed_time_permitted",
+          "side": "successor",
+          "bodiesHaveMoved": true,
+          "bodyOwner": "successor",
+          "productiveLabourOwner": "successor",
+          "physicalLocationOwner": "successor",
+          "transitionWriter": "provisionalLifecycleResolver (world adapter)",
+          "permittedNext": [
+            "reintegrated",
+            "continuing_after_failed_return",
+            "provisional_extinguished"
+          ],
+          "terminal": false,
+          "resolutionKind": "event_bounded_living_condition",
+          "clearsOnExit": []
+        },
+        "reproducedPath": [
+          {
+            "day": 2100,
+            "phase": "travelling",
+            "position": "tile:195:89"
+          },
+          {
+            "day": 2101,
+            "phase": "travelling",
+            "position": "tile:194:89"
+          },
+          {
+            "day": 2102,
+            "phase": "travelling",
+            "position": "tile:193:89"
+          },
+          {
+            "day": 2103,
+            "phase": "travelling",
+            "position": "tile:193:88"
+          },
+          {
+            "day": 2104,
+            "phase": "travelling",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2105,
+            "phase": "establishing",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2465,
+            "phase": "failed_early",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2495,
+            "phase": "returning",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2499,
+            "phase": "returning",
+            "position": "tile:195:89"
+          },
+          {
+            "day": 2675,
+            "phase": "unresolved_after_failed_return",
+            "position": "tile:195:89"
+          }
+        ],
+        "priorOnlyExits": [
+          "reintegrated",
+          "provisional_extinguished"
+        ]
+      }
+    },
+    {
+      "id": "F2_return_really_happened_and_failed",
+      "claim": "the successor physically departed, arrived, entered a monotonic return path, retraced contiguous ground, found no co-located parent and only then entered unresolved-after-failed-return when the bounded action expired",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "trace": [
+          {
+            "day": 2100,
+            "phase": "travelling",
+            "position": "tile:195:89"
+          },
+          {
+            "day": 2101,
+            "phase": "travelling",
+            "position": "tile:194:89"
+          },
+          {
+            "day": 2102,
+            "phase": "travelling",
+            "position": "tile:193:89"
+          },
+          {
+            "day": 2103,
+            "phase": "travelling",
+            "position": "tile:193:88"
+          },
+          {
+            "day": 2104,
+            "phase": "travelling",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2105,
+            "phase": "establishing",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2465,
+            "phase": "failed_early",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2495,
+            "phase": "returning",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2499,
+            "phase": "returning",
+            "position": "tile:195:89"
+          },
+          {
+            "day": 2675,
+            "phase": "unresolved_after_failed_return",
+            "position": "tile:195:89"
+          }
+        ],
+        "returnMoves": [
+          {
+            "day": 2496,
+            "from": "tile:193:87",
+            "to": "tile:193:88",
+            "manhattan": 1
+          },
+          {
+            "day": 2497,
+            "from": "tile:193:88",
+            "to": "tile:193:89",
+            "manhattan": 1
+          },
+          {
+            "day": 2498,
+            "from": "tile:193:89",
+            "to": "tile:194:89",
+            "manhattan": 1
+          },
+          {
+            "day": 2499,
+            "from": "tile:194:89",
+            "to": "tile:195:89",
+            "manhattan": 1
+          }
+        ],
+        "separationCourse": {
+          "status": "return_path_entered",
+          "initializedOnDay": 2100,
+          "firstEnteredOnDay": 2495,
+          "enteredFromPhase": "failed_early",
+          "trigger": "phase_bound_expired"
+        },
+        "parentTile": "tile:0:0",
+        "successorTileAtFailure": "tile:195:89"
+      }
+    },
+    {
+      "id": "F3_fresh_social_fact_represents_current_survivors",
+      "claim": "a new aggregate-current-survivor commitment, not the founder commitment or spent permit, binds the current three cohort lines after failed return",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "founderCommitmentId": "commit:c5904b9a8990418e",
+        "originalFounders": {
+          "workingAdults": 3,
+          "dependents": 0,
+          "elders": 0
+        },
+        "postReturnCommitment": {
+          "commitmentId": "commit:2e8edef76edc2b4d",
+          "authority": "post_return_continuation_commitment_v1",
+          "actorResolution": "aggregate_current_survivor_cohort",
+          "intent": "continue_as_separate_group",
+          "successorBandId": "band:failed-return-continuation",
+          "parentBandId": "band:varied-estuary",
+          "lineageId": "LIN-FAILED-RETURN-CONTINUATION",
+          "survivors": {
+            "workingAdults": 3,
+            "dependents": 0,
+            "elders": 0
+          },
+          "failedReturnBeganOnDay": 2675,
+          "decisionDay": 2677,
+          "decisionTileId": "tile:195:89",
+          "targetTileId": "tile:195:89",
+          "evidence": {
+            "authority": "post_return_continuation_decision_v1",
+            "failedReturnBeganOnDay": 2675,
+            "assessedOnDay": 2677,
+            "livedSinceFailure": {
+              "firstDay": 2676,
+              "lastDay": 2677,
+              "days": 2,
+              "demandUnits": 0.0666,
+              "workerDays": 2,
+              "supportUnits": 0.0624,
+              "meanWaterStress": 0
+            },
+            "currentCondition": {
+              "population": 3,
+              "workingAdults": 3,
+              "dependents": 0,
+              "elders": 0,
+              "mortalityRiskBump": 0.022
+            },
+            "target": {
+              "tileId": "tile:195:89",
+              "basis": "current_occupied_tile"
+            },
+            "requirements": {
+              "failedReturnIsMonotonicHistory": true,
+              "postFailureLifeWasPhysicallyMeasured": true,
+              "currentSurvivorCohortIsNonempty": true,
+              "productiveLaborRemains": true,
+              "embodiedCapacityRemains": true,
+              "targetComesFromGroupOwnedKnowledge": true
+            },
+            "allRequirementsMet": true,
+            "sourceAuthorities": [
+              "ProvisionalSeparationCourse.return_path_entered",
+              "FissionLifecycleRecord.phaseEnteredDay",
+              "provisionalTravelSubsistence.TravelSubsistenceDay",
+              "Band.demography current survivor cohorts",
+              "Band.acuteRisk current embodied burden",
+              "Band.knowledge.observedTiles or current physical occupation"
+            ]
+          },
+          "reasonIds": [
+            "current_survivor_cohort_chose_independent_continuation",
+            "continue_from_physically_occupied_ground",
+            "post_failure_ground_supported_continuation"
+          ]
+        }
+      }
+    },
+    {
+      "id": "F4_stale_evidence_barrier_is_temporal_and_structural",
+      "claim": "the decision evidence begins after failed return and the establishment window begins strictly after the new commitment, so old outbound operation cannot be replayed",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "failedReturnBeganOnDay": 2675,
+        "decisionEvidence": {
+          "firstDay": 2676,
+          "lastDay": 2677,
+          "days": 2,
+          "demandUnits": 0.0666,
+          "workerDays": 2,
+          "supportUnits": 0.0624,
+          "meanWaterStress": 0
+        },
+        "decisionDay": 2677,
+        "establishmentWindow": {
+          "startDay": 2678,
+          "endDay": 2688,
+          "days": 11,
+          "tileIds": [
+            "tile:195:89"
+          ],
+          "supportUnits": 0.3504,
+          "demandUnits": 0.3663,
+          "supportRatio": 0.9566,
+          "daysWithAnyPhysicalTake": 11,
+          "workerDays": 11,
+          "depletionApplied": 0.385,
+          "meanWaterStress": 0,
+          "closedBy": "demand_window_complete"
+        }
+      }
+    },
+    {
+      "id": "F5_distinct_established_outcome_preserves_whole_path",
+      "claim": "completion is established-after-failed-return, never ordinary stabilized, and its event/deep history retain departure, failed return, fresh decision and later operation",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "phase": "established_after_failed_return",
+        "ordinaryStabilizationEvents": 0,
+        "event": {
+          "id": "event:successor-established-after-failed-return:band:varied-estuary:band:failed-return-continuation:2688",
+          "time": {
+            "tick": 29,
+            "seasonTick": 29,
+            "day": 2688,
+            "dayOfSeason": 78,
+            "seasonLengthDays": 90,
+            "daysPerYear": 360,
+            "year": 7,
+            "season": "summer",
+            "seasonIndex": 1,
+            "generation": {
+              "index": 0,
+              "yearWithinGeneration": 7,
+              "tickWithinGeneration": 29
+            }
+          },
+          "tick": 29,
+          "establishedOnDay": 2688,
+          "departureRecordId": "event:successor-departure:band:varied-estuary:band:failed-return-continuation:2100",
+          "lineageId": "LIN-FAILED-RETURN-CONTINUATION",
+          "parentBandId": "band:varied-estuary",
+          "successorBandId": "band:failed-return-continuation",
+          "relation": "pressure_split",
+          "establishedTileId": "tile:195:89",
+          "successorPopulationAtEstablishment": 3,
+          "successorWorkingAdultsAtEstablishment": 3,
+          "successorDependentsAtEstablishment": 0,
+          "successorEldersAtEstablishment": 0,
+          "returnPathEntered": true,
+          "failedReturnBeganOnDay": 2675,
+          "continuationCommitment": {
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "authority": "post_return_continuation_commitment_v1",
+            "actorResolution": "aggregate_current_survivor_cohort",
+            "intent": "continue_as_separate_group",
+            "successorBandId": "band:failed-return-continuation",
+            "parentBandId": "band:varied-estuary",
+            "lineageId": "LIN-FAILED-RETURN-CONTINUATION",
+            "survivors": {
+              "workingAdults": 3,
+              "dependents": 0,
+              "elders": 0
+            },
+            "failedReturnBeganOnDay": 2675,
+            "decisionDay": 2677,
+            "decisionTileId": "tile:195:89",
+            "targetTileId": "tile:195:89",
+            "evidence": {
+              "authority": "post_return_continuation_decision_v1",
+              "failedReturnBeganOnDay": 2675,
+              "assessedOnDay": 2677,
+              "livedSinceFailure": {
+                "firstDay": 2676,
+                "lastDay": 2677,
+                "days": 2,
+                "demandUnits": 0.0666,
+                "workerDays": 2,
+                "supportUnits": 0.0624,
+                "meanWaterStress": 0
+              },
+              "currentCondition": {
+                "population": 3,
+                "workingAdults": 3,
+                "dependents": 0,
+                "elders": 0,
+                "mortalityRiskBump": 0.022
+              },
+              "target": {
+                "tileId": "tile:195:89",
+                "basis": "current_occupied_tile"
+              },
+              "requirements": {
+                "failedReturnIsMonotonicHistory": true,
+                "postFailureLifeWasPhysicallyMeasured": true,
+                "currentSurvivorCohortIsNonempty": true,
+                "productiveLaborRemains": true,
+                "embodiedCapacityRemains": true,
+                "targetComesFromGroupOwnedKnowledge": true
+              },
+              "allRequirementsMet": true,
+              "sourceAuthorities": [
+                "ProvisionalSeparationCourse.return_path_entered",
+                "FissionLifecycleRecord.phaseEnteredDay",
+                "provisionalTravelSubsistence.TravelSubsistenceDay",
+                "Band.demography current survivor cohorts",
+                "Band.acuteRisk current embodied burden",
+                "Band.knowledge.observedTiles or current physical occupation"
+              ]
+            },
+            "reasonIds": [
+              "current_survivor_cohort_chose_independent_continuation",
+              "continue_from_physically_occupied_ground",
+              "post_failure_ground_supported_continuation"
+            ]
+          },
+          "independentOperation": {
+            "authority": "post_return_independent_operation_v1",
+            "successorBandId": "band:failed-return-continuation",
+            "lineageId": "LIN-FAILED-RETURN-CONTINUATION",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "assessedOnDay": 2688,
+            "assessmentWindow": {
+              "startDay": 2678,
+              "endDay": 2688,
+              "days": 11,
+              "tileIds": [
+                "tile:195:89"
+              ],
+              "supportUnits": 0.3504,
+              "demandUnits": 0.3663,
+              "supportRatio": 0.9566,
+              "daysWithAnyPhysicalTake": 11,
+              "workerDays": 11,
+              "depletionApplied": 0.385,
+              "meanWaterStress": 0,
+              "closedBy": "demand_window_complete"
+            },
+            "currentCondition": {
+              "population": 3,
+              "workingAdults": 3,
+              "mortalityRiskBump": 0.022,
+              "returnDecisionWouldAbandon": false
+            },
+            "requirements": {
+              "physicallyReachedCommittedTarget": true,
+              "operationWindowBeganAfterFreshCommitment": true,
+              "demandWasMeasured": true,
+              "productiveLaborWasLived": true,
+              "realFoodWasTakenAndDepleted": true,
+              "supportStayedAboveReturnFailureFloor": true,
+              "waterStayedBelowNoWaterFailureLine": true,
+              "livingPopulationRemains": true,
+              "workingPopulationRemains": true,
+              "embodiedBurdenRemainsBelowReturnLine": true
+            },
+            "allRequirementsMet": true,
+            "sourceAuthorities": [
+              "PostReturnContinuationCommitment",
+              "provisionalTravel contiguous local steps",
+              "provisionalTravelSubsistence.ProvisionalOperationHistory reset at commitment",
+              "plantStock.resolvePlantFoodHarvest",
+              "carryingCapacity.derivePopulationDemand",
+              "Band.demography current cohorts",
+              "Band.acuteRisk current embodied burden"
+            ]
+          },
+          "reasonIds": [
+            "founder_cohort_accepted_separation",
+            "strong_motive_to_separate",
+            "destination_is_known_ground",
+            "split_removes_productive_labour_from_camp",
+            "split_worsens_dependency_load",
+            "split_reduces_mobility_capability",
+            "current_survivor_cohort_chose_independent_continuation",
+            "continue_from_physically_occupied_ground",
+            "post_failure_ground_supported_continuation",
+            "reason:successor-established-after-failed-return:band:failed-return-continuation:2688"
+          ]
+        },
+        "founding": {
+          "bandId": "band:failed-return-continuation",
+          "kind": "fission_daughter",
+          "foundedAt": {
+            "tick": 29,
+            "seasonTick": 29,
+            "day": 2688,
+            "dayOfSeason": 78,
+            "seasonLengthDays": 90,
+            "daysPerYear": 360,
+            "year": 7,
+            "season": "summer",
+            "seasonIndex": 1,
+            "generation": {
+              "index": 0,
+              "yearWithinGeneration": 7,
+              "tickWithinGeneration": 29
+            }
+          },
+          "foundingTileId": "tile:195:89",
+          "foundingTileWaterAccess": 1,
+          "foundingTileIsRiverbank": true,
+          "foundingTileIsCoastal": false,
+          "foundingTileIsFloodplain": true,
+          "creationCause": "independent_life_established_after_failed_return",
+          "creationReasonIds": [
+            "founder_cohort_accepted_separation",
+            "strong_motive_to_separate",
+            "destination_is_known_ground",
+            "split_removes_productive_labour_from_camp",
+            "split_worsens_dependency_load",
+            "split_reduces_mobility_capability"
+          ],
+          "startingPopulation": 3,
+          "startingDependents": 0,
+          "startingWorkingAdults": 3,
+          "startingElders": 0,
+          "startingKnownTileCount": 15,
+          "startingPlaceMemoryCount": 5,
+          "startingCorridorCount": 2,
+          "startingCrossingCount": 0,
+          "parentBandId": "band:varied-estuary",
+          "parentOriginTileId": "tile:195:89",
+          "relation": "pressure_split",
+          "parentPopulationBefore": 30,
+          "inheritedKnowledgeCount": 15,
+          "inheritedMemoryCount": 5,
+          "inheritedCorridorCount": 2,
+          "inheritedCrossingCount": 0,
+          "evidence": [
+            {
+              "kind": "successor_departure_event",
+              "ids": [
+                "event:successor-departure:band:varied-estuary:band:failed-return-continuation:2100"
+              ]
+            },
+            {
+              "kind": "post_return_continuation_commitment",
+              "ids": [
+                "commit:2e8edef76edc2b4d"
+              ]
+            },
+            {
+              "kind": "successor_post_return_establishment_event",
+              "ids": [
+                "event:successor-established-after-failed-return:band:varied-estuary:band:failed-return-continuation:2688"
+              ]
+            },
+            {
+              "kind": "lineage_link",
+              "ids": [
+                "founder_cohort_accepted_separation",
+                "strong_motive_to_separate",
+                "destination_is_known_ground",
+                "split_removes_productive_labour_from_camp",
+                "split_worsens_dependency_load",
+                "split_reduces_mobility_capability"
+              ]
+            }
+          ],
+          "unknownAtFounding": [
+            "parentFoodStressAtSplit_notRecordedAtDeparture",
+            "parentWaterStressAtSplit_notRecordedAtDeparture",
+            "parentHungerClassificationAtSplit_notRecordedAtDeparture",
+            "parentExtinctionRiskAtSplit_notRecordedAtDeparture"
+          ]
+        }
+      }
+    },
+    {
+      "id": "F6_release_conserves_bodies_and_initializes_established_readers",
+      "claim": "the distinct release moves no person or position, creates no duplicate band, and atomically initializes camp, lineage, deep history and lineage readability while deferring ordinary viability",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "populationBefore": 3,
+        "populationAfter": 3,
+        "positionBefore": "tile:195:89",
+        "positionAfter": "tile:195:89",
+        "bandCountBefore": 10,
+        "bandCountAfter": 10,
+        "formationStatus": "established_daughter"
+      }
+    },
+    {
+      "id": "F7_event_chronicle_identity_are_truthful",
+      "claim": "event, Chronicle, identity, selected-band projection and map marker expose a completed daughter while the event explicitly names the failed-return recovery rather than projecting ordinary stabilization",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "canonical": {
+          "id": "canonical-event:band:failed-return-continuation:successor-established-after-failed-return:event:successor-established-after-failed-return:band:varied-estuary:band:failed-return-continuation:2688",
+          "type": "successor_established_after_failed_return",
+          "family": "origin_lineage",
+          "memoryScope": "recent",
+          "livedStatus": "personally_lived",
+          "provenance": "direct_sim_transition",
+          "sourceSystem": "successor_post_return_establishment_record",
+          "startYear": 7,
+          "endYear": 7,
+          "season": "summer",
+          "title": "Independent life rebuilt after a failed return",
+          "summary": "After its return attempt failed, the surviving cohort made a new commitment and later established independent life through 11 measured days of fresh physical operation.",
+          "consequence": "The failed return remains in history; the new commitment, not the founder commitment, ended provisional quarantine.",
+          "actualCause": "fresh post-return survivor commitment followed by post-commitment physical operation",
+          "severity": 0.68,
+          "significance": 0.9,
+          "grouped": false,
+          "groupedCount": 1,
+          "involvedBandIds": [
+            "band:varied-estuary",
+            "band:failed-return-continuation"
+          ],
+          "involvedTileIds": [
+            "tile:195:89"
+          ],
+          "involvedRouteIds": [],
+          "sourceEventIds": [
+            "event:successor-established-after-failed-return:band:varied-estuary:band:failed-return-continuation:2688",
+            "event:successor-departure:band:varied-estuary:band:failed-return-continuation:2100"
+          ],
+          "sourceReasonIds": [
+            "founder_cohort_accepted_separation",
+            "strong_motive_to_separate",
+            "destination_is_known_ground",
+            "split_removes_productive_labour_from_camp",
+            "split_worsens_dependency_load"
+          ],
+          "sourceHistoryIds": [
+            "event:successor-departure:band:varied-estuary:band:failed-return-continuation:2100",
+            "commit:2e8edef76edc2b4d"
+          ],
+          "evidenceChips": [
+            {
+              "kind": "failed_return",
+              "label": "return path entered and failed",
+              "sourceIds": []
+            },
+            {
+              "kind": "post_return_commitment",
+              "label": "current survivors chose a new course",
+              "sourceIds": [
+                "commit:2e8edef76edc2b4d"
+              ]
+            },
+            {
+              "kind": "physical_subsistence",
+              "label": "11 fresh extraction days",
+              "sourceIds": []
+            }
+          ],
+          "chronicleLinkIds": [
+            "event:event:successor-established-after-failed-return:band:varied-estuary:band:failed-return-continuation:2688",
+            "year:7"
+          ],
+          "chronicleSectionIds": [
+            "article-history",
+            "article-long-memory"
+          ],
+          "relatedReferentIds": [],
+          "relatedTalkIds": [],
+          "talkMentionCount": 0,
+          "referentHookCount": 0
+        },
+        "chronicleArcs": [
+          {
+            "id": "arc:movement:1",
+            "kind": "movement",
+            "startYear": 6,
+            "endYear": 7,
+            "title": "Movement history",
+            "summary": "Movement mattered because several remembered routes shaped later choices.",
+            "causeLines": [
+              "several remembered routes shaped later choices"
+            ],
+            "consequenceLines": [
+              "Route memory made later choices more cautious and more legible."
+            ],
+            "score": 54,
+            "sourceEventIds": [],
+            "sourceTalkIds": [],
+            "sourceReasonIds": [],
+            "linkTargetIds": [
+              "arc:movement:1",
+              "arc-link:movement:several-remembered-routes-shaped-later-choices"
+            ]
+          },
+          {
+            "id": "arc:lineage:2",
+            "kind": "lineage",
+            "startYear": 7,
+            "endYear": 7,
+            "title": "Lineage and band continuity",
+            "summary": "Lineage history matters because this band began as a daughter branch and its return attempt failed before the surviving cohort chose and earned a new independent life.",
+            "causeLines": [
+              "this band began as a daughter branch",
+              "its return attempt failed before the surviving cohort chose and earned a new independent life"
+            ],
+            "consequenceLines": [
+              "daughter of"
+            ],
+            "score": 48,
+            "sourceEventIds": [],
+            "sourceTalkIds": [],
+            "sourceReasonIds": [
+              "founder_cohort_accepted_separation",
+              "strong_motive_to_separate",
+              "destination_is_known_ground",
+              "split_removes_productive_labour_from_camp",
+              "split_worsens_dependency_load",
+              "split_reduces_mobility_capability",
+              "current_survivor_cohort_chose_independent_continuation",
+              "continue_from_physically_occupied_ground",
+              "post_failure_ground_supported_continuation",
+              "reason:successor-established-after-failed-return:band:failed-return-continuation:2688"
+            ],
+            "linkTargetIds": [
+              "arc:lineage:2",
+              "arc-link:lineage:this-band-began-as-a-daughter-branch",
+              "arc-link:lineage:its-return-attempt-failed-before-the-surviving-cohort-chose-and-"
+            ]
+          }
+        ],
+        "identityTitle": "A daughter band carrying inherited memory",
+        "selectedPanelCarriesEvent": true,
+        "mapMarker": {
+          "id": "band:failed-return-continuation",
+          "position": "tile:195:89",
+          "color": "#65d4bd",
+          "isDaughter": true,
+          "isProvisional": false,
+          "separationActive": false,
+          "recentActivity": []
+        }
+      }
+    },
+    {
+      "id": "F8_movement_uses_only_group_owned_target_and_contiguous_steps",
+      "claim": "any post-return relocation target is either the occupied tile or an observed-memory tile, and every actual movement step remains contiguous",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "target": {
+          "tileId": "tile:195:89",
+          "basis": "current_occupied_tile"
+        },
+        "trace": [
+          {
+            "offset": 1,
+            "day": 2676,
+            "phase": "unresolved_after_failed_return",
+            "position": "tile:195:89",
+            "population": 3
+          },
+          {
+            "offset": 2,
+            "day": 2677,
+            "phase": "continuing_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          },
+          {
+            "offset": 3,
+            "day": 2678,
+            "phase": "continuing_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          },
+          {
+            "offset": 4,
+            "day": 2679,
+            "phase": "continuing_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          },
+          {
+            "offset": 5,
+            "day": 2680,
+            "phase": "continuing_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          },
+          {
+            "offset": 6,
+            "day": 2681,
+            "phase": "continuing_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          },
+          {
+            "offset": 7,
+            "day": 2682,
+            "phase": "continuing_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          },
+          {
+            "offset": 8,
+            "day": 2683,
+            "phase": "continuing_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          },
+          {
+            "offset": 9,
+            "day": 2684,
+            "phase": "continuing_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          },
+          {
+            "offset": 10,
+            "day": 2685,
+            "phase": "continuing_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          },
+          {
+            "offset": 11,
+            "day": 2686,
+            "phase": "continuing_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          },
+          {
+            "offset": 12,
+            "day": 2687,
+            "phase": "continuing_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          },
+          {
+            "offset": 13,
+            "day": 2688,
+            "phase": "established_after_failed_return",
+            "position": "tile:195:89",
+            "commitmentId": "commit:2e8edef76edc2b4d",
+            "population": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "F9_same_day_physical_reunion_has_explicit_priority",
+      "claim": "when the parent is physically present on the day a post-return decision could begin, reintegration runs first and no fresh commitment or independent-completion event is written",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "actionIds": [
+          "intra-season-trips",
+          "expeditions",
+          "parent_fission_attempt_deadline",
+          "natural_fission_pre_departure",
+          "provisional_travel",
+          "provisional_reintegration",
+          "provisional_travel_subsistence",
+          "provisional_return_decision",
+          "post_return_disposition",
+          "provisional_establishment",
+          "successor_stabilization",
+          "post_return_establishment",
+          "provisional_lifecycle_deadline"
+        ],
+        "phase": "reintegrated"
+      }
+    },
+    {
+      "id": "F10_reintegration_authority_is_preserved",
+      "claim": "an unresolved group on the same tile still reintegrates only through performAtomicReintegration with exact cohort conservation and no independent-completion event",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "ok": true,
+        "phase": "reintegrated",
+        "ledger": {
+          "demographic": {
+            "parentBefore": {
+              "workingAdults": 15,
+              "dependents": 9,
+              "elders": 3
+            },
+            "successorBefore": {
+              "workingAdults": 3,
+              "dependents": 0,
+              "elders": 0
+            },
+            "parentAfter": {
+              "workingAdults": 18,
+              "dependents": 9,
+              "elders": 3
+            },
+            "worldPopulationBefore": 235,
+            "worldPopulationAfter": 235,
+            "populationConserved": true,
+            "workingAdultsConserved": true,
+            "dependentsConserved": true,
+            "eldersConserved": true,
+            "measuredFromResultingWorld": true,
+            "fixedRatioRecomputeUsed": false
+          },
+          "physical": {
+            "parentTileId": "tile:195:89",
+            "successorTileId": "tile:195:89",
+            "coLocated": true,
+            "journeyTiles": 8
+          },
+          "embodied": {
+            "parentHungerBefore": 0,
+            "successorHunger": 0.13,
+            "parentHungerAfter": 0,
+            "parentReliefedByAbsorbingAHungrierGroup": false,
+            "successorAcuteRiskEpisodes": 10,
+            "acuteRiskMerge": {
+              "parentEpisodesBefore": 10,
+              "returningEpisodesBefore": 10,
+              "sharedEpisodeIds": 10,
+              "returningOnlyEpisodes": 0,
+              "mergedEpisodes": 10,
+              "retainedEpisodes": 10,
+              "droppedByCap": 0,
+              "activeEpisodesRetained": 2,
+              "activeEpisodesDropped": 0,
+              "effectRederivedFromMergedRing": true,
+              "noEpisodeReplayed": true,
+              "cohortAttributionUnavailable": true
+            },
+            "returningOnlyBurdenSurvived": true,
+            "fieldTreatments": {
+              "demography.cohorts": "exact_aggregate_merge",
+              "demography.accumulators": "exact_aggregate_merge",
+              "acuteRisk": "exact_aggregate_merge",
+              "seasonalSupport": "conservative_burden",
+              "hungerPressure": "conservative_burden",
+              "provisionalSuccessor.travelSubsistence": "invalidate",
+              "carryingCapacity": "recompute_at_next_cadence",
+              "populationDemand": "recompute_at_next_cadence",
+              "perCapitaReturn": "recompute_at_next_cadence",
+              "rangeSaturation": "recompute_at_next_cadence",
+              "bodyCampLogistics": "recompute_at_next_cadence",
+              "deathMemory": "historical_only",
+              "provisionalSuccessor": "historical_only"
+            },
+            "claim": "no_unearned_relief"
+          },
+          "entity": {
+            "successorStillLiving": false,
+            "successorStillHoldsBodies": false,
+            "successorPhase": "reintegrated",
+            "removedExactlyOnce": true
+          }
+        }
+      }
+    },
+    {
+      "id": "F11_terminal_parent_creates_no_omniscience_or_dead_end",
+      "claim": "a terminal parent cannot receive remote reintegration and is never read by the decision, while the living successor still needs and earns the same fresh decision and operation",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "parentStatus": "dispersed",
+        "parentPosition": "tile:0:0",
+        "successorPosition": "tile:195:89",
+        "decisionSources": [
+          "ProvisionalSeparationCourse.return_path_entered",
+          "FissionLifecycleRecord.phaseEnteredDay",
+          "provisionalTravelSubsistence.TravelSubsistenceDay",
+          "Band.demography current survivor cohorts",
+          "Band.acuteRisk current embodied burden",
+          "Band.knowledge.observedTiles or current physical occupation"
+        ]
+      }
+    },
+    {
+      "id": "N1_old_commitment_and_time_only_cannot_resolve",
+      "claim": "the old founder commitment, spent permit, living bodies and arbitrary elapsed time leave unresolved unchanged without a new decision",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "oldCommitment": "commit:c5904b9a8990418e",
+        "resolver": []
+      }
+    },
+    {
+      "id": "N2_pre_return_operation_evidence_cannot_be_replayed",
+      "claim": "a fully qualifying old outbound operation window supplies zero post-failure lived days and cannot create the new commitment",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "oldWindow": {
+          "startDay": 2101,
+          "endDay": 2111,
+          "days": 11,
+          "tileIds": [
+            "tile:194:89",
+            "tile:193:89",
+            "tile:193:88",
+            "tile:193:87"
+          ],
+          "supportUnits": 0.1412,
+          "demandUnits": 0.3663,
+          "supportRatio": 0.3855,
+          "daysWithAnyPhysicalTake": 6,
+          "workerDays": 12,
+          "depletionApplied": 0.1618,
+          "meanWaterStress": 0,
+          "closedBy": "demand_window_complete"
+        },
+        "refusal": {
+          "successorBandId": "band:failed-return-old-evidence",
+          "day": 2211,
+          "refusal": "post_failure_life_not_measured"
+        }
+      }
+    },
+    {
+      "id": "N3_history_overflow_cannot_forget_return",
+      "claim": "evicting returning from the bounded lifecycle ring cannot erase the absorbing separation-course fact",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "phase": "unresolved_after_failed_return",
+        "phaseEnteredDay": 2675,
+        "history": [
+          "travelling",
+          "establishing",
+          "travelling",
+          "establishing",
+          "travelling",
+          "establishing",
+          "travelling",
+          "establishing",
+          "travelling",
+          "establishing",
+          "travelling",
+          "establishing"
+        ],
+        "lineageId": "LIN-FAILED-RETURN-CONTINUATION",
+        "requestedFounders": 3,
+        "endorsedFounders": 3,
+        "targetTileId": "tile:193:87",
+        "departureTileId": "tile:195:89",
+        "trail": [
+          "tile:195:89",
+          "tile:194:89",
+          "tile:193:89",
+          "tile:193:88",
+          "tile:193:87",
+          "tile:193:88",
+          "tile:193:89",
+          "tile:194:89"
+        ],
+        "departureProvenance": {
+          "departureRecordId": "event:successor-departure:band:varied-estuary:band:failed-return-continuation:2100",
+          "commitmentId": "commit:c5904b9a8990418e",
+          "commitmentDecisionDay": 2100,
+          "departedOnDay": 2100,
+          "founders": {
+            "workingAdults": 3,
+            "dependents": 0,
+            "elders": 0
+          },
+          "authorizationStatus": "consumed_by_departure"
+        },
+        "separationCourse": {
+          "status": "return_path_entered",
+          "initializedOnDay": 2100,
+          "firstEnteredOnDay": 2495,
+          "enteredFromPhase": "failed_early",
+          "trigger": "phase_bound_expired"
+        },
+        "lastActionRelativeToDeparture": "toward_departure",
+        "lastActionRelativeToDepartureDay": 2499,
+        "travelSubsistence": {
+          "intervalStartDay": 2105,
+          "lastAdvancedDay": 2105,
+          "daysElapsed": 1,
+          "demandUnits": 0.0333,
+          "supportUnits": 0.0302,
+          "harvestUnits": 0.035,
+          "processingLossUnits": 0.0048,
+          "depletionApplied": 0.035,
+          "gatheringDays": 1,
+          "gatheringDaysWithAnyTake": 1,
+          "waterStressDaySum": 0,
+          "daysWithoutWater": 0,
+          "recentDays": [
+            {
+              "day": 2105,
+              "tileId": "tile:193:87",
+              "gatherShare": 0.278,
+              "gatheringWorkers": 1,
+              "requestedUnits": 0.035,
+              "harvestedUnits": 0.035,
+              "usableUnits": 0.0302,
+              "depletionApplied": 0.035,
+              "demandUnits": 0.0333,
+              "waterStress": 0,
+              "sourceKind": "plant_patch",
+              "sourceId": "plant:tile:193:87:roots_tubers_uso"
+            }
+          ],
+          "closedIntervals": 1
+        },
+        "operationHistory": {
+          "lifetimeDaysWithAnyPhysicalTake": 4,
+          "lifetimeAssessmentWindows": 0,
+          "lifetimeWindowsWithAnyPhysicalTake": 0,
+          "lifetimeTileIdsWithAnyPhysicalTake": [],
+          "recentAssessmentWindows": [],
+          "openAssessmentWindow": {
+            "tileIds": [
+              "tile:194:89",
+              "tile:193:89",
+              "tile:193:88",
+              "tile:193:87"
+            ],
+            "tileIdsWithAnyPhysicalTake": [
+              "tile:193:89",
+              "tile:193:88",
+              "tile:193:87"
+            ],
+            "startDay": 2101,
+            "days": 5,
+            "supportUnits": 0.11,
+            "demandUnits": 0.1665,
+            "daysWithAnyPhysicalTake": 4,
+            "waterStressDaySum": 0,
+            "workerDays": 6,
+            "depletionApplied": 0.1262
+          }
+        },
+        "blockedStepDays": 0,
+        "establishment": {
+          "siteTileId": "tile:193:87",
+          "sinceDay": 2105,
+          "closedIntervalsAtEntry": 1,
+          "windowOpenedDay": 2105,
+          "windowsAssessed": 0,
+          "daysAtSite": 1,
+          "productiveGatheringDaysAtSite": 1,
+          "waterStressDaySumAtSite": 0,
+          "supportUnitsAtSite": 0.0302,
+          "demandUnitsAtSite": 0.0333,
+          "signals": [
+            {
+              "id": "measured_support_intervals_at_this_site",
+              "sourceAuthority": "provisionalTravelSubsistence.closeTravelSupportInterval -> seasonalSurvival.recordSupportInterval",
+              "holds": false,
+              "measured": 0,
+              "reference": 2
+            },
+            {
+              "id": "measured_support_covered_a_real_share_of_demand",
+              "sourceAuthority": "ProvisionalEstablishmentState.supportUnitsAtSite / demandUnitsAtSite — accumulated only from TravelSubsistenceDay records lived at this site",
+              "holds": true,
+              "measured": 0.9069,
+              "reference": 0.35,
+              "acquiredDay": 2105
+            },
+            {
+              "id": "food_repeatedly_taken_from_local_sources",
+              "sourceAuthority": "plantStock.resolvePlantFoodHarvest, counted on days the take was real",
+              "holds": false,
+              "measured": 1,
+              "reference": 4
+            },
+            {
+              "id": "water_reachable_where_the_group_lives",
+              "sourceAuthority": "1 - mean daily water stress at this site; stress is the standing tile's own waterAccess through provisionalTravelSubsistence, so this is measured reachability and higher is better",
+              "holds": true,
+              "measured": 1,
+              "reference": 0.6,
+              "acquiredDay": 2105
+            },
+            {
+              "id": "productive_labour_retained",
+              "sourceAuthority": "Band.demography.workingAdults",
+              "holds": true,
+              "measured": 3,
+              "reference": 2,
+              "acquiredDay": 2105
+            },
+            {
+              "id": "embodied_burden_bounded",
+              "sourceAuthority": "acuteRisk.activeEffect.mortalityRiskBump",
+              "holds": true,
+              "measured": 0.022,
+              "reference": 0.3,
+              "acquiredDay": 2105
+            },
+            {
+              "id": "long_enough_to_reject_one_lucky_day",
+              "sourceAuthority": "days physically spent at this site",
+              "holds": false,
+              "measured": 1,
+              "reference": 30
+            }
+          ],
+          "satisfiedSignals": 4
+        }
+      }
+    },
+    {
+      "id": "N4_hand_built_commitment_cannot_complete",
+      "claim": "a hand-built post-return commitment that did not come through the canonical identity/evidence path is refused even when later-looking operation history is present",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "successorBandId": "band:failed-return-continuation",
+        "day": 2688,
+        "refusal": "fresh_commitment_not_canonical"
+      }
+    },
+    {
+      "id": "N4b_pre_commitment_operation_cannot_complete",
+      "claim": "even a physically qualifying old demand window cannot establish the group unless its start is strictly after the fresh commitment",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "oldWindow": {
+          "startDay": 2101,
+          "endDay": 2111,
+          "days": 11,
+          "tileIds": [
+            "tile:194:89",
+            "tile:193:89",
+            "tile:193:88",
+            "tile:193:87"
+          ],
+          "supportUnits": 0.1412,
+          "demandUnits": 0.3663,
+          "supportRatio": 0.3855,
+          "daysWithAnyPhysicalTake": 6,
+          "workerDays": 12,
+          "depletionApplied": 0.1618,
+          "meanWaterStress": 0,
+          "closedBy": "demand_window_complete"
+        },
+        "decisionDay": 2677,
+        "refusal": {
+          "successorBandId": "band:failed-return-continuation",
+          "day": 2688,
+          "refusal": "no_fresh_operation_window"
+        }
+      }
+    },
+    {
+      "id": "N4c_monotonic_return_fact_is_a_completion_barrier",
+      "claim": "a post-return completion is refused if the absorbing return-path fact is removed even though commitment and fresh operation otherwise qualify",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "successorBandId": "band:failed-return-continuation",
+        "day": 2688,
+        "refusal": "fresh_commitment_not_canonical"
+      }
+    },
+    {
+      "id": "N4d_cross_system_release_must_start_clean",
+      "claim": "a half-initialized established surface is refused rather than overwritten or merged by the post-return release",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "successorBandId": "band:failed-return-continuation",
+        "day": 2688,
+        "refusal": "quarantine_release_preconditions_not_met"
+      }
+    },
+    {
+      "id": "N5_no_remote_reintegration",
+      "claim": "a real unresolved successor cannot reintegrate while the parent is physically elsewhere",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "ok": false,
+        "refusal": "not_physically_co_located",
+        "detail": "parent at tile:0:0, successor at tile:195:89"
+      }
+    },
+    {
+      "id": "N6_zero_bodies_cannot_establish",
+      "claim": "a dead unresolved group creates no fresh commitment and terminalizes only through the existing zero-population resolver",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "commitments": [],
+        "resolutions": [
+          {
+            "bandId": "band:failed-return-continuation",
+            "lineageId": "LIN-FAILED-RETURN-CONTINUATION",
+            "fromPhase": "unresolved_after_failed_return",
+            "toPhase": "provisional_extinguished",
+            "populationAtResolution": 0,
+            "reason": "zero_physical_population"
+          }
+        ]
+      }
+    },
+    {
+      "id": "N7_no_timer_generated_positive_outcome",
+      "claim": "even a caller claiming every proof cannot enter established-after-failed-return with elapsed time as its cause",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "ok": false,
+        "rejection": "terminal_outcome_requires_a_physical_event"
+      }
+    },
+    {
+      "id": "F12_structural_dead_end_removed_on_productive_and_failing_ground",
+      "claim": "productive ground reaches a fresh established outcome, while failing ground produces a real social relocation decision toward observed country and a contiguous physical step instead of inert waiting",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "productiveOutcome": "established_after_failed_return",
+        "failingCommitment": {
+          "successorBandId": "band:failed-return-continuation",
+          "day": 2677,
+          "commitmentId": "commit:ab2910359206c103",
+          "targetTileId": "tile:197:89",
+          "targetBasis": "group_observed_memory"
+        },
+        "failingStep": {
+          "bandId": "band:failed-return-continuation",
+          "lineageId": "LIN-FAILED-RETURN-CONTINUATION",
+          "phase": "continuing_after_failed_return",
+          "fromTileId": "tile:195:89",
+          "toTileId": "tile:196:89",
+          "destinationTileId": "tile:197:89",
+          "moved": true,
+          "kmPerActiveDay": 1.804544,
+          "gatherShare": 0.392,
+          "daysPerTile": 1,
+          "distanceRemaining": 1,
+          "impassableNeighboursRefused": 0,
+          "arrived": false
+        }
+      }
+    },
+    {
+      "id": "F13_deterministic_replay_and_bounded_state",
+      "claim": "the same controlled causal setup replays to the same normalized state and all new histories remain bounded",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "byteEqual": true,
+        "lifecycleHistory": 6,
+        "operationWindows": 1,
+        "completionEvents": 1
+      }
+    },
+    {
+      "id": "F14_order_and_quarantine_release_surface",
+      "claim": "reintegration precedes disposition, movement precedes subsistence, disposition precedes post-return recognition, and the released band is admitted to viability/demography/future-fission readers only afterward",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "actionIds": [
+          "intra-season-trips",
+          "expeditions",
+          "parent_fission_attempt_deadline",
+          "natural_fission_pre_departure",
+          "provisional_travel",
+          "provisional_reintegration",
+          "provisional_travel_subsistence",
+          "provisional_return_decision",
+          "post_return_disposition",
+          "provisional_establishment",
+          "successor_stabilization",
+          "post_return_establishment",
+          "provisional_lifecycle_deadline"
+        ]
+      }
+    },
+    {
+      "id": "F15_long_horizon_controlled_matrix",
+      "claim": "the controlled matrix reaches reintegration, distinct post-return establishment, parent-terminal continuation, a failing-ground relocation response, and zero-population extinction without threshold tuning",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "laterPhysicalReintegration": "reintegrated",
+        "newIndependentContinuation": "established_after_failed_return",
+        "terminalParent": "established_after_failed_return",
+        "worseningCondition": {
+          "disposition": {
+            "successorBandId": "band:failed-return-continuation",
+            "day": 2677,
+            "commitmentId": "commit:ab2910359206c103",
+            "targetTileId": "tile:197:89",
+            "targetBasis": "group_observed_memory"
+          },
+          "physicalStep": {
+            "bandId": "band:failed-return-continuation",
+            "lineageId": "LIN-FAILED-RETURN-CONTINUATION",
+            "phase": "continuing_after_failed_return",
+            "fromTileId": "tile:195:89",
+            "toTileId": "tile:196:89",
+            "destinationTileId": "tile:197:89",
+            "moved": true,
+            "kmPerActiveDay": 1.804544,
+            "gatherShare": 0.392,
+            "daysPerTile": 1,
+            "distanceRemaining": 1,
+            "impassableNeighboursRefused": 0,
+            "arrived": false
+          }
+        },
+        "zeroPopulation": "provisional_extinguished"
+      }
+    }
+  ]
+}

@@ -326,6 +326,7 @@ export interface SimSelectedBandLiveSummary {
   readonly provisionalSuccessor?: Band["provisionalSuccessor"];
   readonly successorDepartureRecords?: Band["successorDepartureRecords"];
   readonly successorStabilizationEvents?: Band["successorStabilizationEvents"];
+  readonly successorPostReturnEstablishmentEvents?: Band["successorPostReturnEstablishmentEvents"];
   readonly deepHistory?: Band["deepHistory"];
   readonly lineageReadability?: Band["lineageReadability"];
   readonly currentCampTileId?: Band["currentCampTileId"];
@@ -481,6 +482,9 @@ function projectSelectedBandLiveSummary(band: Band): SimSelectedBandLiveSummary 
     ...(band.provisionalSuccessor === undefined ? {} : { provisionalSuccessor: band.provisionalSuccessor }),
     ...(band.successorDepartureRecords === undefined ? {} : { successorDepartureRecords: band.successorDepartureRecords }),
     ...(band.successorStabilizationEvents === undefined ? {} : { successorStabilizationEvents: band.successorStabilizationEvents }),
+    ...(band.successorPostReturnEstablishmentEvents === undefined
+      ? {}
+      : { successorPostReturnEstablishmentEvents: band.successorPostReturnEstablishmentEvents }),
     ...(band.deepHistory === undefined ? {} : { deepHistory: band.deepHistory }),
     ...(band.lineageReadability === undefined ? {} : { lineageReadability: band.lineageReadability }),
     ...(band.currentCampTileId === undefined ? {} : { currentCampTileId: band.currentCampTileId }),
@@ -654,6 +658,9 @@ export function takeLiveOverlay(
         band.lineage !== undefined ||
         band.deepHistory?.founding.kind === "fission_daughter" ||
         (band.successorStabilizationEvents ?? []).some(
+          (event) => String(event.successorBandId) === String(band.id),
+        ) ||
+        (band.successorPostReturnEstablishmentEvents ?? []).some(
           (event) => String(event.successorBandId) === String(band.id),
         ),
       isProvisional: isProvisionalSuccessor(band),

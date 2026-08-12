@@ -66,14 +66,16 @@ try {
   const generate = await server.ssrLoadModule("/sim/world/generate.ts");
   const passability = await server.ssrLoadModule("/sim/world/passability.ts");
 
-  // ── E1 — every phase is classified, and the two successful terminals require a world event ──
+  // ── E1 — every phase is classified, and every world-asserting successor step is physical ──
   const contracts = kernel.PHASE_CONTRACTS;
   const unclassified = contracts.filter((c) => c.entryRequires !== "elapsed_time_permitted" && c.entryRequires !== "physical_event");
   const physicalEventPhases = contracts.filter((c) => c.entryRequires === "physical_event").map((c) => c.phase);
   record(
     "E1_successful_terminals_require_a_physical_event",
-    "`reintegrated` and `stabilized` — the two phases that assert something happened in the world — are classified as requiring a physical event, and every phase carries a classification",
-    unclassified.length === 0 && physicalEventPhases.includes("reintegrated") && physicalEventPhases.includes("stabilized"),
+    "reintegration, both successful terminals and the fresh post-return social transition require a physical event, and every phase carries a classification",
+    unclassified.length === 0 &&
+      ["reintegrated", "stabilized", "continuing_after_failed_return", "established_after_failed_return"]
+        .every((phase) => physicalEventPhases.includes(phase)),
     contracts.length >= 12,
     { phases: contracts.length, unclassified: unclassified.map((c) => c.phase), physicalEventPhases },
   );

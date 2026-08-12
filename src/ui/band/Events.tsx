@@ -347,6 +347,8 @@ function publicEventConsequence(event: CanonicalEvent): string {
       return "A new branch changes the family line without copying the whole parent story.";
     case "successor_stabilized":
       return "A previously recorded physical departure became an established branch after lived independent operation.";
+    case "successor_established_after_failed_return":
+      return "A failed return stayed in the record; the current survivors chose a new course and earned a later independent life.";
     case "residential_move":
       return "This belongs to the remembered movement record, not a new movement decision.";
     case "durable_era_closed":

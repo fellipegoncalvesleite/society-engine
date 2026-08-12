@@ -13,6 +13,7 @@ import type {
   HistoryEvidenceRef,
   InheritedEraSummary,
   ResidentialMoveEvent,
+  SuccessorPostReturnEstablishmentEvent,
   SuccessorStabilizationEvent,
 } from "./types";
 
@@ -46,7 +47,8 @@ export type CanonicalEventType =
   | "recent_pattern"
   | "residential_move"
   | "fission_split"
-  | "successor_stabilized";
+  | "successor_stabilized"
+  | "successor_established_after_failed_return";
 
 export type CanonicalEventMemoryScope = "recent" | "durable" | "inherited";
 
@@ -69,6 +71,7 @@ export type CanonicalEventSourceSystem =
   | "residential_move_record"
   | "fission_record"
   | "successor_stabilization_record"
+  | "successor_post_return_establishment_record"
   | "camp_movement_record";
 
 export type CanonicalEventLivedStatus = "personally_lived" | "inherited_not_personally_lived";
@@ -182,6 +185,7 @@ const EMPTY_SOURCE_COUNTS: Readonly<Record<CanonicalEventSourceSystem, number>> 
   residential_move_record: 0,
   fission_record: 0,
   successor_stabilization_record: 0,
+  successor_post_return_establishment_record: 0,
   camp_movement_record: 0,
 };
 
@@ -193,6 +197,7 @@ export function deriveCanonicalEvents(world: WorldState, band: Band): CanonicalE
     ...deriveCampMovementEvents(band),
     ...deriveFissionEvents(band),
     ...deriveSuccessorStabilizationEvents(band),
+    ...deriveSuccessorPostReturnEstablishmentEvents(band),
   ]);
   const drafts = [...dedupedDrafts].sort(compareDraftPriority);
   const capped = capEventDrafts(drafts);
@@ -878,6 +883,55 @@ function successorStabilizationDraft(
     chronicleSectionIds: ["article-history", "article-long-memory"],
     sourceKeys: [String(event.id), String(event.departureRecordId), String(event.successorBandId)],
     score: 675 + event.time.year * 0.01,
+  };
+}
+
+function deriveSuccessorPostReturnEstablishmentEvents(band: Band): readonly CanonicalEventDraft[] {
+  return (band.successorPostReturnEstablishmentEvents ?? [])
+    .filter((event) => String(event.successorBandId) === String(band.id))
+    .slice(-6)
+    .map((event) => successorPostReturnEstablishmentDraft(band, event));
+}
+
+function successorPostReturnEstablishmentDraft(
+  band: Band,
+  event: SuccessorPostReturnEstablishmentEvent,
+): CanonicalEventDraft {
+  const proof = event.independentOperation.assessmentWindow;
+  return {
+    id: canonicalId(band, "successor-established-after-failed-return", String(event.id)),
+    type: "successor_established_after_failed_return",
+    family: "origin_lineage",
+    memoryScope: "recent",
+    livedStatus: "personally_lived",
+    provenance: "direct_sim_transition",
+    sourceSystem: "successor_post_return_establishment_record",
+    startYear: event.time.year,
+    endYear: event.time.year,
+    season: event.time.season,
+    title: "Independent life rebuilt after a failed return",
+    summary: `After its return attempt failed, the surviving cohort made a new commitment and later established independent life through ${proof.days} measured days of fresh physical operation.`,
+    consequence: "The failed return remains in history; the new commitment, not the founder commitment, ended provisional quarantine.",
+    actualCause: "fresh post-return survivor commitment followed by post-commitment physical operation",
+    severity: 0.68,
+    significance: 0.9,
+    grouped: false,
+    groupedCount: 1,
+    involvedBandIds: compactIds([event.parentBandId, event.successorBandId]),
+    involvedTileIds: compactIds([event.establishedTileId]),
+    involvedRouteIds: [],
+    sourceEventIds: [event.id, event.departureRecordId],
+    sourceReasonIds: capIds(event.reasonIds, SOURCE_ID_CAP),
+    sourceHistoryIds: [String(event.departureRecordId), event.continuationCommitment.commitmentId],
+    evidenceChips: [
+      { kind: "failed_return", label: "return path entered and failed", sourceIds: [] },
+      { kind: "post_return_commitment", label: "current survivors chose a new course", sourceIds: [event.continuationCommitment.commitmentId] },
+      { kind: "physical_subsistence", label: `${proof.daysWithAnyPhysicalTake} fresh extraction days`, sourceIds: [] },
+    ],
+    chronicleLinkIds: [`event:${String(event.id)}`, `year:${event.time.year}`],
+    chronicleSectionIds: ["article-history", "article-long-memory"],
+    sourceKeys: [String(event.id), event.continuationCommitment.commitmentId, String(event.successorBandId)],
+    score: 710 + event.time.year * 0.01,
   };
 }
 

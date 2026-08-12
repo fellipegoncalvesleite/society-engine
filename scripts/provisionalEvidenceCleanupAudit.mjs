@@ -513,7 +513,8 @@ try {
     String(c10Result.world.bands["band:cleanup:c10"].position) === c10Before &&
       c10Result.world.bands["band:cleanup:c10"].provisionalSuccessor.phase === "establishing" &&
       c10Result.steps.every((step) => step.bandId !== "band:cleanup:c10") &&
-      JSON.stringify(travel.TRAVEL_PHASES_THAT_MOVE) === JSON.stringify(["travelling", "returning"]),
+      JSON.stringify(travel.TRAVEL_PHASES_THAT_MOVE) ===
+        JSON.stringify(["travelling", "returning", "continuing_after_failed_return"]),
     barrenDays.length === 2 && c10World.bands["band:cleanup:c10"].provisionalSuccessor.blockedStepDays > 2,
     { before: c10Before, after: String(c10Result.world.bands["band:cleanup:c10"].position), steps: c10Result.steps },
   );

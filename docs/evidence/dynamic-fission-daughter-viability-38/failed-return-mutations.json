@@ -1,0 +1,170 @@
+{
+  "audit": "ROADMAP ITEM 4 — failed-return mutation controls",
+  "verdict": "PASS",
+  "counts": {
+    "total": 6,
+    "passing": 6,
+    "failing": 0,
+    "vacuous": 0
+  },
+  "restoration": {
+    "byteIdentical": true,
+    "startingHashes": {
+      "src/sim/agents/postReturnContinuation.ts": "1e81c5238dec80008adf659f0a837beff9987c4f691194a2c157f91bbdef9308",
+      "src/sim/agents/fissionLifecycleKernel.ts": "0b57040d2903f0edb0590ff7e06ce4779cc97d2e2fc91be137cd611fbd86d013",
+      "src/sim/agents/provisionalReintegration.ts": "1372ff1466bc55d52d091a294187b79bccfd445422bd70f7be31bd7e0ab7262d"
+    },
+    "restoredHashes": {
+      "src/sim/agents/postReturnContinuation.ts": "1e81c5238dec80008adf659f0a837beff9987c4f691194a2c157f91bbdef9308",
+      "src/sim/agents/fissionLifecycleKernel.ts": "0b57040d2903f0edb0590ff7e06ce4779cc97d2e2fc91be137cd611fbd86d013",
+      "src/sim/agents/provisionalReintegration.ts": "1372ff1466bc55d52d091a294187b79bccfd445422bd70f7be31bd7e0ab7262d"
+    }
+  },
+  "controls": [
+    {
+      "id": "M1_fresh_post_failure_decision",
+      "barrier": "removing canonical fresh-commitment validation makes the hand-built commitment complete",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "detail": {
+        "mutantEstablished": [
+          {
+            "successorBandId": "band:failed-return-continuation",
+            "parentBandId": "band:varied-estuary",
+            "day": 2688,
+            "eventId": "event:successor-established-after-failed-return:band:varied-estuary:band:failed-return-continuation:2688",
+            "commitmentId": "commit:2e8edef76edc2b4d:fabricated"
+          }
+        ],
+        "mutantRefusals": []
+      }
+    },
+    {
+      "id": "M2_fresh_post_commitment_evidence",
+      "barrier": "dating evidence from departure instead of after the new decision replays the old outbound window",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "detail": {
+        "oldWindow": {
+          "startDay": 2101,
+          "endDay": 2111,
+          "days": 11,
+          "tileIds": [
+            "tile:194:89",
+            "tile:193:89",
+            "tile:193:88",
+            "tile:193:87"
+          ],
+          "supportUnits": 0.1412,
+          "demandUnits": 0.3663,
+          "supportRatio": 0.3855,
+          "daysWithAnyPhysicalTake": 6,
+          "workerDays": 12,
+          "depletionApplied": 0.1618,
+          "meanWaterStress": 0,
+          "closedBy": "demand_window_complete"
+        },
+        "freshWindow": {
+          "startDay": 2678,
+          "endDay": 2688,
+          "days": 11,
+          "tileIds": [
+            "tile:195:89"
+          ],
+          "supportUnits": 0.3504,
+          "demandUnits": 0.3663,
+          "supportRatio": 0.9566,
+          "daysWithAnyPhysicalTake": 11,
+          "workerDays": 11,
+          "depletionApplied": 0.385,
+          "meanWaterStress": 0,
+          "closedBy": "demand_window_complete"
+        },
+        "mutantEstablished": [
+          {
+            "successorBandId": "band:failed-return-continuation",
+            "parentBandId": "band:varied-estuary",
+            "day": 2688,
+            "eventId": "event:successor-established-after-failed-return:band:varied-estuary:band:failed-return-continuation:2688",
+            "commitmentId": "commit:2e8edef76edc2b4d"
+          }
+        ]
+      }
+    },
+    {
+      "id": "M3_monotonic_return_history",
+      "barrier": "removing the absorbing return-course join lets a record that forgot the failed return complete",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "detail": {
+        "mutantEstablished": [
+          {
+            "successorBandId": "band:failed-return-continuation",
+            "parentBandId": "band:varied-estuary",
+            "day": 2688,
+            "eventId": "event:successor-established-after-failed-return:band:varied-estuary:band:failed-return-continuation:2688",
+            "commitmentId": "commit:2e8edef76edc2b4d"
+          }
+        ],
+        "mutantRefusals": []
+      }
+    },
+    {
+      "id": "M4_physical_co_location",
+      "barrier": "removing the position check produces remote reintegration",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "detail": {
+        "mutantOk": true
+      }
+    },
+    {
+      "id": "M5_no_timer_positive_outcome",
+      "barrier": "removing the physical-event entry guard lets elapsed time create the established outcome",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "detail": {
+        "ok": true,
+        "state": {
+          "phase": "established_after_failed_return",
+          "phaseEnteredDay": 10000,
+          "history": [
+            "unresolved_after_failed_return",
+            "continuing_after_failed_return"
+          ]
+        },
+        "timedOut": false
+      }
+    },
+    {
+      "id": "M6_cross_system_release_initialization",
+      "barrier": "removing one clean-release precondition lets a half-initialized established surface be overwritten",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "detail": {
+        "mutantEstablished": [
+          {
+            "successorBandId": "band:failed-return-continuation",
+            "parentBandId": "band:varied-estuary",
+            "day": 2688,
+            "eventId": "event:successor-established-after-failed-return:band:varied-estuary:band:failed-return-continuation:2688",
+            "commitmentId": "commit:2e8edef76edc2b4d"
+          }
+        ],
+        "mutantRefusals": []
+      }
+    }
+  ]
+}

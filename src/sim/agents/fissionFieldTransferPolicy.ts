@@ -148,6 +148,7 @@ export const FISSION_FIELD_TRANSFER_POLICY: Record<keyof Band, FieldTransferPoli
   fissionEvents: entry("FORBIDDEN_TO_COPY", "empty_array", true, "the parent's earlier splits happened to a group this one is not — and `BandFissionEvent` describes an INSTANTANEOUS completed fission, the exact shape Direction D exists to replace, so the successor writes none at departure"),
   successorDepartureRecords: entry("CURRENT_LINEAGE_PROVENANCE", "computed", false, "the successor receives only the immutable physical-departure record that produced it; prior departures belong to the parent and are not inherited"),
   successorStabilizationEvents: entry("FORBIDDEN_TO_COPY", "empty_array", false, "no positive completion event is true at departure; the stabilization authority appends one only after lived independent operation"),
+  successorPostReturnEstablishmentEvents: entry("FORBIDDEN_TO_COPY", "empty_array", false, "a failed-return recovery event can exist only after departure, return failure, a fresh survivor decision and later operation"),
 
   // ── bodies ──────────────────────────────────────────────────────────────────────────────────
   //

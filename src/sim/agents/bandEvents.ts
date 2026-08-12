@@ -2040,6 +2040,9 @@ export function deriveBandLineageReadability(
     band.deepHistory?.founding.kind === "fission_daughter" ||
     (band.successorStabilizationEvents ?? []).some(
       (event) => String(event.successorBandId) === String(band.id),
+    ) ||
+    (band.successorPostReturnEstablishmentEvents ?? []).some(
+      (event) => String(event.successorBandId) === String(band.id),
     );
   const formationStatus: BandLineageReadabilityState["formationStatus"] =
     band.parentBandId === undefined
@@ -2936,6 +2939,9 @@ function deriveLineageEvents(band: Band): readonly BandReadableEventCandidate[] 
     band.lineage !== undefined ||
     band.deepHistory?.founding.kind === "fission_daughter" ||
     (band.successorStabilizationEvents ?? []).some(
+      (event) => String(event.successorBandId) === String(band.id),
+    ) ||
+    (band.successorPostReturnEstablishmentEvents ?? []).some(
       (event) => String(event.successorBandId) === String(band.id),
     );
   return [{

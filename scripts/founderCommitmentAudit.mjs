@@ -553,7 +553,13 @@ try {
   // `consumed_by_departure` is terminal, so the only path to it was a return by a group that never
   // left. A return is a fact about the SUCCESSOR, and the successor lifecycle already carries it.
   const kernelSource = readFileSync("src/sim/agents/fissionLifecycleKernel.ts", "utf8");
-  const returnPhases = ["returning", "unresolved_after_failed_return", "reintegrated"];
+  const returnPhases = [
+    "returning",
+    "unresolved_after_failed_return",
+    "continuing_after_failed_return",
+    "reintegrated",
+    "established_after_failed_return",
+  ];
   const phasesExist = returnPhases.every((ph) => kernelSource.includes(`| "${ph}"`));
   const consumedThenReturn = consumed === undefined
     ? undefined
@@ -578,7 +584,7 @@ try {
       whatStabilizationMustInspectInstead: [
         "a positive commitment exists, by commitmentId",
         "its departure authorization reached consumed_by_departure",
-        "the successor's own lifecycle has never entered returning / unresolved_after_failed_return / reintegrated",
+        "the successor's monotonic separation course has never entered the return path",
         "the successor's lived physical evidence supports establishment (NOT BUILT)",
       ] });
 

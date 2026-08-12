@@ -236,14 +236,15 @@ export const provisionalLifecycleDeadlineDailyAction: DailyAction = {
  * Exported so audits assert the PRODUCTION predicate rather than re-implementing it.
  *
  * True when a living provisional successor is explicitly waiting for a real physical/social event,
- * or when zero population has not yet been terminalized. Event-bounded unresolved state is visible,
- * intentional state rather than silent phase churn.
+ * is acting on a post-return commitment that has not yet earned establishment, or when zero
+ * population has not yet been terminalized.
  */
 export function hasUnresolvedProvisionalGroup(world: WorldState): boolean {
   return Object.values(world.bands).some(
     (band) =>
       isProvisionalSuccessor(band) &&
       (Math.round(band.demography.population) <= 0 ||
-        band.provisionalSuccessor?.phase === "unresolved_after_failed_return"),
+        band.provisionalSuccessor?.phase === "unresolved_after_failed_return" ||
+        band.provisionalSuccessor?.phase === "continuing_after_failed_return"),
   );
 }

@@ -88,9 +88,8 @@ const manhattan = (a: { readonly x: number; readonly y: number }, b: { readonly 
 function destinationFor(record: FissionLifecycleRecord): TileId | undefined {
   if (record.phase === "travelling") return record.targetTileId;
   if (record.phase === "returning") return record.departureTileId;
-  // `establishing` and `unresolved_after_failed_return` have no named destination. A truthful local
-  // relocation authority needs remembered tested/barren places and loop avoidance; it does not exist
-  // yet, so neither phase moves through this writer.
+  if (record.phase === "continuing_after_failed_return") return record.postReturnCommitment?.targetTileId;
+  // `establishing` and unresolved-before-disposition have no named destination.
   return undefined;
 }
 
@@ -114,7 +113,11 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
     if (!isProvisionalSuccessor(band)) continue;
     positionsBefore.set(String(band.id), { position: band.position });
     const record = band.provisionalSuccessor as FissionLifecycleRecord;
-    if (record.phase !== "travelling" && record.phase !== "returning") continue;
+    if (
+      record.phase !== "travelling" &&
+      record.phase !== "returning" &&
+      record.phase !== "continuing_after_failed_return"
+    ) continue;
 
     const destination = destinationFor(record);
     const here = getTile(world, band.position);
@@ -173,7 +176,12 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
           };
         }
       }
-      steps.push({ ...base, refusal: "already_at_destination", distanceRemaining: 0, arrived: record.phase === "travelling" });
+      steps.push({
+        ...base,
+        refusal: "already_at_destination",
+        distanceRemaining: 0,
+        arrived: record.phase === "travelling" || record.phase === "continuing_after_failed_return",
+      });
       continue;
     }
 
@@ -357,7 +365,11 @@ export const provisionalTravelDailyAction: DailyAction = {
 };
 
 /** Exported so audits assert the PRODUCTION bound rather than re-declaring it. */
-export const TRAVEL_PHASES_THAT_MOVE: readonly string[] = ["travelling", "returning"];
+export const TRAVEL_PHASES_THAT_MOVE: readonly string[] = [
+  "travelling",
+  "returning",
+  "continuing_after_failed_return",
+];
 
 /** Exported so the boundary audit can assert this module owns the write. */
 export function isTravelPhase(phase: string): boolean {

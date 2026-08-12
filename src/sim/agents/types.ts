@@ -350,6 +350,135 @@ export interface SuccessorStabilizationEvent {
   readonly reasonIds: readonly ReasonId[];
 }
 
+/** The exact living cohort represented by a decision taken after a failed return. */
+export interface PostReturnSurvivorCohortBinding {
+  readonly workingAdults: number;
+  readonly dependents: number;
+  readonly elders: number;
+}
+
+/**
+ * The successor-owned evidence on which the CURRENT survivors chose a new independent course.
+ *
+ * Nothing here is inherited from the founder commitment. The interval begins only after
+ * `unresolved_after_failed_return` became true, and the destination is either the tile physically
+ * occupied by the group or a tile in its own observed knowledge. A poor interval may still support
+ * a decision to try different remembered country; it never proves establishment.
+ */
+export interface PostReturnContinuationDecisionEvidence {
+  readonly authority: "post_return_continuation_decision_v1";
+  readonly failedReturnBeganOnDay: number;
+  readonly assessedOnDay: number;
+  readonly livedSinceFailure: {
+    readonly firstDay: number;
+    readonly lastDay: number;
+    readonly days: number;
+    readonly demandUnits: number;
+    readonly workerDays: number;
+    readonly supportUnits: number;
+    readonly meanWaterStress: number;
+  };
+  readonly currentCondition: {
+    readonly population: number;
+    readonly workingAdults: number;
+    readonly dependents: number;
+    readonly elders: number;
+    readonly mortalityRiskBump: number;
+  };
+  readonly target: {
+    readonly tileId: TileId;
+    readonly basis: "current_occupied_tile" | "group_observed_memory";
+    readonly observedConfidence?: number;
+    readonly observedRichness?: number;
+    readonly observedWaterAccess?: number;
+  };
+  readonly requirements: {
+    readonly failedReturnIsMonotonicHistory: boolean;
+    readonly postFailureLifeWasPhysicallyMeasured: boolean;
+    readonly currentSurvivorCohortIsNonempty: boolean;
+    readonly productiveLaborRemains: boolean;
+    readonly embodiedCapacityRemains: boolean;
+    readonly targetComesFromGroupOwnedKnowledge: boolean;
+  };
+  readonly allRequirementsMet: boolean;
+  readonly sourceAuthorities: readonly string[];
+}
+
+/**
+ * A new social fact made by the survivors after return failed.
+ *
+ * This is deliberately not `FounderCohortCommitment`: it represents the current cohort, binds no
+ * parent-side transfer, grants no departure permit, and commits only to continuing as a separate
+ * group from a current or remembered place.
+ */
+export interface PostReturnContinuationCommitment {
+  readonly commitmentId: string;
+  readonly authority: "post_return_continuation_commitment_v1";
+  readonly actorResolution: "aggregate_current_survivor_cohort";
+  readonly intent: "continue_as_separate_group";
+  readonly successorBandId: BandId;
+  readonly parentBandId: BandId;
+  readonly lineageId: string;
+  readonly survivors: PostReturnSurvivorCohortBinding;
+  readonly failedReturnBeganOnDay: number;
+  readonly decisionDay: number;
+  readonly decisionTileId: TileId;
+  readonly targetTileId: TileId;
+  readonly evidence: PostReturnContinuationDecisionEvidence;
+  readonly reasonIds: readonly ReasonId[];
+}
+
+/** Physical operation earned strictly after the fresh post-return commitment. */
+export interface PostReturnIndependentOperationEvidence {
+  readonly authority: "post_return_independent_operation_v1";
+  readonly successorBandId: BandId;
+  readonly lineageId: string;
+  readonly commitmentId: string;
+  readonly assessedOnDay: number;
+  readonly assessmentWindow: SuccessorIndependentOperationEvidence["assessmentWindow"];
+  readonly currentCondition: SuccessorIndependentOperationEvidence["currentCondition"];
+  readonly requirements: {
+    readonly physicallyReachedCommittedTarget: boolean;
+    readonly operationWindowBeganAfterFreshCommitment: boolean;
+    readonly demandWasMeasured: boolean;
+    readonly productiveLaborWasLived: boolean;
+    readonly realFoodWasTakenAndDepleted: boolean;
+    readonly supportStayedAboveReturnFailureFloor: boolean;
+    readonly waterStayedBelowNoWaterFailureLine: boolean;
+    readonly livingPopulationRemains: boolean;
+    readonly workingPopulationRemains: boolean;
+    readonly embodiedBurdenRemainsBelowReturnLine: boolean;
+  };
+  readonly allRequirementsMet: boolean;
+  readonly sourceAuthorities: readonly string[];
+}
+
+/**
+ * A historically distinct completion: this group tried to return, failed, chose again, and only
+ * then demonstrated an independent life. It must never be projected as ordinary stabilization.
+ */
+export interface SuccessorPostReturnEstablishmentEvent {
+  readonly id: EventId;
+  readonly time: WorldTime;
+  readonly tick: TickNumber;
+  readonly establishedOnDay: number;
+  readonly departureRecordId: EventId;
+  readonly lineageId: string;
+  readonly parentBandId: BandId;
+  readonly successorBandId: BandId;
+  readonly relation: BandLineageRelation;
+  readonly establishedTileId: TileId;
+  readonly successorPopulationAtEstablishment: number;
+  readonly successorWorkingAdultsAtEstablishment: number;
+  readonly successorDependentsAtEstablishment: number;
+  readonly successorEldersAtEstablishment: number;
+  readonly returnPathEntered: true;
+  readonly failedReturnBeganOnDay: number;
+  readonly continuationCommitment: PostReturnContinuationCommitment;
+  readonly independentOperation: PostReturnIndependentOperationEvidence;
+  readonly reasonIds: readonly ReasonId[];
+}
+
 /** Bounded, all-numeric. Only written on acceptance, where every term was measurable. */
 export interface PreparedCommitmentEvidence {
   readonly motive: number;
@@ -399,6 +528,10 @@ export interface FissionLifecycleRecord {
   readonly separationCourse?: ProvisionalSeparationCourse;
   /** Direct join to the positive completion event, present only after `stabilized`. */
   readonly stabilizationEventId?: EventId;
+  /** The fresh survivor-cohort decision made after a bounded return attempt failed. */
+  readonly postReturnCommitment?: PostReturnContinuationCommitment;
+  /** Direct join to the historically distinct post-return establishment event. */
+  readonly postReturnEstablishmentEventId?: EventId;
   /**
    * The tile the founders physically left from, retained so a return has a destination it LEGITIMATELY
    * KNOWS. It is the last place this group actually saw its parent — deliberately NOT the parent's
@@ -3712,6 +3845,8 @@ export type HistoryEvidenceKind =
   | "fission_event"
   | "successor_departure_event"
   | "successor_stabilization_event"
+  | "post_return_continuation_commitment"
+  | "successor_post_return_establishment_event"
   | "lineage_link"
   | "demographic_churn"
   | "seasonal_support"
@@ -7254,6 +7389,8 @@ export interface Band {
   readonly successorDepartureRecords?: readonly SuccessorDepartureRecord[];
   /** Bounded positive completion events, shared identically by parent and stabilized successor. */
   readonly successorStabilizationEvents?: readonly SuccessorStabilizationEvent[];
+  /** Bounded completions whose history includes a failed return and a fresh survivor commitment. */
+  readonly successorPostReturnEstablishmentEvents?: readonly SuccessorPostReturnEstablishmentEvent[];
   readonly initialSpawnReason?: InitialSpawnReason;
   readonly currentIntent?: MobilityIntent;
   readonly intentHistory?: readonly MobilityIntent[];

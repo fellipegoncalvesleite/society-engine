@@ -15,6 +15,9 @@ function hasCompletedDaughterIdentity(band: Band): boolean {
     band.lineage !== undefined ||
     (band.successorStabilizationEvents ?? []).some(
       (event) => String(event.successorBandId) === String(band.id),
+    ) ||
+    (band.successorPostReturnEstablishmentEvents ?? []).some(
+      (event) => String(event.successorBandId) === String(band.id),
     );
 }
 
@@ -528,7 +531,11 @@ function buildSocialDemographicCard(band: Band, events: readonly CanonicalEvent[
   const recentSplit =
     band.fissionEvents.length > 0 ||
     (band.successorStabilizationEvents?.length ?? 0) > 0 ||
-    events.some((event) => event.type === "fission_split" || event.type === "successor_stabilized");
+    (band.successorPostReturnEstablishmentEvents?.length ?? 0) > 0 ||
+    events.some((event) =>
+      event.type === "fission_split" ||
+      event.type === "successor_stabilized" ||
+      event.type === "successor_established_after_failed_return");
   const score = clamp01(Math.abs(dependentShare - 0.32) + elderShare * 0.6 + (laborThin ? 0.25 : 0) + demographicEvents.length * 0.12 + (recentSplit ? 0.18 : 0));
   const title = recentSplit
     ? "A recent split shapes the group"

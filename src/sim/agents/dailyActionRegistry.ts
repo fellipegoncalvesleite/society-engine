@@ -32,6 +32,10 @@ import { provisionalSubsistenceDailyAction } from "./provisionalTravelSubsistenc
 import { provisionalReturnDecisionDailyAction } from "./provisionalReturnDecision";
 import { provisionalEstablishmentDailyAction } from "./provisionalEstablishment";
 import { successorStabilizationDailyAction } from "./successorStabilization";
+import {
+  postReturnDispositionDailyAction,
+  postReturnEstablishmentDailyAction,
+} from "./postReturnContinuation";
 import { provisionalLifecycleDeadlineDailyAction } from "./provisionalLifecycleResolver";
 import { parentFissionAttemptDeadlineDailyAction } from "./parentFissionAttemptResolver";
 import { naturalFissionPreDepartureDailyAction } from "./naturalFissionPreDeparture";
@@ -71,11 +75,17 @@ export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   // harder: a group that has decided to walk home does not spend the same day accumulating diagnostics
   // about a site it is leaving.
   provisionalReturnDecisionDailyAction,
+  // A failed return is a new social problem. Physical reunion has already had first claim earlier in
+  // this registry; only a still-separate group can now form a fresh survivor-cohort commitment.
+  postReturnDispositionDailyAction,
   provisionalEstablishmentDailyAction,
   // Positive recognition runs only AFTER today's subsistence, return decision and descriptive
   // establishment measurement. It skips season-boundary days, so a group cannot graduate into the
   // later seasonal pipeline and receive ordinary behavior on the same simulated day.
   successorStabilizationDailyAction,
+  // Historically distinct recognition. It cannot consume old outbound operation because the
+  // disposition writer reset the qualifying ledger when the fresh commitment was made.
+  postReturnEstablishmentDailyAction,
   // ROADMAP ITEM 4 — LAST: a lifecycle bound declared in DAYS is evaluated every day. It used to be
   // evaluated only inside the seasonal tick, so a 180-day bound could bind at 269; measured lateness
   // was 41 and 76 days on one real run. Placed after the day's physical actions so a group that gives

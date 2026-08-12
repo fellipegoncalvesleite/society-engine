@@ -41,6 +41,7 @@ export async function loadSuccessorStabilizationModules(server) {
     registry,
     viability,
     protoCamps,
+    postReturn,
   ] = await Promise.all([
     server.ssrLoadModule("/sim/runner/simRunner.ts"),
     server.ssrLoadModule("/sim/tick/advance.ts"),
@@ -69,6 +70,7 @@ export async function loadSuccessorStabilizationModules(server) {
     server.ssrLoadModule("/sim/agents/dailyActionRegistry.ts"),
     server.ssrLoadModule("/sim/agents/viability.ts"),
     server.ssrLoadModule("/sim/agents/protoCamps.ts"),
+    server.ssrLoadModule("/sim/agents/postReturnContinuation.ts"),
   ]);
   return {
     runner,
@@ -98,6 +100,7 @@ export async function loadSuccessorStabilizationModules(server) {
     registry,
     viability,
     protoCamps,
+    postReturn,
   };
 }
 
@@ -192,7 +195,7 @@ export function buildQualifyingPreReleaseWorld(modules, departureFixture, maxDay
     }
     if (
       band === undefined ||
-      ["returning", "reintegrated", "provisional_extinguished", "unresolved_after_failed_return"].includes(
+      ["returning", "reintegrated", "provisional_extinguished", "unresolved_after_failed_return", "continuing_after_failed_return", "established_after_failed_return"].includes(
         band.provisionalSuccessor?.phase,
       )
     ) {
@@ -225,7 +228,7 @@ export function runRegisteredPositiveStabilization(modules, departureFixture, ma
     }
     if (
       band === undefined ||
-      ["returning", "reintegrated", "provisional_extinguished", "unresolved_after_failed_return"].includes(
+      ["returning", "reintegrated", "provisional_extinguished", "unresolved_after_failed_return", "continuing_after_failed_return", "established_after_failed_return"].includes(
         band.provisionalSuccessor?.phase,
       )
     ) {

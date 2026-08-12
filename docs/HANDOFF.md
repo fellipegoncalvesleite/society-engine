@@ -181,6 +181,65 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
+### ROADMAP ITEM 4 — FAILED-RETURN RESOLUTION / FRESH SURVIVOR COMMITMENT / DISTINCT POST-RETURN ESTABLISHMENT — **PROGRESS / NATURAL DEPARTURE STILL DISCONNECTED / ITEM 4 ACTIVE / ITEM 5 UNSTARTED**
+
+Starting from Supervisor-accepted `1df00d2`, the controlled successor path no longer ends
+structurally at `unresolved_after_failed_return`. Source inspection confirmed that state was
+truthfully event-bounded but could only physically reintegrate or reach zero-population extinction.
+Six resolution families were compared. Reusing the old founder commitment, repeating return without
+new parent knowledge, granting ordinary residential movement, and weakening ordinary stabilization
+were rejected. The selected A+C+D/F architecture is a two-fact path:
+
+```text
+unresolved_after_failed_return
+→ fresh commitment by the current aggregate survivor cohort
+→ continuing_after_failed_return
+→ physical operation earned strictly after that commitment
+→ established_after_failed_return
+```
+
+`PostReturnContinuationCommitment` is deliberately not `FounderCohortCommitment`: it binds the
+people alive now, no parent-side transfer and no departure permit. Its pure assessment takes a band
+and day, never world state, and reads only post-failure subsistence, current cohorts/burden, current
+occupation and observed tile memory. Parent position, movement, health and terminality are not inputs.
+Two physically measured post-failure days are required. Productive ground can be named in place;
+failing ground may name deterministic observed country. Movement remains provisional: one contiguous
+local step through `provisionalTravel`, with passability as an execution constraint and physical
+subsistence charged every day. No ordinary residential movement or omniscient retargeting is opened.
+
+The commitment resets the qualifying operation ledger. Therefore an old outbound demand window, a
+window before the failed return, or even operation before the new commitment cannot qualify.
+Completion requires a demand-complete window whose start is strictly later than the decision, real
+take and depletion, measured demand/worker-days/water/support, living workers, acceptable embodied
+burden, arrival at the committed target, direct consumed-departure provenance, the permanent
+`return_path_entered` fact and a clean atomic release surface. The kernel permits the terminal outcome
+only for a physical-event caller; elapsed time cannot manufacture it. `stabilized` is unchanged and
+still requires `provesNeverEnteredReturnPath`.
+
+The distinct completion writes `SuccessorPostReturnEstablishmentEvent`, a founding deep-history fact
+that names failed-return recovery, completed lineage/readability, a canonical event, Chronicle/identity
+projection and `currentCamp` at the physical position. It changes neither population nor position,
+creates no duplicate band, does not manufacture viability, and never emits an ordinary stabilization
+event. Reintegration retains first priority on a day when an unresolved successor is physically
+co-located with a living parent; after a fresh continuation commitment, that social choice changes
+course and no remote body merge is available. A terminal parent is objective execution state only,
+not free successor knowledge, and does not prevent the same fresh independent route.
+
+Validation is green: failed-return fixtures 25/25 and mutation barriers 6/6, all non-vacuous with
+byte-identical restoration; ordinary stabilization mutations and all affected allocation,
+commitment, residual, preparation, natural pre-departure/deadline, departure gate/seam, transfer,
+travel, subsistence, return, resolver, reintegration, reader/admission/quarantine and history suites
+pass. Both TypeScript projects and production build pass; graph remains 221 nodes / 764 links with no
+duplicate or dangling ids; import boundary passes with the inherited 87 informational back-edges;
+deterministic replay matches on both maps; daily/seasonal and all four step modes match canonical
+state; season-order physical results pass. Static production calls remain zero for both
+`performAtomicDeparture` and `createDaughterBand`.
+
+Item 4 remains active. Do not connect physical departure or begin Item 5. Physical cutover must first
+change cooldown/history authority away from legacy-only `band.fissionEvents`, then reconcile the
+daily natural-readiness cadence with the seam's seasonal demography/fission ordering. Those are
+recorded dependencies, not changes in this subpass.
+
 ### ROADMAP ITEM 4 — POSITIVE SUCCESSOR STABILIZATION AUTHORITY — **PROGRESS / CONTROLLED-ONLY / NATURAL DEPARTURE STILL DISCONNECTED / DO NOT MERGE**
 
 From accepted starting tip `bf0823da4090723246753092198e7ce12b6a7c6b`, the controlled seam can
@@ -11666,3 +11725,13 @@ exception; daughter colours related-but-distinct and never visually confusing.
   calls the departure seam, so there is no natural-occurrence evidence for any of it.** Item 3 frozen;
   **Item 5 not started.** Evidence: `TRAVEL_SUBSISTENCE_DECISION.md`,
   `travel-subsistence-reproduction.json`, `provisional-subsistence-lifecycle.json`.
+
+- **2026-08-11 — ROADMAP ITEM 4 FAILED-RETURN RESOLUTION — PROGRESS / PHYSICAL CUTOVER NOT STARTED.**
+  Replaced the structural `unresolved_after_failed_return` dead end with a new current-survivor
+  commitment, optional contiguous movement to current/observed country, strictly post-commitment
+  physical operation, and the distinct `established_after_failed_return` terminal/history fact.
+  Reintegration remains physical and wins same-day competition while unresolved; zero-population
+  extinction and ordinary never-return stabilization are unchanged. Failed-return fixtures 25/25,
+  mutations 6/6, full affected Item-4/invariance/build gates green and non-vacuous. Natural
+  `performAtomicDeparture` callers 0; `createDaughterBand` callers 0. Cooldown and cadence/order
+  authority remain explicit physical-cutover debts; Item 5 unstarted.

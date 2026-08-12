@@ -48,10 +48,17 @@ try {
     fixtures.push({ id, claim, status: !nonVacuous ? "VACUOUS" : passed ? "PASS" : "FAIL", nonVacuityNote, ...rest });
   };
 
-  const LIVE_SUCCESSOR_PHASES = ["travelling", "establishing", "failed_early", "returning", "unresolved_after_failed_return"];
+  const LIVE_SUCCESSOR_PHASES = [
+    "travelling",
+    "establishing",
+    "failed_early",
+    "returning",
+    "unresolved_after_failed_return",
+    "continuing_after_failed_return",
+  ];
 
   // ── LP1 — protected through every phase the split is actually under way ─────────────────────
-  record("LP1", "the parent and its successor are recognised as one split through travel, failure, return and the unresolved living condition", () => {
+  record("LP1", "the parent and its successor are recognised as one split through travel, failure, failed return and committed post-return continuation", () => {
     const rows = {};
     for (const phase of LIVE_SUCCESSOR_PHASES) {
       const parent = band("parent", { attempt: rec("departed", "L1") });
@@ -236,11 +243,13 @@ try {
   record("O6", "terminal lifecycle records do not make a band provisional or ineligible", () => {
     const afterAbandon = band("p", { attempt: rec("abandoned", "L1") });
     const afterStabilize = band("s", { successor: rec("stabilized", "L1") });
+    const afterPostReturnEstablishment = band("s", { successor: rec("established_after_failed_return", "L1") });
     const afterReintegrate = band("s", { successor: rec("reintegrated", "L1") });
     return {
       abandonedParentEligible: lc.isFissionEligibleParent(afterAbandon),
       stabilizedIsProvisional: lc.isProvisionalSuccessor(afterStabilize),
       stabilizedIsEstablished: lc.isEstablishedBand(afterStabilize),
+      postReturnEstablishedIsEstablished: lc.isEstablishedBand(afterPostReturnEstablishment),
       reintegratedIsProvisional: lc.isProvisionalSuccessor(afterReintegrate),
       nonVacuous: lc.isProvisionalSuccessor(band("x", { successor: rec("establishing", "L1") })) === true,
       nonVacuityNote: "a non-terminal record DOES read as provisional in the same run",
@@ -248,6 +257,8 @@ try {
         lc.isFissionEligibleParent(afterAbandon) === true &&
         lc.isProvisionalSuccessor(afterStabilize) === false &&
         lc.isEstablishedBand(afterStabilize) === true &&
+        lc.isProvisionalSuccessor(afterPostReturnEstablishment) === false &&
+        lc.isEstablishedBand(afterPostReturnEstablishment) === true &&
         lc.isProvisionalSuccessor(afterReintegrate) === false,
     };
   });
@@ -258,9 +269,9 @@ try {
     checkpoint: "ROADMAP ITEM 4 §3 + §5 — lifecycle ownership and lineage-protection duration",
     authority: "src/sim/agents/bandLifecycle.ts",
     scopeLimit:
-      "These prove the PREDICATES are right. They do NOT prove any production reader calls them — none does yet. Minimal Band-shaped objects, no stepped world.",
+      "These are predicate-level controls over minimal Band-shaped objects; production-reader wiring is covered by the admission, quarantine and failed-return integration audits.",
     lineageProtectionPolicy:
-      "Protection holds only while a CURRENT provisional successor record exists whose lineage matches the other band. It covers immediate co-residence, travel, failure and return, and ends at BOTH exits: the record is cleared at stabilized, and the entity is removed at reintegrated. The parent retains its attempt record as provenance, and provenance alone confers nothing — LP4 is the proof, and an earlier form of the predicate failed it by granting permanent immunity.",
+      "Protection holds only while a CURRENT non-terminal provisional successor record exists whose lineage matches the other band. It covers travel, failure, return, unresolved life and committed post-return continuation, then ends at every terminal outcome. Retained parent/successor provenance alone confers nothing — LP4 is the proof, and an earlier predicate failed it by granting permanent immunity.",
     fixtures,
     summary: { total: fixtures.length, passing: counts.PASS, failing: counts.FAIL, vacuous: counts.VACUOUS, errored: counts.ERROR },
   };
