@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-11T14:42:49.946Z",
+  "generatedAt": "2026-08-12T16:49:41.905Z",
   "checkpoint": "ROADMAP ITEM 4 §5 — pure lifecycle kernel fixtures",
   "authority": "src/sim/agents/fissionLifecycleKernel.ts",
   "scopeLimit": "The kernel is pure. These fixtures prove its legal vocabulary, conjunctive stabilization gate, action bounds, event-bounded living condition and ownership table. The world-level stabilization audit proves the production adapter.",
@@ -10,7 +10,7 @@
       "status": "PASS",
       "nonVacuityNote": "the complete production phase table is present",
       "problems": [],
-      "phaseCount": 13
+      "phaseCount": 15
     },
     {
       "id": "K2",
@@ -121,6 +121,10 @@
         {
           "phase": "unresolved_after_failed_return",
           "result": "event_bounded_phase_has_no_timeout"
+        },
+        {
+          "phase": "continuing_after_failed_return",
+          "result": "event_bounded_phase_has_no_timeout"
         }
       ]
     },
@@ -134,7 +138,8 @@
         "departed": true,
         "reintegrated": true,
         "provisional_extinguished": true,
-        "stabilized": true
+        "stabilized": true,
+        "established_after_failed_return": true
       }
     },
     {
@@ -142,10 +147,10 @@
       "claim": "every transition outside the permitted set is refused",
       "status": "PASS",
       "nonVacuityNote": "both permitted and refused transitions genuinely occur in the sweep",
-      "refused": 83,
-      "permitted": 21,
-      "expectedPermitted": 21,
-      "totalPairs": 104
+      "refused": 110,
+      "permitted": 25,
+      "expectedPermitted": 25,
+      "totalPairs": 135
     },
     {
       "id": "K10",
@@ -178,9 +183,11 @@
         "failed_early:successor",
         "returning:successor",
         "unresolved_after_failed_return:successor",
+        "continuing_after_failed_return:successor",
         "reintegrated:parent",
         "provisional_extinguished:none",
-        "stabilized:successor"
+        "stabilized:successor",
+        "established_after_failed_return:successor"
       ]
     },
     {
@@ -204,11 +211,25 @@
       "status": "PASS",
       "nonVacuityNote": "unrelated keys were genuinely present on the request",
       "identical": true
+    },
+    {
+      "id": "K15",
+      "claim": "continuing-after-failed-return reopens disposition only behind physical course-failure proof",
+      "status": "PASS",
+      "nonVacuityNote": "the complete physical proof succeeds in the same run, so both negatives isolate the proof/cause barriers",
+      "missing": "post_return_reconsideration_without_physical_failure",
+      "timer": "post_return_reconsideration_without_physical_failure",
+      "proven": "unresolved_after_failed_return",
+      "permittedNext": [
+        "unresolved_after_failed_return",
+        "established_after_failed_return",
+        "provisional_extinguished"
+      ]
     }
   ],
   "summary": {
-    "total": 14,
-    "passing": 14,
+    "total": 15,
+    "passing": 15,
     "failing": 0,
     "vacuous": 0,
     "errored": 0

@@ -11735,3 +11735,48 @@ exception; daughter colours related-but-distinct and never visually confusing.
   mutations 6/6, full affected Item-4/invariance/build gates green and non-vacuous. Natural
   `performAtomicDeparture` callers 0; `createDaughterBand` callers 0. Cooldown and cadence/order
   authority remain explicit physical-cutover debts; Item 5 unstarted.
+
+- **2026-08-12 — ROADMAP ITEM 4 POST-RETURN CONTINUATION RESOLVABILITY CORRECTION — PROGRESS /
+  PHYSICAL CUTOVER AND ITEM 5 NOT STARTED.** Starting from accepted `65627a5`, reproduced the exact
+  later dead end before editing: commitment A named observed `tile:197:89`, local execution found no
+  admissible forward step, and after 90 registered days three people remained at `tile:195:89` in
+  `continuing_after_failed_return` under the same commitment with `blockedStepDays = 90`.
+
+  Selected the smallest truthful A+B+D architecture. Existing physical boundaries — five retained
+  local refusals, a complete failed target-local operation window, or current productive-labour /
+  embodied-burden failure — reopen existing `unresolved_after_failed_return`. The canonical writer
+  preserves immutable A plus typed failure in an 8-entry rich-history ring, records the contradicted
+  target in a 72-id exact-memory-aligned ring, clears current authority, and chooses no replacement.
+  A new B target requires another pure Band+day aggregate-current-survivor decision, a target/day-
+  sensitive identity and a canonical empty operation ledger. Elapsed time still cannot succeed;
+  neither failure assessment nor decision receives hidden route/world truth.
+
+  Replaced F12's one-step-refusal acceptance with a long registered disposition. Three living people
+  accumulate A refusal counts 1–4, cross the existing boundary at 5, retain A as typed history, spend
+  a fresh unresolved interval, choose legitimately observed B, walk only contiguous steps, and reach
+  `established_after_failed_return` only after a complete strictly post-B operation. A separate
+  reached-ground fixture arrives at A, completes a failed strictly post-A target-local window,
+  receives `fresh_operation_contract_not_met`, supersedes A, refuses immediate B completion with
+  `no_fresh_operation_window`, and later establishes from B's own evidence. The unchanged positive
+  course incurs no new delay.
+
+  Physical parent co-location after A failure and before B still reintegrates through the existing
+  authority with cohort conservation; remote reunion remains refused. Both the current commitment
+  phase and reopened unresolved phase retain zero-body terminalization. The audit enumerates all six
+  nonterminal successor phases with resolution kind, exits, production writer, causal advancing fact
+  and truthful persistence reason; no new phase was introduced.
+
+  Corrected failed-return suite: 31/31, zero failing/vacuous. Source mutations: 11/11, byte-identical
+  restoration; disabling reconsideration leaves three living people in A for 40 days with
+  `blockedStepDays = 37`. Both TypeScript projects/build, kernel 15/15, travel 10/10, subsistence
+  39/39, reintegration 9/9, stabilization 27/27, affected admission/quarantine/history/readability,
+  preparation/departure/natural and inherited mutation suites pass. Graph is 221/764 with no
+  duplicate/dangling ids; import boundary remains 87 informational back-edges. Daily/seasonal state
+  matches on both maps, all four batch modes match, fresh-process determinism matches, benchmark is
+  deterministic, and season order passes. The inherited reader-boundary inventory remains explicitly
+  INCOMPLETE at 5/12 and is not claimed as closed.
+
+  `performAtomicDeparture` and `createDaughterBand` each have only their function definition in
+  `src`, hence zero callers. Remaining dependency is separately authorized physical cutover: update
+  the legacy `fissionEvents` cooldown authority and reconcile daily natural readiness with seasonal
+  departure ordering. Neither is implemented; Item 5 remains unstarted.

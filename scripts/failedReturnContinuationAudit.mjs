@@ -10,7 +10,10 @@ import {
   totalWorldPopulation,
 } from "./lib/successorStabilizationFixture.mjs";
 import {
+  makeBlockedPostReturnCourse,
   makeGenuineUnresolvedFailedReturn,
+  runBlockedPostReturnCourse,
+  runFailedGroundAfterArrival,
   runRegisteredPostReturnContinuation,
 } from "./lib/failedReturnContinuationFixture.mjs";
 
@@ -497,63 +500,268 @@ try {
     elapsedCompletion,
   );
 
-  // Structural response on bad ground: two real barren day records lead to a decision naming only
-  // observed country; movement does not happen until the next day's travel action.
-  const failureDays = [1, 2].map((offset) => ({
-    day: unresolved.unresolvedDay + offset,
-    tileId: before.position,
-    gatherShare: 0.8,
-    gatheringWorkers: Math.max(1, before.demography.workingAdults),
-    requestedUnits: 1,
-    harvestedUnits: 0,
-    usableUnits: 0,
-    depletionApplied: 0,
-    demandUnits: 0.1,
-    waterStress: 0.5,
-    sourceKind: "none",
-    failureReason: "physical_source_absent",
-  }));
-  const failing = replaceBand(unresolved.world, unresolved.successorId, (band) => ({
-    ...band,
-    provisionalSuccessor: {
-      ...band.provisionalSuccessor,
-      travelSubsistence: {
-        ...band.provisionalSuccessor.travelSubsistence,
-        lastAdvancedDay: unresolved.unresolvedDay + 2,
-        daysElapsed: 2,
-        demandUnits: 0.2,
-        supportUnits: 0,
-        gatheringDays: 2,
-        waterStressDaySum: 1,
-        daysWithoutWater: 2,
-        recentDays: failureDays,
-      },
-    },
-  }));
-  const failingDecision = modules.postReturn.advancePostReturnDispositions(failing, unresolved.unresolvedDay + 2);
-  const failingBand = failingDecision.world.bands[unresolved.successorId];
-  const failingTarget = failingBand.provisionalSuccessor.postReturnCommitment?.targetTileId;
-  const failingMoved = modules.travel.advanceProvisionalTravel(failingDecision.world, unresolved.unresolvedDay + 3);
-  const failingStep = failingMoved.steps.find((step) => step.bandId === unresolved.successorId);
+  // F12 is deliberately a long disposition proof. A single TravelRefusal is not an exit.
+  const blockedOptions = {
+    successorBandId: "band:failed-return-blocked-route",
+    lineageId: "LIN-FAILED-RETURN-BLOCKED-ROUTE",
+  };
+  const blockedFixture = makeBlockedPostReturnCourse(modules, warm, blockedOptions);
+  const blocked = runBlockedPostReturnCourse(modules, blockedFixture, 80);
+  const blockedA = blockedFixture.commitment;
+  const blockedB = blocked.recommitted;
+  const failedA = blocked.superseded;
+  const blockedKnowledge = blockedFixture.world.bands[blockedFixture.successorId].knowledge.observedTiles;
+  const blockedCompletion = blocked.band.successorPostReturnEstablishmentEvents?.at(-1);
+  const contiguousBlockedTrace = blocked.trace.every((row) => row.movedDistance === 0 || row.movedDistance === 1);
+  const populationStayedAlive = blocked.trace.every((row) => row.population > 0);
+  const localSubsistenceWasReal = blocked.trace.some((row) => (row.supportUnits ?? 0) > 0) &&
+    blocked.trace.some((row) => (row.demandUnits ?? 0) > 0);
   record(
     "F12_structural_dead_end_removed_on_productive_and_failing_ground",
-    "productive ground reaches a fresh established outcome, while failing ground produces a real social relocation decision toward observed country and a contiguous physical step instead of inert waiting",
+    "a living, locally blocked A course crosses the existing repeated-refusal boundary, becomes typed history, waits for a new Band-only decision, adopts observed B under a new identity, walks contiguously and establishes only after B's fresh operation",
     after.provisionalSuccessor.phase === "established_after_failed_return" &&
-      failingDecision.commitments.length === 1 &&
-      failingTarget !== undefined && before.knowledge.observedTiles[failingTarget] !== undefined &&
-      failingStep !== undefined &&
-      (failingStep.moved ? (() => {
-        const from = modules.generate.getTile(failingMoved.world, failingStep.fromTileId);
-        const to = modules.generate.getTile(failingMoved.world, failingStep.toTileId);
-        return Math.abs(from.coord.x - to.coord.x) + Math.abs(from.coord.y - to.coord.y) === 1;
-      })() : failingStep.refusal !== undefined),
-    failingDecision.commitments.length === 1,
-    { productiveOutcome: after.provisionalSuccessor.phase, failingCommitment: failingDecision.commitments[0], failingStep },
+      blocked.resolved === true && populationStayedAlive && localSubsistenceWasReal &&
+      blockedA.evidence.target.basis === "group_observed_memory" &&
+      blockedKnowledge[blockedA.targetTileId] !== undefined &&
+      blockedFixture.blockingTileIds.length > 0 &&
+      blockedFixture.blockingTileIds.every((tileId) => blockedKnowledge[tileId] === undefined) &&
+      failedA?.status === "superseded_after_physical_failure" &&
+      failedA.commitment.commitmentId === blockedA.commitmentId &&
+      failedA.failure.reason === "repeated_local_route_refusal" &&
+      failedA.failure.blockedStepDays >= modules.returnDecision.RETURN_BLOCKED_DAYS &&
+      blockedB !== undefined && blockedB.commitmentId !== blockedA.commitmentId &&
+      String(blockedB.targetTileId) === String(blockedFixture.alternativeTargetTileId) &&
+      blockedKnowledge[blockedB.targetTileId] !== undefined &&
+      contiguousBlockedTrace &&
+      blockedCompletion?.continuationCommitment.commitmentId === blockedB.commitmentId &&
+      blockedCompletion.independentOperation.commitmentId === blockedB.commitmentId &&
+      blockedCompletion.independentOperation.assessmentWindow.startDay > blockedB.decisionDay,
+    blocked.trace.length > modules.returnDecision.RETURN_BLOCKED_DAYS && failedA !== undefined && blockedB !== undefined,
+    {
+      productiveOutcome: after.provisionalSuccessor.phase,
+      A: blockedA,
+      hiddenLocalBlockingTileIds: blockedFixture.blockingTileIds,
+      AFailure: failedA,
+      B: blockedB,
+      BCompletion: blockedCompletion,
+      trace: blocked.trace,
+    },
+  );
+
+  const beforeFailureRows = failedA === undefined
+    ? []
+    : blocked.trace.filter((row) => row.day < failedA.supersededOnDay);
+  record(
+    "F12b_no_one_day_overreaction",
+    "one refusal does not abandon A: the same current commitment persists while retained refused attempts accumulate through one, two, three and four, and only the existing fifth refusal proves route failure",
+    beforeFailureRows.length >= modules.returnDecision.RETURN_BLOCKED_DAYS - 1 &&
+      beforeFailureRows.every((row) =>
+        row.phase === "continuing_after_failed_return" && row.commitmentId === blockedA.commitmentId) &&
+      Array.from({ length: modules.returnDecision.RETURN_BLOCKED_DAYS - 1 }, (_, index) => index + 1)
+        .every((count) => beforeFailureRows.some((row) => row.blockedStepDays === count)) &&
+      failedA?.failure.blockedStepDaysRequired === modules.returnDecision.RETURN_BLOCKED_DAYS,
+    failedA !== undefined && blocked.trace.some((row) => row.blockedStepDays === 1),
+    { boundary: modules.returnDecision.RETURN_BLOCKED_DAYS, beforeFailureRows, failure: failedA?.failure },
+  );
+
+  const emptyOperationHistory = (history) =>
+    history?.lifetimeDaysWithAnyPhysicalTake === 0 &&
+    history?.lifetimeAssessmentWindows === 0 &&
+    history?.recentAssessmentWindows.length === 0 &&
+    history?.openAssessmentWindow === undefined;
+  record(
+    "F12c_recommitment_is_fresh_and_old_operation_isolated",
+    "B binds the current cohorts, current decision tile and new observed target under a new id; A's active operation ledger is discarded and cannot establish B on the recommitment day",
+    blockedB !== undefined && failedA !== undefined &&
+      blockedB.commitmentId !== blockedA.commitmentId &&
+      blockedB.decisionDay > failedA.supersededOnDay &&
+      String(blockedB.decisionTileId) === String(blocked.trace.find(
+        (row) => row.commitmentId === blockedB.commitmentId,
+      )?.position) &&
+      blockedB.survivors.workingAdults === blocked.band.demography.workingAdults &&
+      blockedB.survivors.dependents === blocked.band.demography.dependents &&
+      blockedB.survivors.elders === blocked.band.demography.elders &&
+      (blocked.operationHistoryBeforeRecommitment?.lifetimeDaysWithAnyPhysicalTake ?? 0) > 0 &&
+      emptyOperationHistory(blocked.operationHistoryAtRecommitment) &&
+      blocked.staleEvidenceRefusalAtRecommitment?.refusal === "no_fresh_operation_window",
+    blockedB !== undefined && (blocked.operationHistoryBeforeRecommitment?.lifetimeDaysWithAnyPhysicalTake ?? 0) > 0,
+    {
+      AId: blockedA.commitmentId,
+      B: blockedB,
+      operationBeforeB: blocked.operationHistoryBeforeRecommitment,
+      operationAtB: blocked.operationHistoryAtRecommitment,
+      immediateBRecognition: blocked.staleEvidenceRefusalAtRecommitment,
+    },
+  );
+
+  const failedGround = runFailedGroundAfterArrival(modules, warm, {
+    successorBandId: "band:failed-return-ground-failure",
+    lineageId: "LIN-FAILED-RETURN-GROUND-FAILURE",
+  }, 80);
+  const groundA = failedGround.fixture.commitment;
+  const groundB = failedGround.recommitted;
+  const groundFailure = failedGround.superseded?.failure;
+  const groundCompletion = failedGround.band.successorPostReturnEstablishmentEvents?.at(-1);
+  record(
+    "F12d_failed_ground_after_arrival_reopens_disposition",
+    "A is physically reached, a complete strictly post-A target-local operation fails, establishment refuses, A becomes typed history, and only a later fresh B operation can establish",
+    failedGround.arrivalDay !== undefined && failedGround.arrivalDay > groundA.decisionDay &&
+      failedGround.establishmentRefusalAtFailure?.refusal === "fresh_operation_contract_not_met" &&
+      groundFailure?.physicallyReachedCommittedTarget === true &&
+      groundFailure.completedTargetWindow !== undefined &&
+      groundFailure.completedTargetWindow.startDay > groundA.decisionDay &&
+      groundFailure.completedTargetWindow.tileIds.every((tileId) => String(tileId) === String(groundA.targetTileId)) &&
+      groundFailure.reason.startsWith("completed_target_window_") &&
+      failedGround.superseded?.status === "superseded_after_physical_failure" &&
+      groundB !== undefined && groundB.commitmentId !== groundA.commitmentId &&
+      groundB.decisionDay > failedGround.superseded.supersededOnDay &&
+      emptyOperationHistory(failedGround.operationHistoryAtRecommitment) &&
+      failedGround.staleEvidenceRefusalAtRecommitment?.refusal === "no_fresh_operation_window" &&
+      failedGround.trace.every((row) => row.population > 0 && (row.movedDistance === 0 || row.movedDistance === 1)) &&
+      failedGround.band.provisionalSuccessor.phase === "established_after_failed_return" &&
+      groundCompletion?.continuationCommitment.commitmentId === groundB.commitmentId &&
+      groundCompletion.independentOperation.assessmentWindow.startDay > groundB.decisionDay,
+    groundFailure?.completedTargetWindow !== undefined && groundB !== undefined,
+    {
+      A: groundA,
+      arrivalDay: failedGround.arrivalDay,
+      establishmentRefusal: failedGround.establishmentRefusalAtFailure,
+      AFailure: failedGround.superseded,
+      B: groundB,
+      operationBeforeB: failedGround.operationHistoryBeforeRecommitment,
+      operationAtB: failedGround.operationHistoryAtRecommitment,
+      immediateBRecognition: failedGround.staleEvidenceRefusalAtRecommitment,
+      BCompletion: groundCompletion,
+      trace: failedGround.trace,
+    },
+  );
+
+  const reintegrationFixture = makeBlockedPostReturnCourse(modules, warm, {
+    successorBandId: "band:failed-return-reconsidered-reunion",
+    lineageId: "LIN-FAILED-RETURN-RECONSIDERED-REUNION",
+  });
+  const reconsidered = runBlockedPostReturnCourse(
+    modules,
+    reintegrationFixture,
+    30,
+    { stopAfterSupersession: true },
+  );
+  const reconsideredBand = reconsidered.world.bands[reintegrationFixture.successorId];
+  const parentRejoinedWorld = replaceBand(reconsidered.world, reintegrationFixture.unresolved.parentId, (parent) => ({
+    ...parent,
+    position: reconsideredBand.position,
+  }));
+  const rejoinedAfterA = modules.advance.advanceWorldByDays(parentRejoinedWorld, 1);
+  const rejoinedAfterABand = rejoinedAfterA.bands[reintegrationFixture.successorId];
+  record(
+    "F12e_reintegration_survives_A_failure_before_B",
+    "after A is superseded and before B exists, physical parent co-location still wins through the existing reintegration authority; no remote reunion or independent commitment is fabricated",
+    reconsideredBand.provisionalSuccessor.phase === "unresolved_after_failed_return" &&
+      reconsideredBand.provisionalSuccessor.postReturnCommitment === undefined &&
+      reconsidered.superseded?.commitment.commitmentId === reintegrationFixture.commitment.commitmentId &&
+      rejoinedAfterABand.provisionalSuccessor.phase === "reintegrated" &&
+      rejoinedAfterABand.provisionalSuccessor.postReturnCommitment === undefined &&
+      rejoinedAfterABand.demography.population === 0 &&
+      totalWorldPopulation(parentRejoinedWorld) === totalWorldPopulation(rejoinedAfterA),
+    reconsidered.superseded !== undefined &&
+      String(parentRejoinedWorld.bands[reintegrationFixture.unresolved.parentId].position) === String(reconsideredBand.position),
+    {
+      reconsideredPhase: reconsideredBand.provisionalSuccessor.phase,
+      history: reconsideredBand.provisionalSuccessor.postReturnCommitmentHistory,
+      rejoinedPhase: rejoinedAfterABand.provisionalSuccessor.phase,
+      actionIds: modules.registry.DEFAULT_DAILY_ACTIONS.map((action) => action.id),
+    },
+  );
+
+  const zeroContinuing = replaceBand(blockedFixture.world, blockedFixture.successorId, (band) => ({
+    ...band,
+    size: 0,
+    demography: { ...band.demography, population: 0, workingAdults: 0, dependents: 0, elders: 0 },
+  }));
+  const zeroReopened = replaceBand(reconsidered.world, reintegrationFixture.successorId, (band) => ({
+    ...band,
+    size: 0,
+    demography: { ...band.demography, population: 0, workingAdults: 0, dependents: 0, elders: 0 },
+  }));
+  const zeroContinuingResult = modules.lifecycleResolver.resolveProvisionalLifecycles(
+    zeroContinuing,
+    blockedFixture.decisionDay + 1,
+  );
+  const zeroReopenedResult = modules.lifecycleResolver.resolveProvisionalLifecycles(
+    zeroReopened,
+    Number(zeroReopened.time.day) + 1,
+  );
+  record(
+    "F12f_zero_population_terminalizes_current_and_reopened_states",
+    "both a live commitment state and the decision-capable state reopened after A failure remain reachable by the existing zero-body terminalizer",
+    zeroContinuingResult.world.bands[blockedFixture.successorId].provisionalSuccessor.phase === "provisional_extinguished" &&
+      zeroReopenedResult.world.bands[reintegrationFixture.successorId].provisionalSuccessor.phase === "provisional_extinguished",
+    zeroContinuing.bands[blockedFixture.successorId].provisionalSuccessor.phase === "continuing_after_failed_return" &&
+      zeroReopened.bands[reintegrationFixture.successorId].provisionalSuccessor.phase === "unresolved_after_failed_return",
+    {
+      continuingResolution: zeroContinuingResult.resolutions,
+      reopenedResolution: zeroReopenedResult.resolutions,
+    },
+  );
+
+  const successorAdvanceFacts = {
+    travelling: "contiguous physical arrival, lived return decision, travel timeout, or zero bodies",
+    establishing: "fresh independent-operation proof, failed trial timeout, lived return decision, physical reunion, or zero bodies",
+    failed_early: "bounded failure interval expires into a physical return course, or zero bodies",
+    returning: "physical parent co-location, bounded return expiry without reunion, or zero bodies",
+    unresolved_after_failed_return: "physical reunion, a fresh current-survivor decision using group-owned knowledge, or zero bodies",
+    continuing_after_failed_return: "fresh post-commitment operation, typed physical course failure reopening disposition, or zero bodies",
+  };
+  const successorPersistence = {
+    travelling: { canRemainAliveIndefinitely: false, why: "TRAVEL_MAX_DAYS has a non-success returning timeout" },
+    establishing: { canRemainAliveIndefinitely: false, why: "ESTABLISHMENT_MAX_DAYS has a failed_early timeout" },
+    failed_early: { canRemainAliveIndefinitely: false, why: "FAILED_EARLY_MAX_DAYS has a returning timeout" },
+    returning: { canRemainAliveIndefinitely: false, why: "RETURN_MAX_DAYS ends only the action in unresolved_after_failed_return" },
+    unresolved_after_failed_return: {
+      canRemainAliveIndefinitely: true,
+      why: "persistence is truthful only while no co-located parent and no uncontradicted group-known course exists; its decision authority still runs daily",
+    },
+    continuing_after_failed_return: {
+      canRemainAliveIndefinitely: false,
+      why: "movement/subsistence produces either a qualifying operation, a retained route refusal boundary, a completed failed target-local window, bodily failure, or zero bodies",
+    },
+  };
+  const nonterminalSuccessorAudit = modules.kernel.PHASE_CONTRACTS
+    .filter((contract) => contract.side === "successor" && contract.terminal === false)
+    .map((contract) => ({
+      phase: contract.phase,
+      resolutionKind: contract.resolutionKind,
+      permittedExits: contract.permittedNext,
+      productionWriter: contract.transitionWriter,
+      physicalOrSocialFact: successorAdvanceFacts[contract.phase],
+      ...successorPersistence[contract.phase],
+      ...(contract.maxDays === undefined ? {} : { maxDays: contract.maxDays, onTimeout: contract.onTimeout }),
+    }));
+  const auditedPhaseNames = nonterminalSuccessorAudit.map((row) => row.phase).sort();
+  const expectedNonterminalSuccessorPhases = Object.keys(successorAdvanceFacts).sort();
+  record(
+    "F12g_every_nonterminal_successor_phase_has_a_causal_disposition",
+    "every nonterminal successor contract names its resolution kind, exits, production writer, advancing fact and truthful persistence semantics; the correction did not move limbo into another phase",
+    digest(auditedPhaseNames) === digest(expectedNonterminalSuccessorPhases) &&
+      nonterminalSuccessorAudit.every((row) =>
+        row.productionWriter.length > 0 && row.permittedExits.length > 0 && row.physicalOrSocialFact.length > 0 &&
+        (row.resolutionKind !== "temporally_bounded_action" ||
+          (row.canRemainAliveIndefinitely === false && row.maxDays > 0 && row.onTimeout !== undefined))) &&
+      nonterminalSuccessorAudit.find((row) => row.phase === "continuing_after_failed_return")
+        ?.permittedExits.includes("unresolved_after_failed_return") === true &&
+      modules.registry.DEFAULT_DAILY_ACTIONS.some((action) => action.id === "post_return_reconsideration"),
+    nonterminalSuccessorAudit.length === expectedNonterminalSuccessorPhases.length,
+    nonterminalSuccessorAudit,
   );
 
   const repeated = runRegisteredPostReturnContinuation(
     modules,
     makeGenuineUnresolvedFailedReturn(modules, warm),
+  );
+  const repeatedBlocked = runBlockedPostReturnCourse(
+    modules,
+    makeBlockedPostReturnCourse(modules, warm, blockedOptions),
+    80,
   );
   const selected = (run) => ({
     phase: run.band.provisionalSuccessor.phase,
@@ -563,33 +771,55 @@ try {
     position: run.band.position,
     demography: run.band.demography,
   });
+  const selectedCorrection = (run) => ({
+    phase: run.band.provisionalSuccessor.phase,
+    currentCommitment: run.band.provisionalSuccessor.postReturnCommitment,
+    commitmentHistory: run.band.provisionalSuccessor.postReturnCommitmentHistory,
+    failedTargetTileIds: run.band.provisionalSuccessor.postReturnFailedTargetTileIds,
+    event: run.band.successorPostReturnEstablishmentEvents?.at(-1),
+    position: run.band.position,
+    demography: run.band.demography,
+  });
   record(
     "F13_deterministic_replay_and_bounded_state",
-    "the same controlled causal setup replays to the same normalized state and all new histories remain bounded",
+    "both the unchanged positive path and the A-failure/B-recommitment course replay to byte-identical normalized states while rich commitment history and failed-target memory remain bounded",
     digest(selected(positive)) === digest(selected(repeated)) &&
+      digest(selectedCorrection(blocked)) === digest(selectedCorrection(repeatedBlocked)) &&
       after.provisionalSuccessor.history.length <= modules.kernel.LIFECYCLE_HISTORY_CAP &&
       (after.provisionalSuccessor.operationHistory?.recentAssessmentWindows.length ?? 0) <= modules.subsistence.RECENT_ASSESSMENT_WINDOW_CAP &&
-      (after.successorPostReturnEstablishmentEvents?.length ?? 0) <= 12,
-    positive.trace.length > 2 && repeated.trace.length > 2,
+      (after.successorPostReturnEstablishmentEvents?.length ?? 0) <= 12 &&
+      (blocked.band.provisionalSuccessor.postReturnCommitmentHistory?.length ?? 0) <=
+        modules.postReturn.POST_RETURN_COMMITMENT_HISTORY_CAP &&
+      (blocked.band.provisionalSuccessor.postReturnFailedTargetTileIds?.length ?? 0) <=
+        modules.postReturn.POST_RETURN_FAILED_TARGET_CAP,
+    positive.trace.length > 2 && repeated.trace.length > 2 && blocked.superseded !== undefined,
     {
-      byteEqual: digest(selected(positive)) === digest(selected(repeated)),
+      positiveByteEqual: digest(selected(positive)) === digest(selected(repeated)),
+      correctionByteEqual: digest(selectedCorrection(blocked)) === digest(selectedCorrection(repeatedBlocked)),
       lifecycleHistory: after.provisionalSuccessor.history.length,
       operationWindows: after.provisionalSuccessor.operationHistory?.recentAssessmentWindows.length,
       completionEvents: after.successorPostReturnEstablishmentEvents?.length,
+      commitmentHistory: blocked.band.provisionalSuccessor.postReturnCommitmentHistory?.length,
+      commitmentHistoryCap: modules.postReturn.POST_RETURN_COMMITMENT_HISTORY_CAP,
+      failedTargets: blocked.band.provisionalSuccessor.postReturnFailedTargetTileIds?.length,
+      failedTargetCap: modules.postReturn.POST_RETURN_FAILED_TARGET_CAP,
     },
   );
 
   const actionIds = modules.registry.DEFAULT_DAILY_ACTIONS.map((action) => action.id);
   record(
     "F14_order_and_quarantine_release_surface",
-    "reintegration precedes disposition, movement precedes subsistence, disposition precedes post-return recognition, and the released band is admitted to viability/demography/future-fission readers only afterward",
+    "reintegration precedes every post-return decision, movement precedes subsistence and physical-failure assessment, reconsideration precedes replacement disposition, and recognition precedes the deadline; released bands enter ordinary readers only afterward",
     actionIds.indexOf("provisional_reintegration") < actionIds.indexOf("post_return_disposition") &&
       actionIds.indexOf("provisional_travel") < actionIds.indexOf("provisional_travel_subsistence") &&
+      actionIds.indexOf("provisional_travel_subsistence") < actionIds.indexOf("post_return_reconsideration") &&
+      actionIds.indexOf("post_return_reconsideration") < actionIds.indexOf("post_return_disposition") &&
       actionIds.indexOf("post_return_disposition") < actionIds.indexOf("post_return_establishment") &&
       actionIds.indexOf("post_return_establishment") < actionIds.indexOf("provisional_lifecycle_deadline") &&
       modules.viability.updateBandViabilityStates(positive.world).bands[after.id].viability !== undefined &&
       modules.lifecycle.isFissionEligibleParent(after) === true,
-    actionIds.includes("post_return_disposition") && actionIds.includes("post_return_establishment"),
+    actionIds.includes("post_return_reconsideration") &&
+      actionIds.includes("post_return_disposition") && actionIds.includes("post_return_establishment"),
     { actionIds },
   );
 
@@ -598,30 +828,39 @@ try {
     newIndependentContinuation: after.provisionalSuccessor.phase,
     terminalParent: terminalParentPositive.band.provisionalSuccessor.phase,
     worseningCondition: {
-      disposition: failingDecision.commitments[0],
-      physicalStep: failingStep,
+      blockedRoute: blocked.band.provisionalSuccessor.phase,
+      failedGround: failedGround.band.provisionalSuccessor.phase,
+      historicalReasons: [failedA?.failure.reason, groundFailure?.reason],
     },
     zeroPopulation: zeroResolution.world.bands[unresolved.successorId].provisionalSuccessor.phase,
   };
   record(
     "F15_long_horizon_controlled_matrix",
-    "the controlled matrix reaches reintegration, distinct post-return establishment, parent-terminal continuation, a failing-ground relocation response, and zero-population extinction without threshold tuning",
+    "the controlled matrix reaches reintegration, unchanged positive completion, parent-terminal continuation, long blocked-route and failed-ground reconsideration/completion, and zero-population extinction without threshold tuning",
     matrix.laterPhysicalReintegration === "reintegrated" &&
       matrix.newIndependentContinuation === "established_after_failed_return" &&
       matrix.terminalParent === "established_after_failed_return" &&
-      matrix.worseningCondition.disposition !== undefined &&
+      matrix.worseningCondition.blockedRoute === "established_after_failed_return" &&
+      matrix.worseningCondition.failedGround === "established_after_failed_return" &&
+      matrix.worseningCondition.historicalReasons.every((reason) => reason !== undefined) &&
       matrix.zeroPopulation === "provisional_extinguished",
     Object.values(matrix).length === 5,
     matrix,
   );
 
   const architectures = {
-    A_fresh_recommitment: "SELECTED as a distinct current-survivor commitment",
-    B_renewed_return_search: "REJECTED: no new parent location or information exists",
-    C_independent_relocation: "SELECTED only inside provisional travel and only to current/observed country",
-    D_distinct_terminal_outcome: "SELECTED: established_after_failed_return",
-    E_generalize_stabilized: "REJECTED: would weaken provesNeverEnteredReturnPath",
-    F_source_derived: "two-step commitment then strictly post-commitment operation",
+    A_physical_failure_reopens_disposition:
+      "SELECTED: typed retained route refusal, complete target-local operation failure, or current bodily incapacity reopens unresolved_after_failed_return",
+    B_explicit_commitment_supersession:
+      "SELECTED with A: the immutable A decision and its typed contradiction move into bounded history before current authority is cleared",
+    C_bounded_continuation_action:
+      "REJECTED as the primary mechanism: an arbitrary clock adds no physical fact; elapsed time still cannot establish and physical boundaries act earlier",
+    D_multi_stage_known_country_search:
+      "SELECTED only through repeated fresh Band-only decisions; target ids are never edited in place and contradicted exact-memory targets are excluded",
+    E_new_phase_or_generalized_stabilization:
+      "REJECTED: the existing unresolved decision-capable state is sufficient, and ordinary stabilized must retain provesNeverEnteredReturnPath",
+    selected_smallest_truthful_architecture:
+      "A+B+D inside the existing two phases, preserving the distinct established_after_failed_return outcome and strict post-commitment evidence",
   };
 
   const failed = fixtures.filter((fixture) => fixture.verdict !== "PASS");

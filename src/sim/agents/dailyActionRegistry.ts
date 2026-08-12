@@ -35,6 +35,7 @@ import { successorStabilizationDailyAction } from "./successorStabilization";
 import {
   postReturnDispositionDailyAction,
   postReturnEstablishmentDailyAction,
+  postReturnReconsiderationDailyAction,
 } from "./postReturnContinuation";
 import { provisionalLifecycleDeadlineDailyAction } from "./provisionalLifecycleResolver";
 import { parentFissionAttemptDeadlineDailyAction } from "./parentFissionAttemptResolver";
@@ -75,6 +76,11 @@ export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   // harder: a group that has decided to walk home does not spend the same day accumulating diagnostics
   // about a site it is leaving.
   provisionalReturnDecisionDailyAction,
+  // A current post-return course is not an eternal command. Repeated local route refusal, current
+  // bodily incapacity, or a complete failed target-local operation window supersedes it here. This
+  // runs before disposition so the old commitment is historical before any replacement is assessed;
+  // the disposition's own fresh-day gate prevents a same-day automatic retarget.
+  postReturnReconsiderationDailyAction,
   // A failed return is a new social problem. Physical reunion has already had first claim earlier in
   // this registry; only a still-separate group can now form a fresh survivor-cohort commitment.
   postReturnDispositionDailyAction,

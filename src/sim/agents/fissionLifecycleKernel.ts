@@ -359,7 +359,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     bodyOwner: "successor",
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
-    transitionWriter: "provisionalLifecycleResolver (world adapter)",
+    transitionWriter: "provisionalLifecycleResolver / postReturnContinuation (world adapters)",
     // Event-bounded: reunion can reintegrate; zero bodies can extinguish; a fresh survivor-cohort
     // decision can begin a NEW course without resurrecting the founder commitment.
     permittedNext: ["reintegrated", "continuing_after_failed_return", "provisional_extinguished"],
@@ -369,8 +369,10 @@ const CONTRACTS: readonly PhaseContract[] = [
   },
   {
     phase: "continuing_after_failed_return",
-    // The decision is current authority, but it is not success. The group must still physically
-    // reach its own named place and earn a complete operation window after the decision.
+    // The decision is current authority, but it is not an eternal command or success. The group must
+    // still physically reach its own named place and earn a complete operation window after the
+    // decision; repeated route refusal or a completed target-local failure may supersede it and
+    // reopen disposition without rewriting the historical commitment.
     entryRequires: "physical_event",
     side: "successor",
     bodiesHaveMoved: true,
@@ -378,7 +380,7 @@ const CONTRACTS: readonly PhaseContract[] = [
     productiveLabourOwner: "successor",
     physicalLocationOwner: "successor",
     transitionWriter: "postReturnContinuation (world adapter)",
-    permittedNext: ["established_after_failed_return", "provisional_extinguished"],
+    permittedNext: ["unresolved_after_failed_return", "established_after_failed_return", "provisional_extinguished"],
     terminal: false,
     resolutionKind: "event_bounded_living_condition",
     clearsOnExit: [],
@@ -490,6 +492,8 @@ export type LifecycleRejection =
   | "post_return_establishment_without_fresh_operation"
   /** The post-return outcome has not initialized every established reader atomically. */
   | "post_return_establishment_without_quarantine_release"
+  /** A current continuation course may reopen disposition only after named physical failure. */
+  | "post_return_reconsideration_without_physical_failure"
   /** §3 — elapsed time may not produce a phase that asserts something happened in the world. */
   | "terminal_outcome_requires_a_physical_event"
   /** Reintegration asserts the bodies physically reached the parent. Nothing else may assert it. */
@@ -557,6 +561,8 @@ export interface TransitionRequest {
   readonly postReturnCommitmentProven?: boolean;
   /** Required for the distinct post-return established outcome. */
   readonly postReturnEstablishmentProof?: PostReturnEstablishmentTransitionProof;
+  /** Required only for continuing -> unresolved reconsideration; elapsed time can never supply it. */
+  readonly postReturnCourseFailureProven?: boolean;
   /**
    * §3 — WHAT IS ASKING FOR THIS TRANSITION: something that happened in the world, or a clock.
    *
@@ -619,6 +625,11 @@ export function requestTransition(request: TransitionRequest): LifecycleTransiti
   }
   if (request.to === "continuing_after_failed_return" && request.postReturnCommitmentProven !== true) {
     return { ok: false, rejection: "post_return_continuation_without_fresh_commitment" };
+  }
+  if (request.current.phase === "continuing_after_failed_return" &&
+    request.to === "unresolved_after_failed_return" &&
+    (request.cause !== "physical_event" || request.postReturnCourseFailureProven !== true)) {
+    return { ok: false, rejection: "post_return_reconsideration_without_physical_failure" };
   }
   if (request.to === "established_after_failed_return") {
     const proof = request.postReturnEstablishmentProof;

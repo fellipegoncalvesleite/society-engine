@@ -428,6 +428,73 @@ export interface PostReturnContinuationCommitment {
   readonly reasonIds: readonly ReasonId[];
 }
 
+/**
+ * The distinct physical contradiction that ended one current post-return course.
+ *
+ * No score appears here. A blocked route, a completed barren operation window, water failure,
+ * depleted labour and embodied deterioration are different facts even though they all reopen the
+ * same social question. Optional window fields are present only when a complete target-local
+ * measurement exists; a partial or travelling window cannot condemn the committed ground.
+ */
+export type PostReturnContinuationFailureReason =
+  | "repeated_local_route_refusal"
+  | "completed_target_window_without_physical_take"
+  | "completed_target_window_without_productive_labor"
+  | "completed_target_window_support_failed"
+  | "completed_target_window_water_failed"
+  | "productive_labor_below_continuation_minimum"
+  | "embodied_burden_above_continuation_limit";
+
+export interface PostReturnContinuationFailureEvidence {
+  readonly authority: "post_return_continuation_failure_v1";
+  readonly successorBandId: BandId;
+  readonly lineageId: string;
+  readonly commitmentId: string;
+  readonly failedOnDay: number;
+  readonly reason: PostReturnContinuationFailureReason;
+  readonly positionTileId: TileId;
+  readonly targetTileId: TileId;
+  readonly physicallyReachedCommittedTarget: boolean;
+  readonly blockedStepDays: number;
+  readonly blockedStepDaysRequired: number;
+  readonly workingAdults: number;
+  readonly minimumWorkingAdults: number;
+  readonly mortalityRiskBump: number;
+  readonly maximumMortalityRiskBump: number;
+  readonly completedTargetWindow?: {
+    readonly startDay: number;
+    readonly endDay: number;
+    readonly days: number;
+    readonly tileIds: readonly TileId[];
+    readonly supportUnits: number;
+    readonly demandUnits: number;
+    readonly supportRatio: number;
+    readonly supportRatioFloor: number;
+    readonly workerDays: number;
+    readonly daysWithAnyPhysicalTake: number;
+    readonly depletionApplied: number;
+    readonly hadAnyOwnPhysicalTake: boolean;
+    readonly meanWaterStress: number;
+    readonly maximumMeanWaterStress: number;
+    readonly closedBy: "demand_window_complete";
+  };
+  readonly requirements: {
+    readonly currentCommitmentIsCanonical: boolean;
+    readonly livingPopulationRemains: boolean;
+    readonly reasonSpecificPhysicalBoundaryMet: boolean;
+  };
+  readonly allRequirementsMet: boolean;
+  readonly sourceAuthorities: readonly string[];
+}
+
+/** A superseded commitment remains a real social fact, but no longer authorizes a course. */
+export interface HistoricalPostReturnContinuationCommitment {
+  readonly status: "superseded_after_physical_failure";
+  readonly supersededOnDay: number;
+  readonly commitment: PostReturnContinuationCommitment;
+  readonly failure: PostReturnContinuationFailureEvidence;
+}
+
 /** Physical operation earned strictly after the fresh post-return commitment. */
 export interface PostReturnIndependentOperationEvidence {
   readonly authority: "post_return_independent_operation_v1";
@@ -530,6 +597,16 @@ export interface FissionLifecycleRecord {
   readonly stabilizationEventId?: EventId;
   /** The fresh survivor-cohort decision made after a bounded return attempt failed. */
   readonly postReturnCommitment?: PostReturnContinuationCommitment;
+  /**
+   * Bounded provenance for superseded post-return decisions, newest last. A historical entry grants
+   * no movement or establishment authority; only `postReturnCommitment` is current.
+   */
+  readonly postReturnCommitmentHistory?: readonly HistoricalPostReturnContinuationCommitment[];
+  /**
+   * Bounded target exclusion memory. It prevents an automatic A -> A retry after physical failure
+   * without retaining an unbounded ledger of every attempted decision.
+   */
+  readonly postReturnFailedTargetTileIds?: readonly TileId[];
   /** Direct join to the historically distinct post-return establishment event. */
   readonly postReturnEstablishmentEventId?: EventId;
   /**

@@ -1,4 +1,4 @@
-// ROADMAP ITEM 4 §5 — controlled fixtures K1-K18 for the pure lifecycle kernel.
+// ROADMAP ITEM 4 §5 — controlled fixtures for the pure lifecycle kernel.
 //
 // Every transition, every rejection and every timeout. Non-vacuity is ASSERTED per fixture: the
 // harness relabels a fixture VACUOUS and fails the run when its predicate is false.
@@ -269,6 +269,7 @@ try {
           endorsedFounderCount: 5,
           stabilizationProof: fullStabilizationProof,
           postReturnCommitmentProven: true,
+          postReturnCourseFailureProven: true,
           postReturnEstablishmentProof: fullPostReturnEstablishmentProof,
           physicalCoLocationProven: true,
         });
@@ -391,6 +392,48 @@ try {
       nonVacuous: true,
       nonVacuityNote: "unrelated keys were genuinely present on the request",
       passed: clean === polluted,
+    };
+  });
+
+  // ── K15 — a post-return decision can end only through named physical contradiction ─────────
+  record("K15", "continuing-after-failed-return reopens disposition only behind physical course-failure proof", () => {
+    const current = {
+      phase: "continuing_after_failed_return",
+      phaseEnteredDay: 50,
+      history: ["returning", "unresolved_after_failed_return"],
+    };
+    const missing = k.requestTransition({
+      current,
+      to: "unresolved_after_failed_return",
+      today: 60,
+      cause: "physical_event",
+    });
+    const timer = k.requestTransition({
+      current,
+      to: "unresolved_after_failed_return",
+      today: 60,
+      cause: "elapsed_time",
+      postReturnCourseFailureProven: true,
+    });
+    const proven = k.requestTransition({
+      current,
+      to: "unresolved_after_failed_return",
+      today: 60,
+      cause: "physical_event",
+      postReturnCourseFailureProven: true,
+    });
+    const contract = k.getPhaseContract("continuing_after_failed_return");
+    return {
+      missing: missing.ok === true ? "ACCEPTED" : missing.rejection,
+      timer: timer.ok === true ? "ACCEPTED" : timer.rejection,
+      proven: proven.ok === true ? proven.state.phase : proven.rejection,
+      permittedNext: contract.permittedNext,
+      nonVacuous: proven.ok === true && contract.permittedNext.includes("unresolved_after_failed_return"),
+      nonVacuityNote: "the complete physical proof succeeds in the same run, so both negatives isolate the proof/cause barriers",
+      passed:
+        missing.ok === false && missing.rejection === "post_return_reconsideration_without_physical_failure" &&
+        timer.ok === false && timer.rejection === "post_return_reconsideration_without_physical_failure" &&
+        proven.ok === true && proven.state.phase === "unresolved_after_failed_return",
     };
   });
 

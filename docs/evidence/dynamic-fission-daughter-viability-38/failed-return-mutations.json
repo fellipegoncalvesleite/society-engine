@@ -2,21 +2,21 @@
   "audit": "ROADMAP ITEM 4 — failed-return mutation controls",
   "verdict": "PASS",
   "counts": {
-    "total": 6,
-    "passing": 6,
+    "total": 11,
+    "passing": 11,
     "failing": 0,
     "vacuous": 0
   },
   "restoration": {
     "byteIdentical": true,
     "startingHashes": {
-      "src/sim/agents/postReturnContinuation.ts": "1e81c5238dec80008adf659f0a837beff9987c4f691194a2c157f91bbdef9308",
-      "src/sim/agents/fissionLifecycleKernel.ts": "0b57040d2903f0edb0590ff7e06ce4779cc97d2e2fc91be137cd611fbd86d013",
+      "src/sim/agents/postReturnContinuation.ts": "5061935c8ae40ab7f2711e375e95bb5f7e48180602ca285e48bad8698ac2d2a0",
+      "src/sim/agents/fissionLifecycleKernel.ts": "351aa67ce2dbf542224efc515e1657316b63f64c49c5ab443316e449776fb467",
       "src/sim/agents/provisionalReintegration.ts": "1372ff1466bc55d52d091a294187b79bccfd445422bd70f7be31bd7e0ab7262d"
     },
     "restoredHashes": {
-      "src/sim/agents/postReturnContinuation.ts": "1e81c5238dec80008adf659f0a837beff9987c4f691194a2c157f91bbdef9308",
-      "src/sim/agents/fissionLifecycleKernel.ts": "0b57040d2903f0edb0590ff7e06ce4779cc97d2e2fc91be137cd611fbd86d013",
+      "src/sim/agents/postReturnContinuation.ts": "5061935c8ae40ab7f2711e375e95bb5f7e48180602ca285e48bad8698ac2d2a0",
+      "src/sim/agents/fissionLifecycleKernel.ts": "351aa67ce2dbf542224efc515e1657316b63f64c49c5ab443316e449776fb467",
       "src/sim/agents/provisionalReintegration.ts": "1372ff1466bc55d52d091a294187b79bccfd445422bd70f7be31bd7e0ab7262d"
     }
   },
@@ -164,6 +164,191 @@
           }
         ],
         "mutantRefusals": []
+      }
+    },
+    {
+      "id": "M7_post_commitment_reconsideration_prevents_living_limbo",
+      "barrier": "disabling the correction leaves living people indefinitely in the same unreachable A commitment after far more than the retained refusal boundary",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "detail": {
+        "finalPhase": "continuing_after_failed_return",
+        "finalPopulation": 3,
+        "finalCommitmentId": "commit:a11d4967a377353d",
+        "blockedStepDays": 37,
+        "historicalCommitments": 0,
+        "runDays": 40
+      }
+    },
+    {
+      "id": "M8_material_retarget_requires_new_commitment_identity",
+      "barrier": "removing target and decision day from commitment identity makes B masquerade under A's id, which the fresh-recommitment fixture rejects",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "detail": {
+        "AId": "commit:744021068bf985aa",
+        "ATarget": "tile:197:89",
+        "mutantCurrentId": "commit:744021068bf985aa",
+        "mutantCurrentTarget": "tile:194:90",
+        "mutantPhase": "established_after_failed_return"
+      }
+    },
+    {
+      "id": "M9_recommitment_resets_old_operation_authority",
+      "barrier": "retaining A's operation ledger across B violates the explicit empty-at-recommitment stale-evidence barrier",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "detail": {
+        "operationBeforeB": {
+          "lifetimeDaysWithAnyPhysicalTake": 7,
+          "lifetimeAssessmentWindows": 0,
+          "lifetimeWindowsWithAnyPhysicalTake": 0,
+          "lifetimeTileIdsWithAnyPhysicalTake": [],
+          "recentAssessmentWindows": [],
+          "openAssessmentWindow": {
+            "tileIds": [
+              "tile:195:89"
+            ],
+            "tileIdsWithAnyPhysicalTake": [
+              "tile:195:89"
+            ],
+            "startDay": 2678,
+            "days": 8,
+            "supportUnits": 0.3136,
+            "demandUnits": 0.2664,
+            "daysWithAnyPhysicalTake": 7,
+            "waterStressDaySum": 4.16,
+            "workerDays": 15,
+            "depletionApplied": 0.3444
+          }
+        },
+        "operationAtB": {
+          "lifetimeDaysWithAnyPhysicalTake": 7,
+          "lifetimeAssessmentWindows": 0,
+          "lifetimeWindowsWithAnyPhysicalTake": 0,
+          "lifetimeTileIdsWithAnyPhysicalTake": [],
+          "recentAssessmentWindows": [],
+          "openAssessmentWindow": {
+            "tileIds": [
+              "tile:195:89"
+            ],
+            "tileIdsWithAnyPhysicalTake": [
+              "tile:195:89"
+            ],
+            "startDay": 2678,
+            "days": 10,
+            "supportUnits": 0.3136,
+            "demandUnits": 0.333,
+            "daysWithAnyPhysicalTake": 7,
+            "waterStressDaySum": 5.2,
+            "workerDays": 17,
+            "depletionApplied": 0.3444
+          }
+        },
+        "immediateRecognition": {
+          "successorBandId": "band:failed-return-mutation-blocked",
+          "day": 2687,
+          "refusal": "no_fresh_operation_window"
+        }
+      }
+    },
+    {
+      "id": "M10_decision_cannot_use_hidden_world_target",
+      "barrier": "replacing the Band-only target with an objectively inspected WorldState tile immediately violates the current/observed knowledge boundary",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "detail": {
+        "mutantTarget": "tile:0:0",
+        "decisionTile": "tile:195:89",
+        "commitment": {
+          "commitmentId": "commit:a11d4967a377353d",
+          "authority": "post_return_continuation_commitment_v1",
+          "actorResolution": "aggregate_current_survivor_cohort",
+          "intent": "continue_as_separate_group",
+          "successorBandId": "band:failed-return-mutation-blocked",
+          "parentBandId": "band:varied-estuary",
+          "lineageId": "LIN-FAILED-RETURN-MUTATION-BLOCKED",
+          "survivors": {
+            "workingAdults": 3,
+            "dependents": 0,
+            "elders": 0
+          },
+          "failedReturnBeganOnDay": 2675,
+          "decisionDay": 2677,
+          "decisionTileId": "tile:195:89",
+          "targetTileId": "tile:0:0",
+          "evidence": {
+            "authority": "post_return_continuation_decision_v1",
+            "failedReturnBeganOnDay": 2675,
+            "assessedOnDay": 2677,
+            "livedSinceFailure": {
+              "firstDay": 2676,
+              "lastDay": 2677,
+              "days": 2,
+              "demandUnits": 0.0666,
+              "workerDays": 2,
+              "supportUnits": 0,
+              "meanWaterStress": 0.52
+            },
+            "currentCondition": {
+              "population": 3,
+              "workingAdults": 3,
+              "dependents": 0,
+              "elders": 0,
+              "mortalityRiskBump": 0.022
+            },
+            "target": {
+              "tileId": "tile:197:89",
+              "basis": "group_observed_memory",
+              "observedConfidence": 0.2,
+              "observedRichness": 1,
+              "observedWaterAccess": 1
+            },
+            "requirements": {
+              "failedReturnIsMonotonicHistory": true,
+              "postFailureLifeWasPhysicallyMeasured": true,
+              "currentSurvivorCohortIsNonempty": true,
+              "productiveLaborRemains": true,
+              "embodiedCapacityRemains": true,
+              "targetComesFromGroupOwnedKnowledge": true
+            },
+            "allRequirementsMet": true,
+            "sourceAuthorities": [
+              "ProvisionalSeparationCourse.return_path_entered",
+              "FissionLifecycleRecord.phaseEnteredDay",
+              "provisionalTravelSubsistence.TravelSubsistenceDay",
+              "Band.demography current survivor cohorts",
+              "Band.acuteRisk current embodied burden",
+              "Band.knowledge.observedTiles or current physical occupation"
+            ]
+          },
+          "reasonIds": [
+            "current_survivor_cohort_chose_independent_continuation",
+            "move_toward_group_observed_ground",
+            "post_failure_ground_motivated_known_relocation"
+          ]
+        }
+      }
+    },
+    {
+      "id": "M11_zero_population_exit_from_continuation",
+      "barrier": "removing the zero-body exit from the corrected current-course contract leaves an immortal empty provisional entity",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "baselineHeld": true,
+      "mutantViolated": true,
+      "detail": {
+        "phase": "continuing_after_failed_return",
+        "population": 0,
+        "resolutions": []
       }
     }
   ]

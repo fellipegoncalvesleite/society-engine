@@ -10,7 +10,9 @@ import {
   buildQualifyingPreReleaseWorld,
 } from "./lib/successorStabilizationFixture.mjs";
 import {
+  makeBlockedPostReturnCourse,
   makeGenuineUnresolvedFailedReturn,
+  runBlockedPostReturnCourse,
   runRegisteredPostReturnContinuation,
 } from "./lib/failedReturnContinuationFixture.mjs";
 
@@ -150,6 +152,27 @@ try {
       quarantineReleaseInitialized: true,
     },
   });
+  const blockedFixture = makeBlockedPostReturnCourse(modules, warm, {
+    successorBandId: "band:failed-return-mutation-blocked",
+    lineageId: "LIN-FAILED-RETURN-MUTATION-BLOCKED",
+  });
+  const blockedBaseline = runBlockedPostReturnCourse(modules, blockedFixture, 80);
+  const knowledgeReadyWorld = blockedFixture.decisionReadyWorld;
+  const knowledgeDecision = modules.postReturn.advancePostReturnDispositions(
+    knowledgeReadyWorld,
+    blockedFixture.decisionDay,
+  );
+  const knowledgeCommitment = knowledgeDecision.world.bands[blockedFixture.successorId]
+    .provisionalSuccessor.postReturnCommitment;
+  const zeroContinuingWorld = replaceBand(blockedFixture.world, blockedFixture.successorId, (band) => ({
+    ...band,
+    size: 0,
+    demography: { ...band.demography, population: 0, workingAdults: 0, dependents: 0, elders: 0 },
+  }));
+  const zeroContinuing = modules.lifecycleResolver.resolveProvisionalLifecycles(
+    zeroContinuingWorld,
+    blockedFixture.decisionDay + 1,
+  );
   baseline = {
     positiveDay: positive.day,
     successorId,
@@ -177,6 +200,30 @@ try {
     releaseHeld: dirty.established.length === 0 && dirty.refusals[0]?.refusal === "quarantine_release_preconditions_not_met",
     oldWindow: oldQualifying.evidence.assessmentWindow,
     freshWindow: event.independentOperation.assessmentWindow,
+    warm,
+    blockedFixture,
+    blockedCorrectionHeld:
+      blockedBaseline.resolved === true &&
+      blockedBaseline.superseded?.failure.reason === "repeated_local_route_refusal" &&
+      blockedBaseline.recommitted !== undefined &&
+      blockedBaseline.recommitted.commitmentId !== blockedFixture.commitment.commitmentId,
+    operationResetHeld:
+      (blockedBaseline.operationHistoryBeforeRecommitment?.lifetimeDaysWithAnyPhysicalTake ?? 0) > 0 &&
+      blockedBaseline.operationHistoryAtRecommitment?.lifetimeDaysWithAnyPhysicalTake === 0 &&
+      blockedBaseline.operationHistoryAtRecommitment?.recentAssessmentWindows.length === 0,
+    knowledgeReadyWorld,
+    knowledgeDecisionDay: blockedFixture.decisionDay,
+    knowledgeSuccessorId: blockedFixture.successorId,
+    knowledgeBoundaryHeld:
+      knowledgeCommitment !== undefined &&
+      knowledgeReadyWorld.bands[blockedFixture.successorId].knowledge.observedTiles[
+        knowledgeCommitment.targetTileId
+      ] !== undefined,
+    zeroContinuingWorld,
+    zeroDay: blockedFixture.decisionDay + 1,
+    zeroTerminalHeld:
+      zeroContinuing.world.bands[blockedFixture.successorId].provisionalSuccessor.phase ===
+        "provisional_extinguished",
   };
 } finally {
   await baselineServer.close();
@@ -215,7 +262,7 @@ try {
       source,
       `window.startDay > commitment.decisionDay`,
       `window.startDay >= (record.departureProvenance?.departedOnDay ?? 0)`,
-      2,
+      3,
       "M2",
     ),
     probe: async (server) => {
@@ -333,6 +380,193 @@ try {
     baseline.releaseHeld,
     mutant.established.length === 1,
     { mutantEstablished: mutant.established, mutantRefusals: mutant.refusals },
+  );
+}
+
+{
+  const mutant = await runMutation({
+    id: "M7_post_commitment_reconsideration_prevents_living_limbo",
+    file: POST_RETURN_SRC,
+    mutate: (source) => replaceExactly(
+      source,
+      `    if (failure === undefined || failure.allRequirementsMet !== true) continue;`,
+      `    if (true) continue;`,
+      1,
+      "M7",
+    ),
+    probe: async (server) => {
+      const modules = await loadSuccessorStabilizationModules(server);
+      return runBlockedPostReturnCourse(modules, baseline.blockedFixture, 40);
+    },
+  });
+  const final = mutant.band.provisionalSuccessor;
+  record(
+    "M7_post_commitment_reconsideration_prevents_living_limbo",
+    "disabling the correction leaves living people indefinitely in the same unreachable A commitment after far more than the retained refusal boundary",
+    baseline.blockedCorrectionHeld,
+    mutant.resolved === false && mutant.band.demography.population > 0 &&
+      final.phase === "continuing_after_failed_return" &&
+      final.postReturnCommitment?.commitmentId === baseline.blockedFixture.commitment.commitmentId &&
+      (final.blockedStepDays ?? 0) > 5 &&
+      (final.postReturnCommitmentHistory?.length ?? 0) === 0,
+    {
+      finalPhase: final.phase,
+      finalPopulation: mutant.band.demography.population,
+      finalCommitmentId: final.postReturnCommitment?.commitmentId,
+      blockedStepDays: final.blockedStepDays,
+      historicalCommitments: final.postReturnCommitmentHistory?.length ?? 0,
+      runDays: mutant.trace.length,
+    },
+  );
+}
+
+{
+  const mutant = await runMutation({
+    id: "M8_material_retarget_requires_new_commitment_identity",
+    file: POST_RETURN_SRC,
+    mutate: (source) => {
+      const withoutTarget = replaceExactly(
+        source,
+        `    String(target),`,
+        `    String(band.position),`,
+        1,
+        "M8 target identity",
+      );
+      return replaceExactly(
+        withoutTarget,
+        `    \`day\${today}\`,`,
+        `    \`failed\${failedReturnBeganOnDay}\`,`,
+        1,
+        "M8 decision identity",
+      );
+    },
+    probe: async (server) => {
+      const modules = await loadSuccessorStabilizationModules(server);
+      const fixture = makeBlockedPostReturnCourse(modules, baseline.warm, {
+        successorBandId: "band:failed-return-mutation-blocked",
+        lineageId: "LIN-FAILED-RETURN-MUTATION-BLOCKED",
+      });
+      return { fixture, run: runBlockedPostReturnCourse(modules, fixture, 80) };
+    },
+  });
+  const finalCommitment = mutant.run.band.provisionalSuccessor.postReturnCommitment;
+  record(
+    "M8_material_retarget_requires_new_commitment_identity",
+    "removing target and decision day from commitment identity makes B masquerade under A's id, which the fresh-recommitment fixture rejects",
+    baseline.blockedCorrectionHeld,
+    finalCommitment !== undefined &&
+      String(finalCommitment.targetTileId) !== String(mutant.fixture.commitment.targetTileId) &&
+      finalCommitment.commitmentId === mutant.fixture.commitment.commitmentId,
+    {
+      AId: mutant.fixture.commitment.commitmentId,
+      ATarget: mutant.fixture.commitment.targetTileId,
+      mutantCurrentId: finalCommitment?.commitmentId,
+      mutantCurrentTarget: finalCommitment?.targetTileId,
+      mutantPhase: mutant.run.band.provisionalSuccessor.phase,
+    },
+  );
+}
+
+{
+  const mutant = await runMutation({
+    id: "M9_recommitment_resets_old_operation_authority",
+    file: POST_RETURN_SRC,
+    mutate: (source) => replaceExactly(
+      source,
+      `        operationHistory: emptyOperationHistory(),`,
+      `        operationHistory: closedRecord.operationHistory,`,
+      1,
+      "M9",
+    ),
+    probe: async (server) => {
+      const modules = await loadSuccessorStabilizationModules(server);
+      return runBlockedPostReturnCourse(modules, baseline.blockedFixture, 80);
+    },
+  });
+  record(
+    "M9_recommitment_resets_old_operation_authority",
+    "retaining A's operation ledger across B violates the explicit empty-at-recommitment stale-evidence barrier",
+    baseline.operationResetHeld,
+    (mutant.operationHistoryAtRecommitment?.lifetimeDaysWithAnyPhysicalTake ?? 0) > 0 ||
+      (mutant.operationHistoryAtRecommitment?.recentAssessmentWindows.length ?? 0) > 0 ||
+      mutant.operationHistoryAtRecommitment?.openAssessmentWindow !== undefined,
+    {
+      operationBeforeB: mutant.operationHistoryBeforeRecommitment,
+      operationAtB: mutant.operationHistoryAtRecommitment,
+      immediateRecognition: mutant.staleEvidenceRefusalAtRecommitment,
+    },
+  );
+}
+
+{
+  const mutant = await runMutation({
+    id: "M10_decision_cannot_use_hidden_world_target",
+    file: POST_RETURN_SRC,
+    mutate: (source) => replaceExactly(
+      source,
+      `        postReturnCommitment: decision.commitment,`,
+      `        postReturnCommitment: {
+          ...decision.commitment,
+          targetTileId: Object.values(world.tiles).find((tile) =>
+            tile.isAquatic !== true && String(tile.id) !== String(band.position) &&
+            band.knowledge.observedTiles[tile.id] === undefined)?.id ?? decision.commitment.targetTileId,
+        },`,
+      1,
+      "M10",
+    ),
+    probe: async (server) => {
+      const modules = await loadSuccessorStabilizationModules(server);
+      return modules.postReturn.advancePostReturnDispositions(
+        baseline.knowledgeReadyWorld,
+        baseline.knowledgeDecisionDay,
+      );
+    },
+  });
+  const mutantBand = mutant.world.bands[baseline.knowledgeSuccessorId];
+  const mutantTarget = mutantBand.provisionalSuccessor.postReturnCommitment?.targetTileId;
+  record(
+    "M10_decision_cannot_use_hidden_world_target",
+    "replacing the Band-only target with an objectively inspected WorldState tile immediately violates the current/observed knowledge boundary",
+    baseline.knowledgeBoundaryHeld,
+    mutantTarget !== undefined && String(mutantTarget) !== String(mutantBand.position) &&
+      mutantBand.knowledge.observedTiles[mutantTarget] === undefined,
+    {
+      mutantTarget,
+      decisionTile: mutantBand.position,
+      knownTarget: mutantTarget === undefined ? undefined : mutantBand.knowledge.observedTiles[mutantTarget],
+      commitment: mutantBand.provisionalSuccessor.postReturnCommitment,
+    },
+  );
+}
+
+{
+  const mutant = await runMutation({
+    id: "M11_zero_population_exit_from_continuation",
+    file: KERNEL_SRC,
+    mutate: (source) => replaceExactly(
+      source,
+      `    permittedNext: ["unresolved_after_failed_return", "established_after_failed_return", "provisional_extinguished"],`,
+      `    permittedNext: ["unresolved_after_failed_return", "established_after_failed_return"],`,
+      1,
+      "M11",
+    ),
+    probe: async (server) => {
+      const modules = await loadSuccessorStabilizationModules(server);
+      return modules.lifecycleResolver.resolveProvisionalLifecycles(
+        baseline.zeroContinuingWorld,
+        baseline.zeroDay,
+      );
+    },
+  });
+  const mutantZero = mutant.world.bands[baseline.knowledgeSuccessorId];
+  record(
+    "M11_zero_population_exit_from_continuation",
+    "removing the zero-body exit from the corrected current-course contract leaves an immortal empty provisional entity",
+    baseline.zeroTerminalHeld,
+    mutantZero.demography.population === 0 &&
+      mutantZero.provisionalSuccessor.phase === "continuing_after_failed_return" &&
+      mutant.resolutions.length === 0,
+    { phase: mutantZero.provisionalSuccessor.phase, population: mutantZero.demography.population, resolutions: mutant.resolutions },
   );
 }
 
