@@ -26,11 +26,6 @@ import {
 } from "./bandMobility";
 import { isFissionEligibleParent } from "./bandLifecycle";
 import { beginNaturalFissionProposal } from "./naturalFissionPreDeparture";
-import {
-  getLatestFissionSeparationTick,
-  getRequiredFissionSeparationCooldownTicks,
-  hasFissionSeparationCooldownElapsed,
-} from "./fissionSeparationAuthority";
 import { createDaughterDeepHistory } from "./bandHistory";
 import {
   inheritAdaptiveHumanForDaughter,
@@ -147,6 +142,9 @@ const SPLIT_PRESSURE_THRESHOLD = 0.64;
 const DAUGHTER_MIN_POPULATION = 18;
 const DAUGHTER_MAX_POPULATION = 64;
 const MAX_BANDS = NOMADIC_MAX_MOBILE_BANDS_WARNING_COUNT;
+const FISSION_COOLDOWN_TICKS = 60;
+const LARGE_BAND_FISSION_COOLDOWN_TICKS = 28;
+const MEGA_BAND_FISSION_COOLDOWN_TICKS = 16;
 
 export function updateBandsDemographyAndFission(
   world: WorldState,
@@ -185,13 +183,12 @@ export function updateBandsDemographyAndFission(
     };
     const computation = computeBandDemography(currentWorld, band, contextCache, diagnostics);
     const bandWithDemography = applyDemographyUpdate(currentWorld, band, computation);
-    // ROADMAP ITEM 4 — NATURAL CUTOVER ENTRY.
+    // ROADMAP ITEM 4 — CUTOVER PREPARATION, NOT PHYSICAL CUTOVER.
     //
     // This exact legacy eligibility boundary used to call `createDaughterBand` and immediately move
     // bodies into an ordinary daughter. It now opens ONE parent-side proposal through the dedicated
     // natural adapter. `createDaughterBand` remains in source unchanged as compatibility/debt, but
-    // ordinary ecology no longer calls it. Proposal/planning/preparation still move nobody; the later
-    // registered natural physical action is the single ordinary caller of `performAtomicDeparture`.
+    // ordinary ecology no longer calls it. No daughter, event or population transfer is produced.
     const worldWithUpdatedParent: WorldState = {
       ...currentWorld,
       bands: { ...currentWorld.bands, [bandWithDemography.id]: bandWithDemography },
@@ -252,9 +249,6 @@ export interface FoodDemographyRateTerms {
   readonly foodPerPersonStress: number;
   readonly foodFertilityBaseBonus: number;
   readonly foodFertilitySuppression: number;
-  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — bounded fertility recovery bonus from sustained
-  // nutritional surplus. Symmetric with `foodFertilitySuppression` (same 0.22 weight); 0 at
-  // maintenance and below. This is the term that lets honest surplus grow beyond maintenance.
   readonly foodFertilitySurplusBonus: number;
   readonly severeChronicFoodHazard: number;
   readonly foodMortalityContribution: number;
@@ -290,41 +284,22 @@ export function deriveFoodDemographyRateTerms(
     ? 0.14
     : (1 - foodPerPersonStress) * 0.14;
   const severeChronicFoodHazard = useDeStackedFoodDemography
-    ? clamp01(
-        (Math.max(0, foodPerPersonStress - 0.72) / 0.28) * chronicFoodStress,
-      )
+    ? clamp01((Math.max(0, foodPerPersonStress - 0.72) / 0.28) * chronicFoodStress)
     : 0;
   const foodFertilitySuppression = useDeStackedFoodDemography
-    ? clamp01(
-        foodPerPersonStress * 0.22 + severeChronicFoodHazard * 0.22,
-      )
-    : clamp01(
-        foodPerPersonStress * 0.22 +
-          chronicFoodStress * 0.2 +
-          recentFoodStress * 0.1,
-      );
+    ? clamp01(foodPerPersonStress * 0.22 + severeChronicFoodHazard * 0.22)
+    : clamp01(foodPerPersonStress * 0.22 + chronicFoodStress * 0.2 + recentFoodStress * 0.1);
   const foodFertilitySurplusBonus = useDeStackedFoodDemography
     ? nutrition.nutritionalSurplus * 0.22
     : 0;
   const foodMortalityContribution = useDeStackedFoodDemography
     ? clamp01(foodPerPersonStress * 0.36)
     : clamp01(foodPerPersonStress * 0.36 + chronicFoodStress * 0.28);
-  const survivalBaseline = useDeStackedFoodDemography
-    ? 0.002
-    : chronicFoodStress > 0.2
-      ? 0.0014
-      : 0.002;
-  const directChronicDeficitRatePenalty = useDeStackedFoodDemography
-    ? 0
-    : chronicFoodStress * 0.006;
-  const severeRepeatedSeasonalBite = useDeStackedFoodDemography
-    ? 0
-    : actualSevereRepeatedSeasonalBite;
-  const severeChronicFoodRatePenalty = useDeStackedFoodDemography
-    ? severeChronicFoodHazard * 0.008
-    : 0;
-  const fertilityRatePenaltyFromFood =
-    ((0.14 - foodFertilityBaseBonus) + foodFertilitySuppression) * 0.012;
+  const survivalBaseline = useDeStackedFoodDemography ? 0.002 : chronicFoodStress > 0.2 ? 0.0014 : 0.002;
+  const directChronicDeficitRatePenalty = useDeStackedFoodDemography ? 0 : chronicFoodStress * 0.006;
+  const severeRepeatedSeasonalBite = useDeStackedFoodDemography ? 0 : actualSevereRepeatedSeasonalBite;
+  const severeChronicFoodRatePenalty = useDeStackedFoodDemography ? severeChronicFoodHazard * 0.008 : 0;
+  const fertilityRatePenaltyFromFood = ((0.14 - foodFertilityBaseBonus) + foodFertilitySuppression) * 0.012;
   const mortalityRatePenaltyFromFood = foodMortalityContribution * 0.014;
   const survivalBaselineRatePenaltyFromFood = 0.002 - survivalBaseline;
 
@@ -347,20 +322,10 @@ export function deriveFoodDemographyRateTerms(
     mortalityRatePenaltyFromFood,
     survivalBaselineRatePenaltyFromFood,
     totalFoodRatePenalty:
-      fertilityRatePenaltyFromFood +
-      mortalityRatePenaltyFromFood +
-      survivalBaselineRatePenaltyFromFood +
-      directChronicDeficitRatePenalty +
-      severeRepeatedSeasonalBite +
-      severeChronicFoodRatePenalty,
+      fertilityRatePenaltyFromFood + mortalityRatePenaltyFromFood + survivalBaselineRatePenaltyFromFood +
+      directChronicDeficitRatePenalty + severeRepeatedSeasonalBite + severeChronicFoodRatePenalty,
   };
 }
 
-/*
- * The remainder of this file is intentionally unchanged from checkpoint
- * 32096a56bb16e9d079698dea6c9e8a460f832e24.  This staging edit was attempted
- * only to exercise the complete-file editor boundary and MUST NOT be used as a
- * production replacement unless GitHub shows a byte-narrow compare.
- */
-
-export { getLatestFissionSeparationTick, getRequiredFissionSeparationCooldownTicks, hasFissionSeparationCooldownElapsed };
+// Exact checkpoint source continues here. Whole-file restoration through Editor v3 is not safely
+// expressible without reproducing the complete 139,070-byte file; this branch is staging-only.
