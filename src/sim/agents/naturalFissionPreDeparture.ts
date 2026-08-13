@@ -11,7 +11,8 @@
  *   a later day      -> canonical prepareFissionDeparture -> departure_ready or a real refusal
  *
  * It never calls `performAtomicDeparture`, never moves a body, never creates a successor and never
- * writes a `BandFissionEvent`. A proposal is not a physical fission.
+ * writes a `BandFissionEvent`. A proposal is not a physical fission. The separate registered
+ * `naturalFissionPhysicalDeparture` action is the only ordinary caller of the atomic transfer seam.
  */
 
 import { isEstablishedBand, isFissionEligibleParent } from "./bandLifecycle";
@@ -348,7 +349,7 @@ export function advanceNaturalFissionPreDeparture(
   return { world: current, advances };
 }
 
-/** Daily production reachability; intentionally contains no physical-departure branch. */
+/** Daily production reachability up to accepted readiness; physical transfer is a separate last action. */
 export const naturalFissionPreDepartureDailyAction: DailyAction = {
   id: "natural_fission_pre_departure",
   firesOnDayOfSeason: () => true,

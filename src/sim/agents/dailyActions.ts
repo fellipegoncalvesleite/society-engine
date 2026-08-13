@@ -18,13 +18,15 @@ import type { WorldState } from "../world/types";
  *
  * Hard contract for any registered action (so this stays safe):
  *   - PURE & deterministic: no `unseeded random call`, no `any`, no UI/render/Zustand.
- *   - It must NOT move the residential/home-range marker (`band.position`).
- *     Residential relocation stays in the seasonal `bandDecision` path. Mixing
- *     daily marker motion in here is exactly the SPIKE-MOBILITY-1 HEAT collapse.
- *   - Season-gated physical systems (demography, physical fission, depletion, resource economics)
- *     are deliberately NOT registered here; they run once per crossed season. Parent-side fission
- *     planning and deadline actions are the narrow exception: their kernel contracts are stated in
- *     DAYS, they move no bodies, and ordinary physical departure remains unregistered.
+ *   - It must NOT move the residential/home-range marker (`band.position`) for an established band.
+ *     Residential relocation stays in the seasonal `bandDecision` path. Mixing ordinary daily marker
+ *     motion in here is exactly the SPIKE-MOBILITY-1 HEAT collapse. A provisional successor is the
+ *     deliberate exception: its bounded daily travel authority owns that group's actual walking.
+ *   - Season-gated physical systems (demography, depletion, resource economics) are deliberately NOT
+ *     registered here. Direction-D physical fission is the narrow exception: its parent attempt is a
+ *     day-bounded lifecycle, and the registered cutover action merely executes an already accepted
+ *     preparation through the one atomic transfer seam. It runs last and refuses a season-boundary
+ *     birth, so it cannot grant a newborn successor same-day daily or seasonal work.
  */
 export interface DailyAction {
   readonly id: string;
