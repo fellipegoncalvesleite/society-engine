@@ -1,6 +1,6 @@
-# Human Nomad Simulator
+# Society Engine
 
-Human Nomad Simulator is a browser simulation about small nomadic bands moving through a seasonal world. The bands search for food and water, remember useful places, avoid places that hurt them, split when a group gets too large, and leave behind stories that come from the run itself.
+Society Engine is a browser simulation about small nomadic bands moving through a seasonal world. The bands search for food and water, remember useful places, avoid places that hurt them, split when a group gets too large, and leave behind stories that come from the run itself.
 
 The goal is to make the simulation readable. You can inspect numbers when you need them, but the main view is written like a field note or a short history page.
 
