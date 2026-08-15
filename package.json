@@ -1,5 +1,5 @@
 {
-  "name": "emergent-civilization-simulation",
+  "name": "society-engine",
   "description": "Society Engine: an inspectable human and societal simulation system, currently focused on mobile groups, ecology, movement, memory, demography, relationships, and emergent history.",
   "private": true,
   "version": "0.1.0",
