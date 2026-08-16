@@ -230,7 +230,7 @@ export function ArchitectureMapPage() {
       <div className="ag-topbar">
         <div className="ag-topbar-main">
           <div className="ag-kicker">Obsidian-style architecture graph · Project memory</div>
-          <h1 className="ag-title">Emergent Civilization Simulator — Ecology Architecture</h1>
+          <h1 className="ag-title">Society Engine — Ecology Architecture</h1>
           <p className="ag-sub">
             Force-directed node map with current systems, missing bridge systems, future ecology systems, risk nodes,
             and typed dependency links.

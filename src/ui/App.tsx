@@ -526,7 +526,7 @@ export function App() {
   function handleExportSetup() {
     const setup = {
       formatVersion: 1,
-      app: "human-nomad-simulator",
+      app: "society-engine",
       label: currentMap.label,
       mapScaleLabel,
       runSeed: runSeedInput,

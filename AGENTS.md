@@ -2,7 +2,7 @@
 
 > **Required reading before repository work.**
 >
-> This file is the model-neutral operational entry point for `fellipegoncalvesleite/human-nomad-simulator`.
+> This file is the model-neutral operational entry point for `fellipegoncalvesleite/society-engine`.
 > It exists to prevent every coding agent from rediscovering the repository from scratch.
 >
 > **Code overrides stale documentation.** When this file, `CLAUDE.md`, a handoff, a report, a README section, a commit message, or a roadmap disagrees with current production code, current code wins. Current audits and type/graph metadata come next.

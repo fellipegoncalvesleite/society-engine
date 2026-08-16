@@ -1,6 +1,6 @@
 # CLAUDE.md — Architectural Dossier and Implementation Guide
 
-> Detailed architecture, product intent, active specification, accepted checkpoint history, audit guidance, and Claude-specific workflow for `fellipegoncalvesleite/human-nomad-simulator`.
+> Detailed architecture, product intent, active specification, accepted checkpoint history, audit guidance, and Claude-specific workflow for `fellipegoncalvesleite/society-engine`.
 >
 > Read [`AGENTS.md`](./AGENTS.md) first. Then read only the sections relevant to the current task.
 
@@ -549,7 +549,7 @@ Optional runner diagnostics introduced for the active checkpoint must never be p
 
 | File/area | Required reading | Current status |
 | --- | --- | --- |
-| `package.json` | name `emergent-civilization-simulation`; scripts `dev`(vite)/`build`(tsc+tsc.node+vite build)/`preview`(vite preview)/`sim:benchmark`(node scripts/simBenchmark.mjs); deps react 19.2, zustand 5, d3-drag/force/selection/zoom, lucide-react; devDeps typescript 6, vite 8 | **VERIFIED** |
+| `package.json` | name `society-engine`; scripts `dev`(vite)/`build`(tsc+tsc.node+vite build)/`preview`(vite preview)/`sim:benchmark`(node scripts/simBenchmark.mjs); deps react 19.2, zustand 5, d3-drag/force/selection/zoom, lucide-react; devDeps typescript 6, vite 8 | **VERIFIED** |
 | TypeScript config files | `tsconfig.json` (app) + `tsconfig.node.json` (vite/node config); both compiled in `build` | **VERIFIED** — no separate test config; there is no `test` script, testing is the audit scripts + `sim:benchmark` |
 | build config | `vite.config.ts`, `@vitejs/plugin-react` | **VERIFIED** |
 | README | public-facing project description | present, not modified by this pass |

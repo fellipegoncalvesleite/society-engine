@@ -1,4 +1,4 @@
-# Project Handoff — Emergent Civilization Simulator
+# Project Handoff — Society Engine
 
 > **Living document.** This is the rolling handoff between AI agents. Each checkpoint,
 > the agent updates the **Current Status** section (and **Recommended Next Step**) and

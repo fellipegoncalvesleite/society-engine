@@ -1,22 +1,31 @@
 # Society Engine
 
-Society Engine is a browser simulation about small nomadic bands moving through a seasonal world. The bands search for food and water, remember useful places, avoid places that hurt them, split when a group gets too large, and leave behind stories that come from the run itself.
+Society Engine is a deterministic human-society simulation built to explore how larger social patterns can emerge from physical conditions and accumulated experience rather than scripted civilization stages.
 
-The goal is to make the simulation readable. You can inspect numbers when you need them, but the main view is written like a field note or a short history page.
+The **current implementation** starts with small mobile human bands. They move through a seasonal world, search for food and water, learn and remember useful or dangerous places, respond to risk and demographic pressure, split into new groups, and accumulate histories from the simulation itself. The browser interface makes those systems inspectable through the map, band views, Chronicle, and architecture tools.
 
-## What You Can Do
+That starting point is deliberately narrower than the project's intended scope. The longer-term direction is to let human groups develop through interacting systems for movement, resources, memory, relationships, population dynamics, settlement, social organization, culture, technology, institutions, and history. Those systems are planned to emerge from earlier causal conditions rather than appear as fixed unlocks or labels.
 
-1. Pick a band and read what it is doing, where it is living, what it knows, who it has met and what risks it faces.
-2. Open the Chronicle tab to see a wiki style article built from that band's actual history.
-3. Paint the map before starting a run so the world has the terrain you want to test.
-4. Watch bands move through seasons on the canvas map.
-5. Open the architecture view to see how the simulation systems connect.
+## Implemented now
 
-## How It Works
+- Deterministic TypeScript simulation core with seeded, reproducible runs.
+- Mobile bands interacting with terrain, seasonal ecology, resource knowledge, risk, labor, movement, and demography.
+- Band-local knowledge and memory rather than omniscient access to world state.
+- Expeditionary/logistical movement, task camps, observations, and physical resource returns.
+- Generated band histories and a Chronicle view derived from simulated events.
+- Editable maps plus architecture/debug views for inspecting how the simulation works.
+
+## Planned scope
+
+Society Engine is intended to grow beyond mobile bands into a broader human and societal simulation. Planned systems include richer inter-group relationships and exchange, culture and identity, persistent routes and settlements, deeper social organization, technology and institutions, and longer-run historical change.
+
+These are roadmap goals, **not claims about the current build**. The project treats settlement, culture, and later social complexity as outcomes that should become viable because of preceding ecological, demographic, behavioral, and social conditions.
+
+## How it works
 
 The simulation core lives in `src/sim` and is written in TypeScript. It does not depend on React or the DOM. A seeded generator controls variation, so the same seed produces the same history.
 
-The interface uses React, Vite and Zustand. The world is drawn on canvas, and a worker keeps the simulation moving without blocking the main screen.
+The interface uses React, Vite, and Zustand. The world is drawn on canvas, and a worker keeps the simulation moving without blocking the main screen.
 
 ## Running it
 
@@ -28,14 +37,14 @@ npm run build      # type check and production build
 
 ## Benchmark CLI
 
-The simulation can also run without the browser for performance checks and behavior checks:
+The simulation can also run without the browser for performance and behavior checks:
 
 ```bash
 npm run sim:benchmark
 ```
 
-Scenarios cover crowded deltas, overloaded core areas, daughter band expansion, dry margins and other cases. The benchmark script also supports reproducible checks when you want to confirm that the same setup gives the same run.
+Scenarios cover crowded deltas, overloaded core areas, daughter-band expansion, dry margins, and other cases. The benchmark script also supports reproducible checks when you want to confirm that the same setup gives the same run.
 
 ## Status
 
-Actively developed. The current focus is making generated histories easier to read and keeping long runs fast.
+Actively developed. The current codebase focuses on making the physical, behavioral, and demographic foundations robust enough for later social complexity to emerge causally rather than be scripted on top.

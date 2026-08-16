@@ -1,6 +1,6 @@
 {
-  "name": "emergent-civilization-simulation",
-  "description": "Interactive simulation of nomadic human bands with seasonal ecology, migration, memory, and wiki style histories.",
+  "name": "society-engine",
+  "description": "Deterministic human-society simulation where social complexity emerges from ecology, knowledge, movement, demography, and history.",
   "private": true,
   "version": "0.1.0",
   "type": "module",

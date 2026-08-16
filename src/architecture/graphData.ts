@@ -1,7 +1,7 @@
 /**
  * Architecture Map data + display config — living project memory.
  *
- * Source of truth: "Emergent Civilization Simulator — Ecology Architecture Sheet".
+ * Source of truth: "Society Engine — Ecology Architecture Sheet".
  * This is documentation only; it lives outside `src/sim` and never owns sim truth.
  *
  * To add a new system: add a node here, give it a cluster + scope + status, and
