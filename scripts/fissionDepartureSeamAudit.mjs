@@ -3,10 +3,9 @@
 // Non-vacuity is ASSERTED per gate. The harness relabels a gate VACUOUS and fails the run when its
 // predicate is false.
 //
-// SCOPE LIMIT, STATED UP FRONT: the seam is NOT reachable from ordinary fission. These gates drive
-// the production writer directly, which is what the brief authorises. They prove the departure
-// TRANSITION is truthful. They prove nothing about travel, return or stabilization, none of which
-// exist, and nothing about natural occurrence.
+// SCOPE LIMIT, STATED UP FRONT: these D-gates drive the atomic writer directly. Ordinary natural
+// production now reaches the same writer through exactly one adapter, but this suite itself proves
+// seam truth (transfer/conservation/ownership), not the natural occurrence or downstream lifecycle.
 import { createServer } from "vite";
 import { prepareAndDepart } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
@@ -439,15 +438,15 @@ try {
     };
   });
 
-  // ── D16 — the seam is not reachable from ordinary fission ───────────────────────────────────
-  record("D16", "natural pre-departure is live but nothing in ordinary production calls this physical seam", () => {
-    // Read from the actual source rather than asserted.
+  // ── D16 — exactly one ordinary natural production caller ────────────────────────────────────
+  record("D16", "ordinary natural fission reaches this physical seam through exactly one adapter and the legacy daughter constructor still has no caller", () => {
     const demography = readFileSync("src/sim/agents/demography.ts", "utf8");
     const natural = readFileSync("src/sim/agents/naturalFissionPreDeparture.ts", "utf8");
+    const departure = readFileSync("src/sim/agents/naturalFissionDeparture.ts", "utf8");
     const registry = readFileSync("src/sim/agents/dailyActionRegistry.ts", "utf8");
     const advance = readFileSync("src/sim/tick/advance.ts", "utf8");
     const sources = [["demography.ts", demography], ["naturalFissionPreDeparture.ts", natural],
-      ["dailyActionRegistry.ts", registry], ["advance.ts", advance]];
+      ["naturalFissionDeparture.ts", departure], ["dailyActionRegistry.ts", registry], ["advance.ts", advance]];
     const callers = sources.filter(([, source]) => /\bperformAtomicDeparture\s*\(/.test(source)).map(([file]) => file);
     const legacyOccurrences = [...demography.matchAll(/\bcreateDaughterBand\s*\(/g)].length;
     return {
@@ -456,10 +455,9 @@ try {
       legacyImplementationExists: /function createDaughterBand\s*\(/.test(demography),
       legacyCallSites: Math.max(0, legacyOccurrences - 1),
       nonVacuous: baseline.ok === true,
-      nonVacuityNote: "the controlled audit really executed this seam, so zero ordinary callers is a caller-boundary claim rather than an inert function",
-      passed: callers.length === 0 &&
-        [...natural.matchAll(/\bprepareFissionDeparture\s*\(/g)].length === 1 &&
-        legacyOccurrences === 1,
+      nonVacuityNote: "the controlled audit genuinely executes the seam, and the source scan discriminates the single production adapter",
+      passed: callers.length === 1 && callers[0] === "naturalFissionDeparture.ts" &&
+        [...natural.matchAll(/\bprepareFissionDeparture\s*\(/g)].length === 1 && legacyOccurrences === 1,
     };
   });
 
@@ -498,7 +496,7 @@ try {
     checkpoint: "ROADMAP ITEM 4 §11 — atomic departure seam controlled gates",
     authority: "src/sim/agents/fissionDepartureSeam.ts",
     scopeLimit:
-      "The seam is NOT reachable from ordinary fission — D16 reads the sources to prove it. These gates drive the production writer directly. They prove the departure TRANSITION is truthful; they prove nothing about travel, return or stabilization, none of which exist, and nothing about natural occurrence.",
+      "D16 verifies the sole ordinary natural caller, but these controlled gates drive the atomic writer directly. They prove transfer truth; natural occurrence and downstream lifecycle are covered by the physical-cutover audit.",
     fixtures,
     summary: { total: fixtures.length, passing: counts.PASS, failing: counts.FAIL, vacuous: counts.VACUOUS, errored: counts.ERROR },
   };
@@ -521,16 +519,16 @@ try {
       { step: 12, name: "deriveFinalReadModelContext + updateBandContextStates", movesBands: false, note: "partial rebuild when the active band set changed, so the successor enters the read model this tick" },
     ],
     chosenSeam: {
-      step: 8,
-      writer: "src/sim/agents/fissionDepartureSeam.ts performAtomicDeparture",
-      why: "Both the decision loop's bandOrder and updateBandsDemographyAndFission's own bandOrder are snapshots taken before their loops begin, so a band created at step 8 is in NEITHER. It therefore cannot receive a decision this tick (no free movement, no double movement) and cannot receive a demographic update this tick (no double update). It gets its first of each on the next tick, exactly once. This is also exactly where the legacy path already sits.",
-      acceptedConsequence:
-        "The ecology steps consume the step-5 cache, so the successor exerts no depletion on its birth tick. This is IDENTICAL to what the legacy daughter does today, so it is a preserved property rather than a new defect.",
+      cadence: "daily_non_boundary",
+      writer: "src/sim/agents/naturalFissionDeparture.ts -> fissionDepartureSeam.performAtomicDeparture",
+      order: "final DEFAULT_DAILY_ACTIONS entry",
+      why: "proposal, planning, preparation and parent deadlines are already day-bounded. Readiness on day D is offered no earlier than D+1. Being last prevents every other daily successor action from seeing the newborn on its birth day; skipping dayOfSeason=0 prevents the immediately following seasonal pipeline from seeing a same-day newborn.",
+      acceptedConsequence: "a ready attempt at a season boundary defers physical execution until a later legal day; if intervening seasonal state invalidates the accepted terms, the stale-ready resolver terminalizes them rather than silently refitting.",
     },
     rejectedSeams: [
-      { step: 4, why: "bands physically move here, so a successor created mid-loop could be handed a decision and move on its birth day — free movement" },
-      { step: 11, why: "after the ecology advance the successor would miss viability and the read-model pass, appearing only in the next tick's cache — a one-tick disappearance from physical presence" },
-      { name: "runDailyActions", why: "wrong cadence entirely; fission is annual and a daily writer would need its own resolution bound" },
+      { name: "seasonal_demography_only", why: "adds an artificial delay to a lifecycle whose readiness and deadlines are explicitly daily" },
+      { name: "earlier_daily_action", why: "a successor created before travel/subsistence/return/stabilization actions could receive free same-day work" },
+      { name: "boundary_day_daily_action", why: "advanceWorldByDays runs the seasonal pipeline immediately after boundary-day daily actions, exposing a newborn to same-day seasonal work" },
     ],
     doubleProcessingRisks: {
       consumedTwice: "prevented — the successor is not in step 4's snapshot",

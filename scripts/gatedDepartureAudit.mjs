@@ -583,9 +583,9 @@ try {
     ordinary.ok === true,
     { identical: digest(rerun) === digest(ordinary), bytes: digest(ordinary).length });
 
-  // ══ O — NATURAL PRE-DEPARTURE IS LIVE; PHYSICAL CUTOVER IS NOT ══
+  // ══ O — NATURAL PRE-DEPARTURE AND PHYSICAL CUTOVER HAVE ONE ORDINARY AUTHORITY EACH ══
   const naturalFiles = ["src/sim/agents/demography.ts", "src/sim/agents/naturalFissionPreDeparture.ts",
-    "src/sim/agents/dailyActionRegistry.ts", "src/sim/tick/advance.ts",
+    "src/sim/agents/naturalFissionDeparture.ts", "src/sim/agents/dailyActionRegistry.ts", "src/sim/tick/advance.ts",
     "src/sim/rules/bandDecision.ts", "src/sim/runner/simRunner.ts"]
     .map((f) => ({ file: f, source: readFileSync(f, "utf8") }))
     .map((e) => ({ file: e.file,
@@ -593,11 +593,12 @@ try {
       callsPreparation: /\bprepareFissionDeparture\s*\(/.test(e.source) }));
   const demographySource = readFileSync("src/sim/agents/demography.ts", "utf8");
   const legacyOccurrences = [...demographySource.matchAll(/\bcreateDaughterBand\s*\(/g)].length;
-  record("O_ordinary_ecology_reaches_preparation_but_not_physical_departure",
-    "the natural adapter is the sole ordinary caller of canonical preparation, every ordinary physical-seam caller remains absent, and the retained createDaughterBand definition has no call site",
+  record("O_ordinary_ecology_has_one_preparation_adapter_and_one_physical_adapter",
+    "natural pre-departure is the sole ordinary preparation caller, natural physical departure is the sole ordinary atomic-seam caller, and retained createDaughterBand has no call site",
     naturalFiles.filter((entry) => entry.callsPreparation).map((entry) => entry.file).join("|") ===
       "src/sim/agents/naturalFissionPreDeparture.ts" &&
-      naturalFiles.every((entry) => entry.callsTheSeam === false) &&
+      naturalFiles.filter((entry) => entry.callsTheSeam).map((entry) => entry.file).join("|") ===
+      "src/sim/agents/naturalFissionDeparture.ts" &&
       legacyOccurrences === 1,
     /function createDaughterBand\s*\(/.test(demographySource),
     { naturalFiles,

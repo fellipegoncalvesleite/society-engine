@@ -26,6 +26,7 @@ import {
 } from "./bandMobility";
 import { isFissionEligibleParent } from "./bandLifecycle";
 import { beginNaturalFissionProposal } from "./naturalFissionPreDeparture";
+import { getLatestPhysicalSeparationTick } from "./fissionSeparationHistory";
 import { createDaughterDeepHistory } from "./bandHistory";
 import {
   inheritAdaptiveHumanForDaughter,
@@ -695,7 +696,7 @@ function computeBandDemography(
   if (fissionObserver !== undefined) {
     // AUDIT-ONLY (CORRECTION-14). Reports the gate values the decision above already
     // computed. Never reached in production/UI/worker runs; creates no state.
-    const latestFission = band.fissionEvents[band.fissionEvents.length - 1];
+    const latestPhysicalSeparationTick = getLatestPhysicalSeparationTick(band);
     fissionObserver({
       tick: world.time.tick,
       year: world.time.year,
@@ -735,9 +736,9 @@ function computeBandDemography(
       splitPressureThreshold: SPLIT_PRESSURE_THRESHOLD,
       minimumSplitPopulation: MINIMUM_SPLIT_POPULATION,
       cooldownElapsed: hasFissionCooldownElapsed(world.time, band, population),
-      ticksSinceLastFission: latestFission === undefined
+      ticksSinceLastFission: latestPhysicalSeparationTick === undefined
         ? undefined
-        : Number(world.time.tick) - Number(latestFission.tick),
+        : Number(world.time.tick) - latestPhysicalSeparationTick,
       requiredCooldownTicks: getRequiredFissionCooldownTicks(population),
       bandCount: Object.keys(world.bands).length,
       maxBands: MAX_BANDS,
@@ -2448,10 +2449,10 @@ function getRequiredFissionCooldownTicks(population: number): number {
 }
 
 function hasFissionCooldownElapsed(time: WorldTime, band: Band, population: number): boolean {
-  const latestFission = band.fissionEvents[band.fissionEvents.length - 1];
+  const latestPhysicalSeparationTick = getLatestPhysicalSeparationTick(band);
   const requiredCooldown = getRequiredFissionCooldownTicks(population);
 
-  return latestFission === undefined || time.tick - latestFission.tick >= requiredCooldown;
+  return latestPhysicalSeparationTick === undefined || Number(time.tick) - latestPhysicalSeparationTick >= requiredCooldown;
 }
 
 // CORRECTION-14 audit helper: the uncapped mean raw support over the last four

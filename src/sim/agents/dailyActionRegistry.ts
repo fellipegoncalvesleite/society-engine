@@ -40,6 +40,7 @@ import {
 import { provisionalLifecycleDeadlineDailyAction } from "./provisionalLifecycleResolver";
 import { parentFissionAttemptDeadlineDailyAction } from "./parentFissionAttemptResolver";
 import { naturalFissionPreDepartureDailyAction } from "./naturalFissionPreDeparture";
+import { naturalFissionDepartureDailyAction } from "./naturalFissionDeparture";
 
 /**
  * The default daily-action registry advanced by `advanceWorldByDays`.
@@ -99,4 +100,8 @@ export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   // immediately after viability, which is where a group emptied by the annual demographic step must
   // still be caught.
   provisionalLifecycleDeadlineDailyAction,
+  // Physical natural fission is deliberately LAST. A successor born here cannot be seen by any
+  // other daily action until a later simulated day. The action itself skips season boundaries so a
+  // newborn also cannot fall straight into the same day's seasonal pipeline.
+  naturalFissionDepartureDailyAction,
 ];

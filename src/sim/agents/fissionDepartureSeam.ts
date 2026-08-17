@@ -105,6 +105,7 @@ import type { WorldState } from "../world/types";
 export type DepartureRefusal =
   | "parent_not_found"
   | "parent_attempt_not_departure_ready"
+  | "successor_band_id_already_exists"
   /** No preparation ever ran. The old bypass: a phase alone is not a decision. */
   | "departure_not_prepared"
   /** The prepared record does not agree with itself, so nothing in it can be trusted. */
@@ -335,6 +336,9 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
   const parent = world.bands[parentId];
   if (parent === undefined) {
     return { ok: false, refusal: "parent_not_found" };
+  }
+  if (world.bands[request.successorBandId] !== undefined) {
+    return { ok: false, refusal: "successor_band_id_already_exists" };
   }
 
   // ── 1. require departure_ready ──
@@ -758,13 +762,13 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
       parentBandId: parent.id,
       daughterBandId: successorId,
       daughterTileId: parent.position,
-      currentTick: world.time.tick,
+      currentTick: departureTime.tick,
       inheritedKnownTileIds: new Set(Object.keys(inheritedKnowledge.observedTiles) as TileId[]),
     }),
-    animalPatternKnowledge: inheritAnimalPatternKnowledgeForDaughter(parent.animalPatternKnowledge, successorId, world.time.tick),
-    exploitationSkill: degradeInheritedExploitationSkill(parent.exploitationSkill, successorId, world.time.tick),
-    adaptiveHuman: inheritAdaptiveHumanForDaughter(parent.adaptiveHuman, successorId, world.time.tick),
-    practicalAdaptation: inheritPracticalAdaptationForDaughter(parent.practicalAdaptation, successorId, world.time.tick),
+    animalPatternKnowledge: inheritAnimalPatternKnowledgeForDaughter(parent.animalPatternKnowledge, successorId, departureTime.tick),
+    exploitationSkill: degradeInheritedExploitationSkill(parent.exploitationSkill, successorId, departureTime.tick),
+    adaptiveHuman: inheritAdaptiveHumanForDaughter(parent.adaptiveHuman, successorId, departureTime.tick),
+    practicalAdaptation: inheritPracticalAdaptationForDaughter(parent.practicalAdaptation, successorId, departureTime.tick),
     technologies: parent.technologies.filter((technology) => technology === "basic_foraging"),
 
     // ── RECOMPUTE_FROM_SUCCESSOR_TRUTH ──

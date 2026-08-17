@@ -6,8 +6,9 @@
 // band, but never writes a fissionAttempt: production annual demography, daily planning and the
 // canonical preparation authority must create every lifecycle fact themselves.
 //
-// No fixture calls performAtomicDeparture. A passing run therefore proves pre-departure
-// reachability and timeout truth, never natural physical cutover.
+// No fixture in this PRE-DEPARTURE audit calls performAtomicDeparture directly. Ordinary production
+// now has one later daily caller, but the evidence worlds below stop at proposal/plan/ready/timeout so
+// this suite still proves preparation and deadline semantics rather than physical transfer.
 import { createServer } from "vite";
 import ts from "typescript";
 import { createHash } from "node:crypto";
@@ -425,7 +426,7 @@ try {
         "naturalFissionPreDeparture -> fissionDeparturePreparation.abandonPreparedDeparture",
         "parentFissionAttemptResolver -> fissionDeparturePreparation.abandonPreparedDeparture",
       ],
-      departed: ["fissionDepartureSeam.performAtomicDeparture (controlled-only; zero production callers)"],
+      departed: ["naturalFissionDeparture -> fissionDepartureSeam.performAtomicDeparture (one ordinary production caller)"],
     },
     preparedAuthorizationAuthorities: {
       live: ["fissionDeparturePreparation.prepareFissionDeparture -> openDepartureAuthorization"],
@@ -692,9 +693,10 @@ try {
     readyExpired.world,
   ].every((world) => Object.values(world.bands).every((band) => band.provisionalSuccessor === undefined));
   record(
-    "J_no_provisional_successor_appears",
-    "performAtomicDeparture has zero production call sites and every natural/prepared/expired evidence world contains no provisional successor",
-    callers.performAtomicDeparture.length === 0 &&
+    "J_predeparture_evidence_still_creates_no_successor",
+    "performAtomicDeparture has exactly one ordinary natural production caller, while proposal/plan/ready/timeout evidence worlds still contain no provisional successor before the legal departure day",
+    callers.performAtomicDeparture.length === 1 &&
+      callers.performAtomicDeparture[0]?.file === "src/sim/agents/naturalFissionDeparture.ts" &&
       definitions.performAtomicDeparture.length === 1 &&
       noProvisionalInNaturalEvidence,
     controlledReady?.phase === "departure_ready" && naturalProposal?.phase === "proposed",
