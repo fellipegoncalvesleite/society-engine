@@ -162,11 +162,11 @@ function CanonicalInventionChain({ band }: { readonly band: Band }) {
           <details key={experiment.id} className={`practice-feedback-card status-${experiment.status}`}>
             <summary><strong>{experiment.family.replace(/_/g, " ")}: {experiment.variantKey.replace(/_/g, " ")}</strong><Chip>{experiment.status.replace(/_/g, " ")}</Chip></summary>
             <div className="practice-feedback-card-body">
-              <p><strong>Materials:</strong> {experiment.materials.join(", ")}</p>
-              <p><strong>Procedure:</strong> {experiment.procedure}</p>
+              <p><strong>Planned materials:</strong> {experiment.materials.join(", ")}</p>
+              <p><strong>Planned procedure:</strong> {experiment.procedure}</p>
               <p><strong>Expected:</strong> {experiment.expectedEffect}</p>
               <p><strong>Observed:</strong> {experiment.observedOutcome ?? "not attempted yet"}</p>
-              <p><strong>Cost:</strong> labor {Math.round(experiment.laborCost * 100)}%, risk {Math.round(experiment.riskCost * 100)}%; {experiment.opportunityCost}</p>
+              <p><strong>Estimated cost:</strong> labor {Math.round(experiment.laborCost * 100)}%, risk {Math.round(experiment.riskCost * 100)}%; {experiment.opportunityCost}</p>
             </div>
           </details>
         ))}

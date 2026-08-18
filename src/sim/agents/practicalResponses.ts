@@ -15,8 +15,10 @@
 //
 // Responses are NOT inventory, technology unlocks, crafting recipes, or
 // identity labels. A variant name ("fiber sling") explains a configuration of
-// fragments; the fragments and measured efficacy are the cause. Two bands can
-// reach the same label through different histories, or never form one at all.
+// fragments; learned fragments justify the idea, while a material artifact may
+// affect physics only when a separate execution authority proves it was actually
+// made/used. Two bands can reach the same label through different histories, or
+// never form one at all.
 //
 // IMPLEMENTED (behavior-driving) families:
 //   * carrying_load  — condition: sustained carrying/care burden on residential
@@ -220,9 +222,20 @@ export const PRACTICAL_RESPONSE_REGISTRY: readonly PracticalResponseRegistryEntr
 // The weakest required fragment bounds the composition (weakest-link rule).
 // ---------------------------------------------------------------------------
 
+type VariantExecutionClass =
+  | "practice_only"
+  | "existing_physical_work"
+  | "material_execution_required";
+
 interface VariantSpec {
   readonly family: PracticalResponseFamily;
   readonly variantKey: string;
+  // Provenance class for effects and efficacy. `practice_only` is executed by
+  // doing the practice itself; `existing_physical_work` points at a persisted
+  // physical authority already present in this module (currently waterWorks);
+  // portable material artifacts require a separate execution proof that this
+  // pass deliberately does not invent.
+  readonly executionClass: VariantExecutionClass;
   readonly publicLabel: string;
   readonly requiredSubjects: readonly string[];
   readonly basisFloor: number;
@@ -243,7 +256,9 @@ interface VariantSpec {
   // Aggregate carrier physics (no individual inventory objects).
   readonly waterCapacity?: number;
   readonly carryingBurden?: number;
-  // Compact physical experiment proof.
+  // Planned/estimated physical experiment requirements only. These describe
+  // what a test would need; they are never proof that material was acquired,
+  // consumed, assembled, or used.
   readonly materials?: readonly string[];
   readonly procedure?: string;
   readonly laborCost?: number;
@@ -254,6 +269,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "carrying_load",
     variantKey: "fiber_sling",
+    executionClass: "material_execution_required",
     publicLabel: "fiber sling and wrap carrying response",
     requiredSubjects: ["fiber_cordage"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -263,6 +279,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "carrying_load",
     variantKey: "load_staging",
+    executionClass: "practice_only",
     publicLabel: "staged-load carrying response",
     requiredSubjects: ["load_staging"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -272,6 +289,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "carrying_load",
     variantKey: "carrying_frame",
+    executionClass: "material_execution_required",
     publicLabel: "rough carrying-frame response",
     requiredSubjects: ["fiber_cordage", "load_binding"],
     basisFloor: COMPOSITE_BASIS_FLOOR,
@@ -281,6 +299,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "dry_route_water",
     variantKey: "stage_known_water",
+    executionClass: "practice_only",
     publicLabel: "stage travel between remembered watered places",
     requiredSubjects: ["watered_route_reading"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -290,6 +309,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "engineering_structure",
     variantKey: "crude_bundle_float",
+    executionClass: "material_execution_required",
     publicLabel: "crude bound-bundle crossing response",
     requiredSubjects: ["buoyancy_under_load", "binding_under_load", "staged_shuttle_crossing"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -299,6 +319,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "engineering_structure",
     variantKey: "braced_load_raft",
+    executionClass: "material_execution_required",
     publicLabel: "braced load-distributing crossing response",
     requiredSubjects: ["buoyancy_under_load", "binding_under_load", "load_distribution", "staged_shuttle_crossing"],
     basisFloor: COMPOSITE_BASIS_FLOOR,
@@ -309,6 +330,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "water_storage",
     variantKey: "membrane_water_bag",
+    executionClass: "material_execution_required",
     publicLabel: "plugged membrane water bag",
     requiredSubjects: ["membrane_folding"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -327,6 +349,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "water_storage",
     variantKey: "woven_lined_carrier",
+    executionClass: "material_execution_required",
     publicLabel: "woven lined water carrier",
     requiredSubjects: ["container_holding", "fiber_cordage"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -345,6 +368,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "water_storage",
     variantKey: "sealed_water_carrier",
+    executionClass: "material_execution_required",
     publicLabel: "gum-sealed water carrier",
     requiredSubjects: ["container_holding", "seal_coating"],
     basisFloor: COMPOSITE_BASIS_FLOOR,
@@ -364,6 +388,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "groundwater_seek",
     variantKey: "seep_scrape",
+    executionClass: "existing_physical_work",
     publicLabel: "scraped seep hollow",
     requiredSubjects: ["groundwater_reading"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -375,6 +400,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "groundwater_seek",
     variantKey: "lined_seep_pit",
+    executionClass: "existing_physical_work",
     publicLabel: "lined and deepened seep pit",
     requiredSubjects: ["groundwater_reading", "pit_support"],
     basisFloor: COMPOSITE_BASIS_FLOOR,
@@ -387,6 +413,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "temporary_shelter",
     variantKey: "brush_windbreak",
+    executionClass: "material_execution_required",
     publicLabel: "brush windbreak",
     requiredSubjects: ["camp_ground_reading"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -400,6 +427,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "temporary_shelter",
     variantKey: "shade_screen",
+    executionClass: "material_execution_required",
     publicLabel: "raised shade screen",
     requiredSubjects: ["cover_layering"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -413,6 +441,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "temporary_shelter",
     variantKey: "covered_rain_shelter",
+    executionClass: "material_execution_required",
     publicLabel: "framed and covered rain shelter",
     requiredSubjects: ["cover_layering", "frame_shaping"],
     basisFloor: COMPOSITE_BASIS_FLOOR,
@@ -427,6 +456,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "hunting_distance",
     variantKey: "thrown_reach_hunting",
+    executionClass: "material_execution_required",
     publicLabel: "trued throwing-shaft hunting",
     requiredSubjects: ["shaft_truing"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -438,6 +468,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "hunting_distance",
     variantKey: "hafted_point_hunting",
+    executionClass: "material_execution_required",
     publicLabel: "gum-hafted point hunting",
     requiredSubjects: ["shaft_truing", "seal_coating"],
     basisFloor: COMPOSITE_BASIS_FLOOR,
@@ -449,6 +480,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "hunting_distance",
     variantKey: "tensioned_snare_line",
+    executionClass: "material_execution_required",
     publicLabel: "tensioned snare lines",
     requiredSubjects: ["fiber_cordage", "tension_release"],
     basisFloor: COMPOSITE_BASIS_FLOOR,
@@ -461,6 +493,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "care_treatment",
     variantKey: "wound_binding_care",
+    executionClass: "material_execution_required",
     publicLabel: "cleaned and bound wound care",
     requiredSubjects: ["wound_care"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -477,6 +510,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "care_treatment",
     variantKey: "plant_poultice_care",
+    executionClass: "material_execution_required",
     publicLabel: "prepared plant poultice care",
     requiredSubjects: ["wound_care", "plant_preparation"],
     basisFloor: COMPOSITE_BASIS_FLOOR,
@@ -494,6 +528,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "proto_measure",
     variantKey: "load_tally_reckoning",
+    executionClass: "practice_only",
     publicLabel: "load-and-vessel tally reckoning",
     requiredSubjects: ["one_to_one_count"],
     basisFloor: FRAGMENT_BASIS_FLOOR,
@@ -505,6 +540,7 @@ const VARIANT_SPECS: readonly VariantSpec[] = [
   {
     family: "proto_measure",
     variantKey: "journey_pacing_reckoning",
+    executionClass: "practice_only",
     publicLabel: "day-stage journey reckoning",
     requiredSubjects: ["journey_pacing", "one_to_one_count"],
     basisFloor: COMPOSITE_BASIS_FLOOR,
@@ -905,6 +941,29 @@ const NO_RELIEF: PracticalReliefResult = {
   reason: "no matching practical response",
 };
 
+function hasPhysicalExecutionProof(
+  response: PracticalResponseState,
+  spec: VariantSpec,
+  existingPhysicalWorkResponseId?: string,
+): boolean {
+  switch (spec.executionClass) {
+    case "practice_only":
+      // The physical act IS the practice; fragment basis + live response state
+      // below remain the proof that the practice is currently available.
+      return true;
+    case "existing_physical_work":
+      // The only such authority in this pass is persisted waterWorks. Generic
+      // relief readers do not receive this id; the waterworks reader consumes
+      // the persisted physical state directly instead.
+      return existingPhysicalWorkResponseId === response.id;
+    case "material_execution_required":
+      // No portable artifact/material execution authority exists yet. A plan,
+      // response label, fragment, experiment row, or efficacy outcome is not a
+      // substitute for proof that a material thing was actually made/used.
+      return false;
+  }
+}
+
 function reliefFromResponse(
   response: PracticalResponseState | undefined,
   fragments: readonly PracticalFragment[],
@@ -924,6 +983,16 @@ function reliefFromResponse(
   }
   if (response.status === "dormant") {
     return { ...NO_RELIEF, responseId: response.id, reason: "response dormant — its condition has not recurred" };
+  }
+  if (!hasPhysicalExecutionProof(response, spec)) {
+    return {
+      ...NO_RELIEF,
+      responseId: response.id,
+      variantKey: response.variantKey,
+      reason: spec.executionClass === "material_execution_required"
+        ? "material execution required — no physical execution proof exists for this response"
+        : "physical work must be read from its persisted execution authority",
+    };
   }
   const { basis } = variantBasis(spec, fragments, currentTick);
   if (basis < spec.basisFloor) {
@@ -1039,10 +1108,13 @@ function specFor(response: PracticalResponseState | undefined): VariantSpec | un
  * paid on the SAME carry-constraint input the carrying relief eases. */
 export function deriveShelterPortabilityBurden(band: Band): number {
   const response = currentResponse(band, "temporary_shelter");
-  if (response === undefined || (response.status !== "active" && response.status !== "forming")) {
+  const spec = specFor(response);
+  if (response === undefined || spec === undefined ||
+    (response.status !== "active" && response.status !== "forming") ||
+    !hasPhysicalExecutionProof(response, spec)) {
     return 0;
   }
-  return round2(Math.min(SHELTER_PORTABILITY_BURDEN_CAP, specFor(response)?.portabilityBurden ?? 0));
+  return round2(Math.min(SHELTER_PORTABILITY_BURDEN_CAP, spec.portabilityBurden ?? 0));
 }
 
 /** Provisioning accuracy 0.75..1 — how much of what is carried actually
@@ -1474,8 +1546,10 @@ function advanceFamilyLifecycle(
 // ---------------------------------------------------------------------------
 // INVENTION-3 — problem-driven formation. Every new response forms THROUGH
 // the canonical chain: an active problem frame, an idea selected among
-// recorded alternatives, and a started experiment (the forming response's
-// real practice). A misread frame selects a weaker-fitting mechanism.
+// recorded alternatives, and a started experiment plan. For practice-only
+// variants the forming response is itself practice; material variants still need
+// separate physical execution proof before effects or efficacy may mature them.
+// A misread frame selects a weaker-fitting mechanism.
 // ---------------------------------------------------------------------------
 
 const FAMILY_ORDER: readonly PracticalResponseFamily[] = [
@@ -1858,6 +1932,29 @@ function efficacyResponseId(efficacy: EfficacyEvaluation): string | undefined {
   return efficacy.responseId;
 }
 
+function efficacyWithExecutionProvenance(
+  efficacy: EfficacyEvaluation | undefined,
+  responses: readonly PracticalResponseState[],
+  existingPhysicalWorkResponseId?: string,
+): EfficacyEvaluation | undefined {
+  if (efficacy === undefined) {
+    return undefined;
+  }
+  const responseId = efficacyResponseId(efficacy);
+  const response = responseId === undefined
+    ? undefined
+    : responses.find((entry) => entry.id === responseId);
+  const spec = specFor(response);
+  if (response === undefined || spec === undefined) {
+    // Preserve the existing behavior for evaluations that are not tied to a
+    // practical-response variant. This helper governs only this response chain.
+    return efficacy;
+  }
+  return hasPhysicalExecutionProof(response, spec, existingPhysicalWorkResponseId)
+    ? efficacy
+    : undefined;
+}
+
 function buildPracticalRecord(
   band: Band,
   currentTick: TickNumber,
@@ -1936,7 +2033,11 @@ export function advancePracticalAdaptation(
 
   // (2) Response lifecycle per family (efficacy application, maturation,
   // dormancy, abandonment) — formation happens later, through problems.
-  const efficacies: readonly (readonly [PracticalResponseFamily, EfficacyEvaluation | undefined])[] = [
+  const priorResponses = prior?.responses ?? [];
+  const existingPhysicalWorkResponseId = waterWorksResult.attempted
+    ? waterWorksResult.works?.responseId
+    : undefined;
+  const rawEfficacies: readonly (readonly [PracticalResponseFamily, EfficacyEvaluation | undefined])[] = [
     ["carrying_load", input.carryingEfficacy],
     ["dry_route_water", input.waterRouteEfficacy],
     ["engineering_structure", input.engineeringEfficacy],
@@ -1947,8 +2048,16 @@ export function advancePracticalAdaptation(
     ["proto_measure", input.measureEfficacy],
     ["groundwater_seek", groundwaterEfficacy],
   ];
-  let responses = prior?.responses ?? [];
-  const priorResponses = responses;
+  // One central provenance gate feeds lifecycle, problem revision, experiment
+  // conclusions, efficacy records, and fragment success/failure. Unexecuted
+  // material plans therefore cannot mature through an unrelated outcome at a
+  // later consumer, while practice-only and proven existing work remain live.
+  const efficacies: readonly (readonly [PracticalResponseFamily, EfficacyEvaluation | undefined])[] =
+    rawEfficacies.map(([family, efficacy]) => [
+      family,
+      efficacyWithExecutionProvenance(efficacy, priorResponses, existingPhysicalWorkResponseId),
+    ] as const);
+  let responses = priorResponses;
   const freshlyAbandonedByFamily = new Map<PracticalResponseFamily, PracticalResponseState>();
   const maturedResponses: PracticalResponseState[] = [];
   for (const [family, efficacy] of efficacies) {

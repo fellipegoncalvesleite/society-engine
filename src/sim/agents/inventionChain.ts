@@ -325,8 +325,10 @@ export function mergeIdeas(
 }
 
 // ---------------------------------------------------------------------------
-// Experiments — the selected idea's real bounded test. The forming response
-// IS the experiment's practice; efficacy conclusions are written back here.
+// Experiments — the selected idea's bounded test plan/history. A forming
+// practice-only response can itself be the executed practice; a material plan is
+// not execution proof. practicalResponses.ts decides which efficacy events are
+// causally admissible before conclusions are written back here.
 // ---------------------------------------------------------------------------
 
 export function startExperiment(input: {

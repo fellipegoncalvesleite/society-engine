@@ -6897,6 +6897,9 @@ export interface PracticalExperiment {
   readonly variantKey: string;
   // The real coefficient the experiment expects to change, and how.
   readonly expectedEffect: string;
+  // Planned/estimated test requirements only. These fields do NOT assert that
+  // materials were obtained or consumed, that the procedure was executed, or
+  // that labor/risk/opportunity costs were actually paid.
   readonly materials: readonly string[];
   readonly procedure: string;
   readonly laborCost: NormalizedIntensity;
