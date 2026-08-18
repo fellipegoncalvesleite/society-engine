@@ -673,7 +673,8 @@ export function deriveTravelHunger(band: Band, subsistence: TravelSubsistenceSta
  *
  * Registered AFTER travel so a day's step is taken first and the group then feeds itself where it
  * actually ends up standing — the tile it camps on, not the one it left. It is a no-op for every band
- * that is not a live provisional successor, and nothing in ordinary play creates one.
+ * that is not a live provisional successor. Natural physical fission now makes these groups ordinarily
+ * reachable; because departure is registered after this reducer, they cannot receive birth-day food.
  */
 export const provisionalSubsistenceDailyAction: DailyAction = {
   id: "provisional_travel_subsistence",

@@ -1,43 +1,22 @@
 /**
  * ROADMAP ITEM 4 — THE ATOMIC DEPARTURE SEAM.
  *
- * The one place population moves between entities. `ARCHITECTURE_DECISION.md` §3 names it as the
- * single point at which conservation must be proven, and this module is that point.
+ * The one place population moves between entities. Natural production reaches it through exactly
+ * one adapter, `naturalFissionDeparture.ts`; the retained legacy `createDaughterBand` implementation
+ * has no ordinary caller. This module therefore remains the sole authority for founder transfer,
+ * conservation, successor construction and shared departure provenance.
  *
- * **IT IS NOT REACHABLE FROM ORDINARY FISSION.** Nothing in `demography.ts` or the natural
- * pre-departure adapter calls it. Ordinary ecology now stops at `departure_ready`; the legacy
- * `createDaughterBand` implementation remains in source but its old annual call site has been
- * retired. This seam is the production writer a later physical-cutover pass may connect —
- * deliberately not a test-only duplicate. Connecting it is outside this subpass.
+ * CADENCE AND ORDER. Proposal remains annual, but planning, preparation, readiness and parent
+ * deadlines are explicitly day-bounded. A ready natural attempt is therefore offered to this seam on
+ * a later legal day by the FINAL action in `DEFAULT_DAILY_ACTIONS`. The adapter refuses same-day
+ * readiness consumption and does not fire on season boundaries. Those two rules make physical
+ * departure and the successor's first travel/subsistence/return/stabilization/seasonal work distinct
+ * simulated moments.
  *
- * WHY THIS SEAM, AND WHERE IT SITS.
- *
- * `runSeasonalCompatibilityTick` (`advance.ts`) runs: pre-decision cache → context → acute risk →
- * **the per-band decision loop** → post-decision cache → range saturation → encounters →
- * **demography and fission** → viability → deep history → ecology → final read-model pass.
- *
- * The departure writer belongs at the demography-and-fission step, which is exactly where the legacy
- * path already sits — and that is a finding rather than a convenience, because that position already
- * has the properties §5 demands. Both the decision loop's `bandOrder` and
- * `updateBandsDemographyAndFission`'s own `bandOrder` are **snapshots taken before their loops
- * begin**, so a band created during the fission step is in neither. It therefore cannot be given a
- * decision this tick (no free movement, no double movement) and cannot be given a demographic update
- * this tick (no double update) — it gets its first of each on the next tick, exactly once.
- *
- * Alternatives and why they were rejected, recorded in `departure-ordering.json`:
- *
- *   - **inside the decision loop** — bands physically move there, so a successor created mid-loop
- *     could be handed a decision and move on its birth day, which is free movement;
- *   - **after the ecology advance** — the successor would miss viability and the whole read-model
- *     pass, appearing only in the next tick's cache, which is a one-tick disappearance from physical
- *     presence;
- *   - **in `runDailyActions`** — the wrong cadence entirely; fission is annual and a daily writer
- *     would need its own resolution bound.
- *
- * The one consequence that IS accepted and is stated rather than hidden: the ecology steps consume
- * `postDecisionCache`, built before the successor exists, so the successor exerts no depletion on its
- * birth tick. **That is identical to what the legacy daughter does today**, so it is a preserved
- * property rather than a new defect, and it is recorded in the ledger.
+ * The seam itself does not infer time from a caller's stale `world.time`: its canonical physical
+ * instant is the explicit `today` request, converted once with `getWorldTimeForDay`. Departure
+ * records, provisional lifecycle timestamps and inherited time-stamped knowledge all use that same
+ * instant.
  */
 
 import type { CohortCounts } from "./fissionFounderAllocation";

@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { createServer } from "vite";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
 
 const SEED = "audit27:natural:s1";
 const WARM_DAYS = 2100;
@@ -24,6 +26,7 @@ try {
   const naturalDeparture = await server.ssrLoadModule("/sim/agents/naturalFissionDeparture.ts");
   const separationHistory = await server.ssrLoadModule("/sim/agents/fissionSeparationHistory.ts");
   const diagnostics = await server.ssrLoadModule("/sim/diagnostics/fissionDiagnostics.ts");
+  const social = await server.ssrLoadModule("/sim/agents/socialContext.ts");
 
   const base = advance.advanceWorldByDays(runner.initSimWorld({ kind: "map2" }, SEED), WARM_DAYS);
   const annualDay = Math.ceil((Number(base.time.day ?? 0) + 1) / 360) * 360;
@@ -103,6 +106,13 @@ try {
   assert.equal(directControl.ok, true, "direct control departure must succeed");
   assert.deepEqual(productionSuccessor, directControl.world.bands[successorBandId], "birth day must contain no post-departure successor work");
 
+  // RED/guard: when ordinary context next runs, the parent and its still-provisional successor
+  // are two physical groups but not strangers. Their shared current lineage must not manufacture an
+  // encounter/contact-memory event merely because departure starts from the same tile.
+  const contextAfterBirth = social.updateBandContextStates(productionDepartureWorld);
+  assert.equal(contextAfterBirth.bands[parentId].contactMemories?.[successorBandId], undefined, "parent must not invent stranger contact with its in-flight successor");
+  assert.equal(contextAfterBirth.bands[successorBandId].contactMemories?.[parentId], undefined, "successor must not invent stranger contact with its parent");
+
   // Exact transfer and one-use execution remain seam-owned under the natural caller.
   assert.equal(seam.isDepartureLedgerConserving(directControl.ledger), true, "natural execution must conserve population and all three cohorts");
   assert.equal(productionParent.fissionAttempt.preparedDeparture.authorization.status, "consumed_by_departure", "natural departure must consume the one-use permit");
@@ -145,6 +155,10 @@ try {
   const afterBoundaryDay = advance.advanceWorldByDays(boundaryReadyWorld, 1);
   assert.equal(afterBoundaryDay.bands[successorBandId], undefined, "season-boundary day must not create a newborn successor");
   assert.notEqual(afterBoundaryDay.bands[parentId].fissionAttempt?.phase, "departed", "boundary-day seasonal pipeline must not observe a same-day physical split");
+
+  const boundaryChunked = advance.advanceWorldByDays(boundaryReadyWorld, 2);
+  const boundaryDaily = advance.advanceWorldByDays(afterBoundaryDay, 1);
+  assert.deepEqual(boundaryChunked, boundaryDaily, "season-boundary deferral must be invariant to chunked vs one-day stepping order");
 
   // Build multiple ready natural attempts through the real proposal + plan + preparation authorities.
   // The direct proposal call is a concurrency fixture, not the untouched-natural acceptance proof.
@@ -262,6 +276,12 @@ try {
   assert.equal(staleAttempt.phase, "abandoned", "stale ready attempt must terminalize instead of retrying");
   assert.equal(staleAttempt.preparedDeparture.authorization.status, "superseded_by_revised_terms", "stale permit must be superseded, not silently reused");
 
+  assert.equal(
+    separationHistory.getLatestPhysicalSeparationTick(staleAfter.bands[parentId]),
+    undefined,
+    "pre-departure abandonment must not start physical-separation cooldown",
+  );
+
   // RED 1: the atomic seam must refuse an occupied deterministic successor id before any mutation.
   const occupiedBand = {
     ...readyParent,
@@ -317,7 +337,49 @@ try {
   assert.equal(row.ticksSinceLastFission, expectedTicksSince, "diagnostic recency must include Direction-D departure");
   assert.equal(row.cooldownElapsed, expectedTicksSince >= row.requiredCooldownTicks, "cooldown and recency must share one authority");
 
-  console.log(JSON.stringify({
+  // Secondary cooldown outcome matrix. The physical-separation fact belongs to the parent and must
+  // remain true regardless of how the already-departed successor later resolves. These variants are
+  // deliberately not the untouched-natural proof; they isolate the cooldown reader against each
+  // terminal downstream classification while retaining the one real Direction-D departure record.
+  const cooldownOutcomeMatrix = {};
+  for (const outcomePhase of ["stabilized", "reintegrated", "provisional_extinguished", "established_after_failed_return"]) {
+    const outcomeSuccessor = departure.world.bands[successorBandId];
+    const outcomeWorld = {
+      ...departure.world,
+      time: time.getWorldTimeForDay(nextAnnualDay),
+      bands: {
+        ...departure.world.bands,
+        [successorBandId]: {
+          ...outcomeSuccessor,
+          provisionalSuccessor: {
+            ...outcomeSuccessor.provisionalSuccessor,
+            phase: outcomePhase,
+            phaseEnteredDay: departureDay + 1,
+            history: [...(outcomeSuccessor.provisionalSuccessor?.history ?? []), outcomeSuccessor.provisionalSuccessor?.phase ?? "travelling"],
+          },
+        },
+      },
+    };
+    const outcomeRows = [];
+    diagnostics.setFissionEvaluationObserver((entry) => outcomeRows.push(entry));
+    try {
+      demography.updateBandsDemographyAndFission(outcomeWorld);
+    } finally {
+      diagnostics.setFissionEvaluationObserver(undefined);
+    }
+    const outcomeParentRow = outcomeRows.find((entry) => String(entry.bandId) === String(parentId));
+    assert.ok(outcomeParentRow, `${outcomePhase}: parent must remain observable by the annual cooldown diagnostic`);
+    assert.equal(outcomeParentRow.ticksSinceLastFission, expectedTicksSince, `${outcomePhase}: downstream outcome must not erase physical split recency`);
+    assert.equal(outcomeParentRow.cooldownElapsed, expectedTicksSince >= outcomeParentRow.requiredCooldownTicks, `${outcomePhase}: cooldown result must still derive from the same physical split`);
+    cooldownOutcomeMatrix[outcomePhase] = {
+      ticksSinceLastFission: outcomeParentRow.ticksSinceLastFission,
+      requiredCooldownTicks: outcomeParentRow.requiredCooldownTicks,
+      cooldownElapsed: outcomeParentRow.cooldownElapsed,
+    };
+  }
+
+  const result = {
+    audit: "ROADMAP ITEM 4 — controlled natural physical cutover",
     verdict: "PASS",
     parentId,
     successorBandId,
@@ -329,7 +391,13 @@ try {
     boundaryDay,
     concurrentReadyCount: readyConcurrent.length,
     capWinner: departedRows[0]?.parentId,
-  }, null, 2));
+    cooldownOutcomeMatrix,
+  };
+  const out = "docs/evidence/item4-natural-physical-cutover/controlled-cutover.json";
+  mkdirSync(dirname(out), { recursive: true });
+  writeFileSync(out, `${JSON.stringify(result, null, 2)}\n`);
+  console.log(JSON.stringify(result, null, 2));
+  console.log(`written: ${out}`);
 } finally {
   await server.close();
 }

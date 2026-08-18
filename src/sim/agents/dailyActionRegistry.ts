@@ -59,7 +59,8 @@ export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   // ROADMAP ITEM 4 — provisional travel runs LAST on a shared day, after ordinary trips and
   // expeditions, so a walking group's step is taken against a world whose ordinary activity for that
   // day has already resolved. It is a no-op for every band that is not a walking provisional
-  // successor, and nothing in ordinary play creates one.
+  // successor. Natural physical fission can now create one, but only as the final daily action, so
+  // this mover first sees that successor on a later simulated day.
   provisionalTravelDailyAction,
   // ROADMAP ITEM 4 — the meeting is resolved on the day it happens, immediately after the step that
   // can create it and BEFORE anything else reads the group. Two consequences, both deliberate: the
@@ -71,7 +72,8 @@ export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
   provisionalReintegrationDailyAction,
   // ROADMAP ITEM 4 — subsistence runs AFTER the step, so the group feeds itself on the tile it
   // actually camps on rather than the one it left that morning. Same no-op property: it touches only
-  // live provisional successors, and no natural path creates one.
+  // live provisional successors. Natural cutover creates one only after this action has already run
+  // for the birth day, so subsistence cannot be granted for free at creation.
   provisionalSubsistenceDailyAction,
   // ROADMAP ITEM 4 — then the group reads the day it has just lived. Giving up comes before trying
   // harder: a group that has decided to walk home does not spend the same day accumulating diagnostics

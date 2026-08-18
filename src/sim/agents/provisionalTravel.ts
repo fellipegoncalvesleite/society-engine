@@ -354,9 +354,9 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
  * The daily action. Fires every day: a journey is a daily fact, and a group that only walked on
  * scheduled trip days would be moving on the residential system's cadence rather than its own.
  *
- * It is a no-op for every band that is not a walking provisional successor, so an ordinary world is
- * untouched — and no natural path creates a provisional successor, so it cannot fire in ordinary play
- * at all.
+ * It is a no-op for every band that is not a walking provisional successor. Natural physical fission
+ * can now create such a successor, but the departure action is registered after this mover, so the
+ * newborn cannot walk until a later simulated day.
  */
 export const provisionalTravelDailyAction: DailyAction = {
   id: "provisional_travel",

@@ -21,7 +21,7 @@ import type {
   ReturnTrendMemory,
   TemporarySeparationPressure,
 } from "./types";
-import { preserveTerminalBandSnapshots } from "./bandLifecycle";
+import { preserveTerminalBandSnapshots, shareCurrentFissionLineage } from "./bandLifecycle";
 import { getNearbyBandPressure } from "./crowding";
 import { deriveCarryingCapacity } from "./carryingCapacity";
 import { deriveCanonicalNutritionState, updateSeasonalSupportState } from "./seasonalSurvival";
@@ -1050,6 +1050,12 @@ export function applyEncounterContext(
   for (const pair of getEncounterCandidatePairs(world, cache)) {
     const left = bandsById[pair.leftBandId];
     const right = bandsById[pair.rightBandId];
+    if (left !== undefined && right !== undefined && shareCurrentFissionLineage(left, right)) {
+      // A parent and its in-flight successor are physically distinct groups, so crowding/ecology
+      // still see both bodies. They are not strangers merely because departure begins at the same
+      // tile, however; current lineage provenance blocks only the social encounter fiction.
+      continue;
+    }
     const encounter = left === undefined || right === undefined
       ? undefined
       : detectEncounter(world, left, right);

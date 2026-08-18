@@ -21,10 +21,11 @@ import type { WorldState } from "../world/types";
  *   - It must NOT move the residential/home-range marker (`band.position`).
  *     Residential relocation stays in the seasonal `bandDecision` path. Mixing
  *     daily marker motion in here is exactly the SPIKE-MOBILITY-1 HEAT collapse.
- *   - Season-gated physical systems (demography, physical fission, depletion, resource economics)
- *     are deliberately NOT registered here; they run once per crossed season. Parent-side fission
- *     planning and deadline actions are the narrow exception: their kernel contracts are stated in
- *     DAYS, they move no bodies, and ordinary physical departure remains unregistered.
+ *   - Most season-gated physical systems (demography, depletion, resource economics) remain outside
+ *     this registry. Natural fission is the explicit exception: proposal stays annual, while its
+ *     planning/preparation/deadline contracts are day-bounded and its physical departure is the final
+ *     non-boundary daily action. That final position prevents same-day successor work; boundary days
+ *     are skipped so the immediately following seasonal pipeline cannot process a newborn.
  */
 export interface DailyAction {
   readonly id: string;

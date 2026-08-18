@@ -1,0 +1,41 @@
+{
+  "audit": "ROADMAP ITEM 4 — controlled natural physical cutover",
+  "verdict": "PASS",
+  "parentId": "band:varied-river-mid",
+  "successorBandId": "successor:fission-lineage:band:varied-river-mid:24:tile:108:56",
+  "departureDay": 2163,
+  "departureTick": 24,
+  "diagnosticTick": 28,
+  "expectedTicksSince": 4,
+  "downstreamPhases": [
+    "travelling",
+    "establishing",
+    "returning",
+    "reintegrated"
+  ],
+  "boundaryDay": 2250,
+  "concurrentReadyCount": 12,
+  "capWinner": "band:cutover-concurrent-00",
+  "cooldownOutcomeMatrix": {
+    "stabilized": {
+      "ticksSinceLastFission": 4,
+      "requiredCooldownTicks": 60,
+      "cooldownElapsed": false
+    },
+    "reintegrated": {
+      "ticksSinceLastFission": 4,
+      "requiredCooldownTicks": 60,
+      "cooldownElapsed": false
+    },
+    "provisional_extinguished": {
+      "ticksSinceLastFission": 4,
+      "requiredCooldownTicks": 60,
+      "cooldownElapsed": false
+    },
+    "established_after_failed_return": {
+      "ticksSinceLastFission": 4,
+      "requiredCooldownTicks": 60,
+      "cooldownElapsed": false
+    }
+  }
+}

@@ -99,6 +99,7 @@ try {
   const natural = await baselineServer.ssrLoadModule("/sim/agents/naturalFissionPreDeparture.ts");
   const resolver = await baselineServer.ssrLoadModule("/sim/agents/parentFissionAttemptResolver.ts");
   const kernel = await baselineServer.ssrLoadModule("/sim/agents/fissionLifecycleKernel.ts");
+  const nomadic = await baselineServer.ssrLoadModule("/sim/agents/nomadicScale.ts");
   const time = await baselineServer.ssrLoadModule("/sim/tick/time.ts");
 
   const warm = advance.advanceWorldByDays(runner.initSimWorld({ kind: "map2" }, SEED), WARM_DAYS);
@@ -201,7 +202,32 @@ try {
     readyWorld,
     ready.phaseEnteredDay + kernel.DEPARTURE_READY_MAX_DAYS,
   );
-  const deadlineBaseline = advance.advanceWorldByDays(readyWorld, kernel.DEPARTURE_READY_MAX_DAYS + 1);
+
+  // Physical cutover now executes a legitimate ready attempt on the next legal day, so a deadline
+  // mutation is only non-vacuous if the attempt is truthfully prevented from departing. Fill the
+  // world to the same execution-time band cap production uses; the natural adapter then keeps this
+  // attempt capacity-deferred while the independent parent deadline remains responsible for bounding
+  // it. This tests the deadline rather than racing it against successful physical execution.
+  const capacityBands = { ...readyWorld.bands };
+  const fillerSource = Object.values(readyWorld.bands).find((band) => String(band.id) !== String(parent.id));
+  if (fillerSource === undefined) throw new Error("deadline mutation fixture needs a filler band");
+  for (let index = 0; Object.keys(capacityBands).length < nomadic.NOMADIC_MAX_MOBILE_BANDS_WARNING_COUNT; index += 1) {
+    const id = `band:deadline-cap-filler-${String(index).padStart(2, "0")}`;
+    capacityBands[id] = {
+      ...fillerSource,
+      id,
+      name: id,
+      parentBandId: undefined,
+      daughterBandIds: [],
+      fissionEvents: [],
+      successorDepartureRecords: [],
+      fissionAttempt: undefined,
+      provisionalSuccessor: undefined,
+      knowledge: { ...fillerSource.knowledge, selfBandId: id },
+    };
+  }
+  const capacityReadyWorld = { ...readyWorld, bands: capacityBands };
+  const deadlineBaseline = advance.advanceWorldByDays(capacityReadyWorld, kernel.DEPARTURE_READY_MAX_DAYS + 1);
   const duplicateBaseline = demography.updateBandsDemographyAndFission(inputWorld);
   const provisionalBaseline = natural.beginNaturalFissionProposal({
     world: provisionalWorld,
@@ -216,6 +242,7 @@ try {
     proposedWorld,
     plannedWorld,
     readyWorld,
+    capacityReadyWorld,
     targetRemovedWorld,
     provisionalWorld,
     proposalInput,
@@ -379,7 +406,7 @@ const deadlineMutant = await runMutation({
   ),
   probe: async (server) => {
     const advance = await server.ssrLoadModule("/sim/tick/advance.ts");
-    return advance.advanceWorldByDays(baseline.readyWorld, baseline.readyMaxDays + 1);
+    return advance.advanceWorldByDays(baseline.capacityReadyWorld, baseline.readyMaxDays + 1);
   },
 });
 const deadlineMutantAttempt = deadlineMutant.bands[PARENT_ID]?.fissionAttempt;

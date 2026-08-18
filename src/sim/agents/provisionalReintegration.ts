@@ -555,7 +555,8 @@ export function advanceProvisionalReintegrations(world: WorldState, today: numbe
 /**
  * The daily action. Fires every day, because a meeting is a daily fact.
  *
- * No-op for every band that is not a live provisional successor, and no natural path creates one, so
+ * No-op for every band that is not a live provisional successor. Natural physical fission now creates
+ * these groups ordinarily, so this reducer is part of the production return path and must remain
  * an ordinary world is untouched.
  */
 export const provisionalReintegrationDailyAction: DailyAction = {

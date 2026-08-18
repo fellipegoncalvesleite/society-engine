@@ -1,0 +1,72 @@
+{
+  "audit": "ROADMAP ITEM 4 — natural physical cutover mutation controls",
+  "results": [
+    {
+      "id": "M1_remove_natural_atomic_caller",
+      "file": "src/sim/agents/naturalFissionDeparture.ts",
+      "exitStatus": 1,
+      "expectedAssertion": "next legal production day must create the natural successor",
+      "caught": true,
+      "outputTail": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: next legal production day must create the natural successor\n    at file:///Users/fellipegoncalvesleite/.worktrees/society-engine/item4-natural-physical-cutover/scripts/naturalPhysicalCutoverAudit.mjs:91:10 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.18.0"
+    },
+    {
+      "id": "M2_restore_legacy_only_cooldown",
+      "file": "src/sim/agents/fissionSeparationHistory.ts",
+      "exitStatus": 1,
+      "expectedAssertion": "physical-separation cooldown history must survive successor reintegration",
+      "caught": true,
+      "outputTail": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: physical-separation cooldown history must survive successor reintegration\n\nundefined !== 24\n\n    at file:///Users/fellipegoncalvesleite/.worktrees/society-engine/item4-natural-physical-cutover/scripts/naturalPhysicalCutoverAudit.mjs:141:10 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: 24,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.18.0"
+    },
+    {
+      "id": "M3_disable_ready_day_protection",
+      "file": "src/sim/agents/naturalFissionDeparture.ts",
+      "exitStatus": 1,
+      "expectedAssertion": "fixture must reach departure_ready through production proposal/planning/preparation",
+      "caught": true,
+      "outputTail": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: fixture must reach departure_ready through production proposal/planning/preparation\n    at file:///Users/fellipegoncalvesleite/.worktrees/society-engine/item4-natural-physical-cutover/scripts/naturalPhysicalCutoverAudit.mjs:78:10 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.18.0"
+    },
+    {
+      "id": "M4_break_one_use_authorization",
+      "file": "src/sim/agents/fissionDepartureSeam.ts",
+      "exitStatus": 1,
+      "expectedAssertion": "natural departure must consume the one-use permit",
+      "caught": true,
+      "outputTail": "    ^\n\nAssertionError [ERR_ASSERTION]: natural departure must consume the one-use permit\n+ actual - expected\n\n+ 'live'\n- 'consumed_by_departure'\n\n    at file:///Users/fellipegoncalvesleite/.worktrees/society-engine/item4-natural-physical-cutover/scripts/naturalPhysicalCutoverAudit.mjs:118:10 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: 'live',\n  expected: 'consumed_by_departure',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.18.0"
+    },
+    {
+      "id": "M5_break_deterministic_successor_identity",
+      "file": "src/sim/agents/naturalFissionDeparture.ts",
+      "exitStatus": 1,
+      "expectedAssertion": "next legal production day must create the natural successor",
+      "caught": true,
+      "outputTail": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: next legal production day must create the natural successor\n    at file:///Users/fellipegoncalvesleite/.worktrees/society-engine/item4-natural-physical-cutover/scripts/naturalPhysicalCutoverAudit.mjs:91:10 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.18.0"
+    },
+    {
+      "id": "M6_disable_execution_time_cap",
+      "file": "src/sim/agents/naturalFissionDeparture.ts",
+      "exitStatus": 1,
+      "expectedAssertion": "one remaining causal band slot must admit exactly one successor",
+      "caught": true,
+      "outputTail": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: one remaining causal band slot must admit exactly one successor\n\n37 !== 36\n\n    at file:///Users/fellipegoncalvesleite/.worktrees/society-engine/item4-natural-physical-cutover/scripts/naturalPhysicalCutoverAudit.mjs:226:10 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: 37,\n  expected: 36,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.18.0"
+    },
+    {
+      "id": "M7_disable_stale_ready_resolution",
+      "file": "src/sim/agents/naturalFissionDeparture.ts",
+      "exitStatus": 1,
+      "expectedAssertion": "stale ready attempt must terminalize instead of retrying",
+      "caught": true,
+      "outputTail": "    ^\n\nAssertionError [ERR_ASSERTION]: stale ready attempt must terminalize instead of retrying\n+ actual - expected\n\n+ 'departure_ready'\n- 'abandoned'\n\n    at file:///Users/fellipegoncalvesleite/.worktrees/society-engine/item4-natural-physical-cutover/scripts/naturalPhysicalCutoverAudit.mjs:276:10 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: 'departure_ready',\n  expected: 'abandoned',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.18.0"
+    },
+    {
+      "id": "M8_disable_current_lineage_social_guard",
+      "file": "src/sim/agents/socialContext.ts",
+      "exitStatus": 1,
+      "expectedAssertion": "parent must not invent stranger contact with its in-flight successor",
+      "caught": true,
+      "outputTail": "    peacefulContactCount: 1,\n    strainedContactCount: 0,\n    sharedUseCount: 1,\n    avoidanceCount: 0,\n    familiarity: 0.6,\n    tension: 0,\n    trustLikeTolerance: 0.64,\n    relation: 'parent_daughter',\n    reasonIds: [\n      'reason:context:band:varied-river-mid:24:contact_memory_updated:tile:110:57'\n    ]\n  },\n  expected: undefined,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.18.0"
+    }
+  ],
+  "requiredMutationsCaught": true,
+  "extraCrossSystemMutationCaught": true,
+  "verdict": "PASS"
+}

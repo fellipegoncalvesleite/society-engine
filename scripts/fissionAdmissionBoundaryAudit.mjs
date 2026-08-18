@@ -93,7 +93,12 @@ try {
       population: 60, workingAdults: 30, dependents: 20, elders: 10 },
   });
   const successorArmed = armFission(dep.world.bands[SID]);
-  const establishedArmed = armFission(dep.world.bands[parent.id]);
+  // The established positive control must be an ordinary parent that has NOT just physically split.
+  // Using `dep.world` here became invalid once Direction-D departure records correctly entered the
+  // production cooldown authority: that parent is supposed to be on cooldown. Restore the untouched
+  // pre-departure parent from `base` so F3 differs from F2 by lifecycle state rather than recent
+  // physical-separation history.
+  const establishedArmed = armFission(base.bands[parent.id]);
 
   // Advance to the day the ANNUAL demographic step actually runs, so nothing here depends on a
   // sampling choice — CORRECTION-34A/-34D both recorded a season-boundary sample hiding a daily fact.

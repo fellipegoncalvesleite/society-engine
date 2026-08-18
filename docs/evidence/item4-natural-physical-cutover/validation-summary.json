@@ -1,0 +1,264 @@
+{
+  "audit": "ROADMAP ITEM 4 \u2014 natural physical cutover final validation summary",
+  "acceptedBase": "32096a56bb16e9d079698dea6c9e8a460f832e24",
+  "branch": "item4/natural-physical-cutover",
+  "compileBuildGraph": {
+    "tsconfigApp": "PASS",
+    "tsconfigNode": "PASS",
+    "productionBuild": "PASS",
+    "buildNote": "Vite emitted its existing >500 kB chunk-size advisory; build completed successfully.",
+    "architectureGraph": "PASS",
+    "importBoundary": "PASS"
+  },
+  "coreRegressionAudits": [
+    "founderAllocationFixturesAudit",
+    "founderCommitmentAudit",
+    "fissionParentResidualFixturesAudit",
+    "fissionParentResidualReproductionAudit",
+    "fissionDeparturePreparationAudit",
+    "fissionDepartureSeamAudit",
+    "fissionFieldTransferAudit",
+    "gatedDepartureAudit",
+    "naturalFissionPreDepartureAudit",
+    "naturalFissionPreDepartureMutationAudit",
+    "fissionLifecycleKernelAudit",
+    "fissionAdmissionBoundaryAudit"
+  ],
+  "downstreamRegressionAudits": [
+    "provisionalQuarantineContractAudit",
+    "provisionalTravelAudit",
+    "provisionalSubsistenceLifecycleAudit",
+    "provisionalReturnReachabilityAudit",
+    "provisionalReintegrationAudit",
+    "successorStabilizationAudit",
+    "successorStabilizationMutationAudit",
+    "failedReturnContinuationAudit",
+    "failedReturnContinuationMutationAudit",
+    "postEcologyReturnKindAudit",
+    "provisionalLifecycleExitAudit",
+    "provisionalTwoDayIntegrationAudit"
+  ],
+  "readerRegressionAudits": [
+    "provisionalBandReaderSurfaceAudit",
+    "provisionalReaderAdmissionAudit",
+    "provisionalReaderSemanticAudit",
+    "bandLifecycleSemanticsAudit",
+    "bandLifecycleBoundaryAudit",
+    "travelSubsistenceReproductionAudit"
+  ],
+  "readerBoundary": {
+    "acceptedCheckpoint": "5/12",
+    "cutoverStatus": "11/12 rows resolved for physical cutover",
+    "structuralViolations": 0,
+    "remainingFinalFreezeDebt": [
+      "src/sim/agents/bandHistory.ts \u2014 deep-history lifecycle projection adapter"
+    ]
+  },
+  "invarianceAudits": [
+    "seasonOrderInvarianceAudit",
+    "stepModeInvarianceAudit",
+    "stepModeFourWayAudit",
+    "itemThreeDeterminismAudit",
+    "itemThreeLifecycleDeterminismAudit"
+  ],
+  "controlledCutover": {
+    "audit": "ROADMAP ITEM 4 \u2014 controlled natural physical cutover",
+    "verdict": "PASS",
+    "parentId": "band:varied-river-mid",
+    "successorBandId": "successor:fission-lineage:band:varied-river-mid:24:tile:108:56",
+    "departureDay": 2163,
+    "departureTick": 24,
+    "diagnosticTick": 28,
+    "expectedTicksSince": 4,
+    "downstreamPhases": [
+      "travelling",
+      "establishing",
+      "returning",
+      "reintegrated"
+    ],
+    "boundaryDay": 2250,
+    "concurrentReadyCount": 12,
+    "capWinner": "band:cutover-concurrent-00",
+    "cooldownOutcomeMatrix": {
+      "stabilized": {
+        "ticksSinceLastFission": 4,
+        "requiredCooldownTicks": 60,
+        "cooldownElapsed": false
+      },
+      "reintegrated": {
+        "ticksSinceLastFission": 4,
+        "requiredCooldownTicks": 60,
+        "cooldownElapsed": false
+      },
+      "provisional_extinguished": {
+        "ticksSinceLastFission": 4,
+        "requiredCooldownTicks": 60,
+        "cooldownElapsed": false
+      },
+      "established_after_failed_return": {
+        "ticksSinceLastFission": 4,
+        "requiredCooldownTicks": 60,
+        "cooldownElapsed": false
+      }
+    }
+  },
+  "mutations": {
+    "verdict": "PASS",
+    "requiredSevenCaught": true,
+    "extraSocialGuardMutationCaught": true
+  },
+  "untouchedNaturalReachability": {
+    "verdict": "PASS",
+    "map": "map2",
+    "seed": "audit27:natural:s1",
+    "chain": {
+      "proposalDay": 44280,
+      "plannedDay": 44281,
+      "readyDay": 44282,
+      "departureDay": 44283,
+      "firstPostDepartureWorkDay": 44285,
+      "parentId": "band:varied-estuary",
+      "lineageId": "fission-lineage:band:varied-estuary:492:tile:186:87",
+      "successorBandId": "successor:fission-lineage:band:varied-estuary:492:tile:186:87",
+      "originTileId": "tile:189:87",
+      "targetTileId": "tile:186:87"
+    },
+    "conservation": {
+      "beforeParent": {
+        "workingAdults": 29,
+        "dependents": 15,
+        "elders": 7,
+        "population": 51
+      },
+      "afterParent": {
+        "workingAdults": 18,
+        "dependents": 10,
+        "elders": 5,
+        "population": 33
+      },
+      "successor": {
+        "workingAdults": 11,
+        "dependents": 5,
+        "elders": 2,
+        "population": 18
+      },
+      "worldPopulationBefore": 198,
+      "worldPopulationAfter": 198
+    }
+  },
+  "longNaturalRuns": [
+    {
+      "kind": "map1",
+      "seed": "item4-cutover:map1",
+      "days": 46800,
+      "years": 130,
+      "finalDay": 46800,
+      "proposals": 1,
+      "plans": 0,
+      "preparations": 0,
+      "physicalDepartures": 1,
+      "abandonedAttempts": 0,
+      "supersededPreparedAttempts": 0,
+      "stabilizations": 1,
+      "returns": 0,
+      "reintegrations": 0,
+      "provisionalExtinctions": 0,
+      "failedReturns": 0,
+      "postReturnEstablishments": 0,
+      "liveUnresolvedProvisionalSuccessors": 0,
+      "repeatedSplitParents": [],
+      "minPhysicalSeparationIntervalTicks": null,
+      "maxLiveBandCount": 6,
+      "maxBandObjectCount": 6,
+      "populationConservationFailures": [],
+      "duplicateSuccessorIds": [],
+      "duplicateLineages": [],
+      "legacyFissionEventCount": 0,
+      "boundedness": {
+        "successorDepartureRecords": 1,
+        "fissionAttemptHistory": 3,
+        "provisionalHistory": 2,
+        "stabilizationEvents": 1,
+        "postReturnEstablishmentEvents": 0,
+        "postReturnCommitmentHistory": 0,
+        "postReturnFailedTargetTileIds": 0,
+        "daughterBandIds": 1
+      },
+      "firstPhysicalDeparture": {
+        "id": "event:successor-departure:band:river-valley-foragers:successor:fission-lineage:band:river-valley-foragers:276:tile:127:65:24843",
+        "parentBandId": "band:river-valley-foragers",
+        "successorBandId": "successor:fission-lineage:band:river-valley-foragers:276:tile:127:65",
+        "lineageId": "fission-lineage:band:river-valley-foragers:276:tile:127:65",
+        "departedOnDay": 24843,
+        "tick": 276,
+        "originTileId": "tile:124:67",
+        "targetTileId": "tile:127:65",
+        "attemptPhasesObserved": [
+          "proposed"
+        ],
+        "downstreamPhasesObserved": [
+          "travelling",
+          "establishing",
+          "stabilized"
+        ]
+      }
+    },
+    {
+      "kind": "map2",
+      "seed": "audit27:natural:s1",
+      "days": 46800,
+      "years": 130,
+      "finalDay": 46800,
+      "proposals": 2,
+      "plans": 1,
+      "preparations": 0,
+      "physicalDepartures": 1,
+      "abandonedAttempts": 1,
+      "supersededPreparedAttempts": 0,
+      "stabilizations": 1,
+      "returns": 0,
+      "reintegrations": 0,
+      "provisionalExtinctions": 0,
+      "failedReturns": 0,
+      "postReturnEstablishments": 0,
+      "liveUnresolvedProvisionalSuccessors": 0,
+      "repeatedSplitParents": [],
+      "minPhysicalSeparationIntervalTicks": null,
+      "maxLiveBandCount": 9,
+      "maxBandObjectCount": 10,
+      "populationConservationFailures": [],
+      "duplicateSuccessorIds": [],
+      "duplicateLineages": [],
+      "legacyFissionEventCount": 0,
+      "boundedness": {
+        "successorDepartureRecords": 1,
+        "fissionAttemptHistory": 3,
+        "provisionalHistory": 2,
+        "stabilizationEvents": 1,
+        "postReturnEstablishmentEvents": 0,
+        "postReturnCommitmentHistory": 0,
+        "postReturnFailedTargetTileIds": 0,
+        "daughterBandIds": 1
+      },
+      "firstPhysicalDeparture": {
+        "id": "event:successor-departure:band:varied-estuary:successor:fission-lineage:band:varied-estuary:492:tile:186:87:44283",
+        "parentBandId": "band:varied-estuary",
+        "successorBandId": "successor:fission-lineage:band:varied-estuary:492:tile:186:87",
+        "lineageId": "fission-lineage:band:varied-estuary:492:tile:186:87",
+        "departedOnDay": 44283,
+        "tick": 492,
+        "originTileId": "tile:189:87",
+        "targetTileId": "tile:186:87",
+        "attemptPhasesObserved": [
+          "proposed"
+        ],
+        "downstreamPhasesObserved": [
+          "travelling",
+          "establishing",
+          "stabilized"
+        ]
+      }
+    }
+  ],
+  "verdict": "PASS_WITH_ONE_EXPLICIT_FINAL_FREEZE_READER_DEBT"
+}

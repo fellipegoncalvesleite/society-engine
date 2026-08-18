@@ -38,29 +38,78 @@ const BOUNDARY = "src/sim/agents/bandLifecycle.ts";
 // different and IS enforced below: it must import the boundary and skip provisional successors.
 const TERMINALITY_OWNING_MODULES = ["src/sim/agents/viability.ts"];
 
-// Modules the reader matrix marks as needing a guard, a block or an adapter. Until a module is
-// migrated it is listed as PENDING rather than failing the run — an audit that fails on work that is
-// honestly not started yet would have to be disabled to make progress, and a disabled audit proves
-// nothing. `migrated: true` moves it into the enforced set.
+// The inherited reader matrix entered this cutover at 5/12 source modules migrated. Natural physical
+// reachability makes that bookkeeping stale in two different ways: some rows had already been
+// satisfied by later Item-4 work, and some proposed adapters turn out not to be separate lifecycle
+// readers at all. `status` keeps those cases distinct instead of silently relabelling them migrated.
 const NATURAL_PATH_FILES = [
   "src/sim/agents/demography.ts",
   "src/sim/agents/naturalFissionPreDeparture.ts",
+  "src/sim/agents/naturalFissionDeparture.ts",
   "src/sim/agents/dailyActionRegistry.ts",
   "src/sim/tick/advance.ts",
 ];
 const MATRIX_MODULES = [
-  { file: "src/sim/agents/contextCache.ts", action: "adapter", migrated: true },
-  { file: "src/sim/agents/viability.ts", action: "blocked", migrated: true },
-  { file: "src/sim/agents/demography.ts", action: "blocked + guard", migrated: false },
-  { file: "src/sim/agents/expedition.ts", action: "blocked while provisional", migrated: true },
-  { file: "src/sim/agents/intraSeasonTrips.ts", action: "blocked while provisional", migrated: true },
-  { file: "src/sim/agents/protoCamps.ts", action: "blocked while provisional (pair guard still pending)", migrated: true },
-  { file: "src/sim/agents/socialContext.ts", action: "pair guard", migrated: false },
-  { file: "src/sim/agents/relationshipMemory.ts", action: "pair guard", migrated: false },
-  { file: "src/sim/agents/bodyCampLogistics.ts", action: "adapter", migrated: false },
-  { file: "src/sim/agents/bandEvents.ts", action: "adapter", migrated: false },
-  { file: "src/sim/agents/bandHistory.ts", action: "adapter", migrated: false },
-  { file: "src/sim/runner/simRunner.ts", action: "adapter", migrated: false },
+  { file: "src/sim/agents/contextCache.ts", action: "adapter", status: "migrated" },
+  { file: "src/sim/agents/viability.ts", action: "blocked", status: "migrated" },
+  { file: "src/sim/agents/demography.ts", action: "blocked + guard", status: "cutover_satisfied" },
+  { file: "src/sim/agents/expedition.ts", action: "blocked while provisional", status: "migrated" },
+  { file: "src/sim/agents/intraSeasonTrips.ts", action: "blocked while provisional", status: "migrated" },
+  { file: "src/sim/agents/protoCamps.ts", action: "blocked while provisional", status: "migrated" },
+  { file: "src/sim/agents/socialContext.ts", action: "current-lineage pair guard", status: "cutover_fixed" },
+  { file: "src/sim/agents/relationshipMemory.ts", action: "pair guard", status: "non_applicable" },
+  { file: "src/sim/agents/bodyCampLogistics.ts", action: "adapter", status: "non_applicable" },
+  { file: "src/sim/agents/bandEvents.ts", action: "provisional lineage readability adapter", status: "cutover_satisfied" },
+  { file: "src/sim/agents/bandHistory.ts", action: "deep-history lifecycle projection adapter", status: "final_freeze_debt" },
+  { file: "src/sim/runner/simRunner.ts", action: "provisional UI projection adapter", status: "cutover_satisfied" },
+];
+
+// Required by the handoff: classify the SEVEN rows that were pending at the accepted checkpoint.
+// A = newly load-bearing now that ordinary production creates provisional successors; B = real debt
+// intentionally left for the final whole-Item-4 freeze; C = stale/non-applicable pending label.
+const CUTOVER_PENDING_REVIEW = [
+  {
+    file: "src/sim/agents/socialContext.ts",
+    classification: "A",
+    outcome: "fixed_here",
+    reason: "ordinary context otherwise fabricated parent/successor encounter and contact memory at the physical departure tile; the current-lineage pair is now blocked only at the social encounter seam",
+  },
+  {
+    file: "src/sim/agents/bandHistory.ts",
+    classification: "B",
+    outcome: "final_freeze_debt",
+    reason: "deep-history annual projection still lacks a first-class departure/travel/return/reintegration episode; current state and bandEvents are readable, so this is product/history integration debt rather than physical-cutover correctness",
+  },
+  {
+    file: "src/sim/agents/demography.ts",
+    classification: "C",
+    outcome: "already_satisfied_before_this_cutover",
+    reason: "annual bodily demography intentionally includes provisional bodies, the producer already gates new fission with isFissionEligibleParent, and Object.keys(world.bands) already makes a physical successor consume the real MAX_BANDS slot",
+  },
+  {
+    file: "src/sim/agents/relationshipMemory.ts",
+    classification: "C",
+    outcome: "upstream_authority_makes_separate_guard_non_applicable",
+    reason: "relationship memory derives from the band's own contactMemories rather than enumerating another band pair; blocking the fictitious pair at the sole encounter/contact-memory writer prevents any false record from existing to consume",
+  },
+  {
+    file: "src/sim/agents/bodyCampLogistics.ts",
+    classification: "C",
+    outcome: "existing_reset_and_recompute_contract_satisfies_adapter",
+    reason: "the atomic field-transfer policy invalidates bodyCampLogistics on the successor, and the ordinary context pass recomputes it from the successor's current cohorts, condition and physical location; no lifecycle exclusion or second adapter is required",
+  },
+  {
+    file: "src/sim/agents/bandEvents.ts",
+    classification: "C",
+    outcome: "already_satisfied_before_this_cutover",
+    reason: "the source already imports isProvisionalSuccessor and projects provisional_separation versus established_daughter without fabricating a completed daughter event at departure",
+  },
+  {
+    file: "src/sim/runner/simRunner.ts",
+    classification: "C",
+    outcome: "already_satisfied_before_this_cutover",
+    reason: "the live overlay already imports isProvisionalSuccessor and emits isProvisional on markers, so an in-flight natural successor is not projected as an ordinary established daughter",
+  },
 ];
 
 // SEVEN single-band predicates. `shareCurrentFissionLineage` is a PAIR RELATION, not a predicate
@@ -114,7 +163,11 @@ const pending = [];
 const privateDuplicates = [];
 let inlineTerminalitySitesOutsideBoundary = 0;
 
-const migrated = new Set(MATRIX_MODULES.filter((m) => m.migrated).map((m) => m.file));
+const enforced = new Set(
+  MATRIX_MODULES
+    .filter((m) => m.status === "migrated")
+    .map((m) => m.file),
+);
 
 for (const full of files) {
   const rel = relative(ROOT, full);
@@ -127,7 +180,7 @@ for (const full of files) {
     if (isComment(line)) return;
     if (rel !== BOUNDARY && INLINE_TERMINALITY.test(line)) {
       inlineTerminalitySitesOutsideBoundary += 1;
-      if (migrated.has(rel) && !TERMINALITY_OWNING_MODULES.includes(rel)) {
+      if (enforced.has(rel) && !TERMINALITY_OWNING_MODULES.includes(rel)) {
         violations.push({ kind: "inlined_terminality_in_migrated_module", file: rel, line: i + 1, text: line.trim().slice(0, 140) });
       }
     }
@@ -145,12 +198,21 @@ for (const full of files) {
   // ── check 3 ──
   const entry = MATRIX_MODULES.find((m) => m.file === rel);
   if (entry !== undefined) {
-    if (entry.migrated && !importsBoundary) {
-      violations.push({ kind: "migrated_module_does_not_import_the_boundary", file: rel, action: entry.action });
-    } else if (!entry.migrated) {
-      pending.push({ file: rel, action: entry.action, importsBoundary });
+    if (enforced.has(rel) && !importsBoundary) {
+      violations.push({ kind: "migrated_module_does_not_import_the_boundary", file: rel, action: entry.action, status: entry.status });
+    } else if (entry.status === "final_freeze_debt") {
+      pending.push({ file: rel, action: entry.action, importsBoundary, status: entry.status });
     }
   }
+}
+
+// ── cutover A-class reader check: social parent/successor pair guard ───────────────────────────
+const socialContextRaw = readFileSync(join(ROOT, "src/sim/agents/socialContext.ts"), "utf8");
+if (
+  !/shareCurrentFissionLineage/.test(socialContextRaw) ||
+  !/if\s*\(left !== undefined && right !== undefined && shareCurrentFissionLineage\(left, right\)\)/.test(socialContextRaw)
+) {
+  violations.push({ kind: "natural_parent_successor_social_pair_guard_missing", file: "src/sim/agents/socialContext.ts" });
 }
 
 // ── check 3b: a terminality-owning module must still exclude provisional successors ──
@@ -172,16 +234,24 @@ for (const name of CANONICAL) {
   }
 }
 
-// ── check 5b (§10): performAtomicDeparture stays unreachable from the natural path ──
+// ── check 5b (§10): exactly one ordinary natural physical caller ───────────────────────────────
 //
-// Structural, not remembered. This subpass permits ordinary proposal/planning/preparation but
-// explicitly forbids physical cutover. `resolveProvisionalLifecycles` remains allowed in advance.ts:
-// it acts only on a provisional successor, and ordinary production still creates none.
+// Natural proposal/preparation remain separate authorities. Only the physical adapter may import and
+// call the atomic seam; demography, the pre-departure reducer, registry and time orchestrator may not.
+const naturalSeamCallers = [];
 for (const rel of NATURAL_PATH_FILES) {
   const raw = readFileSync(join(ROOT, rel), "utf8");
-  if (/\bperformAtomicDeparture\s*\(|from\s+["'][^"']*fissionDepartureSeam["']/.test(raw)) {
-    violations.push({ kind: "departure_seam_reachable_from_the_natural_path", file: rel });
-  }
+  const calls = /\bperformAtomicDeparture\s*\(/.test(raw);
+  const imports = /from\s+["'][^"']*fissionDepartureSeam["']/.test(raw);
+  if (calls || imports) naturalSeamCallers.push({ file: rel, calls, imports });
+}
+if (
+  naturalSeamCallers.length !== 1 ||
+  naturalSeamCallers[0]?.file !== "src/sim/agents/naturalFissionDeparture.ts" ||
+  naturalSeamCallers[0]?.calls !== true ||
+  naturalSeamCallers[0]?.imports !== true
+) {
+  violations.push({ kind: "natural_departure_seam_caller_count_is_not_exactly_one", callers: naturalSeamCallers });
 }
 
 // ── check 5 (§4): the legacy `"splitting"` marker gains no new lifecycle writer ──
@@ -228,8 +298,10 @@ const out = {
   canonicalPredicates: CANONICAL,
   whatThisDoesNotForbid:
     "Keyed lookups (world.bands[id]) and physical-group readers that enumerate every living band. Both are legitimate: a provisional successor holds real bodies and must appear in presence, depletion, consumption, health and demography. Excluding it from those would recreate the ghost bodies CORRECTION-34 removed.",
-  enforcedModules: MATRIX_MODULES.filter((m) => m.migrated),
+  enforcedModules: MATRIX_MODULES.filter((m) => enforced.has(m.file)),
+  cutoverPendingReview: CUTOVER_PENDING_REVIEW,
   pendingModules: pending,
+  naturalSeamCallers,
   privateDuplicateSpellings: privateDuplicates,
   inlineTerminalitySitesOutsideBoundary,
   violations,
@@ -258,7 +330,11 @@ const out = {
       v.kind === "boundary_became_a_barrel" || v.kind === "canonical_predicate_missing_from_boundary",
     ).length,
 
-    migratedReaders: MATRIX_MODULES.filter((m) => m.migrated).length,
+    migratedReaders: MATRIX_MODULES.filter((m) => m.status === "migrated").length,
+    cutoverFixedReaders: MATRIX_MODULES.filter((m) => m.status === "cutover_fixed").length,
+    cutoverSatisfiedReaders: MATRIX_MODULES.filter((m) => m.status === "cutover_satisfied").length,
+    nonApplicableReaderRows: MATRIX_MODULES.filter((m) => m.status === "non_applicable").length,
+    finalFreezeDebtReaders: MATRIX_MODULES.filter((m) => m.status === "final_freeze_debt").length,
     pendingReaders: pending.length,
     pendingAdapters: pending.filter((p) => p.action.includes("adapter")).length,
     pendingGuards: pending.filter((p) => p.action.includes("guard")).length,
@@ -270,15 +346,16 @@ const out = {
     // Structural cleanliness of the MIGRATED scope is not the same claim as migration being done,
     // and folding them into one PASS is exactly how a half-finished migration looks finished.
     migratedScopeStructurallyClean: violations.length === 0,
-    migrationCompleteness: `${MATRIX_MODULES.filter((m) => m.migrated).length}/${MATRIX_MODULES.length} load-bearing readers migrated`,
+    inheritedMigrationStatus: "5/12 at accepted checkpoint",
+    cutoverReviewStatus: `${MATRIX_MODULES.length - MATRIX_MODULES.filter((m) => m.status === "final_freeze_debt").length}/${MATRIX_MODULES.length} rows resolved for physical cutover; ${MATRIX_MODULES.filter((m) => m.status === "final_freeze_debt").length} explicit final-freeze debt`,
     verdict:
-      violations.length > 0 ? "FAIL" : pending.length > 0 ? "INCOMPLETE" : "PASS",
+      violations.length > 0 ? "FAIL" : pending.length > 0 ? "INCOMPLETE_FINAL_FREEZE_DEBT" : "PASS",
     verdictNote:
       violations.length > 0
-        ? "structural violations exist in migrated scope"
+        ? "structural violations exist in enforced cutover scope"
         : pending.length > 0
-          ? "migrated scope is structurally clean, but load-bearing readers remain unmigrated. A migration PASS requires no unresolved load-bearing reader."
-          : "every load-bearing reader is migrated and the migrated scope is clean",
+          ? "all newly load-bearing physical-cutover readers are resolved; the named B-class deep-history adapter remains intentionally deferred to final whole-Item-4 freeze"
+          : "every cutover reader row is resolved and the enforced scope is clean",
   },
 };
 
@@ -289,7 +366,7 @@ if (violations.length > 0) {
   console.log("\nVIOLATIONS:");
   for (const v of violations) console.log(`  ${v.kind}  ${v.file}${v.line ? `:${v.line}` : ""}${v.name ? ` (${v.name})` : ""}`);
 }
-console.log(`\npending migration (${pending.length}, honestly not started — not a violation):`);
+console.log(`\nexplicit final-freeze debt (${pending.length}, not falsely marked complete):`);
 for (const p of pending) console.log(`  ${p.file}  [${p.action}]`);
 console.log(`\nwritten: ${OUT}`);
 if (violations.length > 0) process.exitCode = 1;

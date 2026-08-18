@@ -216,7 +216,8 @@ export interface EstablishmentResult {
  * Runs daily so that evidence accumulates on the cadence it is lived on, and rolls the descriptive
  * record only at the end of a bounded window. Deterministic:
  * canonical band sort, no randomness, no wall clock. A no-op for every band that is not a provisional
- * successor in `establishing`, and nothing in ordinary play creates one.
+ * successor in `establishing`. Natural physical fission now makes that state ordinarily reachable;
+ * the departure action runs after this reducer, so establishment work still cannot happen on birth day.
  */
 export function advanceProvisionalEstablishment(world: WorldState, today: number): EstablishmentResult {
   const assessments: EstablishmentAssessment[] = [];
