@@ -1,0 +1,17 @@
+{
+  "allPass": true,
+  "checks": {
+    "cert_01_provenance": true,
+    "cert_05_adaptation_boundary": true,
+    "cert_06_expedition_adaptation": true,
+    "cert_08_item4_whole": true,
+    "cert_09_map2_50y_repeat": true,
+    "cert_07_fission_transfer": true,
+    "cert_10_targeted_practical": true,
+    "cert_11_targeted_efficacy": true,
+    "cert_12_targeted_routines2": true,
+    "cert_02_tsc_app": true,
+    "cert_03_tsc_node": true,
+    "cert_04_build": true
+  }
+}

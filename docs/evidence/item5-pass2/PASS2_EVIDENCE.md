@@ -5,6 +5,7 @@ Branch: `checkpoint/item5-physical-effect-provenance-pass2`
 Required base: `31ced032d901e81d9d6ce56aedd997c31df1d258`
 RED commit: `f91f84d7ff7ed0a15db449ad64b4dd43ae8736ed`
 Production commit: `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`
+Regression-fixture correction commit: `caeac19845c41e60a2d0740ac8c224d53d0813b9`
 Status: Pass 2 implemented and certified; Roadmap Item 5 remains open and is not frozen. No merge or push is part of this pass.
 
 ## Scope and hard gates
@@ -85,9 +86,21 @@ The Pass-2 audit then exited 1 and reproduced the material physical/lifecycle ef
 
 Raw capture: `mutation.*`, `mutation_before.sha256`, `mutation_after.sha256`, `mutation_restoration.txt`.
 
+## Certification-instrument correction
+
+A final committed-HEAD verification caught a real problem in the certification instrument: the targeted practical-adaptation and ROUTINES-2 benchmark commands both returned process exit 0 while their JSON payloads said `"passed": false`. The stale assertions were not production regressions; they still expected learned `fiber_sling` / raft plans to create physical effects and to mature/abandon from efficacy before material execution proof existed — exactly the behavior Pass 2 removes.
+
+The original misleading outputs are preserved as `diagnostic_stale_targeted_practical.*` and `diagnostic_stale_targeted_routines2.*`. The test-only correction at `caeac19845c41e60a2d0740ac8c224d53d0813b9` changes only `scripts/simBenchmark.mjs`:
+
+- carrying relief/success/failure/revision lifecycle coverage now uses the real `practice_only` `load_staging` path;
+- a separate `fiber_sling` negative control requires zero physical relief without execution proof;
+- ROUTINES-2 still proves engineering fragments/problems/ideas/experiment plans can form, but now requires zero engineering relief/safety gain, zero material-efficacy maturation, zero abandonment, and zero revision without execution proof.
+
+No production source changed in this correction. The full battery was then rerun, and certification now checks semantic payloads as well as process exits.
+
 ## Certification battery
 
-All required live gates below exited 0; command/stdout/stderr/exit captures are stored as `cert_01_*` through `cert_12_*`:
+All required live gates below now pass their real semantic gate; command/stdout/stderr/exit captures are stored as `cert_01_*` through `cert_12_*`, and `certification_semantic.json` records the combined verdict. For the three targeted benchmark suites this explicitly requires `"passed": true` and every assertion true — exit 0 alone is not accepted:
 
 1. `node scripts/item5PhysicalEffectProvenanceAudit.mjs`
 2. `npx tsc -p tsconfig.json --noEmit`
@@ -123,7 +136,7 @@ Committed production changes from the exact base through the production commit a
 - `src/sim/agents/inventionChain.ts` — truth-in-documentation comment only;
 - `src/ui/band/IdeasSolutions.tsx` — planned/estimated labels only.
 
-Plus the new Pass-2 audit and its RED evidence. See `scope_diff.txt`.
+Plus the new Pass-2 audit and its RED evidence. After the production commit, `scripts/simBenchmark.mjs` has one test-only certification-fixture correction; `scope_diff.txt` proves there are no production-source changes after the production commit.
 
 Not done and not claimed:
 

@@ -1,10 +1,16 @@
-Committed source diff from exact Pass-1 base through Pass-2 production commit:
+Committed production source diff from exact Pass-1 base through Pass-2 production commit:
 M	src/sim/agents/inventionChain.ts
 M	src/sim/agents/practicalResponses.ts
 M	src/sim/agents/types.ts
 M	src/ui/band/IdeasSolutions.tsx
 
-All committed files through Pass-2 production commit:
+Test-only certification fixture correction commit:
+M	scripts/simBenchmark.mjs
+
+Production source changes after the Pass-2 production commit (must be empty):
+(none)
+
+All committed files through the Pass-2 production commit:
 A	docs/evidence/item5-pass2/provenance_red.command
 A	docs/evidence/item5-pass2/provenance_red.exit
 A	docs/evidence/item5-pass2/provenance_red.stderr

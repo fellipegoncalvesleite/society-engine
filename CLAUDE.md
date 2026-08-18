@@ -19,6 +19,7 @@
 - No coefficients were tuned and `src/sim/agents/adaptiveEfficacy.ts` is unchanged at SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`.
 - Pass 3, Item-5 freeze, merge, and push are **NOT STARTED**. `src/architecture/graphData.ts` remains documentation/discovery only and never simulation authority.
 - **Last verified against production commit:** `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9` (Pass-2 code); final documentation/evidence commit follows it on the same branch.
+- Certification fixture correction `caeac19845c41e60a2d0740ac8c224d53d0813b9` is **test-only** (`scripts/simBenchmark.mjs`): final verification caught stale material-effect assertions because the benchmark CLI can exit 0 with `"passed": false`. Fresh semantic certification is all-pass; no production source changed after `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`.
 - **Last updated:** 2026-08-18. **Current active checkpoint:** Roadmap Item 5 physical-effect provenance Pass 2.
 - **Known stale/unverified sections:** older “current”, “Item 4 active”, and “Item 5 unstarted” checkpoint prose below is historical and superseded by this block; it is not rewritten retroactively.
 

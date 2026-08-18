@@ -197,7 +197,7 @@
       }
     ],
     "stateCapsHeld": true,
-    "runtimeMs": 15348.5992,
+    "runtimeMs": 15242.4824,
     "fingerprint": "f509b2f4d6e8a463b7505025afe22d151fd45a0598bd9550fbb84aac900da03c"
   },
   "repeated": {
@@ -206,6 +206,6 @@
     "activeBands": 9,
     "extinctBands": 0,
     "declineCapMatchesObserved": true,
-    "runtimeMs": 14311.5882
+    "runtimeMs": 14304.9786
   }
 }

@@ -14,3 +14,19 @@ provenance_red.exit (must fail)              1
 provenance_green.exit                        0
 mutation.exit (must fail)                    1
 diagnostic_pass1_hash_gate.exit (expected historical hash pin) 1
+
+semantic_all_pass=true
+semantic_cert_01_provenance=true
+semantic_cert_05_adaptation_boundary=true
+semantic_cert_06_expedition_adaptation=true
+semantic_cert_08_item4_whole=true
+semantic_cert_09_map2_50y_repeat=true
+semantic_cert_07_fission_transfer=true
+semantic_cert_10_targeted_practical=true
+semantic_cert_11_targeted_efficacy=true
+semantic_cert_12_targeted_routines2=true
+semantic_cert_02_tsc_app=true
+semantic_cert_03_tsc_node=true
+semantic_cert_04_build=true
+
+instrument_correction: the original targeted practical and ROUTINES-2 commands exited 0 while their JSON payloads reported passed=false; those stale outputs are preserved as diagnostic_stale_targeted_*. The corrected fixtures are test-only and the fresh payloads report passed=true with zero false assertions.

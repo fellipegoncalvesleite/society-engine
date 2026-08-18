@@ -5,7 +5,7 @@
 {
   "suite": "targeted_practical_adaptation_check",
   "checkpoint": "ENVIRONMENT-READING-PRACTICAL-ADAPTATION-INVENTION-1",
-  "passed": true,
+  "passed": false,
   "assertions": {
     "carrying_response_forms_under_repeated_burden": true,
     "carrying_response_matures_to_active": true,
@@ -13,15 +13,14 @@
     "fragments_form_from_lived_evidence": true,
     "comfortable_band_stays_inert": true,
     "no_material_basis_no_response": true,
-    "faded_practice_basis_disables_relief": true,
-    "material_plan_has_no_physical_relief_without_execution_proof": true,
+    "faded_basis_disables_relief": false,
     "practiced_plan_regains_budget_steps": true,
     "reliefs_capped": true,
     "water_relief_context_gated_by_destination": true,
-    "clear_success_is_specific_and_raises_confidence": true,
+    "clear_success_is_specific_and_raises_confidence": false,
     "severe_hardship_is_failure": true,
-    "repeated_failure_abandons": true,
-    "failure_revises_into_alternative_composition": true,
+    "repeated_failure_abandons": false,
+    "failure_revises_into_alternative_composition": false,
     "water_relief_refuses_unmatched_destination": true,
     "consumed_relief_without_context_is_mismatch": true,
     "drier_arrival_is_danger": true,
@@ -335,26 +334,19 @@
       "relief": 0,
       "cap": 0,
       "active": false,
-      "reason": "material/technique basis faded below 0.25 — practice cannot operate",
-      "responseId": "practical-response:band:practical-audit:carrying_load:load_staging:400"
-    },
-    "unexecutedMaterialRelief": {
-      "relief": 0,
-      "cap": 0,
-      "active": false,
       "reason": "material execution required — no physical execution proof exists for this response",
       "responseId": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
       "variantKey": "fiber_sling"
     },
     "planWith": {
-      "budget": 3,
+      "budget": 2,
       "carrying": {
-        "relief": 0.22,
-        "cap": 0.3,
-        "active": true,
-        "responseId": "practical-response:band:practical-audit:carrying_load:load_staging:400",
-        "variantKey": "load_staging",
-        "reason": "active practiced response"
+        "relief": 0,
+        "cap": 0,
+        "active": false,
+        "reason": "material execution required — no physical execution proof exists for this response",
+        "responseId": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+        "variantKey": "fiber_sling"
       },
       "water": {
         "relief": 0.22,
@@ -369,7 +361,7 @@
       "budget": 1
     },
     "planUnmatchedWater": {
-      "budget": 2,
+      "budget": 1,
       "water": {
         "relief": 0,
         "cap": 0.3,
@@ -381,7 +373,7 @@
     },
     "carryingClear": {
       "family": "carrying_load",
-      "responseId": "practical-response:band:practical-audit:carrying_load:load_staging:400",
+      "responseId": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
       "contextKey": "burdened_residential_travel",
       "coefficient": "seasonalTravelBudget.carry+vulnerable limiters / moveHardship dependent terms",
       "preEffectValue": 2,
@@ -396,26 +388,25 @@
       "reason": "carrying response restored 2 travel step(s) on a burdened residential move that completed"
     },
     "clearResponse": {
-      "id": "practical-response:band:practical-audit:carrying_load:load_staging:400",
+      "id": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
       "family": "carrying_load",
-      "variantKey": "load_staging",
-      "publicLabel": "load_staging",
+      "variantKey": "fiber_sling",
+      "publicLabel": "fiber_sling",
       "status": "active",
-      "confidence": 0.72,
-      "successCount": 2,
+      "confidence": 0.6,
+      "successCount": 1,
       "partialCount": 0,
       "failureCount": 0,
       "formedAtTick": 400,
       "lastActiveTick": 400,
       "requiredFragmentIds": [
-        "fragment:technique:load_staging"
+        "fragment:material_property:fiber_cordage"
       ],
-      "contextNote": "audit",
-      "lastEfficacy": "clear_success_specific"
+      "contextNote": "audit"
     },
     "carryingFailure": {
       "family": "carrying_load",
-      "responseId": "practical-response:band:practical-audit:carrying_load:load_staging:400",
+      "responseId": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
       "contextKey": "burdened_residential_travel",
       "coefficient": "seasonalTravelBudget.carry+vulnerable limiters / moveHardship dependent terms",
       "preEffectValue": 2,
@@ -430,44 +421,21 @@
       "reason": "burdened move ended in severe hardship despite the carrying response"
     },
     "abandoned": {
-      "id": "practical-response:band:practical-audit:carrying_load:load_staging:400",
+      "id": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
       "family": "carrying_load",
-      "variantKey": "load_staging",
-      "publicLabel": "load_staging",
-      "status": "abandoned",
-      "confidence": 0.05,
+      "variantKey": "fiber_sling",
+      "publicLabel": "fiber_sling",
+      "status": "active",
+      "confidence": 0.2,
       "successCount": 1,
       "partialCount": 0,
-      "failureCount": 3,
+      "failureCount": 2,
       "formedAtTick": 400,
       "lastActiveTick": 400,
       "requiredFragmentIds": [
-        "fragment:technique:load_staging"
+        "fragment:material_property:fiber_cordage"
       ],
-      "contextNote": "audit",
-      "lastEfficacy": "failure_or_danger_specific"
-    },
-    "revision": {
-      "id": "practical-response:band:practical-audit:carrying_load:carrying_frame:400",
-      "family": "carrying_load",
-      "variantKey": "carrying_frame",
-      "publicLabel": "rough carrying-frame response",
-      "status": "forming",
-      "confidence": 0.3,
-      "successCount": 0,
-      "partialCount": 0,
-      "failureCount": 0,
-      "formedAtTick": 400,
-      "lastActiveTick": 400,
-      "requiredFragmentIds": [
-        "fragment:material_property:fiber_cordage",
-        "fragment:material_property:load_binding"
-      ],
-      "contextNote": "composite: needs strong fiber AND binding practice; helps only burdened residential travel",
-      "problemId": "problem:band:practical-audit:carrying_burden",
-      "ideaId": "idea:problem:band:practical-audit:carrying_burden:carrying_load:carrying_frame:400",
-      "experimentId": "experiment:practical-response:band:practical-audit:carrying_load:carrying_frame:400",
-      "revisionOf": "practical-response:band:practical-audit:carrying_load:load_staging:400"
+      "contextNote": "audit"
     },
     "mismatchRelief": {
       "relief": 0,
@@ -510,10 +478,10 @@
       "reason": "the staged journey left the band drier (water stress 0.55 → 0.72) — the remembered water did not hold"
     },
     "dormantResponse": {
-      "id": "practical-response:band:practical-audit:carrying_load:load_staging:400",
+      "id": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
       "family": "carrying_load",
-      "variantKey": "load_staging",
-      "publicLabel": "load_staging",
+      "variantKey": "fiber_sling",
+      "publicLabel": "fiber_sling",
       "status": "dormant",
       "confidence": 0.6,
       "successCount": 1,
@@ -522,7 +490,7 @@
       "formedAtTick": 400,
       "lastActiveTick": 399,
       "requiredFragmentIds": [
-        "fragment:technique:load_staging"
+        "fragment:material_property:fiber_cordage"
       ],
       "contextNote": "audit"
     },
@@ -531,13 +499,13 @@
       "cap": 0,
       "active": false,
       "reason": "response dormant — its condition has not recurred",
-      "responseId": "practical-response:band:practical-audit:carrying_load:load_staging:400"
+      "responseId": "practical-response:band:practical-audit:carrying_load:fiber_sling:400"
     },
     "rewokenResponse": {
-      "id": "practical-response:band:practical-audit:carrying_load:load_staging:400",
+      "id": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
       "family": "carrying_load",
-      "variantKey": "load_staging",
-      "publicLabel": "load_staging",
+      "variantKey": "fiber_sling",
+      "publicLabel": "fiber_sling",
       "status": "active",
       "confidence": 0.6,
       "successCount": 1,
@@ -546,7 +514,7 @@
       "formedAtTick": 400,
       "lastActiveTick": 400,
       "requiredFragmentIds": [
-        "fragment:technique:load_staging"
+        "fragment:material_property:fiber_cordage"
       ],
       "contextNote": "audit"
     },

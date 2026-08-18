@@ -24,6 +24,7 @@
 - No coefficients were tuned and `src/sim/agents/adaptiveEfficacy.ts` is unchanged at SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`.
 - Pass 3, Item-5 freeze, merge, and push are **NOT STARTED**. `src/architecture/graphData.ts` remains documentation/discovery only and never simulation authority.
 - Current checkpoint branch: `checkpoint/item5-physical-effect-provenance-pass2`; exact Pass-1 base `31ced032d901e81d9d6ce56aedd997c31df1d258`; Pass-2 production commit `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`.
+- Certification fixture correction `caeac19845c41e60a2d0740ac8c224d53d0813b9` is **test-only** (`scripts/simBenchmark.mjs`): final verification caught stale material-effect assertions because the benchmark CLI can exit 0 with `"passed": false`. Fresh semantic certification is all-pass; no production source changed after `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`.
 - Older freshness/update lines below are retained as historical record and are superseded by this 2026-08-18 authority block.
 
 ## 0. Freshness and evidence warning
