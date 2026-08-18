@@ -1,0 +1,39 @@
+{
+  "audit": "ROADMAP ITEM 4 — supervisor correction source review",
+  "correctionBase": "bc397de96efb319c4cbc2363da0caff44fa11fbb",
+  "cumulativeBase": "32096a56bb16e9d079698dea6c9e8a460f832e24",
+  "branch": "checkpoint/dynamic-fission-provisional-successor-38",
+  "productionChanges": [
+    "src/sim/agents/demography.ts — explicit observationTime authority for inherited/spawn knowledge; legacy daughter path explicitly preserves world.time semantics",
+    "src/sim/agents/fissionDepartureSeam.ts — compute one departureTime before inheritance and pass it through shared helper"
+  ],
+  "proofChanges": [
+    "scripts/naturalPhysicalCutoverAudit.mjs — complete stale-clock, independent ready-day, real collision, terminal-object cap and historical-evidence controls",
+    "scripts/naturalPhysicalCutoverMutationAudit.mjs — nine causal mutants with baseline exercise and byte-identical restoration verification"
+  ],
+  "capDecision": "retain Object.keys(current.bands).length execution gate; it is the historical retained-Band simulation-management bound, distinct from living-band ecological pressure even though both currently use numeric 36",
+  "finalFreezeDebt": [
+    "src/sim/agents/bandHistory.ts — deep-history lifecycle projection adapter"
+  ],
+  "outOfScopeConfirmed": [
+    "final Item-4 freeze",
+    "Item 5",
+    "cumulative System Record regeneration",
+    "Canonical Bundle regeneration"
+  ],
+  "sourceReview": {
+    "ordinaryPerformAtomicDepartureCallers": 1,
+    "ordinaryCreateDaughterBandCallers": 0,
+    "inheritKnowledgeStateCallers": {
+      "legacyDaughter": "passes world.time explicitly",
+      "physicalCutover": "passes departureTime explicitly"
+    },
+    "naturalFissionDepartureAbsoluteLastDefaultDailyAction": true,
+    "directionDLegacyBandFissionEventWriters": 0,
+    "correctionProductionFiles": [
+      "src/sim/agents/demography.ts",
+      "src/sim/agents/fissionDepartureSeam.ts"
+    ],
+    "unexpectedDeletionOrCleanup": false
+  }
+}

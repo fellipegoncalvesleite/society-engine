@@ -586,8 +586,11 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
   };
   // Partial and degraded, through the SAME canonical helpers the legacy daughter path uses. A
   // perfect copy is what the spread was doing; re-implementing the degradation here would be a
-  // second answer to a question that already has one.
-  const inheritedKnowledge = inheritKnowledgeState(world, parent, successorId, parent.position);
+  // second answer to a question that already has one. Spatial/resource truth still comes from
+  // `world`; every NEW successor observation created by that helper is stamped with this one explicit
+  // physical instant rather than the caller's potentially stale `world.time`.
+  const departureTime = getWorldTimeForDay(today as DayNumber);
+  const inheritedKnowledge = inheritKnowledgeState(world, parent, successorId, parent.position, departureTime);
   const inheritedPlaceMemory = inheritPlaceMemory(parent, inheritedKnowledge);
   const inheritedCrossings = inheritCrossingMemories(parent, inheritedKnowledge);
   const inheritedCorridors = inheritTravelCorridors(parent, inheritedKnowledge);
@@ -599,7 +602,6 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
   // This bounded record says only what became true here: bodies left, from this tile, toward this
   // accepted target, under this positive commitment, and the one-use permit was spent. It is written
   // identically to both sides. No lineage link, founding snapshot or success claim exists yet.
-  const departureTime = getWorldTimeForDay(today as DayNumber);
   const departureRecordId =
     `event:successor-departure:${String(parent.id)}:${String(successorId)}:${today}` as EventId;
   const departureRecord: SuccessorDepartureRecord = {

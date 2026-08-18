@@ -16,6 +16,69 @@
   "boundaryDay": 2250,
   "concurrentReadyCount": 12,
   "capWinner": "band:cutover-concurrent-00",
+  "collisionBaseline": {
+    "independentReadyAttempts": 2,
+    "departures": 2,
+    "distinctSuccessorIds": 2,
+    "refusals": 0
+  },
+  "staleClockEvidence": {
+    "staleWorldTime": {
+      "tick": 1,
+      "seasonTick": 1,
+      "day": 100,
+      "dayOfSeason": 10,
+      "seasonLengthDays": 90,
+      "daysPerYear": 360,
+      "year": 0,
+      "season": "summer",
+      "seasonIndex": 1,
+      "generation": {
+        "index": 0,
+        "yearWithinGeneration": 0,
+        "tickWithinGeneration": 1
+      }
+    },
+    "explicitDepartureTime": {
+      "tick": 24,
+      "seasonTick": 24,
+      "day": 2163,
+      "dayOfSeason": 3,
+      "seasonLengthDays": 90,
+      "daysPerYear": 360,
+      "year": 6,
+      "season": "spring",
+      "seasonIndex": 0,
+      "generation": {
+        "index": 0,
+        "yearWithinGeneration": 6,
+        "tickWithinGeneration": 24
+      }
+    },
+    "inheritedResourceMemories": 12,
+    "inheritedGeneralTiles": 11,
+    "physicalSpawnTiles": 4,
+    "tileObservations": 18,
+    "inheritedDomainsPresent": {
+      "animalPattern": false,
+      "exploitationSkill": false,
+      "adaptiveHuman": true,
+      "practicalAdaptation": true,
+      "placeMemory": 5,
+      "crossingMemories": 0,
+      "travelCorridors": 2,
+      "openingEmbodiedSupport": true
+    }
+  },
+  "capSemantics": {
+    "threshold": 36,
+    "retainedBandObjectCountBefore": 35,
+    "terminalStoredCount": 33,
+    "livingBandCount": 2,
+    "admittedDepartures": 1,
+    "deferredDepartures": 1,
+    "interpretation": "shared numeric threshold; ecological scale pressure counts living bands, physical fission MAX_BANDS bounds retained Band objects"
+  },
   "cooldownOutcomeMatrix": {
     "stabilized": {
       "ticksSinceLastFission": 4,

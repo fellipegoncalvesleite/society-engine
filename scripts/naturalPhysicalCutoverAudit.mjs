@@ -67,8 +67,16 @@ try {
     const proposedWorld = demography.updateBandsDemographyAndFission(inputWorld);
     const proposed = proposedWorld.bands[candidate.id]?.fissionAttempt;
     if (proposed?.phase !== "proposed" || proposed.naturalProposal === undefined) continue;
-    const plannedWorld = advance.advanceWorldByDays(proposedWorld, 1);
-    const readyWorld = advance.advanceWorldByDays(plannedWorld, 1);
+    // Build the two pre-departure days through the production reducer directly, then mirror the
+    // time update `advanceWorldByDays` performs after daily actions. This keeps the controlled ready
+    // fixture available even when the separate ready-day barrier is mutation-tested: the fixture
+    // itself must not disappear merely because physical execution is intentionally broken.
+    const planDay = Number(proposed.phaseEnteredDay) + 1;
+    const planned = natural.advanceNaturalFissionPreDeparture(proposedWorld, planDay);
+    const plannedWorld = { ...planned.world, time: time.getWorldTimeForDay(planDay) };
+    const readyDay = planDay + 1;
+    const prepared = natural.advanceNaturalFissionPreDeparture(plannedWorld, readyDay);
+    const readyWorld = { ...prepared.world, time: time.getWorldTimeForDay(readyDay) };
     const ready = readyWorld.bands[candidate.id]?.fissionAttempt;
     if (ready?.phase === "departure_ready" && ready.preparedDeparture?.authorization.status === "live") {
       controlled = { parentId: candidate.id, readyWorld };
@@ -80,10 +88,19 @@ try {
   const parentId = controlled.parentId;
   const readyParent = controlled.readyWorld.bands[parentId];
   const readyAttempt = readyParent.fissionAttempt;
-  const departureDay = Number(readyAttempt.phaseEnteredDay) + 1;
-  const successorBandId = `successor:${readyAttempt.lineageId}`;
+  const readinessDay = Number(readyAttempt.phaseEnteredDay);
+  const departureDay = readinessDay + 1;
+  const successorBandId = naturalDeparture.makeNaturalSuccessorBandId(readyAttempt.lineageId);
 
-  // RED 3: the production daily registry must connect a natural ready attempt to the atomic seam.
+  // Distinct invariant A: readiness written on D is not physical permission to depart on D.
+  // Exercise the production departure reducer directly so a ready-day mutation is caught by the
+  // causal assertion rather than by making this fixture vanish during setup.
+  const sameDayBarrier = naturalDeparture.advanceNaturalFissionDepartures(controlled.readyWorld, readinessDay);
+  assert.equal(sameDayBarrier.records.length, 0, "readiness created on D cannot be consumed on D");
+  assert.equal(sameDayBarrier.world.bands[successorBandId], undefined, "ready-day barrier must move no bodies and create no successor");
+
+  // Distinct invariant B: the production daily registry must connect a natural ready attempt to the
+  // atomic seam only after every downstream provisional action for the legal departure day has run.
   assert.equal(controlled.readyWorld.bands[successorBandId], undefined, "readiness day must not create a successor");
   const productionDepartureWorld = advance.advanceWorldByDays(controlled.readyWorld, 1);
   const productionParent = productionDepartureWorld.bands[parentId];
@@ -119,8 +136,6 @@ try {
   const repeatNatural = naturalDeparture.advanceNaturalFissionDepartures(productionDepartureWorld, departureDay + 1);
   assert.equal(repeatNatural.records.length, 0, "terminal departed attempt must not be offered to the seam again");
   assert.equal(Object.keys(repeatNatural.world.bands).length, Object.keys(productionDepartureWorld.bands).length, "repeated natural reducer must not create a duplicate successor");
-  assert.equal(naturalDeparture.makeNaturalSuccessorBandId(readyAttempt.lineageId), successorBandId, "same lineage must deterministically map to the same successor id");
-  assert.notEqual(naturalDeparture.makeNaturalSuccessorBandId(`${readyAttempt.lineageId}:other`), successorBandId, "different lineage must map to a different successor id");
 
   // Continue the actually created successor only through ordinary registered production actions.
   let downstreamWorld = productionDepartureWorld;
@@ -207,6 +222,31 @@ try {
     .sort((a, b) => a.fissionAttempt.lineageId.localeCompare(b.fissionAttempt.lineageId));
   assert.ok(readyConcurrent.length >= 2, `concurrency fixture must produce at least two canonically prepared ready attempts; got ${readyConcurrent.length}`);
   const twoReady = readyConcurrent.slice(0, 2);
+
+  // Two independent canonical lineages with ample capacity must both depart and create distinct
+  // deterministic successors. This is the baseline half of the collision mutation: replacing the
+  // identity authority with one constant makes the SECOND attempt reach the real occupied-ID seam.
+  const collisionDay = departureDay + 13;
+  const collisionBaselineWorld = {
+    ...concurrentWorld,
+    bands: Object.fromEntries(twoReady.map((band) => [band.id, band])),
+  };
+  const collisionBaseline = naturalDeparture.advanceNaturalFissionDepartures(collisionBaselineWorld, collisionDay);
+  const collisionDepartures = collisionBaseline.records.filter((record) => record.kind === "departed");
+  const collisionRefusals = collisionBaseline.records.filter((record) => record.kind === "refused");
+  const occupiedIdCollisionRefusals = collisionRefusals.filter((record) => record.refusal === "successor_band_id_already_exists");
+  assert.equal(occupiedIdCollisionRefusals.length, 0, "independent canonical lineages must not compete for one occupied successor id");
+  assert.equal(collisionDepartures.length, 2, "both independent ready lineages must physically depart when two slots are available");
+  assert.equal(collisionRefusals.length, 0, "distinct canonical lineages must not collide at the occupied-ID seam");
+  const collisionSuccessorIds = collisionDepartures.map((record) => String(record.successorBandId));
+  assert.equal(new Set(collisionSuccessorIds).size, 2, "independent ready lineages must derive two distinct deterministic successor ids");
+  for (const id of collisionSuccessorIds) {
+    assert.ok(collisionBaseline.world.bands[id], `baseline collision fixture must retain successor ${id}`);
+  }
+  assert.equal(naturalDeparture.makeNaturalSuccessorBandId(readyAttempt.lineageId), successorBandId, "same lineage must deterministically map to the same successor id");
+  assert.equal(successorBandId, `successor:${readyAttempt.lineageId}`, "canonical successor identity must be lineage-derived rather than wall-clock or insertion-order derived");
+  assert.notEqual(naturalDeparture.makeNaturalSuccessorBandId(`${readyAttempt.lineageId}:other`), successorBandId, "different lineage must map to a different successor id");
+
   const kept = Object.fromEntries(twoReady.map((band) => [band.id, band]));
   const fillerSource = Object.values(controlled.readyWorld.bands).find((band) => band.id !== parentId);
   assert.ok(fillerSource, "cap fixture needs an inert filler source");
@@ -219,7 +259,7 @@ try {
     };
   }
   const capWorld = { ...concurrentWorld, bands: kept };
-  const capDay = departureDay + 13;
+  const capDay = collisionDay;
   const capResult = naturalDeparture.advanceNaturalFissionDepartures(capWorld, capDay);
   const departedRows = capResult.records.filter((record) => record.kind === "departed");
   const deferredRows = capResult.records.filter((record) => record.kind === "capacity_deferred");
@@ -230,12 +270,52 @@ try {
   const reversedCapResult = naturalDeparture.advanceNaturalFissionDepartures(reversedCapWorld, capDay);
   assert.equal(reversedCapResult.records.find((record) => record.kind === "departed")?.parentId, departedRows[0].parentId, "band insertion order must not choose the capacity winner");
 
+  // The 36 threshold has two source-derived meanings that share one historical numeric constant:
+  // nomadic-scale PRESSURE counts living bodies, but MAX_BANDS is a simulation-management bound on
+  // retained Band objects. Terminal snapshots therefore still consume object-capacity even though
+  // they do not count as living ecological bands. Prove that distinction rather than inferring it
+  // from the constant's historical name.
+  const terminalKept = Object.fromEntries(twoReady.map((band) => [band.id, band]));
+  for (let i = 0; Object.keys(terminalKept).length < 35; i += 1) {
+    const id = `band:cutover-terminal-${String(i).padStart(2, "0")}`;
+    terminalKept[id] = {
+      ...fillerSource,
+      id,
+      name: id,
+      size: 0,
+      status: "dispersed",
+      parentBandId: undefined,
+      daughterBandIds: [],
+      fissionEvents: [],
+      successorDepartureRecords: [],
+      fissionAttempt: undefined,
+      provisionalSuccessor: undefined,
+      demography: {
+        ...fillerSource.demography,
+        population: 0,
+        workingAdults: 0,
+        dependents: 0,
+        elders: 0,
+      },
+      knowledge: { ...fillerSource.knowledge, selfBandId: id },
+    };
+  }
+  const terminalCapWorld = { ...concurrentWorld, bands: terminalKept };
+  const terminalStoredCount = Object.values(terminalCapWorld.bands).filter((band) => lifecycle.isBandTerminal(band)).length;
+  const terminalLivingCount = Object.values(terminalCapWorld.bands).filter((band) => lifecycle.isLivingBand(band)).length;
+  assert.equal(terminalStoredCount, 33, "terminal-cap fixture must contain 33 retained archival band objects");
+  assert.equal(terminalLivingCount, 2, "terminal-cap fixture must contain only the two living ready parents");
+  const terminalCapResult = naturalDeparture.advanceNaturalFissionDepartures(terminalCapWorld, capDay);
+  assert.equal(Object.keys(terminalCapResult.world.bands).length, 36, "retained terminal Band objects must consume the shared simulation-management cap");
+  assert.equal(terminalCapResult.records.filter((record) => record.kind === "departed").length, 1, "terminal-object cap must admit only one final successor slot");
+  assert.equal(terminalCapResult.records.filter((record) => record.kind === "capacity_deferred").length, 1, "second ready parent must defer when retained-object count reaches 36");
+
   // RED 5: the explicit simulated departure day is the one time authority. A stale world clock
   // must not stamp inherited successor knowledge with an older tick while the departure record says
   // something else. This mirrors accelerated stepping where daily reducers receive `day` explicitly.
   const staleClockWorld = {
     ...controlled.readyWorld,
-    time: time.getWorldTimeForDay(0),
+    time: time.getWorldTimeForDay(100),
   };
   const staleClockDeparture = seam.performAtomicDeparture({
     world: staleClockWorld,
@@ -245,11 +325,111 @@ try {
     lineageId: readyAttempt.lineageId,
   });
   assert.equal(staleClockDeparture.ok, true, "stale-clock control departure must still execute accepted terms");
-  const explicitDepartureTick = time.getWorldTimeForDay(departureDay).tick;
-  const inheritedPatch = staleClockDeparture.world.bands[successorBandId].resourceKnowledgeState?.patchMemories?.[0];
-  assert.ok(inheritedPatch, "fixture must carry at least one inherited resource memory so the time assertion is non-vacuous");
-  assert.equal(inheritedPatch.firstNotedTick, explicitDepartureTick, "inherited knowledge must be stamped with explicit departure time");
+  const explicitDepartureTime = time.getWorldTimeForDay(departureDay);
+  const explicitDepartureTick = explicitDepartureTime.tick;
+  const staleSuccessor = staleClockDeparture.world.bands[successorBandId];
+  const staleDepartureRecord = staleSuccessor.successorDepartureRecords.at(-1);
+  assert.ok(staleDepartureRecord, "stale-clock departure must create one physical departure record");
+  assert.deepEqual(staleDepartureRecord.time, explicitDepartureTime, "departure record WorldTime must come from explicit simulated departure day");
+  assert.equal(staleDepartureRecord.tick, explicitDepartureTick, "departure record tick must come from explicit simulated departure day");
+  assert.equal(staleSuccessor.provisionalSuccessor?.phaseEnteredDay, departureDay, "provisional lifecycle must begin on the explicit departure day");
+  assert.equal(staleClockDeparture.consumedAuthorization.endedDay, departureDay, "consumed authorization must end on the explicit departure day");
   assert.equal(staleClockDeparture.successorDepartureProvenance.departedOnDay, departureDay, "departure provenance must share the same simulated instant");
+
+  const inheritedPatches = staleSuccessor.resourceKnowledgeState?.patchMemories ?? [];
+  assert.ok(inheritedPatches.length > 0, "fixture must carry at least one inherited resource memory so the time assertion is non-vacuous");
+  for (const inheritedPatch of inheritedPatches) {
+    assert.equal(inheritedPatch.firstNotedTick, explicitDepartureTick, `inherited resource ${String(inheritedPatch.patchId)} first reception must use explicit departure tick`);
+    assert.equal(inheritedPatch.lastNotedTick, explicitDepartureTick, `inherited resource ${String(inheritedPatch.patchId)} recency must use explicit departure tick`);
+    if (inheritedPatch.plantObservation !== undefined) {
+      assert.equal(inheritedPatch.plantObservation.lastObservedTick, explicitDepartureTick, `inherited plant hint ${String(inheritedPatch.patchId)} must use explicit departure tick`);
+    }
+  }
+
+  const generalKnowledge = Object.values(staleSuccessor.knowledge.observedTiles);
+  assert.ok(generalKnowledge.length > 0, "fixture must create successor general tile knowledge");
+  const inheritedTileKnowledge = generalKnowledge.filter((record) => record.knowledgeSource === "inherited_memory");
+  const physicalTileKnowledge = generalKnowledge.filter((record) =>
+    record.knowledgeSource === "personally_observed" || record.knowledgeSource === "physically_seen_on_spawn",
+  );
+  assert.ok(inheritedTileKnowledge.length > 0, "fixture must carry at least one inherited general tile record");
+  assert.ok(physicalTileKnowledge.length > 0, "fixture must create at least one physical spawn-perception tile record");
+  for (const record of generalKnowledge) {
+    assert.deepEqual(record.firstObservedAt, explicitDepartureTime, `new successor tile ${String(record.tileId)} firstObservedAt must use explicit departure time`);
+    assert.deepEqual(record.lastObservedAt, explicitDepartureTime, `new successor tile ${String(record.tileId)} lastObservedAt must use explicit departure time`);
+    if (record.knowledgeSource !== "inherited_memory") {
+      assert.deepEqual(record.seasonsObserved, [explicitDepartureTime.season], `physical spawn tile ${String(record.tileId)} season must use explicit departure season`);
+    }
+  }
+
+  const observations = staleSuccessor.knowledge.tileObservationHistory;
+  assert.ok(observations.length > 0, "fixture must create successor tile-observation history");
+  for (const observation of observations) {
+    assert.deepEqual(observation.observedAt, explicitDepartureTime, `new successor observation ${String(observation.tileId)} must use explicit departure time`);
+    assert.equal(observation.season, explicitDepartureTime.season, `new successor observation ${String(observation.tileId)} must use explicit departure season`);
+  }
+
+  const parentKnownBand = staleSuccessor.knowledge.knownBands.find((record) => String(record.bandId) === String(parentId));
+  assert.ok(parentKnownBand, "successor must create a direct known-band record for its parent");
+  assert.deepEqual(parentKnownBand.firstObservedAt, explicitDepartureTime, "new parent known-band record firstObservedAt must use explicit departure time");
+  assert.deepEqual(parentKnownBand.lastObservedAt, explicitDepartureTime, "new parent known-band record lastObservedAt must use explicit departure time");
+
+  const inheritedTickStates = [
+    ["animal-pattern", staleSuccessor.animalPatternKnowledge],
+    ["exploitation-skill", staleSuccessor.exploitationSkill],
+    ["adaptive-human", staleSuccessor.adaptiveHuman],
+    ["practical-adaptation", staleSuccessor.practicalAdaptation],
+  ];
+  for (const [label, state] of inheritedTickStates) {
+    if (state !== undefined) {
+      assert.equal(state.lastUpdatedTick, explicitDepartureTick, `${label} inheritance timestamp must use explicit departure tick`);
+    }
+  }
+  for (const record of staleSuccessor.animalPatternKnowledge?.records ?? []) {
+    assert.equal(record.lastObservedTick, explicitDepartureTick, `inherited animal pattern ${String(record.stockId)} must use explicit departure tick`);
+  }
+  for (const skill of Object.values(staleSuccessor.exploitationSkill?.skills ?? {})) {
+    assert.equal(skill.lastUpdatedTick, explicitDepartureTick, `inherited exploitation skill ${String(skill.resourceClassId)} must use explicit departure tick`);
+  }
+  for (const fragment of staleSuccessor.practicalAdaptation?.fragments ?? []) {
+    assert.equal(fragment.lastReinforcedTick, explicitDepartureTick, `inherited practical fragment ${String(fragment.id)} must use explicit departure tick`);
+  }
+  for (const problem of staleSuccessor.practicalAdaptation?.problems ?? []) {
+    assert.equal(problem.framedAtTick, explicitDepartureTick, `inherited practical problem ${String(problem.id)} must be framed at explicit departure tick`);
+    assert.equal(problem.lastEvidenceTick, explicitDepartureTick, `inherited practical problem ${String(problem.id)} evidence recency must use explicit departure tick`);
+  }
+
+  // Historical evidence is the opposite category: the successor receives it NOW, but its internal
+  // event times still describe when the parent actually experienced those places/routes. Restamping
+  // these would manufacture history. Assert that those original timestamps survive unchanged.
+  for (const [tileId, memory] of Object.entries(staleSuccessor.placeMemory ?? {})) {
+    const parentMemory = readyParent.placeMemory?.[tileId];
+    assert.ok(parentMemory, `inherited place memory ${tileId} must originate in the parent`);
+    assert.deepEqual(memory.firstObservedAt, parentMemory.firstObservedAt, `place memory ${tileId} firstObservedAt is historical evidence and must remain old`);
+    assert.deepEqual(memory.lastObservedAt, parentMemory.lastObservedAt, `place memory ${tileId} lastObservedAt is historical evidence and must remain old`);
+    assert.deepEqual(memory.lastReturnAt, parentMemory.lastReturnAt, `place memory ${tileId} lastReturnAt is historical evidence and must remain old`);
+  }
+  for (const [crossingKey, memory] of Object.entries(staleSuccessor.crossingMemories ?? {})) {
+    const parentMemory = readyParent.crossingMemories?.[crossingKey];
+    assert.ok(parentMemory, `inherited crossing memory ${crossingKey} must originate in the parent`);
+    assert.deepEqual(memory.firstUsedAt, parentMemory.firstUsedAt, `crossing ${crossingKey} firstUsedAt is historical evidence and must remain old`);
+    assert.deepEqual(memory.lastUsedAt, parentMemory.lastUsedAt, `crossing ${crossingKey} lastUsedAt is historical evidence and must remain old`);
+  }
+  for (const [corridorId, memory] of Object.entries(staleSuccessor.travelCorridors ?? {})) {
+    const parentMemory = readyParent.travelCorridors?.[corridorId];
+    assert.ok(parentMemory, `inherited corridor ${corridorId} must originate in the parent`);
+    assert.deepEqual(memory.lastUsedAt, parentMemory.lastUsedAt, `corridor ${corridorId} lastUsedAt is historical evidence and must remain old`);
+  }
+
+  if (staleSuccessor.seasonalSupport !== undefined) {
+    assert.equal(staleSuccessor.seasonalSupport.lastUpdatedTick, explicitDepartureTick, "successor opening embodied-support state must be rebuilt at explicit departure tick");
+    const parentSamples = readyParent.seasonalSupport?.recentSamples?.length > 0
+      ? readyParent.seasonalSupport.recentSamples
+      : readyParent.seasonalSupport === undefined
+        ? []
+        : [readyParent.seasonalSupport.currentSeasonSupport];
+    assert.deepEqual(staleSuccessor.seasonalSupport.recentSamples, parentSamples, "opening embodied-support samples must retain their original historical tick/year/season evidence");
+  }
 
   // RED 4: a permanently stale ready attempt must not be retried forever. The exact accepted
   // cohort changed after preparation; production must preserve the refusal, supersede the old permit
@@ -391,6 +571,39 @@ try {
     boundaryDay,
     concurrentReadyCount: readyConcurrent.length,
     capWinner: departedRows[0]?.parentId,
+    collisionBaseline: {
+      independentReadyAttempts: twoReady.length,
+      departures: collisionDepartures.length,
+      distinctSuccessorIds: new Set(collisionSuccessorIds).size,
+      refusals: collisionRefusals.length,
+    },
+    staleClockEvidence: {
+      staleWorldTime: staleClockWorld.time,
+      explicitDepartureTime,
+      inheritedResourceMemories: inheritedPatches.length,
+      inheritedGeneralTiles: inheritedTileKnowledge.length,
+      physicalSpawnTiles: physicalTileKnowledge.length,
+      tileObservations: observations.length,
+      inheritedDomainsPresent: {
+        animalPattern: staleSuccessor.animalPatternKnowledge !== undefined,
+        exploitationSkill: staleSuccessor.exploitationSkill !== undefined,
+        adaptiveHuman: staleSuccessor.adaptiveHuman !== undefined,
+        practicalAdaptation: staleSuccessor.practicalAdaptation !== undefined,
+        placeMemory: Object.keys(staleSuccessor.placeMemory ?? {}).length,
+        crossingMemories: Object.keys(staleSuccessor.crossingMemories ?? {}).length,
+        travelCorridors: Object.keys(staleSuccessor.travelCorridors ?? {}).length,
+        openingEmbodiedSupport: staleSuccessor.seasonalSupport !== undefined,
+      },
+    },
+    capSemantics: {
+      threshold: 36,
+      retainedBandObjectCountBefore: Object.keys(terminalCapWorld.bands).length,
+      terminalStoredCount,
+      livingBandCount: terminalLivingCount,
+      admittedDepartures: terminalCapResult.records.filter((record) => record.kind === "departed").length,
+      deferredDepartures: terminalCapResult.records.filter((record) => record.kind === "capacity_deferred").length,
+      interpretation: "shared numeric threshold; ecological scale pressure counts living bands, physical fission MAX_BANDS bounds retained Band objects",
+    },
     cooldownOutcomeMatrix,
   };
   const out = "docs/evidence/item4-natural-physical-cutover/controlled-cutover.json";

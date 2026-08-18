@@ -973,7 +973,7 @@ function createDaughterBand(
   const daughterIndex = parent.daughterBandIds.length + 1;
   const daughterBandId = makeDaughterBandId(parent.id, daughterIndex, world.time.tick);
   const splitReason = makeFissionReason(world, parent, daughterBandId, target, daughterPopulation);
-  const inheritedKnowledge = inheritKnowledgeState(world, parent, daughterBandId, target.tileId);
+  const inheritedKnowledge = inheritKnowledgeState(world, parent, daughterBandId, target.tileId, world.time);
   const inheritedMemory = inheritPlaceMemory(parent, inheritedKnowledge);
   const inheritedCrossings = inheritCrossingMemories(parent, inheritedKnowledge);
   const inheritedCorridors = inheritTravelCorridors(parent, inheritedKnowledge);
@@ -2008,6 +2008,7 @@ export function inheritKnowledgeState(
   parent: Band,
   daughterBandId: BandId,
   targetTileId: TileId,
+  observationTime: WorldTime,
 ): KnowledgeState {
   const inheritedRecords = selectInheritedKnownTileRecords(world, parent, targetTileId);
   const observedTiles: Record<string, KnownTileRecord> = {};
@@ -2018,8 +2019,8 @@ export function inheritKnowledgeState(
 
     observedTiles[record.tileId] = {
       ...record,
-      firstObservedAt: world.time,
-      lastObservedAt: world.time,
+      firstObservedAt: observationTime,
+      lastObservedAt: observationTime,
       visits: 0,
       confidence,
       knowledgeSource: "inherited_memory",
@@ -2037,8 +2038,8 @@ export function inheritKnowledgeState(
     };
     tileObservationHistory.push({
       tileId: record.tileId,
-      observedAt: world.time,
-      season: world.time.season,
+      observedAt: observationTime,
+      season: observationTime.season,
       observedRichness: record.observedRichness,
       observedAquaticPotential: record.observedAquaticPotential,
       observedRisk: record.observedRisk ?? 0.35,
@@ -2046,7 +2047,7 @@ export function inheritKnowledgeState(
     });
   }
 
-  for (const physicalRecord of createSpawnPhysicalPerceptionRecords(world, daughterBandId, targetTileId)) {
+  for (const physicalRecord of createSpawnPhysicalPerceptionRecords(world, daughterBandId, targetTileId, observationTime)) {
     observedTiles[physicalRecord.record.tileId] = physicalRecord.record;
     tileObservationHistory.push(physicalRecord.observation);
   }
@@ -2056,7 +2057,7 @@ export function inheritKnowledgeState(
     observedTiles: observedTiles as Readonly<Record<TileId, KnownTileRecord>>,
     compressedKnownTileSummaries: [],
     knownAreaSummaries: [],
-    knownBands: [createParentBandRecord(world, parent)],
+    knownBands: [createParentBandRecord(parent, observationTime)],
     knownSettlements: [],
     knownRoutes: [],
     placeAttachments: createInheritedPlaceAttachments(parent, targetTileId),
@@ -2069,6 +2070,7 @@ function createSpawnPhysicalPerceptionRecords(
   world: WorldState,
   daughterBandId: BandId,
   targetTileId: TileId,
+  observationTime: WorldTime,
 ): readonly {
   readonly record: KnownTileRecord;
   readonly observation: TileObservation;
@@ -2098,9 +2100,9 @@ function createSpawnPhysicalPerceptionRecords(
     return {
       record: {
         tileId: tile.id,
-        firstObservedAt: world.time,
-        lastObservedAt: world.time,
-        seasonsObserved: [world.time.season],
+        firstObservedAt: observationTime,
+        lastObservedAt: observationTime,
+        seasonsObserved: [observationTime.season],
         visits,
         observedRichness: getDepletionAdjustedRichness(world, tile),
         observedWaterAccess: tile.resourceProfile.waterAccess,
@@ -2119,8 +2121,8 @@ function createSpawnPhysicalPerceptionRecords(
       },
       observation: {
         tileId: tile.id,
-        observedAt: world.time,
-        season: world.time.season,
+        observedAt: observationTime,
+        season: observationTime.season,
         observedRichness: getDepletionAdjustedRichness(world, tile),
         observedAquaticPotential: tile.resourceProfile.aquaticPotential,
         observedRisk,
@@ -2277,11 +2279,11 @@ export function getInheritanceProfile(
   };
 }
 
-function createParentBandRecord(world: WorldState, parent: Band): KnownBandRecord {
+function createParentBandRecord(parent: Band, observationTime: WorldTime): KnownBandRecord {
   return {
     bandId: parent.id,
-    firstObservedAt: world.time,
-    lastObservedAt: world.time,
+    firstObservedAt: observationTime,
+    lastObservedAt: observationTime,
     confidence: 1,
     estimatedSize: Math.round(parent.demography.population),
     lastKnownTileId: parent.position,

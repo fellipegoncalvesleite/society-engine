@@ -1,13 +1,13 @@
 {
-  "audit": "ROADMAP ITEM 4 \u2014 natural physical cutover final validation summary",
+  "audit": "ROADMAP ITEM 4 — natural physical cutover supervisor correction validation summary",
   "acceptedBase": "32096a56bb16e9d079698dea6c9e8a460f832e24",
-  "branch": "item4/natural-physical-cutover",
+  "branch": "checkpoint/dynamic-fission-provisional-successor-38",
   "compileBuildGraph": {
     "tsconfigApp": "PASS",
     "tsconfigNode": "PASS",
     "productionBuild": "PASS",
     "buildNote": "Vite emitted its existing >500 kB chunk-size advisory; build completed successfully.",
-    "architectureGraph": "PASS",
+    "architectureGraph": "REPORT_NO_FAILURE",
     "importBoundary": "PASS"
   },
   "coreRegressionAudits": [
@@ -51,7 +51,7 @@
     "cutoverStatus": "11/12 rows resolved for physical cutover",
     "structuralViolations": 0,
     "remainingFinalFreezeDebt": [
-      "src/sim/agents/bandHistory.ts \u2014 deep-history lifecycle projection adapter"
+      "src/sim/agents/bandHistory.ts — deep-history lifecycle projection adapter"
     ]
   },
   "invarianceAudits": [
@@ -62,7 +62,7 @@
     "itemThreeLifecycleDeterminismAudit"
   ],
   "controlledCutover": {
-    "audit": "ROADMAP ITEM 4 \u2014 controlled natural physical cutover",
+    "audit": "ROADMAP ITEM 4 — controlled natural physical cutover",
     "verdict": "PASS",
     "parentId": "band:varied-river-mid",
     "successorBandId": "successor:fission-lineage:band:varied-river-mid:24:tile:108:56",
@@ -79,6 +79,69 @@
     "boundaryDay": 2250,
     "concurrentReadyCount": 12,
     "capWinner": "band:cutover-concurrent-00",
+    "collisionBaseline": {
+      "independentReadyAttempts": 2,
+      "departures": 2,
+      "distinctSuccessorIds": 2,
+      "refusals": 0
+    },
+    "staleClockEvidence": {
+      "staleWorldTime": {
+        "tick": 1,
+        "seasonTick": 1,
+        "day": 100,
+        "dayOfSeason": 10,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "summer",
+        "seasonIndex": 1,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 1
+        }
+      },
+      "explicitDepartureTime": {
+        "tick": 24,
+        "seasonTick": 24,
+        "day": 2163,
+        "dayOfSeason": 3,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 6,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 6,
+          "tickWithinGeneration": 24
+        }
+      },
+      "inheritedResourceMemories": 12,
+      "inheritedGeneralTiles": 11,
+      "physicalSpawnTiles": 4,
+      "tileObservations": 18,
+      "inheritedDomainsPresent": {
+        "animalPattern": false,
+        "exploitationSkill": false,
+        "adaptiveHuman": true,
+        "practicalAdaptation": true,
+        "placeMemory": 5,
+        "crossingMemories": 0,
+        "travelCorridors": 2,
+        "openingEmbodiedSupport": true
+      }
+    },
+    "capSemantics": {
+      "threshold": 36,
+      "retainedBandObjectCountBefore": 35,
+      "terminalStoredCount": 33,
+      "livingBandCount": 2,
+      "admittedDepartures": 1,
+      "deferredDepartures": 1,
+      "interpretation": "shared numeric threshold; ecological scale pressure counts living bands, physical fission MAX_BANDS bounds retained Band objects"
+    },
     "cooldownOutcomeMatrix": {
       "stabilized": {
         "ticksSinceLastFission": 4,
@@ -104,8 +167,14 @@
   },
   "mutations": {
     "verdict": "PASS",
-    "requiredSevenCaught": true,
-    "extraSocialGuardMutationCaught": true
+    "allMutationsCaught": true,
+    "allSourcesRestored": true,
+    "semanticGroups": {
+      "readyDayBarrier": true,
+      "birthDayNoDownstreamWork": true,
+      "realSuccessorCollision": true
+    },
+    "count": 9
   },
   "untouchedNaturalReachability": {
     "verdict": "PASS",
@@ -260,5 +329,111 @@
       }
     }
   ],
-  "verdict": "PASS_WITH_ONE_EXPLICIT_FINAL_FREEZE_READER_DEBT"
+  "verdict": "PASS_WITH_ONE_EXPLICIT_FINAL_FREEZE_READER_DEBT",
+  "correctionBase": "bc397de96efb319c4cbc2363da0caff44fa11fbb",
+  "supervisorCorrection": {
+    "explicitTimeDefect": {
+      "reproducedOnCorrectionBase": true,
+      "reproduction": "stale world.time day 100 / tick 1 / summer while explicit departure day 2163 / tick 24 / spring; successor KnownTileRecord.firstObservedAt used stale world.time before the fix",
+      "rootCause": "performAtomicDeparture supplied explicit departure time to several inherited subsystems but inheritKnowledgeState still read WorldState.time internally",
+      "fix": "inheritKnowledgeState now receives an explicit observation WorldTime; legacy daughter creation passes world.time, while physical cutover passes canonical departureTime"
+    },
+    "departureTimeAuthority": {
+      "newDepartureFactsUseCanonicalInstant": [
+        "SuccessorDepartureRecord time/tick/day",
+        "provisional lifecycle phaseEnteredDay and separation-course initialization",
+        "consumed founder-authorization endedDay and departure provenance",
+        "inherited resource-knowledge reception timestamps",
+        "animal-pattern / exploitation-skill / adaptive-human / practical-adaptation inheritance update timestamps",
+        "successor general KnownTileRecord inheritance timestamps",
+        "physical spawn/perception KnownTileRecord and TileObservation timestamps/seasons",
+        "new KnownBandRecord for the parent",
+        "successor opening embodied-support state lastUpdatedTick"
+      ],
+      "historicalParentEvidencePreserved": [
+        "place-memory first/last observation and return timestamps",
+        "crossing first/last use timestamps",
+        "travel-corridor last-use timestamps",
+        "retained embodied-support sample tick/year/season evidence"
+      ]
+    },
+    "staleClockRegression": {
+      "staleWorldTime": {
+        "tick": 1,
+        "seasonTick": 1,
+        "day": 100,
+        "dayOfSeason": 10,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "summer",
+        "seasonIndex": 1,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 1
+        }
+      },
+      "explicitDepartureTime": {
+        "tick": 24,
+        "seasonTick": 24,
+        "day": 2163,
+        "dayOfSeason": 3,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 6,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 6,
+          "tickWithinGeneration": 24
+        }
+      },
+      "inheritedResourceMemories": 12,
+      "inheritedGeneralTiles": 11,
+      "physicalSpawnTiles": 4,
+      "tileObservations": 18,
+      "inheritedDomainsPresent": {
+        "animalPattern": false,
+        "exploitationSkill": false,
+        "adaptiveHuman": true,
+        "practicalAdaptation": true,
+        "placeMemory": 5,
+        "crossingMemories": 0,
+        "travelCorridors": 2,
+        "openingEmbodiedSupport": true
+      }
+    },
+    "sameDayControls": {
+      "readyDayBarrier": true,
+      "birthDayNoDownstreamWork": true,
+      "orderingCounterfactual": "moving natural_fission_departure before provisional_travel creates a real newborn and then gives it same-day travel; the empty-birth-day-trail assertion catches it"
+    },
+    "successorIdentity": {
+      "baseline": {
+        "independentReadyAttempts": 2,
+        "departures": 2,
+        "distinctSuccessorIds": 2,
+        "refusals": 0
+      },
+      "collisionCounterfactual": "constant successor:collision identity lets the first independent lineage depart, then the second reaches occupied-ID protection and is refused with successor_band_id_already_exists"
+    },
+    "capSemantics": {
+      "threshold": 36,
+      "retainedBandObjectCountBefore": 35,
+      "terminalStoredCount": 33,
+      "livingBandCount": 2,
+      "admittedDepartures": 1,
+      "deferredDepartures": 1,
+      "interpretation": "shared numeric threshold; ecological scale pressure counts living bands, physical fission MAX_BANDS bounds retained Band objects"
+    },
+    "capConclusion": "two concepts intentionally share numeric 36: ecological nomadic-scale pressure counts living bands; physical fission MAX_BANDS bounds retained Band objects for state/performance growth. No production cap change was made."
+  },
+  "validationNotes": {
+    "focused": "app TypeScript, node TypeScript, atomic seam, natural pre-departure, pre-departure mutations, controlled cutover and strengthened cutover mutations completed with exit 0",
+    "broad": "materially affected downstream, failed-return, reader, determinism, step-mode and season-order matrix completed under set -e with exit 0",
+    "build": "npm run build completed with exit 0; only existing Vite chunk-size advisory was emitted",
+    "environment": "some Vite-backed audits printed transient HMR port 24678 already-in-use notices but completed their assertions and the set -e matrix continued to final PASS"
+  }
 }
