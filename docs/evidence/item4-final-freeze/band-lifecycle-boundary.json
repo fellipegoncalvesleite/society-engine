@@ -1,0 +1,175 @@
+{
+  "generatedAt": "2026-08-18T14:03:05.189Z",
+  "checkpoint": "ROADMAP ITEM 4 §4 — band lifecycle boundary",
+  "boundary": "src/sim/agents/bandLifecycle.ts",
+  "boundaryExports": [
+    "isBandTerminal",
+    "isLivingBand",
+    "isProvisionalSuccessor",
+    "hasCurrentFissionAttempt",
+    "isEstablishedBand",
+    "isFissionEligibleParent",
+    "isProvisionalGroupInTransit",
+    "shareCurrentFissionLineage",
+    "auditFissionLineageOwnership",
+    "preserveTerminalBandSnapshots"
+  ],
+  "canonicalPredicates": [
+    "isBandTerminal",
+    "isLivingBand",
+    "isProvisionalSuccessor",
+    "hasCurrentFissionAttempt",
+    "isEstablishedBand",
+    "isFissionEligibleParent",
+    "isProvisionalGroupInTransit",
+    "shareCurrentFissionLineage",
+    "preserveTerminalBandSnapshots"
+  ],
+  "whatThisDoesNotForbid": "Keyed lookups (world.bands[id]) and physical-group readers that enumerate every living band. Both are legitimate: a provisional successor holds real bodies and must appear in presence, depletion, consumption, health and demography. Excluding it from those would recreate the ghost bodies CORRECTION-34 removed.",
+  "enforcedModules": [
+    {
+      "file": "src/sim/agents/contextCache.ts",
+      "action": "adapter",
+      "status": "migrated"
+    },
+    {
+      "file": "src/sim/agents/viability.ts",
+      "action": "blocked",
+      "status": "migrated"
+    },
+    {
+      "file": "src/sim/agents/expedition.ts",
+      "action": "blocked while provisional",
+      "status": "migrated"
+    },
+    {
+      "file": "src/sim/agents/intraSeasonTrips.ts",
+      "action": "blocked while provisional",
+      "status": "migrated"
+    },
+    {
+      "file": "src/sim/agents/protoCamps.ts",
+      "action": "blocked while provisional",
+      "status": "migrated"
+    },
+    {
+      "file": "src/sim/agents/bandHistory.ts",
+      "action": "deep-history lifecycle projection adapter",
+      "status": "migrated"
+    }
+  ],
+  "cutoverPendingReview": [
+    {
+      "file": "src/sim/agents/socialContext.ts",
+      "classification": "A",
+      "outcome": "fixed_here",
+      "reason": "ordinary context otherwise fabricated parent/successor encounter and contact memory at the physical departure tile; the current-lineage pair is now blocked only at the social encounter seam"
+    },
+    {
+      "file": "src/sim/agents/bandHistory.ts",
+      "classification": "B",
+      "outcome": "resolved_in_final_freeze",
+      "reason": "final freeze requires deep history to consume the canonical lifecycle boundary and project bounded successor separation history without becoming a lifecycle authority"
+    },
+    {
+      "file": "src/sim/agents/demography.ts",
+      "classification": "C",
+      "outcome": "already_satisfied_before_this_cutover",
+      "reason": "annual bodily demography intentionally includes provisional bodies, the producer already gates new fission with isFissionEligibleParent, and Object.keys(world.bands) already makes a physical successor consume the real MAX_BANDS slot"
+    },
+    {
+      "file": "src/sim/agents/relationshipMemory.ts",
+      "classification": "C",
+      "outcome": "upstream_authority_makes_separate_guard_non_applicable",
+      "reason": "relationship memory derives from the band's own contactMemories rather than enumerating another band pair; blocking the fictitious pair at the sole encounter/contact-memory writer prevents any false record from existing to consume"
+    },
+    {
+      "file": "src/sim/agents/bodyCampLogistics.ts",
+      "classification": "C",
+      "outcome": "existing_reset_and_recompute_contract_satisfies_adapter",
+      "reason": "the atomic field-transfer policy invalidates bodyCampLogistics on the successor, and the ordinary context pass recomputes it from the successor's current cohorts, condition and physical location; no lifecycle exclusion or second adapter is required"
+    },
+    {
+      "file": "src/sim/agents/bandEvents.ts",
+      "classification": "C",
+      "outcome": "already_satisfied_before_this_cutover",
+      "reason": "the source already imports isProvisionalSuccessor and projects provisional_separation versus established_daughter without fabricating a completed daughter event at departure"
+    },
+    {
+      "file": "src/sim/runner/simRunner.ts",
+      "classification": "C",
+      "outcome": "already_satisfied_before_this_cutover",
+      "reason": "the live overlay already imports isProvisionalSuccessor and emits isProvisional on markers, so an in-flight natural successor is not projected as an ordinary established daughter"
+    }
+  ],
+  "pendingModules": [],
+  "naturalSeamCallers": [
+    {
+      "file": "src/sim/agents/naturalFissionDeparture.ts",
+      "calls": true,
+      "imports": true
+    }
+  ],
+  "privateDuplicateSpellings": [],
+  "inlineTerminalitySitesOutsideBoundary": 51,
+  "violations": [],
+  "legacySplittingMarker": {
+    "note": "band.status has exactly five writers in the whole simulation. `camped`, `moving`, `settled` and `stressed` have ZERO PRODUCERS and are structurally unreachable. `splitting` is an activity/read-model marker, not a lifecycle phase, and must not become a parallel lifecycle authority.",
+    "writers": [
+      {
+        "file": "src/sim/agents/demography.ts",
+        "line": 1224
+      }
+    ],
+    "readers": [
+      {
+        "file": "src/sim/agents/familiarCountry.ts",
+        "line": 316
+      },
+      {
+        "file": "src/ui/bandSummary.ts",
+        "line": 75
+      }
+    ],
+    "sanctionedWriters": [
+      "src/sim/agents/demography.ts"
+    ],
+    "knownReaders": [
+      "src/sim/agents/familiarCountry.ts",
+      "src/ui/bandSummary.ts"
+    ]
+  },
+  "summary": {
+    "filesScanned": 165,
+    "canonicalSinglebandPredicates": 7,
+    "canonicalPairRelations": 1,
+    "canonicalReducers": 1,
+    "canonicalExportsTotal": 9,
+    "structuralViolationsInMigratedScope": 0,
+    "privateDuplicatePredicates": 0,
+    "legacyMarkerViolations": 0,
+    "boundaryIntegrityViolations": 0,
+    "migratedReaders": 6,
+    "cutoverFixedReaders": 1,
+    "cutoverSatisfiedReaders": 3,
+    "nonApplicableReaderRows": 2,
+    "finalFreezeDebtReaders": 0,
+    "totalReaderRows": 12,
+    "resolvedReaderRows": 12,
+    "readerBoundaryStatus": "12/12",
+    "pendingReaders": 0,
+    "pendingAdapters": 0,
+    "pendingGuards": 0,
+    "pendingBlocked": 0,
+    "safeUnchangedReaders": 16,
+    "inlineTerminalitySitesOutsideBoundary": 51,
+    "terminalityOwningModules": [
+      "src/sim/agents/viability.ts"
+    ],
+    "migratedScopeStructurallyClean": true,
+    "inheritedMigrationStatus": "5/12 at accepted checkpoint",
+    "cutoverReviewStatus": "12/12 reader rows resolved for final Item-4 freeze; 0 pending",
+    "verdict": "PASS",
+    "verdictNote": "every cutover reader row is resolved and the enforced scope is clean"
+  }
+}

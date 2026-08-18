@@ -1,0 +1,205 @@
+{
+  "checkpoint": "ROADMAP ITEM 4 — FINAL WHOLE-INTEGRATION CERTIFICATION / FREEZE",
+  "generatedAt": "2026-08-18T14:13:16.493Z",
+  "acceptedBaseCommit": "b661d41393ec95e0d119d9e0c9855382e3b0fb7e",
+  "certifiedCodeCommit": "717ffd908c6e0f993670e2343d0b91bca74b383c",
+  "branch": "checkpoint/dynamic-fission-provisional-successor-38",
+  "verdict": "PASS",
+  "readerBoundary": {
+    "verdict": "PASS",
+    "status": "12/12",
+    "resolvedReaderRows": 12,
+    "totalReaderRows": 12,
+    "pendingReaders": 0,
+    "structuralViolationsInMigratedScope": 0,
+    "boundaryIntegrityViolations": 0
+  },
+  "wholeIntegration": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "verdict": "PASS"
+  },
+  "mutationControl": {
+    "verdict": "PASS",
+    "baseline": {
+      "exitStatus": 0,
+      "verdict": "PASS",
+      "nonVacuousFixtures": 6
+    },
+    "physicalLifecycleStillRan": true,
+    "historySpecificallyLost": true,
+    "mutantExitStatus": 1,
+    "mutantVerdict": "FAIL",
+    "failedFixtureIds": [
+      "F1_stabilized_successor_retains_physical_separation_history",
+      "F5_retained_departure_projection_survives_episode_cap_pressure",
+      "F6_in_flight_successor_history_stays_open_without_elapsed_time_inference",
+      "F2_post_return_establishment_preserves_distinct_terminal_outcome",
+      "F4_provisional_extinction_remains_a_distinct_terminal_history",
+      "F3_parent_history_closes_real_reintegration_without_fabricating_daughter_success"
+    ],
+    "caught": true,
+    "restoration": {
+      "sourceSha256Before": "6a06e06fc5edb6889fc9fc56def0b3396d0088bc2acd334c52b3727b35c7cb28",
+      "sourceSha256After": "6a06e06fc5edb6889fc9fc56def0b3396d0088bc2acd334c52b3727b35c7cb28",
+      "byteIdentical": true
+    }
+  },
+  "certification": {
+    "requiredGates": 50,
+    "passedGates": 50,
+    "failedGates": 0,
+    "gateNames": [
+      "base_ancestry",
+      "tsc_app",
+      "tsc_node",
+      "build",
+      "graph",
+      "import_boundary",
+      "founder_allocation",
+      "founder_commitment",
+      "parent_residual_fixtures",
+      "parent_residual_reproduction",
+      "departure_preparation",
+      "departure_seam",
+      "field_transfer",
+      "gated_departure",
+      "natural_predeparture",
+      "natural_predeparture_mutation",
+      "lifecycle_kernel",
+      "admission_boundary",
+      "quarantine_contract",
+      "provisional_travel",
+      "provisional_subsistence",
+      "return_reachability",
+      "reintegration",
+      "stabilization",
+      "stabilization_mutation",
+      "failed_return",
+      "failed_return_mutation",
+      "post_ecology_return_kind",
+      "lifecycle_exit",
+      "two_day_integration",
+      "reader_surface",
+      "reader_admission",
+      "reader_semantic",
+      "lifecycle_semantics",
+      "lifecycle_boundary",
+      "travel_subsistence_reproduction",
+      "final_whole_integration",
+      "final_whole_integration_mutation",
+      "natural_cutover",
+      "natural_cutover_mutation",
+      "natural_cutover_reachability",
+      "season_order",
+      "step_mode",
+      "step_mode_four_way",
+      "item3_determinism",
+      "item3_lifecycle_determinism",
+      "natural_cutover_long_run",
+      "one_atomic_departure_caller",
+      "zero_ordinary_createDaughterBand_callers",
+      "diff_check"
+    ],
+    "precertification": {
+      "verdict": "PASS",
+      "execution": "single uninterrupted isolated-worktree run",
+      "passedGates": 50
+    },
+    "exactCommitCertification": {
+      "verdict": "PASS",
+      "commit": "717ffd908c6e0f993670e2343d0b91bca74b383c",
+      "passedGates": 50,
+      "execution": "same immutable SHA; transport-interrupted sections were rerun explicitly on that SHA",
+      "interruptions": [
+        "local-agent transport dropped after failed_return mutation output; failed_return_mutation was rerun standalone and exited 0 with byte-identical restoration",
+        "a shell transport limit terminated one long-run invocation; natural_cutover_long_run was rerun standalone in a persistent terminal and exited 0"
+      ]
+    }
+  },
+  "staticAuthorityGuards": {
+    "performAtomicDepartureCallers": 1,
+    "ordinaryCreateDaughterBandCallers": 0,
+    "sourceAndScriptTreeCleanAfterMutation": true,
+    "diffCheck": "PASS"
+  },
+  "longRun": {
+    "audit": "ROADMAP ITEM 4 — untouched natural physical cutover long runs",
+    "daysPerRun": 46800,
+    "stepDays": 90,
+    "results": [
+      {
+        "kind": "map1",
+        "seed": "item4-cutover:map1",
+        "days": 46800,
+        "years": 130,
+        "physicalDepartures": 1,
+        "stabilizations": 1,
+        "liveUnresolvedProvisionalSuccessors": 0,
+        "populationConservationFailures": [],
+        "duplicateSuccessorIds": [],
+        "duplicateLineages": [],
+        "legacyFissionEventCount": 0,
+        "maxLiveBandCount": 6,
+        "maxBandObjectCount": 6,
+        "firstPhysicalDeparture": {
+          "id": "event:successor-departure:band:river-valley-foragers:successor:fission-lineage:band:river-valley-foragers:276:tile:127:65:24843",
+          "parentBandId": "band:river-valley-foragers",
+          "successorBandId": "successor:fission-lineage:band:river-valley-foragers:276:tile:127:65",
+          "lineageId": "fission-lineage:band:river-valley-foragers:276:tile:127:65",
+          "departedOnDay": 24843,
+          "tick": 276,
+          "originTileId": "tile:124:67",
+          "targetTileId": "tile:127:65",
+          "attemptPhasesObserved": [
+            "proposed"
+          ],
+          "downstreamPhasesObserved": [
+            "travelling",
+            "establishing",
+            "stabilized"
+          ]
+        }
+      },
+      {
+        "kind": "map2",
+        "seed": "audit27:natural:s1",
+        "days": 46800,
+        "years": 130,
+        "physicalDepartures": 1,
+        "stabilizations": 1,
+        "liveUnresolvedProvisionalSuccessors": 0,
+        "populationConservationFailures": [],
+        "duplicateSuccessorIds": [],
+        "duplicateLineages": [],
+        "legacyFissionEventCount": 0,
+        "maxLiveBandCount": 9,
+        "maxBandObjectCount": 10,
+        "firstPhysicalDeparture": {
+          "id": "event:successor-departure:band:varied-estuary:successor:fission-lineage:band:varied-estuary:492:tile:186:87:44283",
+          "parentBandId": "band:varied-estuary",
+          "successorBandId": "successor:fission-lineage:band:varied-estuary:492:tile:186:87",
+          "lineageId": "fission-lineage:band:varied-estuary:492:tile:186:87",
+          "departedOnDay": 44283,
+          "tick": 492,
+          "originTileId": "tile:189:87",
+          "targetTileId": "tile:186:87",
+          "attemptPhasesObserved": [
+            "proposed"
+          ],
+          "downstreamPhasesObserved": [
+            "travelling",
+            "establishing",
+            "stabilized"
+          ]
+        }
+      }
+    ]
+  },
+  "publicationPolicy": {
+    "evidenceOnlyCommitAfterCertifiedCode": true,
+    "mainBranchMergedOrRebased": false,
+    "canonicalMarkdownRegenerated": false
+  }
+}
