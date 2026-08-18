@@ -40799,15 +40799,27 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
     const noMaterialState = advanceSeasons(
       makeBand({ carryConstraintBias: 0.4, careTravelBurdenBias: 0.3, dependents: 10, elders: 5 }), 8);
 
-    // (C) MATERIAL/CONTEXT MATCH: an active response whose fragments have
-    // faded cannot operate (relief gated with a legible reason).
+    // (C) PRACTICE BASIS / MATERIAL PROVENANCE: a practice-only response whose
+    // lived basis has faded cannot operate. Separately, a learned material plan
+    // with a strong basis still cannot create physical relief without execution
+    // proof.
+    const loadStagingFragmentId = "fragment:technique:load_staging";
     const fadedBand = makeBand({
       practicalAdaptation: practicedState({
-        fragments: [strongFragment("fiber_cordage", "material_property", "holds_tension_when_dry", 0.8, T0 - 60)],
-        responses: [activeResponse("carrying_load", "fiber_sling")],
+        fragments: [strongFragment("load_staging", "technique", "staged_loads_ease_burdened_travel", 0.8, T0 - 60)],
+        responses: [activeResponse("carrying_load", "load_staging", 0.6, {
+          requiredFragmentIds: [loadStagingFragmentId],
+        })],
       }),
     });
     const fadedRelief = pr.deriveCarryingRelief(fadedBand, T0 + 40);
+    const unexecutedMaterialBand = makeBand({
+      practicalAdaptation: practicedState({
+        fragments: [strongFragment("fiber_cordage", "material_property", "holds_tension_when_dry")],
+        responses: [activeResponse("carrying_load", "fiber_sling")],
+      }),
+    });
+    const unexecutedMaterialRelief = pr.deriveCarryingRelief(unexecutedMaterialBand, T0 + 21);
 
     // (D) REAL EFFECT: the practiced band's travel plan regains budget steps
     // relative to the SAME plan with practical reliefs disabled.
@@ -40826,7 +40838,9 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
       },
       practicalAdaptation: practicedState({
         responses: [
-          activeResponse("carrying_load", "fiber_sling"),
+          activeResponse("carrying_load", "load_staging", 0.6, {
+            requiredFragmentIds: [loadStagingFragmentId],
+          }),
           activeResponse("dry_route_water", "stage_known_water"),
         ],
       }),
@@ -40843,7 +40857,7 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
       moved: true,
       context: {
         reliefApplied: 0.22, responseId: practicedBand.practicalAdaptation.responses[0].id,
-        variantKey: "fiber_sling", conditionPresent: true,
+        variantKey: "load_staging", conditionPresent: true,
         budgetWithRelief: 4, budgetWithoutRelief: 2, moveDistance: 3,
         stagedLegIncomplete: false, hardshipLevel: "low", hardshipOutcome: "accepted",
         hardshipReliefApplied: 0.03,
@@ -40871,7 +40885,10 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
     const failingBand = makeBand({
       ...burdenOver,
       practicalAdaptation: practicedState({
-        responses: [activeResponse("carrying_load", "fiber_sling", 0.2, { failureCount: 2 })],
+        responses: [activeResponse("carrying_load", "load_staging", 0.2, {
+          failureCount: 2,
+          requiredFragmentIds: [loadStagingFragmentId],
+        })],
       }),
     });
     const afterFailure = advanceSeasons(failingBand, 1, () => ({
@@ -40881,9 +40898,9 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
         responseId: failingBand.practicalAdaptation.responses[0].id,
       },
     }));
-    const abandoned = afterFailure.responses.find((response) => response.variantKey === "fiber_sling");
+    const abandoned = afterFailure.responses.find((response) => response.variantKey === "load_staging");
     const revision = afterFailure.responses.find(
-      (response) => response.family === "carrying_load" && response.variantKey !== "fiber_sling");
+      (response) => response.family === "carrying_load" && response.variantKey !== "load_staging");
 
     // (G) CONTEXT MISMATCH: water relief refuses to apply without a remembered
     // watered destination; a consumed relief without the context classifies as
@@ -40912,7 +40929,10 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
     const dormantSeed = makeBand({
       affordances: [fiberAffordance(), materialAffordanceItem()],
       practicalAdaptation: practicedState({
-        responses: [activeResponse("carrying_load", "fiber_sling", 0.6, { lastActiveTick: T0 - 1 })],
+        responses: [activeResponse("carrying_load", "load_staging", 0.6, {
+          lastActiveTick: T0 - 1,
+          requiredFragmentIds: [loadStagingFragmentId],
+        })],
       }),
     });
     const dormantState = advanceSeasons(dormantSeed, 9);
@@ -40929,7 +40949,7 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
     const unburdenedEval = eff.evaluateCarryingEfficacy({
       moved: true,
       context: {
-        reliefApplied: 0.22, responseId: "r", variantKey: "fiber_sling",
+        reliefApplied: 0.22, responseId: "r", variantKey: "load_staging",
         conditionPresent: false, budgetWithRelief: 3, budgetWithoutRelief: 3,
         moveDistance: 1, stagedLegIncomplete: false, hardshipLevel: "low",
         hardshipOutcome: "accepted", hardshipReliefApplied: 0,
@@ -40971,7 +40991,7 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
     return {
       triggerState, triggerResponse, waterResponse,
       comfortableState, noMaterialState,
-      fadedRelief,
+      fadedRelief, unexecutedMaterialRelief,
       planWith: { budget: planWith.budget, carrying: planWith.appliedCarryingRelief, water: planWith.appliedWaterRelief },
       planWithout: { budget: planWithout.budget },
       planUnmatchedWater: { budget: planUnmatchedWater.budget, water: planUnmatchedWater.appliedWaterRelief },
@@ -41076,9 +41096,12 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
     // (B) non-trigger
     comfortable_band_stays_inert: (unit.comfortableState?.responses.length ?? 0) === 0,
     no_material_basis_no_response: (unit.noMaterialState?.responses.length ?? 0) === 0,
-    // (C) material/context match
-    faded_basis_disables_relief:
+    // (C) practice basis + material execution provenance
+    faded_practice_basis_disables_relief:
       unit.fadedRelief.active === false && unit.fadedRelief.reason.includes("basis faded"),
+    material_plan_has_no_physical_relief_without_execution_proof:
+      unit.unexecutedMaterialRelief.active === false && unit.unexecutedMaterialRelief.relief === 0 &&
+      unit.unexecutedMaterialRelief.reason.includes("material execution required"),
     // (D) real effect, capped
     practiced_plan_regains_budget_steps: unit.planWith.budget > unit.planWithout.budget,
     reliefs_capped:
@@ -41098,7 +41121,7 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
     repeated_failure_abandons: unit.abandoned?.status === "abandoned",
     failure_revises_into_alternative_composition:
       unit.revision !== undefined && unit.revision.revisionOf === unit.abandoned?.id &&
-      unit.revision.variantKey !== "fiber_sling",
+      unit.revision.variantKey !== "load_staging",
     // (G) context mismatch
     water_relief_refuses_unmatched_destination: unit.mismatchRelief.active === false,
     consumed_relief_without_context_is_mismatch:
@@ -41196,11 +41219,11 @@ function runTargetedRoutines2Check(modules, options) {
     recentResidentialMoveEvents: [{ temporaryWatercraft: craftAssessment }],
   };
 
-  // Controlled live crossing experiment: use the production watercraft
-  // assessment against a real generated river crossing and repeatedly feed
-  // its observable result through the production fragment/response advance.
-  // This is not a hand-authored coefficient assertion: the final assessment
-  // must read the learned response and change expectedCrossingSafety itself.
+  // Controlled live crossing learning: use the production watercraft
+  // assessment against a real generated river crossing and repeatedly feed its
+  // observable result through fragment/problem/idea formation. A material
+  // response may form as a plan, but without execution proof the final physical
+  // assessment must NOT gain engineering relief or crossing safety.
   const realCrossing = Object.values(baseWorld.riverCrossings)[0];
   const crossingBand = realCrossing === undefined ? baseBand : {
     ...baseBand,
@@ -41296,6 +41319,10 @@ function runTargetedRoutines2Check(modules, options) {
     });
   }
   const failedComplex = failedEngineeringState.responses.find((response) => response.id === directResponse?.id);
+  const failedComplexExperiment = failedEngineeringState.experiments?.find(
+    (experiment) => experiment.responseId === directResponse?.id);
+  const failedComplexRecords = failedEngineeringState.efficacyRecords.filter(
+    (record) => record.responseId === directResponse?.id);
   const fallbackRevision = failedEngineeringState.responses.find((response) => response.revisionOf === directResponse?.id);
   const rediscoverySource = directResponse === undefined ? directState : {
     ...directState,
@@ -41509,17 +41536,26 @@ function runTargetedRoutines2Check(modules, options) {
     direct_strong_discovery_supported: directResponse?.status === "forming" && directResponse.requiredFragmentIds.length >= 3 &&
       directState.experiments?.some((experiment) => experiment.responseId === directResponse.id && experiment.status === "underway") === true,
     recombination_requires_components: missingState.responses.every((response) => response.family !== "engineering_structure"),
-    matching_context_changes_real_safety_coefficient: matchingRelief.active === true && matchingRelief.relief > 0 && matchingRelief.relief <= 0.22,
-    controlled_live_crossing_activates_engineering_loop:
+    material_plan_cannot_change_real_safety_without_execution_proof:
+      matchingRelief.active === false && matchingRelief.relief === 0 &&
+      matchingRelief.reason.includes("material execution required"),
+    controlled_live_crossing_forms_plan_without_magic_physical_effect:
       actualAssessment !== undefined && learnedAssessment !== undefined &&
       liveEngineeringState?.responses.some((response) => response.family === "engineering_structure" && response.status === "forming") === true &&
-      liveEngineeringState?.experiments?.some((experiment) => experiment.family === "engineering_structure" && experiment.status === "underway") === true &&
-      learnedAssessment.engineeringResponseId !== undefined,
+      liveEngineeringState?.experiments?.some((experiment) => experiment.family === "engineering_structure" && experiment.status === "underway" && experiment.attemptSeasons === 0) === true &&
+      learnedAssessment.engineeringResponseId !== undefined &&
+      learnedAssessment.engineeringResponseActive === false &&
+      learnedAssessment.engineeringSafetyRelief === 0 &&
+      learnedAssessment.expectedCrossingSafety === actualAssessment.expectedCrossingSafety,
     context_mismatch_gets_no_credit: mismatchRelief.active === false && mismatchRelief.relief === 0,
     specific_failure_is_not_success: engineeringFailure?.classification === "failure_or_danger_specific",
-    failed_complex_variant_is_abandoned: failedComplex?.status === "abandoned",
-    failure_refines_to_simpler_composition:
-      fallbackRevision?.variantKey === "crude_bundle_float" && fallbackRevision.requiredFragmentIds.length === 3,
+    unexecuted_material_failure_cannot_abandon_response:
+      failedComplex?.status === "forming" && failedComplex.failureCount === 0 &&
+      failedComplex.confidence === directResponse?.confidence,
+    unexecuted_material_failure_cannot_mature_experiment:
+      failedComplexExperiment?.status === "underway" && failedComplexExperiment.attemptSeasons === 0 &&
+      failedComplexRecords.length === 0,
+    unexecuted_material_failure_cannot_spawn_revision: fallbackRevision === undefined,
     abandoned_variant_can_be_rediscovered_after_block:
       rediscoveredResponse !== undefined && rediscoveredResponse.variantKey === directResponse?.variantKey,
     contradiction_weakens_components: contradictedFragments.some((fragment) => fragment.knowledgeState === "tentative" || fragment.knowledgeState === "contradicted"),
@@ -41567,7 +41603,7 @@ function runTargetedRoutines2Check(modules, options) {
       animalPatterns: animals.ANIMAL_PATTERN_CAP, managementRecords: animals.ANIMAL_MANAGEMENT_CAP,
       faunaStocks: 260, influenceTilesPerStock: 13,
     },
-    learning: { permissiveSignalCount: permissiveSignals.length, groundedFragments, directResponse, matchingRelief, mismatchRelief, actualAssessment, learnedAssessment, liveEngineeringState, engineeringFailure, failedComplex, fallbackRevision, rediscoveredResponse, contradictedFragments, incorrectFragments, staleFragments },
+    learning: { permissiveSignalCount: permissiveSignals.length, groundedFragments, directResponse, matchingRelief, mismatchRelief, actualAssessment, learnedAssessment, liveEngineeringState, engineeringFailure, failedComplex, failedComplexExperiment, failedComplexRecords, fallbackRevision, rediscoveredResponse, contradictedFragments, incorrectFragments, staleFragments },
     animals: {
       profileCounts: Object.fromEntries([...new Set(geography.stocks.map((stock) => stock.routineProfile))].map((profile) => [profile, geography.stocks.filter((stock) => stock.routineProfile === profile).length])),
       promisingKind: promisingStock?.kind, promisingHistory: promising.history,
