@@ -1,0 +1,102 @@
+{
+  "check": "ITEM5-PHYSICAL-EFFECT-PROVENANCE-PASS2",
+  "verdict": "FAIL",
+  "checks": {
+    "executionClassDeclaredOnEveryVariant": false,
+    "practiceOnlyFormingReliefRemainsNonVacuouslyActive": true,
+    "practiceOnlyActiveReliefRemainsNonVacuouslyActive": true,
+    "materialRequiredHasZeroPhysicalReliefWithoutExecutionProof": false,
+    "materialRequiredCannotManufactureStorageWithoutExecutionProof": false,
+    "materialRequiredCannotMatureFromUnprovenSuccess": false,
+    "materialRequiredCannotInterpretUnprovenFailure": false,
+    "practiceOnlyEfficacyStillMaturesAndConcludes": true,
+    "existingWaterWorksPhysicalAuthorityRemainsActive": true,
+    "noCoefficientCompensation": true,
+    "adaptiveEfficacyFormulaSourceUnchanged": true,
+    "practicalExperimentRequirementsAreDocumentedAsPlansNotConsumption": false,
+    "uiLabelsRequirementsAndCostsAsPlans": false
+  },
+  "variantExecutionClasses": {},
+  "runtime": {
+    "formingPracticeRelief": {
+      "relief": 0.08,
+      "cap": 0.3,
+      "active": true,
+      "responseId": "response:audit:load-staging-forming",
+      "variantKey": "load_staging",
+      "reason": "forming response — probe-level relief"
+    },
+    "activePracticeRelief": {
+      "relief": 0.26,
+      "cap": 0.3,
+      "active": true,
+      "responseId": "response:audit:load-staging-active",
+      "variantKey": "load_staging",
+      "reason": "active practiced response"
+    },
+    "unexecutedMaterial": {
+      "carried": {
+        "relief": 0.03,
+        "cap": 0.14,
+        "active": true,
+        "responseId": "response:audit:membrane-water-bag",
+        "variantKey": "membrane_water_bag",
+        "reason": "carried water loses too much to leakage and misreckoning to matter",
+        "leakage": 0.28,
+        "provisioningAccuracy": 0.75,
+        "heatCrackRisk": 0,
+        "sealCracked": false,
+        "capacity": 0.12,
+        "carryingBurden": 0.03,
+        "routeDurationSteps": 1,
+        "consumedShare": 0.17
+      },
+      "storage": 0.22
+    },
+    "materialSuccessLifecycle": {
+      "responseStatus": "active",
+      "successCount": 1,
+      "failureCount": 0,
+      "experimentStatus": "concluded_success",
+      "attemptSeasons": 1,
+      "efficacyRecordCount": 1
+    },
+    "materialFailureLifecycle": {
+      "responseStatus": "forming",
+      "successCount": 0,
+      "failureCount": 1,
+      "experimentStatus": "underway",
+      "attemptSeasons": 1,
+      "efficacyRecordCount": 1
+    },
+    "practiceLifecycle": {
+      "responseStatus": "active",
+      "successCount": 1,
+      "experimentStatus": "concluded_success",
+      "attemptSeasons": 1
+    },
+    "waterWorksRelief": {
+      "relief": 0.12,
+      "active": true,
+      "status": "shallow_well",
+      "reason": "shallow well yields water at this camp"
+    }
+  },
+  "coefficientPins": {
+    "CARRYING_RELIEF_CAP_SIMPLE": "0.3",
+    "CARRYING_RELIEF_CAP_COMPOSITE": "0.4",
+    "WATER_ROUTE_RELIEF_CAP": "0.3",
+    "ENGINEERING_SAFETY_CAP": "0.22",
+    "CARRIED_WATER_RELIEF_CAP": "0.28",
+    "SHELTER_EXPOSURE_RELIEF_CAP": "0.35",
+    "HUNTING_DANGER_RELIEF_CAP": "0.3",
+    "CARE_TREATMENT_RELIEF_CAP": "0.35",
+    "WATERWORKS_YIELD_CAP": "0.15",
+    "SHELTER_PORTABILITY_BURDEN_CAP": "0.05",
+    "PROVISIONING_ACCURACY_BASE": "0.75",
+    "FRAGMENT_BASIS_FLOOR": "0.25",
+    "COMPOSITE_BASIS_FLOOR": "0.5",
+    "RELIEF_ACTIVE_FLOOR": "0.05"
+  },
+  "adaptiveEfficacySha256": "ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919"
+}
