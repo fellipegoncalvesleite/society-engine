@@ -11,6 +11,17 @@
 
 ---
 
+## CURRENT AUTHORITY / CURRENT STATUS — 2026-08-18
+
+> This block supersedes older “current”, “active checkpoint”, and “Item 5 unstarted” wording preserved below as historical checkpoint record.
+
+- Roadmap Item 4 is **CLOSED / ACCEPTED / FROZEN** at `11f085930462f981fcca45faf37b67d961196adb`.
+- Roadmap Item 5 is open with the controlled adaptation-authority consolidation Pass 1.
+- `band.practicalAdaptation` is the canonical Item-5 adaptation/history authority.
+- `band.adaptiveHuman` is **LEGACY / COMPATIBILITY / NON-CANONICAL** state; production compatibility routes through `src/sim/agents/legacyAdaptiveHumanCompatibility.ts`.
+- Physical artifact/material execution debt remains **OPEN** and is explicitly not solved by this pass.
+- `src/architecture/graphData.ts` is documentation/discovery only and never simulation authority.
+
 ## 0. Freshness and evidence warning
 
 ```text

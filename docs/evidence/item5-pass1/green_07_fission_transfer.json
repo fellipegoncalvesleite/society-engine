@@ -1,0 +1,336 @@
+{
+  "generatedAt": "2026-08-18T15:51:36.556Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 1800,
+  "parentId": "band:varied-river-mid",
+  "successorId": "band:varied-river-mid:provisional:1",
+  "summary": {
+    "fixtures": 12,
+    "passing": 12,
+    "failing": 0,
+    "vacuous": 0,
+    "bandFieldsClassified": 136,
+    "fieldsStillHoldingTheParentsObject": 5
+  },
+  "transferLedger": {
+    "bandFieldsClassified": 136,
+    "policyViolations": [],
+    "pendingRecomputeFields": [
+      "socialPressure"
+    ],
+    "fieldsStillHoldingTheParentsObject": 5,
+    "sharedByReferenceFields": [
+      "health",
+      "subsistenceModes",
+      "deathMemory",
+      "socialPressure",
+      "biomeAdaptation"
+    ]
+  },
+  "classHistogram": {
+    "NEW_SUCCESSOR_IDENTITY": 4,
+    "CURRENT_LINEAGE_PROVENANCE": 3,
+    "FORBIDDEN_TO_COPY": 42,
+    "SHARED_HISTORICAL_FACT": 7,
+    "EXACT_COHORT_TRANSFER": 2,
+    "FOUNDER_CARRIED_EMBODIED_BURDEN": 4,
+    "DEGRADED_OR_PARTIAL_INHERITANCE": 13,
+    "RECOMPUTE_FROM_SUCCESSOR_TRUTH": 3,
+    "INVALIDATE_UNTIL_LATER_PHASE": 32,
+    "RESET_ACTIVE_COMMITMENT": 16,
+    "REBUILD_READ_MODEL": 8,
+    "LEGACY_COMPATIBILITY_GATED": 2
+  },
+  "fixtures": [
+    {
+      "id": "T1_policy_covers_every_band_field",
+      "claim": "every keyof Band parsed from types.ts has exactly one classification, and the table names no field Band does not have",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "bandFieldsInSource": 136,
+        "classified": 136,
+        "missing": [],
+        "extra": []
+      }
+    },
+    {
+      "id": "T2_every_field_carries_a_class_and_a_reason",
+      "claim": "each entry names one of the twelve classes and states a reason a reader could not derive from the field name",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "badEntries": [],
+        "classHistogram": {
+          "NEW_SUCCESSOR_IDENTITY": 4,
+          "CURRENT_LINEAGE_PROVENANCE": 3,
+          "FORBIDDEN_TO_COPY": 42,
+          "SHARED_HISTORICAL_FACT": 7,
+          "EXACT_COHORT_TRANSFER": 2,
+          "FOUNDER_CARRIED_EMBODIED_BURDEN": 4,
+          "DEGRADED_OR_PARTIAL_INHERITANCE": 13,
+          "RECOMPUTE_FROM_SUCCESSOR_TRUTH": 3,
+          "INVALIDATE_UNTIL_LATER_PHASE": 32,
+          "RESET_ACTIVE_COMMITMENT": 16,
+          "REBUILD_READ_MODEL": 8,
+          "LEGACY_COMPATIBILITY_GATED": 2
+        },
+        "classesUsed": 12
+      }
+    },
+    {
+      "id": "T3_derived_legacy_registry_matches_the_retained_literal",
+      "claim": "the derived registry drops nothing from the literal and adds only fields createDaughterBand already resets explicitly, so consolidating the two policies changes no legacy behaviour",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "literalCount": 67,
+        "derivedCount": 69,
+        "addedByPolicy": [
+          "pendingInvestigation",
+          "recentInvestigationOutcomes"
+        ],
+        "droppedByPolicy": [],
+        "additionsExplicitlyOverridden": true
+      }
+    },
+    {
+      "id": "T4_legacy_debt_is_published_not_silently_repaired",
+      "claim": "fields this policy forbids copying wholesale that createDaughterBand neither registers nor overrides are ENUMERATED as legacy debt; repairing them changes ordinary ecology and needs its own before/after evidence",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "method": "LEXICAL — parsed from createDaughterBand's own object literal; it cannot see a field handled by a helper it calls",
+        "unregisteredByPolicyClass": 46,
+        "alsoNotOverriddenByTheLegacyPath": 35,
+        "fields": [
+          "lineage",
+          "fissionAttempt",
+          "successorStabilizationEvents",
+          "successorPostReturnEstablishmentEvents",
+          "mobility",
+          "carryingCapacity",
+          "populationDemand",
+          "perCapitaReturn",
+          "rangeSaturation",
+          "returnTrend",
+          "nearbyOpportunity",
+          "foragingRadiusState",
+          "dryMarginContext",
+          "ecologicalStressCauses",
+          "nomadicScalePressure",
+          "daughterColonization",
+          "frontierDispersal",
+          "intraSeasonActivity",
+          "disposition",
+          "exhaustedRangeAudit",
+          "expeditions",
+          "seasonalRound",
+          "seasonalRoundState",
+          "roundCatchmentRotation",
+          "residentialAnchor",
+          "preDecisionAnchor",
+          "anchorDecision",
+          "currentCampTileId",
+          "currentSettlementId",
+          "receivedSmokeSignals",
+          "seasonalTimeline",
+          "anchorActionTrace",
+          "recentExpeditionOutcomes",
+          "lastFrontierExplorationTick",
+          "anchorMemories"
+        ]
+      }
+    },
+    {
+      "id": "T5_constructed_successor_violates_nothing_and_shares_only_what_is_permitted",
+      "claim": "a real departure produces zero policy violations, and every field still holding the parent's own object is one the table explicitly permits to be carried",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "violations": [],
+        "stillTheParentsObject": 5,
+        "sharedFields": [
+          "health",
+          "subsistenceModes",
+          "deathMemory",
+          "socialPressure",
+          "biomeAdaptation"
+        ],
+        "unpermittedShared": [],
+        "pendingRecomputeFields": [
+          "socialPressure"
+        ]
+      }
+    },
+    {
+      "id": "T6_knowledge_transfers_partially_not_perfectly",
+      "claim": "the successor's observed tiles, place memory, corridors, resource patches and technologies are each STRICTLY FEWER than the parent's — a perfect copy would hand it country nobody in it has walked",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "observedTiles": {
+          "parent": 58,
+          "successor": 15
+        },
+        "placeMemory": {
+          "parent": 42,
+          "successor": 5
+        },
+        "travelCorridors": {
+          "parent": 9,
+          "successor": 2
+        },
+        "resourcePatches": {
+          "parent": 48,
+          "successor": 12
+        },
+        "technologies": {
+          "parent": 3,
+          "successor": 1
+        }
+      }
+    },
+    {
+      "id": "T7_no_free_material_or_residential_capability",
+      "claim": "storage is zero rather than the legacy path's hardcoded 0.16, and the successor holds no camp, no catchment, no committed party and no deliberation history",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "storageCapacity": {
+          "parent": 0.16,
+          "successor": 0
+        },
+        "expeditions": 0,
+        "receipts": 0,
+        "residentialAnchor": 0,
+        "carryingCapacity": 0,
+        "decisionHistory": 0
+      }
+    },
+    {
+      "id": "T8_embodied_burden_travels_re_identified_and_never_softens",
+      "claim": "hunger is carried unchanged (the legacy path applies parent x 0.86), no health term falls, and acuteRisk is retained but RE-IDENTIFIED — the parent's object stamps every episode with another band's id",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "hunger": {
+          "parent": 0.62,
+          "successor": 0.62
+        },
+        "healthTermsCompared": 4,
+        "healthTermsSoftened": [],
+        "acuteRiskPresent": true,
+        "acuteRiskBandId": {
+          "parent": "band:varied-river-mid",
+          "successor": "band:varied-river-mid:provisional:1"
+        },
+        "acuteRiskIsTheParentsObject": false
+      }
+    },
+    {
+      "id": "T9_identity_is_new_but_location_is_not",
+      "claim": "id, name and colour all differ — the seam previously gave the successor the PARENT'S OWN COLOUR, making the two halves indistinguishable at the moment a viewer most needs to tell them apart — while position is deliberately identical, because bodies do not teleport",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "id": {
+          "parent": "band:varied-river-mid",
+          "successor": "band:varied-river-mid:provisional:1"
+        },
+        "name": {
+          "parent": "Long River Band",
+          "successor": "Long River Band successor"
+        },
+        "color": {
+          "parent": "#56b55d",
+          "successor": "#74ca7a"
+        },
+        "position": {
+          "parent": "tile:111:57",
+          "successor": "tile:111:57"
+        }
+      }
+    },
+    {
+      "id": "T10_negative_control_the_guard_catches_a_laundered_field_in_every_enforcing_class",
+      "claim": "deliberately re-introducing each historical defect into an otherwise valid successor is CAUGHT by the same function the seam gates on — so the zero in T5 is a real zero and not an insensitive instrument",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "cases": [
+          {
+            "label": "INVALIDATE_UNTIL_LATER_PHASE: the parent's camp",
+            "field": "residentialAnchor",
+            "caught": true,
+            "defect": "should_be_absent"
+          },
+          {
+            "label": "FORBIDDEN_TO_COPY: the parent's deliberations",
+            "field": "decisionHistory",
+            "caught": true,
+            "defect": "should_be_an_empty_array"
+          },
+          {
+            "label": "FORBIDDEN_TO_COPY: the parent's social world",
+            "field": "contactMemories",
+            "caught": true,
+            "defect": "still_the_parents_object"
+          },
+          {
+            "label": "INVALIDATE_UNTIL_LATER_PHASE: the legacy path's free storage",
+            "field": "storageCapacity",
+            "caught": true,
+            "defect": "should_be_zero"
+          },
+          {
+            "label": "FOUNDER_CARRIED: the legacy path's 14% hunger relief",
+            "field": "hungerPressure",
+            "caught": true,
+            "defect": "improved_on_the_parent"
+          },
+          {
+            "label": "FOUNDER_CARRIED: curing an injury by splitting",
+            "field": "health",
+            "caught": true,
+            "defect": "improved_on_the_parent"
+          },
+          {
+            "label": "DEGRADED: a perfect copy of the parent's knowledge",
+            "field": "knowledge",
+            "caught": true,
+            "defect": "still_the_parents_object"
+          },
+          {
+            "label": "NEW_SUCCESSOR_IDENTITY: the parent's own colour",
+            "field": "color",
+            "caught": true,
+            "defect": "identical_to_the_parent"
+          }
+        ]
+      }
+    },
+    {
+      "id": "T11_structural_resets_come_from_the_table_not_from_a_hand_written_list",
+      "claim": "every field classified absent/empty is reset on the constructed successor, and the reset object is produced from the table itself — so classifying a NEW field resets it with no edit to the departure seam at all",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "absentByPolicy": 83,
+        "absentButPresent": [],
+        "emptyByPolicy": 18,
+        "notEmpty": [],
+        "resetKeys": 103
+      }
+    },
+    {
+      "id": "T12_the_constructed_successor_is_deterministic",
+      "claim": "two identical departure requests produce a byte-identical successor",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "successorDigestLength": 93024
+      }
+    }
+  ]
+}

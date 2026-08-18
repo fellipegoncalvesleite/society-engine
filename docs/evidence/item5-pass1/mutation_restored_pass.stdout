@@ -1,0 +1,48 @@
+{
+  "check": "ITEM5-ADAPTATION-AUTHORITY-PASS1",
+  "verdict": "PASS",
+  "checks": {
+    "canonicalStateExplicitlyPracticalAdaptation": true,
+    "canonicalBoundaryExportsRequiredPracticalOperations": true,
+    "canonicalBoundaryDoesNotExportLegacyAdaptiveHuman": true,
+    "canonicalBoundaryDocumentsLegacyCompatibilityRoute": true,
+    "dedicatedLegacyCompatibilityBoundaryExists": true,
+    "legacyCompatibilityBoundaryExplicitlyNonCanonical": true,
+    "legacyCompatibilityExportsOnlyCuratedRequiredSurface": true,
+    "noProductionDeepImportOfAdaptiveHuman": true,
+    "productionLegacyImportsUseCompatibilityBoundary": true,
+    "preCanonicalAdaptiveHumanAdvancementGuardPreserved": true,
+    "legacyDecisionInfluenceDisabledAfterCanonicalState": true,
+    "fissionInheritanceUsesCanonicalAndLegacyBoundaries": true,
+    "ideasSolutionsPrefersCanonicalInventionChain": true,
+    "practicalPhysicalAndEfficacyFormulaSourcesUnchanged": true
+  },
+  "canonicalState": "band.practicalAdaptation",
+  "canonicalBoundary": "src/sim/agents/adaptationBoundary.ts",
+  "legacyCompatibilityState": "band.adaptiveHuman",
+  "legacyCompatibilityBoundary": "src/sim/agents/legacyAdaptiveHumanCompatibility.ts",
+  "canonicalLegacyExports": [],
+  "missingCanonicalExports": [],
+  "compatExports": [
+    "advanceAdaptiveHumanState",
+    "deriveAdaptiveDecisionSupport",
+    "selectAdaptiveInfluenceForAction",
+    "deriveAdaptiveHumanProfile",
+    "inheritAdaptiveHumanForDaughter",
+    "AdaptiveDecisionSupport"
+  ],
+  "missingCompatExports": [],
+  "unexpectedCompatExports": [],
+  "directAdaptiveHumanImports": [],
+  "legacyImportsOutsideCompatibility": [],
+  "frozenHashes": {
+    "expected": {
+      "src/sim/agents/practicalResponses.ts": "432a0fb0a9826ead77648937e6d8626f6d5d62653a0a8768d979614f36b26a8e",
+      "src/sim/agents/adaptiveEfficacy.ts": "ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919"
+    },
+    "actual": {
+      "src/sim/agents/practicalResponses.ts": "432a0fb0a9826ead77648937e6d8626f6d5d62653a0a8768d979614f36b26a8e",
+      "src/sim/agents/adaptiveEfficacy.ts": "ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919"
+    }
+  }
+}

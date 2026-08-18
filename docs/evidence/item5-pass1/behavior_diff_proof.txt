@@ -1,0 +1,285 @@
+BASE=11f085930462f981fcca45faf37b67d961196adb
+IMPLEMENTATION_HEAD=437fdc7d5f33118d2c80a8e163d3c2526af8fc2d
+--- changed tracked paths vs base (excluding untracked evidence) ---
+AGENTS.md
+CLAUDE.md
+docs/HANDOFF.md
+docs/evidence/item5-pass1/.gitattributes
+docs/evidence/item5-pass1/authority_red.command
+docs/evidence/item5-pass1/authority_red.exit
+docs/evidence/item5-pass1/authority_red.stderr
+docs/evidence/item5-pass1/authority_red.stdout
+docs/evidence/item5-pass1/authority_red.txt
+docs/evidence/item5-pass1/baseline_01_tsc_app.command
+docs/evidence/item5-pass1/baseline_01_tsc_app.exit
+docs/evidence/item5-pass1/baseline_01_tsc_app.stderr
+docs/evidence/item5-pass1/baseline_01_tsc_app.stdout
+docs/evidence/item5-pass1/baseline_02_tsc_node.command
+docs/evidence/item5-pass1/baseline_02_tsc_node.exit
+docs/evidence/item5-pass1/baseline_02_tsc_node.stderr
+docs/evidence/item5-pass1/baseline_02_tsc_node.stdout
+docs/evidence/item5-pass1/baseline_03_build.command
+docs/evidence/item5-pass1/baseline_03_build.exit
+docs/evidence/item5-pass1/baseline_03_build.stderr
+docs/evidence/item5-pass1/baseline_03_build.stdout
+docs/evidence/item5-pass1/baseline_04_adaptation_boundary.command
+docs/evidence/item5-pass1/baseline_04_adaptation_boundary.exit
+docs/evidence/item5-pass1/baseline_04_adaptation_boundary.stderr
+docs/evidence/item5-pass1/baseline_04_adaptation_boundary.stdout
+docs/evidence/item5-pass1/baseline_05_expedition_adaptation.command
+docs/evidence/item5-pass1/baseline_05_expedition_adaptation.exit
+docs/evidence/item5-pass1/baseline_05_expedition_adaptation.stderr
+docs/evidence/item5-pass1/baseline_05_expedition_adaptation.stdout
+docs/evidence/item5-pass1/baseline_06_fission_transfer.command
+docs/evidence/item5-pass1/baseline_06_fission_transfer.exit
+docs/evidence/item5-pass1/baseline_06_fission_transfer.stderr
+docs/evidence/item5-pass1/baseline_06_fission_transfer.stdout
+docs/evidence/item5-pass1/baseline_07_item4_whole.command
+docs/evidence/item5-pass1/baseline_07_item4_whole.exit
+docs/evidence/item5-pass1/baseline_07_item4_whole.stderr
+docs/evidence/item5-pass1/baseline_07_item4_whole.stdout
+scripts/adaptationBoundaryAudit.mjs
+scripts/item5AdaptationAuthorityAudit.mjs
+src/sim/agents/adaptationBoundary.ts
+src/sim/agents/demography.ts
+src/sim/agents/fissionDepartureSeam.ts
+src/sim/agents/knowledgeCarriers.ts
+src/sim/agents/legacyAdaptiveHumanCompatibility.ts
+src/sim/agents/publicHumanStory.ts
+src/sim/rules/bandDecision.ts
+src/sim/rules/decisionCandidateTypes.ts
+--- frozen formula hashes ---
+432a0fb0a9826ead77648937e6d8626f6d5d62653a0a8768d979614f36b26a8e  src/sim/agents/practicalResponses.ts
+ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919  src/sim/agents/adaptiveEfficacy.ts
+--- formula diff exit ---
+0
+--- default frozen evidence diff exit ---
+0
+--- production source patch ---
+diff --git a/src/sim/agents/adaptationBoundary.ts b/src/sim/agents/adaptationBoundary.ts
+index b409ba0..5bc5d4f 100644
+--- a/src/sim/agents/adaptationBoundary.ts
++++ b/src/sim/agents/adaptationBoundary.ts
+@@ -1,8 +1,8 @@
+ // CORE-PIPELINE-DECOMPOSITION-3 (Workstream B) — practical-adaptation / invention
+-// public boundary.
++// canonical public boundary.
+ //
+-// The ONE sanctioned entry point for production code OUTSIDE the adaptation
+-// subsystem to drive and read the practical-adaptation / invention causal chain:
++// The sanctioned canonical entry point for production code OUTSIDE the practical
++// adaptation subsystem to drive and read this causal chain:
+ //
+ //   lived evidence -> practical problem -> fragments/affordances -> idea ->
+ //   experiment -> physical result -> practical response / invention -> real
+@@ -10,26 +10,27 @@
+ //   later behavior
+ //
+ // Canonical state:   band.practicalAdaptation
+-// Advance writers:   advancePracticalAdaptation, advanceAdaptiveHumanState
++// Canonical writer:  advancePracticalAdaptation
+ // Effect boundary:   practicalResponses.ts is the single DEFINITION site for the
+-//                    effect readers (derive*Condition, derive*Relief, storage);
+-//                    production reads them THROUGH this boundary, never directly.
+-// Efficacy:          the evaluate*Efficacy readers below
+-// Inheritance:       inheritPracticalAdaptationForDaughter,
+-//                    inheritAdaptiveHumanForDaughter (fission)
++//                    practical effect readers (derive*Condition, derive*Relief,
++//                    storage); production reads them THROUGH this boundary.
++// Efficacy:          adaptiveEfficacy is read THROUGH this boundary via the
++//                    evaluate*Efficacy operations below.
++// Inheritance:       inheritPracticalAdaptationForDaughter is the canonical
++//                    practical-adaptation fission inheritance path.
++//
++// Legacy `band.adaptiveHuman` compatibility is intentionally OUTSIDE this
++// canonical boundary. Existing pre-canonical/old-state fallback consumers route
++// through `legacyAdaptiveHumanCompatibility.ts`; that state is not a coequal
++// adaptation/history authority.
+ //
+ // This surface is deliberately SMALLER than the internal implementation: the
+ // subsystem's problem-framing, fragment, affordance, idea, experiment, and
+-// invention-chain internals are NOT exported here — only the operations
+-// production actually consumes, named explicitly (this is a CURATED boundary,
+-// NOT a re-export-everything `export *` barrel). Every production SIM module
+-// outside the internal adaptation cluster must import adaptation only through
+-// this file (enforced by scripts/adaptationBoundaryAudit.mjs, which rejects any
+-// sibling `./adaptiveHuman` / `./practicalResponses` / `./adaptiveEfficacy`
+-// import from a non-internal module). Internal adaptation modules still import
+-// each other directly. The read-only UI projection layer (band panels) is a
+-// separate concern governed by importBoundaryAudit, not this boundary. The
+-// re-exports are behaviorally identical to the previous direct imports.
++// invention-chain internals are NOT exported here — only the canonical practical
++// operations production actually consumes, named explicitly (this is a CURATED
++// boundary, NOT a re-export-everything `export *` barrel). Internal practical
++// adaptation modules still import each other directly. The read-only UI
++// projection layer is a separate concern governed by importBoundaryAudit.
+ import type { Band } from "./types";
+ import {
+   deriveCarryingCondition,
+@@ -37,19 +38,8 @@ import {
+   deriveWaterStorageCondition,
+ } from "./practicalResponses";
+ 
+-// --- Advance the adaptation state (writers on the production path) ---
++// --- Advance canonical practical adaptation state ---
+ export { advancePracticalAdaptation } from "./practicalResponses";
+-export { advanceAdaptiveHumanState } from "./adaptiveHuman";
+-
+-// --- Read decision support + per-action influence (band-known effects) ---
+-export {
+-  deriveAdaptiveDecisionSupport,
+-  selectAdaptiveInfluenceForAction,
+-  type AdaptiveDecisionSupport,
+-} from "./adaptiveHuman";
+-
+-// --- Read adaptive-human profile (band-known adaptive-state projection) ---
+-export { deriveAdaptiveHumanProfile } from "./adaptiveHuman";
+ 
+ // --- Read the real behavioral/physical effect coefficients (effect boundary) ---
+ // The band-known effect CONDITIONS the decision scorer consumes:
+@@ -90,7 +80,7 @@ export function deriveAdaptationEffectConditions(band: Band): {
+   };
+ }
+ 
+-// --- Evaluate outcome efficacy of applied responses ---
++// --- Evaluate outcome efficacy of applied practical responses ---
+ export {
+   evaluateCareEfficacy,
+   evaluateCarryingEfficacy,
+@@ -102,6 +92,5 @@ export {
+   evaluateWaterRouteEfficacy,
+ } from "./adaptiveEfficacy";
+ 
+-// --- Inherit adaptation knowledge to a fission daughter ---
++// --- Inherit canonical practical adaptation knowledge to a fission daughter ---
+ export { inheritPracticalAdaptationForDaughter } from "./practicalResponses";
+-export { inheritAdaptiveHumanForDaughter } from "./adaptiveHuman";
+diff --git a/src/sim/agents/demography.ts b/src/sim/agents/demography.ts
+index 93a6e41..8482cc3 100644
+--- a/src/sim/agents/demography.ts
++++ b/src/sim/agents/demography.ts
+@@ -28,10 +28,8 @@ import { isFissionEligibleParent } from "./bandLifecycle";
+ import { beginNaturalFissionProposal } from "./naturalFissionPreDeparture";
+ import { getLatestPhysicalSeparationTick } from "./fissionSeparationHistory";
+ import { createDaughterDeepHistory } from "./bandHistory";
+-import {
+-  inheritAdaptiveHumanForDaughter,
+-  inheritPracticalAdaptationForDaughter,
+-} from "./adaptationBoundary";
++import { inheritPracticalAdaptationForDaughter } from "./adaptationBoundary";
++import { inheritAdaptiveHumanForDaughter } from "./legacyAdaptiveHumanCompatibility";
+ import { inheritAnimalPatternKnowledgeForDaughter } from "./animalLearning";
+ import { inheritResourceKnowledgeForDaughter } from "./resourceKnowledge";
+ import { deriveReportedKnowledgeTargetBias } from "./reportedKnowledge";
+diff --git a/src/sim/agents/fissionDepartureSeam.ts b/src/sim/agents/fissionDepartureSeam.ts
+index 9ce86f9..994b910 100644
+--- a/src/sim/agents/fissionDepartureSeam.ts
++++ b/src/sim/agents/fissionDepartureSeam.ts
+@@ -51,7 +51,8 @@ import {
+ import { inheritResourceKnowledgeForDaughter } from "./resourceKnowledge";
+ import { inheritAnimalPatternKnowledgeForDaughter } from "./animalLearning";
+ import { degradeInheritedExploitationSkill } from "./exploitationSkill";
+-import { inheritAdaptiveHumanForDaughter, inheritPracticalAdaptationForDaughter } from "./adaptationBoundary";
++import { inheritPracticalAdaptationForDaughter } from "./adaptationBoundary";
++import { inheritAdaptiveHumanForDaughter } from "./legacyAdaptiveHumanCompatibility";
+ import { deriveDaughterColor } from "./lineageColor";
+ import { deriveCanonicalNutritionState, recordSupportInterval } from "./seasonalSurvival";
+ import { beginProvisionalSeparationCourse } from "./provisionalSeparationCourse";
+diff --git a/src/sim/agents/knowledgeCarriers.ts b/src/sim/agents/knowledgeCarriers.ts
+index 7868a37..b84492f 100644
+--- a/src/sim/agents/knowledgeCarriers.ts
++++ b/src/sim/agents/knowledgeCarriers.ts
+@@ -1,7 +1,7 @@
+ import type { BandId, ReasonId, RouteId, TileId, TickNumber } from "../core/types";
+ import type { NormalizedIntensity } from "../rules/types";
+ import type { WorldState } from "../world/types";
+-import { deriveAdaptiveHumanProfile } from "./adaptationBoundary";
++import { deriveAdaptiveHumanProfile } from "./legacyAdaptiveHumanCompatibility";
+ import { deriveCampFootholdProfile } from "./campFoothold";
+ import { deriveCampMovementProfile } from "./campMovement";
+ import { deriveCanonicalEvents } from "./eventSystem";
+diff --git a/src/sim/agents/legacyAdaptiveHumanCompatibility.ts b/src/sim/agents/legacyAdaptiveHumanCompatibility.ts
+new file mode 100644
+index 0000000..e0ec67a
+--- /dev/null
++++ b/src/sim/agents/legacyAdaptiveHumanCompatibility.ts
+@@ -0,0 +1,18 @@
++// ROADMAP ITEM 5 PASS 1 — LEGACY / COMPATIBILITY / NON-CANONICAL boundary.
++//
++// `band.practicalAdaptation` is the canonical adaptation/history authority once
++// present. `band.adaptiveHuman` remains only for pre-canonical / old-state
++// compatibility. The legacy state may be advanced only on that fallback path,
++// and legacy decision influence must not apply after practical adaptation exists.
++//
++// No new production module should use this boundary to create a second
++// adaptation history. This file only curates the legacy operations that existing
++// compatibility consumers still require; algorithms remain in `adaptiveHuman.ts`.
++export {
++  advanceAdaptiveHumanState,
++  deriveAdaptiveDecisionSupport,
++  selectAdaptiveInfluenceForAction,
++  deriveAdaptiveHumanProfile,
++  inheritAdaptiveHumanForDaughter,
++  type AdaptiveDecisionSupport,
++} from "./adaptiveHuman";
+diff --git a/src/sim/agents/publicHumanStory.ts b/src/sim/agents/publicHumanStory.ts
+index 4732f7b..392eca0 100644
+--- a/src/sim/agents/publicHumanStory.ts
++++ b/src/sim/agents/publicHumanStory.ts
+@@ -1,7 +1,7 @@
+ import type { BandId } from "../core/types";
+ import { getTile } from "../world/generate";
+ import type { Tile, WorldState } from "../world/types";
+-import { deriveAdaptiveHumanProfile } from "./adaptationBoundary";
++import { deriveAdaptiveHumanProfile } from "./legacyAdaptiveHumanCompatibility";
+ import { deriveBandChronicle } from "./bandChronicle";
+ import { deriveBandIdentityProfile, type BandIdentityProfile } from "./bandIdentity";
+ import { deriveCampMovementProfile } from "./campMovement";
+diff --git a/src/sim/rules/bandDecision.ts b/src/sim/rules/bandDecision.ts
+index fd1dc1f..98fe48b 100644
+--- a/src/sim/rules/bandDecision.ts
++++ b/src/sim/rules/bandDecision.ts
+@@ -57,12 +57,11 @@ import {
+   advanceReportedKnowledgeAfterDecision,
+   deriveReportedKnowledgeTargetBias,
+ } from "../agents/reportedKnowledge";
+-// CORE-PIPELINE-DECOMPOSITION-3 (Workstream B) — adaptation/invention is used only
+-// through the public boundary (never the subsystem internals directly).
++// CORE-PIPELINE-DECOMPOSITION-3 (Workstream B) — canonical practical adaptation
++// is read through adaptationBoundary; old adaptive-human fallback is isolated
++// behind the dedicated legacy compatibility boundary.
+ import {
+-  advanceAdaptiveHumanState,
+   advancePracticalAdaptation,
+-  deriveAdaptiveDecisionSupport,
+   deriveCarryingCondition,
+   deriveEffectiveStorageCapacity,
+   deriveWaterRouteCondition,
+@@ -75,9 +74,13 @@ import {
+   evaluateShelterEfficacy,
+   evaluateWaterRouteEfficacy,
+   evaluateWaterStorageEfficacy,
++} from "../agents/adaptationBoundary";
++import {
++  advanceAdaptiveHumanState,
++  deriveAdaptiveDecisionSupport,
+   selectAdaptiveInfluenceForAction,
+   type AdaptiveDecisionSupport,
+-} from "../agents/adaptationBoundary";
++} from "../agents/legacyAdaptiveHumanCompatibility";
+ import {
+   advanceCampMovementState,
+   deriveCampMovementDecisionSupport,
+diff --git a/src/sim/rules/decisionCandidateTypes.ts b/src/sim/rules/decisionCandidateTypes.ts
+index e3ba168..8c4a647 100644
+--- a/src/sim/rules/decisionCandidateTypes.ts
++++ b/src/sim/rules/decisionCandidateTypes.ts
+@@ -9,7 +9,7 @@ import type { getBiomeAdaptationFit } from "../agents/biomeAdaptation";
+ import type { deriveReportedKnowledgeTargetBias } from "../agents/reportedKnowledge";
+ import type { BandTendencyProfile } from "../agents/bandTendency";
+ import type { ChronicHardshipSignal } from "../agents/chronicHardship";
+-import type { AdaptiveDecisionSupport } from "../agents/adaptationBoundary";
++import type { AdaptiveDecisionSupport } from "../agents/legacyAdaptiveHumanCompatibility";
+ import type { CampMovementDecisionSupport } from "../agents/campMovement";
+ import type { ResourceBeliefOpportunity } from "../agents/resourceKnowledge";
+ import type { ResidentialAnchorContext } from "../agents/residentialAnchor";

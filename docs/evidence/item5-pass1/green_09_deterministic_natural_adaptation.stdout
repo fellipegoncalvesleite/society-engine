@@ -1,0 +1,211 @@
+{
+  "check": "DEMOGRAPHIC-PERSISTENCE-LONG-RUN",
+  "verdict": "PASS",
+  "map": "map2",
+  "years": 50,
+  "repeat": true,
+  "checks": {
+    "completed": true,
+    "populationReconciles": true,
+    "observerParity": true,
+    "deterministic": true,
+    "stateCapsHeld": true,
+    "noHumanRemainsNoHuman": true,
+    "survivorsNotAllStructurallyCapPinned": true
+  },
+  "result": {
+    "completedYears": 50,
+    "startPopulation": 238,
+    "endPopulation": 213,
+    "activeBands": 9,
+    "extinctBands": 0,
+    "fissionEvents": 0,
+    "births": 201,
+    "uniqueDeaths": 226,
+    "accounting": {
+      "equation": "238 + 201 - 226 = 213",
+      "reconciles": true,
+      "recordedDeaths": 226,
+      "terminalDeaths": 0,
+      "elderDeaths": 191,
+      "dependentDeaths": 0,
+      "adultDeaths": 35,
+      "overlappingAttributionDoNotSum": {
+        "crisis": 34,
+        "water": 1,
+        "food": 34,
+        "movement": 0
+      }
+    },
+    "means": {
+      "physicalUsableSupport": 17.3314,
+      "adultEquivalentDemand": 21.8436,
+      "supportRatio": 0.7367,
+      "foodStress": 0.4646,
+      "fertilityPressure": 0.2214,
+      "mortalityPressure": 0.4538
+    },
+    "movements": 1092,
+    "adaptationsAttempted": 25,
+    "adaptationsEffective": 3,
+    "renewal": {
+      "declining": 3,
+      "critical_remnant": 6
+    },
+    "declineCap": {
+      "perBand": {
+        "band:varied-dry-corridor-mid": {
+          "active": true,
+          "years": 50,
+          "declineCapShare": 0,
+          "maxContinuousDeclineCapYears": 0,
+          "positiveRateShare": 0,
+          "replacementYears": 0,
+          "severeDeficitYears": 50,
+          "meanUncappedRate": -0.011498,
+          "meanClampedRate": -0.011498,
+          "meanRateSuppressedByCap": 0
+        },
+        "band:varied-dry-corridor-upper": {
+          "active": true,
+          "years": 50,
+          "declineCapShare": 0,
+          "maxContinuousDeclineCapYears": 0,
+          "positiveRateShare": 0,
+          "replacementYears": 0,
+          "severeDeficitYears": 50,
+          "meanUncappedRate": -0.006616,
+          "meanClampedRate": -0.006616,
+          "meanRateSuppressedByCap": 0
+        },
+        "band:varied-estuary": {
+          "active": true,
+          "years": 50,
+          "declineCapShare": 0,
+          "maxContinuousDeclineCapYears": 0,
+          "positiveRateShare": 1,
+          "replacementYears": 50,
+          "severeDeficitYears": 50,
+          "meanUncappedRate": 0.00505,
+          "meanClampedRate": 0.00505,
+          "meanRateSuppressedByCap": 0
+        },
+        "band:varied-lake-east": {
+          "active": true,
+          "years": 50,
+          "declineCapShare": 0,
+          "maxContinuousDeclineCapYears": 0,
+          "positiveRateShare": 0.7,
+          "replacementYears": 46,
+          "severeDeficitYears": 49,
+          "meanUncappedRate": 0.000204,
+          "meanClampedRate": 0.000204,
+          "meanRateSuppressedByCap": 0
+        },
+        "band:varied-lake-north": {
+          "active": true,
+          "years": 50,
+          "declineCapShare": 0,
+          "maxContinuousDeclineCapYears": 0,
+          "positiveRateShare": 0,
+          "replacementYears": 15,
+          "severeDeficitYears": 50,
+          "meanUncappedRate": -0.00546,
+          "meanClampedRate": -0.00546,
+          "meanRateSuppressedByCap": 0
+        },
+        "band:varied-lake-west": {
+          "active": true,
+          "years": 50,
+          "declineCapShare": 0,
+          "maxContinuousDeclineCapYears": 0,
+          "positiveRateShare": 0,
+          "replacementYears": 16,
+          "severeDeficitYears": 50,
+          "meanUncappedRate": -0.006396,
+          "meanClampedRate": -0.006396,
+          "meanRateSuppressedByCap": 0
+        },
+        "band:varied-pass-frontier": {
+          "active": true,
+          "years": 50,
+          "declineCapShare": 0,
+          "maxContinuousDeclineCapYears": 0,
+          "positiveRateShare": 0.04,
+          "replacementYears": 20,
+          "severeDeficitYears": 50,
+          "meanUncappedRate": -0.002944,
+          "meanClampedRate": -0.002944,
+          "meanRateSuppressedByCap": 0
+        },
+        "band:varied-plains-creek": {
+          "active": true,
+          "years": 50,
+          "declineCapShare": 0,
+          "maxContinuousDeclineCapYears": 0,
+          "positiveRateShare": 0.42,
+          "replacementYears": 38,
+          "severeDeficitYears": 34,
+          "meanUncappedRate": -0.00113,
+          "meanClampedRate": -0.00113,
+          "meanRateSuppressedByCap": 0
+        },
+        "band:varied-river-mid": {
+          "active": true,
+          "years": 50,
+          "declineCapShare": 0,
+          "maxContinuousDeclineCapYears": 0,
+          "positiveRateShare": 0.58,
+          "replacementYears": 49,
+          "severeDeficitYears": 47,
+          "meanUncappedRate": 0.00036,
+          "meanClampedRate": 0.00036,
+          "meanRateSuppressedByCap": 0
+        }
+      },
+      "survivorCount": 9,
+      "survivorMeanDeclineCapShare": 0,
+      "survivorMaxDeclineCapShare": 0,
+      "survivorsWithPositiveInterval": 5,
+      "survivorsWithReplacementInterval": 7,
+      "allSurvivorsStructurallyCapPinned": false
+    },
+    "checkpoints": [
+      {
+        "year": 0,
+        "population": 238,
+        "activeBands": 9,
+        "extinctBands": 0,
+        "births": 0,
+        "uniqueDeaths": 0
+      },
+      {
+        "year": 25,
+        "population": 221,
+        "activeBands": 9,
+        "extinctBands": 0,
+        "births": 95,
+        "uniqueDeaths": 112
+      },
+      {
+        "year": 50,
+        "population": 213,
+        "activeBands": 9,
+        "extinctBands": 0,
+        "births": 201,
+        "uniqueDeaths": 226
+      }
+    ],
+    "stateCapsHeld": true,
+    "runtimeMs": 20788.5153,
+    "fingerprint": "5f00bc43d90371e77aa84a76761be4fb1349a669debeb81c53623df33a94ae30"
+  },
+  "repeated": {
+    "fingerprint": "5f00bc43d90371e77aa84a76761be4fb1349a669debeb81c53623df33a94ae30",
+    "endPopulation": 213,
+    "activeBands": 9,
+    "extinctBands": 0,
+    "declineCapMatchesObserved": true,
+    "runtimeMs": 21207.0971
+  }
+}

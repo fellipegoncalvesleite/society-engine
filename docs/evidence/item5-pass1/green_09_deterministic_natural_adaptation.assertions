@@ -1,0 +1,12 @@
+{
+  "auditExit": 0,
+  "verdict": "PASS",
+  "completed": true,
+  "deterministic": true,
+  "observerParity": true,
+  "adaptationsAttempted": 25,
+  "adaptationsEffective": 3,
+  "fingerprint": "5f00bc43d90371e77aa84a76761be4fb1349a669debeb81c53623df33a94ae30",
+  "repeatedFingerprint": "5f00bc43d90371e77aa84a76761be4fb1349a669debeb81c53623df33a94ae30",
+  "naturalAdaptationOccurred": true
+}

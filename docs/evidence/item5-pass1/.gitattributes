@@ -1,2 +1,4 @@
 *.stdout -diff -text
 *.stderr -diff -text
+behavior_diff_proof.txt -diff -text
+isolation_proof.txt -diff -text

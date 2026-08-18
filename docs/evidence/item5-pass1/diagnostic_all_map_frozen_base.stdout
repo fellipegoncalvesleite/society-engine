@@ -1,0 +1,830 @@
+{
+  "check": "ALL-MAP LIVING ECOLOGY VALIDATION / DYNAMIC RICHNESS PROJECTION-1",
+  "verdict": "FAIL",
+  "years": 25,
+  "checks": {
+    "everyProductionWorldProjected": true,
+    "everyWorldHasPlantEcology": true,
+    "everyWorldHasFaunaEcology": true,
+    "everyWorldHasAquaticEcology": true,
+    "proceduralStartsEmpty": true,
+    "initializationParity": true,
+    "placementClassesDistinct": true,
+    "richOutperformsNonviable": true,
+    "marginalShowsAdaptiveActivity": true,
+    "adaptationsNotDecorative": true,
+    "nonviableRemainsPhysicallyHonest": true,
+    "genuinelyNonviableCanFail": true,
+    "naturalExtinctionTerminal": true,
+    "populationReconciles": true,
+    "fertilityVisible": true,
+    "classificationsHonest": true,
+    "habitatStableCurrentDynamic": true,
+    "perceivedCanLag": true,
+    "sourceAbsenceZero": true,
+    "antiOmniscience": true,
+    "noDuplicateFoodAuthority": false,
+    "deterministicObserverParity": true,
+    "boundedState": true,
+    "boundedProjectionRuntime": true
+  },
+  "worldInventory": {
+    "map1": {
+      "tileCount": 16000,
+      "projectedTiles": 16000,
+      "habitatClasses": {
+        "alpine": 917,
+        "arid": 1375,
+        "coastal": 386,
+        "floodplain": 703,
+        "marsh": 560,
+        "shrubland": 108,
+        "temperate_forest": 129,
+        "temperate_grassland": 11822
+      },
+      "waterDistribution": {
+        "dry": 10952,
+        "limited": 1307,
+        "wet": 3741,
+        "aquatic": 2601
+      },
+      "plantPatchCount": 13108,
+      "plantCategories": [
+        "fruit_berry",
+        "leaf_green",
+        "nuts_mast",
+        "roots_tubers_uso",
+        "wetland_plant",
+        "wild_grain_seed"
+      ],
+      "faunaStockCount": 223,
+      "faunaCategories": [
+        "forest_edge_game",
+        "small_game",
+        "waterfowl"
+      ],
+      "predatorCount": 4,
+      "aquaticStockCount": 33,
+      "supportDistribution": {
+        "min": 0,
+        "p25": 0,
+        "p50": 0.0529,
+        "p75": 0.117,
+        "p90": 0.1821,
+        "max": 0.7354,
+        "mean": 0.0743
+      },
+      "seasonalReliabilityDistribution": {
+        "min": 0.3792,
+        "p25": 0.4399,
+        "p50": 0.4603,
+        "p75": 0.5593,
+        "p90": 0.752,
+        "max": 0.9655,
+        "mean": 0.5235
+      },
+      "nonviableTiles": 9959,
+      "marginalTiles": 4990,
+      "highSupportTiles": 141,
+      "defaultBandCount": 5,
+      "defaultPlacements": [
+        {
+          "id": "band:delta-coastal-foragers",
+          "tileId": "tile:126:56"
+        },
+        {
+          "id": "band:river-valley-foragers",
+          "tileId": "tile:124:66"
+        },
+        {
+          "id": "band:lake-wetland-foragers",
+          "tileId": "tile:104:58"
+        },
+        {
+          "id": "band:highland-edge-foragers",
+          "tileId": "tile:35:20"
+        },
+        {
+          "id": "band:dry-margin-foragers",
+          "tileId": "tile:112:40"
+        }
+      ],
+      "startingPopulation": 155,
+      "projectionAuditPassed": true
+    },
+    "map2": {
+      "tileCount": 30800,
+      "projectedTiles": 30800,
+      "habitatClasses": {
+        "alpine": 1432,
+        "arid": 1801,
+        "coastal": 531,
+        "floodplain": 1851,
+        "marsh": 637,
+        "shrubland": 220,
+        "temperate_forest": 1205,
+        "temperate_grassland": 23123
+      },
+      "waterDistribution": {
+        "dry": 19955,
+        "limited": 5631,
+        "wet": 5214,
+        "aquatic": 3453
+      },
+      "plantPatchCount": 31338,
+      "plantCategories": [
+        "fruit_berry",
+        "leaf_green",
+        "nuts_mast",
+        "roots_tubers_uso",
+        "wetland_plant",
+        "wild_grain_seed"
+      ],
+      "faunaStockCount": 222,
+      "faunaCategories": [
+        "forest_edge_game",
+        "medium_game",
+        "small_game",
+        "waterfowl"
+      ],
+      "predatorCount": 4,
+      "aquaticStockCount": 34,
+      "supportDistribution": {
+        "min": 0,
+        "p25": 0.0023,
+        "p50": 0.0562,
+        "p75": 0.1,
+        "p90": 0.1659,
+        "max": 0.5936,
+        "mean": 0.0659
+      },
+      "seasonalReliabilityDistribution": {
+        "min": 0.3639,
+        "p25": 0.4442,
+        "p50": 0.4636,
+        "p75": 0.526,
+        "p90": 0.7494,
+        "max": 0.9655,
+        "mean": 0.5134
+      },
+      "nonviableTiles": 20766,
+      "marginalTiles": 8820,
+      "highSupportTiles": 44,
+      "defaultBandCount": 9,
+      "defaultPlacements": [
+        {
+          "id": "band:varied-dry-corridor-mid",
+          "tileId": "tile:76:111"
+        },
+        {
+          "id": "band:varied-dry-corridor-upper",
+          "tileId": "tile:56:105"
+        },
+        {
+          "id": "band:varied-lake-north",
+          "tileId": "tile:78:60"
+        },
+        {
+          "id": "band:varied-lake-west",
+          "tileId": "tile:68:78"
+        },
+        {
+          "id": "band:varied-lake-east",
+          "tileId": "tile:88:80"
+        },
+        {
+          "id": "band:varied-river-mid",
+          "tileId": "tile:108:54"
+        },
+        {
+          "id": "band:varied-plains-creek",
+          "tileId": "tile:100:46"
+        },
+        {
+          "id": "band:varied-estuary",
+          "tileId": "tile:194:90"
+        },
+        {
+          "id": "band:varied-pass-frontier",
+          "tileId": "tile:135:44"
+        }
+      ],
+      "startingPopulation": 238,
+      "projectionAuditPassed": true
+    },
+    "map2_single_origin": {
+      "tileCount": 30800,
+      "projectedTiles": 30800,
+      "habitatClasses": {
+        "alpine": 1432,
+        "arid": 1801,
+        "coastal": 531,
+        "floodplain": 1851,
+        "marsh": 637,
+        "shrubland": 220,
+        "temperate_forest": 1205,
+        "temperate_grassland": 23123
+      },
+      "waterDistribution": {
+        "dry": 19955,
+        "limited": 5631,
+        "wet": 5214,
+        "aquatic": 3453
+      },
+      "plantPatchCount": 31338,
+      "plantCategories": [
+        "fruit_berry",
+        "leaf_green",
+        "nuts_mast",
+        "roots_tubers_uso",
+        "wetland_plant",
+        "wild_grain_seed"
+      ],
+      "faunaStockCount": 222,
+      "faunaCategories": [
+        "forest_edge_game",
+        "medium_game",
+        "small_game",
+        "waterfowl"
+      ],
+      "predatorCount": 4,
+      "aquaticStockCount": 34,
+      "supportDistribution": {
+        "min": 0,
+        "p25": 0.0023,
+        "p50": 0.0562,
+        "p75": 0.1,
+        "p90": 0.1659,
+        "max": 0.5936,
+        "mean": 0.0659
+      },
+      "seasonalReliabilityDistribution": {
+        "min": 0.3639,
+        "p25": 0.4442,
+        "p50": 0.4636,
+        "p75": 0.526,
+        "p90": 0.7494,
+        "max": 0.9655,
+        "mean": 0.5134
+      },
+      "nonviableTiles": 20766,
+      "marginalTiles": 8820,
+      "highSupportTiles": 44,
+      "defaultBandCount": 1,
+      "defaultPlacements": [
+        {
+          "id": "band:single-origin",
+          "tileId": "tile:108:54"
+        }
+      ],
+      "startingPopulation": 32,
+      "projectionAuditPassed": true
+    },
+    "procedural_empty": {
+      "tileCount": 864,
+      "projectedTiles": 864,
+      "habitatClasses": {
+        "unknown": 864
+      },
+      "waterDistribution": {
+        "dry": 335,
+        "limited": 309,
+        "wet": 220,
+        "aquatic": 146
+      },
+      "plantPatchCount": 1177,
+      "plantCategories": [
+        "fruit_berry",
+        "leaf_green",
+        "nuts_mast",
+        "roots_tubers_uso",
+        "wetland_plant",
+        "wild_grain_seed"
+      ],
+      "faunaStockCount": 41,
+      "faunaCategories": [
+        "forest_edge_game",
+        "large_game",
+        "small_game"
+      ],
+      "predatorCount": 4,
+      "aquaticStockCount": 27,
+      "supportDistribution": {
+        "min": 0,
+        "p25": 0.0605,
+        "p50": 0.1187,
+        "p75": 0.1928,
+        "p90": 0.2533,
+        "max": 0.4606,
+        "mean": 0.1377
+      },
+      "seasonalReliabilityDistribution": {
+        "min": 0.5,
+        "p25": 0.6545,
+        "p50": 0.6826,
+        "p75": 0.7401,
+        "p90": 0.7862,
+        "max": 0.8763,
+        "mean": 0.6964
+      },
+      "nonviableTiles": 350,
+      "marginalTiles": 318,
+      "highSupportTiles": 2,
+      "defaultBandCount": 0,
+      "defaultPlacements": [],
+      "startingPopulation": 0,
+      "projectionAuditPassed": true
+    }
+  },
+  "initialization": {
+    "productionContract": "initSimWorld: terrain edits -> remove defaults -> rebuild placements -> add custom founders",
+    "defaultReplayExact": true,
+    "firstPhysicalIntervalExact": true,
+    "manualDefaultCoreContract": {
+      "equalCoreContract": true,
+      "tileId": "tile:126:56",
+      "observedTiles": 13,
+      "note": "identity/name/history may differ; ecology, knowledge radius, accumulators and lifecycle use the same founder constructor"
+    }
+  },
+  "placementMatrix": {
+    "high_support": {
+      "kind": "high_support",
+      "tileId": "tile:124:66",
+      "classification": "high_support",
+      "startSupport": 0.7354,
+      "water": 1,
+      "potential": 0.8454,
+      "startPopulation": 24,
+      "endPopulation": 27,
+      "births": 13,
+      "deaths": 10,
+      "terminalLoss": 0,
+      "reconciles": true,
+      "dependents": 8,
+      "adults": 16,
+      "elders": 3,
+      "fertilityPressure": 0.52,
+      "foodFertilitySuppression": 0.02,
+      "mortalityPressure": 0.23,
+      "foodMortalityContribution": 0.04,
+      "growthAccumulator": 0.481,
+      "mortalityAccumulator": 0,
+      "renewalKind": "critical_remnant",
+      "lifecycle": "fragile",
+      "meanSupportRatio": 2.0388,
+      "meanFoodStress": 0.1678,
+      "physicalReceiptCount": 1074,
+      "physicalReceiptSupport": 35.3773,
+      "moves": 56,
+      "stays": 44,
+      "probes": 0,
+      "adaptationsAttempted": 7,
+      "adaptationsEffective": 0,
+      "stateCapsHeld": true
+    },
+    "moderate": {
+      "kind": "moderate",
+      "tileId": "tile:112:40",
+      "classification": "moderate_viable",
+      "startSupport": 0.3387,
+      "water": 0.3377,
+      "potential": 0.3504,
+      "startPopulation": 24,
+      "endPopulation": 17,
+      "births": 9,
+      "deaths": 16,
+      "terminalLoss": 0,
+      "reconciles": true,
+      "dependents": 4,
+      "adults": 11,
+      "elders": 2,
+      "fertilityPressure": 0,
+      "foodFertilitySuppression": 0.44,
+      "mortalityPressure": 0.84,
+      "foodMortalityContribution": 0.36,
+      "growthAccumulator": 0,
+      "mortalityAccumulator": 0.846,
+      "renewalKind": "declining",
+      "lifecycle": "fragile",
+      "meanSupportRatio": 0.1062,
+      "meanFoodStress": 0.8985,
+      "physicalReceiptCount": 201,
+      "physicalReceiptSupport": 3.2572,
+      "moves": 14,
+      "stays": 3,
+      "probes": 83,
+      "adaptationsAttempted": 5,
+      "adaptationsEffective": 0,
+      "stateCapsHeld": true
+    },
+    "marginal_adaptable": {
+      "kind": "marginal_adaptable",
+      "tileId": "tile:113:45",
+      "classification": "marginal",
+      "startSupport": 0.14,
+      "water": 0.25,
+      "potential": 0.3683,
+      "startPopulation": 24,
+      "endPopulation": 20,
+      "births": 9,
+      "deaths": 13,
+      "terminalLoss": 0,
+      "reconciles": true,
+      "dependents": 6,
+      "adults": 11,
+      "elders": 3,
+      "fertilityPressure": 0.01,
+      "foodFertilitySuppression": 0.29,
+      "mortalityPressure": 0.63,
+      "foodMortalityContribution": 0.31,
+      "growthAccumulator": 0,
+      "mortalityAccumulator": 0.3674,
+      "renewalKind": "declining",
+      "lifecycle": "fragile",
+      "meanSupportRatio": 0.3981,
+      "meanFoodStress": 0.6359,
+      "physicalReceiptCount": 318,
+      "physicalReceiptSupport": 5.5468,
+      "moves": 47,
+      "stays": 8,
+      "probes": 45,
+      "adaptationsAttempted": 4,
+      "adaptationsEffective": 0,
+      "stateCapsHeld": true
+    },
+    "temporarily_depleted": {
+      "kind": "temporarily_depleted",
+      "tileId": "tile:128:68",
+      "classification": "marginal",
+      "startSupport": 0.1,
+      "water": 1,
+      "potential": 0.8894,
+      "startPopulation": 24,
+      "endPopulation": 26,
+      "births": 11,
+      "deaths": 9,
+      "terminalLoss": 0,
+      "reconciles": true,
+      "dependents": 7,
+      "adults": 15,
+      "elders": 4,
+      "fertilityPressure": 0.57,
+      "foodFertilitySuppression": 0.02,
+      "mortalityPressure": 0.17,
+      "foodMortalityContribution": 0.04,
+      "growthAccumulator": 0.9522,
+      "mortalityAccumulator": 0,
+      "renewalKind": "replacing_losses",
+      "lifecycle": "viable",
+      "meanSupportRatio": 1.7827,
+      "meanFoodStress": 0.1954,
+      "physicalReceiptCount": 894,
+      "physicalReceiptSupport": 29.3916,
+      "moves": 43,
+      "stays": 57,
+      "probes": 0,
+      "adaptationsAttempted": 7,
+      "adaptationsEffective": 0,
+      "stateCapsHeld": true
+    },
+    "seasonally_misleading": {
+      "kind": "seasonally_misleading",
+      "tileId": "tile:133:61",
+      "classification": "marginal",
+      "startSupport": 0.1907,
+      "water": 1,
+      "potential": 0.9631,
+      "startPopulation": 24,
+      "endPopulation": 26,
+      "births": 11,
+      "deaths": 9,
+      "terminalLoss": 0,
+      "reconciles": true,
+      "dependents": 7,
+      "adults": 15,
+      "elders": 4,
+      "fertilityPressure": 0.41,
+      "foodFertilitySuppression": 0.03,
+      "mortalityPressure": 0.21,
+      "foodMortalityContribution": 0.05,
+      "growthAccumulator": 0.3058,
+      "mortalityAccumulator": 0.0069,
+      "renewalKind": "replacing_losses",
+      "lifecycle": "viable",
+      "meanSupportRatio": 1.4798,
+      "meanFoodStress": 0.2278,
+      "physicalReceiptCount": 800,
+      "physicalReceiptSupport": 25.8236,
+      "moves": 56,
+      "stays": 44,
+      "probes": 0,
+      "adaptationsAttempted": 7,
+      "adaptationsEffective": 0,
+      "stateCapsHeld": true
+    },
+    "water_limited": {
+      "kind": "water_limited",
+      "tileId": "tile:111:39",
+      "classification": "nonviable",
+      "startSupport": 0.279,
+      "water": 0,
+      "potential": 0.0987,
+      "startPopulation": 24,
+      "endPopulation": 16,
+      "births": 9,
+      "deaths": 17,
+      "terminalLoss": 0,
+      "reconciles": true,
+      "dependents": 2,
+      "adults": 11,
+      "elders": 3,
+      "fertilityPressure": 0,
+      "foodFertilitySuppression": 0.44,
+      "mortalityPressure": 0.79,
+      "foodMortalityContribution": 0.36,
+      "growthAccumulator": 0,
+      "mortalityAccumulator": 0.2416,
+      "renewalKind": "declining",
+      "lifecycle": "fragile",
+      "meanSupportRatio": 0.0439,
+      "meanFoodStress": 0.9561,
+      "physicalReceiptCount": 82,
+      "physicalReceiptSupport": 1.506,
+      "moves": 6,
+      "stays": 0,
+      "probes": 94,
+      "adaptationsAttempted": 5,
+      "adaptationsEffective": 0,
+      "stateCapsHeld": true
+    },
+    "nonviable": {
+      "kind": "nonviable",
+      "tileId": "tile:0:7",
+      "classification": "nonviable",
+      "startSupport": 0,
+      "water": 0,
+      "potential": 0.189,
+      "startPopulation": 24,
+      "endPopulation": 17,
+      "births": 9,
+      "deaths": 16,
+      "terminalLoss": 0,
+      "reconciles": true,
+      "dependents": 5,
+      "adults": 10,
+      "elders": 2,
+      "fertilityPressure": 0,
+      "foodFertilitySuppression": 0.33,
+      "mortalityPressure": 0.69,
+      "foodMortalityContribution": 0.32,
+      "growthAccumulator": 0,
+      "mortalityAccumulator": 0.5131,
+      "renewalKind": "declining",
+      "lifecycle": "fragile",
+      "meanSupportRatio": 0.2066,
+      "meanFoodStress": 0.7934,
+      "physicalReceiptCount": 300,
+      "physicalReceiptSupport": 4.3062,
+      "moves": 54,
+      "stays": 0,
+      "probes": 46,
+      "adaptationsAttempted": 5,
+      "adaptationsEffective": 0,
+      "stateCapsHeld": true
+    },
+    "manual_default_equivalent": {
+      "kind": "manual_default_equivalent",
+      "tileId": "tile:126:56",
+      "classification": "high_support",
+      "startSupport": 0.5975,
+      "water": 0.5329,
+      "potential": 0.5922,
+      "startPopulation": 34,
+      "endPopulation": 36,
+      "births": 16,
+      "deaths": 14,
+      "terminalLoss": 0,
+      "reconciles": true,
+      "dependents": 11,
+      "adults": 21,
+      "elders": 4,
+      "fertilityPressure": 0.49,
+      "foodFertilitySuppression": 0.03,
+      "mortalityPressure": 0.21,
+      "foodMortalityContribution": 0.04,
+      "growthAccumulator": 0.6459,
+      "mortalityAccumulator": 0,
+      "renewalKind": "replacing_losses",
+      "lifecycle": "viable",
+      "meanSupportRatio": 1.212,
+      "meanFoodStress": 0.2021,
+      "physicalReceiptCount": 971,
+      "physicalReceiptSupport": 28.2108,
+      "moves": 60,
+      "stays": 38,
+      "probes": 2,
+      "adaptationsAttempted": 6,
+      "adaptationsEffective": 0,
+      "stateCapsHeld": true
+    }
+  },
+  "demographicAccounting": {
+    "allBandsReconcile": true,
+    "deathCauseAttribution": "crisis/water/food/migration fields overlap; only deaths is additive",
+    "reproductiveBasis": "working-adult structure only; reproductive-capable adults are not separately modeled"
+  },
+  "dynamicEcology": {
+    "tileId": "tile:124:66",
+    "plantHarvest": 0.8429,
+    "faunaHarvest": 1.5,
+    "currentSupportBefore": 0.7354,
+    "currentSupportDepleted": 0.473,
+    "currentSupportRecovered": 0.669,
+    "habitatStable": true,
+    "depletionLowersCurrent": true,
+    "recoveryRaisesCurrent": true,
+    "perceivedSupportLagged": true,
+    "perceivedConfidenceAged": true
+  },
+  "controlledResilience": {
+    "pressure": "water shortage at a physically water-limited placement",
+    "perceivedAndFramed": "controlled comparison begins after the accepted groundwater response formed through the existing practice system",
+    "response": "maintained shallow well at the current camp",
+    "materialEffect": "waterworks relief is local, seasonal, capped, and pays maintenance labor",
+    "controlWaterStress": 0.45,
+    "adaptedWaterStress": 0.3,
+    "waterStressRelief": 0.15,
+    "consequence": {
+      "startingMortalityAccumulator": 0,
+      "controlAccumulator": 0,
+      "adaptedAccumulator": 0,
+      "controlDeaths": 0,
+      "adaptedDeaths": 0,
+      "controlMortalityPressure": 0.14,
+      "adaptedMortalityPressure": 0.1
+    },
+    "physicalEffect": true,
+    "survivalMetricImproved": true,
+    "scriptedSurvival": false,
+    "note": "identical demographic states are compared; only an existing physical waterworks response differs"
+  },
+  "nonviableFailure": {
+    "startPopulation": 24,
+    "endPopulation": 0,
+    "survivingBands": 0,
+    "extinctBands": 1,
+    "births": 19,
+    "deaths": 43,
+    "meanSupportRatio": 0,
+    "meanFoodStress": 1,
+    "movements": 0,
+    "adaptationsAttempted": 11,
+    "adaptationsEffective": 1,
+    "renewal": {
+      "extinct": 1
+    },
+    "runtimeMs": 939.0457
+  },
+  "naturalTerminal": {
+    "naturallyExtinct": true,
+    "populationFrozenZero": true,
+    "lifecycleFrozen": true,
+    "completeBandStateFrozen": true,
+    "decisionsStopped": true,
+    "tripsStopped": true,
+    "chronicleReadable": true
+  },
+  "absenceControls": {
+    "plantAbsenceZero": true,
+    "faunaAbsenceZero": true,
+    "aquaticAbsenceZero": true,
+    "examples": {
+      "plant": "tile:0:11",
+      "fauna": "tile:0:7",
+      "aquatic": "tile:0:0"
+    },
+    "projectionFeedsNutrition": false
+  },
+  "antiOmniscience": {
+    "unseenRichPatchUnknown": true,
+    "noExactHiddenAbundance": true,
+    "selectedBandChangesProjection": true,
+    "noSelectedBandHasNoProjection": true,
+    "renderingProjectionDoesNotWriteKnowledge": true,
+    "observerDoesNotChangeTruth": true,
+    "predatorsNotLeaked": true
+  },
+  "longRuns": {
+    "map1": {
+      "startPopulation": 155,
+      "endPopulation": 155,
+      "survivingBands": 5,
+      "extinctBands": 0,
+      "births": 66,
+      "deaths": 66,
+      "meanSupportRatio": 0.9425,
+      "meanFoodStress": 0.3455,
+      "movements": 355,
+      "adaptationsAttempted": 29,
+      "adaptationsEffective": 0,
+      "renewal": {
+        "critical_remnant": 3,
+        "declining": 1,
+        "replacing_losses": 1
+      },
+      "runtimeMs": 6006.7566
+    },
+    "map2": {
+      "startPopulation": 238,
+      "endPopulation": 220,
+      "survivingBands": 9,
+      "extinctBands": 0,
+      "births": 94,
+      "deaths": 112,
+      "meanSupportRatio": 0.6619,
+      "meanFoodStress": 0.5012,
+      "movements": 549,
+      "adaptationsAttempted": 54,
+      "adaptationsEffective": 2,
+      "renewal": {
+        "critical_remnant": 4,
+        "declining": 4,
+        "replacing_losses": 1
+      },
+      "runtimeMs": 11653.4538
+    },
+    "map2_single_origin": {
+      "startPopulation": 32,
+      "endPopulation": 32,
+      "survivingBands": 1,
+      "extinctBands": 0,
+      "births": 13,
+      "deaths": 13,
+      "meanSupportRatio": 0.9233,
+      "meanFoodStress": 0.3255,
+      "movements": 48,
+      "adaptationsAttempted": 7,
+      "adaptationsEffective": 0,
+      "renewal": {
+        "critical_remnant": 1
+      },
+      "runtimeMs": 2070.4155
+    }
+  },
+  "noHuman": {
+    "startPopulation": 0,
+    "endPopulation": 0,
+    "survivingBands": 0,
+    "extinctBands": 0,
+    "births": 0,
+    "deaths": 0,
+    "meanSupportRatio": 0,
+    "meanFoodStress": 0,
+    "movements": 0,
+    "adaptationsAttempted": 0,
+    "adaptationsEffective": 0,
+    "renewal": {},
+    "runtimeMs": 42.0451
+  },
+  "performance": {
+    "projectionMsByWorld": {
+      "map1": 92.391,
+      "map2": 172.4845,
+      "map2_single_origin": 169.6122,
+      "procedural_empty": 10.4714
+    },
+    "matrixRuntimeMs": 8367.149,
+    "longRunRuntimeMs": {
+      "map1": 6006.7566,
+      "map2": 11653.4538,
+      "map2_single_origin": 2070.4155
+    }
+  },
+  "bounds": {
+    "worldTileCap": 200000,
+    "perceivedTileCap": 256,
+    "sourceCapPerTile": 8,
+    "stateCapsHeld": true
+  },
+  "duplicateAuthority": {
+    "passed": false,
+    "violations": [
+      "human food ledger physical receipt guard missing"
+    ],
+    "legacyShadowSupplementReachable": false,
+    "legitimateStaticUses": [
+      "habitat and terrain generation",
+      "physical plant/fauna/forest stock seeding",
+      "Habitat Potential and cosmetic vegetation display",
+      "visible landscape cues",
+      "band-observed habitat memory (allowed to become stale)"
+    ]
+  },
+  "aggregationAlternatives": [
+    "single weighted caloric/support scalar (rejected alone: hides source absence and risk)",
+    "source-separated plant/fauna/aquatic/water channels with display scalar (selected)",
+    "stock influence raster (deferred: more complex while plant geography is tile-derived)"
+  ],
+  "fingerprint": "43e0f9614b77cf4e4d9ba623e5f5faf3f23008818234d68330935f1b576a55a3"
+}

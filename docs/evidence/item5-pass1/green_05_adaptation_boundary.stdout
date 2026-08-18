@@ -1,0 +1,51 @@
+{
+  "check": "ADAPTATION-BOUNDARY-1",
+  "verdict": "PASS",
+  "checks": {
+    "noUnauthorizedPracticalDeepImports": true,
+    "noUnauthorizedLegacyAdaptiveHumanDeepImports": true,
+    "productionLegacyImportsUseCompatibilityBoundary": true,
+    "canonicalBoundaryExposesSanctionedPracticalOps": true,
+    "canonicalBoundaryDoesNotExposeLegacyAdaptiveHuman": true,
+    "legacyCompatibilityBoundaryExposesRequiredOps": true,
+    "legacyCompatibilityBoundaryIsCurated": true,
+    "boundaryIsCuratedNotBarrel": true,
+    "singleEffectDefinitionInPracticalResponses": true,
+    "boundaryEffectMatchesInternalNoDuplicate": true,
+    "livedProblemToExperimentToResponseChainExecutes": true,
+    "responsesProduceRealEffectCoefficient": true,
+    "efficacyEvaluated": true,
+    "adaptationObserverParity": true
+  },
+  "canonicalState": "band.practicalAdaptation",
+  "publicBoundary": "src/sim/agents/adaptationBoundary.ts",
+  "legacyCompatibilityState": "band.adaptiveHuman",
+  "legacyCompatibilityBoundary": "src/sim/agents/legacyAdaptiveHumanCompatibility.ts",
+  "boundaryNamedExportCount": 26,
+  "internalDefinitionCount": 92,
+  "effectBoundary": "practicalResponses.ts (derive*Condition / storage readers)",
+  "canonicalAdvanceWriter": "advancePracticalAdaptation",
+  "canonicalInheritance": "inheritPracticalAdaptationForDaughter (fission)",
+  "legacyCompatibilityExports": [
+    "advanceAdaptiveHumanState",
+    "deriveAdaptiveDecisionSupport",
+    "selectAdaptiveInfluenceForAction",
+    "deriveAdaptiveHumanProfile",
+    "inheritAdaptiveHumanForDaughter",
+    "AdaptiveDecisionSupport"
+  ],
+  "practicalDeepImportAllowlist": "internal practical-adaptation modules + adaptationBoundary.ts",
+  "legacyDeepImportAllowlist": "adaptiveHuman.ts + legacyAdaptiveHumanCompatibility.ts",
+  "unauthorizedPracticalDeepImports": [],
+  "unauthorizedLegacyDeepImports": [],
+  "legacyImportsOutsideCompatibility": [],
+  "runtime": {
+    "problemsFormed": 5,
+    "experimentsRun": 5,
+    "responsesFormed": 5,
+    "effectCoefficientActive": 5,
+    "efficacyEvaluated": 5,
+    "boundaryMatchesInternal": true,
+    "adaptationObserverParity": true
+  }
+}

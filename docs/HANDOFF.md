@@ -4,8 +4,17 @@
 > the agent updates the **Current Status** section (and **Recommended Next Step**) and
 > appends a one-line entry to the **Checkpoint Log** at the bottom. The durable sections
 > (Project Understanding, Invariants, Verification) only change when the architecture
-> itself changes. The in-app architecture graph (`src/architecture/graphData.ts`) remains
-> the authoritative living map; this file is the human/agent-readable narrative on top of it.
+> itself changes. The in-app architecture graph (`src/architecture/graphData.ts`) is a
+> documentation/discovery projection only; it is never simulation authority. This file is
+> the human/agent-readable narrative alongside the production code and audits.
+
+## CURRENT AUTHORITY / CURRENT STATUS — 2026-08-18
+
+- Roadmap Item 4 is **CLOSED / ACCEPTED / FROZEN** at `11f085930462f981fcca45faf37b67d961196adb`.
+- Roadmap Item 5 is open with the controlled adaptation-authority consolidation Pass 1.
+- `band.practicalAdaptation` is the canonical Item-5 adaptation/history authority.
+- `band.adaptiveHuman` is legacy compatibility state only, routed for production compatibility through `src/sim/agents/legacyAdaptiveHumanCompatibility.ts`.
+- Physical artifact/material execution debt remains **OPEN** and is explicitly not solved by this pass.
 
 ---
 

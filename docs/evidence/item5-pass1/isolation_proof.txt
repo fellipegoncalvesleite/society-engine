@@ -1,0 +1,27 @@
+WORKTREE=/Users/fellipegoncalvesleite/.worktrees/society-engine-item5-adaptation-authority-pass1
+BRANCH=checkpoint/item5-adaptation-authority-pass1
+HEAD=437fdc7d5f33118d2c80a8e163d3c2526af8fc2d
+MAIN=e74e7e82cc038c009ecbab2146bea87ae3f2e60e
+--- main latest reflog ---
+e74e7e8 main@{2026-08-16 00:09:51 -0300}: commit: Complete Society Engine rebrand
+--- worktrees ---
+worktree /Users/fellipegoncalvesleite/society-engine
+HEAD 11f085930462f981fcca45faf37b67d961196adb
+branch refs/heads/checkpoint/dynamic-fission-provisional-successor-38
+
+worktree /private/tmp/society-engine-item4-finalcert
+HEAD 717ffd908c6e0f993670e2343d0b91bca74b383c
+detached
+
+worktree /private/tmp/society-engine-item4-precert
+HEAD b661d41393ec95e0d119d9e0c9855382e3b0fb7e
+detached
+
+worktree /Users/fellipegoncalvesleite/.worktrees/society-engine-item5-adaptation-authority-pass1
+HEAD 437fdc7d5f33118d2c80a8e163d3c2526af8fc2d
+branch refs/heads/checkpoint/item5-adaptation-authority-pass1
+
+worktree /Users/fellipegoncalvesleite/.worktrees/society-engine/item4-natural-physical-cutover
+HEAD bc397de96efb319c4cbc2363da0caff44fa11fbb
+branch refs/heads/item4/natural-physical-cutover
+
