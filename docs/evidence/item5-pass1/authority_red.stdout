@@ -1,0 +1,99 @@
+{
+  "check": "ITEM5-ADAPTATION-AUTHORITY-PASS1",
+  "verdict": "FAIL",
+  "checks": {
+    "canonicalStateExplicitlyPracticalAdaptation": true,
+    "canonicalBoundaryExportsRequiredPracticalOperations": true,
+    "canonicalBoundaryDoesNotExportLegacyAdaptiveHuman": false,
+    "canonicalBoundaryDocumentsLegacyCompatibilityRoute": false,
+    "dedicatedLegacyCompatibilityBoundaryExists": false,
+    "legacyCompatibilityBoundaryExplicitlyNonCanonical": false,
+    "legacyCompatibilityExportsOnlyCuratedRequiredSurface": false,
+    "noProductionDeepImportOfAdaptiveHuman": true,
+    "productionLegacyImportsUseCompatibilityBoundary": false,
+    "preCanonicalAdaptiveHumanAdvancementGuardPreserved": true,
+    "legacyDecisionInfluenceDisabledAfterCanonicalState": true,
+    "fissionInheritanceUsesCanonicalAndLegacyBoundaries": false,
+    "ideasSolutionsPrefersCanonicalInventionChain": true,
+    "practicalPhysicalAndEfficacyFormulaSourcesUnchanged": true
+  },
+  "canonicalState": "band.practicalAdaptation",
+  "canonicalBoundary": "src/sim/agents/adaptationBoundary.ts",
+  "legacyCompatibilityState": "band.adaptiveHuman",
+  "legacyCompatibilityBoundary": "src/sim/agents/legacyAdaptiveHumanCompatibility.ts",
+  "canonicalLegacyExports": [
+    "advanceAdaptiveHumanState",
+    "deriveAdaptiveDecisionSupport",
+    "selectAdaptiveInfluenceForAction",
+    "deriveAdaptiveHumanProfile",
+    "inheritAdaptiveHumanForDaughter"
+  ],
+  "missingCanonicalExports": [],
+  "compatExports": [],
+  "missingCompatExports": [
+    "advanceAdaptiveHumanState",
+    "deriveAdaptiveDecisionSupport",
+    "selectAdaptiveInfluenceForAction",
+    "inheritAdaptiveHumanForDaughter",
+    "AdaptiveDecisionSupport"
+  ],
+  "unexpectedCompatExports": [],
+  "directAdaptiveHumanImports": [],
+  "legacyImportsOutsideCompatibility": [
+    {
+      "file": "src/sim/agents/demography.ts",
+      "from": "./adaptationBoundary",
+      "symbols": [
+        "inheritAdaptiveHumanForDaughter"
+      ]
+    },
+    {
+      "file": "src/sim/agents/fissionDepartureSeam.ts",
+      "from": "./adaptationBoundary",
+      "symbols": [
+        "inheritAdaptiveHumanForDaughter"
+      ]
+    },
+    {
+      "file": "src/sim/agents/knowledgeCarriers.ts",
+      "from": "./adaptationBoundary",
+      "symbols": [
+        "deriveAdaptiveHumanProfile"
+      ]
+    },
+    {
+      "file": "src/sim/agents/publicHumanStory.ts",
+      "from": "./adaptationBoundary",
+      "symbols": [
+        "deriveAdaptiveHumanProfile"
+      ]
+    },
+    {
+      "file": "src/sim/rules/bandDecision.ts",
+      "from": "../agents/adaptationBoundary",
+      "symbols": [
+        "advanceAdaptiveHumanState",
+        "deriveAdaptiveDecisionSupport",
+        "selectAdaptiveInfluenceForAction",
+        "AdaptiveDecisionSupport"
+      ]
+    },
+    {
+      "file": "src/sim/rules/decisionCandidateTypes.ts",
+      "from": "../agents/adaptationBoundary",
+      "symbols": [
+        "AdaptiveDecisionSupport"
+      ]
+    }
+  ],
+  "frozenHashes": {
+    "expected": {
+      "src/sim/agents/practicalResponses.ts": "432a0fb0a9826ead77648937e6d8626f6d5d62653a0a8768d979614f36b26a8e",
+      "src/sim/agents/adaptiveEfficacy.ts": "ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919"
+    },
+    "actual": {
+      "src/sim/agents/practicalResponses.ts": "432a0fb0a9826ead77648937e6d8626f6d5d62653a0a8768d979614f36b26a8e",
+      "src/sim/agents/adaptiveEfficacy.ts": "ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919"
+    }
+  }
+}
