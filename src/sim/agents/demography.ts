@@ -28,10 +28,8 @@ import { isFissionEligibleParent } from "./bandLifecycle";
 import { beginNaturalFissionProposal } from "./naturalFissionPreDeparture";
 import { getLatestPhysicalSeparationTick } from "./fissionSeparationHistory";
 import { createDaughterDeepHistory } from "./bandHistory";
-import {
-  inheritAdaptiveHumanForDaughter,
-  inheritPracticalAdaptationForDaughter,
-} from "./adaptationBoundary";
+import { inheritPracticalAdaptationForDaughter } from "./adaptationBoundary";
+import { inheritAdaptiveHumanForDaughter } from "./legacyAdaptiveHumanCompatibility";
 import { inheritAnimalPatternKnowledgeForDaughter } from "./animalLearning";
 import { inheritResourceKnowledgeForDaughter } from "./resourceKnowledge";
 import { deriveReportedKnowledgeTargetBias } from "./reportedKnowledge";

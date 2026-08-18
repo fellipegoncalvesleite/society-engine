@@ -51,7 +51,8 @@ import {
 import { inheritResourceKnowledgeForDaughter } from "./resourceKnowledge";
 import { inheritAnimalPatternKnowledgeForDaughter } from "./animalLearning";
 import { degradeInheritedExploitationSkill } from "./exploitationSkill";
-import { inheritAdaptiveHumanForDaughter, inheritPracticalAdaptationForDaughter } from "./adaptationBoundary";
+import { inheritPracticalAdaptationForDaughter } from "./adaptationBoundary";
+import { inheritAdaptiveHumanForDaughter } from "./legacyAdaptiveHumanCompatibility";
 import { deriveDaughterColor } from "./lineageColor";
 import { deriveCanonicalNutritionState, recordSupportInterval } from "./seasonalSurvival";
 import { beginProvisionalSeparationCourse } from "./provisionalSeparationCourse";

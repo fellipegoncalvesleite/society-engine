@@ -1,8 +1,8 @@
 // CORE-PIPELINE-DECOMPOSITION-3 (Workstream B) — practical-adaptation / invention
-// public boundary.
+// canonical public boundary.
 //
-// The ONE sanctioned entry point for production code OUTSIDE the adaptation
-// subsystem to drive and read the practical-adaptation / invention causal chain:
+// The sanctioned canonical entry point for production code OUTSIDE the practical
+// adaptation subsystem to drive and read this causal chain:
 //
 //   lived evidence -> practical problem -> fragments/affordances -> idea ->
 //   experiment -> physical result -> practical response / invention -> real
@@ -10,26 +10,27 @@
 //   later behavior
 //
 // Canonical state:   band.practicalAdaptation
-// Advance writers:   advancePracticalAdaptation, advanceAdaptiveHumanState
+// Canonical writer:  advancePracticalAdaptation
 // Effect boundary:   practicalResponses.ts is the single DEFINITION site for the
-//                    effect readers (derive*Condition, derive*Relief, storage);
-//                    production reads them THROUGH this boundary, never directly.
-// Efficacy:          the evaluate*Efficacy readers below
-// Inheritance:       inheritPracticalAdaptationForDaughter,
-//                    inheritAdaptiveHumanForDaughter (fission)
+//                    practical effect readers (derive*Condition, derive*Relief,
+//                    storage); production reads them THROUGH this boundary.
+// Efficacy:          adaptiveEfficacy is read THROUGH this boundary via the
+//                    evaluate*Efficacy operations below.
+// Inheritance:       inheritPracticalAdaptationForDaughter is the canonical
+//                    practical-adaptation fission inheritance path.
+//
+// Legacy `band.adaptiveHuman` compatibility is intentionally OUTSIDE this
+// canonical boundary. Existing pre-canonical/old-state fallback consumers route
+// through `legacyAdaptiveHumanCompatibility.ts`; that state is not a coequal
+// adaptation/history authority.
 //
 // This surface is deliberately SMALLER than the internal implementation: the
 // subsystem's problem-framing, fragment, affordance, idea, experiment, and
-// invention-chain internals are NOT exported here — only the operations
-// production actually consumes, named explicitly (this is a CURATED boundary,
-// NOT a re-export-everything `export *` barrel). Every production SIM module
-// outside the internal adaptation cluster must import adaptation only through
-// this file (enforced by scripts/adaptationBoundaryAudit.mjs, which rejects any
-// sibling `./adaptiveHuman` / `./practicalResponses` / `./adaptiveEfficacy`
-// import from a non-internal module). Internal adaptation modules still import
-// each other directly. The read-only UI projection layer (band panels) is a
-// separate concern governed by importBoundaryAudit, not this boundary. The
-// re-exports are behaviorally identical to the previous direct imports.
+// invention-chain internals are NOT exported here — only the canonical practical
+// operations production actually consumes, named explicitly (this is a CURATED
+// boundary, NOT a re-export-everything `export *` barrel). Internal practical
+// adaptation modules still import each other directly. The read-only UI
+// projection layer is a separate concern governed by importBoundaryAudit.
 import type { Band } from "./types";
 import {
   deriveCarryingCondition,
@@ -37,19 +38,8 @@ import {
   deriveWaterStorageCondition,
 } from "./practicalResponses";
 
-// --- Advance the adaptation state (writers on the production path) ---
+// --- Advance canonical practical adaptation state ---
 export { advancePracticalAdaptation } from "./practicalResponses";
-export { advanceAdaptiveHumanState } from "./adaptiveHuman";
-
-// --- Read decision support + per-action influence (band-known effects) ---
-export {
-  deriveAdaptiveDecisionSupport,
-  selectAdaptiveInfluenceForAction,
-  type AdaptiveDecisionSupport,
-} from "./adaptiveHuman";
-
-// --- Read adaptive-human profile (band-known adaptive-state projection) ---
-export { deriveAdaptiveHumanProfile } from "./adaptiveHuman";
 
 // --- Read the real behavioral/physical effect coefficients (effect boundary) ---
 // The band-known effect CONDITIONS the decision scorer consumes:
@@ -90,7 +80,7 @@ export function deriveAdaptationEffectConditions(band: Band): {
   };
 }
 
-// --- Evaluate outcome efficacy of applied responses ---
+// --- Evaluate outcome efficacy of applied practical responses ---
 export {
   evaluateCareEfficacy,
   evaluateCarryingEfficacy,
@@ -102,6 +92,5 @@ export {
   evaluateWaterRouteEfficacy,
 } from "./adaptiveEfficacy";
 
-// --- Inherit adaptation knowledge to a fission daughter ---
+// --- Inherit canonical practical adaptation knowledge to a fission daughter ---
 export { inheritPracticalAdaptationForDaughter } from "./practicalResponses";
-export { inheritAdaptiveHumanForDaughter } from "./adaptiveHuman";

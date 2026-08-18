@@ -1,28 +1,45 @@
 // CORE-PIPELINE-DECOMPOSITION-3 (Workstream B) — adaptation/invention boundary audit.
 //
-// Static: the adaptation subsystem is reached from outside ONLY through
-// src/sim/agents/adaptationBoundary.ts (no production deep imports of
-// adaptiveHuman / practicalResponses / adaptiveEfficacy), the canonical state is
-// band.practicalAdaptation, and each effect reader has a single definition.
+// Static: canonical practical adaptation is reached from outside only through
+// src/sim/agents/adaptationBoundary.ts; legacy adaptive-human compatibility is
+// reached only through src/sim/agents/legacyAdaptiveHumanCompatibility.ts.
+// `band.practicalAdaptation` is the canonical state; `band.adaptiveHuman` is a
+// non-canonical compatibility state. Practical effect readers remain single-
+// definition internals exposed through the canonical boundary.
+//
 // Runtime: the lived problem -> experiment -> response -> real effect coefficient
-// -> efficacy chain executes through the boundary, the boundary reads the SAME
-// effect as the internal path (no duplicate/divergent application), and observer
-// mode does not change adaptation state.
+// -> efficacy chain executes through the canonical boundary, the boundary reads
+// the SAME effect as the internal path (no duplicate/divergent application), and
+// observer mode does not change practical adaptation state.
 import { createHash } from "node:crypto";
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { createServer } from "vite";
 
 const ROOT = process.cwd();
 const SIM = join(ROOT, "src/sim");
-const ADAPTATION_INTERNALS = ["adaptiveHuman", "practicalResponses", "adaptiveEfficacy"];
-// Only these may import the internals directly: the internals themselves and the
-// public boundary. (Internal subsystem modules like problemPractice/practicalFragments/
-// materialAffordance/inventionChain import each other freely.)
-const INTERNAL_ADAPTATION_MODULES = new Set([
+const CANONICAL_BOUNDARY = "adaptationBoundary";
+const LEGACY_COMPATIBILITY_BOUNDARY = "legacyAdaptiveHumanCompatibility";
+const PRACTICAL_INTERNALS = ["practicalResponses", "adaptiveEfficacy"];
+const LEGACY_INTERNAL = "adaptiveHuman";
+const LEGACY_SYMBOLS = new Set([
+  "advanceAdaptiveHumanState",
+  "deriveAdaptiveDecisionSupport",
+  "selectAdaptiveInfluenceForAction",
+  "deriveAdaptiveHumanProfile",
+  "inheritAdaptiveHumanForDaughter",
+  "AdaptiveDecisionSupport",
+]);
+
+// Internal practical subsystem modules and the canonical boundary may import the
+// practical implementation modules directly. Legacy adaptive-human implementation
+// itself remains an internal peer because old-state fallback algorithms still
+// exist, but production consumers must route through the dedicated compatibility
+// boundary instead of treating it as canonical authority.
+const INTERNAL_PRACTICAL_MODULES = new Set([
   "adaptiveHuman", "practicalResponses", "adaptiveEfficacy", "problemPractice",
   "practicalFragments", "materialAffordance", "inventionChain", "practiceFeedbackReadiness",
-  "adaptiveEfficacy", "adaptationBoundary",
+  "adaptationBoundary",
 ]);
 
 function walk(dir) {
@@ -35,60 +52,112 @@ function walk(dir) {
   return out;
 }
 function moduleBaseName(file) { return file.replace(/^.*\//, "").replace(/\.tsx?$/, ""); }
+function namedImports(source) {
+  const imports = [];
+  const re = /import\s+(?:type\s+)?\{([\s\S]*?)\}\s+from\s+["']([^"']+)["']\s*;/g;
+  for (const match of source.matchAll(re)) {
+    const symbols = match[1]
+      .split(",")
+      .map((raw) => raw.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "").trim())
+      .filter(Boolean)
+      .map((raw) => raw.replace(/^type\s+/, "").split(/\s+as\s+/)[0].trim());
+    imports.push({ from: match[2], symbols });
+  }
+  return imports;
+}
+function collectExportNames(source) {
+  const names = [];
+  const reexports = /export\s+(?:type\s+)?\{([\s\S]*?)\}\s+from\s+["'][^"']+["']\s*;/g;
+  for (const match of source.matchAll(reexports)) {
+    for (const raw of match[1].split(",")) {
+      const cleaned = raw.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "").trim();
+      if (!cleaned) continue;
+      const original = cleaned.replace(/^type\s+/, "").split(/\s+as\s+/)[0].trim();
+      if (original) names.push(original);
+    }
+  }
+  for (const match of source.matchAll(/\bexport\s+(?:function|const|class|type|interface)\s+(\w+)/g)) {
+    names.push(match[1]);
+  }
+  return [...new Set(names)];
+}
 
 const simFiles = walk(SIM);
-const unauthorizedDeepImports = [];
+const unauthorizedPracticalDeepImports = [];
+const unauthorizedLegacyDeepImports = [];
+const legacyImportsOutsideCompatibility = [];
 for (const file of simFiles) {
   const base = moduleBaseName(file);
-  if (INTERNAL_ADAPTATION_MODULES.has(base)) continue; // internals + boundary may import internals
+  const rel = relative(ROOT, file).replaceAll("\\", "/");
   const src = readFileSync(file, "utf8");
-  for (const internal of ADAPTATION_INTERNALS) {
-    // Match ANY import whose final path segment is the internal module — sibling
-    // "./practicalResponses", "../agents/practicalResponses", bare, etc. The
-    // earlier "[^"]*agents/" form had a blind spot: sibling imports from OTHER
-    // agents/ modules (e.g. "./practicalResponses") have no "agents/" in the path
-    // and slipped through. The trailing '"' pins the module name to the segment
-    // end so "./adaptiveHumanExtra" does not match.
-    if (new RegExp(`from\\s+"(?:[^"]*/)?${internal}"`).test(src)) {
-      unauthorizedDeepImports.push({ file: relative(ROOT, file), imports: internal });
+
+  if (!INTERNAL_PRACTICAL_MODULES.has(base)) {
+    for (const internal of PRACTICAL_INTERNALS) {
+      if (new RegExp(`from\\s+["'](?:[^"']*/)?${internal}["']`).test(src)) {
+        unauthorizedPracticalDeepImports.push({ file: rel, imports: internal });
+      }
+    }
+  }
+
+  for (const imp of namedImports(src)) {
+    const directAdaptiveHuman = /(?:^|\/)adaptiveHuman$/.test(imp.from);
+    if (directAdaptiveHuman && base !== LEGACY_INTERNAL && base !== LEGACY_COMPATIBILITY_BOUNDARY) {
+      unauthorizedLegacyDeepImports.push({ file: rel, from: imp.from, symbols: imp.symbols });
+    }
+    const legacySymbols = imp.symbols.filter((symbol) => LEGACY_SYMBOLS.has(symbol));
+    if (
+      legacySymbols.length > 0 &&
+      base !== LEGACY_COMPATIBILITY_BOUNDARY &&
+      !imp.from.endsWith(LEGACY_COMPATIBILITY_BOUNDARY)
+    ) {
+      legacyImportsOutsideCompatibility.push({ file: rel, from: imp.from, symbols: legacySymbols });
     }
   }
 }
 
-// The boundary must exist and re-export the sanctioned operations.
-const boundarySrc = readFileSync(join(SIM, "agents/adaptationBoundary.ts"), "utf8");
-const boundaryExports = [
-  "advancePracticalAdaptation", "advanceAdaptiveHumanState", "deriveAdaptiveDecisionSupport",
-  "selectAdaptiveInfluenceForAction", "deriveCarryingCondition", "deriveWaterRouteCondition",
+const boundaryPath = join(SIM, `agents/${CANONICAL_BOUNDARY}.ts`);
+const legacyBoundaryPath = join(SIM, `agents/${LEGACY_COMPATIBILITY_BOUNDARY}.ts`);
+const boundarySrc = readFileSync(boundaryPath, "utf8");
+const legacyBoundaryExists = existsSync(legacyBoundaryPath);
+const legacyBoundarySrc = legacyBoundaryExists ? readFileSync(legacyBoundaryPath, "utf8") : "";
+const boundaryExportNames = collectExportNames(boundarySrc);
+const legacyBoundaryExportNames = collectExportNames(legacyBoundarySrc);
+
+const canonicalBoundaryExports = [
+  "advancePracticalAdaptation", "deriveCarryingCondition", "deriveWaterRouteCondition",
   "deriveWaterStorageCondition", "deriveEffectiveStorageCapacity", "inheritPracticalAdaptationForDaughter",
-  "inheritAdaptiveHumanForDaughter", "deriveAdaptiveHumanProfile", "evaluateCarryingEfficacy",
-  // the per-system reliefs the physical agent modules consume (must all be surfaced
-  // so those modules never need a direct internal import):
+  "evaluateCarryingEfficacy", "deriveAdaptationEffectConditions",
+  // Per-system reliefs consumed by physical agent modules. These remain reads of
+  // practicalResponses through the canonical boundary; no definitions moved.
   "deriveCareTreatmentRelief", "deriveShelterExposureRelief", "deriveShelterPortabilityBurden",
   "deriveHuntingSafetyRelief", "deriveWaterWorksRelief", "deriveCarryingRelief",
   "deriveCarriedWaterRelief", "deriveDryRouteWaterRelief", "deriveEngineeringSafetyRelief",
 ];
-const boundaryExposesAll = boundaryExports.every((name) => new RegExp(`\\b${name}\\b`).test(boundarySrc));
+const legacyBoundaryExports = [
+  "advanceAdaptiveHumanState", "deriveAdaptiveDecisionSupport",
+  "selectAdaptiveInfluenceForAction", "deriveAdaptiveHumanProfile",
+  "inheritAdaptiveHumanForDaughter", "AdaptiveDecisionSupport",
+];
+const canonicalBoundaryExposesAll = canonicalBoundaryExports.every((name) => boundaryExportNames.includes(name));
+const canonicalBoundaryExposesLegacy = legacyBoundaryExports.some((name) => boundaryExportNames.includes(name));
+const legacyBoundaryExposesRequired = legacyBoundaryExists &&
+  legacyBoundaryExports.every((name) => legacyBoundaryExportNames.includes(name));
+const legacyBoundaryOnlyExportsLegacy = legacyBoundaryExists &&
+  legacyBoundaryExportNames.every((name) => legacyBoundaryExports.includes(name));
 
-// Barrel guard: the curated boundary must expose FEWER named operations than the
-// internal cluster defines (no `export *`, no re-export-everything). Count named
-// exports on the boundary vs named `export function`/`export const`/`export class`
-// definitions across the internal modules.
-const boundaryNamedExportCount = (boundarySrc.match(/\bexport\s+(?:function|const|class|type)\s+\w|\bexport\s*\{[^}]*\}/g) ?? [])
-  .reduce((total, chunk) => total + (chunk.startsWith("export {") ? (chunk.match(/\b\w+\b/g)?.length ?? 1) - 1 : 1), 0);
-// A real barrel re-export is `export * from "..."` (optionally `export * as ns from`);
-// require the `from` so the phrase "export *" inside this file's own doc comment
-// does not false-positive.
+// Barrel guard: the curated canonical boundary must expose fewer named operations
+// than the internal practical cluster defines (no `export *`, no re-export-everything).
+const boundaryNamedExportCount = boundaryExportNames.length;
 const boundaryUsesStarReexport = /export\s+\*(?:\s+as\s+\w+)?\s+from/.test(boundarySrc);
 let internalDefinitionCount = 0;
 for (const file of simFiles) {
   const base = moduleBaseName(file);
-  if (!INTERNAL_ADAPTATION_MODULES.has(base) || base === "adaptationBoundary") continue;
+  if (!INTERNAL_PRACTICAL_MODULES.has(base) || base === CANONICAL_BOUNDARY) continue;
   internalDefinitionCount += (readFileSync(file, "utf8").match(/^export\s+(?:function|const|class)\s+\w+/gm) ?? []).length;
 }
 const boundaryIsCuratedNotBarrel = !boundaryUsesStarReexport && boundaryNamedExportCount < internalDefinitionCount;
 
-// Each effect reader is defined exactly once (single effect boundary).
+// Each canonical practical effect reader is still defined exactly once.
 const effectReaders = ["deriveCarryingCondition", "deriveWaterRouteCondition", "deriveWaterStorageCondition"];
 const singleEffectDefinition = effectReaders.every((name) => {
   const defs = simFiles.filter((f) => new RegExp(`export function ${name}\\b`).test(readFileSync(f, "utf8")));
@@ -104,11 +173,10 @@ try {
   const boundary = await server.ssrLoadModule("/sim/agents/adaptationBoundary.ts");
   const internal = await server.ssrLoadModule("/sim/agents/practicalResponses.ts");
 
-  // Run the default map long enough for the adaptation chain to execute.
+  // Run the default map long enough for the canonical practical chain to execute.
   let world = runner.initSimWorld({ kind: "map1" }, "adaptation-boundary");
   world = runner.stepSim(world, 40 * 4, "seasonal");
 
-  // Causal chain: find bands whose practical adaptation advanced through the chain.
   const bands = Object.values(world.bands);
   let problemsFormed = 0, experimentsRun = 0, responsesFormed = 0, effectCoefficientActive = 0, efficacyEvaluated = 0;
   let boundaryMatchesInternal = true;
@@ -119,7 +187,6 @@ try {
     if ((pa.experiments ?? []).some((e) => (e.attemptSeasons ?? 0) > 0)) experimentsRun += 1;
     if ((pa.responses ?? []).length > 0) responsesFormed += 1;
     if ((pa.responses ?? []).some((r) => r.lastEfficacy !== undefined)) efficacyEvaluated += 1;
-    // Effect coefficient read through the boundary must equal the internal path.
     const viaBoundary = boundary.deriveCarryingCondition(band);
     const viaInternal = internal.deriveCarryingCondition(band);
     if (viaBoundary !== viaInternal) boundaryMatchesInternal = false;
@@ -128,7 +195,7 @@ try {
     }
   }
 
-  // Observer parity for adaptation state: an observer must not change adaptation.
+  // Observer parity for canonical practical state.
   const initial = runner.initSimWorld({ kind: "map1" }, "adaptation-boundary:obs");
   const paFp = (w) => hash(Object.values(w.bands).map((b) => b.practicalAdaptation ?? null).sort());
   const plain = runner.stepSim(initial, 25 * 4, "seasonal");
@@ -144,8 +211,13 @@ try {
 }
 
 const checks = {
-  noUnauthorizedDeepImports: unauthorizedDeepImports.length === 0,
-  boundaryExposesSanctionedOps: boundaryExposesAll,
+  noUnauthorizedPracticalDeepImports: unauthorizedPracticalDeepImports.length === 0,
+  noUnauthorizedLegacyAdaptiveHumanDeepImports: unauthorizedLegacyDeepImports.length === 0,
+  productionLegacyImportsUseCompatibilityBoundary: legacyImportsOutsideCompatibility.length === 0,
+  canonicalBoundaryExposesSanctionedPracticalOps: canonicalBoundaryExposesAll,
+  canonicalBoundaryDoesNotExposeLegacyAdaptiveHuman: !canonicalBoundaryExposesLegacy,
+  legacyCompatibilityBoundaryExposesRequiredOps: legacyBoundaryExposesRequired,
+  legacyCompatibilityBoundaryIsCurated: legacyBoundaryOnlyExportsLegacy,
   boundaryIsCuratedNotBarrel,
   singleEffectDefinitionInPracticalResponses: singleEffectDefinition,
   boundaryEffectMatchesInternalNoDuplicate: runtime.boundaryMatchesInternal,
@@ -163,13 +235,19 @@ console.log(JSON.stringify({
   checks,
   canonicalState: "band.practicalAdaptation",
   publicBoundary: "src/sim/agents/adaptationBoundary.ts",
+  legacyCompatibilityState: "band.adaptiveHuman",
+  legacyCompatibilityBoundary: "src/sim/agents/legacyAdaptiveHumanCompatibility.ts",
   boundaryNamedExportCount,
   internalDefinitionCount,
   effectBoundary: "practicalResponses.ts (derive*Condition / storage readers)",
-  advanceWriters: ["advancePracticalAdaptation", "advanceAdaptiveHumanState"],
-  inheritance: "inheritPracticalAdaptationForDaughter (fission)",
-  allowlist: "internal adaptation modules + adaptationBoundary.ts may import internals; production callers (bandDecision, demography) use the boundary",
-  unauthorizedDeepImports,
+  canonicalAdvanceWriter: "advancePracticalAdaptation",
+  canonicalInheritance: "inheritPracticalAdaptationForDaughter (fission)",
+  legacyCompatibilityExports: legacyBoundaryExportNames,
+  practicalDeepImportAllowlist: "internal practical-adaptation modules + adaptationBoundary.ts",
+  legacyDeepImportAllowlist: "adaptiveHuman.ts + legacyAdaptiveHumanCompatibility.ts",
+  unauthorizedPracticalDeepImports,
+  unauthorizedLegacyDeepImports,
+  legacyImportsOutsideCompatibility,
   runtime,
 }, null, 2));
 if (!pass) process.exitCode = 1;

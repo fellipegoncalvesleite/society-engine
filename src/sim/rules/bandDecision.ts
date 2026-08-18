@@ -57,12 +57,11 @@ import {
   advanceReportedKnowledgeAfterDecision,
   deriveReportedKnowledgeTargetBias,
 } from "../agents/reportedKnowledge";
-// CORE-PIPELINE-DECOMPOSITION-3 (Workstream B) — adaptation/invention is used only
-// through the public boundary (never the subsystem internals directly).
+// CORE-PIPELINE-DECOMPOSITION-3 (Workstream B) — canonical practical adaptation
+// is read through adaptationBoundary; old adaptive-human fallback is isolated
+// behind the dedicated legacy compatibility boundary.
 import {
-  advanceAdaptiveHumanState,
   advancePracticalAdaptation,
-  deriveAdaptiveDecisionSupport,
   deriveCarryingCondition,
   deriveEffectiveStorageCapacity,
   deriveWaterRouteCondition,
@@ -75,9 +74,13 @@ import {
   evaluateShelterEfficacy,
   evaluateWaterRouteEfficacy,
   evaluateWaterStorageEfficacy,
+} from "../agents/adaptationBoundary";
+import {
+  advanceAdaptiveHumanState,
+  deriveAdaptiveDecisionSupport,
   selectAdaptiveInfluenceForAction,
   type AdaptiveDecisionSupport,
-} from "../agents/adaptationBoundary";
+} from "../agents/legacyAdaptiveHumanCompatibility";
 import {
   advanceCampMovementState,
   deriveCampMovementDecisionSupport,
