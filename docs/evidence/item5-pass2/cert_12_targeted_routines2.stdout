@@ -1,0 +1,1481 @@
+
+> emergent-civilization-simulation@0.1.0 sim:benchmark
+> node scripts/simBenchmark.mjs --targeted-routines-2-check
+
+{
+  "suite": "targeted_routines_2_check",
+  "checkpoint": "CUMULATIVE-PRACTICAL-LEARNING-RECOMBINATION-ANIMAL-ROUTINES-2",
+  "passed": false,
+  "assertions": {
+    "registry_entry_alone_does_not_form_fragment": true,
+    "useful_repeated_activity_forms_fragment": true,
+    "direct_strong_discovery_supported": true,
+    "recombination_requires_components": true,
+    "matching_context_changes_real_safety_coefficient": false,
+    "controlled_live_crossing_activates_engineering_loop": true,
+    "context_mismatch_gets_no_credit": true,
+    "specific_failure_is_not_success": true,
+    "failed_complex_variant_is_abandoned": false,
+    "failure_refines_to_simpler_composition": false,
+    "abandoned_variant_can_be_rediscovered_after_block": true,
+    "contradiction_weakens_components": true,
+    "repeated_contradiction_can_mark_inference_incorrect": true,
+    "staleness_can_make_knowledge_dormant": true,
+    "differentiated_stock_profiles": true,
+    "feeding_without_domestication": true,
+    "short_term_proximity_possible": true,
+    "temporary_holding_possible": true,
+    "unsuitable_profile_escapes_or_stresses": true,
+    "enclosure_stress_is_specific_failure": true,
+    "reproductive_failure_is_possible": true,
+    "labor_water_cost_changes_willingness": true,
+    "contact_loss_makes_management_dormant": true,
+    "stock_routine_responds_to_feeding": true,
+    "seasonal_migration_routine_activates": true,
+    "water_seeking_routine_activates": true,
+    "pressure_can_trigger_flight_and_fragmentation": true,
+    "stock_recovers_when_pressure_recedes": true,
+    "live_observation_loop_activates": true,
+    "live_management_loop_activates": true,
+    "controlled_suitable_stock_enters_management_naturally": true,
+    "controlled_fish_stock_never_managed": true,
+    "controlled_predator_never_managed": true,
+    "controlled_no_contact_no_management": true,
+    "live_stock_routines_activate": true,
+    "live_dry_route_response_activates": true,
+    "caps_held": true
+  },
+  "caps": {
+    "fragment": 10,
+    "response": 10,
+    "rawVariantCandidates": 6,
+    "topVariantCandidates": 3,
+    "animalPatterns": 12,
+    "managementRecords": 4,
+    "faunaStocks": 260,
+    "influenceTilesPerStock": 13
+  },
+  "learning": {
+    "permissiveSignalCount": 0,
+    "groundedFragments": [
+      {
+        "id": "fragment:material_property:fiber_cordage",
+        "domain": "material_property",
+        "subject": "fiber_cordage",
+        "property": "holds_tension_when_dry",
+        "publicLabel": "worked plant fiber holds a carrying tension",
+        "basis": "lived",
+        "strength": 0.3,
+        "failureCount": 0,
+        "lastReinforcedTick": 20,
+        "evidenceRefs": [
+          "repetition:fiber_handling"
+        ],
+        "knowledgeState": "partial",
+        "observationCount": 1,
+        "contradictionCount": 0,
+        "contextKeys": [
+          "tile:126:56"
+        ]
+      }
+    ],
+    "directResponse": {
+      "id": "practical-response:band:delta-coastal-foragers:engineering_structure:braced_load_raft:21",
+      "family": "engineering_structure",
+      "variantKey": "braced_load_raft",
+      "publicLabel": "braced load-distributing crossing response",
+      "status": "forming",
+      "confidence": 0.3,
+      "successCount": 0,
+      "partialCount": 0,
+      "failureCount": 0,
+      "formedAtTick": 21,
+      "lastActiveTick": 21,
+      "requiredFragmentIds": [
+        "fragment:material_property:buoyancy_under_load",
+        "fragment:technique:binding_under_load",
+        "fragment:structure:load_distribution",
+        "fragment:technique:staged_shuttle_crossing"
+      ],
+      "contextNote": "four-component refinement; local flow, load and season can still make it fail",
+      "problemId": "problem:band:delta-coastal-foragers:crossing_blocked",
+      "ideaId": "idea:problem:band:delta-coastal-foragers:crossing_blocked:engineering_structure:braced_load_raft:21",
+      "experimentId": "experiment:practical-response:band:delta-coastal-foragers:engineering_structure:braced_load_raft:21"
+    },
+    "matchingRelief": {
+      "relief": 0,
+      "cap": 0,
+      "active": false,
+      "reason": "material execution required — no physical execution proof exists for this response",
+      "responseId": "practical-response:band:delta-coastal-foragers:engineering_structure:braced_load_raft:21",
+      "variantKey": "braced_load_raft"
+    },
+    "mismatchRelief": {
+      "relief": 0,
+      "cap": 0,
+      "active": false,
+      "reason": "material execution required — no physical execution proof exists for this response",
+      "responseId": "practical-response:band:delta-coastal-foragers:engineering_structure:braced_load_raft:21",
+      "variantKey": "braced_load_raft"
+    },
+    "actualAssessment": {
+      "considered": true,
+      "traceType": "crossing_abandoned_risk",
+      "result": "crossing_abandoned_risk",
+      "reason": "river risk 1 outweighed known material confidence 1",
+      "sourceRiverId": "river:regional-main-gorge",
+      "sourceTileId": "tile:32:15",
+      "targetTileId": "tile:32:16",
+      "crossingClass": "impassable_without_bridge_or_ferry",
+      "watercraftType": "log_raft",
+      "optionLabel": "log raft",
+      "optionCount": 3,
+      "optionCap": 4,
+      "bestOption": {
+        "kind": "log_raft",
+        "label": "log raft",
+        "materialBasis": [
+          "known cordage fibers: lashing/fiber",
+          "known floatable logs: logs/wood"
+        ],
+        "laborBurden": "high",
+        "carryingCapacity": "high",
+        "durability": "medium",
+        "confidence": 0.85,
+        "safety": 0.6,
+        "shuttleSuitability": 0.94,
+        "reasons": [
+          "tree/wood plus lashing basis",
+          "heavy labor but carries loads"
+        ]
+      },
+      "materialBasis": [
+        "known cordage fibers: lashing/fiber",
+        "known floatable logs: logs/wood"
+      ],
+      "materialConfidence": 1,
+      "adultLabor": 19,
+      "dependents": 12,
+      "elders": 3,
+      "carryBurden": "medium",
+      "shuttleTrips": 3,
+      "riskTolerance": 0.34,
+      "expectedCrossingSafety": 0.12,
+      "crossingSafetyBeforeLearning": 0.12,
+      "engineeringSafetyRelief": 0,
+      "engineeringResponseActive": false,
+      "crossingContextKey": "river:regional-main-gorge:tile:32:15->tile:32:16",
+      "riverRisk": 1,
+      "seasonExposureRisk": 0.18,
+      "crossingPathTiles": [],
+      "routeConfidence": 0.32,
+      "hardshipKind": "risk_rejection",
+      "acuteRiskHint": "aquatic_accident",
+      "protoCampMemoryHint": "dangerous_crossing_place",
+      "reasonIds": [
+        "reason:routines-2:controlled-live-crossing"
+      ],
+      "antiOmniscience": {
+        "knownCrossingOnly": true,
+        "materialBasisFromKnownResourcesOnly": true,
+        "noHiddenRiverScan": true
+      },
+      "guards": {
+        "noPermanentBoatInventory": true,
+        "noDockBridgeOrFerry": true,
+        "noCanoeCulture": true,
+        "noVillageOrTerritory": true
+      }
+    },
+    "learnedAssessment": {
+      "considered": true,
+      "traceType": "crossing_abandoned_risk",
+      "result": "crossing_abandoned_risk",
+      "reason": "river risk 1 outweighed known material confidence 1",
+      "sourceRiverId": "river:regional-main-gorge",
+      "sourceTileId": "tile:32:15",
+      "targetTileId": "tile:32:16",
+      "crossingClass": "impassable_without_bridge_or_ferry",
+      "watercraftType": "log_raft",
+      "optionLabel": "log raft",
+      "optionCount": 3,
+      "optionCap": 4,
+      "bestOption": {
+        "kind": "log_raft",
+        "label": "log raft",
+        "materialBasis": [
+          "known cordage fibers: lashing/fiber",
+          "known floatable logs: logs/wood"
+        ],
+        "laborBurden": "high",
+        "carryingCapacity": "high",
+        "durability": "medium",
+        "confidence": 0.85,
+        "safety": 0.6,
+        "shuttleSuitability": 0.94,
+        "reasons": [
+          "tree/wood plus lashing basis",
+          "heavy labor but carries loads"
+        ]
+      },
+      "materialBasis": [
+        "known cordage fibers: lashing/fiber",
+        "known floatable logs: logs/wood"
+      ],
+      "materialConfidence": 1,
+      "adultLabor": 19,
+      "dependents": 12,
+      "elders": 3,
+      "carryBurden": "medium",
+      "shuttleTrips": 3,
+      "riskTolerance": 0.34,
+      "expectedCrossingSafety": 0.12,
+      "crossingSafetyBeforeLearning": 0.12,
+      "engineeringSafetyRelief": 0,
+      "engineeringResponseActive": false,
+      "engineeringResponseId": "practical-response:band:delta-coastal-foragers:engineering_structure:crude_bundle_float:21",
+      "crossingContextKey": "river:regional-main-gorge:tile:32:15->tile:32:16",
+      "riverRisk": 1,
+      "seasonExposureRisk": 0.18,
+      "crossingPathTiles": [],
+      "routeConfidence": 0.32,
+      "hardshipKind": "risk_rejection",
+      "acuteRiskHint": "aquatic_accident",
+      "protoCampMemoryHint": "dangerous_crossing_place",
+      "reasonIds": [
+        "reason:routines-2:controlled-live-crossing"
+      ],
+      "antiOmniscience": {
+        "knownCrossingOnly": true,
+        "materialBasisFromKnownResourcesOnly": true,
+        "noHiddenRiverScan": true
+      },
+      "guards": {
+        "noPermanentBoatInventory": true,
+        "noDockBridgeOrFerry": true,
+        "noCanoeCulture": true,
+        "noVillageOrTerritory": true
+      }
+    },
+    "liveEngineeringState": {
+      "bandId": "band:delta-coastal-foragers",
+      "lastUpdatedTick": 25,
+      "fragments": [
+        {
+          "id": "fragment:abstract_pattern:one_to_one_count",
+          "domain": "abstract_pattern",
+          "subject": "one_to_one_count",
+          "property": "loads_and_people_match_marks_one_to_one",
+          "publicLabel": "loads and people can be matched against marks, one for one",
+          "basis": "lived",
+          "strength": 0.5,
+          "failureCount": 0,
+          "lastReinforcedTick": 25,
+          "evidenceRefs": [
+            "movement:shuttle_load_division"
+          ],
+          "knowledgeState": "partial",
+          "observationCount": 6,
+          "contradictionCount": 0,
+          "contextKeys": [
+            "tile:32:15"
+          ]
+        },
+        {
+          "id": "fragment:material_property:buoyancy_under_load",
+          "domain": "material_property",
+          "subject": "buoyancy_under_load",
+          "property": "bundled_material_can_float_a_load",
+          "publicLabel": "a tested bundle can carry some load on this water",
+          "basis": "lived",
+          "strength": 0.44,
+          "failureCount": 0,
+          "lastReinforcedTick": 25,
+          "evidenceRefs": [
+            "watercraft:crossing_abandoned_risk:buoyancy"
+          ],
+          "knowledgeState": "partial",
+          "observationCount": 6,
+          "contradictionCount": 0,
+          "contextKeys": [
+            "river:regional-main-gorge:tile:32:15->tile:32:16"
+          ]
+        },
+        {
+          "id": "fragment:structure:load_distribution",
+          "domain": "structure",
+          "subject": "load_distribution",
+          "property": "spread_load_across_bundles_or_frame",
+          "publicLabel": "spreading and shuttling loads changes stability",
+          "basis": "lived",
+          "strength": 0.38,
+          "failureCount": 0,
+          "lastReinforcedTick": 25,
+          "evidenceRefs": [
+            "watercraft:crossing_abandoned_risk:load_distribution"
+          ],
+          "knowledgeState": "partial",
+          "observationCount": 6,
+          "contradictionCount": 0,
+          "contextKeys": [
+            "river:regional-main-gorge:tile:32:15->tile:32:16"
+          ]
+        },
+        {
+          "id": "fragment:technique:binding_under_load",
+          "domain": "technique",
+          "subject": "binding_under_load",
+          "property": "lashings_hold_or_fail_under_crossing_load",
+          "publicLabel": "lashings can be tested under a moving water load",
+          "basis": "lived",
+          "strength": 0.38,
+          "failureCount": 0,
+          "lastReinforcedTick": 25,
+          "evidenceRefs": [
+            "watercraft:crossing_abandoned_risk:binding"
+          ],
+          "knowledgeState": "partial",
+          "observationCount": 6,
+          "contradictionCount": 0,
+          "contextKeys": [
+            "river:regional-main-gorge:tile:32:15->tile:32:16"
+          ]
+        },
+        {
+          "id": "fragment:technique:staged_shuttle_crossing",
+          "domain": "technique",
+          "subject": "staged_shuttle_crossing",
+          "property": "cross_people_and_loads_in_ordered_shuttles",
+          "publicLabel": "people and loads can be sequenced across in shuttles",
+          "basis": "lived",
+          "strength": 0.38,
+          "failureCount": 0,
+          "lastReinforcedTick": 25,
+          "evidenceRefs": [
+            "watercraft:crossing_abandoned_risk:sequence"
+          ],
+          "knowledgeState": "partial",
+          "observationCount": 6,
+          "contradictionCount": 0,
+          "contextKeys": [
+            "river:regional-main-gorge:tile:32:15->tile:32:16"
+          ]
+        }
+      ],
+      "responses": [
+        {
+          "id": "practical-response:band:delta-coastal-foragers:engineering_structure:crude_bundle_float:21",
+          "family": "engineering_structure",
+          "variantKey": "crude_bundle_float",
+          "publicLabel": "crude bound-bundle crossing response",
+          "status": "forming",
+          "confidence": 0.3,
+          "successCount": 0,
+          "partialCount": 0,
+          "failureCount": 0,
+          "formedAtTick": 21,
+          "lastActiveTick": 25,
+          "requiredFragmentIds": [
+            "fragment:material_property:buoyancy_under_load",
+            "fragment:technique:binding_under_load",
+            "fragment:technique:staged_shuttle_crossing"
+          ],
+          "contextNote": "three-component bundle/shuttle response; applies only at a crossing context actually tested",
+          "problemId": "problem:band:delta-coastal-foragers:crossing_blocked",
+          "ideaId": "idea:problem:band:delta-coastal-foragers:crossing_blocked:engineering_structure:crude_bundle_float:21",
+          "experimentId": "experiment:practical-response:band:delta-coastal-foragers:engineering_structure:crude_bundle_float:21"
+        }
+      ],
+      "efficacyRecords": [],
+      "problems": [
+        {
+          "id": "problem:band:delta-coastal-foragers:crossing_blocked",
+          "family": "crossing_blocked",
+          "publicLabel": "the water route blocks the band's way",
+          "interpretation": "the crossing needs something that floats and holds a load",
+          "misread": false,
+          "severity": 0.39,
+          "confidence": 0.95,
+          "repetitionCount": 6,
+          "origin": "lived",
+          "status": "active",
+          "evidenceRefs": [
+            "movement:watercraft_assessment"
+          ],
+          "framedAtTick": 20,
+          "lastEvidenceTick": 25
+        },
+        {
+          "id": "problem:band:delta-coastal-foragers:journey_misjudgment",
+          "family": "journey_misjudgment",
+          "publicLabel": "journeys and loads keep coming out short of the reckoning",
+          "interpretation": "what is carried is not being matched against the days it must last",
+          "misread": false,
+          "severity": 0.08,
+          "confidence": 0.85,
+          "repetitionCount": 6,
+          "origin": "opportunity",
+          "status": "active",
+          "evidenceRefs": [
+            "movement:staged_legs",
+            "movement:shuttle_division"
+          ],
+          "framedAtTick": 20,
+          "lastEvidenceTick": 25
+        },
+        {
+          "id": "problem:band:delta-coastal-foragers:carrying_burden",
+          "family": "carrying_burden",
+          "publicLabel": "moving camp under load wears the carriers down",
+          "interpretation": "the loads and the slow walkers exceed what hands can carry",
+          "misread": false,
+          "severity": 0.03,
+          "confidence": 0.95,
+          "repetitionCount": 6,
+          "origin": "lived",
+          "status": "active",
+          "evidenceRefs": [
+            "body_logistics:carry_constraint",
+            "movement:burdened_moves"
+          ],
+          "framedAtTick": 20,
+          "lastEvidenceTick": 25
+        }
+      ],
+      "ideas": [
+        {
+          "id": "idea:problem:band:delta-coastal-foragers:crossing_blocked:engineering_structure:braced_load_raft:21",
+          "problemId": "problem:band:delta-coastal-foragers:crossing_blocked",
+          "family": "engineering_structure",
+          "variantKey": "braced_load_raft",
+          "publicLabel": "braced load-distributing crossing response",
+          "mechanismBelief": "four-component refinement; local flow, load and season can still make it fail",
+          "basisFragmentIds": [
+            "fragment:material_property:buoyancy_under_load",
+            "fragment:technique:binding_under_load",
+            "fragment:structure:load_distribution",
+            "fragment:technique:staged_shuttle_crossing"
+          ],
+          "basisScore": 0.26,
+          "status": "postponed",
+          "statusReason": "material/technique basis 0.26 below the 0.50 this configuration needs",
+          "source": "local_inference",
+          "consideredAtTick": 21
+        },
+        {
+          "id": "idea:problem:band:delta-coastal-foragers:crossing_blocked:engineering_structure:crude_bundle_float:21",
+          "problemId": "problem:band:delta-coastal-foragers:crossing_blocked",
+          "family": "engineering_structure",
+          "variantKey": "crude_bundle_float",
+          "publicLabel": "crude bound-bundle crossing response",
+          "mechanismBelief": "three-component bundle/shuttle response; applies only at a crossing context actually tested",
+          "basisFragmentIds": [
+            "fragment:material_property:buoyancy_under_load",
+            "fragment:technique:binding_under_load",
+            "fragment:technique:staged_shuttle_crossing"
+          ],
+          "basisScore": 0.26,
+          "status": "selected",
+          "statusReason": "strongest practiced basis among the considered options",
+          "source": "local_inference",
+          "consideredAtTick": 21
+        }
+      ],
+      "experiments": [
+        {
+          "id": "experiment:practical-response:band:delta-coastal-foragers:engineering_structure:crude_bundle_float:21",
+          "problemId": "problem:band:delta-coastal-foragers:crossing_blocked",
+          "ideaId": "idea:problem:band:delta-coastal-foragers:crossing_blocked:engineering_structure:crude_bundle_float:21",
+          "responseId": "practical-response:band:delta-coastal-foragers:engineering_structure:crude_bundle_float:21",
+          "family": "engineering_structure",
+          "variantKey": "crude_bundle_float",
+          "expectedEffect": "crossing feasibility for no-land-route moves (pontoon/temporary bridge class)",
+          "materials": [
+            "buoyancy under load",
+            "binding under load",
+            "staged shuttle crossing"
+          ],
+          "procedure": "assemble and test crude bound-bundle crossing response under the problem's current conditions",
+          "laborCost": 0.16,
+          "riskCost": 0.16,
+          "opportunityCost": "working hands leave other subsistence tasks while the test is made",
+          "observationBasis": "inferred",
+          "attemptSeasons": 0,
+          "status": "underway",
+          "fragmentsLearned": [],
+          "fragmentsContradicted": [],
+          "startedAtTick": 21
+        }
+      ],
+      "caps": {
+        "fragmentCap": 10,
+        "responseCap": 10,
+        "recordCap": 12,
+        "problemCap": 5,
+        "ideaCap": 8,
+        "experimentCap": 4,
+        "held": true
+      }
+    },
+    "engineeringFailure": {
+      "family": "engineering_structure",
+      "responseId": "practical-response:band:delta-coastal-foragers:engineering_structure:braced_load_raft:21",
+      "responseActive": true,
+      "contextKey": "river:test:tile:a->tile:b",
+      "coefficient": "temporaryWatercraft.expectedCrossingSafety",
+      "preEffectValue": 0.26,
+      "effectAmount": 0.14,
+      "effectCap": 0.22,
+      "dangerDelta": -0.14,
+      "practiceDelta": 0.14,
+      "localityNote": "crossing engineering is bound to tested water/material/load context and can fail under another flow, season, or burden",
+      "classification": "failure_or_danger_specific",
+      "outcome": "dangerous_feedback",
+      "reason": "learned components were active but the crossing ended crossing_abandoned_risk"
+    },
+    "failedComplex": {
+      "id": "practical-response:band:delta-coastal-foragers:engineering_structure:braced_load_raft:21",
+      "family": "engineering_structure",
+      "variantKey": "braced_load_raft",
+      "publicLabel": "braced load-distributing crossing response",
+      "status": "forming",
+      "confidence": 0.3,
+      "successCount": 0,
+      "partialCount": 0,
+      "failureCount": 0,
+      "formedAtTick": 21,
+      "lastActiveTick": 24,
+      "requiredFragmentIds": [
+        "fragment:material_property:buoyancy_under_load",
+        "fragment:technique:binding_under_load",
+        "fragment:structure:load_distribution",
+        "fragment:technique:staged_shuttle_crossing"
+      ],
+      "contextNote": "four-component refinement; local flow, load and season can still make it fail",
+      "problemId": "problem:band:delta-coastal-foragers:crossing_blocked",
+      "ideaId": "idea:problem:band:delta-coastal-foragers:crossing_blocked:engineering_structure:braced_load_raft:21",
+      "experimentId": "experiment:practical-response:band:delta-coastal-foragers:engineering_structure:braced_load_raft:21"
+    },
+    "rediscoveredResponse": {
+      "id": "practical-response:band:delta-coastal-foragers:engineering_structure:braced_load_raft:22",
+      "family": "engineering_structure",
+      "variantKey": "braced_load_raft",
+      "publicLabel": "braced load-distributing crossing response",
+      "status": "forming",
+      "confidence": 0.3,
+      "successCount": 0,
+      "partialCount": 0,
+      "failureCount": 0,
+      "formedAtTick": 22,
+      "lastActiveTick": 22,
+      "requiredFragmentIds": [
+        "fragment:material_property:buoyancy_under_load",
+        "fragment:technique:binding_under_load",
+        "fragment:structure:load_distribution",
+        "fragment:technique:staged_shuttle_crossing"
+      ],
+      "contextNote": "four-component refinement; local flow, load and season can still make it fail",
+      "problemId": "problem:band:delta-coastal-foragers:crossing_blocked",
+      "ideaId": "idea:problem:band:delta-coastal-foragers:crossing_blocked:engineering_structure:braced_load_raft:22",
+      "experimentId": "experiment:practical-response:band:delta-coastal-foragers:engineering_structure:braced_load_raft:22"
+    },
+    "contradictedFragments": [
+      {
+        "id": "fragment:material_property:buoyancy_under_load",
+        "domain": "material_property",
+        "subject": "buoyancy_under_load",
+        "property": "buoyancy_under_load",
+        "publicLabel": "buoyancy_under_load",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 1,
+        "lastReinforcedTick": 20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "tentative",
+        "observationCount": 5,
+        "contradictionCount": 1,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      },
+      {
+        "id": "fragment:technique:binding_under_load",
+        "domain": "technique",
+        "subject": "binding_under_load",
+        "property": "binding_under_load",
+        "publicLabel": "binding_under_load",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 1,
+        "lastReinforcedTick": 20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "tentative",
+        "observationCount": 5,
+        "contradictionCount": 1,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      },
+      {
+        "id": "fragment:structure:load_distribution",
+        "domain": "structure",
+        "subject": "load_distribution",
+        "property": "load_distribution",
+        "publicLabel": "load_distribution",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 1,
+        "lastReinforcedTick": 20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "tentative",
+        "observationCount": 5,
+        "contradictionCount": 1,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      },
+      {
+        "id": "fragment:technique:staged_shuttle_crossing",
+        "domain": "technique",
+        "subject": "staged_shuttle_crossing",
+        "property": "staged_shuttle_crossing",
+        "publicLabel": "staged_shuttle_crossing",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 1,
+        "lastReinforcedTick": 20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "tentative",
+        "observationCount": 5,
+        "contradictionCount": 1,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      }
+    ],
+    "incorrectFragments": [
+      {
+        "id": "fragment:material_property:buoyancy_under_load",
+        "domain": "material_property",
+        "subject": "buoyancy_under_load",
+        "property": "buoyancy_under_load",
+        "publicLabel": "buoyancy_under_load",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 3,
+        "lastReinforcedTick": 20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "incorrect",
+        "observationCount": 5,
+        "contradictionCount": 3,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      },
+      {
+        "id": "fragment:technique:binding_under_load",
+        "domain": "technique",
+        "subject": "binding_under_load",
+        "property": "binding_under_load",
+        "publicLabel": "binding_under_load",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 3,
+        "lastReinforcedTick": 20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "incorrect",
+        "observationCount": 5,
+        "contradictionCount": 3,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      },
+      {
+        "id": "fragment:structure:load_distribution",
+        "domain": "structure",
+        "subject": "load_distribution",
+        "property": "load_distribution",
+        "publicLabel": "load_distribution",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 3,
+        "lastReinforcedTick": 20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "incorrect",
+        "observationCount": 5,
+        "contradictionCount": 3,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      },
+      {
+        "id": "fragment:technique:staged_shuttle_crossing",
+        "domain": "technique",
+        "subject": "staged_shuttle_crossing",
+        "property": "staged_shuttle_crossing",
+        "publicLabel": "staged_shuttle_crossing",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 3,
+        "lastReinforcedTick": 20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "incorrect",
+        "observationCount": 5,
+        "contradictionCount": 3,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      }
+    ],
+    "staleFragments": [
+      {
+        "id": "fragment:material_property:buoyancy_under_load",
+        "domain": "material_property",
+        "subject": "buoyancy_under_load",
+        "property": "buoyancy_under_load",
+        "publicLabel": "buoyancy_under_load",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 0,
+        "lastReinforcedTick": -20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "dormant",
+        "observationCount": 5,
+        "contradictionCount": 0,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      },
+      {
+        "id": "fragment:structure:load_distribution",
+        "domain": "structure",
+        "subject": "load_distribution",
+        "property": "load_distribution",
+        "publicLabel": "load_distribution",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 0,
+        "lastReinforcedTick": -20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "dormant",
+        "observationCount": 5,
+        "contradictionCount": 0,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      },
+      {
+        "id": "fragment:technique:binding_under_load",
+        "domain": "technique",
+        "subject": "binding_under_load",
+        "property": "binding_under_load",
+        "publicLabel": "binding_under_load",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 0,
+        "lastReinforcedTick": -20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "dormant",
+        "observationCount": 5,
+        "contradictionCount": 0,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      },
+      {
+        "id": "fragment:technique:staged_shuttle_crossing",
+        "domain": "technique",
+        "subject": "staged_shuttle_crossing",
+        "property": "staged_shuttle_crossing",
+        "publicLabel": "staged_shuttle_crossing",
+        "basis": "lived",
+        "strength": 0.84,
+        "failureCount": 0,
+        "lastReinforcedTick": -20,
+        "evidenceRefs": [
+          "audit:direct_experiment"
+        ],
+        "knowledgeState": "dormant",
+        "observationCount": 5,
+        "contradictionCount": 0,
+        "contextKeys": [
+          "river:test:tile:a->tile:b"
+        ]
+      }
+    ]
+  },
+  "animals": {
+    "profileCounts": {
+      "camp_scavenger": 188,
+      "cover_forager": 17,
+      "schooling_aquatic": 33,
+      "migratory_herd": 22
+    },
+    "promisingKind": "small_game",
+    "promisingHistory": [
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "feeding",
+        "action": "feed",
+        "outcome": "habituation_increased",
+        "contactSeasons": 1,
+        "feedingAttempts": 1,
+        "holdingAttempts": 0,
+        "successes": 1,
+        "failures": 0,
+        "laborCost": 0.12,
+        "waterCost": 0.06,
+        "campCost": 0.08,
+        "willingness": 0.62,
+        "animalToleranceObserved": 0.24,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: habituation_increased; labor 0.12, water 0.06, camp 0.08, willingness 0.62"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "feeding",
+        "action": "feed",
+        "outcome": "habituation_increased",
+        "contactSeasons": 2,
+        "feedingAttempts": 2,
+        "holdingAttempts": 0,
+        "successes": 2,
+        "failures": 0,
+        "laborCost": 0.12,
+        "waterCost": 0.06,
+        "campCost": 0.08,
+        "willingness": 0.68,
+        "animalToleranceObserved": 0.36,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: habituation_increased; labor 0.12, water 0.06, camp 0.08, willingness 0.68"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "holding",
+        "action": "temporary_hold",
+        "outcome": "holding_succeeded",
+        "contactSeasons": 3,
+        "feedingAttempts": 2,
+        "holdingAttempts": 1,
+        "successes": 3,
+        "failures": 0,
+        "laborCost": 0.26,
+        "waterCost": 0.18,
+        "campCost": 0.24,
+        "willingness": 0.54,
+        "animalToleranceObserved": 0.48,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "temporary_hold: holding_succeeded; labor 0.26, water 0.18, camp 0.24, willingness 0.54"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "holding",
+        "action": "protect",
+        "outcome": "habituation_increased",
+        "contactSeasons": 4,
+        "feedingAttempts": 2,
+        "holdingAttempts": 1,
+        "successes": 4,
+        "failures": 0,
+        "laborCost": 0.16,
+        "waterCost": 0.08,
+        "campCost": 0.1,
+        "willingness": 0.76,
+        "animalToleranceObserved": 0.6,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "protect: habituation_increased; labor 0.16, water 0.08, camp 0.1, willingness 0.76"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "feeding",
+        "action": "feed",
+        "outcome": "habituation_increased",
+        "contactSeasons": 5,
+        "feedingAttempts": 3,
+        "holdingAttempts": 1,
+        "successes": 5,
+        "failures": 0,
+        "laborCost": 0.12,
+        "waterCost": 0.06,
+        "campCost": 0.08,
+        "willingness": 0.86,
+        "animalToleranceObserved": 0.72,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: habituation_increased; labor 0.12, water 0.06, camp 0.08, willingness 0.86"
+      }
+    ],
+    "unsuitableKind": "waterfowl",
+    "unsuitableHistory": [
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:waterfowl:tile:100:52",
+        "stockId": "fauna:waterfowl:tile:100:52",
+        "faunaKind": "waterfowl",
+        "placeTileId": "tile:100:52",
+        "status": "feeding",
+        "action": "feed",
+        "outcome": "brief_proximity",
+        "contactSeasons": 1,
+        "feedingAttempts": 1,
+        "holdingAttempts": 0,
+        "successes": 1,
+        "failures": 0,
+        "laborCost": 0.12,
+        "waterCost": 0.06,
+        "campCost": 0.08,
+        "willingness": 0.62,
+        "animalToleranceObserved": 0.24,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: brief_proximity; labor 0.12, water 0.06, camp 0.08, willingness 0.62"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:waterfowl:tile:100:52",
+        "stockId": "fauna:waterfowl:tile:100:52",
+        "faunaKind": "waterfowl",
+        "placeTileId": "tile:100:52",
+        "status": "feeding",
+        "action": "feed",
+        "outcome": "brief_proximity",
+        "contactSeasons": 2,
+        "feedingAttempts": 2,
+        "holdingAttempts": 0,
+        "successes": 2,
+        "failures": 0,
+        "laborCost": 0.12,
+        "waterCost": 0.06,
+        "campCost": 0.08,
+        "willingness": 0.68,
+        "animalToleranceObserved": 0.36,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: brief_proximity; labor 0.12, water 0.06, camp 0.08, willingness 0.68"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:waterfowl:tile:100:52",
+        "stockId": "fauna:waterfowl:tile:100:52",
+        "faunaKind": "waterfowl",
+        "placeTileId": "tile:100:52",
+        "status": "holding",
+        "action": "temporary_hold",
+        "outcome": "escaped",
+        "contactSeasons": 3,
+        "feedingAttempts": 2,
+        "holdingAttempts": 1,
+        "successes": 2,
+        "failures": 1,
+        "laborCost": 0.26,
+        "waterCost": 0.18,
+        "campCost": 0.24,
+        "willingness": 0.54,
+        "animalToleranceObserved": 0.26,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "temporary_hold: escaped; labor 0.26, water 0.18, camp 0.24, willingness 0.54"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:waterfowl:tile:100:52",
+        "stockId": "fauna:waterfowl:tile:100:52",
+        "faunaKind": "waterfowl",
+        "placeTileId": "tile:100:52",
+        "status": "holding",
+        "action": "temporary_hold",
+        "outcome": "escaped",
+        "contactSeasons": 4,
+        "feedingAttempts": 2,
+        "holdingAttempts": 2,
+        "successes": 2,
+        "failures": 2,
+        "laborCost": 0.26,
+        "waterCost": 0.18,
+        "campCost": 0.24,
+        "willingness": 0.42,
+        "animalToleranceObserved": 0.16,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "temporary_hold: escaped; labor 0.26, water 0.18, camp 0.24, willingness 0.42"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:waterfowl:tile:100:52",
+        "stockId": "fauna:waterfowl:tile:100:52",
+        "faunaKind": "waterfowl",
+        "placeTileId": "tile:100:52",
+        "status": "abandoned",
+        "action": "temporary_hold",
+        "outcome": "escaped",
+        "contactSeasons": 5,
+        "feedingAttempts": 2,
+        "holdingAttempts": 3,
+        "successes": 2,
+        "failures": 3,
+        "laborCost": 0.26,
+        "waterCost": 0.18,
+        "campCost": 0.24,
+        "willingness": 0.3,
+        "animalToleranceObserved": 0.06,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "temporary_hold: escaped; labor 0.26, water 0.18, camp 0.24, willingness 0.3"
+      }
+    ],
+    "costlyHistory": [
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "dormant",
+        "action": "feed",
+        "outcome": "cost_too_high",
+        "contactSeasons": 1,
+        "feedingAttempts": 1,
+        "holdingAttempts": 0,
+        "successes": 0,
+        "failures": 0,
+        "laborCost": 0,
+        "waterCost": 0,
+        "campCost": 0,
+        "willingness": 0.58,
+        "animalToleranceObserved": 0.12,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: cost_too_high; labor 0.12, water 0.06, camp 0.08, willingness 0.58"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "dormant",
+        "action": "feed",
+        "outcome": "cost_too_high",
+        "contactSeasons": 2,
+        "feedingAttempts": 2,
+        "holdingAttempts": 0,
+        "successes": 0,
+        "failures": 0,
+        "laborCost": 0,
+        "waterCost": 0,
+        "campCost": 0,
+        "willingness": 0.58,
+        "animalToleranceObserved": 0.12,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: cost_too_high; labor 0.12, water 0.06, camp 0.08, willingness 0.58"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "dormant",
+        "action": "feed",
+        "outcome": "cost_too_high",
+        "contactSeasons": 3,
+        "feedingAttempts": 3,
+        "holdingAttempts": 0,
+        "successes": 0,
+        "failures": 0,
+        "laborCost": 0,
+        "waterCost": 0,
+        "campCost": 0,
+        "willingness": 0.58,
+        "animalToleranceObserved": 0.12,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: cost_too_high; labor 0.12, water 0.06, camp 0.08, willingness 0.58"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "dormant",
+        "action": "feed",
+        "outcome": "cost_too_high",
+        "contactSeasons": 4,
+        "feedingAttempts": 4,
+        "holdingAttempts": 0,
+        "successes": 0,
+        "failures": 0,
+        "laborCost": 0,
+        "waterCost": 0,
+        "campCost": 0,
+        "willingness": 0.58,
+        "animalToleranceObserved": 0.12,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: cost_too_high; labor 0.12, water 0.06, camp 0.08, willingness 0.58"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "dormant",
+        "action": "feed",
+        "outcome": "cost_too_high",
+        "contactSeasons": 5,
+        "feedingAttempts": 5,
+        "holdingAttempts": 0,
+        "successes": 0,
+        "failures": 0,
+        "laborCost": 0,
+        "waterCost": 0,
+        "campCost": 0,
+        "willingness": 0.58,
+        "animalToleranceObserved": 0.12,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: cost_too_high; labor 0.12, water 0.06, camp 0.08, willingness 0.58"
+      }
+    ],
+    "contactLost": [
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "dormant",
+        "action": "none",
+        "outcome": "contact_lost",
+        "contactSeasons": 5,
+        "feedingAttempts": 3,
+        "holdingAttempts": 1,
+        "successes": 5,
+        "failures": 0,
+        "laborCost": 0,
+        "waterCost": 0,
+        "campCost": 0,
+        "willingness": 1,
+        "animalToleranceObserved": 0.72,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "none: contact_lost; labor 0, water 0, camp 0, willingness 1"
+      }
+    ],
+    "stressedHistory": [
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "feeding",
+        "action": "feed",
+        "outcome": "habituation_increased",
+        "contactSeasons": 1,
+        "feedingAttempts": 1,
+        "holdingAttempts": 0,
+        "successes": 1,
+        "failures": 0,
+        "laborCost": 0.12,
+        "waterCost": 0.06,
+        "campCost": 0.08,
+        "willingness": 0.62,
+        "animalToleranceObserved": 0.24,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: habituation_increased; labor 0.12, water 0.06, camp 0.08, willingness 0.62"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "feeding",
+        "action": "feed",
+        "outcome": "habituation_increased",
+        "contactSeasons": 2,
+        "feedingAttempts": 2,
+        "holdingAttempts": 0,
+        "successes": 2,
+        "failures": 0,
+        "laborCost": 0.12,
+        "waterCost": 0.06,
+        "campCost": 0.08,
+        "willingness": 0.68,
+        "animalToleranceObserved": 0.36,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "feed: habituation_increased; labor 0.12, water 0.06, camp 0.08, willingness 0.68"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "holding",
+        "action": "temporary_hold",
+        "outcome": "enclosure_stress",
+        "contactSeasons": 3,
+        "feedingAttempts": 2,
+        "holdingAttempts": 1,
+        "successes": 2,
+        "failures": 1,
+        "laborCost": 0.26,
+        "waterCost": 0.18,
+        "campCost": 0.24,
+        "willingness": 0.54,
+        "animalToleranceObserved": 0.26,
+        "stressObserved": 0.24,
+        "lastContactTick": 0,
+        "reason": "temporary_hold: enclosure_stress; labor 0.26, water 0.18, camp 0.24, willingness 0.54"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "holding",
+        "action": "temporary_hold",
+        "outcome": "enclosure_stress",
+        "contactSeasons": 4,
+        "feedingAttempts": 2,
+        "holdingAttempts": 2,
+        "successes": 2,
+        "failures": 2,
+        "laborCost": 0.26,
+        "waterCost": 0.18,
+        "campCost": 0.24,
+        "willingness": 0.42,
+        "animalToleranceObserved": 0.16,
+        "stressObserved": 0.48,
+        "lastContactTick": 0,
+        "reason": "temporary_hold: enclosure_stress; labor 0.26, water 0.18, camp 0.24, willingness 0.42"
+      },
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "abandoned",
+        "action": "temporary_hold",
+        "outcome": "enclosure_stress",
+        "contactSeasons": 5,
+        "feedingAttempts": 2,
+        "holdingAttempts": 3,
+        "successes": 2,
+        "failures": 3,
+        "laborCost": 0.26,
+        "waterCost": 0.18,
+        "campCost": 0.24,
+        "willingness": 0.3,
+        "animalToleranceObserved": 0.06,
+        "stressObserved": 0.72,
+        "lastContactTick": 0,
+        "reason": "temporary_hold: enclosure_stress; labor 0.26, water 0.18, camp 0.24, willingness 0.3"
+      }
+    ],
+    "reproductiveFailure": [
+      {
+        "id": "animal-management:band:delta-coastal-foragers:fauna:small_game:tile:0:0",
+        "stockId": "fauna:small_game:tile:0:0",
+        "faunaKind": "small_game",
+        "placeTileId": "tile:0:0",
+        "status": "holding",
+        "action": "protect",
+        "outcome": "reproduction_failed",
+        "contactSeasons": 4,
+        "feedingAttempts": 2,
+        "holdingAttempts": 1,
+        "successes": 3,
+        "failures": 1,
+        "laborCost": 0.16,
+        "waterCost": 0.08,
+        "campCost": 0.1,
+        "willingness": 0.76,
+        "animalToleranceObserved": 0.38,
+        "stressObserved": 0,
+        "lastContactTick": 0,
+        "reason": "protect: reproduction_failed; labor 0.16, water 0.08, camp 0.1, willingness 0.76"
+      }
+    ],
+    "managedDynamic": {
+      "abundance": 0.9638,
+      "disturbance": 0,
+      "lastPressureTick": 0,
+      "cumulativePressure": 0,
+      "forageSupportRatio": 1,
+      "feedingPressure": 0.0208,
+      "forageStress": 0,
+      "relocationPressure": 0,
+      "routinePhase": "feeding",
+      "herdCohesion": 0.25,
+      "humanWariness": 0,
+      "habituation": 0.078,
+      "campProximity": 0.0842,
+      "habitatReturn": 0.58,
+      "migrationPressure": 0.08,
+      "youngProtection": 0.1064,
+      "reproductiveCondition": 0.7512,
+      "managementStress": 0,
+      "predationPressure": 0.0362
+    },
+    "migrationDynamic": {
+      "abundance": 0.9195,
+      "disturbance": 0.0624,
+      "lastPressureTick": 0,
+      "cumulativePressure": 0,
+      "forageSupportRatio": 1,
+      "feedingPressure": 0.0474,
+      "forageStress": 0,
+      "relocationPressure": 0,
+      "routinePhase": "migration",
+      "herdCohesion": 0.9,
+      "humanWariness": 0.0608,
+      "habituation": 0,
+      "campProximity": 0,
+      "habitatReturn": 0.606,
+      "migrationPressure": 0.68,
+      "youngProtection": 0.152,
+      "reproductiveCondition": 0.7028,
+      "managementStress": 0
+    },
+    "waterDynamic": {
+      "abundance": 0.9179,
+      "disturbance": 0.039,
+      "lastPressureTick": 0,
+      "cumulativePressure": 0,
+      "forageSupportRatio": 1,
+      "feedingPressure": 0,
+      "forageStress": 0,
+      "relocationPressure": 0,
+      "routinePhase": "water_seeking",
+      "herdCohesion": 0.7,
+      "humanWariness": 0.038,
+      "habituation": 0,
+      "campProximity": 0,
+      "habitatReturn": 0.598,
+      "migrationPressure": 0.08,
+      "youngProtection": 0.08,
+      "reproductiveCondition": 0.7468,
+      "managementStress": 0
+    },
+    "flightDynamic": {
+      "abundance": 0.7118,
+      "disturbance": 0.5616,
+      "lastPressureTick": 0,
+      "cumulativePressure": 0,
+      "forageSupportRatio": 1,
+      "feedingPressure": 0.0358,
+      "forageStress": 0,
+      "relocationPressure": 0,
+      "routinePhase": "flight",
+      "herdCohesion": 0.7944,
+      "humanWariness": 0.76,
+      "habituation": 0,
+      "campProximity": 0,
+      "habitatReturn": 0.606,
+      "migrationPressure": 0.24,
+      "youngProtection": 0.08,
+      "reproductiveCondition": 0.305,
+      "managementStress": 0.35
+    },
+    "recoveryDynamic": {
+      "abundance": 0.5967,
+      "disturbance": 0,
+      "lastPressureTick": 0,
+      "cumulativePressure": 0,
+      "forageSupportRatio": 1,
+      "feedingPressure": 0.0104,
+      "forageStress": 0,
+      "relocationPressure": 0,
+      "routinePhase": "feeding",
+      "herdCohesion": 0.25,
+      "humanWariness": 0,
+      "habituation": 0,
+      "campProximity": 0,
+      "habitatReturn": 0.58,
+      "migrationPressure": 0.08,
+      "youngProtection": 0.08,
+      "reproductiveCondition": 0.8424,
+      "managementStress": 0
+    },
+    "emergence": {
+      "suitableKind": "small_game",
+      "suitable": {
+        "observationCount": 5,
+        "fed": true,
+        "managementRecordCount": 1
+      },
+      "fishExcluded": {
+        "kind": "delta_wetland_fish",
+        "managementRecords": 0
+      },
+      "predatorExcluded": {
+        "kind": "small_predator",
+        "managementRecords": 0
+      },
+      "noContactRecords": 0
+    }
+  },
+  "live": {
+    "scenario": "map2_varied_migration",
+    "years": 30,
+    "bands": 9,
+    "animalPatternRecords": 3,
+    "managementRecords": 2,
+    "routineDynamics": 260,
+    "patternStates": {
+      "dormant": 3
+    },
+    "managementOutcomes": {
+      "contact_lost": 2
+    },
+    "liveFeedingAttempts": 4,
+    "liveHoldingAttempts": 1,
+    "maxAnimalStateBytes": 1974,
+    "faunaRoutineStateBytes": 112202,
+    "waterRouteScenario": {
+      "years": 2,
+      "responses": [
+        {
+          "variantKey": "stage_known_water",
+          "status": "abandoned",
+          "confidence": 0.15
+        }
+      ]
+    }
+  }
+}

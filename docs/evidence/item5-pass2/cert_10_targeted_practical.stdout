@@ -1,0 +1,766 @@
+
+> emergent-civilization-simulation@0.1.0 sim:benchmark
+> node scripts/simBenchmark.mjs --targeted-practical-adaptation-check
+
+{
+  "suite": "targeted_practical_adaptation_check",
+  "checkpoint": "ENVIRONMENT-READING-PRACTICAL-ADAPTATION-INVENTION-1",
+  "passed": false,
+  "assertions": {
+    "carrying_response_forms_under_repeated_burden": true,
+    "carrying_response_matures_to_active": true,
+    "water_response_forms_under_water_stress": true,
+    "fragments_form_from_lived_evidence": true,
+    "comfortable_band_stays_inert": true,
+    "no_material_basis_no_response": true,
+    "faded_basis_disables_relief": false,
+    "practiced_plan_regains_budget_steps": true,
+    "reliefs_capped": true,
+    "water_relief_context_gated_by_destination": true,
+    "clear_success_is_specific_and_raises_confidence": false,
+    "severe_hardship_is_failure": true,
+    "repeated_failure_abandons": false,
+    "failure_revises_into_alternative_composition": false,
+    "water_relief_refuses_unmatched_destination": true,
+    "consumed_relief_without_context_is_mismatch": true,
+    "drier_arrival_is_danger": true,
+    "response_goes_dormant_without_condition": true,
+    "dormant_relief_off": true,
+    "condition_return_wakes_response": true,
+    "unburdened_move_earns_nothing": true,
+    "tendencies_split_borderline_formation": true,
+    "independent_parallel_formation_possible": true,
+    "unit_battery_deterministic": true,
+    "live_no_unearned_confidence": true,
+    "live_fragments_form_somewhere": true
+  },
+  "unit": {
+    "triggerState": {
+      "bandId": "band:practical-audit",
+      "lastUpdatedTick": 407,
+      "fragments": [
+        {
+          "id": "fragment:material_property:fiber_cordage",
+          "domain": "material_property",
+          "subject": "fiber_cordage",
+          "property": "holds_tension_when_dry",
+          "publicLabel": "worked plant fiber holds a carrying tension",
+          "basis": "lived",
+          "strength": 0.92,
+          "failureCount": 0,
+          "lastReinforcedTick": 407,
+          "evidenceRefs": [
+            "repetition:fiber_handling"
+          ],
+          "knowledgeState": "confident",
+          "observationCount": 8,
+          "contradictionCount": 0,
+          "contextKeys": [
+            "undefined"
+          ]
+        },
+        {
+          "id": "fragment:material_property:load_binding",
+          "domain": "material_property",
+          "subject": "load_binding",
+          "property": "binds_and_carries_load",
+          "publicLabel": "bound material carries weight without spilling",
+          "basis": "lived",
+          "strength": 0.92,
+          "failureCount": 0,
+          "lastReinforcedTick": 407,
+          "evidenceRefs": [
+            "repetition:material_handling"
+          ],
+          "knowledgeState": "confident",
+          "observationCount": 8,
+          "contradictionCount": 0,
+          "contextKeys": [
+            "undefined"
+          ]
+        }
+      ],
+      "responses": [
+        {
+          "id": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+          "family": "carrying_load",
+          "variantKey": "fiber_sling",
+          "publicLabel": "fiber sling and wrap carrying response",
+          "status": "forming",
+          "confidence": 0.3,
+          "successCount": 0,
+          "partialCount": 0,
+          "failureCount": 0,
+          "formedAtTick": 400,
+          "lastActiveTick": 407,
+          "requiredFragmentIds": [
+            "fragment:material_property:fiber_cordage"
+          ],
+          "contextNote": "helps only burdened residential travel; fades if fiber work is not kept up",
+          "problemId": "problem:band:practical-audit:carrying_burden",
+          "ideaId": "idea:problem:band:practical-audit:carrying_burden:carrying_load:fiber_sling:400",
+          "experimentId": "experiment:practical-response:band:practical-audit:carrying_load:fiber_sling:400"
+        }
+      ],
+      "efficacyRecords": [],
+      "problems": [
+        {
+          "id": "problem:band:practical-audit:carrying_burden",
+          "family": "carrying_burden",
+          "publicLabel": "moving camp under load wears the carriers down",
+          "interpretation": "the loads and the slow walkers exceed what hands can carry",
+          "misread": false,
+          "severity": 1,
+          "confidence": 1,
+          "repetitionCount": 8,
+          "origin": "lived",
+          "status": "active",
+          "evidenceRefs": [
+            "body_logistics:carry_constraint",
+            "movement:burdened_moves"
+          ],
+          "framedAtTick": 400,
+          "lastEvidenceTick": 407
+        }
+      ],
+      "ideas": [
+        {
+          "id": "idea:problem:band:practical-audit:carrying_burden:carrying_load:carrying_frame:400",
+          "problemId": "problem:band:practical-audit:carrying_burden",
+          "family": "carrying_load",
+          "variantKey": "carrying_frame",
+          "publicLabel": "rough carrying-frame response",
+          "mechanismBelief": "composite: needs strong fiber AND binding practice; helps only burdened residential travel",
+          "basisFragmentIds": [
+            "fragment:material_property:fiber_cordage",
+            "fragment:material_property:load_binding"
+          ],
+          "basisScore": 0.29,
+          "status": "postponed",
+          "statusReason": "material/technique basis 0.29 below the 0.50 this configuration needs",
+          "source": "local_inference",
+          "consideredAtTick": 400
+        },
+        {
+          "id": "idea:problem:band:practical-audit:carrying_burden:carrying_load:fiber_sling:400",
+          "problemId": "problem:band:practical-audit:carrying_burden",
+          "family": "carrying_load",
+          "variantKey": "fiber_sling",
+          "publicLabel": "fiber sling and wrap carrying response",
+          "mechanismBelief": "helps only burdened residential travel; fades if fiber work is not kept up",
+          "basisFragmentIds": [
+            "fragment:material_property:fiber_cordage"
+          ],
+          "basisScore": 0.29,
+          "status": "selected",
+          "statusReason": "strongest practiced basis among the considered options",
+          "source": "local_inference",
+          "consideredAtTick": 400
+        }
+      ],
+      "experiments": [
+        {
+          "id": "experiment:practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+          "problemId": "problem:band:practical-audit:carrying_burden",
+          "ideaId": "idea:problem:band:practical-audit:carrying_burden:carrying_load:fiber_sling:400",
+          "responseId": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+          "family": "carrying_load",
+          "variantKey": "fiber_sling",
+          "expectedEffect": "seasonal travel plan carry + vulnerable limiters; residential-move hardship dependent/elder terms",
+          "materials": [
+            "fiber cordage"
+          ],
+          "procedure": "assemble and test fiber sling and wrap carrying response under the problem's current conditions",
+          "laborCost": 0.09,
+          "riskCost": 0.08,
+          "opportunityCost": "working hands leave other subsistence tasks while the test is made",
+          "observationBasis": "inferred",
+          "attemptSeasons": 0,
+          "status": "underway",
+          "fragmentsLearned": [],
+          "fragmentsContradicted": [],
+          "startedAtTick": 400
+        }
+      ],
+      "caps": {
+        "fragmentCap": 10,
+        "responseCap": 10,
+        "recordCap": 12,
+        "problemCap": 5,
+        "ideaCap": 8,
+        "experimentCap": 4,
+        "held": true
+      }
+    },
+    "triggerResponse": {
+      "id": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+      "family": "carrying_load",
+      "variantKey": "fiber_sling",
+      "publicLabel": "fiber sling and wrap carrying response",
+      "status": "forming",
+      "confidence": 0.3,
+      "successCount": 0,
+      "partialCount": 0,
+      "failureCount": 0,
+      "formedAtTick": 400,
+      "lastActiveTick": 407,
+      "requiredFragmentIds": [
+        "fragment:material_property:fiber_cordage"
+      ],
+      "contextNote": "helps only burdened residential travel; fades if fiber work is not kept up",
+      "problemId": "problem:band:practical-audit:carrying_burden",
+      "ideaId": "idea:problem:band:practical-audit:carrying_burden:carrying_load:fiber_sling:400",
+      "experimentId": "experiment:practical-response:band:practical-audit:carrying_load:fiber_sling:400"
+    },
+    "waterResponse": {
+      "id": "practical-response:band:practical-audit:dry_route_water:stage_known_water:400",
+      "family": "dry_route_water",
+      "variantKey": "stage_known_water",
+      "publicLabel": "stage travel between remembered watered places",
+      "status": "forming",
+      "confidence": 0.3,
+      "successCount": 0,
+      "partialCount": 0,
+      "failureCount": 0,
+      "formedAtTick": 400,
+      "lastActiveTick": 407,
+      "requiredFragmentIds": [
+        "fragment:place_route:watered_route_reading"
+      ],
+      "contextNote": "applies only when the journey's scored destination is a remembered watered place",
+      "problemId": "problem:band:practical-audit:water_route_shortage",
+      "ideaId": "idea:problem:band:practical-audit:water_route_shortage:dry_route_water:stage_known_water:400",
+      "experimentId": "experiment:practical-response:band:practical-audit:dry_route_water:stage_known_water:400"
+    },
+    "comfortableState": {
+      "bandId": "band:practical-audit",
+      "lastUpdatedTick": 407,
+      "fragments": [
+        {
+          "id": "fragment:material_property:fiber_cordage",
+          "domain": "material_property",
+          "subject": "fiber_cordage",
+          "property": "holds_tension_when_dry",
+          "publicLabel": "worked plant fiber holds a carrying tension",
+          "basis": "lived",
+          "strength": 0.92,
+          "failureCount": 0,
+          "lastReinforcedTick": 407,
+          "evidenceRefs": [
+            "repetition:fiber_handling"
+          ],
+          "knowledgeState": "confident",
+          "observationCount": 8,
+          "contradictionCount": 0,
+          "contextKeys": [
+            "undefined"
+          ]
+        },
+        {
+          "id": "fragment:material_property:load_binding",
+          "domain": "material_property",
+          "subject": "load_binding",
+          "property": "binds_and_carries_load",
+          "publicLabel": "bound material carries weight without spilling",
+          "basis": "lived",
+          "strength": 0.92,
+          "failureCount": 0,
+          "lastReinforcedTick": 407,
+          "evidenceRefs": [
+            "repetition:material_handling"
+          ],
+          "knowledgeState": "confident",
+          "observationCount": 8,
+          "contradictionCount": 0,
+          "contextKeys": [
+            "undefined"
+          ]
+        }
+      ],
+      "responses": [],
+      "efficacyRecords": [],
+      "problems": [],
+      "ideas": [],
+      "experiments": [],
+      "caps": {
+        "fragmentCap": 10,
+        "responseCap": 10,
+        "recordCap": 12,
+        "problemCap": 5,
+        "ideaCap": 8,
+        "experimentCap": 4,
+        "held": true
+      }
+    },
+    "noMaterialState": {
+      "bandId": "band:practical-audit",
+      "lastUpdatedTick": 407,
+      "fragments": [],
+      "responses": [],
+      "efficacyRecords": [],
+      "problems": [
+        {
+          "id": "problem:band:practical-audit:carrying_burden",
+          "family": "carrying_burden",
+          "publicLabel": "moving camp under load wears the carriers down",
+          "interpretation": "the loads and the slow walkers exceed what hands can carry",
+          "misread": false,
+          "severity": 1,
+          "confidence": 1,
+          "repetitionCount": 8,
+          "origin": "lived",
+          "status": "active",
+          "evidenceRefs": [
+            "body_logistics:carry_constraint",
+            "movement:burdened_moves"
+          ],
+          "framedAtTick": 400,
+          "lastEvidenceTick": 407
+        }
+      ],
+      "ideas": [],
+      "experiments": [],
+      "caps": {
+        "fragmentCap": 10,
+        "responseCap": 10,
+        "recordCap": 12,
+        "problemCap": 5,
+        "ideaCap": 8,
+        "experimentCap": 4,
+        "held": true
+      }
+    },
+    "fadedRelief": {
+      "relief": 0,
+      "cap": 0,
+      "active": false,
+      "reason": "material execution required — no physical execution proof exists for this response",
+      "responseId": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+      "variantKey": "fiber_sling"
+    },
+    "planWith": {
+      "budget": 2,
+      "carrying": {
+        "relief": 0,
+        "cap": 0,
+        "active": false,
+        "reason": "material execution required — no physical execution proof exists for this response",
+        "responseId": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+        "variantKey": "fiber_sling"
+      },
+      "water": {
+        "relief": 0.22,
+        "cap": 0.3,
+        "active": true,
+        "responseId": "practical-response:band:practical-audit:dry_route_water:stage_known_water:400",
+        "variantKey": "stage_known_water",
+        "reason": "active practiced response"
+      }
+    },
+    "planWithout": {
+      "budget": 1
+    },
+    "planUnmatchedWater": {
+      "budget": 1,
+      "water": {
+        "relief": 0,
+        "cap": 0.3,
+        "active": false,
+        "responseId": "practical-response:band:practical-audit:dry_route_water:stage_known_water:400",
+        "variantKey": "stage_known_water",
+        "reason": "carried water addressed the same limiter more strongly; staging was not credited"
+      }
+    },
+    "carryingClear": {
+      "family": "carrying_load",
+      "responseId": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+      "contextKey": "burdened_residential_travel",
+      "coefficient": "seasonalTravelBudget.carry+vulnerable limiters / moveHardship dependent terms",
+      "preEffectValue": 2,
+      "effectCap": 0.4,
+      "dangerDelta": 0,
+      "practiceDelta": 0,
+      "localityNote": "carrying practice applies only to burdened residential travel and fades with its material basis; it is not a universal load multiplier",
+      "responseActive": true,
+      "classification": "clear_success_specific",
+      "outcome": "clear_success",
+      "effectAmount": 0.22,
+      "reason": "carrying response restored 2 travel step(s) on a burdened residential move that completed"
+    },
+    "clearResponse": {
+      "id": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+      "family": "carrying_load",
+      "variantKey": "fiber_sling",
+      "publicLabel": "fiber_sling",
+      "status": "active",
+      "confidence": 0.6,
+      "successCount": 1,
+      "partialCount": 0,
+      "failureCount": 0,
+      "formedAtTick": 400,
+      "lastActiveTick": 400,
+      "requiredFragmentIds": [
+        "fragment:material_property:fiber_cordage"
+      ],
+      "contextNote": "audit"
+    },
+    "carryingFailure": {
+      "family": "carrying_load",
+      "responseId": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+      "contextKey": "burdened_residential_travel",
+      "coefficient": "seasonalTravelBudget.carry+vulnerable limiters / moveHardship dependent terms",
+      "preEffectValue": 2,
+      "effectCap": 0.4,
+      "dangerDelta": 0,
+      "practiceDelta": 0,
+      "localityNote": "carrying practice applies only to burdened residential travel and fades with its material basis; it is not a universal load multiplier",
+      "responseActive": true,
+      "classification": "failure_or_danger_specific",
+      "outcome": "dangerous_feedback",
+      "effectAmount": 0.22,
+      "reason": "burdened move ended in severe hardship despite the carrying response"
+    },
+    "abandoned": {
+      "id": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+      "family": "carrying_load",
+      "variantKey": "fiber_sling",
+      "publicLabel": "fiber_sling",
+      "status": "active",
+      "confidence": 0.2,
+      "successCount": 1,
+      "partialCount": 0,
+      "failureCount": 2,
+      "formedAtTick": 400,
+      "lastActiveTick": 400,
+      "requiredFragmentIds": [
+        "fragment:material_property:fiber_cordage"
+      ],
+      "contextNote": "audit"
+    },
+    "mismatchRelief": {
+      "relief": 0,
+      "cap": 0.3,
+      "active": false,
+      "responseId": "practical-response:band:practical-audit:dry_route_water:stage_known_water:400",
+      "variantKey": "stage_known_water",
+      "reason": "no remembered watered destination on this journey — practice does not apply"
+    },
+    "mismatchEval": {
+      "family": "dry_route_water",
+      "responseId": "r",
+      "contextKey": "known_watered_destination",
+      "coefficient": "seasonalTravelBudget.water limiter",
+      "preEffectValue": 0.6,
+      "effectCap": 0.3,
+      "dangerDelta": -0.02,
+      "practiceDelta": 0,
+      "localityNote": "water-route practice applies only to journeys toward the band's own remembered watered places; it discovers no water and fades if those memories go stale",
+      "responseActive": true,
+      "classification": "context_mismatch",
+      "outcome": "mixed_feedback",
+      "effectAmount": 0,
+      "reason": "water-route relief consumed without a remembered watered destination — context mismatch, no credit"
+    },
+    "waterDanger": {
+      "family": "dry_route_water",
+      "responseId": "r",
+      "contextKey": "known_watered_destination",
+      "coefficient": "seasonalTravelBudget.water limiter",
+      "preEffectValue": 0.55,
+      "effectCap": 0.3,
+      "dangerDelta": 0.17,
+      "practiceDelta": 0,
+      "localityNote": "water-route practice applies only to journeys toward the band's own remembered watered places; it discovers no water and fades if those memories go stale",
+      "responseActive": true,
+      "classification": "failure_or_danger_specific",
+      "outcome": "dangerous_feedback",
+      "effectAmount": 0.22,
+      "reason": "the staged journey left the band drier (water stress 0.55 → 0.72) — the remembered water did not hold"
+    },
+    "dormantResponse": {
+      "id": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+      "family": "carrying_load",
+      "variantKey": "fiber_sling",
+      "publicLabel": "fiber_sling",
+      "status": "dormant",
+      "confidence": 0.6,
+      "successCount": 1,
+      "partialCount": 0,
+      "failureCount": 0,
+      "formedAtTick": 400,
+      "lastActiveTick": 399,
+      "requiredFragmentIds": [
+        "fragment:material_property:fiber_cordage"
+      ],
+      "contextNote": "audit"
+    },
+    "dormantRelief": {
+      "relief": 0,
+      "cap": 0,
+      "active": false,
+      "reason": "response dormant — its condition has not recurred",
+      "responseId": "practical-response:band:practical-audit:carrying_load:fiber_sling:400"
+    },
+    "rewokenResponse": {
+      "id": "practical-response:band:practical-audit:carrying_load:fiber_sling:400",
+      "family": "carrying_load",
+      "variantKey": "fiber_sling",
+      "publicLabel": "fiber_sling",
+      "status": "active",
+      "confidence": 0.6,
+      "successCount": 1,
+      "partialCount": 0,
+      "failureCount": 0,
+      "formedAtTick": 400,
+      "lastActiveTick": 400,
+      "requiredFragmentIds": [
+        "fragment:material_property:fiber_cordage"
+      ],
+      "contextNote": "audit"
+    },
+    "variety": {
+      "eagerId": "band:var-5",
+      "reluctantId": "band:var-2",
+      "eagerFormed": true,
+      "reluctantFormed": false,
+      "parallelA": [
+        "carrying_load:fiber_sling:forming"
+      ],
+      "parallelB": [
+        "carrying_load:fiber_sling:forming"
+      ]
+    }
+  },
+  "live": {
+    "dry": {
+      "scenario": "harsh_dry_margin",
+      "years": 40,
+      "totalBands": 5,
+      "bandsWithFragments": 5,
+      "totalFragments": 14,
+      "responsesByFamilyStatus": {
+        "carrying_load:forming": 3,
+        "proto_measure:forming": 1,
+        "water_storage:forming": 1,
+        "dry_route_water:forming": 1
+      },
+      "variantCounts": {
+        "load_staging": 3,
+        "load_tally_reckoning": 1,
+        "membrane_water_bag": 1,
+        "stage_known_water": 1
+      },
+      "recordsByClassification": {
+        "low_or_no_feedback_specific": 25
+      },
+      "unearnedConfidence": 0,
+      "maxCarryingCondition": 0.45,
+      "maxWaterCondition": 1,
+      "fragmentSubjects": {
+        "watered_route_reading": 4,
+        "journey_pacing": 4,
+        "one_to_one_count": 1,
+        "container_holding": 1,
+        "membrane_folding": 1,
+        "load_staging": 3
+      },
+      "recordReasonSamples": [
+        "carrying relief was active but changed neither the travel budget nor the realized hardship — no credit"
+      ],
+      "moveOutcomeCounts": {
+        "accepted": 16,
+        "delayed": 4
+      },
+      "moveLevelCounts": {
+        "moderate": 12,
+        "high": 8
+      },
+      "maxPracticalStateBytes": 18592
+    },
+    "river": {
+      "scenario": "river_barrier_frontier",
+      "years": 40,
+      "totalBands": 6,
+      "bandsWithFragments": 6,
+      "totalFragments": 15,
+      "responsesByFamilyStatus": {
+        "carrying_load:forming": 3,
+        "proto_measure:forming": 1,
+        "water_storage:forming": 1,
+        "dry_route_water:forming": 1
+      },
+      "variantCounts": {
+        "load_staging": 3,
+        "load_tally_reckoning": 1,
+        "membrane_water_bag": 1,
+        "stage_known_water": 1
+      },
+      "recordsByClassification": {
+        "low_or_no_feedback_specific": 33
+      },
+      "unearnedConfidence": 0,
+      "maxCarryingCondition": 0.45,
+      "maxWaterCondition": 1,
+      "fragmentSubjects": {
+        "watered_route_reading": 5,
+        "journey_pacing": 4,
+        "container_holding": 1,
+        "membrane_folding": 1,
+        "one_to_one_count": 1,
+        "load_staging": 3
+      },
+      "recordReasonSamples": [
+        "carrying relief was active but changed neither the travel budget nor the realized hardship — no credit"
+      ],
+      "moveOutcomeCounts": {
+        "accepted": 21,
+        "delayed": 3
+      },
+      "moveLevelCounts": {
+        "moderate": 16,
+        "high": 8
+      },
+      "maxPracticalStateBytes": 20990
+    },
+    "crowded": {
+      "scenario": "crowded_delta",
+      "years": 30,
+      "totalBands": 9,
+      "bandsWithFragments": 9,
+      "totalFragments": 23,
+      "responsesByFamilyStatus": {
+        "carrying_load:forming": 4,
+        "proto_measure:forming": 1,
+        "water_storage:forming": 1
+      },
+      "variantCounts": {
+        "load_staging": 4,
+        "load_tally_reckoning": 1,
+        "membrane_water_bag": 1
+      },
+      "recordsByClassification": {
+        "low_or_no_feedback_specific": 42
+      },
+      "unearnedConfidence": 0,
+      "maxCarryingCondition": 0.41,
+      "maxWaterCondition": 1,
+      "fragmentSubjects": {
+        "watered_route_reading": 8,
+        "journey_pacing": 8,
+        "load_staging": 4,
+        "container_holding": 1,
+        "membrane_folding": 1,
+        "one_to_one_count": 1
+      },
+      "recordReasonSamples": [
+        "carrying relief was active but changed neither the travel budget nor the realized hardship — no credit"
+      ],
+      "moveOutcomeCounts": {
+        "accepted": 34,
+        "delayed": 2
+      },
+      "moveLevelCounts": {
+        "moderate": 23,
+        "high": 13
+      },
+      "maxPracticalStateBytes": 20987
+    },
+    "long": {
+      "scenario": "baseline",
+      "years": 100,
+      "totalBands": 7,
+      "bandsWithFragments": 7,
+      "totalFragments": 30,
+      "responsesByFamilyStatus": {
+        "carrying_load:forming": 4,
+        "carrying_load:active": 1,
+        "proto_measure:forming": 1,
+        "water_storage:forming": 1
+      },
+      "variantCounts": {
+        "load_staging": 5,
+        "load_tally_reckoning": 1,
+        "membrane_water_bag": 1
+      },
+      "recordsByClassification": {
+        "low_or_no_feedback_specific": 36,
+        "clear_success_specific": 11,
+        "partial_success_specific": 1
+      },
+      "unearnedConfidence": 0,
+      "maxCarryingCondition": 0.35,
+      "maxWaterCondition": 0,
+      "fragmentSubjects": {
+        "one_to_one_count": 7,
+        "watered_route_reading": 7,
+        "journey_pacing": 7,
+        "load_staging": 7,
+        "container_holding": 1,
+        "membrane_folding": 1
+      },
+      "recordReasonSamples": [
+        "carrying relief was active but changed neither the travel budget nor the realized hardship — no credit",
+        "carrying response cut the move's dependent/elder hardship by ~0.01 and the move completed",
+        "carrying response eased the move's hardship but the burden still limited it"
+      ],
+      "moveOutcomeCounts": {
+        "accepted": 27,
+        "delayed": 1
+      },
+      "moveLevelCounts": {
+        "moderate": 17,
+        "high": 3,
+        "low": 8
+      },
+      "maxPracticalStateBytes": 24698
+    },
+    "refuge": {
+      "scenario": "late_dry_refuge_fallback",
+      "years": 30,
+      "totalBands": 5,
+      "bandsWithFragments": 5,
+      "totalFragments": 15,
+      "responsesByFamilyStatus": {
+        "carrying_load:forming": 3,
+        "proto_measure:forming": 1,
+        "water_storage:forming": 1,
+        "groundwater_seek:abandoned": 1
+      },
+      "variantCounts": {
+        "load_staging": 3,
+        "load_tally_reckoning": 1,
+        "membrane_water_bag": 1,
+        "seep_scrape": 1
+      },
+      "recordsByClassification": {
+        "low_or_no_feedback_specific": 34,
+        "failure_or_danger_specific": 2
+      },
+      "unearnedConfidence": 0,
+      "maxCarryingCondition": 0.41,
+      "maxWaterCondition": 1,
+      "fragmentSubjects": {
+        "watered_route_reading": 4,
+        "journey_pacing": 4,
+        "one_to_one_count": 1,
+        "container_holding": 1,
+        "membrane_folding": 1,
+        "load_staging": 3,
+        "groundwater_reading": 1
+      },
+      "recordReasonSamples": [
+        "carrying relief was active but changed neither the travel budget nor the realized hardship — no credit",
+        "seasons of digging found only dry ground — the reading was wrong here"
+      ],
+      "moveOutcomeCounts": {
+        "accepted": 17,
+        "delayed": 3
+      },
+      "moveLevelCounts": {
+        "moderate": 10,
+        "high": 10
+      },
+      "maxPracticalStateBytes": 27114
+    }
+  }
+}

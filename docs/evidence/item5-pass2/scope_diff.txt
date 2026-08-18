@@ -1,0 +1,16 @@
+Committed source diff from exact Pass-1 base through Pass-2 production commit:
+M	src/sim/agents/inventionChain.ts
+M	src/sim/agents/practicalResponses.ts
+M	src/sim/agents/types.ts
+M	src/ui/band/IdeasSolutions.tsx
+
+All committed files through Pass-2 production commit:
+A	docs/evidence/item5-pass2/provenance_red.command
+A	docs/evidence/item5-pass2/provenance_red.exit
+A	docs/evidence/item5-pass2/provenance_red.stderr
+A	docs/evidence/item5-pass2/provenance_red.stdout
+A	scripts/item5PhysicalEffectProvenanceAudit.mjs
+M	src/sim/agents/inventionChain.ts
+M	src/sim/agents/practicalResponses.ts
+M	src/sim/agents/types.ts
+M	src/ui/band/IdeasSolutions.tsx

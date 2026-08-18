@@ -1,0 +1,16 @@
+cert_01_provenance.exit                      0
+cert_02_tsc_app.exit                         0
+cert_03_tsc_node.exit                        0
+cert_04_build.exit                           0
+cert_05_adaptation_boundary.exit             0
+cert_06_expedition_adaptation.exit           0
+cert_07_fission_transfer.exit                0
+cert_08_item4_whole.exit                     0
+cert_09_map2_50y_repeat.exit                 0
+cert_10_targeted_practical.exit              0
+cert_11_targeted_efficacy.exit               0
+cert_12_targeted_routines2.exit              0
+provenance_red.exit (must fail)              1
+provenance_green.exit                        0
+mutation.exit (must fail)                    1
+diagnostic_pass1_hash_gate.exit (expected historical hash pin) 1

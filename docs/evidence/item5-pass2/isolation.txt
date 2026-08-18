@@ -1,0 +1,38 @@
+branch=checkpoint/item5-physical-effect-provenance-pass2
+head_at_evidence_prep=2d7251d4456ba52e98b6ebaddd51c54a5f5575f9
+required_base=31ced032d901e81d9d6ce56aedd997c31df1d258
+merge_base_with_required_base=31ced032d901e81d9d6ce56aedd997c31df1d258
+red_commit=f91f84d7ff7ed0a15db449ad64b4dd43ae8736ed
+production_commit=2d7251d4456ba52e98b6ebaddd51c54a5f5575f9
+upstream=none
+--- worktrees ---
+worktree /Users/fellipegoncalvesleite/society-engine
+HEAD 11f085930462f981fcca45faf37b67d961196adb
+branch refs/heads/checkpoint/dynamic-fission-provisional-successor-38
+
+worktree /private/tmp/society-engine-item4-finalcert
+HEAD 717ffd908c6e0f993670e2343d0b91bca74b383c
+detached
+
+worktree /private/tmp/society-engine-item4-precert
+HEAD b661d41393ec95e0d119d9e0c9855382e3b0fb7e
+detached
+
+worktree /Users/fellipegoncalvesleite/.worktrees/society-engine-item5-adaptation-authority-pass1
+HEAD 31ced032d901e81d9d6ce56aedd997c31df1d258
+branch refs/heads/checkpoint/item5-adaptation-authority-pass1
+
+worktree /Users/fellipegoncalvesleite/.worktrees/society-engine-item5-physical-effect-provenance-pass2
+HEAD 2d7251d4456ba52e98b6ebaddd51c54a5f5575f9
+branch refs/heads/checkpoint/item5-physical-effect-provenance-pass2
+
+worktree /Users/fellipegoncalvesleite/.worktrees/society-engine/item4-natural-physical-cutover
+HEAD bc397de96efb319c4cbc2363da0caff44fa11fbb
+branch refs/heads/item4/natural-physical-cutover
+
+--- branch vv ---
++ checkpoint/dynamic-fission-provisional-successor-38 11f0859 (/Users/fellipegoncalvesleite/society-engine) [origin/checkpoint/dynamic-fission-provisional-successor-38] chore: freeze roadmap item 4
++ checkpoint/item5-adaptation-authority-pass1         31ced03 (/Users/fellipegoncalvesleite/.worktrees/society-engine-item5-adaptation-authority-pass1) docs: open roadmap item 5 authority consolidation
+* checkpoint/item5-physical-effect-provenance-pass2   2d7251d fix: require provenance for item5 physical effects
++ item4/natural-physical-cutover                      bc397de (/Users/fellipegoncalvesleite/.worktrees/society-engine/item4-natural-physical-cutover) [origin/item4/natural-physical-cutover] test: certify natural physical fission cutover
+  main                                                e74e7e8 [origin/main] Complete Society Engine rebrand

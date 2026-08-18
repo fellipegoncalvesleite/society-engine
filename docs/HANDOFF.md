@@ -11,10 +11,13 @@
 ## CURRENT AUTHORITY / CURRENT STATUS — 2026-08-18
 
 - Roadmap Item 4 is **CLOSED / ACCEPTED / FROZEN** at `11f085930462f981fcca45faf37b67d961196adb`.
-- Roadmap Item 5 is open with the controlled adaptation-authority consolidation Pass 1.
-- `band.practicalAdaptation` is the canonical Item-5 adaptation/history authority.
-- `band.adaptiveHuman` is legacy compatibility state only, routed for production compatibility through `src/sim/agents/legacyAdaptiveHumanCompatibility.ts`.
-- Physical artifact/material execution debt remains **OPEN** and is explicitly not solved by this pass.
+- Roadmap Item 5 remains **OPEN / NOT FROZEN**. Physical-effect provenance Pass 2 is implemented on `checkpoint/item5-physical-effect-provenance-pass2` from exact Pass-1 base `31ced032d901e81d9d6ce56aedd997c31df1d258`; production commit `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`.
+- `band.practicalAdaptation` remains the canonical Item-5 adaptation/history authority; `band.adaptiveHuman` remains legacy compatibility state only, routed through `src/sim/agents/legacyAdaptiveHumanCompatibility.ts`.
+- `practicalResponses.ts` now classifies every variant as `practice_only`, `existing_physical_work`, or `material_execution_required`. Practice-only responses retain bounded forming/active effects. Material-required responses have **zero physical effect and zero efficacy maturation without execution proof**.
+- Existing persisted `waterWorks` remains the physical authority for groundwater work. No portable material inventory, crafting, resource-stock, or execution store was introduced; portable-material execution proof remains the next explicit debt rather than being fabricated from plans or labels.
+- `PracticalExperiment.materials` / procedure / labor / risk / opportunity fields are planned/estimated requirements, not claims of acquisition, consumption, execution, or paid cost. The Ideas/Solutions UI labels them accordingly.
+- No coefficients were tuned and `src/sim/agents/adaptiveEfficacy.ts` is unchanged at SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`.
+- Pass 3, Item-5 freeze, merge, and push are **NOT STARTED**. `src/architecture/graphData.ts` remains documentation/discovery only and never simulation authority.
 
 ---
 
@@ -189,6 +192,18 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 ---
 
 ## Current Status
+
+### ROADMAP ITEM 5 — PHYSICAL-EFFECT PROVENANCE PASS 2 — **IMPLEMENTED / CERTIFIED / ITEM 5 STILL OPEN / NOT FROZEN / NOT PUSHED**
+
+This checkpoint starts from exact Pass-1 HEAD `31ced032d901e81d9d6ce56aedd997c31df1d258` in isolated branch `checkpoint/item5-physical-effect-provenance-pass2`. RED on untouched Pass-1 production reproduced both missing-provenance paths: an active learned `membrane_water_bag` manufactured carried-water relief and raised effective storage from `0.16` to `0.22` without any executed artifact, and synthetic success/failure efficacy matured/interpreted the same unexecuted material response. Positive controls proved `load_staging` practice and persisted `waterWorks` were already live.
+
+Pass 2 adds one execution-provenance class to every variant and enforces it centrally in `practicalResponses.ts`. `practice_only` remains physically causal through the existing fragment/response basis; `existing_physical_work` can be admitted only by its persisted authority (`waterWorks` in this pass); `material_execution_required` is physically inert until an execution authority exists. The same central gate filters response-bound efficacy before response lifecycle, experiment conclusion, efficacy-record, and fragment success/failure consumers. `deriveShelterPortabilityBurden` is also gated because it was the same-module physical coefficient bypassing the common relief seam. No downstream physical consumer was patched and `adaptiveEfficacy.ts` was not changed.
+
+GREEN proves forming and active load-staging relief remain nonzero (`0.08` and `0.26`), unexecuted membrane storage remains at baseline `0.16`, unexecuted material success/failure leaves the response forming with zero attempts/records, practice-only efficacy still matures normally, and existing waterworks relief remains `0.12`. A reversible mutation restoring `material_execution_required -> true` reproduces the old magic storage/lifecycle effect and is caught by the new audit; restoration SHA-256 is byte-identical (`d59c22929c40641d2bbdec84edb9b49cabd3e0b8c3ca05dc30396ff3ccc19a04` before and after). Both TypeScript projects, production build, adaptation boundary, expedition/practice efficacy, fission transfer, Item-4 integration, all three targeted adaptation regressions, and a deterministic 50-year Map-2 repeat pass. The repeat fingerprint is `f509b2f4d6e8a463b7505025afe22d151fd45a0598bd9550fbb84aac900da03c` in both runs; the natural arm attempts 8 adaptations and makes 3 effective, so the corrected system is not vacuous.
+
+The historical Pass-1 authority audit now fails only its intentional frozen-source hash pin for `practicalResponses.ts`; every actual authority check remains true and the `adaptiveEfficacy.ts` hash remains unchanged. That diagnostic is retained rather than weakening or rewriting the historical audit. `PracticalExperiment` and Ideas/Solutions wording now state that materials/procedure/cost fields are planned/estimated requirements, not execution or consumption evidence. No inventory/crafting/resource-stock model exists.
+
+Worktree while this handoff record is being prepared is dirty only with Pass-2 evidence/documentation. Final clean-tree verification is an external close gate after this record is committed. No merge or push has been performed. Pass 3 and Item-5 freeze are not started.
 
 ### ROADMAP ITEM 4 — FAILED-RETURN RESOLUTION / FRESH SURVIVOR COMMITMENT / DISTINCT POST-RETURN ESTABLISHMENT — **PROGRESS / NATURAL DEPARTURE STILL DISCONNECTED / ITEM 4 ACTIVE / ITEM 5 UNSTARTED**
 
@@ -9104,12 +9119,11 @@ UI in `src/ui/BandPanel.tsx`, audit + `--targeted-cause-event-check` in
 
 ## Recommended Next Step
 
-**CURRENT (ROADMAP ITEM 4, 2026-08-11).** The exact next dependency is a separately authorized pass
-to resolve the living `unresolved_after_failed_return` state without using stabilization as an escape
-hatch. **Do not implement it in this checkpoint.** Only after that boundary is closed should a later
-physical-cutover pass connect naturally `departure_ready` attempts to `performAtomicDeparture` while
-permanently bypassing the legacy daughter call without rewriting/deleting `createDaughterBand` and
-proving no legacy/new duplicate can occur. Item 5 remains unstarted.
+**CURRENT (ROADMAP ITEM 5, 2026-08-18).** Pass 2 stops after physical-effect provenance. The next
+separately authorized Item-5 work, if approved, is to define a real portable-material execution
+authority/proof before any material-required response may regain physical effect or efficacy. Do not
+invent inventory, crafting, stock, or consumed-material state merely to make these responses active.
+Do not begin Pass 3, declare Item 5 frozen, merge, or push as part of this checkpoint.
 
 ---
 
@@ -9639,6 +9653,8 @@ exception; daughter colours related-but-distinct and never visually confusing.
 ---
 
 ## Checkpoint Log
+
+- **ROADMAP ITEM 5 — PHYSICAL-EFFECT PROVENANCE PASS 2** (`checkpoint/item5-physical-effect-provenance-pass2`, exact base `31ced032d901e81d9d6ce56aedd997c31df1d258`, production `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`) — RED reproduced learned-material magic storage (`0.16 -> 0.22`) and unproven efficacy maturation; every variant now carries an execution class and the central `practicalResponses.ts` seam permits practice-only effects, preserves persisted `waterWorks`, and blocks portable material effects/efficacy without execution proof. Practice remains non-vacuous; no coefficients, inventory/crafting/resource stock, Item-4 logic, downstream physical consumers, or `adaptiveEfficacy.ts` formulas changed. Mutation catches the old path and restores byte-identically; full Pass-2 certification including deterministic 50-year Map-2 repeat is green. Item 5 remains open; Pass 3/freeze/merge/push not started.
 
 - **ROADMAP ITEM 4 — NATURAL PRE-DEPARTURE REACHABILITY + PARENT ATTEMPT DEADLINE AUTHORITY** (`checkpoint/dynamic-fission-provisional-successor-38`, continuing recovered tip `22da95c`) — architecture A+C preserves annual demographic causality while a dedicated adapter opens and progresses bounded parent attempts one phase per day. Natural proposal and planning are demonstrated on an untouched seed; canonical positive commitment and live permit are reachable under a controlled real condition; the daily parent deadline resolver precedes progression and ready timeout withdraws the permit. `createDaughterBand` unchanged/zero calls, preparation one natural caller, physical seam zero natural callers. A–M 13/13, mutations 7/7, full regressions green. Item 4 remains active; no physical cutover, stabilization, failed-return resolution or Item-5 work.
 

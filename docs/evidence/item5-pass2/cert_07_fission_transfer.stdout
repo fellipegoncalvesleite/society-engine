@@ -1,0 +1,20 @@
+{
+  "fixtures": 12,
+  "passing": 12,
+  "failing": 0,
+  "vacuous": 0,
+  "bandFieldsClassified": 136,
+  "fieldsStillHoldingTheParentsObject": 5
+}
+PASS    T1_policy_covers_every_band_field
+PASS    T2_every_field_carries_a_class_and_a_reason
+PASS    T3_derived_legacy_registry_matches_the_retained_literal
+PASS    T4_legacy_debt_is_published_not_silently_repaired
+PASS    T5_constructed_successor_violates_nothing_and_shares_only_what_is_permitted
+PASS    T6_knowledge_transfers_partially_not_perfectly
+PASS    T7_no_free_material_or_residential_capability
+PASS    T8_embodied_burden_travels_re_identified_and_never_softens
+PASS    T9_identity_is_new_but_location_is_not
+PASS    T10_negative_control_the_guard_catches_a_laundered_field_in_every_enforcing_class
+PASS    T11_structural_resets_come_from_the_table_not_from_a_hand_written_list
+PASS    T12_the_constructed_successor_is_deterministic

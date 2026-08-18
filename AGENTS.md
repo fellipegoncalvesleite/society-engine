@@ -16,11 +16,15 @@
 > This block supersedes older “current”, “active checkpoint”, and “Item 5 unstarted” wording preserved below as historical checkpoint record.
 
 - Roadmap Item 4 is **CLOSED / ACCEPTED / FROZEN** at `11f085930462f981fcca45faf37b67d961196adb`.
-- Roadmap Item 5 is open with the controlled adaptation-authority consolidation Pass 1.
-- `band.practicalAdaptation` is the canonical Item-5 adaptation/history authority.
-- `band.adaptiveHuman` is **LEGACY / COMPATIBILITY / NON-CANONICAL** state; production compatibility routes through `src/sim/agents/legacyAdaptiveHumanCompatibility.ts`.
-- Physical artifact/material execution debt remains **OPEN** and is explicitly not solved by this pass.
-- `src/architecture/graphData.ts` is documentation/discovery only and never simulation authority.
+- Roadmap Item 5 remains **OPEN / NOT FROZEN**. Physical-effect provenance Pass 2 is implemented on `checkpoint/item5-physical-effect-provenance-pass2` from exact Pass-1 base `31ced032d901e81d9d6ce56aedd997c31df1d258`; production commit `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`.
+- `band.practicalAdaptation` remains the canonical Item-5 adaptation/history authority; `band.adaptiveHuman` remains **LEGACY / COMPATIBILITY / NON-CANONICAL** state routed through `src/sim/agents/legacyAdaptiveHumanCompatibility.ts`.
+- `practicalResponses.ts` now classifies every variant as `practice_only`, `existing_physical_work`, or `material_execution_required`. Practice-only responses retain bounded forming/active effects. Material-required responses have **zero physical effect and zero efficacy maturation without execution proof**.
+- Existing persisted `waterWorks` remains the physical authority for groundwater work. No portable material inventory, crafting, resource-stock, or execution store was introduced; portable-material execution proof remains the next explicit debt rather than being fabricated from plans or labels.
+- `PracticalExperiment.materials` / procedure / labor / risk / opportunity fields are planned/estimated requirements, not claims of acquisition, consumption, execution, or paid cost. The Ideas/Solutions UI labels them accordingly.
+- No coefficients were tuned and `src/sim/agents/adaptiveEfficacy.ts` is unchanged at SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`.
+- Pass 3, Item-5 freeze, merge, and push are **NOT STARTED**. `src/architecture/graphData.ts` remains documentation/discovery only and never simulation authority.
+- Current checkpoint branch: `checkpoint/item5-physical-effect-provenance-pass2`; exact Pass-1 base `31ced032d901e81d9d6ce56aedd997c31df1d258`; Pass-2 production commit `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`.
+- Older freshness/update lines below are retained as historical record and are superseded by this 2026-08-18 authority block.
 
 ## 0. Freshness and evidence warning
 
