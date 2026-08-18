@@ -193,7 +193,7 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 
 ## Current Status
 
-### ROADMAP ITEM 5 — PHYSICAL-EFFECT PROVENANCE PASS 2 — **IMPLEMENTED / CERTIFIED / ITEM 5 STILL OPEN / NOT FROZEN / NOT PUSHED**
+### ROADMAP ITEM 5 — PHYSICAL-EFFECT PROVENANCE PASS 2 — **IMPLEMENTED / CERTIFIED / ITEM 5 STILL OPEN / NOT FROZEN / PUSHED FOR INDEPENDENT REVIEW / NOT MERGED**
 
 This checkpoint starts from exact Pass-1 HEAD `31ced032d901e81d9d6ce56aedd997c31df1d258` in isolated branch `checkpoint/item5-physical-effect-provenance-pass2`. RED on untouched Pass-1 production reproduced both missing-provenance paths: an active learned `membrane_water_bag` manufactured carried-water relief and raised effective storage from `0.16` to `0.22` without any executed artifact, and synthetic success/failure efficacy matured/interpreted the same unexecuted material response. Positive controls proved `load_staging` practice and persisted `waterWorks` were already live.
 
@@ -205,7 +205,7 @@ The historical Pass-1 authority audit now fails only its intentional frozen-sour
 
 Final committed-HEAD verification also caught a certification-instrument error: `--targeted-practical-adaptation-check` and `--targeted-routines-2-check` returned exit 0 while their JSON said `"passed": false`, because those fixtures still expected learned material plans to have physical/lifecycle authority. The stale outputs are preserved. Test-only commit `caeac19845c41e60a2d0740ac8c224d53d0813b9` moves generic carrying lifecycle coverage to `practice_only` `load_staging` and turns the material engineering expectations into explicit no-execution-proof guards. No production source changed. The entire 12-gate battery was rerun with semantic parsing; all gates now pass and all three targeted payloads report `"passed": true` with zero false assertions.
 
-Worktree while this handoff record is being prepared is dirty only with Pass-2 evidence/documentation. Final clean-tree verification is an external close gate after this record is committed. No merge or push has been performed. Pass 3 and Item-5 freeze are not started.
+The checkpoint branch was subsequently pushed only for independent architect review. Before this documentation-drift correction commit, remote checkpoint HEAD is `75a9f5b1ec47b804e190161b6e652e30d09f150d`. No merge to `main` has occurred. Pass 3 has not started. Item 5 remains open and is not frozen.
 
 ### ROADMAP ITEM 4 — FAILED-RETURN RESOLUTION / FRESH SURVIVOR COMMITMENT / DISTINCT POST-RETURN ESTABLISHMENT — **PROGRESS / NATURAL DEPARTURE STILL DISCONNECTED / ITEM 4 ACTIVE / ITEM 5 UNSTARTED**
 

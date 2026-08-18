@@ -20,7 +20,7 @@
 // made/used. Two bands can reach the same label through different histories, or
 // never form one at all.
 //
-// IMPLEMENTED (behavior-driving) families:
+// IMPLEMENTED response families:
 //   * carrying_load  — condition: sustained carrying/care burden on residential
 //     travel; effect: bounded relief on the travel plan's carry-constraint and
 //     vulnerable-share limiters + a capped reduction of the dependent/elder
@@ -29,9 +29,11 @@
 //     pressure; effect: bounded relief on the travel plan's water-stress
 //     limiter, ONLY when the scored destination is one of the band's own
 //     remembered watered places (staging between known water points).
-//   * engineering_structure — condition: a real attempted temporary-watercraft
-//     crossing; effect: capped relief on that crossing's expected-safety
-//     coefficient, only where multiple components were learned in context.
+//   * engineering_structure — problem/fragments/ideas/responses/experiment plans
+//     may still form; its variants are material_execution_required, so without
+//     a separate physical execution authority they grant zero crossing-safety
+//     relief and zero material efficacy maturation. Pass 2 intentionally does
+//     not create that material execution authority.
 //
 // DECLARED-ONLY response families (registry below documents what real substrate
 // each still needs): hunting_distance, temporary_shelter, water_storage and
