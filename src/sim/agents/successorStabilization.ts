@@ -13,7 +13,7 @@
  * line, and receive a non-return verdict from the canonical return authority. A window may span
  * multiple tiles, so independent operation is not redefined as sedentary residence.
  */
-import { createStabilizedSuccessorDeepHistory } from "./bandHistory";
+import { createStabilizedSuccessorDeepHistory, projectSuccessorSeparationLifecycleHistory } from "./bandHistory";
 import { isEstablishedBand, isProvisionalSuccessor } from "./bandLifecycle";
 import { deriveBandLineageReadability } from "./bandEvents";
 import {
@@ -499,13 +499,28 @@ export function advanceSuccessorStabilization(
       refuse("kernel_refused_stabilization", transition.rejection, evidence);
       continue;
     }
+    const terminalHistorySuccessor: Band = {
+      ...closed,
+      provisionalSuccessor: {
+        ...closedRecord,
+        phase: transition.state.phase,
+        phaseEnteredDay: transition.state.phaseEnteredDay,
+        history: transition.state.history,
+      },
+    };
+    const terminalDeepHistory = projectSuccessorSeparationLifecycleHistory(
+      deepHistory,
+      provenance.departure,
+      terminalHistorySuccessor,
+      time.year,
+    );
     const release = applySuccessorQuarantineRelease({
       world: current,
       successor: closed,
       transitionState: transition.state,
       lineage,
       event,
-      deepHistory,
+      deepHistory: terminalDeepHistory,
       operationHistory: closedOperationHistory,
     });
     if (release.ok !== true) {

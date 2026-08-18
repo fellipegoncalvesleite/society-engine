@@ -39,7 +39,7 @@
  * atomic history/release writes. Parent terminality is never supplied to the decision.
  */
 import { deriveBandLineageReadability } from "./bandEvents";
-import { createPostReturnEstablishedSuccessorDeepHistory } from "./bandHistory";
+import { createPostReturnEstablishedSuccessorDeepHistory, projectSuccessorSeparationLifecycleHistory } from "./bandHistory";
 import { isEstablishedBand, isProvisionalSuccessor } from "./bandLifecycle";
 import {
   requestTransition,
@@ -923,13 +923,28 @@ export function advancePostReturnEstablishment(
       refusals.push({ successorBandId: String(successor.id), day: today, refusal: transition.rejection });
       continue;
     }
+    const terminalHistorySuccessor: Band = {
+      ...closed,
+      provisionalSuccessor: {
+        ...closedRecord,
+        phase: transition.state.phase,
+        phaseEnteredDay: transition.state.phaseEnteredDay,
+        history: transition.state.history,
+      },
+    };
+    const terminalDeepHistory = projectSuccessorSeparationLifecycleHistory(
+      deepHistory,
+      provenance.departure,
+      terminalHistorySuccessor,
+      time.year,
+    );
     const released = applyPostReturnRelease({
       world: current,
       successor: closed,
       transitionState: transition.state,
       lineage,
       event,
-      deepHistory,
+      deepHistory: terminalDeepHistory,
       operationHistory: closedHistory,
     });
     if (released === undefined) {

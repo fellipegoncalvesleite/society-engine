@@ -3988,6 +3988,8 @@ function deepEpisodeTitle(type: BandChronicleDeepHistoryEpisodeRecord["type"]): 
       return "Population recovered";
     case "daughter_branch_formed":
       return "Branch formed";
+    case "successor_separation_lifecycle":
+      return "Successor separation";
     case "long_hunger_period":
       return "Long hunger period";
     case "water_caution_period":
@@ -4041,6 +4043,8 @@ function deepEpisodeSummary(episode: BandChronicleDeepHistoryEpisodeRecord): str
       return finiteHistoryNumber(d.daughterPopulation) === undefined
         ? "A daughter band formed in the durable record."
         : `A daughter band began with ${d.daughterPopulation} people.`;
+    case "successor_separation_lifecycle":
+      return episode.summary;
     case "long_hunger_period":
       return finiteHistoryNumber(d.streakSeasons) === undefined
         ? "Hunger pressure lasted long enough to become a durable episode."
@@ -4103,6 +4107,8 @@ function evidenceKindLabel(kind: string): string {
       return "split record";
     case "successor_departure_event":
       return "physical departure record";
+    case "successor_lifecycle_record":
+      return "successor lifecycle record";
     case "successor_stabilization_event":
       return "independent founding record";
     case "post_return_continuation_commitment":

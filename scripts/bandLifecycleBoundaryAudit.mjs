@@ -60,7 +60,7 @@ const MATRIX_MODULES = [
   { file: "src/sim/agents/relationshipMemory.ts", action: "pair guard", status: "non_applicable" },
   { file: "src/sim/agents/bodyCampLogistics.ts", action: "adapter", status: "non_applicable" },
   { file: "src/sim/agents/bandEvents.ts", action: "provisional lineage readability adapter", status: "cutover_satisfied" },
-  { file: "src/sim/agents/bandHistory.ts", action: "deep-history lifecycle projection adapter", status: "final_freeze_debt" },
+  { file: "src/sim/agents/bandHistory.ts", action: "deep-history lifecycle projection adapter", status: "migrated" },
   { file: "src/sim/runner/simRunner.ts", action: "provisional UI projection adapter", status: "cutover_satisfied" },
 ];
 
@@ -77,8 +77,8 @@ const CUTOVER_PENDING_REVIEW = [
   {
     file: "src/sim/agents/bandHistory.ts",
     classification: "B",
-    outcome: "final_freeze_debt",
-    reason: "deep-history annual projection still lacks a first-class departure/travel/return/reintegration episode; current state and bandEvents are readable, so this is product/history integration debt rather than physical-cutover correctness",
+    outcome: "resolved_in_final_freeze",
+    reason: "final freeze requires deep history to consume the canonical lifecycle boundary and project bounded successor separation history without becoming a lifecycle authority",
   },
   {
     file: "src/sim/agents/demography.ts",
@@ -203,6 +203,23 @@ for (const full of files) {
     } else if (entry.status === "final_freeze_debt") {
       pending.push({ file: rel, action: entry.action, importsBoundary, status: entry.status });
     }
+  }
+}
+
+// ── final-freeze B-class reader check: deep history is a canonical lifecycle projection ───────
+const bandHistoryRaw = readFileSync(join(ROOT, "src/sim/agents/bandHistory.ts"), "utf8");
+const bandHistoryRequirements = [
+  ["imports_isBandTerminal", /import\s*\{[^}]*isBandTerminal[^}]*\}\s*from\s*["']\.\/bandLifecycle["']/s],
+  ["imports_isProvisionalSuccessor", /import\s*\{[^}]*isProvisionalSuccessor[^}]*\}\s*from\s*["']\.\/bandLifecycle["']/s],
+  ["projects_successor_separation_lifecycle", /successor_separation_lifecycle/],
+  ["reads_successor_departure_records", /successorDepartureRecords/],
+  ["joins_successor_by_recorded_identity", /departure\.successorBandId/],
+  ["joins_lifecycle_by_lineage", /lineageId/],
+  ["records_canonical_lifecycle_evidence", /successor_lifecycle_record/],
+];
+for (const [name, pattern] of bandHistoryRequirements) {
+  if (!pattern.test(bandHistoryRaw)) {
+    violations.push({ kind: "band_history_final_freeze_projection_requirement_missing", file: "src/sim/agents/bandHistory.ts", requirement: name });
   }
 }
 
@@ -335,6 +352,9 @@ const out = {
     cutoverSatisfiedReaders: MATRIX_MODULES.filter((m) => m.status === "cutover_satisfied").length,
     nonApplicableReaderRows: MATRIX_MODULES.filter((m) => m.status === "non_applicable").length,
     finalFreezeDebtReaders: MATRIX_MODULES.filter((m) => m.status === "final_freeze_debt").length,
+    totalReaderRows: MATRIX_MODULES.length,
+    resolvedReaderRows: MATRIX_MODULES.length - pending.length,
+    readerBoundaryStatus: `${MATRIX_MODULES.length - pending.length}/${MATRIX_MODULES.length}`,
     pendingReaders: pending.length,
     pendingAdapters: pending.filter((p) => p.action.includes("adapter")).length,
     pendingGuards: pending.filter((p) => p.action.includes("guard")).length,
@@ -347,7 +367,7 @@ const out = {
     // and folding them into one PASS is exactly how a half-finished migration looks finished.
     migratedScopeStructurallyClean: violations.length === 0,
     inheritedMigrationStatus: "5/12 at accepted checkpoint",
-    cutoverReviewStatus: `${MATRIX_MODULES.length - MATRIX_MODULES.filter((m) => m.status === "final_freeze_debt").length}/${MATRIX_MODULES.length} rows resolved for physical cutover; ${MATRIX_MODULES.filter((m) => m.status === "final_freeze_debt").length} explicit final-freeze debt`,
+    cutoverReviewStatus: `${MATRIX_MODULES.length - pending.length}/${MATRIX_MODULES.length} reader rows resolved for final Item-4 freeze; ${pending.length} pending`,
     verdict:
       violations.length > 0 ? "FAIL" : pending.length > 0 ? "INCOMPLETE_FINAL_FREEZE_DEBT" : "PASS",
     verdictNote:
@@ -366,7 +386,7 @@ if (violations.length > 0) {
   console.log("\nVIOLATIONS:");
   for (const v of violations) console.log(`  ${v.kind}  ${v.file}${v.line ? `:${v.line}` : ""}${v.name ? ` (${v.name})` : ""}`);
 }
-console.log(`\nexplicit final-freeze debt (${pending.length}, not falsely marked complete):`);
+console.log(`\nfinal-freeze reader debt (${pending.length}):`);
 for (const p of pending) console.log(`  ${p.file}  [${p.action}]`);
 console.log(`\nwritten: ${OUT}`);
 if (violations.length > 0) process.exitCode = 1;

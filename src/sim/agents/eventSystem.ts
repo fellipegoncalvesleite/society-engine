@@ -1236,6 +1236,7 @@ function episodeFamily(type: BandEpisodeType): CanonicalEventFamily {
     case "band_collapsed_end":
       return "demography";
     case "daughter_branch_formed":
+    case "successor_separation_lifecycle":
       return "origin_lineage";
     case "route_became_memory":
     case "hard_crossing_remembered":
@@ -1334,6 +1335,8 @@ function episodeTitle(type: BandEpisodeType): string {
       return "Population recovered";
     case "daughter_branch_formed":
       return "Daughter branch formed";
+    case "successor_separation_lifecycle":
+      return "Successor separation lifecycle";
     case "long_hunger_period":
       return "Long hunger period";
     case "water_caution_period":
@@ -1367,6 +1370,8 @@ function episodeConsequence(type: BandEpisodeType): string {
       return "Known country grew enough to survive compression.";
     case "daughter_branch_formed":
       return "The branch becomes a link between parent history and a new band record.";
+    case "successor_separation_lifecycle":
+      return "Physical separation and its retained outcome survive as bounded lineage history.";
     default:
       return "The episode survived compression because it had grounded evidence and enough significance.";
   }
@@ -1393,6 +1398,8 @@ function episodeActualCause(type: BandEpisodeType): string {
       return "Pressure history evidence";
     case "daughter_branch_formed":
       return "Fission record";
+    case "successor_separation_lifecycle":
+      return "Physical successor lifecycle record";
     case "band_absorbed_end":
       return "Terminal absorption record";
   }
