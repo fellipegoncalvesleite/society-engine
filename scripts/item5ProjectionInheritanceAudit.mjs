@@ -345,6 +345,17 @@ try {
     { ...experiments[0], attemptSeasons: 1, status: "underway" },
     [clearSuccessEfficacy],
   );
+  const mixedFeedbackEfficacy = {
+    id: "efficacy:audit:mixed-feedback",
+    responseId: activeLoadResponse.id,
+    family: "carrying_load",
+    classification: "context_mismatch",
+    outcome: "mixed_feedback",
+  };
+  const efficacyMixedFeedbackProbe = lifecycleProbe(
+    { ...experiments[0], attemptSeasons: 1, status: "underway" },
+    [mixedFeedbackEfficacy],
+  );
   const groundwaterIdea = {
     ...canonicalIdea,
     id: "idea:audit:groundwater-work",
@@ -592,6 +603,13 @@ try {
       efficacySuccessProbe.item?.readinessStatus === "learning_ready_later" &&
       projected.practiceCandidates[1]?.status === "blocked_by_missing_material" &&
       materialReadinessItem?.readinessStatus === "blocked_by_material",
+    canonicalMixedFeedbackEfficacyIsPreserved:
+      efficacyMixedFeedbackProbe.candidate?.canonical?.efficacyRecordIds.join("|") === mixedFeedbackEfficacy.id &&
+      efficacyMixedFeedbackProbe.item?.canonical?.efficacyRecordIds.join("|") === mixedFeedbackEfficacy.id &&
+      efficacyMixedFeedbackProbe.candidate?.expectedFeedbackType === "mixed_feedback" &&
+      efficacyMixedFeedbackProbe.item?.feedbackType === "mixed_feedback" &&
+      efficacyMixedFeedbackProbe.item?.feedbackQuality === "mixed" &&
+      efficacyMixedFeedbackProbe.item?.readinessStatus === "repeated_mixed_feedback",
     canonicalProblemBasisUsesProblemOriginOnly:
       emptyFragmentLivedProfile.problemFrames[0]?.livedBasis === "lived" &&
       emptyFragmentLivedProfile.problemFrames[0]?.inheritedEvidenceCount === 0,

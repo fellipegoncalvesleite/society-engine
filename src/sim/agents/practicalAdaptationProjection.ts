@@ -25,8 +25,9 @@ import type {
   PracticeFeedbackRisk,
 } from "./practiceFeedbackReadiness";
 import type {
-  Band,
+  AdaptiveAttemptOutcome,
   AdaptiveEfficacyRecord,
+  Band,
   PracticalAdaptationState,
   PracticalExperiment,
   PracticalIdeaCandidate,
@@ -190,16 +191,25 @@ interface CanonicalFeedbackPresentation {
 }
 
 function feedbackFromEfficacy(record: AdaptiveEfficacyRecord): CanonicalFeedbackPresentation {
-  switch (record.outcome) {
+  const outcome: AdaptiveAttemptOutcome = record.outcome;
+  switch (outcome) {
     case "clear_success": return { feedbackType: "clear_success", feedbackQuality: "clear" };
-    case "partial_success": return { feedbackType: "mixed_feedback", feedbackQuality: "mixed" };
     case "clear_failure": return { feedbackType: "clear_failure", feedbackQuality: "clear" };
-    case "dangerous_feedback": return { feedbackType: "dangerous_feedback", feedbackQuality: "dangerous" };
+    case "partial_success": return { feedbackType: "mixed_feedback", feedbackQuality: "usable" };
+    case "mixed_feedback": return { feedbackType: "mixed_feedback", feedbackQuality: "mixed" };
     case "low_feedback": return { feedbackType: "low_feedback", feedbackQuality: "weak" };
+    case "delayed_feedback": return { feedbackType: "delayed_feedback", feedbackQuality: "delayed" };
+    case "dangerous_feedback": return { feedbackType: "dangerous_feedback", feedbackQuality: "dangerous" };
+    case "local_only_success": return { feedbackType: "local_only_success", feedbackQuality: "usable" };
+    case "contradicted_by_event": return { feedbackType: "contradicted_by_recent_events", feedbackQuality: "contradicted" };
+    case "false_confidence": return { feedbackType: "mixed_feedback", feedbackQuality: "mixed" };
+    case "dead_end": return { feedbackType: "clear_failure", feedbackQuality: "weak" };
+    case "blocked_before_attempt":
+    case "too_labor_heavy":
+      return { feedbackType: "delayed_feedback", feedbackQuality: "blocked" };
   }
-  return record.classification === "failure_or_danger_specific" || record.classification === "context_mismatch"
-    ? { feedbackType: "dangerous_feedback", feedbackQuality: "dangerous" }
-    : { feedbackType: "low_feedback", feedbackQuality: "weak" };
+  const exhaustive: never = outcome;
+  return exhaustive;
 }
 
 function feedbackPresentation(entry: CanonicalCandidateEntry): CanonicalFeedbackPresentation {
