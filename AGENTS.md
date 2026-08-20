@@ -11,21 +11,21 @@
 
 ---
 
-## CURRENT AUTHORITY / CURRENT STATUS — 2026-08-18
+## CURRENT AUTHORITY / CURRENT STATUS — 2026-08-20
 
 > This block supersedes older “current”, “active checkpoint”, and “Item 5 unstarted” wording preserved below as historical checkpoint record.
 
 - Roadmap Item 4 is **CLOSED / ACCEPTED / FROZEN** at `11f085930462f981fcca45faf37b67d961196adb`.
-- Roadmap Item 5 remains **OPEN / NOT FROZEN**. Physical-effect provenance Pass 2 is implemented on `checkpoint/item5-physical-effect-provenance-pass2` from exact Pass-1 base `31ced032d901e81d9d6ce56aedd997c31df1d258`; production commit `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`.
+- Roadmap Item 5 Pass 3 canonical projection/inheritance is **IMPLEMENTED / PENDING INDEPENDENT ARCHITECT REVIEW** on `checkpoint/item5-projection-inheritance-pass3`, from exact accepted Pass-2 base `31363c4f8e19e1c4f536338ecd0ef59e3fa7082f`. Item 5 remains **OPEN / NOT FROZEN**; this is not a merge or acceptance.
 - `band.practicalAdaptation` remains the canonical Item-5 adaptation/history authority; `band.adaptiveHuman` remains **LEGACY / COMPATIBILITY / NON-CANONICAL** state routed through `src/sim/agents/legacyAdaptiveHumanCompatibility.ts`.
 - `practicalResponses.ts` now classifies every variant as `practice_only`, `existing_physical_work`, or `material_execution_required`. Practice-only responses retain bounded forming/active effects. Material-required responses have **zero physical effect and zero efficacy maturation without execution proof**.
 - Existing persisted `waterWorks` remains the physical authority for groundwater work. No portable material inventory, crafting, resource-stock, or execution store was introduced; portable-material execution proof remains the next explicit debt rather than being fabricated from plans or labels.
 - `PracticalExperiment.materials` / procedure / labor / risk / opportunity fields are planned/estimated requirements, not claims of acquisition, consumption, execution, or paid cost. The Ideas/Solutions UI labels them accordingly.
 - No coefficients were tuned and `src/sim/agents/adaptiveEfficacy.ts` is unchanged at SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`.
-- Pass 3, Item-5 freeze, and merge are **NOT STARTED**. The checkpoint branch was pushed only for independent review; before this documentation-drift correction, remote checkpoint HEAD is `75a9f5b1ec47b804e190161b6e652e30d09f150d`. `src/architecture/graphData.ts` remains documentation/discovery only and never simulation authority.
-- Current checkpoint branch: `checkpoint/item5-physical-effect-provenance-pass2`; exact Pass-1 base `31ced032d901e81d9d6ce56aedd997c31df1d258`; Pass-2 production commit `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`.
+- Pass 3 makes canonical `band.practicalAdaptation` the sole read-model lifecycle authority when present, with explicit `legacy_compatibility` fallback only when absent. It adds no Item-4 mechanism, daughter-transfer richness, material execution, physical-effect gate, coefficient, or Map-2 behavior change. `src/architecture/graphData.ts` remains documentation/discovery only and never simulation authority.
+- Certification reports Pass-3 audit 30/30, Pass-2 provenance 13/13, adaptation-boundary 14/14, expedition-efficacy 12/12, Item-4 field transfer 12/12 (0 vacuous), and whole integration 6/6; Map-2 fingerprint remains `f509b2f4d6e8a463b7505025afe22d151fd45a0598bd9550fbb84aac900da03c`. Detailed measured evidence is in `docs/evidence/item5-pass3/PASS3_EVIDENCE.md`.
 - Certification fixture correction `caeac19845c41e60a2d0740ac8c224d53d0813b9` is **test-only** (`scripts/simBenchmark.mjs`): final verification caught stale material-effect assertions because the benchmark CLI can exit 0 with `"passed": false`. Fresh semantic certification is all-pass; no production source changed after `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`.
-- Older freshness/update lines below are retained as historical record and are superseded by this 2026-08-18 authority block.
+- Older freshness/update lines below are retained as historical record and are superseded by this 2026-08-20 authority block.
 
 ## 0. Freshness and evidence warning
 

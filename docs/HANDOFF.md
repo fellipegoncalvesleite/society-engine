@@ -8,16 +8,16 @@
 > documentation/discovery projection only; it is never simulation authority. This file is
 > the human/agent-readable narrative alongside the production code and audits.
 
-## CURRENT AUTHORITY / CURRENT STATUS — 2026-08-18
+## CURRENT AUTHORITY / CURRENT STATUS — 2026-08-20
 
 - Roadmap Item 4 is **CLOSED / ACCEPTED / FROZEN** at `11f085930462f981fcca45faf37b67d961196adb`.
-- Roadmap Item 5 remains **OPEN / NOT FROZEN**. Physical-effect provenance Pass 2 is implemented on `checkpoint/item5-physical-effect-provenance-pass2` from exact Pass-1 base `31ced032d901e81d9d6ce56aedd997c31df1d258`; production commit `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`.
+- Roadmap Item 5 Pass 3 canonical projection/inheritance is **IMPLEMENTED / PENDING INDEPENDENT ARCHITECT REVIEW** on `checkpoint/item5-projection-inheritance-pass3`, from exact accepted Pass-2 base `31363c4f8e19e1c4f536338ecd0ef59e3fa7082f`. Item 5 remains **OPEN / NOT FROZEN**; this is not a merge or acceptance.
 - `band.practicalAdaptation` remains the canonical Item-5 adaptation/history authority; `band.adaptiveHuman` remains legacy compatibility state only, routed through `src/sim/agents/legacyAdaptiveHumanCompatibility.ts`.
 - `practicalResponses.ts` now classifies every variant as `practice_only`, `existing_physical_work`, or `material_execution_required`. Practice-only responses retain bounded forming/active effects. Material-required responses have **zero physical effect and zero efficacy maturation without execution proof**.
 - Existing persisted `waterWorks` remains the physical authority for groundwater work. No portable material inventory, crafting, resource-stock, or execution store was introduced; portable-material execution proof remains the next explicit debt rather than being fabricated from plans or labels.
 - `PracticalExperiment.materials` / procedure / labor / risk / opportunity fields are planned/estimated requirements, not claims of acquisition, consumption, execution, or paid cost. The Ideas/Solutions UI labels them accordingly.
 - No coefficients were tuned and `src/sim/agents/adaptiveEfficacy.ts` is unchanged at SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`.
-- Pass 3, Item-5 freeze, merge, and push are **NOT STARTED**. `src/architecture/graphData.ts` remains documentation/discovery only and never simulation authority.
+- Pass 3 makes canonical `band.practicalAdaptation` the only projection lifecycle authority when present, with explicit legacy compatibility only when absent. It changes no Item-4 mechanics, daughter-transfer richness, material execution, physical-effect gate, coefficient, or Map-2 behavior. Certification is 30/30 projection, 13/13 provenance, 14/14 boundary, 12/12 expedition efficacy, 12/12 Item-4 transfer (0 vacuous), and 6/6 Item-4 whole integration; the exact Map-2 fingerprint remains `f509b2f4d6e8a463b7505025afe22d151fd45a0598bd9550fbb84aac900da03c`. See `docs/evidence/item5-pass3/PASS3_EVIDENCE.md`.
 
 ---
 
