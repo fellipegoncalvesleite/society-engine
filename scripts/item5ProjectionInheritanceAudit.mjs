@@ -399,6 +399,13 @@ try {
       efficacyRecords: [staleMaterialEfficacyRecord],
     },
   };
+  const evictedMaterialResponseBand = {
+    ...staleMaterialBand,
+    practicalAdaptation: {
+      ...staleMaterialBand.practicalAdaptation,
+      responses: [],
+    },
+  };
   const fragmentOnlyDaughterBand = {
     ...daughterBand,
     practicalAdaptation: { ...daughterState, problems: [] },
@@ -462,6 +469,12 @@ try {
       latestDecision: undefined,
     })),
   };
+  const evictedMaterialResponseTechnical = renderToStaticMarkup(createElement(technical.Technical, {
+    band: evictedMaterialResponseBand,
+    world,
+    currentTile: world.tiles[evictedMaterialResponseBand.position],
+    latestDecision: undefined,
+  }));
   const fragmentOnlyDaughterFeedback = renderToStaticMarkup(createElement(practiceFeedback.PracticeFeedback, {
     band: fragmentOnlyDaughterBand,
     world,
@@ -472,7 +485,7 @@ try {
   }));
   const staleMaterialEfficacyAudit = {
     feedbackWithheld: staleMaterialUi.feedback.includes("Efficacy records:</strong> withheld: material execution not proven."),
-    technicalWithheld: staleMaterialUi.technical.includes("material efficacy records withheld: material execution not proven"),
+    technicalWithheld: staleMaterialUi.technical.includes("practical efficacy records withheld: execution not proven"),
     feedbackHasId: staleMaterialUi.feedback.includes("efficacy:audit:stale-material-success"),
     feedbackHasOutcome: staleMaterialUi.feedback.includes("clear_success"),
     feedbackHasOutcomeLabel: staleMaterialUi.feedback.includes("clear success"),
@@ -481,6 +494,15 @@ try {
     technicalHasOutcome: staleMaterialUi.technical.includes("clear_success"),
     technicalHasOutcomeLabel: staleMaterialUi.technical.includes("clear success"),
     technicalHasClassification: staleMaterialUi.technical.includes("clear_success_specific"),
+    technicalShowsBlockedRepeatedOne: staleMaterialUi.technical.includes("repeated 1 · max per family"),
+    technicalShowsExecutionProvenRepeatedZero: staleMaterialUi.technical.includes("repeated 0 · max per family"),
+  };
+  const evictedMaterialResponseEfficacyAudit = {
+    technicalWithheld: evictedMaterialResponseTechnical.includes("practical efficacy records withheld: execution not proven"),
+    technicalHasId: evictedMaterialResponseTechnical.includes("efficacy:audit:stale-material-success"),
+    technicalHasOutcome: evictedMaterialResponseTechnical.includes("clear_success"),
+    technicalHasOutcomeLabel: evictedMaterialResponseTechnical.includes("clear success"),
+    technicalHasClassification: evictedMaterialResponseTechnical.includes("clear_success_specific"),
   };
 
   const activeLoadResponse = { ...responses[0], status: "active" };
@@ -729,6 +751,7 @@ try {
       technicalAuthority: canonicalUi.technical.includes("canonical practical-adaptation"),
     },
     staleMaterialEfficacyAudit,
+    evictedMaterialResponseEfficacyAudit,
   };
   checks = {
     canonicalProblemsAreExclusive:
@@ -893,6 +916,15 @@ try {
       !staleMaterialEfficacyAudit.technicalHasOutcome &&
       !staleMaterialEfficacyAudit.technicalHasOutcomeLabel &&
       !staleMaterialEfficacyAudit.technicalHasClassification,
+    evictedMaterialResponseEfficacyIsWithheldInTechnical:
+      evictedMaterialResponseEfficacyAudit.technicalWithheld &&
+      !evictedMaterialResponseEfficacyAudit.technicalHasId &&
+      !evictedMaterialResponseEfficacyAudit.technicalHasOutcome &&
+      !evictedMaterialResponseEfficacyAudit.technicalHasOutcomeLabel &&
+      !evictedMaterialResponseEfficacyAudit.technicalHasClassification,
+    blockedMaterialRepeatedExposureIsWithheldInTechnical:
+      staleMaterialEfficacyAudit.technicalShowsExecutionProvenRepeatedZero &&
+      !staleMaterialEfficacyAudit.technicalShowsBlockedRepeatedOne,
     fragmentOnlyDaughterIsLabeledInheritedNotTested:
       fragmentOnlyDaughterFeedback.includes("Inherited practical fragments are knowledge carried from another band, not tested here."),
     canonicalCardsDoNotDenyRecordedResponses:

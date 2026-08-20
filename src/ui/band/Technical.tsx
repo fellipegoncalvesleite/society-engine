@@ -624,11 +624,16 @@ function PracticalAdaptationDetails({ band, world }: { readonly band: Band; read
   const engineering = deriveEngineeringSafetyRelief(band, currentTick, undefined);
   const materialExecutionIsUnproven = (family: string, variantKey: string) =>
     derivePracticalVariantExecutionClass(family as Parameters<typeof derivePracticalVariantExecutionClass>[0], variantKey) === "material_execution_required";
-  const materialEfficacyRecords = state.efficacyRecords.filter((record) => {
-    const response = state.responses.find((candidate) => candidate.id === record.responseId);
-    return response !== undefined && materialExecutionIsUnproven(response.family, response.variantKey);
+  const efficacyExecutionIsUnproven = (responseId: string) => {
+    const response = state.responses.find((candidate) => candidate.id === responseId);
+    const experiment = state.experiments?.find((candidate) => candidate.responseId === responseId);
+    const source = response ?? experiment;
+    return source === undefined || materialExecutionIsUnproven(source.family, source.variantKey);
+  };
+  const executionUnprovenEfficacyRecords = state.efficacyRecords.filter((record) => {
+    return efficacyExecutionIsUnproven(record.responseId);
   });
-  const executionProvenEfficacyRecords = state.efficacyRecords.filter((record) => !materialEfficacyRecords.includes(record));
+  const executionProvenEfficacyRecords = state.efficacyRecords.filter((record) => !executionUnprovenEfficacyRecords.includes(record));
   return (
     <>
       <Detail
@@ -684,10 +689,10 @@ function PracticalAdaptationDetails({ band, world }: { readonly band: Band; read
         label="current crossing-engineering relief"
         value={`safety relief ${formatCompactNumber(engineering.relief)} (cap ${formatCompactNumber(engineering.cap)}) · target/crossing-dependent; this view has no crossing context · ${engineering.reason}`}
       />
-      {materialEfficacyRecords.length === 0 ? null : (
+      {executionUnprovenEfficacyRecords.length === 0 ? null : (
         <Detail
-          label="practical efficacy material records"
-          value={`${materialEfficacyRecords.length} material efficacy records withheld: material execution not proven`}
+          label="practical efficacy execution-unproven records"
+          value={`${executionUnprovenEfficacyRecords.length} practical efficacy records withheld: execution not proven`}
         />
       )}
       {executionProvenEfficacyRecords.map((record) => (
@@ -1345,6 +1350,9 @@ function PracticeFeedbackReadinessDetails({ band, world }: { readonly band: Band
   const executionProvenItems = profile.items.filter(
     (item) => item.canonical?.executionTruth !== "blocked_material_execution",
   );
+  const executionProvenRepeatedExposureCount = executionProvenItems.filter(
+    (item) => item.repeatedExposureBasis.length > 0 || item.linkedRepetitionIds.length > 0,
+  ).length;
   const summarizeCounts = <T extends string>(values: readonly T[], label: (value: T) => string) =>
     Array.from(new Set(values))
       .map((value) => `${label(value)} ${values.filter((candidate) => candidate === value).length}`)
@@ -1385,7 +1393,7 @@ function PracticeFeedbackReadinessDetails({ band, world }: { readonly band: Band
   return (
     <>
       <Detail label="authority" value={profile.authority === "canonical_practical_adaptation" ? "canonical practical-adaptation (canonical_practical_adaptation)" : "legacy compatibility (legacy_compatibility)"} />
-      <Detail label="projection" value={`${profile.items.length}/${profile.caps.itemCap} readiness items · repeated ${profile.repeatedExposureCount} · max per family ${profile.caps.itemsPerFamilyCap}`} />
+      <Detail label="projection" value={`${profile.items.length}/${profile.caps.itemCap} readiness items · repeated ${executionProvenRepeatedExposureCount} · max per family ${profile.caps.itemsPerFamilyCap}`} />
       <Detail
         label="overview"
         value={materialExecutionUnprovenItems.length === 0
