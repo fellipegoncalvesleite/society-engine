@@ -134,7 +134,8 @@ export type PracticeFeedbackType =
   | "dangerous_feedback"
   | "local_only_success"
   | "inherited_no_local_feedback"
-  | "contradicted_by_recent_events";
+  | "contradicted_by_recent_events"
+  | "recorded_execution_without_feedback";
 
 export type PracticeRiskLevel = "low" | "present" | "high";
 
@@ -396,6 +397,7 @@ const EMPTY_FEEDBACK_COUNTS: Readonly<Record<PracticeFeedbackType, number>> = {
   local_only_success: 0,
   inherited_no_local_feedback: 0,
   contradicted_by_recent_events: 0,
+  recorded_execution_without_feedback: 0,
 };
 
 const EMPTY_STATUS_COUNTS: Readonly<Record<PracticeExperimentStatus, number>> = {
@@ -2011,5 +2013,7 @@ export function practiceFeedbackTypeLabel(feedback: PracticeFeedbackType): strin
       return "inherited, no local feedback";
     case "contradicted_by_recent_events":
       return "contradicted by recent events";
+    case "recorded_execution_without_feedback":
+      return "recorded execution, feedback not recorded";
   }
 }

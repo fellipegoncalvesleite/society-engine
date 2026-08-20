@@ -322,15 +322,15 @@ try {
         experiments: [experiment],
       },
     };
-    const candidate = problemPractice.deriveProblemPracticeProfile(world, probeBand).practiceCandidates[0];
-    const item = readiness.derivePracticeFeedbackReadinessProfile(world, probeBand).items[0];
-    return { candidate, item };
+    const candidateProfile = problemPractice.deriveProblemPracticeProfile(world, probeBand);
+    const readinessProfile = readiness.derivePracticeFeedbackReadinessProfile(world, probeBand);
+    return { candidate: candidateProfile.practiceCandidates[0], item: readinessProfile.items[0], readinessProfile };
   };
   const lifecycleProbes = {
     attempted: lifecycleProbe({ ...experiments[0], attemptSeasons: 2, status: "underway" }),
     planned: lifecycleProbe({ ...experiments[0], attemptSeasons: 0, status: "underway" }),
     concludedSuccess: lifecycleProbe({ ...experiments[0], status: "concluded_success" }),
-    concludedPartial: lifecycleProbe({ ...experiments[0], status: "concluded_partial" }),
+    concludedPartial: lifecycleProbe({ ...experiments[0], attemptSeasons: 1, status: "concluded_partial" }),
     abandoned: lifecycleProbe({ ...experiments[0], status: "abandoned" }),
   };
   const groundwaterIdea = {
@@ -529,11 +529,20 @@ try {
       lifecycleProbes.concludedSuccess.item?.readinessStatus === "learning_ready_later" &&
       lifecycleProbes.concludedPartial.candidate?.status === "low_feedback_repetition" &&
       lifecycleProbes.concludedPartial.item?.readinessStatus === "repeated_mixed_feedback" &&
+      lifecycleProbes.concludedPartial.item?.feedbackType === "mixed_feedback" &&
+      lifecycleProbes.concludedPartial.item?.feedbackQuality === "mixed" &&
+      lifecycleProbes.concludedPartial.item?.repeatedExposureBasis.length === 1 &&
+      lifecycleProbes.concludedPartial.item?.familiaritySignal === "canonical practice evidence recorded" &&
+      lifecycleProbes.concludedPartial.readinessProfile.repeatedExposureCount === 1 &&
       lifecycleProbes.abandoned.candidate?.status === "dead_end_risk" &&
       lifecycleProbes.abandoned.item?.readinessStatus === "contradicted" &&
       groundwaterCandidate?.canonical?.executionTruth === "existing_physical_work_executed" &&
       groundwaterCandidate.status === "implicit_repetition" &&
-      groundwaterReadiness?.readinessStatus === "repeated_mixed_feedback" &&
+      groundwaterReadiness?.readinessStatus === "executed_without_feedback" &&
+      groundwaterReadiness?.feedbackType === "recorded_execution_without_feedback" &&
+      groundwaterReadiness?.feedbackQuality === "not_recorded" &&
+      groundwaterReadiness?.repeatedExposureBasis.length === 0 &&
+      groundwaterReadiness?.familiaritySignal === "canonical physical work recorded; feedback not recorded" &&
       projected.practiceCandidates[1]?.status === "blocked_by_missing_material" &&
       materialReadinessItem?.readinessStatus === "blocked_by_material",
     canonicalProblemBasisUsesProblemOriginOnly:

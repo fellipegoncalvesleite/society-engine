@@ -80,22 +80,23 @@ const PRACTICE_STATUSES = [
 const FEEDBACK_TYPES = [
   "clear_success", "clear_failure", "mixed_feedback", "low_feedback", "delayed_feedback",
   "dangerous_feedback", "local_only_success", "inherited_no_local_feedback", "contradicted_by_recent_events",
+  "recorded_execution_without_feedback",
 ] as const satisfies readonly PracticeFeedbackType[];
 
 const READINESS_FEEDBACK_TYPES = [
   "clear_success", "clear_failure", "mixed_feedback", "low_feedback", "delayed_feedback",
   "dangerous_feedback", "local_only_success", "inherited_no_local_feedback",
-  "contradicted_by_recent_events", "blocked_no_attempt", "familiarity_only",
+  "contradicted_by_recent_events", "blocked_no_attempt", "familiarity_only", "recorded_execution_without_feedback",
 ] as const satisfies readonly PracticeFeedbackReadinessFeedbackType[];
 
 const FEEDBACK_QUALITIES = [
-  "clear", "usable", "mixed", "weak", "delayed", "dangerous", "inherited_only", "blocked", "contradicted",
+  "clear", "usable", "mixed", "weak", "delayed", "dangerous", "inherited_only", "blocked", "contradicted", "not_recorded",
 ] as const satisfies readonly PracticeFeedbackQuality[];
 
 const READINESS_STATUSES = [
   "not_started", "familiarity_only", "repeated_low_feedback", "repeated_mixed_feedback",
   "learning_ready_later", "blocked_by_material", "blocked_by_labor", "inherited_not_tested_here",
-  "dead_end_risk", "false_confidence_risk", "local_only", "contradicted",
+  "dead_end_risk", "false_confidence_risk", "local_only", "contradicted", "executed_without_feedback",
 ] as const satisfies readonly PracticeFeedbackReadinessStatus[];
 
 const BLOCKERS = [
@@ -183,6 +184,9 @@ function candidateStatus(
 
 function feedbackType(experiment: PracticalExperiment | undefined, canonical: CanonicalCandidateProjection, inherited: boolean): PracticeFeedbackType {
   if (inherited) return "inherited_no_local_feedback";
+  if (canonical.executionTruth === "existing_physical_work_executed" && canonical.attemptSeasons === 0 && canonical.efficacyRecordIds.length === 0) {
+    return "recorded_execution_without_feedback";
+  }
   if (experiment?.status === "concluded_success") return "clear_success";
   if (experiment?.status === "concluded_partial") return "mixed_feedback";
   if (experiment?.status === "concluded_failure" || experiment?.status === "abandoned") return "clear_failure";
@@ -449,7 +453,8 @@ export function deriveCanonicalPracticeFeedbackReadinessProfile(world: WorldStat
     feedbackQualityCounts: countByKey(FEEDBACK_QUALITIES, items.map((item) => item.feedbackQuality)),
     readinessStatusCounts: countByKey(READINESS_STATUSES, items.map((item) => item.readinessStatus)),
     sourceSystemCounts: countByKey(READINESS_SOURCE_SYSTEMS, evidence.map(() => "problem_practice")),
-    repeatedExposureCount: items.filter((item) => item.canonical?.executionTruth === "practice_attempted").length,
+    repeatedExposureCount: items.filter((item) =>
+      (item.canonical?.attemptSeasons ?? 0) > 0 || (item.canonical?.efficacyRecordIds.length ?? 0) > 0).length,
     deadEndRiskCount: items.filter((item) => item.risks.includes("dead_end")).length,
     falseConfidenceRiskCount: items.filter((item) => item.risks.includes("false_confidence")).length,
     localOnlyRiskCount: 0,
@@ -499,21 +504,27 @@ export function deriveCanonicalPracticeFeedbackReadinessProfile(world: WorldStat
 function canonicalReadinessItem(candidate: PracticeExperimentCandidate): PracticeFeedbackReadinessItem {
   const canonical = candidate.canonical!;
   const inherited = candidate.status === "inherited_not_tested_here";
+  const hasCanonicalPracticeEvidence = canonical.attemptSeasons > 0 || canonical.efficacyRecordIds.length > 0;
   const feedbackType: PracticeFeedbackReadinessFeedbackType = inherited ? "inherited_no_local_feedback"
     : canonical.executionTruth === "blocked_material_execution" ? "blocked_no_attempt"
+    : canonical.executionTruth === "existing_physical_work_executed" && !hasCanonicalPracticeEvidence && canonical.experimentStatus?.startsWith("concluded_") !== true && canonical.experimentStatus !== "abandoned"
+      ? "recorded_execution_without_feedback"
     : candidate.expectedFeedbackType;
   const readinessStatus: PracticeFeedbackReadinessStatus = inherited ? "inherited_not_tested_here"
     : canonical.executionTruth === "blocked_material_execution" ? "blocked_by_material"
     : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_success" ? "learning_ready_later"
     : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_partial" ? "repeated_mixed_feedback"
     : canonical.executionTruth === "concluded_from_canonical_history" ? "contradicted"
+    : canonical.executionTruth === "existing_physical_work_executed" && !hasCanonicalPracticeEvidence ? "executed_without_feedback"
     : canonical.executionTruth === "existing_physical_work_executed" ? "repeated_mixed_feedback"
     : canonical.executionTruth === "practice_attempted" ? "repeated_low_feedback"
     : "not_started";
   const feedbackQuality: PracticeFeedbackQuality = inherited ? "inherited_only"
     : canonical.executionTruth === "blocked_material_execution" ? "blocked"
     : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_success" ? "clear"
+    : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_partial" ? "mixed"
     : canonical.executionTruth === "concluded_from_canonical_history" ? "contradicted"
+    : canonical.executionTruth === "existing_physical_work_executed" && !hasCanonicalPracticeEvidence ? "not_recorded"
     : canonical.executionTruth === "existing_physical_work_executed" ? "usable"
     : "weak";
   const blockers: readonly PracticeFeedbackBlocker[] = canonical.executionTruth === "blocked_material_execution" ? ["missing_material"]
@@ -546,9 +557,15 @@ function canonicalReadinessItem(candidate: PracticeExperimentCandidate): Practic
     linkedPracticeCandidateId: candidate.id,
     linkedAffordanceIds: [], linkedKnowledgeIds: candidate.relatedKnowledgeIds, linkedActivityIds: [],
     linkedEventIds: [candidate.problemFrameId], linkedFootholdIds: [], linkedRepetitionIds: [],
-    repeatedExposureBasis: canonical.executionTruth === "practice_attempted" ? ["canonical attempted practice"] : [],
+    repeatedExposureBasis: hasCanonicalPracticeEvidence
+      ? [`canonical attempt evidence (${canonical.attemptSeasons} seasons; ${canonical.efficacyRecordIds.length} efficacy records)`]
+      : [],
     feedbackType, feedbackQuality,
-    familiaritySignal: canonical.executionTruth === "practice_attempted" ? "canonical attempt recorded" : "canonical plan recorded",
+    familiaritySignal: hasCanonicalPracticeEvidence
+      ? "canonical practice evidence recorded"
+      : canonical.executionTruth === "existing_physical_work_executed"
+        ? "canonical physical work recorded; feedback not recorded"
+        : "canonical plan recorded",
     readinessStatus, blockers, risks,
     inheritedVsLivedBasis: inherited ? "inherited_not_lived" : "lived",
     localTransferClue: inherited ? "Inherited knowledge; not tested here." : "Canonical lifecycle record; no inferred local execution.",

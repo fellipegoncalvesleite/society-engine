@@ -89,7 +89,8 @@ export type PracticeFeedbackReadinessFeedbackType =
   | "inherited_no_local_feedback"
   | "contradicted_by_recent_events"
   | "blocked_no_attempt"
-  | "familiarity_only";
+  | "familiarity_only"
+  | "recorded_execution_without_feedback";
 
 export type PracticeFeedbackQuality =
   | "clear"
@@ -100,7 +101,8 @@ export type PracticeFeedbackQuality =
   | "dangerous"
   | "inherited_only"
   | "blocked"
-  | "contradicted";
+  | "contradicted"
+  | "not_recorded";
 
 export type PracticeFeedbackReadinessStatus =
   | "not_started"
@@ -114,7 +116,8 @@ export type PracticeFeedbackReadinessStatus =
   | "dead_end_risk"
   | "false_confidence_risk"
   | "local_only"
-  | "contradicted";
+  | "contradicted"
+  | "executed_without_feedback";
 
 export type PracticeFeedbackBlocker =
   | "missing_material"
@@ -319,6 +322,7 @@ const FEEDBACK_TYPES: readonly PracticeFeedbackReadinessFeedbackType[] = [
   "contradicted_by_recent_events",
   "blocked_no_attempt",
   "familiarity_only",
+  "recorded_execution_without_feedback",
 ];
 
 const FEEDBACK_QUALITIES: readonly PracticeFeedbackQuality[] = [
@@ -331,6 +335,7 @@ const FEEDBACK_QUALITIES: readonly PracticeFeedbackQuality[] = [
   "inherited_only",
   "blocked",
   "contradicted",
+  "not_recorded",
 ];
 
 const READINESS_STATUSES: readonly PracticeFeedbackReadinessStatus[] = [
@@ -346,6 +351,7 @@ const READINESS_STATUSES: readonly PracticeFeedbackReadinessStatus[] = [
   "false_confidence_risk",
   "local_only",
   "contradicted",
+  "executed_without_feedback",
 ];
 
 const SOURCE_SYSTEMS: readonly PracticeFeedbackReadinessSourceSystem[] = [
@@ -769,6 +775,8 @@ function deriveFeedbackQuality(draft: ReadinessDraft, feedbackType: PracticeFeed
       return "contradicted";
     case "blocked_no_attempt":
       return "blocked";
+    case "recorded_execution_without_feedback":
+      return "not_recorded";
   }
 }
 
@@ -1046,6 +1054,8 @@ function meaningForStatus(
       return "Familiarity exists, but the feedback does not yet separate useful practice from habit.";
     case "not_started":
       return `The candidate exists, but feedback is still ${practiceFeedbackReadinessFeedbackTypeLabel(feedbackType)}.`;
+    case "executed_without_feedback":
+      return "Physical work is recorded, but no canonical practice feedback or conclusion is recorded.";
   }
 }
 
@@ -1249,6 +1259,8 @@ export function practiceFeedbackReadinessStatusLabel(status: PracticeFeedbackRea
       return "local only";
     case "contradicted":
       return "contradicted";
+    case "executed_without_feedback":
+      return "executed; feedback not recorded";
   }
 }
 
@@ -1276,6 +1288,8 @@ export function practiceFeedbackReadinessFeedbackTypeLabel(feedback: PracticeFee
       return "blocked, no useful attempt";
     case "familiarity_only":
       return "familiarity only";
+    case "recorded_execution_without_feedback":
+      return "recorded execution, feedback not recorded";
   }
 }
 
@@ -1299,5 +1313,7 @@ export function practiceFeedbackQualityLabel(quality: PracticeFeedbackQuality): 
       return "blocked";
     case "contradicted":
       return "contradicted";
+    case "not_recorded":
+      return "not recorded";
   }
 }
