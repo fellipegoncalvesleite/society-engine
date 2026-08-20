@@ -369,6 +369,26 @@ try {
     attemptSeasons: 3,
     fragmentsLearned: ["fragment:audit:stale-learned"],
   };
+  const staleMaterialEfficacyRecord = {
+    id: "efficacy:audit:stale-material-success",
+    tick: world.time.tick,
+    responseId: staleMaterialResponse.id,
+    family: "water_storage",
+    classification: "clear_success_specific",
+    outcome: "clear_success",
+    responseActive: true,
+    coefficient: "audit_coefficient",
+    preEffectValue: 0.4,
+    effectAmount: 0.1,
+    effectCap: 0.2,
+    dangerDelta: 0,
+    practiceDelta: 0.1,
+    confidenceDelta: 0.1,
+    failureDelta: 0,
+    futureInfluenceChanged: true,
+    localityNote: "stale material result must not become execution proof",
+    reason: "stale material result must not become execution proof",
+  };
   const staleMaterialBand = {
     ...band,
     practicalAdaptation: {
@@ -376,6 +396,7 @@ try {
       ideas: [materialIdea],
       responses: [staleMaterialResponse],
       experiments: [staleMaterialExperiment],
+      efficacyRecords: [staleMaterialEfficacyRecord],
     },
   };
   const fragmentOnlyDaughterBand = {
@@ -430,6 +451,10 @@ try {
   };
   const staleMaterialUi = {
     ideas: renderToStaticMarkup(createElement(ideasSolutions.IdeasSolutions, { band: staleMaterialBand, world })),
+    feedback: renderToStaticMarkup(createElement(practiceFeedback.PracticeFeedback, {
+      band: staleMaterialBand,
+      world,
+    })),
     technical: renderToStaticMarkup(createElement(technical.Technical, {
       band: staleMaterialBand,
       world,
@@ -445,6 +470,18 @@ try {
     band: multiEfficacyBand,
     world,
   }));
+  const staleMaterialEfficacyAudit = {
+    feedbackWithheld: staleMaterialUi.feedback.includes("Efficacy records:</strong> withheld: material execution not proven."),
+    technicalWithheld: staleMaterialUi.technical.includes("material efficacy records withheld: material execution not proven"),
+    feedbackHasId: staleMaterialUi.feedback.includes("efficacy:audit:stale-material-success"),
+    feedbackHasOutcome: staleMaterialUi.feedback.includes("clear_success"),
+    feedbackHasOutcomeLabel: staleMaterialUi.feedback.includes("clear success"),
+    feedbackHasClassification: staleMaterialUi.feedback.includes("clear_success_specific"),
+    technicalHasId: staleMaterialUi.technical.includes("efficacy:audit:stale-material-success"),
+    technicalHasOutcome: staleMaterialUi.technical.includes("clear_success"),
+    technicalHasOutcomeLabel: staleMaterialUi.technical.includes("clear success"),
+    technicalHasClassification: staleMaterialUi.technical.includes("clear_success_specific"),
+  };
 
   const activeLoadResponse = { ...responses[0], status: "active" };
   const lifecycleProbe = (experiment, efficacyRecords = []) => {
@@ -691,6 +728,7 @@ try {
       ideasPlan: canonicalUi.ideas.includes("planned or recorded test"),
       technicalAuthority: canonicalUi.technical.includes("canonical practical-adaptation"),
     },
+    staleMaterialEfficacyAudit,
   };
   checks = {
     canonicalProblemsAreExclusive:
@@ -829,15 +867,32 @@ try {
       canonicalUi.technical.includes("canonical practical-adaptation"),
     staleMaterialSuccessIsSuppressedInCanonicalUi:
       staleMaterialUi.ideas.includes("material execution not proven") &&
+      staleMaterialUi.feedback.includes("material execution not proven") &&
       staleMaterialUi.technical.includes("material execution not proven") &&
       !staleMaterialUi.ideas.includes("stale observed success must not become execution proof") &&
       !staleMaterialUi.ideas.includes("fragment:audit:stale-learned") &&
       !staleMaterialUi.ideas.includes("4 useful") &&
       !staleMaterialUi.ideas.includes("concluded success") &&
+      !staleMaterialUi.feedback.includes("stale observed success must not become execution proof") &&
+      !staleMaterialUi.feedback.includes("fragment:audit:stale-learned") &&
+      !staleMaterialUi.feedback.includes("4 useful") &&
+      !staleMaterialUi.feedback.includes("4 success") &&
+      !staleMaterialUi.feedback.includes("concluded success") &&
       !staleMaterialUi.technical.includes("stale observed success must not become execution proof") &&
       !staleMaterialUi.technical.includes("fragment:audit:stale-learned") &&
       !staleMaterialUi.technical.includes("4 success") &&
       !staleMaterialUi.technical.includes("concluded success"),
+    blockedMaterialEfficacyIsWithheldInBothPanels:
+      staleMaterialEfficacyAudit.feedbackWithheld &&
+      staleMaterialEfficacyAudit.technicalWithheld &&
+      !staleMaterialEfficacyAudit.feedbackHasId &&
+      !staleMaterialEfficacyAudit.feedbackHasOutcome &&
+      !staleMaterialEfficacyAudit.feedbackHasOutcomeLabel &&
+      !staleMaterialEfficacyAudit.feedbackHasClassification &&
+      !staleMaterialEfficacyAudit.technicalHasId &&
+      !staleMaterialEfficacyAudit.technicalHasOutcome &&
+      !staleMaterialEfficacyAudit.technicalHasOutcomeLabel &&
+      !staleMaterialEfficacyAudit.technicalHasClassification,
     fragmentOnlyDaughterIsLabeledInheritedNotTested:
       fragmentOnlyDaughterFeedback.includes("Inherited practical fragments are knowledge carried from another band, not tested here."),
     canonicalCardsDoNotDenyRecordedResponses:

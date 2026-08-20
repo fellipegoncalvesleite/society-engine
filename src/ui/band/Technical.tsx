@@ -624,6 +624,11 @@ function PracticalAdaptationDetails({ band, world }: { readonly band: Band; read
   const engineering = deriveEngineeringSafetyRelief(band, currentTick, undefined);
   const materialExecutionIsUnproven = (family: string, variantKey: string) =>
     derivePracticalVariantExecutionClass(family as Parameters<typeof derivePracticalVariantExecutionClass>[0], variantKey) === "material_execution_required";
+  const materialEfficacyRecords = state.efficacyRecords.filter((record) => {
+    const response = state.responses.find((candidate) => candidate.id === record.responseId);
+    return response !== undefined && materialExecutionIsUnproven(response.family, response.variantKey);
+  });
+  const executionProvenEfficacyRecords = state.efficacyRecords.filter((record) => !materialEfficacyRecords.includes(record));
   return (
     <>
       <Detail
@@ -679,7 +684,13 @@ function PracticalAdaptationDetails({ band, world }: { readonly band: Band; read
         label="current crossing-engineering relief"
         value={`safety relief ${formatCompactNumber(engineering.relief)} (cap ${formatCompactNumber(engineering.cap)}) · target/crossing-dependent; this view has no crossing context · ${engineering.reason}`}
       />
-      {state.efficacyRecords.map((record) => (
+      {materialEfficacyRecords.length === 0 ? null : (
+        <Detail
+          label="practical efficacy material records"
+          value={`${materialEfficacyRecords.length} material efficacy records withheld: material execution not proven`}
+        />
+      )}
+      {executionProvenEfficacyRecords.map((record) => (
         <Detail
           key={record.id}
           label={`practical efficacy ${record.family} @t${String(record.tick)}`}
@@ -1133,6 +1144,16 @@ function ProblemPracticeDetails({ band, world }: { readonly band: Band; readonly
   }
 
   const profile = deriveProblemPracticeProfile(world, band);
+  const materialExecutionUnprovenCandidates = profile.practiceCandidates.filter(
+    (candidate) => candidate.canonical?.executionTruth === "blocked_material_execution",
+  );
+  const executionProvenCandidates = profile.practiceCandidates.filter(
+    (candidate) => candidate.canonical?.executionTruth !== "blocked_material_execution",
+  );
+  const summarizeCandidateCounts = <T extends string>(values: readonly T[], label: (value: T) => string) =>
+    Array.from(new Set(values))
+      .map((value) => `${label(value)} ${values.filter((candidate) => candidate === value).length}`)
+      .join(" · ");
   const frameFamilies = Object.entries(profile.problemFamilyCounts)
     .filter(([, count]) => count > 0)
     .map(([family, count]) => `${problemFrameFamilyLabel(family as Parameters<typeof problemFrameFamilyLabel>[0])} ${count}`)
@@ -1141,14 +1162,14 @@ function ProblemPracticeDetails({ band, world }: { readonly band: Band; readonly
     .filter(([, count]) => count > 0)
     .map(([family, count]) => `${candidateFamilyLabel(family as Parameters<typeof candidateFamilyLabel>[0])} ${count}`)
     .join(" · ");
-  const statuses = Object.entries(profile.statusCounts)
-    .filter(([, count]) => count > 0)
-    .map(([status, count]) => `${practiceExperimentStatusLabel(status as Parameters<typeof practiceExperimentStatusLabel>[0])} ${count}`)
-    .join(" · ");
-  const feedback = Object.entries(profile.feedbackTypeCounts)
-    .filter(([, count]) => count > 0)
-    .map(([type, count]) => `${practiceFeedbackTypeLabel(type as Parameters<typeof practiceFeedbackTypeLabel>[0])} ${count}`)
-    .join(" · ");
+  const statuses = summarizeCandidateCounts(
+    executionProvenCandidates.map((candidate) => candidate.status),
+    (status) => practiceExperimentStatusLabel(status),
+  );
+  const feedback = summarizeCandidateCounts(
+    executionProvenCandidates.map((candidate) => candidate.expectedFeedbackType),
+    (type) => practiceFeedbackTypeLabel(type),
+  );
   const sources = Object.entries(profile.sourceSystemCounts)
     .filter(([, count]) => count > 0)
     .map(([source, count]) => `${source.replace(/_/g, " ")} ${count}`)
@@ -1167,14 +1188,21 @@ function ProblemPracticeDetails({ band, world }: { readonly band: Band; readonly
     .slice(0, 7)
     .map((candidate) => candidate.canonical === undefined
       ? `${candidate.family}:${candidate.status}:${candidate.expectedFeedbackType}:${formatCompactNumber(candidate.confidence)}`
-      : `${candidate.canonical.ideaId}:${candidate.canonical.ideaStatus}:${candidate.canonical.experimentStatus ?? "no_experiment"}:${candidate.canonical.responseStatus ?? "no_response"}:${candidate.canonical.executionTruth}`)
+      : candidate.canonical.executionTruth === "blocked_material_execution"
+        ? `${candidate.canonical.ideaId}:material execution not proven`
+        : `${candidate.canonical.ideaId}:${candidate.canonical.ideaStatus}:${candidate.canonical.experimentStatus ?? "no_experiment"}:${candidate.canonical.responseStatus ?? "no_response"}:${candidate.canonical.executionTruth}`)
     .join(" | ");
 
   return (
     <>
       <Detail label="authority" value={profile.authority === "canonical_practical_adaptation" ? "canonical practical-adaptation (canonical_practical_adaptation)" : "legacy compatibility (legacy_compatibility)"} />
       <Detail label="projection" value={`${profile.problemFrames.length}/${profile.caps.problemFrameCap} frames · ${profile.practiceCandidates.length}/${profile.caps.practiceCandidateCap} candidates`} />
-      <Detail label="overview" value={`${profile.overviewTitle} · ${profile.overviewLines.join(" ")}`} />
+      <Detail
+        label="overview"
+        value={materialExecutionUnprovenCandidates.length === 0
+          ? `${profile.overviewTitle} · ${profile.overviewLines.join(" ")}`
+          : `${executionProvenCandidates.length} execution-proven candidate${executionProvenCandidates.length === 1 ? "" : "s"} · ${materialExecutionUnprovenCandidates.length} material plan${materialExecutionUnprovenCandidates.length === 1 ? "" : "s"} withheld: material execution not proven`}
+      />
       <Detail label="frame families" value={frameFamilies || "none"} />
       <Detail label="candidate families" value={candidateFamilies || "none"} />
       <Detail label="candidate statuses" value={statuses || "none"} />
@@ -1311,42 +1339,59 @@ function PracticeFeedbackReadinessDetails({ band, world }: { readonly band: Band
   }
 
   const profile = derivePracticeFeedbackReadinessProfile(world, band);
+  const materialExecutionUnprovenItems = profile.items.filter(
+    (item) => item.canonical?.executionTruth === "blocked_material_execution",
+  );
+  const executionProvenItems = profile.items.filter(
+    (item) => item.canonical?.executionTruth !== "blocked_material_execution",
+  );
+  const summarizeCounts = <T extends string>(values: readonly T[], label: (value: T) => string) =>
+    Array.from(new Set(values))
+      .map((value) => `${label(value)} ${values.filter((candidate) => candidate === value).length}`)
+      .join(" · ");
   const families = Object.entries(profile.familyCounts)
     .filter(([, count]) => count > 0)
     .map(([family, count]) => `${practiceFeedbackReadinessFamilyLabel(family as Parameters<typeof practiceFeedbackReadinessFamilyLabel>[0])} ${count}`)
     .join(" · ");
-  const feedbackTypes = Object.entries(profile.feedbackTypeCounts)
-    .filter(([, count]) => count > 0)
-    .map(([feedback, count]) => `${practiceFeedbackReadinessFeedbackTypeLabel(feedback as Parameters<typeof practiceFeedbackReadinessFeedbackTypeLabel>[0])} ${count}`)
-    .join(" · ");
-  const feedbackQualities = Object.entries(profile.feedbackQualityCounts)
-    .filter(([, count]) => count > 0)
-    .map(([quality, count]) => `${practiceFeedbackQualityLabel(quality as Parameters<typeof practiceFeedbackQualityLabel>[0])} ${count}`)
-    .join(" · ");
-  const statuses = Object.entries(profile.readinessStatusCounts)
-    .filter(([, count]) => count > 0)
-    .map(([status, count]) => `${practiceFeedbackReadinessStatusLabel(status as Parameters<typeof practiceFeedbackReadinessStatusLabel>[0])} ${count}`)
-    .join(" · ");
-  const blockers = Object.entries(profile.blockerCounts)
-    .filter(([, count]) => count > 0)
-    .map(([blocker, count]) => `${blocker.replace(/_/g, " ")} ${count}`)
-    .join(" · ");
-  const sources = Object.entries(profile.sourceSystemCounts)
-    .filter(([, count]) => count > 0)
-    .map(([source, count]) => `${source.replace(/_/g, " ")} ${count}`)
-    .join(" · ");
+  const feedbackTypes = summarizeCounts(
+    executionProvenItems.map((item) => item.feedbackType),
+    (feedback) => practiceFeedbackReadinessFeedbackTypeLabel(feedback),
+  );
+  const feedbackQualities = summarizeCounts(
+    executionProvenItems.map((item) => item.feedbackQuality),
+    (quality) => practiceFeedbackQualityLabel(quality),
+  );
+  const statuses = summarizeCounts(
+    executionProvenItems.map((item) => item.readinessStatus),
+    (status) => practiceFeedbackReadinessStatusLabel(status),
+  );
+  const blockers = summarizeCounts(
+    executionProvenItems.flatMap((item) => item.blockers),
+    (blocker) => blocker.replace(/_/g, " "),
+  );
+  const sources = summarizeCounts(
+    executionProvenItems.flatMap((item) => item.evidence.map((entry) => entry.sourceSystem)),
+    (source) => source.replace(/_/g, " "),
+  );
   const itemSummary = profile.items
     .slice(0, 8)
     .map((item) => item.canonical === undefined
       ? `${item.family}:${item.readinessStatus}:${item.feedbackType}:${formatCompactNumber(item.confidence)} e${item.evidence.length}`
-      : `${item.canonical.ideaId}:${item.canonical.ideaStatus}:${item.canonical.experimentStatus ?? "no_experiment"}:${item.canonical.responseStatus ?? "no_response"}:${item.canonical.executionTruth}:efficacy=${item.canonical.efficacyRecordIds.join(",") || "none"}`)
+      : item.canonical.executionTruth === "blocked_material_execution"
+        ? `${item.canonical.ideaId}:material execution not proven:efficacy=withheld`
+        : `${item.canonical.ideaId}:${item.canonical.ideaStatus}:${item.canonical.experimentStatus ?? "no_experiment"}:${item.canonical.responseStatus ?? "no_response"}:${item.canonical.executionTruth}:efficacy=${item.canonical.efficacyRecordIds.join(",") || "none"}`)
     .join(" | ");
 
   return (
     <>
       <Detail label="authority" value={profile.authority === "canonical_practical_adaptation" ? "canonical practical-adaptation (canonical_practical_adaptation)" : "legacy compatibility (legacy_compatibility)"} />
       <Detail label="projection" value={`${profile.items.length}/${profile.caps.itemCap} readiness items · repeated ${profile.repeatedExposureCount} · max per family ${profile.caps.itemsPerFamilyCap}`} />
-      <Detail label="overview" value={`${profile.overviewTitle} · ${profile.overviewLines.join(" ")}`} />
+      <Detail
+        label="overview"
+        value={materialExecutionUnprovenItems.length === 0
+          ? `${profile.overviewTitle} · ${profile.overviewLines.join(" ")}`
+          : `${executionProvenItems.length} execution-proven readiness item${executionProvenItems.length === 1 ? "" : "s"} · ${materialExecutionUnprovenItems.length} material plan${materialExecutionUnprovenItems.length === 1 ? "" : "s"} withheld: material execution not proven`}
+      />
       <Detail label="families" value={families || "none"} />
       <Detail label="feedback types" value={feedbackTypes || "none"} />
       <Detail label="feedback quality" value={feedbackQualities || "none"} />

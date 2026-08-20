@@ -198,6 +198,7 @@ function FeedbackCard({
   readonly item: PracticeFeedbackReadinessItem;
   readonly efficacyRecords?: readonly AdaptiveEfficacyRecord[];
 }) {
+  const materialExecutionUnproven = item.canonical?.executionTruth === "blocked_material_execution";
   return (
     <details className={`practice-feedback-card status-${item.readinessStatus}`}>
       <summary>
@@ -207,28 +208,36 @@ function FeedbackCard({
         <span className="practice-feedback-card-head">
           <span className="practice-feedback-card-kicker">{practiceFeedbackReadinessFamilyLabel(item.family)}</span>
           <span className="practice-feedback-card-title">{item.publicLabel}</span>
-          <span className="practice-feedback-card-summary">{item.meaning}</span>
-          <span className="practice-feedback-evidence-preview" aria-label="top feedback evidence">
-            {item.evidence.slice(0, 2).map((entry, index) => (
-              <EvidenceChip key={`${item.id}:preview:${entry.label}:${index}`} evidence={entry} />
-            ))}
-          </span>
+          <span className="practice-feedback-card-summary">{materialExecutionUnproven ? "Material execution is not proven." : item.meaning}</span>
+          {materialExecutionUnproven ? null : (
+            <span className="practice-feedback-evidence-preview" aria-label="top feedback evidence">
+              {item.evidence.slice(0, 2).map((entry, index) => (
+                <EvidenceChip key={`${item.id}:preview:${entry.label}:${index}`} evidence={entry} />
+              ))}
+            </span>
+          )}
         </span>
         <span className="practice-feedback-card-chips">
           <Chip>{practiceFeedbackReadinessStatusLabel(item.readinessStatus)}</Chip>
-          <Chip>{practiceFeedbackReadinessFeedbackTypeLabel(item.feedbackType)}</Chip>
+          <Chip>{materialExecutionUnproven ? "material execution not proven" : practiceFeedbackReadinessFeedbackTypeLabel(item.feedbackType)}</Chip>
           <Chip>{Math.round(item.confidence * 100)}%</Chip>
         </span>
       </summary>
       <div className="practice-feedback-card-body">
         {item.canonical === undefined ? null : <CanonicalLifecycleLines item={item} efficacyRecords={efficacyRecords ?? []} />}
-        <p><strong>Feedback quality:</strong> {practiceFeedbackQualityLabel(item.feedbackQuality)}</p>
-        <p><strong>Familiarity:</strong> {item.familiaritySignal}</p>
-        <p><strong>Transfer clue:</strong> {item.localTransferClue}</p>
-        <ChipLine title="Repeated basis" items={item.repeatedExposureBasis} empty="no repeated basis is clear" />
-        <ChipLine title="Blockers" items={item.blockers.map((entry) => entry.replace(/_/g, " "))} empty="no major blocker shown" />
-        <ChipLine title="Risks" items={item.risks.map((entry) => entry.replace(/_/g, " "))} empty="no major risk shown" />
-        <EvidenceLine evidence={item.evidence} />
+        <p><strong>Feedback quality:</strong> {materialExecutionUnproven ? "material execution not proven" : practiceFeedbackQualityLabel(item.feedbackQuality)}</p>
+        <p><strong>Familiarity:</strong> {materialExecutionUnproven ? "no material execution is proven" : item.familiaritySignal}</p>
+        <p><strong>Transfer clue:</strong> {materialExecutionUnproven ? "no transfer claim can be made before material execution is proven" : item.localTransferClue}</p>
+        {materialExecutionUnproven ? (
+          <p className="practice-feedback-evidence-line">Stored experiment, response, and efficacy history is withheld as physical-execution proof.</p>
+        ) : (
+          <>
+            <ChipLine title="Repeated basis" items={item.repeatedExposureBasis} empty="no repeated basis is clear" />
+            <ChipLine title="Blockers" items={item.blockers.map((entry) => entry.replace(/_/g, " "))} empty="no major blocker shown" />
+            <ChipLine title="Risks" items={item.risks.map((entry) => entry.replace(/_/g, " "))} empty="no major risk shown" />
+            <EvidenceLine evidence={item.evidence} />
+          </>
+        )}
         <div className="practice-feedback-card-note">
           {item.canonical === undefined
             ? "No skill or adaptation exists yet."
@@ -255,9 +264,9 @@ function CanonicalLifecycleLines({
   return (
     <>
       <p><strong>Canonical idea:</strong> {canonical.ideaId} · {canonical.ideaStatus}</p>
-      <p><strong>Planned experiment:</strong> {canonical.experimentId ?? "none"} · {canonical.experimentStatus ?? "not recorded"} · attempts {canonical.attemptSeasons}</p>
-      <p><strong>Response state:</strong> {canonical.responseId ?? "none"} · {canonical.responseStatus ?? "not recorded"}</p>
-      <p><strong>Efficacy records:</strong> {matchingEfficacy.length === 0 ? "none" : matchingEfficacy.map((record) => `${record.id} · outcome ${record.outcome} (${record.outcome.replace(/_/g, " ")}) · classification ${record.classification}`).join(" | ")}</p>
+      <p><strong>Planned experiment:</strong> {materialUnproven ? `${canonical.experimentId ?? "none"} · material execution not proven` : `${canonical.experimentId ?? "none"} · ${canonical.experimentStatus ?? "not recorded"} · attempts ${canonical.attemptSeasons}`}</p>
+      <p><strong>Response state:</strong> {materialUnproven ? `${canonical.responseId ?? "none"} · material execution not proven` : `${canonical.responseId ?? "none"} · ${canonical.responseStatus ?? "not recorded"}`}</p>
+      <p><strong>Efficacy records:</strong> {materialUnproven ? "withheld: material execution not proven." : matchingEfficacy.length === 0 ? "none" : matchingEfficacy.map((record) => `${record.id} · outcome ${record.outcome} (${record.outcome.replace(/_/g, " ")}) · classification ${record.classification}`).join(" | ")}</p>
       <p><strong>Execution truth:</strong> {materialUnproven ? "material execution not proven" : canonical.executionTruth.replace(/_/g, " ")}</p>
     </>
   );
