@@ -14,6 +14,7 @@ import {
 } from "../../sim/agents/problemPractice";
 import type { Band } from "../../sim/agents/types";
 import type { WorldState } from "../../sim/world/types";
+import { canonicalExecutionProofGap } from "../../sim/agents/practicalAdaptationProjection";
 
 import { Icon, type IconName } from "../icons";
 import { Chip, SectionHeading } from "./parts";
@@ -180,6 +181,9 @@ function PracticeCandidateCard({
   readonly candidate: PracticeExperimentCandidate;
   readonly problemLabel: string;
 }) {
+  const executionProofGap = candidate.canonical === undefined
+    ? undefined
+    : canonicalExecutionProofGap(candidate.canonical);
   return (
     <details className={`practice-candidate-card status-${candidate.status}`}>
       <summary>
@@ -204,10 +208,13 @@ function PracticeCandidateCard({
       <div className="practice-candidate-body">
         {candidate.canonical === undefined ? null : (
           <>
-            <p><strong>Canonical idea:</strong> {candidate.canonical.ideaId} · <strong>Idea:</strong> {candidate.canonical.ideaStatus}</p>
-            <p><strong>Experiment:</strong> {candidate.canonical.experimentId ?? "no recorded experiment"} · {candidate.canonical.experimentStatus ?? "not planned"} · attempts {candidate.canonical.attemptSeasons}</p>
-            <p><strong>Response:</strong> {candidate.canonical.responseId ?? "none"} · {candidate.canonical.responseStatus ?? "not recorded"}</p>
-            <p><strong>Execution truth:</strong> {candidate.canonical.executionTruth.replace(/_/g, " ")}</p>
+            <p><strong>Canonical idea:</strong> {candidate.canonical.ideaId ?? "missing"} · <strong>Idea:</strong> {candidate.canonical.ideaStatus ?? "missing retained record"}</p>
+            <p><strong>Experiment:</strong> {candidate.canonical.experimentId ?? "no recorded experiment"} · {executionProofGap ?? candidate.canonical.experimentStatus ?? "not planned"}{executionProofGap === undefined ? ` · attempts ${candidate.canonical.attemptSeasons}` : " · attempts withheld"}</p>
+            <p><strong>Response:</strong> {candidate.canonical.responseId ?? "none"} · {executionProofGap ?? candidate.canonical.responseStatus ?? "not recorded"}</p>
+            <p><strong>Execution truth:</strong> {executionProofGap ?? candidate.canonical.executionTruth.replace(/_/g, " ")}</p>
+            {candidate.canonical.missingLinks?.length ? (
+              <p><strong>Missing retained links:</strong> {candidate.canonical.missingLinks.map((link) => `${link.kind} ${link.id}`).join(" · ")}</p>
+            ) : null}
           </>
         )}
         <p><strong>Responds to:</strong> {problemLabel}</p>
@@ -275,6 +282,8 @@ function basisLabel(basis: ProblemFrame["livedBasis"]): string {
       return "lived";
     case "inherited_not_lived":
       return "inherited";
+    case "copied_not_lived":
+      return "copied";
     case "mixed":
       return "mixed";
     case "unknown":

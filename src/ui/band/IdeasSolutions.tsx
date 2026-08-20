@@ -6,7 +6,10 @@ import {
   adaptiveResponseTypeLabel,
   deriveAdaptiveHumanProfile,
 } from "../../sim/agents/adaptiveHuman";
-import { derivePracticalVariantExecutionClass } from "../../sim/agents/practicalResponses";
+import {
+  canonicalExecutionProofGap,
+  deriveCanonicalPracticalAdaptationRows,
+} from "../../sim/agents/practicalAdaptationProjection";
 import {
   derivePublicHumanStoryProfile,
   publicStoryForSource,
@@ -125,11 +128,10 @@ function CanonicalInventionChain({ band }: { readonly band: Band }) {
   const state = band.practicalAdaptation;
   if (state === undefined) return null;
   const problems = (state.problems ?? []).slice(0, 5);
-  const ideas = (state.ideas ?? []).slice(0, 6);
-  const experiments = (state.experiments ?? []).slice(0, 4);
-  const responses = state.responses.slice(0, 6);
-  const materialExecutionIsUnproven = (family: string, variantKey: string) =>
-    derivePracticalVariantExecutionClass(family as Parameters<typeof derivePracticalVariantExecutionClass>[0], variantKey) === "material_execution_required";
+  const rows = deriveCanonicalPracticalAdaptationRows(state);
+  const ideaRows = rows.filter((row) => row.idea !== undefined).slice(0, 6);
+  const experimentRows = rows.filter((row) => row.experiment !== undefined).slice(0, 4);
+  const responseRows = rows.filter((row) => row.response !== undefined).slice(0, 6);
   return (
     <section className="bp-section band-adaptive" aria-label="causal invention chain">
       <SectionHeading icon="activity">Problems, ideas &amp; inventions</SectionHeading>
@@ -149,46 +151,54 @@ function CanonicalInventionChain({ band }: { readonly band: Band }) {
         </div>
       )}
       <div className="practice-feedback-grid compact">
-        {ideas.map((idea) => (
-          <details key={idea.id} className={`practice-feedback-card status-${idea.status}`}>
+        {ideaRows.map((row) => {
+          const idea = row.idea!;
+          return (
+          <details key={row.id} className={`practice-feedback-card status-${idea.status}`}>
             <summary><strong>{idea.publicLabel}</strong><Chip>{idea.status}</Chip></summary>
             <div className="practice-feedback-card-body">
               <p><strong>Believed mechanism:</strong> {idea.mechanismBelief}</p>
               <p><strong>Decision:</strong> {idea.statusReason}</p>
               <p><strong>Basis:</strong> {idea.basisFragmentIds.join(", ") || "missing components"}</p>
-            </div>
-          </details>
-        ))}
-      </div>
-      <div className="practice-feedback-grid compact">
-        {experiments.map((experiment) => {
-          const executionUnproven = materialExecutionIsUnproven(experiment.family, experiment.variantKey);
-          return (
-          <details key={experiment.id} className={`practice-feedback-card status-${experiment.status}`}>
-            <summary><strong>{experiment.family.replace(/_/g, " ")}: {experiment.variantKey.replace(/_/g, " ")}</strong><Chip>{executionUnproven ? "material execution not proven" : experiment.status.replace(/_/g, " ")}</Chip></summary>
-            <div className="practice-feedback-card-body">
-              <p><strong>Planned materials:</strong> {experiment.materials.join(", ")}</p>
-              <p><strong>Planned procedure:</strong> {experiment.procedure}</p>
-              <p><strong>Expected:</strong> {experiment.expectedEffect}</p>
-              <p><strong>Observed:</strong> {executionUnproven ? "material execution not proven" : experiment.observedOutcome ?? "not attempted yet"}</p>
-              <p><strong>Execution:</strong> {executionUnproven ? "material execution not proven; stored status, observation, and learned fragments are withheld as physical proof." : "planned materials, procedure, and costs do not prove material execution."}</p>
-              <p><strong>Estimated cost:</strong> labor {Math.round(experiment.laborCost * 100)}%, risk {Math.round(experiment.riskCost * 100)}%; {experiment.opportunityCost}</p>
+              {row.canonical.missingLinks?.length ? <p><strong>Missing retained links:</strong> {row.canonical.missingLinks.map((link) => `${link.kind} ${link.id}`).join(" · ")}</p> : null}
             </div>
           </details>
           );
         })}
       </div>
       <div className="practice-feedback-grid compact">
-        {responses.map((response) => {
-          const executionUnproven = materialExecutionIsUnproven(response.family, response.variantKey);
+        {experimentRows.map((row) => {
+          const experiment = row.experiment!;
+          const executionProofGap = canonicalExecutionProofGap(row.canonical);
           return (
-          <article key={response.id} className={`practice-feedback-card status-${response.status}`}>
+          <details key={row.id} className={`practice-feedback-card status-${experiment.status}`}>
+            <summary><strong>{experiment.family.replace(/_/g, " ")}: {experiment.variantKey.replace(/_/g, " ")}</strong><Chip>{executionProofGap ?? experiment.status.replace(/_/g, " ")}</Chip></summary>
+            <div className="practice-feedback-card-body">
+              <p><strong>Planned materials:</strong> {experiment.materials.join(", ")}</p>
+              <p><strong>Planned procedure:</strong> {experiment.procedure}</p>
+              <p><strong>Expected:</strong> {experiment.expectedEffect}</p>
+              <p><strong>Observed:</strong> {executionProofGap ?? experiment.observedOutcome ?? "not attempted yet"}</p>
+              <p><strong>Execution:</strong> {executionProofGap === undefined ? "planned materials, procedure, and costs do not prove material execution." : `${executionProofGap}; stored status, observation, and learned fragments are withheld as physical proof.`}</p>
+              <p><strong>Estimated cost:</strong> labor {Math.round(experiment.laborCost * 100)}%, risk {Math.round(experiment.riskCost * 100)}%; {experiment.opportunityCost}</p>
+              {row.canonical.missingLinks?.length ? <p><strong>Missing retained links:</strong> {row.canonical.missingLinks.map((link) => `${link.kind} ${link.id}`).join(" · ")}</p> : null}
+            </div>
+          </details>
+          );
+        })}
+      </div>
+      <div className="practice-feedback-grid compact">
+        {responseRows.map((row) => {
+          const response = row.response!;
+          const executionProofGap = canonicalExecutionProofGap(row.canonical);
+          return (
+          <article key={row.id} className={`practice-feedback-card status-${response.status}`}>
             <div className="practice-feedback-card-body">
               <strong>{response.publicLabel}</strong>
               <p>{response.contextNote}</p>
-              <p>{executionUnproven
-                ? "Material execution not proven; stored response status and outcome counts are withheld as execution evidence."
+              <p>{executionProofGap !== undefined
+                ? `${executionProofGap}; stored response status and outcome counts are withheld as execution evidence.`
                 : `${response.status} · confidence ${Math.round(response.confidence * 100)}% · ${response.successCount} useful / ${response.failureCount} failed`}</p>
+              {row.canonical.missingLinks?.length ? <p><strong>Missing retained links:</strong> {row.canonical.missingLinks.map((link) => `${link.kind} ${link.id}`).join(" · ")}</p> : null}
             </div>
           </article>
           );

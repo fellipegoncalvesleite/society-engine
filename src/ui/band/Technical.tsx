@@ -5,7 +5,11 @@ import { deriveChronicHardship } from "../../sim/agents/chronicHardship";
 import { deriveCanonicalNutritionState } from "../../sim/agents/seasonalSurvival";
 import { deriveCrossingPracticeRelief } from "../../sim/agents/crossingPractice";
 import { effectiveFragmentStrength } from "../../sim/agents/practicalFragments";
-import { deriveCarryingRelief, deriveDryRouteWaterRelief, deriveEngineeringSafetyRelief, derivePracticalVariantExecutionClass } from "../../sim/agents/practicalResponses";
+import { deriveCarryingRelief, deriveDryRouteWaterRelief, deriveEngineeringSafetyRelief } from "../../sim/agents/practicalResponses";
+import {
+  canonicalExecutionProofGap,
+  deriveCanonicalPracticalAdaptationRows,
+} from "../../sim/agents/practicalAdaptationProjection";
 import { classifyResidentialSeason, deriveSeasonalTravelPlanForBand } from "../../sim/agents/migrationWalk";
 import { deriveBandIdentityProfile } from "../../sim/agents/bandIdentity";
 import { deriveCanonicalEvents, familyLabel } from "../../sim/agents/eventSystem";
@@ -611,7 +615,16 @@ function CausalAgencyDetails({
 function PracticalAdaptationDetails({ band, world }: { readonly band: Band; readonly world: WorldState | null }) {
   const state = band.practicalAdaptation;
   const currentTick = world === null ? 0 : Number(world.time.tick);
-  if (state === undefined || (state.fragments.length === 0 && state.responses.length === 0)) {
+  if (state === undefined) {
+    return (
+      <Detail
+        label="practical adaptation"
+        value="no learned fragments or practical responses yet — they form only from repeated lived conditions (burden, dry travel) with a real material/technique basis"
+      />
+    );
+  }
+  const rows = deriveCanonicalPracticalAdaptationRows(state);
+  if (state.fragments.length === 0 && rows.length === 0) {
     return (
       <Detail
         label="practical adaptation"
@@ -622,18 +635,9 @@ function PracticalAdaptationDetails({ band, world }: { readonly band: Band; read
   const carrying = deriveCarryingRelief(band, currentTick);
   const water = deriveDryRouteWaterRelief(band, currentTick, undefined);
   const engineering = deriveEngineeringSafetyRelief(band, currentTick, undefined);
-  const materialExecutionIsUnproven = (family: string, variantKey: string) =>
-    derivePracticalVariantExecutionClass(family as Parameters<typeof derivePracticalVariantExecutionClass>[0], variantKey) === "material_execution_required";
-  const efficacyExecutionIsUnproven = (responseId: string) => {
-    const response = state.responses.find((candidate) => candidate.id === responseId);
-    const experiment = state.experiments?.find((candidate) => candidate.responseId === responseId);
-    const source = response ?? experiment;
-    return source === undefined || materialExecutionIsUnproven(source.family, source.variantKey);
-  };
-  const executionUnprovenEfficacyRecords = state.efficacyRecords.filter((record) => {
-    return efficacyExecutionIsUnproven(record.responseId);
-  });
-  const executionProvenEfficacyRecords = state.efficacyRecords.filter((record) => !executionUnprovenEfficacyRecords.includes(record));
+  const admittedEfficacyIds = new Set(rows.flatMap((row) => row.canonical.efficacyRecordIds));
+  const executionUnprovenEfficacyRecords = state.efficacyRecords.filter((record) => !admittedEfficacyIds.has(record.id));
+  const executionProvenEfficacyRecords = state.efficacyRecords.filter((record) => admittedEfficacyIds.has(record.id));
   return (
     <>
       <Detail
@@ -643,15 +647,15 @@ function PracticalAdaptationDetails({ band, world }: { readonly band: Band; read
       />
       <Detail
         label="canonical invention ideas"
-        value={(state.ideas ?? []).length === 0 ? "none" : (state.ideas ?? []).map((idea) =>
+        value={rows.every((row) => row.idea === undefined) ? "none" : rows.flatMap((row) => row.idea === undefined ? [] : [row.idea]).map((idea) =>
           `${idea.publicLabel} · ${idea.status} (${idea.statusReason}) · mechanism ${idea.mechanismBelief} · basis ${formatCompactNumber(idea.basisScore)} from ${idea.basisFragmentIds.join(",") || "missing components"} · ${idea.source}`).join(" | ")}
       />
       <Detail
         label="canonical experiment plans and outcomes"
-        value={(state.experiments ?? []).length === 0 ? "none" : (state.experiments ?? []).map((experiment) => {
-          const executionUnproven = materialExecutionIsUnproven(experiment.family, experiment.variantKey);
-          return executionUnproven
-            ? `${experiment.family}/${experiment.variantKey} · material execution not proven · planned materials ${experiment.materials.join(", ")} · planned procedure ${experiment.procedure} · estimated cost labor ${formatCompactNumber(experiment.laborCost)} risk ${formatCompactNumber(experiment.riskCost)} / ${experiment.opportunityCost} · stored status, observation, and learned fragments withheld as physical proof`
+        value={rows.every((row) => row.experiment === undefined) ? "none" : rows.flatMap((row) => row.experiment === undefined ? [] : [{ row, experiment: row.experiment }]).map(({ row, experiment }) => {
+          const executionProofGap = canonicalExecutionProofGap(row.canonical);
+          return executionProofGap !== undefined
+            ? `${experiment.family}/${experiment.variantKey} · ${executionProofGap} · planned materials ${experiment.materials.join(", ")} · planned procedure ${experiment.procedure} · estimated cost labor ${formatCompactNumber(experiment.laborCost)} risk ${formatCompactNumber(experiment.riskCost)} / ${experiment.opportunityCost} · stored status, observation, and learned fragments withheld as physical proof`
             : `${experiment.family}/${experiment.variantKey} · ${experiment.status} attempts ${experiment.attemptSeasons} · planned materials ${experiment.materials.join(", ")} · planned procedure ${experiment.procedure} · estimated cost labor ${formatCompactNumber(experiment.laborCost)} risk ${formatCompactNumber(experiment.riskCost)} / ${experiment.opportunityCost} · expected ${experiment.expectedEffect} · observed ${experiment.observedOutcome ?? "not yet attempted"} · learned ${experiment.fragmentsLearned.join(",") || "none"} contradicted ${experiment.fragmentsContradicted.join(",") || "none"}`;
         }).join(" | ")}
       />
@@ -668,15 +672,21 @@ function PracticalAdaptationDetails({ band, world }: { readonly band: Band; read
                 `${fragment.subject} (${fragment.property}) · ${fragment.basis}/${fragment.knowledgeState ?? "legacy"} · strength ${formatCompactNumber(fragment.strength)} eff ${formatCompactNumber(effectiveFragmentStrength(fragment, currentTick))} · observations ${fragment.observationCount ?? 0} contradictions ${fragment.contradictionCount ?? 0} · contexts ${(fragment.contextKeys ?? []).join(",") || "none"} · failures ${fragment.failureCount}`)
               .join(" | ")}
       />
-      {state.responses.map((response) => (
+      {rows.flatMap((row) => row.response === undefined ? [] : [{ row, response: row.response }]).map(({ row, response }) => (
         <Detail
-          key={response.id}
+          key={row.id}
           label={`response ${response.family}`}
-          value={materialExecutionIsUnproven(response.family, response.variantKey)
-            ? `${response.variantKey} · material execution not proven · stored response status, efficacy, and success/partial/failure counts withheld as execution evidence · ${response.contextNote}${response.revisionOf !== undefined ? ` · revised from ${response.revisionOf}` : ""}`
+          value={canonicalExecutionProofGap(row.canonical) !== undefined
+            ? `${response.variantKey} · ${canonicalExecutionProofGap(row.canonical)} · stored response status, efficacy, and success/partial/failure counts withheld as execution evidence · ${response.contextNote}${response.revisionOf !== undefined ? ` · revised from ${response.revisionOf}` : ""}`
             : `${response.variantKey} · ${response.status} · confidence ${formatCompactNumber(response.confidence)} · ${response.successCount} success / ${response.partialCount} partial / ${response.failureCount} failure · ${response.lastEfficacy ?? "not yet exercised"} · ${response.contextNote}${response.revisionOf !== undefined ? ` · revised from ${response.revisionOf}` : ""}`}
         />
       ))}
+      {rows.some((row) => (row.canonical.missingLinks?.length ?? 0) > 0) ? (
+        <Detail
+          label="canonical lifecycle missing retained links"
+          value={rows.flatMap((row) => row.canonical.missingLinks ?? []).map((link) => `${link.kind} ${link.id}`).join(" | ")}
+        />
+      ) : null}
       <Detail
         label="current carrying relief"
         value={`relief ${formatCompactNumber(carrying.relief)} (cap ${formatCompactNumber(carrying.cap)}) · ${carrying.active ? "ACTIVE — applied to travel-plan carry/vulnerable limiters + move-hardship dependent terms" : "inactive"} · ${carrying.reason}`}
@@ -1149,11 +1159,11 @@ function ProblemPracticeDetails({ band, world }: { readonly band: Band; readonly
   }
 
   const profile = deriveProblemPracticeProfile(world, band);
-  const materialExecutionUnprovenCandidates = profile.practiceCandidates.filter(
-    (candidate) => candidate.canonical?.executionTruth === "blocked_material_execution",
+  const executionUnprovenCandidates = profile.practiceCandidates.filter(
+    (candidate) => candidate.canonical !== undefined && canonicalExecutionProofGap(candidate.canonical) !== undefined,
   );
   const executionProvenCandidates = profile.practiceCandidates.filter(
-    (candidate) => candidate.canonical?.executionTruth !== "blocked_material_execution",
+    (candidate) => candidate.canonical === undefined || canonicalExecutionProofGap(candidate.canonical) === undefined,
   );
   const summarizeCandidateCounts = <T extends string>(values: readonly T[], label: (value: T) => string) =>
     Array.from(new Set(values))
@@ -1193,8 +1203,8 @@ function ProblemPracticeDetails({ band, world }: { readonly band: Band; readonly
     .slice(0, 7)
     .map((candidate) => candidate.canonical === undefined
       ? `${candidate.family}:${candidate.status}:${candidate.expectedFeedbackType}:${formatCompactNumber(candidate.confidence)}`
-      : candidate.canonical.executionTruth === "blocked_material_execution"
-        ? `${candidate.canonical.ideaId}:material execution not proven`
+      : canonicalExecutionProofGap(candidate.canonical) !== undefined
+        ? `${candidate.canonical.ideaId ?? "missing idea"}:${canonicalExecutionProofGap(candidate.canonical)}`
         : `${candidate.canonical.ideaId}:${candidate.canonical.ideaStatus}:${candidate.canonical.experimentStatus ?? "no_experiment"}:${candidate.canonical.responseStatus ?? "no_response"}:${candidate.canonical.executionTruth}`)
     .join(" | ");
 
@@ -1204,9 +1214,9 @@ function ProblemPracticeDetails({ band, world }: { readonly band: Band; readonly
       <Detail label="projection" value={`${profile.problemFrames.length}/${profile.caps.problemFrameCap} frames · ${profile.practiceCandidates.length}/${profile.caps.practiceCandidateCap} candidates`} />
       <Detail
         label="overview"
-        value={materialExecutionUnprovenCandidates.length === 0
+        value={executionUnprovenCandidates.length === 0
           ? `${profile.overviewTitle} · ${profile.overviewLines.join(" ")}`
-          : `${executionProvenCandidates.length} execution-proven candidate${executionProvenCandidates.length === 1 ? "" : "s"} · ${materialExecutionUnprovenCandidates.length} material plan${materialExecutionUnprovenCandidates.length === 1 ? "" : "s"} withheld: material execution not proven`}
+          : `${executionProvenCandidates.length} execution-proven candidate${executionProvenCandidates.length === 1 ? "" : "s"} · ${executionUnprovenCandidates.length} lifecycle record${executionUnprovenCandidates.length === 1 ? "" : "s"} withheld: ${Array.from(new Set(executionUnprovenCandidates.flatMap((candidate) => candidate.canonical === undefined ? [] : [canonicalExecutionProofGap(candidate.canonical) ?? "execution not proven"]))).join(" · ")}`}
       />
       <Detail label="frame families" value={frameFamilies || "none"} />
       <Detail label="candidate families" value={candidateFamilies || "none"} />
@@ -1344,11 +1354,11 @@ function PracticeFeedbackReadinessDetails({ band, world }: { readonly band: Band
   }
 
   const profile = derivePracticeFeedbackReadinessProfile(world, band);
-  const materialExecutionUnprovenItems = profile.items.filter(
-    (item) => item.canonical?.executionTruth === "blocked_material_execution",
+  const executionUnprovenItems = profile.items.filter(
+    (item) => item.canonical !== undefined && canonicalExecutionProofGap(item.canonical) !== undefined,
   );
   const executionProvenItems = profile.items.filter(
-    (item) => item.canonical?.executionTruth !== "blocked_material_execution",
+    (item) => item.canonical === undefined || canonicalExecutionProofGap(item.canonical) === undefined,
   );
   const executionProvenRepeatedExposureCount = executionProvenItems.filter(
     (item) => item.repeatedExposureBasis.length > 0 || item.linkedRepetitionIds.length > 0,
@@ -1385,8 +1395,8 @@ function PracticeFeedbackReadinessDetails({ band, world }: { readonly band: Band
     .slice(0, 8)
     .map((item) => item.canonical === undefined
       ? `${item.family}:${item.readinessStatus}:${item.feedbackType}:${formatCompactNumber(item.confidence)} e${item.evidence.length}`
-      : item.canonical.executionTruth === "blocked_material_execution"
-        ? `${item.canonical.ideaId}:material execution not proven:efficacy=withheld`
+      : canonicalExecutionProofGap(item.canonical) !== undefined
+        ? `${item.canonical.ideaId ?? "missing idea"}:${canonicalExecutionProofGap(item.canonical)}:efficacy=withheld`
         : `${item.canonical.ideaId}:${item.canonical.ideaStatus}:${item.canonical.experimentStatus ?? "no_experiment"}:${item.canonical.responseStatus ?? "no_response"}:${item.canonical.executionTruth}:efficacy=${item.canonical.efficacyRecordIds.join(",") || "none"}`)
     .join(" | ");
 
@@ -1396,9 +1406,9 @@ function PracticeFeedbackReadinessDetails({ band, world }: { readonly band: Band
       <Detail label="projection" value={`${profile.items.length}/${profile.caps.itemCap} readiness items · repeated ${executionProvenRepeatedExposureCount} · max per family ${profile.caps.itemsPerFamilyCap}`} />
       <Detail
         label="overview"
-        value={materialExecutionUnprovenItems.length === 0
+        value={executionUnprovenItems.length === 0
           ? `${profile.overviewTitle} · ${profile.overviewLines.join(" ")}`
-          : `${executionProvenItems.length} execution-proven readiness item${executionProvenItems.length === 1 ? "" : "s"} · ${materialExecutionUnprovenItems.length} material plan${materialExecutionUnprovenItems.length === 1 ? "" : "s"} withheld: material execution not proven`}
+          : `${executionProvenItems.length} execution-proven readiness item${executionProvenItems.length === 1 ? "" : "s"} · ${executionUnprovenItems.length} lifecycle record${executionUnprovenItems.length === 1 ? "" : "s"} withheld: ${Array.from(new Set(executionUnprovenItems.flatMap((item) => item.canonical === undefined ? [] : [canonicalExecutionProofGap(item.canonical) ?? "execution not proven"]))).join(" · ")}`}
       />
       <Detail label="families" value={families || "none"} />
       <Detail label="feedback types" value={feedbackTypes || "none"} />

@@ -714,10 +714,12 @@ function buildInheritanceContexts(context: SocialDiffusionContext): readonly Soc
 
 function buildTraceContexts(context: SocialDiffusionContext): readonly SocialEcologicalContext[] {
   const factor = context.footholdFactors.find((item) =>
-    item.status === "stale" ||
-    item.family === "route_crossing_use" ||
-    item.family === "temporary_storage_cache" ||
-    item.family === "care_camp_organization") ?? context.footholdFactors[0];
+    hasIndependentVisibleFootholdEvidence(item) && (
+      item.status === "stale" ||
+      item.family === "route_crossing_use" ||
+      item.family === "temporary_storage_cache" ||
+      item.family === "care_camp_organization")) ??
+    context.footholdFactors.find(hasIndependentVisibleFootholdEvidence);
   if (factor === undefined) {
     return [];
   }
@@ -931,9 +933,24 @@ function isVisiblePracticeTrace(practice: PracticeFeedbackReadinessItem): boolea
       return true;
     case "idea_only":
     case "planned_unexecuted":
+    case "existing_physical_work_unproven":
     case "blocked_material_execution":
       return false;
   }
+}
+
+const INDEPENDENT_VISIBLE_FOOTHOLD_SOURCES: ReadonlySet<string> = new Set([
+  "proto_camp_memory",
+  "place_memory",
+  "activity_party",
+  "activity_labor",
+  "body_camp_logistics",
+  "seasonal_support",
+  "use_pressure",
+] as const);
+
+function hasIndependentVisibleFootholdEvidence(factor: CampFootholdFactor): boolean {
+  return factor.evidence.some((entry) => INDEPENDENT_VISIBLE_FOOTHOLD_SOURCES.has(entry.sourceSystem));
 }
 
 function buildFootholdTraceDiffusionItems(
@@ -941,12 +958,12 @@ function buildFootholdTraceDiffusionItems(
   socialContexts: readonly SocialEcologicalContext[],
 ): readonly SocialDiffusionItem[] {
   return context.footholdFactors
-    .filter((factor) =>
+    .filter((factor) => hasIndependentVisibleFootholdEvidence(factor) && (
       factor.family === "route_crossing_use" ||
       factor.family === "temporary_storage_cache" ||
       factor.family === "care_camp_organization" ||
       factor.family === "fire_hearth_fuel" ||
-      factor.status === "stale")
+      factor.status === "stale"))
     .slice(0, 2)
     .map((factor) => {
       const domain = domainFromFoothold(factor);

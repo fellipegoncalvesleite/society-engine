@@ -76,7 +76,12 @@ export type PracticeFeedbackReadinessEvidenceKind =
   | "demography"
   | "identity";
 
-export type PracticeFeedbackLivedBasis = "lived" | "inherited_not_lived" | "mixed" | "unknown";
+export type PracticeFeedbackLivedBasis =
+  | "lived"
+  | "inherited_not_lived"
+  | "copied_not_lived"
+  | "mixed"
+  | "unknown";
 
 export type PracticeFeedbackReadinessFeedbackType =
   | "clear_success"

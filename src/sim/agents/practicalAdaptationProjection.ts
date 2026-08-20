@@ -149,6 +149,21 @@ function candidateFamily(family: PracticalResponseFamily): PracticeExperimentFam
   }
 }
 
+function fallbackProblemFamily(family: PracticalResponseFamily): ProblemFrameFamily {
+  switch (family) {
+    case "carrying_load": return "carrying_logistical_burden";
+    case "dry_route_water":
+    case "proto_measure": return "route_new_country_uncertainty";
+    case "hunting_distance": return "food_return_subsistence";
+    case "temporary_shelter":
+    case "care_treatment": return "camp_setup_care_burden";
+    case "water_storage":
+    case "groundwater_seek":
+    case "animal_proximity": return "water_refuge_pressure";
+    case "engineering_structure": return "crossing_blocked_path";
+  }
+}
+
 function readinessFamily(family: PracticalResponseFamily): PracticeFeedbackReadinessFamily {
   switch (family) {
     case "carrying_load":
@@ -164,21 +179,30 @@ function readinessFamily(family: PracticalResponseFamily): PracticeFeedbackReadi
   }
 }
 
-function livedBasis(problem: PracticalProblemFrame): "lived" | "inherited_not_lived" {
-  return problem.origin === "inherited" ? "inherited_not_lived" : "lived";
+type CanonicalBasis = PracticeFeedbackLivedBasis;
+
+function problemLivedBasis(problem: PracticalProblemFrame): CanonicalBasis {
+  if (problem.origin === "inherited") return "inherited_not_lived";
+  if (problem.origin === "copied") return "copied_not_lived";
+  return "lived";
 }
 
-function candidateStatus(
-  problem: PracticalProblemFrame,
-  experiment: PracticalExperiment | undefined,
-  canonical: CanonicalCandidateProjection,
-): PracticeExperimentStatus {
-  if (livedBasis(problem) === "inherited_not_lived" && experiment === undefined) return "inherited_not_tested_here";
+function candidateHasLocalExecution(canonical: CanonicalCandidateProjection): boolean {
+  return canonical.executionTruth === "practice_attempted" ||
+    canonical.executionTruth === "existing_physical_work_executed" ||
+    canonical.executionTruth === "concluded_from_canonical_history";
+}
+
+function candidateStatus(entry: CanonicalPracticalAdaptationRow): PracticeExperimentStatus {
+  const { canonical, experiment, candidateBasis } = entry;
   if (canonical.executionTruth === "blocked_material_execution") return "blocked_by_missing_material";
+  if (canonical.executionTruth === "existing_physical_work_unproven") return "currently_unsupported";
+  if ((candidateBasis === "inherited_not_lived" || candidateBasis === "copied_not_lived") &&
+      !candidateHasLocalExecution(canonical)) return "inherited_not_tested_here";
   if (experiment?.status === "concluded_failure" || experiment?.status === "abandoned") return "dead_end_risk";
   if (experiment?.status === "concluded_partial") return "low_feedback_repetition";
   if (experiment?.status === "concluded_success") return "implicit_repetition";
-  if ((experiment?.attemptSeasons ?? 0) > 0 || canonical.efficacyRecordIds.length > 0) return "implicit_repetition";
+  if (canonical.attemptSeasons > 0 || canonical.efficacyRecordIds.length > 0) return "implicit_repetition";
   if (canonical.responseStatus === "abandoned") return "dead_end_risk";
   if (canonical.executionTruth === "practice_attempted") return "implicit_repetition";
   if (experiment !== undefined) return "plausible_untried";
@@ -212,8 +236,15 @@ function feedbackFromEfficacy(record: AdaptiveEfficacyRecord): CanonicalFeedback
   return exhaustive;
 }
 
-function feedbackPresentation(entry: CanonicalCandidateEntry): CanonicalFeedbackPresentation {
-  if (entry.inherited) return { feedbackType: "inherited_no_local_feedback", feedbackQuality: "inherited_only" };
+function feedbackPresentation(entry: CanonicalPracticalAdaptationRow): CanonicalFeedbackPresentation {
+  if (entry.canonical.executionTruth === "blocked_material_execution" ||
+      entry.canonical.executionTruth === "existing_physical_work_unproven") {
+    return { feedbackType: "delayed_feedback", feedbackQuality: "blocked" };
+  }
+  if ((entry.candidateBasis === "inherited_not_lived" || entry.candidateBasis === "copied_not_lived") &&
+      !candidateHasLocalExecution(entry.canonical)) {
+    return { feedbackType: "inherited_no_local_feedback", feedbackQuality: "inherited_only" };
+  }
   if (entry.experiment?.status === "concluded_success") return { feedbackType: "clear_success", feedbackQuality: "clear" };
   if (entry.experiment?.status === "concluded_partial") return { feedbackType: "mixed_feedback", feedbackQuality: "mixed" };
   if (entry.experiment?.status === "concluded_failure" || entry.experiment?.status === "abandoned") {
@@ -225,70 +256,199 @@ function feedbackPresentation(entry: CanonicalCandidateEntry): CanonicalFeedback
   if (entry.canonical.executionTruth === "existing_physical_work_executed") {
     return { feedbackType: "recorded_execution_without_feedback", feedbackQuality: "not_recorded" };
   }
-  if (entry.canonical.executionTruth === "blocked_material_execution") return { feedbackType: "delayed_feedback", feedbackQuality: "blocked" };
   return { feedbackType: "delayed_feedback", feedbackQuality: "weak" };
 }
 
-interface CanonicalCandidateEntry {
-  readonly problem: PracticalProblemFrame;
-  readonly idea: PracticalIdeaCandidate;
+export interface CanonicalPracticalAdaptationRow {
+  readonly id: string;
+  readonly family: PracticalResponseFamily;
+  readonly variantKey: string;
+  readonly problem?: PracticalProblemFrame;
+  readonly idea?: PracticalIdeaCandidate;
   readonly experiment?: PracticalExperiment;
   readonly response?: PracticalResponseState;
   readonly efficacyRecords: readonly AdaptiveEfficacyRecord[];
+  readonly recordedEfficacyRecords: readonly AdaptiveEfficacyRecord[];
   readonly canonical: CanonicalCandidateProjection;
-  readonly inherited: boolean;
+  readonly candidateBasis: CanonicalBasis;
 }
 
-function entriesFor(state: PracticalAdaptationState, problems: readonly PracticalProblemFrame[]): readonly CanonicalCandidateEntry[] {
-  const problemIds = new Set(problems.map((problem) => problem.id));
-  return (state.ideas ?? [])
-    .filter((idea) => problemIds.has(idea.problemId))
-    .slice(0, PRACTICE_CANDIDATE_CAP)
-    .map((idea) => {
-      const problem = problems.find((item) => item.id === idea.problemId)!;
-      const experiment = (state.experiments ?? []).find((item) => item.problemId === problem.id && item.ideaId === idea.id);
-      const response = experiment === undefined ? undefined : state.responses.find((item) =>
-        item.id === experiment.responseId && item.problemId === problem.id && item.ideaId === idea.id && item.experimentId === experiment.id);
-      const efficacyRecords = response === undefined
-        ? []
-        : state.efficacyRecords.filter((record) => record.responseId === response.id);
-      const efficacyRecordIds = response === undefined
-        ? []
-        : efficacyRecords.map((record) => record.id);
-      const executionClass = derivePracticalVariantExecutionClass(idea.family, idea.variantKey);
-      const matchingWaterWorks = response !== undefined && state.waterWorks?.responseId === response.id;
-      const executionTruth = executionClass === "material_execution_required"
-        ? "blocked_material_execution"
-        : executionClass === "existing_physical_work" && matchingWaterWorks
-          ? "existing_physical_work_executed"
-          : experiment?.status.startsWith("concluded_") || experiment?.status === "abandoned"
-            ? "concluded_from_canonical_history"
-            : (experiment?.attemptSeasons ?? 0) > 0 || efficacyRecordIds.length > 0
-              ? "practice_attempted"
-              : experiment !== undefined
-                ? "planned_unexecuted"
-                : "idea_only";
-      return {
-        problem,
-        idea,
-        experiment,
-        response,
-        efficacyRecords,
-        inherited: livedBasis(problem) === "inherited_not_lived",
-        canonical: {
-          ideaId: idea.id,
-          ideaStatus: idea.status,
-          ...(experiment === undefined ? {} : { experimentId: experiment.id, experimentStatus: experiment.status }),
-          attemptSeasons: experiment?.attemptSeasons ?? 0,
-          ...(response === undefined ? {} : { responseId: response.id, responseStatus: response.status }),
-          efficacyRecordIds,
-          executionTruth,
-        },
-      };
-    });
+export function canonicalExecutionProofGap(canonical: CanonicalCandidateProjection): string | undefined {
+  switch (canonical.executionTruth) {
+    case "blocked_material_execution":
+      return "material execution not proven";
+    case "existing_physical_work_unproven":
+      return "physical work not proven";
+    case "idea_only":
+    case "planned_unexecuted":
+    case "practice_attempted":
+    case "existing_physical_work_executed":
+    case "concluded_from_canonical_history":
+      return undefined;
+  }
 }
 
-function problemEvidence(problem: PracticalProblemFrame, basis: "lived" | "inherited_not_lived"): readonly ProblemPracticeEvidenceRef[] {
+export function canonicalEfficacyRecordsForProjection(
+  canonical: CanonicalCandidateProjection,
+  records: readonly AdaptiveEfficacyRecord[],
+): readonly AdaptiveEfficacyRecord[] {
+  const admittedIds = new Set(canonical.efficacyRecordIds);
+  return records.filter((record) => admittedIds.has(record.id));
+}
+
+interface CanonicalRowSeed {
+  readonly idea?: PracticalIdeaCandidate;
+  readonly experiment?: PracticalExperiment;
+  readonly response?: PracticalResponseState;
+  readonly efficacyResponseId?: string;
+}
+
+const PRACTICAL_RESPONSE_FAMILIES = new Set<PracticalResponseFamily>([
+  "carrying_load", "dry_route_water", "hunting_distance", "temporary_shelter", "water_storage",
+  "animal_proximity", "engineering_structure", "groundwater_seek", "care_treatment", "proto_measure",
+]);
+
+function candidateBasis(idea: PracticalIdeaCandidate | undefined, canonical: CanonicalCandidateProjection): CanonicalBasis {
+  const localExecution = candidateHasLocalExecution(canonical);
+  if (idea?.source === "inherited") return localExecution ? "mixed" : "inherited_not_lived";
+  if (idea?.source === "copied") return localExecution ? "mixed" : "copied_not_lived";
+  if (idea?.source === "local_inference" || idea?.source === "accident") return "lived";
+  return localExecution ? "lived" : "unknown";
+}
+
+function linkSeed(
+  state: PracticalAdaptationState,
+  retainedProblems: readonly PracticalProblemFrame[],
+  seed: CanonicalRowSeed,
+): CanonicalPracticalAdaptationRow | undefined {
+  const idea = seed.idea;
+  const experiment = seed.experiment;
+  const response = seed.response;
+  const family = idea?.family ?? experiment?.family ?? response?.family ??
+    state.efficacyRecords.find((record) => record.responseId === seed.efficacyResponseId)?.family;
+  if (family === undefined || !PRACTICAL_RESPONSE_FAMILIES.has(family as PracticalResponseFamily)) return undefined;
+  const practicalFamily = family as PracticalResponseFamily;
+  const variantKey = idea?.variantKey ?? experiment?.variantKey ?? response?.variantKey ?? "unknown_variant";
+  const problemId = idea?.problemId ?? experiment?.problemId ?? response?.problemId;
+  const ideaId = idea?.id ?? experiment?.ideaId ?? response?.ideaId;
+  const experimentId = experiment?.id ?? response?.experimentId;
+  const responseId = response?.id ?? experiment?.responseId ?? seed.efficacyResponseId;
+  const problem = problemId === undefined ? undefined : retainedProblems.find((item) => item.id === problemId);
+  const recordedEfficacyRecords = responseId === undefined
+    ? []
+    : state.efficacyRecords.filter((record) => record.responseId === responseId);
+  const executionClass = derivePracticalVariantExecutionClass(practicalFamily, variantKey);
+  const matchingPhysicalWork = responseId !== undefined && state.waterWorks?.responseId === responseId;
+  const executionEvidenceAdmitted = executionClass !== "material_execution_required" &&
+    !(executionClass === "existing_physical_work" && !matchingPhysicalWork);
+  const executionTruth = executionClass === "material_execution_required"
+    ? "blocked_material_execution"
+    : executionClass === "existing_physical_work"
+      ? matchingPhysicalWork ? "existing_physical_work_executed" : "existing_physical_work_unproven"
+      : experiment?.status.startsWith("concluded_") || experiment?.status === "abandoned"
+        ? "concluded_from_canonical_history"
+        : (experiment?.attemptSeasons ?? 0) > 0 || recordedEfficacyRecords.length > 0
+          ? "practice_attempted"
+          : experiment !== undefined
+            ? "planned_unexecuted"
+            : "idea_only";
+  const missingLinks = [
+    ...(problemId !== undefined && problem === undefined ? [{ kind: "problem" as const, id: problemId }] : []),
+    ...(ideaId !== undefined && idea === undefined ? [{ kind: "idea" as const, id: ideaId }] : []),
+    ...(experimentId !== undefined && experiment === undefined ? [{ kind: "experiment" as const, id: experimentId }] : []),
+    ...(responseId !== undefined && response === undefined ? [{ kind: "response" as const, id: responseId }] : []),
+  ];
+  const recordedAttemptSeasons = experiment?.attemptSeasons ?? 0;
+  const admittedEfficacyRecords = executionEvidenceAdmitted ? recordedEfficacyRecords : [];
+  const canonical: CanonicalCandidateProjection = {
+    ...(problemId === undefined ? {} : { problemId }),
+    ...(problem === undefined ? {} : { problemOrigin: problem.origin }),
+    ...(ideaId === undefined ? {} : { ideaId }),
+    ...(idea === undefined ? {} : { ideaStatus: idea.status, ideaSource: idea.source }),
+    ...(experimentId === undefined ? {} : { experimentId }),
+    ...(experiment === undefined ? {} : { experimentStatus: experiment.status }),
+    attemptSeasons: executionEvidenceAdmitted ? recordedAttemptSeasons : 0,
+    recordedAttemptSeasons,
+    ...(responseId === undefined ? {} : { responseId }),
+    ...(response === undefined ? {} : { responseStatus: response.status }),
+    efficacyRecordIds: admittedEfficacyRecords.map((record) => record.id),
+    recordedEfficacyRecordIds: recordedEfficacyRecords.map((record) => record.id),
+    missingLinks,
+    executionEvidenceAdmitted,
+    executionTruth,
+  };
+  return {
+    id: idea?.id ?? experiment?.id ?? response?.id ?? recordedEfficacyRecords[0]?.id ?? `canonical-row:${practicalFamily}`,
+    family: practicalFamily,
+    variantKey,
+    problem,
+    idea,
+    experiment,
+    response,
+    efficacyRecords: admittedEfficacyRecords,
+    recordedEfficacyRecords,
+    canonical,
+    candidateBasis: candidateBasis(idea, canonical),
+  };
+}
+
+/**
+ * The single canonical lifecycle join used by every Item 5 read surface.
+ * Each bounded array remains authoritative independently: missing neighbours
+ * are represented in `canonical.missingLinks`, never converted into absence.
+ */
+export function deriveCanonicalPracticalAdaptationRows(
+  state: PracticalAdaptationState,
+  retainedProblems: readonly PracticalProblemFrame[] = (state.problems ?? []).slice(0, PROBLEM_FRAME_CAP),
+): readonly CanonicalPracticalAdaptationRow[] {
+  const experiments = state.experiments ?? [];
+  const responses = state.responses ?? [];
+  const usedExperiments = new Set<string>();
+  const usedResponses = new Set<string>();
+  const usedEfficacyResponseIds = new Set<string>();
+  const seeds: CanonicalRowSeed[] = [];
+
+  for (const idea of state.ideas ?? []) {
+    const experiment = experiments.find((item) => !usedExperiments.has(item.id) && item.ideaId === idea.id);
+    if (experiment !== undefined) usedExperiments.add(experiment.id);
+    const response = experiment === undefined
+      ? responses.find((item) => !usedResponses.has(item.id) && item.ideaId === idea.id)
+      : responses.find((item) => !usedResponses.has(item.id) && item.id === experiment.responseId);
+    if (response !== undefined) usedResponses.add(response.id);
+    const efficacyResponseId = response?.id ?? experiment?.responseId;
+    if (efficacyResponseId !== undefined) usedEfficacyResponseIds.add(efficacyResponseId);
+    seeds.push({ idea, experiment, response, efficacyResponseId });
+  }
+
+  for (const experiment of experiments) {
+    if (usedExperiments.has(experiment.id)) continue;
+    usedExperiments.add(experiment.id);
+    const response = responses.find((item) => !usedResponses.has(item.id) && item.id === experiment.responseId);
+    if (response !== undefined) usedResponses.add(response.id);
+    const efficacyResponseId = response?.id ?? experiment.responseId;
+    usedEfficacyResponseIds.add(efficacyResponseId);
+    seeds.push({ experiment, response, efficacyResponseId });
+  }
+
+  for (const response of responses) {
+    if (usedResponses.has(response.id)) continue;
+    usedResponses.add(response.id);
+    usedEfficacyResponseIds.add(response.id);
+    seeds.push({ response, efficacyResponseId: response.id });
+  }
+
+  for (const responseId of unique(state.efficacyRecords.map((record) => record.responseId))) {
+    if (usedEfficacyResponseIds.has(responseId)) continue;
+    seeds.push({ efficacyResponseId: responseId });
+  }
+
+  return seeds
+    .map((seed) => linkSeed(state, retainedProblems, seed))
+    .filter((entry): entry is CanonicalPracticalAdaptationRow => entry !== undefined)
+    .slice(0, PRACTICE_CANDIDATE_CAP);
+}
+
+function problemEvidence(problem: PracticalProblemFrame, basis: CanonicalBasis): readonly ProblemPracticeEvidenceRef[] {
   return unique([problem.id, ...problem.evidenceRefs]).slice(0, EVIDENCE_PER_FRAME_CAP).map((sourceId) => ({
     kind: "event",
     sourceSystem: "canonical_event",
@@ -300,17 +460,18 @@ function problemEvidence(problem: PracticalProblemFrame, basis: "lived" | "inher
   }));
 }
 
-function candidateEvidence(entry: CanonicalCandidateEntry, state: PracticalAdaptationState): readonly ProblemPracticeEvidenceRef[] {
-  const ids = [entry.idea.id, entry.experiment?.id, ...entry.idea.basisFragmentIds]
+function candidateEvidence(entry: CanonicalPracticalAdaptationRow, state: PracticalAdaptationState): readonly ProblemPracticeEvidenceRef[] {
+  const ids = [entry.idea?.id, entry.experiment?.id, entry.response?.id, ...(entry.idea?.basisFragmentIds ?? [])]
     .filter((id): id is string => id !== undefined)
-    .filter((id) => id === entry.idea.id || id === entry.experiment?.id || state.fragments.some((fragment) => fragment.id === id));
+    .filter((id) => id === entry.idea?.id || id === entry.experiment?.id || id === entry.response?.id ||
+      state.fragments.some((fragment) => fragment.id === id));
   return unique(ids).slice(0, EVIDENCE_PER_CANDIDATE_CAP).map((sourceId) => ({
     kind: "knowledge",
     sourceSystem: "knowledge_ecology",
-    label: sourceId === entry.idea.id ? entry.idea.publicLabel : `Canonical basis ${sourceId}`,
+    label: sourceId === entry.idea?.id ? entry.idea.publicLabel : `Canonical basis ${sourceId}`,
     sourceId,
-    confidence: entry.idea.basisScore,
-    livedBasis: entry.inherited ? "inherited_not_lived" : "lived",
+    confidence: entry.idea?.basisScore ?? entry.response?.confidence ?? entry.problem?.confidence ?? 0,
+    livedBasis: entry.candidateBasis,
     reasonIds: [],
   }));
 }
@@ -319,14 +480,19 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
   const state = band.practicalAdaptation;
   if (state === undefined) throw new Error("canonical practical projection requires practicalAdaptation");
   const problems = (state.problems ?? []).slice(0, PROBLEM_FRAME_CAP);
-  const entries = entriesFor(state, problems);
+  const entries = deriveCanonicalPracticalAdaptationRows(state, problems);
   const problemFrames: readonly ProblemFrame[] = problems.map((problem) => {
-    const basis = livedBasis(problem);
-    const hooks = entries.filter((entry) => entry.problem.id === problem.id).map((entry) => candidateFamily(entry.idea.family));
+    const basis = problemLivedBasis(problem);
+    const hooks = entries.filter((entry) => entry.problem?.id === problem.id).map((entry) => candidateFamily(entry.family));
+    const basisLabel = basis === "inherited_not_lived"
+      ? `${problem.publicLabel} (inherited; not tested here)`
+      : basis === "copied_not_lived"
+        ? `${problem.publicLabel} (copied; not lived here)`
+        : problem.publicLabel;
     return {
       id: problem.id,
       family: problemFamily(problem.family),
-      publicLabel: basis === "inherited_not_lived" ? `${problem.publicLabel} (inherited; not tested here)` : problem.publicLabel,
+      publicLabel: basisLabel,
       meaning: problem.interpretation,
       objectiveBasis: problem.evidenceRefs.slice(0, EVIDENCE_PER_FRAME_CAP),
       perceivedCause: problem.interpretation,
@@ -337,7 +503,7 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
       sourceSystems: ["canonical_event"],
       livedBasis: basis,
       livedEvidenceCount: basis === "lived" ? 1 : 0,
-      inheritedEvidenceCount: basis === "inherited_not_lived" ? 1 : 0,
+      inheritedEvidenceCount: basis === "inherited_not_lived" || basis === "copied_not_lived" ? 1 : 0,
       relatedAffordanceIds: [],
       relatedKnowledgeIds: [],
       relatedEventIds: unique([problem.id, ...problem.evidenceRefs]).slice(0, EVIDENCE_PER_FRAME_CAP),
@@ -349,29 +515,49 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
     };
   });
   const practiceCandidates: readonly PracticeExperimentCandidate[] = entries.map((entry) => {
-    const status = candidateStatus(entry.problem, entry.experiment, entry.canonical);
+    const status = candidateStatus(entry);
     const feedback = feedbackPresentation(entry);
     const evidence = candidateEvidence(entry, state);
+    const problemFrameId = entry.canonical.problemId ?? entry.problem?.id ?? `unlinked-problem:${entry.id}`;
+    const relatedKnowledgeIds = (entry.idea?.basisFragmentIds ?? []).slice(0, 4);
+    const inheritedLabel = entry.candidateBasis === "inherited_not_lived";
+    const copiedLabel = entry.candidateBasis === "copied_not_lived";
+    const baseLabel = entry.idea?.publicLabel ?? entry.response?.publicLabel ?? `Canonical ${entry.family} lifecycle record`;
+    const publicLabel = inheritedLabel
+      ? `${baseLabel} (inherited; not tested here)`
+      : copiedLabel
+        ? `${baseLabel} (copied; not tested here)`
+        : baseLabel;
+    const problemProjectionFamily = entry.problem === undefined
+      ? fallbackProblemFamily(entry.family)
+      : problemFamily(entry.problem.family);
+    const executionUnproven = entry.canonical.executionTruth === "blocked_material_execution" ||
+      entry.canonical.executionTruth === "existing_physical_work_unproven";
     return {
-      id: entry.idea.id,
-      family: candidateFamily(entry.idea.family),
-      publicLabel: entry.inherited ? `${entry.idea.publicLabel} (inherited; not tested here)` : entry.idea.publicLabel,
-      meaning: entry.idea.mechanismBelief,
-      problemFrameId: entry.problem.id,
-      problemFamily: problemFamily(entry.problem.family),
+      id: entry.id,
+      family: candidateFamily(entry.family),
+      publicLabel,
+      meaning: entry.idea?.mechanismBelief ?? entry.experiment?.expectedEffect ?? entry.response?.contextNote ??
+        "A retained canonical lifecycle record has missing adjacent history.",
+      problemFrameId,
+      problemFamily: problemProjectionFamily,
       relatedAffordanceIds: [],
-      relatedKnowledgeIds: entry.idea.basisFragmentIds.slice(0, 4),
-      relatedEventIds: [entry.problem.id],
+      relatedKnowledgeIds,
+      relatedEventIds: entry.problem === undefined ? [] : [entry.problem.id],
       relatedActivityIds: [],
       relatedRepetitionIds: [],
-      materialBasis: entry.idea.basisFragmentIds.slice(0, 4),
-      knowledgeBasis: entry.idea.basisFragmentIds.slice(0, 4),
+      materialBasis: relatedKnowledgeIds,
+      knowledgeBasis: relatedKnowledgeIds,
       activityRepetitionBasis: [],
       expectedFeedbackType: feedback.feedbackType,
-      likelyCostRisk: entry.experiment?.opportunityCost ?? entry.idea.statusReason,
+      likelyCostRisk: entry.experiment?.opportunityCost ?? entry.idea?.statusReason ?? "adjacent canonical history is missing",
       laborBurden: entry.experiment === undefined ? "no canonical experiment plan is recorded" : "planned requirements are not execution proof",
-      confidence: entry.idea.basisScore,
-      uncertainty: entry.experiment?.observedOutcome ?? "",
+      confidence: entry.idea?.basisScore ?? entry.response?.confidence ?? entry.problem?.confidence ?? 0,
+      uncertainty: executionUnproven
+        ? entry.canonical.executionTruth === "blocked_material_execution"
+          ? "material execution not proven"
+          : "physical work not proven"
+        : entry.experiment?.observedOutcome ?? "",
       deadEndRisk: status === "dead_end_risk" ? "present" : "low",
       falseConfidenceRisk: entry.canonical.executionTruth === "blocked_material_execution" ? "present" : "low",
       lowFeedbackRisk: feedback.feedbackType === "low_feedback" ? "present" : "low",
@@ -385,7 +571,8 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
     };
   });
   const allEvidence = [...problemFrames.flatMap((frame) => frame.evidence), ...practiceCandidates.flatMap((candidate) => candidate.evidence)];
-  const inheritedBasisCount = allEvidence.filter((evidence) => evidence.livedBasis === "inherited_not_lived").length;
+  const inheritedBasisCount = allEvidence.filter((evidence) =>
+    evidence.livedBasis === "inherited_not_lived" || evidence.livedBasis === "copied_not_lived").length;
   const payload = { bandId: band.id, generatedAtTick: Number(world.time.tick), problemFrames, practiceCandidates };
   return {
     bandId: band.id,
@@ -395,7 +582,9 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
     authority: "canonical_practical_adaptation",
     overviewTitle: problemFrames.length === 0 ? "No canonical practical problems recorded" : "Canonical practical problems and plans",
     overviewLines: practiceCandidates.length === 0
-      ? ["Canonical inherited knowledge is not a local trial."]
+      ? problemFrames.some((frame) => frame.livedBasis === "inherited_not_lived" || frame.livedBasis === "copied_not_lived")
+        ? ["Canonical inherited or copied problem framing is not a local trial."]
+        : ["No canonical idea or experiment record is attached to the recorded local problem framing."]
       : ["Canonical ideas and experiment records only; planned requirements are not execution proof."],
     problemFrames,
     practiceCandidates,
@@ -451,7 +640,11 @@ function canonicalProblemIntegrity(
   frames: readonly ProblemFrame[],
   candidates: readonly PracticeExperimentCandidate[],
 ): ProblemPracticeProfile["integrity"] {
-  const inheritedCandidates = candidates.filter((candidate) => candidate.canonical?.executionTruth === "idea_only");
+  const inheritedCandidates = candidates.filter((candidate) => {
+    const canonical = candidate.canonical;
+    return (canonical?.ideaSource === "inherited" || canonical?.ideaSource === "copied") &&
+      canonical !== undefined && !candidateHasLocalExecution(canonical);
+  });
   return {
     selectedBandOnly: true, projectionOnly: true, noBehaviorInfluence: true, noDecisionInfluence: true,
     noSkillOrAdaptationState: true, noAutomaticImprovement: true, noCultureTabooMythWorldviewLanguage: true,
@@ -459,7 +652,9 @@ function canonicalProblemIntegrity(
     inheritedSeparated: frames.every((frame) => frame.livedBasis !== "unknown"),
     daughterParentKnowledgeNotTreatedAsTestedHere: inheritedCandidates.every((candidate) => candidate.status === "inherited_not_tested_here"),
     repetitionIsNotMastery: true,
-    candidatesRequireProblemBasis: candidates.every((candidate) => frames.some((frame) => frame.id === candidate.problemFrameId)),
+    candidatesRequireProblemBasis: candidates.every((candidate) =>
+      frames.some((frame) => frame.id === candidate.problemFrameId) ||
+      candidate.canonical?.missingLinks?.some((link) => link.kind === "problem" && link.id === candidate.problemFrameId) === true),
   };
 }
 
@@ -467,7 +662,10 @@ export function deriveCanonicalPracticeFeedbackReadinessProfile(world: WorldStat
   const state = band.practicalAdaptation;
   if (state === undefined) throw new Error("canonical practical projection requires practicalAdaptation");
   const problemProfile = deriveCanonicalProblemPracticeProfile(world, band);
-  const entriesByIdeaId = new Map(entriesFor(state, (state.problems ?? []).slice(0, PROBLEM_FRAME_CAP)).map((entry) => [entry.idea.id, entry]));
+  const entriesById = new Map(deriveCanonicalPracticalAdaptationRows(
+    state,
+    (state.problems ?? []).slice(0, PROBLEM_FRAME_CAP),
+  ).map((entry) => [entry.id, entry]));
   const perFamilyCounts = new Map<PracticeFeedbackReadinessFamily, number>();
   const items: readonly PracticeFeedbackReadinessItem[] = problemProfile.practiceCandidates
     .filter((candidate) => {
@@ -478,9 +676,10 @@ export function deriveCanonicalPracticeFeedbackReadinessProfile(world: WorldStat
       return true;
     })
     .slice(0, READINESS_ITEM_CAP)
-    .map((candidate) => canonicalReadinessItem(candidate, entriesByIdeaId.get(candidate.canonical!.ideaId)!));
+    .map((candidate) => canonicalReadinessItem(candidate, entriesById.get(candidate.id)!));
   const evidence = items.flatMap((item) => item.evidence);
-  const inheritedBasisCount = evidence.filter((item) => item.livedBasis === "inherited_not_lived").length;
+  const inheritedBasisCount = evidence.filter((item) =>
+    item.livedBasis === "inherited_not_lived" || item.livedBasis === "copied_not_lived").length;
   const payload = { bandId: band.id, generatedAtTick: Number(world.time.tick), items };
   return {
     bandId: band.id,
@@ -525,7 +724,9 @@ export function deriveCanonicalPracticeFeedbackReadinessProfile(world: WorldStat
       noCultureTabooMythWorldviewLanguage: true, noSettlementInventoryPropertyStorageEconomy: true,
       noAgricultureDomesticationWar: true, ignoresLegacyStartingSkills: true,
       inheritedSeparated: items.every((item) => item.inheritedVsLivedBasis !== "unknown"),
-      daughterParentRoutineNotLocalTesting: items.every((item) => item.inheritedVsLivedBasis !== "inherited_not_lived" || item.readinessStatus === "inherited_not_tested_here"),
+      daughterParentRoutineNotLocalTesting: items.every((item) =>
+        (item.inheritedVsLivedBasis !== "inherited_not_lived" && item.inheritedVsLivedBasis !== "copied_not_lived") ||
+        item.readinessStatus === "inherited_not_tested_here"),
       badRepetitionRepresented: true,
       itemsRequireCandidateOrRepeatedAffordanceBasis: items.every((item) => item.linkedPracticeCandidateId !== undefined),
     },
@@ -544,16 +745,21 @@ export function deriveCanonicalPracticeFeedbackReadinessProfile(world: WorldStat
   };
 }
 
-function canonicalReadinessItem(candidate: PracticeExperimentCandidate, entry: CanonicalCandidateEntry): PracticeFeedbackReadinessItem {
+function canonicalReadinessItem(candidate: PracticeExperimentCandidate, entry: CanonicalPracticalAdaptationRow): PracticeFeedbackReadinessItem {
   const canonical = candidate.canonical!;
-  const inherited = candidate.status === "inherited_not_tested_here";
+  const basis = entry.candidateBasis;
+  const inherited = basis === "inherited_not_lived" || basis === "copied_not_lived";
   const hasCanonicalPracticeEvidence = canonical.attemptSeasons > 0 || canonical.efficacyRecordIds.length > 0;
   const feedback = feedbackPresentation(entry);
-  const feedbackType: PracticeFeedbackReadinessFeedbackType = canonical.executionTruth === "blocked_material_execution"
+  const executionUnproven = canonical.executionTruth === "blocked_material_execution" ||
+    canonical.executionTruth === "existing_physical_work_unproven";
+  const feedbackType: PracticeFeedbackReadinessFeedbackType = executionUnproven
     ? "blocked_no_attempt"
     : feedback.feedbackType;
-  const readinessStatus: PracticeFeedbackReadinessStatus = inherited ? "inherited_not_tested_here"
+  const readinessStatus: PracticeFeedbackReadinessStatus = inherited && !candidateHasLocalExecution(canonical)
+    ? "inherited_not_tested_here"
     : canonical.executionTruth === "blocked_material_execution" ? "blocked_by_material"
+    : canonical.executionTruth === "existing_physical_work_unproven" ? "not_started"
     : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_success" ? "learning_ready_later"
     : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_partial" ? "repeated_mixed_feedback"
     : canonical.executionTruth === "concluded_from_canonical_history" ? "contradicted"
@@ -563,14 +769,15 @@ function canonicalReadinessItem(candidate: PracticeExperimentCandidate, entry: C
     : hasCanonicalPracticeEvidence ? "repeated_low_feedback"
     : canonical.executionTruth === "existing_physical_work_executed" ? "executed_without_feedback"
     : "not_started";
-  const feedbackQuality: PracticeFeedbackQuality = canonical.executionTruth === "blocked_material_execution"
+  const feedbackQuality: PracticeFeedbackQuality = executionUnproven
     ? "blocked"
     : feedback.feedbackQuality;
   const blockers: readonly PracticeFeedbackBlocker[] = canonical.executionTruth === "blocked_material_execution" ? ["missing_material"]
-    : inherited ? ["inherited_not_local"] : [];
+    : canonical.executionTruth === "existing_physical_work_unproven" ? ["unsupported_ecology"]
+    : inherited && !candidateHasLocalExecution(canonical) ? ["inherited_not_local"] : [];
   const risks: readonly PracticeFeedbackRisk[] = candidate.deadEndRisk === "present" ? ["dead_end"]
     : candidate.lowFeedbackRisk === "present" ? ["low_feedback"] : [];
-  const evidence: readonly PracticeFeedbackEvidenceRef[] = [canonical.ideaId, canonical.experimentId, ...candidate.relatedKnowledgeIds]
+  const evidence: readonly PracticeFeedbackEvidenceRef[] = [canonical.ideaId, canonical.experimentId, canonical.responseId, ...candidate.relatedKnowledgeIds]
     .filter((id): id is string => id !== undefined)
     .slice(0, EVIDENCE_PER_ITEM_CAP)
     .map((sourceId) => ({
@@ -579,7 +786,7 @@ function canonicalReadinessItem(candidate: PracticeExperimentCandidate, entry: C
       label: sourceId === candidate.id ? candidate.publicLabel : `Canonical evidence ${sourceId}`,
       sourceId,
       confidence: candidate.confidence,
-      livedBasis: inherited ? "inherited_not_lived" : "lived",
+      livedBasis: basis,
       problemFrameId: candidate.problemFrameId,
       practiceCandidateId: candidate.id,
       reasonIds: [],
@@ -588,14 +795,16 @@ function canonicalReadinessItem(candidate: PracticeExperimentCandidate, entry: C
     id: `practice-feedback:${candidate.id}`,
     problemFrameId: candidate.problemFrameId,
     family: readinessFamilyFromCandidate(candidate.family),
-    publicLabel: inherited ? `${candidate.publicLabel} (inherited; not tested here)` : candidate.publicLabel,
+    publicLabel: candidate.publicLabel,
     meaning: canonical.executionTruth === "blocked_material_execution"
       ? "Material execution is not proven by this canonical plan."
+      : canonical.executionTruth === "existing_physical_work_unproven"
+        ? "Physical work is not proven without the matching canonical works record."
       : candidate.meaning,
     linkedProblemFrameId: candidate.problemFrameId,
     linkedPracticeCandidateId: candidate.id,
     linkedAffordanceIds: [], linkedKnowledgeIds: candidate.relatedKnowledgeIds, linkedActivityIds: [],
-    linkedEventIds: [candidate.problemFrameId], linkedFootholdIds: [], linkedRepetitionIds: [],
+    linkedEventIds: entry.problem === undefined ? [] : [candidate.problemFrameId], linkedFootholdIds: [], linkedRepetitionIds: [],
     repeatedExposureBasis: hasCanonicalPracticeEvidence
       ? [`canonical attempt evidence (${canonical.attemptSeasons} seasons; ${canonical.efficacyRecordIds.length} efficacy records)`]
       : [],
@@ -604,10 +813,18 @@ function canonicalReadinessItem(candidate: PracticeExperimentCandidate, entry: C
       ? "canonical practice evidence recorded"
       : canonical.executionTruth === "existing_physical_work_executed"
         ? "canonical physical work recorded; feedback not recorded"
+        : canonical.executionTruth === "existing_physical_work_unproven"
+          ? "canonical physical work not proven"
         : "canonical plan recorded",
     readinessStatus, blockers, risks,
-    inheritedVsLivedBasis: inherited ? "inherited_not_lived" : "lived",
-    localTransferClue: inherited ? "Inherited knowledge; not tested here." : "Canonical lifecycle record; no inferred local execution.",
+    inheritedVsLivedBasis: basis,
+    localTransferClue: basis === "inherited_not_lived"
+      ? "Inherited knowledge; not tested here."
+      : basis === "copied_not_lived"
+        ? "Copied knowledge; not tested here."
+        : basis === "mixed"
+          ? "Carried framing with local canonical testing evidence."
+          : "Canonical lifecycle record; no inferred local execution.",
     confidence: candidate.confidence,
     evidence,
     sourceSystems: ["problem_practice"],

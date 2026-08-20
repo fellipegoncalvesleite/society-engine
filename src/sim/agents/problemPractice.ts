@@ -71,7 +71,12 @@ export type ProblemFrameEvidenceKind =
   | "identity"
   | "affordance";
 
-export type ProblemFrameLivedBasis = "lived" | "inherited_not_lived" | "mixed" | "unknown";
+export type ProblemFrameLivedBasis =
+  | "lived"
+  | "inherited_not_lived"
+  | "copied_not_lived"
+  | "mixed"
+  | "unknown";
 
 export type Item5ProjectionAuthority =
   | "canonical_practical_adaptation"
@@ -82,8 +87,16 @@ export type CanonicalExecutionTruth =
   | "planned_unexecuted"
   | "practice_attempted"
   | "existing_physical_work_executed"
+  | "existing_physical_work_unproven"
   | "blocked_material_execution"
   | "concluded_from_canonical_history";
+
+export type CanonicalMissingLinkKind = "problem" | "idea" | "experiment" | "response";
+
+export interface CanonicalMissingLink {
+  readonly kind: CanonicalMissingLinkKind;
+  readonly id: string;
+}
 
 export interface CanonicalProblemProjection {
   readonly problemId: string;
@@ -92,14 +105,21 @@ export interface CanonicalProblemProjection {
 }
 
 export interface CanonicalCandidateProjection {
-  readonly ideaId: string;
-  readonly ideaStatus: import("./types").PracticalIdeaStatus;
+  readonly problemId?: string;
+  readonly problemOrigin?: import("./types").PracticalProblemOrigin;
+  readonly ideaId?: string;
+  readonly ideaStatus?: import("./types").PracticalIdeaStatus;
+  readonly ideaSource?: import("./types").PracticalIdeaSource;
   readonly experimentId?: string;
   readonly experimentStatus?: import("./types").PracticalExperimentStatus;
   readonly attemptSeasons: number;
+  readonly recordedAttemptSeasons?: number;
   readonly responseId?: string;
   readonly responseStatus?: import("./types").PracticalResponseStatus;
   readonly efficacyRecordIds: readonly string[];
+  readonly recordedEfficacyRecordIds?: readonly string[];
+  readonly missingLinks?: readonly CanonicalMissingLink[];
+  readonly executionEvidenceAdmitted?: boolean;
   readonly executionTruth: CanonicalExecutionTruth;
 }
 

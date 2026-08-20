@@ -12,6 +12,10 @@ import {
 } from "../../sim/agents/practiceFeedbackReadiness";
 import type { AdaptiveEfficacyRecord, Band } from "../../sim/agents/types";
 import type { WorldState } from "../../sim/world/types";
+import {
+  canonicalEfficacyRecordsForProjection,
+  canonicalExecutionProofGap,
+} from "../../sim/agents/practicalAdaptationProjection";
 
 import { Icon, type IconName } from "../icons";
 import { Chip, SectionHeading } from "./parts";
@@ -123,13 +127,15 @@ function CanonicalPracticeFeedback({
 }) {
   const planned = profile.items.filter((item) =>
     item.canonical?.executionTruth === "planned_unexecuted" ||
-    item.canonical?.executionTruth === "blocked_material_execution");
+    item.canonical?.executionTruth === "blocked_material_execution" ||
+    item.canonical?.executionTruth === "existing_physical_work_unproven");
   const attempted = profile.items.filter((item) =>
     item.canonical?.executionTruth === "practice_attempted" ||
     item.canonical?.executionTruth === "existing_physical_work_executed");
   const outcomes = profile.items.filter((item) =>
-    item.canonical?.executionTruth === "concluded_from_canonical_history" ||
-    item.canonical?.responseStatus !== undefined);
+    item.canonical !== undefined && canonicalExecutionProofGap(item.canonical) === undefined && (
+      item.canonical.executionTruth === "concluded_from_canonical_history" ||
+      item.canonical.responseStatus !== undefined));
   const inheritedOnly =
     band.practicalAdaptation?.problems?.some((problem) => problem.origin === "inherited") === true ||
     band.practicalAdaptation?.fragments.some((fragment) => fragment.basis === "inherited") === true;
@@ -198,7 +204,8 @@ function FeedbackCard({
   readonly item: PracticeFeedbackReadinessItem;
   readonly efficacyRecords?: readonly AdaptiveEfficacyRecord[];
 }) {
-  const materialExecutionUnproven = item.canonical?.executionTruth === "blocked_material_execution";
+  const executionProofGap = item.canonical === undefined ? undefined : canonicalExecutionProofGap(item.canonical);
+  const executionUnproven = executionProofGap !== undefined;
   return (
     <details className={`practice-feedback-card status-${item.readinessStatus}`}>
       <summary>
@@ -208,8 +215,8 @@ function FeedbackCard({
         <span className="practice-feedback-card-head">
           <span className="practice-feedback-card-kicker">{practiceFeedbackReadinessFamilyLabel(item.family)}</span>
           <span className="practice-feedback-card-title">{item.publicLabel}</span>
-          <span className="practice-feedback-card-summary">{materialExecutionUnproven ? "Material execution is not proven." : item.meaning}</span>
-          {materialExecutionUnproven ? null : (
+          <span className="practice-feedback-card-summary">{executionUnproven ? executionProofGap : item.meaning}</span>
+          {executionUnproven ? null : (
             <span className="practice-feedback-evidence-preview" aria-label="top feedback evidence">
               {item.evidence.slice(0, 2).map((entry, index) => (
                 <EvidenceChip key={`${item.id}:preview:${entry.label}:${index}`} evidence={entry} />
@@ -219,17 +226,17 @@ function FeedbackCard({
         </span>
         <span className="practice-feedback-card-chips">
           <Chip>{practiceFeedbackReadinessStatusLabel(item.readinessStatus)}</Chip>
-          <Chip>{materialExecutionUnproven ? "material execution not proven" : practiceFeedbackReadinessFeedbackTypeLabel(item.feedbackType)}</Chip>
+          <Chip>{executionProofGap ?? practiceFeedbackReadinessFeedbackTypeLabel(item.feedbackType)}</Chip>
           <Chip>{Math.round(item.confidence * 100)}%</Chip>
         </span>
       </summary>
       <div className="practice-feedback-card-body">
         {item.canonical === undefined ? null : <CanonicalLifecycleLines item={item} efficacyRecords={efficacyRecords ?? []} />}
-        <p><strong>Feedback quality:</strong> {materialExecutionUnproven ? "material execution not proven" : practiceFeedbackQualityLabel(item.feedbackQuality)}</p>
-        <p><strong>Familiarity:</strong> {materialExecutionUnproven ? "no material execution is proven" : item.familiaritySignal}</p>
-        <p><strong>Transfer clue:</strong> {materialExecutionUnproven ? "no transfer claim can be made before material execution is proven" : item.localTransferClue}</p>
-        {materialExecutionUnproven ? (
-          <p className="practice-feedback-evidence-line">Stored experiment, response, and efficacy history is withheld as physical-execution proof.</p>
+        <p><strong>Feedback quality:</strong> {executionProofGap ?? practiceFeedbackQualityLabel(item.feedbackQuality)}</p>
+        <p><strong>Familiarity:</strong> {executionUnproven ? `no execution is proven: ${executionProofGap}` : item.familiaritySignal}</p>
+        <p><strong>Transfer clue:</strong> {executionUnproven ? `no transfer claim can be made: ${executionProofGap}` : item.localTransferClue}</p>
+        {executionUnproven ? (
+          <p className="practice-feedback-evidence-line">Stored experiment, response, efficacy, and outcome history is withheld as execution proof: {executionProofGap}.</p>
         ) : (
           <>
             <ChipLine title="Repeated basis" items={item.repeatedExposureBasis} empty="no repeated basis is clear" />
@@ -257,17 +264,16 @@ function CanonicalLifecycleLines({
 }) {
   const canonical = item.canonical;
   if (canonical === undefined) return null;
-  const materialUnproven = canonical.executionTruth === "blocked_material_execution";
-  const matchingEfficacy = canonical.responseId === undefined
-    ? []
-    : efficacyRecords.filter((record) => record.responseId === canonical.responseId);
+  const executionProofGap = canonicalExecutionProofGap(canonical);
+  const matchingEfficacy = canonicalEfficacyRecordsForProjection(canonical, efficacyRecords);
   return (
     <>
-      <p><strong>Canonical idea:</strong> {canonical.ideaId} · {canonical.ideaStatus}</p>
-      <p><strong>Planned experiment:</strong> {materialUnproven ? `${canonical.experimentId ?? "none"} · material execution not proven` : `${canonical.experimentId ?? "none"} · ${canonical.experimentStatus ?? "not recorded"} · attempts ${canonical.attemptSeasons}`}</p>
-      <p><strong>Response state:</strong> {materialUnproven ? `${canonical.responseId ?? "none"} · material execution not proven` : `${canonical.responseId ?? "none"} · ${canonical.responseStatus ?? "not recorded"}`}</p>
-      <p><strong>Efficacy records:</strong> {materialUnproven ? "withheld: material execution not proven." : matchingEfficacy.length === 0 ? "none" : matchingEfficacy.map((record) => `${record.id} · outcome ${record.outcome} (${record.outcome.replace(/_/g, " ")}) · classification ${record.classification}`).join(" | ")}</p>
-      <p><strong>Execution truth:</strong> {materialUnproven ? "material execution not proven" : canonical.executionTruth.replace(/_/g, " ")}</p>
+      <p><strong>Canonical idea:</strong> {canonical.ideaId ?? "missing"} · {canonical.ideaStatus ?? "missing retained record"}</p>
+      <p><strong>Planned experiment:</strong> {executionProofGap === undefined ? `${canonical.experimentId ?? "none"} · ${canonical.experimentStatus ?? "not recorded"} · attempts ${canonical.attemptSeasons}` : `${canonical.experimentId ?? "none"} · ${executionProofGap}`}</p>
+      <p><strong>Response state:</strong> {executionProofGap === undefined ? `${canonical.responseId ?? "none"} · ${canonical.responseStatus ?? "not recorded"}` : `${canonical.responseId ?? "none"} · ${executionProofGap}`}</p>
+      <p><strong>Efficacy records:</strong> {executionProofGap === undefined ? matchingEfficacy.length === 0 ? "none" : matchingEfficacy.map((record) => `${record.id} · outcome ${record.outcome} (${record.outcome.replace(/_/g, " ")}) · classification ${record.classification}`).join(" | ") : `withheld: ${executionProofGap}.`}</p>
+      <p><strong>Execution truth:</strong> {executionProofGap ?? canonical.executionTruth.replace(/_/g, " ")}</p>
+      {canonical.missingLinks?.length ? <p><strong>Missing retained links:</strong> {canonical.missingLinks.map((link) => `${link.kind} ${link.id}`).join(" · ")}</p> : null}
     </>
   );
 }
