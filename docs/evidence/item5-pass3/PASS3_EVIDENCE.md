@@ -60,7 +60,16 @@ adapter maps stored problem, idea, experiment, response, efficacy, fragment,
 and matching `waterWorks` facts; it does not infer lifecycle from ecology,
 affordances, repetition, camp state, identity, or events. Material-required
 plans remain `blocked_material_execution`; matching persisted `waterWorks` is
-the existing physical-work proof.
+the existing physical-work proof. Missing matching works is now represented as
+`existing_physical_work_unproven`, and the same adapter withholds attempts,
+conclusions, outcomes, and efficacy from every downstream read surface.
+
+The final whole-branch fix wave also makes the adapter join the independently
+bounded problem, idea, experiment, response, and efficacy arrays without
+requiring an adjacent array entry to survive. Missing retained neighbours are
+explicit `{ kind, id }` links. Problem-origin basis is separate from the basis
+of later local ideas/tests, so inherited or copied framing cannot relabel a
+daughter's local attempt as inherited practice.
 
 ## RED, GREEN, and mutation sensitivity
 
@@ -82,6 +91,16 @@ temporary byte copy back; pre- and post-restore SHA-256 were both
 byte comparison succeeded. The discarded literal-inversion probe threw in the
 legacy positive control before JSON and is not counted as the mutation proof.
 
+The final-review RED commit
+`abc4259575e86ecff3fe9c33665de7e92e20fa8c` added six real fixture groups. The
+focused audit exited 1 with exactly those six new checks false while every
+existing 30 check remained true: missing-waterworks physical proof, blocked
+material feedback short-circuiting, independent bounded joins, inherited-frame
+versus local-test basis, plan-only foothold trace suppression, and local
+idea-only diagnostics. After the production correction commit
+`1658c92e187df42f3435d2290e30b38ad552817f`, the same audit exited 0 with all
+36 checks true.
+
 ## Caller classifications
 
 The runtime inventory classifies every observed projection caller as an
@@ -100,18 +119,24 @@ blocked material entries do not become visible practice.
 
 ## Canonical, legacy, inheritance, and UI evidence
 
-- The final Pass-3 audit reports `verdict: "PASS"` with all 30 checks true:
+- The final Pass-3 audit reports `verdict: "PASS"` with all 36 checks true:
   canonical-only profiles, exact IDs/statuses, no projection mutation, daughter
   inherited-not-local truth, legacy fallback, adaptive-human suppression,
-  execution-gated diffusion, and SSR UI lifecycle/execution rendering.
+  execution-gated diffusion, independently bounded missing-link truth, and SSR
+  UI lifecycle/execution rendering.
 - The canonical daughter is made by the real inheritor. It retains degraded
   inherited fragments and limited inherited problem framing while responses,
   ideas, experiments, efficacy records, and waterworks are absent; the
   projection labels this knowledge untested here rather than local proof.
 - UI panels distinguish canonical authority from legacy compatibility, render
   plans separately from physical execution, show material execution as not
-  proven, and withhold stale material efficacy/aggregate claims. This is
-  read-model wording and projection behavior, not a simulation writer change.
+  proven, show missing `waterWorks` as physical work not proven, and withhold
+  stale attempt/conclusion/outcome/efficacy claims. This is read-model wording
+  and projection behavior, not a simulation writer change.
+- Camp foothold factors may retain contextual plan evidence, but visible trace
+  diffusion now requires separate physical camp/activity evidence. A plan-only
+  storage factor remains present in the controlled fixture and yields zero
+  foothold-trace diffusion items.
 - The legacy no-canonical-state control remains a non-empty
   `legacy_compatibility` projection. Serialized world/band inputs are
   byte-identical before and after projection calls.
@@ -130,7 +155,7 @@ responses lacking proof.
 | `npx tsc -p tsconfig.node.json --noEmit` | exit 0 |
 | `npm run build` | exit 0; existing Vite >500 kB chunk advisory only |
 | `node scripts/item5PhysicalEffectProvenanceAudit.mjs` | exit 0; `PASS`, 13/13 checks |
-| `node scripts/item5ProjectionInheritanceAudit.mjs` | exit 0; `PASS`, 30/30 checks |
+| `node scripts/item5ProjectionInheritanceAudit.mjs` | exit 0; `PASS`, 36/36 checks |
 | `node scripts/adaptationBoundaryAudit.mjs` | exit 0; `PASS`, 14/14 checks |
 | `node scripts/expeditionAdaptationEfficacyAudit.mjs` | exit 0; `PASS`, 12/12 checks |
 | `git diff --check` | exit 0 before evidence authoring and before the certification commits |
@@ -142,10 +167,15 @@ claims:
 
 - `fission-field-transfer.json`: 12/12 passing, 0 failing, 0 vacuous; 136 Band
   fields classified; SHA-256
-  `4f10cb0caefeb1b7b058edf23b766622c21457f50e2180543b7ace90e27830cd`.
+  `ff897ce981623cfcdfdc6a6e049f4aab7787acb23aa362b5f3ba2424c683cfe5`.
 - `item4-whole-integration.json`: six fixtures passed, none failed,
   `verdict: "PASS"`; SHA-256
-  `d62fdd0ac9cba057f39dbd41540e02915e0196003e2e89d89886482d4983b575`.
+  `4255aa0456ca04f3340c71985517b44965abfdb7d45143dea6e54ad2f2e4cd3f`.
+
+The two `--out` audit scripts preserve an existing artifact's creation stamp,
+so rerunning the required exact commands is byte-stable. Commit
+`ade57f6aaefcfeed6289224dade7c17f0125a801` was verified by comparing SHA-256
+before and after both reruns; both pairs were identical.
 
 No Item-4 mechanic or inheritance richness was modified in this pass.
 
