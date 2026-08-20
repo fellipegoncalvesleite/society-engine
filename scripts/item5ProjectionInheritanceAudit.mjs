@@ -311,6 +311,82 @@ try {
   const legacyReadiness = project(readiness.derivePracticeFeedbackReadinessProfile, legacyBand);
   const adaptiveProfile = project(adaptiveHuman.deriveAdaptiveHumanProfile, canonicalBand);
 
+  const activeLoadResponse = { ...responses[0], status: "active" };
+  const lifecycleProbe = (experiment) => {
+    const probeBand = {
+      ...band,
+      practicalAdaptation: {
+        ...practicalAdaptation,
+        ideas: [canonicalIdea],
+        responses: [activeLoadResponse],
+        experiments: [experiment],
+      },
+    };
+    const candidate = problemPractice.deriveProblemPracticeProfile(world, probeBand).practiceCandidates[0];
+    const item = readiness.derivePracticeFeedbackReadinessProfile(world, probeBand).items[0];
+    return { candidate, item };
+  };
+  const lifecycleProbes = {
+    attempted: lifecycleProbe({ ...experiments[0], attemptSeasons: 2, status: "underway" }),
+    planned: lifecycleProbe({ ...experiments[0], attemptSeasons: 0, status: "underway" }),
+    concludedSuccess: lifecycleProbe({ ...experiments[0], status: "concluded_success" }),
+    concludedPartial: lifecycleProbe({ ...experiments[0], status: "concluded_partial" }),
+    abandoned: lifecycleProbe({ ...experiments[0], status: "abandoned" }),
+  };
+  const groundwaterIdea = {
+    ...canonicalIdea,
+    id: "idea:audit:groundwater-work",
+    family: "groundwater_seek",
+    variantKey: "seep_scrape",
+  };
+  const groundwaterResponse = {
+    ...activeLoadResponse,
+    id: "response:audit:groundwater-work",
+    family: "groundwater_seek",
+    variantKey: "seep_scrape",
+    ideaId: groundwaterIdea.id,
+    experimentId: "experiment:audit:groundwater-work",
+  };
+  const groundwaterExperiment = {
+    ...experiments[0],
+    id: "experiment:audit:groundwater-work",
+    ideaId: groundwaterIdea.id,
+    responseId: groundwaterResponse.id,
+    family: "groundwater_seek",
+    variantKey: "seep_scrape",
+    attemptSeasons: 0,
+    status: "underway",
+  };
+  const groundwaterBand = {
+    ...band,
+    practicalAdaptation: {
+      ...practicalAdaptation,
+      ideas: [groundwaterIdea],
+      responses: [groundwaterResponse],
+      experiments: [groundwaterExperiment],
+      waterWorks: { responseId: groundwaterResponse.id },
+    },
+  };
+  const groundwaterCandidate = problemPractice.deriveProblemPracticeProfile(world, groundwaterBand).practiceCandidates[0];
+  const groundwaterReadiness = readiness.derivePracticeFeedbackReadinessProfile(world, groundwaterBand).items[0];
+  const emptyFragmentLivedProfile = problemPractice.deriveProblemPracticeProfile(world, {
+    ...band,
+    practicalAdaptation: { ...practicalAdaptation, fragments: [], ideas: [], responses: [], experiments: [] },
+  });
+  const perFamilyCapProfile = readiness.derivePracticeFeedbackReadinessProfile(world, {
+    ...band,
+    practicalAdaptation: {
+      ...practicalAdaptation,
+      ideas: [
+        canonicalIdea,
+        { ...canonicalIdea, id: "idea:audit:load-staging:2" },
+        { ...canonicalIdea, id: "idea:audit:load-staging:3" },
+      ],
+      responses: [],
+      experiments: [],
+    },
+  });
+
   const expectedCanonicalCards = [
     {
       problemFrameId: canonicalProblem.id,
@@ -444,6 +520,33 @@ try {
       materialReadinessItem?.canonical?.executionTruth === "blocked_material_execution" &&
       materialReadinessItem.canonical?.attemptSeasons === 0 &&
       exactJson(materialReadinessItem.canonical?.efficacyRecordIds, []),
+    canonicalCoarseStatusesRespectLifecycleTruth:
+      lifecycleProbes.attempted.candidate?.status === "implicit_repetition" &&
+      lifecycleProbes.attempted.item?.readinessStatus === "repeated_low_feedback" &&
+      lifecycleProbes.planned.candidate?.status === "plausible_untried" &&
+      lifecycleProbes.planned.item?.readinessStatus === "not_started" &&
+      lifecycleProbes.concludedSuccess.candidate?.status === "implicit_repetition" &&
+      lifecycleProbes.concludedSuccess.item?.readinessStatus === "learning_ready_later" &&
+      lifecycleProbes.concludedPartial.candidate?.status === "low_feedback_repetition" &&
+      lifecycleProbes.concludedPartial.item?.readinessStatus === "repeated_mixed_feedback" &&
+      lifecycleProbes.abandoned.candidate?.status === "dead_end_risk" &&
+      lifecycleProbes.abandoned.item?.readinessStatus === "contradicted" &&
+      groundwaterCandidate?.canonical?.executionTruth === "existing_physical_work_executed" &&
+      groundwaterCandidate.status === "implicit_repetition" &&
+      groundwaterReadiness?.readinessStatus === "repeated_mixed_feedback" &&
+      projected.practiceCandidates[1]?.status === "blocked_by_missing_material" &&
+      materialReadinessItem?.readinessStatus === "blocked_by_material",
+    canonicalProblemBasisUsesProblemOriginOnly:
+      emptyFragmentLivedProfile.problemFrames[0]?.livedBasis === "lived" &&
+      emptyFragmentLivedProfile.problemFrames[0]?.inheritedEvidenceCount === 0,
+    canonicalReadinessHonorsPerFamilyCap:
+      perFamilyCapProfile.items.length === 2 &&
+      perFamilyCapProfile.items.every((item) => item.family === "carrying_fiber_handling") &&
+      perFamilyCapProfile.caps.capsHeld,
+    canonicalSourceSystemCountsMatchEvidence:
+      projected.sourceSystemCounts.knowledge_ecology === projected.practiceCandidates
+        .flatMap((candidate) => candidate.evidence)
+        .filter((evidence) => evidence.sourceSystem === "knowledge_ecology").length,
     daughterInheritedStatePreservesOnlyKnowledge:
       daughterState !== undefined &&
       exactJson(daughterState.fragments.map((fragment) => ({

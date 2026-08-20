@@ -161,23 +161,23 @@ function readinessFamily(family: PracticalResponseFamily): PracticeFeedbackReadi
   }
 }
 
-function livedBasis(problem: PracticalProblemFrame, state: PracticalAdaptationState): "lived" | "inherited_not_lived" {
-  return problem.origin === "inherited" || state.fragments.every((fragment) => fragment.basis === "inherited")
-    ? "inherited_not_lived"
-    : "lived";
+function livedBasis(problem: PracticalProblemFrame): "lived" | "inherited_not_lived" {
+  return problem.origin === "inherited" ? "inherited_not_lived" : "lived";
 }
 
 function candidateStatus(
   problem: PracticalProblemFrame,
   experiment: PracticalExperiment | undefined,
   canonical: CanonicalCandidateProjection,
-  state: PracticalAdaptationState,
 ): PracticeExperimentStatus {
-  if (livedBasis(problem, state) === "inherited_not_lived" && experiment === undefined) return "inherited_not_tested_here";
+  if (livedBasis(problem) === "inherited_not_lived" && experiment === undefined) return "inherited_not_tested_here";
   if (canonical.executionTruth === "blocked_material_execution") return "blocked_by_missing_material";
-  if (experiment?.status === "concluded_failure" || experiment?.status === "abandoned" || canonical.responseStatus === "abandoned") return "dead_end_risk";
+  if (experiment?.status === "concluded_failure" || experiment?.status === "abandoned") return "dead_end_risk";
+  if (experiment?.status === "concluded_partial") return "low_feedback_repetition";
+  if (experiment?.status === "concluded_success" || canonical.executionTruth === "existing_physical_work_executed") return "implicit_repetition";
+  if (canonical.responseStatus === "abandoned") return "dead_end_risk";
   if (canonical.executionTruth === "practice_attempted") return "implicit_repetition";
-  if (experiment !== undefined) return "plausible_untried";
+  if (canonical.executionTruth === "planned_unexecuted") return "plausible_untried";
   return "currently_unsupported";
 }
 
@@ -230,7 +230,7 @@ function entriesFor(state: PracticalAdaptationState, problems: readonly Practica
         idea,
         experiment,
         response,
-        inherited: livedBasis(problem, state) === "inherited_not_lived",
+        inherited: livedBasis(problem) === "inherited_not_lived",
         canonical: {
           ideaId: idea.id,
           ideaStatus: idea.status,
@@ -277,7 +277,7 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
   const problems = (state.problems ?? []).slice(0, PROBLEM_FRAME_CAP);
   const entries = entriesFor(state, problems);
   const problemFrames: readonly ProblemFrame[] = problems.map((problem) => {
-    const basis = livedBasis(problem, state);
+    const basis = livedBasis(problem);
     const hooks = entries.filter((entry) => entry.problem.id === problem.id).map((entry) => candidateFamily(entry.idea.family));
     return {
       id: problem.id,
@@ -305,7 +305,7 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
     };
   });
   const practiceCandidates: readonly PracticeExperimentCandidate[] = entries.map((entry) => {
-    const status = candidateStatus(entry.problem, entry.experiment, entry.canonical, state);
+    const status = candidateStatus(entry.problem, entry.experiment, entry.canonical);
     const feedback = feedbackType(entry.experiment, entry.canonical, entry.inherited);
     const evidence = candidateEvidence(entry, state);
     return {
@@ -358,7 +358,7 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
     problemFamilyCounts: countByKey(PROBLEM_FAMILIES, problemFrames.map((frame) => frame.family)),
     candidateFamilyCounts: countByKey(CANDIDATE_FAMILIES, practiceCandidates.map((candidate) => candidate.family)),
     perceivedCauseCounts: countStrings(problemFrames.map((frame) => frame.perceivedCause)),
-    sourceSystemCounts: countByKey(PROBLEM_SOURCE_SYSTEMS, allEvidence.map(() => "canonical_event")),
+    sourceSystemCounts: countByKey(PROBLEM_SOURCE_SYSTEMS, allEvidence.map((evidence) => evidence.sourceSystem)),
     feedbackTypeCounts: countByKey(FEEDBACK_TYPES, practiceCandidates.map((candidate) => candidate.expectedFeedbackType)),
     statusCounts: countByKey(PRACTICE_STATUSES, practiceCandidates.map((candidate) => candidate.status)),
     uncertaintyMisreadCount: problemFrames.filter((frame) => frame.uncertainty.length > 0 || frame.possibleMisread.length > 0).length,
@@ -421,7 +421,15 @@ function canonicalProblemIntegrity(
 
 export function deriveCanonicalPracticeFeedbackReadinessProfile(world: WorldState, band: Band): PracticeFeedbackReadinessProfile {
   const problemProfile = deriveCanonicalProblemPracticeProfile(world, band);
+  const perFamilyCounts = new Map<PracticeFeedbackReadinessFamily, number>();
   const items: readonly PracticeFeedbackReadinessItem[] = problemProfile.practiceCandidates
+    .filter((candidate) => {
+      const family = readinessFamilyFromCandidate(candidate.family);
+      const count = perFamilyCounts.get(family) ?? 0;
+      if (count >= 2) return false;
+      perFamilyCounts.set(family, count + 1);
+      return true;
+    })
     .slice(0, READINESS_ITEM_CAP)
     .map((candidate) => canonicalReadinessItem(candidate));
   const evidence = items.flatMap((item) => item.evidence);
@@ -461,7 +469,7 @@ export function deriveCanonicalPracticeFeedbackReadinessProfile(world: WorldStat
     caps: {
       itemCap: READINESS_ITEM_CAP, itemsPerFamilyCap: 2, evidencePerItemCap: EVIDENCE_PER_ITEM_CAP,
       blockersPerItemCap: 4, risksPerItemCap: 4, basisPerItemCap: 4, linkPerItemCap: 4, contextRecordCap: 16,
-      capsHeld: items.length <= READINESS_ITEM_CAP,
+      capsHeld: items.length <= READINESS_ITEM_CAP && [...perFamilyCounts.values()].every((count) => count <= 2),
     },
     integrity: {
       selectedBandOnly: true, projectionOnly: true, noBehaviorInfluence: true, noDecisionInfluence: true,
@@ -496,13 +504,17 @@ function canonicalReadinessItem(candidate: PracticeExperimentCandidate): Practic
     : candidate.expectedFeedbackType;
   const readinessStatus: PracticeFeedbackReadinessStatus = inherited ? "inherited_not_tested_here"
     : canonical.executionTruth === "blocked_material_execution" ? "blocked_by_material"
+    : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_success" ? "learning_ready_later"
+    : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_partial" ? "repeated_mixed_feedback"
+    : canonical.executionTruth === "concluded_from_canonical_history" ? "contradicted"
+    : canonical.executionTruth === "existing_physical_work_executed" ? "repeated_mixed_feedback"
     : canonical.executionTruth === "practice_attempted" ? "repeated_low_feedback"
-    : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_failure" ? "contradicted"
     : "not_started";
   const feedbackQuality: PracticeFeedbackQuality = inherited ? "inherited_only"
     : canonical.executionTruth === "blocked_material_execution" ? "blocked"
     : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_success" ? "clear"
-    : canonical.executionTruth === "concluded_from_canonical_history" ? "mixed"
+    : canonical.executionTruth === "concluded_from_canonical_history" ? "contradicted"
+    : canonical.executionTruth === "existing_physical_work_executed" ? "usable"
     : "weak";
   const blockers: readonly PracticeFeedbackBlocker[] = canonical.executionTruth === "blocked_material_execution" ? ["missing_material"]
     : inherited ? ["inherited_not_local"] : [];
