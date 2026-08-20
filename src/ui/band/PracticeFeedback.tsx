@@ -10,7 +10,7 @@ import {
   type PracticeFeedbackReadinessFamily,
   type PracticeFeedbackReadinessItem,
 } from "../../sim/agents/practiceFeedbackReadiness";
-import type { Band } from "../../sim/agents/types";
+import type { AdaptiveEfficacyRecord, Band } from "../../sim/agents/types";
 import type { WorldState } from "../../sim/world/types";
 
 import { Icon, type IconName } from "../icons";
@@ -130,7 +130,10 @@ function CanonicalPracticeFeedback({
   const outcomes = profile.items.filter((item) =>
     item.canonical?.executionTruth === "concluded_from_canonical_history" ||
     item.canonical?.responseStatus !== undefined);
-  const inheritedOnly = band.practicalAdaptation?.problems?.some((problem) => problem.origin === "inherited") === true;
+  const inheritedOnly =
+    band.practicalAdaptation?.problems?.some((problem) => problem.origin === "inherited") === true ||
+    band.practicalAdaptation?.fragments.some((fragment) => fragment.basis === "inherited") === true;
+  const efficacyRecords = band.practicalAdaptation?.efficacyRecords ?? [];
 
   return (
     <section className="bp-section band-practice-feedback" aria-label="canonical practice lifecycle feedback">
@@ -141,13 +144,13 @@ function CanonicalPracticeFeedback({
         <h3>{profile.overviewTitle}</h3>
         {profile.overviewLines.map((line) => <p key={line}>{line}</p>)}
       </article>
-      <FeedbackBlock title="Planned experiments" empty="No canonical experiment plan is recorded." items={planned} />
-      <FeedbackBlock title="Attempted practice or recorded physical work" empty="No attempted canonical practice or recorded physical work is visible." items={attempted} />
-      <FeedbackBlock title="Responses and recorded outcomes" empty="No canonical response or concluded outcome is recorded." items={outcomes} />
+      <FeedbackBlock title="Planned experiments" empty="No canonical experiment plan is recorded." items={planned} canonicalEfficacyRecords={efficacyRecords} />
+      <FeedbackBlock title="Attempted practice or recorded physical work" empty="No attempted canonical practice or recorded physical work is visible." items={attempted} canonicalEfficacyRecords={efficacyRecords} />
+      <FeedbackBlock title="Responses and recorded outcomes" empty="No canonical response or concluded outcome is recorded." items={outcomes} canonicalEfficacyRecords={efficacyRecords} />
       {inheritedOnly ? (
         <div className="practice-feedback-note inherited" role="note">
           <Icon name="lineage" size={14} />
-          <span>Inherited problem framing is knowledge carried from another band, not tested here.</span>
+          <span>Inherited practical fragments are knowledge carried from another band, not tested here.</span>
         </div>
       ) : null}
     </section>
@@ -159,11 +162,13 @@ function FeedbackBlock({
   empty,
   items,
   ready = false,
+  canonicalEfficacyRecords,
 }: {
   readonly title: string;
   readonly empty: string;
   readonly items: readonly PracticeFeedbackReadinessItem[];
   readonly ready?: boolean;
+  readonly canonicalEfficacyRecords?: readonly AdaptiveEfficacyRecord[];
 }) {
   return (
     <div className="practice-feedback-block">
@@ -177,7 +182,7 @@ function FeedbackBlock({
           ) : null}
           <div className="practice-feedback-grid">
             {items.map((item) => (
-              <FeedbackCard key={item.id} item={item} />
+              <FeedbackCard key={item.id} item={item} efficacyRecords={canonicalEfficacyRecords} />
             ))}
           </div>
         </>
@@ -186,7 +191,13 @@ function FeedbackBlock({
   );
 }
 
-function FeedbackCard({ item }: { readonly item: PracticeFeedbackReadinessItem }) {
+function FeedbackCard({
+  item,
+  efficacyRecords,
+}: {
+  readonly item: PracticeFeedbackReadinessItem;
+  readonly efficacyRecords?: readonly AdaptiveEfficacyRecord[];
+}) {
   return (
     <details className={`practice-feedback-card status-${item.readinessStatus}`}>
       <summary>
@@ -210,7 +221,7 @@ function FeedbackCard({ item }: { readonly item: PracticeFeedbackReadinessItem }
         </span>
       </summary>
       <div className="practice-feedback-card-body">
-        {item.canonical === undefined ? null : <CanonicalLifecycleLines item={item} />}
+        {item.canonical === undefined ? null : <CanonicalLifecycleLines item={item} efficacyRecords={efficacyRecords ?? []} />}
         <p><strong>Feedback quality:</strong> {practiceFeedbackQualityLabel(item.feedbackQuality)}</p>
         <p><strong>Familiarity:</strong> {item.familiaritySignal}</p>
         <p><strong>Transfer clue:</strong> {item.localTransferClue}</p>
@@ -218,22 +229,35 @@ function FeedbackCard({ item }: { readonly item: PracticeFeedbackReadinessItem }
         <ChipLine title="Blockers" items={item.blockers.map((entry) => entry.replace(/_/g, " "))} empty="no major blocker shown" />
         <ChipLine title="Risks" items={item.risks.map((entry) => entry.replace(/_/g, " "))} empty="no major risk shown" />
         <EvidenceLine evidence={item.evidence} />
-        <div className="practice-feedback-card-note">No skill or adaptation exists yet.</div>
+        <div className="practice-feedback-card-note">
+          {item.canonical === undefined
+            ? "No skill or adaptation exists yet."
+            : "This projection creates no additional skill or adaptation; any recorded response is shown above."}
+        </div>
       </div>
     </details>
   );
 }
 
-function CanonicalLifecycleLines({ item }: { readonly item: PracticeFeedbackReadinessItem }) {
+function CanonicalLifecycleLines({
+  item,
+  efficacyRecords,
+}: {
+  readonly item: PracticeFeedbackReadinessItem;
+  readonly efficacyRecords: readonly AdaptiveEfficacyRecord[];
+}) {
   const canonical = item.canonical;
   if (canonical === undefined) return null;
   const materialUnproven = canonical.executionTruth === "blocked_material_execution";
+  const matchingEfficacy = canonical.responseId === undefined
+    ? []
+    : efficacyRecords.filter((record) => record.responseId === canonical.responseId);
   return (
     <>
       <p><strong>Canonical idea:</strong> {canonical.ideaId} · {canonical.ideaStatus}</p>
       <p><strong>Planned experiment:</strong> {canonical.experimentId ?? "none"} · {canonical.experimentStatus ?? "not recorded"} · attempts {canonical.attemptSeasons}</p>
       <p><strong>Response state:</strong> {canonical.responseId ?? "none"} · {canonical.responseStatus ?? "not recorded"}</p>
-      <p><strong>Efficacy records:</strong> {canonical.efficacyRecordIds.join(", ") || "none"}</p>
+      <p><strong>Efficacy records:</strong> {matchingEfficacy.length === 0 ? "none" : matchingEfficacy.map((record) => `${record.id} · outcome ${record.outcome} (${record.outcome.replace(/_/g, " ")}) · classification ${record.classification}`).join(" | ")}</p>
       <p><strong>Execution truth:</strong> {materialUnproven ? "material execution not proven" : canonical.executionTruth.replace(/_/g, " ")}</p>
     </>
   );

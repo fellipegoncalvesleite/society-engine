@@ -354,6 +354,97 @@ try {
       latestDecision: undefined,
     })),
   };
+  const staleMaterialResponse = {
+    ...responses[1],
+    status: "active",
+    successCount: 4,
+    partialCount: 2,
+    failureCount: 0,
+    lastEfficacy: "clear_success_specific",
+  };
+  const staleMaterialExperiment = {
+    ...experiments[1],
+    status: "concluded_success",
+    observedOutcome: "stale observed success must not become execution proof",
+    attemptSeasons: 3,
+    fragmentsLearned: ["fragment:audit:stale-learned"],
+  };
+  const staleMaterialBand = {
+    ...band,
+    practicalAdaptation: {
+      ...practicalAdaptation,
+      ideas: [materialIdea],
+      responses: [staleMaterialResponse],
+      experiments: [staleMaterialExperiment],
+    },
+  };
+  const fragmentOnlyDaughterBand = {
+    ...daughterBand,
+    practicalAdaptation: { ...daughterState, problems: [] },
+  };
+  const multiEfficacyRecords = [
+    {
+      id: "efficacy:audit:multi-clear",
+      tick: world.time.tick,
+      responseId: responses[0].id,
+      family: "carrying_load",
+      classification: "clear_success_specific",
+      outcome: "clear_success",
+      responseActive: true,
+      coefficient: "audit_coefficient",
+      preEffectValue: 0.4,
+      effectAmount: 0.1,
+      effectCap: 0.2,
+      dangerDelta: 0,
+      practiceDelta: 0.1,
+      confidenceDelta: 0.1,
+      failureDelta: 0,
+      futureInfluenceChanged: true,
+      localityNote: "audit local result",
+      reason: "audit clear result",
+    },
+    {
+      id: "efficacy:audit:multi-mixed",
+      tick: world.time.tick,
+      responseId: responses[0].id,
+      family: "carrying_load",
+      classification: "context_mismatch",
+      outcome: "mixed_feedback",
+      responseActive: true,
+      coefficient: "audit_coefficient",
+      preEffectValue: 0.4,
+      effectAmount: 0.05,
+      effectCap: 0.2,
+      dangerDelta: 0.02,
+      practiceDelta: 0.04,
+      confidenceDelta: 0.01,
+      failureDelta: 0.02,
+      futureInfluenceChanged: true,
+      localityNote: "audit mixed result",
+      reason: "audit mixed result",
+    },
+  ];
+  const multiEfficacyBand = {
+    ...canonicalBand,
+    practicalAdaptation: { ...practicalAdaptation, efficacyRecords: multiEfficacyRecords },
+  };
+  const staleMaterialUi = {
+    ideas: renderToStaticMarkup(createElement(ideasSolutions.IdeasSolutions, { band: staleMaterialBand, world })),
+    technical: renderToStaticMarkup(createElement(technical.Technical, {
+      band: staleMaterialBand,
+      world,
+      currentTile: world.tiles[staleMaterialBand.position],
+      latestDecision: undefined,
+    })),
+  };
+  const fragmentOnlyDaughterFeedback = renderToStaticMarkup(createElement(practiceFeedback.PracticeFeedback, {
+    band: fragmentOnlyDaughterBand,
+    world,
+  }));
+  const multiEfficacyFeedback = renderToStaticMarkup(createElement(practiceFeedback.PracticeFeedback, {
+    band: multiEfficacyBand,
+    world,
+  }));
 
   const activeLoadResponse = { ...responses[0], status: "active" };
   const lifecycleProbe = (experiment, efficacyRecords = []) => {
@@ -736,6 +827,31 @@ try {
       canonicalUi.feedback.includes("Planned experiment") &&
       canonicalUi.ideas.includes("planned or recorded test") &&
       canonicalUi.technical.includes("canonical practical-adaptation"),
+    staleMaterialSuccessIsSuppressedInCanonicalUi:
+      staleMaterialUi.ideas.includes("material execution not proven") &&
+      staleMaterialUi.technical.includes("material execution not proven") &&
+      !staleMaterialUi.ideas.includes("stale observed success must not become execution proof") &&
+      !staleMaterialUi.ideas.includes("fragment:audit:stale-learned") &&
+      !staleMaterialUi.ideas.includes("4 useful") &&
+      !staleMaterialUi.ideas.includes("concluded success") &&
+      !staleMaterialUi.technical.includes("stale observed success must not become execution proof") &&
+      !staleMaterialUi.technical.includes("fragment:audit:stale-learned") &&
+      !staleMaterialUi.technical.includes("4 success") &&
+      !staleMaterialUi.technical.includes("concluded success"),
+    fragmentOnlyDaughterIsLabeledInheritedNotTested:
+      fragmentOnlyDaughterFeedback.includes("Inherited practical fragments are knowledge carried from another band, not tested here."),
+    canonicalCardsDoNotDenyRecordedResponses:
+      !canonicalUi.feedback.includes("No skill or adaptation exists yet.") &&
+      canonicalUi.feedback.includes("This projection creates no additional skill or adaptation;"),
+    canonicalEfficacyRecordsDisplayExactStoredOutcomes:
+      multiEfficacyFeedback.includes("efficacy:audit:multi-clear") &&
+      multiEfficacyFeedback.includes("clear_success") &&
+      multiEfficacyFeedback.includes("clear success") &&
+      multiEfficacyFeedback.includes("clear_success_specific") &&
+      multiEfficacyFeedback.includes("efficacy:audit:multi-mixed") &&
+      multiEfficacyFeedback.includes("mixed_feedback") &&
+      multiEfficacyFeedback.includes("mixed feedback") &&
+      multiEfficacyFeedback.includes("context_mismatch"),
   };
 } finally {
   await server.close();

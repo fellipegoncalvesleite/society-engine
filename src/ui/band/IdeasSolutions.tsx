@@ -6,6 +6,7 @@ import {
   adaptiveResponseTypeLabel,
   deriveAdaptiveHumanProfile,
 } from "../../sim/agents/adaptiveHuman";
+import { derivePracticalVariantExecutionClass } from "../../sim/agents/practicalResponses";
 import {
   derivePublicHumanStoryProfile,
   publicStoryForSource,
@@ -127,6 +128,8 @@ function CanonicalInventionChain({ band }: { readonly band: Band }) {
   const ideas = (state.ideas ?? []).slice(0, 6);
   const experiments = (state.experiments ?? []).slice(0, 4);
   const responses = state.responses.slice(0, 6);
+  const materialExecutionIsUnproven = (family: string, variantKey: string) =>
+    derivePracticalVariantExecutionClass(family as Parameters<typeof derivePracticalVariantExecutionClass>[0], variantKey) === "material_execution_required";
   return (
     <section className="bp-section band-adaptive" aria-label="causal invention chain">
       <SectionHeading icon="activity">Problems, ideas &amp; inventions</SectionHeading>
@@ -158,30 +161,38 @@ function CanonicalInventionChain({ band }: { readonly band: Band }) {
         ))}
       </div>
       <div className="practice-feedback-grid compact">
-        {experiments.map((experiment) => (
+        {experiments.map((experiment) => {
+          const executionUnproven = materialExecutionIsUnproven(experiment.family, experiment.variantKey);
+          return (
           <details key={experiment.id} className={`practice-feedback-card status-${experiment.status}`}>
-            <summary><strong>{experiment.family.replace(/_/g, " ")}: {experiment.variantKey.replace(/_/g, " ")}</strong><Chip>{experiment.status.replace(/_/g, " ")}</Chip></summary>
+            <summary><strong>{experiment.family.replace(/_/g, " ")}: {experiment.variantKey.replace(/_/g, " ")}</strong><Chip>{executionUnproven ? "material execution not proven" : experiment.status.replace(/_/g, " ")}</Chip></summary>
             <div className="practice-feedback-card-body">
               <p><strong>Planned materials:</strong> {experiment.materials.join(", ")}</p>
               <p><strong>Planned procedure:</strong> {experiment.procedure}</p>
               <p><strong>Expected:</strong> {experiment.expectedEffect}</p>
-              <p><strong>Observed:</strong> {experiment.observedOutcome ?? "not attempted yet"}</p>
-              <p><strong>Execution:</strong> planned materials, procedure, and costs do not prove material execution.</p>
+              <p><strong>Observed:</strong> {executionUnproven ? "material execution not proven" : experiment.observedOutcome ?? "not attempted yet"}</p>
+              <p><strong>Execution:</strong> {executionUnproven ? "material execution not proven; stored status, observation, and learned fragments are withheld as physical proof." : "planned materials, procedure, and costs do not prove material execution."}</p>
               <p><strong>Estimated cost:</strong> labor {Math.round(experiment.laborCost * 100)}%, risk {Math.round(experiment.riskCost * 100)}%; {experiment.opportunityCost}</p>
             </div>
           </details>
-        ))}
+          );
+        })}
       </div>
       <div className="practice-feedback-grid compact">
-        {responses.map((response) => (
+        {responses.map((response) => {
+          const executionUnproven = materialExecutionIsUnproven(response.family, response.variantKey);
+          return (
           <article key={response.id} className={`practice-feedback-card status-${response.status}`}>
             <div className="practice-feedback-card-body">
               <strong>{response.publicLabel}</strong>
               <p>{response.contextNote}</p>
-              <p>{response.status} · confidence {Math.round(response.confidence * 100)}% · {response.successCount} useful / {response.failureCount} failed</p>
+              <p>{executionUnproven
+                ? "Material execution not proven; stored response status and outcome counts are withheld as execution evidence."
+                : `${response.status} · confidence ${Math.round(response.confidence * 100)}% · ${response.successCount} useful / ${response.failureCount} failed`}</p>
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

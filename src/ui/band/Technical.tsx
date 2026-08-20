@@ -5,7 +5,7 @@ import { deriveChronicHardship } from "../../sim/agents/chronicHardship";
 import { deriveCanonicalNutritionState } from "../../sim/agents/seasonalSurvival";
 import { deriveCrossingPracticeRelief } from "../../sim/agents/crossingPractice";
 import { effectiveFragmentStrength } from "../../sim/agents/practicalFragments";
-import { deriveCarryingRelief, deriveDryRouteWaterRelief, deriveEngineeringSafetyRelief } from "../../sim/agents/practicalResponses";
+import { deriveCarryingRelief, deriveDryRouteWaterRelief, deriveEngineeringSafetyRelief, derivePracticalVariantExecutionClass } from "../../sim/agents/practicalResponses";
 import { classifyResidentialSeason, deriveSeasonalTravelPlanForBand } from "../../sim/agents/migrationWalk";
 import { deriveBandIdentityProfile } from "../../sim/agents/bandIdentity";
 import { deriveCanonicalEvents, familyLabel } from "../../sim/agents/eventSystem";
@@ -622,6 +622,8 @@ function PracticalAdaptationDetails({ band, world }: { readonly band: Band; read
   const carrying = deriveCarryingRelief(band, currentTick);
   const water = deriveDryRouteWaterRelief(band, currentTick, undefined);
   const engineering = deriveEngineeringSafetyRelief(band, currentTick, undefined);
+  const materialExecutionIsUnproven = (family: string, variantKey: string) =>
+    derivePracticalVariantExecutionClass(family as Parameters<typeof derivePracticalVariantExecutionClass>[0], variantKey) === "material_execution_required";
   return (
     <>
       <Detail
@@ -636,8 +638,12 @@ function PracticalAdaptationDetails({ band, world }: { readonly band: Band; read
       />
       <Detail
         label="canonical experiment plans and outcomes"
-        value={(state.experiments ?? []).length === 0 ? "none" : (state.experiments ?? []).map((experiment) =>
-          `${experiment.family}/${experiment.variantKey} · ${experiment.status} attempts ${experiment.attemptSeasons} · planned materials ${experiment.materials.join(", ")} · planned procedure ${experiment.procedure} · estimated cost labor ${formatCompactNumber(experiment.laborCost)} risk ${formatCompactNumber(experiment.riskCost)} / ${experiment.opportunityCost} · expected ${experiment.expectedEffect} · observed ${experiment.observedOutcome ?? "not yet attempted"} · learned ${experiment.fragmentsLearned.join(",") || "none"} contradicted ${experiment.fragmentsContradicted.join(",") || "none"}`).join(" | ")}
+        value={(state.experiments ?? []).length === 0 ? "none" : (state.experiments ?? []).map((experiment) => {
+          const executionUnproven = materialExecutionIsUnproven(experiment.family, experiment.variantKey);
+          return executionUnproven
+            ? `${experiment.family}/${experiment.variantKey} · material execution not proven · planned materials ${experiment.materials.join(", ")} · planned procedure ${experiment.procedure} · estimated cost labor ${formatCompactNumber(experiment.laborCost)} risk ${formatCompactNumber(experiment.riskCost)} / ${experiment.opportunityCost} · stored status, observation, and learned fragments withheld as physical proof`
+            : `${experiment.family}/${experiment.variantKey} · ${experiment.status} attempts ${experiment.attemptSeasons} · planned materials ${experiment.materials.join(", ")} · planned procedure ${experiment.procedure} · estimated cost labor ${formatCompactNumber(experiment.laborCost)} risk ${formatCompactNumber(experiment.riskCost)} / ${experiment.opportunityCost} · expected ${experiment.expectedEffect} · observed ${experiment.observedOutcome ?? "not yet attempted"} · learned ${experiment.fragmentsLearned.join(",") || "none"} contradicted ${experiment.fragmentsContradicted.join(",") || "none"}`;
+        }).join(" | ")}
       />
       <Detail
         label="local waterworks"
@@ -656,7 +662,9 @@ function PracticalAdaptationDetails({ band, world }: { readonly band: Band; read
         <Detail
           key={response.id}
           label={`response ${response.family}`}
-          value={`${response.variantKey} · ${response.status} · confidence ${formatCompactNumber(response.confidence)} · ${response.successCount} success / ${response.partialCount} partial / ${response.failureCount} failure · ${response.lastEfficacy ?? "not yet exercised"} · ${response.contextNote}${response.revisionOf !== undefined ? ` · revised from ${response.revisionOf}` : ""}`}
+          value={materialExecutionIsUnproven(response.family, response.variantKey)
+            ? `${response.variantKey} · material execution not proven · stored response status, efficacy, and success/partial/failure counts withheld as execution evidence · ${response.contextNote}${response.revisionOf !== undefined ? ` · revised from ${response.revisionOf}` : ""}`
+            : `${response.variantKey} · ${response.status} · confidence ${formatCompactNumber(response.confidence)} · ${response.successCount} success / ${response.partialCount} partial / ${response.failureCount} failure · ${response.lastEfficacy ?? "not yet exercised"} · ${response.contextNote}${response.revisionOf !== undefined ? ` · revised from ${response.revisionOf}` : ""}`}
         />
       ))}
       <Detail
@@ -1905,7 +1913,7 @@ export function Technical({
         <CarryingCapacityDetails band={band} world={world} />
         <SeasonalSupportDetails band={band} />
       </CollapsibleGroup>
-      <CollapsibleGroup title="Causal agency repair — hardship / tendencies / crossing practice">
+      <CollapsibleGroup title="Causal agency repair — hardship / tendencies / crossing practice" defaultOpen={band.practicalAdaptation !== undefined}>
         <CausalAgencyDetails band={band} world={world} latestDecision={latestDecision} />
         {band.practicalAdaptation === undefined ? <AdaptiveEfficacyDetails band={band} /> : null}
         <PracticalAdaptationDetails band={band} world={world} />
