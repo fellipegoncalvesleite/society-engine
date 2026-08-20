@@ -312,7 +312,7 @@ try {
   const adaptiveProfile = project(adaptiveHuman.deriveAdaptiveHumanProfile, canonicalBand);
 
   const activeLoadResponse = { ...responses[0], status: "active" };
-  const lifecycleProbe = (experiment) => {
+  const lifecycleProbe = (experiment, efficacyRecords = []) => {
     const probeBand = {
       ...band,
       practicalAdaptation: {
@@ -320,6 +320,7 @@ try {
         ideas: [canonicalIdea],
         responses: [activeLoadResponse],
         experiments: [experiment],
+        efficacyRecords,
       },
     };
     const candidateProfile = problemPractice.deriveProblemPracticeProfile(world, probeBand);
@@ -333,6 +334,17 @@ try {
     concludedPartial: lifecycleProbe({ ...experiments[0], attemptSeasons: 1, status: "concluded_partial" }),
     abandoned: lifecycleProbe({ ...experiments[0], status: "abandoned" }),
   };
+  const clearSuccessEfficacy = {
+    id: "efficacy:audit:clear-success",
+    responseId: activeLoadResponse.id,
+    family: "carrying_load",
+    classification: "clear_success_specific",
+    outcome: "clear_success",
+  };
+  const efficacySuccessProbe = lifecycleProbe(
+    { ...experiments[0], attemptSeasons: 1, status: "underway" },
+    [clearSuccessEfficacy],
+  );
   const groundwaterIdea = {
     ...canonicalIdea,
     id: "idea:audit:groundwater-work",
@@ -369,6 +381,24 @@ try {
   };
   const groundwaterCandidate = problemPractice.deriveProblemPracticeProfile(world, groundwaterBand).practiceCandidates[0];
   const groundwaterReadiness = readiness.derivePracticeFeedbackReadinessProfile(world, groundwaterBand).items[0];
+  const groundwaterAttemptBand = {
+    ...groundwaterBand,
+    practicalAdaptation: {
+      ...groundwaterBand.practicalAdaptation,
+      experiments: [{ ...groundwaterExperiment, attemptSeasons: 1 }],
+    },
+  };
+  const groundwaterAttemptCandidate = problemPractice.deriveProblemPracticeProfile(world, groundwaterAttemptBand).practiceCandidates[0];
+  const groundwaterAttemptReadiness = readiness.derivePracticeFeedbackReadinessProfile(world, groundwaterAttemptBand).items[0];
+  const groundwaterConcludedBand = {
+    ...groundwaterBand,
+    practicalAdaptation: {
+      ...groundwaterBand.practicalAdaptation,
+      experiments: [{ ...groundwaterExperiment, attemptSeasons: 1, status: "concluded_success" }],
+    },
+  };
+  const groundwaterConcludedCandidate = problemPractice.deriveProblemPracticeProfile(world, groundwaterConcludedBand).practiceCandidates[0];
+  const groundwaterConcludedReadiness = readiness.derivePracticeFeedbackReadinessProfile(world, groundwaterConcludedBand).items[0];
   const emptyFragmentLivedProfile = problemPractice.deriveProblemPracticeProfile(world, {
     ...band,
     practicalAdaptation: { ...practicalAdaptation, fragments: [], ideas: [], responses: [], experiments: [] },
@@ -537,12 +567,29 @@ try {
       lifecycleProbes.abandoned.candidate?.status === "dead_end_risk" &&
       lifecycleProbes.abandoned.item?.readinessStatus === "contradicted" &&
       groundwaterCandidate?.canonical?.executionTruth === "existing_physical_work_executed" &&
-      groundwaterCandidate.status === "implicit_repetition" &&
+      groundwaterCandidate.status === "plausible_untried" &&
       groundwaterReadiness?.readinessStatus === "executed_without_feedback" &&
       groundwaterReadiness?.feedbackType === "recorded_execution_without_feedback" &&
       groundwaterReadiness?.feedbackQuality === "not_recorded" &&
       groundwaterReadiness?.repeatedExposureBasis.length === 0 &&
       groundwaterReadiness?.familiaritySignal === "canonical physical work recorded; feedback not recorded" &&
+      groundwaterAttemptCandidate?.canonical?.executionTruth === "existing_physical_work_executed" &&
+      groundwaterAttemptCandidate.status === "implicit_repetition" &&
+      groundwaterAttemptReadiness?.readinessStatus === "repeated_low_feedback" &&
+      groundwaterAttemptReadiness?.feedbackType === "low_feedback" &&
+      groundwaterAttemptReadiness?.feedbackQuality === "weak" &&
+      groundwaterAttemptReadiness?.repeatedExposureBasis.length === 1 &&
+      groundwaterConcludedCandidate?.canonical?.executionTruth === "existing_physical_work_executed" &&
+      groundwaterConcludedCandidate.status === "implicit_repetition" &&
+      groundwaterConcludedReadiness?.readinessStatus === "learning_ready_later" &&
+      groundwaterConcludedReadiness?.feedbackType === "clear_success" &&
+      groundwaterConcludedReadiness?.feedbackQuality === "clear" &&
+      efficacySuccessProbe.candidate?.canonical?.efficacyRecordIds.join("|") === clearSuccessEfficacy.id &&
+      efficacySuccessProbe.item?.canonical?.efficacyRecordIds.join("|") === clearSuccessEfficacy.id &&
+      efficacySuccessProbe.candidate?.expectedFeedbackType === "clear_success" &&
+      efficacySuccessProbe.item?.feedbackType === "clear_success" &&
+      efficacySuccessProbe.item?.feedbackQuality === "clear" &&
+      efficacySuccessProbe.item?.readinessStatus === "learning_ready_later" &&
       projected.practiceCandidates[1]?.status === "blocked_by_missing_material" &&
       materialReadinessItem?.readinessStatus === "blocked_by_material",
     canonicalProblemBasisUsesProblemOriginOnly:
