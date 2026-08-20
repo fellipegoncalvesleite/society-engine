@@ -23,6 +23,8 @@ import type {
   RepetitionAffordanceDomain,
   RepetitionAffordanceItem,
 } from "./types";
+import { deriveCanonicalPracticeFeedbackReadinessProfile } from "./practicalAdaptationProjection";
+import type { CanonicalCandidateProjection, Item5ProjectionAuthority } from "./problemPractice";
 
 const READINESS_ITEM_CAP = 8;
 const ITEMS_PER_FAMILY_CAP = 2;
@@ -153,6 +155,9 @@ export interface PracticeFeedbackEvidenceRef {
 
 export interface PracticeFeedbackReadinessItem {
   readonly id: string;
+  // Canonical adapter mirror for cross-profile lifecycle joins. Legacy cards
+  // continue to use linkedProblemFrameId only.
+  readonly problemFrameId?: string;
   readonly family: PracticeFeedbackReadinessFamily;
   readonly publicLabel: string;
   readonly meaning: string;
@@ -181,6 +186,7 @@ export interface PracticeFeedbackReadinessItem {
   readonly noDecisionInfluence: true;
   readonly learningReadyLaterIsNotSkill: true;
   readonly futureHook: "practice_learning_readiness_candidate";
+  readonly canonical?: CanonicalCandidateProjection;
 }
 
 export interface PracticeFeedbackReadinessProfile {
@@ -188,6 +194,7 @@ export interface PracticeFeedbackReadinessProfile {
   readonly generatedAtTick: number;
   readonly generatedAtYear: number;
   readonly projectionMode: "selected_band_projection";
+  readonly authority: Item5ProjectionAuthority;
   readonly overviewTitle: string;
   readonly overviewLines: readonly string[];
   readonly items: readonly PracticeFeedbackReadinessItem[];
@@ -371,6 +378,9 @@ const BLOCKERS: readonly PracticeFeedbackBlocker[] = [
 ];
 
 export function derivePracticeFeedbackReadinessProfile(world: WorldState, band: Band): PracticeFeedbackReadinessProfile {
+  if (band.practicalAdaptation !== undefined) {
+    return deriveCanonicalPracticeFeedbackReadinessProfile(world, band);
+  }
   const problemProfile = deriveProblemPracticeProfile(world, band);
   const materialProfile = deriveMaterialAffordanceProfile(world, band);
   const campProfile = deriveCampFootholdProfile(world, band);
@@ -412,6 +422,7 @@ export function derivePracticeFeedbackReadinessProfile(world: WorldState, band: 
     generatedAtTick: Number(world.time.tick),
     generatedAtYear: world.time.year,
     projectionMode: "selected_band_projection",
+    authority: "legacy_compatibility",
     overviewTitle: readinessTitle(items),
     overviewLines: readinessLines(items),
     items,

@@ -39,7 +39,7 @@ const LEGACY_SYMBOLS = new Set([
 const INTERNAL_PRACTICAL_MODULES = new Set([
   "adaptiveHuman", "practicalResponses", "adaptiveEfficacy", "problemPractice",
   "practicalFragments", "materialAffordance", "inventionChain", "practiceFeedbackReadiness",
-  "adaptationBoundary",
+  "practicalAdaptationProjection", "adaptationBoundary",
 ]);
 
 function walk(dir) {

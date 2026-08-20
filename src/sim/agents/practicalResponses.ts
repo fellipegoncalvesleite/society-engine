@@ -224,7 +224,7 @@ export const PRACTICAL_RESPONSE_REGISTRY: readonly PracticalResponseRegistryEntr
 // The weakest required fragment bounds the composition (weakest-link rule).
 // ---------------------------------------------------------------------------
 
-type VariantExecutionClass =
+export type VariantExecutionClass =
   | "practice_only"
   | "existing_physical_work"
   | "material_execution_required";
@@ -557,6 +557,15 @@ const VARIANTS_BY_FAMILY = new Map<PracticalResponseFamily, readonly VariantSpec
 for (const spec of VARIANT_SPECS) {
   const existing = VARIANTS_BY_FAMILY.get(spec.family) ?? [];
   VARIANTS_BY_FAMILY.set(spec.family, [...existing, spec]);
+}
+
+export function derivePracticalVariantExecutionClass(
+  family: PracticalResponseFamily,
+  variantKey: string,
+): VariantExecutionClass | undefined {
+  return VARIANT_SPECS.find(
+    (entry) => entry.family === family && entry.variantKey === variantKey,
+  )?.executionClass;
 }
 
 function variantBasis(

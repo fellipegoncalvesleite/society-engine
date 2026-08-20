@@ -21,6 +21,7 @@ import type {
   ResidentialMoveEvent,
   TravelCorridorMemory,
 } from "./types";
+import { deriveCanonicalProblemPracticeProfile } from "./practicalAdaptationProjection";
 
 const PROBLEM_FRAME_CAP = 6;
 const PRACTICE_CANDIDATE_CAP = 9;
@@ -71,6 +72,36 @@ export type ProblemFrameEvidenceKind =
   | "affordance";
 
 export type ProblemFrameLivedBasis = "lived" | "inherited_not_lived" | "mixed" | "unknown";
+
+export type Item5ProjectionAuthority =
+  | "canonical_practical_adaptation"
+  | "legacy_compatibility";
+
+export type CanonicalExecutionTruth =
+  | "idea_only"
+  | "planned_unexecuted"
+  | "practice_attempted"
+  | "existing_physical_work_executed"
+  | "blocked_material_execution"
+  | "concluded_from_canonical_history";
+
+export interface CanonicalProblemProjection {
+  readonly problemId: string;
+  readonly problemStatus: import("./types").PracticalProblemStatus;
+  readonly problemOrigin: import("./types").PracticalProblemOrigin;
+}
+
+export interface CanonicalCandidateProjection {
+  readonly ideaId: string;
+  readonly ideaStatus: import("./types").PracticalIdeaStatus;
+  readonly experimentId?: string;
+  readonly experimentStatus?: import("./types").PracticalExperimentStatus;
+  readonly attemptSeasons: number;
+  readonly responseId?: string;
+  readonly responseStatus?: import("./types").PracticalResponseStatus;
+  readonly efficacyRecordIds: readonly string[];
+  readonly executionTruth: CanonicalExecutionTruth;
+}
 
 export type PracticeExperimentFamily =
   | "carrying_container_cordage"
@@ -146,6 +177,7 @@ export interface ProblemFrame {
   readonly relatedRepetitionIds: readonly string[];
   readonly possibleExperimentHooks: readonly PracticeExperimentFamily[];
   readonly noDecisionInfluence: true;
+  readonly canonical?: CanonicalProblemProjection;
 }
 
 export interface PracticeExperimentCandidate {
@@ -177,6 +209,7 @@ export interface PracticeExperimentCandidate {
   readonly noSkillUnlocked: true;
   readonly noAutomaticImprovement: true;
   readonly futureHook: "practice_learning_candidate";
+  readonly canonical?: CanonicalCandidateProjection;
 }
 
 export interface ProblemPracticeProfile {
@@ -184,6 +217,7 @@ export interface ProblemPracticeProfile {
   readonly generatedAtTick: number;
   readonly generatedAtYear: number;
   readonly projectionMode: "selected_band_projection";
+  readonly authority: Item5ProjectionAuthority;
   readonly overviewTitle: string;
   readonly overviewLines: readonly string[];
   readonly problemFrames: readonly ProblemFrame[];
@@ -452,6 +486,9 @@ const CANDIDATE_SPECS: readonly CandidateSpec[] = [
 ];
 
 export function deriveProblemPracticeProfile(world: WorldState, band: Band): ProblemPracticeProfile {
+  if (band.practicalAdaptation !== undefined) {
+    return deriveCanonicalProblemPracticeProfile(world, band);
+  }
   const eventState = deriveCanonicalEvents(world, band);
   const knowledgeProfile = deriveKnowledgeEcologyProfile(world, band);
   const materialProfile = deriveMaterialAffordanceProfile(world, band);
@@ -515,6 +552,7 @@ export function deriveProblemPracticeProfile(world: WorldState, band: Band): Pro
     generatedAtTick: Number(world.time.tick),
     generatedAtYear: world.time.year,
     projectionMode: "selected_band_projection",
+    authority: "legacy_compatibility",
     overviewTitle: buildOverviewTitle(problemFrames, practiceCandidates),
     overviewLines: buildOverviewLines(problemFrames, practiceCandidates),
     problemFrames,
