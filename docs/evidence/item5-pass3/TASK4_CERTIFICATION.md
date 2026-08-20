@@ -37,7 +37,7 @@ the sole recorded sensitivity result.
 | `npx tsc -p tsconfig.json --noEmit` | 0 | TypeScript project compiled. |
 | `npx tsc -p tsconfig.node.json --noEmit` | 0 | Node TypeScript project compiled. |
 | `npm run build` | 0 | Vite build completed. Existing advisory: chunks over 500 kB. |
-| `node scripts/item5PhysicalEffectProvenanceAudit.mjs` | 0 | `verdict: "PASS"`; all 13 checks true. Material-required responses retain zero physical relief and no efficacy maturation without execution proof; adaptive-efficacy hash remains `ca2603250e171688e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`. |
+| `node scripts/item5PhysicalEffectProvenanceAudit.mjs` | 0 | `verdict: "PASS"`; all 13 checks true. Material-required responses retain zero physical relief and no efficacy maturation without execution proof; adaptive-efficacy hash remains `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`. |
 | `node scripts/item5ProjectionInheritanceAudit.mjs` | 0 | `verdict: "PASS"`; all 30 checks true, including canonical-only profiles, no projection mutation, daughter inherited-not-local truth, adaptive-human suppression, and UI execution-truth checks. |
 | `node scripts/adaptationBoundaryAudit.mjs` | 0 | `verdict: "PASS"`; all 14 checks true. The canonical state is `band.practicalAdaptation`, with 26 public-boundary named exports and zero unauthorized deep imports. |
 | `node scripts/expeditionAdaptationEfficacyAudit.mjs` | 0 | `verdict: "PASS"`; all 12 checks true. Adapted/unaltered relief is `0.27/0`, carrying capacity is `0.2976/0.24`, and the adapted expedition completes in 7 versus 8 days. |
