@@ -1,0 +1,377 @@
+{
+  "checkpoint": "ROADMAP ITEM 4 — FINAL WHOLE-INTEGRATION FREEZE",
+  "generatedAt": "2026-08-20T21:28:04.333Z",
+  "fixtures": [
+    {
+      "id": "F1_stabilized_successor_retains_physical_separation_history",
+      "claim": "a real departure that later stabilizes produces exactly one completed deep-history lifecycle episode joined to the immutable departure and retained terminal lifecycle",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "departureRecordId": "event:successor-departure:band:varied-estuary:band:item4-freeze-stabilized:2100",
+        "phase": "stabilized",
+        "episodes": [
+          {
+            "id": "episode:band:item4-freeze-stabilized:successor_separation_lifecycle:LIN-ITEM4-FREEZE-STABILIZED",
+            "type": "successor_separation_lifecycle",
+            "startYear": 5,
+            "endYear": 5,
+            "ongoing": false,
+            "severity": 0.1,
+            "relatedTileId": "tile:193:87",
+            "relatedBandId": "band:item4-freeze-stabilized",
+            "summary": "a physically separated successor stabilized as an established band",
+            "detail": {
+              "departedOnDay": 2100,
+              "successorPopulationAtDeparture": 3,
+              "parentPopulationBefore": 30,
+              "parentPopulationAfter": 27,
+              "lifecycleRecordMatched": 1,
+              "lifecyclePhaseEnteredDay": 2111,
+              "lifecycleHistoryLength": 3,
+              "returnPathEntered": 0,
+              "terminalOutcomeStabilized": 1,
+              "terminalOutcomeEstablishedAfterFailedReturn": 0,
+              "terminalOutcomeReintegrated": 0,
+              "terminalOutcomeProvisionalExtinguished": 0
+            },
+            "evidence": [
+              {
+                "kind": "successor_departure_event",
+                "ids": [
+                  "event:successor-departure:band:varied-estuary:band:item4-freeze-stabilized:2100"
+                ]
+              },
+              {
+                "kind": "successor_lifecycle_record",
+                "ids": [
+                  "LIN-ITEM4-FREEZE-STABILIZED",
+                  "phase:stabilized",
+                  "path:travelling>establishing>stabilized"
+                ]
+              }
+            ],
+            "recordKind": "recorded_event",
+            "confidence": 1,
+            "occurrenceCount": 1,
+            "lastUpdatedYear": 5,
+            "provenance": "lived"
+          }
+        ]
+      }
+    },
+    {
+      "id": "F5_retained_departure_projection_survives_episode_cap_pressure",
+      "claim": "a saturated deep-history ring reserves a slot for the lifecycle projection of a still-retained physical departure while remaining within the existing deterministic episode and payload caps",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "beforeCount": 28,
+        "afterCount": 28,
+        "maxEpisodes": 28,
+        "payloadBytesEstimate": 14823,
+        "capsHeld": true,
+        "retainedLifecycleIds": [
+          "episode:band:item4-freeze-stabilized:successor_separation_lifecycle:LIN-ITEM4-FREEZE-STABILIZED"
+        ]
+      }
+    },
+    {
+      "id": "F6_in_flight_successor_history_stays_open_without_elapsed_time_inference",
+      "claim": "a physically departed successor still in canonical travelling state is recorded as an ongoing lifecycle episode with no fabricated terminal year or terminal outcome",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "canonicalPhase": "travelling",
+        "episode": {
+          "id": "episode:band:varied-estuary:successor_separation_lifecycle:LIN-ITEM4-FREEZE-STABILIZED",
+          "type": "successor_separation_lifecycle",
+          "startYear": 5,
+          "ongoing": true,
+          "severity": 0.1,
+          "relatedTileId": "tile:193:87",
+          "relatedBandId": "band:item4-freeze-stabilized",
+          "summary": "a physically separated successor remains in canonical phase travelling",
+          "detail": {
+            "departedOnDay": 2100,
+            "successorPopulationAtDeparture": 3,
+            "parentPopulationBefore": 30,
+            "parentPopulationAfter": 27,
+            "lifecycleRecordMatched": 1,
+            "lifecyclePhaseEnteredDay": 2100,
+            "lifecycleHistoryLength": 1,
+            "returnPathEntered": 0,
+            "terminalOutcomeStabilized": 0,
+            "terminalOutcomeEstablishedAfterFailedReturn": 0,
+            "terminalOutcomeReintegrated": 0,
+            "terminalOutcomeProvisionalExtinguished": 0
+          },
+          "evidence": [
+            {
+              "kind": "successor_departure_event",
+              "ids": [
+                "event:successor-departure:band:varied-estuary:band:item4-freeze-stabilized:2100"
+              ]
+            },
+            {
+              "kind": "successor_lifecycle_record",
+              "ids": [
+                "LIN-ITEM4-FREEZE-STABILIZED",
+                "phase:travelling",
+                "path:travelling"
+              ]
+            }
+          ],
+          "recordKind": "recorded_event",
+          "confidence": 1,
+          "occurrenceCount": 1,
+          "lastUpdatedYear": 6,
+          "provenance": "lived"
+        }
+      }
+    },
+    {
+      "id": "F2_post_return_establishment_preserves_distinct_terminal_outcome",
+      "claim": "failed return followed by a fresh continuation and independent operation is retained as established_after_failed_return, never relabelled stabilized",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "departureRecordId": "event:successor-departure:band:varied-estuary:band:item4-freeze-post-return:2100",
+        "phase": "established_after_failed_return",
+        "episodes": [
+          {
+            "id": "episode:band:item4-freeze-post-return:successor_separation_lifecycle:LIN-ITEM4-FREEZE-POST-RETURN",
+            "type": "successor_separation_lifecycle",
+            "startYear": 5,
+            "endYear": 7,
+            "ongoing": false,
+            "severity": 0.1,
+            "relatedTileId": "tile:193:87",
+            "relatedBandId": "band:item4-freeze-post-return",
+            "summary": "a successor established independent life after a failed return",
+            "detail": {
+              "departedOnDay": 2100,
+              "successorPopulationAtDeparture": 3,
+              "parentPopulationBefore": 30,
+              "parentPopulationAfter": 27,
+              "lifecycleRecordMatched": 1,
+              "lifecyclePhaseEnteredDay": 2688,
+              "lifecycleHistoryLength": 7,
+              "returnPathEntered": 1,
+              "terminalOutcomeStabilized": 0,
+              "terminalOutcomeEstablishedAfterFailedReturn": 1,
+              "terminalOutcomeReintegrated": 0,
+              "terminalOutcomeProvisionalExtinguished": 0
+            },
+            "evidence": [
+              {
+                "kind": "successor_departure_event",
+                "ids": [
+                  "event:successor-departure:band:varied-estuary:band:item4-freeze-post-return:2100"
+                ]
+              },
+              {
+                "kind": "successor_lifecycle_record",
+                "ids": [
+                  "LIN-ITEM4-FREEZE-POST-RETURN",
+                  "phase:established_after_failed_return",
+                  "path:travelling>establishing>failed_early>returning>unresolved_after_failed_return>continuing_after_failed_return>established_after_failed_return"
+                ]
+              }
+            ],
+            "recordKind": "recorded_event",
+            "confidence": 1,
+            "occurrenceCount": 1,
+            "lastUpdatedYear": 7,
+            "provenance": "lived"
+          }
+        ]
+      }
+    },
+    {
+      "id": "F4_provisional_extinction_remains_a_distinct_terminal_history",
+      "claim": "zero physical population resolves through the provisional lifecycle and deep history records provisional_extinguished without manufacturing a successful daughter branch",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "departureRecordId": "event:successor-departure:band:varied-estuary:band:item4-freeze-extinguished:2100",
+        "terminalPhase": "provisional_extinguished",
+        "resolutions": [
+          {
+            "bandId": "band:item4-freeze-extinguished",
+            "lineageId": "LIN-ITEM4-FREEZE-EXTINGUISHED",
+            "fromPhase": "travelling",
+            "toPhase": "provisional_extinguished",
+            "populationAtResolution": 0,
+            "reason": "zero_physical_population"
+          }
+        ],
+        "episodes": [
+          {
+            "id": "episode:band:varied-estuary:successor_separation_lifecycle:LIN-ITEM4-FREEZE-EXTINGUISHED",
+            "type": "successor_separation_lifecycle",
+            "startYear": 5,
+            "endYear": 5,
+            "ongoing": false,
+            "severity": 0.1,
+            "relatedTileId": "tile:193:87",
+            "relatedBandId": "band:item4-freeze-extinguished",
+            "summary": "a physically separated successor died before establishment",
+            "detail": {
+              "departedOnDay": 2100,
+              "successorPopulationAtDeparture": 3,
+              "parentPopulationBefore": 30,
+              "parentPopulationAfter": 27,
+              "lifecycleRecordMatched": 1,
+              "lifecyclePhaseEnteredDay": 2101,
+              "lifecycleHistoryLength": 2,
+              "returnPathEntered": 0,
+              "terminalOutcomeStabilized": 0,
+              "terminalOutcomeEstablishedAfterFailedReturn": 0,
+              "terminalOutcomeReintegrated": 0,
+              "terminalOutcomeProvisionalExtinguished": 1
+            },
+            "evidence": [
+              {
+                "kind": "successor_departure_event",
+                "ids": [
+                  "event:successor-departure:band:varied-estuary:band:item4-freeze-extinguished:2100"
+                ]
+              },
+              {
+                "kind": "successor_lifecycle_record",
+                "ids": [
+                  "LIN-ITEM4-FREEZE-EXTINGUISHED",
+                  "phase:provisional_extinguished",
+                  "path:travelling>provisional_extinguished"
+                ]
+              }
+            ],
+            "recordKind": "recorded_event",
+            "confidence": 1,
+            "occurrenceCount": 1,
+            "lastUpdatedYear": 5,
+            "provenance": "lived"
+          }
+        ]
+      }
+    },
+    {
+      "id": "F3_parent_history_closes_real_reintegration_without_fabricating_daughter_success",
+      "claim": "after a real departure/travel/return/reintegration path, the next legitimate annual history observation closes one lifecycle episode as reintegrated and does not manufacture daughter_branch_formed success",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "departureRecordId": "event:successor-departure:band:varied-estuary:band:item4-freeze-reintegrated:2100",
+        "terminalPhase": "reintegrated",
+        "productionTrace": [
+          {
+            "day": 2100,
+            "phase": "travelling",
+            "position": "tile:195:89"
+          },
+          {
+            "day": 2101,
+            "phase": "travelling",
+            "position": "tile:194:89"
+          },
+          {
+            "day": 2102,
+            "phase": "travelling",
+            "position": "tile:193:89"
+          },
+          {
+            "day": 2103,
+            "phase": "travelling",
+            "position": "tile:193:88"
+          },
+          {
+            "day": 2104,
+            "phase": "travelling",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2105,
+            "phase": "establishing",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2465,
+            "phase": "failed_early",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2495,
+            "phase": "returning",
+            "position": "tile:193:87"
+          },
+          {
+            "day": 2499,
+            "phase": "returning",
+            "position": "tile:195:89"
+          },
+          {
+            "day": 2675,
+            "phase": "unresolved_after_failed_return",
+            "position": "tile:195:89"
+          }
+        ],
+        "returnMoves": 4,
+        "episodes": [
+          {
+            "id": "episode:band:varied-estuary:successor_separation_lifecycle:LIN-ITEM4-FREEZE-REINTEGRATED",
+            "type": "successor_separation_lifecycle",
+            "startYear": 5,
+            "endYear": 7,
+            "ongoing": false,
+            "severity": 0.1,
+            "relatedTileId": "tile:193:87",
+            "relatedBandId": "band:item4-freeze-reintegrated",
+            "summary": "a physically separated successor returned and rejoined its parent",
+            "detail": {
+              "departedOnDay": 2100,
+              "successorPopulationAtDeparture": 3,
+              "parentPopulationBefore": 30,
+              "parentPopulationAfter": 27,
+              "lifecycleRecordMatched": 1,
+              "lifecyclePhaseEnteredDay": 2676,
+              "lifecycleHistoryLength": 6,
+              "returnPathEntered": 1,
+              "terminalOutcomeStabilized": 0,
+              "terminalOutcomeEstablishedAfterFailedReturn": 0,
+              "terminalOutcomeReintegrated": 1,
+              "terminalOutcomeProvisionalExtinguished": 0
+            },
+            "evidence": [
+              {
+                "kind": "successor_departure_event",
+                "ids": [
+                  "event:successor-departure:band:varied-estuary:band:item4-freeze-reintegrated:2100"
+                ]
+              },
+              {
+                "kind": "successor_lifecycle_record",
+                "ids": [
+                  "LIN-ITEM4-FREEZE-REINTEGRATED",
+                  "phase:reintegrated",
+                  "path:travelling>establishing>failed_early>returning>unresolved_after_failed_return>reintegrated"
+                ]
+              }
+            ],
+            "recordKind": "recorded_event",
+            "confidence": 1,
+            "occurrenceCount": 1,
+            "lastUpdatedYear": 7,
+            "provenance": "lived"
+          }
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "verdict": "PASS"
+  }
+}
