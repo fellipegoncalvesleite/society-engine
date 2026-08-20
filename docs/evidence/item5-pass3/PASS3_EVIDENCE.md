@@ -11,6 +11,35 @@
   Pass 3 remains pending independent architect review; this evidence is not a
   merge or acceptance record.
 
+## Checkpoint finalization and provenance
+
+The durable checkpoint reference is
+`refs/heads/checkpoint/item5-projection-inheritance-pass3` and its remote-tracking
+counterpart `refs/remotes/origin/checkpoint/item5-projection-inheritance-pass3`.
+Before this finalization correction, the measured pushed checkpoint was
+`effe5e7188c1f25e87b7a52220cda37df5cd2466` on both refs. Its author and
+committer were both `fellipegoncalvesleite
+<207756005+fellipegoncalvesleite@users.noreply.github.com>`; `git status
+--short` produced no output and the ahead/behind count was `0 0`.
+
+The measured provenance commands were:
+
+```text
+git rev-parse HEAD
+git rev-parse @{upstream}
+git rev-list --left-right --count HEAD...@{upstream}
+git show -s --format='author=%an <%ae>%ncommitter=%cn <%ce>' HEAD
+git status --short
+git diff --check
+```
+
+A file cannot truthfully embed the hash of the commit that contains that same
+file: changing the file changes the commit hash. Therefore this evidence names
+the checkpoint branch/ref as the durable finalization identity and records the
+prior measured pushed hash above. The actual post-commit final HEAD, upstream
+hash, and parity must be measured after the commit and are recorded in the
+ignored implementer report rather than guessed here.
+
 ## Design decision and authority boundary
 
 Three designs were considered in the accepted specification:
