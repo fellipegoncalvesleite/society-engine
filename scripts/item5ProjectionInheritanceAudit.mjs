@@ -107,6 +107,7 @@ try {
   const readiness = await server.ssrLoadModule("/sim/agents/practiceFeedbackReadiness.ts");
   const boundary = await server.ssrLoadModule("/sim/agents/adaptationBoundary.ts");
   const adaptiveHuman = await server.ssrLoadModule("/sim/agents/adaptiveHuman.ts");
+  const campFoothold = await server.ssrLoadModule("/sim/agents/campFoothold.ts");
   const diffusion = await server.ssrLoadModule("/sim/agents/socialEcologicalDiffusion.ts");
   const problemsAndTrials = await server.ssrLoadModule("/ui/band/ProblemsAndTrials.tsx");
   const practiceFeedback = await server.ssrLoadModule("/ui/band/PracticeFeedback.tsx");
@@ -604,6 +605,210 @@ try {
   };
   const groundwaterConcludedCandidate = problemPractice.deriveProblemPracticeProfile(world, groundwaterConcludedBand).practiceCandidates[0];
   const groundwaterConcludedReadiness = readiness.derivePracticeFeedbackReadinessProfile(world, groundwaterConcludedBand).items[0];
+
+  // Whole-branch review RED 1: an existing-physical-work variant must have a
+  // matching persisted waterWorks.responseId before any attempt, conclusion,
+  // efficacy, observed outcome, or visible-practice trace is admitted.
+  const groundwaterUnprovenEfficacy = {
+    ...staleMaterialEfficacyRecord,
+    id: "efficacy:audit:unproven-groundwater",
+    responseId: groundwaterResponse.id,
+    family: "groundwater_seek",
+    localityNote: "UNPROVEN_WATERWORKS_EFFICACY",
+    reason: "UNPROVEN_WATERWORKS_EFFICACY",
+  };
+  const groundwaterUnprovenBand = {
+    ...band,
+    practicalAdaptation: {
+      ...practicalAdaptation,
+      ideas: [groundwaterIdea],
+      responses: [{
+        ...groundwaterResponse,
+        status: "active",
+        successCount: 4,
+        lastEfficacy: "clear_success_specific",
+      }],
+      experiments: [{
+        ...groundwaterExperiment,
+        attemptSeasons: 1,
+        status: "concluded_success",
+        observedOutcome: "UNPROVEN_WATERWORKS_OBSERVED_OUTCOME",
+        fragmentsLearned: ["fragment:audit:unproven-waterworks"],
+      }],
+      efficacyRecords: [groundwaterUnprovenEfficacy],
+    },
+  };
+  const groundwaterUnprovenProblem = problemPractice.deriveProblemPracticeProfile(world, groundwaterUnprovenBand);
+  const groundwaterUnprovenReadiness = readiness.derivePracticeFeedbackReadinessProfile(world, groundwaterUnprovenBand);
+  const groundwaterUnprovenSocial = diffusion.deriveSocialEcologicalDiffusionProfile(world, {
+    ...socialCanonicalBand,
+    practicalAdaptation: groundwaterUnprovenBand.practicalAdaptation,
+  });
+  const groundwaterUnprovenUi = {
+    problems: renderToStaticMarkup(createElement(problemsAndTrials.ProblemsAndTrials, { band: groundwaterUnprovenBand, world })),
+    ideas: renderToStaticMarkup(createElement(ideasSolutions.IdeasSolutions, { band: groundwaterUnprovenBand, world })),
+    technical: renderToStaticMarkup(createElement(technical.Technical, {
+      band: groundwaterUnprovenBand,
+      world,
+      currentTile: world.tiles[groundwaterUnprovenBand.position],
+      latestDecision: undefined,
+    })),
+  };
+
+  // Whole-branch review RED 2: blocked material lifecycle contradictions must
+  // be short-circuited before Problems & Trials interprets feedback or copies
+  // an observed outcome.
+  const staleMaterialProblemProfile = problemPractice.deriveProblemPracticeProfile(world, staleMaterialBand);
+  const staleMaterialProblemCandidate = staleMaterialProblemProfile.practiceCandidates[0];
+  const staleMaterialProblemsUi = renderToStaticMarkup(createElement(problemsAndTrials.ProblemsAndTrials, {
+    band: staleMaterialBand,
+    world,
+  }));
+
+  // Whole-branch review RED 3: canonical arrays are independently bounded.
+  // Every retained record must still project even when any adjacent record was
+  // evicted, and the absent link must be explicit rather than silently turning
+  // the row into idea_only/not_started.
+  const capJoinEfficacy = {
+    ...staleMaterialEfficacyRecord,
+    id: "efficacy:audit:cap-join",
+    responseId: activeLoadResponse.id,
+    family: "carrying_load",
+    outcome: "mixed_feedback",
+    classification: "context_mismatch",
+    localityNote: "cap join efficacy",
+    reason: "cap join efficacy",
+  };
+  const capJoinProfile = (overrides) => {
+    const subject = {
+      ...band,
+      practicalAdaptation: {
+        ...practicalAdaptation,
+        problems: [canonicalProblem],
+        ideas: [canonicalIdea],
+        experiments: [experiments[0]],
+        responses: [activeLoadResponse],
+        efficacyRecords: [capJoinEfficacy],
+        ...overrides,
+      },
+    };
+    return {
+      problem: problemPractice.deriveProblemPracticeProfile(world, subject),
+      readiness: readiness.derivePracticeFeedbackReadinessProfile(world, subject),
+    };
+  };
+  const independentlyBoundedJoins = {
+    problemEvicted: capJoinProfile({ problems: [] }),
+    ideaEvicted: capJoinProfile({ ideas: [] }),
+    experimentEvicted: capJoinProfile({ experiments: [] }),
+    responseEvicted: capJoinProfile({ responses: [] }),
+    efficacyEvicted: capJoinProfile({ efficacyRecords: [] }),
+  };
+
+  // Whole-branch review RED 4: inherited framing and locally created/testing
+  // records have distinct bases. A copied framing is also not lived evidence.
+  const daughterProblem = daughterState?.problems?.[0];
+  const daughterLocalIdea = {
+    ...canonicalIdea,
+    id: "idea:audit:daughter-local",
+    problemId: daughterProblem?.id,
+    publicLabel: "Daughter local load-staging idea",
+    source: "local_inference",
+  };
+  const daughterLocalResponse = {
+    ...activeLoadResponse,
+    id: "response:audit:daughter-local",
+    problemId: daughterProblem?.id,
+    ideaId: daughterLocalIdea.id,
+    experimentId: "experiment:audit:daughter-local",
+    publicLabel: "Daughter local load-staging response",
+  };
+  const daughterLocalExperiment = {
+    ...experiments[0],
+    id: "experiment:audit:daughter-local",
+    problemId: daughterProblem?.id,
+    ideaId: daughterLocalIdea.id,
+    responseId: daughterLocalResponse.id,
+    attemptSeasons: 1,
+    status: "underway",
+  };
+  const daughterLocalTestingBand = {
+    ...daughterBand,
+    practicalAdaptation: {
+      ...daughterState,
+      ideas: [daughterLocalIdea],
+      experiments: [daughterLocalExperiment],
+      responses: [daughterLocalResponse],
+      efficacyRecords: [],
+    },
+  };
+  const daughterLocalProblemProfile = problemPractice.deriveProblemPracticeProfile(world, daughterLocalTestingBand);
+  const daughterLocalReadinessProfile = readiness.derivePracticeFeedbackReadinessProfile(world, daughterLocalTestingBand);
+  const copiedProblem = {
+    ...canonicalProblem,
+    id: "problem:audit:copied-framing",
+    origin: "copied",
+    publicLabel: "Copied water framing",
+  };
+  const copiedProblemProfile = problemPractice.deriveProblemPracticeProfile(world, {
+    ...band,
+    practicalAdaptation: {
+      ...practicalAdaptation,
+      problems: [copiedProblem],
+      ideas: [],
+      experiments: [],
+      responses: [],
+      efficacyRecords: [],
+    },
+  });
+
+  // Whole-branch review RED 5: a canonical plan may inform a camp-context
+  // possibility, but without independent physical camp/activity evidence it
+  // cannot diffuse as a visible repeated-use trace.
+  const planOnlyProtoCampMemory = band.protoCampMemory === undefined
+    ? undefined
+    : { ...band.protoCampMemory, topPlaces: [] };
+  const planOnlyBand = {
+    ...band,
+    placeMemory: {},
+    recentIntraSeasonTrips: [],
+    bodyCampLogistics: undefined,
+    resourceEcology: undefined,
+    protoCampMemory: planOnlyProtoCampMemory,
+    practicalAdaptation: {
+      ...practicalAdaptation,
+      problems: [canonicalProblem],
+      ideas: [materialIdea],
+      experiments: [experiments[1]],
+      responses: [],
+      efficacyRecords: [],
+    },
+  };
+  const planOnlyCampProfile = campFoothold.deriveCampFootholdProfile(world, planOnlyBand);
+  const planOnlyDiffusionProfile = diffusion.deriveSocialEcologicalDiffusionProfile(world, planOnlyBand);
+  const planOnlyStorageFactor = planOnlyCampProfile.factors.find((factor) => factor.family === "temporary_storage_cache");
+  const planOnlyStorageTraceItems = planOnlyDiffusionProfile.diffusionItems.filter((item) =>
+    item.id.includes(":foothold-trace:") &&
+    (item.linkedFootholdIds.includes(planOnlyStorageFactor?.id) || item.domain === "storage_processing"));
+
+  // Whole-branch review Minor: an empty local problem set and a local
+  // idea-only row must not be diagnosed as inherited knowledge.
+  const localIdeaOnlyBand = {
+    ...band,
+    practicalAdaptation: {
+      ...practicalAdaptation,
+      problems: [canonicalProblem],
+      ideas: [canonicalIdea],
+      experiments: [],
+      responses: [],
+      efficacyRecords: [],
+    },
+  };
+  const localIdeaOnlyProfile = problemPractice.deriveProblemPracticeProfile(world, localIdeaOnlyBand);
+  const localProblemWithoutIdeaProfile = problemPractice.deriveProblemPracticeProfile(world, {
+    ...localIdeaOnlyBand,
+    practicalAdaptation: { ...localIdeaOnlyBand.practicalAdaptation, ideas: [] },
+  });
   const emptyFragmentLivedProfile = problemPractice.deriveProblemPracticeProfile(world, {
     ...band,
     practicalAdaptation: { ...practicalAdaptation, fragments: [], ideas: [], responses: [], experiments: [] },
@@ -621,6 +826,17 @@ try {
       experiments: [],
     },
   });
+
+  const firstCanonicalPair = (profiles) => ({
+    candidate: profiles.problem.practiceCandidates[0]?.canonical,
+    item: profiles.readiness.items[0]?.canonical,
+  });
+  const boundedJoinCards = Object.fromEntries(Object.entries(independentlyBoundedJoins).map(([key, profiles]) => [
+    key,
+    firstCanonicalPair(profiles),
+  ]));
+  const missingLink = (canonical, kind, id) =>
+    canonical?.missingLinks?.some((link) => link.kind === kind && link.id === id) === true;
 
   const expectedCanonicalCards = [
     {
@@ -752,6 +968,43 @@ try {
     },
     staleMaterialEfficacyAudit,
     evictedMaterialResponseEfficacyAudit,
+    finalReviewFixWave: {
+      groundwaterWithoutWorks: {
+        candidate: groundwaterUnprovenProblem.practiceCandidates[0],
+        readiness: groundwaterUnprovenReadiness.items[0],
+        practiceTraceIds: groundwaterUnprovenSocial.diffusionItems
+          .filter((item) => item.id.includes(":practice-trace:"))
+          .map((item) => item.id),
+        uiContainsObservedOutcome: Object.fromEntries(Object.entries(groundwaterUnprovenUi)
+          .map(([key, markup]) => [key, markup.includes("UNPROVEN_WATERWORKS_OBSERVED_OUTCOME")])),
+      },
+      blockedMaterialProblemsAndTrials: {
+        status: staleMaterialProblemCandidate?.status,
+        feedbackType: staleMaterialProblemCandidate?.expectedFeedbackType,
+        uncertainty: staleMaterialProblemCandidate?.uncertainty,
+        renderedObservedOutcome: staleMaterialProblemsUi.includes("stale observed success must not become execution proof"),
+        renderedClearSuccess: staleMaterialProblemsUi.includes("clear success"),
+      },
+      independentlyBoundedJoins: boundedJoinCards,
+      inheritedProblemLocalTesting: {
+        problemBasis: daughterLocalProblemProfile.problemFrames[0]?.livedBasis,
+        candidateBasis: daughterLocalProblemProfile.practiceCandidates[0]?.evidence[0]?.livedBasis,
+        candidateLabel: daughterLocalProblemProfile.practiceCandidates[0]?.publicLabel,
+        feedbackType: daughterLocalReadinessProfile.items[0]?.feedbackType,
+        readinessBasis: daughterLocalReadinessProfile.items[0]?.inheritedVsLivedBasis,
+        copiedProblemBasis: copiedProblemProfile.problemFrames[0]?.livedBasis,
+      },
+      planOnlyCampTrace: {
+        storageFactorId: planOnlyStorageFactor?.id,
+        storageFactorSources: planOnlyStorageFactor?.evidence.map((entry) => entry.sourceSystem),
+        traceIds: planOnlyStorageTraceItems.map((item) => item.id),
+      },
+      localIdeaOnlyDiagnostics: {
+        candidateStatus: localIdeaOnlyProfile.practiceCandidates[0]?.status,
+        integrity: localIdeaOnlyProfile.integrity.daughterParentKnowledgeNotTreatedAsTestedHere,
+        emptyOverviewLines: localProblemWithoutIdeaProfile.overviewLines,
+      },
+    },
   };
   checks = {
     canonicalProblemsAreExclusive:
@@ -939,6 +1192,69 @@ try {
       multiEfficacyFeedback.includes("mixed_feedback") &&
       multiEfficacyFeedback.includes("mixed feedback") &&
       multiEfficacyFeedback.includes("context_mismatch"),
+    missingWaterWorksCannotProveExistingPhysicalWork:
+      groundwaterUnprovenProblem.practiceCandidates[0]?.canonical?.executionTruth === "existing_physical_work_unproven" &&
+      groundwaterUnprovenProblem.practiceCandidates[0]?.canonical?.attemptSeasons === 0 &&
+      groundwaterUnprovenProblem.practiceCandidates[0]?.canonical?.efficacyRecordIds.length === 0 &&
+      groundwaterUnprovenProblem.practiceCandidates[0]?.status === "currently_unsupported" &&
+      groundwaterUnprovenProblem.practiceCandidates[0]?.expectedFeedbackType === "delayed_feedback" &&
+      !groundwaterUnprovenProblem.practiceCandidates[0]?.uncertainty.includes("UNPROVEN_WATERWORKS_OBSERVED_OUTCOME") &&
+      groundwaterUnprovenReadiness.items[0]?.readinessStatus === "not_started" &&
+      groundwaterUnprovenReadiness.items[0]?.feedbackType === "blocked_no_attempt" &&
+      groundwaterUnprovenReadiness.items[0]?.feedbackQuality === "blocked" &&
+      groundwaterUnprovenSocial.diffusionItems.every((item) => !item.id.includes(":practice-trace:")) &&
+      Object.values(groundwaterUnprovenUi).every((markup) =>
+        markup.includes("physical work not proven") &&
+        !markup.includes("UNPROVEN_WATERWORKS_OBSERVED_OUTCOME") &&
+        !markup.includes("efficacy:audit:unproven-groundwater")),
+    blockedMaterialShortCircuitsProblemsAndTrials:
+      staleMaterialProblemCandidate?.status === "blocked_by_missing_material" &&
+      staleMaterialProblemCandidate?.expectedFeedbackType === "delayed_feedback" &&
+      !staleMaterialProblemCandidate?.uncertainty.includes("stale observed success must not become execution proof") &&
+      staleMaterialProblemsUi.includes("material execution not proven") &&
+      !staleMaterialProblemsUi.includes("stale observed success must not become execution proof") &&
+      !staleMaterialProblemsUi.includes("clear success"),
+    independentlyBoundedCanonicalJoinsRemainTruthful:
+      missingLink(boundedJoinCards.problemEvicted.candidate, "problem", canonicalProblem.id) &&
+      missingLink(boundedJoinCards.problemEvicted.item, "problem", canonicalProblem.id) &&
+      boundedJoinCards.problemEvicted.candidate?.responseStatus === "active" &&
+      boundedJoinCards.problemEvicted.candidate?.efficacyRecordIds.includes(capJoinEfficacy.id) &&
+      missingLink(boundedJoinCards.ideaEvicted.candidate, "idea", canonicalIdea.id) &&
+      missingLink(boundedJoinCards.ideaEvicted.item, "idea", canonicalIdea.id) &&
+      boundedJoinCards.ideaEvicted.candidate?.experimentId === experiments[0].id &&
+      boundedJoinCards.ideaEvicted.candidate?.responseStatus === "active" &&
+      boundedJoinCards.ideaEvicted.candidate?.efficacyRecordIds.includes(capJoinEfficacy.id) &&
+      missingLink(boundedJoinCards.experimentEvicted.candidate, "experiment", experiments[0].id) &&
+      missingLink(boundedJoinCards.experimentEvicted.item, "experiment", experiments[0].id) &&
+      boundedJoinCards.experimentEvicted.candidate?.responseStatus === "active" &&
+      boundedJoinCards.experimentEvicted.candidate?.efficacyRecordIds.includes(capJoinEfficacy.id) &&
+      boundedJoinCards.experimentEvicted.candidate?.executionTruth === "practice_attempted" &&
+      missingLink(boundedJoinCards.responseEvicted.candidate, "response", activeLoadResponse.id) &&
+      missingLink(boundedJoinCards.responseEvicted.item, "response", activeLoadResponse.id) &&
+      boundedJoinCards.responseEvicted.candidate?.experimentId === experiments[0].id &&
+      boundedJoinCards.responseEvicted.candidate?.efficacyRecordIds.includes(capJoinEfficacy.id) &&
+      boundedJoinCards.efficacyEvicted.candidate?.responseStatus === "active" &&
+      boundedJoinCards.efficacyEvicted.item?.responseStatus === "active" &&
+      boundedJoinCards.efficacyEvicted.candidate?.efficacyRecordIds.length === 0,
+    inheritedFramingDoesNotRelabelLocalTesting:
+      daughterLocalProblemProfile.problemFrames[0]?.livedBasis === "inherited_not_lived" &&
+      daughterLocalProblemProfile.practiceCandidates[0]?.evidence.every((entry) => entry.livedBasis === "lived") &&
+      !daughterLocalProblemProfile.practiceCandidates[0]?.publicLabel.includes("inherited") &&
+      daughterLocalReadinessProfile.items[0]?.feedbackType === "low_feedback" &&
+      daughterLocalReadinessProfile.items[0]?.feedbackQuality === "weak" &&
+      daughterLocalReadinessProfile.items[0]?.inheritedVsLivedBasis === "lived" &&
+      !daughterLocalReadinessProfile.items[0]?.localTransferClue.toLowerCase().includes("inherited") &&
+      copiedProblemProfile.problemFrames[0]?.livedBasis === "copied_not_lived",
+    planOnlyCampFactorsDoNotDiffuseAsVisibleTraces:
+      planOnlyStorageFactor !== undefined &&
+      planOnlyStorageFactor.evidence.some((entry) => entry.sourceSystem === "problem_practice") &&
+      planOnlyStorageTraceItems.length === 0,
+    localIdeaOnlyDiagnosticsStayLocal:
+      localIdeaOnlyProfile.practiceCandidates[0]?.canonical?.executionTruth === "idea_only" &&
+      localIdeaOnlyProfile.practiceCandidates[0]?.evidence.every((entry) => entry.livedBasis === "lived") &&
+      !localIdeaOnlyProfile.practiceCandidates[0]?.publicLabel.toLowerCase().includes("inherited") &&
+      localIdeaOnlyProfile.integrity.daughterParentKnowledgeNotTreatedAsTestedHere &&
+      localProblemWithoutIdeaProfile.overviewLines.every((line) => !line.toLowerCase().includes("inherited")),
   };
 } finally {
   await server.close();
