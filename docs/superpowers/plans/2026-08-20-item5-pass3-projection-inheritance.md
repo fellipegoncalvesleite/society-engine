@@ -394,7 +394,7 @@ git commit -m "docs: record item5 projection consolidation pass3"
 
 Repeat the complete Task-4 battery plus `git diff --check`. Inspect every JSON payload again. Run the required author/committer log command and `git status --short`; status must be empty.
 
-- [ ] **Step 5: Push only the checkpoint branch and verify parity**
+- [x] **Step 5: Push only the checkpoint branch and verify parity**
 
 ```bash
 git push origin checkpoint/item5-projection-inheritance-pass3
