@@ -105,8 +105,9 @@ $ git status --short
 Those were the complete changed-file list at that point, and both files were
 inspected before this document was authored. No tracked production file had a
 certification edit. After commit `af766da80ff3fa3698dff1cdc512738f05564c59`,
-the same full-worktree command produced no output (clean). The final
-post-correction status is rechecked after the evidence-only follow-up commit.
+the same full-worktree command produced no output (clean); after follow-up
+commit `f488f3f0cc20c8b0f3d10d4e4c0459ef43befa50`, exact current
+`git status --short` likewise produced no output (clean).
 
 ## Limits
 
