@@ -1,0 +1,210 @@
+{
+  "check": "ITEM5-PROJECTION-INHERITANCE-PASS3",
+  "verdict": "FAIL",
+  "checks": {
+    "canonicalProblemsAreExclusive": false,
+    "canonicalCandidateCardsAreExact": false,
+    "canonicalProblemAuthority": false,
+    "canonicalReadinessAuthority": false,
+    "canonicalReadinessCardsAreExact": false,
+    "materialPlanRemainsUnexecuted": false,
+    "daughterInheritedStatePreservesOnlyKnowledge": true,
+    "daughterProjectionUsesCanonicalAuthority": false,
+    "daughterProjectionHasNoLocalTrialOrReadiness": false,
+    "daughterProjectionLabelsInheritedNotLocal": true,
+    "legacyPositiveControlUsesCompatibilityAuthority": true,
+    "projectionsDoNotMutateCanonicalBandOrWorld": true,
+    "deriveProblemPracticeProfileCallerInventoryIsReadOnly": true,
+    "derivePracticeFeedbackReadinessProfileCallerInventoryIsReadOnly": true,
+    "adaptiveHumanCanonicalLeakClosed": false
+  },
+  "runtime": {
+    "tick": 0,
+    "canonicalProblemFrameIds": [
+      "problem-frame:band:delta-coastal-foragers:carrying_logistical_burden",
+      "problem-frame:band:delta-coastal-foragers:crossing_blocked_path",
+      "problem-frame:band:delta-coastal-foragers:route_new_country_uncertainty",
+      "problem-frame:band:delta-coastal-foragers:camp_setup_care_burden",
+      "problem-frame:band:delta-coastal-foragers:water_refuge_pressure"
+    ],
+    "canonicalCandidateCards": [
+      {
+        "problemFrameId": "problem-frame:band:delta-coastal-foragers:carrying_logistical_burden"
+      },
+      {
+        "problemFrameId": "problem-frame:band:delta-coastal-foragers:carrying_logistical_burden"
+      },
+      {
+        "problemFrameId": "problem-frame:band:delta-coastal-foragers:camp_setup_care_burden"
+      },
+      {
+        "problemFrameId": "problem-frame:band:delta-coastal-foragers:camp_setup_care_burden"
+      },
+      {
+        "problemFrameId": "problem-frame:band:delta-coastal-foragers:crossing_blocked_path"
+      },
+      {
+        "problemFrameId": "problem-frame:band:delta-coastal-foragers:carrying_logistical_burden"
+      },
+      {
+        "problemFrameId": "problem-frame:band:delta-coastal-foragers:route_new_country_uncertainty"
+      }
+    ],
+    "canonicalReadinessCards": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "daughterFrameCount": 5,
+    "daughterCandidateCount": 7,
+    "daughterReadinessItemCount": 7,
+    "legacyFrameCount": 5,
+    "legacyCandidateCount": 7,
+    "legacyReadinessItemCount": 7,
+    "materialReadinessItemCount": 0,
+    "daughterInheritedFragments": [
+      {
+        "id": "fragment:audit:staging",
+        "basis": "inherited",
+        "strength": 0.4,
+        "failureCount": 0,
+        "lastReinforcedTick": 1,
+        "evidenceRefs": [
+          "inherited:parent_band"
+        ],
+        "knowledgeState": "confident",
+        "observationCount": 3,
+        "contradictionCount": 0,
+        "contextKeys": [
+          "audit:travel"
+        ]
+      },
+      {
+        "id": "fragment:audit:membrane",
+        "basis": "inherited",
+        "strength": 0.34,
+        "failureCount": 0,
+        "lastReinforcedTick": 1,
+        "evidenceRefs": [
+          "inherited:parent_band"
+        ],
+        "knowledgeState": "tentative",
+        "observationCount": 1,
+        "contradictionCount": 0,
+        "contextKeys": [
+          "audit:camp"
+        ]
+      }
+    ],
+    "daughterInheritedProblems": [
+      {
+        "id": "problem:band:delta-coastal-foragers:audit-daughter:camp_water_shortage",
+        "family": "camp_water_shortage",
+        "publicLabel": "Canonical water shortage",
+        "interpretation": "the camp lacks dependable water",
+        "misread": false,
+        "severity": 0.72,
+        "confidence": 0.49,
+        "repetitionCount": 1,
+        "origin": "inherited",
+        "status": "active",
+        "evidenceRefs": [
+          "inherited:parent_band"
+        ],
+        "framedAtTick": 1,
+        "lastEvidenceTick": 1
+      }
+    ]
+  },
+  "callerInventory": {
+    "deriveProblemPracticeProfile": {
+      "allowlist": [
+        "src/sim/agents/adaptiveHuman.ts",
+        "src/sim/agents/campFoothold.ts",
+        "src/sim/agents/practiceFeedbackReadiness.ts",
+        "src/sim/agents/socialEcologicalDiffusion.ts",
+        "src/ui/band/ProblemsAndTrials.tsx",
+        "src/ui/band/Technical.tsx"
+      ],
+      "callSites": [
+        {
+          "file": "src/sim/agents/adaptiveHuman.ts",
+          "calls": 1,
+          "classification": "allowlisted_read_model"
+        },
+        {
+          "file": "src/sim/agents/campFoothold.ts",
+          "calls": 1,
+          "classification": "allowlisted_read_model"
+        },
+        {
+          "file": "src/sim/agents/practiceFeedbackReadiness.ts",
+          "calls": 1,
+          "classification": "allowlisted_read_model"
+        },
+        {
+          "file": "src/sim/agents/socialEcologicalDiffusion.ts",
+          "calls": 1,
+          "classification": "allowlisted_read_model"
+        },
+        {
+          "file": "src/ui/band/ProblemsAndTrials.tsx",
+          "calls": 1,
+          "classification": "allowlisted_read_model"
+        },
+        {
+          "file": "src/ui/band/Technical.tsx",
+          "calls": 1,
+          "classification": "allowlisted_read_model"
+        }
+      ],
+      "writerOrRuleSites": [],
+      "unclassified": []
+    },
+    "derivePracticeFeedbackReadinessProfile": {
+      "allowlist": [
+        "src/sim/agents/adaptiveHuman.ts",
+        "src/sim/agents/socialEcologicalDiffusion.ts",
+        "src/ui/band/PracticeFeedback.tsx",
+        "src/ui/band/Technical.tsx"
+      ],
+      "callSites": [
+        {
+          "file": "src/sim/agents/adaptiveHuman.ts",
+          "calls": 1,
+          "classification": "allowlisted_read_model"
+        },
+        {
+          "file": "src/sim/agents/socialEcologicalDiffusion.ts",
+          "calls": 1,
+          "classification": "allowlisted_read_model"
+        },
+        {
+          "file": "src/ui/band/PracticeFeedback.tsx",
+          "calls": 1,
+          "classification": "allowlisted_read_model"
+        },
+        {
+          "file": "src/ui/band/Technical.tsx",
+          "calls": 1,
+          "classification": "allowlisted_read_model"
+        }
+      ],
+      "writerOrRuleSites": [],
+      "unclassified": []
+    }
+  },
+  "behaviorIsolation": {
+    "canonicalProblemAuthority": "heuristic_on_canonical",
+    "canonicalReadinessAuthority": "heuristic_on_canonical",
+    "daughterProblemAuthority": "heuristic_on_canonical",
+    "daughterReadinessAuthority": "heuristic_on_canonical",
+    "legacyProblemAuthority": "legacy_compatibility",
+    "legacyReadinessAuthority": "legacy_compatibility",
+    "adaptiveHumanIdeaCount": 3
+  }
+}
