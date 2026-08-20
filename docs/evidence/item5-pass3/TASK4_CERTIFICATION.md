@@ -86,17 +86,27 @@ the npm preamble; each has top-level `passed: true` and no false assertion.
 
 | Benchmark | JSON suite / passed | Reported natural state and caps |
 | --- | --- | --- |
-| `npm run sim:benchmark -- --targeted-practical-adaptation-check` | `targeted_practical_adaptation_check` / `true` | Live scenarios reported no unearned confidence. The largest reported practical-state payload was 27,114 bytes (late-dry refuge); the five scenario payload maxima were 18,592, 20,990, 20,987, 24,698, and 27,114 bytes. |
+| `npm run sim:benchmark -- --targeted-practical-adaptation-check` | `targeted_practical_adaptation_check` / `true` | Live scenarios reported no unearned confidence. Fresh JSON confirms that each unit state (`triggerState`, `comfortableState`, and `noMaterialState`) reports the identical `caps` object: `fragmentCap: 10`, `responseCap: 10`, `recordCap: 12` (the cap for `efficacyRecords`), `problemCap: 5`, `ideaCap: 8`, `experimentCap: 4`, `held: true`. The largest reported practical-state payload was 27,114 bytes (late-dry refuge); the five scenario payload maxima were 18,592, 20,990, 20,987, 24,698, and 27,114 bytes. |
 | `npm run sim:benchmark -- --targeted-adaptive-efficacy-check` | `targeted_adaptive_efficacy_check` / `true` | 40-year harsh-dry live run: five bands, zero efficacy records, zero inconsistent records, zero unearned scout-probe clear successes, and zero decorative camp-care successes. This payload reports no numeric state-cap object. |
 | `npm run sim:benchmark -- --targeted-routines-2-check` | `targeted_routines_2_check` / `true` | Reported caps: fragments 10; responses 10; raw/top variant candidates 6/3; animal patterns 12; management records 4; fauna stocks 260; influence tiles per stock 13. Its 30-year Map-2 run reported nine bands, 3 animal-pattern records, 2 management records, 260 routine dynamics, 4 feeding attempts, 1 holding attempt, max animal state 1,974 bytes, and fauna routine state 112,202 bytes. |
 
 ## Diff hygiene before documentation
 
 Before this authored certification record, `git diff --check` exited `0` and
-the tracked diff was empty. The complete changed-file list contained only the
-two untracked Item-4 JSON artifacts named above; both were inspected before
-this document was authored. No tracked production file had a certification
-edit.
+the tracked diff was empty. The exact required full-worktree command and output
+were:
+
+```text
+$ git status --short
+?? docs/evidence/item5-pass3/fission-field-transfer.json
+?? docs/evidence/item5-pass3/item4-whole-integration.json
+```
+
+Those were the complete changed-file list at that point, and both files were
+inspected before this document was authored. No tracked production file had a
+certification edit. After commit `af766da80ff3fa3698dff1cdc512738f05564c59`,
+the same full-worktree command produced no output (clean). The final
+post-correction status is rechecked after the evidence-only follow-up commit.
 
 ## Limits
 
