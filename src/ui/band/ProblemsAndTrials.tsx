@@ -65,16 +65,19 @@ export function ProblemsAndTrials({
   const visibleCandidates = [...profile.practiceCandidates]
     .sort((left, right) => right.confidence - left.confidence)
     .slice(0, 5);
+  const canonical = profile.authority === "canonical_practical_adaptation";
 
   return (
     <section className="bp-section band-problems-trials" aria-label="problems and trial candidates">
       <SectionHeading icon="focus">Problems &amp; Trials</SectionHeading>
       <p className="condition-note">
-        How the band seems to frame pressure, and what practical trials look plausible from its known world. These are not skills.
+        {canonical
+          ? "Canonical practical-adaptation record: stored problems, ideas, experiments, and responses. A plan is not an independently plausible trial or proof of execution."
+          : "Legacy compatibility projection: how the band seems to frame pressure and what practical trials look plausible from its known world. These are not skills."}
       </p>
 
       <article className="problem-practice-overview">
-        <span className="problem-practice-kicker">Problem framing</span>
+        <span className="problem-practice-kicker">{canonical ? "Canonical practical-adaptation record" : "Legacy compatibility projection"}</span>
         <h3>{profile.overviewTitle}</h3>
         {profile.overviewLines.map((line) => (
           <p key={line}>{line}</p>
@@ -106,7 +109,7 @@ export function ProblemsAndTrials({
       </div>
 
       <div className="problem-practice-block">
-        <span className="problem-practice-block-title">What they could try</span>
+        <span className="problem-practice-block-title">{canonical ? "Recorded ideas and experiment plans" : "What they could try"}</span>
         {visibleCandidates.length === 0 ? (
           <p className="empty-panel">No trial candidate is grounded yet.</p>
         ) : (
@@ -152,6 +155,8 @@ function ProblemFrameCard({ frame }: { readonly frame: ProblemFrame }) {
         </span>
       </summary>
       <div className="problem-frame-body">
+        {frame.canonical === undefined ? null : <p><strong>Canonical ID:</strong> {frame.canonical.problemId}</p>}
+        {frame.canonical === undefined ? null : <p><strong>Origin:</strong> {frame.canonical.problemOrigin} · <strong>Status:</strong> {frame.canonical.problemStatus}</p>}
         <p><strong>They may see it as:</strong> {frame.perceivedCause}.</p>
         <p><strong>Uncertainty:</strong> {frame.uncertainty}</p>
         <p><strong>Possible misread:</strong> {frame.possibleMisread}</p>
@@ -197,6 +202,14 @@ function PracticeCandidateCard({
         </span>
       </summary>
       <div className="practice-candidate-body">
+        {candidate.canonical === undefined ? null : (
+          <>
+            <p><strong>Canonical idea:</strong> {candidate.canonical.ideaId} · <strong>Idea:</strong> {candidate.canonical.ideaStatus}</p>
+            <p><strong>Experiment:</strong> {candidate.canonical.experimentId ?? "no recorded experiment"} · {candidate.canonical.experimentStatus ?? "not planned"} · attempts {candidate.canonical.attemptSeasons}</p>
+            <p><strong>Response:</strong> {candidate.canonical.responseId ?? "none"} · {candidate.canonical.responseStatus ?? "not recorded"}</p>
+            <p><strong>Execution truth:</strong> {candidate.canonical.executionTruth.replace(/_/g, " ")}</p>
+          </>
+        )}
         <p><strong>Responds to:</strong> {problemLabel}</p>
         <BasisLine title="Material basis" items={candidate.materialBasis} empty="material basis weak" />
         <BasisLine title="Knowledge basis" items={candidate.knowledgeBasis} empty="knowledge basis weak" />

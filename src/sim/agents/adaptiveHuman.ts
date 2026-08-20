@@ -86,7 +86,7 @@ export interface AdaptiveHumanProfile {
   readonly bandId: BandId;
   readonly generatedAtTick: number;
   readonly generatedAtYear: number;
-  readonly mode: "behavior_active_bounded";
+  readonly mode: "behavior_active_bounded" | "canonical_projection_suppressed";
   readonly overviewTitle: string;
   readonly overviewLines: readonly string[];
   readonly ideas: readonly AdaptiveIdea[];
@@ -125,7 +125,7 @@ export interface AdaptiveHumanProfile {
   readonly maxEvidenceItem: number;
   readonly caps: AdaptiveHumanState["caps"];
   readonly integrity: {
-    readonly behaviorActive: true;
+    readonly behaviorActive: boolean;
     readonly selectedBandProfile: true;
     readonly noNewActions: true;
     readonly noNewEcology: true;
@@ -437,6 +437,9 @@ export function inheritAdaptiveHumanForDaughter(
 }
 
 export function deriveAdaptiveHumanProfile(world: WorldState, band: Band): AdaptiveHumanProfile {
+  if (band.practicalAdaptation !== undefined) {
+    return deriveCanonicalSuppressedAdaptiveHumanProfile(world, band);
+  }
   const state = band.adaptiveHuman;
   const directIdeas = deriveDirectAdaptiveIdeas({ world, band, includeCurrentPressure: true });
   const problem = deriveProblemPracticeProfile(world, band);
@@ -541,6 +544,89 @@ export function deriveAdaptiveHumanProfile(world: WorldState, band: Band): Adapt
       campFootholdIdSamples: uniqueStrings(enrichedIdeas.flatMap((idea) => idea.linkedFootholdIds)).slice(0, SAMPLE_CAP),
       socialDiffusionIdSamples: uniqueStrings(enrichedIdeas.flatMap((idea) => idea.linkedSocialDiffusionIds)).slice(0, SAMPLE_CAP),
       eventRefSamples: uniqueStrings(eventRefs.map(String)).slice(0, SAMPLE_CAP),
+    },
+  };
+}
+
+function deriveCanonicalSuppressedAdaptiveHumanProfile(world: WorldState, band: Band): AdaptiveHumanProfile {
+  const emptyIdeas: readonly AdaptiveIdea[] = [];
+  const emptyResponses: readonly AdaptiveResponse[] = [];
+  const emptyAttempts: readonly SolutionAttempt[] = [];
+  const emptyRoutines: readonly LocalRoutine[] = [];
+  const emptyAdaptations: readonly ContextBoundAdaptation[] = [];
+  const emptyVariants: readonly AdaptivePracticeVariant[] = [];
+  return {
+    bandId: band.id,
+    generatedAtTick: Number(world.time.tick),
+    generatedAtYear: world.time.year,
+    mode: "canonical_projection_suppressed",
+    overviewTitle: "Legacy adaptive history is suppressed for canonical practical adaptation",
+    overviewLines: [
+      "This band has canonical practical-adaptation history, so legacy adaptive ideas and lifecycle records are not projected here.",
+      "Use the canonical problem, experiment, response, and efficacy projections for lifecycle truth.",
+    ],
+    ideas: emptyIdeas,
+    selectedResponses: emptyResponses,
+    attempts: emptyAttempts,
+    localRoutines: emptyRoutines,
+    contextBoundAdaptations: emptyAdaptations,
+    variants: emptyVariants,
+    passiveCollapseAudit: undefined,
+    ideaFamilyCounts: countByKey(IDEA_FAMILIES, []),
+    responseTypeCounts: countByKey(RESPONSE_TYPES, []),
+    attemptOutcomeCounts: countByKey(FEEDBACK_TYPES, []),
+    feedbackQualityCounts: countByKey(FEEDBACK_QUALITIES, []),
+    routineConfidenceCounts: countByKey(ROUTINE_CONFIDENCE_BANDS, []),
+    selectedIdeaCount: 0,
+    rejectedIdeaCount: 0,
+    copiedIdeaCount: 0,
+    inheritedIdeaCount: 0,
+    desperateIdeaCount: 0,
+    deadEndCount: 0,
+    falseConfidenceCount: 0,
+    localOnlyCount: 0,
+    subgroupExecutionCount: 0,
+    eventRefCount: 0,
+    problemRefCount: 0,
+    affordanceRefCount: 0,
+    knowledgeRefCount: 0,
+    activityRefCount: 0,
+    practiceFeedbackRefCount: 0,
+    campFootholdRefCount: 0,
+    socialDiffusionRefCount: 0,
+    behaviorInfluenceTraceCount: 0,
+    payloadBytesEstimate: byteLengthUtf8(JSON.stringify({ bandId: band.id, mode: "canonical_projection_suppressed" })),
+    maxIdeasProfile: ACTIVE_IDEA_CAP,
+    maxRoutinesProfile: ROUTINE_CAP,
+    maxEvidenceItem: 0,
+    caps: emptyCaps(true),
+    integrity: {
+      behaviorActive: false,
+      selectedBandProfile: true,
+      noNewActions: true,
+      noNewEcology: true,
+      noTechTree: true,
+      noGlobalUnlock: true,
+      noAgricultureDomesticationSettlementTerritoryWarCulture: true,
+      noAutomaticImprovement: true,
+      localRoutinesNotGlobalSkills: true,
+      behaviorInfluenceTraced: true,
+      daughterInheritancePartial: true,
+      copiedIdeasCanFail: true,
+    },
+    technicalProof: {
+      ideaIdSamples: [],
+      responseIdSamples: [],
+      attemptIdSamples: [],
+      routineIdSamples: [],
+      adaptationIdSamples: [],
+      variantIdSamples: [],
+      problemIdSamples: [],
+      affordanceIdSamples: [],
+      practiceFeedbackIdSamples: [],
+      campFootholdIdSamples: [],
+      socialDiffusionIdSamples: [],
+      eventRefSamples: [],
     },
   };
 }

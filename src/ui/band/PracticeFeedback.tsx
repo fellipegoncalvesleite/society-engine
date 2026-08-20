@@ -47,6 +47,10 @@ export function PracticeFeedback({
     );
   }
 
+  if (profile.authority === "canonical_practical_adaptation") {
+    return <CanonicalPracticeFeedback band={band} profile={profile} />;
+  }
+
   const repeatedTrials = profile.items
     .filter((item) => item.repeatedExposureBasis.length > 0 || item.linkedRepetitionIds.length > 0)
     .slice(0, 5);
@@ -110,6 +114,46 @@ export function PracticeFeedback({
   );
 }
 
+function CanonicalPracticeFeedback({
+  band,
+  profile,
+}: {
+  readonly band: Band;
+  readonly profile: ReturnType<typeof derivePracticeFeedbackReadinessProfile>;
+}) {
+  const planned = profile.items.filter((item) =>
+    item.canonical?.executionTruth === "planned_unexecuted" ||
+    item.canonical?.executionTruth === "blocked_material_execution");
+  const attempted = profile.items.filter((item) =>
+    item.canonical?.executionTruth === "practice_attempted" ||
+    item.canonical?.executionTruth === "existing_physical_work_executed");
+  const outcomes = profile.items.filter((item) =>
+    item.canonical?.executionTruth === "concluded_from_canonical_history" ||
+    item.canonical?.responseStatus !== undefined);
+  const inheritedOnly = band.practicalAdaptation?.problems?.some((problem) => problem.origin === "inherited") === true;
+
+  return (
+    <section className="bp-section band-practice-feedback" aria-label="canonical practice lifecycle feedback">
+      <SectionHeading icon="activity">Practice Feedback</SectionHeading>
+      <p className="condition-note">Canonical practical-adaptation record: lifecycle facts are shown from stored experiment, response, efficacy, and execution evidence.</p>
+      <article className="practice-feedback-overview">
+        <span className="practice-feedback-kicker">Canonical practical-adaptation record</span>
+        <h3>{profile.overviewTitle}</h3>
+        {profile.overviewLines.map((line) => <p key={line}>{line}</p>)}
+      </article>
+      <FeedbackBlock title="Planned experiments" empty="No canonical experiment plan is recorded." items={planned} />
+      <FeedbackBlock title="Attempted practice or recorded physical work" empty="No attempted canonical practice or recorded physical work is visible." items={attempted} />
+      <FeedbackBlock title="Responses and recorded outcomes" empty="No canonical response or concluded outcome is recorded." items={outcomes} />
+      {inheritedOnly ? (
+        <div className="practice-feedback-note inherited" role="note">
+          <Icon name="lineage" size={14} />
+          <span>Inherited problem framing is knowledge carried from another band, not tested here.</span>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
 function FeedbackBlock({
   title,
   empty,
@@ -166,6 +210,7 @@ function FeedbackCard({ item }: { readonly item: PracticeFeedbackReadinessItem }
         </span>
       </summary>
       <div className="practice-feedback-card-body">
+        {item.canonical === undefined ? null : <CanonicalLifecycleLines item={item} />}
         <p><strong>Feedback quality:</strong> {practiceFeedbackQualityLabel(item.feedbackQuality)}</p>
         <p><strong>Familiarity:</strong> {item.familiaritySignal}</p>
         <p><strong>Transfer clue:</strong> {item.localTransferClue}</p>
@@ -176,6 +221,21 @@ function FeedbackCard({ item }: { readonly item: PracticeFeedbackReadinessItem }
         <div className="practice-feedback-card-note">No skill or adaptation exists yet.</div>
       </div>
     </details>
+  );
+}
+
+function CanonicalLifecycleLines({ item }: { readonly item: PracticeFeedbackReadinessItem }) {
+  const canonical = item.canonical;
+  if (canonical === undefined) return null;
+  const materialUnproven = canonical.executionTruth === "blocked_material_execution";
+  return (
+    <>
+      <p><strong>Canonical idea:</strong> {canonical.ideaId} · {canonical.ideaStatus}</p>
+      <p><strong>Planned experiment:</strong> {canonical.experimentId ?? "none"} · {canonical.experimentStatus ?? "not recorded"} · attempts {canonical.attemptSeasons}</p>
+      <p><strong>Response state:</strong> {canonical.responseId ?? "none"} · {canonical.responseStatus ?? "not recorded"}</p>
+      <p><strong>Efficacy records:</strong> {canonical.efficacyRecordIds.join(", ") || "none"}</p>
+      <p><strong>Execution truth:</strong> {materialUnproven ? "material execution not proven" : canonical.executionTruth.replace(/_/g, " ")}</p>
+    </>
   );
 }
 

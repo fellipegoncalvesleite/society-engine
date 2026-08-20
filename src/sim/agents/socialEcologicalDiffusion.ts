@@ -881,40 +881,59 @@ function buildPracticeTraceDiffusionItems(
   if (!hasSocialSource) {
     return [];
   }
-  return context.practiceItems.slice(0, 3).map((practice) => {
-    const domain = domainFromPractice(practice);
-    const compatibility = compatibilityForDomain(context, domain, practice.readinessStatus === "blocked_by_material" ? "blocked_by_material_context" : "seen_not_understood");
-    const status: SocialDiffusionStatus =
-      practice.readinessStatus === "learning_ready_later" ? "diffusion_ready_later" :
-      practice.readinessStatus === "blocked_by_material" ? "blocked_by_material_context" :
-      practice.readinessStatus === "blocked_by_labor" ? "blocked_by_labor" :
-      "seen_not_understood";
-    return makeDiffusionItem({
-      id: `social-diffusion:practice-trace:${context.band.id}:${practice.id}`,
-      domain,
-      channel: "visible_trace",
-      publicLabel: "Visible practice, missing steps",
-      meaning: "A practice candidate can be seen or heard as a result, while the tacit sequence remains incomplete.",
-      sourceLabel: "visible or heard practice",
-      linkedContextIds: socialContexts.map((item) => item.id).slice(0, LINK_PER_ITEM_CAP),
-      linkedKnowledgeIds: practice.linkedKnowledgeIds.slice(0, LINK_PER_ITEM_CAP),
-      linkedReportIds: [],
-      linkedEventIds: practice.linkedEventIds.slice(0, LINK_PER_ITEM_CAP),
-      linkedActivityIds: practice.linkedActivityIds.slice(0, LINK_PER_ITEM_CAP),
-      linkedAffordanceIds: practice.linkedAffordanceIds.slice(0, LINK_PER_ITEM_CAP),
-      linkedPracticeFeedbackIds: [practice.id],
-      linkedFootholdIds: practice.linkedFootholdIds.slice(0, LINK_PER_ITEM_CAP),
-      visibility: "seen",
-      tacitDifficulty: tacitDifficultyForDomain(domain),
-      compatibility,
-      trustFilter: "cautious_hearsay",
-      status,
-      risks: risksForPracticeTrace(practice, compatibility),
-      inheritedVsLocalBasis: practice.inheritedVsLivedBasis === "inherited_not_lived" ? "inherited" : "mixed",
-      confidence: clamp01(practice.confidence * 0.72),
-      evidence: [practiceEvidence(practice)].slice(0, EVIDENCE_PER_ITEM_CAP),
+  return context.practiceItems
+    .filter(isVisiblePracticeTrace)
+    .slice(0, 3)
+    .map((practice) => {
+      const domain = domainFromPractice(practice);
+      const compatibility = compatibilityForDomain(context, domain, practice.readinessStatus === "blocked_by_material" ? "blocked_by_material_context" : "seen_not_understood");
+      const status: SocialDiffusionStatus =
+        practice.readinessStatus === "learning_ready_later" ? "diffusion_ready_later" :
+        practice.readinessStatus === "blocked_by_material" ? "blocked_by_material_context" :
+        practice.readinessStatus === "blocked_by_labor" ? "blocked_by_labor" :
+        "seen_not_understood";
+      return makeDiffusionItem({
+        id: `social-diffusion:practice-trace:${context.band.id}:${practice.id}`,
+        domain,
+        channel: "visible_trace",
+        publicLabel: "Visible practice, missing steps",
+        meaning: "A practice candidate can be seen or heard as a result, while the tacit sequence remains incomplete.",
+        sourceLabel: "visible or heard practice",
+        linkedContextIds: socialContexts.map((item) => item.id).slice(0, LINK_PER_ITEM_CAP),
+        linkedKnowledgeIds: practice.linkedKnowledgeIds.slice(0, LINK_PER_ITEM_CAP),
+        linkedReportIds: [],
+        linkedEventIds: practice.linkedEventIds.slice(0, LINK_PER_ITEM_CAP),
+        linkedActivityIds: practice.linkedActivityIds.slice(0, LINK_PER_ITEM_CAP),
+        linkedAffordanceIds: practice.linkedAffordanceIds.slice(0, LINK_PER_ITEM_CAP),
+        linkedPracticeFeedbackIds: [practice.id],
+        linkedFootholdIds: practice.linkedFootholdIds.slice(0, LINK_PER_ITEM_CAP),
+        visibility: "seen",
+        tacitDifficulty: tacitDifficultyForDomain(domain),
+        compatibility,
+        trustFilter: "cautious_hearsay",
+        status,
+        risks: risksForPracticeTrace(practice, compatibility),
+        inheritedVsLocalBasis: practice.inheritedVsLivedBasis === "inherited_not_lived" ? "inherited" : "mixed",
+        confidence: clamp01(practice.confidence * 0.72),
+        evidence: [practiceEvidence(practice)].slice(0, EVIDENCE_PER_ITEM_CAP),
+      });
     });
-  });
+}
+
+function isVisiblePracticeTrace(practice: PracticeFeedbackReadinessItem): boolean {
+  if (practice.canonical === undefined) {
+    return true;
+  }
+  switch (practice.canonical.executionTruth) {
+    case "practice_attempted":
+    case "existing_physical_work_executed":
+    case "concluded_from_canonical_history":
+      return true;
+    case "idea_only":
+    case "planned_unexecuted":
+    case "blocked_material_execution":
+      return false;
+  }
 }
 
 function buildFootholdTraceDiffusionItems(

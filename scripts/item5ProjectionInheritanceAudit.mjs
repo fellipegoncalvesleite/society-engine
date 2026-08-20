@@ -6,6 +6,8 @@
 // until the canonical adapter and adaptive-human projection guard are added.
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { createServer } from "vite";
 
 const ROOT = process.cwd();
@@ -105,6 +107,11 @@ try {
   const readiness = await server.ssrLoadModule("/sim/agents/practiceFeedbackReadiness.ts");
   const boundary = await server.ssrLoadModule("/sim/agents/adaptationBoundary.ts");
   const adaptiveHuman = await server.ssrLoadModule("/sim/agents/adaptiveHuman.ts");
+  const diffusion = await server.ssrLoadModule("/sim/agents/socialEcologicalDiffusion.ts");
+  const problemsAndTrials = await server.ssrLoadModule("/ui/band/ProblemsAndTrials.tsx");
+  const practiceFeedback = await server.ssrLoadModule("/ui/band/PracticeFeedback.tsx");
+  const ideasSolutions = await server.ssrLoadModule("/ui/band/IdeasSolutions.tsx");
+  const technical = await server.ssrLoadModule("/ui/band/Technical.tsx");
 
   const world = runner.initSimWorld({ kind: "map1" }, "item5-pass3-projection-inheritance");
   const bandId = Object.keys(world.bands).sort()[0];
@@ -310,6 +317,43 @@ try {
   const legacyProjected = project(problemPractice.deriveProblemPracticeProfile, legacyBand);
   const legacyReadiness = project(readiness.derivePracticeFeedbackReadinessProfile, legacyBand);
   const adaptiveProfile = project(adaptiveHuman.deriveAdaptiveHumanProfile, canonicalBand);
+  const contactBandId = Object.keys(world.bands).sort().find((id) => id !== bandId);
+  const socialCanonicalBand = {
+    ...canonicalBand,
+    contactMemories: {
+      ...canonicalBand.contactMemories,
+      ...(contactBandId === undefined ? {} : {
+        [contactBandId]: {
+          otherBandId: contactBandId,
+          firstContactAt: world.time,
+          lastContactAt: world.time,
+          contactCount: 1,
+          peacefulContactCount: 1,
+          strainedContactCount: 0,
+          sharedUseCount: 0,
+          avoidanceCount: 0,
+          familiarity: 0.65,
+          tension: 0,
+          trustLikeTolerance: 0.7,
+          relation: "unrelated",
+          reasonIds: [],
+        },
+      }),
+    },
+  };
+  const diffusionProfile = project(diffusion.deriveSocialEcologicalDiffusionProfile, socialCanonicalBand);
+  const practiceTraceItems = diffusionProfile.diffusionItems.filter((item) => item.id.includes(":practice-trace:"));
+  const canonicalUi = {
+    problems: renderToStaticMarkup(createElement(problemsAndTrials.ProblemsAndTrials, { band: canonicalBand, world })),
+    feedback: renderToStaticMarkup(createElement(practiceFeedback.PracticeFeedback, { band: canonicalBand, world })),
+    ideas: renderToStaticMarkup(createElement(ideasSolutions.IdeasSolutions, { band: canonicalBand, world })),
+    technical: renderToStaticMarkup(createElement(technical.Technical, {
+      band: canonicalBand,
+      world,
+      currentTile: world.tiles[canonicalBand.position],
+      latestDecision: undefined,
+    })),
+  };
 
   const activeLoadResponse = { ...responses[0], status: "active" };
   const lifecycleProbe = (experiment, efficacyRecords = []) => {
@@ -546,6 +590,16 @@ try {
       contextKeys: fragment.contextKeys,
     })),
     daughterInheritedProblems: daughterState?.problems,
+    canonicalUiTruthMarkers: {
+      problemsAuthority: canonicalUi.problems.includes("Canonical practical-adaptation record"),
+      problemsOrigin: canonicalUi.problems.includes("Origin:</strong> lived"),
+      problemsIdea: canonicalUi.problems.includes("Idea:</strong> selected"),
+      feedbackAuthority: canonicalUi.feedback.includes("Canonical practical-adaptation record"),
+      feedbackMaterial: canonicalUi.feedback.includes("material execution not proven"),
+      feedbackPlan: canonicalUi.feedback.includes("Planned experiment"),
+      ideasPlan: canonicalUi.ideas.includes("planned or recorded test"),
+      technicalAuthority: canonicalUi.technical.includes("canonical practical-adaptation"),
+    },
   };
   checks = {
     canonicalProblemsAreExclusive:
@@ -658,6 +712,30 @@ try {
     projectionsDoNotMutateCanonicalBandOrWorld: projectionsMutatedNothing,
     ...callerInventory.checks,
     adaptiveHumanCanonicalLeakClosed: adaptiveProfile.ideas.length === 0,
+    adaptiveHumanCanonicalProfileIsSuppressed:
+      adaptiveProfile.mode === "canonical_projection_suppressed" &&
+      adaptiveProfile.ideas.length === 0 &&
+      adaptiveProfile.selectedResponses.length === 0 &&
+      adaptiveProfile.attempts.length === 0 &&
+      adaptiveProfile.localRoutines.length === 0 &&
+      adaptiveProfile.contextBoundAdaptations.length === 0 &&
+      adaptiveProfile.variants.length === 0 &&
+      adaptiveProfile.integrity.behaviorActive === false,
+    canonicalDiffusionRequiresExecutionTruth:
+      practiceTraceItems.length === 1 &&
+      practiceTraceItems[0]?.linkedPracticeFeedbackIds.length === 1 &&
+      practiceTraceItems[0]?.linkedPracticeFeedbackIds[0] === readinessProfile.items.find(
+        (item) => item.canonical?.executionTruth === "practice_attempted",
+      )?.id,
+    canonicalUiDisplaysLifecycleTruth:
+      canonicalUi.problems.includes("Canonical practical-adaptation record") &&
+      canonicalUi.problems.includes("Origin:</strong> lived") &&
+      canonicalUi.problems.includes("Idea:</strong> selected") &&
+      canonicalUi.feedback.includes("Canonical practical-adaptation record") &&
+      canonicalUi.feedback.includes("material execution not proven") &&
+      canonicalUi.feedback.includes("Planned experiment") &&
+      canonicalUi.ideas.includes("planned or recorded test") &&
+      canonicalUi.technical.includes("canonical practical-adaptation"),
   };
 } finally {
   await server.close();

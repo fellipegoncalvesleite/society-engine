@@ -635,9 +635,9 @@ function PracticalAdaptationDetails({ band, world }: { readonly band: Band; read
           `${idea.publicLabel} · ${idea.status} (${idea.statusReason}) · mechanism ${idea.mechanismBelief} · basis ${formatCompactNumber(idea.basisScore)} from ${idea.basisFragmentIds.join(",") || "missing components"} · ${idea.source}`).join(" | ")}
       />
       <Detail
-        label="canonical physical experiments"
+        label="canonical experiment plans and outcomes"
         value={(state.experiments ?? []).length === 0 ? "none" : (state.experiments ?? []).map((experiment) =>
-          `${experiment.family}/${experiment.variantKey} · ${experiment.status} attempts ${experiment.attemptSeasons} · materials ${experiment.materials.join(", ")} · procedure ${experiment.procedure} · cost labor ${formatCompactNumber(experiment.laborCost)} risk ${formatCompactNumber(experiment.riskCost)} / ${experiment.opportunityCost} · expected ${experiment.expectedEffect} · observed ${experiment.observedOutcome ?? "not yet attempted"} · learned ${experiment.fragmentsLearned.join(",") || "none"} contradicted ${experiment.fragmentsContradicted.join(",") || "none"}`).join(" | ")}
+          `${experiment.family}/${experiment.variantKey} · ${experiment.status} attempts ${experiment.attemptSeasons} · planned materials ${experiment.materials.join(", ")} · planned procedure ${experiment.procedure} · estimated cost labor ${formatCompactNumber(experiment.laborCost)} risk ${formatCompactNumber(experiment.riskCost)} / ${experiment.opportunityCost} · expected ${experiment.expectedEffect} · observed ${experiment.observedOutcome ?? "not yet attempted"} · learned ${experiment.fragmentsLearned.join(",") || "none"} contradicted ${experiment.fragmentsContradicted.join(",") || "none"}`).join(" | ")}
       />
       <Detail
         label="local waterworks"
@@ -1151,15 +1151,20 @@ function ProblemPracticeDetails({ band, world }: { readonly band: Band; readonly
     .join(" · ");
   const frameSummary = profile.problemFrames
     .slice(0, 7)
-    .map((frame) => `${frame.family}:${formatCompactNumber(frame.confidence)} e${frame.evidence.length}`)
+    .map((frame) => frame.canonical === undefined
+      ? `${frame.family}:${formatCompactNumber(frame.confidence)} e${frame.evidence.length}`
+      : `${frame.canonical.problemId}:${frame.canonical.problemOrigin}:${frame.canonical.problemStatus}`)
     .join(" | ");
   const candidateSummary = profile.practiceCandidates
     .slice(0, 7)
-    .map((candidate) => `${candidate.family}:${candidate.status}:${candidate.expectedFeedbackType}:${formatCompactNumber(candidate.confidence)}`)
+    .map((candidate) => candidate.canonical === undefined
+      ? `${candidate.family}:${candidate.status}:${candidate.expectedFeedbackType}:${formatCompactNumber(candidate.confidence)}`
+      : `${candidate.canonical.ideaId}:${candidate.canonical.ideaStatus}:${candidate.canonical.experimentStatus ?? "no_experiment"}:${candidate.canonical.responseStatus ?? "no_response"}:${candidate.canonical.executionTruth}`)
     .join(" | ");
 
   return (
     <>
+      <Detail label="authority" value={profile.authority === "canonical_practical_adaptation" ? "canonical practical-adaptation (canonical_practical_adaptation)" : "legacy compatibility (legacy_compatibility)"} />
       <Detail label="projection" value={`${profile.problemFrames.length}/${profile.caps.problemFrameCap} frames · ${profile.practiceCandidates.length}/${profile.caps.practiceCandidateCap} candidates`} />
       <Detail label="overview" value={`${profile.overviewTitle} · ${profile.overviewLines.join(" ")}`} />
       <Detail label="frame families" value={frameFamilies || "none"} />
@@ -1324,11 +1329,14 @@ function PracticeFeedbackReadinessDetails({ band, world }: { readonly band: Band
     .join(" · ");
   const itemSummary = profile.items
     .slice(0, 8)
-    .map((item) => `${item.family}:${item.readinessStatus}:${item.feedbackType}:${formatCompactNumber(item.confidence)} e${item.evidence.length}`)
+    .map((item) => item.canonical === undefined
+      ? `${item.family}:${item.readinessStatus}:${item.feedbackType}:${formatCompactNumber(item.confidence)} e${item.evidence.length}`
+      : `${item.canonical.ideaId}:${item.canonical.ideaStatus}:${item.canonical.experimentStatus ?? "no_experiment"}:${item.canonical.responseStatus ?? "no_response"}:${item.canonical.executionTruth}:efficacy=${item.canonical.efficacyRecordIds.join(",") || "none"}`)
     .join(" | ");
 
   return (
     <>
+      <Detail label="authority" value={profile.authority === "canonical_practical_adaptation" ? "canonical practical-adaptation (canonical_practical_adaptation)" : "legacy compatibility (legacy_compatibility)"} />
       <Detail label="projection" value={`${profile.items.length}/${profile.caps.itemCap} readiness items · repeated ${profile.repeatedExposureCount} · max per family ${profile.caps.itemsPerFamilyCap}`} />
       <Detail label="overview" value={`${profile.overviewTitle} · ${profile.overviewLines.join(" ")}`} />
       <Detail label="families" value={families || "none"} />
@@ -1939,14 +1947,14 @@ export function Technical({
       <CollapsibleGroup title="Material affordance substrate">
         <MaterialAffordanceDetails band={band} world={world} />
       </CollapsibleGroup>
+      <CollapsibleGroup title={band.practicalAdaptation === undefined ? "Legacy problem projection adapter" : "Canonical problem projection adapter"} defaultOpen>
+        <ProblemPracticeDetails band={band} world={world} />
+      </CollapsibleGroup>
+      <CollapsibleGroup title={band.practicalAdaptation === undefined ? "Legacy practice-readiness adapter" : "Canonical practice-readiness adapter"} defaultOpen>
+        <PracticeFeedbackReadinessDetails band={band} world={world} />
+      </CollapsibleGroup>
       {band.practicalAdaptation === undefined ? (
         <>
-          <CollapsibleGroup title="Legacy problem projection adapter">
-            <ProblemPracticeDetails band={band} world={world} />
-          </CollapsibleGroup>
-          <CollapsibleGroup title="Legacy practice-readiness adapter">
-            <PracticeFeedbackReadinessDetails band={band} world={world} />
-          </CollapsibleGroup>
           <CollapsibleGroup title="Legacy adaptive-idea adapter">
             <AdaptiveHumanDetails band={band} world={world} />
           </CollapsibleGroup>

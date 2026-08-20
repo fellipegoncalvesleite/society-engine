@@ -130,7 +130,7 @@ function CanonicalInventionChain({ band }: { readonly band: Band }) {
   return (
     <section className="bp-section band-adaptive" aria-label="causal invention chain">
       <SectionHeading icon="activity">Problems, ideas &amp; inventions</SectionHeading>
-      <p className="condition-note">One causal record: lived evidence → competing idea → physical test → learning → context-bound response.</p>
+      <p className="condition-note">One causal record: lived evidence → competing idea → planned or recorded test → learning → context-bound response.</p>
       {problems.length === 0 ? <p className="empty-panel">No grounded practical problem is active yet.</p> : (
         <div className="practice-feedback-grid compact">
           {problems.map((problem) => (
@@ -166,6 +166,7 @@ function CanonicalInventionChain({ band }: { readonly band: Band }) {
               <p><strong>Planned procedure:</strong> {experiment.procedure}</p>
               <p><strong>Expected:</strong> {experiment.expectedEffect}</p>
               <p><strong>Observed:</strong> {experiment.observedOutcome ?? "not attempted yet"}</p>
+              <p><strong>Execution:</strong> planned materials, procedure, and costs do not prove material execution.</p>
               <p><strong>Estimated cost:</strong> labor {Math.round(experiment.laborCost * 100)}%, risk {Math.round(experiment.riskCost * 100)}%; {experiment.opportunityCost}</p>
             </div>
           </details>
