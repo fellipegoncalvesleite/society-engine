@@ -934,6 +934,7 @@ function isVisiblePracticeTrace(practice: PracticeFeedbackReadinessItem): boolea
     case "idea_only":
     case "planned_unexecuted":
     case "existing_physical_work_unproven":
+    case "execution_provenance_unproven":
     case "blocked_material_execution":
       return false;
   }

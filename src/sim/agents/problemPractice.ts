@@ -88,6 +88,7 @@ export type CanonicalExecutionTruth =
   | "practice_attempted"
   | "existing_physical_work_executed"
   | "existing_physical_work_unproven"
+  | "execution_provenance_unproven"
   | "blocked_material_execution"
   | "concluded_from_canonical_history";
 
@@ -265,6 +266,8 @@ export interface ProblemPracticeProfile {
   readonly caps: {
     readonly problemFrameCap: number;
     readonly practiceCandidateCap: number;
+    readonly canonicalRowCount?: number;
+    readonly omittedCanonicalCandidateCount?: number;
     readonly evidencePerFrameCap: number;
     readonly evidencePerCandidateCap: number;
     readonly basisPerCandidateCap: number;

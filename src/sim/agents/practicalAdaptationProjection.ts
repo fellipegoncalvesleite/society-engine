@@ -196,7 +196,8 @@ function candidateHasLocalExecution(canonical: CanonicalCandidateProjection): bo
 function candidateStatus(entry: CanonicalPracticalAdaptationRow): PracticeExperimentStatus {
   const { canonical, experiment, candidateBasis } = entry;
   if (canonical.executionTruth === "blocked_material_execution") return "blocked_by_missing_material";
-  if (canonical.executionTruth === "existing_physical_work_unproven") return "currently_unsupported";
+  if (canonical.executionTruth === "existing_physical_work_unproven" ||
+      canonical.executionTruth === "execution_provenance_unproven") return "currently_unsupported";
   if ((candidateBasis === "inherited_not_lived" || candidateBasis === "copied_not_lived") &&
       !candidateHasLocalExecution(canonical)) return "inherited_not_tested_here";
   if (experiment?.status === "concluded_failure" || experiment?.status === "abandoned") return "dead_end_risk";
@@ -238,7 +239,8 @@ function feedbackFromEfficacy(record: AdaptiveEfficacyRecord): CanonicalFeedback
 
 function feedbackPresentation(entry: CanonicalPracticalAdaptationRow): CanonicalFeedbackPresentation {
   if (entry.canonical.executionTruth === "blocked_material_execution" ||
-      entry.canonical.executionTruth === "existing_physical_work_unproven") {
+      entry.canonical.executionTruth === "existing_physical_work_unproven" ||
+      entry.canonical.executionTruth === "execution_provenance_unproven") {
     return { feedbackType: "delayed_feedback", feedbackQuality: "blocked" };
   }
   if ((entry.candidateBasis === "inherited_not_lived" || entry.candidateBasis === "copied_not_lived") &&
@@ -279,6 +281,8 @@ export function canonicalExecutionProofGap(canonical: CanonicalCandidateProjecti
       return "material execution not proven";
     case "existing_physical_work_unproven":
       return "physical work not proven";
+    case "execution_provenance_unproven":
+      return "execution provenance unavailable";
     case "idea_only":
     case "planned_unexecuted":
     case "practice_attempted":
@@ -339,19 +343,23 @@ function linkSeed(
     : state.efficacyRecords.filter((record) => record.responseId === responseId);
   const executionClass = derivePracticalVariantExecutionClass(practicalFamily, variantKey);
   const matchingPhysicalWork = responseId !== undefined && state.waterWorks?.responseId === responseId;
-  const executionEvidenceAdmitted = executionClass !== "material_execution_required" &&
-    !(executionClass === "existing_physical_work" && !matchingPhysicalWork);
-  const executionTruth = executionClass === "material_execution_required"
-    ? "blocked_material_execution"
-    : executionClass === "existing_physical_work"
-      ? matchingPhysicalWork ? "existing_physical_work_executed" : "existing_physical_work_unproven"
-      : experiment?.status.startsWith("concluded_") || experiment?.status === "abandoned"
-        ? "concluded_from_canonical_history"
-        : (experiment?.attemptSeasons ?? 0) > 0 || recordedEfficacyRecords.length > 0
-          ? "practice_attempted"
-          : experiment !== undefined
-            ? "planned_unexecuted"
-            : "idea_only";
+  // Positive authorization only: loss of variant provenance may preserve a
+  // canonical record, but it can never increase execution authority.
+  const executionEvidenceAdmitted = executionClass === "practice_only" ||
+    (executionClass === "existing_physical_work" && matchingPhysicalWork);
+  const executionTruth = executionClass === undefined
+    ? "execution_provenance_unproven"
+    : executionClass === "material_execution_required"
+      ? "blocked_material_execution"
+      : executionClass === "existing_physical_work"
+        ? matchingPhysicalWork ? "existing_physical_work_executed" : "existing_physical_work_unproven"
+        : experiment?.status.startsWith("concluded_") || experiment?.status === "abandoned"
+          ? "concluded_from_canonical_history"
+          : (experiment?.attemptSeasons ?? 0) > 0 || recordedEfficacyRecords.length > 0
+            ? "practice_attempted"
+            : experiment !== undefined
+              ? "planned_unexecuted"
+              : "idea_only";
   const missingLinks = [
     ...(problemId !== undefined && problem === undefined ? [{ kind: "problem" as const, id: problemId }] : []),
     ...(ideaId !== undefined && idea === undefined ? [{ kind: "idea" as const, id: ideaId }] : []),
@@ -444,8 +452,7 @@ export function deriveCanonicalPracticalAdaptationRows(
 
   return seeds
     .map((seed) => linkSeed(state, retainedProblems, seed))
-    .filter((entry): entry is CanonicalPracticalAdaptationRow => entry !== undefined)
-    .slice(0, PRACTICE_CANDIDATE_CAP);
+    .filter((entry): entry is CanonicalPracticalAdaptationRow => entry !== undefined);
 }
 
 function problemEvidence(problem: PracticalProblemFrame, basis: CanonicalBasis): readonly ProblemPracticeEvidenceRef[] {
@@ -480,7 +487,8 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
   const state = band.practicalAdaptation;
   if (state === undefined) throw new Error("canonical practical projection requires practicalAdaptation");
   const problems = (state.problems ?? []).slice(0, PROBLEM_FRAME_CAP);
-  const entries = deriveCanonicalPracticalAdaptationRows(state, problems);
+  const canonicalRows = deriveCanonicalPracticalAdaptationRows(state, problems);
+  const entries = canonicalRows.slice(0, PRACTICE_CANDIDATE_CAP);
   const problemFrames: readonly ProblemFrame[] = problems.map((problem) => {
     const basis = problemLivedBasis(problem);
     const hooks = entries.filter((entry) => entry.problem?.id === problem.id).map((entry) => candidateFamily(entry.family));
@@ -532,7 +540,8 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
       ? fallbackProblemFamily(entry.family)
       : problemFamily(entry.problem.family);
     const executionUnproven = entry.canonical.executionTruth === "blocked_material_execution" ||
-      entry.canonical.executionTruth === "existing_physical_work_unproven";
+      entry.canonical.executionTruth === "existing_physical_work_unproven" ||
+      entry.canonical.executionTruth === "execution_provenance_unproven";
     return {
       id: entry.id,
       family: candidateFamily(entry.family),
@@ -556,7 +565,9 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
       uncertainty: executionUnproven
         ? entry.canonical.executionTruth === "blocked_material_execution"
           ? "material execution not proven"
-          : "physical work not proven"
+          : entry.canonical.executionTruth === "existing_physical_work_unproven"
+            ? "physical work not proven"
+            : "canonical efficacy record retained, execution provenance unavailable"
         : entry.experiment?.observedOutcome ?? "",
       deadEndRisk: status === "dead_end_risk" ? "present" : "low",
       falseConfidenceRisk: entry.canonical.executionTruth === "blocked_material_execution" ? "present" : "low",
@@ -585,7 +596,12 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
       ? problemFrames.some((frame) => frame.livedBasis === "inherited_not_lived" || frame.livedBasis === "copied_not_lived")
         ? ["Canonical inherited or copied problem framing is not a local trial."]
         : ["No canonical idea or experiment record is attached to the recorded local problem framing."]
-      : ["Canonical ideas and experiment records only; planned requirements are not execution proof."],
+      : [
+          "Canonical ideas and experiment records only; planned requirements are not execution proof.",
+          ...(canonicalRows.length > practiceCandidates.length
+            ? [`Showing ${practiceCandidates.length} of ${canonicalRows.length} retained canonical lifecycle rows; ${canonicalRows.length - practiceCandidates.length} omitted from this bounded display only.`]
+            : []),
+        ],
     problemFrames,
     practiceCandidates,
     problemFamilyCounts: countByKey(PROBLEM_FAMILIES, problemFrames.map((frame) => frame.family)),
@@ -610,6 +626,8 @@ export function deriveCanonicalProblemPracticeProfile(world: WorldState, band: B
     caps: {
       problemFrameCap: PROBLEM_FRAME_CAP,
       practiceCandidateCap: PRACTICE_CANDIDATE_CAP,
+      canonicalRowCount: canonicalRows.length,
+      omittedCanonicalCandidateCount: canonicalRows.length - practiceCandidates.length,
       evidencePerFrameCap: EVIDENCE_PER_FRAME_CAP,
       evidencePerCandidateCap: EVIDENCE_PER_CANDIDATE_CAP,
       basisPerCandidateCap: 4,
@@ -752,7 +770,8 @@ function canonicalReadinessItem(candidate: PracticeExperimentCandidate, entry: C
   const hasCanonicalPracticeEvidence = canonical.attemptSeasons > 0 || canonical.efficacyRecordIds.length > 0;
   const feedback = feedbackPresentation(entry);
   const executionUnproven = canonical.executionTruth === "blocked_material_execution" ||
-    canonical.executionTruth === "existing_physical_work_unproven";
+    canonical.executionTruth === "existing_physical_work_unproven" ||
+    canonical.executionTruth === "execution_provenance_unproven";
   const feedbackType: PracticeFeedbackReadinessFeedbackType = executionUnproven
     ? "blocked_no_attempt"
     : feedback.feedbackType;
@@ -760,6 +779,7 @@ function canonicalReadinessItem(candidate: PracticeExperimentCandidate, entry: C
     ? "inherited_not_tested_here"
     : canonical.executionTruth === "blocked_material_execution" ? "blocked_by_material"
     : canonical.executionTruth === "existing_physical_work_unproven" ? "not_started"
+    : canonical.executionTruth === "execution_provenance_unproven" ? "not_started"
     : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_success" ? "learning_ready_later"
     : canonical.executionTruth === "concluded_from_canonical_history" && canonical.experimentStatus === "concluded_partial" ? "repeated_mixed_feedback"
     : canonical.executionTruth === "concluded_from_canonical_history" ? "contradicted"
@@ -773,7 +793,7 @@ function canonicalReadinessItem(candidate: PracticeExperimentCandidate, entry: C
     ? "blocked"
     : feedback.feedbackQuality;
   const blockers: readonly PracticeFeedbackBlocker[] = canonical.executionTruth === "blocked_material_execution" ? ["missing_material"]
-    : canonical.executionTruth === "existing_physical_work_unproven" ? ["unsupported_ecology"]
+    : canonical.executionTruth === "existing_physical_work_unproven" || canonical.executionTruth === "execution_provenance_unproven" ? ["unsupported_ecology"]
     : inherited && !candidateHasLocalExecution(canonical) ? ["inherited_not_local"] : [];
   const risks: readonly PracticeFeedbackRisk[] = candidate.deadEndRisk === "present" ? ["dead_end"]
     : candidate.lowFeedbackRisk === "present" ? ["low_feedback"] : [];
@@ -800,6 +820,8 @@ function canonicalReadinessItem(candidate: PracticeExperimentCandidate, entry: C
       ? "Material execution is not proven by this canonical plan."
       : canonical.executionTruth === "existing_physical_work_unproven"
         ? "Physical work is not proven without the matching canonical works record."
+        : canonical.executionTruth === "execution_provenance_unproven"
+          ? "Canonical efficacy is retained, but execution provenance is unavailable."
       : candidate.meaning,
     linkedProblemFrameId: candidate.problemFrameId,
     linkedPracticeCandidateId: candidate.id,
@@ -815,6 +837,8 @@ function canonicalReadinessItem(candidate: PracticeExperimentCandidate, entry: C
         ? "canonical physical work recorded; feedback not recorded"
         : canonical.executionTruth === "existing_physical_work_unproven"
           ? "canonical physical work not proven"
+          : canonical.executionTruth === "execution_provenance_unproven"
+            ? "canonical record retained; execution provenance unavailable"
         : "canonical plan recorded",
     readinessStatus, blockers, risks,
     inheritedVsLivedBasis: basis,

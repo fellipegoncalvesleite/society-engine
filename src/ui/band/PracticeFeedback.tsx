@@ -128,7 +128,8 @@ function CanonicalPracticeFeedback({
   const planned = profile.items.filter((item) =>
     item.canonical?.executionTruth === "planned_unexecuted" ||
     item.canonical?.executionTruth === "blocked_material_execution" ||
-    item.canonical?.executionTruth === "existing_physical_work_unproven");
+    item.canonical?.executionTruth === "existing_physical_work_unproven" ||
+    item.canonical?.executionTruth === "execution_provenance_unproven");
   const attempted = profile.items.filter((item) =>
     item.canonical?.executionTruth === "practice_attempted" ||
     item.canonical?.executionTruth === "existing_physical_work_executed");
