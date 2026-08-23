@@ -3,6 +3,8 @@
 > Detailed architecture, product intent, active specification, accepted checkpoint history, audit guidance, and Claude-specific workflow for `fellipegoncalvesleite/human-nomad-simulator`.
 >
 > Read [`AGENTS.md`](./AGENTS.md) first. Then read only the sections relevant to the current task.
+>
+> Before architecture-heavy implementation, also read [`docs/ARCHITECTURE_OWNERSHIP.md`](./docs/ARCHITECTURE_OWNERSHIP.md) for the permanent architect/implementer ownership and escalation contract.
 
 ---
 

@@ -8,6 +8,8 @@
 > **Code overrides stale documentation.** When this file, `CLAUDE.md`, a handoff, a report, a README section, a commit message, or a roadmap disagrees with current production code, current code wins. Current audits and type/graph metadata come next.
 >
 > Deeper architectural explanations, checkpoint history, the implemented demographic-persistence checkpoint, audit meanings, and Claude-specific workflow are in [`CLAUDE.md`](./CLAUDE.md).
+>
+> Before architecture-heavy implementation, read [`docs/ARCHITECTURE_OWNERSHIP.md`](./docs/ARCHITECTURE_OWNERSHIP.md) for the permanent architect/implementer decision-ownership and escalation contract.
 
 ---
 
