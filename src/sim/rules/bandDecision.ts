@@ -1429,6 +1429,7 @@ export function applyBandDecision(
     measureEfficacy,
     residenceContext,
     groundwaterContext,
+    runSeed: world.runSeed,
   });
   const effectiveStorageCapacity = deriveEffectiveStorageCapacity(
     { ...band, practicalAdaptation },

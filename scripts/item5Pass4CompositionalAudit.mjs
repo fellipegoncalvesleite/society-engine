@@ -3,6 +3,8 @@
 // normalization checks. Production is loaded through Vite SSR so these are the
 // same TypeScript modules used by the simulation.
 import { createHash } from "node:crypto";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createServer } from "vite";
 
@@ -70,6 +72,7 @@ try {
   const materialEvidence = await server.ssrLoadModule("/sim/agents/materialEvidence.ts");
   const practicalFragments = await server.ssrLoadModule("/sim/agents/practicalFragments.ts");
   const practicalResponses = await server.ssrLoadModule("/sim/agents/practicalResponses.ts");
+  const ideasSolutions = await server.ssrLoadModule("/ui/band/IdeasSolutions.tsx");
 
   const baseFragments = [fragment("fragment:audit:binding", "load_binding"), fragment("fragment:audit:staging", "load_staging")];
   const fiber = belief("material:audit:fiber", "worked_plant_fiber", ["tensile_fibrous", "interlacing_twisting", "flexibility"]);
@@ -131,16 +134,23 @@ try {
   });
 
   // P + A negative: hidden truth is not an input and cannot change results.
-  const hiddenTruthArmA = invention.generateCompositionalCandidates(candidateInput());
-  const hiddenTruthArmB = invention.generateCompositionalCandidates(candidateInput());
+  const hiddenTruthArmA = invention.generateCompositionalCandidates(candidateInput({ hiddenWorldTruth: { terrain: "stone", abundance: 1 } }));
+  const hiddenTruthArmB = invention.generateCompositionalCandidates(candidateInput({ hiddenWorldTruth: { terrain: "fiber", abundance: 0 } }));
   assert("P_hidden_world_truth_cannot_change_candidates", digest(hiddenTruthArmA) === digest(hiddenTruthArmB));
 
   // B / same known environment, different inherited technical history.
   const historyA = invention.generateCompositionalCandidates(candidateInput());
   const historyB = invention.generateCompositionalCandidates(candidateInput({
-    fragments: [...baseFragments, fragment("fragment:audit:weave", "interlacing", 0.75, "inherited")],
+    fragments: [...baseFragments, fragment("fragment:audit:fiber-inherited", "fiber_cordage", 0.75, "inherited")],
   }));
   assert("B_history_changes_trajectory", digest(historyA) !== digest(historyB));
+
+  const inheritedTemplate = invention.generateCompositionalCandidates(candidateInput({
+    fragments: baseFragments.map((entry) => entry.subject === "load_staging" ? { ...entry, basis: "inherited" } : entry),
+  })).find((candidate) => candidate.templateVariantKey === "load_staging");
+  assert("template_recognition_preserves_inherited_provenance", inheritedTemplate?.source === "inherited", {
+    source: inheritedTemplate?.source, signature: inheritedTemplate?.design.signature,
+  });
 
   // C / same function, different technical histories can produce distinct designs.
   const carryFiber = invention.generateCompositionalCandidates(candidateInput({ materialBeliefs: [fiber] }));
@@ -179,7 +189,9 @@ try {
   assert("E_inheritance_hints_only", inherited !== undefined && inherited.responses.length === 0 && inherited.efficacyRecords.length === 0 &&
     (inherited.experiments?.length ?? 0) === 0 && inherited.waterWorks === undefined &&
     (inherited.materialBeliefs?.length ?? 0) > 0 && (inherited.designHints?.length ?? 0) > 0 &&
-    inherited.materialBeliefs.every((entry) => entry.provenance === "inherited" && entry.knownContexts.includes("local:A")));
+    inherited.materialBeliefs.every((entry) => entry.provenance === "inherited" && entry.knownContexts.includes("local:A") &&
+      entry.originalContext.inheritedFromBandId === "band:parent") &&
+    inherited.designHints.every((entry) => entry.source === "inherited" && entry.sourceBandId === "band:parent"));
 
   // F / live social diffusion stays projection-only: source audit has no write path.
   const diffusionSource = readFileSync(`${ROOT}/src/sim/agents/socialEcologicalDiffusion.ts`, "utf8");
@@ -204,13 +216,24 @@ try {
   const replay2 = invention.generateCompositionalCandidates(candidateInput({ runSeed: "same-seed" }));
   assert("I_replay_byte_identical", JSON.stringify(replay1) === JSON.stringify(replay2));
 
-  // J / adversarial candidate generation cannot exceed budgets.
-  const manyBeliefs = Array.from({ length: 40 }, (_, index) => belief(`material:audit:${index}`, `material_${index}`,
-    [index % 2 === 0 ? "tensile_fibrous" : "structural_load", "flexibility"], [`local:${index % 3}`]));
-  const manyFragments = Array.from({ length: 50 }, (_, index) => fragment(`fragment:audit:${index}`, `subject_${index}`, 0.9));
-  const bounded = invention.generateCompositionalCandidates(candidateInput({ materialBeliefs: manyBeliefs, fragments: manyFragments }));
-  assert("J_candidate_budgets_hold", bounded.length <= invention.SHORTLIST_PER_PROBLEM_CAP &&
-    invention.RAW_CANDIDATE_PER_PROBLEM_CAP <= 6 && invention.RAW_CANDIDATE_GLOBAL_CAP <= 18);
+  // J / adversarial candidate generation must actually reach the raw cap, then stop.
+  const universalBelief = belief("material:audit:universal", "audit_multi_property_material", invention.MATERIAL_PROPERTY_REGISTRY);
+  const allRequiredSubjects = [
+    "fiber_cordage", "load_staging", "load_binding", "watered_route_reading", "container_holding", "membrane_folding",
+    "seal_coating", "one_to_one_count", "journey_pacing", "groundwater_reading", "pit_support", "camp_ground_reading",
+    "cover_layering", "frame_shaping", "buoyancy_under_load", "binding_under_load", "staged_shuttle_crossing", "load_distribution",
+    "shaft_truing", "tension_release", "wound_care", "plant_preparation",
+  ];
+  const saturatedFragments = allRequiredSubjects.map((subject, index) => fragment(`fragment:audit:saturated:${index}`, subject, 0.95));
+  const boundedSet = invention.generateCompositionalCandidateSet(candidateInput({
+    problem: waterProblem, materialBeliefs: [universalBelief], fragments: saturatedFragments, rawBudget: 999,
+  }));
+  assert("J_candidate_budgets_hold", boundedSet.rawConsidered === invention.RAW_CANDIDATE_PER_PROBLEM_CAP &&
+    boundedSet.raw.length <= invention.RAW_CANDIDATE_PER_PROBLEM_CAP &&
+    boundedSet.shortlist.length <= invention.SHORTLIST_PER_PROBLEM_CAP &&
+    invention.RAW_CANDIDATE_PER_PROBLEM_CAP === 6 && invention.RAW_CANDIDATE_GLOBAL_CAP === 18, {
+      rawConsidered: boundedSet.rawConsidered, raw: boundedSet.raw.length, shortlist: boundedSet.shortlist.length,
+    });
 
   // M / attributed joining failure leaves independent edge material belief alone.
   const edgeBelief = belief("material:audit:edge", "sharp_stone", ["edge_fracture"]);
@@ -222,9 +245,10 @@ try {
       implicatedFragmentIds: [baseFragments[0].id], implicatedMaterialBeliefIds: [bindingBelief.id], evidenceRefs: ["audit:joint-broke"] },
     currentTick: 101,
   });
-  assert("M_join_failure_localized", localized.materialBeliefs.find((x) => x.id === edgeBelief.id)?.properties[0]?.confidence ===
-    edgeBelief.properties[0].confidence && localized.materialBeliefs.find((x) => x.id === bindingBelief.id)?.properties[0]?.confidence <
-    bindingBelief.properties[0].confidence);
+  assert("M_join_failure_localized", localized.fragments[0]?.strength < baseFragments[0].strength &&
+    localized.fragments[1]?.strength === baseFragments[1].strength &&
+    localized.materialBeliefs.find((x) => x.id === edgeBelief.id)?.properties[0]?.confidence === edgeBelief.properties[0].confidence &&
+    localized.materialBeliefs.find((x) => x.id === bindingBelief.id)?.properties[0]?.confidence < bindingBelief.properties[0].confidence);
 
   // N / unknown failure reduces design-level confidence only, not components.
   const unknown = invention.applyTypedFeedback({
@@ -241,6 +265,42 @@ try {
   assert("O_novel_design_no_physical_adapter", novel !== undefined &&
     practicalResponses.derivePracticalVariantExecutionClass(novel.family, novel.persistenceVariantKey) === undefined);
 
+  const diagnosticIdea = {
+    id: "idea:audit:diagnostic", problemId: carryingProblem.id, family: "carrying_load", variantKey: "load_staging",
+    publicLabel: "diagnostic staged load", mechanismBelief: designA.mechanism, basisFragmentIds: [baseFragments[1].id],
+    basisScore: 0.72, status: "selected", statusReason: "audit selected", source: "revision", consideredAtTick: 100,
+    designSignature: designA.signature, design: designA, materialBindings: [{ role: "load_support", materialBeliefId: fiber.id,
+      requiredProperties: ["tensile_fibrous", "flexibility"], localSupport: "supported" }],
+    parentIdeaId: "idea:audit:parent", changedDimension: "joining", sourceEvidenceRefs: ["audit:diagnostic"], localReproducibility: "supported",
+  };
+  const diagnosticExperiment = {
+    id: "experiment:audit:diagnostic", problemId: carryingProblem.id, ideaId: diagnosticIdea.id, responseId: "response:audit:diagnostic",
+    family: "carrying_load", variantKey: "load_staging", expectedEffect: "reduce carrying burden", materials: ["planned fiber"],
+    procedure: "staged practice", laborCost: 0.2, riskCost: 0.1, opportunityCost: "audit time", observationBasis: "direct",
+    observedOutcome: "partial but interpretable", attemptSeasons: 1, status: "concluded_partial", contextKey: "local:A",
+    fragmentsLearned: [], fragmentsContradicted: [], designSignature: designA.signature, materialBindings: diagnosticIdea.materialBindings,
+    plannedOperations: designA.operations, supportingEvidenceRefs: ["audit:diagnostic"], executionOccurred: true, executionAuthority: "practice",
+    executionEvidenceRefs: ["audit:practice-executed"], observedFeedback: { feedbackClass: "joining_construction_failure",
+      attributionQuality: "specific", designSignature: designA.signature, implicatedFragmentIds: [baseFragments[0].id],
+      implicatedMaterialBeliefIds: [fiber.id], evidenceRefs: ["audit:joint-broke"], contextKey: "local:A" }, startedAtTick: 99, concludedAtTick: 100,
+  };
+  const diagnosticState = { ...parentState, bandId: "band:diagnostic", problems: [carryingProblem], materialBeliefs: [fiber],
+    ideas: [diagnosticIdea], experiments: [diagnosticExperiment], responses: [], efficacyRecords: [], waterWorks: undefined, revisionLessons: lesson };
+  const diagnosticHtml = renderToStaticMarkup(createElement(ideasSolutions.IdeasSolutions, {
+    band: { id: "band:diagnostic", practicalAdaptation: diagnosticState }, world: null,
+  }));
+  const uiSource = readFileSync(`${ROOT}/src/ui/band/IdeasSolutions.tsx`, "utf8");
+  assert("diagnostic_ui_exposes_compositional_provenance_read_only",
+    diagnosticHtml.includes("Pass-4 invention diagnostics") && diagnosticHtml.includes(designA.signature) &&
+    diagnosticHtml.includes("revision parent idea:audit:parent") && diagnosticHtml.includes("load_transport") &&
+    diagnosticHtml.includes("distributed_tension") && diagnosticHtml.includes(fiber.id) &&
+    diagnosticHtml.includes("joining_construction_failure") && diagnosticHtml.includes("attribution specific") &&
+    diagnosticHtml.includes("Execution evidence refs") && diagnosticHtml.includes("audit:practice-executed") &&
+    diagnosticHtml.includes("Revision changed dimension") && diagnosticHtml.includes("joining") &&
+    uiSource.includes("Band A") && uiSource.includes("Band B comparator") &&
+    uiSource.includes("reads band.practicalAdaptation only") && !/advancePracticalAdaptation\s*\(/.test(uiSource),
+    { htmlDigest: digest(diagnosticHtml), byteLength: diagnosticHtml.length });
+
   // Material-evidence boundary: observable wooded context may produce weak
   // encountered structural plant evidence but must not grant resin/sealing competence.
   const evidence = materialEvidence.deriveMaterialBeliefSignals({
@@ -251,13 +311,37 @@ try {
   assert("material_evidence_wooded_is_weak_not_resin_competence", evidence.some((x) => x.materialCategory === "encountered_woody_plant") &&
     evidence.every((x) => !x.properties.includes("coating_binding")));
 
-  // Static anti-omniscience / source boundary.
+  // Static anti-omniscience / authority-reader boundary. Candidate generation
+  // may read only explicit human-known inputs, never Band.technologies, the
+  // materialAffordance projection, or a world/tile collection.
   const generatorSource = readFileSync(`${ROOT}/src/sim/agents/compositionalInvention.ts`, "utf8");
+  const materialEvidenceSource = readFileSync(`${ROOT}/src/sim/agents/materialEvidence.ts`, "utf8");
   assert("generator_static_no_raw_world_or_terrain", !/\bWorldState\b|\.terrainKind\b|\bgeology\b|\bbiome\b|world\.tiles|resourceProfile|riskProfile/.test(generatorSource));
+  assert("candidate_generation_has_zero_Band_technologies_causal_reads", !/\.technologies\b|band\.technologies\b/.test(generatorSource));
+  assert("candidate_generation_has_zero_materialAffordance_causal_reads", !/materialAffordance/.test(generatorSource));
+  assert("material_observation_adapter_has_no_world_scan",
+    !/\bWorldState\b|world\.tiles|Object\.values\(world|materialAffordance|\.technologies\b/.test(materialEvidenceSource));
 
   // Existing blanket fragment failure must no longer be on the production update path.
   const practicalSource = readFileSync(`${ROOT}/src/sim/agents/practicalResponses.ts`, "utf8");
   assert("localized_feedback_replaces_blanket_failure", !/recordFragmentFailure\(fragments,\s*failed\?\.requiredFragmentIds/.test(practicalSource));
+
+  // Projection/UI is observability only: required Pass-4 diagnostics must be
+  // rendered from canonical practical-adaptation rows/state, never a UI writer.
+  const diagnosticUiSource = readFileSync(`${ROOT}/src/ui/band/IdeasSolutions.tsx`, "utf8");
+  assert("ui_diagnostics_expose_pass4_causal_fields",
+    diagnosticUiSource.includes("Pass-4 invention diagnostics — read only") &&
+    diagnosticUiSource.includes("Normalized design signature:") &&
+    diagnosticUiSource.includes("Material beliefs / known contexts:") &&
+    diagnosticUiSource.includes("Planned material roles:") &&
+    diagnosticUiSource.includes("Typed observed result:") &&
+    diagnosticUiSource.includes("Revision / dead-end history:") &&
+    diagnosticUiSource.includes("Independent / convergent normalized signatures across displayed bands:"));
+  assert("ui_diagnostics_are_projection_only",
+    diagnosticUiSource.includes("deriveCanonicalPracticalAdaptationRows") &&
+    !/advancePracticalAdaptation\s*\(/.test(diagnosticUiSource) &&
+    !/generateCompositionalCandidateSet\s*\(/.test(diagnosticUiSource) &&
+    !/practicalAdaptation\s*:\s*\{/.test(diagnosticUiSource));
 
   runtime = {
     designSignature: designA.signature,

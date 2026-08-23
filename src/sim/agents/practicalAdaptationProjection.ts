@@ -316,7 +316,8 @@ function candidateBasis(idea: PracticalIdeaCandidate | undefined, canonical: Can
   const localExecution = candidateHasLocalExecution(canonical);
   if (idea?.source === "inherited") return localExecution ? "mixed" : "inherited_not_lived";
   if (idea?.source === "copied") return localExecution ? "mixed" : "copied_not_lived";
-  if (idea?.source === "local_inference" || idea?.source === "accident") return "lived";
+  if (idea?.source === "local_inference" || idea?.source === "accident" || idea?.source === "revision" ||
+      idea?.source === "recombination" || idea?.source === "template_recognition") return "lived";
   return localExecution ? "lived" : "unknown";
 }
 

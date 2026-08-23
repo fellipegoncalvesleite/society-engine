@@ -39,7 +39,7 @@ import type {
   PracticalResponseFamily,
 } from "./types";
 
-export const PROBLEM_CAP = 5;
+export const PROBLEM_CAP = 6;
 export const IDEA_CAP = 8;
 export const EXPERIMENT_CAP = 4;
 const PROBLEM_EVIDENCE_CAP = 3;
@@ -233,6 +233,12 @@ export interface IdeaOption {
   // Relative labor/risk note used in rejection reasons.
   readonly costNote: string;
   readonly source: PracticalIdeaSource;
+  readonly design?: PracticalIdeaCandidate["design"];
+  readonly materialBindings?: PracticalIdeaCandidate["materialBindings"];
+  readonly sourceEvidenceRefs?: readonly string[];
+  readonly parentIdeaId?: string;
+  readonly changedDimension?: PracticalIdeaCandidate["changedDimension"];
+  readonly localReproducibility?: PracticalIdeaCandidate["localReproducibility"];
 }
 
 export interface IdeaSelectionResult {
@@ -294,6 +300,12 @@ export function selectIdeaForProblem(input: {
       statusReason,
       source: option.source,
       consideredAtTick: input.currentTick,
+      ...(option.design === undefined ? {} : { designSignature: option.design.signature, design: option.design }),
+      ...(option.materialBindings === undefined ? {} : { materialBindings: option.materialBindings }),
+      ...(option.parentIdeaId === undefined ? {} : { parentIdeaId: option.parentIdeaId }),
+      ...(option.changedDimension === undefined ? {} : { changedDimension: option.changedDimension }),
+      ...(option.sourceEvidenceRefs === undefined ? {} : { sourceEvidenceRefs: option.sourceEvidenceRefs }),
+      ...(option.localReproducibility === undefined ? {} : { localReproducibility: option.localReproducibility }),
     });
   }
 
@@ -363,6 +375,11 @@ export function startExperiment(input: {
     contextKey: input.contextKey,
     fragmentsLearned: [],
     fragmentsContradicted: [],
+    ...(input.idea.designSignature === undefined ? {} : { designSignature: input.idea.designSignature }),
+    ...(input.idea.materialBindings === undefined ? {} : { materialBindings: input.idea.materialBindings }),
+    ...(input.idea.design === undefined ? {} : { plannedOperations: input.idea.design.operations }),
+    ...(input.idea.sourceEvidenceRefs === undefined ? {} : { supportingEvidenceRefs: input.idea.sourceEvidenceRefs }),
+    executionOccurred: false,
     startedAtTick: input.currentTick,
   };
 }
@@ -374,6 +391,10 @@ export interface ExperimentAdvanceEvent {
   readonly observedOutcome?: string;
   readonly fragmentsLearned?: readonly string[];
   readonly fragmentsContradicted?: readonly string[];
+  readonly observedFeedback?: PracticalExperiment["observedFeedback"];
+  readonly executionOccurred?: boolean;
+  readonly executionAuthority?: PracticalExperiment["executionAuthority"];
+  readonly executionEvidenceRefs?: readonly string[];
 }
 
 export function advanceExperiments(
@@ -404,6 +425,10 @@ export function advanceExperiments(
       observedOutcome: event.observedOutcome ?? experiment.observedOutcome,
       fragmentsLearned: [...new Set([...experiment.fragmentsLearned, ...(event.fragmentsLearned ?? [])])].slice(0, 4),
       fragmentsContradicted: [...new Set([...experiment.fragmentsContradicted, ...(event.fragmentsContradicted ?? [])])].slice(0, 4),
+      ...(event.observedFeedback === undefined ? {} : { observedFeedback: event.observedFeedback }),
+      ...(event.executionOccurred === undefined ? {} : { executionOccurred: event.executionOccurred }),
+      ...(event.executionAuthority === undefined ? {} : { executionAuthority: event.executionAuthority }),
+      ...(event.executionEvidenceRefs === undefined ? {} : { executionEvidenceRefs: event.executionEvidenceRefs }),
       concludedAtTick: currentTick,
     };
   });

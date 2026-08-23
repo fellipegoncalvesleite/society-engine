@@ -72,9 +72,26 @@ const REQUIRED_CANONICAL_EXPORTS = [
   "inheritPracticalAdaptationForDaughter",
 ];
 
-const FROZEN_HASHES = {
-  "src/sim/agents/practicalResponses.ts": "432a0fb0a9826ead77648937e6d8626f6d5d62653a0a8768d979614f36b26a8e",
-  "src/sim/agents/adaptiveEfficacy.ts": "ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919",
+// Pass 1 originally froze practicalResponses.ts byte-for-byte. Pass 4 legitimately
+// extends that file, so the compatibility certification pins the invariants the
+// old hash protected instead: unchanged efficacy formula source, unchanged effect
+// constants, and the Pass-2 execution provenance classes/gates.
+const ADAPTIVE_EFFICACY_FROZEN_HASH = "ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919";
+const PRACTICAL_EFFECT_CONSTANT_PINS = {
+  CARRYING_RELIEF_CAP_SIMPLE: "0.3",
+  CARRYING_RELIEF_CAP_COMPOSITE: "0.4",
+  WATER_ROUTE_RELIEF_CAP: "0.3",
+  ENGINEERING_SAFETY_CAP: "0.22",
+  CARRIED_WATER_RELIEF_CAP: "0.28",
+  SHELTER_EXPOSURE_RELIEF_CAP: "0.35",
+  HUNTING_DANGER_RELIEF_CAP: "0.3",
+  CARE_TREATMENT_RELIEF_CAP: "0.35",
+  WATERWORKS_YIELD_CAP: "0.15",
+  SHELTER_PORTABILITY_BURDEN_CAP: "0.05",
+  PROVISIONING_ACCURACY_BASE: "0.75",
+  FRAGMENT_BASIS_FLOOR: "0.25",
+  COMPOSITE_BASIS_FLOOR: "0.5",
+  RELIEF_ACTIVE_FLOOR: "0.05",
 };
 
 function read(path) {
@@ -197,7 +214,7 @@ const fissionInheritanceRouted =
   importsSymbolFrom(fissionSeamSrc, "inheritAdaptiveHumanForDaughter", "legacyAdaptiveHumanCompatibility");
 
 const canonicalPreferenceMatch = ideasSolutionsSrc.match(
-  /if\s*\(\s*band\.practicalAdaptation\s*!==\s*undefined\s*\)\s*\{\s*return\s*<CanonicalInventionChain\s+band=\{band\}\s*\/>;\s*\}/,
+  /if\s*\(\s*band\.practicalAdaptation\s*!==\s*undefined\s*\)\s*\{\s*return\s*<CanonicalInventionChain\s+band=\{band\}(?:\s+world=\{world\})?\s*\/>;\s*\}/,
 );
 const legacyProfileUseIndex = ideasSolutionsSrc.indexOf("profile.ideas");
 const canonicalPreferenceIndex = canonicalPreferenceMatch?.index ?? -1;
@@ -206,11 +223,27 @@ const ideasSolutionsPrefersCanonical =
   legacyProfileUseIndex >= 0 &&
   canonicalPreferenceIndex < legacyProfileUseIndex;
 
-const actualFrozenHashes = Object.fromEntries(
-  Object.keys(FROZEN_HASHES).map((rel) => [rel, sha256File(join(ROOT, rel))]),
-);
-const physicalFormulaSourcesUnchanged = Object.entries(FROZEN_HASHES)
-  .every(([rel, expected]) => actualFrozenHashes[rel] === expected);
+const practicalResponsesPath = join(ROOT, "src/sim/agents/practicalResponses.ts");
+const practicalResponsesSrc = read(practicalResponsesPath);
+const adaptiveEfficacyPath = join(ROOT, "src/sim/agents/adaptiveEfficacy.ts");
+const actualAdaptiveEfficacyHash = sha256File(adaptiveEfficacyPath);
+
+const effectConstantActual = Object.fromEntries(Object.keys(PRACTICAL_EFFECT_CONSTANT_PINS).map((name) => {
+  const match = practicalResponsesSrc.match(new RegExp(`(?:export\\s+)?const\\s+${name}\\s*=\\s*([^;]+);`));
+  return [name, match?.[1]?.trim() ?? null];
+}));
+const practicalEffectConstantsUnchanged = Object.entries(PRACTICAL_EFFECT_CONSTANT_PINS)
+  .every(([name, expected]) => effectConstantActual[name] === expected);
+const adaptiveEfficacyFormulaSourceUnchanged = actualAdaptiveEfficacyHash === ADAPTIVE_EFFICACY_FROZEN_HASH;
+
+const executionClassContractPreserved =
+  /export type VariantExecutionClass\s*=\s*[\s\S]*?"practice_only"[\s\S]*?"existing_physical_work"[\s\S]*?"material_execution_required"\s*;/.test(practicalResponsesSrc);
+const materialRequiredCannotSelfProveExecution =
+  /case "material_execution_required":\s*[\s\S]{0,500}?return false;/.test(practicalResponsesSrc);
+const existingPhysicalWorkRequiresPersistedAuthority =
+  /case "existing_physical_work":\s*[\s\S]{0,500}?existingPhysicalWorkResponseId === response\.id/.test(practicalResponsesSrc);
+const noMaterialMagicEffect =
+  /material execution required — no physical execution proof exists for this response/.test(practicalResponsesSrc);
 
 const checks = {
   canonicalStateExplicitlyPracticalAdaptation:
@@ -229,7 +262,12 @@ const checks = {
   legacyDecisionInfluenceDisabledAfterCanonicalState: legacyInfluenceDisabledAfterCanonical,
   fissionInheritanceUsesCanonicalAndLegacyBoundaries: fissionInheritanceRouted,
   ideasSolutionsPrefersCanonicalInventionChain: ideasSolutionsPrefersCanonical,
-  practicalPhysicalAndEfficacyFormulaSourcesUnchanged: physicalFormulaSourcesUnchanged,
+  adaptiveEfficacyFormulaSourceUnchanged,
+  practicalEffectConstantsUnchanged,
+  pass2ExecutionClassContractPreserved: executionClassContractPreserved,
+  materialRequiredCannotSelfProveExecution,
+  existingPhysicalWorkRequiresPersistedAuthority,
+  materialRequiredResponsesHaveNoMagicEffect: noMaterialMagicEffect,
 };
 
 const pass = Object.values(checks).every(Boolean);
@@ -248,9 +286,11 @@ console.log(JSON.stringify({
   unexpectedCompatExports,
   directAdaptiveHumanImports,
   legacyImportsOutsideCompatibility,
-  frozenHashes: {
-    expected: FROZEN_HASHES,
-    actual: actualFrozenHashes,
+  pass4CompatibilityCertification: {
+    obsoleteWholeFileHashRetired: "src/sim/agents/practicalResponses.ts",
+    adaptiveEfficacy: { expected: ADAPTIVE_EFFICACY_FROZEN_HASH, actual: actualAdaptiveEfficacyHash },
+    effectConstants: { expected: PRACTICAL_EFFECT_CONSTANT_PINS, actual: effectConstantActual },
+    executionClasses: ["practice_only", "existing_physical_work", "material_execution_required"],
   },
 }, null, 2));
 

@@ -349,10 +349,43 @@ try {
       startedAtTick: world.time.tick,
     },
   ];
+  const materialBeliefs = [
+    {
+      id: `material-belief:${String(band.id)}:audit-fiber`,
+      materialCategory: "audit-fiber",
+      publicLabel: "handled audit fiber",
+      properties: [
+        { property: "tensile_fibrous", confidence: 0.8, evidenceRefs: ["audit:material:fiber"], contradictionRefs: [] },
+        { property: "flexibility", confidence: 0.72, evidenceRefs: ["audit:material:fiber"], contradictionRefs: [] },
+      ],
+      knownContexts: ["audit:parent-place"],
+      provenance: "lived",
+      handlingDepth: "transformed_tested",
+      contradictionRefs: [],
+      lastReinforcedTick: world.time.tick,
+      originalContext: { contextKey: "audit:parent-place", sourceBandId: band.id },
+    },
+  ];
+  const designHints = [
+    {
+      id: "design-hint:audit:parent",
+      designSignature: "design:audit-parent-hint",
+      functionalIntent: "load_transport",
+      mechanism: "distributed_tension",
+      source: "lived",
+      confidence: 0.8,
+      sourceContextKey: "audit:parent-place",
+      sourceBandId: band.id,
+      lastReinforcedTick: world.time.tick,
+    },
+  ];
   const practicalAdaptation = {
     bandId: band.id,
     lastUpdatedTick: world.time.tick,
     fragments,
+    materialBeliefs,
+    designHints,
+    revisionLessons: [],
     responses,
     efficacyRecords: [],
     problems: [canonicalProblem],
@@ -1111,6 +1144,9 @@ try {
       contextKeys: fragment.contextKeys,
     })),
     daughterInheritedProblems: daughterState?.problems,
+    daughterInheritedMaterialBeliefs: daughterState?.materialBeliefs,
+    daughterInheritedDesignHints: daughterState?.designHints,
+    daughterInheritedRevisionLessons: daughterState?.revisionLessons,
     canonicalUiTruthMarkers: {
       problemsAuthority: canonicalUi.problems.includes("Canonical practical-adaptation record"),
       problemsOrigin: canonicalUi.problems.includes("Origin:</strong> lived"),
@@ -1280,7 +1316,26 @@ try {
       daughterState.problems?.every((problem) => problem.origin === "inherited") &&
       daughterState.problems.length === 1 &&
       daughterState.problems.length <= (daughterState.caps.problemCap ?? 0) &&
-      daughterState.caps.problemCap === 5 &&
+      daughterState.caps.problemCap === 6 &&
+      daughterState.materialBeliefs?.length === 1 &&
+      daughterState.materialBeliefs[0]?.provenance === "inherited" &&
+      daughterState.materialBeliefs[0]?.handlingDepth === materialBeliefs[0].handlingDepth &&
+      daughterState.materialBeliefs[0]?.properties.every((property, index) =>
+        property.confidence < (materialBeliefs[0].properties[index]?.confidence ?? 0) &&
+        property.evidenceRefs.length === 1 &&
+        property.evidenceRefs[0]?.startsWith(`inherited:${String(band.id)}:`) &&
+        property.contradictionRefs.length === 0) &&
+      daughterState.materialBeliefs[0]?.knownContexts.join("|") === materialBeliefs[0].knownContexts.join("|") &&
+      daughterState.materialBeliefs[0]?.originalContext.contextKey === "audit:parent-place" &&
+      daughterState.materialBeliefs[0]?.originalContext.sourceBandId === band.id &&
+      daughterState.materialBeliefs[0]?.originalContext.inheritedFromBandId === band.id &&
+      daughterState.designHints?.length === 1 &&
+      daughterState.designHints[0]?.source === "inherited" &&
+      daughterState.designHints[0]?.confidence < designHints[0].confidence &&
+      daughterState.designHints[0]?.designSignature === designHints[0].designSignature &&
+      daughterState.designHints[0]?.sourceContextKey === "audit:parent-place" &&
+      daughterState.designHints[0]?.sourceBandId === band.id &&
+      daughterState.revisionLessons?.length === 0 &&
       daughterState.responses.length === 0 &&
       daughterState.ideas?.length === 0 &&
       daughterState.experiments?.length === 0 &&

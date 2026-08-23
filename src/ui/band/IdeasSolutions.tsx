@@ -22,6 +22,7 @@ import type {
   ContextBoundAdaptation,
   LocalRoutine,
   SolutionAttempt,
+  PracticalIdeaSource,
 } from "../../sim/agents/types";
 import type { Band } from "../../sim/agents/types";
 import type { WorldState } from "../../sim/world/types";
@@ -55,7 +56,7 @@ export function IdeasSolutions({
   );
 
   if (band.practicalAdaptation !== undefined) {
-    return <CanonicalInventionChain band={band} />;
+    return <CanonicalInventionChain band={band} world={world} />;
   }
 
   if (profile === undefined) {
@@ -124,10 +125,10 @@ export function IdeasSolutions({
   );
 }
 
-function CanonicalInventionChain({ band }: { readonly band: Band }) {
+function CanonicalInventionChain({ band, world }: { readonly band: Band; readonly world: WorldState | null }) {
   const state = band.practicalAdaptation;
   if (state === undefined) return null;
-  const problems = (state.problems ?? []).slice(0, 5);
+  const problems = (state.problems ?? []).slice(0, 6);
   const rows = deriveCanonicalPracticalAdaptationRows(state);
   const ideaRows = rows.filter((row) => row.idea !== undefined).slice(0, 6);
   const experimentRows = rows.filter((row) => row.experiment !== undefined).slice(0, 4);
@@ -204,7 +205,150 @@ function CanonicalInventionChain({ band }: { readonly band: Band }) {
           );
         })}
       </div>
+      <CanonicalInventionDiagnostics band={band} world={world} />
     </section>
+  );
+}
+
+function ideaProvenanceLabel(source: PracticalIdeaSource): string {
+  switch (source) {
+    case "local_inference": return "local inference";
+    case "template_recognition": return "local template recognition";
+    case "recombination": return "local recombination";
+    case "accident": return "accidental observation";
+    case "revision": return "revision";
+    case "inherited": return "inherited hint";
+    case "copied": return "copied hint";
+  }
+}
+
+function diagnosticComparator(world: WorldState | null, band: Band): Band | undefined {
+  if (world === null || band.practicalAdaptation === undefined) return undefined;
+  const activeFamilies = new Set((band.practicalAdaptation.problems ?? [])
+    .filter((problem) => problem.status === "active" || problem.status === "revised")
+    .map((problem) => problem.family));
+  return Object.values(world.bands)
+    .filter((other) => other.id !== band.id && other.practicalAdaptation !== undefined)
+    .map((other) => ({
+      band: other,
+      overlap: (other.practicalAdaptation?.problems ?? []).filter((problem) => activeFamilies.has(problem.family)).length,
+    }))
+    .sort((left, right) => right.overlap - left.overlap || String(left.band.id).localeCompare(String(right.band.id)))[0]?.band;
+}
+
+function executionDiagnostic(row: ReturnType<typeof deriveCanonicalPracticalAdaptationRows>[number]): string {
+  const experiment = row.experiment;
+  const truth = row.canonical.executionTruth;
+  if (truth === "blocked_material_execution") return "execution required: yes; actual execution proven: no; no independent material executor";
+  if (truth === "existing_physical_work_unproven") return "execution required: yes; actual execution proven: no; persisted physical-work authority missing";
+  if (truth === "existing_physical_work_executed") return "execution required: yes; actual execution proven: yes; authority: existing physical work";
+  if (truth === "execution_provenance_unproven") return "execution required: unknown; actual execution proven: no; provenance class unavailable";
+  if (truth === "practice_attempted" || truth === "concluded_from_canonical_history") {
+    return `execution required: practice; actual execution proven: yes; authority: ${experiment?.executionAuthority ?? "canonical practice history"}`;
+  }
+  return `execution required: practice; actual execution proven: no; state: ${truth.replace(/_/g, " ")}`;
+}
+
+function CanonicalInventionDiagnosticBand({ band, label }: { readonly band: Band; readonly label: string }) {
+  const state = band.practicalAdaptation;
+  if (state === undefined) return null;
+  const rows = deriveCanonicalPracticalAdaptationRows(state);
+  const candidateRows = rows.filter((row) => row.idea !== undefined).slice(0, 4);
+  const experimentRows = rows.filter((row) => row.experiment !== undefined).slice(0, 4);
+  const activeProblems = (state.problems ?? []).filter((problem) => problem.status === "active" || problem.status === "revised").slice(0, 6);
+  const beliefs = (state.materialBeliefs ?? []).slice(0, 8);
+  const fragments = (state.fragments ?? []).slice(0, 12);
+  const lessons = (state.revisionLessons ?? []).slice(0, 8);
+
+  return (
+    <article className="practice-feedback-card item5-invention-diagnostic" data-item5-diagnostic-band={String(band.id)}>
+      <div className="practice-feedback-card-body">
+        <span className="practice-feedback-card-kicker">{label} · canonical Item-5 state</span>
+        <strong>{String(band.id)}</strong>
+        <p><strong>Active problems:</strong> {activeProblems.map((problem) => `${problem.publicLabel} (${problem.origin}, ${Math.round(problem.confidence * 100)}% confidence)`).join(" · ") || "none retained"}</p>
+        <p><strong>Human material beliefs:</strong> {beliefs.map((belief) => `${belief.publicLabel} [${belief.provenance}; ${belief.handlingDepth}; ${belief.properties.map((property) => `${property.property} ${Math.round(property.confidence * 100)}%`).join(", ")}; contexts ${belief.knownContexts.join(", ") || "none"}]`).join(" · ") || "none retained"}</p>
+        <p><strong>Technical fragments:</strong> {fragments.map((fragment) => `${fragment.publicLabel} [${fragment.basis}; ${Math.round(fragment.strength * 100)}%]`).join(" · ") || "none retained"}</p>
+
+        <div className="practice-feedback-grid compact">
+          {candidateRows.map((row) => {
+            const idea = row.idea!;
+            const design = idea.design;
+            const boundBeliefs = (idea.materialBindings ?? []).map((binding) => {
+              const belief = (state.materialBeliefs ?? []).find((entry) => entry.id === binding.materialBeliefId);
+              return `${binding.role}: ${belief?.publicLabel ?? binding.materialBeliefId} (${binding.localSupport}; contexts ${belief?.knownContexts.join(", ") || "unknown"})`;
+            });
+            return (
+              <details key={`diagnostic:${idea.id}`} className={`practice-feedback-card status-${idea.status}`}>
+                <summary><strong>Candidate: {idea.publicLabel}</strong><Chip>{ideaProvenanceLabel(idea.source)}</Chip></summary>
+                <div className="practice-feedback-card-body">
+                  <p><strong>Practical problem:</strong> {row.problem?.publicLabel ?? idea.problemId}</p>
+                  <p><strong>Idea provenance:</strong> {ideaProvenanceLabel(idea.source)}{idea.parentIdeaId === undefined ? "" : `; revision parent ${idea.parentIdeaId}`}</p>
+                  <p><strong>Normalized design signature:</strong> {idea.designSignature ?? "legacy / unavailable"}</p>
+                  <p><strong>Functional intent:</strong> {design?.functionalIntent ?? "legacy / unavailable"}</p>
+                  <p><strong>Mechanism:</strong> {design?.mechanism ?? idea.mechanismBelief}</p>
+                  <p><strong>Component roles:</strong> {design?.componentRoles.map((role) => `${role.role}:${role.form} requires ${role.requiredProperties.join("+") || "no material predicate"}`).join(" · ") || "none"}</p>
+                  <p><strong>Operations:</strong> {design?.operations.map((operation) => `${operation.id}:${operation.operation}(${operation.inputRoles.join("+")})`).join(" → ") || "practice-only / none"}</p>
+                  <p><strong>Supporting fragments:</strong> {idea.basisFragmentIds.join(", ") || "none"}</p>
+                  <p><strong>Material beliefs / known contexts:</strong> {boundBeliefs.join(" · ") || "no material role binding"}</p>
+                  <p><strong>Uncertainty:</strong> {Math.round((1 - idea.basisScore) * 100)}% basis uncertainty; {idea.statusReason}</p>
+                  <p><strong>Local reproducibility:</strong> {idea.localReproducibility ?? "legacy / unknown"}</p>
+                  {idea.changedDimension === undefined ? null : <p><strong>Revision changed dimension:</strong> {idea.changedDimension}</p>}
+                </div>
+              </details>
+            );
+          })}
+        </div>
+
+        <div className="practice-feedback-grid compact">
+          {experimentRows.map((row) => {
+            const experiment = row.experiment!;
+            const feedback = experiment.observedFeedback;
+            const executionProofGap = canonicalExecutionProofGap(row.canonical);
+            return (
+              <details key={`diagnostic-experiment:${experiment.id}`} className={`practice-feedback-card status-${experiment.status}`}>
+                <summary><strong>Experiment: {experiment.variantKey.replace(/_/g, " ")}</strong><Chip>{executionProofGap ?? experiment.status.replace(/_/g, " ")}</Chip></summary>
+                <div className="practice-feedback-card-body">
+                  <p><strong>Planned material roles:</strong> {experiment.materialBindings?.map((binding) => `${binding.role} → ${binding.materialBeliefId} (${binding.localSupport})`).join(" · ") || experiment.materials.join(", ") || "none"}</p>
+                  <p><strong>Planned operations:</strong> {experiment.plannedOperations?.map((operation) => operation.operation).join(" → ") || experiment.procedure}</p>
+                  <p><strong>Expected effect:</strong> {experiment.expectedEffect}</p>
+                  <p><strong>Estimated labor/risk/opportunity:</strong> {Math.round(experiment.laborCost * 100)}% / {Math.round(experiment.riskCost * 100)}% / {experiment.opportunityCost}</p>
+                  <p><strong>Execution authority:</strong> {executionDiagnostic(row)}</p>
+                  <p><strong>Execution evidence refs:</strong> {executionProofGap === undefined ? experiment.executionEvidenceRefs?.join(", ") || "none" : `${executionProofGap}; stored execution refs withheld as proof`}</p>
+                  <p><strong>Typed observed result:</strong> {executionProofGap !== undefined ? `${executionProofGap}; stored feedback is not admitted as physical evidence` : feedback === undefined ? "not recorded" : `${feedback.feedbackClass}; attribution ${feedback.attributionQuality}; evidence ${feedback.evidenceRefs.join(", ")}`}</p>
+                </div>
+              </details>
+            );
+          })}
+        </div>
+
+        <p><strong>Revision / dead-end history:</strong> {lessons.map((lesson) => `${lesson.designSignature}: ${lesson.feedbackClass}; changed ${lesson.changedDimension ?? "unknown"}; ${lesson.status}; strength ${Math.round(lesson.strength * 100)}%`).join(" · ") || "no retained lessons"}</p>
+        <p><strong>Environmental mismatch:</strong> {lessons.filter((lesson) => lesson.feedbackClass === "environmental_mismatch").map((lesson) => lesson.designSignature).join(", ") || "none retained"}</p>
+        <p><strong>Inherited vs locally proven:</strong> inherited/copy provenance is knowledge only; local proof requires canonical execution truth. Current executed rows: {rows.filter((row) => row.canonical.executionTruth === "practice_attempted" || row.canonical.executionTruth === "concluded_from_canonical_history" || row.canonical.executionTruth === "existing_physical_work_executed").length}.</p>
+      </div>
+    </article>
+  );
+}
+
+function CanonicalInventionDiagnostics({ band, world }: { readonly band: Band; readonly world: WorldState | null }) {
+  const comparator = diagnosticComparator(world, band);
+  const state = band.practicalAdaptation;
+  if (state === undefined) return null;
+  const signatures = new Set((state.ideas ?? []).flatMap((idea) => idea.designSignature === undefined ? [] : [idea.designSignature]));
+  const convergent = comparator?.practicalAdaptation?.ideas
+    ?.flatMap((idea) => idea.designSignature !== undefined && signatures.has(idea.designSignature) ? [idea.designSignature] : [])
+    .filter((signature, index, all) => all.indexOf(signature) === index) ?? [];
+  return (
+    <div className="practice-feedback-block item5-invention-diagnostics" data-item5-invention-diagnostics="canonical-read-only">
+      <span className="practice-feedback-block-title">Pass-4 invention diagnostics — read only</span>
+      <p className="condition-note">This inspection surface reads band.practicalAdaptation only. It does not create ideas, execution, efficacy, material truth, or technical competence.</p>
+      <div className="practice-feedback-grid compact">
+        <CanonicalInventionDiagnosticBand band={band} label="Band A" />
+        {comparator === undefined ? null : <CanonicalInventionDiagnosticBand band={comparator} label="Band B comparator" />}
+      </div>
+      {comparator === undefined ? <p className="empty-panel">No second band with canonical Item-5 state is currently available for comparison.</p> : (
+        <p><strong>Independent / convergent normalized signatures across displayed bands:</strong> {convergent.join(", ") || "none retained in both histories"}</p>
+      )}
+    </div>
   );
 }
 

@@ -10,15 +10,21 @@
 
 ## CURRENT AUTHORITY / CURRENT STATUS — 2026-08-23
 
+> This block supersedes older “current”, “active checkpoint”, and “Item 5 unstarted” wording preserved below as historical checkpoint record.
+
 - Roadmap Item 4 is **CLOSED / ACCEPTED / FROZEN** at `11f085930462f981fcca45faf37b67d961196adb`.
-- Roadmap Item 5 Pass 3 canonical projection/inheritance is **IMPLEMENTED / PENDING INDEPENDENT ARCHITECT REVIEW** on `checkpoint/item5-projection-inheritance-pass3`, from exact accepted Pass-2 base `31363c4f8e19e1c4f536338ecd0ef59e3fa7082f`. Item 5 remains **OPEN / NOT FROZEN**; this is not a merge or acceptance.
-- `band.practicalAdaptation` remains the canonical Item-5 adaptation/history authority; `band.adaptiveHuman` remains legacy compatibility state only, routed through `src/sim/agents/legacyAdaptiveHumanCompatibility.ts`.
-- `practicalResponses.ts` now classifies every variant as `practice_only`, `existing_physical_work`, or `material_execution_required`. Practice-only responses retain bounded forming/active effects. Material-required responses have **zero physical effect and zero efficacy maturation without execution proof**.
-- Existing persisted `waterWorks` remains the physical authority for groundwater work. A missing matching `waterWorks.responseId` is explicit unproven physical work and cannot admit attempts, conclusions, efficacy, outcomes, or diffusion. No portable material inventory, crafting, resource-stock, or execution store was introduced; portable-material execution proof remains the next explicit debt rather than being fabricated from plans or labels.
-- `PracticalExperiment.materials` / procedure / labor / risk / opportunity fields are planned/estimated requirements, not claims of acquisition, consumption, execution, or paid cost. The Ideas/Solutions UI labels them accordingly.
-- No coefficients were tuned and `src/sim/agents/adaptiveEfficacy.ts` is unchanged at SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`.
-- Pass 3 makes canonical `band.practicalAdaptation` the only projection lifecycle authority when present, with explicit legacy compatibility only when absent. Final-review fixes preserve independently bounded lifecycle records with explicit missing links, separate inherited/copied framing from later local testing, and require independent physical camp/activity evidence before foothold traces diffuse. The 2026-08-23 correction makes unresolved execution provenance fail closed (`execution_provenance_unproven`), retains orphan efficacy only as recorded history, removes the legacy 9-row cap from canonical history while keeping explicit display truncation, and restores truthful fresh-run Item-4 audit timestamps with semantic comparison normalizing only root `generatedAt`. It changes no Item-4 simulation mechanic, coefficient, or Map-2 behavior. Certification is 40/40 projection, 13/13 provenance, 14/14 boundary, 12/12 expedition efficacy, 12/12 Item-4 transfer (0 vacuous), and 6/6 Item-4 whole integration; all benchmark assertion maps are true and the exact Map-2 fingerprint remains `f509b2f4d6e8a463b7505025afe22d151fd45a0598bd9550fbb84aac900da03c`. See `docs/evidence/item5-pass3/PASS3_EVIDENCE.md`.
-- Durable architecture/implementation decision ownership is now defined in `docs/ARCHITECTURE_OWNERSHIP.md`; it does not perform the post-Item-5 roadmap rewrite.
+- Roadmap Item 5 Pass 4 is a **CLOSURE-CANDIDATE IMPLEMENTATION / FULLY CERTIFIED BY THE IMPLEMENTER / PENDING INDEPENDENT ARCHITECT REVIEW / NOT ACCEPTED / NOT FROZEN** on `checkpoint/item5-invention-diversity-pass4`, preserving accepted Pass-3 ancestry `e290a0a039b1e75dd949d646860f1b867ee1c9ce` and the committed Pass-4 RED/audit checkpoint `bf201a30ccbd16f9e039aa2f321f0b7eddd70329`.
+- `band.practicalAdaptation` remains the sole canonical Item-5 causal/history authority. `band.adaptiveHuman` is legacy compatibility/read-model only; `Band.technologies` is legacy only; `materialAffordance` and the selected-band UI are projections/read models only.
+- Pass 4 adds bounded canonical `HumanMaterialBelief`, normalized compositional design identity, deterministic fixed-budget candidate generation, typed/localized experiment feedback, design hints and revision/dead-end memory. Historical named variants remain bootstrap/compatibility/effect adapters rather than the entire invention universe.
+- Candidate generation reads human-known Item-5 state only. Raw hidden terrain/geology/WORLD-M0 truth is not a candidate input. Fixed raw budgets are 6 candidates/problem and 18 globally per band/update, with 3 shortlisted/problem. Natural certification observed maxima 5/problem and 12/global.
+- Existing Pass-2 execution provenance remains authoritative. `material_execution_required` designs have zero physical effect and zero efficacy maturation without independent execution proof. Existing `waterWorks` remains a narrow physical authority; Pass 4 adds no inventory, extraction stock, generic crafting, produced-object, construction-labor, ownership, fuel, wear, or maintenance authority.
+- Daughter inheritance may carry degraded problem framing, fragments, material beliefs and design hints, retaining parent-place provenance. It does not copy parent execution, efficacy, practical success, waterworks, objects, current local occurrence, or local competence.
+- Pass-1 and Pass-3 live audits were migrated away from obsolete whole-file/schema-shape assumptions while preserving their causal purpose. Final certification also corrected the stale Invention-3 benchmark so unexecuted material plans are tested as physically inert rather than expected to manufacture effects.
+- `src/sim/agents/adaptiveEfficacy.ts` remains byte-identical to accepted Pass 3 at SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`; no physical coefficient was retuned to restore an old world fingerprint.
+- Fresh Pass-4 certification includes controlled A–P 26/26, reversible mutations M1–M6 with byte-identical restoration, both TypeScript project checks, production build, migrated authority/provenance/projection gates, practical/adaptive-efficacy/routines/Invention-3 suites, Item-4 fission transfer 12/12, Item-4 whole integration 6/6, graph 221/764 with zero duplicate/dangling links, import boundary PASS, deterministic 50-year Map-2 repeat, natural Map-1/Map-2 40-year runs, and a 120-year Map-2 boundedness run. Detailed measured evidence is in `docs/evidence/item5-pass4/`.
+- The accepted Pass-3 whole-world fingerprint changes under Pass 4. Cross-worktree comparison locates the first full divergence at season 1 in weak human material-belief state, with Item-5-stripped state identical through season 26; the later divergence follows the approved compositional/practice-only invention path. Classification: **EXPECTED PASS-4 INVENTION-SEMANTIC CHANGE**, not a coefficient retune or Item-4 redesign.
+- `docs/HANDOFF_ITEM6_WORLD_GENERATION.md` remains authoritative for the next-item discussion boundary. **Do not begin Item 6, WORLD-M0, another Item-5 pass, or the roadmap rewrite here.** The next action is independent architect review; before Item-6 implementation the world-generation proposal must be explicitly discussed with the user.
+- Durable architecture/implementation decision ownership remains defined in `docs/ARCHITECTURE_OWNERSHIP.md`.
 
 ---
 
@@ -193,6 +199,17 @@ has a seed input — the sim layer just never consumes it. All audits/baselines 
 ---
 
 ## Current Status
+
+### ROADMAP ITEM 5 — PASS 4 COMPOSITIONAL INVENTION / MATERIAL KNOWLEDGE — **CLOSURE CANDIDATE / IMPLEMENTER-CERTIFIED / PENDING INDEPENDENT ARCHITECT REVIEW / NOT ACCEPTED / NOT FROZEN**
+
+Pass 4 preserves `band.practicalAdaptation` as the sole Item-5 causal/history authority and adds bounded human material beliefs, normalized compositional hypotheses, deterministic fixed-budget generation, typed/localized feedback, revision/dead-end memory, degraded inheritance and read-only explainability. Hidden raw-world truth is not an invention input; an idea/plan does not prove execution; existing Pass-2 execution provenance remains the physical gate. Named historical variants remain compatibility/bootstrap/effect adapters, not a technology tree.
+
+Fresh certification is recorded under `docs/evidence/item5-pass4/`: controlled A–P 26/26; all six reversible mutation families caught and restored byte-identically; migrated Pass-1/Pass-3 authority checks green; physical-effect provenance green; practical/adaptive-efficacy/routines/Invention-3 regressions green; both TypeScript projects and production build green; Item-4 transfer 12/12 and whole integration 6/6; graph/import boundaries green; deterministic repeat green; natural Map 1/2 40-year and Map-2 120-year boundedness runs green. The accepted Pass-3 world fingerprint changes for an explained, traced Pass-4 invention-semantic reason rather than coefficient retuning.
+
+The checkpoint stops here. Do not freeze Item 5, begin another pass, begin Item 6/WORLD-M0, rewrite the roadmap, or merge main. The next action is independent architect review of the pushed checkpoint. `docs/HANDOFF_ITEM6_WORLD_GENERATION.md` remains present; before Item-6 implementation the next architect must explicitly discuss the world-generation proposal with the user.
+
+> Older Current Status entries below are historical checkpoint records and are superseded by this Pass-4 closure-candidate entry.
+
 
 ### ROADMAP ITEM 5 — PHYSICAL-EFFECT PROVENANCE PASS 2 — **IMPLEMENTED / CERTIFIED / ITEM 5 STILL OPEN / NOT FROZEN / PUSHED FOR INDEPENDENT REVIEW / NOT MERGED**
 
@@ -9122,11 +9139,11 @@ UI in `src/ui/BandPanel.tsx`, audit + `--targeted-cause-event-check` in
 
 ## Recommended Next Step
 
-**CURRENT (ROADMAP ITEM 5, 2026-08-18).** Pass 2 stops after physical-effect provenance. The next
-separately authorized Item-5 work, if approved, is to define a real portable-material execution
-authority/proof before any material-required response may regain physical effect or efficacy. Do not
-invent inventory, crafting, stock, or consumed-material state merely to make these responses active.
-Do not begin Pass 3, declare Item 5 frozen, merge, or push as part of this checkpoint.
+**CURRENT (ROADMAP ITEM 5 PASS 4, 2026-08-23).** Stop implementation and submit the exact pushed `checkpoint/item5-invention-diversity-pass4` tree for independent supervising-architect review. The implementer has no authority to accept or freeze Item 5. Do not begin Pass 5, Item 6, WORLD-M0, the roadmap rewrite, or a merge to `main`.
+
+If the architect accepts Item 5 and work later proceeds toward Item 6, preserve `docs/HANDOFF_ITEM6_WORLD_GENERATION.md`: **before Item-6 implementation, explicitly discuss the world-generation proposal with the user.** Future physical/material authorities must reopen Item 5 only through the seams listed in `docs/evidence/item5-pass4/FUTURE_EVOLUTION_CONTRACT.md`.
+
+> Older “CURRENT” recommendations below this separator are historical and superseded by the paragraph above.
 
 ---
 
@@ -9656,6 +9673,9 @@ exception; daughter colours related-but-distinct and never visually confusing.
 ---
 
 ## Checkpoint Log
+
+- **ROADMAP ITEM 5 — PASS 4 COMPOSITIONAL INVENTION / MATERIAL KNOWLEDGE CLOSURE CANDIDATE** (`checkpoint/item5-invention-diversity-pass4`, starting committed RED checkpoint `bf201a30ccbd16f9e039aa2f321f0b7eddd70329`) — reconciled legitimate uncommitted Pass-4 work without resetting it; added canonical bounded `HumanMaterialBelief`, normalized compositional designs, fixed-budget deterministic candidate generation, localized feedback/revision/dead-end state, degraded inheritance and diagnostic projection while preserving Pass-2 physical execution provenance. Migrated obsolete Pass-1/Pass-3 live-audit assumptions and the stale Invention-3 material-effect fixture. Controlled A–P 26/26, M1–M6 reversible mutations, TypeScript/build, Item-5 regressions, Item-4 transfer/integration, graph/import, deterministic repeat, Map-1/Map-2 natural runs and 120-year boundedness are green. Expected Pass-4 fingerprint divergence was traced to the new invention semantics rather than tuned away. Pending independent architect review; Item 5 remains open/not frozen; Item 6/WORLD-M0/roadmap rewrite/main merge not begun.
+
 
 - **ROADMAP ITEM 5 — PHYSICAL-EFFECT PROVENANCE PASS 2** (`checkpoint/item5-physical-effect-provenance-pass2`, exact base `31ced032d901e81d9d6ce56aedd997c31df1d258`, production `2d7251d4456ba52e98b6ebaddd51c54a5f5575f9`) — RED reproduced learned-material magic storage (`0.16 -> 0.22`) and unproven efficacy maturation; every variant now carries an execution class and the central `practicalResponses.ts` seam permits practice-only effects, preserves persisted `waterWorks`, and blocks portable material effects/efficacy without execution proof. Practice remains non-vacuous; no coefficients, inventory/crafting/resource stock, Item-4 logic, downstream physical consumers, or `adaptiveEfficacy.ts` formulas changed. Mutation catches the old path and restores byte-identically; final verification caught and corrected stale benchmark material-effect assertions in test-only `caeac19845c41e60a2d0740ac8c224d53d0813b9`, then the full 12-gate semantic certification including deterministic 50-year Map-2 repeat passed. Item 5 remains open; Pass 3/freeze/merge/push not started.
 

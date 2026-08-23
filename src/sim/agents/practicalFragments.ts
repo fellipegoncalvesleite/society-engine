@@ -36,7 +36,7 @@ import type {
 } from "./types";
 import { deterministicRoll } from "./inventionChain";
 
-export const FRAGMENT_CAP = 10;
+export const FRAGMENT_CAP = 20;
 const EVIDENCE_REF_CAP = 3;
 const SEASONS_PER_YEAR = 4;
 // Reinforcement/decay tuning: a fragment reinforced this season gains
@@ -355,42 +355,6 @@ export function deriveFragmentSignals(input: {
     });
   }
 
-  // A water-short camp can test an already handled flexible lining without
-  // first knowing weaving or sealing. This is a small material foothold for a
-  // leaky membrane bag, not a storage unlock; the later physical carry decides
-  // whether the fold, plug and binding actually hold.
-  if (livedWaterStress >= 0.55) {
-    signals.push({
-      domain: "technique",
-      subject: "membrane_folding",
-      property: "folded_flexible_lining_can_hold_a_small_fill",
-      publicLabel: "a folded flexible lining can be filled and watched for leaks",
-      signal: clamp01(0.35 + livedWaterStress * 0.16),
-      evidenceRef: "camp:water_shortage_membrane_test",
-      contextKey: String(band.position),
-    });
-  }
-
-  // Seal coating (compound material): regular fire use + handled material in
-  // a wooded country where gums/resins are gatherable. The property carries
-  // its own failure mode — heated coatings crack under later heat.
-  const fireSignal = Math.max(fire?.warmthValue ?? 0, fire?.usefulness ?? 0);
-  if (context?.isWoodedContext === true && fireSignal >= 0.3 && binding > 0) {
-    const accidentalObservation = deterministicRoll(
-      `gum-on-binding:${String(band.id)}:${String(context.tileId)}:${Number(band.bodyCampLogistics?.lastUpdatedTick ?? 0)}`,
-    ) < 0.18;
-    signals.push({
-      domain: "material_property",
-      subject: "seal_coating",
-      property: "heated_gum_coats_and_seals_but_cracks_in_heat",
-      publicLabel: "heated tree gum can coat and seal a seam, though heat can crack it",
-      signal: clamp01(0.26 + fireSignal * 0.2 + binding * 0.18),
-      evidenceRef: accidentalObservation ? "accidental:heated_gum_on_binding" : "fire+material:wooded_country",
-      contextKey: `wooded:${String(band.position)}`,
-      inferred: !accidentalObservation,
-    });
-  }
-
   // Groundwater reading (uncertain inference): visible damp-ground cues, or
   // remembered animal water-seeking routines, in dry country. The band forms
   // an IDEA about hidden water; only digging tests it.
@@ -447,37 +411,6 @@ export function deriveFragmentSignals(input: {
       signal: clamp01(0.26 + campGround * 0.25 + wetMemory * 0.2),
       evidenceRef: "camp_setup+wet_weather_memory",
       contextKey: String(band.position),
-    });
-  }
-
-  // Frame shaping: handled structural material in wooded country plus real
-  // camp practice — poles and frames can be shaped and braced.
-  if (context?.isWoodedContext === true && binding > 0 && campGround > 0) {
-    signals.push({
-      domain: "structure",
-      subject: "frame_shaping",
-      property: "shaped_poles_brace_a_standing_frame",
-      publicLabel: "shaped poles can brace a standing camp frame",
-      signal: clamp01(0.24 + binding * 0.25 + campGround * 0.2),
-      evidenceRef: "material+camp_setup:wooded_country",
-      contextKey: `wooded:${String(band.position)}`,
-    });
-  }
-
-  // Shaft truing: repeated hunting trips (including failures — close calls
-  // teach the need for reach) plus handled material.
-  if (huntingTrips.length >= 2 && binding > 0) {
-    const dangerous = huntingTrips.some((trip) =>
-      trip.animalActivityTrace?.dangerClass === "high" || trip.animalActivityTrace?.dangerClass === "moderate");
-    signals.push({
-      domain: "technique",
-      subject: "shaft_truing",
-      property: "trued_shafts_fly_and_strike_straighter",
-      publicLabel: "straightened shafts strike more truly at reach",
-      signal: clamp01(0.26 + Math.min(huntingTrips.length, 5) * 0.05 + (dangerous ? 0.1 : 0)),
-      evidenceRef: "trips:hunting_repeated",
-      contextKey: String(band.position),
-      inferred: true,
     });
   }
 
@@ -579,6 +512,7 @@ export function advancePracticalFragments(
   prior: readonly PracticalFragment[],
   signals: readonly FragmentSignal[],
   currentTick: TickNumber,
+  protectedFragmentIds: readonly string[] = [],
 ): readonly PracticalFragment[] {
   const byId = new Map<string, PracticalFragment>(prior.map((fragment) => [fragment.id, fragment]));
 
@@ -626,7 +560,9 @@ export function advancePracticalFragments(
     }
   }
 
-  // Deterministic eviction: keep the strongest (effective) fragments; ties by id.
+  // Dependency-aware deterministic eviction: an active idea/experiment/response
+  // dependency outranks ordinary retention until its dependent state resolves.
+  const protectedIds = new Set(protectedFragmentIds);
   return [...byId.values()]
     .map((fragment) => {
       const stale = fragmentStaleness(Number(currentTick), Number(fragment.lastReinforcedTick));
@@ -635,6 +571,8 @@ export function advancePracticalFragments(
       return fragment;
     })
     .sort((left, right) => {
+      const protectionGap = Number(protectedIds.has(right.id)) - Number(protectedIds.has(left.id));
+      if (protectionGap !== 0) return protectionGap;
       const strengthGap =
         effectiveFragmentStrength(right, Number(currentTick)) -
         effectiveFragmentStrength(left, Number(currentTick));
@@ -643,7 +581,7 @@ export function advancePracticalFragments(
     .slice(0, FRAGMENT_CAP);
 }
 
-/** Record a response-efficacy failure against the fragments it composed. */
+/** Legacy compatibility helper. Pass 4 canonical feedback uses typed localized attribution instead. */
 export function recordFragmentFailure(
   fragments: readonly PracticalFragment[],
   fragmentIds: readonly string[],
@@ -666,8 +604,7 @@ export function recordFragmentFailure(
       : fragment);
 }
 
-/** A response-specific useful physical outcome re-proves the exact component
- * fragments that were exercised; generic survival never calls this. */
+/** Legacy compatibility helper. Pass 4 live updates do not blanket-reinforce every supporting fragment. */
 export function recordFragmentSuccess(
   fragments: readonly PracticalFragment[],
   fragmentIds: readonly string[],

@@ -40899,8 +40899,11 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
       },
     }));
     const abandoned = afterFailure.responses.find((response) => response.variantKey === "load_staging");
-    const revision = afterFailure.responses.find(
-      (response) => response.family === "carrying_load" && response.variantKey !== "load_staging");
+    const revisionIdea = afterFailure.ideas.find(
+      (idea) => idea.problemId === afterFailure.problems.find((problem) => problem.family === "carrying_burden")?.id &&
+        idea.status === "selected" && idea.variantKey !== "load_staging");
+    const revisionExperiment = afterFailure.experiments.find(
+      (experiment) => experiment.ideaId === revisionIdea?.id);
 
     // (G) CONTEXT MISMATCH: water relief refuses to apply without a remembered
     // watered destination; a consumed relief without the context classifies as
@@ -40995,7 +40998,8 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
       planWith: { budget: planWith.budget, carrying: planWith.appliedCarryingRelief, water: planWith.appliedWaterRelief },
       planWithout: { budget: planWithout.budget },
       planUnmatchedWater: { budget: planUnmatchedWater.budget, water: planUnmatchedWater.appliedWaterRelief },
-      carryingClear, clearResponse, carryingFailure, abandoned, revision,
+      carryingClear, clearResponse, carryingFailure, abandoned,
+      revisionIdea, revisionExperiment,
       mismatchRelief, mismatchEval, waterDanger,
       dormantResponse, dormantRelief, rewokenResponse,
       unburdenedEval,
@@ -41119,9 +41123,11 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
       unit.carryingFailure?.classification === "failure_or_danger_specific" &&
       unit.carryingFailure?.outcome === "dangerous_feedback",
     repeated_failure_abandons: unit.abandoned?.status === "abandoned",
-    failure_revises_into_alternative_composition:
-      unit.revision !== undefined && unit.revision.revisionOf === unit.abandoned?.id &&
-      unit.revision.variantKey !== "load_staging",
+    failure_revises_into_alternative_composition_plan_without_fabricated_effect:
+      unit.revisionIdea !== undefined && unit.revisionIdea.variantKey !== "load_staging" &&
+      unit.revisionIdea.designSignature !== undefined &&
+      unit.revisionExperiment?.status === "underway" && unit.revisionExperiment.executionOccurred === false &&
+      unit.triggerState.responses.every((response) => response.id !== unit.revisionExperiment?.responseId),
     // (G) context mismatch
     water_relief_refuses_unmatched_destination: unit.mismatchRelief.active === false,
     consumed_relief_without_context_is_mismatch:
@@ -41213,8 +41219,16 @@ function runTargetedRoutines2Check(modules, options) {
     ...baseBand,
     practicalAdaptation: {
       bandId: baseBand.id, lastUpdatedTick: tick, fragments: engineeringFragments,
-      responses: [], efficacyRecords: [],
-      caps: { fragmentCap: 10, responseCap: 5, recordCap: 4, held: true },
+      // Pass 4 separates technical fragments from canonical human material beliefs.
+      // This controlled fixture intentionally seeds both known property classes; raw
+      // fragments alone must no longer manufacture material knowledge.
+      materialBeliefs: [
+        { id: `material-belief:${String(baseBand.id)}:tested_floating_bundle_material`, materialCategory: "tested_floating_bundle_material", publicLabel: "tested floating bundle material", properties: [{ property: "structural_load", confidence: 0.84, evidenceRefs: ["audit:direct_experiment"], contradictionRefs: [] }], knownContexts: [contextKey], provenance: "lived", handlingDepth: "transformed_tested", contradictionRefs: [], lastReinforcedTick: tick, originalContext: { contextKey, sourceBandId: baseBand.id } },
+        { id: `material-belief:${String(baseBand.id)}:handled_binding_material`, materialCategory: "handled_binding_material", publicLabel: "handled binding material", properties: [{ property: "tensile_fibrous", confidence: 0.84, evidenceRefs: ["audit:direct_experiment"], contradictionRefs: [] }], knownContexts: [contextKey], provenance: "lived", handlingDepth: "transformed_tested", contradictionRefs: [], lastReinforcedTick: tick, originalContext: { contextKey, sourceBandId: baseBand.id } },
+      ],
+      designHints: [], revisionLessons: [],
+      responses: [], efficacyRecords: [], problems: [], ideas: [], experiments: [],
+      caps: { fragmentCap: 20, materialBeliefCap: 12, designHintCap: 8, revisionLessonCap: 8, responseCap: 12, recordCap: 12, problemCap: 6, ideaCap: 8, experimentCap: 4, held: true },
     },
     recentResidentialMoveEvents: [{ temporaryWatercraft: craftAssessment }],
   };
@@ -41556,8 +41570,9 @@ function runTargetedRoutines2Check(modules, options) {
       failedComplexExperiment?.status === "underway" && failedComplexExperiment.attemptSeasons === 0 &&
       failedComplexRecords.length === 0,
     unexecuted_material_failure_cannot_spawn_revision: fallbackRevision === undefined,
-    abandoned_variant_can_be_rediscovered_after_block:
-      rediscoveredResponse !== undefined && rediscoveredResponse.variantKey === directResponse?.variantKey,
+    failed_path_keeps_family_accessible_and_can_select_alternative:
+      rediscoveredResponse !== undefined && rediscoveredResponse.family === directResponse?.family &&
+      rediscoveredResponse.variantKey !== directResponse?.variantKey,
     contradiction_weakens_components: contradictedFragments.some((fragment) => fragment.knowledgeState === "tentative" || fragment.knowledgeState === "contradicted"),
     repeated_contradiction_can_mark_inference_incorrect: incorrectFragments.some((fragment) => fragment.knowledgeState === "incorrect"),
     staleness_can_make_knowledge_dormant: staleFragments.every((fragment) => fragment.knowledgeState === "stale" || fragment.knowledgeState === "dormant"),
@@ -57874,16 +57889,34 @@ function runTargetedInvention3Audit(modules, options) {
     contradictionCount: 0,
     contextKeys: [String(sourceBand.position)],
   });
-  const emptyState = (bandId, fragments = [], responses = []) => ({
+  const materialBelief = (bandId, materialCategory, properties, publicLabel = materialCategory.replace(/_/g, " ")) => ({
+    id: `material-belief:${String(bandId)}:${materialCategory}`,
+    materialCategory,
+    publicLabel,
+    properties: properties.map((property) => ({ property, confidence: 0.9, evidenceRefs: [`fixture:${materialCategory}:${property}`], contradictionRefs: [] })),
+    knownContexts: [String(sourceBand.position)],
+    provenance: "lived",
+    handlingDepth: "transformed_tested",
+    contradictionRefs: [],
+    lastReinforcedTick: tick,
+    originalContext: { contextKey: String(sourceBand.position), sourceBandId: bandId },
+  });
+  const emptyState = (bandId, fragments = [], responses = [], materialBeliefs = []) => ({
     bandId,
     lastUpdatedTick: tick,
     fragments,
+    materialBeliefs,
+    designHints: [],
+    revisionLessons: [],
     responses,
     efficacyRecords: [],
     problems: [],
     ideas: [],
     experiments: [],
-    caps: { fragmentCap: 10, responseCap: 10, recordCap: 12, problemCap: 5, ideaCap: 8, experimentCap: 4, held: true },
+    caps: {
+      fragmentCap: 20, materialBeliefCap: 12, designHintCap: 8, revisionLessonCap: 8,
+      responseCap: 12, recordCap: 12, problemCap: 6, ideaCap: 8, experimentCap: 4, held: true,
+    },
   });
   const makeResponse = (band, family, variantKey, required, confidence = 0.62) => ({
     id: `practical-response:${String(band.id)}:${family}:${variantKey}:fixture`,
@@ -57914,6 +57947,9 @@ function runTargetedInvention3Audit(modules, options) {
     },
     practicalAdaptation: emptyState("band:invention-chain-fixture", [
       fragment("container_holding"), fragment("fiber_cordage", 0.55), fragment("seal_coating", 0.9, "accidental:heated_gum_on_binding"),
+    ], [], [
+      materialBelief("band:invention-chain-fixture", "worked_plant_fiber", ["interlacing_twisting", "tensile_fibrous", "flexibility"]),
+      materialBelief("band:invention-chain-fixture", "handled_sealing_coating", ["coating_binding", "heat_response", "porosity_water_barrier"]),
     ]),
   };
   const formed = modules.practicalResponses.advancePracticalAdaptation({
@@ -57925,8 +57961,9 @@ function runTargetedInvention3Audit(modules, options) {
     residenceContext: { tileId: String(pressuredBand.position), droughtRisk: 0.8, isWoodedContext: true, dampGroundCue: false, season: "summer" },
     groundwaterContext: { tileId: pressuredBand.position, surfaceWaterAccess: 0.05, droughtRisk: 0.8, isFloodplainOrValley: false, season: "summer" },
   });
-  const formedStorage = formed.responses.find((entry) => entry.family === "water_storage");
-  const formedExperiment = formed.experiments.find((entry) => entry.responseId === formedStorage?.id);
+  const formedSelectedIdea = formed.ideas.find((entry) => entry.family === "water_storage" && entry.status === "selected");
+  const formedStorage = formed.responses.find((entry) => entry.ideaId === formedSelectedIdea?.id);
+  const formedExperiment = formed.experiments.find((entry) => entry.ideaId === formedSelectedIdea?.id);
   const closureEfficacy = formedStorage === undefined ? undefined : modules.adaptiveEfficacy.evaluateWaterStorageEfficacy({
     moved: true,
     context: { reliefApplied: 0.14, responseId: formedStorage.id, conditionPresent: true, budgetWithRelief: 3, budgetWithoutRelief: 2, waterStressBefore: 0.72, waterStressAfter: 0.58, sealCracked: false },
@@ -57941,8 +57978,8 @@ function runTargetedInvention3Audit(modules, options) {
     residenceContext: { tileId: String(pressuredBand.position), droughtRisk: 0.8, isWoodedContext: true, dampGroundCue: false, season: "summer" },
     groundwaterContext: { tileId: pressuredBand.position, surfaceWaterAccess: 0.05, droughtRisk: 0.8, isFloodplainOrValley: false, season: "summer" },
   });
-  const closedResponse = closed.responses.find((entry) => entry.id === formedStorage?.id);
-  const closedExperiment = closed.experiments.find((entry) => entry.responseId === formedStorage?.id);
+  const closedResponse = closed.responses.find((entry) => entry.ideaId === formedSelectedIdea?.id);
+  const closedExperiment = closed.experiments.find((entry) => entry.id === formedExperiment?.id);
 
   const quietBand = { ...sourceBand, id: "band:quiet-no-invention", practicalAdaptation: undefined, pressureState: undefined, recentResidentialMoveEvents: undefined };
   const quiet = modules.practicalResponses.advancePracticalAdaptation({ band: quietBand, currentTick: tick, moved: false, residentialMoveDistance: 0, crossedThisSeason: false });
@@ -58079,12 +58116,23 @@ function runTargetedInvention3Audit(modules, options) {
   const liveBands = Object.values(liveA.bands);
   const familyCounts = {};
   let maxStateBytes = 0;
-  let maxCounts = { fragments: 0, responses: 0, efficacy: 0, problems: 0, ideas: 0, experiments: 0, waterworks: 0 };
+  let maxCounts = { fragments: 0, materialBeliefs: 0, designHints: 0, revisionLessons: 0, responses: 0, efficacy: 0, problems: 0, ideas: 0, experiments: 0, waterworks: 0 };
   for (const band of liveBands) {
     const state = band.practicalAdaptation;
     if (state === undefined) continue;
     maxStateBytes = Math.max(maxStateBytes, JSON.stringify(state).length);
-    maxCounts = { fragments: Math.max(maxCounts.fragments, state.fragments.length), responses: Math.max(maxCounts.responses, state.responses.length), efficacy: Math.max(maxCounts.efficacy, state.efficacyRecords.length), problems: Math.max(maxCounts.problems, state.problems?.length ?? 0), ideas: Math.max(maxCounts.ideas, state.ideas?.length ?? 0), experiments: Math.max(maxCounts.experiments, state.experiments?.length ?? 0), waterworks: Math.max(maxCounts.waterworks, state.waterWorks === undefined ? 0 : 1) };
+    maxCounts = {
+      fragments: Math.max(maxCounts.fragments, state.fragments.length),
+      materialBeliefs: Math.max(maxCounts.materialBeliefs, state.materialBeliefs?.length ?? 0),
+      designHints: Math.max(maxCounts.designHints, state.designHints?.length ?? 0),
+      revisionLessons: Math.max(maxCounts.revisionLessons, state.revisionLessons?.length ?? 0),
+      responses: Math.max(maxCounts.responses, state.responses.length),
+      efficacy: Math.max(maxCounts.efficacy, state.efficacyRecords.length),
+      problems: Math.max(maxCounts.problems, state.problems?.length ?? 0),
+      ideas: Math.max(maxCounts.ideas, state.ideas?.length ?? 0),
+      experiments: Math.max(maxCounts.experiments, state.experiments?.length ?? 0),
+      waterworks: Math.max(maxCounts.waterworks, state.waterWorks === undefined ? 0 : 1),
+    };
     for (const response of state.responses) familyCounts[response.family] = (familyCounts[response.family] ?? 0) + 1;
   }
   const aridBands = Object.values(aridRun.world.bands);
@@ -58137,30 +58185,56 @@ function runTargetedInvention3Audit(modules, options) {
   };
 
   const checks = {
-    canonicalChainClosedNextTick: formedStorage?.status === "forming" && formedExperiment?.status === "underway" && closedResponse?.status === "active" && (closedExperiment?.status === "concluded_success" || closedExperiment?.status === "concluded_partial") && (closedExperiment?.attemptSeasons ?? 0) >= 1,
+    canonicalMaterialPlanCannotCloseWithoutExecution:
+      formedSelectedIdea?.family === "water_storage" && formedExperiment?.status === "underway" &&
+      formedExperiment.executionOccurred === false && closedExperiment?.status === "underway" &&
+      closedExperiment.executionOccurred === false && (closedExperiment.attemptSeasons ?? 0) === 0 &&
+      (formedStorage === undefined || closedResponse?.status === "forming") &&
+      closed.efficacyRecords.every((record) => record.responseId !== formedExperiment.responseId),
     noSpontaneousInvention: quiet.responses.length === 0 && (quiet.ideas?.length ?? 0) === 0 && (quiet.experiments?.length ?? 0) === 0,
     wrongFrameRevisedByContradiction: misreadFrame?.misread === true && revisedFrame?.misread === false && revisedFrame?.status === "revised",
-    waterStorageCapacityLeakageWeightDuration: coolCarrier.capacity > 0 && coolCarrier.leakage > 0 && coolCarrier.carryingBurden > 0 && coolCarrier.routeDurationSteps === 4 && coolCarrier.consumedShare > 0,
-    sealedCarrierCanCrackInHeat: crackedCarrier?.sealCracked === true && crackedCarrier.relief === 0 && crackedCarrier.leakage === 1,
-    carriedWaterChangesRealPlan: storagePlan.appliedCarriedWaterRelief?.active === true && (storagePlan.budget > storagePlanOff.budget || storagePlan.limiters.join("|") !== storagePlanOff.limiters.join("|")),
-    protoMeasureChangesProvisioningError: coolCarrier.measurementResponseId === measureResponse.id && coolCarrier.provisioningAccuracy > 0.75,
-    shelterMatchMismatchAndBurden: wetShelter.active && wetShelter.relief > 0 && !heatShelter.active && modules.practicalResponses.deriveShelterPortabilityBurden(shelterBand) > 0 && shelterEval?.classification.includes("success"),
-    huntingPreyMatchLaborReturnWariness: huntMatched.contextMatched && huntMatched.laborShift > 0 && huntMatched.returnShift > 0 && !huntMismatch.contextMatched && huntingEval?.responseActive === true,
-    medicineUsefulMismatchHarm: usefulCare?.relief > 0 && mismatchedCare.attempted && !mismatchedCare.matched && harmfulCare?.harmful === true && harmfulCareEval?.outcome === "dangerous_feedback",
-    repeatedFailureAbandons: abandonedCare?.status === "abandoned" && abandonedCare.failureCount >= 3,
+    unexecutedWaterStorageHasZeroPhysicalEffect:
+      coolCarrier.active === false && coolCarrier.relief === 0 && coolCarrier.capacity === 0 &&
+      coolCarrier.leakage === 0 && coolCarrier.carryingBurden === 0 && coolCarrier.consumedShare === 0 &&
+      /physical execution proof/.test(coolCarrier.reason),
+    unexecutedSealedCarrierCannotFabricateHeatFailure: crackedCarrier === undefined,
+    unexecutedCarriedWaterCannotChangeRealPlan:
+      storagePlan.appliedCarriedWaterRelief?.active !== true &&
+      storagePlan.budget === storagePlanOff.budget &&
+      storagePlan.limiters.join("|") === storagePlanOff.limiters.join("|"),
+    practiceOnlyProtoMeasureStillImprovesReckoning:
+      modules.practicalResponses.deriveProvisioningAccuracy(storageBand, tick) > 0.75,
+    unexecutedShelterHasZeroReliefAndBurden:
+      wetShelter.active === false && wetShelter.relief === 0 && heatShelter.active === false &&
+      modules.practicalResponses.deriveShelterPortabilityBurden(shelterBand) === 0,
+    unexecutedHuntingMaterialHasNoAttemptOrEffect:
+      huntMatched.active === false && huntMatched.relief === 0 && huntMatched.attempted === false &&
+      huntMismatch.active === false && huntMismatch.attempted === false,
+    unexecutedCareMaterialCannotTreatHarmOrAbandon:
+      usefulCare?.attempted === false && usefulCare.relief === 0 && harmfulCare === undefined &&
+      mismatchedCare.attempted === false && abandonedCare?.status === "active" && abandonedCare.failureCount === 0,
     groundwaterDryAndVariable: dryHole?.status === "dry_hole" && wetOutcome !== undefined && collapsedPit?.status === "collapsed" && contaminatedSeep?.status === "contaminated_seep",
     groundwaterLocalOnly: localRelief?.active === true && otherTileRelief?.active === false,
     groundwaterLaborConsumed: (dryHole?.laborPaid ?? 0) > 0 && (dryHole?.lastLaborCost ?? 0) > 0,
-    compoundPreparationMeasuredAndFails: formedExperiment?.materials.some((item) => /gum|resin/i.test(item)) === true && /warm|mix|cool|test/i.test(formedExperiment?.procedure ?? "") && coolCarrier.leakage < 0.2 && crackedCarrier?.sealCracked === true,
+    materialPreparationRemainsPlanOnlyWithoutExecution:
+      formedExperiment !== undefined && formedExperiment.materials.length > 0 && formedExperiment.procedure.length > 0 &&
+      formedExperiment.executionOccurred === false && formedExperiment.status === "underway" &&
+      coolCarrier.relief === 0,
     engineeringBeyondRaft: linedWell?.status === "shallow_well" && (linedWell.laborPaid ?? 0) > 0 && (linedWell.digSeasons ?? 0) >= 4,
-    daughterGetsHintsNotCompetence: inherited !== undefined && inherited.responses.length === 0 && (inherited.ideas?.length ?? 0) === 0 && (inherited.experiments?.length ?? 0) === 0 && inherited.waterWorks === undefined,
+    daughterGetsHintsNotCompetence:
+      inherited !== undefined && inherited.responses.length === 0 && (inherited.ideas?.length ?? 0) === 0 &&
+      (inherited.experiments?.length ?? 0) === 0 && inherited.waterWorks === undefined &&
+      (inherited.materialBeliefs?.length ?? 0) > 0 && (inherited.designHints?.length ?? 0) > 0,
     staticCrossingGateRemoved: !/band\.technologies\.includes/.test(sourceBandDecision.slice(sourceBandDecision.indexOf("function getBandRiverCrossingCapability"), sourceBandDecision.indexOf("function formatRiverCapability"))),
     spawnStorageNotTagFrozen: /storageCapacity:\s*0\.16/.test(sourceSpawn) && !/storageCapacity:\s*profile\.technologies\.includes/.test(sourceSpawn),
     daughterStaticCompetenceRemoved: /technologies:\s*parent\.technologies\.filter/.test(sourceDemography) && /storageCapacity:\s*0\.16/.test(sourceDemography),
     deterministicFullInventionState: inventionFingerprint(liveA) === inventionFingerprint(liveB),
     liveNormalWorldActivated: Object.keys(familyCounts).length > 0,
     aridLiveProblemsAndAttempts: aridSurvival.activeBands > 0 && aridProblems.length > 0 && aridIdeas.length >= 2 && aridExperiments.length > 0,
-    capsHeld: maxCounts.fragments <= 10 && maxCounts.responses <= 10 && maxCounts.efficacy <= 12 && maxCounts.problems <= 5 && maxCounts.ideas <= 8 && maxCounts.experiments <= 4 && maxCounts.waterworks <= 1,
+    capsHeld:
+      maxCounts.fragments <= 20 && maxCounts.materialBeliefs <= 12 && maxCounts.designHints <= 8 && maxCounts.revisionLessons <= 8 &&
+      maxCounts.responses <= 12 && maxCounts.efficacy <= 12 && maxCounts.problems <= 6 &&
+      maxCounts.ideas <= 8 && maxCounts.experiments <= 4 && maxCounts.waterworks <= 1,
   };
   const failures = Object.entries(checks).filter(([, value]) => !value).map(([name]) => name);
   return {
@@ -58185,7 +58259,7 @@ function runTargetedInvention3Audit(modules, options) {
       wrongFraming: { before: misreadFrame, after: revisedFrame },
     },
     live: { years: options.years ?? 40, bands: liveBands.length, familyCounts, deterministic: checks.deterministicFullInventionState, aridSurvival },
-    bounds: { caps: { fragments: 10, responses: 10, efficacyRecords: 12, problems: 5, ideas: 8, experiments: 4, waterworks: 1 }, maxObserved: maxCounts, maxPerBandStateBytes: maxStateBytes },
+    bounds: { caps: { fragments: 20, materialBeliefs: 12, designHints: 8, revisionLessons: 8, responses: 12, efficacyRecords: 12, problems: 6, ideas: 8, experiments: 4, waterworks: 1 }, maxObserved: maxCounts, maxPerBandStateBytes: maxStateBytes },
     performance: { totalMs: round2(performance.now() - started), twoLiveRunsMs: round2(liveMs), meanLiveRunMs: round2(liveMs / 2), microIterations, phaseMicroMs },
   };
 }

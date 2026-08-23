@@ -67,8 +67,6 @@ import {
   effectiveFragmentStrength,
   findFragment,
   inheritFragmentsForDaughter,
-  recordFragmentFailure,
-  recordFragmentSuccess,
   FRAGMENT_CAP,
   type DigOutcomeSignal,
   type FragmentResidenceContext,
@@ -88,8 +86,24 @@ import {
   type IdeaOption,
   type ProblemSignal,
 } from "./inventionChain";
+import {
+  advanceHumanMaterialBeliefs,
+  applyTypedFeedback,
+  deriveDesignHintsFromIdeas,
+  deriveLocalReproducibility,
+  generateCompositionalCandidateSet,
+  inheritDesignHintsForDaughter,
+  inheritMaterialBeliefsForDaughter,
+  MATERIAL_BELIEF_CAP,
+  RAW_CANDIDATE_GLOBAL_CAP,
+  recordRevisionLesson,
+  REVISION_LESSON_CAP,
+  DESIGN_HINT_CAP,
+  type CompositionalCandidate,
+} from "./compositionalInvention";
+import { deriveMaterialBeliefSignals } from "./materialEvidence";
 
-export const RESPONSE_CAP = 10;
+export const RESPONSE_CAP = 12;
 export const PRACTICAL_RECORD_CAP = 12;
 // Effect caps (same conservative family as crossing practice's 0.35): most of
 // the underlying constraint is ALWAYS still paid.
@@ -559,6 +573,9 @@ for (const spec of VARIANT_SPECS) {
   VARIANTS_BY_FAMILY.set(spec.family, [...existing, spec]);
 }
 
+// Pass 4: this registry is a historical template/effect-adapter catalog, not
+// the universe of possible designs. `requiredSubjects` are adapter support
+// rules for these named historical variants, never universal recipes.
 export function derivePracticalVariantExecutionClass(
   family: PracticalResponseFamily,
   variantKey: string,
@@ -1435,6 +1452,7 @@ export interface PracticalAdaptationAdvanceInput {
   // waterworks physical outcome only.
   readonly residenceContext?: FragmentResidenceContext;
   readonly groundwaterContext?: GroundwaterContext;
+  readonly runSeed?: number;
 }
 
 function applyEfficacyToResponse(
@@ -1613,88 +1631,127 @@ function formResponsesThroughProblems(input: {
   readonly frames: readonly PracticalProblemFrame[];
   readonly responses: readonly PracticalResponseState[];
   readonly fragments: readonly PracticalFragment[];
+  readonly materialBeliefs: NonNullable<PracticalAdaptationState["materialBeliefs"]>;
+  readonly designHints: NonNullable<PracticalAdaptationState["designHints"]>;
+  readonly revisionLessons: NonNullable<PracticalAdaptationState["revisionLessons"]>;
+  readonly priorIdeas: readonly PracticalIdeaCandidate[];
+  readonly priorExperiments: readonly PracticalExperiment[];
   readonly freshlyAbandonedByFamily: ReadonlyMap<PracticalResponseFamily, PracticalResponseState>;
   readonly currentTick: TickNumber;
+  readonly runSeed: string;
+  readonly localContextKey: string;
 }): FormationResult {
   const tick = Number(input.currentTick);
   const tendencies = deriveBandTendencies(input.band);
   let responses = input.responses;
   const ideas: PracticalIdeaCandidate[] = [];
   const startedExperiments: PracticalExperiment[] = [];
+  let rawBudgetRemaining = RAW_CANDIDATE_GLOBAL_CAP;
 
-  for (const frame of input.frames) {
-    if (frame.status !== "active" && frame.status !== "revised") {
-      continue;
-    }
-    const mappedFamilies = PROBLEM_TO_FAMILIES.get(frame.family) ?? [];
-    // Families of this problem that have no live response yet, in stable order.
-    const openFamilies = FAMILY_ORDER.filter((family) =>
-      mappedFamilies.includes(family) &&
-      !responses.some((response) => response.family === family && response.status !== "abandoned"));
-    if (openFamilies.length === 0) {
-      continue;
-    }
+  const orderedFrames = [...input.frames].sort((left, right) =>
+    right.severity - left.severity || left.id.localeCompare(right.id));
+  for (const frame of orderedFrames) {
+    if (rawBudgetRemaining <= 0) break;
+    if (frame.status !== "active" && frame.status !== "revised") continue;
+
     const threshold = baseThresholdForProblem(frame.family) *
       (1 - tendencies.routineReliance * 0.15) * (1 + tendencies.attachment * 0.15);
-    if (frame.severity < Math.max(CONDITION_FLOOR, threshold)) {
-      continue;
-    }
+    if (frame.severity < Math.max(CONDITION_FLOOR, threshold)) continue;
 
-    // Bounded idea options: family-indexed variant specs, fragment-filtered.
-    const options: IdeaOption[] = [];
-    for (const family of openFamilies) {
-      const blockedKeys = responses
-        .filter((response) =>
-          response.family === family &&
-          response.status === "abandoned" &&
-          tick - Number(response.lastActiveTick) < REDISCOVERY_BLOCK_TICKS)
-        .map((response) => response.variantKey);
-      for (const spec of (VARIANTS_BY_FAMILY.get(family) ?? []).slice(0, RAW_VARIANT_CANDIDATE_CAP)) {
-        if (blockedKeys.includes(spec.variantKey)) {
-          continue;
-        }
-        const { basis, fragmentIds } = variantBasis(spec, input.fragments, tick);
-        if (fragmentIds.length === 0) {
-          continue; // no material/technique foothold at all
-        }
-        options.push({
-          family,
-          variantKey: spec.variantKey,
-          publicLabel: spec.publicLabel,
-          mechanismBelief: spec.mechanismBelief ?? spec.contextNote,
-          basisFragmentIds: fragmentIds,
-          basisScore: basis,
-          basisFloor: spec.basisFloor,
-          costNote: spec.costNote ?? "more labor for the same help",
-          source: ideaSourceForBasis(input.fragments, fragmentIds, basis,
-            !responses.some((response) => response.family === family)),
-        });
-      }
-    }
-    if (options.length === 0) {
-      continue;
-    }
-
-    const selection = selectIdeaForProblem({
-      frame,
-      options: options.slice(0, RAW_VARIANT_CANDIDATE_CAP),
-      currentTick: input.currentTick,
+    const candidateSet = generateCompositionalCandidateSet({
+      bandId: String(input.band.id),
+      runSeed: input.runSeed,
+      problem: frame,
+      fragments: input.fragments,
+      materialBeliefs: input.materialBeliefs,
+      priorIdeas: input.priorIdeas,
+      designHints: input.designHints,
+      revisionLessons: input.revisionLessons,
+      currentTick: tick,
+      localContextKey: input.localContextKey,
+      rawBudget: Math.min(RAW_VARIANT_CANDIDATE_CAP, rawBudgetRemaining),
     });
-    ideas.push(...selection.ideas.slice(0, TOP_VARIANT_CANDIDATE_CAP + 1));
+    rawBudgetRemaining -= candidateSet.rawConsidered;
+
+    const candidates = candidateSet.shortlist.filter((candidate) => {
+      const blockedHistorical = candidate.templateVariantKey !== undefined && responses.some((response) =>
+        response.family === candidate.family && response.variantKey === candidate.templateVariantKey &&
+        response.status === "abandoned" && tick - Number(response.lastActiveTick) < REDISCOVERY_BLOCK_TICKS);
+      if (blockedHistorical) return false;
+      const liveHistorical = candidate.templateVariantKey !== undefined && responses.some((response) =>
+        response.family === candidate.family && response.status !== "abandoned");
+      if (liveHistorical) return false;
+      const alreadyPlanned = input.priorExperiments.some((experiment) =>
+        experiment.designSignature === candidate.design.signature && experiment.problemId === frame.id && experiment.status === "underway");
+      return !alreadyPlanned;
+    });
+    if (candidates.length === 0) continue;
+
+    const options: IdeaOption[] = candidates.map((candidate) => ({
+      family: candidate.family,
+      variantKey: candidate.persistenceVariantKey,
+      publicLabel: candidate.publicLabel,
+      mechanismBelief: candidate.mechanismBelief,
+      basisFragmentIds: candidate.fragmentIds,
+      basisScore: candidate.score,
+      basisFloor: candidate.basisFloor,
+      costNote: candidate.localReproducibility === "supported"
+        ? "locally supported at the level of current human evidence"
+        : "local material support remains incomplete",
+      source: candidate.source,
+      design: candidate.design,
+      materialBindings: candidate.materialBindings,
+      sourceEvidenceRefs: candidate.provenance.evidenceRefs,
+      ...(candidate.provenance.priorIdeaId === undefined ? {} : { parentIdeaId: candidate.provenance.priorIdeaId }),
+      ...(candidate.changedDimension === undefined ? {} : { changedDimension: candidate.changedDimension }),
+      localReproducibility: candidate.localReproducibility === "supported" ? "supported" : candidate.localReproducibility === "blocked" ? "blocked" : "unknown",
+    }));
+
+    const selection = selectIdeaForProblem({ frame, options, currentTick: input.currentTick });
+    ideas.push(...selection.ideas.slice(0, TOP_VARIANT_CANDIDATE_CAP));
     const selected = selection.selected;
-    if (selected === undefined) {
-      continue;
-    }
+    if (selected === undefined || selected.designSignature === undefined) continue;
+    const candidate = candidates.find((entry) =>
+      entry.persistenceVariantKey === selected.variantKey && entry.design.signature === selected.designSignature);
+    if (candidate === undefined) continue;
+
+    const effectTarget = PRACTICAL_RESPONSE_REGISTRY.find((entry) => entry.family === selected.family)?.effectTarget
+      ?? "a bounded practical coefficient";
+    const materialLabels = candidate.materialBindings.map((binding) => {
+      const belief = input.materialBeliefs.find((entry) => entry.id === binding.materialBeliefId);
+      return `${binding.role}: ${belief?.publicLabel ?? binding.materialBeliefId}`;
+    });
+    const procedure = candidate.design.operations.length === 0
+      ? `practice and compare ${candidate.publicLabel} under the current problem`
+      : candidate.design.operations.map((operation) => operation.operation).join(" → ");
+    const estimatedLabor = Math.min(0.2, 0.04 + candidate.design.operations.length * 0.025 + candidate.design.componentRoles.length * 0.02);
+    const estimatedRisk = Math.min(0.28, 0.04 + candidate.design.operations.length * 0.02);
+
     const spec = VARIANT_SPECS.find((entry) =>
       entry.family === selected.family && entry.variantKey === selected.variantKey);
     if (spec === undefined) {
+      // Novel compositional hypotheses are canonical knowledge/plans but have no
+      // effect adapter. No response state is manufactured for them.
+      const planId = `hypothesis-plan:${String(input.band.id)}:${frame.id}:${selected.designSignature}`;
+      startedExperiments.push(startExperiment({
+        idea: selected,
+        responseId: planId,
+        expectedEffect: effectTarget,
+        materials: materialLabels,
+        procedure,
+        laborCost: estimatedLabor,
+        riskCost: estimatedRisk,
+        opportunityCost: "planned work would displace other subsistence tasks if a future executor can actually perform it",
+        observationBasis: selected.source === "accident" ? "direct" : "inferred",
+        contextKey: frame.contextKey,
+        currentTick: input.currentTick,
+      }));
       continue;
     }
 
-    const revisedFrom = input.freshlyAbandonedByFamily.get(selected.family);
-    // Direct discovery: a strong fragment basis at formation starts more
-    // confident (observations aligned); a thin basis starts weak.
     const responseId = `practical-response:${String(input.band.id)}:${selected.family}:${selected.variantKey}:${tick}`;
+    const parentResponse = selected.parentIdeaId === undefined ? undefined : responses.find((entry) => entry.ideaId === selected.parentIdeaId);
+    const revisedFrom = parentResponse ?? input.freshlyAbandonedByFamily.get(selected.family);
     const response: PracticalResponseState = {
       id: responseId,
       family: selected.family,
@@ -1718,19 +1775,17 @@ function formResponsesThroughProblems(input: {
     startedExperiments.push(startExperiment({
       idea: selected,
       responseId,
-      expectedEffect: PRACTICAL_RESPONSE_REGISTRY.find((entry) => entry.family === selected.family)?.effectTarget
-        ?? "a bounded practical coefficient",
-      materials: spec.materials ?? spec.requiredSubjects.map((subject) => subject.replace(/_/g, " ")),
-      procedure: spec.procedure ?? `assemble and test ${spec.publicLabel} under the problem's current conditions`,
-      laborCost: spec.laborCost ?? Math.min(0.2, 0.05 + spec.requiredSubjects.length * 0.035),
-      riskCost: spec.riskCost ?? Math.min(0.28, 0.04 + spec.requiredSubjects.length * 0.04),
+      expectedEffect: effectTarget,
+      materials: spec.materials ?? (materialLabels.length > 0 ? materialLabels : selected.basisFragmentIds),
+      procedure: spec.procedure ?? procedure,
+      laborCost: spec.laborCost ?? estimatedLabor,
+      riskCost: spec.riskCost ?? estimatedRisk,
       opportunityCost: spec.costNote ?? "working hands leave other subsistence tasks while the test is made",
       observationBasis: selected.source === "accident" ? "direct" : "inferred",
       contextKey: frame.contextKey,
       currentTick: input.currentTick,
     }));
   }
-
   return { responses, ideas, startedExperiments };
 }
 
@@ -2001,14 +2056,45 @@ function buildPracticalRecord(
   };
 }
 
+function typedFeedbackForEfficacy(
+  efficacy: EfficacyEvaluation,
+  response: PracticalResponseState,
+  ideas: readonly PracticalIdeaCandidate[],
+): PracticalExperiment["observedFeedback"] | undefined {
+  const idea = response.ideaId === undefined ? undefined : ideas.find((entry) => entry.id === response.ideaId);
+  const designSignature = idea?.designSignature ?? `legacy-design:${response.family}:${response.variantKey}`;
+  const evidenceRefs = [`efficacy:${efficacy.family}:${efficacy.classification}:${efficacy.contextKey ?? "context-unknown"}`];
+  switch (efficacy.classification) {
+    case "clear_success_specific":
+      return { feedbackClass: "context_specific_success", attributionQuality: "design_level", designSignature, implicatedFragmentIds: [], implicatedMaterialBeliefIds: [], evidenceRefs, contextKey: efficacy.contextKey };
+    case "partial_success_specific":
+      return { feedbackClass: "partial_success", attributionQuality: "design_level", designSignature, implicatedFragmentIds: [], implicatedMaterialBeliefIds: [], evidenceRefs, contextKey: efficacy.contextKey };
+    case "context_mismatch":
+      return { feedbackClass: "environmental_mismatch", attributionQuality: "design_level", designSignature, implicatedFragmentIds: [], implicatedMaterialBeliefIds: [], evidenceRefs, contextKey: efficacy.contextKey };
+    case "failure_or_danger_specific":
+      return {
+        feedbackClass: (efficacy.dangerDelta ?? 0) > 0 ? "risk_injury" : "ambiguous_unknown_failure",
+        attributionQuality: "unknown",
+        designSignature,
+        implicatedFragmentIds: [],
+        implicatedMaterialBeliefIds: [],
+        evidenceRefs,
+        contextKey: efficacy.contextKey,
+      };
+    default:
+      return undefined;
+  }
+}
+
 export function advancePracticalAdaptation(
   input: PracticalAdaptationAdvanceInput,
 ): PracticalAdaptationState {
   const prior = input.band.practicalAdaptation;
   const tick = Number(input.currentTick);
+  const localContextKey = input.residenceContext?.tileId ?? String(input.band.position);
 
-  // (0) Waterworks physics FIRST: this season's dig outcome is itself
-  // fragment evidence (pit support) and groundwater efficacy evidence.
+  // (0) Existing narrow physical authority first. A dig outcome may become
+  // human evidence; it does not expose hidden substrate truth to the generator.
   const waterWorksResult = advanceWaterWorks({
     band: input.band,
     prior: prior?.waterWorks,
@@ -2017,7 +2103,8 @@ export function advancePracticalAdaptation(
     currentTick: input.currentTick,
   });
 
-  // (1) Learned fragments from this season's lived evidence.
+  // (1) Lived technical signals and the temporary observation→material-belief
+  // seam. Active dependencies outrank ordinary retention.
   const signals = deriveFragmentSignals({
     band: input.band,
     moved: input.moved,
@@ -2027,10 +2114,35 @@ export function advancePracticalAdaptation(
     residenceContext: input.residenceContext,
     digOutcome: waterWorksResult.digOutcome,
   });
-  let fragments = advancePracticalFragments(prior?.fragments ?? [], signals, input.currentTick);
+  const protectedFragmentIds = [...new Set([
+    ...(prior?.ideas ?? []).filter((idea) => idea.status === "selected" || idea.status === "considered").flatMap((idea) => idea.basisFragmentIds),
+    ...(prior?.experiments ?? []).filter((experiment) => experiment.status === "underway").flatMap((experiment) =>
+      (prior?.ideas ?? []).find((idea) => idea.id === experiment.ideaId)?.basisFragmentIds ?? []),
+    ...(prior?.responses ?? []).filter((response) => response.status === "forming" || response.status === "active").flatMap((response) => response.requiredFragmentIds),
+  ])];
+  let fragments = advancePracticalFragments(prior?.fragments ?? [], signals, input.currentTick, protectedFragmentIds);
 
-  // Groundwater efficacy is produced by the dig itself (the physical outcome
-  // is only known here); an explicitly passed evaluation (fixtures) wins.
+  const protectedBeliefIds = [...new Set([
+    ...(prior?.ideas ?? []).filter((idea) => idea.status === "selected" || idea.status === "considered")
+      .flatMap((idea) => idea.materialBindings?.map((binding) => binding.materialBeliefId) ?? []),
+    ...(prior?.experiments ?? []).filter((experiment) => experiment.status === "underway")
+      .flatMap((experiment) => experiment.materialBindings?.map((binding) => binding.materialBeliefId) ?? []),
+  ])];
+  let materialBeliefs = advanceHumanMaterialBeliefs({
+    bandId: String(input.band.id),
+    prior: prior?.materialBeliefs ?? [],
+    signals: deriveMaterialBeliefSignals({
+      bandId: String(input.band.id),
+      currentTick: input.currentTick,
+      localContextKey,
+      residenceContext: input.residenceContext,
+      fragmentSignals: signals,
+    }),
+    protectedBeliefIds,
+    currentTick: input.currentTick,
+  });
+
+  // Groundwater efficacy is produced by the existing physical work itself.
   const groundwaterEfficacy = input.groundwaterEfficacy ?? evaluateGroundwaterEfficacy({
     responseId: waterWorksResult.works?.responseId,
     attempted: waterWorksResult.attempted,
@@ -2042,65 +2154,63 @@ export function advancePracticalAdaptation(
       : deriveWaterWorksRelief(input.band, input.band.position, input.groundwaterContext?.season ?? "").relief,
   });
 
-  // (2) Response lifecycle per family (efficacy application, maturation,
-  // dormancy, abandonment) — formation happens later, through problems.
+  // (2) Existing execution-provenance gate remains the single route from an
+  // attempted response to efficacy/lifecycle feedback.
   const priorResponses = prior?.responses ?? [];
-  const existingPhysicalWorkResponseId = waterWorksResult.attempted
-    ? waterWorksResult.works?.responseId
-    : undefined;
+  const existingPhysicalWorkResponseId = waterWorksResult.attempted ? waterWorksResult.works?.responseId : undefined;
   const rawEfficacies: readonly (readonly [PracticalResponseFamily, EfficacyEvaluation | undefined])[] = [
-    ["carrying_load", input.carryingEfficacy],
-    ["dry_route_water", input.waterRouteEfficacy],
-    ["engineering_structure", input.engineeringEfficacy],
-    ["water_storage", input.waterStorageEfficacy],
-    ["temporary_shelter", input.shelterEfficacy],
-    ["hunting_distance", input.huntingEfficacy],
-    ["care_treatment", input.careEfficacy],
-    ["proto_measure", input.measureEfficacy],
+    ["carrying_load", input.carryingEfficacy], ["dry_route_water", input.waterRouteEfficacy],
+    ["engineering_structure", input.engineeringEfficacy], ["water_storage", input.waterStorageEfficacy],
+    ["temporary_shelter", input.shelterEfficacy], ["hunting_distance", input.huntingEfficacy],
+    ["care_treatment", input.careEfficacy], ["proto_measure", input.measureEfficacy],
     ["groundwater_seek", groundwaterEfficacy],
   ];
-  // One central provenance gate feeds lifecycle, problem revision, experiment
-  // conclusions, efficacy records, and fragment success/failure. Unexecuted
-  // material plans therefore cannot mature through an unrelated outcome at a
-  // later consumer, while practice-only and proven existing work remain live.
-  const efficacies: readonly (readonly [PracticalResponseFamily, EfficacyEvaluation | undefined])[] =
-    rawEfficacies.map(([family, efficacy]) => [
-      family,
-      efficacyWithExecutionProvenance(efficacy, priorResponses, existingPhysicalWorkResponseId),
-    ] as const);
+  const efficacies = rawEfficacies.map(([family, efficacy]) => [
+    family, efficacyWithExecutionProvenance(efficacy, priorResponses, existingPhysicalWorkResponseId),
+  ] as const);
   let responses = priorResponses;
   const freshlyAbandonedByFamily = new Map<PracticalResponseFamily, PracticalResponseState>();
   const maturedResponses: PracticalResponseState[] = [];
   for (const [family, efficacy] of efficacies) {
     const lifecycle = advanceFamilyLifecycle(family, responses, input.band, input.currentTick, efficacy);
     responses = lifecycle.responses;
-    if (lifecycle.freshlyAbandoned[0] !== undefined) {
-      freshlyAbandonedByFamily.set(family, lifecycle.freshlyAbandoned[0]);
-    }
+    if (lifecycle.freshlyAbandoned[0] !== undefined) freshlyAbandonedByFamily.set(family, lifecycle.freshlyAbandoned[0]);
     maturedResponses.push(...lifecycle.matured);
   }
 
-  // (3) Problem frames from the same lived condition evidence, with the
-  // revision/resolution feedback this season's efficacy produced.
+  // (3) Typed feedback: unknown/design-level evidence never fabricates
+  // component blame. Exact-path failure can still create a bounded lesson.
+  let revisionLessons = prior?.revisionLessons ?? [];
+  const feedbackByResponse = new Map<string, NonNullable<PracticalExperiment["observedFeedback"]>>();
+  for (const [, efficacy] of efficacies) {
+    if (efficacy === undefined) continue;
+    const responseId = efficacyResponseId(efficacy);
+    const response = responseId === undefined ? undefined : priorResponses.find((entry) => entry.id === responseId);
+    if (response === undefined) continue;
+    const feedback = typedFeedbackForEfficacy(efficacy, response, prior?.ideas ?? []);
+    if (feedback === undefined) continue;
+    feedbackByResponse.set(response.id, feedback);
+    const localized = applyTypedFeedback({ fragments, materialBeliefs, feedback, currentTick: input.currentTick });
+    fragments = localized.fragments;
+    materialBeliefs = localized.materialBeliefs;
+    const problemFamily = (prior?.problems ?? []).find((problem) => problem.id === response.problemId)?.family;
+    if (problemFamily !== undefined) {
+      revisionLessons = recordRevisionLesson({ prior: revisionLessons, problemFamily, feedback, currentTick: input.currentTick });
+    }
+  }
+
+  // (4) Problem framing remains the canonical pressure/history source.
   const problemSignals = deriveProblemSignals(input.band);
   const reviseProblemIds: string[] = [];
   const resolveProblemIds: string[] = [];
   for (const [, efficacy] of efficacies) {
-    if (efficacy === undefined) {
-      continue;
-    }
+    if (efficacy === undefined) continue;
     const exercised = priorResponses.find((response) => response.id === efficacyResponseId(efficacy));
-    if (exercised?.problemId === undefined) {
-      continue;
-    }
+    if (exercised?.problemId === undefined) continue;
     const exercisedAfter = responses.find((response) => response.id === efficacyResponseId(efficacy));
     if ((efficacy.classification === "failure_or_danger_specific" || efficacy.classification === "context_mismatch") &&
-      (exercisedAfter?.failureCount ?? 0) >= 2) {
-      reviseProblemIds.push(exercised.problemId);
-    }
-    if (efficacy.classification === "clear_success_specific") {
-      resolveProblemIds.push(exercised.problemId);
-    }
+      (exercisedAfter?.failureCount ?? 0) >= 2) reviseProblemIds.push(exercised.problemId);
+    if (efficacy.classification === "clear_success_specific") resolveProblemIds.push(exercised.problemId);
   }
   const problems = advanceProblemFrames({
     bandId: String(input.band.id),
@@ -2111,111 +2221,99 @@ export function advancePracticalAdaptation(
     resolveProblemIds,
   });
 
-  // (4) Formation THROUGH the chain: active problem → recorded idea
-  // candidates → selected idea → new forming response + started experiment.
+  // Knowledge survives a move, but old ideas are re-evaluated against CURRENT
+  // locally known material support without rewriting their design identity.
+  const priorIdeas = (prior?.ideas ?? []).map((idea) => {
+    if (idea.design === undefined) return idea;
+    const local = deriveLocalReproducibility(idea.design, materialBeliefs, localContextKey);
+    return { ...idea, localReproducibility: local.status === "supported" ? "supported" as const : local.status === "blocked" ? "blocked" as const : "unknown" as const };
+  });
+  const priorHints = prior?.designHints ?? [];
+
+  // (5) Fixed-budget compositional formation. Historical variants are only
+  // templates/effect adapters; non-template designs stop at hypothesis/plan.
   const formation = formResponsesThroughProblems({
     band: input.band,
     frames: problems,
     responses,
     fragments,
+    materialBeliefs,
+    designHints: priorHints,
+    revisionLessons,
+    priorIdeas,
+    priorExperiments: prior?.experiments ?? [],
     freshlyAbandonedByFamily,
     currentTick: input.currentTick,
+    runSeed: String(input.runSeed ?? ""),
+    localContextKey,
   });
-  responses = formation.responses;
-
-  // Bounded: deterministic eviction keeps the most alive/confident responses.
-  responses = [...responses]
+  responses = [...formation.responses]
     .sort((left, right) => {
-      const rank = (response: PracticalResponseState): number =>
-        response.status === "abandoned" ? response.confidence - 1 : response.confidence;
+      const rank = (response: PracticalResponseState): number => response.status === "abandoned" ? response.confidence - 1 : response.confidence;
       return rank(right) - rank(left) || left.id.localeCompare(right.id);
     })
     .slice(0, RESPONSE_CAP);
 
-  // (5) Experiments: attempts accrue while their response forms; maturation
-  // concludes success; failure efficacy and abandonment conclude failure.
+  // (6) Experiment history carries execution proof and typed result. Surviving
+  // efficacy means the central execution gate already admitted the attempt.
   const experimentEvents: ExperimentAdvanceEvent[] = [];
+  const executionMetadata = (response: PracticalResponseState): Pick<ExperimentAdvanceEvent, "executionOccurred" | "executionAuthority" | "executionEvidenceRefs"> => {
+    const executionClass = derivePracticalVariantExecutionClass(response.family, response.variantKey);
+    return executionClass === "practice_only"
+      ? { executionOccurred: true, executionAuthority: "practice", executionEvidenceRefs: [`practice:${response.id}:${tick}`] }
+      : executionClass === "existing_physical_work"
+        ? { executionOccurred: true, executionAuthority: "existing_physical_work", executionEvidenceRefs: [`physical-work:${response.id}:${tick}`] }
+        : {};
+  };
   for (const matured of maturedResponses) {
-    const observed = efficacies.find(([, efficacy]) =>
-      efficacy !== undefined && efficacyResponseId(efficacy) === matured.id)?.[1];
+    const observed = efficacies.find(([, efficacy]) => efficacy !== undefined && efficacyResponseId(efficacy) === matured.id)?.[1];
     experimentEvents.push({
       responseId: matured.id,
       attempted: true,
       conclusion: matured.lastEfficacy === "partial_success_specific" ? "partial" : "success",
-      observedOutcome: observed?.reason ?? "the practice produced response-specific useful feedback and stayed in use",
-      fragmentsLearned: matured.requiredFragmentIds,
+      observedOutcome: observed?.reason ?? "response-specific useful feedback",
+      observedFeedback: feedbackByResponse.get(matured.id),
+      ...executionMetadata(matured),
     });
   }
   for (const [family, efficacy] of efficacies) {
-    if (efficacy === undefined) {
-      continue;
-    }
+    if (efficacy === undefined) continue;
     const responseId = efficacyResponseId(efficacy);
-    if (responseId === undefined || maturedResponses.some((entry) => entry.id === responseId)) {
-      continue;
-    }
+    if (responseId === undefined || maturedResponses.some((entry) => entry.id === responseId)) continue;
+    const response = priorResponses.find((entry) => entry.id === responseId);
+    if (response === undefined) continue;
     const abandoned = freshlyAbandonedByFamily.get(family);
-    if (abandoned !== undefined && abandoned.id === responseId) {
-      experimentEvents.push({
-        responseId,
-        attempted: true,
-        conclusion: "abandoned",
-        observedOutcome: efficacy.reason,
-        fragmentsContradicted: abandoned.requiredFragmentIds,
-      });
-      continue;
-    }
     experimentEvents.push({
       responseId,
       attempted: true,
-      // A single bad attempt is evidence, not a concluded invention history.
-      // The experiment remains underway until success/partial maturation or
-      // repeated failure causes abandonment above.
-      conclusion: undefined,
+      ...(abandoned?.id === responseId ? { conclusion: "abandoned" as const } : {}),
       observedOutcome: efficacy.reason,
-      ...(efficacy.classification === "failure_or_danger_specific"
-        ? { fragmentsContradicted: priorResponses.find((entry) => entry.id === responseId)?.requiredFragmentIds ?? [] }
-        : {}),
+      observedFeedback: feedbackByResponse.get(responseId),
+      ...executionMetadata(response),
     });
   }
-  const experiments = advanceExperiments(
-    prior?.experiments ?? [],
-    experimentEvents,
-    formation.startedExperiments,
-    input.currentTick,
-  );
+  const experiments = advanceExperiments(prior?.experiments ?? [], experimentEvents, formation.startedExperiments, input.currentTick);
 
-  // (6) Idea records (bounded newest-per-variant history).
-  const ideas = mergeIdeas(prior?.ideas ?? [], formation.ideas);
+  // (7) One canonical bounded idea/hint history. Design hints are degraded
+  // technical sketches, not local execution or efficacy.
+  const ideas = mergeIdeas(priorIdeas, formation.ideas);
+  const designHints = deriveDesignHintsFromIdeas(ideas, priorHints, input.currentTick);
 
-  // (7) Failures propagate to the fragments the failed composition relied on.
+  // (8) Efficacy records remain response-specific. No blanket component
+  // success/failure mutation occurs here; typed attribution above owns learning.
   const records: AdaptiveEfficacyRecord[] = [];
   for (const [, efficacy] of efficacies) {
-    if (efficacy === undefined) {
-      continue;
-    }
-    records.push(buildPracticalRecord(input.band, input.currentTick, efficacy, priorResponses, responses));
-    if (efficacy.classification === "failure_or_danger_specific") {
-      const failed = responses.find((response) => response.id === efficacyResponseId(efficacy));
-      fragments = recordFragmentFailure(fragments, failed?.requiredFragmentIds ?? []);
-    } else if (efficacy.classification === "clear_success_specific" || efficacy.classification === "partial_success_specific") {
-      const succeeded = responses.find((response) => response.id === efficacyResponseId(efficacy));
-      fragments = recordFragmentSuccess(
-        fragments,
-        succeeded?.requiredFragmentIds ?? [],
-        input.currentTick,
-        `experiment:${efficacy.family}:${efficacy.classification}`,
-        efficacy.classification === "partial_success_specific",
-      );
-    }
+    if (efficacy !== undefined) records.push(buildPracticalRecord(input.band, input.currentTick, efficacy, priorResponses, responses));
   }
-
   const efficacyRecords = [...records, ...(prior?.efficacyRecords ?? [])].slice(0, PRACTICAL_RECORD_CAP);
 
   return {
     bandId: input.band.id,
     lastUpdatedTick: input.currentTick,
     fragments,
+    materialBeliefs,
+    designHints,
+    revisionLessons,
     responses,
     efficacyRecords,
     problems,
@@ -2224,18 +2322,19 @@ export function advancePracticalAdaptation(
     ...(waterWorksResult.works !== undefined ? { waterWorks: waterWorksResult.works } : {}),
     caps: {
       fragmentCap: FRAGMENT_CAP,
+      materialBeliefCap: MATERIAL_BELIEF_CAP,
+      designHintCap: DESIGN_HINT_CAP,
+      revisionLessonCap: REVISION_LESSON_CAP,
       responseCap: RESPONSE_CAP,
       recordCap: PRACTICAL_RECORD_CAP,
       problemCap: PROBLEM_CAP,
       ideaCap: IDEA_CAP,
       experimentCap: EXPERIMENT_CAP,
       held:
-        fragments.length <= FRAGMENT_CAP &&
-        responses.length <= RESPONSE_CAP &&
-        efficacyRecords.length <= PRACTICAL_RECORD_CAP &&
-        problems.length <= PROBLEM_CAP &&
-        ideas.length <= IDEA_CAP &&
-        experiments.length <= EXPERIMENT_CAP,
+        fragments.length <= FRAGMENT_CAP && materialBeliefs.length <= MATERIAL_BELIEF_CAP &&
+        designHints.length <= DESIGN_HINT_CAP && revisionLessons.length <= REVISION_LESSON_CAP &&
+        responses.length <= RESPONSE_CAP && efficacyRecords.length <= PRACTICAL_RECORD_CAP &&
+        problems.length <= PROBLEM_CAP && ideas.length <= IDEA_CAP && experiments.length <= EXPERIMENT_CAP,
     },
   };
 }
@@ -2253,20 +2352,32 @@ export function inheritPracticalAdaptationForDaughter(
     return undefined;
   }
   const fragments = inheritFragmentsForDaughter(parentState.fragments, currentTick);
-  if (fragments.length === 0) {
+  const materialBeliefs = inheritMaterialBeliefsForDaughter(
+    parentState.materialBeliefs ?? [], String(daughterBandId), String(parentState.bandId), currentTick,
+  );
+  const parentHints = deriveDesignHintsFromIdeas(parentState.ideas ?? [], parentState.designHints ?? [], parentState.lastUpdatedTick);
+  const designHints = inheritDesignHintsForDaughter(parentHints, String(daughterBandId), String(parentState.bandId), currentTick);
+  const problems = inheritProblemFramesForDaughter(parentState.problems ?? [], String(daughterBandId), currentTick);
+  if (fragments.length === 0 && materialBeliefs.length === 0 && designHints.length === 0 && problems.length === 0) {
     return undefined;
   }
   return {
     bandId: daughterBandId,
     lastUpdatedTick: currentTick,
     fragments,
+    materialBeliefs,
+    designHints,
+    revisionLessons: [],
     responses: [],
     efficacyRecords: [],
-    problems: inheritProblemFramesForDaughter(parentState.problems ?? [], String(daughterBandId), currentTick),
+    problems,
     ideas: [],
     experiments: [],
     caps: {
       fragmentCap: FRAGMENT_CAP,
+      materialBeliefCap: MATERIAL_BELIEF_CAP,
+      designHintCap: DESIGN_HINT_CAP,
+      revisionLessonCap: REVISION_LESSON_CAP,
       responseCap: RESPONSE_CAP,
       recordCap: PRACTICAL_RECORD_CAP,
       problemCap: PROBLEM_CAP,

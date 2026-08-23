@@ -6861,9 +6861,174 @@ export interface PracticalProblemFrame {
   readonly lastEvidenceTick: TickNumber;
 }
 
+export type PracticalMaterialProperty =
+  | "edge_fracture"
+  | "impact_toughness"
+  | "abrasion"
+  | "flexibility"
+  | "tensile_fibrous"
+  | "interlacing_twisting"
+  | "structural_load"
+  | "formability_workability"
+  | "porosity_water_barrier"
+  | "coating_binding"
+  | "heat_response"
+  | "durability_weathering";
+
+export type PracticalMaterialOperation =
+  | "split"
+  | "abrade"
+  | "grind"
+  | "pound"
+  | "twist"
+  | "bind"
+  | "interlace"
+  | "layer"
+  | "coat"
+  | "heat"
+  | "dry"
+  | "soak"
+  | "haft"
+  | "brace"
+  | "dig"
+  | "line";
+
+export type HumanMaterialBeliefProvenance = "lived" | "inherited" | "copied" | "inferred";
+export type HumanMaterialHandlingDepth = "encountered" | "handled" | "transformed_tested";
+
+export interface HumanMaterialPropertyBelief {
+  readonly property: PracticalMaterialProperty;
+  readonly confidence: NormalizedIntensity;
+  readonly evidenceRefs: readonly string[];
+  readonly contradictionRefs: readonly string[];
+}
+
+/**
+ * Canonical HUMAN technical belief about a recognized material category. This
+ * is epistemic state, not geology, quantity, inventory, ownership or an object.
+ */
+export interface HumanMaterialBelief {
+  readonly id: string;
+  readonly materialCategory: string;
+  readonly publicLabel: string;
+  readonly properties: readonly HumanMaterialPropertyBelief[];
+  readonly knownContexts: readonly string[];
+  readonly provenance: HumanMaterialBeliefProvenance;
+  readonly handlingDepth: HumanMaterialHandlingDepth;
+  readonly contradictionRefs: readonly string[];
+  readonly lastReinforcedTick: TickNumber;
+  readonly originalContext: {
+    readonly contextKey: string;
+    readonly sourceBandId?: BandId;
+    readonly inheritedFromBandId?: BandId;
+  };
+}
+
+export type PracticalFunctionalIntent =
+  | "load_transport"
+  | "containment_storage_transport"
+  | "shelter_environmental_protection"
+  | "water_access_transport"
+  | "route_crossing_transport"
+  | "cut_scrape_pierce_pound_grind_dig"
+  | "hunting_trapping_capture"
+  | "food_material_processing_preservation"
+  | "fire_hearth_fuel_refinement"
+  | "care_treatment"
+  | "measurement_marking_pacing";
+
+export type PracticalDeploymentClass =
+  | "practice_only"
+  | "portable_material_construction"
+  | "place_bound_work"
+  | "temporary_structure_or_work";
+
+export interface PracticalDesignComponentRole {
+  readonly role: string;
+  readonly form: string;
+  readonly requiredProperties: readonly PracticalMaterialProperty[];
+}
+
+export interface PracticalDesignOperationStep {
+  readonly id: string;
+  readonly operation: PracticalMaterialOperation;
+  readonly inputRoles: readonly string[];
+  readonly dependsOn: readonly string[];
+}
+
+/** Identity-bearing normalized engineering hypothesis. Public labels and
+ * discovery history are intentionally outside the signature. */
+export interface NormalizedPracticalDesignHypothesis {
+  readonly signature: string;
+  readonly functionalIntent: PracticalFunctionalIntent;
+  readonly mechanism: string;
+  readonly componentRoles: readonly PracticalDesignComponentRole[];
+  readonly operations: readonly PracticalDesignOperationStep[];
+  readonly deploymentClass: PracticalDeploymentClass;
+  readonly publicLabel: string;
+}
+
+export interface PracticalMaterialRoleBinding {
+  readonly role: string;
+  readonly materialBeliefId: string;
+  readonly requiredProperties: readonly PracticalMaterialProperty[];
+  readonly localSupport: "supported" | "context_unproven" | "property_unproven";
+}
+
+export type PracticalFeedbackClass =
+  | "acquisition_material_unavailable"
+  | "material_property_mismatch"
+  | "transformation_process_failure"
+  | "joining_construction_failure"
+  | "functional_underperformance"
+  | "durability_maintenance_failure"
+  | "environmental_mismatch"
+  | "excessive_labor_opportunity_cost"
+  | "risk_injury"
+  | "ambiguous_unknown_failure"
+  | "partial_success"
+  | "context_specific_success";
+
+export type PracticalFeedbackAttributionQuality = "specific" | "partial" | "design_level" | "unknown";
+
+export interface PracticalObservedFeedback {
+  readonly feedbackClass: PracticalFeedbackClass;
+  readonly attributionQuality: PracticalFeedbackAttributionQuality;
+  readonly designSignature: string;
+  readonly implicatedFragmentIds: readonly string[];
+  readonly implicatedMaterialBeliefIds: readonly string[];
+  readonly evidenceRefs: readonly string[];
+  readonly contextKey?: string;
+}
+
+export interface PracticalRevisionLesson {
+  readonly id: string;
+  readonly designSignature: string;
+  readonly problemFamily: PracticalProblemFamily;
+  readonly feedbackClass: PracticalFeedbackClass;
+  readonly confidence: NormalizedIntensity;
+  readonly strength: NormalizedIntensity;
+  readonly changedDimension?: "material_binding" | "component" | "joining" | "operation" | "scale" | "deployment";
+  readonly evidenceRefs: readonly string[];
+  readonly status: "active" | "dormant";
+  readonly lastReinforcedTick: TickNumber;
+}
+
+export interface PracticalDesignHint {
+  readonly id: string;
+  readonly designSignature: string;
+  readonly functionalIntent: PracticalFunctionalIntent;
+  readonly mechanism: string;
+  readonly source: "lived" | "inherited" | "copied";
+  readonly confidence: NormalizedIntensity;
+  readonly sourceContextKey?: string;
+  readonly sourceBandId?: BandId;
+  readonly lastReinforcedTick: TickNumber;
+}
+
 export type PracticalIdeaStatus = "considered" | "selected" | "rejected" | "postponed";
 
-export type PracticalIdeaSource = "local_inference" | "copied" | "inherited" | "accident";
+export type PracticalIdeaSource = "local_inference" | "copied" | "inherited" | "accident" | "revision" | "recombination" | "template_recognition";
 
 export interface PracticalIdeaCandidate {
   readonly id: string;
@@ -6879,6 +7044,15 @@ export interface PracticalIdeaCandidate {
   readonly statusReason: string;
   readonly source: PracticalIdeaSource;
   readonly consideredAtTick: TickNumber;
+  // PASS 4 canonical compositional identity. Optional only for migrated legacy
+  // fixtures/history; live Pass-4 ideas populate these fields.
+  readonly designSignature?: string;
+  readonly design?: NormalizedPracticalDesignHypothesis;
+  readonly materialBindings?: readonly PracticalMaterialRoleBinding[];
+  readonly parentIdeaId?: string;
+  readonly changedDimension?: PracticalRevisionLesson["changedDimension"];
+  readonly sourceEvidenceRefs?: readonly string[];
+  readonly localReproducibility?: "supported" | "blocked" | "unknown";
 }
 
 export type PracticalExperimentStatus =
@@ -6912,6 +7086,16 @@ export interface PracticalExperiment {
   readonly contextKey?: string;
   readonly fragmentsLearned: readonly string[];
   readonly fragmentsContradicted: readonly string[];
+  // PASS 4 plan/feedback metadata. These remain plans until executionOccurred
+  // is proven by the practice or an existing physical authority.
+  readonly designSignature?: string;
+  readonly materialBindings?: readonly PracticalMaterialRoleBinding[];
+  readonly plannedOperations?: readonly PracticalDesignOperationStep[];
+  readonly supportingEvidenceRefs?: readonly string[];
+  readonly executionOccurred?: boolean;
+  readonly executionAuthority?: "practice" | "existing_physical_work";
+  readonly executionEvidenceRefs?: readonly string[];
+  readonly observedFeedback?: PracticalObservedFeedback;
   readonly startedAtTick: TickNumber;
   readonly concludedAtTick?: TickNumber;
 }
@@ -6948,6 +7132,10 @@ export interface PracticalAdaptationState {
   readonly bandId: BandId;
   readonly lastUpdatedTick: TickNumber;
   readonly fragments: readonly PracticalFragment[];
+  // PASS 4 canonical human epistemic/material state and compact path memory.
+  readonly materialBeliefs?: readonly HumanMaterialBelief[];
+  readonly designHints?: readonly PracticalDesignHint[];
+  readonly revisionLessons?: readonly PracticalRevisionLesson[];
   readonly responses: readonly PracticalResponseState[];
   readonly efficacyRecords: readonly AdaptiveEfficacyRecord[];
   // INVENTION-3 canonical causal chain (optional only for pre-pass fixtures;
@@ -6958,6 +7146,9 @@ export interface PracticalAdaptationState {
   readonly waterWorks?: PracticalWaterWorks;
   readonly caps: {
     readonly fragmentCap: number;
+    readonly materialBeliefCap?: number;
+    readonly designHintCap?: number;
+    readonly revisionLessonCap?: number;
     readonly responseCap: number;
     readonly recordCap: number;
     readonly problemCap?: number;
