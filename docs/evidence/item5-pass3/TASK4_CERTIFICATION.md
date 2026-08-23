@@ -3,6 +3,52 @@
 Certification base: `09b5c8f54b3526cd5ede8da0288222ba3d2762e3` on
 `checkpoint/item5-projection-inheritance-pass3`.
 
+## 2026-08-23 final-correction addendum — current certification
+
+This addendum supersedes the older counts, mutation target, and audit-timestamp
+mechanism below where they conflict. The older sections remain as historical
+evidence of the earlier Pass-3 certification.
+
+The final correction began at reviewed HEAD
+`c49ba4674700903bc231f1900b9834d6e2fa4f16`. RED-first runtime fixtures proved
+that efficacy-only orphan rows were incorrectly admitted as `practice_attempted`,
+that the same failure let a material-capable orphan gain authority when its variant
+was evicted, that ten retained responses were truncated to nine canonical rows, and
+that both Item-4 writers inherited an existing artifact's `generatedAt`.
+
+GREEN now requires unresolved variant provenance to be
+`execution_provenance_unproven`: the canonical efficacy record remains recorded,
+but admitted efficacy is empty, attempts remain zero, readiness is blocked/not
+started, no practice trace diffuses, and normal UI withholds the stale success and
+classification. The canonical row adapter returns all ten controlled responses in
+deterministic order; the legacy display still shows nine only by an explicit display
+cap with total 10 and omitted count 1.
+
+The Item-4 writers now write a fresh current-invocation `generatedAt`. Semantic
+comparison removes only root `generatedAt`; no behavior field is ignored. Fresh
+raw SHA-256 is `059f1e19048e12f7e90c3dc8fd43a52500d5584b978cd602f337ae0cc18fed86`
+for field transfer and `c9bcd0ef899f1a3cbdae53d0bade4b61f8b7406c05f051f5e0ea19d777f2402c`
+for whole integration, while their normalized semantic SHA-256 values remain exactly
+`278d5d560f951c8ded4b6408cda15665b4d2c337ab1ca596fa3a3a07857f639b` and
+`eca57acda4faea58c91454e0d9e59bae3afe493d96b853040c1a2bd3b8a72b64`.
+
+The final reversible mutant re-admitted `executionClass === undefined`. The audit
+then failed both orphan authority controls. Exact source SHA-256 values were:
+
+```text
+before  419772dc1969b21a1cae9c9b67c874a52197589a8cd4260a4959e1eb87632c8e
+mutated 98946adeac9f1679341bbcbad27150a8e738cd74ba40bc8b0e43ed7a6fcca9d5
+after   419772dc1969b21a1cae9c9b67c874a52197589a8cd4260a4959e1eb87632c8e
+```
+
+Restoration used the exact saved bytes, not Git reset/checkout. Final verification:
+projection 40/40, physical-effect provenance 13/13, adaptation boundary 14/14,
+expedition efficacy 12/12, Item-4 transfer 12/12 with 0 vacuous, whole integration
+6/6, both TypeScript projects and build green, and all benchmark assertion maps
+true (27/27 practical, 26/26 efficacy, 38/38 routines). The repeated Map-2
+fingerprint remains exactly
+`f509b2f4d6e8a463b7505025afe22d151fd45a0598bd9550fbb84aac900da03c`.
+
 ## Reversible canonical-guard mutation
 
 Target: `src/sim/agents/problemPractice.ts`.
@@ -27,8 +73,9 @@ Target: `src/sim/agents/problemPractice.ts`.
 Certification note: an initial literal guard inversion was also restored from
 the same exact copy. It made the legacy positive control call the canonical
 adapter without canonical state and therefore threw before emitting JSON. It
-was not accepted as the mutation proof; the `if (false)` guard mutant above is
-the sole recorded sensitivity result.
+was not accepted as the mutation proof; the `if (false)` guard mutant above was
+the sole recorded sensitivity result for that earlier certification. The
+2026-08-23 addendum records the later unresolved-provenance mutant.
 
 ## Compile, build, and focused audits
 

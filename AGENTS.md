@@ -13,7 +13,7 @@
 
 ---
 
-## CURRENT AUTHORITY / CURRENT STATUS — 2026-08-20
+## CURRENT AUTHORITY / CURRENT STATUS — 2026-08-23
 
 > This block supersedes older “current”, “active checkpoint”, and “Item 5 unstarted” wording preserved below as historical checkpoint record.
 
@@ -25,10 +25,11 @@
 - `PracticalExperiment.materials` / procedure / labor / risk / opportunity fields are planned/estimated requirements, not claims of acquisition, consumption, execution, or paid cost. The Ideas/Solutions UI labels them accordingly.
 - No coefficients were tuned and `src/sim/agents/adaptiveEfficacy.ts` is unchanged at SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`.
 - Pass 3 makes canonical `band.practicalAdaptation` the sole read-model lifecycle authority when present, with explicit `legacy_compatibility` fallback only when absent. It adds no Item-4 mechanism, daughter-transfer richness, material execution, physical-effect gate, coefficient, or Map-2 behavior change. `src/architecture/graphData.ts` remains documentation/discovery only and never simulation authority.
-- Final-review fixes keep one canonical mapper, preserve independently bounded lifecycle records with explicit missing links, distinguish inherited/copied framing from later local testing, and require independent physical camp/activity evidence before foothold traces diffuse.
-- Certification reports Pass-3 audit 36/36, Pass-2 provenance 13/13, adaptation-boundary 14/14, expedition-efficacy 12/12, Item-4 field transfer 12/12 (0 vacuous), and whole integration 6/6; Map-2 fingerprint remains `f509b2f4d6e8a463b7505025afe22d151fd45a0598bd9550fbb84aac900da03c`. Detailed measured evidence is in `docs/evidence/item5-pass3/PASS3_EVIDENCE.md`.
+- Final-review fixes keep one canonical mapper, preserve independently bounded lifecycle records with explicit missing links, distinguish inherited/copied framing from later local testing, and require independent physical camp/activity evidence before foothold traces diffuse. The final 2026-08-23 correction additionally makes unresolved variant provenance explicit as `execution_provenance_unproven`: retained orphan efficacy is diagnostic history only and grants no attempt, admitted efficacy, readiness, outcome, or diffusion authority. Canonical row capacity is no longer truncated by the 9-item display cap; display truncation reports its retained total and omission count explicitly.
+- Item-4 audit writers now timestamp the current invocation rather than reusing an existing artifact's `generatedAt`; deterministic evidence comparison normalizes only that root volatile field. Item-4 simulation mechanics remain unchanged.
+- Certification reports Pass-3 audit 40/40, Pass-2 provenance 13/13, adaptation-boundary 14/14, expedition-efficacy 12/12, Item-4 field transfer 12/12 (0 vacuous), and whole integration 6/6; all benchmark assertion maps are true and the Map-2 fingerprint remains `f509b2f4d6e8a463b7505025afe22d151fd45a0598bd9550fbb84aac900da03c`. Detailed measured evidence is in `docs/evidence/item5-pass3/PASS3_EVIDENCE.md`.
 - Certification fixture correction `caeac19845c41e60a2d0740ac8c224d53d0813b9` is **test-only** (`scripts/simBenchmark.mjs`): final verification caught stale material-effect assertions because the benchmark CLI can exit 0 with `"passed": false`. That fixture-correction commit made no production-source change; Pass 3's separately recorded read-model production changes remain documented above and in `docs/evidence/item5-pass3/PASS3_EVIDENCE.md`.
-- Older freshness/update lines below are retained as historical record and are superseded by this 2026-08-20 authority block.
+- Older freshness/update lines below are retained as historical record and are superseded by this 2026-08-23 authority block.
 
 ## 0. Freshness and evidence warning
 

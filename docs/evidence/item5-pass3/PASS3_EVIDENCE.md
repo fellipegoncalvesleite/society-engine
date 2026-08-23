@@ -5,11 +5,148 @@
 - Exact accepted Pass-2 base: `31363c4f8e19e1c4f536338ecd0ef59e3fa7082f`.
 - Branch: `checkpoint/item5-projection-inheritance-pass3`.
 - Worktree: `/Users/fellipegoncalvesleite/.worktrees/society-engine-item5-projection-inheritance-pass3`.
-- This pass changes Item-5 read-model authority only. It does not change Item-4
-  mechanics, daughter-transfer richness, physical-effect gates, coefficients, or
-  the deterministic Map-2 trajectory. Item 5 remains open and unfrozen, and
-  Pass 3 remains pending independent architect review; this evidence is not a
-  merge or acceptance record.
+- Pass 3 changes Item-5 read-model authority. The 2026-08-23 final correction also
+  fixes audit-run provenance metadata and adds durable architecture-ownership
+  governance. It does not change Item-4 simulation mechanics, daughter-transfer
+  richness, physical-effect gates, coefficients, or the deterministic Map-2
+  trajectory. Item 5 remains open and unfrozen, and Pass 3 remains pending
+  independent architect review; this evidence is not a merge or acceptance record.
+
+## Final provenance / capacity / audit-truth correction — 2026-08-23
+
+This section supersedes earlier Pass-3 certification claims wherever they conflict
+with it. The correction started from reviewed HEAD
+`c49ba4674700903bc231f1900b9834d6e2fa4f16` with accepted Pass-2 merge base
+`31363c4f8e19e1c4f536338ecd0ef59e3fa7082f`, a clean worktree, exact upstream
+parity (`0 0`), and no unrelated commits. The implementation remains on
+`checkpoint/item5-projection-inheritance-pass3`; Item 5 is not frozen and `main`
+was not merged.
+
+### RED controls and GREEN semantics
+
+Commit `fe2c66bbe03ecaca96a61e0296e4514badfae36c` added the four final-correction
+controls before production repair. The pre-fix audit exited `1`, reported 40 total
+checks with exactly four failures, and measured the defects directly:
+
+- **Efficacy-only orphan:** a retained `carrying_load` efficacy record with its
+  response/idea/experiment absent was incorrectly `practice_attempted`, admitted
+  the stale efficacy as execution evidence, emitted a visible practice diffusion
+  trace, and exposed clear-success outcome/classification in normal UI.
+- **Material-capable efficacy-only orphan:** the same loss of provenance in the
+  `water_storage` family also became `practice_attempted`, admitted stale success,
+  diffused it, and exposed it. Losing the variant therefore increased authority by
+  erasing the evidence that might have classified it as material-required.
+- **Canonical capacity pressure:** ten retained response records produced only nine
+  canonical rows; `response:audit:cap-10` was silently absent because the canonical
+  adapter inherited the legacy display cap of 9.
+- **Item-4 run provenance:** both audit writers inherited a seeded
+  `2000-01-01T00:00:00.000Z` timestamp from an existing output artifact rather than
+  timestamping the current invocation.
+
+Commit `c3f60d5ed8f5c11a7f44b91beb8209c007840880` applies positive execution
+authorization. `derivePracticalVariantExecutionClass(...) === undefined` now yields
+`execution_provenance_unproven`; unresolved provenance cannot admit execution
+evidence. In the final GREEN fixtures both orphan families have:
+
+- `executionEvidenceAdmitted: false`;
+- `attemptSeasons: 0`;
+- admitted `efficacyRecordIds: []`;
+- the canonical record still preserved in `recordedEfficacyRecordIds`;
+- `currently_unsupported` candidate status;
+- `not_started` / `blocked_no_attempt` / `blocked` readiness;
+- zero visible practice-trace diffusion items;
+- no normal-UI clear-success outcome or classification.
+
+This is the permanent monotonicity rule: **loss of provenance may preserve or reduce
+authority; it may never increase authority.** Record existence is not execution
+proof, efficacy proof, or successful practice. The diagnostic read model may state
+that canonical efficacy was retained while execution provenance is unavailable.
+
+The canonical adapter no longer applies the 9-row display cap.
+`deriveCanonicalPracticalAdaptationRows()` returns every row implied by the already
+bounded retained lifecycle arrays. The controlled 10-response fixture returns all
+ten response IDs in deterministic order, including exact response
+`response:audit:cap-10`, with its missing idea/experiment links and efficacy link
+intact. The public profile may still display nine candidates, but now reports
+`canonicalRowCount: 10`, `omittedCanonicalCandidateCount: 1`, and the explicit line
+`Showing 9 of 10 retained canonical lifecycle rows; 1 omitted from this bounded
+display only.` A display limit is therefore no longer canonical-history authority.
+
+Commit `662d843ba9c66709ffc34d4086564f4b5b4c752f` removes old-artifact timestamp
+reuse from both Item-4 audit writers. Every invocation writes a fresh current-run
+`generatedAt`, including failure output. The final projection audit executes each
+writer twice through isolated temporary output paths preloaded with the year-2000
+timestamp; all four invocations timestamp themselves inside their own measured run
+window and do not inherit the prior artifact.
+
+Deterministic audit comparison now normalizes **only the root `generatedAt` field**.
+No behaviorally meaningful field is removed. Two consecutive runs of each Item-4
+writer are semantically identical after that normalization. Final retained-artifact
+proof against the prior committed artifacts is:
+
+| Artifact | Prior raw SHA-256 | Fresh raw SHA-256 | Semantic SHA-256 before/after |
+| --- | --- | --- | --- |
+| `fission-field-transfer.json` | `ff897ce981623cfcdfdc6a6e049f4aab7787acb23aa362b5f3ba2424c683cfe5` | `059f1e19048e12f7e90c3dc8fd43a52500d5584b978cd602f337ae0cc18fed86` | `278d5d560f951c8ded4b6408cda15665b4d2c337ab1ca596fa3a3a07857f639b` |
+| `item4-whole-integration.json` | `4255aa0456ca04f3340c71985517b44965abfdb7d45143dea6e54ad2f2e4cd3f` | `c9bcd0ef899f1a3cbdae53d0bade4b61f8b7406c05f051f5e0ea19d777f2402c` | `eca57acda4faea58c91454e0d9e59bae3afe493d96b853040c1a2bd3b8a72b64` |
+
+The raw-byte changes are expected provenance changes. The semantic digests are
+identical. This explicitly supersedes the earlier claim that reusing an existing
+`generatedAt` was the correct mechanism for deterministic audit evidence.
+
+### Final-correction mutation sensitivity
+
+After GREEN, a reversible mutation changed only unresolved-class admission so that
+`executionClass === undefined` became admissible again. The focused audit exited
+`1`; exactly `orphanEfficacyCannotCreateExecutionAuthority` and
+`orphanMaterialEfficacyCannotGainAuthorityFromLostVariant` failed. Restoration used
+the saved exact bytes, not Git reset/checkout. SHA-256:
+
+```text
+before  419772dc1969b21a1cae9c9b67c874a52197589a8cd4260a4959e1eb87632c8e
+mutated 98946adeac9f1679341bbcbad27150a8e738cd74ba40bc8b0e43ed7a6fcca9d5
+after   419772dc1969b21a1cae9c9b67c874a52197589a8cd4260a4959e1eb87632c8e
+```
+
+`before == after` is true.
+
+### Final verification
+
+The exact required full verification was rerun after restoring the mutation:
+
+| Command | Semantic result |
+| --- | --- |
+| `npx tsc -p tsconfig.json --noEmit` | exit 0 |
+| `npx tsc -p tsconfig.node.json --noEmit` | exit 0 |
+| `npm run build` | exit 0; Vite built 2,144 modules; existing >500 kB chunk advisory only |
+| `node scripts/item5PhysicalEffectProvenanceAudit.mjs` | `PASS`, 13/13 |
+| `node scripts/item5ProjectionInheritanceAudit.mjs` | `PASS`, 40/40 |
+| `node scripts/adaptationBoundaryAudit.mjs` | `PASS`, 14/14 |
+| `node scripts/expeditionAdaptationEfficacyAudit.mjs` | `PASS`, 12/12 |
+| `node scripts/fissionFieldTransferAudit.mjs --out .../fission-field-transfer.json` | 12/12, 0 failing, 0 vacuous |
+| `node scripts/item4WholeIntegrationFreezeAudit.mjs --out .../item4-whole-integration.json` | 6/6, 0 failing |
+| `node scripts/demographicLongRunAudit.mjs --map map2 --years 50 --repeat` | `PASS`; all seven checks true; both fingerprints exact and identical |
+| targeted practical-adaptation benchmark | `passed: true`; 27/27 assertions true |
+| targeted adaptive-efficacy benchmark | `passed: true`; 26/26 assertions true |
+| targeted routines-2 benchmark | `passed: true`; 38/38 assertions true |
+| `git diff --check` | exit 0 |
+
+The exact Map-2 fingerprint in both 50-year runs remains:
+
+```text
+f509b2f4d6e8a463b7505025afe22d151fd45a0598bd9550fbb84aac900da03c
+```
+
+No coefficient was tuned to preserve it.
+
+### Durable ownership rule
+
+`docs/ARCHITECTURE_OWNERSHIP.md` is now the permanent architect/implementer
+ownership and escalation contract. `AGENTS.md` and `CLAUDE.md` link to it without
+duplicating it. It records architect authority over consequential design, local
+implementer authority, architectural escalation, stronger specification for weaker
+local models, the duty to surface contradictions rather than obey known-bad design,
+and the future cross-system roadmap-review rule. It does **not** perform the
+post-Item-5 roadmap rewrite.
 
 ## Checkpoint finalization and provenance
 
@@ -60,9 +197,12 @@ adapter maps stored problem, idea, experiment, response, efficacy, fragment,
 and matching `waterWorks` facts; it does not infer lifecycle from ecology,
 affordances, repetition, camp state, identity, or events. Material-required
 plans remain `blocked_material_execution`; matching persisted `waterWorks` is
-the existing physical-work proof. Missing matching works is now represented as
-`existing_physical_work_unproven`, and the same adapter withholds attempts,
-conclusions, outcomes, and efficacy from every downstream read surface.
+the existing physical-work proof. Missing matching works is represented as
+`existing_physical_work_unproven`. When retained efficacy has lost the variant
+provenance needed to resolve any execution class, the adapter uses
+`execution_provenance_unproven`. Both unproven states withhold attempts,
+conclusions, outcomes, admitted efficacy, and visible practice diffusion from
+downstream read surfaces.
 
 The final whole-branch fix wave also makes the adapter join the independently
 bounded problem, idea, experiment, response, and efficacy arrays without
@@ -119,7 +259,7 @@ blocked material entries do not become visible practice.
 
 ## Canonical, legacy, inheritance, and UI evidence
 
-- The final Pass-3 audit reports `verdict: "PASS"` with all 36 checks true:
+- The final Pass-3 audit reports `verdict: "PASS"` with all 40 checks true:
   canonical-only profiles, exact IDs/statuses, no projection mutation, daughter
   inherited-not-local truth, legacy fallback, adaptive-human suppression,
   execution-gated diffusion, independently bounded missing-link truth, and SSR
@@ -155,7 +295,7 @@ responses lacking proof.
 | `npx tsc -p tsconfig.node.json --noEmit` | exit 0 |
 | `npm run build` | exit 0; existing Vite >500 kB chunk advisory only |
 | `node scripts/item5PhysicalEffectProvenanceAudit.mjs` | exit 0; `PASS`, 13/13 checks |
-| `node scripts/item5ProjectionInheritanceAudit.mjs` | exit 0; `PASS`, 36/36 checks |
+| `node scripts/item5ProjectionInheritanceAudit.mjs` | exit 0; `PASS`, 40/40 checks |
 | `node scripts/adaptationBoundaryAudit.mjs` | exit 0; `PASS`, 14/14 checks |
 | `node scripts/expeditionAdaptationEfficacyAudit.mjs` | exit 0; `PASS`, 12/12 checks |
 | `git diff --check` | exit 0 before evidence authoring and before the certification commits |
@@ -166,16 +306,19 @@ The retained command-generated artifacts are inspected JSON, not exit-code-only
 claims:
 
 - `fission-field-transfer.json`: 12/12 passing, 0 failing, 0 vacuous; 136 Band
-  fields classified; SHA-256
-  `ff897ce981623cfcdfdc6a6e049f4aab7787acb23aa362b5f3ba2424c683cfe5`.
+  fields classified; fresh-run `generatedAt: 2026-08-23T17:24:47.463Z`; raw
+  SHA-256 `059f1e19048e12f7e90c3dc8fd43a52500d5584b978cd602f337ae0cc18fed86`.
 - `item4-whole-integration.json`: six fixtures passed, none failed,
-  `verdict: "PASS"`; SHA-256
-  `4255aa0456ca04f3340c71985517b44965abfdb7d45143dea6e54ad2f2e4cd3f`.
+  `verdict: "PASS"`; fresh-run `generatedAt: 2026-08-23T17:24:58.051Z`; raw
+  SHA-256 `c9bcd0ef899f1a3cbdae53d0bade4b61f8b7406c05f051f5e0ea19d777f2402c`.
 
-The two `--out` audit scripts preserve an existing artifact's creation stamp,
-so rerunning the required exact commands is byte-stable. Commit
-`ade57f6aaefcfeed6289224dade7c17f0125a801` was verified by comparing SHA-256
-before and after both reruns; both pairs were identical.
+The previous byte-stability mechanism was wrong because it reused an existing
+artifact's `generatedAt`. Current writers timestamp the invocation that actually
+created the result. Deterministic certification normalizes only root
+`generatedAt`; semantic SHA-256 remains respectively
+`278d5d560f951c8ded4b6408cda15665b4d2c337ab1ca596fa3a3a07857f639b` and
+`eca57acda4faea58c91454e0d9e59bae3afe493d96b853040c1a2bd3b8a72b64` before
+and after the fresh rerun. No behaviorally meaningful field is normalized.
 
 No Item-4 mechanic or inheritance richness was modified in this pass.
 
