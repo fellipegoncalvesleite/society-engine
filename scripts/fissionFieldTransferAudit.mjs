@@ -28,18 +28,6 @@ const OUT = arg("out", `${EVIDENCE}/fission-field-transfer.json`);
 const SEED = arg("seed", "audit27:natural:s1");
 const WARM_DAYS = Number(arg("warm-days", "1800"));
 
-function artifactCreatedAt(path) {
-  try {
-    const value = JSON.parse(readFileSync(path, "utf8")).generatedAt;
-    if (typeof value === "string" && value.length > 0) return value;
-  } catch {
-    // A missing or invalid artifact gets a creation timestamp on its first successful write.
-  }
-  return new Date().toISOString();
-}
-
-const ARTIFACT_CREATED_AT = artifactCreatedAt(OUT);
-
 /** Re-derive `keyof Band` from the source, independently of the TypeScript compiler. */
 function parseBandFieldsFromTypes() {
   const text = readFileSync("src/sim/agents/types.ts", "utf8");
@@ -338,7 +326,7 @@ try {
   );
 
   out = {
-    generatedAt: ARTIFACT_CREATED_AT,
+    generatedAt: new Date().toISOString(),
     seed: SEED,
     warmDays: WARM_DAYS,
     parentId: String(parent.id),

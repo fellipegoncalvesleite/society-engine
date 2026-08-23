@@ -2,7 +2,7 @@
 // The behavioral core of the freeze: canonical physical successor lifecycle must be projected into
 // bounded deep history without becoming a second lifecycle authority.
 import { createServer } from "vite";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import {
   loadSuccessorStabilizationModules,
@@ -21,17 +21,6 @@ const arg = (name, fallback) => {
 };
 const OUT = arg("out", "docs/evidence/item4-final-freeze/whole-integration.json");
 
-function artifactCreatedAt(path) {
-  try {
-    const value = JSON.parse(readFileSync(path, "utf8")).generatedAt;
-    if (typeof value === "string" && value.length > 0) return value;
-  } catch {
-    // A missing or invalid artifact gets a creation timestamp on its first successful write.
-  }
-  return new Date().toISOString();
-}
-
-const ARTIFACT_CREATED_AT = artifactCreatedAt(OUT);
 const fixtures = [];
 const record = (id, claim, passed, nonVacuous, detail) => fixtures.push({
   id,
@@ -302,14 +291,14 @@ try {
   const failures = fixtures.filter((row) => row.verdict !== "PASS");
   output = {
     checkpoint: "ROADMAP ITEM 4 — FINAL WHOLE-INTEGRATION FREEZE",
-    generatedAt: ARTIFACT_CREATED_AT,
+    generatedAt: new Date().toISOString(),
     fixtures,
     summary: { total: fixtures.length, passed: fixtures.length - failures.length, failed: failures.length, verdict: failures.length === 0 ? "PASS" : "FAIL" },
   };
 } catch (error) {
   output = {
     checkpoint: "ROADMAP ITEM 4 — FINAL WHOLE-INTEGRATION FREEZE",
-    generatedAt: ARTIFACT_CREATED_AT,
+    generatedAt: new Date().toISOString(),
     fixtures,
     summary: { total: fixtures.length, passed: fixtures.filter((row) => row.verdict === "PASS").length, failed: fixtures.filter((row) => row.verdict !== "PASS").length + 1, verdict: "FAIL" },
     harnessError: error instanceof Error ? error.stack ?? error.message : String(error),
