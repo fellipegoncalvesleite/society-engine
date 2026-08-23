@@ -4,8 +4,10 @@
 // proves that a band carrying canonical practical-adaptation history still gets
 // a second, heuristic history on the accepted Pass-2 base. It must stay RED
 // until the canonical adapter and adaptive-human projection guard are added.
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
+import { spawnSync } from "node:child_process";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { createServer } from "vite";
@@ -63,6 +65,76 @@ function exactJson(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
+function normalizeAuditRunMetadata(payload) {
+  const { generatedAt: _generatedAt, ...semanticPayload } = payload;
+  return semanticPayload;
+}
+
+function auditRunProvenance(scriptName) {
+  const tempRoot = mkdtempSync(join(tmpdir(), "item5-pass3-audit-provenance-"));
+  const outPath = join(tempRoot, `${scriptName}.json`);
+  const staleGeneratedAt = "2000-01-01T00:00:00.000Z";
+  const run = () => {
+    const startedAtMs = Date.now();
+    const child = spawnSync(process.execPath, [join(ROOT, "scripts", scriptName), "--out", outPath], {
+      cwd: ROOT,
+      encoding: "utf8",
+      timeout: 120_000,
+    });
+    const finishedAtMs = Date.now();
+    let payload;
+    try {
+      payload = JSON.parse(readFileSync(outPath, "utf8"));
+    } catch {
+      payload = undefined;
+    }
+    const generatedAtMs = typeof payload?.generatedAt === "string" ? Date.parse(payload.generatedAt) : Number.NaN;
+    return {
+      status: child.status,
+      signal: child.signal,
+      stdout: child.stdout,
+      stderr: child.stderr,
+      startedAtMs,
+      finishedAtMs,
+      generatedAt: payload?.generatedAt,
+      generatedAtMs,
+      freshForInvocation: child.status === 0 && Number.isFinite(generatedAtMs) && generatedAtMs >= startedAtMs && generatedAtMs <= finishedAtMs,
+      payload,
+    };
+  };
+
+  try {
+    writeFileSync(outPath, `${JSON.stringify({ generatedAt: staleGeneratedAt }, null, 2)}\n`);
+    const first = run();
+    const second = run();
+    return {
+      staleGeneratedAt,
+      first: {
+        status: first.status, signal: first.signal, generatedAt: first.generatedAt,
+        startedAtMs: first.startedAtMs, finishedAtMs: first.finishedAtMs, freshForInvocation: first.freshForInvocation,
+        stderr: first.stderr,
+      },
+      second: {
+        status: second.status, signal: second.signal, generatedAt: second.generatedAt,
+        startedAtMs: second.startedAtMs, finishedAtMs: second.finishedAtMs, freshForInvocation: second.freshForInvocation,
+        stderr: second.stderr,
+      },
+      previousArtifactNotInherited: first.generatedAt !== staleGeneratedAt && second.generatedAt !== first.generatedAt ||
+        (first.freshForInvocation && second.freshForInvocation),
+      semanticNormalizedStable: first.payload !== undefined && second.payload !== undefined &&
+        exactJson(normalizeAuditRunMetadata(first.payload), normalizeAuditRunMetadata(second.payload)),
+      normalizedFields: ["generatedAt"],
+    };
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+const item4AuditRunProvenance = {
+  fissionFieldTransfer: auditRunProvenance("fissionFieldTransferAudit.mjs"),
+  wholeIntegration: auditRunProvenance("item4WholeIntegrationFreezeAudit.mjs"),
+};
+
 function canonicalCard(item) {
   const canonical = item.canonical;
   return {
@@ -104,6 +176,7 @@ let checks;
 try {
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
   const problemPractice = await server.ssrLoadModule("/sim/agents/problemPractice.ts");
+  const practicalProjection = await server.ssrLoadModule("/sim/agents/practicalAdaptationProjection.ts");
   const readiness = await server.ssrLoadModule("/sim/agents/practiceFeedbackReadiness.ts");
   const boundary = await server.ssrLoadModule("/sim/agents/adaptationBoundary.ts");
   const adaptiveHuman = await server.ssrLoadModule("/sim/agents/adaptiveHuman.ts");
@@ -505,6 +578,88 @@ try {
     technicalHasOutcomeLabel: evictedMaterialResponseTechnical.includes("clear success"),
     technicalHasClassification: evictedMaterialResponseTechnical.includes("clear_success_specific"),
   };
+
+  // Final correction RED A/B: efficacy may outlive every record that can
+  // identify its variant. Record retention is not positive execution authority.
+  const makeEfficacyOnlyOrphanBand = (family, efficacyId, responseId) => ({
+    ...socialCanonicalBand,
+    practicalAdaptation: {
+      ...practicalAdaptation,
+      problems: [],
+      ideas: [],
+      experiments: [],
+      responses: [],
+      efficacyRecords: [{
+        ...staleMaterialEfficacyRecord,
+        id: efficacyId,
+        responseId,
+        family,
+        classification: "clear_success_specific",
+        outcome: "clear_success",
+        localityNote: "orphan efficacy must remain recorded without granting execution authority",
+        reason: "orphan efficacy must remain recorded without granting execution authority",
+      }],
+    },
+  });
+  const orphanEfficacyBand = makeEfficacyOnlyOrphanBand(
+    "carrying_load",
+    "efficacy:audit:orphan-practice-success",
+    "response:audit:orphan-practice",
+  );
+  const orphanMaterialEfficacyBand = makeEfficacyOnlyOrphanBand(
+    "water_storage",
+    "efficacy:audit:orphan-material-success",
+    "response:audit:orphan-material",
+  );
+  const orphanProfiles = (subject) => ({
+    rows: practicalProjection.deriveCanonicalPracticalAdaptationRows(subject.practicalAdaptation),
+    problem: problemPractice.deriveProblemPracticeProfile(world, subject),
+    readiness: readiness.derivePracticeFeedbackReadinessProfile(world, subject),
+    diffusion: diffusion.deriveSocialEcologicalDiffusionProfile(world, subject),
+    feedbackUi: renderToStaticMarkup(createElement(practiceFeedback.PracticeFeedback, { band: subject, world })),
+  });
+  const orphanEfficacy = orphanProfiles(orphanEfficacyBand);
+  const orphanMaterialEfficacy = orphanProfiles(orphanMaterialEfficacyBand);
+
+  // Final correction RED C: the canonical adapter joins already-bounded source
+  // arrays. A legacy display cap must not erase the tenth retained response.
+  const responseCapResponses = Array.from({ length: 10 }, (_, index) => ({
+    ...responses[0],
+    id: `response:audit:cap-${String(index + 1).padStart(2, "0")}`,
+    ideaId: `idea:audit:cap-${String(index + 1).padStart(2, "0")}`,
+    experimentId: `experiment:audit:cap-${String(index + 1).padStart(2, "0")}`,
+    problemId: canonicalProblem.id,
+    status: "active",
+    successCount: 0,
+    partialCount: 0,
+    failureCount: 0,
+    lastEfficacy: undefined,
+  }));
+  const responseCapEfficacy = {
+    ...staleMaterialEfficacyRecord,
+    id: "efficacy:audit:cap-10",
+    responseId: responseCapResponses[9].id,
+    family: "carrying_load",
+    classification: "context_mismatch",
+    outcome: "mixed_feedback",
+    localityNote: "tenth response retained efficacy",
+    reason: "tenth response retained efficacy",
+  };
+  const responseCapState = {
+    ...practicalAdaptation,
+    problems: [canonicalProblem],
+    ideas: [],
+    experiments: [],
+    responses: responseCapResponses,
+    efficacyRecords: [responseCapEfficacy],
+  };
+  const responseCapRows = practicalProjection.deriveCanonicalPracticalAdaptationRows(responseCapState);
+  const responseCapRowsAgain = practicalProjection.deriveCanonicalPracticalAdaptationRows(responseCapState);
+  const responseCapTenth = responseCapRows.find((row) => row.response?.id === responseCapResponses[9].id);
+  const responseCapDisplayProfile = problemPractice.deriveProblemPracticeProfile(world, {
+    ...band,
+    practicalAdaptation: responseCapState,
+  });
 
   const activeLoadResponse = { ...responses[0], status: "active" };
   const lifecycleProbe = (experiment, efficacyRecords = []) => {
@@ -968,6 +1123,33 @@ try {
     },
     staleMaterialEfficacyAudit,
     evictedMaterialResponseEfficacyAudit,
+    finalCorrectionRedFixtures: {
+      orphanEfficacy: {
+        row: orphanEfficacy.rows[0],
+        candidate: orphanEfficacy.problem.practiceCandidates[0],
+        readiness: orphanEfficacy.readiness.items[0],
+        practiceTraceIds: orphanEfficacy.diffusion.diffusionItems.filter((item) => item.id.includes(":practice-trace:")).map((item) => item.id),
+        feedbackUiHasOutcome: orphanEfficacy.feedbackUi.includes("clear success") || orphanEfficacy.feedbackUi.includes("clear_success"),
+        feedbackUiHasClassification: orphanEfficacy.feedbackUi.includes("clear_success_specific"),
+      },
+      orphanMaterialEfficacy: {
+        row: orphanMaterialEfficacy.rows[0],
+        candidate: orphanMaterialEfficacy.problem.practiceCandidates[0],
+        readiness: orphanMaterialEfficacy.readiness.items[0],
+        practiceTraceIds: orphanMaterialEfficacy.diffusion.diffusionItems.filter((item) => item.id.includes(":practice-trace:")).map((item) => item.id),
+        feedbackUiHasOutcome: orphanMaterialEfficacy.feedbackUi.includes("clear success") || orphanMaterialEfficacy.feedbackUi.includes("clear_success"),
+        feedbackUiHasClassification: orphanMaterialEfficacy.feedbackUi.includes("clear_success_specific"),
+      },
+      responseCapPressure: {
+        rowCount: responseCapRows.length,
+        responseIds: responseCapRows.map((row) => row.response?.id),
+        tenth: responseCapTenth,
+        displayCount: responseCapDisplayProfile.practiceCandidates.length,
+        caps: responseCapDisplayProfile.caps,
+        overviewLines: responseCapDisplayProfile.overviewLines,
+      },
+      auditRunProvenance: item4AuditRunProvenance,
+    },
     finalReviewFixWave: {
       groundwaterWithoutWorks: {
         candidate: groundwaterUnprovenProblem.practiceCandidates[0],
@@ -1192,6 +1374,56 @@ try {
       multiEfficacyFeedback.includes("mixed_feedback") &&
       multiEfficacyFeedback.includes("mixed feedback") &&
       multiEfficacyFeedback.includes("context_mismatch"),
+    orphanEfficacyCannotCreateExecutionAuthority:
+      orphanEfficacy.rows.length === 1 &&
+      orphanEfficacy.rows[0]?.canonical.executionTruth === "execution_provenance_unproven" &&
+      orphanEfficacy.rows[0]?.canonical.executionEvidenceAdmitted === false &&
+      exactJson(orphanEfficacy.rows[0]?.canonical.efficacyRecordIds, []) &&
+      exactJson(orphanEfficacy.rows[0]?.canonical.recordedEfficacyRecordIds, ["efficacy:audit:orphan-practice-success"]) &&
+      orphanEfficacy.rows[0]?.canonical.attemptSeasons === 0 &&
+      orphanEfficacy.problem.practiceCandidates[0]?.status === "currently_unsupported" &&
+      orphanEfficacy.problem.practiceCandidates[0]?.expectedFeedbackType === "delayed_feedback" &&
+      orphanEfficacy.readiness.items[0]?.readinessStatus === "not_started" &&
+      orphanEfficacy.readiness.items[0]?.feedbackType === "blocked_no_attempt" &&
+      orphanEfficacy.readiness.items[0]?.feedbackQuality === "blocked" &&
+      orphanEfficacy.diffusion.diffusionItems.every((item) => !item.id.includes(":practice-trace:")) &&
+      !orphanEfficacy.feedbackUi.includes("clear success") &&
+      !orphanEfficacy.feedbackUi.includes("clear_success") &&
+      !orphanEfficacy.feedbackUi.includes("clear_success_specific"),
+    orphanMaterialEfficacyCannotGainAuthorityFromLostVariant:
+      orphanMaterialEfficacy.rows.length === 1 &&
+      orphanMaterialEfficacy.rows[0]?.canonical.executionTruth === "execution_provenance_unproven" &&
+      orphanMaterialEfficacy.rows[0]?.canonical.executionEvidenceAdmitted === false &&
+      exactJson(orphanMaterialEfficacy.rows[0]?.canonical.efficacyRecordIds, []) &&
+      exactJson(orphanMaterialEfficacy.rows[0]?.canonical.recordedEfficacyRecordIds, ["efficacy:audit:orphan-material-success"]) &&
+      orphanMaterialEfficacy.rows[0]?.canonical.attemptSeasons === 0 &&
+      orphanMaterialEfficacy.readiness.items[0]?.readinessStatus === "not_started" &&
+      orphanMaterialEfficacy.diffusion.diffusionItems.every((item) => !item.id.includes(":practice-trace:")) &&
+      !orphanMaterialEfficacy.feedbackUi.includes("clear success") &&
+      !orphanMaterialEfficacy.feedbackUi.includes("clear_success") &&
+      !orphanMaterialEfficacy.feedbackUi.includes("clear_success_specific"),
+    canonicalAdapterRetainsAllTenResponses:
+      responseCapRows.length === 10 &&
+      exactJson(responseCapRows.map((row) => row.response?.id), responseCapResponses.map((response) => response.id)) &&
+      exactJson(responseCapRowsAgain.map((row) => row.response?.id), responseCapRows.map((row) => row.response?.id)) &&
+      responseCapTenth?.canonical.responseId === "response:audit:cap-10" &&
+      responseCapTenth?.canonical.responseStatus === "active" &&
+      responseCapTenth?.canonical.executionTruth === "practice_attempted" &&
+      responseCapTenth?.canonical.executionEvidenceAdmitted === true &&
+      exactJson(responseCapTenth?.canonical.efficacyRecordIds, ["efficacy:audit:cap-10"]) &&
+      exactJson(responseCapTenth?.canonical.recordedEfficacyRecordIds, ["efficacy:audit:cap-10"]) &&
+      missingLink(responseCapTenth?.canonical, "idea", "idea:audit:cap-10") &&
+      missingLink(responseCapTenth?.canonical, "experiment", "experiment:audit:cap-10") &&
+      responseCapDisplayProfile.practiceCandidates.length === 9 &&
+      responseCapDisplayProfile.caps.canonicalRowCount === 10 &&
+      responseCapDisplayProfile.caps.omittedCanonicalCandidateCount === 1 &&
+      responseCapDisplayProfile.overviewLines.some((line) => line.includes("Showing 9 of 10 retained canonical lifecycle rows")),
+    item4AuditWritersUseFreshRunProvenance:
+      Object.values(item4AuditRunProvenance).every((audit) =>
+        audit.first.status === 0 && audit.second.status === 0 &&
+        audit.first.freshForInvocation && audit.second.freshForInvocation &&
+        audit.previousArtifactNotInherited && audit.semanticNormalizedStable &&
+        exactJson(audit.normalizedFields, ["generatedAt"])),
     missingWaterWorksCannotProveExistingPhysicalWork:
       groundwaterUnprovenProblem.practiceCandidates[0]?.canonical?.executionTruth === "existing_physical_work_unproven" &&
       groundwaterUnprovenProblem.practiceCandidates[0]?.canonical?.attemptSeasons === 0 &&
