@@ -32,8 +32,24 @@ import type {
 } from "./types";
 import { makeRiverCrossingKey, makeRiverId } from "./hydrography";
 import { createEmptyDecisionArchive } from "../rules/decisionArchive";
+import type { WorldSpatialReference } from "./spatialTypes";
+
+const CANONICAL_ONE_KM_SPATIAL_REFERENCE: WorldSpatialReference = {
+  cellWidthKm: 1,
+  cellHeightKm: 1,
+  coordinateFrame: "cartesian_cell_centers",
+  connectivity: "cardinal_4",
+};
+
+const LEGACY_MAP2_SPATIAL_REFERENCE: WorldSpatialReference = {
+  cellWidthKm: 1.5,
+  cellHeightKm: 1.5,
+  coordinateFrame: "cartesian_cell_centers",
+  connectivity: "cardinal_4",
+};
 
 export const DEFAULT_WORLD_CONFIG: WorldConfig = {
+  spatial: CANONICAL_ONE_KM_SPATIAL_REFERENCE,
   width: 30,
   height: 20,
   seasonsPerYear: SEASONS_PER_YEAR,
@@ -42,6 +58,7 @@ export const DEFAULT_WORLD_CONFIG: WorldConfig = {
 };
 
 export const EARTH_DEBUG_WORLD_CONFIG: WorldConfig = {
+  spatial: CANONICAL_ONE_KM_SPATIAL_REFERENCE,
   width: 360,
   height: 180,
   seasonsPerYear: SEASONS_PER_YEAR,
@@ -50,6 +67,7 @@ export const EARTH_DEBUG_WORLD_CONFIG: WorldConfig = {
 };
 
 export const REGIONAL_DEBUG_WORLD_CONFIG: WorldConfig = {
+  spatial: CANONICAL_ONE_KM_SPATIAL_REFERENCE,
   width: 160,
   height: 100,
   seasonsPerYear: SEASONS_PER_YEAR,
@@ -149,7 +167,7 @@ interface RegionalTileHydrography {
 // spawn-profile habitats and the lake-opportunity audit premises all survive.
 const REGIONAL_SEED_HASH = hashString(String(REGIONAL_DEBUG_WORLD_SEED));
 
-export const REGIONAL_KM_PER_TILE = 1;
+export const REGIONAL_KM_PER_TILE = REGIONAL_DEBUG_WORLD_CONFIG.spatial.cellWidthKm;
 
 const REGIONAL_MAIN_RIVER_BASE: readonly MacroPoint[] = [
   // Future rule: derive rivers from elevation and drainage, not hand-authored paths.
@@ -2321,6 +2339,7 @@ function round2(value: number): number {
 // ---------------------------------------------------------------------------
 
 export const VARIED_MIGRATION_WORLD_CONFIG: WorldConfig = {
+  spatial: LEGACY_MAP2_SPATIAL_REFERENCE,
   width: 220,
   height: 140,
   seasonsPerYear: SEASONS_PER_YEAR,
@@ -2333,7 +2352,7 @@ export const VARIED_MIGRATION_WORLD_SEED = "varied-migration-test-map" as Simula
 // MAP2-R: declared map scale. One tile ≈ 1.5 km of terrain, so seasonal band
 // movement of a few tiles reads as realistic foraging-range shifts and a
 // 100–300y migration of 50–150 tiles reads as a 75–225 km range expansion.
-export const VARIED_MIGRATION_KM_PER_TILE = 1.5;
+export const VARIED_MIGRATION_KM_PER_TILE = VARIED_MIGRATION_WORLD_CONFIG.spatial.cellWidthKm;
 
 const VARIED_SEED_HASH = hashString(String(VARIED_MIGRATION_WORLD_SEED));
 

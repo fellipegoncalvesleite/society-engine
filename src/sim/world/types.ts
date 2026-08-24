@@ -16,6 +16,7 @@ import type { FaunaStockDynamic } from "../agents/faunaStock";
 import type { ForestPatchState } from "../agents/forestPatches";
 import type { PlantPatchState } from "../agents/plantStock";
 import type { Decision, DecisionArchiveSummary } from "../rules/types";
+import type { WorldSpatialReference } from "./spatialTypes";
 
 export type TerrainKind =
   | "plains"
@@ -240,6 +241,7 @@ export interface Tile {
 }
 
 export interface WorldConfig {
+  readonly spatial: WorldSpatialReference;
   readonly width: number;
   readonly height: number;
   readonly seasonsPerYear: number;
