@@ -1,97 +1,117 @@
 # Roadmap Item 5 Pass 4 — Architecture Implemented
 
-Status: closure-candidate implementation record. This document describes the implemented Pass-4 architecture; it does not declare Roadmap Item 5 accepted or frozen.
+Status: final closure-correction implementation record pending independent architect review. This document does not accept or freeze Roadmap Item 5.
 
 ## Canonical authority
 
-`band.practicalAdaptation` remains the sole canonical Item-5 causal/history authority. `band.adaptiveHuman` remains legacy compatibility/read-model state. `Band.technologies` remains legacy only and receives no new causal authority. `materialAffordance` remains a projection/read model, not canonical human knowledge.
+`band.practicalAdaptation` remains the sole canonical Item-5 causal/history authority. `band.adaptiveHuman` remains legacy compatibility/read-model state. `Band.technologies` remains legacy only. `materialAffordance` and the selected-band diagnostic UI remain projections/read models and do not write simulation truth.
 
-The implemented causal chain is:
+The implemented causal separation is:
 
 ```text
-lived / inherited human-known evidence
+human-known evidence
 → practical problem
-→ technical fragments
-→ human material beliefs
+→ technical/material primitives
 → bounded compositional design hypothesis
+→ optional historical recognition
 → selected idea
 → experiment plan
 → physical execution only where independently proven
-→ typed observed result
-→ localized interpretation
-→ success / partial / failure / ambiguity
-→ revision / dead end / dormancy
+→ physical result
+→ typed interpretation / localized feedback
 → practical response
 → efficacy
-→ degraded inheritance / future transmission
+→ durable/degraded knowledge history
 ```
 
-An idea is not an experiment; an experiment plan is not execution; execution is not success; success is not durable competence; and no Item-5 knowledge state manufactures inventory or an artifact.
+Permanent distinction:
 
-## Human material knowledge
+```text
+knowledge
+!= plan
+!= execution
+!= physical result
+!= efficacy
+!= durable competence
+!= artifact
+```
 
-`HumanMaterialBelief` is now canonical band-level epistemic state. It carries a coarse material category/public label, bounded property beliefs with confidence and evidence/contradiction refs, known contexts, handling depth, provenance, and original-context provenance.
+## Closure correction 1 — primitive composition precedes recognition
 
-The temporary material-evidence adapter in `materialEvidence.ts` only translates already-legitimate band-known observations into weak human evidence. It does not scan raw terrain or hidden geology. In particular, wooded context may produce weak `encountered_woody_plant` evidence; it does not grant resin, shaft, frame, membrane, cordage, or other technical competence.
-
-Material beliefs are bounded at 12 per band. Inherited beliefs are degraded, retain their origin/context provenance, and are not local occurrence or execution proof.
-
-## Compositional design
-
-`compositionalInvention.ts` implements normalized design identity over causal dimensions rather than labels or array order:
+Candidate construction no longer begins from a complete catalog of generic designs. `compositionalInvention.ts` builds normalized designs from bounded reusable inputs:
 
 - functional intent;
-- mechanism;
-- component/form roles;
-- required material-property predicates;
-- operations/process structure;
-- deployment class.
+- mechanism primitives;
+- component/form primitives;
+- process/operation primitives;
+- technical fragments;
+- current actionable human material-property beliefs;
+- compatibility constraints;
+- revision/history constraints.
 
-Semantically irrelevant insertion/array order is normalized. Public labels and discovery order do not define identity. Meaningfully different mechanism/process/deployment consequences remain distinct.
+The complete historical design set is not the discovery universe. Historical designs are consulted after a design has been composed, for recognition/compatibility and for already-existing physical-effect adapters.
 
-All historical Item-5 variants remain represented as bootstrap/compatibility templates and, where already supported, physical-effect adapters. They are not the whole invention universe. Generic bounded blueprints can generate non-template hypotheses without assigning them fabricated physical coefficients.
+The controlled closure audit produces uncatalogued normalized `design:ee8231c9` with `historicalMatch: false`. Its fixture also requires the relevant primitive basis; removing the required primitive removes that composition. A non-template persistence key by itself is not treated as proof of composition.
 
-## Candidate generation
+Primitive candidate work is bounded: mechanism inputs 12, component/form inputs 32, process inputs 36, raw candidates 6/problem and 18 globally, shortlist 3/problem.
 
-Generation consumes only human-known Item-5 state: practical problems/history, technical fragments, `HumanMaterialBelief`, design hints, revision/dead-end lessons, and explicit known-context evidence already held by the band.
+## Closure correction 2 — historical material memory is not perpetual current actionability
 
-Fixed budgets are:
+`HumanMaterialBelief` stores history/provenance separately from its current effective epistemic strength. Stored property confidence is not deleted merely because time passes. Instead, `effectiveMaterialPropertyConfidence` applies current-evidence freshness when a role is being bound.
 
-- raw candidates per problem: 6;
-- raw candidates globally per update/band: 18;
-- shortlisted candidates per problem: 3.
+Controlled evidence proves the same belief identity moves:
 
-Ranking uses deterministic keyed tie-breaking. Candidate generation supports many-to-many coupling between practical problems and functional intents. It does not enumerate a world/material Cartesian product and does not query raw terrain, hidden geology, or WORLD-M0 state.
+```text
+fresh observation → supported
+stale without reinforcement → unknown
+fresh re-observation → supported again
+```
 
-## Typed feedback, revisions, and dead ends
+The identity remains `material-belief:band:audit:A:worked_plant_fiber`; re-observation reinforces/reactivates that belief rather than fabricating an unrelated one. Inherited knowledge is degraded and does not count as fresh local occurrence/execution evidence.
 
-Experiment feedback is typed and attribution is localized. Known component/material/operation implications can update the implicated evidence; ambiguous failure remains ambiguous and cannot invent precise blame. The previous blanket rule in which a failure weakened every supporting fragment has been removed.
+## Closure correction 3 — localized binding failure changes later binding
 
-Canonical state now carries bounded design hints and revision/dead-end lessons. Failed or partial paths can create revision hypotheses without removing the functional family from the invention universe. Dormant knowledge can remain recorded without being current local proof.
+Specific material-binding failure can now record a bounded `failedMaterialBinding` scoped to the implicated design/role/material/property/context evidence. Candidate binding consults that localized lesson rather than globally poisoning a material category.
+
+Controlled evidence starts with material A and B both plausible for the same support role. A specifically attributed failure changes later binding to `material:audit:B-binding`. The unknown-failure negative control keeps `material:audit:A-binding` eligible. Only the implicated A property is weakened in the fixture (`tensile_fibrous` 0.78 → 0.69); A `flexibility`, A `heat_response`, and B remain unaffected. A later reinforcement newer than the localized lesson can make the prior binding eligible again.
+
+## Closure correction 4 — no-executor plans are blocked, not falsely underway
+
+A novel design with no existing execution/effect adapter may exist as human knowledge and a plan, but its experiment starts as `blocked_by_execution`, not `underway`.
+
+`blocked_by_execution` is part of the existing canonical experiment/history authority; no second plan ledger was added. Such plans:
+
+- accumulate zero attempt seasons;
+- carry no execution occurrence/evidence;
+- create no physical response/effect;
+- mature no efficacy;
+- remain bounded by the existing experiment cap;
+- rank below genuinely `underway` experiments.
+
+The controlled fixture retains one real `underway` experiment ahead of three blocked plans inside the cap of four.
+
+Long-run inspection exposed a second-order defect in the bounded history: once an unchanged blocked experiment was evicted from the cap-4 experiment store, the same non-template design could be immediately planned again. The correction reuses the existing bounded selected-idea history as a 32-tick reconsideration memory for composed plans. This adds no second plan authority and no permanent blacklist: recent unchanged blocked designs are suppressed, then become reconsiderable after the bounded cooldown. Historical executable variants are not suppressed by this rule.
 
 ## Physical execution boundary
 
-Existing Pass-2 execution provenance remains authoritative. `practice_only` responses can retain their legitimate bounded effects. `existing_physical_work` remains tied to its existing physical authority. `material_execution_required` designs have zero physical effect and zero efficacy maturation without execution proof.
+Pass-2 execution provenance remains authoritative. `practice_only` responses keep only their already-justified practice/measurement effects. `existing_physical_work` remains tied to existing narrow physical authorities such as `waterWorks`. `material_execution_required` designs have zero material physical effect and zero efficacy maturation without independent execution proof.
 
-Existing `waterWorks` remains a narrow physical-work authority. Pass 4 does not generalize it into crafting, construction, inventory, or production. A novel compositional design without an execution/effect adapter may exist as an idea, plan, revision, blocked experiment, or interpreted history but receives no invented physical coefficient.
+A composed design with no historical effect adapter therefore stays knowledge/plan state. Pass 4 adds no inventory, extraction stock, generic crafting, produced-object, construction-labor, ownership, fuel, wear, maintenance, metallurgy, or WORLD-M0 authority.
 
-## Inheritance and locality
+## Feedback, revision and inheritance
 
-Daughter inheritance may carry degraded:
+Typed feedback permits precise change only when the evidence is precise. Unknown failure cannot invent role/property/material blame. Revision/dead-end lessons and design hints remain bounded.
 
-- practical problem framing;
-- technical fragments;
-- human material beliefs;
-- design hints.
+Daughter inheritance may carry degraded problem framing, technical fragments, human material beliefs, and design hints with origin provenance. It does not copy parent execution, efficacy, physical success, waterworks, objects, current local occurrence, or local competence.
 
-It does not copy parent execution, efficacy, practical success, waterworks, objects, current local material occurrence, or local competence. Parent-place provenance remains explicit. Local reproducibility is derived from current band-known contexts/beliefs and can lapse after relocation while knowledge persists.
+## Projection truth correction
 
-## Projection and UI
+`practicalAdaptationProjection.ts` remains read-only. The selected-band UI may display stored history, but an unproven stored lifecycle label such as `concluded_success` is not presented as admitted canonical execution/success truth when execution proof is absent.
 
-`practicalAdaptationProjection.ts` remains a pure projection over canonical state. The selected-band diagnostic UI exposes the design signature, provenance, functional intent, mechanism, component roles, operations, material beliefs/contexts, uncertainty, local reproducibility, plan requirements, execution proof, result/attribution, revisions/dead ends/dormancy, and inherited-versus-local status.
-
-No UI-owned Item-5 state machine or simulation writer was added.
+```text
+stored historical claim != admitted canonical execution truth
+```
 
 ## Scope exclusions preserved
 
-Pass 4 does not own or manufacture inventory, material stock, extracted quantity, components, produced objects, generic crafting, ownership, construction labor, fuel consumption, wear, maintenance stock, physical trade, culture/adoption, or WORLD-M0 material truth.
+No Item-4 physical redesign, Item 6, WORLD-M0, geology, extraction, inventory, craft/production, construction, metallurgy, culture/adoption, or roadmap rewrite is implemented by this closure correction.

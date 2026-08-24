@@ -133,6 +133,7 @@ const CONDITION_FLOOR = 0.2;
 const DORMANT_AFTER_TICKS = 8; // 2y without the matching condition
 const ABANDON_FAILURES = 3;
 const REDISCOVERY_BLOCK_TICKS = 32; // 8y before an abandoned variant may re-form
+const BLOCKED_PLAN_RECONSIDERATION_TICKS = 32; // bounded idea memory prevents immediate executor-less plan cycling
 const RELIEF_ACTIVE_FLOOR = 0.05;
 
 function clamp01(value: number): number {
@@ -1626,6 +1627,21 @@ interface FormationResult {
   readonly startedExperiments: readonly PracticalExperiment[];
 }
 
+export function hasRecentBlockedPlanMemory(input: {
+  readonly priorIdeas: readonly PracticalIdeaCandidate[];
+  readonly problemId: string;
+  readonly designSignature: string;
+  readonly currentTick: number;
+}): boolean {
+  return input.priorIdeas.some((idea) =>
+    idea.problemId === input.problemId &&
+    idea.designSignature === input.designSignature &&
+    idea.status === "selected" &&
+    idea.variantKey.startsWith("composed:") &&
+    input.currentTick - Number(idea.consideredAtTick) >= 0 &&
+    input.currentTick - Number(idea.consideredAtTick) < BLOCKED_PLAN_RECONSIDERATION_TICKS);
+}
+
 function formResponsesThroughProblems(input: {
   readonly band: Band;
   readonly frames: readonly PracticalProblemFrame[];
@@ -1682,8 +1698,16 @@ function formResponsesThroughProblems(input: {
         response.family === candidate.family && response.status !== "abandoned");
       if (liveHistorical) return false;
       const alreadyPlanned = input.priorExperiments.some((experiment) =>
-        experiment.designSignature === candidate.design.signature && experiment.problemId === frame.id && experiment.status === "underway");
-      return !alreadyPlanned;
+        experiment.designSignature === candidate.design.signature && experiment.problemId === frame.id &&
+        (experiment.status === "underway" || experiment.status === "blocked_by_execution"));
+      if (alreadyPlanned) return false;
+      const recentlyRememberedBlockedPlan = candidate.templateVariantKey === undefined && hasRecentBlockedPlanMemory({
+        priorIdeas: input.priorIdeas,
+        problemId: frame.id,
+        designSignature: candidate.design.signature,
+        currentTick: tick,
+      });
+      return !recentlyRememberedBlockedPlan;
     });
     if (candidates.length === 0) continue;
 
@@ -1701,6 +1725,7 @@ function formResponsesThroughProblems(input: {
       source: candidate.source,
       design: candidate.design,
       materialBindings: candidate.materialBindings,
+      constructionPrimitiveIds: candidate.constructionPrimitiveIds,
       sourceEvidenceRefs: candidate.provenance.evidenceRefs,
       ...(candidate.provenance.priorIdeaId === undefined ? {} : { parentIdeaId: candidate.provenance.priorIdeaId }),
       ...(candidate.changedDimension === undefined ? {} : { changedDimension: candidate.changedDimension }),
@@ -1744,6 +1769,7 @@ function formResponsesThroughProblems(input: {
         opportunityCost: "planned work would displace other subsistence tasks if a future executor can actually perform it",
         observationBasis: selected.source === "accident" ? "direct" : "inferred",
         contextKey: frame.contextKey,
+        initialStatus: "blocked_by_execution",
         currentTick: input.currentTick,
       }));
       continue;
@@ -2116,7 +2142,8 @@ export function advancePracticalAdaptation(
   });
   const protectedFragmentIds = [...new Set([
     ...(prior?.ideas ?? []).filter((idea) => idea.status === "selected" || idea.status === "considered").flatMap((idea) => idea.basisFragmentIds),
-    ...(prior?.experiments ?? []).filter((experiment) => experiment.status === "underway").flatMap((experiment) =>
+    ...(prior?.experiments ?? []).filter((experiment) =>
+      experiment.status === "underway" || experiment.status === "blocked_by_execution").flatMap((experiment) =>
       (prior?.ideas ?? []).find((idea) => idea.id === experiment.ideaId)?.basisFragmentIds ?? []),
     ...(prior?.responses ?? []).filter((response) => response.status === "forming" || response.status === "active").flatMap((response) => response.requiredFragmentIds),
   ])];
@@ -2125,7 +2152,8 @@ export function advancePracticalAdaptation(
   const protectedBeliefIds = [...new Set([
     ...(prior?.ideas ?? []).filter((idea) => idea.status === "selected" || idea.status === "considered")
       .flatMap((idea) => idea.materialBindings?.map((binding) => binding.materialBeliefId) ?? []),
-    ...(prior?.experiments ?? []).filter((experiment) => experiment.status === "underway")
+    ...(prior?.experiments ?? []).filter((experiment) =>
+      experiment.status === "underway" || experiment.status === "blocked_by_execution")
       .flatMap((experiment) => experiment.materialBindings?.map((binding) => binding.materialBeliefId) ?? []),
   ])];
   let materialBeliefs = advanceHumanMaterialBeliefs({
@@ -2195,7 +2223,15 @@ export function advancePracticalAdaptation(
     materialBeliefs = localized.materialBeliefs;
     const problemFamily = (prior?.problems ?? []).find((problem) => problem.id === response.problemId)?.family;
     if (problemFamily !== undefined) {
-      revisionLessons = recordRevisionLesson({ prior: revisionLessons, problemFamily, feedback, currentTick: input.currentTick });
+      const experiment = (prior?.experiments ?? []).find((entry) => entry.responseId === response.id);
+      const idea = response.ideaId === undefined ? undefined : (prior?.ideas ?? []).find((entry) => entry.id === response.ideaId);
+      revisionLessons = recordRevisionLesson({
+        prior: revisionLessons,
+        problemFamily,
+        feedback,
+        materialBindings: experiment?.materialBindings ?? idea?.materialBindings,
+        currentTick: input.currentTick,
+      });
     }
   }
 
@@ -2225,7 +2261,7 @@ export function advancePracticalAdaptation(
   // locally known material support without rewriting their design identity.
   const priorIdeas = (prior?.ideas ?? []).map((idea) => {
     if (idea.design === undefined) return idea;
-    const local = deriveLocalReproducibility(idea.design, materialBeliefs, localContextKey);
+    const local = deriveLocalReproducibility(idea.design, materialBeliefs, localContextKey, tick);
     return { ...idea, localReproducibility: local.status === "supported" ? "supported" as const : local.status === "blocked" ? "blocked" as const : "unknown" as const };
   });
   const priorHints = prior?.designHints ?? [];

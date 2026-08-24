@@ -6,9 +6,9 @@ Status: deterministic causal-divergence record. A changed whole-world fingerprin
 
 The final closure-candidate source bytes are deterministic under repeated and fresh-process execution. `demographicLongRunAudit.mjs --map map2 --years 50 --repeat` reports repeat-identical state and fingerprint:
 
-`1d442858bfece8f51f7a901c4a589b0f66f2696bef9a43d68044e21d58d5d9cd`
+`2f4b6b3a13b78f6b30555d0b503c50eb308aa10d59e496b4561bc7edb3f34287`
 
-Two additional independent Node processes produced the same fingerprint and the same key outcomes (`endPopulation=214`, `activeBands=9`, `movements=1077`, `adaptationsAttempted=6`, `adaptationsEffective=3`). The final value therefore reproduced across four executions, including independent processes.
+Two additional independent Node processes produced the same fingerprint and the same key outcomes (`endPopulation=214`, `activeBands=9`, `movements=1077`, `adaptationsAttempted=8`, `adaptationsEffective=3`). The final value therefore reproduced across four executions, including independent processes.
 
 An earlier Pass-4 evidence capture recorded:
 
@@ -20,7 +20,7 @@ The accepted Pass-3 Map-2 fingerprint was:
 
 `f509b2f4d6e8a463b7505025afe22d151fd45a0598bd9550fbb84aac900da03c`
 
-The final Pass-4 and accepted Pass-3 fingerprints differ. No coefficient was retuned to restore either the Pass-3 value or the stale intermediate Pass-4 value.
+The final Pass-4 and accepted Pass-3 fingerprints differ. No coefficient was retuned to restore either the Pass-3 value or any stale intermediate Pass-4 value. The final fingerprint also differs from the pre-cooldown closure-correction fingerprint because certification identified and corrected immediate blocked-plan cycling; population, movement, and effective-adaptation outcomes remain stable.
 
 ## First causal divergence from accepted Pass 3
 
@@ -40,7 +40,7 @@ It is not classified as an Item-4, ecology, demography, or physical-coefficient 
 
 ## Controlled divergence A–P
 
-Fresh `item5Pass4CompositionalAudit.mjs` result on the final exact source bytes: **PASS, 26/26 checks**. The controlled suite proves all required cases:
+Fresh `item5Pass4CompositionalAudit.mjs` result on the final exact source bytes: **PASS, 31/31 checks**. The original A–P cases remain green and closure assertions Q/R/S/T additionally prove primitive composition, temporal material actionability, localized failed-binding substitution, and truthful blocked-plan lifecycle. The strengthened T check also proves the bounded 32-tick blocked-plan reconsideration memory expires and does not suppress an executable historical variant. The controlled suite preserves these original cases:
 
 - A — different human-known environments produce different candidate possibilities while hidden truth alone does not;
 - B — same environment plus different technical history diverges;
@@ -59,7 +59,7 @@ Fresh `item5Pass4CompositionalAudit.mjs` result on the final exact source bytes:
 - O — unsupported material-required design produces zero fabricated physical effect/efficacy;
 - P — hidden world changes with identical human knowledge do not change candidate generation.
 
-Current controlled values include normalized equivalence signature `design:bf976a52`, fiber-opportunity candidate digest `6101ffc4b774606ad0e83c06380c85647de2dc248736a4f90e83f3fac3424da8`, and stone-opportunity candidate digest `82c5d5449f6b025a298457cf4a7f3d353e7e4c4eea35e0accb0fecc42d8e8be0`.
+Current controlled values include normalized equivalence signature `design:bf976a52`, fiber-opportunity candidate digest `928b6f3c1ca047e8ff2a32ca20aa9093bd3bc82cc1c7ed6dcf9457b47d71bb5e`, and stone-opportunity candidate digest `67d039d2a3f877c33493c7ea24138c0e6859cd0eae117b5c1439fa6ccc94771e`.
 
 ## Natural divergence / non-vacuity
 

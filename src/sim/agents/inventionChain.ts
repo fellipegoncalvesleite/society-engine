@@ -235,6 +235,7 @@ export interface IdeaOption {
   readonly source: PracticalIdeaSource;
   readonly design?: PracticalIdeaCandidate["design"];
   readonly materialBindings?: PracticalIdeaCandidate["materialBindings"];
+  readonly constructionPrimitiveIds?: PracticalIdeaCandidate["constructionPrimitiveIds"];
   readonly sourceEvidenceRefs?: readonly string[];
   readonly parentIdeaId?: string;
   readonly changedDimension?: PracticalIdeaCandidate["changedDimension"];
@@ -302,6 +303,7 @@ export function selectIdeaForProblem(input: {
       consideredAtTick: input.currentTick,
       ...(option.design === undefined ? {} : { designSignature: option.design.signature, design: option.design }),
       ...(option.materialBindings === undefined ? {} : { materialBindings: option.materialBindings }),
+      ...(option.constructionPrimitiveIds === undefined ? {} : { constructionPrimitiveIds: option.constructionPrimitiveIds }),
       ...(option.parentIdeaId === undefined ? {} : { parentIdeaId: option.parentIdeaId }),
       ...(option.changedDimension === undefined ? {} : { changedDimension: option.changedDimension }),
       ...(option.sourceEvidenceRefs === undefined ? {} : { sourceEvidenceRefs: option.sourceEvidenceRefs }),
@@ -354,6 +356,7 @@ export function startExperiment(input: {
   readonly opportunityCost: string;
   readonly observationBasis: "direct" | "inferred";
   readonly contextKey?: string;
+  readonly initialStatus?: "underway" | "blocked_by_execution";
   readonly currentTick: TickNumber;
 }): PracticalExperiment {
   return {
@@ -371,7 +374,7 @@ export function startExperiment(input: {
     opportunityCost: input.opportunityCost,
     observationBasis: input.observationBasis,
     attemptSeasons: 0,
-    status: "underway",
+    status: input.initialStatus ?? "underway",
     contextKey: input.contextKey,
     fragmentsLearned: [],
     fragmentsContradicted: [],
@@ -436,7 +439,7 @@ export function advanceExperiments(
   return [...started, ...advanced]
     .sort((left, right) => {
       const rank = (experiment: PracticalExperiment): number =>
-        experiment.status === "underway" ? 2 : 1;
+        experiment.status === "underway" ? 3 : experiment.status === "blocked_by_execution" ? 2 : 1;
       return rank(right) - rank(left) ||
         Number(right.startedAtTick) - Number(left.startedAtTick) ||
         left.id.localeCompare(right.id);

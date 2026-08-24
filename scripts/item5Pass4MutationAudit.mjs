@@ -31,8 +31,8 @@ const mutations = [
     audit: "item5Pass4CompositionalAudit.mjs",
     expectedFailures: ["P_hidden_world_truth_cannot_change_candidates"],
     mutate(source) {
-      const from = '  const ranked = raw.sort((a, b) => b.score - a.score || a.design.signature.localeCompare(b.design.signature));\n  return { raw: ranked, shortlist: ranked.slice(0, SHORTLIST_PER_PROBLEM_CAP), rawConsidered: ranked.length };';
-      const to = '  const ranked = raw.sort((a, b) => b.score - a.score || a.design.signature.localeCompare(b.design.signature));\n  const hiddenWorldTruth = (input as typeof input & { hiddenWorldTruth?: { terrain?: string } }).hiddenWorldTruth;\n  const contaminatedRanking = hiddenWorldTruth?.terrain === "stone" ? [...ranked].reverse() : ranked;\n  return { raw: contaminatedRanking, shortlist: contaminatedRanking.slice(0, SHORTLIST_PER_PROBLEM_CAP), rawConsidered: contaminatedRanking.length };';
+      const from = '  const ranked = raw.sort((a, b) => b.score - a.score || a.design.signature.localeCompare(b.design.signature));\n  return {\n    raw: ranked,\n    shortlist: ranked.slice(0, SHORTLIST_PER_PROBLEM_CAP),\n    rawConsidered: ranked.length,';
+      const to = '  const ranked = raw.sort((a, b) => b.score - a.score || a.design.signature.localeCompare(b.design.signature));\n  const hiddenWorldTruth = (input as typeof input & { hiddenWorldTruth?: { terrain?: string } }).hiddenWorldTruth;\n  const contaminatedRanking = hiddenWorldTruth?.terrain === "stone" ? [...ranked].reverse() : ranked;\n  return {\n    raw: contaminatedRanking,\n    shortlist: contaminatedRanking.slice(0, SHORTLIST_PER_PROBLEM_CAP),\n    rawConsidered: contaminatedRanking.length,';
       if (!source.includes(from)) throw new Error("M1 mutation anchor missing");
       return source.replace(from, to);
     },
@@ -99,6 +99,68 @@ const mutations = [
       const from = '  })).sort((a, b) => a.role.localeCompare(b.role) || a.form.localeCompare(b.form));';
       const to = '  }));';
       if (!source.includes(from)) throw new Error("M6 mutation anchor missing");
+      return source.replace(from, to);
+    },
+  },
+
+  {
+    id: "M7",
+    description: "return candidate formation to complete authored-blueprint selection instead of primitive construction",
+    file: "src/sim/agents/compositionalInvention.ts",
+    audit: "item5Pass4CompositionalAudit.mjs",
+    expectedFailures: ["Q_primitive_recombination_constructs_uncatalogued_design"],
+    mutate(source) {
+      const from = `    const constructed = constructBlueprintFromPrimitives({
+      mechanism: mechanismPrimitive,
+      componentInputs,
+      processInputs,
+      fragments: input.fragments,
+      currentTick: input.currentTick,
+    });`;
+      const to = `    const catalogBlueprint = HISTORICAL_VARIANT_BLUEPRINTS.find((entry) =>
+      entry.intent === mechanismPrimitive.intent && entry.mechanism === mechanismPrimitive.mechanism);
+    if (catalogBlueprint === undefined) continue;
+    const constructed = { blueprint: catalogBlueprint, primitiveIds: [\`catalog:\${catalogBlueprint.id}\`] };`;
+      if (!source.includes(from)) throw new Error("M7 mutation anchor missing");
+      return source.replace(from, to);
+    },
+  },
+  {
+    id: "M8",
+    description: "make stale stored material confidence directly actionable forever",
+    file: "src/sim/agents/compositionalInvention.ts",
+    audit: "item5Pass4CompositionalAudit.mjs",
+    expectedFailures: ["R_material_belief_staleness_and_reactivation"],
+    mutate(source) {
+      const from = 'effectiveMaterialPropertyConfidence(belief, required, currentTick) >= MATERIAL_ACTIONABILITY_MIN_CONFIDENCE';
+      const to = 'belief.properties.some((property) => property.property === required && property.confidence >= MATERIAL_ACTIONABILITY_MIN_CONFIDENCE)';
+      if (!source.includes(from)) throw new Error("M8 mutation anchor missing");
+      return source.replace(from, to);
+    },
+  },
+  {
+    id: "M9",
+    description: "permit a specifically failed material binding to be selected again despite an alternative",
+    file: "src/sim/agents/compositionalInvention.ts",
+    audit: "item5Pass4CompositionalAudit.mjs",
+    expectedFailures: ["S_specific_material_binding_failure_substitutes_locally"],
+    mutate(source) {
+      const from = '  const matches = beliefs.filter((belief) => !implicated(belief) && role.requiredProperties.every((required) =>';
+      const to = '  const matches = beliefs.filter((belief) => role.requiredProperties.every((required) =>';
+      if (!source.includes(from)) throw new Error("M9 mutation anchor missing");
+      return source.replace(from, to);
+    },
+  },
+  {
+    id: "M10",
+    description: "classify executor-less blocked plans as underway physical experiments",
+    file: "src/sim/agents/inventionChain.ts",
+    audit: "item5Pass4CompositionalAudit.mjs",
+    expectedFailures: ["T_executorless_novel_plan_is_not_false_underway_experiment"],
+    mutate(source) {
+      const from = '    status: input.initialStatus ?? "underway",';
+      const to = '    status: "underway",';
+      if (!source.includes(from)) throw new Error("M10 mutation anchor missing");
       return source.replace(from, to);
     },
   },

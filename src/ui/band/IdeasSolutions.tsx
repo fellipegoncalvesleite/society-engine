@@ -275,7 +275,9 @@ function CanonicalInventionDiagnosticBand({ band, label }: { readonly band: Band
             const design = idea.design;
             const boundBeliefs = (idea.materialBindings ?? []).map((binding) => {
               const belief = (state.materialBeliefs ?? []).find((entry) => entry.id === binding.materialBeliefId);
-              return `${binding.role}: ${belief?.publicLabel ?? binding.materialBeliefId} (${binding.localSupport}; contexts ${belief?.knownContexts.join(", ") || "unknown"})`;
+              const effective = binding.effectiveConfidence === undefined ? "effective strength unavailable" : `effective at formation ${Math.round(binding.effectiveConfidence * 100)}%`;
+              const reinforced = belief === undefined ? "reinforcement unknown" : `last reinforced tick ${Number(belief.lastReinforcedTick)}`;
+              return `${binding.role}: ${belief?.publicLabel ?? binding.materialBeliefId} (${binding.localSupport}; ${effective}; ${reinforced}; contexts ${belief?.knownContexts.join(", ") || "unknown"})`;
             });
             return (
               <details key={`diagnostic:${idea.id}`} className={`practice-feedback-card status-${idea.status}`}>
@@ -289,6 +291,7 @@ function CanonicalInventionDiagnosticBand({ band, label }: { readonly band: Band
                   <p><strong>Component roles:</strong> {design?.componentRoles.map((role) => `${role.role}:${role.form} requires ${role.requiredProperties.join("+") || "no material predicate"}`).join(" · ") || "none"}</p>
                   <p><strong>Operations:</strong> {design?.operations.map((operation) => `${operation.id}:${operation.operation}(${operation.inputRoles.join("+")})`).join(" → ") || "practice-only / none"}</p>
                   <p><strong>Supporting fragments:</strong> {idea.basisFragmentIds.join(", ") || "none"}</p>
+                  <p><strong>Construction primitive basis:</strong> {idea.constructionPrimitiveIds?.join(", ") || "legacy / revision basis"}</p>
                   <p><strong>Material beliefs / known contexts:</strong> {boundBeliefs.join(" · ") || "no material role binding"}</p>
                   <p><strong>Uncertainty:</strong> {Math.round((1 - idea.basisScore) * 100)}% basis uncertainty; {idea.statusReason}</p>
                   <p><strong>Local reproducibility:</strong> {idea.localReproducibility ?? "legacy / unknown"}</p>
@@ -312,6 +315,11 @@ function CanonicalInventionDiagnosticBand({ band, label }: { readonly band: Band
                   <p><strong>Planned operations:</strong> {experiment.plannedOperations?.map((operation) => operation.operation).join(" → ") || experiment.procedure}</p>
                   <p><strong>Expected effect:</strong> {experiment.expectedEffect}</p>
                   <p><strong>Estimated labor/risk/opportunity:</strong> {Math.round(experiment.laborCost * 100)}% / {Math.round(experiment.riskCost * 100)}% / {experiment.opportunityCost}</p>
+                  <p><strong>Plan lifecycle:</strong> {executionProofGap !== undefined
+                    ? "planned/deferred; stored lifecycle status is withheld because execution proof is absent"
+                    : experiment.status === "blocked_by_execution"
+                      ? "planned and blocked/deferred; no physical experiment is underway"
+                      : experiment.status.replace(/_/g, " ")}</p>
                   <p><strong>Execution authority:</strong> {executionDiagnostic(row)}</p>
                   <p><strong>Execution evidence refs:</strong> {executionProofGap === undefined ? experiment.executionEvidenceRefs?.join(", ") || "none" : `${executionProofGap}; stored execution refs withheld as proof`}</p>
                   <p><strong>Typed observed result:</strong> {executionProofGap !== undefined ? `${executionProofGap}; stored feedback is not admitted as physical evidence` : feedback === undefined ? "not recorded" : `${feedback.feedbackClass}; attribution ${feedback.attributionQuality}; evidence ${feedback.evidenceRefs.join(", ")}`}</p>
@@ -321,7 +329,10 @@ function CanonicalInventionDiagnosticBand({ band, label }: { readonly band: Band
           })}
         </div>
 
-        <p><strong>Revision / dead-end history:</strong> {lessons.map((lesson) => `${lesson.designSignature}: ${lesson.feedbackClass}; changed ${lesson.changedDimension ?? "unknown"}; ${lesson.status}; strength ${Math.round(lesson.strength * 100)}%`).join(" · ") || "no retained lessons"}</p>
+        <p><strong>Revision / dead-end history:</strong> {lessons.map((lesson) => {
+          const failedBindings = lesson.failedMaterialBindings?.map((binding) => `${binding.role} rejected ${binding.materialBeliefId}${binding.contextKey === undefined ? "" : ` @ ${binding.contextKey}`}`).join(", ");
+          return `${lesson.designSignature}: ${lesson.feedbackClass}; changed ${lesson.changedDimension ?? "unknown"}; ${lesson.status}; strength ${Math.round(lesson.strength * 100)}%${failedBindings === undefined || failedBindings.length === 0 ? "" : `; binding lesson ${failedBindings}`}`;
+        }).join(" · ") || "no retained lessons"}</p>
         <p><strong>Environmental mismatch:</strong> {lessons.filter((lesson) => lesson.feedbackClass === "environmental_mismatch").map((lesson) => lesson.designSignature).join(", ") || "none retained"}</p>
         <p><strong>Inherited vs locally proven:</strong> inherited/copy provenance is knowledge only; local proof requires canonical execution truth. Current executed rows: {rows.filter((row) => row.canonical.executionTruth === "practice_attempted" || row.canonical.executionTruth === "concluded_from_canonical_history" || row.canonical.executionTruth === "existing_physical_work_executed").length}.</p>
       </div>

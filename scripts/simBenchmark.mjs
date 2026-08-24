@@ -41126,7 +41126,8 @@ function runTargetedPracticalAdaptationCheck(modules, options) {
     failure_revises_into_alternative_composition_plan_without_fabricated_effect:
       unit.revisionIdea !== undefined && unit.revisionIdea.variantKey !== "load_staging" &&
       unit.revisionIdea.designSignature !== undefined &&
-      unit.revisionExperiment?.status === "underway" && unit.revisionExperiment.executionOccurred === false &&
+      unit.revisionExperiment?.status === "blocked_by_execution" && unit.revisionExperiment.executionOccurred === false &&
+      unit.revisionExperiment.attemptSeasons === 0 &&
       unit.triggerState.responses.every((response) => response.id !== unit.revisionExperiment?.responseId),
     // (G) context mismatch
     water_relief_refuses_unmatched_destination: unit.mismatchRelief.active === false,
@@ -58186,8 +58187,8 @@ function runTargetedInvention3Audit(modules, options) {
 
   const checks = {
     canonicalMaterialPlanCannotCloseWithoutExecution:
-      formedSelectedIdea?.family === "water_storage" && formedExperiment?.status === "underway" &&
-      formedExperiment.executionOccurred === false && closedExperiment?.status === "underway" &&
+      formedSelectedIdea?.family === "water_storage" && formedExperiment?.status === "blocked_by_execution" &&
+      formedExperiment.executionOccurred === false && closedExperiment?.status === "blocked_by_execution" &&
       closedExperiment.executionOccurred === false && (closedExperiment.attemptSeasons ?? 0) === 0 &&
       (formedStorage === undefined || closedResponse?.status === "forming") &&
       closed.efficacyRecords.every((record) => record.responseId !== formedExperiment.responseId),
@@ -58218,7 +58219,7 @@ function runTargetedInvention3Audit(modules, options) {
     groundwaterLaborConsumed: (dryHole?.laborPaid ?? 0) > 0 && (dryHole?.lastLaborCost ?? 0) > 0,
     materialPreparationRemainsPlanOnlyWithoutExecution:
       formedExperiment !== undefined && formedExperiment.materials.length > 0 && formedExperiment.procedure.length > 0 &&
-      formedExperiment.executionOccurred === false && formedExperiment.status === "underway" &&
+      formedExperiment.executionOccurred === false && formedExperiment.status === "blocked_by_execution" &&
       coolCarrier.relief === 0,
     engineeringBeyondRaft: linedWell?.status === "shallow_well" && (linedWell.laborPaid ?? 0) > 0 && (linedWell.digSeasons ?? 0) >= 4,
     daughterGetsHintsNotCompetence:

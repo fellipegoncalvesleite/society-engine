@@ -1,68 +1,111 @@
 # Roadmap Item 5 Pass 4 — Migration and Compatibility
 
-Status: measured migration/certification record. Historical evidence files were not rewritten to make current production fit old assumptions.
+Status: final closure-correction migration/certification record pending independent architect review. Historical evidence is not rewritten to make the rejected `1352c568...` tree appear correct.
 
 ## Pass-1 authority-audit migration
 
-The old Pass-1 audit froze the complete hash of `practicalResponses.ts`. That whole-file hash is no longer a valid invariant because Pass 4 necessarily changes Item-5 response orchestration.
+The old Pass-1 audit once froze broader implementation shape that Pass 4 necessarily changes. The live compatibility gate now preserves the causal invariant instead:
 
-The live compatibility audit now preserves the reason the guard existed instead of freezing an obsolete file shape:
+1. `src/sim/agents/adaptiveEfficacy.ts` remains byte-identical to accepted Pass 3 at SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`.
+2. Pass-2 execution provenance classes/gates remain authoritative.
+3. `material_execution_required` responses cannot regain physical effect or efficacy without execution proof.
+4. `band.practicalAdaptation` remains the single canonical Item-5 adaptation/history authority.
 
-1. `src/sim/agents/adaptiveEfficacy.ts` remains byte-identical to the accepted Pass-3 authority: SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`.
-2. Pass-2 physical execution provenance classes/gates remain authoritative; the focused provenance audit passes.
-3. Material-execution-required responses cannot regain physical effect or efficacy without execution proof.
-4. `band.practicalAdaptation` remains the only canonical Item-5 adaptation authority; no duplicate writer was introduced through `adaptiveHuman`, technologies, projections, or UI.
-
-Fresh result: `node scripts/item5AdaptationAuthorityAudit.mjs` => PASS.
+Fresh final result: `node scripts/item5AdaptationAuthorityAudit.mjs` => **PASS, 19/19**.
 
 ## Pass-3 projection/inheritance migration
 
-The old live projection/inheritance audit assumed `problemCap === 5` and treated fragments/problems as the complete inheritable practical-knowledge surface. Pass 4 intentionally changes those schema assumptions.
+Pass 4 adds bounded material-belief/design-hint/revision state, so a fixture that treated fragments/problems as the complete inheritable practical-knowledge surface became stale.
 
-The current live invariant is:
+Current live caps are:
 
-- problem cap: 6;
-- fragment cap: 20;
-- material-belief cap: 12;
-- design-hint cap: 8;
-- revision/dead-end lesson cap: 8;
-- response cap: 12;
-- efficacy cap: 12;
-- idea cap: 8;
-- experiment cap: 4.
+- problems 6;
+- fragments 20;
+- material beliefs 12;
+- design hints 8;
+- revision/dead-end lessons 8;
+- responses 12;
+- efficacy 12;
+- ideas 8;
+- experiments 4.
 
-The migrated audit proves daughter transfer may include degraded material beliefs/design hints while still refusing parent execution, efficacy, waterworks, local material occurrence, or local competence as daughter-local proof.
+The migrated audit proves daughter transfer may include degraded material beliefs/design hints while refusing parent execution, efficacy, waterworks, current local material occurrence, or local competence as daughter-local proof.
 
-Fresh result: `node scripts/item5ProjectionInheritanceAudit.mjs` => PASS.
+Fresh final result: `node scripts/item5ProjectionInheritanceAudit.mjs` => **PASS, 40/40**.
 
-## Invention-3 benchmark migration discovered during final certification
+## Practical-adaptation / Invention-3 blocked-plan migration
 
-Final certification found a stale benchmark rather than a production regression. `--targeted-invention-3-audit` still expected unexecuted water carriers, shelters, hunting material, and treatments to create physical effects and still enforced the old fragment/problem caps. Those expectations directly conflicted with accepted Pass-2 execution provenance and Pass-4 bounded state.
+The reviewed closure candidate still carried older fixture expectations that unsupported material plans could remain `underway`. That expectation conflicts with the corrected execution/history semantics.
 
-The benchmark fixture was migrated, not weakened:
+The stronger migrated invariant is:
 
-- a material design may be selected and have an experiment plan without physical execution;
-- its `executionOccurred` remains false and it cannot create material physical effects or efficacy;
-- practice-only proto-measurement remains able to improve reckoning;
-- persisted `waterWorks` remains a legitimate existing physical authority;
-- unexecuted shelter/hunting/treatment plans produce zero physical effect;
-- current store caps are checked explicitly.
+```text
+no execution authority
+→ blocked_by_execution
+→ attemptSeasons = 0
+→ executionOccurred = false
+→ zero material physical effect
+→ zero efficacy maturation
+```
 
-Fresh result after migration: `--targeted-invention-3-audit` => `passed: true`, 23/23 checks.
+The practical-adaptation suite now verifies this while retaining positive controls for legitimate practice-only work and existing narrow physical work.
+
+Fresh final results:
+
+- `--targeted-practical-adaptation-check` => **PASS, 27/27**;
+- `--targeted-invention-3-audit` => **PASS, 23/23**.
+
+This is a benchmark/test migration, not a relaxation of production execution requirements.
+
+Final long-run certification additionally found that cap eviction could cause the same non-template blocked plan to be recreated immediately. The narrow correction uses the already-canonical bounded idea history as a 32-tick reconsideration cooldown for selected `composed:` designs. It does not suppress historical executable variants, does not add execution authority, and does not create a second durable plan ledger.
+
+## Projection truth correction
+
+A stored historical lifecycle label such as `concluded_success` is not itself canonical proof that physical execution happened. The selected-band diagnostic projection was corrected so absent canonical execution proof is not presented as admitted execution/success truth.
+
+```text
+stored historical claim != admitted canonical execution truth
+```
+
+Fresh Pass-3 projection/inheritance and Pass-4 controlled audits cover this stronger interpretation.
+
+## Closure-test migration and RED chronology
+
+The closure audit grew from 26 A–P assertions to 31 assertions including Q/R/S/T plus a static composition-order guard. The reversible mutation suite grew from M1–M6 to M1–M10.
+
+The old stored RED output is retained as historical evidence of a failed capture but is not claimed as semantic RED: it failed at module loading. A detached reproduction against exact rejected SHA `1352c568...` instead establishes the four defect failures Q/R/S/T with exit non-zero, 4 failed and 27 passed.
 
 ## Compatibility with Item 4
 
-`src/sim/agents/fissionFieldTransferPolicy.ts` receives only an Item-5 compatibility-description/classification update for the richer degraded practical-adaptation surface. No founder allocation, departure, travel, stabilization, reintegration, fission timing, or other Item-4 physical mechanic was changed.
+`src/sim/agents/fissionFieldTransferPolicy.ts` receives only the already-authorized Item-5 compatibility classification for the richer degraded practical-adaptation surface. The closure correction does not redesign Item-4 departure, travel, transfer, stabilization, or reintegration mechanics.
 
-Fresh regression evidence:
+Fresh final regression evidence:
 
-- Item-4 fission field transfer: 12/12 PASS, 0 vacuous;
-- Item-4 whole integration freeze: 6/6 PASS;
-- graph integrity: 221 nodes / 764 edges, 0 duplicate node ids, 0 dangling links;
-- import boundary: PASS, 87 recorded agent-agent back edges.
+- Item-4 fission field transfer: **12/12 PASS, 0 vacuous**;
+- Item-4 whole integration: **6/6 PASS**;
+- architecture graph: **221 nodes / 764 edges / 0 duplicate ids / 0 dangling links**;
+- import boundary: **PASS**.
+
+The import-boundary audit currently reports 68 internal sim back-edges as informational metadata. The prohibited simulation import boundary remains clean.
 
 ## Legacy compatibility surfaces
 
-`band.adaptiveHuman` remains compatibility/read-model only. `Band.technologies` remains legacy only. `materialAffordance` remains a projection/read model. No new causal reader/writer authority was granted to any of them.
+`band.adaptiveHuman` remains compatibility/read-model only. `Band.technologies` remains legacy only. `materialAffordance` remains projection/read model. The selected-band UI reads projection state and owns no simulation writer.
 
-The selected-band UI reads the canonical projection and does not own simulation state.
+Historical complete design definitions may still be used for recognition/compatibility and existing effect adapters. They no longer define the discovery universe: a candidate is composed first from bounded primitives, then optionally recognized.
+
+## Non-migrations
+
+No compatibility migration in this correction adds or begins:
+
+- WORLD-M0;
+- canonical geology/material occurrence;
+- extraction or inventory;
+- craft/production;
+- task-level labor;
+- construction or metallurgy;
+- physical trade;
+- culture/adoption;
+- Item 6;
+- Pass 5;
+- roadmap rewrite.

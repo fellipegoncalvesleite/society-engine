@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-11T22:53:44.721Z",
+  "generatedAt": "2026-08-24T00:51:20.848Z",
   "seed": "audit27:natural:s1",
   "warmDays": 1800,
   "parentId": "band:varied-river-mid",
@@ -9,11 +9,11 @@
     "passing": 12,
     "failing": 0,
     "vacuous": 0,
-    "bandFieldsClassified": 135,
+    "bandFieldsClassified": 136,
     "fieldsStillHoldingTheParentsObject": 5
   },
   "transferLedger": {
-    "bandFieldsClassified": 135,
+    "bandFieldsClassified": 136,
     "policyViolations": [],
     "pendingRecomputeFields": [
       "socialPressure"
@@ -30,7 +30,7 @@
   "classHistogram": {
     "NEW_SUCCESSOR_IDENTITY": 4,
     "CURRENT_LINEAGE_PROVENANCE": 3,
-    "FORBIDDEN_TO_COPY": 41,
+    "FORBIDDEN_TO_COPY": 42,
     "SHARED_HISTORICAL_FACT": 7,
     "EXACT_COHORT_TRANSFER": 2,
     "FOUNDER_CARRIED_EMBODIED_BURDEN": 4,
@@ -48,8 +48,8 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "bandFieldsInSource": 135,
-        "classified": 135,
+        "bandFieldsInSource": 136,
+        "classified": 136,
         "missing": [],
         "extra": []
       }
@@ -64,7 +64,7 @@
         "classHistogram": {
           "NEW_SUCCESSOR_IDENTITY": 4,
           "CURRENT_LINEAGE_PROVENANCE": 3,
-          "FORBIDDEN_TO_COPY": 41,
+          "FORBIDDEN_TO_COPY": 42,
           "SHARED_HISTORICAL_FACT": 7,
           "EXACT_COHORT_TRANSFER": 2,
           "FOUNDER_CARRIED_EMBODIED_BURDEN": 4,
@@ -101,12 +101,13 @@
       "nonVacuous": true,
       "detail": {
         "method": "LEXICAL — parsed from createDaughterBand's own object literal; it cannot see a field handled by a helper it calls",
-        "unregisteredByPolicyClass": 45,
-        "alsoNotOverriddenByTheLegacyPath": 34,
+        "unregisteredByPolicyClass": 46,
+        "alsoNotOverriddenByTheLegacyPath": 35,
         "fields": [
           "lineage",
           "fissionAttempt",
           "successorStabilizationEvents",
+          "successorPostReturnEstablishmentEvents",
           "mobility",
           "carryingCapacity",
           "populationDemand",
@@ -317,9 +318,9 @@
       "detail": {
         "absentByPolicy": 83,
         "absentButPresent": [],
-        "emptyByPolicy": 17,
+        "emptyByPolicy": 18,
         "notEmpty": [],
-        "resetKeys": 102
+        "resetKeys": 103
       }
     },
     {
@@ -328,7 +329,7 @@
       "verdict": "PASS",
       "nonVacuous": true,
       "detail": {
-        "successorDigestLength": 92980
+        "successorDigestLength": 91656
       }
     }
   ]

@@ -1,21 +1,30 @@
 # Roadmap Item 5 Pass 4 — Physical Authority Boundary
 
-Status: closure-candidate physical-causality certification. Pass 4 extends human technical knowledge and invention history; it does not create a general physical production authority.
+Status: final closure-correction physical-causality record pending independent architect review. Pass 4 extends human technical knowledge and invention history; it does not create general physical production authority.
 
 ## Permanent separation
 
-The model continues to enforce:
+The corrected architecture enforces:
 
 ```text
-idea
-!= experiment plan
-!= physical execution
-!= successful experiment
+physical material truth != human material belief
+
+knowledge
+!= plan
+!= execution
+!= physical result
+!= efficacy
 != durable competence
-!= produced artifact
+!= artifact
 ```
 
-Human material knowledge is also separate from physical-world truth. `HumanMaterialBelief` records what a band has reason to believe from its own evidence; it is not canonical geology, inventory, ownership, or an object.
+A design being imaginable, recognized, selected, or planned is not evidence that anyone executed it.
+
+## Human material belief is epistemic state
+
+`HumanMaterialBelief` records what a band has evidence to believe about a coarse material category and properties. It is not canonical geology, stock, possession, extraction, or an object.
+
+The closure correction additionally separates historical storage from current practical actionability. A belief can remain stored with provenance while its effective property confidence decays enough that a current role becomes `unknown`. Fresh re-observation may reinforce the same belief identity. Inherited belief remains degraded and is not fresh local occurrence/execution proof.
 
 ## Existing execution classes remain authoritative
 
@@ -25,52 +34,81 @@ Human material knowledge is also separate from physical-world truth. `HumanMater
 - `existing_physical_work`;
 - `material_execution_required`.
 
-`practice_only` can keep the bounded effects already justified by practice/measurement. `existing_physical_work` can consume the existing narrow authority that proves that work. `material_execution_required` has zero material physical effect and zero efficacy maturation unless independent execution proof exists.
+`practice_only` can retain the bounded effects already justified by actual practice/measurement. `existing_physical_work` can consume an existing narrow physical authority. `material_execution_required` has zero material physical effect and zero efficacy maturation unless independent execution proof exists.
 
-Fresh `item5PhysicalEffectProvenanceAudit.mjs` result: PASS.
+Fresh final `item5PhysicalEffectProvenanceAudit.mjs`: **PASS, 13/13**.
 
-The final Invention-3 compatibility audit additionally verifies that a selected material design and its plan remain non-physical when `executionOccurred === false`; practice-only proto-measurement remains effective, while persisted `waterWorks` remains a legitimate existing physical authority.
+`src/sim/agents/adaptiveEfficacy.ts` remains SHA-256:
+
+`ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`
+
+No physical coefficient was retuned.
+
+## Primitive composition does not manufacture physical capability
+
+The corrected discovery order is:
+
+```text
+bounded primitive composition
+→ normalized design
+→ optional historical recognition
+→ optional existing effect adapter if one truly exists
+```
+
+The complete historical catalog does not define candidate possibility space. Conversely, producing an uncatalogued design does not grant it a generic physical effect.
+
+Controlled proof produces uncatalogued `design:ee8231c9` with no historical match. Such a design can be humanly meaningful as an idea/plan while remaining physically inert absent a real execution/effect authority.
+
+## Blocked plan lifecycle
+
+A novel material design without execution authority starts an experiment record as `blocked_by_execution`, not `underway`.
+
+A blocked plan:
+
+- has `attemptSeasons = 0`;
+- has `executionOccurred = false`;
+- has no execution evidence refs;
+- does not generate a material response/effect;
+- does not mature efficacy;
+- remains inside the existing bounded experiment history;
+- ranks below a genuine `underway` experiment.
+
+The final controlled fixture demonstrates one true underway experiment survives at the head of a cap-4 set containing three blocked plans. No parallel plan authority was created.
+
+A 32-tick reconsideration cooldown now reuses recent selected composed-idea history so eviction from the cap-4 experiment store does not cause immediate identical blocked-plan recreation. This is epistemic/planning memory only: it grants no attempt, execution, physical result, efficacy, artifact, or permanent impossibility. After the bounded cooldown, the design may be reconsidered.
 
 ## Existing waterworks remains narrow
 
-`waterWorks` continues to be the existing physical authority for its groundwater work only. Pass 4 does not generalize it into:
+`waterWorks` remains the existing physical authority for its groundwater work only. Pass 4 does not generalize it into:
 
-- inventory or stock;
+- inventory or material stock;
 - resource extraction quantities;
 - components;
 - generic crafting;
-- produced portable objects;
-- durable construction generally;
+- portable produced objects;
+- general construction;
 - ownership;
 - fuel/material consumption;
 - wear or maintenance stock.
 
-## Novel compositional designs
+## Localized material failure remains epistemic/plan feedback
 
-A novel design can be humanly meaningful without a physical adapter. Such a design may exist as:
+Specific material-binding failure can change which believed material a later candidate binds, but it does not mutate physical-world material truth. Precise blame is recorded only when the evidence identifies the implicated role/material/property/context. Unknown failure cannot create precise material blame.
 
-- a hypothesis;
-- a selected idea;
-- an experiment plan;
-- a revision;
-- a blocked or interpreted experiment where evidence permits;
-- a dormant/dead-end record.
+This is a planning/knowledge revision seam, not a physical-material mutation authority.
 
-It receives no fabricated physical coefficient. Future practical responses that attempt physical effects must add or migrate to a real execution authority rather than infer execution from knowledge, labels, need, or environmental opportunity.
+## Projection is not execution authority
 
-## Negative controls
+The UI/projector may describe stored ideas, plans, results, and historical labels. It may not turn a stored `concluded_success` into admitted execution truth without canonical execution proof.
 
-The Pass-4 controlled audit proves:
+```text
+stored historical claim != admitted canonical execution truth
+```
 
-- O: unsupported material-required design => zero fabricated physical effect / efficacy;
-- P: hidden raw-world changes with identical human knowledge => identical candidate generation.
+The projection remains read-only.
 
-Mutation M2 intentionally removes the execution gate. The focused audit fails for the intended provenance reasons, then restoration returns the source file to the exact original SHA-256 `f0a6f7fa9ea43f7a328241b793b202246c93286cff7529161a3325aedc4c1dd8` and the restored audit is green.
+## Future physical-authority seam
 
-## No authority leaked through legacy/read models
+WORLD-M0 may later provide canonical material occurrence/property truth underneath human observation. Future extraction, inventory, craft, production, task labor, construction, metallurgy, and physical trade authorities may later prove actual acquisition/transformation/execution.
 
-`band.adaptiveHuman` is compatibility only. `Band.technologies` is legacy only. `materialAffordance` is projection only. The selected-band diagnostic UI is read-only. None may prove execution, material possession, local occurrence, or efficacy.
-
-## Future replacement seam
-
-WORLD-M0 may later replace/deepen the physical material occurrence/property substrate underneath the observation-to-belief adapter. That future physical truth does not replace human epistemic state. Inventory/craft/task/construction authorities must separately own actual acquisition, labor, transformations, outputs, and persistent works.
+Those systems must reopen/migrate Item-5 seams explicitly. They must not collapse physical truth into `HumanMaterialBelief`, infer execution from knowledge, or retroactively make blocked plans executed merely because a physical system later exists.

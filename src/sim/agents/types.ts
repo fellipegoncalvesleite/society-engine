@@ -6973,6 +6973,16 @@ export interface PracticalMaterialRoleBinding {
   readonly materialBeliefId: string;
   readonly requiredProperties: readonly PracticalMaterialProperty[];
   readonly localSupport: "supported" | "context_unproven" | "property_unproven";
+  // Current epistemic strength used for actionability. Stored historical
+  // property confidence remains on HumanMaterialBelief.
+  readonly effectiveConfidence?: NormalizedIntensity;
+}
+
+export interface PracticalMaterialBindingFailure {
+  readonly role: string;
+  readonly materialBeliefId: string;
+  readonly requiredProperties: readonly PracticalMaterialProperty[];
+  readonly contextKey?: string;
 }
 
 export type PracticalFeedbackClass =
@@ -6997,6 +7007,11 @@ export interface PracticalObservedFeedback {
   readonly designSignature: string;
   readonly implicatedFragmentIds: readonly string[];
   readonly implicatedMaterialBeliefIds: readonly string[];
+  // Optional only when observation actually localizes the material role/property.
+  // Omitting these preserves design-level/unknown attribution rather than
+  // fabricating component blame.
+  readonly implicatedMaterialRoles?: readonly string[];
+  readonly implicatedMaterialProperties?: readonly PracticalMaterialProperty[];
   readonly evidenceRefs: readonly string[];
   readonly contextKey?: string;
 }
@@ -7009,6 +7024,7 @@ export interface PracticalRevisionLesson {
   readonly confidence: NormalizedIntensity;
   readonly strength: NormalizedIntensity;
   readonly changedDimension?: "material_binding" | "component" | "joining" | "operation" | "scale" | "deployment";
+  readonly failedMaterialBindings?: readonly PracticalMaterialBindingFailure[];
   readonly evidenceRefs: readonly string[];
   readonly status: "active" | "dormant";
   readonly lastReinforcedTick: TickNumber;
@@ -7049,6 +7065,7 @@ export interface PracticalIdeaCandidate {
   readonly designSignature?: string;
   readonly design?: NormalizedPracticalDesignHypothesis;
   readonly materialBindings?: readonly PracticalMaterialRoleBinding[];
+  readonly constructionPrimitiveIds?: readonly string[];
   readonly parentIdeaId?: string;
   readonly changedDimension?: PracticalRevisionLesson["changedDimension"];
   readonly sourceEvidenceRefs?: readonly string[];
@@ -7056,6 +7073,7 @@ export interface PracticalIdeaCandidate {
 }
 
 export type PracticalExperimentStatus =
+  | "blocked_by_execution"
   | "underway"
   | "concluded_success"
   | "concluded_partial"

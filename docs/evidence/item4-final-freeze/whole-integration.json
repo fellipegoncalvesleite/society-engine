@@ -1,6 +1,6 @@
 {
   "checkpoint": "ROADMAP ITEM 4 — FINAL WHOLE-INTEGRATION FREEZE",
-  "generatedAt": "2026-08-18T14:03:22.085Z",
+  "generatedAt": "2026-08-24T00:51:32.067Z",
   "fixtures": [
     {
       "id": "F1_stabilized_successor_retains_physical_separation_history",

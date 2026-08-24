@@ -69,6 +69,7 @@ const fixtures = [];
 let runtime = {};
 try {
   const invention = await server.ssrLoadModule("/sim/agents/compositionalInvention.ts");
+  const inventionChain = await server.ssrLoadModule("/sim/agents/inventionChain.ts");
   const materialEvidence = await server.ssrLoadModule("/sim/agents/materialEvidence.ts");
   const practicalFragments = await server.ssrLoadModule("/sim/agents/practicalFragments.ts");
   const practicalResponses = await server.ssrLoadModule("/sim/agents/practicalResponses.ts");
@@ -145,6 +146,47 @@ try {
   }));
   assert("B_history_changes_trajectory", digest(historyA) !== digest(historyB));
 
+  // Closure correction / Defect 1 RED: a normalized design must be able to
+  // exist because reusable causal primitives compose, not because that complete
+  // design is present in either authored complete-design catalog.
+  const primitiveRecombinedDesign = invention.normalizeDesignHypothesis({
+    functionalIntent: "load_transport",
+    mechanism: "rigid_load_distribution",
+    componentRoles: [
+      { role: "frame", form: "rigid_support", requiredProperties: ["structural_load", "formability_workability"] },
+      { role: "binding", form: "lashings", requiredProperties: ["tensile_fibrous"] },
+    ],
+    operations: [
+      { id: "brace", operation: "brace", inputRoles: ["frame"], dependsOn: [] },
+      { id: "bind", operation: "bind", inputRoles: ["frame", "binding"], dependsOn: ["brace"] },
+    ],
+    deploymentClass: "portable_material_construction",
+    publicLabel: "audit recombined rigid carrying frame",
+  });
+  const primitiveHistory = [...baseFragments, fragment("fragment:audit:fiber-cordage", "fiber_cordage")];
+  const primitiveSet = invention.generateCompositionalCandidateSet(candidateInput({
+    fragments: primitiveHistory,
+    materialBeliefs: [wood, fiber],
+  }));
+  const primitiveCandidate = primitiveSet.raw.find((candidate) => candidate.design.signature === primitiveRecombinedDesign.signature);
+  const historicalSignatures = new Set(invention.HISTORICAL_VARIANT_BLUEPRINTS.map((entry) => invention.normalizeDesignHypothesis(entry).signature));
+  const withoutRequiredPrimitive = invention.generateCompositionalCandidateSet(candidateInput({
+    fragments: baseFragments,
+    materialBeliefs: [wood, fiber],
+  })).raw;
+  assert("Q_primitive_recombination_constructs_uncatalogued_design",
+    !historicalSignatures.has(primitiveRecombinedDesign.signature) &&
+    primitiveCandidate !== undefined && primitiveCandidate.templateVariantKey === undefined &&
+    primitiveCandidate.source === "recombination" &&
+    primitiveCandidate.constructionPrimitiveIds?.includes("mechanism:rigid-load") === true &&
+    primitiveCandidate.constructionPrimitiveIds?.includes("component:rigid-load-binding") === true &&
+    primitiveCandidate.constructionPrimitiveIds?.includes("process:rigid-bind") === true &&
+    !withoutRequiredPrimitive.some((candidate) => candidate.design.signature === primitiveRecombinedDesign.signature), {
+      target: primitiveRecombinedDesign.signature,
+      produced: primitiveSet.raw.map((candidate) => candidate.design.signature),
+      historicalMatch: historicalSignatures.has(primitiveRecombinedDesign.signature),
+    });
+
   const inheritedTemplate = invention.generateCompositionalCandidates(candidateInput({
     fragments: baseFragments.map((entry) => entry.subject === "load_staging" ? { ...entry, basis: "inherited" } : entry),
   })).find((candidate) => candidate.templateVariantKey === "load_staging");
@@ -199,9 +241,155 @@ try {
     !/advancePracticalAdaptation\s*\(/.test(diffusionSource) && !/practicalAdaptation\s*:/.test(diffusionSource));
 
   // G / knowledge persists away from its known context while reproducibility changes.
-  const localFit = invention.deriveLocalReproducibility(designA, [fiber], "local:A");
-  const movedFit = invention.deriveLocalReproducibility(designA, [fiber], "local:B");
+  const localFit = invention.deriveLocalReproducibility(designA, [fiber], "local:A", 100);
+  const movedFit = invention.deriveLocalReproducibility(designA, [fiber], "local:B", 100);
   assert("G_environment_change_preserves_knowledge_blocks_local_support", localFit.status !== movedFit.status && fiber.knownContexts.includes("local:A"));
+
+  // Closure correction / Defect 2 RED: historical storage and current
+  // epistemic actionability are separate. Elapsed time may make an unreinfoced
+  // belief insufficient, while a relevant observation reactivates the SAME belief.
+  const canonicalFiber = { ...fiber, id: "material-belief:band:audit:A:worked_plant_fiber" };
+  const staleDesign = invention.normalizeDesignHypothesis({
+    functionalIntent: "load_transport", mechanism: "audit_stale_flexible_support",
+    componentRoles: [{ role: "support", form: "flexible_band", requiredProperties: ["tensile_fibrous", "flexibility"] }],
+    operations: [{ id: "bind", operation: "bind", inputRoles: ["support"], dependsOn: [] }],
+    deploymentClass: "portable_material_construction", publicLabel: "audit staleness design",
+  });
+  const freshFit = invention.deriveLocalReproducibility(staleDesign, [canonicalFiber], "local:A", 100);
+  const staleFit = invention.deriveLocalReproducibility(staleDesign, [canonicalFiber], "local:A", 180);
+  const reactivatedBeliefs = invention.advanceHumanMaterialBeliefs({
+    bandId: "band:audit:A", prior: [canonicalFiber], protectedBeliefIds: [], currentTick: 180,
+    signals: [{ materialCategory: "worked_plant_fiber", publicLabel: "worked plant fiber",
+      properties: ["tensile_fibrous", "flexibility"], confidence: 0.7, evidenceRef: "audit:reactivated-handling",
+      contextKey: "local:A", provenance: "lived", handlingDepth: "handled" }],
+  });
+  const reactivatedFit = invention.deriveLocalReproducibility(staleDesign, reactivatedBeliefs, "local:A", 180);
+  assert("R_material_belief_staleness_and_reactivation",
+    freshFit.status === "supported" && staleFit.status !== "supported" &&
+    reactivatedFit.status === "supported" && reactivatedBeliefs.some((belief) => belief.id === canonicalFiber.id) &&
+    reactivatedBeliefs.length === 1, {
+      fresh: freshFit.status, stale: staleFit.status, reactivated: reactivatedFit.status,
+      ids: reactivatedBeliefs.map((belief) => belief.id),
+    });
+
+  // Closure correction / Defect 3 RED: a specific failed role/material binding
+  // must make the compatible alternative selectable without globally poisoning
+  // unrelated properties or reacting to unknown feedback.
+  const bindingA = belief("material:audit:A-binding", "fiber_A", ["tensile_fibrous", "flexibility", "heat_response"]);
+  const bindingB = belief("material:audit:B-binding", "fiber_B", ["tensile_fibrous", "flexibility", "heat_response"]);
+  const bindingDesign = invention.normalizeDesignHypothesis({
+    functionalIntent: "load_transport", mechanism: "audit_binding_revision",
+    componentRoles: [{ role: "support", form: "flexible_band", requiredProperties: ["tensile_fibrous", "flexibility"] }],
+    operations: [{ id: "bind", operation: "bind", inputRoles: ["support"], dependsOn: [] }],
+    deploymentClass: "portable_material_construction", publicLabel: "audit binding revision design",
+  });
+  const bindingIdea = {
+    id: "idea:audit:binding-parent", problemId: carryingProblem.id, family: "carrying_load",
+    variantKey: `composed:${bindingDesign.signature.slice("design:".length)}`, publicLabel: "audit binding revision",
+    mechanismBelief: bindingDesign.mechanism, basisFragmentIds: [baseFragments[0].id], basisScore: 0.8,
+    status: "selected", statusReason: "audit parent", source: "local_inference", consideredAtTick: 100,
+    designSignature: bindingDesign.signature, design: bindingDesign,
+    materialBindings: [{ role: "support", materialBeliefId: bindingA.id, requiredProperties: ["tensile_fibrous", "flexibility"], localSupport: "supported" }],
+    sourceEvidenceRefs: ["audit:binding-parent"], localReproducibility: "supported",
+  };
+  const specificBindingLesson = {
+    id: "lesson:audit:binding-specific", designSignature: bindingDesign.signature, problemFamily: carryingProblem.family,
+    feedbackClass: "material_property_mismatch", confidence: 0.8, strength: 0.8, changedDimension: "material_binding",
+    evidenceRefs: ["audit:binding-A-failed"], status: "active", lastReinforcedTick: 101,
+    failedMaterialBindings: [{ role: "support", materialBeliefId: bindingA.id,
+      requiredProperties: ["tensile_fibrous"], contextKey: "local:A" }],
+  };
+  const bindingRevision = invention.generateCompositionalCandidateSet(candidateInput({
+    materialBeliefs: [bindingA, bindingB], priorIdeas: [bindingIdea], revisionLessons: [specificBindingLesson], currentTick: 102,
+  })).raw.find((candidate) => candidate.source === "revision" && candidate.provenance.priorIdeaId === bindingIdea.id);
+  const unknownBindingLesson = { ...specificBindingLesson, id: "lesson:audit:binding-unknown",
+    feedbackClass: "ambiguous_unknown_failure", changedDimension: undefined, failedMaterialBindings: undefined };
+  const unknownRevision = invention.generateCompositionalCandidateSet(candidateInput({
+    materialBeliefs: [bindingA, bindingB], priorIdeas: [bindingIdea], revisionLessons: [unknownBindingLesson], currentTick: 102,
+  })).raw.find((candidate) => candidate.source === "revision" && candidate.provenance.priorIdeaId === bindingIdea.id);
+  const propertySpecific = invention.applyTypedFeedback({
+    fragments: baseFragments, materialBeliefs: [bindingA, bindingB], currentTick: 102,
+    feedback: { feedbackClass: "material_property_mismatch", attributionQuality: "specific", designSignature: bindingDesign.signature,
+      implicatedFragmentIds: [], implicatedMaterialBeliefIds: [bindingA.id], implicatedMaterialProperties: ["tensile_fibrous"],
+      evidenceRefs: ["audit:binding-property-failed"], contextKey: "local:A" },
+  });
+  const changedA = propertySpecific.materialBeliefs.find((entry) => entry.id === bindingA.id);
+  const originalA = bindingA;
+  const recordedBindingLesson = invention.recordRevisionLesson({
+    prior: [], problemFamily: carryingProblem.family, currentTick: 102,
+    materialBindings: bindingIdea.materialBindings,
+    feedback: { feedbackClass: "material_property_mismatch", attributionQuality: "specific", designSignature: bindingDesign.signature,
+      implicatedFragmentIds: [], implicatedMaterialBeliefIds: [bindingA.id], implicatedMaterialRoles: ["support"],
+      implicatedMaterialProperties: ["tensile_fibrous"], evidenceRefs: ["audit:binding-A-failed"], contextKey: "local:A" },
+  })[0];
+  assert("S_specific_material_binding_failure_substitutes_locally",
+    bindingRevision?.materialBindings.find((entry) => entry.role === "support")?.materialBeliefId === bindingB.id &&
+    unknownRevision?.materialBindings.find((entry) => entry.role === "support")?.materialBeliefId === bindingA.id &&
+    changedA?.properties.find((entry) => entry.property === "tensile_fibrous")?.confidence < originalA.properties.find((entry) => entry.property === "tensile_fibrous")?.confidence &&
+    changedA?.properties.find((entry) => entry.property === "heat_response")?.confidence === originalA.properties.find((entry) => entry.property === "heat_response")?.confidence &&
+    propertySpecific.materialBeliefs.find((entry) => entry.id === bindingB.id)?.properties[0]?.confidence === bindingB.properties[0]?.confidence &&
+    recordedBindingLesson?.failedMaterialBindings?.[0]?.role === "support" &&
+    recordedBindingLesson?.failedMaterialBindings?.[0]?.materialBeliefId === bindingA.id &&
+    recordedBindingLesson?.failedMaterialBindings?.[0]?.requiredProperties?.[0] === "tensile_fibrous" &&
+    recordedBindingLesson?.failedMaterialBindings?.[0]?.contextKey === "local:A", {
+      specificBinding: bindingRevision?.materialBindings, unknownBinding: unknownRevision?.materialBindings,
+      changedA: changedA?.properties,
+    });
+
+  // Closure correction / Defect 4 RED: an executor-less novel hypothesis may
+  // remain a bounded plan, but it is not physical experimental activity.
+  const blockedPlanIdea = { ...bindingIdea, id: "idea:audit:blocked-plan", variantKey: `composed:${bindingDesign.signature.slice("design:".length)}` };
+  let blockedPlan = inventionChain.startExperiment({
+    idea: blockedPlanIdea, responseId: `hypothesis-plan:band:audit:A:${blockedPlanIdea.id}`,
+    expectedEffect: "future bounded effect only if execution authority exists", materials: ["planned support"], procedure: "planned bind",
+    laborCost: 0.1, riskCost: 0.1, opportunityCost: "deferred until executable", observationBasis: "inferred",
+    contextKey: "local:A", currentTick: 100, initialStatus: "blocked_by_execution",
+  });
+  for (let tick = 101; tick <= 140; tick += 1) {
+    blockedPlan = inventionChain.advanceExperiments([blockedPlan], [], [], tick)[0];
+  }
+  const activeExecutablePlan = inventionChain.startExperiment({
+    idea: { ...blockedPlanIdea, id: "idea:audit:active-plan", variantKey: "load_staging" }, responseId: "response:audit:active-plan",
+    expectedEffect: "practice effect", materials: [], procedure: "practice", laborCost: 0.05, riskCost: 0.02,
+    opportunityCost: "audit", observationBasis: "direct", contextKey: "local:A", currentTick: 140,
+  });
+  const manyBlockedPlans = Array.from({ length: 7 }, (_, index) => inventionChain.startExperiment({
+    idea: { ...blockedPlanIdea, id: `idea:audit:blocked:${index}`, variantKey: `composed:blocked-${index}` },
+    responseId: `hypothesis-plan:band:audit:A:blocked:${index}`, expectedEffect: "future only", materials: ["planned"],
+    procedure: "deferred", laborCost: 0.05, riskCost: 0.02, opportunityCost: "audit", observationBasis: "inferred",
+    contextKey: "local:A", initialStatus: "blocked_by_execution", currentTick: 140 + index,
+  }));
+  const boundedPlanSet = inventionChain.advanceExperiments([activeExecutablePlan], [], manyBlockedPlans, 150);
+  const rememberedBlockedIdea = {
+    ...blockedPlanIdea,
+    id: "idea:audit:remembered-blocked-plan",
+    status: "selected",
+    problemId: blockedPlanIdea.problemId,
+    designSignature: bindingDesign.signature,
+    consideredAtTick: 100,
+  };
+  const recentBlockedPlanMemoryWorks =
+    typeof practicalResponses.hasRecentBlockedPlanMemory === "function" &&
+    practicalResponses.hasRecentBlockedPlanMemory({
+      priorIdeas: [rememberedBlockedIdea], problemId: blockedPlanIdea.problemId, designSignature: bindingDesign.signature, currentTick: 131,
+    }) &&
+    !practicalResponses.hasRecentBlockedPlanMemory({
+      priorIdeas: [rememberedBlockedIdea], problemId: blockedPlanIdea.problemId, designSignature: bindingDesign.signature, currentTick: 132,
+    }) &&
+    !practicalResponses.hasRecentBlockedPlanMemory({
+      priorIdeas: [{ ...rememberedBlockedIdea, variantKey: "load_staging" }],
+      problemId: blockedPlanIdea.problemId, designSignature: bindingDesign.signature, currentTick: 101,
+    });
+  assert("T_executorless_novel_plan_is_not_false_underway_experiment",
+    blockedPlan?.status === "blocked_by_execution" && blockedPlan.executionOccurred === false && blockedPlan.attemptSeasons === 0 &&
+    practicalResponses.derivePracticalVariantExecutionClass(blockedPlan.family, blockedPlan.variantKey) === undefined &&
+    boundedPlanSet.length === inventionChain.EXPERIMENT_CAP &&
+    boundedPlanSet.some((experiment) => experiment.id === activeExecutablePlan.id && experiment.status === "underway") &&
+    recentBlockedPlanMemoryWorks, {
+      status: blockedPlan?.status, executionOccurred: blockedPlan?.executionOccurred, attemptSeasons: blockedPlan?.attemptSeasons,
+      boundedPlanSet: boundedPlanSet.map((experiment) => ({ id: experiment.id, status: experiment.status })),
+      experimentCap: inventionChain.EXPERIMENT_CAP, activeId: activeExecutablePlan.id, recentBlockedPlanMemoryWorks,
+    });
 
   // H / same normalized signature, independent provenance stays distinct.
   const independentA = invention.generateCompositionalCandidates(candidateInput({ bandId: "band:independent:A" }));
@@ -231,8 +419,12 @@ try {
   assert("J_candidate_budgets_hold", boundedSet.rawConsidered === invention.RAW_CANDIDATE_PER_PROBLEM_CAP &&
     boundedSet.raw.length <= invention.RAW_CANDIDATE_PER_PROBLEM_CAP &&
     boundedSet.shortlist.length <= invention.SHORTLIST_PER_PROBLEM_CAP &&
+    boundedSet.primitiveInputsConsidered.mechanisms <= invention.PRIMITIVE_MECHANISM_INPUT_CAP &&
+    boundedSet.primitiveInputsConsidered.componentForms <= invention.PRIMITIVE_COMPONENT_INPUT_CAP &&
+    boundedSet.primitiveInputsConsidered.processes <= invention.PRIMITIVE_PROCESS_INPUT_CAP &&
     invention.RAW_CANDIDATE_PER_PROBLEM_CAP === 6 && invention.RAW_CANDIDATE_GLOBAL_CAP === 18, {
       rawConsidered: boundedSet.rawConsidered, raw: boundedSet.raw.length, shortlist: boundedSet.shortlist.length,
+      primitiveInputsConsidered: boundedSet.primitiveInputsConsidered,
     });
 
   // M / attributed joining failure leaves independent edge material belief alone.
@@ -317,6 +509,9 @@ try {
   const generatorSource = readFileSync(`${ROOT}/src/sim/agents/compositionalInvention.ts`, "utf8");
   const materialEvidenceSource = readFileSync(`${ROOT}/src/sim/agents/materialEvidence.ts`, "utf8");
   assert("generator_static_no_raw_world_or_terrain", !/\bWorldState\b|\.terrainKind\b|\bgeology\b|\bbiome\b|world\.tiles|resourceProfile|riskProfile/.test(generatorSource));
+  assert("primitive_construction_precedes_historical_recognition",
+    !generatorSource.includes("GENERIC_BLUEPRINTS") &&
+    generatorSource.indexOf("constructBlueprintFromPrimitives({") < generatorSource.indexOf("recognizeHistoricalDesign(design)"));
   assert("candidate_generation_has_zero_Band_technologies_causal_reads", !/\.technologies\b|band\.technologies\b/.test(generatorSource));
   assert("candidate_generation_has_zero_materialAffordance_causal_reads", !/materialAffordance/.test(generatorSource));
   assert("material_observation_adapter_has_no_world_scan",
@@ -332,7 +527,11 @@ try {
   assert("ui_diagnostics_expose_pass4_causal_fields",
     diagnosticUiSource.includes("Pass-4 invention diagnostics — read only") &&
     diagnosticUiSource.includes("Normalized design signature:") &&
+    diagnosticUiSource.includes("Construction primitive basis:") &&
     diagnosticUiSource.includes("Material beliefs / known contexts:") &&
+    diagnosticUiSource.includes("effective at formation") &&
+    diagnosticUiSource.includes("Plan lifecycle:") &&
+    diagnosticUiSource.includes("binding lesson") &&
     diagnosticUiSource.includes("Planned material roles:") &&
     diagnosticUiSource.includes("Typed observed result:") &&
     diagnosticUiSource.includes("Revision / dead-end history:") &&
@@ -356,6 +555,9 @@ try {
       rawGlobal: invention.RAW_CANDIDATE_GLOBAL_CAP,
       shortlistPerProblem: invention.SHORTLIST_PER_PROBLEM_CAP,
       revisionLessonCap: invention.REVISION_LESSON_CAP,
+      primitiveMechanismInputs: invention.PRIMITIVE_MECHANISM_INPUT_CAP,
+      primitiveComponentInputs: invention.PRIMITIVE_COMPONENT_INPUT_CAP,
+      primitiveProcessInputs: invention.PRIMITIVE_PROCESS_INPUT_CAP,
     },
   };
 } finally {

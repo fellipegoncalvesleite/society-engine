@@ -1,152 +1,177 @@
-# Roadmap Item 5 Pass 4 — Closure-Candidate Evidence
+# Roadmap Item 5 Pass 4 — Final Closure-Correction Evidence
 
-Status: IMPLEMENTED / exact-tree certification complete by the implementer, pending independent architect review. This is not acceptance and does not freeze Item 5.
+Status: implementer certification of the closure-corrected Pass-4 tree, pending independent architect review. Item 5 is not accepted or frozen by this record.
 
-## Repository and ancestry basis
+## Reconciled starting state
+
+The closure correction was found as legitimate uncommitted work on:
 
 - repository: `fellipegoncalvesleite/society-engine`;
-- worktree: `.worktrees/society-engine-item5-invention-diversity-pass4`;
-- checkpoint branch: `checkpoint/item5-invention-diversity-pass4`;
-- starting HEAD actually found: `bf201a30ccbd16f9e039aa2f321f0b7eddd70329`;
-- accepted Pass-3 ancestry base: `e290a0a039b1e75dd949d646860f1b867ee1c9ce`;
-- handoff commit in ancestry: `fb1f4f505861a52a83f01b42862667bd1b64765e`;
-- first committed Pass-4 RED/audit checkpoint preserved: `bf201a30ccbd16f9e039aa2f321f0b7eddd70329`.
+- branch: `checkpoint/item5-invention-diversity-pass4`;
+- starting HEAD: `1352c568968f6a556d64f8de616afe37335ce555`;
+- accepted Pass-3 ancestor: `e290a0a039b1e75dd949d646860f1b867ee1c9ce`;
+- no intervening commit after `1352c568...`;
+- no staged changes or conflicts at reconciliation time;
+- 17 legitimate modified tracked files were present: eight implementation/audit files plus nine evidence/regression-artifact files; `CLOSURE_CORRECTION.md` was also present as an intended untracked evidence file, alongside a temporary untracked `node_modules` symlink used only to access dependencies.
 
-The starting worktree contained legitimate uncommitted Pass-4 production work plus new Pass-4 audit scripts and a temporary untracked `node_modules` entry. The legitimate work was reconciled in place; it was not reset back to the committed RED checkpoint.
+The worktree was not reset and the legitimate closure-correction work was preserved.
 
-## Controlled Pass-4 A–P certification
+## RED evidence and chronology
 
-Fresh final-tree `node scripts/item5Pass4CompositionalAudit.mjs` result: **PASS, 26/26 checks**.
+The architect verdict on the reviewed `1352c568...` closure candidate was `REWORK_REQUIRED` for four semantic defects.
 
-Required causal cases A–P all pass:
+The pre-existing `docs/evidence/item5-pass4/red.stderr` / `artifacts/RED_item5Pass4CompositionalAudit.txt` files do **not** prove those four defects: that historical capture failed during Vite module loading. They are not relabeled as a genuine semantic RED run.
 
-| Case | Result | Certified invariant |
-| --- | --- | --- |
-| A | PASS | different human-known environment => causal candidate divergence; hidden truth alone does not |
-| B | PASS | same environment + different technical history => trajectory divergence |
-| C | PASS | convergent function can retain different normalized design/history |
-| D | PASS | failed path changes later revision path without removing functional family |
-| E | PASS | degraded daughter hints/knowledge without copied local execution/efficacy/proof |
-| F | PASS | no fabricated canonical social-diffusion writer |
-| G | PASS | knowledge can persist while local reproducibility lapses |
-| H | PASS | independent discovery may share normalized identity while history stays separate |
-| I | PASS | same state/seed => identical relevant canonical replay |
-| J | PASS | stores/candidate budgets remain bounded |
-| K | PASS | semantically irrelevant reordering => same normalized signature |
-| L | PASS | causal mechanism/process/deployment difference => different signature |
-| M | PASS | localized known failure does not damage independent demonstrated knowledge |
-| N | PASS | ambiguous failure does not invent precise attribution |
-| O | PASS | unsupported material-required design => zero fabricated physical effect/efficacy |
-| P | PASS | raw hidden-world change with identical human knowledge => identical candidates |
+A later detached reproduction was therefore run against the exact untouched `1352c568...` production tree, using the current closure audit while neutralizing only three guards that depend on fields/UI assertions introduced by the correction itself. That reproduction exited non-zero and produced exactly four semantic failures, 27 passes:
 
-Current controlled values include normalized equivalence signature `design:bf976a52`, fiber-opportunity candidate digest `6101ffc4b774606ad0e83c06380c85647de2dc248736a4f90e83f3fac3424da8`, and stone-opportunity candidate digest `82c5d5449f6b025a298457cf4a7f3d353e7e4c4eea35e0accb0fecc42d8e8be0`.
+- `Q_primitive_recombination_constructs_uncatalogued_design`;
+- `R_material_belief_staleness_and_reactivation`;
+- `S_specific_material_binding_failure_substitutes_locally`;
+- `T_executorless_novel_plan_is_not_false_underway_experiment`.
 
-## Reversible mutation evidence
+This is reproducible defect-level RED evidence against the rejected tree. It does not rewrite the chronology by pretending the broken older capture was valid.
 
-Fresh final-tree `item5Pass4MutationAudit.mjs` result: **PASS; M1–M6 all caught, restored byte-identically, and each restored targeted audit returned green**.
+## GREEN — corrected compositional audit
 
-| Mutation | Original SHA-256 | Mutated SHA-256 | Restored SHA-256 | Intended failure caught |
-| --- | --- | --- | --- | --- |
-| M1 raw-world omniscience | `90c8014f202acd53bf02059c3bcee96f2779d232de64e8c731f156c873a8e215` | `8533db80f2e076cd1d05e51b102e694c2397a0754e9cddb27d1e838aca491b84` | `90c8014f202acd53bf02059c3bcee96f2779d232de64e8c731f156c873a8e215` | `P_hidden_world_truth_cannot_change_candidates` |
-| M2 bypass execution proof | `f0a6f7fa9ea43f7a328241b793b202246c93286cff7529161a3325aedc4c1dd8` | `f8927925847c8f6e641597cefec90f392eae0a29cdd6b3498c1a91bcedcd8d74` | `f0a6f7fa9ea43f7a328241b793b202246c93286cff7529161a3325aedc4c1dd8` | execution-class / material-execution provenance gates |
-| M3 copy parent efficacy locally | `f0a6f7fa9ea43f7a328241b793b202246c93286cff7529161a3325aedc4c1dd8` | `92ac71f8da2da6db8b2c1721ded15ac55a76805d6cb7afe36318e09749872d58` | `f0a6f7fa9ea43f7a328241b793b202246c93286cff7529161a3325aedc4c1dd8` | `E_inheritance_hints_only` |
-| M4 blanket failure mutation | `90c8014f202acd53bf02059c3bcee96f2779d232de64e8c731f156c873a8e215` | `45c5a924bd48a1a6b755fdce4888b817cd842d01aebbf0921241d1861460fac6` | `90c8014f202acd53bf02059c3bcee96f2779d232de64e8c731f156c873a8e215` | `M_join_failure_localized` |
-| M5 bypass candidate caps | `90c8014f202acd53bf02059c3bcee96f2779d232de64e8c731f156c873a8e215` | `f8889d0536431d98d3d74c33266097a1f90ea75490dae90442e27087f6da3f34` | `90c8014f202acd53bf02059c3bcee96f2779d232de64e8c731f156c873a8e215` | `J_candidate_budgets_hold` |
-| M6 order-dependent signature | `90c8014f202acd53bf02059c3bcee96f2779d232de64e8c731f156c873a8e215` | `889874f8766764505933cd7d46df3ff3b2ab290c4bfce42d0ac43ddfce1da995` | `90c8014f202acd53bf02059c3bcee96f2779d232de64e8c731f156c873a8e215` | `K_equivalent_designs_share_signature` |
+Command: `node scripts/item5Pass4CompositionalAudit.mjs`
 
-No mutation was left in the worktree.
+Final semantic result: **PASS, 31/31, 0 failed**.
 
-## Item-5 regression/certification matrix
+Closure-specific proof:
 
-Fresh results from the final exact-tree closure candidate:
+- Q: uncatalogued `design:ee8231c9` is produced by primitive recombination; `historicalMatch: false`; required primitive removal makes the target disappear.
+- R: the same material-belief id moves `supported → unknown → supported` under freshness, staleness, and re-observation.
+- S: specifically failed A is replaced by B; unknown failure keeps A; only the specifically implicated A property is weakened.
+- T: executor-less novel plan is `blocked_by_execution`, `executionOccurred=false`, `attemptSeasons=0`; one genuinely `underway` experiment remains ahead of blocked plans inside cap 4.
 
-| Gate | Result |
-| --- | --- |
-| Pass-1 migrated adaptation authority | PASS, 19 checks |
-| Pass-2 physical-effect provenance | PASS, 13 checks |
-| Pass-3 projection/inheritance | PASS, 40 checks |
-| practical adaptation targeted suite | PASS, 27 assertions |
-| adaptive efficacy targeted suite | PASS, 26 assertions |
-| expedition adaptation efficacy | PASS |
-| routines-2 targeted suite | PASS, 38 assertions |
-| migrated Invention-3 compatibility | PASS, 23/23 checks |
-| Pass-4 compositional A–P | PASS, 26/26 |
-| Pass-4 M1–M6 reversible mutations | PASS |
+## Reversible mutation certification
 
-Three older exploratory benchmark modes (`practice-feedback-routine-readiness`, `adaptive-human-ideas-solutions-routines`, and `foraging-learning-adaptation`) emit review-oriented fixture data and are not used as closure gates. Closure relies on the accepted live gates above plus the explicit Pass-4 boundary/mutation suites.
+Command: `node scripts/item5Pass4MutationAudit.mjs`
 
-## TypeScript, production build, and patch hygiene
+Final semantic result: **PASS, M1–M10**. Every mutation caused a non-zero semantic failure, the intended source was restored byte-identically, and the restored controlled audit returned GREEN.
 
-Fresh final-tree results:
+The closure mutations are:
 
-- `npx tsc -p tsconfig.json --noEmit` => PASS;
-- `npx tsc -p tsconfig.node.json --noEmit` => PASS;
-- `npm run build` => PASS; Vite completes successfully, with only the pre-existing large-chunk warning;
-- `git diff --check` => PASS.
+- M7 — regress candidate formation toward catalog-only generation;
+- M8 — make stale material confidence actionable forever;
+- M9 — ignore a specifically failed material binding;
+- M10 — classify an executor-less plan as `underway`.
 
-## Item-1–4 regression/scope proof
+M7–M10 each make their targeted Q/R/S/T closure invariant fail. Mutation residue was not retained.
+
+## Regression matrix
+
+Fresh final-tree semantic results:
 
 | Gate | Result |
 | --- | --- |
-| Item-4 fission field transfer | PASS, 12/12, 0 vacuous |
-| Item-4 whole integration freeze | PASS, 6/6 |
-| graph integrity | PASS; 221 nodes, 764 edges, 0 duplicate ids, 0 dangling links |
-| import boundary | PASS |
-| deterministic Map-2 50-year repeat | PASS; repeat-identical |
+| Pass-1 adaptation authority | PASS — 19/19 |
+| Pass-2 physical-effect provenance | PASS — 13/13 |
+| Pass-3 projection/inheritance | PASS — 40/40 |
+| Pass-4 corrected compositional | PASS — 31/31 |
+| Reversible mutation audit | PASS — M1–M10 |
+| Practical adaptation targeted | PASS — 27/27 |
+| Adaptive efficacy targeted | PASS — 26/26 |
+| ROUTINES-2 | PASS — 38/38 |
+| Invention-3 compatibility | PASS — 23/23 |
+| Expedition adaptation efficacy | PASS — 12/12 |
+| Item-4 fission field transfer | PASS — 12/12, 0 vacuous |
+| Item-4 whole integration | PASS — 6/6 |
+| Architecture graph | PASS — 221 nodes / 764 edges / 0 duplicate ids / 0 dangling links |
+| Import boundary | PASS |
 
-No Item-4 production mechanic was redesigned. The only Item-4-policy file diff is compatibility/explainability wording for the richer degraded practical-knowledge transfer surface. `adaptiveEfficacy.ts` remains byte-identical to accepted Pass 3 at SHA-256 `ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`.
+The import-boundary run records 68 current internal sim back-edges as informational architecture metadata; its prohibited sim→UI/render/store/worker boundary verdict is PASS.
 
-## Natural and long-run evidence
+## Projection and benchmark corrections preserved
 
-See `CAPS_AND_PERFORMANCE.md` for the complete measurements. Final exact-tree summary:
+Two stale expectations discovered during closure work remain corrected:
 
-- Map 1 / 40y: PASS; 1 band produced material beliefs, 14 hypotheses (5 named-template-recognized / 9 non-template), 8 experiments, 1 independent convergent signature.
-- Map 2 / 40y: PASS; 3 bands produced material beliefs, 42 hypotheses (19 named / 23 non-template), 30 experiments, 1 concluded success, 2 dead-end lessons, 5 independent convergent signatures.
-- Map 2 / 120y: PASS; 6 bands produced material beliefs, 56 hypotheses (27 named / 29 non-template), 40 experiments, 3 revision ideas, 2 concluded partials, 1 success, 2 abandoned experiments, 5 dead-end lessons, 1 dormant lesson, 5 independent convergent signatures.
-- reactivation: not naturally observed in the declared final seeds/horizons.
+1. Diagnostic projection no longer presents a stored `concluded_success` as admitted execution/success truth when canonical execution proof is missing.
+2. Practical-adaptation/Invention-3 fixtures no longer demand that unsupported material plans remain `underway`. Their stronger invariant is `blocked_by_execution` + zero attempt + zero physical execution/effect.
 
-Across the final long run, observed candidate maxima remain 5 raw/problem and 12 raw/global, below caps 6 and 18. All tracked stores remain within their declared bounds.
+The Invention-3 compatibility audit is 23/23 after that migration.
 
-Final canonical Item-5 digests:
+## Physical-authority invariant
 
-- Map 1 / 40y: `3626b45cf28088e26860989a51b9d2acdac69ba3eb059f6be56b063f789a84ae`;
-- Map 2 / 40y: `4f59ed6878e4685947742048b61ce3a93fcfab1f916f936fb545000fe0ed5cc4`;
-- Map 2 / 120y: `ff12c6b9cd1f2b25997a5e3af78928d53a740e6fef64e332495818bb85f28af5`.
+`src/sim/agents/adaptiveEfficacy.ts` final required SHA-256:
 
-## Whole-world fingerprint discrepancy resolution
+`ca2603250e1716886e2bb21db2d1c3bed5114d7ed8cf9213761747acbb72e919`
 
-The final deterministic 50-year Map-2 fingerprint is:
+Pass-1 and Pass-2 audits independently preserve the existing effect constants. No physical coefficient was retuned to recover a fingerprint.
 
-`1d442858bfece8f51f7a901c4a589b0f66f2696bef9a43d68044e21d58d5d9cd`
+## Natural and deterministic evidence
 
-It reproduced identically twice inside a `--repeat` run and in two additional fresh Node processes. The four executions also agreed on the key outcomes `endPopulation=214`, `activeBands=9`, `movements=1077`, `adaptationsAttempted=6`, and `adaptationsEffective=3`.
+Natural Map 1, 40 years:
 
-An earlier evidence capture recorded `1d4424667b4047a705877dda15befff86148cb50ccc8e92b5276fa5156d24744`. That value does not reproduce from the final exact source bytes. The same earlier evidence set also carried natural-run metrics/digests and reversible-mutation source hashes that no longer matched the final exact source state. It is therefore classified as **stale pre-final evidence**, not ongoing cross-process nondeterminism. No coefficient or architecture was altered to chase either hash.
+- PASS;
+- hypotheses 9;
+- non-template 4;
+- independent convergence 1;
+- raw candidate maxima 5/problem, 9/global;
+- digest `17ebd55be40343bf4010d32ae9fecf60973971a4be3bac1be90807e44a04f1d6`.
 
-The accepted Pass-3 fingerprint remains `f509b2f4d6e8a463b7505025afe22d151fd45a0598bd9550fbb84aac900da03c`. Cross-worktree comparison locates the first Pass-3/Pass-4 full-snapshot divergence at season 1 in weak human material-belief state, with Item-5-stripped state identical through season 26. The later divergence follows the approved compositional/practice-only invention path. Classification remains **EXPECTED PASS-4 INVENTION-SEMANTIC CHANGE**.
+Natural Map 2, 40 years:
 
-## Known limitations / intentionally coarse seams
+- PASS;
+- hypotheses 40;
+- non-template 21;
+- convergent signatures 5;
+- raw candidate maxima 5/problem, 12/global;
+- digest `dc046a550d27c01a0a376e9eef22ed7eccc33f20924cceb087484964df3dd6b8`.
 
-- no WORLD-M0 canonical material truth;
-- no canonical extraction/inventory/craft production;
-- no task-level performed experiment labor;
-- no individual teacher/skill-carrier transmission;
-- no causal culture/adoption system;
-- no physical trade authority;
-- no general durable construction authority;
-- no metallurgy authority;
-- no rich weathering/material-compatibility engine;
-- no fabricated physical-effect adapter for novel designs;
-- aggregate human material beliefs remain intentionally coarse and may be uncertain/context-limited.
+Natural Map 2, 120 years:
 
-These are reopening seams, not silent claims of implementation.
+- PASS;
+- hypotheses encountered 98;
+- non-template 72;
+- experiments 38;
+- revisions 2; partial outcomes 2; success outcomes 1; abandoned experiments 2; dead-end lessons 5; dormant lessons 1;
+- all retained-state/candidate caps held;
+- raw candidate maxima 5/problem, 12/global;
+- digest `4610cc2cd648ab6f75df8b5f574ad0868a90ae585486f4cb12ad1f83f51211ac`.
 
-## Scope stop confirmation
+Deterministic Map 2, 50 years, repeated in one audit:
 
-- WORLD-M0 was not begun.
-- Roadmap Item 6 was not begun.
-- The roadmap rewrite was not begun.
-- `docs/HANDOFF_ITEM6_WORLD_GENERATION.md` remains present and continues to require explicit discussion of the world-generation proposal with the user before Item-6 implementation.
-- main was not merged.
+- PASS, deterministic=true;
+- fingerprint both repetitions `2f4b6b3a13b78f6b30555d0b503c50eb308aa10d59e496b4561bc7edb3f34287`;
+- end population 214;
+- active bands 9;
+- movements 1077;
+- adaptations attempted 8;
+- adaptations effective 3;
+- state caps held true.
 
-The implementation is now an exact-tree Roadmap Item 5 closure candidate. Independent architect review remains the next acceptance step; this implementer does not declare Item 5 accepted or frozen.
+## Blocked-plan churn investigation and correction
+
+The initial closure-corrected 120-year run produced 424 cumulative hypothesis ids while retained state stayed bounded. A deeper read-only probe showed that this was not merely harmless accounting noise: only 37 conceptual `(band, problem, designSignature, variant)` keys underlay the 424 ids, 12 of 19 blocked experiment keys were restarted, and the worst identical blocked experiment was recreated 74 times. The root cause was precise: experiment history is capped at four, and candidate formation previously checked only retained `underway`/`blocked_by_execution` experiments. Once a blocked row was evicted, the same unchanged non-executable design could be selected again immediately.
+
+The final correction reuses existing bounded selected-idea history as a 32-tick reconsideration memory for non-template `composed:` designs. The strengthened T fixture was written first and produced a semantic RED with only T failing; after the production change the audit returned 31/31. The control also proves the memory expires at tick 32 and does not suppress a historical executable variant.
+
+Post-fix 120-year measurement:
+
+- cumulative hypotheses: 98 instead of 424;
+- non-template hypotheses: 72 instead of 398;
+- blocked experiment keys observed: 19;
+- keys restarted after cooldown: 12;
+- maximum starts for one blocked experiment: 9 instead of 74;
+- common retry spacing is the intended 32 ticks;
+- retained maxima remain ideas 7/8, experiments 4/4, dead-end lessons 2/8, raw candidates 5/6 per problem and 12/18 globally.
+
+Classification: **the immediate repeated-planning loop was a real bounded semantic/performance defect and is corrected; periodic reconsideration after the bounded 32-tick cooldown is an intentional coarse-resolution seam**. No permanent blacklist, second plan authority, physical execution, effect, or efficacy was added.
+
+## Known limitations
+
+- Historical material memory is aggregate band-level epistemic state, not person-level skill/teaching.
+- Material categories/property predicates are coarse and are not canonical physical geology/material truth.
+- Exact blocked composed hypotheses may be reconsidered after the bounded 32-tick cooldown; evidence-sensitive retry timing remains a future refinement seam.
+- Natural runs do not demonstrate every controlled feedback transition; controlled fixtures remain the proof for stale/reactivation and localized binding substitution.
+- Novel composed designs without an execution/effect authority remain plans only.
+- No inventory, extraction, craft, production, construction, metallurgy, physical trade, task-labor, culture/adoption, or WORLD-M0 authority is claimed.
+
+## Closure status
+
+This evidence supports only:
+
+**PASS 4 FINAL CLOSURE CORRECTION IMPLEMENTED / CERTIFIED**
+
+It does not itself accept/freeze Item 5 or authorize Pass 5, Item 6, WORLD-M0, roadmap rewrite, or a merge to `main`.
