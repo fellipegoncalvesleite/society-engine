@@ -151,7 +151,7 @@ try {
     check: "MOBILITY-CAPACITY-1",
     verdict: pass ? "PASS" : "FAIL",
     architecture: "Option B — mobility-role cohorts. NO sex composition exists in canonical population state, so NO male/female average is derived or displayed.",
-    kmPerTile: mob.KM_PER_TILE,
+    paceAuthority: "km_per_travel_day",
     checks,
     controlledHistorySummary: summary,
     capacitySamples: { calm, hungry, tired, desperate, lowCond, highCond, unloaded, fullyLoaded },

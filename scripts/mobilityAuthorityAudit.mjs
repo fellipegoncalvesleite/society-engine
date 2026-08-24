@@ -55,9 +55,9 @@ try {
   const recon = mob.deriveTravelPace(band, "selected_reconnaissance_party", { urgency: 0.6 });
   const loaded = mob.deriveTravelPace(band, "loaded_return_party", { loadRatio: 1 });
   const injured = mob.deriveTravelPace(band, "delayed_or_injured_party", { injuryLoad: 0.6 });
-  const routeTiles = 12;
-  const partyDays = Math.ceil(routeTiles / party.tilesPerTravelDay);
-  const columnDays = Math.ceil(routeTiles / column.tilesPerTravelDay);
+  const routeKm = 12;
+  const partyDays = routeKm / party.kmPerTravelDay;
+  const columnDays = routeKm / column.kmPerTravelDay;
   // More dependents/elders → slower column; a lean band's column is quicker.
   const leanColumn = mob.deriveTravelPace(
     bandWith({ demography: { population: 14, workingAdults: 12, dependents: 1, elders: 1 } }),
@@ -149,6 +149,7 @@ try {
     balancedPreservesHighPool_8: balanced !== undefined && balanced.high === 0,
     productionPoolsReconcile_8: productionReconciles,
     productionNeverOverCommits_8: !productionOverCommit,
+    canonicalPaceAuthorityIsKmPerDay_SCALE1: Number.isFinite(party.kmPerTravelDay) && party.kmPerTravelDay > 0,
   };
   const pass = Object.values(checks).every(Boolean);
   out = {
@@ -156,7 +157,7 @@ try {
     verdict: pass ? "PASS" : "FAIL",
     checks,
     comparisonSameRoute: {
-      routeTiles,
+      routeKm,
       selectedParty: { kmPerDay: party.kmPerTravelDay, days: partyDays },
       wholeBandColumn: { kmPerDay: column.kmPerTravelDay, days: columnDays },
       emergencyColumn: { kmPerDay: emergencyColumn.kmPerTravelDay },

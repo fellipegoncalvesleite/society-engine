@@ -19,7 +19,7 @@
 //                      `band.pressureState.fatiguePressure`; §19.6 forbids duplicating a
 //                      health system.
 //   4. history       — STORED, bounded. Written ONLY from completed physical movement.
-//                      Kilometres, at the map's documented 1.5 km/tile.
+//                      Kilometres are physical telemetry independent of grid resolution.
 //
 // The hard rule the amendment repeats: history CONDITIONS gradually, it never PERMITS.
 // There is no `allowedDistance = historicalAverage` anywhere in this file. Today's
@@ -28,7 +28,10 @@
 import type { DayNumber } from "../core/types";
 import type { Band, ExpeditionPartyComposition, ExpeditionRecord } from "./types";
 
-/** The map's documented spatial scale (see world/generate.ts: "1 tile ≈ 1.5 km"). */
+/**
+ * @deprecated SCALE-1 migration bridge only. WorldConfig.spatial is the physical authority.
+ * No new behavior may read this constant; remaining readers are removed by Tasks 3/4/7.
+ */
 export const KM_PER_TILE = 1.5;
 
 /** Rolling realized-history window. Bounded state, never grows. */
@@ -483,6 +486,7 @@ export type TravelContext =
 export interface TravelPace {
   readonly context: TravelContext;
   readonly kmPerTravelDay: number;
+  /** @deprecated SCALE-1 migration bridge; physical traversal consumes kmPerTravelDay. */
   readonly tilesPerTravelDay: number;
 }
 
