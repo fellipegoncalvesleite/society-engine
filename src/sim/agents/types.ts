@@ -22,6 +22,7 @@ import type {
 } from "./resourceClasses";
 import type { ResourceKnowledgeState, ResourceKnowledgeStateKind } from "./resourceKnowledge";
 import type { BandMobilityState } from "./bandMobility";
+import type { DirectedEdgeTravelRemainder } from "./traversal";
 import type { ResourceEcologyBandState, ResourceEcologyClassId } from "./resourceEcologyFoundation";
 import type { TemporaryWatercraftAssessment } from "./storageSuitability";
 import type { VisibleNatureState } from "./visibleNature";
@@ -1906,6 +1907,10 @@ export interface ExpeditionRecord {
   /** Where the party physically is right now (an index into routeTileIds). */
   readonly positionTileId: TileId;
   readonly routeIndex: number;
+  /** SCALE-1: unfinished work on the one directed edge currently being traversed. */
+  readonly travelEdgeRemainder?: DirectedEdgeTravelRemainder;
+  /** Physical outbound travel time estimated from the launch route and launch pace. */
+  readonly plannedOutboundTravelDays: number;
   readonly departedDay: DayNumber;
   readonly departedTick: TickNumber;
   /** Bounded window; exceeding it makes the party overdue then lost. */
@@ -2338,6 +2343,8 @@ export interface ExpeditionOutcomeSummary {
   readonly phase: Extract<ExpeditionPhase, "completed" | "aborted" | "lost">;
   readonly outcomeReason: ExpeditionOutcomeReason;
   readonly distanceTiles: number;
+  /** SCALE-1 physical round-trip journey length. Older serialized records may omit it. */
+  readonly distanceKm?: number;
   readonly totalDays: number;
   /** Productive labour the party carried (CORRECTION-34D — not its headcount). */
   readonly partyWorkers: number;

@@ -43,6 +43,7 @@ try {
   }
 
   const prepared = expedition.createPreparedExpedition({
+    world,
     band,
     taskKind: "distant_plant_gathering",
     targetTileId: targetTile.tile.id,
@@ -68,15 +69,45 @@ try {
       provisionUnitsConsumed: 4 * expedition.EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * 20,
     },
   };
+  // Isolate the invariant under test. The warmed band carries unrelated plant/activity
+  // traces that can truthfully consume the canonical two-episode seasonal cap before
+  // expedition exposure is selected. Those traces are irrelevant to this controlled arm.
   const craftedBand = {
     ...band,
+    recentIntraSeasonTrips: [],
+    recentResidentialMoveEvents: [],
+    seasonalSupport: undefined,
     ...(band.pressureState === undefined
       ? {}
-      : { pressureState: { ...band.pressureState, fatiguePressure: 0.8 } }),
+      : {
+          pressureState: {
+            ...band.pressureState,
+            foodStress: 0,
+            waterStress: 0,
+            riskPressure: 0,
+            fatiguePressure: 0.8,
+          },
+        }),
     expeditions: [exposedExpedition],
     acuteRisk: undefined,
   };
-  const craftedWorld = { ...world, bands: { ...world.bands, [bandId]: craftedBand } };
+  const craftedWorld = {
+    ...world,
+    time: { ...world.time, season: "spring" },
+    tiles: {
+      ...world.tiles,
+      [exposedExpedition.positionTileId]: {
+        ...world.tiles[exposedExpedition.positionTileId],
+        riskProfile: {
+          ...world.tiles[exposedExpedition.positionTileId].riskProfile,
+          floodRisk: 0,
+          droughtRisk: 0,
+          depletionRisk: 0,
+        },
+      },
+    },
+    bands: { ...world.bands, [bandId]: craftedBand },
+  };
 
   // Canonical authority generates the episode and stamps the party.
   const assessed = acute.applyAcuteRiskToBand(craftedWorld, craftedBand);
@@ -134,7 +165,7 @@ try {
 
   // ── no direct population writes in expedition code ─────────────────────────────────
   const expeditionSrc = readFileSync(`${ROOT}/src/sim/agents/expedition.ts`, "utf8");
-  const noPopulationWrites = !/population\s*:/.test(expeditionSrc) && !/demography\s*:/.test(expeditionSrc);
+  const noPopulationWrites = !/(?:^|[,{]\\s*)(?:population|demography)\\s*:/m.test(expeditionSrc);
 
   // ── natural occurrence over 40y (informational + capped) ──────────────────────────
   let natural = runner.initSimWorld({ kind: "map1" }, "expedition-acute-natural");

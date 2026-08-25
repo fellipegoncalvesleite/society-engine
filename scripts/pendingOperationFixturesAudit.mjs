@@ -58,7 +58,7 @@ try {
 
   // A far target and a near one, both band-known and both physically routable. "Far" must be
   // far enough that the outbound leg is several days, which is what makes a camp decision
-  // exist at all; "near" must be inside same-day reach so J3 has a real same-day operation.
+  // exist at all; "near" must be inside a sub-day outbound reach so J3 has a real operation that never needs a task camp.
   const known = Object.keys(baseBand.knowledge.observedTiles).filter((tileId) => {
     const tile = world.tiles[tileId];
     return tile !== undefined && tileId !== baseBand.position;
@@ -72,20 +72,47 @@ try {
 
   for (const tileId of known.sort((a, b) => distanceOf(a) - distanceOf(b) || a.localeCompare(b))) {
     const distance = distanceOf(tileId);
-    if (distance < 3 || distance > 24) continue;
+    if (distance < 1 || distance > 24) continue;
     const route = trips.buildExpeditionRouteTiles(world, baseBand.position, tileId, distance + 8);
     if (route === undefined) continue;
-    routable.push({ tileId, distance, route });
+    const tripTiming = trips.derivePhysicalRoundTripTiming(
+      world,
+      baseBand,
+      route,
+      0.25,
+      "resource_expedition",
+    );
+    if (!Number.isFinite(tripTiming.totalDays)) continue;
+    routable.push({ tileId, distance, route, tripTiming });
   }
 
-  // The fixtures need targets whose outbound leg is genuinely multi-day, so that an operation
-  // aimed there still has a camp decision ahead of it after it sets out.
-  const farTargets = routable.filter((entry) => pending.deriveOutboundLegDays(entry.route.length) >= 3);
+  // The fixtures need targets whose physical outbound leg is genuinely multi-day, so that an
+  // operation aimed there still has a camp decision ahead of it after it sets out.
+  const farTargets = routable.filter((entry) => pending.deriveOutboundLegDays(entry.tripTiming.outboundTravelDays) >= 3);
   if (farTargets.length < 2) throw new Error("fixture needs two multi-day-leg targets");
 
   const target = farTargets[0];
   const otherTarget = farTargets[1];
-  const nearTarget = routable.find((entry) => pending.deriveOutboundLegDays(entry.route.length) <= 1);
+  const nearTarget = Object.values(world.tiles)
+    .filter((tile) => {
+      const distance = distanceOf(tile.id);
+      return tile.id !== baseBand.position && !tile.isAquatic && distance <= 2;
+    })
+    .map((tile) => {
+      const distance = distanceOf(tile.id);
+      const route = trips.buildExpeditionRouteTiles(world, baseBand.position, tile.id, distance + 8);
+      if (route === undefined) return undefined;
+      const tripTiming = trips.derivePhysicalRoundTripTiming(
+        world,
+        baseBand,
+        route,
+        0.25,
+        "resource_expedition",
+      );
+      return { tileId: tile.id, distance, route, tripTiming };
+    })
+    .filter((entry) => entry !== undefined && entry.tripTiming.outboundTravelDays < 1)
+    .sort((a, b) => a.distance - b.distance || String(a.tileId).localeCompare(String(b.tileId)))[0];
 
   // ── band builders. Band-known state only; no world truth is touched. ──────────────────
   const setDisposition = (band, tileId, disposition) => {
@@ -146,6 +173,22 @@ try {
     expeditions: [],
   });
 
+  /** Add a controlled band-known observation for a physically near tile. */
+  const withObservedTile = (band, tileId) => {
+    if (band.knowledge.observedTiles[tileId] !== undefined) return band;
+    const template = band.knowledge.observedTiles[target.tileId];
+    return {
+      ...band,
+      knowledge: {
+        ...band.knowledge,
+        observedTiles: {
+          ...band.knowledge.observedTiles,
+          [tileId]: { ...template, tileId, verificationDisposition: [] },
+        },
+      },
+    };
+  };
+
   /** Install a remembered patch at a tile. Memory only — never intent. */
   const withPatchMemory = (band, tileId) => ({
     ...band,
@@ -170,6 +213,7 @@ try {
    */
   const withOperation = (band, entry, { phase = "outbound", departedDaysAgo = 1, taskKind = "distant_plant_gathering" } = {}) => {
     const prepared = expedition.createPreparedExpedition({
+      world,
       band,
       taskKind,
       targetTileId: entry.tileId,
@@ -287,14 +331,18 @@ try {
   // ── J3 — a selected operation that needs no camp ──────────────────────────────────────
   {
     if (nearTarget === undefined) {
-      record("J3", "a selected same-day operation does not launch temporary-use verification", {
+      record("J3", "a selected operation with no task-camp decision does not launch temporary-use verification", {
         skipped: false,
-      }, "No same-day-reach target is known to the warmed band; fixture could not be constructed.");
+      }, "No sub-day outbound target is physically reachable from the warmed band; fixture could not be constructed.");
     } else {
-      const nearClean = withoutAnswer(bare(baseBand), nearTarget.tileId, "temporary_use");
+      const nearClean = withoutAnswer(
+        withObservedTile(bare(baseBand), nearTarget.tileId),
+        nearTarget.tileId,
+        "temporary_use",
+      );
       const band = withOperation(nearClean, nearTarget, { departedDaysAgo: 0 });
 
-      record("J3", "a selected same-day operation does not launch temporary-use verification", {
+      record("J3", "a selected operation with no task-camp decision does not launch temporary-use verification", {
         operationExists: (band.expeditions ?? []).length === 1,
         notAsked: asks(band, nearTarget.tileId, "temporary_use") === false,
       });
@@ -307,10 +355,13 @@ try {
     // favourable pending operation the architecture can produce.
     const band = withOperation(clean, target, { departedDaysAgo: 0, phase: "prepared" });
     const identity = pending.derivePendingOperationAtTile(band.expeditions, target.tileId, currentDay);
-    const roundTrip = pending.deriveVerificationRoundTripDays(
-      target.distance,
+    const roundTrip = trips.derivePhysicalRoundTripTiming(
+      world,
+      band,
+      target.route,
       verification.VERIFICATION_ON_SITE_DAYS,
-    );
+      "selected_reconnaissance_party",
+    ).totalDays;
     const daysUntilCamp = identity === undefined ? 0 : identity.expectedOperatingDay - currentDay;
 
     record(
@@ -369,10 +420,13 @@ try {
     const band = withOperation(clean, target, { departedDaysAgo: 0, phase: "prepared" });
     const identity = pending.derivePendingOperationAtTile(band.expeditions, target.tileId, currentDay);
     const daysUntilCamp = identity.expectedOperatingDay - currentDay;
-    const roundTrip = pending.deriveVerificationRoundTripDays(
-      target.distance,
+    const roundTrip = trips.derivePhysicalRoundTripTiming(
+      world,
+      band,
+      target.route,
       verification.VERIFICATION_ON_SITE_DAYS,
-    );
+      "selected_reconnaissance_party",
+    ).totalDays;
 
     // The READER end, pinned independently of timing: with a negative held, the exact camp is
     // refused; without it, permitted.
@@ -409,6 +463,7 @@ try {
       expeditions: [
         {
           ...expedition.createPreparedExpedition({
+            world,
             band: clean,
             taskKind: "frontier_verification",
             targetTileId: target.tileId,

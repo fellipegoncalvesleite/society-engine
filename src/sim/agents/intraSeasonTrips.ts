@@ -107,11 +107,14 @@ import { SEASON_LENGTH_DAYS } from "../core/types";
 import { getWorldTimeForDay } from "../tick/time";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
+import { deriveTravelPace, type TravelContext } from "./bandMobility";
+import { getRouteTravelTimeDays } from "./traversal";
 
 const TRIP_DAY_CADENCE = 3;
 const FIRST_TRIP_DAY_OF_SEASON = 6;
 const MAX_TRIP_DISTANCE_TILES = 10;
-const SAME_DAY_ROUND_TRIP_TILE_BUDGET = 8;
+/** On-site search/work share reserved inside an ordinary same-day trip. */
+const INTRA_SEASON_ACTIVITY_WORK_DAYS = 0.25;
 const RECENT_TRIP_RECORD_CAP = 24;
 const RECENT_ACTIVITY_GROUP_SUMMARY_CAP = 8;
 const STARTING_LOCAL_RECON_MAX_DISTANCE_TILES = 2;
@@ -338,10 +341,6 @@ function applyTripDay(world: WorldState, day: number): WorldState {
     // Multi-day work now belongs to the expedition lifecycle (expedition.ts), which
     // launches from the same band-known candidate and delivers a receipt only on
     // physical return. Skipping here is what removes the fake instant credit.
-    if (deriveTripDurationDays(candidate.distanceTiles) > 1) {
-      continue;
-    }
-
     const activityBand =
       candidate.seededResourceKnowledgeState === undefined
         ? band
@@ -410,7 +409,7 @@ function applyTripDay(world: WorldState, day: number): WorldState {
       // real day. Observing with it stamped observations at day 180 instead of 185 and
       // broke step-mode invariance — the same defect CORRECTION-15 repaired for the
       // expedition observation timestamp. The executor is handed the day it is actually
-      // running on, and `deriveTripDurationDays`/`buildOutboundPathTiles` are unaffected
+      // running on, and `derivePhysicalRoundTripTiming`/`buildOutboundPathTiles` are unaffected
       // because they read tiles, not time.
       { ...currentWorld, time },
       band,
@@ -441,7 +440,7 @@ function applyTripDay(world: WorldState, day: number): WorldState {
 // a party is actually staffed, walks a contiguous passable route, arrives or fails, and —
 // only on arrival — observes. Every physical primitive is the one the same-day trip path
 // already owns: `buildOutboundPathTiles`/`findPassablePath` for the route,
-// `isBandPassableDestination` for the destination, `deriveTripDurationDays` for the
+// `isBandPassableDestination` for the destination, `derivePhysicalRoundTripTiming` for the
 // same-day boundary, and the identical aquatic-adjacent arrival rule
 // `resolvePhysicalFoodHarvest` uses. Nothing new is scheduled and nothing is reserved.
 //
@@ -518,22 +517,6 @@ function executePendingInvestigation(
     return settle("destination_blocked");
   }
 
-  // (3) SAME-DAY REACH, by the authoritative classifier, on the straight-line distance the
-  // selection itself used. A target the band can select at up to ten tiles is honestly
-  // same-day only inside the eight-tile round-trip budget — beyond that it takes an
-  // explicit NAMED NON-EXECUTION rather than being compressed into a fake one-day record.
-  const gridDistance = getGridDistance(origin, target);
-  const selectionDurationDays = deriveTripDurationDays(gridDistance);
-
-  if (selectionDurationDays > 1) {
-    return settle("beyond_same_day_reach", {
-      outcome: "beyond_same_day_reach",
-      resolvedDay: day,
-      routeDistanceTiles: gridDistance,
-      durationDays: selectionDurationDays,
-    });
-  }
-
   // (4) LABOUR. Adults away on an expedition are not at camp; adults already out on today's
   // ordinary trip are already spent. The party can never exceed what is left, and a band
   // with nobody left sends nobody — the real `insufficient_labor` case, not a floor of one.
@@ -593,9 +576,16 @@ function executePendingInvestigation(
   // (6) THE REAL WALK. Selection measures straight-line distance; the ground may be longer.
   // Re-classify on the route actually walked, through the same authoritative helper.
   const routeDistanceTiles = routeTiles.length - 1;
-  const durationDays = deriveTripDurationDays(routeDistanceTiles);
+  const tripTiming = derivePhysicalRoundTripTiming(
+    world,
+    band,
+    routeTiles,
+    INTRA_SEASON_ACTIVITY_WORK_DAYS,
+    "selected_reconnaissance_party",
+  );
+  const durationDays = tripTiming.durationDays;
 
-  if (durationDays > 1) {
+  if (!tripTiming.sameDay) {
     return settle("beyond_same_day_reach", {
       outcome: "beyond_same_day_reach",
       resolvedDay: day,
@@ -1025,7 +1015,7 @@ function selectTripCandidate(
   // candidate, which is why the ordinary founder launched 0 gathering expeditions
   // while still running verifications. Restricting the argmax domain — rather than
   // filtering after it — closes that eligibility gap without a second distance
-  // authority: multi-day-ness is still decided by deriveTripDurationDays.
+  // authority: multi-day-ness is still decided by derivePhysicalRoundTripTiming.
   requireMultiDay: boolean = false,
   // REPEATED-BAND-EXPANSION-FISSION-14 §9 Stage 2 — the SYMMETRIC half of
   // CORRECTION-4's fix above. The same-day caller (`applyTripDay`) discards a winner
@@ -1038,7 +1028,7 @@ function selectTripCandidate(
   // 141 of 480 seasons at exactly zero support. Restricting the argmax DOMAIN to what
   // the caller can actually execute (rather than filtering after it) is the same
   // repair CORRECTION-4 made for the expedition selector; multi-day-ness is still
-  // decided only by `deriveTripDurationDays`, and expeditions still receive the best
+  // decided only by `derivePhysicalRoundTripTiming`, and expeditions still receive the best
   // multi-day candidate from their own call.
   requireSameDay: boolean = false,
 ): TripCandidate | undefined {
@@ -1101,11 +1091,19 @@ function selectTripCandidate(
       continue;
     }
 
-    if (requireMultiDay && deriveTripDurationDays(distanceTiles) <= 1) {
+    const candidateTiming = deriveCandidatePhysicalTiming(
+      world,
+      band,
+      target.id,
+      Math.min(maxDistanceTiles, distanceTiles + 8),
+    );
+    if (candidateTiming === undefined) {
       continue;
     }
-
-    if (requireSameDay && deriveTripDurationDays(distanceTiles) > 1) {
+    if (requireMultiDay && candidateTiming.sameDay) {
+      continue;
+    }
+    if (requireSameDay && !candidateTiming.sameDay) {
       continue;
     }
 
@@ -1306,13 +1304,19 @@ function hasReachablePatchMemory(
       continue;
     }
 
-    const durationDays = deriveTripDurationDays(distanceTiles);
-
-    if (domain.requireMultiDay && durationDays <= 1) {
+    const candidateTiming = deriveCandidatePhysicalTiming(
+      world,
+      band,
+      target.id,
+      Math.min(domain.maxDistanceTiles, distanceTiles + 8),
+    );
+    if (candidateTiming === undefined) {
       continue;
     }
-
-    if (domain.requireSameDay && durationDays > 1) {
+    if (domain.requireMultiDay && candidateTiming.sameDay) {
+      continue;
+    }
+    if (domain.requireSameDay && !candidateTiming.sameDay) {
       continue;
     }
 
@@ -1499,8 +1503,10 @@ function buildTripRecord(
     readonly productiveWorkers: number;
   },
 ): IntraSeasonTripRecord {
-  const roundTripTiles = candidate.distanceTiles * 2;
-  const estimatedDurationDays = Math.max(1, Math.ceil(roundTripTiles / SAME_DAY_ROUND_TRIP_TILE_BUDGET));
+  const pathTiles = buildOutboundPathTiles(world, band.position, candidate.targetTileId);
+  const timing = derivePhysicalRoundTripTiming(world, band, pathTiles, INTRA_SEASON_ACTIVITY_WORK_DAYS);
+  const estimatedDurationDays = timing.durationDays;
+  const roundTripTiles = Math.max(0, pathTiles.length - 1) * 2; // TOPOLOGICAL telemetry only.
   const outcome = classifyOutcome(estimatedDurationDays);
   const movementType = deriveMovementType(candidate.cause, outcome, candidate.distanceTiles);
   const taskGroupType = deriveTaskGroupType(candidate.cause, candidate.memory.resourceClassId);
@@ -1538,7 +1544,6 @@ function buildTripRecord(
     ? estimateTaskGroupPeople(band, taskGroupType)
     : partyWork.productiveWorkers;
   const objective = deriveObjective(candidate.cause);
-  const pathTiles = buildOutboundPathTiles(world, band.position, candidate.targetTileId);
   const endDay = (Number(day) + estimatedDurationDays - 1) as DayNumber;
   const reasonId =
     `reason:intra-season-trip:${band.id}:${Number(day)}:${candidate.cause}:${candidate.targetTileId}` as ReasonId;
@@ -3525,16 +3530,54 @@ function summarizePeopleByActivityType(
   );
 }
 
-// A day-return loop fits inside one daily travel budget; longer round trips imply a
-// night out or a multi-day foray. NONE of these move the residential marker — a
-// `continues` trip is a task group ranging far while the camp stays fixed.
+export interface PhysicalRoundTripTiming {
+  readonly outboundTravelDays: number;
+  readonly activityDays: number;
+  readonly returnTravelDays: number;
+  readonly totalDays: number;
+  readonly durationDays: number;
+  readonly sameDay: boolean;
+  readonly kmPerTravelDay: number;
+}
+
 /**
- * EXPEDITIONARY-2 §1 — the real duration of a round trip to `distanceTiles`, in activity
- * days. This is the single boundary between the two physical paths: 1 day => the
- * ordinary same-day activity path; more than 1 day => the expedition lifecycle.
+ * SCALE-1 — the physical boundary between ordinary same-day activity and the
+ * expedition lifecycle. Route topology is supplied by the existing bounded path
+ * builder; only physical edge time + explicit on-site time decides the domain.
  */
-export function deriveTripDurationDays(distanceTiles: number): number {
-  return Math.max(1, Math.ceil((distanceTiles * 2) / SAME_DAY_ROUND_TRIP_TILE_BUDGET));
+export function derivePhysicalRoundTripTiming(
+  world: WorldState,
+  band: Band,
+  outboundRouteTileIds: readonly TileId[],
+  activityDays: number = INTRA_SEASON_ACTIVITY_WORK_DAYS,
+  travelContext: TravelContext = "resource_expedition",
+): PhysicalRoundTripTiming {
+  const kmPerTravelDay = deriveTravelPace(band, travelContext).kmPerTravelDay;
+  const outboundTravelDays = getRouteTravelTimeDays(world, outboundRouteTileIds, kmPerTravelDay);
+  const returnTravelDays = getRouteTravelTimeDays(world, [...outboundRouteTileIds].reverse(), kmPerTravelDay);
+  const boundedActivityDays = Math.max(0, activityDays);
+  const totalDays = outboundTravelDays + boundedActivityDays + returnTravelDays;
+  return {
+    outboundTravelDays,
+    activityDays: boundedActivityDays,
+    returnTravelDays,
+    totalDays,
+    durationDays: Number.isFinite(totalDays) ? Math.max(1, Math.ceil(totalDays)) : Number.POSITIVE_INFINITY,
+    sameDay: Number.isFinite(totalDays) && totalDays <= 1 + 1e-9,
+    kmPerTravelDay,
+  };
+}
+
+function deriveCandidatePhysicalTiming(
+  world: WorldState,
+  band: Band,
+  targetTileId: TileId,
+  maxReachTiles: number = MAX_TRIP_DISTANCE_TILES,
+): PhysicalRoundTripTiming | undefined {
+  const route = buildOutboundPathTiles(world, band.position, targetTileId, maxReachTiles);
+  return route.length <= 1
+    ? undefined
+    : derivePhysicalRoundTripTiming(world, band, route, INTRA_SEASON_ACTIVITY_WORK_DAYS);
 }
 
 /**
@@ -3551,7 +3594,7 @@ export function selectExpeditionTripCandidate(
 ): { readonly memory: ResourcePatchMemory; readonly targetTileId: TileId; readonly distanceTiles: number } | undefined {
   const candidate = selectTripCandidate(world, band, day, maxDistanceTiles, true);
 
-  if (candidate === undefined || deriveTripDurationDays(candidate.distanceTiles) <= 1) {
+  if (candidate === undefined) {
     return undefined;
   }
 

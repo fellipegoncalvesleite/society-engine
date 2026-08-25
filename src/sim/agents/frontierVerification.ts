@@ -46,12 +46,9 @@ import {
   resourceTestEligible,
   taskCampRefusedByEvidence,
 } from "./verificationEvidence";
-import { deriveTripDurationDays } from "./intraSeasonTrips";
+import { derivePhysicalRoundTripTiming } from "./intraSeasonTrips";
 // CORRECTION-23J §5 — the identity of an operation the production selector actually chose.
-import {
-  derivePendingOperationAtTile,
-  deriveVerificationRoundTripDays,
-} from "./pendingOperation";
+import { derivePendingOperationAtTile } from "./pendingOperation";
 // CORRECTION-23I — audit-only refusal counting and the typed dependency shape.
 import {
   isRecordingLaunchDependencies,
@@ -652,7 +649,14 @@ function deriveLaunchDecisionDependency(
     // (3) and (6) — the route and duration must actually imply a camp decision. A same-day
     // target never reaches the reader (`deriveTaskCampForOperating` returns early), so a bounded
     // negative could not prevent or alter anything about this operation.
-    if (!operation.requiresTaskCampDecision || deriveTripDurationDays(distanceTiles) <= 1) {
+    const verificationTiming = derivePhysicalRoundTripTiming(
+      world,
+      band,
+      operation.routeTileIds,
+      VERIFICATION_ON_SITE_DAYS,
+      "selected_reconnaissance_party",
+    );
+    if (!operation.requiresTaskCampDecision || verificationTiming.sameDay) {
       recordLaunchRefusal(question, "operation_needs_no_camp_decision");
       return undefined;
     }
@@ -669,9 +673,9 @@ function deriveLaunchDecisionDependency(
     // decision informed nothing, and crediting it would be exactly the retrospective attribution
     // §3.3 forbids.
     const daysUntilCampDecision = operation.expectedOperatingDay - day;
-    const roundTripDays = deriveVerificationRoundTripDays(distanceTiles, VERIFICATION_ON_SITE_DAYS);
+    const roundTripDays = verificationTiming.totalDays;
 
-    if (roundTripDays > daysUntilCampDecision) {
+    if (!Number.isFinite(roundTripDays) || roundTripDays > daysUntilCampDecision) {
       recordLaunchRefusal(question, "answer_cannot_return_before_camp_decision");
       return undefined;
     }

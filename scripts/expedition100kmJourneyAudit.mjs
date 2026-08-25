@@ -2,7 +2,7 @@
 //
 // Proves long multi-day travel is POSSIBLE without being routine:
 //   FAVORABLE — a conditioned (not superhuman) selected party, known valuable route
-//     (~34 tiles out), calm camp, provisions: physical daily legs, nights out, no
+//     (~34 temporary Map-2 cells out = ~51 km one way), calm camp, provisions: physical daily legs, nights out, no
 //     teleport, real provision consumption, physical return, total ≥ ~100 km, and
 //     bounded post-journey recovery (rest days recorded).
 //   UNFAVORABLE — the SAME route with an unconditioned, exhausted, starving band:
@@ -22,8 +22,11 @@ try {
   const trips = await server.ssrLoadModule("/sim/agents/intraSeasonTrips.ts");
   const plantPatches = await server.ssrLoadModule("/sim/agents/plantPatches.ts");
   const mob = await server.ssrLoadModule("/sim/agents/bandMobility.ts");
+  const traversal = await server.ssrLoadModule("/sim/agents/traversal.ts");
 
-  let world = runner.initSimWorld({ kind: "map1" }, "hundred-km-journey");
+  // Temporary Map 2 is intentionally retained at 1.5 km/cell during SCALE-1; this old
+  // audit needs that fixture for a ~100 km round trip inside the 36-edge technical cap.
+  let world = runner.initSimWorld({ kind: "map2" }, "hundred-km-journey");
   world = runner.stepSim(world, 12, "seasonal");
   const bandId = Object.keys(world.bands).sort()[0];
   const band = world.bands[bandId];
@@ -37,13 +40,13 @@ try {
     linkedTiles: [],
     state: "used", source: "direct",
     confidence: {
-      presenceConfidence: 0.85, seasonConfidence: 0.7, yieldConfidence: 0.85,
-      safetyConfidence: 0.85, processingConfidence: 0.6, accessConfidence: 0.85,
+      presenceConfidence: 1, seasonConfidence: 0.9, yieldConfidence: 1,
+      safetyConfidence: 0.9, processingConfidence: 0.8, accessConfidence: 1,
       recoveryConfidence: 0.5,
     },
     seasonality: { bestSeasons: [], badSeasons: [], failedSeasonCount: 0 },
     useHistory: {
-      visits: 6, successfulUses: 5, failedUses: 0, lastYieldEstimate: 0.85,
+      visits: 6, successfulUses: 5, failedUses: 0, lastYieldEstimate: 1,
       yieldTrend: "flat", depletionMemory: 0, recoveryExpectation: 0.5,
     },
     risk: { poisoningOrBadReaction: false, badWater: false, predatorOrAnimalRisk: 0, tabooOrAvoidanceFutureFlag: false },
@@ -51,32 +54,54 @@ try {
     firstNotedTick: 0, lastNotedTick: tick, reasonIds: [],
   });
 
-  // A DISTANT worthwhile target: ~33-35 tiles of route → ≥ ~100 km out-and-back.
+  // A DISTANT worthwhile target chosen by physical route length AND physical travel time,
+  // not by cell count or iteration order. The temporary Map-2 raster is 1.5 km/cell,
+  // but this fixture never multiplies cells by 1.5.
+  const favorableTimingBand = {
+    ...band,
+    demography: { ...band.demography, workingAdults: Math.max(18, band.demography.workingAdults) },
+    ...(band.pressureState === undefined
+      ? {}
+      : { pressureState: { ...band.pressureState, foodStress: 1, fatiguePressure: 0 } }),
+    mobility: { ...(band.mobility ?? mob.createEmptyMobilityState()), conditioning: 0.65 },
+  };
   let site;
   for (const tile of Object.values(world.tiles)) {
     const d = Math.abs(tile.coord.x - origin.coord.x) + Math.abs(tile.coord.y - origin.coord.y);
-    if (d < 33 || d > 35 || tile.isAquatic === true) continue;
+    if (d < 20 || d > 36 || tile.isAquatic === true) continue;
     if (plantPatches.derivePlantPatchesForTile(tile, world.time).length === 0) continue;
     const route = trips.buildExpeditionRouteTiles(world, band.position, tile.id, 36);
-    if (route === undefined || route[route.length - 1] !== tile.id || route.length - 1 < 33) continue;
-    site = { tile, route, d };
-    break;
+    if (route === undefined || route[route.length - 1] !== tile.id) continue;
+    const routeKm = traversal.getRoutePhysicalLengthKm(world, route);
+    if (!Number.isFinite(routeKm) || routeKm < 49.5 || routeKm > 54) continue;
+    const physicalTiming = trips.derivePhysicalRoundTripTiming(
+      world,
+      favorableTimingBand,
+      route,
+      1,
+      "resource_expedition",
+    );
+    if (!Number.isFinite(physicalTiming.totalDays) || physicalTiming.totalDays > 23) continue;
+    if (site === undefined || physicalTiming.totalDays < site.physicalTiming.totalDays) {
+      site = { tile, route, d, routeKm, physicalTiming };
+    }
   }
+  if (site === undefined) throw new Error("no ~50 km one-way route fitting the physical expedition window");
 
   const runJourney = (fitness) => {
     const crafted = {
       ...band,
       demography: {
         ...band.demography,
-        workingAdults: Math.max(14, band.demography.workingAdults),
-        foodPerPersonStress: fitness === "favorable" ? 0 : 0.9,
+        workingAdults: Math.max(18, band.demography.workingAdults),
+        foodPerPersonStress: fitness === "favorable" ? 1 : 0.9,
       },
       ...(band.pressureState === undefined
         ? {}
         : {
             pressureState: {
               ...band.pressureState,
-              foodStress: fitness === "favorable" ? 0 : 0.6,
+              foodStress: fitness === "favorable" ? 1 : 0.6,
               fatiguePressure: fitness === "favorable" ? 0 : 0.95,
             },
           }),
@@ -84,9 +109,18 @@ try {
         ...(band.mobility ?? mob.createEmptyMobilityState()),
         conditioning: fitness === "favorable" ? 0.65 : 0,
       },
+      // Controlled remote-option fixture: do not let the same morning's local-recon
+      // bootstrap manufacture a nearby substitute and change the expedition value test.
+      knowledge: {
+        ...band.knowledge,
+        observedTiles: band.knowledge.observedTiles[band.position] === undefined
+          ? {}
+          : { [band.position]: band.knowledge.observedTiles[band.position] },
+      },
       resourceKnowledgeState: { patchMemories: [makeMemory(site.tile)], cap: 48 },
       expeditions: [],
       recentExpeditionOutcomes: [],
+      recentIntraSeasonTrips: [],
       receivedSmokeSignals: [],
     };
     let w = { ...world, bands: { ...world.bands, [bandId]: crafted } };
@@ -156,12 +190,12 @@ try {
   );
 
   const checks = {
-    distantRouteExists_17: site !== undefined && site.route.length - 1 >= 33,
+    distantRouteExists_17: site.routeKm >= 49.5 && site.routeKm <= 54,
     favorableJourneyLaunches_17: favorable.launched === true,
     favorableJourneyCompletes_17: favorableCompleted === true,
     physicalDailyLegs_17: favorable.travelDaysSeen >= 10,
     noTeleport_17: favorable.offRouteViolations === 0,
-    totalNearOrAbove100km_17: favorable.longestExpeditionKm >= 99,
+    totalNearOrAbove100km_17: (favorable.outcome?.distanceKm ?? favorable.longestExpeditionKm) >= 99,
     provisionsPhysicallyConsumed_17: favorable.provisions > 0,
     boundedRecoveryAfterwards_17: favorable.restDaysAfter > 0,
     unfavorableFailsOrMuchSlower_17: unfavorableFailedOrMuchSlower === true,
@@ -172,7 +206,10 @@ try {
     check: "EXPEDITION-100KM-JOURNEY-1",
     verdict: pass ? "PASS" : "FAIL",
     checks,
-    site: { tileId: String(site?.tile.id), routeTiles: (site?.route.length ?? 1) - 1, gridDistance: site?.d },
+    site: {
+      tileId: String(site.tile.id), routeTiles: site.route.length - 1, routeKm: site.routeKm,
+      gridDistance: site.d, plannedPhysicalDays: site.physicalTiming.totalDays,
+    },
     favorable: {
       reason: favorable.outcome?.outcomeReason, phase: favorable.outcome?.phase,
       journeyDays: favorable.journeyDays, travelDays: favorable.travelDaysSeen,

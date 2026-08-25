@@ -27,7 +27,6 @@ import type { DailyAction } from "./dailyActions";
 import { isProvisionalSuccessor } from "./bandLifecycle";
 import { deriveCarriedWaterRelief, deriveCarryingRelief } from "./adaptationBoundary";
 import {
-  KM_PER_TILE,
   deriveAvailableMobilityPools,
   derivePhysicallyAwayPartyPeople,
   derivePreparedCommitmentPartyPeople,
@@ -44,7 +43,7 @@ import {
   applyActivityOutcomeToMemoryForWorld,
   buildExpeditionRouteTiles,
   compareExpeditionBands,
-  deriveTripDurationDays,
+  derivePhysicalRoundTripTiming,
   isActiveExpeditionBand,
   isFoodClass,
   resolveExpeditionTargetWork,
@@ -63,7 +62,6 @@ import {
   chooseNextFrontierStep,
   deriveFrontierExplorationEligibility,
   deriveFrontierHeading,
-  deriveOutwardTilesRemaining,
   retainFrontierObservations,
 } from "./frontierExploration";
 import {
@@ -111,15 +109,15 @@ import type {
   IntraSeasonTripRecord,
   ReceivedSmokeSignal,
 } from "./types";
+import {
+  advanceTraversalAlongRoute,
+  deriveTraversalEdge,
+  getRoutePhysicalLengthKm,
+  getRouteTravelTimeDays,
+} from "./traversal";
 
 // ── Bounds. Every one of these is a hard cap on state or search, never a tuning dial. ──
 
-// CORRECTION-23J §5 — the travel pace now lives in `pendingOperation.ts`, which must be
-// importable by `frontierVerification.ts` (this module imports THAT one, so it cannot be the
-// owner without closing a cycle). Re-exported under its original name so every existing reader
-// is unaffected.
-export { EXPEDITION_BASE_TILES_PER_DAY } from "./pendingOperation";
-import { EXPEDITION_BASE_TILES_PER_DAY } from "./pendingOperation";
 /**
  * Ceiling on how far out an expedition may plan; derived reach is normally far lower.
  * §17 — this is a TECHNICAL search bound, not a behavioral range: at 36 tiles (54 km)
@@ -154,12 +152,14 @@ export const EXPEDITION_CARRY_UNITS_PER_WORKER = 0.12;
  */
 export const EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY = 0.0008;
 
-/**
- * The genuine same-day envelope: can a party walk to `distanceTiles` and back within one
- * activity day? This — not a distance constant — is what separates the two paths.
- */
-export function deriveSameDayRoundTripFeasible(distanceTiles: number): boolean {
-  return distanceTiles * 2 <= EXPEDITION_BASE_TILES_PER_DAY * 2;
+/** SCALE-1: same-day feasibility is physical route time plus on-site work time. */
+export function deriveSameDayRoundTripFeasible(
+  world: WorldState,
+  band: Band,
+  routeTileIds: readonly TileId[],
+  activityDays = 0.25,
+): boolean {
+  return derivePhysicalRoundTripTiming(world, band, routeTileIds, activityDays).sameDay;
 }
 
 /** Deterministic expedition identity from stable band/target/day facts. No counters, no clock. */
@@ -565,16 +565,10 @@ export function deriveCarryCapacityUnits(
  * (through the public adaptation boundary only) recover part of that loss. Bounded to at
  * least one tile so a party can never be permanently frozen mid-route.
  */
-function deriveTilesPerDay(band: Band, expedition: ExpeditionRecord, currentTick: number): number {
+function deriveExpeditionKmPerTravelDay(band: Band, expedition: ExpeditionRecord, currentTick: number): number {
   const carried = expedition.cargo.harvestUnits;
   const capacity = Math.max(0.0001, expedition.cargo.carryCapacityUnits);
   const loadRatio = Math.max(0, Math.min(1, carried / capacity));
-  // EXPEDITIONARY-4 §6 — pace comes from the ONE canonical travel-pace boundary, in the
-  // travel context this party is physically in: an injured party limps, a loaded return
-  // party is slower than its own outbound leg, an information party travels light, and
-  // an ordinary resource party walks at party capacity. Urgency (food stress) raises
-  // willingness inside the authority; it cannot manufacture stamina. The party's §8
-  // pool composition shapes its pace: who walks decides how far the party goes.
   const urgency = Math.max(0, Math.min(1, band.pressureState?.foodStress ?? 0));
   const context: TravelContext =
     expedition.injuryLoad > 0.25
@@ -583,11 +577,6 @@ function deriveTilesPerDay(band: Band, expedition: ExpeditionRecord, currentTick
         ? "loaded_return_party"
         : expedition.taskKind === "distant_patch_verification" ||
             expedition.taskKind === "route_reconnaissance" ||
-            // CORRECTION-17 §7 — a frontier party travels light and carries no cargo, so
-            // it uses the SAME reconnaissance pace every other information party uses. It
-            // is not faster because the band is hungry: `urgency` enters the shared pace
-            // authority identically for all five task families, and this checkpoint adds
-            // no frontier-specific speed, stamina, or duration term anywhere.
             expedition.taskKind === "frontier_exploration" ||
             expedition.taskKind === "frontier_verification"
           ? "selected_reconnaissance_party"
@@ -597,19 +586,15 @@ function deriveTilesPerDay(band: Band, expedition: ExpeditionRecord, currentTick
     urgency,
     injuryLoad: expedition.injuryLoad,
     partyComposition: expedition.partyComposition,
-    // CORRECTION-34D — a non-working member walks with the party, so the party cannot be timed as
-    // though they were not there.
     nonWorkingPartyPeople: expedition.nonWorkingPartyPeople,
   });
-  // Practiced carrying/water handling (public adaptation boundary only) recovers part of
-  // the load cost — learned technique, kept distinct from bodily conditioning.
   const carryingRelief = deriveCarryingRelief(band, currentTick);
   const waterRelief = deriveCarriedWaterRelief(band, currentTick);
   const reliefFactor =
     1 +
     Math.max(0, Math.min(0.2, carryingRelief.relief ?? 0)) +
     Math.max(0, Math.min(0.1, waterRelief.relief ?? 0));
-  return Math.max(1, Math.floor(pace.tilesPerTravelDay * reliefFactor));
+  return Math.max(0.1, pace.kmPerTravelDay * reliefFactor);
 }
 
 /**
@@ -654,7 +639,7 @@ function deriveTaskCampForOperating(
   expedition: ExpeditionRecord,
   day: DayNumber,
 ): ExpeditionTaskCamp | undefined {
-  const homeLegDays = Math.ceil(expedition.routeTileIds.length / EXPEDITION_BASE_TILES_PER_DAY);
+  const homeLegDays = expedition.plannedOutboundTravelDays;
 
   if (homeLegDays < 1 || expedition.taskCamp !== undefined) {
     // CORRECTION-23I §7 — audit-only. A party that already has a camp, or whose work is inside
@@ -711,8 +696,8 @@ function deriveTaskCampForOperating(
 
 /** §16 — one-off physical establishment cost: setup labor eats a real provision share. */
 const TASK_CAMP_SETUP_PROVISION_WORKER_DAYS = 0.5;
-/** §16 — a campless party shuttles to safe ground nightly: real tiles walked per work day. */
-const CAMPLESS_BACKTRACK_TILES_PER_WORK_DAY = 4;
+/** §16 — share of one physical travel day spent shuttling to safe ground when no task camp exists. */
+const CAMPLESS_BACKTRACK_TRAVEL_DAY_FRACTION = 0.5;
 /** §16 — the nightly shuttle also costs extra provisions (in worker-day equivalents). */
 const CAMPLESS_EXTRA_PROVISION_WORKER_DAYS = 0.5;
 
@@ -796,12 +781,14 @@ function buildReturnedRecord(expedition: ExpeditionRecord, day: DayNumber): Intr
 }
 
 function summarizeOutcome(
+  world: WorldState,
   expedition: ExpeditionRecord,
   phase: "completed" | "aborted" | "lost",
   reason: ExpeditionOutcomeReason,
   deliveredUnits: number,
 ): ExpeditionOutcomeSummary {
   const time = getWorldTimeForDay(expedition.departedDay);
+  const oneWayKm = getRoutePhysicalLengthKm(world, expedition.routeTileIds);
   return {
     id: expedition.id,
     tick: time.tick,
@@ -810,6 +797,7 @@ function summarizeOutcome(
     phase,
     outcomeReason: reason,
     distanceTiles: Math.max(0, expedition.routeTileIds.length - 1),
+    distanceKm: Number.isFinite(oneWayKm) ? round4(oneWayKm * 2) : 0,
     totalDays: expedition.travelDaysElapsed + expedition.workDaysElapsed,
     partyWorkers: getExpeditionProductiveWorkers(expedition),
     // CORRECTION-34D — the bodies that walked out. Every human-facing sentence about a party
@@ -829,6 +817,7 @@ function summarizeOutcome(
 
 /** Create a prepared expedition. Called by the decision path when the candidate wins. */
 export function createPreparedExpedition(params: {
+  readonly world: WorldState;
   readonly band: Band;
   readonly taskKind: ExpeditionTaskKind;
   readonly targetTileId: TileId;
@@ -838,10 +827,21 @@ export function createPreparedExpedition(params: {
   readonly partyComposition?: ExpeditionPartyComposition;
   readonly day: DayNumber;
 }): ExpeditionRecord {
-  const { band, taskKind, targetTileId, targetPatchId, routeTileIds, partyWorkers, partyComposition, day } = params;
+  const { world, band, taskKind, targetTileId, targetPatchId, routeTileIds, partyWorkers, partyComposition, day } = params;
   const time = getWorldTimeForDay(day);
-  const legDays = Math.ceil((routeTileIds.length - 1) / EXPEDITION_BASE_TILES_PER_DAY);
-  const plannedDays = Math.min(EXPEDITION_MAX_DURATION_DAYS, legDays * 2 + EXPEDITION_MAX_WORK_DAYS);
+  const launchContext: TravelContext =
+    taskKind === "distant_patch_verification" ||
+    taskKind === "route_reconnaissance" ||
+    taskKind === "frontier_exploration" ||
+    taskKind === "frontier_verification"
+      ? "selected_reconnaissance_party"
+      : "resource_expedition";
+  const launchKmPerTravelDay = deriveTravelPace(band, launchContext, { partyComposition }).kmPerTravelDay;
+  const plannedOutboundTravelDays = getRouteTravelTimeDays(world, routeTileIds, launchKmPerTravelDay);
+  const plannedDays = Math.min(
+    EXPEDITION_MAX_DURATION_DAYS,
+    Math.max(1, Math.ceil(plannedOutboundTravelDays * 2 + EXPEDITION_MAX_WORK_DAYS)),
+  );
   return {
     id: deriveExpeditionId(band.id, targetTileId, taskKind, day),
     bandId: band.id,
@@ -853,6 +853,7 @@ export function createPreparedExpedition(params: {
     routeTileIds,
     positionTileId: band.position,
     routeIndex: 0,
+    plannedOutboundTravelDays,
     departedDay: day,
     departedTick: time.tick,
     plannedReturnDay: (Number(day) + plannedDays) as DayNumber,
@@ -923,68 +924,115 @@ interface AdvanceResult {
 function advanceFrontierExplorationOutboundDay(
   world: WorldState,
   expedition: ExpeditionRecord,
-  tilesPerDay: number,
+  kmPerTravelDay: number,
   day: DayNumber,
 ): AdvanceResult {
   const plan = expedition.frontierPlan;
 
   if (plan === undefined) {
-    // A frontier party with no plan is a construction error, not a physical state: it
-    // turns for home rather than inventing a destination.
     return {
       world,
       expedition: { ...expedition, phase: "returning", outcomeReason: "frontier_barrier_blocked" },
     };
   }
 
-  const daysElapsed = Number(day) - Number(expedition.departedDay);
   let trail = [...expedition.routeTileIds];
   let observations: readonly ExpeditionObservation[] = expedition.carriedObservations;
   let positionTileId = expedition.positionTileId;
   let deepest = expedition.frontierDeepestReachTiles ?? 0;
-  let stepsTaken = 0;
+  let travelDaysRemaining = 1;
+  let walkedKm = 0;
+  let edgeRemainder = expedition.travelEdgeRemainder;
   let terminal: ExpeditionOutcomeReason | undefined;
 
-  for (let step = 0; step < tilesPerDay; step += 1) {
-    const outwardRemaining = deriveOutwardTilesRemaining({
-      trailLength: trail.length,
-      tilesPerDay,
-      daysElapsed,
-      maxDurationDays: EXPEDITION_MAX_DURATION_DAYS,
-      outboundBudgetTiles: plan.outboundBudgetTiles,
-    });
-    const outcome = chooseNextFrontierStep(
-      world,
-      { ...expedition, routeTileIds: trail, positionTileId },
-      outwardRemaining,
-    );
-
-    if (outcome.kind === "budget_reached") {
+  while (travelDaysRemaining > 1e-9) {
+    const completedOutwardEdges = Math.max(0, trail.length - 1);
+    const planBudgetRemaining = Math.max(0, plan.outboundBudgetTiles - completedOutwardEdges);
+    if (planBudgetRemaining <= 0) {
       terminal = "frontier_return_budget_reached";
       break;
     }
 
-    if (outcome.kind === "blocked") {
-      // A physical barrier at the party's deepest point is real evidence about the
-      // country, and it is what distinguishes a blocked direction from a walkable one.
-      const barrier = buildFrontierCountryObservation(world, positionTileId, Number(day));
+    const daysAfterToday = Math.max(0, Number(expedition.hardDeadlineDay) - Number(day));
+    const currentReturnDays = getRouteTravelTimeDays(world, [...trail].reverse(), kmPerTravelDay);
+    if (!Number.isFinite(currentReturnDays) || currentReturnDays >= travelDaysRemaining + daysAfterToday - 1e-9) {
+      terminal = "frontier_return_budget_reached";
+      break;
+    }
 
-      if (barrier !== undefined) {
-        observations = [...observations, { ...barrier, kind: "frontier_barrier", confidence: 0.75 }];
+    let nextTileId: TileId | undefined = edgeRemainder?.toTileId;
+    if (edgeRemainder !== undefined && edgeRemainder.fromTileId !== positionTileId) {
+      edgeRemainder = undefined;
+      nextTileId = undefined;
+    }
+
+    if (nextTileId === undefined) {
+      const outcome = chooseNextFrontierStep(
+        world,
+        { ...expedition, routeTileIds: trail, positionTileId },
+        planBudgetRemaining,
+      );
+
+      if (outcome.kind === "budget_reached") {
+        terminal = "frontier_return_budget_reached";
+        break;
       }
 
+      if (outcome.kind === "blocked") {
+        const barrier = buildFrontierCountryObservation(world, positionTileId, Number(day));
+        if (barrier !== undefined) {
+          observations = [...observations, { ...barrier, kind: "frontier_barrier", confidence: 0.75 }];
+        }
+        terminal = "frontier_barrier_blocked";
+        break;
+      }
+      nextTileId = outcome.tileId;
+
+      // Before entering new country, reserve enough physical time to complete this edge
+      // and retrace the resulting trail before the hard deadline.
+      const edge = deriveTraversalEdge(world, positionTileId, nextTileId, kmPerTravelDay);
+      const projectedTrail = [...trail, nextTileId];
+      const projectedReturnDays = getRouteTravelTimeDays(world, [...projectedTrail].reverse(), kmPerTravelDay);
+      if (
+        !edge.passable ||
+        !Number.isFinite(edge.travelTimeDays) ||
+        !Number.isFinite(projectedReturnDays) ||
+        edge.travelTimeDays + projectedReturnDays > travelDaysRemaining + daysAfterToday + 1e-9
+      ) {
+        terminal = "frontier_return_budget_reached";
+        break;
+      }
+    }
+
+    const advance = advanceTraversalAlongRoute({
+      world,
+      routeTileIds: [positionTileId, nextTileId],
+      routeIndex: 0,
+      kmPerTravelDay,
+      availableTravelDays: travelDaysRemaining,
+      edgeRemainder,
+    });
+    travelDaysRemaining = advance.unusedTravelDays;
+    walkedKm += advance.completedPhysicalKm;
+    edgeRemainder = advance.edgeRemainder;
+
+    if (advance.blocked) {
       terminal = "frontier_barrier_blocked";
       break;
     }
 
-    // The party physically stepped onto a tile the residential band may never have seen.
-    positionTileId = outcome.tileId;
-    trail = [...trail, outcome.tileId];
-    stepsTaken += 1;
+    if (advance.completedEdges === 0) {
+      // The party is physically between the same two cells; canonical position stays
+      // on the last fully reached tile until the edge finishes on a later day.
+      break;
+    }
+
+    positionTileId = nextTileId;
+    trail = [...trail, nextTileId];
+    edgeRemainder = undefined;
 
     const originTile = world.tiles[expedition.originTileId];
-    const standTile = world.tiles[outcome.tileId];
-
+    const standTile = world.tiles[nextTileId];
     if (originTile !== undefined && standTile !== undefined) {
       deepest = Math.max(
         deepest,
@@ -992,30 +1040,19 @@ function advanceFrontierExplorationOutboundDay(
       );
     }
 
-    // §11/§12 — the party LOOKS from where it stands. The record is PARTY-LOCAL: it is
-    // appended to `carriedObservations` and reaches residential knowledge only if this
-    // party physically walks home (see the return handler in `applyExpeditionDay`).
-    const seen = buildFrontierCountryObservation(world, outcome.tileId, Number(day));
-
+    const seen = buildFrontierCountryObservation(world, nextTileId, Number(day));
     if (seen !== undefined) {
       observations = retainFrontierObservations([...observations, seen]);
     }
   }
 
-  // §17/§11 control arm — the party that never came home. It walked and it observed;
-  // at the moment it would have turned for home it is declared lost instead, so its
-  // `carriedObservations` die with it and the residential band learns nothing. Undefined
-  // in every normal world => this branch is never taken.
-  const lostBeforeReturn =
-    terminal !== undefined && world.auditOptions?.frontierExplorationAlwaysLost === true;
-
-  const walkedKm = stepsTaken * KM_PER_TILE;
+  const lostBeforeReturn = terminal !== undefined && world.auditOptions?.frontierExplorationAlwaysLost === true;
   const moved: ExpeditionRecord = {
     ...expedition,
     routeTileIds: trail,
-    // The trail is also the way home: the party stands at its end.
     routeIndex: trail.length - 1,
     positionTileId,
+    ...(edgeRemainder === undefined ? { travelEdgeRemainder: undefined } : { travelEdgeRemainder: edgeRemainder }),
     travelDaysElapsed: expedition.travelDaysElapsed + 1,
     frontierDeepestReachTiles: deepest,
     carriedObservations: retainFrontierObservations(observations),
@@ -1284,7 +1321,11 @@ function advanceExpeditionOneDay(
     };
   }
 
-  const tilesPerDay = deriveTilesPerDay(band, withProvisions, Number(getWorldTimeForDay(day).tick));
+  const kmPerTravelDay = deriveExpeditionKmPerTravelDay(
+    band,
+    withProvisions,
+    Number(getWorldTimeForDay(day).tick),
+  );
   const lastIndex = withProvisions.routeTileIds.length - 1;
 
   if (withProvisions.phase === "prepared") {
@@ -1294,41 +1335,53 @@ function advanceExpeditionOneDay(
     };
   }
 
-  // CORRECTION-17 §9 — FRONTIER EXPLORATION walks a route it does not have. Every other
-  // task family follows a `routeTileIds` path computed at launch; this one DISCOVERS its
-  // route, choosing one 4-adjacent step at a time from where its feet actually are, and
-  // appends each step to the trail it will later retrace home. It therefore takes its own
-  // outbound branch here rather than indexing into a precomputed path.
+  // Frontier exploration discovers its route one edge at a time. The same physical
+  // time budget applies, but the next edge is chosen only when the party reaches the
+  // end of the trail it already knows.
   if (withProvisions.phase === "outbound" && withProvisions.taskKind === "frontier_exploration") {
-    return advanceFrontierExplorationOutboundDay(world, withProvisions, tilesPerDay, day);
+    return advanceFrontierExplorationOutboundDay(world, withProvisions, kmPerTravelDay, day);
   }
 
   if (withProvisions.phase === "outbound") {
-    const nextIndex = Math.min(lastIndex, withProvisions.routeIndex + tilesPerDay);
-    const arrived = nextIndex >= lastIndex;
+    const advance = advanceTraversalAlongRoute({
+      world,
+      routeTileIds: withProvisions.routeTileIds,
+      routeIndex: withProvisions.routeIndex,
+      kmPerTravelDay,
+      availableTravelDays: 1,
+      edgeRemainder: withProvisions.travelEdgeRemainder,
+    });
+    const arrived = advance.routeIndex >= lastIndex;
     const moved: ExpeditionRecord = {
       ...withProvisions,
-      routeIndex: nextIndex,
-      positionTileId: withProvisions.routeTileIds[nextIndex],
+      routeIndex: advance.routeIndex,
+      positionTileId: advance.positionTileId,
+      ...(advance.edgeRemainder === undefined
+        ? { travelEdgeRemainder: undefined }
+        : { travelEdgeRemainder: advance.edgeRemainder }),
       travelDaysElapsed: withProvisions.travelDaysElapsed + 1,
-      phase: arrived ? "operating" : "outbound",
+      phase: advance.blocked ? "returning" : arrived ? "operating" : "outbound",
+      ...(advance.blocked ? { outcomeReason: "route_endpoint_mismatch" as ExpeditionOutcomeReason } : {}),
     };
-    const outboundKm = (nextIndex - withProvisions.routeIndex) * KM_PER_TILE;
+    const outboundKm = advance.completedPhysicalKm;
     // §12 — the arriving party's bounded viewshed from its stand (and task camp, when
     // one is set up): a broad water/wetland feature on an adjacent tile is the kind of
     // physically grounded cue a person standing there cannot miss. It stays PARTY-LOCAL
     // until return (§11); no exact quantity, stock, or hidden band state is exposed.
-    const arrivalObservation = arrived ? deriveArrivalViewshedObservation(world, moved, day) : undefined;
+    const arrivalObservation = arrived && !advance.blocked
+      ? deriveArrivalViewshedObservation(world, moved, day)
+      : undefined;
     // §16 — establishing the camp is real work: setup labor eats a provision share, once.
-    const establishedCamp = arrived ? deriveTaskCampForOperating(world, moved, day) : undefined;
+    const establishedCamp = arrived && !advance.blocked
+      ? deriveTaskCampForOperating(world, moved, day)
+      : undefined;
     const setupCost =
-      arrived && establishedCamp !== undefined && moved.taskCamp === undefined
-        // CORRECTION-34D — a camp is set up for, and eaten by, everyone standing at it.
+      arrived && !advance.blocked && establishedCamp !== undefined && moved.taskCamp === undefined
         ? round4(getExpeditionPhysicalPeople(moved) * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * TASK_CAMP_SETUP_PROVISION_WORKER_DAYS)
         : 0;
     return {
       world,
-      expedition: arrived
+      expedition: arrived && !advance.blocked
         ? {
             ...moved,
             taskCamp: establishedCamp,
@@ -1350,9 +1403,9 @@ function advanceExpeditionOneDay(
                 }),
           }
         : moved,
-      walkedKm: outboundKm,
-      walkedLoadedKm: 0,
-      walkSource: "expedition_outbound",
+      ...(outboundKm <= 0
+        ? {}
+        : { walkedKm: outboundKm, walkedLoadedKm: 0, walkSource: "expedition_outbound" as const }),
     };
   }
 
@@ -1506,10 +1559,13 @@ function advanceExpeditionOneDay(
     const workDays = withProvisions.workDaysElapsed + 1;
     const doneWorking = workDays >= EXPEDITION_MAX_WORK_DAYS || carried >= capacity || taken <= 0;
     const camp = deriveTaskCampForOperating(world, withProvisions, day);
-    // §16 — a party with NO feasible camp shuttles to safe ground every evening: real
-    // tiles walked, real extra provisions. A camped party sleeps at its work.
+    // §16 — a party with NO feasible camp shuttles to safe ground every evening.
+    // SCALE-1 expresses the shuttle as a share of this party's physical travel day,
+    // not a fixed number of cells.
     const campless = camp === undefined;
-    const backtrackKm = campless ? CAMPLESS_BACKTRACK_TILES_PER_WORK_DAY * KM_PER_TILE : 0;
+    const backtrackKm = campless
+      ? kmPerTravelDay * CAMPLESS_BACKTRACK_TRAVEL_DAY_FRACTION
+      : 0;
     const backtrackProvisions = campless
       // CORRECTION-34D — the nightly shuttle is walked and eaten by every body in the party.
       ? round4(getExpeditionPhysicalPeople(withProvisions) * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * CAMPLESS_EXTRA_PROVISION_WORKER_DAYS)
@@ -1536,27 +1592,44 @@ function advanceExpeditionOneDay(
     };
   }
 
-  // returning
-  const nextIndex = Math.max(0, withProvisions.routeIndex - tilesPerDay);
-  const home = nextIndex <= 0;
+  // returning — traverse the already-laid trail in reverse with the same physical
+  // edge-time authority. Canonical position changes only when a full reverse edge is
+  // completed; a slow party may spend multiple days on one edge.
+  const returnRoute = withProvisions.routeTileIds
+    .slice(0, withProvisions.routeIndex + 1)
+    .reverse();
+  const returnAdvance = advanceTraversalAlongRoute({
+    world,
+    routeTileIds: returnRoute,
+    routeIndex: 0,
+    kmPerTravelDay,
+    availableTravelDays: 1,
+    edgeRemainder: withProvisions.travelEdgeRemainder,
+  });
+  const nextIndex = Math.max(0, withProvisions.routeIndex - returnAdvance.completedEdges);
+  const home = nextIndex === 0 && returnAdvance.edgeRemainder === undefined && !returnAdvance.blocked;
   const moved: ExpeditionRecord = {
     ...withProvisions,
     routeIndex: nextIndex,
     positionTileId: withProvisions.routeTileIds[nextIndex],
+    ...(returnAdvance.edgeRemainder === undefined
+      ? { travelEdgeRemainder: undefined }
+      : { travelEdgeRemainder: returnAdvance.edgeRemainder }),
     travelDaysElapsed: withProvisions.travelDaysElapsed + 1,
     phase: home ? "completed" : "returning",
+    ...(returnAdvance.blocked
+      ? { outcomeReason: "route_endpoint_mismatch" as ExpeditionOutcomeReason }
+      : {}),
   };
 
-  const returnKm = (withProvisions.routeIndex - nextIndex) * KM_PER_TILE;
+  const returnKm = returnAdvance.completedPhysicalKm;
   const loadedKm = withProvisions.cargo.harvestUnits > 0 ? returnKm : 0;
 
   if (!home) {
     return {
       world,
       expedition: moved,
-      walkedKm: returnKm,
-      walkedLoadedKm: loadedKm,
-      walkSource: "expedition_return",
+      ...(returnKm <= 0 ? {} : { walkedKm: returnKm, walkedLoadedKm: loadedKm, walkSource: "expedition_return" as const }),
     };
   }
 
@@ -1565,9 +1638,7 @@ function advanceExpeditionOneDay(
     world,
     expedition: moved,
     depositRecord,
-    walkedKm: returnKm,
-    walkedLoadedKm: loadedKm,
-    walkSource: "expedition_return",
+    ...(returnKm <= 0 ? {} : { walkedKm: returnKm, walkedLoadedKm: loadedKm, walkSource: "expedition_return" as const }),
   };
 }
 
@@ -1776,6 +1847,7 @@ function wasTargetRecentlyEmpty(band: Band, targetTileId: TileId, currentTick: n
 // willingness/stamina distinction and the anti-omniscience guarantee can be proven
 // without a world. Mirrors the other *ForAudit helpers.
 export function isDistantRetrievalWorthwhileForAudit(
+  world: WorldState,
   band: Band,
   retrieval: { readonly memory: ResourcePatchMemory; readonly targetTileId: TileId; readonly distanceTiles: number },
   foodStress: number,
@@ -1783,6 +1855,7 @@ export function isDistantRetrievalWorthwhileForAudit(
   currentTick: number,
 ): boolean {
   return isDistantRetrievalWorthwhile(
+    world,
     band,
     retrieval,
     effectiveResourceConfidence(retrieval.memory, currentTick),
@@ -1793,6 +1866,7 @@ export function isDistantRetrievalWorthwhileForAudit(
 }
 
 function isDistantRetrievalWorthwhile(
+  world: WorldState,
   band: Band,
   retrieval: { readonly memory: ResourcePatchMemory; readonly targetTileId: TileId; readonly distanceTiles: number },
   evidence: ReturnType<typeof effectiveResourceConfidence>,
@@ -1834,8 +1908,25 @@ function isDistantRetrievalWorthwhile(
       ? Math.min(rememberedUnits, carryCeiling)
       : Math.min(rememberedUnits, carryCeiling, Math.max(realizedMean, rememberedUnits * 0.25));
 
-  const travelDays = deriveTripDurationDays(retrieval.distanceTiles);
-  const totalDays = travelDays + 1;
+  const retrievalRoute = buildExpeditionRouteTiles(
+    world,
+    band.position,
+    retrieval.targetTileId,
+    Math.min(EXPEDITION_MAX_ROUTE_TILES, retrieval.distanceTiles + 8),
+  );
+  if (retrievalRoute === undefined) {
+    return false;
+  }
+  const totalDays = derivePhysicalRoundTripTiming(
+    world,
+    band,
+    retrievalRoute,
+    1,
+    "resource_expedition",
+  ).durationDays;
+  if (!Number.isFinite(totalDays)) {
+    return false;
+  }
   const provisionUnits = workers * totalDays * EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY;
   // Provisions alone are far too small to represent what an expedition really costs
   // (EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY is 0.0008). The dominant cost is the
@@ -1891,8 +1982,19 @@ function selectVerificationCandidate(
     }
 
     const distance = tileGridDistance(world, band.position, memory.approximateTile);
-
-    if (distance === undefined || deriveTripDurationDays(distance) <= 1 || distance > EXPEDITION_MAX_ROUTE_TILES) {
+    if (distance === undefined || distance > EXPEDITION_MAX_ROUTE_TILES) {
+      continue;
+    }
+    const route = buildExpeditionRouteTiles(
+      world,
+      band.position,
+      memory.approximateTile,
+      Math.min(EXPEDITION_MAX_ROUTE_TILES, distance + 8),
+    );
+    if (
+      route === undefined ||
+      derivePhysicalRoundTripTiming(world, band, route, 0.25, "selected_reconnaissance_party").sameDay
+    ) {
       continue;
     }
 
@@ -1970,8 +2072,19 @@ function selectReconnaissanceCandidate(
     }
 
     const distance = tileGridDistance(world, band.position, memory.approximateTile);
-
-    if (distance === undefined || deriveTripDurationDays(distance) <= 1 || distance > EXPEDITION_MAX_ROUTE_TILES) {
+    if (distance === undefined || distance > EXPEDITION_MAX_ROUTE_TILES) {
+      continue;
+    }
+    const route = buildExpeditionRouteTiles(
+      world,
+      band.position,
+      memory.approximateTile,
+      Math.min(EXPEDITION_MAX_ROUTE_TILES, distance + 8),
+    );
+    if (
+      route === undefined ||
+      derivePhysicalRoundTripTiming(world, band, route, 0.25, "selected_reconnaissance_party").sameDay
+    ) {
       continue;
     }
 
@@ -2061,15 +2174,22 @@ function maybeLaunchFrontierVerification(
     return undefined;
   }
 
-  const legDays = Math.ceil((route.length - 1) / EXPEDITION_BASE_TILES_PER_DAY);
+  const verificationTiming = derivePhysicalRoundTripTiming(
+    world,
+    band,
+    route,
+    VERIFICATION_ON_SITE_DAYS,
+    "selected_reconnaissance_party",
+  );
 
   // Return budget must physically fit, including the on-site work.
-  if (legDays * 2 + VERIFICATION_ON_SITE_DAYS > EXPEDITION_MAX_DURATION_DAYS) {
+  if (!Number.isFinite(verificationTiming.totalDays) || verificationTiming.totalDays > EXPEDITION_MAX_DURATION_DAYS) {
     return undefined;
   }
 
   const plan = buildVerificationPlan(candidate, record, need, band.frontierVerificationAttempts ?? []);
   const prepared = createPreparedExpedition({
+    world,
     band,
     taskKind: "frontier_verification",
     targetTileId: candidate.tileId,
@@ -2185,6 +2305,7 @@ function maybeLaunchFrontierExploration(
   });
 
   const prepared = createPreparedExpedition({
+    world,
     band,
     taskKind: "frontier_exploration",
     // §8 — for this family `targetTileId` is the plan's band-KNOWN anchor and is
@@ -2286,7 +2407,7 @@ function maybeLaunchExpedition(world: WorldState, band: Band, day: DayNumber): B
   const retrievalWorthwhile =
     retrieval !== undefined &&
     retrievalEvidence !== undefined &&
-    isDistantRetrievalWorthwhile(band, retrieval, retrievalEvidence, foodStress, partyWorkers, currentTick);
+    isDistantRetrievalWorthwhile(world, band, retrieval, retrievalEvidence, foodStress, partyWorkers, currentTick);
 
   // A retrieval target rejected on VALUE leaves the band free to do something useful
   // instead, exactly as if it had no retrieval candidate at all.
@@ -2453,13 +2574,18 @@ function maybeLaunchExpedition(world: WorldState, band: Band, day: DayNumber): B
     return band;
   }
 
-  const legDays = Math.ceil((route.length - 1) / EXPEDITION_BASE_TILES_PER_DAY);
+  const launchContext: TravelContext =
+    chosen.taskKind === "distant_patch_verification" || chosen.taskKind === "route_reconnaissance"
+      ? "selected_reconnaissance_party"
+      : "resource_expedition";
+  const launchTiming = derivePhysicalRoundTripTiming(world, band, route, 1, launchContext);
 
-  if (legDays * 2 + 1 > EXPEDITION_MAX_DURATION_DAYS) {
+  if (!Number.isFinite(launchTiming.totalDays) || launchTiming.totalDays > EXPEDITION_MAX_DURATION_DAYS) {
     return band;
   }
 
   const expedition = createPreparedExpedition({
+    world,
     band,
     taskKind: chosen.taskKind,
     targetTileId: chosen.targetTileId,
@@ -2612,12 +2738,14 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
             ? "cargo_return_failed"
             : provisionalReason;
         // Observation only: how far this whole journey actually walked, out and back.
+        const oneWayJourneyKm = getRoutePhysicalLengthKm(result.world, result.expedition.routeTileIds);
         mobility = recordExpeditionDistance(
           mobility,
-          (result.expedition.routeTileIds.length - 1) * 2 * KM_PER_TILE,
+          Number.isFinite(oneWayJourneyKm) ? oneWayJourneyKm * 2 : 0,
         );
         outcomes = [
           summarizeOutcome(
+            result.world,
             result.expedition,
             result.expedition.phase,
             terminalReason,

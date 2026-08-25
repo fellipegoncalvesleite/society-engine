@@ -39,6 +39,7 @@ try {
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
   const spawn = await server.ssrLoadModule("/sim/agents/spawn.ts");
   const resourceKnowledge = await server.ssrLoadModule("/sim/agents/resourceKnowledge.ts");
+  const tripsModule = await server.ssrLoadModule("/sim/agents/intraSeasonTrips.ts");
 
   // ── shared run: one isolated founder on the named physically-rich tile ────────────
   let world = runner.initSimWorld({ kind: "map2" }, "c15-isolation");
@@ -72,9 +73,18 @@ try {
       ? Infinity
       : Math.abs(ta.coord.x - tb.coord.x) + Math.abs(ta.coord.y - tb.coord.y);
   };
-  // Same-day budget as production computes it: deriveTripDurationDays(d) <= 1.
-  const SAME_DAY_ROUND_TRIP_TILE_BUDGET = 8;
-  const isSameDay = (d) => Math.max(1, Math.ceil((d * 2) / SAME_DAY_ROUND_TRIP_TILE_BUDGET)) <= 1;
+  const isSameDayMemory = (world_, band_, memory) => {
+    const distance = gridDistance(world_, band_.position, memory.approximateTile);
+    if (!Number.isFinite(distance) || distance <= 0 || distance > 10) return false;
+    const route = tripsModule.buildExpeditionRouteTiles(
+      world_,
+      band_.position,
+      memory.approximateTile,
+      Math.min(10, distance + 8),
+    );
+    return route !== undefined &&
+      tripsModule.derivePhysicalRoundTripTiming(world_, band_, route, 0.25).sameDay;
+  };
 
   for (let season = 0; season < YEARS * 4; season += 1) {
     world = runner.stepSim(world, 1, "seasonal");
@@ -118,12 +128,11 @@ try {
     if (trips === 0) {
       seasonsWithZeroTrips += 1;
       const memories = band.resourceKnowledgeState?.patchMemories ?? [];
-      const distances = memories
+      const reachable = memories
         .filter((m) => m.approximateTile !== band.position)
-        .map((m) => gridDistance(world, band.position, m.approximateTile))
-        .filter((d) => Number.isFinite(d) && d > 0);
-      const reachable = distances.filter((d) => d <= 10);
-      const sameDay = reachable.filter(isSameDay);
+        .map((memory) => ({ memory, distance: gridDistance(world, band.position, memory.approximateTile) }))
+        .filter(({ distance }) => Number.isFinite(distance) && distance > 0 && distance <= 10);
+      const sameDay = reachable.filter(({ memory }) => isSameDayMemory(world, band, memory));
       if (reachable.length > 0) zeroTripSeasonsWithReachableMemory += 1;
       if (sameDay.length > 0) zeroTripSeasonsWithSameDayMemory += 1;
       if (reachable.length > 0 && sameDay.length === 0) {

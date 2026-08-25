@@ -791,6 +791,7 @@ try {
         lastObservedAt: priorRecord.firstObservedAt,
       };
       const prepared = expedition.createPreparedExpedition({
+        world,
         band: parent,
         taskKind: "frontier_exploration",
         targetTileId,
@@ -1180,6 +1181,7 @@ try {
         };
         const boundaryDay = 360;
         const prepared = expedition.createPreparedExpedition({
+          world,
           band: controlledParent,
           taskKind: "frontier_exploration",
           targetTileId: targetTile.id,

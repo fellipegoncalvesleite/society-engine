@@ -42,7 +42,7 @@ export type PendingInvestigationOutcome =
   | "route_unavailable"
   // A route existed but its endpoint was not the target (or its aquatic-adjacent stand).
   | "arrival_failed"
-  // The round trip does not fit one day by `deriveTripDurationDays`. Named non-execution.
+  // The physical route plus on-site work does not fit one day. Named non-execution.
   | "beyond_same_day_reach"
   // The band could not staff even a minimum party once away and same-day workers are out.
   | "insufficient_labor"

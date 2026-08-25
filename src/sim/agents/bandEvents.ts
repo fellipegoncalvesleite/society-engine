@@ -2113,8 +2113,6 @@ function deriveBandEventCandidates(world: WorldState, band: Band): readonly Band
 // event is deduplicated by the underlying record's deterministic id.
 function deriveExpeditionEvents(world: WorldState, band: Band): readonly BandReadableEventCandidate[] {
   const events: BandReadableEventCandidate[] = [];
-  const kmPerTile = 1.5;
-
   for (const outcome of (band.recentExpeditionOutcomes ?? []).slice(0, 3)) {
     if (Number(world.time.tick) - Number(outcome.tick) > 4) {
       continue;
@@ -2127,18 +2125,18 @@ function deriveExpeditionEvents(world: WorldState, band: Band): readonly BandRea
       continue;
     }
 
-    const totalKm = outcome.distanceTiles * 2 * kmPerTile;
+    const totalKm = outcome.distanceKm ?? 0;
     const lost = outcome.phase === "lost";
     // CORRECTION-34D — human-facing counts are BODIES. `partyWorkers` is productive labour, and a
     // party that lost labour on the way did not lose the people.
     const partyPeople = outcome.partyPeople ?? outcome.partyWorkers;
     const hurt = outcome.outcomeReason === "injury_forced_return";
-    const majorReturn = outcome.deliveredHarvestUnits > 0 && outcome.distanceTiles >= 12;
+    const majorReturn = outcome.deliveredHarvestUnits > 0 && totalKm >= 36;
     const exceptionalJourney = totalKm >= 60;
     const criticalConfirmation =
       outcome.taskKind !== "distant_plant_gathering" &&
       (outcome.observations ?? []).length > 0 &&
-      outcome.distanceTiles >= 10;
+      totalKm >= 30;
 
     if (!lost && !hurt && !majorReturn && !exceptionalJourney && !criticalConfirmation) {
       continue;
@@ -2163,12 +2161,12 @@ function deriveExpeditionEvents(world: WorldState, band: Band): readonly BandRea
           : exceptionalJourney
             ? `A party walked roughly ${Math.round(totalKm)} km out and back over ${outcome.totalDays} days.`
             : majorReturn
-              ? `${partyPeople} adults carried ${outcome.deliveredHarvestUnits} units home from ${outcome.distanceTiles} tiles away.`
+              ? `${partyPeople} adults carried ${outcome.deliveredHarvestUnits} units home from roughly ${Math.round(totalKm / 2)} km away.`
               : `A small party confirmed what the band remembered about ${String(outcome.targetTileId)}.`,
-      detail: `task ${outcome.taskKind}; outcome ${outcome.outcomeReason}; ${outcome.distanceTiles} tiles; ${outcome.totalDays} days; ${partyPeople} adults (${outcome.partyWorkers} working); delivered ${outcome.deliveredHarvestUnits}; provisions ${outcome.provisionUnitsConsumed}; task camp ${outcome.usedTaskCamp}`,
+      detail: `task ${outcome.taskKind}; outcome ${outcome.outcomeReason}; ${totalKm} km round trip; ${outcome.totalDays} days; ${partyPeople} adults (${outcome.partyWorkers} working); delivered ${outcome.deliveredHarvestUnits}; provisions ${outcome.provisionUnitsConsumed}; task camp ${outcome.usedTaskCamp}`,
       stateKey: `expedition:${outcome.id}`,
       rawSource: "Band.recentExpeditionOutcomes",
-      rawReason: `${outcome.taskKind}; ${outcome.outcomeReason}; distanceTiles=${outcome.distanceTiles}; deliveredUnits=${outcome.deliveredHarvestUnits}`,
+      rawReason: `${outcome.taskKind}; ${outcome.outcomeReason}; distanceKm=${totalKm}; deliveredUnits=${outcome.deliveredHarvestUnits}`,
       sourceReasonIds: [],
       relatedTileId: outcome.targetTileId,
       repeatWindowTicks: 9999,

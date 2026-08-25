@@ -98,7 +98,8 @@ try {
         const target = world.tiles[memory.approximateTile];
         if (origin === undefined || target === undefined) return false;
         const d = Math.abs(origin.coord.x - target.coord.x) + Math.abs(origin.coord.y - target.coord.y);
-        return trips.deriveTripDurationDays(d) <= 1;
+        const route = trips.buildExpeditionRouteTiles(world, band.position, target.id, Math.min(36, d + 8));
+        return route !== undefined && trips.derivePhysicalRoundTripTiming(world, band, route, 0.25).sameDay;
       });
       bands[band.id] = {
         ...band,
@@ -294,6 +295,7 @@ try {
     const origin = world.tiles[band0.position];
     const site = tileAt(world, origin, 10);
     const prepared = expedition.createPreparedExpedition({
+      world,
       band: band0, taskKind: "distant_plant_gathering", targetTileId: site.tile.id,
       targetPatchId: `${site.tile.id}:generic_plant_food`, routeTileIds: site.route, partyWorkers: 4, day: 6,
     });
@@ -320,8 +322,8 @@ try {
       unitsUs: { acuteSweepPerBand: sweep },
     };
   } else if (caseArg === "P8") {
-    // Long-distance ~105 km favorable journey with timing + peak state size.
-    let world = runner.initSimWorld({ kind: "map1" }, "perf-P8");
+    // Long-distance ~100 km favorable journey on the temporary 1.5 km Map-2 fixture.
+    let world = runner.initSimWorld({ kind: "map2" }, "perf-P8");
     world = runner.stepSim(world, 12, "seasonal");
     const bandId = Object.keys(world.bands).sort()[0];
     const band = world.bands[bandId];
@@ -362,18 +364,18 @@ try {
       outcome = (b.recentExpeditionOutcomes ?? []).find((o) => o.targetTileId === site.tile.id);
     }
     out = {
-      caseId: "P8", label: "long-distance ~105 km journey",
+      caseId: "P8", label: "long-distance ~100 km physical journey",
       routeLegs: site.route.length - 1,
       journeyDaysSimulated: day,
       travelDays,
       taskCampDays,
       provisionUpdatesPerAwayDay: 1,
-      mobilityDerivationsPerAwayDay: "1 per active party (deriveTilesPerDay) + 1 history write",
+      mobilityDerivationsPerAwayDay: "1 km/day pace derivation per active party + physical traversal + 1 history write",
       msPerSimDay: stats(perDayMs),
       totalMs: Math.round(perDayMs.reduce((a, b) => a + b, 0)),
       peakBandStateBytes: peakStateBytes,
       outcome: outcome?.outcomeReason,
-      totalKm: outcome === undefined ? 0 : outcome.distanceTiles * 2 * 1.5,
+      totalKm: outcome?.distanceKm ?? 0,
     };
   } else {
     throw new Error(`unknown case ${caseArg}`);

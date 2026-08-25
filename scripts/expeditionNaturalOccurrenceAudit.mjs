@@ -67,7 +67,7 @@ try {
       for (const outcome of band.recentExpeditionOutcomes ?? []) {
         if (seenOutcomes.has(outcome.id)) continue;
         seenOutcomes.add(outcome.id);
-        if (outcome.distanceTiles * 2 * 1.5 >= 90) nearHundredKmJourneys += 1;
+        if ((outcome.distanceKm ?? 0) >= 90) nearHundredKmJourneys += 1;
         outcomeReasons[outcome.outcomeReason] = (outcomeReasons[outcome.outcomeReason] ?? 0) + 1;
         taskKinds[outcome.taskKind] = (taskKinds[outcome.taskKind] ?? 0) + 1;
         if (outcome.usedTaskCamp) taskCampsUsed += 1;

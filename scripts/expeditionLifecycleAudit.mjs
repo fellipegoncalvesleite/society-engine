@@ -55,15 +55,31 @@ try {
     actionIds[1] === "expeditions" &&
     new Set(actionIds).size === actionIds.length;
 
-  // §1: the duration boundary is real and is what splits the two paths.
+  // §1 / SCALE-1: the split is physical round-trip time plus on-site work, never a tile budget.
+  const boundaryWorld = runner.initSimWorld({ kind: "map1" }, "expedition-duration-boundary");
+  const boundaryBand = boundaryWorld.bands[Object.keys(boundaryWorld.bands).sort()[0]];
+  const boundaryOrigin = boundaryWorld.tiles[boundaryBand.position];
+  const physicalTimingAtGridDistance = (wanted) => {
+    for (const tile of Object.values(boundaryWorld.tiles)) {
+      const d = Math.abs(tile.coord.x - boundaryOrigin.coord.x) + Math.abs(tile.coord.y - boundaryOrigin.coord.y);
+      if (d !== wanted || tile.isAquatic === true) continue;
+      const route = tripsMod.buildExpeditionRouteTiles(boundaryWorld, boundaryBand.position, tile.id, wanted + 8);
+      if (route === undefined || route.at(-1) !== tile.id) continue;
+      return tripsMod.derivePhysicalRoundTripTiming(boundaryWorld, boundaryBand, route, 0.25);
+    }
+    return undefined;
+  };
   const durationBoundary = {
-    oneTile: tripsMod.deriveTripDurationDays(1),
-    fourTiles: tripsMod.deriveTripDurationDays(4),
-    fiveTiles: tripsMod.deriveTripDurationDays(5),
-    tenTiles: tripsMod.deriveTripDurationDays(10),
+    oneTile: physicalTimingAtGridDistance(1),
+    fourTiles: physicalTimingAtGridDistance(4),
+    fiveTiles: physicalTimingAtGridDistance(5),
+    tenTiles: physicalTimingAtGridDistance(10),
   };
   const sameDayBoundaryCorrect =
-    durationBoundary.fourTiles === 1 && durationBoundary.fiveTiles > 1 && durationBoundary.tenTiles > 1;
+    durationBoundary.oneTile?.sameDay === true &&
+    [durationBoundary.fourTiles, durationBoundary.fiveTiles, durationBoundary.tenTiles]
+      .filter(Boolean)
+      .some((timing) => timing.sameDay === false);
 
 // CORRECTION-34A §11 — THE INSTRUMENT CORRECTION.
 //

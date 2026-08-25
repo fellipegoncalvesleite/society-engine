@@ -21,9 +21,6 @@
 import type { TileId } from "../core/types";
 import type { ExpeditionPhase, ExpeditionRecord, ExpeditionTaskKind } from "./types";
 
-/** A party covers this many route tiles in one unburdened travel day. */
-export const EXPEDITION_BASE_TILES_PER_DAY = 4;
-
 /**
  * Task families that walk to a NAMED target and can therefore reach the task-camp reader.
  *
@@ -61,6 +58,9 @@ export interface PendingOperationIdentity {
   readonly bandId: string;
   readonly activityKind: ExpeditionTaskKind;
   readonly targetTileId: string;
+  /** Exact selected physical route, retained so dependent decisions need not reconstruct timing from cell counts. */
+  readonly routeTileIds: readonly TileId[];
+  readonly plannedOutboundTravelDays: number;
   /**
    * The day the production selector chose this operation.
    *
@@ -86,27 +86,14 @@ export interface PendingOperationIdentity {
   readonly phase: ExpeditionPhase;
 }
 
-/** Outbound leg in days, from the route the production launcher actually built. */
-export function deriveOutboundLegDays(routeTiles: number): number {
-  return Math.ceil(Math.max(0, routeTiles - 1) / EXPEDITION_BASE_TILES_PER_DAY);
-}
-
-/**
- * The round trip a verification party must physically walk before its answer exists: out, the
- * bounded on-site budget, and home again. Exported so the fixtures and the launch gate use one
- * arithmetic rather than two that agree by luck.
- */
-export function deriveVerificationRoundTripDays(distanceTiles: number, onSiteDays: number): number {
-  const legDays = Math.max(1, Math.ceil(distanceTiles / EXPEDITION_BASE_TILES_PER_DAY));
-  return legDays * 2 + onSiteDays;
+/** Outbound leg in calendar days from the physical launch estimate. */
+export function deriveOutboundLegDays(plannedOutboundTravelDays: number): number {
+  return Math.max(1, Math.ceil(Math.max(0, plannedOutboundTravelDays)));
 }
 
 /** Would this expedition reach the task-camp reader at all? */
 function reachesTaskCampReader(expedition: ExpeditionRecord): boolean {
-  // `deriveTaskCampForOperating`'s own precondition, verbatim in arithmetic: a party whose home
-  // leg is under a day is inside same-day reach and returns before the reader is consulted.
-  const homeLegDays = Math.ceil(expedition.routeTileIds.length / EXPEDITION_BASE_TILES_PER_DAY);
-  return homeLegDays >= 1 && expedition.taskCamp === undefined;
+  return expedition.plannedOutboundTravelDays >= 1 && expedition.taskCamp === undefined;
 }
 
 /** Build the identity for one expedition, or `undefined` when it is not an operation at all. */
@@ -122,7 +109,7 @@ export function describePendingOperation(
     return undefined;
   }
 
-  const outboundLegDays = deriveOutboundLegDays(expedition.routeTileIds.length);
+  const outboundLegDays = deriveOutboundLegDays(expedition.plannedOutboundTravelDays);
   const expectedOperatingDay = Number(expedition.departedDay) + outboundLegDays;
 
   // A party whose arrival is already behind it has passed the decision even if its phase has not
@@ -136,10 +123,12 @@ export function describePendingOperation(
     bandId: String(expedition.bandId),
     activityKind: expedition.taskKind,
     targetTileId: String(expedition.targetTileId),
+    routeTileIds: expedition.routeTileIds,
+    plannedOutboundTravelDays: expedition.plannedOutboundTravelDays,
     selectedDay: Number(expedition.departedDay),
     expectedLaunchDay: Number(expedition.departedDay),
     expectedOperatingDay,
-    requiresMultiDayOperation: outboundLegDays > 1,
+    requiresMultiDayOperation: expedition.plannedOutboundTravelDays * 2 > 1,
     requiresTaskCampDecision: reachesTaskCampReader(expedition),
     partyOrTaskIdentity: `${expedition.id}:${expedition.partyWorkers}w`,
     authoritativeSelector: "expedition.maybeLaunchExpedition",
