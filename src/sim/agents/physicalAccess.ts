@@ -29,6 +29,13 @@ export interface BoundedTravelReach {
   readonly expandedEdgeCount: number;
 }
 
+export interface BoundedTravelRouteSurface extends BoundedTravelReach {
+  /** Requested target ids used only for deterministic early-stop; never canonical simulation state. */
+  readonly targetTileIds: readonly TileId[];
+  /** Cheapest-path predecessor for each discovered/finalized route node. */
+  readonly predecessorByTileId: ReadonlyMap<TileId, TileId>;
+}
+
 interface QueueEntry {
   readonly tileId: TileId;
   readonly travelTimeDays: number;
@@ -53,9 +60,41 @@ export function expandBoundedTravelReach(
   travelTimeBudgetDays: number,
   crossingCapability: RiverCrossingCapability,
 ): BoundedTravelReach {
+  const surface = expandBoundedTravelRouteSurface(
+    world,
+    originTileId,
+    kmPerTravelDay,
+    travelTimeBudgetDays,
+    crossingCapability,
+  );
+  return {
+    originTileId: surface.originTileId,
+    kmPerTravelDay: surface.kmPerTravelDay,
+    travelTimeBudgetDays: surface.travelTimeBudgetDays,
+    reachable: surface.reachable,
+    reachableAreaKm2: surface.reachableAreaKm2,
+    visitedNodeCount: surface.visitedNodeCount,
+    expandedEdgeCount: surface.expandedEdgeCount,
+  };
+}
+
+/**
+ * The route-bearing form of the bounded physical traversal query. Optional target ids permit
+ * deterministic early-stop once every requested target has been finalized by Dijkstra. With no
+ * targets it is byte-for-byte the same reachability question exposed by expandBoundedTravelReach.
+ */
+export function expandBoundedTravelRouteSurface(
+  world: WorldState,
+  originTileId: TileId,
+  kmPerTravelDay: number,
+  travelTimeBudgetDays: number,
+  crossingCapability: RiverCrossingCapability,
+  targetTileIds: readonly TileId[] = [],
+): BoundedTravelRouteSurface {
   const pace = Math.max(0, kmPerTravelDay);
   const budget = Math.max(0, travelTimeBudgetDays);
   const origin = world.tiles[originTileId];
+  const stableTargets = [...new Set(targetTileIds)].sort(compareTileIds);
 
   if (origin === undefined || pace <= 0) {
     return {
@@ -66,12 +105,16 @@ export function expandBoundedTravelReach(
       reachableAreaKm2: 0,
       visitedNodeCount: 0,
       expandedEdgeCount: 0,
+      targetTileIds: stableTargets,
+      predecessorByTileId: new Map(),
     };
   }
 
   const bestTravelTime = new Map<TileId, number>([[originTileId, 0]]);
   const bestPhysicalDistance = new Map<TileId, number>([[originTileId, 0]]);
+  const predecessorByTileId = new Map<TileId, TileId>();
   const finalized = new Set<TileId>();
+  const pendingTargets = new Set<TileId>(stableTargets);
   const queue = new MinQueue();
   queue.push({ tileId: originTileId, travelTimeDays: 0, physicalDistanceKm: 0 });
   let expandedEdgeCount = 0;
@@ -91,6 +134,11 @@ export function expandBoundedTravelReach(
     }
 
     finalized.add(current.tileId);
+    pendingTargets.delete(current.tileId);
+    if (stableTargets.length > 0 && pendingTargets.size === 0) {
+      break;
+    }
+
     const tile = world.tiles[current.tileId];
     if (tile === undefined) {
       continue;
@@ -117,18 +165,25 @@ export function expandBoundedTravelReach(
       const nextPhysicalDistance = current.physicalDistanceKm + edge.physicalLengthKm;
       const priorTime = bestTravelTime.get(neighborId);
       const priorDistance = bestPhysicalDistance.get(neighborId);
+      const priorPredecessor = predecessorByTileId.get(neighborId);
       const improvesTime = priorTime === undefined || nextTravelTime < priorTime - ACCESS_EPSILON_DAYS;
       const tiesTimeImprovesDistance =
         priorTime !== undefined &&
         Math.abs(nextTravelTime - priorTime) <= ACCESS_EPSILON_DAYS &&
         (priorDistance === undefined || nextPhysicalDistance < priorDistance - 1e-9);
+      const tiesTimeAndDistanceImprovesPredecessor =
+        priorTime !== undefined && priorDistance !== undefined &&
+        Math.abs(nextTravelTime - priorTime) <= ACCESS_EPSILON_DAYS &&
+        Math.abs(nextPhysicalDistance - priorDistance) <= 1e-9 &&
+        (priorPredecessor === undefined || compareTileIds(current.tileId, priorPredecessor) < 0);
 
-      if (!improvesTime && !tiesTimeImprovesDistance) {
+      if (!improvesTime && !tiesTimeImprovesDistance && !tiesTimeAndDistanceImprovesPredecessor) {
         continue;
       }
 
       bestTravelTime.set(neighborId, nextTravelTime);
       bestPhysicalDistance.set(neighborId, nextPhysicalDistance);
+      predecessorByTileId.set(neighborId, current.tileId);
       queue.push({
         tileId: neighborId,
         travelTimeDays: nextTravelTime,
@@ -153,7 +208,34 @@ export function expandBoundedTravelReach(
     reachableAreaKm2: reachable.length * getCellAreaKm2(world.config),
     visitedNodeCount: finalized.size,
     expandedEdgeCount,
+    targetTileIds: stableTargets,
+    predecessorByTileId,
   };
+}
+
+/** Reconstruct the deterministic cheapest-travel-time route from a transient bounded surface. */
+export function reconstructBoundedTravelRoute(
+  surface: BoundedTravelRouteSurface,
+  targetTileId: TileId,
+): readonly TileId[] | undefined {
+  if (targetTileId === surface.originTileId) {
+    return [surface.originTileId];
+  }
+  if (!surface.reachable.some((entry) => entry.tileId === targetTileId)) {
+    return undefined;
+  }
+
+  const reversed: TileId[] = [targetTileId];
+  let current = targetTileId;
+  const guard = surface.predecessorByTileId.size + 1;
+  while (current !== surface.originTileId && reversed.length <= guard) {
+    const previous = surface.predecessorByTileId.get(current);
+    if (previous === undefined) return undefined;
+    reversed.push(previous);
+    current = previous;
+  }
+  if (current !== surface.originTileId) return undefined;
+  return reversed.reverse();
 }
 
 class MinQueue {

@@ -41,7 +41,6 @@ import {
 } from "./bandMobility";
 import {
   applyActivityOutcomeToMemoryForWorld,
-  buildExpeditionRouteTiles,
   compareExpeditionBands,
   derivePhysicalRoundTripTiming,
   isActiveExpeditionBand,
@@ -117,6 +116,12 @@ import {
   getRouteTravelTimeDays,
 } from "./traversal";
 import { EXPEDITION_MAX_DURATION_DAYS, EXPEDITION_MAX_WORK_DAYS } from "./expeditionLimits";
+import {
+  buildExpeditionPhysicalRouteSurface,
+  deriveExpeditionOneWaySearchBudgetDays,
+  reconstructExpeditionPhysicalRoute,
+} from "./expeditionRouteSearch";
+import type { RouteSearchCaller } from "../diagnostics/routeSearchDiagnostics";
 export { EXPEDITION_MAX_DURATION_DAYS, EXPEDITION_MAX_WORK_DAYS } from "./expeditionLimits";
 
 // ── Bounds. Every one of these is a hard cap on state or search, never a tuning dial. ──
@@ -164,6 +169,32 @@ export function deriveExpeditionRouteSearchHorizonTilesForAudit(
   const horizonTiles = deriveExpeditionRouteSearchHorizonTiles(world, band, travelContext);
   const minimumEdgeKm = Math.min(world.config.spatial.cellWidthKm, world.config.spatial.cellHeightKm);
   return { horizonTiles, horizonKm: horizonTiles * minimumEdgeKm };
+}
+
+function buildPhysicalExpeditionRoute(
+  world: WorldState,
+  band: Band,
+  targetTileIds: readonly TileId[],
+  travelContext: TravelContext,
+  onSiteDays: number,
+  diagnosticCaller: RouteSearchCaller,
+  surfaceReuseKey: string,
+): { readonly routeTileIds: readonly TileId[]; readonly targetTileId: TileId } | undefined {
+  const stablePriorityTargets = [...new Set(targetTileIds)];
+  const surface = buildExpeditionPhysicalRouteSurface({
+    world,
+    band,
+    travelContext,
+    travelTimeBudgetDays: deriveExpeditionOneWaySearchBudgetDays(EXPEDITION_MAX_DURATION_DAYS, onSiteDays),
+    targetTileIds: stablePriorityTargets,
+    diagnosticCaller,
+    surfaceReuseKey,
+  });
+  for (const targetTileId of stablePriorityTargets) {
+    const routeTileIds = reconstructExpeditionPhysicalRoute(surface, targetTileId);
+    if (routeTileIds !== undefined) return { routeTileIds, targetTileId };
+  }
+  return undefined;
 }
 
 /** SCALE-1: same-day feasibility is physical route time plus on-site work time. */
@@ -1909,12 +1940,15 @@ function isDistantRetrievalWorthwhile(
       ? Math.min(rememberedUnits, carryCeiling)
       : Math.min(rememberedUnits, carryCeiling, Math.max(realizedMean, rememberedUnits * 0.25));
 
-  const retrievalRoute = buildExpeditionRouteTiles(
+  const retrievalRoute = buildPhysicalExpeditionRoute(
     world,
-    band.position,
-    retrieval.targetTileId,
-    deriveExpeditionRouteSearchHorizonTiles(world, band, "resource_expedition"),
-  );
+    band,
+    [retrieval.targetTileId],
+    "resource_expedition",
+    1,
+    "retrieval",
+    `retrieval:value:${String(band.id)}:${currentTick}:${String(retrieval.targetTileId)}`,
+  )?.routeTileIds;
   if (retrievalRoute === undefined) {
     return false;
   }
@@ -1975,57 +2009,53 @@ function selectVerificationCandidate(
   band: Band,
   currentTick: number,
 ): { readonly memory: ResourcePatchMemory; readonly targetTileId: TileId } | undefined {
-  let best: { readonly memory: ResourcePatchMemory; readonly targetTileId: TileId; readonly score: number } | undefined;
+  const searchHorizonTiles = deriveExpeditionRouteSearchHorizonTiles(world, band, "selected_reconnaissance_party");
+  const candidates: Array<{
+    readonly memory: ResourcePatchMemory;
+    readonly rememberedValue: number;
+    readonly dormantBonus: number;
+  }> = [];
 
   for (const memory of band.resourceKnowledgeState?.patchMemories ?? []) {
-    if (!isFoodClass(memory.resourceClassId)) {
-      continue;
-    }
-
+    if (!isFoodClass(memory.resourceClassId)) continue;
     const distance = tileGridDistance(world, band.position, memory.approximateTile);
-    const searchHorizonTiles = deriveExpeditionRouteSearchHorizonTiles(world, band, "selected_reconnaissance_party");
-    if (distance === undefined || distance > searchHorizonTiles) {
-      continue;
-    }
-    const route = buildExpeditionRouteTiles(
-      world,
-      band.position,
-      memory.approximateTile,
-      searchHorizonTiles,
-    );
+    if (distance === undefined || distance > searchHorizonTiles) continue;
+
+    const effective = effectiveResourceConfidence(memory, currentTick);
+    if (!effective.isStale && !effective.isDormant) continue;
+    const rememberedValue = Math.max(memory.confidence.yieldConfidence, memory.useHistory.lastYieldEstimate);
+    if (rememberedValue < VERIFICATION_MIN_REMEMBERED_VALUE) continue;
+    if (wasTargetRecentlyConcluded(band, memory.approximateTile, currentTick)) continue;
+    candidates.push({ memory, rememberedValue, dormantBonus: effective.isDormant ? 0.2 : 0.1 });
+  }
+
+  if (candidates.length === 0) return undefined;
+  const routeSurface = buildExpeditionPhysicalRouteSurface({
+    world,
+    band,
+    travelContext: "selected_reconnaissance_party",
+    travelTimeBudgetDays: deriveExpeditionOneWaySearchBudgetDays(EXPEDITION_MAX_DURATION_DAYS, 0.25),
+    targetTileIds: candidates.map((candidate) => candidate.memory.approximateTile),
+    diagnosticCaller: "verification_selector",
+    surfaceReuseKey: `patch-verification:${String(band.id)}:${currentTick}`,
+  });
+  let best: { readonly memory: ResourcePatchMemory; readonly targetTileId: TileId; readonly score: number } | undefined;
+
+  for (const candidate of candidates) {
+    const route = reconstructExpeditionPhysicalRoute(routeSurface, candidate.memory.approximateTile);
     if (
       route === undefined ||
       derivePhysicalRoundTripTiming(world, band, route, 0.25, "selected_reconnaissance_party").sameDay
     ) {
       continue;
     }
-
-    const effective = effectiveResourceConfidence(memory, currentTick);
-
-    // Verification exists FOR degraded evidence: fresh memory needs no verifying.
-    if (!effective.isStale && !effective.isDormant) {
-      continue;
-    }
-
-    // The remembered value must justify the walk (never a generic curiosity walk).
-    const rememberedValue = Math.max(memory.confidence.yieldConfidence, memory.useHistory.lastYieldEstimate);
-
-    if (rememberedValue < VERIFICATION_MIN_REMEMBERED_VALUE) {
-      continue;
-    }
-
-    if (wasTargetRecentlyConcluded(band, memory.approximateTile, currentTick)) {
-      continue;
-    }
-
-    const score = rememberedValue + (effective.isDormant ? 0.2 : 0.1);
-
+    const score = candidate.rememberedValue + candidate.dormantBonus;
     if (
       best === undefined ||
       score > best.score ||
-      (score === best.score && String(memory.patchId) < String(best.memory.patchId))
+      (score === best.score && String(candidate.memory.patchId) < String(best.memory.patchId))
     ) {
-      best = { memory, targetTileId: memory.approximateTile, score };
+      best = { memory: candidate.memory, targetTileId: candidate.memory.approximateTile, score };
     }
   }
 
@@ -2051,49 +2081,29 @@ function selectReconnaissanceCandidate(
     ) {
       continue;
     }
-
-    // One bounded re-read per failure: once a reconnaissance has concluded for this
-    // tile since the failure, the question is answered until new evidence arrives.
     const reconDoneSince = (band.recentExpeditionOutcomes ?? []).some(
       (other) =>
         other.targetTileId === outcome.targetTileId &&
         other.outcomeReason === "returned_information_only" &&
         Number(other.tick) >= Number(outcome.tick),
     );
-
     if (!reconDoneSince) {
       return { targetTileId: outcome.targetTileId, targetPatchId: `route:${outcome.targetTileId}` };
     }
   }
 
-  let best: { readonly targetTileId: TileId; readonly patchId: string; readonly score: number } | undefined;
-
+  const searchHorizonTiles = deriveExpeditionRouteSearchHorizonTiles(world, band, "selected_reconnaissance_party");
+  const candidates: Array<{
+    readonly memory: ResourcePatchMemory;
+    readonly score: number;
+  }> = [];
   for (const memory of band.resourceKnowledgeState?.patchMemories ?? []) {
-    if (!isFoodClass(memory.resourceClassId)) {
-      continue;
-    }
-
+    if (!isFoodClass(memory.resourceClassId)) continue;
     const distance = tileGridDistance(world, band.position, memory.approximateTile);
-    const searchHorizonTiles = deriveExpeditionRouteSearchHorizonTiles(world, band, "selected_reconnaissance_party");
-    if (distance === undefined || distance > searchHorizonTiles) {
-      continue;
-    }
-    const route = buildExpeditionRouteTiles(
-      world,
-      band.position,
-      memory.approximateTile,
-      searchHorizonTiles,
-    );
-    if (
-      route === undefined ||
-      derivePhysicalRoundTripTiming(world, band, route, 0.25, "selected_reconnaissance_party").sameDay
-    ) {
-      continue;
-    }
+    if (distance === undefined || distance > searchHorizonTiles) continue;
 
     const effective = effectiveResourceConfidence(memory, currentTick);
     const rememberedValue = Math.max(memory.confidence.yieldConfidence, memory.useHistory.lastYieldEstimate);
-
     if (
       effective.effectiveAccessConfidence >= 0.35 ||
       effective.effectivePresenceConfidence < 0.4 ||
@@ -2102,20 +2112,41 @@ function selectReconnaissanceCandidate(
     ) {
       continue;
     }
+    candidates.push({ memory, score: rememberedValue + (0.35 - effective.effectiveAccessConfidence) });
+  }
 
-    const score = rememberedValue + (0.35 - effective.effectiveAccessConfidence);
+  if (candidates.length === 0) return undefined;
+  const routeSurface = buildExpeditionPhysicalRouteSurface({
+    world,
+    band,
+    travelContext: "selected_reconnaissance_party",
+    travelTimeBudgetDays: deriveExpeditionOneWaySearchBudgetDays(EXPEDITION_MAX_DURATION_DAYS, 0.25),
+    targetTileIds: candidates.map((candidate) => candidate.memory.approximateTile),
+    diagnosticCaller: "route_reconnaissance",
+    surfaceReuseKey: `route-reconnaissance:${String(band.id)}:${currentTick}`,
+  });
+  let best: { readonly targetTileId: TileId; readonly patchId: string; readonly score: number } | undefined;
 
+  for (const candidate of candidates) {
+    const route = reconstructExpeditionPhysicalRoute(routeSurface, candidate.memory.approximateTile);
+    if (
+      route === undefined ||
+      derivePhysicalRoundTripTiming(world, band, route, 0.25, "selected_reconnaissance_party").sameDay
+    ) {
+      continue;
+    }
     if (
       best === undefined ||
-      score > best.score ||
-      (score === best.score && String(memory.patchId) < String(best.patchId))
+      candidate.score > best.score ||
+      (candidate.score === best.score && String(candidate.memory.patchId) < String(best.patchId))
     ) {
-      best = { targetTileId: memory.approximateTile, patchId: String(memory.patchId), score };
+      best = { targetTileId: candidate.memory.approximateTile, patchId: String(candidate.memory.patchId), score: candidate.score };
     }
   }
 
   return best === undefined ? undefined : { targetTileId: best.targetTileId, targetPatchId: best.patchId };
 }
+
 
 
 /**
@@ -2169,13 +2200,8 @@ function maybeLaunchFrontierVerification(
     return undefined;
   }
 
-  // A real physical route. No route, no verification — the band does not teleport to ask.
-  const searchBound = deriveExpeditionRouteSearchHorizonTiles(world, band, "selected_reconnaissance_party");
-  const route = buildExpeditionRouteTiles(world, band.position, candidate.tileId, searchBound);
-
-  if (route === undefined) {
-    return undefined;
-  }
+  // The selector already reconstructed this route from its shared physical surface. Reuse it.
+  const route = candidate.routeTileIds;
 
   const verificationTiming = derivePhysicalRoundTripTiming(
     world,
@@ -2547,27 +2573,23 @@ function maybeLaunchExpedition(world: WorldState, band: Band, day: DayNumber): B
   // itself is unreachable, any of the patch's linked tiles is an equally valid physical
   // stand (deterministic order), and reaching one does not lose the patch identity.
   //
-  // The pathfinder bound is technical and derived from the physical duration envelope; actual
-  // launch eligibility remains the round-trip timing check below.
+  // The physical route query is bounded by travel time, not a raster-cell ceiling. Anchor and
+  // linked-tile fallbacks share one surface; exact round-trip timing remains the launch gate.
   const launchContext: TravelContext =
     chosen.taskKind === "distant_patch_verification" || chosen.taskKind === "route_reconnaissance"
       ? "selected_reconnaissance_party"
       : "resource_expedition";
-  const searchBound = deriveExpeditionRouteSearchHorizonTiles(world, band, launchContext);
-  let route = buildExpeditionRouteTiles(world, band.position, chosen.targetTileId, searchBound);
+  const routeSearch = buildPhysicalExpeditionRoute(
+    world,
+    band,
+    [chosen.targetTileId, ...[...chosen.linkedTiles].sort((a, b) => String(a).localeCompare(String(b)))],
+    launchContext,
+    1,
+    "expedition_launch",
+    `expedition:launch:${String(band.id)}:${Number(day)}:${chosen.taskKind}`,
+  );
+  const route = routeSearch?.routeTileIds;
 
-  if (route === undefined) {
-    for (const linkedTileId of [...chosen.linkedTiles].sort((a, b) => String(a).localeCompare(String(b)))) {
-      route = buildExpeditionRouteTiles(world, band.position, linkedTileId, searchBound);
-
-      if (route !== undefined) {
-        break;
-      }
-    }
-  }
-
-  // No passable route within the bounded neighbourhood => physically unreachable. The
-  // band simply does not go; it never teleports to the target.
   if (route === undefined) {
     return band;
   }

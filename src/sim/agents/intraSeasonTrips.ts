@@ -115,6 +115,11 @@ import { getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
 import { deriveTravelPace, type TravelContext } from "./bandMobility";
 import { getTripRoundTripDistanceKm } from "./tripDistance";
 import { getRoutePhysicalLengthKm, getRouteTravelTimeDays } from "./traversal";
+import {
+  classifyRouteSearchCaller,
+  isRecordingRouteSearchDiagnostics,
+  recordRouteSearchDiagnostic,
+} from "../diagnostics/routeSearchDiagnostics";
 
 const TRIP_DAY_CADENCE = 3;
 const FIRST_TRIP_DAY_OF_SEASON = 6;
@@ -3904,11 +3909,19 @@ function deriveObjective(cause: IntraSeasonTripCause): IntraSeasonTripObjective 
  * distance-based behavior (including the shadow economy) reads canonical `distanceKm`.
  * Only the drawn breadcrumb `pathTiles`/`tilesCrossed` is reconstructed here.
  */
+interface PassablePathSearchMeasurement {
+  readonly nodesExplored: number;
+  readonly expandedEdges: number;
+  readonly maxExplored: number;
+  readonly termination: "target_found" | "reachable_graph_exhausted" | "exploration_cap";
+}
+
 function buildOutboundPathTiles(
   world: WorldState,
   originTileId: TileId,
   targetTileId: TileId,
   maxReachTiles: number,
+  onSearchMeasured?: (measurement: PassablePathSearchMeasurement) => void,
 ): readonly TileId[] {
   const origin = world.tiles[originTileId];
   const target = world.tiles[targetTileId];
@@ -3925,7 +3938,7 @@ function buildOutboundPathTiles(
     return [originTileId];
   }
 
-  return findPassablePath(world, origin, aimTile, maxReachTiles) ?? [originTileId];
+  return findPassablePath(world, origin, aimTile, maxReachTiles, onSearchMeasured) ?? [originTileId];
 }
 
 /**
@@ -3942,7 +3955,30 @@ export function buildExpeditionRouteTiles(
   targetTileId: TileId,
   maxReachTiles: number,
 ): readonly TileId[] | undefined {
-  const route = buildOutboundPathTiles(world, originTileId, targetTileId, maxReachTiles);
+  const recording = isRecordingRouteSearchDiagnostics();
+  const caller = recording ? classifyRouteSearchCaller(new Error().stack) : "other";
+  let measurement: PassablePathSearchMeasurement | undefined;
+  const route = buildOutboundPathTiles(
+    world,
+    originTileId,
+    targetTileId,
+    maxReachTiles,
+    recording ? (value) => { measurement = value; } : undefined,
+  );
+
+  if (recording && measurement !== undefined) {
+    recordRouteSearchDiagnostic({
+      engine: "legacy_bfs",
+      caller,
+      originTileId,
+      targetTileIds: [targetTileId],
+      maxReachTiles,
+      maxExplored: measurement.maxExplored,
+      nodesExplored: measurement.nodesExplored,
+      expandedEdges: measurement.expandedEdges,
+      termination: measurement.termination,
+    });
+  }
 
   if (route.length <= 1) {
     return undefined;
@@ -3956,6 +3992,20 @@ export function buildExpeditionRouteTiles(
  * (deterministic tile-id tie-break). Undefined when the water source has no passable
  * 4-neighbour at all (fully enclosed water) → the trip is target-inaccessible.
  */
+export function resolveExpeditionRouteAimTileId(
+  world: WorldState,
+  originTileId: TileId,
+  targetTileId: TileId,
+): TileId | undefined {
+  const origin = world.tiles[originTileId];
+  const target = world.tiles[targetTileId];
+  if (origin === undefined || target === undefined) return undefined;
+  const aim = isBandPassableDestination(target)
+    ? target
+    : resolveShoreApproachTile(world, origin, target);
+  return aim?.id;
+}
+
 function resolveShoreApproachTile(world: WorldState, origin: Tile, target: Tile): Tile | undefined {
   let best: Tile | undefined;
   let bestDistance = Number.POSITIVE_INFINITY;
@@ -3996,12 +4046,14 @@ function findPassablePath(
   // they need a correspondingly larger (still hard-bounded) search neighbourhood.
   // Same-day trips keep their derived physical search horizon unchanged.
   maxReachTiles: number,
+  onMeasured?: (measurement: PassablePathSearchMeasurement) => void,
 ): readonly TileId[] | undefined {
   const maxExplored = (maxReachTiles * 2 + 4) ** 2;
   const cameFrom = new Map<TileId, TileId>();
   const visited = new Set<TileId>([origin.id]);
   let frontier: Tile[] = [origin];
   let explored = 0;
+  let expandedEdges = 0;
 
   while (frontier.length > 0 && explored < maxExplored) {
     const next: Tile[] = [];
@@ -4010,12 +4062,14 @@ function findPassablePath(
       explored += 1;
 
       if (tile.id === aim.id) {
+        onMeasured?.({ nodesExplored: explored, expandedEdges, maxExplored, termination: "target_found" });
         return reconstructPassablePath(cameFrom, origin.id, aim.id);
       }
 
       const neighbors = [...tile.neighbors].sort((left, right) => String(left).localeCompare(String(right)));
 
       for (const neighborId of neighbors) {
+        expandedEdges += 1;
         if (visited.has(neighborId)) {
           continue;
         }
@@ -4039,6 +4093,12 @@ function findPassablePath(
     frontier = next;
   }
 
+  onMeasured?.({
+    nodesExplored: explored,
+    expandedEdges,
+    maxExplored,
+    termination: frontier.length === 0 ? "reachable_graph_exhausted" : "exploration_cap",
+  });
   return undefined;
 }
 
