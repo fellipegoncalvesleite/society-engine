@@ -29,6 +29,7 @@ let out;
 try {
   const runner = await server.ssrLoadModule("/sim/runner/simRunner.ts");
   const trips = await server.ssrLoadModule("/sim/agents/intraSeasonTrips.ts");
+  const expedition = await server.ssrLoadModule("/sim/agents/expedition.ts");
   const plantPatches = await server.ssrLoadModule("/sim/agents/plantPatches.ts");
   const fire = await server.ssrLoadModule("/sim/agents/fireSignals.ts");
   const env = await server.ssrLoadModule("/sim/agents/environmentBoundary.ts");
@@ -159,6 +160,125 @@ try {
     },
   };
 
+  // Runtime seam isolation: find the nearest genuinely multi-day plant-memory target whose
+  // remembered value still clears the ordinary retrieval EV gate when stale. This keeps the
+  // positive fixture about the SIGNAL seam rather than accidentally choosing a bad trip.
+  const seamBandBase = world.bands[bandId];
+  const seamCandidates = Object.values(world.tiles)
+    .map((tile) => ({
+      tile,
+      d: Math.abs(tile.coord.x - world.tiles[seamBandBase.position].coord.x) +
+        Math.abs(tile.coord.y - world.tiles[seamBandBase.position].coord.y),
+    }))
+    .filter(({ tile, d }) => d >= 2 && d <= 8 && tile.isAquatic !== true && plantPatches.derivePlantPatchesForTile(tile, world.time).length > 0)
+    .sort((a, b) => a.d - b.d || String(a.tile.id).localeCompare(String(b.tile.id)));
+
+  let seamSite;
+  let strongStaleMemory;
+  for (const candidateSite of seamCandidates) {
+    const route = trips.buildExpeditionRouteTiles(world, seamBandBase.position, candidateSite.tile.id, candidateSite.d + 8);
+    if (route === undefined) continue;
+    const timing = trips.derivePhysicalRoundTripTiming(world, seamBandBase, route, 0.25, "resource_expedition");
+    if (timing.sameDay) continue;
+    const memory = makeMemory(candidateSite, world.time, {
+      confidence: {
+        presenceConfidence: 1, seasonConfidence: 0.9, yieldConfidence: 1,
+        safetyConfidence: 0.95, processingConfidence: 0.8, accessConfidence: 0.95, recoveryConfidence: 0.8,
+      },
+      useHistory: {
+        visits: 6, successfulUses: 6, failedUses: 0, lastYieldEstimate: 1,
+        yieldTrend: "flat", depletionMemory: 0, recoveryExpectation: 0.8,
+      },
+      lastNotedTick: Math.max(0, Number(world.time.tick) - 33),
+    });
+    const worthwhile = expedition.isDistantRetrievalWorthwhileForAudit(
+      world,
+      seamBandBase,
+      { memory, targetTileId: candidateSite.tile.id, distanceTiles: candidateSite.d },
+      0,
+      Math.max(2, Math.floor(seamBandBase.demography.workingAdults / 3)),
+      Number(world.time.tick),
+    );
+    if (worthwhile) {
+      seamSite = candidateSite;
+      strongStaleMemory = memory;
+      break;
+    }
+  }
+
+  // An off-cadence day proves the signal changes the canonical launch decision rather
+  // than merely coinciding with the ordinary launch cadence.
+  let seamDay = Number(world.time.day ?? 0) + 1;
+  while (seamDay % 6 === 0) seamDay += 1;
+  const targetSignal = seamSite === undefined ? undefined : {
+    id: `audit-relay:${seamSite.tile.id}:${seamDay}`,
+    day: seamDay,
+    tick: Number(world.time.tick),
+    direction: "east",
+    distanceBand: "near",
+    distanceKm: seamSite.d,
+    outcome: "seen_understood",
+    meaning: "target_confirmed",
+    aboutTileId: seamSite.tile.id,
+    expiresOnDay: seamDay + 2,
+  };
+  const makeRelaySeamWorld = (memory, withSignal) => ({
+    ...world,
+    time: { ...world.time, day: seamDay },
+    bands: {
+      [bandId]: {
+        ...world.bands[bandId],
+        resourceKnowledgeState: { patchMemories: memory === undefined ? [] : [memory], cap: 48 },
+        expeditions: [],
+        recentExpeditionOutcomes: [],
+        receivedSmokeSignals: withSignal && targetSignal !== undefined ? [targetSignal] : [],
+      },
+    },
+  });
+  const seamWithoutSignal = expedition.expeditionDailyAction.apply(
+    makeRelaySeamWorld(strongStaleMemory, false), seamDay,
+  ).bands[bandId];
+  const seamWithSignal = expedition.expeditionDailyAction.apply(
+    makeRelaySeamWorld(strongStaleMemory, true), seamDay,
+  ).bands[bandId];
+  const seamGathering = (b) => seamSite !== undefined && (b.expeditions ?? []).some(
+    (entry) => entry.taskKind === "distant_plant_gathering" && String(entry.targetTileId) === String(seamSite.tile.id),
+  );
+  const positiveRelayWorld = makeRelaySeamWorld(strongStaleMemory, true);
+  const positiveRelayBand = positiveRelayWorld.bands[bandId];
+  const positiveRelayWorthwhile = seamSite !== undefined && strongStaleMemory !== undefined &&
+    expedition.isDistantRetrievalWorthwhileForAudit(
+      positiveRelayWorld, positiveRelayBand,
+      { memory: strongStaleMemory, targetTileId: seamSite.tile.id, distanceTiles: seamSite.d },
+      0, Math.max(2, Math.floor(positiveRelayBand.demography.workingAdults / 3)), Number(world.time.tick),
+    );
+  const runtimeRelayInfluencesCanonicalLaunch =
+    positiveRelayWorthwhile === true && !seamGathering(seamWithoutSignal) && seamGathering(seamWithSignal);
+
+  // Negative control: the same bounded meaning about a deliberately low-value memory must
+  // not force a gathering party through the ordinary EV gate.
+  const lowValueMemory = seamSite === undefined ? undefined : makeMemory(seamSite, world.time, {
+    confidence: {
+      presenceConfidence: 0.2, seasonConfidence: 0.2, yieldConfidence: 0.02,
+      safetyConfidence: 0.25, processingConfidence: 0.2, accessConfidence: 0.3, recoveryConfidence: 0.2,
+    },
+    useHistory: {
+      visits: 5, successfulUses: 1, failedUses: 4, lastYieldEstimate: 0.01,
+      yieldTrend: "declining", depletionMemory: 0.8, recoveryExpectation: 0.1,
+    },
+  });
+  const lowValueWorld = makeRelaySeamWorld(lowValueMemory, true);
+  const lowValueBand = lowValueWorld.bands[bandId];
+  const lowValueWorthwhile = seamSite === undefined || lowValueMemory === undefined ? false :
+    expedition.isDistantRetrievalWorthwhileForAudit(
+      lowValueWorld, lowValueBand,
+      { memory: lowValueMemory, targetTileId: seamSite.tile.id, distanceTiles: seamSite.d },
+      0, Math.max(2, Math.floor(lowValueBand.demography.workingAdults / 3)), Number(world.time.tick),
+    );
+  const lowValueAfterSignal = expedition.expeditionDailyAction.apply(lowValueWorld, seamDay).bands[bandId];
+  const runtimeRelayDoesNotForceBadRetrieval =
+    seamSite !== undefined && lowValueWorthwhile === false && !seamGathering(lowValueAfterSignal);
+
   let signalUnderstoodReceived = false;
   let signalAttemptRecorded = false;
   let signalReceivedBeforeReturn = false;
@@ -271,6 +391,8 @@ try {
     plannedSignalUnderstoodInProduction_13: signalUnderstoodReceived,
     signalAttemptRecordedOnParty_13: signalAttemptRecorded,
     relayMeaningReceivedBeforeReturn_13: signalReceivedBeforeReturn,
+    relayRuntimeLaunchInfluencedBySignal_13: runtimeRelayInfluencesCanonicalLaunch,
+    relayRuntimeDoesNotForceBadRetrieval_13: runtimeRelayDoesNotForceBadRetrieval,
     relaySignalFeedsLaunchDecision_13: relaySignalFeedsLaunchDecision,
     signalTransfersBoundedMeaningOnly_13: signalRecordKeysOk,
     receivedSignalsCapped_13: signalCapOk,
@@ -289,6 +411,13 @@ try {
       site: String(site.tile.id),
       signalUnderstoodReceived,
       signalReceivedBeforeReturn,
+      runtimeRelayInfluencesCanonicalLaunch,
+      runtimeRelayDoesNotForceBadRetrieval,
+      positiveRelayWorthwhile,
+      lowValueWorthwhile,
+      seamDay,
+      seamWithoutSignalExpeditions: (seamWithoutSignal.expeditions ?? []).map((e) => ({ taskKind: e.taskKind, target: String(e.targetTileId), phase: e.phase })),
+      seamWithSignalExpeditions: (seamWithSignal.expeditions ?? []).map((e) => ({ taskKind: e.taskKind, target: String(e.targetTileId), phase: e.phase })),
       arrivalObservationSeen,
     },
     natural: { partyObservationsInNature },

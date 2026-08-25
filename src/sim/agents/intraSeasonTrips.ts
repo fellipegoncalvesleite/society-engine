@@ -3518,6 +3518,44 @@ export interface PhysicalRoundTripTiming {
   readonly kmPerTravelDay: number;
 }
 
+export interface InvestigationSameDayLowerBound {
+  readonly straightLineDistanceKm: number;
+  readonly kmPerTravelDay: number;
+  readonly activityDays: number;
+  readonly minimumRoundTripTravelDays: number;
+  readonly minimumTotalDays: number;
+  readonly sameDayPossible: boolean;
+}
+
+/**
+ * SCALE-1 Task 5 — a perception-only eligibility lower bound for a selected
+ * reconnaissance party. This deliberately does NOT construct a route or infer
+ * crossing knowledge. It only rejects a cue when even an ideal straight-line
+ * round trip, using the executor's own party pace and on-site work allowance,
+ * cannot fit the same-day contract. Actual feasibility remains the walked route.
+ */
+export function deriveInvestigationSameDayLowerBound(
+  band: Band,
+  straightLineDistanceKm: number,
+): InvestigationSameDayLowerBound {
+  const kmPerTravelDay = deriveTravelPace(band, "selected_reconnaissance_party").kmPerTravelDay;
+  const validDistance = Number.isFinite(straightLineDistanceKm) && straightLineDistanceKm >= 0;
+  const minimumRoundTripTravelDays =
+    validDistance && kmPerTravelDay > 0
+      ? (straightLineDistanceKm * 2) / kmPerTravelDay
+      : Number.POSITIVE_INFINITY;
+  const minimumTotalDays = minimumRoundTripTravelDays + INTRA_SEASON_ACTIVITY_WORK_DAYS;
+
+  return {
+    straightLineDistanceKm,
+    kmPerTravelDay,
+    activityDays: INTRA_SEASON_ACTIVITY_WORK_DAYS,
+    minimumRoundTripTravelDays,
+    minimumTotalDays,
+    sameDayPossible: Number.isFinite(minimumTotalDays) && minimumTotalDays <= 1 + 1e-9,
+  };
+}
+
 /**
  * SCALE-1 — the physical boundary between ordinary same-day activity and the
  * expedition lifecycle. Route topology is supplied by the existing bounded path

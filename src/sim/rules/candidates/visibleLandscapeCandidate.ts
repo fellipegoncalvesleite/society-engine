@@ -2,13 +2,13 @@
 //
 // A residence-unchanged probe toward a band-KNOWN visible landscape cue (an
 // uncertain distant hint the band can see but has not observed). Owns its own
-// eligibility (a fresh, confident, unobserved cue in range with a passable edge),
-// evidence (the cue + edge memo), benefits/risks (water urgency, route confidence,
-// crossing risk), and contribution (the scored logistical_probe candidate). This
-// family module depends only on the shared candidate contract, scoring kit, edge
-// context, and constants — never on the decision orchestrator. Extracted verbatim
-// from bandDecision.ts; behavior is byte-identical.
+// eligibility (a fresh, confident, unobserved cue inside the same-day physical
+// lower bound), evidence (the cue only), benefits/risks (water urgency and perceptual
+// uncertainty), and contribution (the scored logistical_probe candidate). Route and
+// crossing feasibility remain owned by physical execution; this family never invents
+// a synthetic current->target movement edge for a distant cue.
 import { LANDSCAPE_VISIBILITY_MAX_RANGE_KM } from "../../agents/landscapeVisibility";
+import { deriveInvestigationSameDayLowerBound } from "../../agents/intraSeasonTrips";
 import { deriveProbeDiminishingReturn } from "../../agents/probeMemory";
 import { getLocalUsePressureValue } from "../../agents/pressure";
 import { getAnchorHoldBonus } from "../../agents/residentialAnchor";
@@ -24,7 +24,6 @@ import {
   PROBE_DIMINISHING_RETURN_SCORE_WEIGHT,
   VISIBLE_LANDSCAPE_PROBE_SCORE_WEIGHT,
 } from "../decisionConstants";
-import { getCandidateEdgeMemo } from "../decisionEdgeContext";
 import {
   clamp01,
   emptyScoreBreakdown,
@@ -76,8 +75,12 @@ export function buildVisibleLandscapeProbeCandidate(
     return undefined;
   }
 
-  const edgeMemo = getCandidateEdgeMemo(world, band, currentTile.id, targetTile.id, "expand_known_world", decisionCache);
-  if (!edgeMemo.toTilePassable || edgeMemo.riverAssessment.blockedCrossingPenalty > 0.8) {
+  // A distant visual cue is not route knowledge. The candidate may only rule out a
+  // probe that is physically impossible even under an ideal straight-line round trip.
+  // Route topology, passability and crossings remain unknown until the executor builds
+  // and walks the real route. This keeps perception != route feasibility.
+  const sameDayLowerBound = deriveInvestigationSameDayLowerBound(band, distanceKm);
+  if (!sameDayLowerBound.sameDayPossible) {
     return undefined;
   }
 
@@ -104,12 +107,9 @@ export function buildVisibleLandscapeProbeCandidate(
   );
   const nearbyWaterUrgency =
     isWaterCue && !cue.blockedByTerrain ? clamp01(bandPoorness * (distanceKm <= 9 ? 1 : 0.5)) : 0;
-  const routeConfidence = clamp01(
-    cue.confidence * 0.42 +
-      edgeMemo.riverAssessment.knownFordValue * 0.22 +
-      edgeMemo.riverAssessment.riverCorridorValue * 0.18 +
-      (distanceKm <= 7.5 ? 0.12 : 0),
-  );
+  // Route confidence is intentionally zero at this stage: visibility says where an
+  // approximate feature is, not that the band knows a passable route or crossing to it.
+  const routeConfidence = 0;
   const scoreBreakdown: ScoreBreakdown = {
     ...emptyScoreBreakdown(),
     foodValue: clamp01((currentRecord.observedRichness ?? 0.35) * 0.16),
@@ -117,8 +117,7 @@ export function buildVisibleLandscapeProbeCandidate(
     memoryConfidence: cue.confidence,
     movementCost: clamp01(distanceKm / LANDSCAPE_VISIBILITY_MAX_RANGE_KM),
     riskCost: clamp01(
-      edgeMemo.riverAssessment.riverCrossingRisk * 0.34 +
-        (band.pressureState?.riskPressure ?? 0) * 0.12 +
+      (band.pressureState?.riskPressure ?? 0) * 0.12 +
         (cue.blockedByTerrain ? 0.12 : 0),
     ),
     routeValue: routeConfidence,
@@ -129,11 +128,11 @@ export function buildVisibleLandscapeProbeCandidate(
     foodStress: decisionCache.pressureSnapshot.bandPressureState.foodStress,
     waterStress: decisionCache.pressureSnapshot.bandPressureState.waterStress,
     mobilityPressure: decisionCache.pressureSnapshot.bandPressureState.mobilityPressure,
-    riverCrossingCost: edgeMemo.riverAssessment.riverCrossingCost,
-    riverCrossingRisk: edgeMemo.riverAssessment.riverCrossingRisk,
-    riverCorridorValue: edgeMemo.riverAssessment.riverCorridorValue,
-    knownFordValue: edgeMemo.riverAssessment.knownFordValue,
-    blockedCrossingPenalty: edgeMemo.riverAssessment.blockedCrossingPenalty,
+    riverCrossingCost: 0,
+    riverCrossingRisk: 0,
+    riverCorridorValue: 0,
+    knownFordValue: 0,
+    blockedCrossingPenalty: 0,
     scoutValue: cue.confidence,
     logisticalProbeValue: cue.confidence,
   };
@@ -155,8 +154,8 @@ export function buildVisibleLandscapeProbeCandidate(
     prospectTileIds: [targetTile.id],
     scoutValue: cue.confidence,
     uncertainty: round2(1 - cue.confidence),
-    crossingRisk: edgeMemo.riverAssessment.riverCrossingRisk,
-    travelCost: distanceKm,
+    crossingRisk: 0,
+    travelCost: sameDayLowerBound.minimumTotalDays,
     basis,
   });
   const diminishingReturn = deriveProbeDiminishingReturn(band.probeMemory, targetTile.id, Number(world.time.tick), {
@@ -190,12 +189,11 @@ export function buildVisibleLandscapeProbeCandidate(
         prospectTileIds: [targetTile.id],
         scoutValue: cue.confidence,
         uncertainty: round2(1 - cue.confidence),
-        crossingRisk: edgeMemo.riverAssessment.riverCrossingRisk,
-        travelCost: distanceKm,
+        crossingRisk: 0,
+        travelCost: sameDayLowerBound.minimumTotalDays,
         basis,
       }),
     ],
-    riverAssessment: edgeMemo.riverAssessment,
   };
 }
 
