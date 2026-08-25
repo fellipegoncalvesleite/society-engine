@@ -36,6 +36,10 @@ import type {
 } from "./types";
 import { deterministicRoll } from "./inventionChain";
 
+// SCALE-1 provisional compatibility calibration: staged-load learning formerly required
+// a three-cell residential move on the canonical 1.5-km raster, i.e. 4.5 km.
+const STAGED_LOAD_MOVE_DISTANCE_KM = 4.5;
+
 export const FRAGMENT_CAP = 20;
 const EVIDENCE_REF_CAP = 3;
 const SEASONS_PER_YEAR = 4;
@@ -166,6 +170,7 @@ function wateredPlaceSignal(band: Band): { readonly signal: number; readonly cou
 export function deriveFragmentSignals(input: {
   readonly band: Band;
   readonly moved: boolean;
+  /** Completed residential route distance in physical km. */
   readonly residentialMoveDistance: number;
   readonly crossedThisSeason: boolean;
   readonly latestMoveEvent?: ResidentialMoveEvent;
@@ -206,7 +211,7 @@ export function deriveFragmentSignals(input: {
   // Lived staged travel: a completed multi-tile residential leg is direct
   // experience that loads can move in stages.
   if (
-    input.moved && input.residentialMoveDistance >= 3 &&
+    input.moved && input.residentialMoveDistance >= STAGED_LOAD_MOVE_DISTANCE_KM &&
     ((input.latestMoveEvent?.hardshipRisk ?? 0) >= 0.28 ||
       (input.latestMoveEvent?.temporaryWatercraft?.shuttleTrips ?? 0) >= 2)
   ) {

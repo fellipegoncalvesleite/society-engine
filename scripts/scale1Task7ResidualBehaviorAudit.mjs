@@ -45,6 +45,42 @@ const directBehaviorPatterns = [
   ["src/sim/agents/dryMargin.ts", /\bgetGridDistance\b/],
 ];
 
+const forbiddenRoundTripBehaviorPatterns = [
+  ["src/sim/agents/acuteRisk.ts", /\blongTrip\.roundTripTiles\b/],
+  ["src/sim/agents/intraSeasonTrips.ts", /\brecord\.roundTripTiles\s*\*/],
+  ["src/sim/agents/intraSeasonTrips.ts", /\bSHADOW_TRAVEL_RATE_PER_TILE\b/],
+];
+
+const forbiddenResidualCellBehaviorPatterns = [
+  ["src/sim/agents/intraSeasonTrips.ts", /candidate\.distanceTiles\s*>=\s*8/],
+  ["src/sim/agents/bandEvents.ts", /entry\.distanceTiles\s*>=\s*3/],
+  ["src/sim/rules/bandDecision.ts", /getGridDistance\(adaptiveOriginTile, observationTile\)/],
+  ["src/sim/agents/practicalFragments.ts", /residentialMoveDistance\s*>=\s*3/],
+  ["src/sim/agents/adaptiveEfficacy.ts", /context\.moveDistance\s*===\s*1/],
+  ["src/sim/agents/campMovement.ts", /tileDistanceByCoord\(from, to\)\s*<=\s*1/],
+  ["src/sim/agents/campMovement.ts", /tileDistanceByCoord\(currentTile, tile\)\s*<=\s*2/],
+  ["src/sim/agents/campMovement.ts", /tileDistanceByCoord\(current, tile\)\s*<=\s*2/],
+  ["src/sim/agents/campMovement.ts", /shift\.distance\s*<=\s*1/],
+  ["src/sim/agents/campMovement.ts", /moveDistance\s*<=\s*2/],
+  ["src/sim/agents/campMovement.ts", /moveDistance\s*>\s*2/],
+  ["src/sim/agents/campMovement.ts", /moveDistance\s*\*\s*0\.08/],
+  ["src/sim/agents/campMovement.ts", /moveDistance\s*\*\s*0\.12/],
+  ["src/sim/agents/campMovement.ts", /distance\s*\*\s*0\.04/],
+  ["src/sim/agents/spawn.ts", /tileDistance\(candidate\.tile, selected\.tile\)\s*>=\s*9/],
+];
+
+const requiredPhysicalTripSemantics = [
+  ["src/sim/agents/acuteRisk.ts", /ACUTE_RISK_ROUTE_LOAD_FULL_SCALE_KM\s*=\s*18\b/],
+  ["src/sim/agents/intraSeasonTrips.ts", /TRANSPORT_LOSS_RATE_PER_ROUND_TRIP_KM\s*=\s*0\.008\b/],
+  ["src/sim/agents/intraSeasonTrips.ts", /SHADOW_TRAVEL_RATE_PER_ROUND_TRIP_KM\s*=\s*1\s*\/\s*150\b/],
+  ["src/sim/agents/intraSeasonTrips.ts", /UNCERTAIN_LONG_ROUTE_DISTANCE_KM\s*=\s*12\b/],
+  ["src/sim/agents/bandEvents.ts", /ROUTE_TALK_DISTANCE_KM\s*=\s*4\.5\b/],
+  ["src/sim/agents/practicalFragments.ts", /STAGED_LOAD_MOVE_DISTANCE_KM\s*=\s*4\.5\b/],
+  ["src/sim/agents/campMovement.ts", /LOCAL_SHIFT_MAX_DISTANCE_KM\s*=\s*3\b/],
+  ["src/sim/agents/campMovement.ts", /MICRO_SHIFT_MAX_DISTANCE_KM\s*=\s*1\.5\b/],
+  ["src/sim/agents/spawn.ts", /INITIAL_SPAWN_SEPARATION_KM\s*=\s*13\.5\b/],
+];
+
 const failures = [];
 for (const [file, symbol] of forbiddenSymbolChecks) {
   const source = readFileSync(file, "utf8");
@@ -76,6 +112,18 @@ for (const file of behavioralDistanceFiles) {
 for (const [file, regex] of directBehaviorPatterns) {
   const source = readFileSync(file, "utf8");
   if (regex.test(source)) failures.push({ file, kind: "raw_grid_distance_behavior", match: regex.source });
+}
+for (const [file, regex] of forbiddenRoundTripBehaviorPatterns) {
+  const source = readFileSync(file, "utf8");
+  if (regex.test(source)) failures.push({ file, kind: "round_trip_tile_behavior", match: regex.source });
+}
+for (const [file, regex] of forbiddenResidualCellBehaviorPatterns) {
+  const source = readFileSync(file, "utf8");
+  if (regex.test(source)) failures.push({ file, kind: "residual_cell_behavior", match: regex.source });
+}
+for (const [file, regex] of requiredPhysicalTripSemantics) {
+  const source = readFileSync(file, "utf8");
+  if (!regex.test(source)) failures.push({ file, kind: "physical_trip_semantics_missing", match: regex.source });
 }
 
 const out = {

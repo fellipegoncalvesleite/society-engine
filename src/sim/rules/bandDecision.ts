@@ -1214,10 +1214,9 @@ export function applyBandDecision(
     pressureState: pressureUpdate.pressureState,
     causalTraces: pressureUpdate.causalTraces,
   };
+  // Current residence truth for environment-reading response context only. Physical move
+  // severity below comes from the executed residential event, not this endpoint topology.
   const adaptiveOriginTile = getTile(world, band.position);
-  const residentialMoveDistance = moved && adaptiveOriginTile !== undefined && observationTile !== undefined
-    ? getGridDistance(adaptiveOriginTile, observationTile)
-    : 0;
   // INVENTION-1: the residential-move event ring is derived HERE (hoisted from
   // the return literal — identical pure derivation) so the carrying efficacy
   // can read the realized hardship of THIS season's move.
@@ -1257,6 +1256,9 @@ export function applyBandDecision(
     prior: band.residentialMovementIntentOutcomes,
   });
   const latestMoveEvent = moved ? recentResidentialMoveEvents?.[0] : undefined;
+  // Canonical completed physical route distance. The residential event already resolved the
+  // executed path; downstream adaptation/efficacy must not reconstruct severity from cells.
+  const residentialMoveDistance = latestMoveEvent?.distanceKm ?? 0;
   // INVENTION-1: practical-response efficacy contexts. The applied plan is the
   // SAME derivation the migration walk consumed; the counterfactual plan
   // disables the practical reliefs so the budget delta isolates the response's

@@ -28,6 +28,10 @@ import type {
 } from "./types";
 import { isProvisionalSuccessor } from "./bandLifecycle";
 
+// SCALE-1 provisional compatibility calibration: the legacy route-talk selector used
+// three cells on the canonical 1.5-km raster, i.e. 4.5 km outbound physical distance.
+const ROUTE_TALK_DISTANCE_KM = 4.5;
+
 const RECENT_EVENT_LIMIT = 48;
 const LAST_10_YEAR_EVENT_LIMIT = 80;
 const LAST_25_YEAR_EVENT_LIMIT = 120;
@@ -1265,7 +1269,7 @@ function pushMovementTalk(candidates: CampTalkCandidate[], world: WorldState, ba
     entry.taskGroupType === "memory_refresh_group" ||
     entry.activityOutcome === "failed_due_to_water_risk" ||
     entry.activityOutcome === "abandoned_due_to_risk" ||
-    entry.distanceTiles >= 3
+    entry.distanceKm >= ROUTE_TALK_DISTANCE_KM
   );
   if (trip !== undefined) {
     candidates.push({

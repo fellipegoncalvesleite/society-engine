@@ -3,6 +3,7 @@ import type { WorldState } from "../world/types";
 import { enforceResourceKnowledgeCap } from "./resourceKnowledge";
 import { deriveCareTreatmentRelief } from "./adaptationBoundary";
 import { getExpeditionPhysicalPeople } from "./bandMobility";
+import { getTripRoundTripDistanceKm } from "./tripDistance";
 // EXPEDITIONARY-4 §14 — the provisioning scale an away party's exposure is judged
 // against (single definition site; no duplicated constants).
 import {
@@ -27,6 +28,10 @@ import type {
 const RECENT_EPISODE_CAP = 10;
 const MAX_EPISODES_PER_BAND_SEASON = 2;
 const RECENT_TRIP_SCAN_CAP = 8;
+// MODEL / PROVISIONAL SCALE-1 COMPATIBILITY CALIBRATION. The legacy route-load term
+// reached full scale at 12 round-trip cells on the canonical 1.5-km raster (~18 km).
+// This is a model compatibility scale, not a universal human exposure threshold.
+const ACUTE_RISK_ROUTE_LOAD_FULL_SCALE_KM = 18;
 const ACTIVE_EFFECT_CAP: AcuteRiskEffect = {
   activityEfficiencyPenalty: 0.18,
   extraSeasonalStress: 0.14,
@@ -49,6 +54,12 @@ interface AcuteRiskCandidate {
   readonly groundedReasons: readonly string[];
   readonly contributingFactors: readonly string[];
   readonly reasonIds: readonly ReasonId[];
+}
+
+export function deriveAcuteRiskRouteLoadForAudit(
+  trip: Pick<IntraSeasonTripRecord, "distanceKm" | "roundTripTiles">,
+): number {
+  return clamp01(getTripRoundTripDistanceKm(trip) / ACUTE_RISK_ROUTE_LOAD_FULL_SCALE_KM);
 }
 
 export function applyAcuteRiskContext(world: WorldState): WorldState {
@@ -402,7 +413,7 @@ function deriveAcuteRiskCandidates(world: WorldState, band: Band): readonly Acut
   );
   if (move !== undefined || longTrip !== undefined) {
     const moveHardship = move?.hardshipLevel === "severe" ? 0.78 : move?.hardshipLevel === "high" ? 0.62 : 0;
-    const routeLoad = longTrip === undefined ? 0 : clamp01(longTrip.roundTripTiles / 12);
+    const routeLoad = longTrip === undefined ? 0 : deriveAcuteRiskRouteLoadForAudit(longTrip);
     const crossing = move?.temporaryWatercraft;
     const crossingLoad = crossing === undefined
       ? 0

@@ -177,7 +177,7 @@ export function Mobility({
           <ul className="condition-note">
             {outcomes.map((outcome) => (
               <li key={outcome.id}>
-                {outcome.taskKind.replace(/_/g, " ")} to {String(outcome.targetTileId)} ({outcome.distanceTiles} tiles, {outcome.totalDays}d,{" "}
+                {outcome.taskKind.replace(/_/g, " ")} to {String(outcome.targetTileId)} ({outcome.distanceTiles} cells topology, {outcome.totalDays}d,{" "}
                 {outcome.partyPeople ?? outcome.partyWorkers} adults): <strong>{outcome.outcomeReason.replace(/_/g, " ")}</strong>
                 {outcome.deliveredHarvestUnits > 0 ? ` — brought home ${outcome.deliveredHarvestUnits} units` : ""}
                 {outcome.usedTaskCamp ? <Chip>task camp</Chip> : null}

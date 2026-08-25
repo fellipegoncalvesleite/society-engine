@@ -1434,6 +1434,7 @@ export interface PracticalAdaptationAdvanceInput {
   readonly band: Band; // pre-decision band (holds prior state)
   readonly currentTick: TickNumber;
   readonly moved: boolean;
+  /** Completed residential route distance in physical km. */
   readonly residentialMoveDistance: number;
   readonly crossedThisSeason: boolean;
   readonly latestMoveEvent?: ResidentialMoveEvent;

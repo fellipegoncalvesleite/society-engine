@@ -112,7 +112,7 @@ function ActivityCard({
         </div>
       )}
       <div className="activity-card-meta">
-        ~{trip.distanceTiles} tiles out · {duration} day{duration === 1 ? "" : "s"}
+        ~{Math.round(trip.distanceKm * 10) / 10} km out · {duration} day{duration === 1 ? "" : "s"}
         {similarCount > 0 ? ` · ${similarCount} more trip${similarCount === 1 ? "" : "s"} like this` : ""}
       </div>
     </button>

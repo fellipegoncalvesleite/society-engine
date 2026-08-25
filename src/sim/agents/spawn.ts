@@ -32,6 +32,11 @@ import {
   type CurrentLivingEcologyTileProjection,
 } from "../world/ecologicalProjection";
 
+// SCALE-1 provisional compatibility calibration: the legacy initial-band spacing gate was
+// 9 cells on the canonical 1.5-km raster, i.e. 13.5 km physical Euclidean separation.
+// This preserves Map-2 compatibility without making raster topology behavioral authority.
+const INITIAL_SPAWN_SEPARATION_KM = 13.5;
+
 interface SpawnProfile {
   readonly role: InitialSpawnProfileRole;
   readonly bandId: BandId;
@@ -891,7 +896,8 @@ function selectSpawnCandidate(
     .sort(compareSpawnCandidates);
 
   const separatedCandidate = rankedCandidates.find((candidate) =>
-    alreadySelected.every((selected) => tileDistance(candidate.tile, selected.tile) >= 9),
+    alreadySelected.every((selected) =>
+      getEuclideanPhysicalDistanceKm(world.config, candidate.tile.coord, selected.tile.coord) >= INITIAL_SPAWN_SEPARATION_KM),
   );
 
   return separatedCandidate ?? rankedCandidates[0];
@@ -1128,6 +1134,20 @@ function collectKnownTiles(world: WorldState, currentTile: Tile): readonly Known
 }
 
 /** Audit-only exposure of founder-local physical familiarity without constructing a Band. */
+export function deriveSpawnSeparationPhysicalAssessmentForAudit(
+  world: WorldState,
+  firstTileId: TileId,
+  secondTileId: TileId,
+): { readonly distanceKm: number; readonly eligible: boolean } | undefined {
+  const first = getTile(world, firstTileId);
+  const second = getTile(world, secondTileId);
+  if (first === undefined || second === undefined) {
+    return undefined;
+  }
+  const distanceKm = getEuclideanPhysicalDistanceKm(world.config, first.coord, second.coord);
+  return { distanceKm, eligible: distanceKm >= INITIAL_SPAWN_SEPARATION_KM };
+}
+
 export function deriveInitialLocalKnowledgeForAudit(
   world: WorldState,
   currentTileId: TileId,
@@ -1299,10 +1319,6 @@ function getInitialHealthProfile(): HealthProfile {
     injuryBurden: 0.06,
     mortalityRisk: 0.08,
   };
-}
-
-function tileDistance(first: Tile, second: Tile): number {
-  return Math.hypot(first.coord.x - second.coord.x, first.coord.y - second.coord.y);
 }
 
 function clamp01(value: number): number {

@@ -9,6 +9,7 @@ const server = await createServer({
 let out;
 try {
   const trips = await server.ssrLoadModule("/sim/agents/intraSeasonTrips.ts");
+  const acuteRisk = await server.ssrLoadModule("/sim/agents/acuteRisk.ts");
   const spawn = await server.ssrLoadModule("/sim/agents/spawn.ts");
   const decision = await server.ssrLoadModule("/sim/rules/bandDecision.ts");
   const verification = await server.ssrLoadModule("/sim/agents/frontierVerification.ts");
@@ -23,11 +24,17 @@ try {
   const storageSuitability = await server.ssrLoadModule("/sim/agents/storageSuitability.ts");
 
   const hasTripAssessment = typeof trips.deriveOrdinaryTripTargetAssessmentForAudit === "function";
+  const hasAcuteRiskRouteLoad = typeof acuteRisk.deriveAcuteRiskRouteLoadForAudit === "function";
+  const hasPhysicalHarvestTransportLoss = typeof trips.derivePhysicalHarvestTransportLossRateForAudit === "function";
+  const hasShadowTravelCost = typeof trips.deriveShadowTravelCostForAudit === "function";
   const hasLocalRecon = typeof trips.deriveStartingLocalReconTilesForAudit === "function";
   const hasSpawnKnowledge = typeof spawn.deriveInitialLocalKnowledgeForAudit === "function";
+  const hasSpawnSeparation = typeof spawn.deriveSpawnSeparationPhysicalAssessmentForAudit === "function";
   const hasFrontierProbe = typeof decision.deriveInferredFrontierProbeTargetForAudit === "function";
   const hasVerificationPhysical = typeof verification.deriveVerificationPhysicalAssessmentForAudit === "function";
   const hasReliefPhysical = typeof campMovement.derivePressureReliefPhysicalAssessmentForAudit === "function";
+  const hasCampMovementPhysical = typeof campMovement.deriveCampMovementPhysicalAssessmentForAudit === "function";
+  const hasDistanceRiskPhysical = typeof trips.deriveDistanceRiskKnownForAudit === "function";
   const hasFrontierClassifiers = typeof frontierExploration.deriveFrontierPhysicalClassifiersForAudit === "function";
   const hasResidencePhysical = typeof frontierResidence.deriveFrontierResidencePhysicalDistanceForAudit === "function";
   const hasRelocationPhysical = typeof bandHistory.deriveRelocationPhysicalDistanceForAudit === "function";
@@ -64,6 +71,10 @@ try {
   const spawn15 = hasSpawnKnowledge ? spawn.deriveInitialLocalKnowledgeForAudit(map15, "t0") : [];
   const spawn1MaxKm = Math.max(0, ...spawn1.map((row) => row.distanceKm ?? 0));
   const spawn15MaxKm = Math.max(0, ...spawn15.map((row) => row.distanceKm ?? 0));
+  const spawnSeparation12_1 = hasSpawnSeparation ? spawn.deriveSpawnSeparationPhysicalAssessmentForAudit(map1, "t0", "t12") : undefined;
+  const spawnSeparation12_15 = hasSpawnSeparation ? spawn.deriveSpawnSeparationPhysicalAssessmentForAudit(map15, "t0", "t8") : undefined;
+  const spawnSeparation15_1 = hasSpawnSeparation ? spawn.deriveSpawnSeparationPhysicalAssessmentForAudit(map1, "t0", "t15") : undefined;
+  const spawnSeparation15_15 = hasSpawnSeparation ? spawn.deriveSpawnSeparationPhysicalAssessmentForAudit(map15, "t0", "t10") : undefined;
 
   // Same physical 6 km inferred target: 6 cells at 1 km, 4 cells at 1.5 km.
   const frontierBand1 = makeFrontierBand("t0", 6, "near_water_margin_inference");
@@ -85,6 +96,14 @@ try {
   const reliefBand15 = makeBand("t0", observedThrough(13));
   const relief1 = hasReliefPhysical ? campMovement.derivePressureReliefPhysicalAssessmentForAudit(map1, reliefBand1, "t3") : undefined;
   const relief15 = hasReliefPhysical ? campMovement.derivePressureReliefPhysicalAssessmentForAudit(map15, reliefBand15, "t2") : undefined;
+  const campMove1 = hasCampMovementPhysical ? campMovement.deriveCampMovementPhysicalAssessmentForAudit(map1, "t0", "t3") : undefined;
+  const campMove15 = hasCampMovementPhysical ? campMovement.deriveCampMovementPhysicalAssessmentForAudit(map15, "t0", "t2") : undefined;
+  const distanceRiskAt12 = hasDistanceRiskPhysical ? trips.deriveDistanceRiskKnownForAudit({
+    physicallyAtTarget: false, estimatedDurationDays: 2, distanceKm: 12, effectiveAccessConfidence: 0.2, desperationFoodOverride: false,
+  }) : undefined;
+  const distanceRiskBelow12 = hasDistanceRiskPhysical ? trips.deriveDistanceRiskKnownForAudit({
+    physicallyAtTarget: false, estimatedDurationDays: 2, distanceKm: 11.9, effectiveAccessConfidence: 0.2, desperationFoodOverride: false,
+  }) : undefined;
   const frontierClassifier1 = hasFrontierClassifiers ? frontierExploration.deriveFrontierPhysicalClassifiersForAudit(map1, withAnchor(reliefBand1, 0.5), "t3") : undefined;
   const frontierClassifier15 = hasFrontierClassifiers ? frontierExploration.deriveFrontierPhysicalClassifiersForAudit(map15, withAnchor(reliefBand15, 0.5), "t2") : undefined;
   const residence1 = hasResidencePhysical ? frontierResidence.deriveFrontierResidencePhysicalDistanceForAudit(map1, "t0", "t6") : undefined;
@@ -104,10 +123,26 @@ try {
   const storageCrossing1 = hasStorageCrossingPhysical ? storageSuitability.deriveCrossingPhysicalDistanceScoreForAudit(map1, "t0", "t6", "t3", "t3") : undefined;
   const storageCrossing15 = hasStorageCrossingPhysical ? storageSuitability.deriveCrossingPhysicalDistanceScoreForAudit(map15, "t0", "t4", "t2", "t2") : undefined;
 
+  // Same 6 km OUTBOUND physical trip represented by different raster counts. The historical
+  // record's physical distance is authoritative; raw round-trip cell telemetry must be inert.
+  const physicalTrip1 = { distanceKm: 6, roundTripTiles: 12, estimatedDurationDays: 2 };
+  const physicalTrip15 = { distanceKm: 6, roundTripTiles: 8, estimatedDurationDays: 2 };
+  const cellCountMutation = { distanceKm: 6, roundTripTiles: 999, estimatedDurationDays: 2 };
+  const acuteRouteLoad1 = hasAcuteRiskRouteLoad ? acuteRisk.deriveAcuteRiskRouteLoadForAudit(physicalTrip1) : undefined;
+  const acuteRouteLoad15 = hasAcuteRiskRouteLoad ? acuteRisk.deriveAcuteRiskRouteLoadForAudit(physicalTrip15) : undefined;
+  const acuteRouteLoadMutation = hasAcuteRiskRouteLoad ? acuteRisk.deriveAcuteRiskRouteLoadForAudit(cellCountMutation) : undefined;
+  const transportLoss1 = hasPhysicalHarvestTransportLoss ? trips.derivePhysicalHarvestTransportLossRateForAudit(physicalTrip1) : undefined;
+  const transportLoss15 = hasPhysicalHarvestTransportLoss ? trips.derivePhysicalHarvestTransportLossRateForAudit(physicalTrip15) : undefined;
+  const transportLossMutation = hasPhysicalHarvestTransportLoss ? trips.derivePhysicalHarvestTransportLossRateForAudit(cellCountMutation) : undefined;
+  const shadowTravelCost1 = hasShadowTravelCost ? trips.deriveShadowTravelCostForAudit(physicalTrip1) : undefined;
+  const shadowTravelCost15 = hasShadowTravelCost ? trips.deriveShadowTravelCostForAudit(physicalTrip15) : undefined;
+  const shadowTravelCostMutation = hasShadowTravelCost ? trips.deriveShadowTravelCostForAudit(cellCountMutation) : undefined;
+
   const checks = {
     auditSeamsExist:
-      hasTripAssessment && hasLocalRecon && hasSpawnKnowledge && hasFrontierProbe &&
-      hasVerificationPhysical && hasReliefPhysical && hasFrontierClassifiers &&
+      hasTripAssessment && hasAcuteRiskRouteLoad && hasPhysicalHarvestTransportLoss && hasShadowTravelCost &&
+      hasLocalRecon && hasSpawnKnowledge && hasSpawnSeparation && hasFrontierProbe &&
+      hasVerificationPhysical && hasReliefPhysical && hasCampMovementPhysical && hasDistanceRiskPhysical && hasFrontierClassifiers &&
       hasResidencePhysical && hasRelocationPhysical && hasExpeditionHorizon &&
       hasKnownMovePhysical && hasFissionPhysical && hasAccessNormPhysical &&
       hasProtoCampPhysical && hasStorageCrossingPhysical,
@@ -120,12 +155,29 @@ try {
     ordinaryTripScoreCostPhysical:
       nearlyEqual(trip1?.distancePenalty, trip15?.distancePenalty, 0.02) &&
       nearlyEqual(trip1?.travelCost, trip15?.travelCost, 0.02),
+    acuteRiskRouteLoadPhysical:
+      nearlyEqual(acuteRouteLoad1, acuteRouteLoad15, 1e-9) &&
+      nearlyEqual(acuteRouteLoad1, acuteRouteLoadMutation, 1e-9) &&
+      nearlyEqual(acuteRouteLoad1, 12 / 18, 1e-9),
+    physicalHarvestTransportLossPhysical:
+      nearlyEqual(transportLoss1, transportLoss15, 1e-9) &&
+      nearlyEqual(transportLoss1, transportLossMutation, 1e-9) &&
+      nearlyEqual(transportLoss1, 12 * 0.008, 1e-9),
+    shadowTravelCostPhysical:
+      nearlyEqual(shadowTravelCost1, shadowTravelCost15, 1e-9) &&
+      nearlyEqual(shadowTravelCost1, shadowTravelCostMutation, 1e-9) &&
+      nearlyEqual(shadowTravelCost1, 12 / 150 + 0.02, 1e-9),
     physicallyTooLongFailsBoth: tooLong1?.eligible === false && tooLong15?.eligible === false,
     highCostCloseTripFailsBoth: costly1?.eligible === false && costly15?.eligible === false,
     localReconPhysicalEnvelopeEquivalent:
       nearlyEqual(localRecon1MaxKm, localRecon15MaxKm, 0.51) && localRecon1MaxKm >= 2.5 && localRecon15MaxKm >= 2.5,
     spawnKnowledgePhysicalEnvelopeEquivalent:
       nearlyEqual(spawn1MaxKm, spawn15MaxKm, 0.51) && spawn1MaxKm >= 2.5 && spawn15MaxKm >= 2.5,
+    spawnSeparationPhysicalEquivalent:
+      spawnSeparation12_1?.eligible === false && spawnSeparation12_15?.eligible === false &&
+      spawnSeparation15_1?.eligible === true && spawnSeparation15_15?.eligible === true &&
+      nearlyEqual(spawnSeparation12_1?.distanceKm, spawnSeparation12_15?.distanceKm, 1e-6) &&
+      nearlyEqual(spawnSeparation15_1?.distanceKm, spawnSeparation15_15?.distanceKm, 1e-6),
     frontierProbeEquivalentEligibility:
       frontier1?.tileId === "t6" && frontier15?.tileId === "t4" &&
       nearlyEqual(frontier1?.physicalDistanceKm, frontier15?.physicalDistanceKm, 1e-6),
@@ -145,6 +197,12 @@ try {
       relief1?.reachable === relief15?.reachable &&
       nearlyEqual(relief1?.physicalDistanceKm, relief15?.physicalDistanceKm, 1e-6) &&
       nearlyEqual(relief1?.travelTimeDays, relief15?.travelTimeDays, 0.02),
+    campMovementPhysicalEquivalent:
+      campMove1?.localShiftEligible === true && campMove15?.localShiftEligible === true &&
+      campMove1?.microShift === false && campMove15?.microShift === false &&
+      nearlyEqual(campMove1?.distanceKm, campMove15?.distanceKm, 1e-6),
+    uncertainLongRouteUsesPhysicalDistance:
+      distanceRiskAt12 === true && distanceRiskBelow12 === false,
     frontierPhysicalClassifiersEquivalent:
       frontierClassifier1?.insideParentCatchment === frontierClassifier15?.insideParentCatchment &&
       frontierClassifier1?.anchorFarEnough === frontierClassifier15?.anchorFarEnough &&
@@ -186,12 +244,17 @@ try {
       trip1, trip15, tooLong1, tooLong15, costly1, costly15,
       localRecon1, localRecon15, localRecon1MaxKm, localRecon15MaxKm,
       spawn1, spawn15, spawn1MaxKm, spawn15MaxKm,
+      spawnSeparation12_1, spawnSeparation12_15, spawnSeparation15_1, spawnSeparation15_15,
       frontier1, frontier15, side1, side15, farFrontier1, farFrontier15,
-      verification1, verification15, relief1, relief15,
+      verification1, verification15, relief1, relief15, campMove1, campMove15,
+      distanceRiskAt12, distanceRiskBelow12,
       frontierClassifier1, frontierClassifier15, residence1, residence15,
       relocation1, relocation15, expeditionHorizon1, expeditionHorizon15,
       knownMove1, knownMove15, fission1, fission15, accessNorm1, accessNorm15,
       protoCamp1, protoCamp15, storageCrossing1, storageCrossing15,
+      acuteRouteLoad1, acuteRouteLoad15, acuteRouteLoadMutation,
+      transportLoss1, transportLoss15, transportLossMutation,
+      shadowTravelCost1, shadowTravelCost15, shadowTravelCostMutation,
     },
   };
 } finally {

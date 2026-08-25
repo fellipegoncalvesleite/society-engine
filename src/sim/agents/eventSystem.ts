@@ -590,7 +590,7 @@ function residentialMoveDraft(band: Band, event: ResidentialMoveEvent): Canonica
     endYear: estimateYearFromTick(event.tick, band),
     season: event.season,
     title: residentialMoveTitle(event),
-    summary: `${residentialMoveSummary(event)} ${formatMoveDistance(event.distanceTiles)} and ${residentialMoveStatusLine(event)}.`,
+    summary: `${residentialMoveSummary(event)} ${formatMoveDistance(event.distanceKm)} and ${residentialMoveStatusLine(event)}.`,
     consequence: "This records a camp move that already happened; it does not steer future movement.",
     actualCause: residentialMoveCauseLine(event.cause),
     severity: event.hardshipRisk ?? 0.35,
@@ -604,7 +604,7 @@ function residentialMoveDraft(band: Band, event: ResidentialMoveEvent): Canonica
     sourceReasonIds: capIds(event.reasonIds, SOURCE_ID_CAP),
     sourceHistoryIds: [],
     evidenceChips: [
-      { kind: "move", label: `${event.distanceTiles} tile move`, sourceIds: [String(event.eventId)] },
+      { kind: "move", label: `${Math.round(event.distanceKm * 10) / 10} km move`, sourceIds: [String(event.eventId)] },
       { kind: "status", label: humanizeKey(event.status), sourceIds: [] },
     ],
     chronicleLinkIds: [`event:${String(event.eventId)}`],
@@ -1600,8 +1600,8 @@ function residentialMoveSummary(event: ResidentialMoveEvent): string {
   }
 }
 
-function formatMoveDistance(distanceTiles: number): string {
-  return distanceTiles === 1 ? "It moved 1 tile" : `It moved ${distanceTiles} tiles`;
+function formatMoveDistance(distanceKm: number): string {
+  return `It moved ${Math.round(distanceKm * 10) / 10} km`;
 }
 
 function residentialMoveStatusLine(event: ResidentialMoveEvent): string {

@@ -113,6 +113,7 @@ import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
 import { getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
 import { deriveTravelPace, type TravelContext } from "./bandMobility";
+import { getTripRoundTripDistanceKm } from "./tripDistance";
 import { getRoutePhysicalLengthKm, getRouteTravelTimeDays } from "./traversal";
 
 const TRIP_DAY_CADENCE = 3;
@@ -128,6 +129,13 @@ const INTRA_SEASON_ACTIVITY_WORK_DAYS = 0.25;
 const STARTING_LOCAL_RECON_MAX_DISTANCE_KM = 3;
 /** Legacy two-cell Map-2 distinction, now stated honestly in physical units. */
 const LOCAL_FORAGING_LOOP_MAX_DISTANCE_KM = 3;
+// SCALE-1 provisional compatibility calibration. Legacy physical-harvest transport loss was
+// 0.012 per round-trip cell on the canonical 1.5-km raster, i.e. 0.008 per round-trip km.
+// This is not a universal transport-physiology coefficient.
+const TRANSPORT_LOSS_RATE_PER_ROUND_TRIP_KM = 0.008;
+// SCALE-1 provisional compatibility calibration: legacy uncertain-route memory gating used
+// eight cells on the canonical 1.5-km raster, i.e. 12 km outbound physical route distance.
+const UNCERTAIN_LONG_ROUTE_DISTANCE_KM = 12;
 const STARTING_LOCAL_RECON_OBSERVED_TILE_CAP = 6;
 const RECENT_TRIP_RECORD_CAP = 24;
 const RECENT_ACTIVITY_GROUP_SUMMARY_CAP = 8;
@@ -831,6 +839,12 @@ function markVisibleLandscapeCueChecked(
     : band.visibleLandscapeCues;
 }
 
+export function derivePhysicalHarvestTransportLossRateForAudit(
+  record: Pick<IntraSeasonTripRecord, "distanceKm" | "roundTripTiles">,
+): number {
+  return Math.min(0.25, getTripRoundTripDistanceKm(record) * TRANSPORT_LOSS_RATE_PER_ROUND_TRIP_KM);
+}
+
 function resolvePhysicalFoodHarvest(
   world: WorldState,
   record: IntraSeasonTripRecord,
@@ -853,7 +867,7 @@ function resolvePhysicalFoodHarvest(
   const activityEligible = !verifyOnly && routeReached && isPhysicalFoodReturnKind(record.resourceReturn.returnedResourceKind) &&
     record.resourceReturn.estimatedReturnValue > 0;
   const requestedAmount = record.resourceReturn.estimatedReturnValue;
-  const transportLossRate = Math.min(0.25, record.roundTripTiles * 0.012);
+  const transportLossRate = derivePhysicalHarvestTransportLossRateForAudit(record);
   const knownness: PhysicalFoodHarvestRecord["knownness"] = record.resourceReturn.returnConfidence >= 0.42
     ? "known_target"
     : "stale_or_inferred_target";
@@ -1531,6 +1545,7 @@ function buildTripRecord(
     ? derivePhysicalRoundTripTiming(world, band, pathTiles, INTRA_SEASON_ACTIVITY_WORK_DAYS)
     : candidate.timing;
   const estimatedDurationDays = timing.durationDays;
+  const physicalDistanceKm = round4(getRoutePhysicalLengthKm(world, pathTiles));
   const roundTripTiles = Math.max(0, pathTiles.length - 1) * 2; // TOPOLOGICAL telemetry only.
   const outcome = classifyOutcome(estimatedDurationDays);
   const movementType = deriveMovementType(candidate.cause, outcome, candidate.physicalDistanceKm);
@@ -1633,7 +1648,7 @@ function buildTripRecord(
     endDay,
     activityStatus: "completed_observation",
     distanceTiles: candidate.distanceTiles,
-    distanceKm: round4(getRoutePhysicalLengthKm(world, pathTiles)),
+    distanceKm: physicalDistanceKm,
     estimatedDurationDays,
     cause: candidate.cause,
     movementType,
@@ -1648,7 +1663,7 @@ function buildTripRecord(
       taskGroupType,
       estimatedPeopleCount,
       estimatedDurationDays,
-      roundTripTiles,
+      physicalDistanceKm,
       outcome,
       outcomeDetail.activityOutcome,
       effectiveResourceReturn,
@@ -1886,6 +1901,20 @@ function finalizePlantPatchTrace(
   };
 }
 
+export function deriveDistanceRiskKnownForAudit(input: {
+  readonly physicallyAtTarget: boolean;
+  readonly estimatedDurationDays: number;
+  readonly distanceKm: number;
+  readonly effectiveAccessConfidence: number;
+  readonly desperationFoodOverride: boolean;
+}): boolean {
+  return !input.physicallyAtTarget &&
+    input.estimatedDurationDays > 1 &&
+    input.distanceKm >= UNCERTAIN_LONG_ROUTE_DISTANCE_KM &&
+    input.effectiveAccessConfidence < 0.35 &&
+    !input.desperationFoodOverride;
+}
+
 function deriveActivityOutcomeDetail(
   candidate: TripCandidate,
   taskGroupType: IntraSeasonTripTaskGroupType,
@@ -1913,12 +1942,13 @@ function deriveActivityOutcomeDetail(
     effective.effectivePresenceConfidence >= 0.18;
   // EXPEDITIONARY-4 §5 — "will we even get there?" is not a question for a party that
   // is already standing at the target; physical access was resolved by the walked route.
-  const distanceRiskKnown =
-    !physicallyAtTarget &&
-    estimatedDurationDays > 1 &&
-    candidate.distanceTiles >= 8 &&
-    effective.effectiveAccessConfidence < 0.35 &&
-    !desperationFoodOverride;
+  const distanceRiskKnown = deriveDistanceRiskKnownForAudit({
+    physicallyAtTarget,
+    estimatedDurationDays,
+    distanceKm: candidate.physicalDistanceKm,
+    effectiveAccessConfidence: effective.effectiveAccessConfidence,
+    desperationFoodOverride,
+  });
   const lowMemoryConfidenceThreshold = isFoodClass(candidate.memory.resourceClassId)
     ? Math.max(0.14, LOW_MEMORY_CONFIDENCE_THRESHOLD - riskToleranceModifier * 0.55)
     : LOW_MEMORY_CONFIDENCE_THRESHOLD;
@@ -2152,10 +2182,28 @@ const SHADOW_TASK_RELIABILITY: Record<IntraSeasonTripTaskGroupType, number> = {
   water_group: 0.85,
   memory_refresh_group: 0.9,
 };
-const SHADOW_TRAVEL_RATE_PER_TILE = 0.01;
+// SCALE-1 provisional compatibility calibration. Legacy shadow travel cost was 0.01 per
+// round-trip cell on the canonical 1.5-km raster, equivalent to 1/150 per round-trip km.
+// This is a model compatibility coefficient, not a universal travel-cost law.
+const SHADOW_TRAVEL_RATE_PER_ROUND_TRIP_KM = 1 / 150;
 const SHADOW_OVERNIGHT_TRAVEL_COST = 0.02;
 const SHADOW_MAX_TRAVEL_COST = 0.25;
 const SHADOW_MAX_RISK_PENALTY = 0.2;
+
+function deriveShadowTravelCost(outboundDistanceKm: number, estimatedDurationDays: number): number {
+  const overnight = estimatedDurationDays > 1;
+  return Math.min(
+    SHADOW_MAX_TRAVEL_COST,
+    getTripRoundTripDistanceKm({ distanceKm: outboundDistanceKm }) * SHADOW_TRAVEL_RATE_PER_ROUND_TRIP_KM +
+      (overnight ? SHADOW_OVERNIGHT_TRAVEL_COST * (estimatedDurationDays - 1) : 0),
+  );
+}
+
+export function deriveShadowTravelCostForAudit(
+  record: Pick<IntraSeasonTripRecord, "distanceKm" | "roundTripTiles" | "estimatedDurationDays">,
+): number {
+  return deriveShadowTravelCost(record.distanceKm, record.estimatedDurationDays);
+}
 
 function deriveShadowReturnKind(
   returnedResourceKind: ActivityReturnResourceKind,
@@ -2209,7 +2257,7 @@ function deriveShadowSubsistenceRecord(
   taskGroupType: IntraSeasonTripTaskGroupType,
   estimatedPeopleCount: number,
   estimatedDurationDays: number,
-  roundTripTiles: number,
+  outboundDistanceKm: number,
   tripOutcome: IntraSeasonTripOutcome,
   activityOutcome: IntraSeasonTripActivityResult,
   resourceReturn: ActivityResourceReturnRecord,
@@ -2247,10 +2295,7 @@ function deriveShadowSubsistenceRecord(
     shadowGrossValue = SHADOW_WATER_SUPPORT_RATE * estimatedPeopleCount * patchConfidence * ecologyModifier;
   }
 
-  const shadowTravelCost = Math.min(
-    SHADOW_MAX_TRAVEL_COST,
-    SHADOW_TRAVEL_RATE_PER_TILE * roundTripTiles + (overnight ? SHADOW_OVERNIGHT_TRAVEL_COST * (estimatedDurationDays - 1) : 0),
-  );
+  const shadowTravelCost = deriveShadowTravelCost(outboundDistanceKm, estimatedDurationDays);
   const shadowRiskPenalty = Math.min(
     SHADOW_MAX_RISK_PENALTY,
     predatorRisk * 0.08 + (badWater ? 0.05 : 0) + (badReaction ? 0.05 : 0) + (overnight ? 0.02 : 0),
@@ -3855,8 +3900,9 @@ function deriveObjective(cause: IntraSeasonTripCause): IntraSeasonTripObjective 
  *   - if no passable route exists, we return a single-tile (non-drawable) path rather
  *     than draw a fake water crossing.
  *
- * `targetTileId`/`distanceTiles`/`roundTripTiles` (and therefore the shadow economy)
- * are unchanged — only the drawn breadcrumb `pathTiles`/`tilesCrossed` become honest.
+ * `targetTileId`/`distanceTiles`/`roundTripTiles` remain topological record fields. Physical
+ * distance-based behavior (including the shadow economy) reads canonical `distanceKm`.
+ * Only the drawn breadcrumb `pathTiles`/`tilesCrossed` is reconstructed here.
  */
 function buildOutboundPathTiles(
   world: WorldState,

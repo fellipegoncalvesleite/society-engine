@@ -7488,7 +7488,10 @@ export interface LocalCampShiftRecord {
   readonly tick: TickNumber;
   readonly fromTileId: TileId;
   readonly toTileId: TileId;
+  /** Topological cell distance retained for diagnostics only. */
   readonly distance: number;
+  /** Canonical physical endpoint distance in km. */
+  readonly distanceKm: number;
   readonly reason: string;
   readonly outcome: EstablishmentOutcome;
   readonly confidence: NormalizedIntensity;

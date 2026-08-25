@@ -114,8 +114,7 @@ export function Doing({
                     {moveKindLabel(move.moveKind)} — {moveStatusLabel(move.status)}
                   </span>
                   <span className="recent-event-desc">
-                    Because {moveCauseLabel(move.cause)}, over {Math.max(1, Math.round(move.distanceTiles))} tile
-                    {Math.round(move.distanceTiles) === 1 ? "" : "s"} in about {Math.max(1, Math.round(move.durationDays))} day
+                    Because {moveCauseLabel(move.cause)}, over {Math.round(move.distanceKm * 10) / 10} km in about {Math.max(1, Math.round(move.durationDays))} day
                     {Math.round(move.durationDays) === 1 ? "" : "s"}.
                     {move.hardshipReason === undefined ? "" : ` The hard part: ${move.hardshipReason} — ${hardshipOutcomeLabel(move.hardshipOutcome)}.`}
                     {group.count > 1 ? ` The same kind of move repeated ${group.count} times recently.` : ""}

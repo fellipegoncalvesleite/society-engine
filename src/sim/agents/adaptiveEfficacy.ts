@@ -81,7 +81,7 @@ export interface CampShiftOutcomeContext {
   readonly priorCampUsePressure: number;
   // Band-known wear at the tile the residence ends the season on.
   readonly newCampUsePressure: number;
-  // Grid distance of the realized residential move (0 = held).
+  // Completed physical route distance in km for the realized residential move (0 = held).
   readonly moveDistance: number;
   // A seasonal travel plan (staged migration walk) drove this move.
   readonly travelEngaged: boolean;
@@ -335,10 +335,10 @@ export function evaluateCampCareEfficacy(input: CampCareEfficacyInput): Efficacy
     preEffectValue: round2(context.priorCampUsePressure),
   };
 
-  // The matching response is a LOCAL one-tile residential shift made without a
-  // seasonal travel motive. Longer or travel-motivated moves address other
-  // pressures; crediting camp care for them would repeat the movement bug.
-  const localShift = input.moved && context.moveDistance === 1 && !context.travelEngaged;
+  // The matching response is a LOCAL residential shift within the legacy one-cell
+  // compatibility envelope, now stated physically as <=1.5 km. Longer or
+  // travel-motivated moves address other pressures.
+  const localShift = input.moved && context.moveDistance <= 1.5 + 1e-9 && !context.travelEngaged;
 
   if (localShift) {
     const wearDrop = round2(context.priorCampUsePressure - context.newCampUsePressure);
@@ -422,6 +422,7 @@ export interface CarryingOutcomeContext {
   readonly conditionPresent: boolean;
   readonly budgetWithRelief: number;
   readonly budgetWithoutRelief: number;
+  /** Completed physical residential route distance in km. */
   readonly moveDistance: number;
   readonly stagedLegIncomplete: boolean;
   // Realized hardship of the residential move event (record built this tick).
