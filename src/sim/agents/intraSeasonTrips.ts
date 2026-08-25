@@ -96,7 +96,11 @@ import {
   formSideCountryResourceMemory,
 } from "./resourceScoutObservation";
 import { appendRecentScoutLearning } from "./resourceScout";
-import { observeTileAndNearby } from "./tileObservation";
+import {
+  collectDirectObservationTargets,
+  observeTileAndNearby,
+  type ObservationTarget,
+} from "./tileObservation";
 import { recordProbe } from "./probeMemory";
 import { markVisibleLandscapeCueProbeChecked } from "./landscapeVisibility";
 import { advanceExploitationSkill } from "./exploitationSkill";
@@ -621,7 +625,7 @@ function executePendingInvestigation(
   }
 
   // (8) LEGITIMATE OBSERVATION. Only here, and only through the canonical writer.
-  const observationTargets = collectInvestigationObservationTargets(world, routeTiles, target);
+  const observationTargets = collectInvestigationObservationTargets(world, routeTiles);
   const observedTileIds = observationTargets.map((entry) => entry.tile.id);
   const newTilesObserved = observedTileIds.some((id) => band.knowledge.observedTiles[id] === undefined);
   const updatedKnowledge = observeTileAndNearby(world, band.knowledge, observationTargets);
@@ -661,61 +665,35 @@ function executePendingInvestigation(
 }
 
 /**
- * What a party that walked there and stood there legitimately perceives.
- *
- * Each tile it physically occupied is observed at distance 0 (`tileObservation.ts:259-268`
- * — confidence 1.0, a real visit) and that tile's 4-neighbours at distance 1 (0.68). No
- * second ring: standing somewhere does not teach the country two tiles beyond it.
- *
- * This is MORE per event than the removed free chain granted (target at 0.68, ring at
- * 0.34, for nobody) and it is granted only to parties that actually arrived. Understating
- * it to make the diff look conservative would be its own falsification.
+ * What a party that physically walked the route can directly perceive from each stand.
+ * Candidate geometry and confidence are owned by tileObservation's physical-km authority;
+ * the investigation still earns nothing until the route/time executor confirms arrival.
  */
 function collectInvestigationObservationTargets(
   world: WorldState,
   routeTiles: readonly TileId[],
-  target: Tile,
-): readonly { readonly tile: Tile; readonly distance: number }[] {
-  const byTileId = new Map<TileId, { readonly tile: Tile; readonly distance: number }>();
-  const stood: Tile[] = [];
+): readonly ObservationTarget[] {
+  const byTileId = new Map<TileId, ObservationTarget>();
 
   for (const tileId of routeTiles) {
-    const tile = world.tiles[tileId];
-
-    if (tile !== undefined) {
-      stood.push(tile);
+    const stoodTile = world.tiles[tileId];
+    if (stoodTile === undefined) {
+      continue;
     }
-  }
 
-  // An aquatic target is looked AT from the shore rather than stood upon; the walked route
-  // already ends on that shore tile, so the target itself joins at distance 1.
-  const targetStoodUpon = routeTiles[routeTiles.length - 1] === target.id;
-
-  for (const tile of stood) {
-    byTileId.set(tile.id, { tile, distance: 0 });
-  }
-
-  if (!targetStoodUpon && !byTileId.has(target.id)) {
-    byTileId.set(target.id, { tile: target, distance: 1 });
-  }
-
-  for (const tile of stood) {
-    for (const neighborId of tile.neighbors) {
-      const neighbor = world.tiles[neighborId];
-
-      if (neighbor === undefined || byTileId.has(neighborId) || getGridDistance(tile, neighbor) !== 1) {
-        continue;
+    for (const target of collectDirectObservationTargets(world, stoodTile)) {
+      const existing = byTileId.get(target.tile.id);
+      if (existing === undefined || target.distanceKm < existing.distanceKm) {
+        byTileId.set(target.tile.id, target);
       }
-
-      byTileId.set(neighborId, { tile: neighbor, distance: 1 });
     }
   }
 
   return Array.from(byTileId.values())
     .sort((left, right) =>
-      left.distance === right.distance
+      left.distanceKm === right.distanceKm
         ? String(left.tile.id).localeCompare(String(right.tile.id))
-        : left.distance - right.distance,
+        : left.distanceKm - right.distanceKm,
     )
     .slice(0, INVESTIGATION_OBSERVATION_CAP);
 }
@@ -3538,6 +3516,44 @@ export interface PhysicalRoundTripTiming {
   readonly durationDays: number;
   readonly sameDay: boolean;
   readonly kmPerTravelDay: number;
+}
+
+export interface InvestigationSameDayLowerBound {
+  readonly straightLineDistanceKm: number;
+  readonly kmPerTravelDay: number;
+  readonly activityDays: number;
+  readonly minimumRoundTripTravelDays: number;
+  readonly minimumTotalDays: number;
+  readonly sameDayPossible: boolean;
+}
+
+/**
+ * SCALE-1 Task 5 — a perception-only eligibility lower bound for a selected
+ * reconnaissance party. This deliberately does NOT construct a route or infer
+ * crossing knowledge. It only rejects a cue when even an ideal straight-line
+ * round trip, using the executor's own party pace and on-site work allowance,
+ * cannot fit the same-day contract. Actual feasibility remains the walked route.
+ */
+export function deriveInvestigationSameDayLowerBound(
+  band: Band,
+  straightLineDistanceKm: number,
+): InvestigationSameDayLowerBound {
+  const kmPerTravelDay = deriveTravelPace(band, "selected_reconnaissance_party").kmPerTravelDay;
+  const validDistance = Number.isFinite(straightLineDistanceKm) && straightLineDistanceKm >= 0;
+  const minimumRoundTripTravelDays =
+    validDistance && kmPerTravelDay > 0
+      ? (straightLineDistanceKm * 2) / kmPerTravelDay
+      : Number.POSITIVE_INFINITY;
+  const minimumTotalDays = minimumRoundTripTravelDays + INTRA_SEASON_ACTIVITY_WORK_DAYS;
+
+  return {
+    straightLineDistanceKm,
+    kmPerTravelDay,
+    activityDays: INTRA_SEASON_ACTIVITY_WORK_DAYS,
+    minimumRoundTripTravelDays,
+    minimumTotalDays,
+    sameDayPossible: Number.isFinite(minimumTotalDays) && minimumTotalDays <= 1 + 1e-9,
+  };
 }
 
 /**

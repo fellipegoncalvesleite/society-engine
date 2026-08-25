@@ -81,7 +81,7 @@ try {
   const apply = (k, tile, acq, times) => {
     let cur = k;
     for (let i = 0; i < times; i += 1) {
-      cur = tileObs.observeTileAndNearby(world, cur, [{ tile, distance: 0 }], acq);
+      cur = tileObs.observeTileAndNearby(world, cur, [{ tile, distanceKm: 0 }], acq);
     }
     return cur.observedTiles[tile.id];
   };
@@ -190,14 +190,14 @@ try {
   const resid = apply(emptyKnowledge, t0, "residential_observation", 20);
   // upgrade: shallow first, then a real residential observation
   const upgradeStart = tileObs.observeTileAndNearby(
-    world, emptyKnowledge, [{ tile: t0, distance: 0 }], "returned_frontier_exploration");
+    world, emptyKnowledge, [{ tile: t0, distanceKm: 0 }], "returned_frontier_exploration");
   const upgraded = tileObs.observeTileAndNearby(
-    world, upgradeStart, [{ tile: t0, distance: 0 }], "residential_observation").observedTiles[t0.id];
+    world, upgradeStart, [{ tile: t0, distanceKm: 0 }], "residential_observation").observedTiles[t0.id];
   // downgrade guard: residential first, then a party walks past
   const downStart = tileObs.observeTileAndNearby(
-    world, emptyKnowledge, [{ tile: t0, distance: 0 }], "residential_observation");
+    world, emptyKnowledge, [{ tile: t0, distanceKm: 0 }], "residential_observation");
   const notDowngraded = tileObs.observeTileAndNearby(
-    world, downStart, [{ tile: t0, distance: 0 }], "returned_frontier_exploration").observedTiles[t0.id];
+    world, downStart, [{ tile: t0, distanceKm: 0 }], "returned_frontier_exploration").observedTiles[t0.id];
 
   const conclusions = {
     shallowDiffersFromResidence:

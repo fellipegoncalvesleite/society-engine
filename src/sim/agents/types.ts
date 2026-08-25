@@ -2328,6 +2328,8 @@ export interface ReceivedSmokeSignal {
   /** Approximate direction/distance only — smoke is a column on the horizon, not a report. */
   readonly direction: LandscapeVisibilityDirection;
   readonly distanceBand: "near" | "middle" | "far";
+  /** Physical source-to-camp separation from the world's spatial geometry. */
+  readonly distanceKm: number;
   readonly outcome: SmokeSignalOutcome;
   /** Present ONLY when seen_understood (a planned same-band convention). */
   readonly meaning?: SmokeSignalMeaning;
@@ -5564,7 +5566,10 @@ export interface VisibleLandscapeCue {
   readonly approximateTileId: TileId;
   readonly kind: LandscapeVisibilityCueKind;
   readonly direction: LandscapeVisibilityDirection;
+  /** Topological/debug separation only; not a physical visibility authority. */
   readonly distanceTiles: number;
+  /** Physical cue distance from the world's spatial geometry. */
+  readonly distanceKm: number;
   readonly confidence: NormalizedIntensity;
   readonly status: LandscapeVisibilityCueStatus;
   readonly blockedByTerrain: boolean;

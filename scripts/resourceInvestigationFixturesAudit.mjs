@@ -230,12 +230,13 @@ try {
       riskCharged: false,
       durationDays: null,
       laborChargeBasis:
-        "resourceScout.ts:419 laborCost = clamp01(0.2 + distance/SCOUT_MAX_DISTANCE*0.5 + (1-capacity)*0.3) is a normalized score term consumed by movementCost and the VOI weighting; it debits no labour pool.",
+        "resourceScout laborCost uses a bounded score from physical-km distanceCost plus scout capacity; it debits no labour pool. Physical party labour is charged only by the investigation executor.",
       stockDrawn: null,
       cargo: null,
       physicalReceipt: null,
-      maxSelectableDistanceTiles: 10,
-      maxSelectableDistanceBasis: "resourceScout.ts:50 SCOUT_MAX_DISTANCE = 10",
+      maxSelectableDistanceTiles: null,
+      maxSelectableDistanceBasis:
+        "No selector radius: the bounded known-memory scan uses physical-km distance only as a smooth cost. Route availability and physical round-trip timing decide execution reach.",
     };
 
     // A1 passes when the fixture correctly establishes what the action IS: an

@@ -2916,7 +2916,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       [...new Set(tileIds)]
         .map((tileId) => currentWorld.tiles[tileId])
         .filter((tile): tile is NonNullable<typeof tile> => tile !== undefined)
-        .map((tile) => ({ tile, distance: 0 }));
+        .map((tile) => ({ tile, distanceKm: 0 }));
     // CORRECTION-18 §7 ARM A — physical exploration WITHOUT residential transfer. The
     // party still departs, still commits its workers, still eats its provisions and still
     // walks every step; only the knowledge hand-off is suppressed. That isolates the

@@ -45,9 +45,12 @@ import type { ExploitationSkillState } from "./exploitationSkill";
 // residential position, and it never assumes the band understands edibility / processing
 // / safety (knowing a patch exists is not knowing how to exploit it).
 
-// Bounded scouting envelope (Manhattan tiles) and the minimum value-of-information a
-// candidate must clear to be worth a scout. EMPIRICAL CALIBRATION CONSTANTS (2K.1H).
-const SCOUT_MAX_DISTANCE = 10;
+// Scout target search is already technically bounded by the band's capped patch-memory list.
+// There is no universal cell-count or kilometre reach gate here: physical feasibility is
+// decided by the route + round-trip timing executor before any observation can be written.
+// This km scale shapes only the smooth cost of considering a farther KNOWN belief; it never
+// makes a target reachable or unreachable.
+const SCOUT_DISTANCE_COST_HALF_SATURATION_KM = 6;
 const SCOUT_VOI_MIN = 0.34;
 // 2K.6B / INFO-1: relaxed VOI floor used ONLY in proactive-info mode (a stable, spare-labor
 // band learning before a crisis). Lower than SCOUT_VOI_MIN so an under-known nearby patch
@@ -112,8 +115,9 @@ export interface ResourceScoutContext {
   // stress reduces safe scout capacity even though it raises scout pressure.
   readonly scoutCapacity: NormalizedIntensity;
   readonly exhaustedRangeStress: NormalizedIntensity;
-  // Manhattan distance from the current tile to a candidate (undefined = unreachable).
-  readonly distanceTo: (tileId: TileId) => number | undefined;
+  // Straight-line physical separation used only for selection cost/telemetry. Actual
+  // reachability is route/time-authoritative in the investigation executor.
+  readonly distanceKmTo: (tileId: TileId) => number | undefined;
   // Probe-recency hooks (shared probeMemory): 1 = novel, 0 = just probed; and the
   // consecutive no-information repeat count for that target.
   readonly probeNovelty: (tileId: TileId) => number;
@@ -270,7 +274,7 @@ export interface ResourceScoutCandidate {
   readonly routeConfidence: NormalizedIntensity;
   readonly laborCost: NormalizedIntensity;
   readonly repeatPenalty: NormalizedIntensity;
-  readonly distance: number;
+  readonly distanceKm: number;
   readonly candidateCount: number;
   readonly reasonVector: ResourceScoutReasonVector;
   // 2K.5: the bounded patch-return selection guidance that was derived for this
@@ -360,8 +364,9 @@ function uncertaintyReduction(presence: number, source: ResourceKnowledgeSource,
 }
 
 // Select the best-VOI resource-scout target from the band's own bounded patch
-// memories. Anti-omniscient (no map scan, no hidden truth), deterministic, bounded
-// by the capped patch-memory list and the scouting envelope.
+// memories. Anti-omniscient (no map scan, no hidden truth), deterministic, and
+// technically bounded by the capped patch-memory list. Physical route/time feasibility
+// is enforced by the executor before observation, not guessed from raster distance here.
 export function selectResourceScoutTarget(
   state: ResourceKnowledgeState | undefined,
   context: ResourceScoutContext,
@@ -383,9 +388,9 @@ export function selectResourceScoutTarget(
     if (memory.approximateTile === context.currentTileId) {
       continue; // already here — nothing to scout
     }
-    const distance = context.distanceTo(memory.approximateTile);
-    if (distance === undefined || distance <= 0 || distance > SCOUT_MAX_DISTANCE) {
-      continue; // out of the bounded scouting envelope / unreachable from known info
+    const distanceKm = context.distanceKmTo(memory.approximateTile);
+    if (distanceKm === undefined || !Number.isFinite(distanceKm) || distanceKm <= 0) {
+      continue;
     }
     const effective = effectiveResourceConfidence(memory, context.currentTick);
     const presence = effective.effectivePresenceConfidence;
@@ -412,11 +417,13 @@ export function selectResourceScoutTarget(
     const needPressure = clamp01(
       urgency * 0.6 + (context.chronicDecline ? 0.18 : 0) + context.exhaustedRangeStress * 0.22,
     );
-    const distanceCost = clamp01(distance / SCOUT_MAX_DISTANCE);
+    const distanceCost = clamp01(
+      distanceKm / (distanceKm + SCOUT_DISTANCE_COST_HALF_SATURATION_KM),
+    );
     const repeatPenalty = clamp01((1 - context.probeNovelty(memory.approximateTile)) * 0.6 + Math.min(1, context.probeNoGain(memory.approximateTile) / 5) * 0.4);
     const staleWrongPenalty = clamp01(memory.seasonality.failedSeasonCount * 0.12 + (memory.state === "seasonally_bad" ? 0.3 : 0));
     const lowConfidencePenalty = presence < 0.2 ? 0.15 : 0;
-    const laborCost = clamp01(0.2 + distance / SCOUT_MAX_DISTANCE * 0.5 + (1 - capacity) * 0.3);
+    const laborCost = clamp01(0.2 + distanceCost * 0.5 + (1 - capacity) * 0.3);
 
     const voiRaw =
       uncertainty * 0.5 +
@@ -489,7 +496,7 @@ export function selectResourceScoutTarget(
       routeConfidence: round2(routeConfidence),
       laborCost: round2(laborCost),
       repeatPenalty: round2(repeatPenalty),
-      distance,
+      distanceKm,
       candidateCount: 0,
       reasonVector: {
         uncertaintyReductionValue: round2(uncertainty),

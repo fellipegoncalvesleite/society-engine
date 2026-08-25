@@ -20,6 +20,7 @@ import {
 import type { Band } from "../../agents/types";
 import type { DecisionId, TileId } from "../../core/types";
 import { getTile } from "../../world/generate";
+import { getEuclideanPhysicalDistanceKm } from "../../world/spatialGeometry";
 import type { WorldState } from "../../world/types";
 import type {
   CandidateDecision,
@@ -81,12 +82,12 @@ export function buildResourceScoutContext(world: WorldState, band: Band): Resour
     chronicDecline: band.returnTrend?.chronicDecline === true,
     scoutCapacity,
     exhaustedRangeStress: band.exhaustedRangeAudit?.stressLevel ?? 0,
-    distanceTo: (tileId) => {
+    distanceKmTo: (tileId) => {
       const tile = getTile(world, tileId);
       if (tile === undefined || currentTile === undefined) {
         return undefined;
       }
-      return Math.abs(tile.coord.x - currentTile.coord.x) + Math.abs(tile.coord.y - currentTile.coord.y);
+      return getEuclideanPhysicalDistanceKm(world.config, currentTile.coord, tile.coord);
     },
     probeNovelty: (tileId) => probeTargetNovelty(band.probeMemory, tileId, Number(world.time.tick)),
     probeNoGain: (tileId) => probeRecord(tileId)?.consecutiveNoGain ?? 0,
@@ -163,7 +164,7 @@ export function buildResourceScoutCandidate(
       edgeMemo.riverAssessment.knownFordValue > 0.12 ||
       edgeMemo.riverAssessment.riverCorridorValue > 0.12 ||
       candidate.confidenceBefore > 0.32,
-    localEvidence: candidate.distance <= 2,
+    localEvidence: candidate.distanceKm <= 3,
   });
 
   const currentRecord = band.knowledge.observedTiles[currentTile.id];
@@ -175,7 +176,7 @@ export function buildResourceScoutCandidate(
     foodValue: clamp01((currentRecord?.observedRichness ?? 0.35) * 0.18),
     waterValue: clamp01((currentRecord?.observedWaterAccess ?? 0.35) * 0.14),
     memoryConfidence: candidate.confidenceBefore,
-    movementCost: clamp01(candidate.distance / 12 + candidate.laborCost * 0.2),
+    movementCost: clamp01(candidate.reasonVector.distanceCost * 0.8 + candidate.laborCost * 0.2),
     riskCost: clamp01(
       edgeMemo.riverAssessment.riverCrossingRisk * 0.34 +
         (band.pressureState?.riskPressure ?? 0) * 0.14 +

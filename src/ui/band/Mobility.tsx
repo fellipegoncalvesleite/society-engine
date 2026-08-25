@@ -163,7 +163,7 @@ export function Mobility({
           <ul className="condition-note">
             {signals.map((signal) => (
               <li key={signal.id}>
-                Day {Number(signal.day)}: {signal.distanceBand} column to the {signal.direction} — {signal.outcome.replace(/_/g, " ")}
+                Day {Number(signal.day)}: {signal.distanceBand} column to the {signal.direction} ({Math.round(signal.distanceKm * 10) / 10} km) — {signal.outcome.replace(/_/g, " ")}
                 {signal.meaning !== undefined ? ` ("${signal.meaning.replace(/_/g, " ")}")` : ""}
               </li>
             ))}
