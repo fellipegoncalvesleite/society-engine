@@ -485,7 +485,7 @@ export function deriveFragmentSignals(input: {
   // Journey pacing (abstract pattern): repeated staged residential legs teach
   // journeys measured in day-stages.
   const stagedLegs = (band.recentResidentialMoveEvents ?? []).filter(
-    (event) => (event.distanceTiles ?? 0) >= 2).length;
+    (event) => event.durationDays >= 2).length;
   if (stagedLegs >= 2) {
     signals.push({
       domain: "abstract_pattern",

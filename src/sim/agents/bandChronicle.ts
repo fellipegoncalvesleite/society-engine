@@ -2304,7 +2304,7 @@ function buildImportantRoutes(context: ChronicleContext): readonly BandChronicle
       id,
       label,
       summary: describeResidentialMoveForChronicle(move),
-      score: round2(move.distanceTiles * 2 + move.confidence * 16 + (hard ? 25 : 8)),
+      score: round2(move.distanceKm * 1.33 + move.confidence * 16 + (hard ? 25 : 8)),
       tileId: move.toTileId,
       linkTargetId: context.linkBuilder.addRoute(id, label, undefined, move.toTileId),
       sourceReasonIds: capReasonIds(move.reasonIds),
@@ -2866,7 +2866,7 @@ function accessPlaceLabel(access: ProtoAccessMemoryState, tileId: TileId): strin
 }
 
 function describeResidentialMoveForChronicle(move: ResidentialMoveEvent): string {
-  const distance = `${move.distanceTiles} tile${plural(move.distanceTiles)}`;
+  const distance = `${round2(move.distanceKm)} km`;
 
   if (move.hardshipOutcome === "rejected" || move.status === "failed_no_route") {
     return `A planned move was blocked after ${distance}, leaving route failure in memory.`;
@@ -5374,7 +5374,7 @@ function buildRoutePages(input: WikiLayerInput): readonly BandChroniclePage[] {
         id: entry.id,
         kind: "route" as const,
         title: entry.label,
-        subtitle: `${sentenceCase(move.season)}, ${move.distanceTiles} tile${plural(move.distanceTiles)} over ${move.durationDays} day${plural(move.durationDays)}`,
+        subtitle: `${sentenceCase(move.season)}, ${round2(move.distanceKm)} km over ${move.durationDays} day${plural(move.durationDays)}`,
         paragraphs: definedParagraphs([
           makeParagraph(`${entry.id}:1`, [describeResidentialMoveForChronicle(move)]),
           makeParagraph(`${entry.id}:2`, [
@@ -5383,7 +5383,7 @@ function buildRoutePages(input: WikiLayerInput): readonly BandChroniclePage[] {
           ]),
         ]).slice(0, PAGE_PARAGRAPH_CAP),
         facts: capFacts([
-          { label: "Distance", value: `${move.distanceTiles} tile${plural(move.distanceTiles)}` },
+          { label: "Distance", value: `${round2(move.distanceKm)} km` },
           { label: "Days", value: String(move.durationDays) },
         ]),
         relatedLinkIds: capRelated([moveArc?.id, `year:${tickToYear(move.tick)}`]),

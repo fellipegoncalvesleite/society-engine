@@ -229,12 +229,12 @@ function deriveAcuteRiskCandidates(world: WorldState, band: Band): readonly Acut
 
   const longTrip = recentTrips.find((trip) =>
     trip.outcome === "continues" ||
-    trip.distanceTiles >= 3 ||
+    trip.distanceKm >= 4.5 ||
     trip.activityOutcome === "delayed_return" ||
     trip.activityOutcome === "abandoned_due_to_risk"
   );
   if (season === "winter" || support?.hungerClassification === "seasonal_lean_stress" || support?.hungerClassification === "chronic_plus_seasonal_stress") {
-    const travelLoad = longTrip === undefined ? 0 : clamp01(longTrip.distanceTiles / 7 + longTrip.estimatedDurationDays / 10);
+    const travelLoad = longTrip === undefined ? 0 : clamp01(longTrip.distanceKm / 10.5 + longTrip.estimatedDurationDays / 10);
     const exposureScore = clamp01(
       (season === "winter" ? 0.26 : 0.08) +
         foodStress * 0.24 +
@@ -358,7 +358,7 @@ function deriveAcuteRiskCandidates(world: WorldState, band: Band): readonly Acut
           (animalTrace?.knowledgeUpdate === "danger_caution_added" ? 0.1 : 0) +
           (trip.activityOutcome === "abandoned_due_to_risk" ? 0.28 : 0) +
           (trip.activityOutcome.includes("failed") ? 0.12 : 0) +
-          (trip.distanceTiles >= 2 ? 0.08 : 0),
+          (trip.distanceKm >= 3 ? 0.08 : 0),
       );
       pushCandidate(candidates, {
         kind:

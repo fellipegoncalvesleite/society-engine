@@ -3,6 +3,7 @@ import type { NormalizedIntensity } from "../rules/types";
 import { getTile } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
+import { getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
 import type { ResourceClassId } from "./resourceClasses";
 import {
   effectiveResourceConfidence,
@@ -39,7 +40,13 @@ const TRIP_FAILURE_CAP = 6;
 const NEARBY_PROBE_CAP = 5;
 const REPETITION_AFFORDANCE_CAP = 8;
 const CANDIDATE_TILE_CAP = 18;
-const EMPIRICAL_LOCAL_DISTANCE = 4;
+// Provisional physical compatibility calibrations from the legacy Map-2 local-learning bands.
+const EMPIRICAL_LOCAL_DISTANCE_KM = 6;
+const EMPIRICAL_NEAR_DISTANCE_KM = 3;
+const NEARBY_PROBE_MAX_DISTANCE_KM = 9;
+const NEARBY_PROBE_DISTANCE_PENALTY_KM = 12;
+const NEARBY_PROBE_NEAR_KM = 4.5;
+const NEARBY_PROBE_INTERMEDIATE_KM = 6;
 const PEACEFUL_FISSION_POPULATION_THRESHOLD = 46;
 
 interface ForagingAdaptationDerivation {
@@ -217,9 +224,9 @@ function deriveLearningRecord(
     return undefined;
   }
 
-  const distanceTiles = getGridDistance(origin, tile);
+  const distanceKm = getManhattanPhysicalDistanceKm(world.config, origin.coord, tile.coord);
 
-  if (distanceTiles > EMPIRICAL_LOCAL_DISTANCE && memory.useHistory.visits === 0 && record.visits < 2) {
+  if (distanceKm > EMPIRICAL_LOCAL_DISTANCE_KM && memory.useHistory.visits === 0 && record.visits < 2) {
     return undefined;
   }
 
@@ -227,7 +234,7 @@ function deriveLearningRecord(
   const effective = effectiveResourceConfidence(memory, currentTick);
   const place = band.placeMemory[memory.approximateTile];
   const tripCount = (band.recentIntraSeasonTrips ?? []).filter((trip) => trip.targetTileId === memory.approximateTile).length;
-  const proximityCount = record.visits + (place?.visitCount ?? 0) + tripCount + (distanceTiles <= 2 ? 1 : 0);
+  const proximityCount = record.visits + (place?.visitCount ?? 0) + tripCount + (distanceKm <= EMPIRICAL_NEAR_DISTANCE_KM ? 1 : 0);
   const testCount =
     memory.useHistory.visits +
     (memory.learning?.confirmationCount ?? 0) +
@@ -483,9 +490,10 @@ function deriveTripFailureMemory(accumulator: TripFailureAccumulator): ForagingT
   const successCount = accumulator.trips.filter((trip) => isTripSuccess(trip.activityOutcome)).length;
   const meanReturn = accumulator.trips.reduce((sum, trip) => sum + trip.resourceReturn.estimatedReturnValue, 0) / accumulator.trips.length;
   const longestDistanceTiles = Math.max(...accumulator.trips.map((trip) => trip.distanceTiles));
+  const longestDistanceKm = Math.max(...accumulator.trips.map((trip) => trip.distanceKm));
   const failureRate = (failureCount + lowReturnCount * 0.55) / accumulator.trips.length;
-  const confidencePenalty = clamp01(failureRate * 0.2 + (longestDistanceTiles >= 7 ? 0.05 : 0) - successCount * 0.025);
-  const action = deriveTripAction(accumulator.trips.length, failureCount, lowReturnCount, successCount, longestDistanceTiles, meanReturn);
+  const confidencePenalty = clamp01(failureRate * 0.2 + (longestDistanceKm >= 10.5 ? 0.05 : 0) - successCount * 0.025);
+  const action = deriveTripAction(accumulator.trips.length, failureCount, lowReturnCount, successCount, longestDistanceKm, meanReturn);
 
   if (action === "continue" && confidencePenalty < 0.04) {
     return undefined;
@@ -500,6 +508,7 @@ function deriveTripFailureMemory(accumulator: TripFailureAccumulator): ForagingT
     lowReturnCount,
     successCount,
     longestDistanceTiles,
+    longestDistanceKm: round2(longestDistanceKm),
     meanReturn: round2(clamp01(meanReturn)),
     confidencePenalty: round2(confidencePenalty),
     action,
@@ -1238,9 +1247,10 @@ function deriveNearbyProbe(
     return undefined;
   }
 
-  const distanceTiles = getGridDistance(origin, tile);
+  const distanceTiles = getGridStepDistance(origin, tile);
+  const distanceKm = getManhattanPhysicalDistanceKm(world.config, origin.coord, tile.coord);
 
-  if (distanceTiles <= 0 || distanceTiles > 6) {
+  if (distanceKm <= 0 || distanceKm > NEARBY_PROBE_MAX_DISTANCE_KM) {
     return undefined;
   }
 
@@ -1256,7 +1266,7 @@ function deriveNearbyProbe(
   }
 
   const riskPenalty = clamp01(record.observedRisk ?? 0.34);
-  const distancePenalty = clamp01(distanceTiles / 8);
+  const distancePenalty = clamp01(distanceKm / NEARBY_PROBE_DISTANCE_PENALTY_KM);
   const probeReadiness = clamp01(
     relativeOpportunity * 0.72 +
       currentOverCapacity * 0.26 +
@@ -1264,15 +1274,16 @@ function deriveNearbyProbe(
       riskPenalty * 0.2 -
       distancePenalty * 0.16,
   );
-  const comparison = distanceTiles <= 3 && probeReadiness >= 0.16
+  const comparison = distanceKm <= NEARBY_PROBE_NEAR_KM && probeReadiness >= 0.16
     ? "nearby_probe"
-    : distanceTiles <= 4
+    : distanceKm <= NEARBY_PROBE_INTERMEDIATE_KM
       ? "not_enough_known"
       : "distant_wait";
 
   return {
     tileId,
     distanceTiles,
+    distanceKm: round2(distanceKm),
     relativeOpportunity: round2(relativeOpportunity),
     probeReadiness: round2(probeReadiness),
     currentOverCapacity: round2(currentOverCapacity),
@@ -1684,14 +1695,14 @@ function deriveTripAction(
   failureCount: number,
   lowReturnCount: number,
   successCount: number,
-  longestDistanceTiles: number,
+  longestDistanceKm: number,
   meanReturn: number,
 ): TripAdaptationAction {
   if (successCount >= failureCount && successCount > 0) {
     return failureCount > 0 ? "recovering_after_success" : "continue";
   }
 
-  if (failureCount >= 3 && longestDistanceTiles >= 6 && meanReturn < 0.05) {
+  if (failureCount >= 3 && longestDistanceKm >= 9 && meanReturn < 0.05) {
     return "abandon_temporarily";
   }
 
@@ -1776,7 +1787,7 @@ function dedupeNearbyProbes(probes: readonly NearbyForagingOpportunityProbe[]): 
     if (
       existing === undefined ||
       probe.probeReadiness > existing.probeReadiness ||
-      (probe.probeReadiness === existing.probeReadiness && probe.distanceTiles < existing.distanceTiles)
+      (probe.probeReadiness === existing.probeReadiness && probe.distanceKm < existing.distanceKm)
     ) {
       byTile.set(String(probe.tileId), probe);
     }
@@ -1813,7 +1824,7 @@ function compareTripFailureMemories(left: ForagingTripFailureMemory, right: Fora
 function compareNearbyProbes(left: NearbyForagingOpportunityProbe, right: NearbyForagingOpportunityProbe): number {
   return (
     right.probeReadiness - left.probeReadiness ||
-    left.distanceTiles - right.distanceTiles ||
+    left.distanceKm - right.distanceKm ||
     String(left.tileId).localeCompare(String(right.tileId))
   );
 }
@@ -1865,7 +1876,7 @@ function makeAdaptationReasonId(
   return `reason:foraging-adaptation:${String(bandId)}:${Number(tick)}:${category}:${String(tileId)}:${suffix}` as ReasonId;
 }
 
-function getGridDistance(left: Tile, right: Tile): number {
+function getGridStepDistance(left: Tile, right: Tile): number {
   return Math.abs(left.coord.x - right.coord.x) + Math.abs(left.coord.y - right.coord.y);
 }
 

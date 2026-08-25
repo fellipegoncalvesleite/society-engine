@@ -1685,7 +1685,10 @@ export interface IntraSeasonTripRecord {
   readonly startDay: DayNumber;
   readonly endDay: DayNumber;
   readonly activityStatus: IntraSeasonTripActivityStatus;
+  /** Topological route/candidate telemetry only. */
   readonly distanceTiles: number;
+  /** Canonical outbound physical route length. */
+  readonly distanceKm: number;
   readonly estimatedDurationDays: number;
   readonly cause: IntraSeasonTripCause;
   readonly movementType: IntraSeasonTripMovementType;
@@ -1712,7 +1715,7 @@ export interface IntraSeasonTripRecord {
   readonly activityMemoryEffect: ActivityMemoryEffectRecord;
   // TIME-1C breadcrumb: the deterministic tile-by-tile outbound route origin→target
   // (inclusive). The trip is logically NOT a teleport even if the UI compresses it —
-  // history preserves every crossed tile. Bounded by MAX_TRIP_DISTANCE_TILES + 1.
+  // history preserves every crossed tile. The search horizon is derived from physical reach.
   readonly pathTiles: readonly TileId[];
   readonly tilesCrossed: number;
   readonly roundTripTiles: number;
@@ -1734,8 +1737,8 @@ export interface IntraSeasonTripRecord {
 //
 // An expedition is a MORE CAPABLE LIFECYCLE of the same task-group/party system
 // that `IntraSeasonTripRecord` already records — not a parallel simulator. A
-// same-day trip (<= MAX_TRIP_DISTANCE_TILES) is resolved in one day's reducer by
-// intraSeasonTrips; an expedition reaches country BEYOND that daily envelope and
+// same-day trip is resolved only when physical route time + on-site work fit one day;
+// an expedition reaches country beyond that physical daily envelope and
 // therefore must physically spend days walking out, working, and walking back.
 // It deposits its result through the SAME IntraSeasonTripRecord + the SAME
 // canonical food ledger (humanFoodSupport), exactly once, at RETURN.
@@ -4342,7 +4345,9 @@ export interface ForagingTripFailureMemory {
   readonly failureCount: number;
   readonly lowReturnCount: number;
   readonly successCount: number;
+  /** Topological telemetry only. */
   readonly longestDistanceTiles: number;
+  readonly longestDistanceKm: number;
   readonly meanReturn: NormalizedIntensity;
   readonly confidencePenalty: NormalizedIntensity;
   readonly action: TripAdaptationAction;
@@ -4353,7 +4358,9 @@ export interface ForagingTripFailureMemory {
 
 export interface NearbyForagingOpportunityProbe {
   readonly tileId: TileId;
+  /** Topological telemetry only. */
   readonly distanceTiles: number;
+  readonly distanceKm: number;
   readonly relativeOpportunity: NormalizedIntensity;
   readonly probeReadiness: NormalizedIntensity;
   readonly currentOverCapacity: NormalizedIntensity;

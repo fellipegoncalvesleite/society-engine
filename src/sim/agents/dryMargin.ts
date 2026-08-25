@@ -18,10 +18,14 @@ import { getRiverCrossingForMovement, getRiverProfile } from "../world/hydrograp
 import { getSeasonalTileConditions } from "../world/seasonal";
 import { getNeighborTiles, getTile } from "../world/generate";
 import type { Tile, WorldState } from "../world/types";
+import { getCardinalEdgeLengthKm, getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
 import { getCanonicalFoodStress } from "./seasonalSurvival";
 
 const MAX_WATER_CANDIDATES = 8;
 const MAX_PROSPECT_CANDIDATES = 10;
+// Provisional physical compatibility bands from the legacy Map-2 dry-margin model.
+const DRY_MARGIN_PROSPECT_MAX_DISTANCE_KM = 12;
+const DRY_MARGIN_TRAVEL_REFERENCE_KM = 12;
 // Hard ceiling on how far resource-belief curiosity can lower the logistical-probe
 // scout-value bar (2K.1F). Small so beliefs nudge probing "slightly", never flip it.
 // EMPIRICAL CALIBRATION CONSTANT (2K.1F; audited 2K.1F-A), not a historical law.
@@ -31,7 +35,7 @@ interface ProspectCandidate {
   readonly tileId: TileId;
   readonly record?: KnownTileRecord;
   readonly tile?: Tile;
-  readonly distance: number;
+  readonly distanceKm: number;
   readonly expectedWater: number;
   readonly expectedFood: number;
   readonly travelCost: number;
@@ -195,7 +199,7 @@ function getBestWaterCandidates(
 
       return tile === undefined || record === undefined
         ? undefined
-        : buildWaterRefugeProfile(world, band, tile, record, getGridDistance(currentTile, tile), contextCache);
+        : buildWaterRefugeProfile(world, band, tile, record, getManhattanPhysicalDistanceKm(world.config, currentTile.coord, tile.coord), contextCache);
     })
     .filter((profile): profile is WaterRefugeProfile => profile !== undefined)
     .filter((profile) => profile.reliability > 0.36 || profile.drySeasonReliability > 0.34)
@@ -208,7 +212,7 @@ function buildWaterRefugeProfile(
   band: Band,
   tile: Tile,
   record: KnownTileRecord,
-  distance: number,
+  distanceKm: number,
   contextCache?: TickContextCache,
 ): WaterRefugeProfile {
   const seasonal = record.observedSeasonalPattern;
@@ -237,7 +241,7 @@ function buildWaterRefugeProfile(
       record.confidence * 0.12 -
       conditions.currentDroughtStress * 0.12,
   );
-  const fallbackRank = getFallbackRank(sourceKind, drySeasonReliability, distance, socialAccessRisk);
+  const fallbackRank = getFallbackRank(sourceKind, drySeasonReliability, distanceKm, socialAccessRisk);
 
   return {
     tileId: tile.id,
@@ -250,7 +254,7 @@ function buildWaterRefugeProfile(
     lastKnownWaterConfidence: round2(clamp01(record.confidence * (seasonal?.confidence ?? 0.7))),
     fallbackRank,
     socialAccessRisk: round2(socialAccessRisk),
-    travelCostFromCurrent: round2(clamp01(distance / 8 + (record.observedMovementCost ?? tile.movementCost) / 8)),
+    travelCostFromCurrent: round2(clamp01(distanceKm / DRY_MARGIN_TRAVEL_REFERENCE_KM + (record.observedMovementCost ?? tile.movementCost) / 8)),
     inferred: record.knowledgeSource !== "personally_observed",
     reasonIds: [makeDryMarginReasonId(world.time, band, `water:${tile.id}`)],
   };
@@ -465,9 +469,9 @@ function buildKnownProspectCandidate(
     return undefined;
   }
 
-  const distance = getGridDistance(currentTile, tile);
+  const distanceKm = getManhattanPhysicalDistanceKm(world.config, currentTile.coord, tile.coord);
 
-  if (distance === 0 || distance > 8) {
+  if (distanceKm === 0 || distanceKm > DRY_MARGIN_PROSPECT_MAX_DISTANCE_KM) {
     return undefined;
   }
 
@@ -486,10 +490,10 @@ function buildKnownProspectCandidate(
     tileId: tile.id,
     tile,
     record,
-    distance,
+    distanceKm,
     expectedWater,
     expectedFood,
-    travelCost: clamp01(distance / 8 + (record.observedMovementCost ?? tile.movementCost) / 6),
+    travelCost: clamp01(distanceKm / DRY_MARGIN_TRAVEL_REFERENCE_KM + (record.observedMovementCost ?? tile.movementCost) / 6),
     uncertainty: clamp01(1 - record.confidence + (record.knowledgeSource === "personally_observed" ? 0 : 0.12)),
     socialAccessRisk: getSocialAccessRisk(band, tile.id),
     crossingRisk,
@@ -532,7 +536,7 @@ function buildInferredFrontierProspect(
   return {
     tileId: targetTileId,
     tile: targetTile,
-    distance: 1,
+    distanceKm: getCardinalEdgeLengthKm(world.config, currentTile.coord, targetTile.coord),
     expectedWater: clamp01((currentRecord.observedWaterAccess ?? 0.34) * 0.82 + (currentTile.isRiverbank ? 0.12 : 0)),
     expectedFood: clamp01(currentRecord.observedRichness * 0.82 + currentRecord.observedAquaticPotential * 0.1),
     travelCost: clamp01(currentTile.movementCost / 5 + (crossing?.baseCrossingCost ?? 0) / 4),
@@ -878,7 +882,7 @@ function getSocialAccessRisk(
 function getFallbackRank(
   sourceKind: WaterSourceKind,
   drySeasonReliability: number,
-  distance: number,
+  distanceKm: number,
   socialAccessRisk: number,
 ): number {
   const kindRank: Record<WaterSourceKind, number> = {
@@ -896,7 +900,7 @@ function getFallbackRank(
     unknown: 12,
   };
 
-  return Math.max(1, Math.round(kindRank[sourceKind] + distance * 0.2 + socialAccessRisk * 1.8 - drySeasonReliability * 1.4));
+  return Math.max(1, Math.round(kindRank[sourceKind] + distanceKm * (2 / 15) + socialAccessRisk * 1.8 - drySeasonReliability * 1.4));
 }
 
 function compareWaterRefugeProfiles(left: WaterRefugeProfile, right: WaterRefugeProfile): number {
@@ -925,10 +929,6 @@ function getProspectCandidateScore(candidate: ProspectCandidate): number {
     candidate.crossingRisk * 0.2 -
     candidate.socialAccessRisk * 0.12
   );
-}
-
-function getGridDistance(first: Tile, second: Tile): number {
-  return Math.abs(first.coord.x - second.coord.x) + Math.abs(first.coord.y - second.coord.y);
 }
 
 function getLowAdultProbePenalty(band: Band): number {

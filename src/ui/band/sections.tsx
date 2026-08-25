@@ -219,7 +219,7 @@ export function ForagingAdaptationDetails({ band }: { readonly band: Band }) {
         <Detail
           key={`${String(memory.tileId)}:${memory.taskGroupType}:${index}`}
           label={`trip memory ${index + 1}`}
-          value={`${String(memory.tileId)} · ${memory.taskGroupType} · ${memory.action} · trips ${memory.recentTripCount} · failures ${memory.failureCount} · low returns ${memory.lowReturnCount} · successes ${memory.successCount} · mean ${formatNumber(memory.meanReturn)} · distance ${memory.longestDistanceTiles} · penalty ${formatNumber(memory.confidencePenalty)} · rest ${memory.restTicksSuggested}`}
+          value={`${String(memory.tileId)} · ${memory.taskGroupType} · ${memory.action} · trips ${memory.recentTripCount} · failures ${memory.failureCount} · low returns ${memory.lowReturnCount} · successes ${memory.successCount} · mean ${formatNumber(memory.meanReturn)} · distance ${formatNumber(memory.longestDistanceKm)} km · penalty ${formatNumber(memory.confidencePenalty)} · rest ${memory.restTicksSuggested}`}
         />
       ))}
       {adaptation.nearbyOpportunityProbes.slice(0, 6).map((probe, index) => (

@@ -111,18 +111,26 @@ import { SEASON_LENGTH_DAYS } from "../core/types";
 import { getWorldTimeForDay } from "../tick/time";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
+import { getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
 import { deriveTravelPace, type TravelContext } from "./bandMobility";
-import { getRouteTravelTimeDays } from "./traversal";
+import { getRoutePhysicalLengthKm, getRouteTravelTimeDays } from "./traversal";
 
 const TRIP_DAY_CADENCE = 3;
 const FIRST_TRIP_DAY_OF_SEASON = 6;
-const MAX_TRIP_DISTANCE_TILES = 10;
 /** On-site search/work share reserved inside an ordinary same-day trip. */
 const INTRA_SEASON_ACTIVITY_WORK_DAYS = 0.25;
+/**
+ * SCALE-1 Task 7 — provisional physical compatibility calibration for the local
+ * reconnaissance bootstrap. The legacy Map-2 behavior inspected two 1.5-km cells;
+ * 3 km preserves that authored fixture without making raster cells the authority.
+ * This is local familiarity/reconstruction, NOT Task-5 direct optical observation.
+ */
+const STARTING_LOCAL_RECON_MAX_DISTANCE_KM = 3;
+/** Legacy two-cell Map-2 distinction, now stated honestly in physical units. */
+const LOCAL_FORAGING_LOOP_MAX_DISTANCE_KM = 3;
+const STARTING_LOCAL_RECON_OBSERVED_TILE_CAP = 6;
 const RECENT_TRIP_RECORD_CAP = 24;
 const RECENT_ACTIVITY_GROUP_SUMMARY_CAP = 8;
-const STARTING_LOCAL_RECON_MAX_DISTANCE_TILES = 2;
-const STARTING_LOCAL_RECON_OBSERVED_TILE_CAP = 6;
 const LOW_MEMORY_CONFIDENCE_THRESHOLD = 0.25;
 const PARTIAL_RETURN_CONFIDENCE_THRESHOLD = 0.58;
 const OBSERVATION_CONFIDENCE_THRESHOLD = 0.42;
@@ -131,7 +139,11 @@ const RECENT_ACTIVITY_MEMORY_EFFECT_CAP = 8;
 interface TripCandidate {
   readonly memory: ResourcePatchMemory;
   readonly targetTileId: TileId;
+  /** Topological telemetry only; never a physical burden/eligibility authority. */
   readonly distanceTiles: number;
+  readonly physicalDistanceKm: number;
+  readonly travelBurden: number;
+  readonly timing: PhysicalRoundTripTiming;
   readonly cause: IntraSeasonTripCause;
   readonly score: number;
   readonly riskToleranceModifier: number;
@@ -259,10 +271,19 @@ export function resolveExpeditionTargetWork(
   const standTileId = routeTiles[routeTiles.length - 1];
   const workTileId =
     standTileId !== targetTileId && memory.linkedTiles.includes(standTileId) ? standTileId : targetTileId;
+  const expeditionTiming = derivePhysicalRoundTripTiming(
+    world,
+    band,
+    routeTiles,
+    INTRA_SEASON_ACTIVITY_WORK_DAYS,
+  );
   const candidate: TripCandidate = {
     memory,
     targetTileId: workTileId,
     distanceTiles,
+    physicalDistanceKm: getRoutePhysicalLengthKm(world, routeTiles),
+    travelBurden: derivePhysicalTravelBurden(expeditionTiming),
+    timing: expeditionTiming,
     cause,
     score: 0,
     riskToleranceModifier: 0,
@@ -278,6 +299,7 @@ export function resolveExpeditionTargetWork(
   // proven cause of the generic target_not_found dominance (218/362 in the 40y audit).
   const baseRecord = buildTripRecord(world, band, candidate, day, time.tick, time.season, faunaGeo, {
     physicallyAtTarget: true,
+    pathOverride: routeTiles,
     // CORRECTION-34F — passed through unaltered. The previous `Math.max(0, Math.round(...))` was
     // the laundering step: it turned an impossible count into a plausible one and let the caller's
     // mistake reach the stock. Validated above, so there is nothing left to clamp.
@@ -330,7 +352,7 @@ function applyTripDay(world: WorldState, day: number): WorldState {
       continue;
     }
 
-    const candidate = selectTripCandidate(currentWorld, band, day, MAX_TRIP_DISTANCE_TILES, false, true);
+    const candidate = selectTripCandidate(currentWorld, band, day, undefined, false, true);
 
     if (candidate === undefined) {
       continue;
@@ -555,7 +577,12 @@ function executePendingInvestigation(
   // standing — so NOBODY LEAVES. `partyWorkers` stays 0: labour was available, but there
   // was nowhere to walk. No trip is resolved, so this case produces no
   // `IntraSeasonTripActivityResult` at all.
-  const routeTiles = buildOutboundPathTiles(world, record.originTileId, record.targetTileId);
+  const routeTiles = buildOutboundPathTiles(
+    world,
+    record.originTileId,
+    record.targetTileId,
+    deriveOrdinaryTripSearchHorizonTiles(world, band),
+  );
 
   if (routeTiles.length <= 1) {
     return settle("route_unavailable", {
@@ -984,7 +1011,8 @@ function selectTripCandidate(
   world: WorldState,
   band: Band,
   day: number,
-  maxDistanceTiles: number = MAX_TRIP_DISTANCE_TILES,
+  /** Optional TECHNICAL search envelope supplied by a multi-day caller. */
+  maxSearchTiles: number | undefined = undefined,
   // CORRECTION-4 — when the caller is the EXPEDITION selector it needs the best
   // MULTI-DAY candidate, not the global best. Previously the argmax ran over every
   // distance and near targets always won (their distance penalty is lowest); the
@@ -1034,8 +1062,9 @@ function selectTripCandidate(
   // STARTING_LOCAL_RECON_OBSERVED_TILE_CAP tiles within
   // STARTING_LOCAL_RECON_MAX_DISTANCE_TILES) — no hidden truth, no yield change, and
   // a band that already has a reachable memory is byte-identical to before.
+  const searchHorizonTiles = maxSearchTiles ?? deriveOrdinaryTripSearchHorizonTiles(world, band);
   const seededResourceKnowledgeState = hasReachablePatchMemory(world, band, origin, {
-    maxDistanceTiles,
+    maxSearchTiles: searchHorizonTiles,
     requireMultiDay,
     requireSameDay,
   })
@@ -1065,23 +1094,18 @@ function selectTripCandidate(
 
     const distanceTiles = getGridDistance(origin, target);
 
-    if (distanceTiles <= 0 || distanceTiles > maxDistanceTiles) {
+    if (distanceTiles <= 0 || distanceTiles > searchHorizonTiles) {
       continue;
     }
 
-    const candidateTiming = deriveCandidatePhysicalTiming(
-      world,
-      band,
-      target.id,
-      Math.min(maxDistanceTiles, distanceTiles + 8),
-    );
-    if (candidateTiming === undefined) {
+    const physical = deriveCandidatePhysicalAssessment(world, band, target.id, searchHorizonTiles);
+    if (physical === undefined) {
       continue;
     }
-    if (requireMultiDay && candidateTiming.sameDay) {
+    if (requireMultiDay && physical.timing.sameDay) {
       continue;
     }
-    if (requireSameDay && !candidateTiming.sameDay) {
+    if (requireSameDay && !physical.timing.sameDay) {
       continue;
     }
 
@@ -1097,12 +1121,12 @@ function selectTripCandidate(
 
     const effective = effectiveResourceConfidence(memory, currentTick);
     const causeWeight = getCauseWeight(cause);
-    const distancePenalty = distanceTiles / MAX_TRIP_DISTANCE_TILES;
+    const distancePenalty = derivePhysicalTravelBurden(physical.timing);
     const confidence = effective.effectivePresenceConfidence;
     const fallbackExpansionBias = getAdaptationFallbackSelectionBias(band, memory.resourceClassId);
     const tripAbandonmentPenalty = getAdaptationTripAbandonmentPenalty(band, memory.approximateTile, memory.resourceClassId);
     const nearbyProbeBonus = getAdaptationNearbyProbeBonus(band, memory.approximateTile);
-    const logisticsSelectionBias = getLogisticsTripSelectionBias(band, memory.resourceClassId, distanceTiles);
+    const logisticsSelectionBias = getLogisticsTripSelectionBias(band, memory.resourceClassId, physical.physicalDistanceKm);
     // 2K.12: bounded, selection-only seasonal-memory bias on the activity target argmax
     // (band-learned only, no hidden truth). Flag default OFF / no learned memory for this
     // tile → bias 0 → byte-identical activity-target selection.
@@ -1124,6 +1148,9 @@ function selectTripCandidate(
       memory,
       targetTileId: memory.approximateTile,
       distanceTiles,
+      physicalDistanceKm: physical.physicalDistanceKm,
+      travelBurden: distancePenalty,
+      timing: physical.timing,
       cause,
       score,
       riskToleranceModifier: adaptationBehavior?.riskToleranceModifier ?? 0,
@@ -1222,7 +1249,7 @@ function getAdaptationNearbyProbeBonus(
 function getLogisticsTripSelectionBias(
   band: Band,
   resourceClassId: ResourceClassId,
-  distanceTiles: number,
+  physicalDistanceKm: number,
 ): number {
   const logistics = band.bodyCampLogistics;
 
@@ -1231,15 +1258,16 @@ function getLogisticsTripSelectionBias(
   }
 
   const foodBias = isFoodClass(resourceClassId)
-    ? logistics.behavior.opportunisticFoodBias * (distanceTiles <= 4 ? 0.46 : 0.18)
+    ? logistics.behavior.opportunisticFoodBias * (physicalDistanceKm <= 6 ? 0.46 : 0.18)
     : 0;
   const materialRepairBias =
     resourceClassId === "fiber_material" || resourceClassId === "fuel_material"
       ? logistics.behavior.materialWearPenalty * 0.42 +
         (logistics.fire.status === "limited_by_fuel" ? logistics.behavior.fireExposureReliefBias * 0.18 : 0)
       : 0;
+  // Legacy Map-2 5-cell distinction expressed as a provisional 7.5-km physical calibration.
   const sicknessDistancePenalty =
-    distanceTiles >= 5
+    physicalDistanceKm >= 7.5
       ? logistics.behavior.sicknessActivityPenalty * 0.42 +
         logistics.behavior.careTravelBurdenBias * 0.34 +
         logistics.behavior.carryConstraintBias * 0.22
@@ -1260,7 +1288,7 @@ function hasReachablePatchMemory(
   band: Band,
   origin: Tile,
   domain: {
-    readonly maxDistanceTiles: number;
+    readonly maxSearchTiles: number;
     readonly requireMultiDay: boolean;
     readonly requireSameDay: boolean;
   },
@@ -1278,23 +1306,18 @@ function hasReachablePatchMemory(
 
     const distanceTiles = getGridDistance(origin, target);
 
-    if (distanceTiles <= 0 || distanceTiles > domain.maxDistanceTiles) {
+    if (distanceTiles <= 0 || distanceTiles > domain.maxSearchTiles) {
       continue;
     }
 
-    const candidateTiming = deriveCandidatePhysicalTiming(
-      world,
-      band,
-      target.id,
-      Math.min(domain.maxDistanceTiles, distanceTiles + 8),
-    );
-    if (candidateTiming === undefined) {
+    const physical = deriveCandidatePhysicalAssessment(world, band, target.id, domain.maxSearchTiles);
+    if (physical === undefined) {
       continue;
     }
-    if (domain.requireMultiDay && candidateTiming.sameDay) {
+    if (domain.requireMultiDay && physical.timing.sameDay) {
       continue;
     }
-    if (domain.requireSameDay && !candidateTiming.sameDay) {
+    if (domain.requireSameDay && !physical.timing.sameDay) {
       continue;
     }
 
@@ -1302,6 +1325,39 @@ function hasReachablePatchMemory(
   }
 
   return false;
+}
+
+function getStartingLocalReconEligibleObservedTiles(
+  world: WorldState,
+  band: Band,
+  origin: Tile,
+) {
+  return Object.values(band.knowledge.observedTiles)
+    .map((record) => {
+      const tile = world.tiles[record.tileId];
+      if (tile === undefined) return undefined;
+      return { record, tile, distanceKm: getManhattanPhysicalDistanceKm(world.config, origin.coord, tile.coord) };
+    })
+    .filter((entry): entry is NonNullable<typeof entry> =>
+      entry !== undefined &&
+      entry.record.tileId !== band.position &&
+      entry.distanceKm > 0 &&
+      entry.distanceKm <= STARTING_LOCAL_RECON_MAX_DISTANCE_KM + 1e-9,
+    )
+    .sort((left, right) => {
+      const distanceDelta = left.distanceKm - right.distanceKm;
+      return distanceDelta === 0
+        ? String(left.record.tileId).localeCompare(String(right.record.tileId))
+        : distanceDelta;
+    });
+}
+
+/** Audit-only visibility into the uncapped physical local-recon eligibility envelope. */
+export function deriveStartingLocalReconTilesForAudit(world: WorldState, band: Band): readonly TileId[] {
+  const origin = world.tiles[band.position];
+  return origin === undefined
+    ? []
+    : getStartingLocalReconEligibleObservedTiles(world, band, origin).map((entry) => entry.record.tileId);
 }
 
 function buildStartingLocalReconnaissanceState(
@@ -1322,25 +1378,7 @@ function buildStartingLocalReconnaissanceState(
     band.perCapitaReturn?.perCapitaReturn ??
     0.5;
   let state = band.resourceKnowledgeState;
-  const localObservedRecords = Object.values(band.knowledge.observedTiles)
-    .map((record) => {
-      const tile = world.tiles[record.tileId];
-
-      return tile === undefined ? undefined : { record, tile, distanceTiles: getGridDistance(origin, tile) };
-    })
-    .filter((entry): entry is NonNullable<typeof entry> =>
-      entry !== undefined &&
-      entry.record.tileId !== band.position &&
-      entry.distanceTiles > 0 &&
-      entry.distanceTiles <= STARTING_LOCAL_RECON_MAX_DISTANCE_TILES,
-    )
-    .sort((left, right) => {
-      const distanceDelta = left.distanceTiles - right.distanceTiles;
-
-      return distanceDelta === 0
-        ? String(left.record.tileId).localeCompare(String(right.record.tileId))
-        : distanceDelta;
-    })
+  const localObservedRecords = getStartingLocalReconEligibleObservedTiles(world, band, origin)
     .slice(0, STARTING_LOCAL_RECON_OBSERVED_TILE_CAP);
 
   for (const { record } of localObservedRecords) {
@@ -1473,6 +1511,8 @@ function buildTripRecord(
   // `estimateTaskGroupPeople`, unchanged.
   partyWork?: {
     readonly physicallyAtTarget: boolean;
+    /** Real already-walked route for expedition work; avoids re-planning a daily path. */
+    readonly pathOverride?: readonly TileId[];
     /**
      * Authoritative, and never derived here. CORRECTION-34F — guaranteed a POSITIVE INTEGER by
      * `resolveExpeditionTargetWork`, the only caller that sets this object; zero and fractional
@@ -1481,12 +1521,19 @@ function buildTripRecord(
     readonly productiveWorkers: number;
   },
 ): IntraSeasonTripRecord {
-  const pathTiles = buildOutboundPathTiles(world, band.position, candidate.targetTileId);
-  const timing = derivePhysicalRoundTripTiming(world, band, pathTiles, INTRA_SEASON_ACTIVITY_WORK_DAYS);
+  const pathTiles = partyWork?.pathOverride ?? buildOutboundPathTiles(
+    world,
+    band.position,
+    candidate.targetTileId,
+    deriveOrdinaryTripSearchHorizonTiles(world, band),
+  );
+  const timing = partyWork?.pathOverride === undefined
+    ? derivePhysicalRoundTripTiming(world, band, pathTiles, INTRA_SEASON_ACTIVITY_WORK_DAYS)
+    : candidate.timing;
   const estimatedDurationDays = timing.durationDays;
   const roundTripTiles = Math.max(0, pathTiles.length - 1) * 2; // TOPOLOGICAL telemetry only.
   const outcome = classifyOutcome(estimatedDurationDays);
-  const movementType = deriveMovementType(candidate.cause, outcome, candidate.distanceTiles);
+  const movementType = deriveMovementType(candidate.cause, outcome, candidate.physicalDistanceKm);
   const taskGroupType = deriveTaskGroupType(candidate.cause, candidate.memory.resourceClassId);
   const faunaClass = faunaClassForTrip(taskGroupType, candidate.memory.resourceClassId);
   const faunaReturnFactor = faunaClass === undefined
@@ -1586,6 +1633,7 @@ function buildTripRecord(
     endDay,
     activityStatus: "completed_observation",
     distanceTiles: candidate.distanceTiles,
+    distanceKm: round4(getRoutePhysicalLengthKm(world, pathTiles)),
     estimatedDurationDays,
     cause: candidate.cause,
     movementType,
@@ -1747,7 +1795,7 @@ function finalizeAnimalActivityTrace(
         }
       : {}),
     distanceTiles: candidate.distanceTiles,
-    travelCost: round4(clamp01(candidate.distanceTiles / MAX_TRIP_DISTANCE_TILES)),
+    travelCost: round4(candidate.travelBurden),
     laborAccessCost: hunting.active && hunting.laborShift > 0
       ? round4(clamp01(base.laborAccessCost + hunting.laborShift))
       : base.laborAccessCost,
@@ -3584,16 +3632,78 @@ export function derivePhysicalRoundTripTiming(
   };
 }
 
-function deriveCandidatePhysicalTiming(
+interface CandidatePhysicalAssessment {
+  readonly routeTileIds: readonly TileId[];
+  readonly physicalDistanceKm: number;
+  readonly timing: PhysicalRoundTripTiming;
+}
+
+function deriveCandidatePhysicalAssessment(
   world: WorldState,
   band: Band,
   targetTileId: TileId,
-  maxReachTiles: number = MAX_TRIP_DISTANCE_TILES,
-): PhysicalRoundTripTiming | undefined {
-  const route = buildOutboundPathTiles(world, band.position, targetTileId, maxReachTiles);
-  return route.length <= 1
-    ? undefined
-    : derivePhysicalRoundTripTiming(world, band, route, INTRA_SEASON_ACTIVITY_WORK_DAYS);
+  maxReachTiles: number,
+): CandidatePhysicalAssessment | undefined {
+  const routeTileIds = buildOutboundPathTiles(world, band.position, targetTileId, maxReachTiles);
+  if (routeTileIds.length <= 1) return undefined;
+  return {
+    routeTileIds,
+    physicalDistanceKm: getRoutePhysicalLengthKm(world, routeTileIds),
+    timing: derivePhysicalRoundTripTiming(world, band, routeTileIds, INTRA_SEASON_ACTIVITY_WORK_DAYS),
+  };
+}
+
+/**
+ * TECHNICAL route-search horizon for an ordinary trip. A same-day trip has at most
+ * the day remaining after on-site work available for travel; converting that physical
+ * reach to cells using the world's shortest cardinal edge guarantees the search cannot
+ * truncate a physically executable candidate merely because resolution changed.
+ */
+function deriveOrdinaryTripSearchHorizonTiles(world: WorldState, band: Band): number {
+  const pace = deriveTravelPace(band, "resource_expedition").kmPerTravelDay;
+  const minimumEdgeKm = Math.max(
+    1e-9,
+    Math.min(world.config.spatial.cellWidthKm, world.config.spatial.cellHeightKm),
+  );
+  const maximumOneWayPhysicalReachKm = pace * Math.max(0, 1 - INTRA_SEASON_ACTIVITY_WORK_DAYS);
+  return Math.max(1, Math.ceil(maximumOneWayPhysicalReachKm / minimumEdgeKm) + 1);
+}
+
+/** Dimensionless physical travel burden; one travel day maps to 0.5, longer trips asymptote to 1. */
+function derivePhysicalTravelBurden(timing: PhysicalRoundTripTiming): number {
+  const travelDays = Math.max(0, timing.outboundTravelDays + timing.returnTravelDays);
+  return Number.isFinite(travelDays) ? travelDays / (1 + travelDays) : 1;
+}
+
+/** Audit-only controlled assessment of one ordinary-trip target. */
+export function deriveOrdinaryTripTargetAssessmentForAudit(
+  world: WorldState,
+  band: Band,
+  targetTileId: TileId,
+) {
+  const origin = world.tiles[band.position];
+  const target = world.tiles[targetTileId];
+  if (origin === undefined || target === undefined) return undefined;
+  const distanceTiles = getGridDistance(origin, target);
+  const searchHorizonTiles = deriveOrdinaryTripSearchHorizonTiles(world, band);
+  if (distanceTiles <= 0 || distanceTiles > searchHorizonTiles) {
+    return { eligible: false, sameDay: false, distanceTiles, physicalDistanceKm: Number.POSITIVE_INFINITY, distancePenalty: 1, travelCost: 1 };
+  }
+  const physical = deriveCandidatePhysicalAssessment(world, band, targetTileId, searchHorizonTiles);
+  if (physical === undefined) {
+    return { eligible: false, sameDay: false, distanceTiles, physicalDistanceKm: Number.POSITIVE_INFINITY, distancePenalty: 1, travelCost: 1 };
+  }
+  const burden = derivePhysicalTravelBurden(physical.timing);
+  return {
+    eligible: physical.timing.sameDay,
+    sameDay: physical.timing.sameDay,
+    distanceTiles,
+    physicalDistanceKm: physical.physicalDistanceKm,
+    distancePenalty: burden,
+    travelCost: burden,
+    totalDays: physical.timing.totalDays,
+    searchHorizonTiles,
+  };
 }
 
 /**
@@ -3651,7 +3761,7 @@ function classifyOutcome(estimatedDurationDays: number): IntraSeasonTripOutcome 
 function deriveMovementType(
   cause: IntraSeasonTripCause,
   outcome: IntraSeasonTripOutcome,
-  distanceTiles: number,
+  physicalDistanceKm: number,
 ): IntraSeasonTripMovementType {
   if (cause === "local_resource_use") {
     return "local_foraging_loop";
@@ -3675,7 +3785,7 @@ function deriveMovementType(
     return "overnight_hunt_or_scout";
   }
 
-  return distanceTiles <= 2 ? "local_foraging_loop" : "food_patch_trip";
+  return physicalDistanceKm <= LOCAL_FORAGING_LOOP_MAX_DISTANCE_KM ? "local_foraging_loop" : "food_patch_trip";
 }
 
 function deriveTaskGroupType(
@@ -3752,7 +3862,7 @@ function buildOutboundPathTiles(
   world: WorldState,
   originTileId: TileId,
   targetTileId: TileId,
-  maxReachTiles: number = MAX_TRIP_DISTANCE_TILES,
+  maxReachTiles: number,
 ): readonly TileId[] {
   const origin = world.tiles[originTileId];
   const target = world.tiles[targetTileId];
@@ -3839,7 +3949,7 @@ function findPassablePath(
   // EXPEDITIONARY-1: expeditions reach country BEYOND the daily trip envelope, so
   // they need a correspondingly larger (still hard-bounded) search neighbourhood.
   // Same-day trips keep the original bound exactly — passing nothing is unchanged.
-  maxReachTiles: number = MAX_TRIP_DISTANCE_TILES,
+  maxReachTiles: number,
 ): readonly TileId[] | undefined {
   const maxExplored = (maxReachTiles * 2 + 4) ** 2;
   const cameFrom = new Map<TileId, TileId>();

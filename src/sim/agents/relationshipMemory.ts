@@ -253,7 +253,7 @@ function derivePracticeSkills(world: WorldState, band: Band): readonly Practical
     const crossing = move.temporaryWatercraft;
     addPractice(accumulators, {
       skill: crossing === undefined ? "long_route_movement" : "river_crossing",
-      practice: clamp01(0.16 + move.distanceTiles * 0.025 + (crossing?.routeConfidence ?? 0) * 0.16),
+      practice: clamp01(0.16 + move.distanceKm / 60 + (crossing?.routeConfidence ?? 0) * 0.16),
       success: move.status === "arrived" ? 1 : 0,
       failure: move.status === "failed_no_route" || crossing?.result === "crossing_abandoned_risk" ? 1 : 0,
       confidence: move.confidence,

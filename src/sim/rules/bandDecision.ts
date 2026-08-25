@@ -194,6 +194,7 @@ import {
 } from "../world/hydrography";
 import { getSeasonalTileConditions } from "../world/seasonal";
 import type { RiverCrossingProfile, Tile, WorldState } from "../world/types";
+import { getCardinalEdgeLengthKm } from "../world/spatialGeometry";
 import {
   advanceCorridorHeading,
   advanceFrontierProbeCadence,
@@ -274,13 +275,12 @@ const BELIEF_PROBE_SCORE_WEIGHT = 2.4;
 // yield logic evaluate the tile. EMPIRICAL CONSTANT.
 const INFERRED_FRONTIER_EXPLORE_PULL = 0.16;
 
-// Inferred-frontier PROBE radius (M0.7): a SETTLED band holding inferred near-water
-// corridor knowledge (it dwells on the margin, so its immediate neighbours are already
-// observed and explore_unknown_neighbor cannot act) may send a residence-UNCHANGED
-// logistical_probe to the NEAREST inferred frontier tile within this bounded radius —
-// observing it (inference → real KnownTileRecord) without relocating. Small, so the probe
-// stays a plausible local reconnaissance, not a long expedition.
-const INFERRED_FRONTIER_PROBE_RADIUS = 4;
+// SCALE-1 Task 7: inferred-frontier probing is a provisional PHYSICAL local-recon
+// envelope. Six kilometres preserves the legacy Map-2 four-cell compatibility fixture;
+// cells remain only the BFS representation. This is not an empirical universal law.
+const INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM = 6;
+// Legacy two-cell Map-2 "local evidence" distinction, now explicitly physical.
+const INFERRED_FRONTIER_LOCAL_EVIDENCE_KM = 3;
 
 // M0.16B — off-corridor SIDE-COUNTRY probe (knowledge CONSUMPTION). M0.16 formed abundant
 // off-corridor side existence beliefs but they were behaviourally INERT: the M0.7 gate rejects
@@ -454,7 +454,9 @@ interface UnknownFrontierCandidate {
 
 interface InferredFrontierProbeTarget {
   readonly tileId: TileId;
-  readonly routeDistance: number;
+  /** Topological telemetry only. */
+  readonly routeDistanceTiles: number;
+  readonly physicalDistanceKm: number;
   readonly routeRisk: number;
 }
 
@@ -2222,7 +2224,7 @@ function buildExploreCandidate(
 // the near-water margin holds inferred corridor knowledge but has no unknown immediate
 // neighbours (its 2-ring is observed), so explore_unknown_neighbor cannot act on it. This
 // emits a residence-UNCHANGED logistical_probe to the NEAREST inferred frontier tile
-// within INFERRED_FRONTIER_PROBE_RADIUS — a cautious reconnaissance that, when applied,
+// within the provisional physical probe envelope — a cautious reconnaissance that, when applied,
 // OBSERVES the tile (inference → real KnownTileRecord) WITHOUT relocating. It expresses
 // curiosity about reachable land it believes EXISTS, NOT richness: the score adds NO
 // resource/yield value (inference carries none), is low-confidence and route/risk-checked,
@@ -2296,7 +2298,7 @@ function buildInferredFrontierProbeCandidate(
     ...emptyScoreBreakdown(),
     waterRefugeSecurity: decisionCache.dryMarginContext?.stayMoveScout?.currentRefugeSecurity ?? 0,
     memoryConfidence: 0.2, // existence-only inference → low confidence
-    movementCost: clamp01(target.routeDistance / 8 + 0.12),
+    movementCost: clamp01(target.physicalDistanceKm / INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM + 0.12),
     riskCost: clamp01(
       Math.max(target.routeRisk, edgeMemo.riverAssessment.riverCrossingRisk) * 0.34 +
         (band.pressureState?.riskPressure ?? 0) * 0.14,
@@ -2342,8 +2344,13 @@ function findReachableInferredFrontierProbeTarget(
   inferred: InferredFrontierTiles,
   decisionCache: CandidateEvaluationCache,
 ): InferredFrontierProbeTarget | undefined {
-  const queue: Array<{ readonly tileId: TileId; readonly distance: number; readonly routeRisk: number }> = [
-    { tileId: currentTile.id, distance: 0, routeRisk: 0 },
+  const queue: Array<{
+    readonly tileId: TileId;
+    readonly routeDistanceTiles: number;
+    readonly physicalDistanceKm: number;
+    readonly routeRisk: number;
+  }> = [
+    { tileId: currentTile.id, routeDistanceTiles: 0, physicalDistanceKm: 0, routeRisk: 0 },
   ];
   const visited = new Set<TileId>([currentTile.id]);
   let best: InferredFrontierProbeTarget | undefined;
@@ -2352,7 +2359,10 @@ function findReachableInferredFrontierProbeTarget(
     const current = queue[index];
     const fromTile = getTile(world, current.tileId);
 
-    if (fromTile === undefined || current.distance >= INFERRED_FRONTIER_PROBE_RADIUS) {
+    if (
+      fromTile === undefined ||
+      current.physicalDistanceKm >= INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM - 1e-9
+    ) {
       continue;
     }
 
@@ -2389,28 +2399,34 @@ function findReachableInferredFrontierProbeTarget(
         continue;
       }
 
-      const distance = current.distance + 1;
+      const physicalDistanceKm =
+        current.physicalDistanceKm + getCardinalEdgeLengthKm(world.config, fromTile.coord, neighborTile.coord);
+      if (physicalDistanceKm > INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM + 1e-9) {
+        continue;
+      }
+      const routeDistanceTiles = current.routeDistanceTiles + 1;
       const routeRisk = Math.max(current.routeRisk, edgeMemo.riverAssessment.riverCrossingRisk);
       visited.add(neighborId);
 
       if (inferred[neighborId] !== undefined && band.knowledge.observedTiles[neighborId] === undefined) {
         const candidate: InferredFrontierProbeTarget = {
           tileId: neighborId,
-          routeDistance: distance,
+          routeDistanceTiles,
+          physicalDistanceKm,
           routeRisk,
         };
 
         if (
           best === undefined ||
-          candidate.routeDistance < best.routeDistance ||
-          (candidate.routeDistance === best.routeDistance && compareTileIds(candidate.tileId, best.tileId) < 0)
+          candidate.physicalDistanceKm < best.physicalDistanceKm ||
+          (candidate.physicalDistanceKm === best.physicalDistanceKm && compareTileIds(candidate.tileId, best.tileId) < 0)
         ) {
           best = candidate;
         }
       }
 
-      if (distance < INFERRED_FRONTIER_PROBE_RADIUS) {
-        queue.push({ tileId: neighborId, distance, routeRisk });
+      if (physicalDistanceKm < INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM - 1e-9) {
+        queue.push({ tileId: neighborId, routeDistanceTiles, physicalDistanceKm, routeRisk });
       }
     }
   }
@@ -2497,7 +2513,7 @@ function buildSideCountryProbeCandidate(
   const target = findReachableSideProbeTarget(world, band, currentTile, inferred, decisionCache);
 
   if (target === undefined) {
-    return undefined; // no reachable inferred SIDE tile within the probe radius
+    return undefined; // no reachable inferred SIDE tile within the physical probe envelope
   }
 
   const edgeMemo = getCandidateEdgeMemo(
@@ -2520,7 +2536,7 @@ function buildSideCountryProbeCandidate(
       inferred[target.tileId] !== undefined ||
       edgeMemo.riverAssessment.knownFordValue > 0.12 ||
       edgeMemo.riverAssessment.riverCorridorValue > 0.12,
-    localEvidence: target.routeDistance <= 2,
+    localEvidence: target.physicalDistanceKm <= INFERRED_FRONTIER_LOCAL_EVIDENCE_KM + 1e-9,
   });
   // Information-motive breakdown: existence-only (low memoryConfidence), the principled
   // `explorationValue` channel carries the value (information is worth gathering even when
@@ -2532,7 +2548,7 @@ function buildSideCountryProbeCandidate(
     memoryConfidence: 0.2, // existence-only inference → low confidence
     routeValue: reportedTargetBias.opportunityBias,
     explorationValue: SIDE_COUNTRY_PROBE_EXPLORATION_VALUE + reportedTargetBias.opportunityBias * 0.12,
-    movementCost: clamp01(target.routeDistance / 8 + 0.12),
+    movementCost: clamp01(target.physicalDistanceKm / INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM + 0.12),
     riskCost: clamp01(
       Math.max(target.routeRisk, edgeMemo.riverAssessment.riverCrossingRisk) * 0.34 +
         (band.pressureState?.riskPressure ?? 0) * 0.14 +
@@ -2571,7 +2587,7 @@ function buildSideCountryProbeCandidate(
   };
 }
 
-// M0.16B: nearest reachable inferred OFF-CORRIDOR SIDE tile within the probe radius. Mirrors
+// M0.16B: nearest reachable inferred OFF-CORRIDOR SIDE tile within the physical probe envelope. Mirrors
 // findReachableInferredFrontierProbeTarget's bounded id-ordered BFS, but a tile only qualifies
 // as a target when its inference source is `off_corridor_side_inference` (so the side probe
 // never accidentally observes a margin/corridor tile — those are M0.7's domain). Land-only,
@@ -2583,8 +2599,13 @@ function findReachableSideProbeTarget(
   inferred: InferredFrontierTiles,
   decisionCache: CandidateEvaluationCache,
 ): InferredFrontierProbeTarget | undefined {
-  const queue: Array<{ readonly tileId: TileId; readonly distance: number; readonly routeRisk: number }> = [
-    { tileId: currentTile.id, distance: 0, routeRisk: 0 },
+  const queue: Array<{
+    readonly tileId: TileId;
+    readonly routeDistanceTiles: number;
+    readonly physicalDistanceKm: number;
+    readonly routeRisk: number;
+  }> = [
+    { tileId: currentTile.id, routeDistanceTiles: 0, physicalDistanceKm: 0, routeRisk: 0 },
   ];
   const visited = new Set<TileId>([currentTile.id]);
   let best: InferredFrontierProbeTarget | undefined;
@@ -2593,7 +2614,10 @@ function findReachableSideProbeTarget(
     const current = queue[index];
     const fromTile = getTile(world, current.tileId);
 
-    if (fromTile === undefined || current.distance >= INFERRED_FRONTIER_PROBE_RADIUS) {
+    if (
+      fromTile === undefined ||
+      current.physicalDistanceKm >= INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM - 1e-9
+    ) {
       continue;
     }
 
@@ -2630,7 +2654,12 @@ function findReachableSideProbeTarget(
         continue;
       }
 
-      const distance = current.distance + 1;
+      const physicalDistanceKm =
+        current.physicalDistanceKm + getCardinalEdgeLengthKm(world.config, fromTile.coord, neighborTile.coord);
+      if (physicalDistanceKm > INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM + 1e-9) {
+        continue;
+      }
+      const routeDistanceTiles = current.routeDistanceTiles + 1;
       const routeRisk = Math.max(current.routeRisk, edgeMemo.riverAssessment.riverCrossingRisk);
       visited.add(neighborId);
 
@@ -2643,26 +2672,48 @@ function findReachableSideProbeTarget(
       ) {
         const candidate: InferredFrontierProbeTarget = {
           tileId: neighborId,
-          routeDistance: distance,
+          routeDistanceTiles,
+          physicalDistanceKm,
           routeRisk,
         };
 
         if (
           best === undefined ||
-          candidate.routeDistance < best.routeDistance ||
-          (candidate.routeDistance === best.routeDistance && compareTileIds(candidate.tileId, best.tileId) < 0)
+          candidate.physicalDistanceKm < best.physicalDistanceKm ||
+          (candidate.physicalDistanceKm === best.physicalDistanceKm && compareTileIds(candidate.tileId, best.tileId) < 0)
         ) {
           best = candidate;
         }
       }
 
-      if (distance < INFERRED_FRONTIER_PROBE_RADIUS) {
-        queue.push({ tileId: neighborId, distance, routeRisk });
+      if (physicalDistanceKm < INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM - 1e-9) {
+        queue.push({ tileId: neighborId, routeDistanceTiles, physicalDistanceKm, routeRisk });
       }
     }
   }
 
   return best;
+}
+
+/**
+ * Audit-only controlled probe-target seam. It uses the same band-known, passability and
+ * crossing checks as production while exposing only target identity + physical route burden.
+ */
+export function deriveInferredFrontierProbeTargetForAudit(
+  world: WorldState,
+  band: Band,
+  sideCountryOnly: boolean,
+): InferredFrontierProbeTarget | undefined {
+  const currentTile = getTile(world, band.position);
+  const inferred = band.frontierKnowledge?.inferredTiles;
+  if (currentTile === undefined || inferred === undefined) return undefined;
+  const decisionCache = {
+    edgeScoresByEdgeKey: new Map(),
+    profiler: undefined,
+  } as unknown as CandidateEvaluationCache;
+  return sideCountryOnly
+    ? findReachableSideProbeTarget(world, band, currentTile, inferred, decisionCache)
+    : findReachableInferredFrontierProbeTarget(world, band, currentTile, inferred, decisionCache);
 }
 
 // M0.8: bounded corridor RELOCATION. A SETTLED band that has formed inferred shore-corridor
