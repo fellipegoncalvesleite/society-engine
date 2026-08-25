@@ -1,10 +1,8 @@
 import type { TileId } from "../core/types";
 import { getCellAreaKm2 } from "../world/spatialGeometry";
+import type { RiverCrossingCapability } from "../world/hydrography";
 import type { WorldState } from "../world/types";
-import {
-  BASELINE_TRAVERSAL_CROSSING_CAPABILITY,
-  deriveTraversalEdge,
-} from "./traversal";
+import { deriveTraversalEdge } from "./traversal";
 
 // PROVENANCE D — TECHNICAL numeric tolerance only; this does not define behavioral reach.
 const ACCESS_EPSILON_DAYS = 1e-9;
@@ -53,6 +51,7 @@ export function expandBoundedTravelReach(
   originTileId: TileId,
   kmPerTravelDay: number,
   travelTimeBudgetDays: number,
+  crossingCapability: RiverCrossingCapability,
 ): BoundedTravelReach {
   const pace = Math.max(0, kmPerTravelDay);
   const budget = Math.max(0, travelTimeBudgetDays);
@@ -105,7 +104,7 @@ export function expandBoundedTravelReach(
         current.tileId,
         neighborId,
         pace,
-        BASELINE_TRAVERSAL_CROSSING_CAPABILITY,
+        crossingCapability,
       );
       if (!edge.passable || !Number.isFinite(edge.travelTimeDays)) {
         continue;

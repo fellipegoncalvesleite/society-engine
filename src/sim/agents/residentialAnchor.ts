@@ -1,5 +1,6 @@
 import { getLocalUsePressureValue } from "./pressure";
 import { deriveTravelPace } from "./bandMobility";
+import { deriveBandRiverCrossingCapability } from "./crossingCapability";
 import { expandBoundedTravelReach, type BoundedTravelReach } from "./physicalAccess";
 import type { TickContextCache } from "./contextCache";
 import type {
@@ -129,12 +130,14 @@ export function deriveResidentialAnchorContext(
     anchorWaterSecurity,
     localFood,
   });
+  const crossingCapability = deriveBandRiverCrossingCapability(band);
   const foragingPace = deriveTravelPace(band, "resource_expedition").kmPerTravelDay;
   const foragingAccess = expandBoundedTravelReach(
     world,
     anchorTile.id,
     foragingPace,
     radius.travelTimeBudgetDays,
+    crossingCapability,
   );
   const logisticalTravelTimeBudgetDays = round2(Math.min(
     MAX_LOGISTICAL_TRAVEL_BUDGET_DAYS,
@@ -146,6 +149,7 @@ export function deriveResidentialAnchorContext(
     anchorTile.id,
     logisticalPace,
     logisticalTravelTimeBudgetDays,
+    crossingCapability,
   );
 
   // Reachability is physical/traversal truth. Resource scoring below is separately

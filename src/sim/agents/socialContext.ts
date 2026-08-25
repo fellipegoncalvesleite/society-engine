@@ -64,7 +64,8 @@ import {
 } from "./contextCache";
 import { getLocalUsePressureValue } from "./pressure";
 import { deriveTravelPace } from "./bandMobility";
-import { expandBoundedTravelReach } from "./physicalAccess";
+import { deriveBandRiverCrossingCapability } from "./crossingCapability";
+import { expandBoundedTravelReach, type BoundedTravelReach } from "./physicalAccess";
 import { advanceFrontierIntent } from "./frontierIntent";
 import { advanceFrontierResidence } from "./frontierResidence";
 import { advanceFrontierShorelineKnowledge } from "./frontierKnowledge";
@@ -87,13 +88,12 @@ import type { FoodDemographyDiagnostics } from "../diagnostics/foodDemographyDia
 // - SOCIAL_VISIT_TRAVEL_BUDGET_DAYS is a new separated visiting parameter; 0.75 day is provisional.
 // - ADJACENT_CONTACT_DISTANCE_KM admits one cardinal neighbor on both currently supported 1-km and
 //   1.5-km rasters; it is compatibility behavior, not an empirical definition of "adjacent".
-// - KNOWN_OPPORTUNITY_* replaces the old <=8-cell coarse reach check with a physical prefilter plus
-//   traversal budget. Both values remain provisional until opportunity/search behavior is calibrated.
+// - KNOWN_OPPORTUNITY_TRAVEL_BUDGET_DAYS bounds known-opportunity/frontier access by canonical
+//   traversal time. Candidate memories are bounded separately; there is no second Euclidean range law.
 export const LOCAL_RANGE_RADIUS_KM = 4;
 export const ENCOUNTER_OPPORTUNITY_RADIUS_KM = 3;
 export const SOCIAL_VISIT_TRAVEL_BUDGET_DAYS = 0.75;
 const ADJACENT_CONTACT_DISTANCE_KM = 1.5;
-const KNOWN_OPPORTUNITY_DISTANCE_KM = 8;
 const KNOWN_OPPORTUNITY_TRAVEL_BUDGET_DAYS = 1;
 const TREND_WINDOW_SHORT = 4;
 const TREND_WINDOW_LONG = 8;
@@ -909,6 +909,17 @@ export function deriveNearbyOpportunityGradient(
   const candidateTileIds =
     getSalientMemorySummary(cache, band.id)?.knownOpportunityCandidateIds ??
     (Object.keys(band.knowledge.observedTiles) as TileId[]);
+  const opportunityReach = currentTile === undefined || candidateTileIds.length === 0
+    ? undefined
+    : deriveKnownOpportunityReach(world, band, currentTile.id);
+  const opportunityReachByTileId = new Map(
+    opportunityReach?.reachable.map((entry) => [entry.tileId, entry] as const) ?? [],
+  );
+  if (opportunityReach !== undefined) {
+    countContext(profiler, "nearbyOpportunityReachSurfacesBuilt");
+    countContext(profiler, "nearbyOpportunityReachNodes", opportunityReach.visitedNodeCount);
+    countContext(profiler, "nearbyOpportunityReachEdges", opportunityReach.expandedEdgeCount);
+  }
 
   // 2K.8 — band-known learned-support coupling (DECISION-SIDE ONLY). The term is INERT (the
   // gradient is byte-identical to pre-2K.8) unless the band BOTH holds learned skill AND is under
@@ -978,14 +989,8 @@ export function deriveNearbyOpportunityGradient(
       continue;
     }
 
-    const distanceKm = getPhysicalDistanceKm(world, currentTile, tile);
-
-    if (distanceKm > KNOWN_OPPORTUNITY_DISTANCE_KM) {
-      countContext(profiler, "nearbyOpportunityRejectedDistance");
-      continue;
-    }
-
-    if (!isKnownReachable(world, band, currentTile.id, tile.id)) {
+    const reachEntry = opportunityReachByTileId.get(tile.id);
+    if (reachEntry === undefined) {
       countContext(profiler, "nearbyOpportunityRejectedReachability");
       continue;
     }
@@ -1004,7 +1009,7 @@ export function deriveNearbyOpportunityGradient(
         riskPenalty * 0.14 -
         crowdingPenalty * 0.18 -
         biomePenalty * 0.12 -
-        distanceKm * 0.018,
+        reachEntry.physicalDistanceKm * 0.018,
     );
 
     if (opportunityStrength <= 0.08) {
@@ -1514,6 +1519,12 @@ function getFrontierCandidates(
   const candidateTileIds =
     getSalientMemorySummary(cache, band.id)?.knownFrontierTileIds ??
     (Object.keys(band.knowledge.observedTiles) as TileId[]);
+  const frontierReach = candidateTileIds.length === 0
+    ? undefined
+    : deriveKnownOpportunityReach(world, band, band.position);
+  const frontierReachByTileId = new Map(
+    frontierReach?.reachable.map((entry) => [entry.tileId, entry] as const) ?? [],
+  );
 
   const bestCandidates: FrontierCandidate[] = [];
   let acceptedCount = 0;
@@ -1534,7 +1545,7 @@ function getFrontierCandidates(
       continue;
     }
 
-    if (!isKnownReachable(world, band, band.position, tile.id)) {
+    if (!frontierReachByTileId.has(tile.id)) {
       countContext(profiler, "frontierCandidatesRejectedReachability");
       continue;
     }
@@ -1551,7 +1562,6 @@ function getFrontierCandidates(
       continue;
     }
 
-    const distanceKm = getPhysicalDistanceKm(world, currentTile, tile);
     const corridorKind = getFrontierCorridorKind(band, tile);
     const corridorValue = corridorKind === "unknown" ? 0.08 : 0.32;
     const pressure = getNearbyBandPressure(world, band, tile.id, cache);
@@ -1563,8 +1573,7 @@ function getFrontierCandidates(
         suitability * 0.24 +
         record.confidence * 0.12 -
         pressure.weightedCrowding * 0.16 -
-        inheritedPenalty -
-        Math.max(0, distanceKm - KNOWN_OPPORTUNITY_DISTANCE_KM) * 0.018,
+        inheritedPenalty,
     );
 
     if (score <= 0.18) {
@@ -1668,37 +1677,19 @@ function getHabitatCrowdingBuffer(tile: Tile): number {
   );
 }
 
-function isKnownReachable(
+function deriveKnownOpportunityReach(
   world: WorldState,
   band: Band,
   fromTileId: TileId,
-  toTileId: TileId,
-): boolean {
-  const target = getTile(world, toTileId);
-  const fromTile = getTile(world, fromTileId);
-
-  if (
-    target === undefined ||
-    fromTile === undefined ||
-    !isBandPassableDestination(target) ||
-    band.knowledge.observedTiles[toTileId] === undefined
-  ) {
-    return false;
-  }
-
-  const distanceKm = getPhysicalDistanceKm(world, fromTile, target);
-  if (distanceKm > KNOWN_OPPORTUNITY_DISTANCE_KM + 1e-9) {
-    return false;
-  }
-
+): BoundedTravelReach {
   const pace = deriveTravelPace(band, "selected_reconnaissance_party").kmPerTravelDay;
-  const reach = expandBoundedTravelReach(
+  return expandBoundedTravelReach(
     world,
     fromTileId,
     pace,
     KNOWN_OPPORTUNITY_TRAVEL_BUDGET_DAYS,
+    deriveBandRiverCrossingCapability(band),
   );
-  return reach.reachable.some((entry) => entry.tileId === toTileId);
 }
 
 /**
@@ -1726,6 +1717,7 @@ export function isSocialVisitReachable(
     band.position,
     pace,
     Math.max(0, travelTimeBudgetDays),
+    deriveBandRiverCrossingCapability(band),
   ).reachable.some((entry) => entry.tileId === targetTileId);
 }
 

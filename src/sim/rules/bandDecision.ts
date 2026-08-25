@@ -393,10 +393,10 @@ import {
   RESOURCE_SCOUT_SCORE_WEIGHT,
   VISIBLE_LANDSCAPE_PROBE_SCORE_WEIGHT,
 } from "./decisionConstants";
+import { deriveBandRiverCrossingCapability } from "../agents/crossingCapability";
 // CORE-PIPELINE-DECOMPOSITION-2 — candidate edge / river-crossing assessment.
 import {
   formatRiverCapability,
-  getBandRiverCrossingCapability,
   getCandidateEdgeMemo,
   getReportedKnowledgeTargetBias,
   getRiverCorridorValue,
@@ -5128,7 +5128,7 @@ function deriveAppliedMigrationWalk(
     kmPerTravelDay: pace.kmPerTravelDay,
     availableTravelDays,
     edgeRemainder: band.residentialTravelEdgeRemainder,
-    crossingCapability: getBandRiverCrossingCapability(band),
+    crossingCapability: deriveBandRiverCrossingCapability(band),
   });
   const completedPath = routeTileIds.slice(1, advanced.routeIndex + 1);
   const exhaustedTime = advanced.unusedTravelDays <= 1e-9 && advanced.routeIndex < routeTileIds.length - 1;

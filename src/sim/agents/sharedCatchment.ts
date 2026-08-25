@@ -1,4 +1,5 @@
 import { deriveCommittedMobilityPools, deriveTravelPace, partyCompositionTotal } from "./bandMobility";
+import { deriveBandRiverCrossingCapability } from "./crossingCapability";
 import { expandBoundedTravelReach } from "./physicalAccess";
 import type { TickContextCache } from "./contextCache";
 import type { Band } from "./types";
@@ -69,7 +70,9 @@ export function getBandForagingFootprint(
     band.residentialAnchor?.foragingTravelTimeBudgetDays ?? DEFAULT_FORAGING_TRAVEL_BUDGET_DAYS,
   );
   const pace = deriveTravelPace(band, "resource_expedition").kmPerTravelDay;
-  const access = expandBoundedTravelReach(world, band.position, pace, travelTimeBudgetDays);
+  const access = expandBoundedTravelReach(
+    world, band.position, pace, travelTimeBudgetDays, deriveBandRiverCrossingCapability(band),
+  );
   const tiles: FootprintTile[] = [];
 
   // Physical reach is deliberately broader than retained anchor summaries. Resource/support

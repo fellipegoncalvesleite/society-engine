@@ -1,5 +1,6 @@
 import type { ResidentialAnchorContext } from "./residentialAnchor";
 import { deriveTravelPace } from "./bandMobility";
+import { deriveBandRiverCrossingCapability } from "./crossingCapability";
 import { expandBoundedTravelReach } from "./physicalAccess";
 import { getLocalUsePressureValue } from "./pressure";
 import type {
@@ -468,6 +469,7 @@ function computeWetCatchmentRotation(
       anchor.anchorTileId,
       logisticalPaceKmPerDay,
       logisticalBudgetDays,
+      deriveBandRiverCrossingCapability(band),
     ).reachable.map((entry) => entry.tileId),
   );
   const candidateIds = [...new Set<TileId>([...anchor.catchmentTileIds, ...wetRange])]

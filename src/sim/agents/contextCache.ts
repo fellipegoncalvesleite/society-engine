@@ -28,13 +28,12 @@ import { isLivingBand } from "./bandLifecycle";
 const SPATIAL_BUCKET_SIZE = 5;
 
 // PROVENANCE C — MODEL / PROVISIONAL SCALE-1 CALIBRATION. The legacy cache/local-density rules
-// used 4-cell neighborhoods, a +1-cell decay shoulder, and an 8-cell known-opportunity prefilter.
+// used 4-cell neighborhoods and a +1-cell decay shoulder for local-density queries.
 // Map 2 is 1.5 km/cell, so simply treating those integers as kilometers would be false provenance.
-// These values use the canonical 1-km raster as a temporary compatibility target while making
-// behavior resolution-independent. They are not empirically frozen human-range constants.
+// The known-opportunity source is bounded by candidate count, not by a second physical radius;
+// canonical traversal time decides whether a remembered candidate is behaviorally reachable.
 export const DEFAULT_NEARBY_RADIUS_KM = 4;
 const LOCAL_POPULATION_DECAY_SHOULDER_KM = 1;
-const KNOWN_OPPORTUNITY_PREFILTER_RADIUS_KM = 8;
 const MAX_SALIENT_PLACES = 16;
 const MAX_SALIENT_CORRIDORS = 12;
 const MAX_FRONTIER_CANDIDATES = 16;
@@ -610,14 +609,11 @@ function isKnownOpportunityRecord(
   tileId: TileId,
 ): boolean {
   const tile = getTile(world, tileId);
-  const currentTile = getTile(world, band.position);
 
   return (
     tile !== undefined &&
-    currentTile !== undefined &&
     tile.id !== band.position &&
-    isBandPassableDestination(tile) &&
-    getPhysicalDistanceKm(world, tile, currentTile) <= KNOWN_OPPORTUNITY_PREFILTER_RADIUS_KM + 1e-9
+    isBandPassableDestination(tile)
   );
 }
 

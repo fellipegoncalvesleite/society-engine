@@ -38,7 +38,7 @@ import { closeOpenTravelInterval, deriveTravelEffortSplit } from "./provisionalT
 import { getNeighborTiles, getTile } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
 import { advanceTraversalAlongRoute } from "./traversal";
-import { getBandRiverCrossingCapability } from "../rules/decisionEdgeContext";
+import { deriveBandRiverCrossingCapability } from "./crossingCapability";
 import type { Band, FissionLifecycleRecord, ProvisionalActionRelativeToDeparture } from "./types";
 import type { BandId, DayNumber, TileId } from "../core/types";
 import type { WorldState } from "../world/types";
@@ -252,7 +252,7 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
         kmPerTravelDay: pace.kmPerTravelDay,
         availableTravelDays,
         edgeRemainder,
-        crossingCapability: getBandRiverCrossingCapability(band),
+        crossingCapability: deriveBandRiverCrossingCapability(band),
       });
       travelDaysConsumed += advanced.travelDaysConsumed;
       availableTravelDays = advanced.unusedTravelDays;
