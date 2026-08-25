@@ -58,10 +58,13 @@ import {
   getActiveBandsFromCache,
   getLocalBandCountFromCache,
   getLocalPopulationEstimateFromCache,
+  getNearbyActiveBandIdsForTile,
   getSalientMemorySummary,
   type TickContextCache,
 } from "./contextCache";
 import { getLocalUsePressureValue } from "./pressure";
+import { deriveTravelPace } from "./bandMobility";
+import { expandBoundedTravelReach } from "./physicalAccess";
 import { advanceFrontierIntent } from "./frontierIntent";
 import { advanceFrontierResidence } from "./frontierResidence";
 import { advanceFrontierShorelineKnowledge } from "./frontierKnowledge";
@@ -70,12 +73,28 @@ import { advanceRangeFriction } from "./rangeFriction";
 import { advanceVisibleLandscapeCues } from "./landscapeVisibility";
 import type { BandId, ReasonId, TickNumber, TileId } from "../core/types";
 import { getTile } from "../world/generate";
-import { getRiverCrossingForMovement } from "../world/hydrography";
 import { isBandPassableDestination } from "../world/passability";
+import { getEuclideanPhysicalDistanceKm } from "../world/spatialGeometry";
 import type { Tile, WorldState } from "../world/types";
 import type { FoodDemographyDiagnostics } from "../diagnostics/foodDemographyDiagnostics";
 
-const LOCAL_RANGE_RADIUS = 4;
+// Distinct process scales. These are intentionally NOT one universal social radius.
+// PROVENANCE C — MODEL / PROVISIONAL SCALE-1 CALIBRATION, not empirical human-law constants:
+// - LOCAL_RANGE_RADIUS_KM temporarily maps the old 4-cell density query to the canonical 1-km
+//   compatibility scale. Legacy Map 2 made the same rule ~6 km, so 4 km is not preserved truth.
+// - ENCOUNTER_OPPORTUNITY_RADIUS_KM similarly carries the old <=3-cell encounter envelope into a
+//   separate physical process without claiming that 3 km is an anthropological cutoff.
+// - SOCIAL_VISIT_TRAVEL_BUDGET_DAYS is a new separated visiting parameter; 0.75 day is provisional.
+// - ADJACENT_CONTACT_DISTANCE_KM admits one cardinal neighbor on both currently supported 1-km and
+//   1.5-km rasters; it is compatibility behavior, not an empirical definition of "adjacent".
+// - KNOWN_OPPORTUNITY_* replaces the old <=8-cell coarse reach check with a physical prefilter plus
+//   traversal budget. Both values remain provisional until opportunity/search behavior is calibrated.
+export const LOCAL_RANGE_RADIUS_KM = 4;
+export const ENCOUNTER_OPPORTUNITY_RADIUS_KM = 3;
+export const SOCIAL_VISIT_TRAVEL_BUDGET_DAYS = 0.75;
+const ADJACENT_CONTACT_DISTANCE_KM = 1.5;
+const KNOWN_OPPORTUNITY_DISTANCE_KM = 8;
+const KNOWN_OPPORTUNITY_TRAVEL_BUDGET_DAYS = 1;
 const TREND_WINDOW_SHORT = 4;
 const TREND_WINDOW_LONG = 8;
 
@@ -457,8 +476,8 @@ function deriveRangeSaturationState(
   const knownRecord = band.knowledge.observedTiles[band.position];
   const nearby = getNearbyBandPressure(world, band, band.position, cache);
   const localUsePressure = getLocalUsePressureValue(band.usePressure[band.position]);
-  const localPopulationEstimate = getLocalPopulationEstimateFromCache(world, cache, band.position, LOCAL_RANGE_RADIUS);
-  const localBandCount = getLocalBandCountFromCache(world, cache, band.position, LOCAL_RANGE_RADIUS);
+  const localPopulationEstimate = getLocalPopulationEstimateFromCache(world, cache, band.position, LOCAL_RANGE_RADIUS_KM);
+  const localBandCount = getLocalBandCountFromCache(world, cache, band.position, LOCAL_RANGE_RADIUS_KM);
   const habitatSuitability = tile === undefined
     ? 0.32
     : getKnownHabitatSuitability(tile, knownRecord);
@@ -959,9 +978,9 @@ export function deriveNearbyOpportunityGradient(
       continue;
     }
 
-    const distance = getGridDistance(currentTile, tile);
+    const distanceKm = getPhysicalDistanceKm(world, currentTile, tile);
 
-    if (distance > 8) {
+    if (distanceKm > KNOWN_OPPORTUNITY_DISTANCE_KM) {
       countContext(profiler, "nearbyOpportunityRejectedDistance");
       continue;
     }
@@ -985,7 +1004,7 @@ export function deriveNearbyOpportunityGradient(
         riskPenalty * 0.14 -
         crowdingPenalty * 0.18 -
         biomePenalty * 0.12 -
-        distance * 0.018,
+        distanceKm * 0.018,
     );
 
     if (opportunityStrength <= 0.08) {
@@ -1100,9 +1119,9 @@ function detectEncounter(
     return undefined;
   }
 
-  const distance = getGridDistance(leftTile, rightTile);
+  const distanceKm = getPhysicalDistanceKm(world, leftTile, rightTile);
   const relation = getEncounterRelation(left, right);
-  const kind = getEncounterKind(distance, relation);
+  const kind = getEncounterKind(distanceKm, relation);
 
   if (kind === undefined) {
     return undefined;
@@ -1120,7 +1139,7 @@ function detectEncounter(
     clamp01(
       (left.pressureState?.nearbyBandPressure ?? 0) * 0.4 +
         (right.pressureState?.nearbyBandPressure ?? 0) * 0.4 +
-        (distance === 0 ? 0.2 : 0),
+        (distanceKm <= 1e-9 ? 0.2 : 0),
     ),
   );
   const tolerance = round2(getEncounterTolerance(relation, left, right, resourcePressure));
@@ -1133,7 +1152,7 @@ function detectEncounter(
     ),
   );
   const outcome = getEncounterOutcome(relation, tolerance, tension, resourcePressure);
-  const anchorTileId = distance === 0 ? left.position : undefined;
+  const anchorTileId = distanceKm <= 1e-9 ? left.position : undefined;
 
   return {
     id: `encounter:${world.time.tick}:${left.id}:${right.id}`,
@@ -1532,7 +1551,7 @@ function getFrontierCandidates(
       continue;
     }
 
-    const distance = getGridDistance(currentTile, tile);
+    const distanceKm = getPhysicalDistanceKm(world, currentTile, tile);
     const corridorKind = getFrontierCorridorKind(band, tile);
     const corridorValue = corridorKind === "unknown" ? 0.08 : 0.32;
     const pressure = getNearbyBandPressure(world, band, tile.id, cache);
@@ -1545,7 +1564,7 @@ function getFrontierCandidates(
         record.confidence * 0.12 -
         pressure.weightedCrowding * 0.16 -
         inheritedPenalty -
-        Math.max(0, distance - 8) * 0.018,
+        Math.max(0, distanceKm - KNOWN_OPPORTUNITY_DISTANCE_KM) * 0.018,
     );
 
     if (score <= 0.18) {
@@ -1622,61 +1641,6 @@ function getFrontierCorridorKind(band: Band, tile: Tile): FrontierCorridorKind {
   return "unknown";
 }
 
-function getLocalPopulationEstimate(world: WorldState, band: Band, tileId: TileId): number {
-  const tile = getTile(world, tileId);
-
-  if (tile === undefined) {
-    return band.demography.population;
-  }
-
-  return Object.values(world.bands).reduce((total, otherBand) => {
-    if (
-      otherBand.status === "dispersed" ||
-      otherBand.viability?.status === "absorbed" ||
-      otherBand.viability?.status === "extinct"
-    ) {
-      return total;
-    }
-
-    const otherTile = getTile(world, otherBand.position);
-
-    if (otherTile === undefined) {
-      return total;
-    }
-
-    const distance = getGridDistance(tile, otherTile);
-
-    if (distance > LOCAL_RANGE_RADIUS) {
-      return total;
-    }
-
-    const weight = (LOCAL_RANGE_RADIUS + 1 - distance) / (LOCAL_RANGE_RADIUS + 1);
-
-    return total + otherBand.demography.population * weight;
-  }, 0);
-}
-
-function getLocalBandCount(world: WorldState, tileId: TileId): number {
-  const tile = getTile(world, tileId);
-
-  if (tile === undefined) {
-    return 1;
-  }
-
-  return Object.values(world.bands).filter((band) => {
-    if (
-      band.status === "dispersed" ||
-      band.viability?.status === "absorbed" ||
-      band.viability?.status === "extinct"
-    ) {
-      return false;
-    }
-
-    const otherTile = getTile(world, band.position);
-
-    return otherTile !== undefined && getGridDistance(tile, otherTile) <= LOCAL_RANGE_RADIUS;
-  }).length;
-}
 
 function getKnownHabitatSuitability(tile: Tile, record: Band["knowledge"]["observedTiles"][TileId] | undefined): number {
   if (record === undefined) {
@@ -1711,33 +1675,58 @@ function isKnownReachable(
   toTileId: TileId,
 ): boolean {
   const target = getTile(world, toTileId);
-
-  if (target === undefined || !isBandPassableDestination(target)) {
-    return false;
-  }
-
   const fromTile = getTile(world, fromTileId);
 
-  if (fromTile === undefined) {
+  if (
+    target === undefined ||
+    fromTile === undefined ||
+    !isBandPassableDestination(target) ||
+    band.knowledge.observedTiles[toTileId] === undefined
+  ) {
     return false;
   }
 
-  const distance = getGridDistance(fromTile, target);
-
-  if (distance > 8) {
+  const distanceKm = getPhysicalDistanceKm(world, fromTile, target);
+  if (distanceKm > KNOWN_OPPORTUNITY_DISTANCE_KM + 1e-9) {
     return false;
   }
 
-  if (distance <= 1) {
-    const crossing = getRiverCrossingForMovement(world, fromTileId, toTileId);
+  const pace = deriveTravelPace(band, "selected_reconnaissance_party").kmPerTravelDay;
+  const reach = expandBoundedTravelReach(
+    world,
+    fromTileId,
+    pace,
+    KNOWN_OPPORTUNITY_TRAVEL_BUDGET_DAYS,
+  );
+  return reach.reachable.some((entry) => entry.tileId === toTileId);
+}
 
-    return crossing === undefined ||
-      crossing.crossingClass === "ford" ||
-      crossing.crossingClass === "seasonal_ford" ||
-      crossing.crossingClass === "shallow_crossing";
+/**
+ * Read-only social visiting reach. Travel authority decides access; relationship memory is neither
+ * created nor rewritten here. The target must already be in this band's observed spatial knowledge.
+ */
+export function isSocialVisitReachable(
+  world: WorldState,
+  band: Band,
+  targetTileId: TileId,
+  travelTimeBudgetDays = SOCIAL_VISIT_TRAVEL_BUDGET_DAYS,
+): boolean {
+  const target = getTile(world, targetTileId);
+  if (
+    target === undefined ||
+    !isBandPassableDestination(target) ||
+    band.knowledge.observedTiles[targetTileId] === undefined
+  ) {
+    return false;
   }
 
-  return true;
+  const pace = deriveTravelPace(band, "selected_reconnaissance_party").kmPerTravelDay;
+  return expandBoundedTravelReach(
+    world,
+    band.position,
+    pace,
+    Math.max(0, travelTimeBudgetDays),
+  ).reachable.some((entry) => entry.tileId === targetTileId);
 }
 
 // CORRECTION-29 — every branch is now gated on CURRENT DISTANCE. The last
@@ -1748,32 +1737,60 @@ function isKnownReachable(
 // private placeMemory. Remembered prior contact and reported awareness are
 // different things from meeting, and neither is created here.
 function getEncounterKind(
-  distance: number,
+  distanceKm: number,
   relation: BandEncounterRelation,
 ): BandEncounterKind | undefined {
-  if (distance === 0) {
+  if (distanceKm <= 1e-9) {
     return "same_tile";
   }
 
-  if (distance === 1) {
+  if (distanceKm <= ADJACENT_CONTACT_DISTANCE_KM + 1e-9) {
     return "adjacent_contact";
   }
 
-  if (relation === "parent_daughter" && distance <= 3) {
+  if (relation === "parent_daughter" && distanceKm <= ENCOUNTER_OPPORTUNITY_RADIUS_KM + 1e-9) {
     return "parent_daughter_overlap";
   }
 
-  if (relation === "siblings" && distance <= 3) {
+  if (relation === "siblings" && distanceKm <= ENCOUNTER_OPPORTUNITY_RADIUS_KM + 1e-9) {
     return "sibling_overlap";
   }
 
-  if (distance <= 3) {
+  if (distanceKm <= ENCOUNTER_OPPORTUNITY_RADIUS_KM + 1e-9) {
     return relation === "unrelated" || relation === "unknown"
       ? "unrelated_overlap"
       : "shared_resource_area";
   }
 
   return undefined;
+}
+
+export function getPhysicalEncounterKind(
+  world: WorldState,
+  left: Band,
+  right: Band,
+): BandEncounterKind | undefined {
+  if (
+    left.status === "dispersed" ||
+    right.status === "dispersed" ||
+    left.viability?.status === "absorbed" ||
+    right.viability?.status === "absorbed" ||
+    left.viability?.status === "extinct" ||
+    right.viability?.status === "extinct"
+  ) {
+    return undefined;
+  }
+
+  const leftTile = getTile(world, left.position);
+  const rightTile = getTile(world, right.position);
+  if (leftTile === undefined || rightTile === undefined) {
+    return undefined;
+  }
+
+  return getEncounterKind(
+    getPhysicalDistanceKm(world, leftTile, rightTile),
+    getEncounterRelation(left, right),
+  );
 }
 
 function getEncounterRelation(left: Band, right: Band): BandEncounterRelation {
@@ -1977,29 +1994,12 @@ function getLocalEncounterCandidateIds(
   cache: TickContextCache,
   band: Band,
 ): readonly BandId[] {
-  const nearby = cache.nearbyBandsByBandId.get(band.id);
-
-  if (nearby !== undefined) {
-    return nearby;
-  }
-
-  const bandTile = getTile(world, band.position);
-
-  if (bandTile === undefined) {
-    return [];
-  }
-
-  return cache.activeBandIds.filter((candidateId) => {
-    const candidate = world.bands[candidateId];
-    const candidateTile = candidate === undefined ? undefined : getTile(world, candidate.position);
-
-    return (
-      candidate !== undefined &&
-      candidate.id !== band.id &&
-      candidateTile !== undefined &&
-      getGridDistance(bandTile, candidateTile) <= 4
-    );
-  });
+  return getNearbyActiveBandIdsForTile(
+    world,
+    cache.bandSpatialIndex,
+    band.position,
+    ENCOUNTER_OPPORTUNITY_RADIUS_KM,
+  ).filter((candidateId) => candidateId !== band.id);
 }
 
 function getEncounterPairKey(left: BandId, right: BandId): string {
@@ -2031,8 +2031,8 @@ function makeContextReasonId(
   return `reason:context:${bandId}:${world.time.tick}:${kind}:${tileId}` as ReasonId;
 }
 
-function getGridDistance(first: Tile, second: Tile): number {
-  return Math.abs(first.coord.x - second.coord.x) + Math.abs(first.coord.y - second.coord.y);
+function getPhysicalDistanceKm(world: WorldState, first: Tile, second: Tile): number {
+  return getEuclideanPhysicalDistanceKm(world.config, first.coord, second.coord);
 }
 
 function compareBands(left: Band, right: Band): number {

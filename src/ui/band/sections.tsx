@@ -1796,10 +1796,30 @@ export function ResidentialAnchorDetails({ band }: { readonly band: Band }) {
       <Detail label="drought response" value={anchor.droughtResponse} />
       <Detail label="seasons anchored" value={String(anchor.seasonsAnchored)} />
       <Detail
-        label="foraging radius"
-        value={`${anchor.foragingRadius} (${radius?.basis ?? "?"}, log ${anchor.logisticalRadius})`}
+        label="foraging reach"
+        value={
+          anchor.foragingRadiusKm === undefined
+            ? `${anchor.foragingRadius} topological cells (${radius?.basis ?? "?"})`
+            : `${formatNumber(anchor.foragingRadiusKm)} km / ${formatNumber(anchor.foragingTravelTimeBudgetDays ?? 0)} travel days (${radius?.basis ?? "?"})`
+        }
       />
-      <Detail label="catchment tiles" value={String(anchor.catchmentTileIds.length)} />
+      <Detail
+        label="logistical reach"
+        value={
+          anchor.logisticalRadiusKm === undefined
+            ? `${anchor.logisticalRadius} topological cells`
+            : `${formatNumber(anchor.logisticalRadiusKm)} km / ${formatNumber(anchor.logisticalTravelTimeBudgetDays ?? 0)} travel days`
+        }
+      />
+      <Detail label="retained catchment cells" value={String(anchor.catchmentTileIds.length)} />
+      <Detail
+        label="catchment area"
+        value={
+          anchor.knownCatchmentAreaKm2 === undefined
+            ? "legacy / unknown"
+            : `${formatNumber(anchor.knownCatchmentAreaKm2)} km² known / ${formatNumber(anchor.reachableCatchmentAreaKm2 ?? 0)} km² physically reachable`
+        }
+      />
       <Detail label="catchment return" value={formatNumber(anchor.catchmentReturnEstimate)} />
       <Detail label="catchment depletion" value={formatNumber(anchor.catchmentDepletion)} />
       <Detail label="anchor water security" value={formatNumber(anchor.anchorWaterSecurity)} />

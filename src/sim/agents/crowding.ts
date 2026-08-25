@@ -11,9 +11,22 @@ import {
 import { getExpeditionPhysicalPeople, isPhysicallyAwayPhase } from "./bandMobility";
 import type { BandId, TileId } from "../core/types";
 import { getTile, getTileAtCoord } from "../world/generate";
+import { getEuclideanPhysicalDistanceKm, getRasterWindowForPhysicalRadius } from "../world/spatialGeometry";
 import type { Tile, WorldState } from "../world/types";
 
-const CROWDING_RADIUS = 4;
+// PROVENANCE C — MODEL / PROVISIONAL SCALE-1 CALIBRATION. Legacy crowding used radius=4 CELLS
+// with cell-distance kernel breakpoints at 1/2 cells; parent-core proximity used 5 cells and
+// remembered-core locality 2 cells. Those imply different physical ranges on the canonical 1-km
+// raster and legacy Map 2 (1.5 km/cell). No SCALE-1 research freezes 4 km (or 6 km) as a universal
+// crowding law. The values below are temporary canonical-1-km compatibility targets whose
+// architectural invariant is exact physical-separation equivalence across raster resolutions.
+// Recalibrate them only with an explicit research/behavior target; do not infer km from old cells.
+export const CROWDING_RADIUS_KM = 4;
+const CROWDING_DECAY_SHOULDER_KM = 1;
+const SAME_PATCH_NEAR_KM = 1;
+const SAME_PATCH_MID_KM = 2;
+const PARENT_CORE_PROXIMITY_RADIUS_KM = 5;
+const REMEMBERED_PARENT_CORE_RADIUS_KM = 2;
 
 export function getNearbyBandPressure(
   world: WorldState,
@@ -54,7 +67,7 @@ export function getNearbyBandPressure(
 // else, so a band with a party three days' walk away projected those people at HOME (ghost
 // bodies) and projected nothing where the party was actually standing (missing bodies). Measured
 // at daily resolution on map2:s1 over 3 years: 69 party-days, of which **34 (49.3%) were beyond
-// CROWDING_RADIUS from their own residence** — bodies that existed nowhere.
+// CROWDING_RADIUS_KM from their own residence** — bodies that existed nowhere.
 //
 // This is the one authority for that question. It REPORTS canonical expedition state: the
 // residential remainder is the population minus everyone physically away, and every away party is
@@ -259,7 +272,7 @@ function buildPressureResult(
 //
 // Each band scatters its crowding influence into nearby tiles ONCE per cache,
 // from the fixed band snapshot, through ONE channel:
-//   - proximity: tiles within CROWDING_RADIUS of the band's CURRENT position
+//   - proximity: tiles within CROWDING_RADIUS_KM of the band's CURRENT position
 // Per tile it stores each contributor's pre-clamp base weight (kin factor NOT yet
 // applied), the kin-factor=1 crowding sum/count, and the sorted contributor ids.
 // A query for a deciding band then reads its tile entry and applies self-exclusion
@@ -349,13 +362,14 @@ function buildCrowdingField(world: WorldState, cache: TickContextCache): Crowdin
       continue;
     }
 
-    // Footprint = the union of each source's proximity ball (distance <= CROWDING_RADIUS).
+    // Footprint = the union of each source's PHYSICAL proximity disk. Raster windows are
+    // scale-derived; exact center distance decides inclusion, so cell size cannot redefine range.
     // CORRECTION-28: the band no longer scatters into the country it merely
     // remembers, so a band that has walked away stops crowding the place it
     // still values.
     const footprint = new Set<TileId>();
     for (const source of sources) {
-      scatterBall(world, source.tile.coord.x, source.tile.coord.y, CROWDING_RADIUS, (reachedTileId) => {
+      scatterPhysicalRadius(world, source.tile, CROWDING_RADIUS_KM, (reachedTileId) => {
         footprint.add(reachedTileId);
       });
     }
@@ -372,19 +386,13 @@ function buildCrowdingField(world: WorldState, cache: TickContextCache): Crowdin
       let basePreclamp = 0;
 
       for (const source of sources) {
-        const distance = getGridDistance(source.tile, tile);
-
-        if (distance > CROWDING_RADIUS) {
+        const distanceKm = getPhysicalDistanceKm(world, source.tile, tile);
+        const kernel = getCrowdingKernel(distanceKm);
+        if (kernel <= 0) {
           continue;
         }
 
-        const distanceWeight = distance <= CROWDING_RADIUS
-          ? Math.max(0, (CROWDING_RADIUS + 1 - distance) / (CROWDING_RADIUS + 1))
-          : 0;
-        const samePatchWeight =
-          distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
-
-        basePreclamp += (distanceWeight * 0.58 + samePatchWeight * 0.34) * source.weight;
+        basePreclamp += kernel * source.weight;
       }
 
       if (basePreclamp <= 0) {
@@ -413,22 +421,20 @@ function buildCrowdingField(world: WorldState, cache: TickContextCache): Crowdin
   return { byTile, childrenByParent };
 }
 
-// Manhattan-ball walk over grid coordinates (bounded O(radius^2)); visits each
-// existing tile within `radius` of (cx, cy) once.
-function scatterBall(
+// Bounded raster enumeration for one physical disk. The raster window is derived
+// from this world's cell dimensions; exact Euclidean center separation is the behavior gate.
+function scatterPhysicalRadius(
   world: WorldState,
-  cx: number,
-  cy: number,
-  radius: number,
+  center: Tile,
+  radiusKm: number,
   visit: (tileId: TileId) => void,
 ): void {
-  for (let dy = -radius; dy <= radius; dy += 1) {
-    const remaining = radius - Math.abs(dy);
+  const window = getRasterWindowForPhysicalRadius(world.config, center.coord, radiusKm);
 
-    for (let dx = -remaining; dx <= remaining; dx += 1) {
-      const tile = getTileAtCoord(world, { x: cx + dx, y: cy + dy });
-
-      if (tile !== undefined) {
+  for (let y = window.minY; y <= window.maxY; y += 1) {
+    for (let x = window.minX; x <= window.maxX; x += 1) {
+      const tile = getTileAtCoord(world, { x, y });
+      if (tile !== undefined && getPhysicalDistanceKm(world, center, tile) <= radiusKm + 1e-9) {
         visit(tile.id);
       }
     }
@@ -644,13 +650,16 @@ function getParentCoreOverlap(
   const directOverlap =
     parentTile === undefined
       ? 0
-      : clamp01((5 - Math.min(5, getGridDistance(parentTile, tile))) / 5);
+      : clamp01(1 - getPhysicalDistanceKm(world, parentTile, tile) / PARENT_CORE_PROXIMITY_RADIUS_KM);
+  // This is remembered/lineage core association, NOT physical crowding. It gets its own
+  // physical memory-locality range and never creates a body or crowding contributor.
   const memoryOverlap = getSalientPlaceMemories(parentBand, cache)
     .filter((memory) => memory.isReturnPlace || memory.attachment > 0.46)
     .map((memory) => {
       const memoryTile = getTile(world, memory.tileId);
 
-      return memoryTile === undefined || getGridDistance(memoryTile, tile) > 2
+      return memoryTile === undefined ||
+        getPhysicalDistanceKm(world, memoryTile, tile) > REMEMBERED_PARENT_CORE_RADIUS_KM
         ? 0
         : clamp01(memory.attachment * 0.72 + (memory.isReturnPlace ? 0.18 : 0));
     })
@@ -790,19 +799,13 @@ function computeCrowdingContribDescriptor(
       continue;
     }
 
-    const distance = getGridDistance(tile, sourceTile);
-
-    if (distance > CROWDING_RADIUS) {
+    const distanceKm = getPhysicalDistanceKm(world, tile, sourceTile);
+    const kernel = getCrowdingKernel(distanceKm);
+    if (kernel <= 0) {
       continue;
     }
 
-    const distanceWeight = distance <= CROWDING_RADIUS
-      ? Math.max(0, (CROWDING_RADIUS + 1 - distance) / (CROWDING_RADIUS + 1))
-      : 0;
-    const samePatchWeight =
-      distance === 0 ? 1 : distance === 1 ? 0.74 : distance === 2 ? 0.48 : 0;
-
-    basePreclamp += (distanceWeight * 0.58 + samePatchWeight * 0.34) * presenceWeight(source.people);
+    basePreclamp += kernel * presenceWeight(source.people);
   }
 
   if (basePreclamp <= 0) {
@@ -872,8 +875,30 @@ function emptyNearbyBandPressure(tileId: TileId): NearbyBandPressure {
   };
 }
 
-function getGridDistance(first: Tile, second: Tile): number {
-  return Math.abs(first.coord.x - second.coord.x) + Math.abs(first.coord.y - second.coord.y);
+function getPhysicalDistanceKm(world: WorldState, first: Tile, second: Tile): number {
+  return getEuclideanPhysicalDistanceKm(world.config, first.coord, second.coord);
+}
+
+function getCrowdingKernel(distanceKm: number): number {
+  if (distanceKm > CROWDING_RADIUS_KM + 1e-9) {
+    return 0;
+  }
+
+  const denominator = CROWDING_RADIUS_KM + CROWDING_DECAY_SHOULDER_KM;
+  const distanceWeight = Math.max(
+    0,
+    (CROWDING_RADIUS_KM + CROWDING_DECAY_SHOULDER_KM - distanceKm) / denominator,
+  );
+  const samePatchWeight =
+    distanceKm <= 1e-9
+      ? 1
+      : distanceKm <= SAME_PATCH_NEAR_KM
+        ? 0.74
+        : distanceKm <= SAME_PATCH_MID_KM
+          ? 0.48
+          : 0;
+
+  return distanceWeight * 0.58 + samePatchWeight * 0.34;
 }
 
 // Cache-less candidate scan used only by computePressureFromScan (isolated unit

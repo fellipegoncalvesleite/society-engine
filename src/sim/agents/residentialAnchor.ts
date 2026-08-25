@@ -1,5 +1,7 @@
 import { getLocalUsePressureValue } from "./pressure";
-import { getSalientMemorySummary, type TickContextCache } from "./contextCache";
+import { deriveTravelPace } from "./bandMobility";
+import { expandBoundedTravelReach, type BoundedTravelReach } from "./physicalAccess";
+import type { TickContextCache } from "./contextCache";
 import type {
   AnchorDecisionComparison,
   AnchorMemoryRecord,
@@ -18,9 +20,22 @@ import type {
 } from "./types";
 import type { ReasonId, Season, TickNumber, TileId, WorldTime } from "../core/types";
 import { getTile } from "../world/generate";
-import type { Tile, WorldState } from "../world/types";
+import { getCellAreaKm2 } from "../world/spatialGeometry";
+import type { WorldState } from "../world/types";
 
+// PROVENANCE D — TECHNICAL CAP. This bounds persisted/debug activity summaries only; it must
+// never define physical land reachable or contested.
 const MAX_CATCHMENT_TILES = 16;
+
+// PROVENANCE C — MODEL / PROVISIONAL SCALE-1 CALIBRATION. Legacy foraging behavior used a
+// seasonally modified 1–3 CELL radius. There is no project research freezing those cell counts as
+// universal physical distances. These travel-day values preserve the old narrow/ordinary/wide
+// ordering on the canonical 1-km raster while making the authority travel-time based. They are
+// compatibility parameters pending later calibration, not anthropological constants.
+const BASE_FORAGING_TRAVEL_BUDGET_DAYS = 0.5;
+const MIN_FORAGING_TRAVEL_BUDGET_DAYS = 0.22;
+const MAX_FORAGING_TRAVEL_BUDGET_DAYS = 0.82;
+const MAX_LOGISTICAL_TRAVEL_BUDGET_DAYS = 1.1;
 const MAX_ANCHOR_MEMORIES = 12;
 // Cap on how much of a remembered anchor's tenure a band may "resume" on return.
 // Returning to a known refuge restarts holding faster, but never magically
@@ -42,7 +57,8 @@ export interface ResidentialAnchorContext {
 
 interface CatchmentTile {
   readonly tileId: TileId;
-  readonly distance: number;
+  readonly physicalDistanceKm: number;
+  readonly travelTimeDays: number;
   readonly expectedReturn: number;
   readonly roundTripCost: number;
   readonly depletion: number;
@@ -105,7 +121,7 @@ export function deriveResidentialAnchorContext(
     currentRecord.observedRichness * 0.62 + currentRecord.observedAquaticPotential * 0.16,
   );
 
-  const radius = deriveForagingRadius({
+  const radius = deriveForagingAccessPolicy({
     seasonalModeKind: seasonalMode?.mode,
     droughtSeverity,
     dependencyLoad,
@@ -113,12 +129,34 @@ export function deriveResidentialAnchorContext(
     anchorWaterSecurity,
     localFood,
   });
-  const logisticalRadius = Math.min(
-    radius.radiusTiles + 3,
-    radius.radiusTiles + 1 + Math.round(logisticalCapacity * 2),
+  const foragingPace = deriveTravelPace(band, "resource_expedition").kmPerTravelDay;
+  const foragingAccess = expandBoundedTravelReach(
+    world,
+    anchorTile.id,
+    foragingPace,
+    radius.travelTimeBudgetDays,
+  );
+  const logisticalTravelTimeBudgetDays = round2(Math.min(
+    MAX_LOGISTICAL_TRAVEL_BUDGET_DAYS,
+    radius.travelTimeBudgetDays + 0.18 + logisticalCapacity * 0.24,
+  ));
+  const logisticalPace = deriveTravelPace(band, "task_camp_shuttle").kmPerTravelDay;
+  const logisticalAccess = expandBoundedTravelReach(
+    world,
+    anchorTile.id,
+    logisticalPace,
+    logisticalTravelTimeBudgetDays,
   );
 
-  const catchment = gatherCatchment(world, band, anchorTile, radius.radiusTiles, dryContext, contextCache);
+  // Reachability is physical/traversal truth. Resource scoring below is separately
+  // filtered through the band's own observed records, so reachable != known.
+  const catchment = gatherCatchment(world, band, foragingAccess);
+  const retainedCatchment = catchment.slice(0, MAX_CATCHMENT_TILES);
+  const cellAreaKm2 = getCellAreaKm2(world.config);
+  const foragingRadiusTiles = getTopologicalSpan(world, anchorTile.id, foragingAccess);
+  const logisticalRadiusTiles = getTopologicalSpan(world, anchorTile.id, logisticalAccess);
+  const foragingRadiusKm = getMaxPhysicalReachKm(foragingAccess);
+  const logisticalRadiusKm = getMaxPhysicalReachKm(logisticalAccess);
   const catchmentReturnEstimate = estimateCatchmentReturn(catchment);
   const catchmentDepletion = estimateCatchmentDepletion(band, anchorTile.id, catchment);
   const anchorMarginalReturn = round2(clamp01(catchmentReturnEstimate * (1 - catchmentDepletion * 0.85)));
@@ -246,9 +284,16 @@ export function deriveResidentialAnchorContext(
     tetheringWaterTileId,
     startedTick,
     seasonsAnchored,
-    foragingRadius: radius.radiusTiles,
-    logisticalRadius,
-    catchmentTileIds: catchment.map((tile) => tile.tileId),
+    foragingRadius: foragingRadiusTiles,
+    logisticalRadius: logisticalRadiusTiles,
+    foragingTravelTimeBudgetDays: radius.travelTimeBudgetDays,
+    logisticalTravelTimeBudgetDays,
+    foragingRadiusKm: round2(foragingRadiusKm),
+    logisticalRadiusKm: round2(logisticalRadiusKm),
+    reachableCatchmentAreaKm2: round2(foragingAccess.reachableAreaKm2),
+    knownCatchmentAreaKm2: round2(catchment.length * cellAreaKm2),
+    retainedCatchmentAreaKm2: round2(retainedCatchment.length * cellAreaKm2),
+    catchmentTileIds: retainedCatchment.map((tile) => tile.tileId),
     catchmentReturnEstimate: round2(catchmentReturnEstimate),
     catchmentDepletion: round2(catchmentDepletion),
     anchorWaterSecurity,
@@ -265,7 +310,11 @@ export function deriveResidentialAnchorContext(
   const foragingRadius: ForagingRadiusState = {
     bandId: band.id,
     anchorTileId: anchorTile.id,
-    radiusTiles: radius.radiusTiles,
+    radiusTiles: foragingRadiusTiles,
+    travelTimeBudgetDays: radius.travelTimeBudgetDays,
+    maxPhysicalReachKm: round2(foragingRadiusKm),
+    reachableAreaKm2: round2(foragingAccess.reachableAreaKm2),
+    knownReachableAreaKm2: round2(catchment.length * cellAreaKm2),
     basis: radius.basis,
     limitingFactors: radius.limitingFactors,
     reachableKnownTileIds: catchment.map((tile) => tile.tileId),
@@ -476,90 +525,78 @@ function boundAnchorMemories(
   return bounded;
 }
 
-function deriveForagingRadius(input: {
+function deriveForagingAccessPolicy(input: {
   readonly seasonalModeKind: string | undefined;
   readonly droughtSeverity: number;
   readonly dependencyLoad: number;
   readonly riskPressure: number;
   readonly anchorWaterSecurity: number;
   readonly localFood: number;
-}): { radiusTiles: number; basis: ForagingRadiusBasis; limitingFactors: readonly string[] } {
+}): { travelTimeBudgetDays: number; basis: ForagingRadiusBasis; limitingFactors: readonly string[] } {
   const limitingFactors: string[] = [];
-  let radius = 2;
+  let budgetDays = BASE_FORAGING_TRAVEL_BUDGET_DAYS;
   let basis: ForagingRadiusBasis = "ordinary";
 
   if (input.seasonalModeKind === "wet_season_dispersal" || input.seasonalModeKind === "green_season_harvest") {
-    radius += 1;
+    budgetDays += 0.18;
     basis = "wet_season_released";
   } else if (input.seasonalModeKind === "drought_emergency" || input.seasonalModeKind === "late_dry_refuge") {
-    radius -= 1;
+    budgetDays -= 0.13 + clamp01(input.droughtSeverity) * 0.05;
     basis = "water_tethered";
     limitingFactors.push("drought_water_tether");
   } else if (input.seasonalModeKind === "dry_season_consolidation") {
+    budgetDays -= 0.06;
     basis = "water_tethered";
     limitingFactors.push("dry_season_tether");
   }
 
   if (input.riskPressure > 0.6) {
-    radius -= 1;
+    budgetDays -= 0.12;
     basis = "risk_contracted";
     limitingFactors.push("risk_pressure");
   }
 
   if (input.dependencyLoad > 0.5) {
-    radius -= 1;
+    budgetDays -= 0.09;
     limitingFactors.push("dependency_load");
   }
 
-  // Secure water but thin local food pushes the able-bodied to range wider.
+  // Secure water but thin local food can justify spending more of the day on the
+  // outward/return leg. This changes a time budget, not a cell radius.
   if (basis !== "risk_contracted" && input.anchorWaterSecurity > 0.5 && input.localFood < 0.35 && input.dependencyLoad < 0.55) {
-    radius += 1;
+    budgetDays += 0.13;
     basis = "stress_expanded";
     limitingFactors.push("water_secure_food_low");
   }
 
   return {
-    radiusTiles: Math.max(1, Math.min(3, radius)),
+    travelTimeBudgetDays: round2(Math.max(
+      MIN_FORAGING_TRAVEL_BUDGET_DAYS,
+      Math.min(MAX_FORAGING_TRAVEL_BUDGET_DAYS, budgetDays),
+    )),
     basis,
     limitingFactors,
   };
 }
 
-// Build the seasonal catchment from a bounded salient candidate set rather than
-// scanning every known tile (2I.3, PART 2). Candidates: the anchor tile, a
-// bounded ring-walk outward over the grid to the foraging radius (which covers
-// every known tile within range while staying O(radius²) regardless of how many
-// tiles the band knows), plus salient water / return / depleted places that fall
-// inside the radius (preserving important water, fords and negative memory). Only
-// tiles the band actually knows are scored — unknown tiles in the ring are
-// dropped, so no hidden tile truth is ever read.
+// Score every physically reachable cell for which the band has its OWN observed
+// record. Traversal may know that unknown terrain is passable; that never creates
+// resource knowledge, expected return, or a usable catchment entry.
 function gatherCatchment(
   world: WorldState,
   band: Band,
-  anchorTile: Tile,
-  radius: number,
-  dryContext: DryMarginMobilityContext,
-  contextCache: TickContextCache | undefined,
+  access: BoundedTravelReach,
 ): readonly CatchmentTile[] {
-  const candidateIds = collectCatchmentCandidateIds(world, band, anchorTile, radius, dryContext, contextCache);
   const tiles: CatchmentTile[] = [];
 
-  for (const tileId of candidateIds) {
-    const record = band.knowledge.observedTiles[tileId];
-
+  for (const reachable of access.reachable) {
+    const record = band.knowledge.observedTiles[reachable.tileId];
     if (record === undefined) {
       continue;
     }
 
-    const tile = getTile(world, tileId);
-
+    const tile = getTile(world, reachable.tileId);
     if (tile === undefined || tile.isAquatic) {
-      continue;
-    }
-
-    const distance = gridDistance(anchorTile, tile);
-
-    if (distance > radius) {
       continue;
     }
 
@@ -568,88 +605,56 @@ function gatherCatchment(
         (record.observedWaterAccess ?? 0.3) * 0.24 +
         (record.observedSeasonalPattern?.reliability ?? 0.42) * 0.16,
     );
+    const travelBurden = access.travelTimeBudgetDays <= 0
+      ? 0
+      : reachable.travelTimeDays / access.travelTimeBudgetDays;
+    const knownMovementCost = record.observedMovementCost ?? 1;
     const roundTripCost = clamp01(
-      (distance / Math.max(1, radius + 1)) * 0.5 + ((record.observedMovementCost ?? tile.movementCost) - 0.9) * 0.16,
+      travelBurden * 0.5 + Math.max(0, knownMovementCost - 0.9) * 0.16,
     );
-    const depletion = getLocalUsePressureValue(band.usePressure[tileId]);
+    const depletion = getLocalUsePressureValue(band.usePressure[reachable.tileId]);
     const contribution = Math.max(0, expectedReturn - roundTripCost) * (1 - depletion);
 
-    tiles.push({ tileId, distance, expectedReturn, roundTripCost, depletion, contribution });
+    tiles.push({
+      tileId: reachable.tileId,
+      physicalDistanceKm: reachable.physicalDistanceKm,
+      travelTimeDays: reachable.travelTimeDays,
+      expectedReturn,
+      roundTripCost,
+      depletion,
+      contribution,
+    });
   }
 
-  return tiles
-    .sort((left, right) => {
-      const delta = right.contribution - left.contribution;
-
-      return delta === 0 ? String(left.tileId).localeCompare(String(right.tileId)) : delta;
-    })
-    .slice(0, MAX_CATCHMENT_TILES);
+  return tiles.sort((left, right) => {
+    const delta = right.contribution - left.contribution;
+    if (delta !== 0) {
+      return delta;
+    }
+    if (left.travelTimeDays !== right.travelTimeDays) {
+      return left.travelTimeDays - right.travelTimeDays;
+    }
+    return String(left.tileId).localeCompare(String(right.tileId));
+  });
 }
 
-function collectCatchmentCandidateIds(
-  world: WorldState,
-  band: Band,
-  anchorTile: Tile,
-  radius: number,
-  dryContext: DryMarginMobilityContext,
-  contextCache: TickContextCache | undefined,
-): readonly TileId[] {
-  const candidates = new Set<TileId>([anchorTile.id]);
+function getMaxPhysicalReachKm(access: BoundedTravelReach): number {
+  return access.reachable.reduce((max, entry) => Math.max(max, entry.physicalDistanceKm), 0);
+}
 
-  // Bounded ring-walk outward over the grid topology to the foraging radius.
-  // Reaches every grid tile within Manhattan range (for <=8-neighbour grids)
-  // while touching only O(radius^2) tiles, independent of total known tiles.
-  let frontier: TileId[] = [anchorTile.id];
-
-  for (let depth = 0; depth < radius; depth += 1) {
-    const next: TileId[] = [];
-
-    for (const tileId of frontier) {
-      const tile = getTile(world, tileId);
-
-      if (tile === undefined) {
-        continue;
-      }
-
-      for (const neighborId of tile.neighbors) {
-        if (!candidates.has(neighborId)) {
-          candidates.add(neighborId);
-          next.push(neighborId);
-        }
-      }
-    }
-
-    frontier = next;
+function getTopologicalSpan(world: WorldState, originTileId: TileId, access: BoundedTravelReach): number {
+  const origin = world.tiles[originTileId];
+  if (origin === undefined) {
+    return 0;
   }
-
-  // Preserve important water / fords (the tether and best known waters) and
-  // salient return / depleted places even if topology missed them; the distance
-  // filter in gatherCatchment keeps only those genuinely within radius.
-  if (dryContext.currentWaterRefuge !== undefined) {
-    candidates.add(dryContext.currentWaterRefuge.tileId);
-  }
-
-  for (const water of dryContext.bestWaterCandidates) {
-    candidates.add(water.tileId);
-  }
-
-  const salient = getSalientMemorySummary(contextCache, band.id);
-
-  if (salient !== undefined) {
-    for (const tileId of salient.topReturnPlaceIds) {
-      candidates.add(tileId);
+  return access.reachable.reduce((max, entry) => {
+    const tile = world.tiles[entry.tileId];
+    if (tile === undefined) {
+      return max;
     }
-
-    for (const tileId of salient.topAnchorPlaceIds) {
-      candidates.add(tileId);
-    }
-
-    for (const tileId of salient.topDepletedPlaceIds) {
-      candidates.add(tileId);
-    }
-  }
-
-  return [...candidates];
+    const distance = Math.abs(origin.coord.x - tile.coord.x) + Math.abs(origin.coord.y - tile.coord.y);
+    return Math.max(max, distance);
+  }, 0);
 }
 
 function estimateCatchmentReturn(catchment: readonly CatchmentTile[]): number {
@@ -792,7 +797,7 @@ function deriveResidenceMode(
     return "anchored_refuge";
   }
 
-  if (anchor.foragingRadius >= 3) {
+  if ((anchor.foragingTravelTimeBudgetDays ?? 0) > BASE_FORAGING_TRAVEL_BUDGET_DAYS + 0.08) {
     return "dispersed_wet_season_round";
   }
 
@@ -878,9 +883,6 @@ function getPreviousStartedTick(band: Band, anchorTileId: TileId, time: WorldTim
   return previous !== undefined && previous.anchorTileId === anchorTileId ? previous.startedTick : time.tick;
 }
 
-function gridDistance(first: Tile, second: Tile): number {
-  return Math.abs(first.coord.x - second.coord.x) + Math.abs(first.coord.y - second.coord.y);
-}
 
 function uniqueTileIds(tileIds: readonly TileId[]): readonly TileId[] {
   return [...new Set(tileIds)];

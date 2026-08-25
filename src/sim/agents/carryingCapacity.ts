@@ -54,6 +54,7 @@ import { getDepletionYieldMultiplier } from "../world/depletion";
 // so it is tightly capped, damped by depletion/crowding, and clamped (surplus bands unaffected).
 import { deriveTileLearnedSupport } from "./patchExploitationKnowledge";
 import { getTile } from "../world/generate";
+import { getEuclideanPhysicalDistanceKm } from "../world/spatialGeometry";
 import { isBandPassableDestination } from "../world/passability";
 import type { WorldState } from "../world/types";
 import type { FoodDemographyDiagnostics } from "../diagnostics/foodDemographyDiagnostics";
@@ -63,8 +64,18 @@ import type { FoodDemographyDiagnostics } from "../diagnostics/foodDemographyDia
 // anti-omniscient (only the band's own known records). Light effects: it makes
 // rich cores finite and surfaces underused habitats without forcing dispersal.
 
-const MAX_CATCHMENT_FOR_YIELD = 16;
-const TILE_SUPPORT = 12.5; // adult-equivalents one full-yield catchment tile can support
+// WORLD-M0 ECOLOGY DEFERRED: realized ecological support is still calibrated per cell,
+// not per km². Keep the legacy normalization only to avoid silently recalibrating ecology
+// in Task 6; it is NOT a physical-area or human-reach cap.
+const WORLD_M0_DEFERRED_YIELD_NORMALIZER_CELLS = 16;
+const TILE_SUPPORT = 12.5; // legacy adult-equivalents per full-yield cell; WORLD-M0 must area-calibrate
+
+// PROVENANCE C — MODEL / PROVISIONAL SCALE-1 COMPATIBILITY. These values only replace cell-count
+// travel proxies in existing carrying-capacity scoring. 0.5 day matches the provisional ordinary
+// catchment budget; 12 km maps the old distance/12 score denominator onto the canonical 1-km
+// compatibility scale. Neither is an empirical mobility/ecology calibration.
+const PROVISIONAL_CARRYING_TRAVEL_BUDGET_DAYS = 0.5;
+const PROVISIONAL_KNOWN_UNUSED_DISTANCE_SCALE_KM = 12;
 const MAX_OPPORTUNITY_CANDIDATES = 18;
 
 // 2K.9 learned realized-support bounds (extremely conservative — first time learned skill touches
@@ -326,11 +337,20 @@ export function deriveCarryingCapacity(
     basePotential.resourceDiversity * 0.4 + recoveryBuffer * 0.4 + meanYield * 0.2,
   ));
 
-  // Accessibility (travel) cost grows with how far the band ranges; surfaced as
-  // accessibilityPenalty. Labour is already inside adult-equivalent demand, so it
-  // is not double-counted into support magnitude — the only NEW support pressure
-  // is the shared-catchment division, keeping rich habitats plausible when solo.
-  const travelCost = clamp01(footprint.length > 8 ? 0.12 : 0.06);
+  // Accessibility (travel) cost is physical/travel-time based. Footprint cardinality
+  // deliberately does not enter this term: 16 cells are different land areas at 1 km
+  // and 1.5 km resolution. Legacy per-cell support magnitude remains WORLD-M0 deferred.
+  const travelBudgetDays = Math.max(
+    0.01,
+    band.residentialAnchor?.foragingTravelTimeBudgetDays ?? PROVISIONAL_CARRYING_TRAVEL_BUDGET_DAYS,
+  );
+  const meanTravelFraction = footprint.length === 0
+    ? 0
+    : footprint.reduce(
+        (sum, tile) => sum + Math.min(1, tile.travelTimeDays / travelBudgetDays),
+        0,
+      ) / footprint.length;
+  const travelCost = clamp01(0.04 + meanTravelFraction * 0.1);
   const overlappingBandIds: readonly BandId[] = sharedIndex === undefined
     ? []
     : getOverlappingBandIds(sharedIndex, band.id);
@@ -516,7 +536,7 @@ export function deriveCarryingCapacity(
     season: time.season,
     populationDemand: round2(demand.adultEquivalentDemand),
     laborCapacity: round2(demand.laborCapacity),
-    totalEffectiveYieldWithinRange: round2(clamp01(adjustedReachableSupport / (MAX_CATCHMENT_FOR_YIELD * TILE_SUPPORT))),
+    totalEffectiveYieldWithinRange: round2(clamp01(adjustedReachableSupport / (WORLD_M0_DEFERRED_YIELD_NORMALIZER_CELLS * TILE_SUPPORT))),
     perCapitaReturn: round2(perCapitaValue),
     travelCostToExploitRange: round2(travelCost),
     crowdingPenalty: round2(clamp01(input.nearbyCrowding)),
@@ -905,8 +925,11 @@ function deriveKnownUnusedHabitat(
       world.auditOptions?.waterAccessEvidenceHiddenFromDestination === true,
     );
     const directWaterAccess = deriveDirectWaterAccess(band, tileId);
-    const distance = currentTile === undefined ? 4 : gridDistance(currentTile.coord, tile.coord);
-    const travelCost = clamp01(distance / 12);
+    const distanceTiles = currentTile === undefined ? 4 : gridDistance(currentTile.coord, tile.coord);
+    const distanceKm = currentTile === undefined
+      ? 4
+      : getEuclideanPhysicalDistanceKm(world.config, currentTile.coord, tile.coord);
+    const travelCost = clamp01(distanceKm / PROVISIONAL_KNOWN_UNUSED_DISTANCE_SCALE_KM);
     const riskPenalty = clamp01(record.observedRisk ?? 0.3);
     const crowding = usePressure;
 
@@ -942,7 +965,7 @@ function deriveKnownUnusedHabitat(
 
       candidateLedger.push({
         tileId,
-        distanceTiles: distance,
+        distanceTiles,
         acquisition: record.acquisition ?? "residential_observation",
         confidence: round2(auditConfidence),
         score: round2(score),

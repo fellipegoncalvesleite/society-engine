@@ -6137,8 +6137,24 @@ export interface ResidentialAnchorState {
   readonly tetheringWaterTileId?: TileId;
   readonly startedTick: TickNumber;
   readonly seasonsAnchored: number;
+  /** Legacy topological span retained for compatibility/debug only; never a physical reach authority. */
   readonly foragingRadius: number;
+  /** Legacy topological span retained for compatibility/debug only; never a physical reach authority. */
   readonly logisticalRadius: number;
+  /** One-way resource-party travel budget that behavior actually uses. */
+  readonly foragingTravelTimeBudgetDays?: number;
+  /** One-way logistical/shuttle travel budget that behavior actually uses. */
+  readonly logisticalTravelTimeBudgetDays?: number;
+  /** Maximum physical route length reached inside the foraging travel budget. */
+  readonly foragingRadiusKm?: number;
+  /** Maximum physical route length reached inside the logistical travel budget. */
+  readonly logisticalRadiusKm?: number;
+  /** All raster land physically reachable inside the foraging budget, in km². */
+  readonly reachableCatchmentAreaKm2?: number;
+  /** Reachable land for which this band actually has an observed record, in km². */
+  readonly knownCatchmentAreaKm2?: number;
+  /** Area represented by the bounded persisted catchment summary only; not a reach limit. */
+  readonly retainedCatchmentAreaKm2?: number;
   readonly catchmentTileIds: readonly TileId[];
   readonly catchmentReturnEstimate: NormalizedIntensity;
   readonly catchmentDepletion: NormalizedIntensity;
@@ -6163,7 +6179,12 @@ export type ForagingRadiusBasis =
 export interface ForagingRadiusState {
   readonly bandId: BandId;
   readonly anchorTileId: TileId;
+  /** Legacy topological span retained for compatibility/debug only; behavior uses travelTimeBudgetDays. */
   readonly radiusTiles: number;
+  readonly travelTimeBudgetDays?: number;
+  readonly maxPhysicalReachKm?: number;
+  readonly reachableAreaKm2?: number;
+  readonly knownReachableAreaKm2?: number;
   readonly basis: ForagingRadiusBasis;
   readonly limitingFactors: readonly string[];
   readonly reachableKnownTileIds: readonly TileId[];

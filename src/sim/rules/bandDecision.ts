@@ -1889,7 +1889,12 @@ function makeAnchorStayReason(
     anchorTileId: tileId,
     tetheringWaterTileId: anchor.tetheringWaterTileId,
     season: time.season,
+    // Legacy topological radius is retained only for diagnostics; physical fields carry meaning.
     foragingRadius: anchor.foragingRadius,
+    foragingRadiusKm: anchor.foragingRadiusKm,
+    foragingTravelTimeBudgetDays: anchor.foragingTravelTimeBudgetDays,
+    reachableCatchmentAreaKm2: anchor.reachableCatchmentAreaKm2,
+    knownCatchmentAreaKm2: anchor.knownCatchmentAreaKm2,
     catchmentTileCount: anchor.catchmentTileIds.length,
     holdValue: anchor.holdValue,
     forayValue: anchor.forayValue,
@@ -1921,7 +1926,7 @@ function makeAnchorRadiusReason(
       ? "drought_tether_tightened"
       : "water_tethered_foraging_radius";
 
-  return makeReason(decisionId, "secondary", radius.radiusTiles, {
+  return makeReason(decisionId, "secondary", radius.maxPhysicalReachKm ?? radius.radiusTiles, {
     type,
     strength: clamp01(anchorContext.anchor.anchorWaterSecurity),
     confidence: 0.6,
@@ -1930,6 +1935,10 @@ function makeAnchorRadiusReason(
     anchorTileId: radius.anchorTileId,
     season: time.season,
     foragingRadius: radius.radiusTiles,
+    foragingRadiusKm: radius.maxPhysicalReachKm,
+    foragingTravelTimeBudgetDays: radius.travelTimeBudgetDays,
+    reachableCatchmentAreaKm2: radius.reachableAreaKm2,
+    knownCatchmentAreaKm2: radius.knownReachableAreaKm2,
     catchmentTileCount: radius.reachableKnownTileIds.length,
     anchorWaterSecurity: anchorContext.anchor.anchorWaterSecurity,
     catchmentReturnEstimate: anchorContext.anchor.catchmentReturnEstimate,
