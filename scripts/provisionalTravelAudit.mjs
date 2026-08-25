@@ -109,20 +109,26 @@ try {
   }
   const finalBand = w.bands[succId];
 
-  // ── V2 — every step is contiguous ──
+  // ── V2 — every completed edge is contiguous ──
+  // SCALE-1 Task 4 can complete multiple adjacent edges in one day, so day-end snapshots
+  // are no longer required to be one cell apart. The journey-local trail records each
+  // completed edge origin and is the correct continuity surface.
+  const currentTrail = finalBand?.provisionalSuccessor?.trail ?? [];
+  const walkedSequence = [...currentTrail, ...(finalBand === undefined ? [] : [finalBand.position])];
   const nonContiguous = [];
-  for (let i = 1; i < positions.length; i += 1) {
-    const a = generate.getTile(w, positions[i - 1]);
-    const b = generate.getTile(w, positions[i]);
+  for (let i = 1; i < walkedSequence.length; i += 1) {
+    const a = generate.getTile(w, walkedSequence[i - 1]);
+    const b = generate.getTile(w, walkedSequence[i]);
+    if (a === undefined || b === undefined) { nonContiguous.push({ from: walkedSequence[i - 1], to: walkedSequence[i], missing: true }); continue; }
     const d = Math.abs(a.coord.x - b.coord.x) + Math.abs(a.coord.y - b.coord.y);
-    if (d !== 1) nonContiguous.push({ from: positions[i - 1], to: positions[i], manhattan: d });
+    if (d !== 1) nonContiguous.push({ from: walkedSequence[i - 1], to: walkedSequence[i], manhattan: d });
   }
   record(
     "V2_every_step_is_contiguous",
-    "consecutive positions are always exactly one tile apart — the group walks rather than appearing somewhere",
+    "every completed provisional transition in the canonical breadcrumb trail is exactly one graph edge; a single day may now complete several such edges",
     nonContiguous.length === 0,
-    positions.length > 2,
-    { distinctPositions: positions.length, nonContiguous, path: positions },
+    walkedSequence.length > 2,
+    { dayEndPositions: positions, completedEdgeSequenceLength: walkedSequence.length, nonContiguous },
   );
 
   // ── V3 — every tile the group stood on physically admits people ──
@@ -148,15 +154,18 @@ try {
     { arrivedOnDay, phaseTrail: phases, finalPhase, finalPosition: String(finalBand?.position ?? "gone") },
   );
 
-  // ── V5 — the trail records ground actually walked, and is bounded ──
+  // ── V5 — the trail records completed physical ground and is bounded ──
   const trail = finalBand?.provisionalSuccessor?.trail ?? [];
-  const trailIsPrefixOfPath = trail.every((id, i) => String(id) === positions[i]);
+  const trailPassable = trail.every((id) => {
+    const tile = generate.getTile(w, id);
+    return tile !== undefined && passability.isBandPassableDestination(tile);
+  });
   record(
     "V5_the_trail_is_ground_actually_walked_and_is_bounded",
-    "the retained trail is the sequence of tiles the group physically left, capped so a long journey cannot grow unbounded state — it is what a return retraces instead of re-deriving a route the group never had",
-    trailIsPrefixOfPath && trail.length <= travel.TRAVEL_TRAIL_CAP,
+    "the retained trail contains completed physical edge origins only and remains bounded; unfinished edge progress is stored separately as a directed-edge time remainder",
+    trailPassable && trail.length <= travel.TRAVEL_TRAIL_CAP,
     trail.length > 0,
-    { trailLength: trail.length, cap: travel.TRAVEL_TRAIL_CAP, trailIsPrefixOfPath, trail: trail.map(String) },
+    { trailLength: trail.length, cap: travel.TRAVEL_TRAIL_CAP, trailPassable, edgeRemainder: finalBand?.provisionalSuccessor?.travelEdgeRemainder ?? null, trail: trail.map(String) },
   );
 
   // ── V6 — pace responds to real burden ──
@@ -174,12 +183,11 @@ try {
   record(
     "V6_pace_responds_to_real_burden",
     "an injured column is slower than a whole one — measured through the CANONICAL `deriveTravelPace` authority rather than a second pace model invented here",
-    wellStep !== undefined && hurtStep !== undefined && hurtStep.daysPerTile >= wellStep.daysPerTile &&
-      hurtStep.kmPerActiveDay < wellStep.kmPerActiveDay,
+    wellStep !== undefined && hurtStep !== undefined && hurtStep.kmPerActiveDay < wellStep.kmPerActiveDay,
     wellStep !== undefined && wellStep.kmPerActiveDay > 0,
     {
-      whole: { kmPerActiveDay: wellStep?.kmPerActiveDay, daysPerTile: wellStep?.daysPerTile },
-      injured: { kmPerActiveDay: hurtStep?.kmPerActiveDay, daysPerTile: hurtStep?.daysPerTile },
+      whole: { kmPerActiveDay: wellStep?.kmPerActiveDay, edgeRemainingDays: wellStep?.edgeTravelTimeRemainingDays },
+      injured: { kmPerActiveDay: hurtStep?.kmPerActiveDay, edgeRemainingDays: hurtStep?.edgeTravelTimeRemainingDays },
     },
   );
 

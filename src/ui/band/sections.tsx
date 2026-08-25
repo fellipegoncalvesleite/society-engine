@@ -2483,9 +2483,9 @@ export function ResidentialMoveTraceDetails({ band }: { readonly band: Band }) {
             <Detail
               key={String(move.eventId)}
               label={`${move.moveKind} · ${move.cause}`}
-              value={`${move.status} · ${move.distanceTiles} tiles (~${formatNumber(
-                move.distanceTiles * KM_PER_TILE,
-              )} km) · hardship ${move.hardshipLevel ?? "n/a"} ${formatNumber(
+              value={`${move.status} · ${move.distanceTiles} tiles (${formatNumber(
+                move.distanceKm,
+              )} km physical) · hardship ${move.hardshipLevel ?? "n/a"} ${formatNumber(
                 move.hardshipRisk ?? 0,
               )} (${move.hardshipOutcome ?? "accepted"}: ${move.hardshipReason ?? "not evaluated"}) · conf ${formatNumber(
                 move.confidence,

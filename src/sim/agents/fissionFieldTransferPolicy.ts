@@ -271,6 +271,7 @@ export const FISSION_FIELD_TRANSFER_POLICY: Record<keyof Band, FieldTransferPoli
   // ── records of things that happened to the PARENT as an entity ──────────────────────────────
   decisionHistory: entry("FORBIDDEN_TO_COPY", "empty_array", true, "a group that has existed for zero days has not deliberated twenty times"),
   movementHistory: entry("FORBIDDEN_TO_COPY", "empty_array", true, "journeys made by the parent, some of them before any founder was born"),
+  residentialTravelEdgeRemainder: entry("RESET_ACTIVE_COMMITMENT", "absent", false, "unfinished directed-edge work belongs to the parent residential journey, never the successor"),
   causalTraces: entry("FORBIDDEN_TO_COPY", "empty_array", true, "traces of the parent's own causal history; the successor's founding trace belongs with the founding event, which Direction D does not write at departure"),
   eventHistory: entry("FORBIDDEN_TO_COPY", "absent", true, "the parent's selected-band history"),
   recentIntraSeasonTrips: entry("FORBIDDEN_TO_COPY", "empty_array", true, "trips run from the parent's camp, by a labour pool that included people who stayed"),

@@ -18,8 +18,8 @@ import {
   deriveMobilityRolePools,
   deriveTravelPace,
   deriveWalkingSummary,
-  KM_PER_TILE,
 } from "../../sim/agents/bandMobility";
+import { getRoutePhysicalLengthKm } from "../../sim/agents/traversal";
 import { getCommittedExpeditionPeople, getCommittedExpeditionWorkers } from "../../sim/agents/expedition";
 import type { Band, ExpeditionRecord } from "../../sim/agents/types";
 import type { WorldState } from "../../sim/world/types";
@@ -116,12 +116,13 @@ export function Mobility({
         <p className="condition-note">No party is away from camp right now.</p>
       ) : (
         expeditions.map((expedition) => {
-          const routeTiles = Math.max(1, expedition.routeTileIds.length - 1);
-          const plannedKm = routeTiles * 2 * KM_PER_TILE;
-          const walkedTiles =
-            expedition.phase === "returning"
-              ? routeTiles + (routeTiles - expedition.routeIndex)
-              : expedition.routeIndex;
+          const routePrefix = expedition.routeTileIds.slice(0, expedition.routeIndex + 1);
+          const oneWayKm = world === null ? 0 : getRoutePhysicalLengthKm(world, expedition.routeTileIds);
+          const outboundKm = world === null ? 0 : getRoutePhysicalLengthKm(world, routePrefix);
+          const plannedKm = oneWayKm * 2;
+          const walkedKm = expedition.phase === "returning"
+            ? oneWayKm + Math.max(0, oneWayKm - outboundKm)
+            : outboundKm;
           return (
             <article key={expedition.id} className="practice-feedback-overview">
               <span className="practice-feedback-kicker">Away party — {expedition.taskKind.replace(/_/g, " ")}</span>
@@ -133,7 +134,7 @@ export function Mobility({
                 {expedition.partyComposition === undefined
                   ? ""
                   : ` (${expedition.partyComposition.high} strong / ${expedition.partyComposition.typical} ordinary / ${expedition.partyComposition.limited} limited)`}{" "}
-                — {phaseLabel(expedition)} at {String(expedition.positionTileId)} · {Math.round((walkedTiles * KM_PER_TILE) * 10) / 10} of ~{plannedKm} km ·
+                — {phaseLabel(expedition)} at {String(expedition.positionTileId)} · {world === null ? "?" : Math.round(walkedKm * 10) / 10} of ~{world === null ? "?" : Math.round(plannedKm * 10) / 10} km ·
                 day {expedition.travelDaysElapsed + expedition.workDaysElapsed}, expected back day {Number(expedition.plannedReturnDay)}
               </p>
               <ul className="condition-note">

@@ -618,6 +618,8 @@ export interface FissionLifecycleRecord {
   readonly departureTileId?: TileId;
   /** Bounded outbound trail, newest last, so a return can retrace ground the group actually walked. */
   readonly trail?: readonly TileId[];
+  /** SCALE-1 Task 4: unfinished work on the exact directed edge this provisional journey is traversing. */
+  readonly travelEdgeRemainder?: DirectedEdgeTravelRemainder;
   /**
    * ROADMAP ITEM 4 — TWO PHYSICAL OBSERVATIONS, AND THE FOUR THINGS THEY DO NOT MEAN.
    *
@@ -1010,6 +1012,8 @@ export interface BandMovementRecord {
   readonly time: WorldTime;
   readonly fromTileId: TileId;
   readonly toTileId: TileId;
+  /** Completed physical route distance only; never inferred from raw cell count. */
+  readonly distanceKm: number;
   readonly action: Action;
   readonly decisionId: DecisionId;
   readonly intentKind?: MobilityIntentKind;
@@ -1087,7 +1091,10 @@ export interface ResidentialMoveEvent {
   readonly fromTileId: TileId;
   readonly toTileId: TileId;
   readonly pathTiles: readonly TileId[];
+  /** Topological edge count retained for diagnostics/presentation. */
   readonly distanceTiles: number;
+  /** Completed physical route distance from world spatial geometry. */
+  readonly distanceKm: number;
   readonly moveKind: ResidentialMoveKind;
   readonly cause: ResidentialMoveCause;
   readonly status: ResidentialMoveStatus;
@@ -7693,6 +7700,8 @@ export interface Band {
   readonly currentIntent?: MobilityIntent;
   readonly intentHistory?: readonly MobilityIntent[];
   readonly movementHistory: readonly BandMovementRecord[];
+  /** SCALE-1 Task 4: unfinished residential travel on one exact directed edge, never generic distance credit. */
+  readonly residentialTravelEdgeRemainder?: DirectedEdgeTravelRemainder;
   readonly lastIntraSeasonTrip?: IntraSeasonTripRecord;
   readonly recentIntraSeasonTrips?: readonly IntraSeasonTripRecord[];
   // LOST-LINEAGE RECOVERY-12 — authoritative bounded current-period food receipts.

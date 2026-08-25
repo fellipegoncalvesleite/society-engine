@@ -35557,9 +35557,9 @@ function runTargetedMigrationWalkCheck(modules) {
     !mw.MIGRATION_INTENT_KINDS.has("local_foraging");
   const a_budgetScales =
     mw.deriveMigrationWalkBudget(0) === 1 &&
-    mw.deriveMigrationWalkBudget(1) === mw.MIGRATION_WALK_MAX_STEPS &&
+    mw.deriveMigrationWalkBudget(1) === mw.MIGRATION_TRAVEL_COMMITMENT_UNITS &&
     mw.deriveMigrationWalkBudget(0.5) > 1 &&
-    mw.deriveMigrationWalkBudget(0.5) < mw.MIGRATION_WALK_MAX_STEPS;
+    mw.deriveMigrationWalkBudget(0.5) < mw.MIGRATION_TRAVEL_COMMITMENT_UNITS;
 
   const assertions = {
     contiguous_no_teleport: a_contiguous,

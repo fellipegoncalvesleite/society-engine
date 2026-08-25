@@ -22,9 +22,13 @@ import { advanceExploitationSkill } from "../agents/exploitationSkill";
 import {
   deriveMigrationWalk,
   deriveSeasonalTravelPlanForBand,
+  MIGRATION_TRAVEL_COMMITMENT_UNITS,
   MIGRATION_WALK_ENABLED,
+  RESIDENTIAL_LEG_TRAVEL_DAYS,
   type MigrationWalkView,
 } from "../agents/migrationWalk";
+import { deriveTravelPace } from "../agents/bandMobility";
+import { advanceTraversalAlongRoute } from "../agents/traversal";
 import {
   chooseDiverseProbeTarget,
   deriveProbeDiminishingReturn,
@@ -919,19 +923,14 @@ export function applyBandDecision(
     (targetTile === undefined || !isBandPassableDestination(targetTile));
   const canonicalNextPosition =
     crossingBlocked || destinationBlocked || !isMovementAction ? band.position : targetTile?.id ?? band.position;
-  // SPIKE (2026-06-15) — cause-gated migration walk. A COMMITTED migration (a residential
-  // move under a migration-class mobility intent with real persistence) is realized as a
-  // contiguous breadcrumb PATH of single-tile steps in the band's own chosen direction,
-  // instead of a single ≤2-tile hop. The marker is a seasonal residential base, and a mobile
-  // forager's base displaces well beyond ~3 km/season; this gives the base realistic per-season
-  // reach WITHOUT teleporting (each step is grid-distance 1, anti-omniscient, cause-scaled).
-  // It is a pure REALIZER of the already-scored decision — it never re-runs the scorer. A
-  // low-commitment / non-migration move keeps the canonical single hop (byte-identical).
+  // SCALE-1 Task 4 — every residential relocation now realizes the already-scored
+  // decision through physical edge traversal. Multi-edge migration planning remains
+  // anti-omniscient; only edges actually completed become canonical position/knowledge.
   const migrationWalk =
     canonicalNextPosition !== band.position && isMovementAction
-      ? deriveAppliedMigrationWalk(world, band, decision, targetTileId)
+      ? deriveAppliedMigrationWalk(world, band, decision, canonicalNextPosition)
       : undefined;
-  const nextPosition = migrationWalk?.endpointTileId ?? canonicalNextPosition;
+  const nextPosition = migrationWalk?.endpointTileId ?? band.position;
   const moved = nextPosition !== band.position;
   // ADAPTIVE EFFICACY FEEDBACK-1: compact decision-time + realized crossing
   // context for response-specific efficacy. All fields come from the SAME
@@ -994,6 +993,7 @@ export function applyBandDecision(
       decision,
       nextPosition,
       moved,
+      movementDistanceKm: migrationWalk?.completedPhysicalKm ?? 0,
       observedTileIds,
       knownTiles: updatedKnowledge.observedTiles,
     }),
@@ -1087,6 +1087,7 @@ export function applyBandDecision(
     currentIntent: decision.mobilityIntent,
     intentHistory: getNextIntentHistory(band, decision),
     movementHistory: memoryUpdate.movementHistory,
+    residentialTravelEdgeRemainder: isMovementAction ? migrationWalk?.edgeRemainder : undefined,
     probeMemory,
     resourceKnowledgeState,
     lastResourceScout,
@@ -1222,6 +1223,7 @@ export function applyBandDecision(
     decision,
     prevRing: band.recentResidentialMoveEvents,
     executedPathTiles: migrationWalk === undefined ? undefined : [band.position, ...migrationWalk.path],
+    travelDaysConsumed: migrationWalk?.travelDaysConsumed,
     stagedLegIncomplete: migrationWalk !== undefined && migrationWalk.stopReason === "budget_exhausted",
   });
   const residentialDependencyShare =
@@ -5054,56 +5056,86 @@ function deriveAppliedMigrationWalk(
   band: Band,
   decision: Decision,
   targetTileId: TileId,
-): ReturnType<typeof deriveMigrationWalk> | undefined {
-  if (!MIGRATION_WALK_ENABLED) {
-    return undefined;
-  }
-  // CAUSAL-REPAIR-2: the walk engages on the seasonal-travel PLAN, not on raw
-  // intent persistence (the SPIKE-MOBILITY-1 churn cause). Chronic hardship
-  // escape can justify a journey even without a formal migration intent; a
-  // migration-class intent needs a multi-season rest since the last move.
+) {
   const intent = decision.mobilityIntent;
   const plan = deriveSeasonalTravelPlanForBand(
     band,
     intent?.kind,
     clamp01(intent?.persistence ?? 0),
     Number(world.time.tick),
-    // INVENTION-1: the dry-route water relief applies only when the scored
-    // destination is one of the band's OWN remembered watered places.
     { destinationKnownWatered: isKnownWateredDestination(band, targetTileId) },
   );
-  if (!plan.engaged) {
-    return undefined; // single hop; the plan's limiters explain why in Technical
-  }
-  // Heading is the band's OWN already-chosen direction (intent vector / realized heading /
-  // the canonical move's bearing) — never a hidden target or truth gradient.
+
   const heading =
     intent?.directionVector ??
     band.corridorHeading?.headingVector ??
     getRealizedMoveDelta(world, band.position, targetTileId);
-  if (heading === undefined || (heading.x === 0 && heading.y === 0)) {
-    return undefined;
-  }
-  // Exploratory dispersal AND hardship escape may take one bounded step into
-  // unknown land (a journey out of a failing range accepts visible route risk);
-  // corridor migration stays on known ground.
   const exploratory =
     plan.motive === "chronic_hardship_escape" ||
     intent?.kind === "frontier_dispersal" ||
     intent?.kind === "seek_new_range" ||
     intent?.kind === "expand_known_world" ||
     intent?.kind === "daughter_range_expansion";
-  const result = deriveMigrationWalk(buildMigrationWalkView(world, band, intent?.kind), {
-    startTileId: band.position,
-    headingVector: heading,
-    maxSteps: plan.budget,
-    runSeed: world.runSeed,
-    bandId: band.id,
-    tick: world.time.tick,
-    allowUnknownSteps: exploratory ? 1 : 0,
-    settleRichnessFloor: MIGRATION_SETTLE_RICHNESS_FLOOR,
+
+  const pace = deriveTravelPace(band, "whole_band_residential_move");
+  // Existing motive/load/water limiters are dimensionless commitment units; they now
+  // allocate a share of the four-day walking window rather than a count of cells.
+  const availableTravelDays = plan.engaged
+    ? RESIDENTIAL_LEG_TRAVEL_DAYS * (plan.budget / MIGRATION_TRAVEL_COMMITMENT_UNITS)
+    : RESIDENTIAL_LEG_TRAVEL_DAYS;
+
+  // Size route planning from physical reach at this world's cardinal edge scale. This
+  // horizon changes with resolution, so it cannot become a cell-resolution movement cap.
+  const minimumEdgeKm = Math.max(1e-9, Math.min(
+    world.config.spatial.cellWidthKm,
+    world.config.spatial.cellHeightKm,
+  ));
+  const plannerHorizon = Math.max(
+    1,
+    Math.ceil((pace.kmPerTravelDay * availableTravelDays) / minimumEdgeKm) + 1,
+  );
+  const planned =
+    MIGRATION_WALK_ENABLED && plan.engaged && heading !== undefined && (heading.x !== 0 || heading.y !== 0)
+      ? deriveMigrationWalk(buildMigrationWalkView(world, band, intent?.kind), {
+          startTileId: band.position,
+          headingVector: heading,
+          maxSteps: plannerHorizon,
+          runSeed: world.runSeed,
+          bandId: band.id,
+          tick: world.time.tick,
+          allowUnknownSteps: exploratory ? 1 : 0,
+          settleRichnessFloor: MIGRATION_SETTLE_RICHNESS_FLOOR,
+        })
+      : undefined;
+  const plannedPath = planned !== undefined && planned.path.length > 0
+    ? planned.path
+    : [targetTileId];
+  const routeTileIds = [band.position, ...plannedPath];
+
+  const advanced = advanceTraversalAlongRoute({
+    world,
+    routeTileIds,
+    routeIndex: 0,
+    kmPerTravelDay: pace.kmPerTravelDay,
+    availableTravelDays,
+    edgeRemainder: band.residentialTravelEdgeRemainder,
+    crossingCapability: getBandRiverCrossingCapability(band),
   });
-  return result.steps >= 1 ? result : undefined;
+  const completedPath = routeTileIds.slice(1, advanced.routeIndex + 1);
+  const exhaustedTime = advanced.unusedTravelDays <= 1e-9 && advanced.routeIndex < routeTileIds.length - 1;
+
+  return {
+    path: completedPath,
+    endpointTileId: advanced.positionTileId,
+    steps: completedPath.length,
+    stopReason: advanced.edgeRemainder !== undefined || exhaustedTime
+      ? "budget_exhausted" as const
+      : planned?.stopReason ?? (completedPath.length > 0 ? "settled_good_enough" as const : "no_progress" as const),
+    edgeRemainder: advanced.edgeRemainder,
+    completedPhysicalKm: advanced.completedPhysicalKm,
+    travelDaysConsumed: advanced.travelDaysConsumed,
+    availableTravelDays,
+  };
 }
 
 /**

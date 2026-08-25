@@ -24,9 +24,6 @@ import { MOVEMENT_TIEBREAK_EPSILON, seededTieBreakJitter } from "../core/seededV
 import type { Band } from "./types";
 import { deriveBandTendencies } from "./bandTendency";
 import { deriveChronicHardship } from "./chronicHardship";
-// EXPEDITIONARY-4 §6/§7 — the ONE canonical travel-pace boundary; the seasonal leg's
-// physical step ceiling derives from the whole-band column pace, not a private constant.
-import { deriveTravelPace } from "./bandMobility";
 import {
   deriveCarriedWaterRelief,
   deriveCarryingRelief,
@@ -63,7 +60,7 @@ export interface MigrationWalkInput {
   readonly startTileId: TileId;
   /** Direction of the band's own already-chosen motion (need not be normalized). */
   readonly headingVector: Coord;
-  /** Cause-scaled step budget (>=1). 1 ≈ today's single hop. */
+  /** Technical route-planning horizon. Physical movement is limited elsewhere by edge travel time. */
   readonly maxSteps: number;
   /** VAR-1 run seed (undefined → legacy zero-jitter movie). */
   readonly runSeed: number | undefined;
@@ -267,10 +264,10 @@ export function deriveMigrationWalk(
  * after a successful escape) or a migration-class intent held across a
  * multi-season cooldown since the last residential move (derived from
  * movementHistory — no perpetual every-season re-walking). Dependents, carry
- * burden, water uncertainty, and low route confidence LIMIT the step budget
- * (never below 2 while the motive is strong); comfort or a fresh move
- * disengages entirely. The walk itself is unchanged: contiguous single-tile
- * steps, band-known values only, breadcrumbs, stop-at-good-enough.
+ * burden, water uncertainty, and low route confidence reduce the journey's
+ * dimensionless commitment allocation (never below 2 units while the motive is
+ * strong); comfort or a fresh move disengages entirely. The path planner itself
+ * remains contiguous, band-known, breadcrumbed, and stop-at-good-enough.
  */
 export const MIGRATION_WALK_ENABLED = true;
 
@@ -286,34 +283,34 @@ export const MIGRATION_INTENT_KINDS: ReadonlySet<string> = new Set<string>([
   "daughter_range_expansion",
 ]);
 
-/** Hard ceiling on steps per migration (≈ MAX×1.5 km on Map 2). Conservative & tunable. */
-export const MIGRATION_WALK_MAX_STEPS = 6;
+/** Dimensionless cause/constraint resolution. It is NOT a physical cell ceiling. */
+export const MIGRATION_TRAVEL_COMMITMENT_UNITS = 6;
 
 /**
  * §7 — walking days a staged seasonal leg actually spends travelling (the rest of the
- * leg is packing, foraging en route, care, and making camp). Multiplied by the column's
- * derived pace to give the leg's PHYSICAL step ceiling.
+ * leg is packing, foraging en route, care, and making camp). Task 4 keeps this as time:
+ * physical edge traversal consumes it directly rather than converting it to cells.
  */
 export const RESIDENTIAL_LEG_TRAVEL_DAYS = 4;
 
 /**
- * Cause-scaled step budget: a mild relocation gets ~1 step (≈ today's single hop), a
- * strongly-pressured stress/dispersal relocation gets up to MAX. `pressure` in [0,1].
+ * Cause-scaled commitment units. These preserve the existing motive/constraint calibration
+ * without representing cells or distance. `pressure` is in [0,1].
  */
 export function deriveMigrationWalkBudget(pressure: number): number {
   const clamped = clamp01(pressure);
-  return 1 + Math.round(clamped * (MIGRATION_WALK_MAX_STEPS - 1));
+  return 1 + Math.round(clamped * (MIGRATION_TRAVEL_COMMITMENT_UNITS - 1));
 }
 
 // ---------------------------------------------------------------------------
 // CAUSAL-REPAIR-2 — Seasonal travel plan: the repaired CAUSE gate for the walk.
 //
-// The plan answers, per residential move: is a multi-tile seasonal journey
-// justified, how far, and — when it is not — WHY not (legible limiters for
-// Technical). Motives are the ones the design allows: chronic hardship escape
+// The plan answers, per residential move: is a staged seasonal journey justified,
+// how much of its physical travel-time window is committed, and — when it is not —
+// WHY not (legible limiters for Technical). Motives are the ones the design allows: chronic hardship escape
 // (repeated low-support evidence), dispersal/frontier pull, or committed
-// corridor migration. Constraints LIMIT distance rather than collapsing it to
-// one tile: while the motive is strong the budget floors at 2 steps.
+// corridor migration. Constraints reduce commitment without becoming a cell count:
+// while the motive is strong the allocation floors at 2 commitment units.
 // Anti-churn (the SPIKE-MOBILITY-1 killer): intent-driven journeys need a
 // multi-season rest since the last residential move; hardship journeys need a
 // shorter rest (a staged escape advances in legs, not every single season) and
@@ -340,21 +337,13 @@ export interface SeasonalTravelPlanInput {
   // Average confidence across the band's own observed tiles (route knowledge).
   readonly routeConfidence: number;
   readonly seasonsSinceLastResidentialMove: number;
-  /**
-   * EXPEDITIONARY-4 §6/§7 — physical ceiling on this leg's step budget, derived from
-   * the canonical mobility authority (whole-band column pace × the bounded travel days
-   * a staged leg spends walking). Optional so pure unit inputs stay valid; production
-   * (`deriveSeasonalTravelPlanForBand`) always supplies it. A physically slow column
-   * cannot buy distance with motive strength.
-   */
-  readonly physicalStepCeiling?: number;
 }
 
 export interface SeasonalTravelPlan {
   readonly engaged: boolean;
   readonly motive: SeasonalTravelMotive;
   readonly motiveStrength: number;
-  // Final step budget after limiters; <2 means today's single hop.
+  // Dimensionless commitment allocation after limiters; production maps this to travel time, never cells.
   readonly budget: number;
   // Human-legible reasons the journey is short/blocked (Technical proof).
   readonly limiters: readonly string[];
@@ -441,20 +430,9 @@ export function deriveSeasonalTravelPlan(input: SeasonalTravelPlanInput): Season
       limiters.push("little confident route knowledge");
     }
 
-    // Constraints LIMIT distance; they do not collapse a strongly-motivated
-    // journey to a single tile.
-    budget = Math.max(strength >= STRONG_MOTIVE_FLOOR ? 2 : 1, Math.min(MIGRATION_WALK_MAX_STEPS, budget));
-
-    // §7 — the PHYSICAL ceiling wins over motive: a column that can only cover so many
-    // tiles in a staged leg's walking days does not walk further because it wants to.
-    if (input.physicalStepCeiling !== undefined) {
-      const ceiling = Math.max(1, Math.floor(input.physicalStepCeiling));
-
-      if (budget > ceiling) {
-        budget = ceiling;
-        limiters.push("the column's physical pace caps this leg");
-      }
-    }
+    // Constraints reduce commitment; they do not erase a strongly motivated journey.
+    // This remains dimensionless until the residential executor maps it to travel time.
+    budget = Math.max(strength >= STRONG_MOTIVE_FLOOR ? 2 : 1, Math.min(MIGRATION_TRAVEL_COMMITMENT_UNITS, budget));
 
     if (budget < 2) {
       limiters.push("constraints reduce this journey to a single hop");
@@ -579,14 +557,6 @@ export function deriveSeasonalTravelPlanForBand(
     Math.max(1, band.demography.population);
   const rawCarryConstraint = band.bodyCampLogistics?.behavior?.carryConstraintBias ?? 0;
   const rawWaterStress = band.pressureState?.waterStress ?? 0;
-  // §6/§7 — the leg's physical ceiling from the canonical mobility authority: the
-  // whole-band column pace times the bounded walking days a staged seasonal leg spends
-  // actually travelling (packing, foraging, and camp-making consume the rest).
-  const columnPace = deriveTravelPace(band, "whole_band_residential_move");
-  const physicalStepCeiling = Math.max(
-    1,
-    Math.floor(columnPace.tilesPerTravelDay * RESIDENTIAL_LEG_TRAVEL_DAYS),
-  );
   const baseInput: SeasonalTravelPlanInput = {
     intentKind,
     intentPersistence: clamp01(intentPersistence),
@@ -598,7 +568,6 @@ export function deriveSeasonalTravelPlanForBand(
     waterStress: rawWaterStress,
     routeConfidence,
     seasonsSinceLastResidentialMove,
-    physicalStepCeiling,
   };
   const unrelievedPlan = deriveSeasonalTravelPlan(baseInput);
   const carriedWaterRelief = disabled || options?.disableCarriedWaterRelief === true

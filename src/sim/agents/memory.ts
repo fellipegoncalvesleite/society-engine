@@ -28,6 +28,8 @@ export interface BandMemoryUpdateInput {
   readonly decision: Decision;
   readonly nextPosition: TileId;
   readonly moved: boolean;
+  /** Completed physical route distance for this residential move. */
+  readonly movementDistanceKm: number;
   readonly observedTileIds: readonly TileId[];
   readonly knownTiles: Readonly<Record<TileId, KnownTileRecord>>;
 }
@@ -81,6 +83,7 @@ function getMovementRecord(input: BandMemoryUpdateInput): BandMovementRecord | u
     time: input.world.time,
     fromTileId: input.band.position,
     toTileId: input.nextPosition,
+    distanceKm: Math.max(0, input.movementDistanceKm),
     action: input.decision.action,
     decisionId: input.decision.id,
     intentKind: input.decision.mobilityIntent?.kind,

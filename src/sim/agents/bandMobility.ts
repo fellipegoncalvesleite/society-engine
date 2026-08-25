@@ -28,12 +28,6 @@
 import type { DayNumber } from "../core/types";
 import type { Band, ExpeditionPartyComposition, ExpeditionRecord } from "./types";
 
-/**
- * @deprecated SCALE-1 migration bridge only. WorldConfig.spatial is the physical authority.
- * No new behavior may read this constant; remaining readers are removed by Tasks 3/4/7.
- */
-export const KM_PER_TILE = 1.5;
-
 /** Rolling realized-history window. Bounded state, never grows. */
 export const WALKING_HISTORY_DAY_CAP = 24;
 
@@ -66,7 +60,7 @@ export interface WalkingDayRecord {
   readonly loadedKm: number;
   /** False on a rest/camp day — this is what separates calendar-day from active-day means. */
   readonly activeTravel: boolean;
-  readonly source: "expedition_outbound" | "expedition_return" | "expedition_operating";
+  readonly source: "expedition_outbound" | "expedition_return" | "expedition_operating" | "provisional_travel";
 }
 
 /** Bounded realized walking history. The observable "average distance" comes from HERE. */
@@ -486,8 +480,6 @@ export type TravelContext =
 export interface TravelPace {
   readonly context: TravelContext;
   readonly kmPerTravelDay: number;
-  /** @deprecated SCALE-1 migration bridge; physical traversal consumes kmPerTravelDay. */
-  readonly tilesPerTravelDay: number;
 }
 
 /**
@@ -564,11 +556,7 @@ export function deriveTravelPace(
   }
 
   const kmPerTravelDay = round3(Math.min(MOBILITY_TECHNICAL_MAX_KM_PER_DAY, Math.max(0.3, km * injuryFactor)));
-  return {
-    context,
-    kmPerTravelDay,
-    tilesPerTravelDay: round3(kmPerTravelDay / KM_PER_TILE),
-  };
+  return { context, kmPerTravelDay };
 }
 
 /**

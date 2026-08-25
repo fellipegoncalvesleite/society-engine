@@ -129,7 +129,7 @@ try {
       partyCompositionTotal: productivePartyWorkers,
       committedMobilityPoolTotal: committedAwayWorkers,
       availableMobilityPoolTotal: availablePools.limited + availablePools.typical + availablePools.high,
-      travelPaceTilesPerDay: pace.tilesPerTravelDay,
+      travelPaceKmPerDay: pace.kmPerTravelDay,
       travelPacePartyFactor: Number(paceFactor.toFixed(6)),
       carryCapacityUnits: expedition.deriveCarryCapacityUnits(b, e.partyWorkers, 0, tick),
       // Consumption is charged on BODIES after the repair and on `partyWorkers` before it; both

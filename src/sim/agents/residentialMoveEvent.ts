@@ -42,6 +42,8 @@ import { deriveCarriedWaterRelief, deriveCarryingRelief } from "./adaptationBoun
 // residential column derives its pace here (cohorts, possessions, cohesion), so this
 // module no longer carries private tiles-per-day constants.
 import { deriveTravelPace } from "./bandMobility";
+import { getRoutePhysicalLengthKm, getRouteTravelTimeDays } from "./traversal";
+import { getBandRiverCrossingCapability } from "../rules/decisionEdgeContext";
 import { deriveTemporaryWatercraftAssessmentForMove } from "./storageSuitability";
 import type {
   Band,
@@ -60,6 +62,10 @@ const RESIDENTIAL_INTENT_OUTCOME_RING_CAP = 12;
 // excluded from the determinism fingerprint), so the cost never touches baselines.
 const RESIDENTIAL_MOVE_PATH_MAX_EXPLORED = 1024;
 const RESIDENTIAL_MOVE_PATH_MAX_TILES = 64;
+// Preserve the pre-SCALE-1 hardship calibration in physical units. These are physical
+// thresholds, not tile conversions: changing map resolution does not change them.
+const RESIDENTIAL_HARDSHIP_DISTANCE_KM_REFERENCE = 21;
+const LONG_RESIDENTIAL_ROUTE_KM = 9;
 
 export interface DeriveResidentialMoveEventArgs {
   readonly world: WorldState;
@@ -69,6 +75,8 @@ export interface DeriveResidentialMoveEventArgs {
   readonly decision: Decision;
   readonly prevRing?: readonly ResidentialMoveEvent[];
   readonly executedPathTiles?: readonly TileId[];
+  /** Actual physical travel time consumed this leg, including time spent on an unfinished next edge. */
+  readonly travelDaysConsumed?: number;
   readonly stagedLegIncomplete?: boolean;
 }
 
@@ -90,6 +98,7 @@ export function deriveResidentialMoveEventRing(
     nextPosition,
     decision,
     args.executedPathTiles,
+    args.travelDaysConsumed,
     args.stagedLegIncomplete === true,
   );
 
@@ -102,6 +111,7 @@ function buildResidentialMoveEvent(
   nextPosition: TileId,
   decision: Decision,
   executedPathTiles: readonly TileId[] | undefined,
+  travelDaysConsumed: number | undefined,
   stagedLegIncomplete: boolean,
 ): ResidentialMoveEvent {
   const fromTileId = band.position;
@@ -120,27 +130,29 @@ function buildResidentialMoveEvent(
   const status: ResidentialMoveStatus = "arrived";
   const pathTiles = route;
   const distanceTiles = Math.max(1, pathTiles.length - 1);
+  const distanceKm = getRoutePhysicalLengthKm(world, pathTiles);
   const startDay = startDayForKind(moveKind);
-  const watercraftDelayDays = 0;
-  // EXPEDITIONARY-4 §6/§7 — the column's pace comes from the canonical mobility
-  // authority: the whole band moves with its dependents, elders, and camp burden, so
-  // it is physically slower than a selected party over the same route. Urgency raises
-  // willingness (a force-marching column overreaches), never stamina; the quicker
-  // pace is paid as extra hardship risk below. The seasonal decision and endpoint are
-  // unchanged — this derives duration/effort of the ALREADY-decided move.
-  const ordinaryPace = deriveTravelPace(band, "whole_band_residential_move").tilesPerTravelDay;
-  const paceTilesPerDay =
+  const ordinaryPace = deriveTravelPace(band, "whole_band_residential_move").kmPerTravelDay;
+  const paceKmPerDay =
     moveKind === "emergency_water_move"
-      ? deriveTravelPace(band, "emergency_residential_move", { urgency: 1 }).tilesPerTravelDay
+      ? deriveTravelPace(band, "emergency_residential_move", { urgency: 1 }).kmPerTravelDay
       : moveKind === "food_pressure_move"
-        ? deriveTravelPace(band, "emergency_residential_move", { urgency: 0.5 }).tilesPerTravelDay
+        ? deriveTravelPace(band, "emergency_residential_move", { urgency: 0.5 }).kmPerTravelDay
         : ordinaryPace;
-  const durationDays = Math.max(
-    1,
-    Math.min(14, Math.ceil(distanceTiles / Math.max(0.2, paceTilesPerDay)) + watercraftDelayDays),
+  const completedRouteTravelDays = getRouteTravelTimeDays(
+    world, pathTiles, paceKmPerDay, getBandRiverCrossingCapability(band),
   );
+  // A staged leg may have spent additional time on the next unfinished edge. Count that
+  // time in duration/hardship without pretending the band occupied a sub-cell position.
+  const travelTimeDays = Math.max(
+    Number.isFinite(completedRouteTravelDays) ? completedRouteTravelDays : 0,
+    Number.isFinite(travelDaysConsumed) ? Math.max(0, travelDaysConsumed ?? 0) : 0,
+  );
+  const durationDays = Math.max(1, Math.ceil(travelTimeDays));
   const endDay = Math.min(SEASON_LENGTH_DAYS - 1, startDay + durationDays);
-  const hardship = deriveMigrationHardship(world, band, distanceTiles, status, undefined, paceTilesPerDay, ordinaryPace);
+  const hardship = deriveMigrationHardship(
+    world, band, distanceKm, travelTimeDays, status, undefined, paceKmPerDay, ordinaryPace,
+  );
   const hardshipOutcome = classifyResidentialMovementHardshipOutcome({
     hasResidentialIntent: isResidentialMovementIntentKind(decision.mobilityIntent?.kind),
     executionOpportunity: true,
@@ -172,11 +184,12 @@ function buildResidentialMoveEvent(
     season: world.time.season as Season,
     startDay: startDay as DayNumber,
     endDay: endDay as DayNumber,
-    durationDays: endDay - startDay,
+    durationDays,
     fromTileId,
     toTileId: nextPosition,
     pathTiles,
     distanceTiles,
+    distanceKm,
     moveKind,
     cause,
     status,
@@ -199,11 +212,12 @@ function buildResidentialMoveEvent(
 function deriveMigrationHardship(
   world: WorldState,
   band: Band,
-  distanceTiles: number,
+  distanceKm: number,
+  travelTimeDays: number,
   status: ResidentialMoveStatus,
   temporaryWatercraft: ReturnType<typeof deriveTemporaryWatercraftAssessmentForMove>,
-  paceTilesPerDay: number,
-  ordinaryPaceTilesPerDay: number,
+  paceKmPerDay: number,
+  ordinaryPaceKmPerDay: number,
 ): {
   readonly risk: number;
   readonly level: "low" | "moderate" | "high" | "severe";
@@ -225,7 +239,7 @@ function deriveMigrationHardship(
   // A forced-march pace (beyond the band's OWN ordinary column pace) is paid as extra
   // hardship risk — the quicker escape trades rest, foraging en route, and care time
   // for speed. A column moving at its ordinary derived pace pays exactly 0 here.
-  const forcedMarchRisk = Math.max(0, paceTilesPerDay - ordinaryPaceTilesPerDay) * 0.12;
+  const forcedMarchRisk = Math.max(0, paceKmPerDay - ordinaryPaceKmPerDay) * 0.08;
   // INVENTION-1: a practiced carrying response (band's own pre-move state)
   // relieves at most 60% × cap(0.4) = 24% of the dependent/elder burden terms
   // of the move — real but bounded; every other hardship term is fully paid.
@@ -236,11 +250,11 @@ function deriveMigrationHardship(
   // are still mostly paid, and leakage/heat already discounted the relief.
   const carriedWater = deriveCarriedWaterRelief(band, Number(world.time.tick), {
     heatContext: world.time.season === "summer",
-    routeDurationSteps: Math.max(1, distanceTiles),
+    routeDurationSteps: Math.max(1, Math.ceil(Number.isFinite(travelTimeDays) ? travelTimeDays : 1)),
   });
   const waterFactor = 1 - (carriedWater.active ? carriedWater.relief : 0) * 0.5;
   const risk = round2(clamp01(
-    distanceTiles / 14 * 0.24 +
+    distanceKm / RESIDENTIAL_HARDSHIP_DISTANCE_KM_REFERENCE * 0.24 +
       (dependentShare * 0.18 + elderShare * 0.16) * carryingFactor +
       foodStress * 0.18 +
       waterStress * 0.22 * waterFactor +
@@ -264,7 +278,7 @@ function deriveMigrationHardship(
     waterStress >= 0.55 ? "hard move: water stress and water gap risk" :
     dependentShare + elderShare >= 0.55 ? "hard move: dependents/elders slow the group" :
     foodStress >= 0.5 ? "hard move: food stress before departure" :
-    distanceTiles >= 6 ? "hard move: long residential route" :
+    distanceKm >= LONG_RESIDENTIAL_ROUTE_KM ? "hard move: long residential route" :
     "move hardship low";
   return {
     risk,

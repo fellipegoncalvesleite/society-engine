@@ -241,14 +241,17 @@ try {
     },
   );
 
-  // ── Q3 — the resolver is the only writer that moves the quarantined group's own state ──
+  // ── Q3 — only provisional authorities may change provisional movement/lifecycle state ──
+  // SCALE-1 Task 4 allows the released comparison arm to move physically as well, so “changed only
+  // in the quarantined arm” is no longer a valid positive control. Q1 already proves ordinary
+  // residential writers are excluded; Q3 now positively requires a provisional-owned field to move.
+  const provisionalOwnedChanges = quarantined.changed.filter((f) => PROVISIONAL_PHYSICAL.includes(f));
   record(
     "Q3_only_the_provisional_authorities_move_a_quarantined_group",
-    "every field that moves in the quarantined arm and NOT in the released one is written by a provisional authority — the lifecycle phase by the resolver, the position by the provisional travel writer — and nothing ordinary reaches the group",
-    movedOnlyWhileQuarantined.every((f) => PROVISIONAL_PHYSICAL.includes(f)),
-    movedOnlyWhileQuarantined.length > 0,
-    { movedOnlyWhileQuarantined, provisionalPhysicalWriters: PROVISIONAL_PHYSICAL,
-      unexpectedMovers: movedOnlyWhileQuarantined.filter((f) => !PROVISIONAL_PHYSICAL.includes(f)),
+    "the quarantined group has live provisional-owned lifecycle/physical changes while ordinary residential writers remain excluded",
+    provisionalOwnedChanges.length > 0 && ordinaryAdmitted.length === 0,
+    provisionalOwnedChanges.length > 0,
+    { provisionalOwnedChanges, provisionalPhysicalWriters: PROVISIONAL_PHYSICAL,
       finalPhase: quarantined.last.provisionalPhase,
       startPosition: quarantined.first.position, endPosition: quarantined.last.position,
       provisionalGroupPhysicallyMoved: quarantined.first.position !== quarantined.last.position },

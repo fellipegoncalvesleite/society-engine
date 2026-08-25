@@ -33,12 +33,14 @@
  */
 import { isProvisionalSuccessor } from "./bandLifecycle";
 import { getPhaseContract, requestTransition } from "./fissionLifecycleKernel";
-import { deriveTravelPace } from "./bandMobility";
+import { deriveTravelPace, recordWalkingDay } from "./bandMobility";
 import { closeOpenTravelInterval, deriveTravelEffortSplit } from "./provisionalTravelSubsistence";
 import { getNeighborTiles, getTile } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
+import { advanceTraversalAlongRoute } from "./traversal";
+import { getBandRiverCrossingCapability } from "../rules/decisionEdgeContext";
 import type { Band, FissionLifecycleRecord, ProvisionalActionRelativeToDeparture } from "./types";
-import type { BandId, TileId } from "../core/types";
+import type { BandId, DayNumber, TileId } from "../core/types";
 import type { WorldState } from "../world/types";
 import type { DailyAction } from "./dailyActions";
 
@@ -49,7 +51,7 @@ export const TRAVEL_TRAIL_CAP = 64;
 export type TravelRefusal =
   | "no_destination_known"
   | "already_at_destination"
-  | "resting_on_this_day_at_current_pace"
+  | "edge_travel_incomplete"
   | "every_step_toward_the_destination_is_impassable";
 
 export interface TravelStepRecord {
@@ -64,7 +66,9 @@ export interface TravelStepRecord {
   readonly kmPerActiveDay: number;
   /** Share of the day's workers spent looking for food instead of covering ground. */
   readonly gatherShare: number;
-  readonly daysPerTile: number;
+  readonly travelDaysConsumed: number;
+  readonly edgeTravelTimeRemainingDays?: number;
+  readonly completedPhysicalKm: number;
   readonly distanceRemaining: number;
   readonly impassableNeighboursRefused: number;
   readonly arrived: boolean;
@@ -133,7 +137,8 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
       moved: false,
       kmPerActiveDay: 0,
       gatherShare: 0,
-      daysPerTile: 0,
+      travelDaysConsumed: 0,
+      completedPhysicalKm: 0,
       distanceRemaining: -1,
       impassableNeighboursRefused: 0,
       arrived: false,
@@ -185,87 +190,165 @@ export function advanceProvisionalTravel(world: WorldState, day: number): Provis
       continue;
     }
 
-    // ── pace, through the canonical authority rather than a second model ──
-    //
-    // `whole_band_residential_move` is the right context and that is a finding rather than a
-    // convenience: a provisional group is not a selected party of chosen walkers, it is EVERYBODY —
-    // dependents, elders and all — moving as a column, which is exactly what that context describes.
-    // Injury load comes from the band's own acute-risk state, so a hurt group walks slower.
-    // `movementCautionBump` is the MOVEMENT term of the acute-risk effect — the one that says a hurt
-    // group travels worse. The other terms describe work efficiency, stress and mortality and would be
-    // the wrong quantity here.
+    // ── physical pace + available travel time ──
+    // A provisional group is a whole residential column. Gathering consumes time from the
+    // same day; the physical pace itself remains km/travel-day and edge geometry/cost lives
+    // exclusively in traversal.ts.
     const injuryLoad = Math.min(1, Math.max(0, band.acuteRisk?.activeEffect?.movementCautionBump ?? 0));
     const pace = deriveTravelPace(band, "whole_band_residential_move", { injuryLoad });
-    // ── THE TRADEOFF, APPLIED TO THE GROUND ACTUALLY COVERED ──
-    //
-    // A day has one set of workers in it. Whatever share of them spends the day looking for food is
-    // not spending it covering distance, so a group that stops to gather genuinely travels slower and
-    // a group that presses on genuinely arrives hungrier. The split is derived from the group's own
-    // measured condition by the subsistence authority; this module only spends it.
     const effort = deriveTravelEffortSplit(band);
-    const tilesPerTravelDay = Math.max(0, pace.tilesPerTravelDay * effort.movementShare);
-    const kmPerActiveDay = Math.max(0, pace.kmPerTravelDay * effort.movementShare);
-    // A column slower than a tile a day RESTS between steps rather than teleporting a fraction of one.
-    const daysPerTile = tilesPerTravelDay <= 0 ? Number.POSITIVE_INFINITY : Math.max(1, Math.ceil(1 / tilesPerTravelDay));
-    const daysInPhase = day - record.phaseEnteredDay;
-    const paced = { ...base, kmPerActiveDay, gatherShare: effort.gatherShare, daysPerTile, distanceRemaining: remaining };
+    let availableTravelDays = Math.max(0, effort.movementShare);
+    let position = band.position;
+    let edgeRemainder = record.travelEdgeRemainder;
+    let completedPhysicalKm = 0;
+    let travelDaysConsumed = 0;
+    let impassable = 0;
+    let trail = [...(record.trail ?? [])];
+    let blockedStepDays = record.blockedStepDays ?? 0;
+    let wroteStep = false;
 
-    if (!Number.isFinite(daysPerTile) || daysInPhase < 0 || daysInPhase % daysPerTile !== 0) {
-      steps.push({ ...paced, refusal: "resting_on_this_day_at_current_pace" });
-      continue;
+    while (availableTravelDays > 1e-9) {
+      const current = getTile(world, position);
+      if (current === undefined) break;
+      const currentRemaining = manhattan(current.coord, target.coord);
+      if (currentRemaining === 0) break;
+
+      let refusedHere = 0;
+      const candidates = getNeighborTiles(world, position)
+        .filter((tile) => {
+          if (isBandPassableDestination(tile)) return true;
+          refusedHere += 1;
+          return false;
+        })
+        .map((tile) => ({ tile, distance: manhattan(tile.coord, target.coord) }))
+        .filter((candidate) => candidate.distance < currentRemaining)
+        .sort((left, right) => (left.distance - right.distance) || String(left.tile.id).localeCompare(String(right.tile.id)));
+      impassable += refusedHere;
+      const next = candidates[0];
+
+      if (next === undefined) {
+        blockedStepDays += 1;
+        edgeRemainder = undefined;
+        steps.push({
+          ...base,
+          fromTileId: String(position),
+          toTileId: String(position),
+          kmPerActiveDay: pace.kmPerTravelDay,
+          gatherShare: effort.gatherShare,
+          travelDaysConsumed,
+          completedPhysicalKm,
+          distanceRemaining: currentRemaining,
+          refusal: "every_step_toward_the_destination_is_impassable",
+          impassableNeighboursRefused: impassable,
+        });
+        wroteStep = true;
+        break;
+      }
+
+      const advanced = advanceTraversalAlongRoute({
+        world,
+        routeTileIds: [position, next.tile.id],
+        routeIndex: 0,
+        kmPerTravelDay: pace.kmPerTravelDay,
+        availableTravelDays,
+        edgeRemainder,
+        crossingCapability: getBandRiverCrossingCapability(band),
+      });
+      travelDaysConsumed += advanced.travelDaysConsumed;
+      availableTravelDays = advanced.unusedTravelDays;
+
+      if (advanced.blocked) {
+        blockedStepDays += 1;
+        edgeRemainder = undefined;
+        steps.push({
+          ...base,
+          fromTileId: String(position),
+          toTileId: String(position),
+          kmPerActiveDay: pace.kmPerTravelDay,
+          gatherShare: effort.gatherShare,
+          travelDaysConsumed: advanced.travelDaysConsumed,
+          completedPhysicalKm: 0,
+          distanceRemaining: currentRemaining,
+          refusal: "every_step_toward_the_destination_is_impassable",
+          impassableNeighboursRefused: impassable + 1,
+        });
+        wroteStep = true;
+        break;
+      }
+
+      if (advanced.completedEdges === 0) {
+        edgeRemainder = advanced.edgeRemainder;
+        steps.push({
+          ...base,
+          fromTileId: String(position),
+          toTileId: String(position),
+          kmPerActiveDay: pace.kmPerTravelDay,
+          gatherShare: effort.gatherShare,
+          travelDaysConsumed: advanced.travelDaysConsumed,
+          edgeTravelTimeRemainingDays: edgeRemainder?.remainingTravelDays,
+          completedPhysicalKm: 0,
+          distanceRemaining: currentRemaining,
+          refusal: "edge_travel_incomplete",
+          impassableNeighboursRefused: impassable,
+        });
+        wroteStep = true;
+        break;
+      }
+
+      changed = true;
+      trail.push(position);
+      if (trail.length > TRAVEL_TRAIL_CAP) trail = trail.slice(trail.length - TRAVEL_TRAIL_CAP);
+      const from = position;
+      position = next.tile.id;
+      edgeRemainder = undefined;
+      completedPhysicalKm += advanced.completedPhysicalKm;
+      blockedStepDays = 0;
+      steps.push({
+        ...base,
+        fromTileId: String(from),
+        toTileId: String(position),
+        moved: true,
+        kmPerActiveDay: pace.kmPerTravelDay,
+        gatherShare: effort.gatherShare,
+        travelDaysConsumed: advanced.travelDaysConsumed,
+        completedPhysicalKm: advanced.completedPhysicalKm,
+        distanceRemaining: next.distance,
+        impassableNeighboursRefused: impassable,
+        arrived: next.distance === 0,
+      });
+      wroteStep = true;
     }
 
-    // ── one contiguous step ──
-    //
-    // Candidates are the CURRENT TILE'S OWN NEIGHBOURS, so a step is contiguous by construction rather
-    // than by assertion. Among those that physically admit people, the one that reduces the distance
-    // to the believed destination wins; ties break on tile id so replay is exact.
-    let impassable = 0;
-    const candidates = getNeighborTiles(world, band.position)
-      .filter((tile) => {
-        if (isBandPassableDestination(tile)) return true;
-        impassable += 1;
-        return false;
-      })
-      .map((tile) => ({ tile, distance: manhattan(tile.coord, target.coord) }))
-      .filter((c) => c.distance < remaining)
-      .sort((l, r) => (l.distance - r.distance) || String(l.tile.id).localeCompare(String(r.tile.id)));
+    if (!wroteStep) {
+      steps.push({
+        ...base,
+        kmPerActiveDay: pace.kmPerTravelDay,
+        gatherShare: effort.gatherShare,
+        distanceRemaining: remaining,
+        refusal: "edge_travel_incomplete",
+      });
+    }
 
-    const next = candidates[0];
-    if (next === undefined) {
-      // A real contradiction: the group wanted to go that way and the ground refused. It is recorded
-      // rather than routed around, because "there is no way forward from here" is exactly the evidence
-      // a later return decision needs, and inventing a detour would be inventing knowledge.
-      //
-      // It is now RETAINED as well as recorded, because a refusal the group forgets by tomorrow cannot
-      // become a reason for anything. The counter is the group's own experience of being stopped; it
-      // says nothing about what lies beyond the tiles that refused it.
+    if (position !== band.position || edgeRemainder !== record.travelEdgeRemainder || travelDaysConsumed > 0) {
       changed = true;
       bands[String(band.id)] = {
         ...band,
-        provisionalSuccessor: { ...record, blockedStepDays: (record.blockedStepDays ?? 0) + 1 },
+        position,
+        mobility: recordWalkingDay(band.mobility, {
+          day: day as DayNumber,
+          km: completedPhysicalKm,
+          loadedKm: 0,
+          activeTravel: travelDaysConsumed > 0,
+          source: "provisional_travel",
+        }),
+        provisionalSuccessor: {
+          ...record,
+          trail,
+          blockedStepDays,
+          travelEdgeRemainder: edgeRemainder,
+        },
       };
-      steps.push({ ...paced, refusal: "every_step_toward_the_destination_is_impassable", impassableNeighboursRefused: impassable });
-      continue;
     }
-
-    changed = true;
-    const trail = [...(record.trail ?? []), band.position];
-    bands[String(band.id)] = {
-      ...band,
-      position: next.tile.id,
-      provisionalSuccessor: {
-        ...record,
-        trail: trail.length > TRAVEL_TRAIL_CAP ? trail.slice(trail.length - TRAVEL_TRAIL_CAP) : trail,
-      },
-    };
-    steps.push({
-      ...paced,
-      toTileId: String(next.tile.id),
-      moved: true,
-      distanceRemaining: next.distance,
-      impassableNeighboursRefused: impassable,
-    });
   }
 
   // ── THE TWO PHYSICAL CHOICE OBSERVATIONS ──────────────────────────────────────────────────────

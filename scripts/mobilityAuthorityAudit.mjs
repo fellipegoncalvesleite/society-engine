@@ -2,8 +2,8 @@
 //
 // Proves:
 //   §6  every relevant travel mode derives pace from ONE boundary (bandMobility):
-//       expedition.ts / residentialMoveEvent.ts / migrationWalk.ts consume it and no
-//       longer carry private tiles-per-day constants;
+//       expedition.ts / residentialMoveEvent.ts / the residential executor in bandDecision.ts
+//       consume it; migrationWalk.ts is route planning only and carries no pace conversion;
 //   §7  a whole-band residential column is physically slower and more constrained than
 //       a selected adult party over the same route (dependents/elders/possessions),
 //       and emergency overreach helps but never turns the column into a scout party;
@@ -28,10 +28,13 @@ try {
   const expeditionSrc = src("expedition.ts");
   const residentialSrc = src("residentialMoveEvent.ts");
   const walkSrc = src("migrationWalk.ts");
+  const decisionSrc = readFileSync(`${ROOT}/src/sim/rules/bandDecision.ts`, "utf8");
   const consumersImportAuthority =
     expeditionSrc.includes('from "./bandMobility"') &&
     residentialSrc.includes('from "./bandMobility"') &&
-    walkSrc.includes('from "./bandMobility"');
+    decisionSrc.includes('from "../agents/bandMobility"') &&
+    decisionSrc.includes('from "../agents/traversal"') &&
+    !walkSrc.includes('from "./bandMobility"');
   // The old private residential pace constants must be gone.
   const noPrivateResidentialPace = !/moveKind === "emergency_water_move" \? 2 :/.test(residentialSrc);
 
