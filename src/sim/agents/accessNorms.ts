@@ -2,6 +2,12 @@ import type { BandId, ReasonId, TileId } from "../core/types";
 import { getTile } from "../world/generate";
 import type { Tile, WorldState } from "../world/types";
 import { deriveFamiliarCountry } from "./familiarCountry";
+import {
+  LOCAL_EVIDENCE_EXTENDED_KM,
+  LOCAL_EVIDENCE_NEAR_KM,
+  getPhysicalTileDistanceKm,
+  isWithinPhysicalProximity,
+} from "./physicalProximity";
 import type {
   Band,
   ProtoAccessBehaviorEffectState,
@@ -739,7 +745,7 @@ function collectStorageSignals(
   const reasonIds: string[] = [];
 
   for (const card of (band.resourceEcology?.storageSuitabilityCards ?? [])
-    .filter((entry) => entry.sourceTileIds.length === 0 || entry.sourceTileIds.some((sourceTileId) => isNearTile(world, tile, sourceTileId, 2)))
+    .filter((entry) => entry.sourceTileIds.length === 0 || entry.sourceTileIds.some((sourceTileId) => isNearTile(world, tile, sourceTileId, LOCAL_EVIDENCE_NEAR_KM)))
     .slice(0, 6)) {
     reasonIds.push(...card.sourceIds.map((sourceId) => `reason:access-storage:${sourceId}`));
     const cardImportance =
@@ -791,28 +797,28 @@ function collectVisibleSignals(
   let forest = false;
   const reasonIds: string[] = [];
 
-  for (const card of (band.visibleNature?.plantCards ?? []).filter((entry) => isNearTile(world, tile, entry.tileId, 2)).slice(0, 3)) {
+  for (const card of (band.visibleNature?.plantCards ?? []).filter((entry) => isNearTile(world, tile, entry.tileId, LOCAL_EVIDENCE_NEAR_KM)).slice(0, 3)) {
     plant = true;
     importance = Math.max(importance, card.plantPatchEffect === "seasonal_pulse" || card.reliability >= 0.5 ? 0.3 : 0.18);
     pressure = Math.max(pressure, card.pressure, card.depletion);
     confidence = Math.max(confidence, card.confidence);
     reasonIds.push(`reason:access-visible-plant:${card.patchId}`);
   }
-  for (const card of (band.visibleNature?.aquaticCards ?? []).filter((entry) => isCardNearTile(world, tile, entry.anchorTileId, entry.seenTileIds, 2)).slice(0, 3)) {
+  for (const card of (band.visibleNature?.aquaticCards ?? []).filter((entry) => isCardNearTile(world, tile, entry.anchorTileId, entry.seenTileIds, LOCAL_EVIDENCE_NEAR_KM)).slice(0, 3)) {
     aquatic = true;
     importance = Math.max(importance, card.reliability >= 0.5 || card.aquaticEffect === "wetland_buffer" || card.aquaticEffect === "winter_buffer" ? 0.34 : 0.2);
     pressure = Math.max(pressure, card.pressure, card.riskDifficulty * 0.7);
     confidence = Math.max(confidence, card.confidence);
     reasonIds.push(`reason:access-visible-aquatic:${card.stockId}`);
   }
-  for (const card of (band.visibleNature?.faunaCards ?? []).filter((entry) => isCardNearTile(world, tile, entry.anchorTileId, entry.seenTileIds, 3)).slice(0, 3)) {
+  for (const card of (band.visibleNature?.faunaCards ?? []).filter((entry) => isCardNearTile(world, tile, entry.anchorTileId, entry.seenTileIds, LOCAL_EVIDENCE_EXTENDED_KM)).slice(0, 3)) {
     fauna = true;
     importance = Math.max(importance, card.routeReliability >= 0.5 || card.usefulness === "high_value" ? 0.26 : 0.14);
     pressure = Math.max(pressure, card.huntingOrFishingPressure, card.wariness);
     confidence = Math.max(confidence, card.confidence);
     reasonIds.push(`reason:access-visible-fauna:${card.stockId}`);
   }
-  for (const card of (band.visibleNature?.forestCards ?? []).filter((entry) => isNearTile(world, tile, entry.tileId, 2)).slice(0, 3)) {
+  for (const card of (band.visibleNature?.forestCards ?? []).filter((entry) => isNearTile(world, tile, entry.tileId, LOCAL_EVIDENCE_NEAR_KM)).slice(0, 3)) {
     forest = true;
     importance = Math.max(importance, Math.max(card.shadeRefugeValue, card.woodFuelMaterialHook) >= 0.35 ? 0.26 : 0.14);
     pressure = Math.max(pressure, card.pressure, card.diebackTrend);
@@ -1313,9 +1319,8 @@ function compareBands(left: Band, right: Band): number {
   return String(left.id).localeCompare(String(right.id));
 }
 
-function isNearTile(world: WorldState, source: Tile | undefined, targetTileId: TileId, maxDistance: number): boolean {
-  const target = getTile(world, targetTileId);
-  return source !== undefined && target !== undefined && gridDistance(source, target) <= maxDistance;
+function isNearTile(world: WorldState, source: Tile | undefined, targetTileId: TileId, maxDistanceKm: number): boolean {
+  return source !== undefined && isWithinPhysicalProximity(world, source.id, targetTileId, maxDistanceKm);
 }
 
 function isCardNearTile(
@@ -1323,13 +1328,25 @@ function isCardNearTile(
   source: Tile | undefined,
   anchorTileId: TileId,
   seenTileIds: readonly TileId[],
-  maxDistance: number,
+  maxDistanceKm: number,
 ): boolean {
-  return isNearTile(world, source, anchorTileId, maxDistance) || seenTileIds.some((tileId) => isNearTile(world, source, tileId, maxDistance));
+  return isNearTile(world, source, anchorTileId, maxDistanceKm) ||
+    seenTileIds.some((tileId) => isNearTile(world, source, tileId, maxDistanceKm));
 }
 
-function gridDistance(left: Tile, right: Tile): number {
-  return Math.max(Math.abs(left.coord.x - right.coord.x), Math.abs(left.coord.y - right.coord.y));
+export function deriveAccessNormPhysicalProximityForAudit(
+  world: WorldState,
+  sourceTileId: TileId,
+  targetTileId: TileId,
+): { readonly physicalDistanceKm: number; readonly near: boolean; readonly extended: boolean } | undefined {
+  const physicalDistanceKm = getPhysicalTileDistanceKm(world, sourceTileId, targetTileId);
+  return physicalDistanceKm === undefined
+    ? undefined
+    : {
+        physicalDistanceKm,
+        near: physicalDistanceKm <= LOCAL_EVIDENCE_NEAR_KM,
+        extended: physicalDistanceKm <= LOCAL_EVIDENCE_EXTENDED_KM,
+      };
 }
 
 function uniqueTileIds(ids: readonly TileId[]): readonly TileId[] {

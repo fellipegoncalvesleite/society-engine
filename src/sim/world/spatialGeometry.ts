@@ -34,6 +34,15 @@ export function getManhattanPhysicalDistanceKm(config: WorldConfig, first: Coord
   );
 }
 
+/** Physical L-infinity displacement, preserving the old square-neighborhood geometry without
+ * treating raster cell counts as distance. */
+export function getChebyshevPhysicalDistanceKm(config: WorldConfig, first: Coord, second: Coord): number {
+  return Math.max(
+    Math.abs(second.x - first.x) * config.spatial.cellWidthKm,
+    Math.abs(second.y - first.y) * config.spatial.cellHeightKm,
+  );
+}
+
 export function getCardinalEdgeLengthKm(config: WorldConfig, from: Coord, to: Coord): number {
   const dx = Math.abs(to.x - from.x);
   const dy = Math.abs(to.y - from.y);

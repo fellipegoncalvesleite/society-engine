@@ -91,6 +91,7 @@ import {
 } from "../world/hydrography";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
+import { getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
 
 interface DemographyComputation {
   readonly demography: BandDemography;
@@ -112,7 +113,9 @@ interface FissionTargetCandidate {
   readonly aquaticValue: number;
   readonly knownBandSpacingPenalty: number;
   readonly knownBandsConsidered: number;
+  /** Topological diagnostic only. */
   readonly closestKnownBandDistanceTiles?: number;
+  readonly closestKnownBandDistanceKm?: number;
   readonly crossingMemory?: KnownCrossingMemory;
   readonly reasonType:
     | "frontier_split"
@@ -123,13 +126,30 @@ interface FissionTargetCandidate {
 
 export interface KnownBandSpacingForFission {
   readonly knownBandsConsidered: number;
+  /** Topological diagnostic only. */
   readonly closestKnownBandDistanceTiles?: number;
+  readonly closestKnownBandDistanceKm?: number;
   readonly trustedKinTolerance: number;
   readonly crowdedContactPressure: number;
   readonly knownBandSpacingPenalty: number;
   readonly hiddenUnknownBandAvoidance: 0;
   readonly reasonIds: readonly ReasonId[];
 }
+
+// SCALE-1 Task 7, PROVENANCE D — provisional physical compatibility calibration for
+// fission spacing and inherited local knowledge. These are explicit km model parameters;
+// raster cell count is no longer a behavioral distance authority.
+const FISSION_SPACING_CLOSE_KM = 3;
+const FISSION_SPACING_MID_KM = 7.5;
+const FISSION_SPACING_FAR_KM = 12;
+const FISSION_DISTANCE_PENALTY_START_KM = 12;
+const FISSION_DISTANCE_PENALTY_RAMP_KM = 27;
+const FISSION_PARENT_CORE_PROXIMITY_KM = 4.5;
+const FISSION_NEARBY_RANGE_MIN_KM = 4.5;
+const FISSION_NEARBY_RANGE_MAX_KM = 12;
+const FISSION_LOCAL_EVIDENCE_KM = 4.5;
+const INHERITED_PARENT_CORE_KM = 3;
+const INHERITANCE_DISTANCE_SCALE_KM = 12;
 
 interface DaughterCreation {
   readonly parent: Band;
@@ -1554,6 +1574,7 @@ export function deriveKnownBandSpacingForFission(
     .slice(0, 12);
 
   let closestKnownBandDistanceTiles: number | undefined;
+  let closestKnownBandDistanceKm: number | undefined;
   let trustedKinTolerance = 0;
   let crowdedContactPressure = 0;
   let penalty = 0;
@@ -1564,9 +1585,12 @@ export function deriveKnownBandSpacingForFission(
       continue;
     }
 
-    const distance = getGridDistance(targetTile, knownTile);
+    const distanceTiles = getGridDistance(targetTile, knownTile);
+    const distanceKm = getManhattanPhysicalDistanceKm(world.config, targetTile.coord, knownTile.coord);
     closestKnownBandDistanceTiles =
-      closestKnownBandDistanceTiles === undefined ? distance : Math.min(closestKnownBandDistanceTiles, distance);
+      closestKnownBandDistanceTiles === undefined ? distanceTiles : Math.min(closestKnownBandDistanceTiles, distanceTiles);
+    closestKnownBandDistanceKm =
+      closestKnownBandDistanceKm === undefined ? distanceKm : Math.min(closestKnownBandDistanceKm, distanceKm);
     const contact = knownBand.bandId === undefined ? undefined : band.contactMemories[knownBand.bandId];
     const kinTolerance = contact === undefined
       ? 0
@@ -1576,14 +1600,7 @@ export function deriveKnownBandSpacingForFission(
     const contactCrowding = contact === undefined
       ? 0
       : clamp01(contact.sharedUseCount * 0.08 + contact.tension * 0.22 + contact.strainedContactCount * 0.06);
-    const proximityPressure =
-      distance <= 2
-        ? 1
-        : distance <= 5
-          ? 0.62
-          : distance <= 8
-            ? 0.28
-            : 0;
+    const proximityPressure = deriveFissionSpacingPressure(distanceKm);
     trustedKinTolerance = Math.max(trustedKinTolerance, kinTolerance);
     crowdedContactPressure = Math.max(crowdedContactPressure, contactCrowding);
     penalty += proximityPressure * (1 - kinTolerance) * (0.1 + knownBand.confidence * 0.12) + contactCrowding * 0.08;
@@ -1592,6 +1609,7 @@ export function deriveKnownBandSpacingForFission(
   return {
     knownBandsConsidered: knownBands.length,
     closestKnownBandDistanceTiles,
+    closestKnownBandDistanceKm: closestKnownBandDistanceKm === undefined ? undefined : round2(closestKnownBandDistanceKm),
     trustedKinTolerance: round2(clamp01(trustedKinTolerance)),
     crowdedContactPressure: round2(clamp01(crowdedContactPressure)),
     knownBandSpacingPenalty: round2(clamp01(penalty)),
@@ -1600,6 +1618,47 @@ export function deriveKnownBandSpacingForFission(
       knownBands.length > 0
         ? [`reason:${String(band.id)}:${String(targetTileId)}:fission_known_band_spacing` as ReasonId]
         : [],
+  };
+}
+
+function deriveFissionSpacingPressure(distanceKm: number): number {
+  return distanceKm <= FISSION_SPACING_CLOSE_KM
+    ? 1
+    : distanceKm <= FISSION_SPACING_MID_KM
+      ? 0.62
+      : distanceKm <= FISSION_SPACING_FAR_KM
+        ? 0.28
+        : 0;
+}
+
+export function deriveFissionPhysicalDistanceCalibrationForAudit(
+  world: WorldState,
+  fromTileId: TileId,
+  toTileId: TileId,
+): {
+  readonly physicalDistanceKm: number;
+  readonly spacingPressure: number;
+  readonly distancePenalty: number;
+  readonly nearbyRangeValue: number;
+  readonly localEvidence: boolean;
+  readonly inheritedParentCore: boolean;
+  readonly inheritanceDistanceValue: number;
+} | undefined {
+  const from = getTile(world, fromTileId);
+  const to = getTile(world, toTileId);
+  if (from === undefined || to === undefined) return undefined;
+  const physicalDistanceKm = getManhattanPhysicalDistanceKm(world.config, from.coord, to.coord);
+  return {
+    physicalDistanceKm,
+    spacingPressure: deriveFissionSpacingPressure(physicalDistanceKm),
+    distancePenalty: clamp01(
+      Math.max(0, physicalDistanceKm - FISSION_DISTANCE_PENALTY_START_KM) / FISSION_DISTANCE_PENALTY_RAMP_KM,
+    ),
+    nearbyRangeValue:
+      physicalDistanceKm >= FISSION_NEARBY_RANGE_MIN_KM && physicalDistanceKm <= FISSION_NEARBY_RANGE_MAX_KM ? 0.16 : 0,
+    localEvidence: physicalDistanceKm <= FISSION_LOCAL_EVIDENCE_KM,
+    inheritedParentCore: physicalDistanceKm <= INHERITED_PARENT_CORE_KM,
+    inheritanceDistanceValue: clamp01(1 - physicalDistanceKm / INHERITANCE_DISTANCE_SCALE_KM),
   };
 }
 
@@ -1631,7 +1690,7 @@ function scoreFissionTarget(
     return undefined;
   }
 
-  const distance = getGridDistance(currentTile, tile);
+  const distanceKm = getManhattanPhysicalDistanceKm(world.config, currentTile.coord, tile.coord);
   const memory = band.placeMemory[tile.id];
   const localPressure = getLocalUsePressureValue(band.usePressure[tile.id]);
   const nearbyPressure = getNearbyBandPressure(world, band, tile.id, contextCache);
@@ -1677,9 +1736,14 @@ function scoreFissionTarget(
   // penalties remain) and never reads truth richness. This converts corridor intent
   // into a less-local daughter target without forcing departure or rich-tile chasing.
   const frontierIntentAlignment = parentFrontierIntentAlignment(world, band, tile.id);
-  const distancePenalty = clamp01(Math.max(0, distance - 8) / 18);
-  const parentCoreProximityPenalty = clamp01(Math.max(0, 3 - distance) / 3);
-  const nearbyRangeValue = distance >= 3 && distance <= 8 ? 0.16 : 0;
+  const distancePenalty = clamp01(
+    Math.max(0, distanceKm - FISSION_DISTANCE_PENALTY_START_KM) / FISSION_DISTANCE_PENALTY_RAMP_KM,
+  );
+  const parentCoreProximityPenalty = clamp01(
+    Math.max(0, FISSION_PARENT_CORE_PROXIMITY_KM - distanceKm) / FISSION_PARENT_CORE_PROXIMITY_KM,
+  );
+  const nearbyRangeValue =
+    distanceKm >= FISSION_NEARBY_RANGE_MIN_KM && distanceKm <= FISSION_NEARBY_RANGE_MAX_KM ? 0.16 : 0;
   const mountainPenalty = tile.terrainKind === "mountains" || tile.movementCost > 2.35 ? 0.8 : 0;
   const riskPenalty = clamp01((record.observedRisk ?? 0.35) * 0.36 + hydroBarrierPenalty + mountainPenalty);
   // RANGE-3B: daughter/founder colonization fission bias (normal default; explicit false disables it).
@@ -1727,7 +1791,7 @@ function scoreFissionTarget(
       corridorValue > 0.28 ||
       frontierValue > 0.2 ||
       (founderContext?.sideCountryEvidence ?? 0) > 0.12,
-    localEvidence: distance <= 3,
+    localEvidence: distanceKm <= FISSION_LOCAL_EVIDENCE_KM,
   });
   const knownBandSpacing = deriveKnownBandSpacingForFission(world, band, tile.id);
   const score =
@@ -1764,6 +1828,7 @@ function scoreFissionTarget(
     knownBandSpacingPenalty: knownBandSpacing.knownBandSpacingPenalty,
     knownBandsConsidered: knownBandSpacing.knownBandsConsidered,
     closestKnownBandDistanceTiles: knownBandSpacing.closestKnownBandDistanceTiles,
+    closestKnownBandDistanceKm: knownBandSpacing.closestKnownBandDistanceKm,
     crossingMemory,
     reasonType: getFissionReasonType(tile, crossingMemory, corridorValue, aquaticValue),
   };
@@ -2146,7 +2211,9 @@ function selectInheritedKnownTileRecords(
       }
 
       const nearParentCore =
-        currentTile === undefined ? false : getGridDistance(tile, currentTile) <= 2;
+        currentTile === undefined
+          ? false
+          : getManhattanPhysicalDistanceKm(world.config, tile.coord, currentTile.coord) <= INHERITED_PARENT_CORE_KM;
       const strongMemory =
         (parent.placeMemory[record.tileId]?.attachment ?? 0) > 0.42 ||
         parent.placeMemory[record.tileId]?.isReturnPlace === true;
@@ -3391,7 +3458,9 @@ function getInheritanceScore(
   const distanceValue =
     targetTile === undefined || tile === undefined
       ? 0
-      : clamp01(1 - getGridDistance(targetTile, tile) / 8);
+      : clamp01(
+          1 - getManhattanPhysicalDistanceKm(world.config, targetTile.coord, tile.coord) / INHERITANCE_DISTANCE_SCALE_KM,
+        );
   const memory = parent.placeMemory[record.tileId];
 
   return (

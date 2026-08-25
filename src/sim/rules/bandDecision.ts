@@ -116,12 +116,14 @@ import { frontierIntentHold, frontierIntentPull } from "../agents/frontierIntent
 import { frontierResidenceInwardDamp, frontierResidenceOriginPullRelief, frontierResidenceStayHold } from "../agents/frontierResidence";
 import { isChannelCorridorLand, isNearWaterMarginLand } from "../agents/frontierKnowledge";
 import { getDepletionAdjustedRichness } from "../world/depletion";
+import { LOCAL_EVIDENCE_NEAR_KM } from "../agents/physicalProximity";
 import {
   deriveDryMarginMobilityContext,
   getDryMarginAttachmentMultiplier,
 } from "../agents/dryMargin";
 import {
   deriveResidentialAnchorContext,
+  deriveResidentialLogisticalAccessForBand,
   getAnchorHoldBonus,
   getAnchorRelocationHysteresis,
   summarizeIntraSeasonActivity,
@@ -219,7 +221,6 @@ import { RECENT_BAND_DECISION_HISTORY_LIMIT } from "./decisionArchive";
 // same id-ordered arrays. Values are immutable projections of world.tiles only,
 // not band knowledge or hidden richness, so decision semantics stay identical.
 const sortedNeighborIdsByTile = new WeakMap<Tile, readonly TileId[]>();
-const knownMoveRadiusCacheByTiles = new WeakMap<WorldState["tiles"], Map<TileId, readonly TileId[]>>();
 const knownTileStatsByObservedTiles = new WeakMap<KnowledgeState["observedTiles"], KnownTileStats>();
 const corridorLookupByTravelCorridors = new WeakMap<
   Band["travelCorridors"],
@@ -437,7 +438,11 @@ import {
 interface KnownTileCandidate {
   readonly tile: Tile;
   readonly record: KnownTileRecord;
-  readonly distance: number;
+  /** Topological diagnostic only. */
+  readonly distanceTiles: number;
+  readonly physicalDistanceKm: number;
+  readonly travelTimeDays: number;
+  readonly travelBurden: number;
 }
 
 interface UnknownFrontierCandidate {
@@ -1774,6 +1779,7 @@ function buildStayCandidate(
     tile,
     record,
     0,
+    0,
     riverAssessment,
     decisionCache,
   );
@@ -1968,7 +1974,8 @@ function buildMoveCandidate(
     band,
     candidate.tile,
     candidate.record,
-    candidate.distance,
+    candidate.physicalDistanceKm,
+    candidate.travelBurden,
     riverAssessment,
     decisionCache,
   );
@@ -3419,7 +3426,6 @@ function getKnownMoveCandidates(
   decisionCache: CandidateEvaluationCache,
 ): readonly KnownTileCandidate[] {
   const currentTile = getTile(world, band.position);
-
   if (currentTile === undefined) {
     return [];
   }
@@ -3428,79 +3434,66 @@ function getKnownMoveCandidates(
     decisionCache.profiler,
     "knownMoveCandidateFiltering",
     () => {
+      const access = deriveResidentialLogisticalAccessForBand(world, band);
       const candidates: KnownTileCandidate[] = [];
-      const tileIds = measureDecision(
-        decisionCache.profiler,
-        "knownMoveCandidateRadiusLookup",
-        () => getTileIdsWithinKnownMoveRadius(world, currentTile),
-      );
 
-      for (const tileId of tileIds) {
-        const record = band.knowledge.observedTiles[tileId];
-        const tile = getTile(world, tileId);
-
-        if (record === undefined || tile === undefined) {
-          continue;
-        }
-
-        const distance = getGridDistance(currentTile, tile);
+      for (const entry of access.reachable) {
+        if (entry.tileId === band.position) continue;
+        const record = band.knowledge.observedTiles[entry.tileId];
+        const tile = getTile(world, entry.tileId);
+        if (record === undefined || tile === undefined) continue;
 
         if (getCandidateEdgeMemo(world, band, band.position, tile.id, undefined, decisionCache).toTilePassable) {
-          candidates.push({ tile, record, distance });
+          const distanceTiles = getGridDistance(currentTile, tile);
+          const travelBurden = access.travelTimeBudgetDays <= 0
+            ? 1
+            : clamp01(entry.travelTimeDays / access.travelTimeBudgetDays);
+          candidates.push({
+            tile,
+            record,
+            distanceTiles,
+            physicalDistanceKm: entry.physicalDistanceKm,
+            travelTimeDays: entry.travelTimeDays,
+            travelBurden,
+          });
         }
       }
 
-      decisionCache.profiler?.count?.("knownMoveCandidatesConsidered", tileIds.length);
+      decisionCache.profiler?.count?.("knownMoveCandidatesConsidered", access.reachable.length);
       decisionCache.profiler?.count?.("knownMoveCandidatesAccepted", candidates.length);
-
-      return candidates;
+      return candidates.sort((left, right) =>
+        left.travelTimeDays - right.travelTimeDays || compareTiles(left.tile, right.tile),
+      );
     },
   );
 }
 
-function getTileIdsWithinKnownMoveRadius(
+export function deriveKnownMovePhysicalAssessmentForAudit(
   world: WorldState,
-  currentTile: Tile,
-): readonly TileId[] {
-  let cache = knownMoveRadiusCacheByTiles.get(world.tiles);
-
-  if (cache === undefined) {
-    cache = new Map<TileId, readonly TileId[]>();
-    knownMoveRadiusCacheByTiles.set(world.tiles, cache);
-  }
-
-  const cached = cache.get(currentTile.id);
-
-  if (cached !== undefined) {
-    return cached;
-  }
-
-  const tileIds = new Set<TileId>();
-
-  for (const neighborId of getSortedNeighborIds(currentTile)) {
-    tileIds.add(neighborId);
-    const neighbor = getTile(world, neighborId);
-
-    if (neighbor === undefined) {
-      continue;
-    }
-
-    for (const secondRingId of getSortedNeighborIds(neighbor)) {
-      if (secondRingId !== currentTile.id) {
-        tileIds.add(secondRingId);
-      }
-    }
-  }
-
-  const result = [...tileIds]
-    .map((tileId) => getTile(world, tileId))
-    .filter((tile): tile is Tile => tile !== undefined && getGridDistance(currentTile, tile) <= 2)
-    .sort(compareTiles)
-    .map((tile) => tile.id);
-
-  cache.set(currentTile.id, result);
-
-  return result;
+  band: Band,
+  targetTileId: TileId,
+): {
+  readonly eligible: boolean;
+  readonly distanceTiles: number;
+  readonly physicalDistanceKm: number;
+  readonly travelTimeDays: number;
+  readonly travelBurden: number;
+} | undefined {
+  const currentTile = getTile(world, band.position);
+  const targetTile = getTile(world, targetTileId);
+  if (currentTile === undefined || targetTile === undefined) return undefined;
+  const access = deriveResidentialLogisticalAccessForBand(world, band);
+  const entry = access.reachable.find((candidate) => candidate.tileId === targetTileId);
+  return {
+    eligible: entry !== undefined,
+    distanceTiles: getGridDistance(currentTile, targetTile),
+    physicalDistanceKm: entry?.physicalDistanceKm ?? getCardinalEdgeLengthKm(world.config, currentTile.coord, targetTile.coord),
+    travelTimeDays: entry?.travelTimeDays ?? Number.POSITIVE_INFINITY,
+    travelBurden:
+      entry === undefined || access.travelTimeBudgetDays <= 0
+        ? 1
+        : clamp01(entry.travelTimeDays / access.travelTimeBudgetDays),
+  };
 }
 
 function applyAdaptiveDecisionShaping(
@@ -3823,7 +3816,8 @@ function buildKnownTileScoreBreakdown(
   band: Band,
   tile: Tile,
   record: KnownTileRecord,
-  distance: number,
+  physicalDistanceKm: number,
+  travelBurden: number,
   riverAssessment: RiverMovementAssessment,
   decisionCache: CandidateEvaluationCache,
 ): ScoreBreakdown {
@@ -3840,13 +3834,16 @@ function buildKnownTileScoreBreakdown(
       (isLeanSeason ? 0.18 : 0) -
       (seasonWasObserved ? 0 : 0.06),
   );
-  const movementCost = distance === 0
-    ? 0
-    : clamp01(
-        ((record.observedMovementCost ?? 1.6) * Math.max(1, distance) - 1) / 3 +
-          decisionCache.pressureSnapshot.bandPressureState.fatiguePressure * 0.28 +
-          getRecentRelocationSettlementCost(world, band),
-      );
+  // SCALE-1 Task 7 — movement burden is physical route-time use of the band's current
+  // logistical access budget. Observed terrain cost remains a modest band-known modifier,
+  // but raster cell count no longer changes the score.
+  const observedTerrainBurden = clamp01(((record.observedMovementCost ?? 1.6) - 1) / 2);
+  const movementCost = clamp01(
+    travelBurden * 0.72 +
+      observedTerrainBurden * 0.18 +
+      decisionCache.pressureSnapshot.bandPressureState.fatiguePressure * 0.28 +
+      getRecentRelocationSettlementCost(world, band),
+  );
   const baseRiskCost = clamp01(record.observedRisk ?? 0.35);
   const foodValue = clamp01(
     record.observedRichness * 0.62 +
@@ -3877,7 +3874,7 @@ function buildKnownTileScoreBreakdown(
   const placeAttachment = tileMemo.placeAttachment;
   const attachmentValue = tileMemo.attachmentValue;
   const populationPressure = getPopulationPressure(band);
-  const isStay = distance === 0;
+  const isStay = physicalDistanceKm <= 1e-9;
   const ecologicalMovePressure = clamp01(
     (band.ecologicalStressCauses?.foodDeficit ?? 0) * 0.24 +
       (band.ecologicalStressCauses?.sharedCatchmentCrowding ?? 0) * 0.22 +
@@ -3954,7 +3951,7 @@ function buildKnownTileScoreBreakdown(
       riverAssessment.riverCorridorValue > 0.12 ||
       tile.hasCreek === true ||
       sideCountryEvidence > 0.18,
-    localEvidence: distance <= 2,
+    localEvidence: physicalDistanceKm <= LOCAL_EVIDENCE_NEAR_KM,
   });
   const creekCorridorBias =
     !isStay && tile.hasCreek === true && record.confidence > 0.34

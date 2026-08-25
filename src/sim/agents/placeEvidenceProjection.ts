@@ -26,7 +26,6 @@ import {
 } from "./verificationEvidence";
 import {
   VERIFICATION_ATTEMPT_HISTORY_CAP,
-  VERIFICATION_MAX_DISTANCE_TILES,
   classifyPlaceForQuestion,
   describeVerificationGap,
   type PlaceEpistemicState,
@@ -679,16 +678,10 @@ function deriveVerificationProjection(
       }
 
       const gap = describeVerificationGap(record, question);
+      // Physical route/working-range eligibility is intentionally owned by the production
+      // selector. This epistemic projection must not infer it from raster cell counts.
       const blockedReason =
-        gap === undefined
-          ? "the signal is too weak to justify the walk"
-          : distance === undefined
-            ? undefined
-            : distance < 3
-              ? "inside the working range already"
-              : distance > VERIFICATION_MAX_DISTANCE_TILES
-                ? "too far to verify — this is an exploration problem"
-                : undefined;
+        gap === undefined ? "the signal is too weak to justify the walk" : undefined;
 
       promising.push({
         tileId: record.tileId,

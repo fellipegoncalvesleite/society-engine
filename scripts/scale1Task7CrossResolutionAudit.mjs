@@ -11,11 +11,32 @@ try {
   const trips = await server.ssrLoadModule("/sim/agents/intraSeasonTrips.ts");
   const spawn = await server.ssrLoadModule("/sim/agents/spawn.ts");
   const decision = await server.ssrLoadModule("/sim/rules/bandDecision.ts");
+  const verification = await server.ssrLoadModule("/sim/agents/frontierVerification.ts");
+  const campMovement = await server.ssrLoadModule("/sim/agents/campMovement.ts");
+  const frontierExploration = await server.ssrLoadModule("/sim/agents/frontierExploration.ts");
+  const frontierResidence = await server.ssrLoadModule("/sim/agents/frontierResidence.ts");
+  const bandHistory = await server.ssrLoadModule("/sim/agents/bandHistory.ts");
+  const expedition = await server.ssrLoadModule("/sim/agents/expedition.ts");
+  const demography = await server.ssrLoadModule("/sim/agents/demography.ts");
+  const accessNorms = await server.ssrLoadModule("/sim/agents/accessNorms.ts");
+  const protoCamps = await server.ssrLoadModule("/sim/agents/protoCamps.ts");
+  const storageSuitability = await server.ssrLoadModule("/sim/agents/storageSuitability.ts");
 
   const hasTripAssessment = typeof trips.deriveOrdinaryTripTargetAssessmentForAudit === "function";
   const hasLocalRecon = typeof trips.deriveStartingLocalReconTilesForAudit === "function";
   const hasSpawnKnowledge = typeof spawn.deriveInitialLocalKnowledgeForAudit === "function";
   const hasFrontierProbe = typeof decision.deriveInferredFrontierProbeTargetForAudit === "function";
+  const hasVerificationPhysical = typeof verification.deriveVerificationPhysicalAssessmentForAudit === "function";
+  const hasReliefPhysical = typeof campMovement.derivePressureReliefPhysicalAssessmentForAudit === "function";
+  const hasFrontierClassifiers = typeof frontierExploration.deriveFrontierPhysicalClassifiersForAudit === "function";
+  const hasResidencePhysical = typeof frontierResidence.deriveFrontierResidencePhysicalDistanceForAudit === "function";
+  const hasRelocationPhysical = typeof bandHistory.deriveRelocationPhysicalDistanceForAudit === "function";
+  const hasExpeditionHorizon = typeof expedition.deriveExpeditionRouteSearchHorizonTilesForAudit === "function";
+  const hasKnownMovePhysical = typeof decision.deriveKnownMovePhysicalAssessmentForAudit === "function";
+  const hasFissionPhysical = typeof demography.deriveFissionPhysicalDistanceCalibrationForAudit === "function";
+  const hasAccessNormPhysical = typeof accessNorms.deriveAccessNormPhysicalProximityForAudit === "function";
+  const hasProtoCampPhysical = typeof protoCamps.deriveProtoCampPhysicalProximityForAudit === "function";
+  const hasStorageCrossingPhysical = typeof storageSuitability.deriveCrossingPhysicalDistanceScoreForAudit === "function";
 
   const map1 = makeLinearWorld(1, 18);
   const map15 = makeLinearWorld(1.5, 13);
@@ -58,8 +79,38 @@ try {
   const farFrontier1 = hasFrontierProbe ? decision.deriveInferredFrontierProbeTargetForAudit(map1, makeFrontierBand("t0", 8, "near_water_margin_inference"), false) : undefined;
   const farFrontier15 = hasFrontierProbe ? decision.deriveInferredFrontierProbeTargetForAudit(map15, makeFrontierBand("t0", 6, "near_water_margin_inference"), false) : undefined;
 
+  const verification1 = hasVerificationPhysical ? verification.deriveVerificationPhysicalAssessmentForAudit(map1, band1, "t12") : undefined;
+  const verification15 = hasVerificationPhysical ? verification.deriveVerificationPhysicalAssessmentForAudit(map15, band15, "t8") : undefined;
+  const reliefBand1 = makeBand("t0", observedThrough(18));
+  const reliefBand15 = makeBand("t0", observedThrough(13));
+  const relief1 = hasReliefPhysical ? campMovement.derivePressureReliefPhysicalAssessmentForAudit(map1, reliefBand1, "t3") : undefined;
+  const relief15 = hasReliefPhysical ? campMovement.derivePressureReliefPhysicalAssessmentForAudit(map15, reliefBand15, "t2") : undefined;
+  const frontierClassifier1 = hasFrontierClassifiers ? frontierExploration.deriveFrontierPhysicalClassifiersForAudit(map1, withAnchor(reliefBand1, 0.5), "t3") : undefined;
+  const frontierClassifier15 = hasFrontierClassifiers ? frontierExploration.deriveFrontierPhysicalClassifiersForAudit(map15, withAnchor(reliefBand15, 0.5), "t2") : undefined;
+  const residence1 = hasResidencePhysical ? frontierResidence.deriveFrontierResidencePhysicalDistanceForAudit(map1, "t0", "t6") : undefined;
+  const residence15 = hasResidencePhysical ? frontierResidence.deriveFrontierResidencePhysicalDistanceForAudit(map15, "t0", "t4") : undefined;
+  const relocation1 = hasRelocationPhysical ? bandHistory.deriveRelocationPhysicalDistanceForAudit(map1, "t0", "t12") : undefined;
+  const relocation15 = hasRelocationPhysical ? bandHistory.deriveRelocationPhysicalDistanceForAudit(map15, "t0", "t8") : undefined;
+  const expeditionHorizon1 = hasExpeditionHorizon ? expedition.deriveExpeditionRouteSearchHorizonTilesForAudit(map1, band1, "resource_expedition") : undefined;
+  const expeditionHorizon15 = hasExpeditionHorizon ? expedition.deriveExpeditionRouteSearchHorizonTilesForAudit(map15, band15, "resource_expedition") : undefined;
+  const knownMove1 = hasKnownMovePhysical ? decision.deriveKnownMovePhysicalAssessmentForAudit(map1, withAnchor(band1, 0.5), "t3") : undefined;
+  const knownMove15 = hasKnownMovePhysical ? decision.deriveKnownMovePhysicalAssessmentForAudit(map15, withAnchor(band15, 0.5), "t2") : undefined;
+  const fission1 = hasFissionPhysical ? demography.deriveFissionPhysicalDistanceCalibrationForAudit(map1, "t0", "t6") : undefined;
+  const fission15 = hasFissionPhysical ? demography.deriveFissionPhysicalDistanceCalibrationForAudit(map15, "t0", "t4") : undefined;
+  const accessNorm1 = hasAccessNormPhysical ? accessNorms.deriveAccessNormPhysicalProximityForAudit(map1, "t0", "t3") : undefined;
+  const accessNorm15 = hasAccessNormPhysical ? accessNorms.deriveAccessNormPhysicalProximityForAudit(map15, "t0", "t2") : undefined;
+  const protoCamp1 = hasProtoCampPhysical ? protoCamps.deriveProtoCampPhysicalProximityForAudit(map1, "t0", "t6") : undefined;
+  const protoCamp15 = hasProtoCampPhysical ? protoCamps.deriveProtoCampPhysicalProximityForAudit(map15, "t0", "t4") : undefined;
+  const storageCrossing1 = hasStorageCrossingPhysical ? storageSuitability.deriveCrossingPhysicalDistanceScoreForAudit(map1, "t0", "t6", "t3", "t3") : undefined;
+  const storageCrossing15 = hasStorageCrossingPhysical ? storageSuitability.deriveCrossingPhysicalDistanceScoreForAudit(map15, "t0", "t4", "t2", "t2") : undefined;
+
   const checks = {
-    auditSeamsExist: hasTripAssessment && hasLocalRecon && hasSpawnKnowledge && hasFrontierProbe,
+    auditSeamsExist:
+      hasTripAssessment && hasLocalRecon && hasSpawnKnowledge && hasFrontierProbe &&
+      hasVerificationPhysical && hasReliefPhysical && hasFrontierClassifiers &&
+      hasResidencePhysical && hasRelocationPhysical && hasExpeditionHorizon &&
+      hasKnownMovePhysical && hasFissionPhysical && hasAccessNormPhysical &&
+      hasProtoCampPhysical && hasStorageCrossingPhysical,
     ordinaryTripEquivalentEligibility:
       trip1?.eligible === true && trip15?.eligible === true && trip1.sameDay === trip15.sameDay,
     ordinaryTripRawCellCountsDiffer:
@@ -86,6 +137,45 @@ try {
       frontier1 !== undefined && frontier15 !== undefined &&
       !("richness" in frontier1) && !("richness" in frontier15) &&
       frontierBand1.position === "t0" && frontierBand15.position === "t0",
+    verificationPhysicalEquivalent:
+      verification1?.eligible === verification15?.eligible &&
+      nearlyEqual(verification1?.physicalDistanceKm, verification15?.physicalDistanceKm, 1e-6) &&
+      nearlyEqual(verification1?.travelBurden, verification15?.travelBurden, 0.02),
+    reliefPhysicalEquivalent:
+      relief1?.reachable === relief15?.reachable &&
+      nearlyEqual(relief1?.physicalDistanceKm, relief15?.physicalDistanceKm, 1e-6) &&
+      nearlyEqual(relief1?.travelTimeDays, relief15?.travelTimeDays, 0.02),
+    frontierPhysicalClassifiersEquivalent:
+      frontierClassifier1?.insideParentCatchment === frontierClassifier15?.insideParentCatchment &&
+      frontierClassifier1?.anchorFarEnough === frontierClassifier15?.anchorFarEnough &&
+      nearlyEqual(frontierClassifier1?.physicalDistanceKm, frontierClassifier15?.physicalDistanceKm, 1e-6),
+    frontierResidencePhysicalDistanceEquivalent:
+      nearlyEqual(residence1?.physicalDistanceKm, residence15?.physicalDistanceKm, 1e-6),
+    relocationPhysicalDistanceEquivalent:
+      nearlyEqual(relocation1?.physicalDistanceKm, relocation15?.physicalDistanceKm, 1e-6) &&
+      relocation1?.significant === relocation15?.significant,
+    expeditionTechnicalHorizonPhysical:
+      Number.isFinite(expeditionHorizon1?.horizonTiles) && Number.isFinite(expeditionHorizon15?.horizonTiles) &&
+      expeditionHorizon1.horizonTiles !== expeditionHorizon15.horizonTiles &&
+      Math.abs(expeditionHorizon1.horizonKm - expeditionHorizon15.horizonKm) <= 1.5,
+    knownMovePhysicalEquivalent:
+      knownMove1?.eligible === true && knownMove15?.eligible === true &&
+      knownMove1.distanceTiles !== knownMove15.distanceTiles &&
+      nearlyEqual(knownMove1?.physicalDistanceKm, knownMove15?.physicalDistanceKm, 1e-6) &&
+      nearlyEqual(knownMove1?.travelTimeDays, knownMove15?.travelTimeDays, 0.02),
+    fissionPhysicalCalibrationEquivalent:
+      nearlyEqual(fission1?.physicalDistanceKm, fission15?.physicalDistanceKm, 1e-6) &&
+      nearlyEqual(fission1?.spacingPressure, fission15?.spacingPressure, 1e-6) &&
+      nearlyEqual(fission1?.distancePenalty, fission15?.distancePenalty, 1e-6) &&
+      fission1?.nearbyRangeValue === fission15?.nearbyRangeValue,
+    accessNormPhysicalProximityEquivalent:
+      accessNorm1?.near === accessNorm15?.near && accessNorm1?.extended === accessNorm15?.extended &&
+      nearlyEqual(accessNorm1?.physicalDistanceKm, accessNorm15?.physicalDistanceKm, 1e-6),
+    protoCampPhysicalProximityEquivalent:
+      protoCamp1?.kinNearby === protoCamp15?.kinNearby &&
+      nearlyEqual(protoCamp1?.physicalDistanceKm, protoCamp15?.physicalDistanceKm, 1e-6),
+    storageCrossingPhysicalRankingEquivalent:
+      nearlyEqual(storageCrossing1?.distanceScoreKm, storageCrossing15?.distanceScoreKm, 1e-6),
   };
 
   out = {
@@ -97,6 +187,11 @@ try {
       localRecon1, localRecon15, localRecon1MaxKm, localRecon15MaxKm,
       spawn1, spawn15, spawn1MaxKm, spawn15MaxKm,
       frontier1, frontier15, side1, side15, farFrontier1, farFrontier15,
+      verification1, verification15, relief1, relief15,
+      frontierClassifier1, frontierClassifier15, residence1, residence15,
+      relocation1, relocation15, expeditionHorizon1, expeditionHorizon15,
+      knownMove1, knownMove15, fission1, fission15, accessNorm1, accessNorm15,
+      protoCamp1, protoCamp15, storageCrossing1, storageCrossing15,
     },
   };
 } finally {
@@ -148,6 +243,17 @@ function makeBand(position, observedIds) {
     mobility: { conditioning: 1, history: { recentDays: [], totalKmWalked: 0, longestActiveDayKm: 0, longestExpeditionKm: 0 } },
     knowledge: { observedTiles: Object.fromEntries(observedIds.map((id) => [id, { tileId: id, confidence: 0.8, visits: 0 }])) },
     placeMemory: {}, crossingMemories: {}, travelCorridors: {}, encounterRecords: [], contactMemories: {},
+  };
+}
+
+function withAnchor(band, foragingTravelTimeBudgetDays) {
+  return {
+    ...band,
+    residentialAnchor: {
+      anchorTileId: band.position,
+      foragingTravelTimeBudgetDays,
+      catchmentTileIds: [],
+    },
   };
 }
 

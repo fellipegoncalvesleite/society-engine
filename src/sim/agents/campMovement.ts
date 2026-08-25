@@ -26,6 +26,7 @@ import type {
   TemporaryTaskPartyRecord,
 } from "./types";
 import { getCanonicalFoodStress } from "./seasonalSurvival";
+import { deriveResidentialLogisticalAccessForBand } from "./residentialAnchor";
 
 const LOCAL_SHIFT_CAP = 8;
 const TEMPORARY_TASK_PARTY_CAP = 6;
@@ -33,18 +34,10 @@ const OLD_CAMP_DECAY_CAP = 6;
 const STAGNATION_ESCAPE_CAP = 8;
 const RELIEF_CANDIDATE_CAP = 6;
 const RELIEF_REJECTED_CANDIDATE_CAP = 4;
-const RELIEF_SEARCH_RADIUS_TILES = 4;
 const EVIDENCE_PER_ITEM_CAP = 4;
 const BEHAVIOR_DELTA_CAP = 0.22;
 const SAMPLE_CAP = 10;
 
-interface ReliefRadiusEntry {
-  readonly tile: Tile;
-  readonly distance: number;
-}
-
-const sortedNeighborIdsByTile = new WeakMap<Tile, readonly TileId[]>();
-const reliefRadiusEntriesByTiles = new WeakMap<WorldState["tiles"], Map<string, readonly ReliefRadiusEntry[]>>();
 
 export interface CampMovementInfluence {
   readonly scale: CampMovementScale;
@@ -636,7 +629,8 @@ function deriveRangeRotationPressureReliefState(
     caps: {
       candidateCap: RELIEF_CANDIDATE_CAP,
       rejectedCandidateCap: RELIEF_REJECTED_CANDIDATE_CAP,
-      searchRadiusTiles: RELIEF_SEARCH_RADIUS_TILES,
+      travelTimeBudgetDays: deriveResidentialLogisticalAccessForBand(world, band).travelTimeBudgetDays,
+      maxPhysicalReachKm: maxReliefReachKm(world, band),
       capsHeld: candidates.length <= RELIEF_CANDIDATE_CAP && rejectedCandidates.length <= RELIEF_REJECTED_CANDIDATE_CAP,
     },
     integrity: {
@@ -676,9 +670,13 @@ function collectPressureReliefCandidates(
     return [];
   }
 
-  const entries = getTilesWithinReliefRadius(world, current, RELIEF_SEARCH_RADIUS_TILES)
-    .filter((entry) => entry.tile.id !== current.id && isPlausibleCampTile(entry.tile))
-    .map((entry) => makePressureReliefCandidate({
+  const access = deriveResidentialLogisticalAccessForBand(world, band);
+  const entries = access.reachable
+    .map((entry) => ({ entry, tile: getTile(world, entry.tileId) }))
+    .filter((item): item is { readonly entry: (typeof access.reachable)[number]; readonly tile: Tile } =>
+      item.tile !== undefined && item.tile.id !== current.id && isPlausibleCampTile(item.tile),
+    )
+    .map(({ entry, tile }) => makePressureReliefCandidate({
       world,
       band,
       current,
@@ -689,8 +687,10 @@ function collectPressureReliefCandidates(
       signals,
       nonFoodPressure,
       localOrbitTrap,
-      tile: entry.tile,
-      distance: entry.distance,
+      tile,
+      distanceTiles: tileDistanceByCoord(current, tile),
+      physicalDistanceKm: entry.physicalDistanceKm,
+      travelTimeDays: entry.travelTimeDays,
     }))
     .filter((candidate): candidate is PressureReliefCandidate => candidate !== undefined)
     .sort(comparePressureReliefCandidatesForChoice)
@@ -711,7 +711,9 @@ function makePressureReliefCandidate(input: {
   readonly nonFoodPressure: number;
   readonly localOrbitTrap: LocalOrbitTrapState;
   readonly tile: Tile;
-  readonly distance: number;
+  readonly distanceTiles: number;
+  readonly physicalDistanceKm: number;
+  readonly travelTimeDays: number;
 }): PressureReliefCandidate | undefined {
   const observed = input.band.knowledge.observedTiles[input.tile.id];
   const inferred = input.band.frontierKnowledge?.inferredTiles[input.tile.id];
@@ -731,15 +733,16 @@ function makePressureReliefCandidate(input: {
   const sameCluster = localClusterId(input.tile) === input.currentCluster;
   const sameRange = localRangeId(input.tile) === input.currentRange;
   const sameRiverCountry = isSameRiverCountry(input.current, input.tile);
-  const familiarCountry = observed !== undefined || (inferred !== undefined && input.distance <= RELIEF_SEARCH_RADIUS_TILES);
+  const familiarCountry = observed !== undefined || inferred !== undefined;
   const relationToCurrentCluster =
     sameCluster
       ? "same_local_cluster"
       : sameRange || sameRiverCountry
         ? "nearby_known_range"
         : "edge_of_familiar_country";
+  const physicalTravelBurden = input.travelTimeDays / (1 + input.travelTimeDays);
   const travelCost = clamp01(
-    input.distance / (RELIEF_SEARCH_RADIUS_TILES + 1) * 0.42 +
+    physicalTravelBurden * 0.42 +
       ((observed?.observedMovementCost ?? 1.4) - 1) * 0.12 +
       (sameRiverCountry ? 0 : 0.08),
   );
@@ -754,7 +757,7 @@ function makePressureReliefCandidate(input: {
   const strictFoodBetter = supportDelta > 0.05;
   const supportGoodEnough = support >= Math.max(0.28, input.currentSupport - 0.16);
   const waterGoodEnough = water >= Math.max(0.28, Math.min(0.48, input.currentWater - 0.1));
-  const routeAcceptable = travelCost <= 0.58 || input.distance <= 2 || sameRiverCountry;
+  const routeAcceptable = travelCost <= 0.58 || input.travelTimeDays <= 0.2 || sameRiverCountry;
   const pressureReliefScore = round2(clamp01(
     usePressureDifference * 0.38 +
       campSicknessWearRelief * 0.26 +
@@ -791,7 +794,7 @@ function makePressureReliefCandidate(input: {
   const actionStrategy =
     blockedReason !== undefined
       ? "blocked"
-      : observed === undefined || knownness < 0.34 || input.distance > 2
+      : observed === undefined || knownness < 0.34 || input.physicalDistanceKm > 3
         ? "scout_probe"
         : "move_to_tile";
   const status =
@@ -811,7 +814,9 @@ function makePressureReliefCandidate(input: {
   return {
     id: `pressure-relief:${String(input.band.id)}:${String(input.tile.id)}`,
     tileId: input.tile.id,
-    distanceTiles: input.distance,
+    distanceTiles: input.distanceTiles,
+    distanceKm: round2(input.physicalDistanceKm),
+    travelTimeDays: round2(input.travelTimeDays),
     relationToCurrentCluster,
     knownness: round2(knownness),
     supportAdequacy: round2(support),
@@ -1071,64 +1076,23 @@ function pressureReliefEvidence(
   };
 }
 
-function getTilesWithinReliefRadius(
-  world: WorldState,
-  current: Tile,
-  radius: number,
-): readonly ReliefRadiusEntry[] {
-  let cachedByOrigin = reliefRadiusEntriesByTiles.get(world.tiles);
-
-  if (cachedByOrigin === undefined) {
-    cachedByOrigin = new Map<string, readonly ReliefRadiusEntry[]>();
-    reliefRadiusEntriesByTiles.set(world.tiles, cachedByOrigin);
-  }
-
-  const cacheKey = `${String(current.id)}:${radius}`;
-  const cached = cachedByOrigin.get(cacheKey);
-
-  if (cached !== undefined) {
-    return cached;
-  }
-
-  const visited = new Set<TileId>([current.id]);
-  const queue: ReliefRadiusEntry[] = [{ tile: current, distance: 0 }];
-  const result: ReliefRadiusEntry[] = [];
-
-  for (let index = 0; index < queue.length; index += 1) {
-    const entry = queue[index];
-    if (entry.distance >= radius) {
-      continue;
-    }
-    for (const neighborId of getSortedTileNeighborIds(entry.tile)) {
-      if (visited.has(neighborId)) {
-        continue;
-      }
-      const tile = getTile(world, neighborId);
-      if (tile === undefined) {
-        continue;
-      }
-      visited.add(neighborId);
-      const next = { tile, distance: entry.distance + 1 };
-      queue.push(next);
-      result.push(next);
-    }
-  }
-
-  const sorted = result.sort((left, right) => left.distance - right.distance || compareTileIds(left.tile.id, right.tile.id));
-  cachedByOrigin.set(cacheKey, sorted);
-  return sorted;
+function maxReliefReachKm(world: WorldState, band: Band): number {
+  const access = deriveResidentialLogisticalAccessForBand(world, band);
+  return round2(Math.max(0, ...access.reachable.map((entry) => entry.physicalDistanceKm)));
 }
 
-function getSortedTileNeighborIds(tile: Tile): readonly TileId[] {
-  const cached = sortedNeighborIdsByTile.get(tile);
-
-  if (cached !== undefined) {
-    return cached;
-  }
-
-  const sorted = [...tile.neighbors].sort(compareTileIds);
-  sortedNeighborIdsByTile.set(tile, sorted);
-  return sorted;
+export function derivePressureReliefPhysicalAssessmentForAudit(
+  world: WorldState,
+  band: Band,
+  targetTileId: TileId,
+): { readonly reachable: boolean; readonly physicalDistanceKm: number; readonly travelTimeDays: number } {
+  const access = deriveResidentialLogisticalAccessForBand(world, band);
+  const entry = access.reachable.find((candidate) => candidate.tileId === targetTileId);
+  return {
+    reachable: entry !== undefined,
+    physicalDistanceKm: entry?.physicalDistanceKm ?? Number.POSITIVE_INFINITY,
+    travelTimeDays: entry?.travelTimeDays ?? Number.POSITIVE_INFINITY,
+  };
 }
 
 function supportAdequacy(tile: Tile, record: { readonly observedRichness: number; readonly observedAquaticPotential: number; readonly confidence: number } | undefined): number {

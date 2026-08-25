@@ -19,6 +19,13 @@ import type {
 } from "./types";
 import { deriveProtoCampResourceReasonFactors } from "./resourceEcologyFoundation";
 import { isBandTerminal, isProvisionalSuccessor } from "./bandLifecycle";
+import {
+  KNOWN_KIN_NEARBY_KM,
+  LOCAL_EVIDENCE_EXTENDED_KM,
+  LOCAL_EVIDENCE_NEAR_KM,
+  getPhysicalTileDistanceKm,
+  isWithinPhysicalProximity,
+} from "./physicalProximity";
 
 const PROTO_CAMP_MEMORY_CAP = 8;
 const MAX_CANDIDATE_TILE_IDS = 18;
@@ -704,7 +711,7 @@ function countNearbyActivity(
   let failure = 0;
 
   for (const trip of band.recentIntraSeasonTrips ?? []) {
-    if (!isNearTile(world, tile, trip.targetTileId, 2)) {
+    if (!isNearTile(world, tile, trip.targetTileId, LOCAL_EVIDENCE_NEAR_KM)) {
       continue;
     }
     if (isSuccessfulActivityTrip(trip)) {
@@ -756,7 +763,7 @@ function deriveProtoCampEcologyReasonFactors(
   let recovery = 0;
 
   for (const card of (band.resourceEcology?.storageSuitabilityCards ?? [])
-    .filter((entry) => entry.sourceTileIds.length === 0 || entry.sourceTileIds.some((sourceTileId) => isNearTile(world, tile, sourceTileId, 2)))
+    .filter((entry) => entry.sourceTileIds.length === 0 || entry.sourceTileIds.some((sourceTileId) => isNearTile(world, tile, sourceTileId, LOCAL_EVIDENCE_NEAR_KM)))
     .slice(0, 6)) {
     reasonIds.push(...card.sourceIds.map((sourceId) => `storage:${sourceId}`));
     if (
@@ -792,7 +799,7 @@ function deriveProtoCampEcologyReasonFactors(
   }
 
   for (const card of (band.visibleNature?.plantCards ?? [])
-    .filter((entry) => isNearTile(world, tile, entry.tileId, 2))
+    .filter((entry) => isNearTile(world, tile, entry.tileId, LOCAL_EVIDENCE_NEAR_KM))
     .slice(0, 5)) {
     reasonIds.push(`visible-plant:${card.patchId}`);
     pressure = Math.max(pressure, card.pressure, card.depletion);
@@ -824,7 +831,7 @@ function deriveProtoCampEcologyReasonFactors(
   }
 
   for (const card of (band.visibleNature?.aquaticCards ?? [])
-    .filter((entry) => isCardNearTile(world, tile, entry.anchorTileId, entry.seenTileIds, 2))
+    .filter((entry) => isCardNearTile(world, tile, entry.anchorTileId, entry.seenTileIds, LOCAL_EVIDENCE_NEAR_KM))
     .slice(0, 4)) {
     reasonIds.push(`visible-aquatic:${card.stockId}`);
     pressure = Math.max(pressure, card.pressure);
@@ -848,7 +855,7 @@ function deriveProtoCampEcologyReasonFactors(
   }
 
   for (const card of (band.visibleNature?.forestCards ?? [])
-    .filter((entry) => isNearTile(world, tile, entry.tileId, 2))
+    .filter((entry) => isNearTile(world, tile, entry.tileId, LOCAL_EVIDENCE_NEAR_KM))
     .slice(0, 4)) {
     reasonIds.push(`visible-forest:${card.patchId}`);
     pressure = Math.max(pressure, card.pressure, card.diebackTrend);
@@ -880,7 +887,7 @@ function deriveProtoCampEcologyReasonFactors(
   }
 
   for (const card of (band.visibleNature?.faunaCards ?? [])
-    .filter((entry) => isCardNearTile(world, tile, entry.anchorTileId, entry.seenTileIds, 3))
+    .filter((entry) => isCardNearTile(world, tile, entry.anchorTileId, entry.seenTileIds, LOCAL_EVIDENCE_EXTENDED_KM))
     .slice(0, 4)) {
     reasonIds.push(`visible-fauna:${card.stockId}`);
     pressure = Math.max(pressure, card.huntingOrFishingPressure, card.wariness);
@@ -990,7 +997,10 @@ function getKnownKinContactNearby(
       continue;
     }
     const otherTile = getTile(world, other.position);
-    if (otherTile === undefined || gridDistance(tile, otherTile) > 4) {
+    if (
+      otherTile === undefined ||
+      !isWithinPhysicalProximity(world, tile.id, otherTile.id, KNOWN_KIN_NEARBY_KM)
+    ) {
       continue;
     }
     const contact = band.contactMemories[other.id];
@@ -1039,9 +1049,8 @@ function getStaleYears(world: WorldState, prior: ProtoCampPlaceMemory | undefine
   return Math.max(0, world.time.year - prior.lastUsedYear);
 }
 
-function isNearTile(world: WorldState, source: Tile | undefined, targetTileId: TileId, maxDistance: number): boolean {
-  const target = getTile(world, targetTileId);
-  return source !== undefined && target !== undefined && gridDistance(source, target) <= maxDistance;
+function isNearTile(world: WorldState, source: Tile | undefined, targetTileId: TileId, maxDistanceKm: number): boolean {
+  return source !== undefined && isWithinPhysicalProximity(world, source.id, targetTileId, maxDistanceKm);
 }
 
 function isCardNearTile(
@@ -1049,9 +1058,10 @@ function isCardNearTile(
   source: Tile | undefined,
   anchorTileId: TileId,
   seenTileIds: readonly TileId[],
-  maxDistance: number,
+  maxDistanceKm: number,
 ): boolean {
-  return isNearTile(world, source, anchorTileId, maxDistance) || seenTileIds.some((tileId) => isNearTile(world, source, tileId, maxDistance));
+  return isNearTile(world, source, anchorTileId, maxDistanceKm) ||
+    seenTileIds.some((tileId) => isNearTile(world, source, tileId, maxDistanceKm));
 }
 
 function isSuccessfulActivityTrip(trip: IntraSeasonTripRecord): boolean {
@@ -1397,8 +1407,15 @@ function isSeasonalSupportClassification(value: string): value is SeasonalHunger
   );
 }
 
-function gridDistance(left: Tile, right: Tile): number {
-  return Math.abs(left.coord.x - right.coord.x) + Math.abs(left.coord.y - right.coord.y);
+export function deriveProtoCampPhysicalProximityForAudit(
+  world: WorldState,
+  sourceTileId: TileId,
+  targetTileId: TileId,
+): { readonly physicalDistanceKm: number; readonly kinNearby: boolean } | undefined {
+  const physicalDistanceKm = getPhysicalTileDistanceKm(world, sourceTileId, targetTileId);
+  return physicalDistanceKm === undefined
+    ? undefined
+    : { physicalDistanceKm, kinNearby: physicalDistanceKm <= KNOWN_KIN_NEARBY_KM };
 }
 
 function clamp01(value: number): number {

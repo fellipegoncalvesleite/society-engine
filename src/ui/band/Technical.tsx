@@ -1664,7 +1664,7 @@ function CampMovementDetails({ band, world }: { readonly band: Band; readonly wo
       <Detail label="rejected relief candidates" value={reliefRejected || "none"} />
       <Detail
         label="relief integrity"
-        value={`goodEnoughSeparate=${String(relief.integrity.goodEnoughSeparateFromBetterThanCurrent)} · bounded=${String(relief.integrity.boundedBehaviorInfluence)} · noLongDistanceForced=${String(relief.integrity.noLongDistanceMigrationForced)} · riverRetained=${String(relief.integrity.riverFollowingRetained)} · noFissionChange=${String(relief.integrity.noFissionBehaviorChange)} · noNewEcology=${String(relief.integrity.noNewEcology)} · capsHeld=${String(relief.caps.capsHeld)} · radius ${relief.caps.searchRadiusTiles}`}
+        value={`goodEnoughSeparate=${String(relief.integrity.goodEnoughSeparateFromBetterThanCurrent)} · bounded=${String(relief.integrity.boundedBehaviorInfluence)} · noLongDistanceForced=${String(relief.integrity.noLongDistanceMigrationForced)} · riverRetained=${String(relief.integrity.riverFollowingRetained)} · noFissionChange=${String(relief.integrity.noFissionBehaviorChange)} · noNewEcology=${String(relief.integrity.noNewEcology)} · capsHeld=${String(relief.caps.capsHeld)} · physical reach ${relief.caps.maxPhysicalReachKm} km · budget ${relief.caps.travelTimeBudgetDays}d`}
       />
       <Detail label="shift sample" value={shifts || "none"} />
       <Detail label="temporary camp sample" value={camps || "none"} />

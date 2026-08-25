@@ -22,6 +22,7 @@
 
 import type { BandId, DayNumber, RouteId, TickNumber, TileId } from "../core/types";
 import { getTile } from "../world/generate";
+import { getChebyshevPhysicalDistanceKm } from "../world/spatialGeometry";
 import type { WorldState } from "../world/types";
 import { getWorldTimeForDay } from "../tick/time";
 import { isBandTerminal, isProvisionalSuccessor } from "./bandLifecycle";
@@ -75,7 +76,8 @@ export const DEEP_HISTORY_CONSTANTS = {
   FALLBACK_RELIANCE_MIN_YEARS: 3,
   NEAR_COLLAPSE_RISK_THRESHOLD: 0.6,
   NEAR_COLLAPSE_CLOSE_THRESHOLD: 0.3,
-  RELOCATION_MIN_DISTANCE_TILES: 8,
+  // PROVENANCE D — provisional physical significance threshold for a durable relocation era.
+  RELOCATION_MIN_DISTANCE_KM: 12,
   RELOCATION_HOLD_YEARS: 3,
   COUNTRY_EXPANDED_TILE_STEP: 18,
   PAYLOAD_SOFT_CAP_BYTES: 20_000,
@@ -1360,7 +1362,8 @@ function accumulateEra(
     return undefined;
   }
 
-  const away = tileChebyshevDistance(world, band.position, openEra.startTileId) >= C.RELOCATION_MIN_DISTANCE_TILES;
+  const away =
+    physicalChebyshevDistanceKm(world, band.position, openEra.startTileId) >= C.RELOCATION_MIN_DISTANCE_KM;
 
   return {
     ...openEra,
@@ -1781,7 +1784,7 @@ function isRecovery(classification: SeasonalHungerClassification | undefined): b
   return classification === "recovery_after_crisis";
 }
 
-function tileChebyshevDistance(world: WorldState, left: TileId, right: TileId): number {
+function physicalChebyshevDistanceKm(world: WorldState, left: TileId, right: TileId): number {
   const leftTile = getTile(world, left);
   const rightTile = getTile(world, right);
 
@@ -1789,10 +1792,19 @@ function tileChebyshevDistance(world: WorldState, left: TileId, right: TileId): 
     return 0;
   }
 
-  return Math.max(
-    Math.abs(leftTile.coord.x - rightTile.coord.x),
-    Math.abs(leftTile.coord.y - rightTile.coord.y),
-  );
+  return getChebyshevPhysicalDistanceKm(world.config, leftTile.coord, rightTile.coord);
+}
+
+export function deriveRelocationPhysicalDistanceForAudit(
+  world: WorldState,
+  left: TileId,
+  right: TileId,
+): { readonly physicalDistanceKm: number; readonly significant: boolean } {
+  const physicalDistanceKm = physicalChebyshevDistanceKm(world, left, right);
+  return {
+    physicalDistanceKm,
+    significant: physicalDistanceKm >= C.RELOCATION_MIN_DISTANCE_KM,
+  };
 }
 
 function capRefs(refs: readonly HistoryEvidenceRef[]): readonly HistoryEvidenceRef[] {

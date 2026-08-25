@@ -56,6 +56,43 @@ export interface ResidentialAnchorContext {
   readonly seasonalModeKind?: DryMarginSeasonalMode;
 }
 
+/**
+ * Canonical Task-6 physical access queries for callers that need to ask whether a place lies inside
+ * the band's current working/logistical range. Persisted catchment tile ids are only summaries and
+ * must not be used as reach authorities.
+ */
+export function deriveResidentialForagingAccessForBand(
+  world: WorldState,
+  band: Band,
+): BoundedTravelReach {
+  const travelTimeBudgetDays =
+    band.residentialAnchor?.foragingTravelTimeBudgetDays ?? BASE_FORAGING_TRAVEL_BUDGET_DAYS;
+  return expandBoundedTravelReach(
+    world,
+    band.position,
+    deriveTravelPace(band, "resource_expedition").kmPerTravelDay,
+    travelTimeBudgetDays,
+    deriveBandRiverCrossingCapability(band),
+  );
+}
+
+export function deriveResidentialLogisticalAccessForBand(
+  world: WorldState,
+  band: Band,
+): BoundedTravelReach {
+  const travelTimeBudgetDays =
+    band.residentialAnchor?.logisticalTravelTimeBudgetDays ??
+    band.residentialAnchor?.foragingTravelTimeBudgetDays ??
+    BASE_FORAGING_TRAVEL_BUDGET_DAYS;
+  return expandBoundedTravelReach(
+    world,
+    band.position,
+    deriveTravelPace(band, "task_camp_shuttle").kmPerTravelDay,
+    travelTimeBudgetDays,
+    deriveBandRiverCrossingCapability(band),
+  );
+}
+
 interface CatchmentTile {
   readonly tileId: TileId;
   readonly physicalDistanceKm: number;

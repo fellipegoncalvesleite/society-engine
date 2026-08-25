@@ -1060,7 +1060,7 @@ function selectTripCandidate(
   // actually REACH from here. It reads the band's OWN observed-tile records (the same
   // knowledge-bounded path as before, capped at
   // STARTING_LOCAL_RECON_OBSERVED_TILE_CAP tiles within
-  // STARTING_LOCAL_RECON_MAX_DISTANCE_TILES) — no hidden truth, no yield change, and
+  // the provisional physical local-recon envelope) — no hidden truth, no yield change, and
   // a band that already has a reachable memory is byte-identical to before.
   const searchHorizonTiles = maxSearchTiles ?? deriveOrdinaryTripSearchHorizonTiles(world, band);
   const seededResourceKnowledgeState = hasReachablePatchMemory(world, band, origin, {
@@ -3840,7 +3840,7 @@ function deriveObjective(cause: IntraSeasonTripCause): IntraSeasonTripObjective 
 // Deterministic 4-neighbour staircase that hugs the straight line origin→target: at
 // each step move the axis with more distance remaining (x wins ties). Each step is
 // grid-distance 1 — the trip is logically NOT a teleport even if the UI compresses
-// it; history preserves every crossed tile. Bounded by MAX_TRIP_DISTANCE_TILES + 1.
+// it; history preserves every crossed tile. The physical search horizon bounds the path.
 /**
  * REALISM-2B Part C — passability-aware activity breadcrumb.
  *
@@ -3948,7 +3948,7 @@ function findPassablePath(
   aim: Tile,
   // EXPEDITIONARY-1: expeditions reach country BEYOND the daily trip envelope, so
   // they need a correspondingly larger (still hard-bounded) search neighbourhood.
-  // Same-day trips keep the original bound exactly — passing nothing is unchanged.
+  // Same-day trips keep their derived physical search horizon unchanged.
   maxReachTiles: number,
 ): readonly TileId[] | undefined {
   const maxExplored = (maxReachTiles * 2 + 4) ** 2;

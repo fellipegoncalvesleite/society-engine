@@ -46,7 +46,14 @@ import {
   resourceTestEligible,
   taskCampRefusedByEvidence,
 } from "./verificationEvidence";
-import { derivePhysicalRoundTripTiming } from "./intraSeasonTrips";
+import { buildExpeditionRouteTiles, derivePhysicalRoundTripTiming } from "./intraSeasonTrips";
+import { deriveTravelPace } from "./bandMobility";
+import { deriveResidentialForagingAccessForBand } from "./residentialAnchor";
+import {
+  deriveTechnicalRouteSearchHorizonTiles,
+  getRoutePhysicalLengthKm,
+} from "./traversal";
+import { EXPEDITION_MAX_DURATION_DAYS } from "./expeditionLimits";
 // CORRECTION-23J §5 — the identity of an operation the production selector actually chose.
 import { derivePendingOperationAtTile } from "./pendingOperation";
 // CORRECTION-23I — audit-only refusal counting and the typed dependency shape.
@@ -73,8 +80,6 @@ const VERIFICATION_RETRY_TICKS = 24;
 const VERIFICATION_MIN_NEED = 0.3;
 /** A record must look at least this promising on the band's OWN coarse impression. */
 const VERIFICATION_MIN_PROMISE = 0.28;
-/** Beyond this the place is not a verification target; it is an exploration problem. */
-export const VERIFICATION_MAX_DISTANCE_TILES = 24;
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 const round2 = (v: number): number => Math.round(v * 100) / 100;
@@ -224,9 +229,67 @@ export interface VerificationCandidate {
   readonly promisingSignal: string;
   readonly missingEvidence: string;
   readonly informationDeficit: number;
+  /** Topological diagnostic only. */
   readonly distanceTiles: number;
+  readonly physicalDistanceKm: number;
+  readonly travelBurden: number;
   readonly score: number;
 }
+
+export interface VerificationPhysicalAssessment {
+  readonly eligible: boolean;
+  readonly insideWorkingRange: boolean;
+  readonly distanceTiles: number;
+  readonly physicalDistanceKm: number;
+  readonly totalDays: number;
+  readonly travelBurden: number;
+  readonly searchHorizonTiles: number;
+}
+
+/** Physical verification reach. Cell counts below are diagnostics/search allocation only. */
+export function deriveVerificationPhysicalAssessment(
+  world: WorldState,
+  band: Band,
+  targetTileId: TileId,
+): VerificationPhysicalAssessment | undefined {
+  const here = getTile(world, band.position);
+  const target = getTile(world, targetTileId);
+  if (here === undefined || target === undefined || !isBandPassableDestination(target)) return undefined;
+
+  const distanceTiles = Math.abs(target.coord.x - here.coord.x) + Math.abs(target.coord.y - here.coord.y);
+  const localAccess = deriveResidentialForagingAccessForBand(world, band);
+  const insideWorkingRange = localAccess.reachable.some((entry) => entry.tileId === targetTileId);
+  const pace = deriveTravelPace(band, "selected_reconnaissance_party").kmPerTravelDay;
+  const searchHorizonTiles = deriveTechnicalRouteSearchHorizonTiles(
+    world,
+    pace,
+    EXPEDITION_MAX_DURATION_DAYS,
+  );
+  const route = buildExpeditionRouteTiles(world, band.position, targetTileId, searchHorizonTiles);
+  if (route === undefined) return undefined;
+  const timing = derivePhysicalRoundTripTiming(
+    world,
+    band,
+    route,
+    VERIFICATION_ON_SITE_DAYS,
+    "selected_reconnaissance_party",
+  );
+  const travelDays = timing.outboundTravelDays + timing.returnTravelDays;
+  return {
+    eligible:
+      !insideWorkingRange &&
+      Number.isFinite(timing.totalDays) &&
+      timing.totalDays <= EXPEDITION_MAX_DURATION_DAYS,
+    insideWorkingRange,
+    distanceTiles,
+    physicalDistanceKm: getRoutePhysicalLengthKm(world, route),
+    totalDays: timing.totalDays,
+    travelBurden: Number.isFinite(travelDays) ? travelDays / (1 + travelDays) : 1,
+    searchHorizonTiles,
+  };
+}
+
+export const deriveVerificationPhysicalAssessmentForAudit = deriveVerificationPhysicalAssessment;
 
 /**
  * §9 — the bounded, deterministic selector.
@@ -284,14 +347,11 @@ export function selectVerificationCandidate(
       continue;
     }
 
-    const distance =
-      Math.abs(tile.coord.x - here.coord.x) + Math.abs(tile.coord.y - here.coord.y);
-
-    // Too close to be worth a party (it is inside the working range), or too far to be a
-    // verification rather than an exploration problem.
-    if (distance < 3 || distance > VERIFICATION_MAX_DISTANCE_TILES) {
+    const physical = deriveVerificationPhysicalAssessment(world, band, record.tileId);
+    if (physical === undefined || !physical.eligible) {
       continue;
     }
+    const distance = physical.distanceTiles;
 
     examined += 1;
 
@@ -359,7 +419,7 @@ export function selectVerificationCandidate(
         gap.promise * 0.44 +
           gap.informationDeficit * 0.3 +
           need.need * 0.24 -
-          clamp01(distance / VERIFICATION_MAX_DISTANCE_TILES) * 0.22 -
+          clamp01(physical.travelBurden) * 0.22 -
           clamp01(record.observedRisk ?? 0.3) * 0.16,
       );
 
@@ -374,6 +434,8 @@ export function selectVerificationCandidate(
         missingEvidence: gap.missingEvidence,
         informationDeficit: round2(gap.informationDeficit),
         distanceTiles: distance,
+        physicalDistanceKm: round2(physical.physicalDistanceKm),
+        travelBurden: round2(physical.travelBurden),
         score,
       });
       // One question per place per pass: the highest-priority open question.

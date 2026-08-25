@@ -2270,9 +2270,9 @@ export interface FrontierExplorationPlan {
   readonly anchorTileId: TileId;
   /** Confidence in the directional hypothesis itself (not in what lies out there). */
   readonly headingConfidence: number;
-  /** Outward tiles the party may walk before the return reserve binds. */
+  /** Legacy topological/search diagnostic derived from the physical duration envelope; never reach authority. */
   readonly outboundBudgetTiles: number;
-  /** Tiles of walking capacity held back so the party can plausibly get home. */
+  /** Legacy topological/search diagnostic derived from the same physical envelope; never reach authority. */
   readonly returnReserveTiles: number;
   /** Literal non-claims — asserted by construction, checked by the anti-omniscience audit. */
   readonly noHiddenDestination: true;
@@ -4066,7 +4066,7 @@ export interface OpenEraAccumulator {
   readonly daughterBandIds: readonly BandId[];
   readonly movesCount: number;
   readonly yearsAccumulated: number;
-  // Consecutive yearly observations at ≥ RELOCATION_MIN_DISTANCE_TILES from startTileId.
+  // Consecutive yearly observations beyond the physical relocation-significance threshold.
   readonly awayFromStartYears: number;
 }
 
@@ -7377,7 +7377,10 @@ export type PressureReliefCandidateActionStrategy =
 export interface PressureReliefCandidate {
   readonly id: string;
   readonly tileId: TileId;
+  /** Topological diagnostic only. */
   readonly distanceTiles: number;
+  readonly distanceKm: number;
+  readonly travelTimeDays: number;
   readonly relationToCurrentCluster: PressureReliefCandidateRelation;
   readonly knownness: NormalizedIntensity;
   readonly supportAdequacy: NormalizedIntensity;
@@ -7466,7 +7469,8 @@ export interface RangeRotationPressureReliefState {
   readonly caps: {
     readonly candidateCap: number;
     readonly rejectedCandidateCap: number;
-    readonly searchRadiusTiles: number;
+    readonly travelTimeBudgetDays: number;
+    readonly maxPhysicalReachKm: number;
     readonly capsHeld: boolean;
   };
   readonly integrity: {
