@@ -39,6 +39,7 @@ import type { Coord, ReasonId, TickNumber, TileId } from "../core/types";
 import { getTile } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
+import { LANDSCAPE_VISIBILITY_MAX_RANGE_KM } from "./landscapeVisibility";
 import type {
   Band,
   ExpeditionObservation,
@@ -584,10 +585,12 @@ function isWaterCue(kind: string): boolean {
 /** The band's own strongest fresh directional cue. Bounded viewshed record, deterministic. */
 function selectDirectionalCue(band: Band): VisibleLandscapeCue | undefined {
   const cues = (band.visibleLandscapeCues ?? []).filter(
-    (cue) => cue.status !== "stale" && !cue.blockedByTerrain && cue.distanceTiles >= MIN_ANCHOR_DISTANCE_TILES,
+    (cue) => cue.status !== "stale" && !cue.blockedByTerrain && Number.isFinite(cue.distanceKm),
   );
   const cueScore = (cue: VisibleLandscapeCue): number =>
-    cue.confidence + (isWaterCue(cue.kind) ? 0.15 : 0) + cue.distanceTiles * 0.01;
+    cue.confidence +
+    (isWaterCue(cue.kind) ? 0.15 : 0) +
+    clamp01(cue.distanceKm / LANDSCAPE_VISIBILITY_MAX_RANGE_KM) * 0.1;
   let best: VisibleLandscapeCue | undefined;
 
   for (const cue of cues) {

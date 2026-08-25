@@ -82,7 +82,7 @@ try {
   const apply = (knowledge, acquisition, times, w = world) => {
     let k = knowledge;
     for (let i = 0; i < times; i += 1) {
-      k = tileObs.observeTileAndNearby(w, k, [{ tile, distance: 0 }], acquisition);
+      k = tileObs.observeTileAndNearby(w, k, [{ tile, distanceKm: 0 }], acquisition);
     }
     return k;
   };
@@ -149,7 +149,7 @@ try {
   const upgraded = tileObs.observeTileAndNearby(
     world,
     cases.frontierCrossedOnce,
-    [{ tile, distance: 0 }],
+    [{ tile, distanceKm: 0 }],
     "residential_observation",
   ).observedTiles[tile.id];
   const upgradeRestoresFullKnowledge =

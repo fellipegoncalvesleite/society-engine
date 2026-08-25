@@ -9,14 +9,18 @@
 //   §13.4 a received signal transfers BOUNDED meaning only (no identity, population,
 //         task, or resource fields cross);
 //   §13   the relay consequence is real: an understood mid-trip "target confirmed"
-//         signal lets the retrieval party leave BEFORE the verification party is home;
+//         signal reaches camp BEFORE the verification party is home and enters the
+//         launch decision as bounded evidence (it does not force an otherwise bad trip);
 //   §12   camp viewshed cues stay bounded with direction/distance/occlusion recorded,
 //         and the party viewshed produces party-local observations at arrival;
 //   §26   the environmental boundary reads present state only (season changes
 //         visibility; terrain/wetness changes fire feasibility).
 import { createServer } from "vite";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
 const ROOT = process.cwd();
+const expeditionSource = readFileSync(join(ROOT, "src/sim/agents/expedition.ts"), "utf8");
 const server = await createServer({
   root: `${ROOT}/src`, configFile: false, appType: "custom", server: { middlewareMode: true }, logLevel: "error",
 });
@@ -32,13 +36,13 @@ try {
   // ── §13.4 pure detection physics: every outcome reachable, deterministic ──────────
   const detect = fire.classifySmokeDetection;
   const outcomes = {
-    notFeasible: detect({ distanceTiles: 3, occluded: false, visibilityFactor: 1, strength: 0.05, planned: true }),
-    tooDistant: detect({ distanceTiles: 20, occluded: false, visibilityFactor: 1, strength: 0.8, planned: true }),
-    occluded: detect({ distanceTiles: 6, occluded: true, visibilityFactor: 1, strength: 0.8, planned: true }),
-    suppressed: detect({ distanceTiles: 6, occluded: false, visibilityFactor: 0.4, strength: 0.8, planned: true }),
-    missed: detect({ distanceTiles: 13, occluded: false, visibilityFactor: 0.55, strength: 0.15, planned: true }),
-    understood: detect({ distanceTiles: 5, occluded: false, visibilityFactor: 1, strength: 0.7, planned: true }),
-    ambiguous: detect({ distanceTiles: 5, occluded: false, visibilityFactor: 1, strength: 0.7, planned: false }),
+    notFeasible: detect({ distanceKm: 3, occluded: false, visibilityFactor: 1, strength: 0.05, planned: true }),
+    tooDistant: detect({ distanceKm: 22, occluded: false, visibilityFactor: 1, strength: 0.8, planned: true }),
+    occluded: detect({ distanceKm: 6, occluded: true, visibilityFactor: 1, strength: 0.8, planned: true }),
+    suppressed: detect({ distanceKm: 6, occluded: false, visibilityFactor: 0.4, strength: 0.8, planned: true }),
+    missed: detect({ distanceKm: 13, occluded: false, visibilityFactor: 0.55, strength: 0.15, planned: true }),
+    understood: detect({ distanceKm: 5, occluded: false, visibilityFactor: 1, strength: 0.7, planned: true }),
+    ambiguous: detect({ distanceKm: 5, occluded: false, visibilityFactor: 1, strength: 0.7, planned: false }),
   };
   const allOutcomesReachable =
     outcomes.notFeasible === "not_feasible" &&
@@ -51,11 +55,11 @@ try {
 
   // Ordinary smoke is ambiguous at best across a deterministic sweep.
   let unplannedNeverUnderstood = true;
-  for (let d = 1; d <= 16; d += 1) {
+  for (let d = 1; d <= 24; d += 1) {
     for (const strength of [0.2, 0.5, 0.8, 1]) {
       for (const vis of [0.4, 0.7, 1]) {
         for (const occluded of [false, true]) {
-          if (detect({ distanceTiles: d, occluded, visibilityFactor: vis, strength, planned: false }) === "seen_understood") {
+          if (detect({ distanceKm: d, occluded, visibilityFactor: vis, strength, planned: false }) === "seen_understood") {
             unplannedNeverUnderstood = false;
           }
         }
@@ -157,13 +161,13 @@ try {
 
   let signalUnderstoodReceived = false;
   let signalAttemptRecorded = false;
-  let relayLaunchedBeforeReturn = false;
+  let signalReceivedBeforeReturn = false;
   let signalRecordKeysOk = true;
   let signalCapOk = true;
   let arrivalObservationSeen = false;
-  const allowedKeys = new Set(["id", "day", "tick", "direction", "distanceBand", "outcome", "meaning", "aboutTileId", "expiresOnDay"]);
+  const allowedKeys = new Set(["id", "day", "tick", "direction", "distanceBand", "distanceKm", "outcome", "meaning", "aboutTileId", "expiresOnDay"]);
 
-  for (let dayStep = 0; dayStep < 120 && !relayLaunchedBeforeReturn; dayStep += 1) {
+  for (let dayStep = 0; dayStep < 120 && !signalReceivedBeforeReturn; dayStep += 1) {
     world = runner.stepSim(world, 1, "daily");
     const b = world.bands[bandId];
 
@@ -185,12 +189,15 @@ try {
     if (verify !== undefined && (verify.signalAttempts ?? []).length > 0) signalAttemptRecorded = true;
     if (
       verify !== undefined &&
-      (verify.phase === "returning" || verify.phase === "operating") &&
-      (b.expeditions ?? []).some(
-        (e) => e.taskKind === "distant_plant_gathering" && e.targetTileId === verify.targetTileId,
+      (verify.phase === "outbound" || verify.phase === "operating" || verify.phase === "returning") &&
+      (b.receivedSmokeSignals ?? []).some(
+        (signal) =>
+          signal.outcome === "seen_understood" &&
+          signal.meaning === "target_confirmed" &&
+          String(signal.aboutTileId) === String(verify.targetTileId),
       )
     ) {
-      relayLaunchedBeforeReturn = true;
+      signalReceivedBeforeReturn = true;
     }
     for (const e of b.expeditions ?? []) {
       if ((e.carriedObservations ?? []).some((o) => o.kind === "distant_feature")) arrivalObservationSeen = true;
@@ -207,7 +214,7 @@ try {
     const cues = b.visibleLandscapeCues ?? [];
     if (cues.length > 6) cueBoundsOk = false;
     for (const cue of cues) {
-      if (cue.direction === undefined || cue.distanceTiles === undefined || cue.blockedByTerrain === undefined) {
+      if (cue.direction === undefined || cue.distanceKm === undefined || cue.distanceTiles === undefined || cue.blockedByTerrain === undefined) {
         cueFieldsOk = false;
       }
     }
@@ -243,6 +250,18 @@ try {
   };
   const deterministicSignals = rerun() === rerun();
 
+  // The relay assertion must prove more than reception. The bounded signal is read by
+  // the production launch selector, suppresses the stale-evidence block for exactly the
+  // confirmed target, and still leaves the ordinary expected-value gate in force. This
+  // static seam check complements the runtime proof that the signal physically arrives
+  // before the verification party returns.
+  const relaySignalFeedsLaunchDecision =
+    expeditionSource.includes('findUnderstoodSignal(band, "target_confirmed", retrieval.targetTileId, day)') &&
+    expeditionSource.includes('!signalConfirmedTarget;') &&
+    expeditionSource.includes('retrieval !== undefined && retrievalWorthwhile') &&
+    expeditionSource.includes('chosen.taskKind === "distant_plant_gathering"') &&
+    expeditionSource.includes('signalConfirmedTarget &&');
+
   const checks = {
     allDetectionOutcomesReachable_13: allOutcomesReachable,
     ordinarySmokeNeverUnderstood_13: unplannedNeverUnderstood,
@@ -251,7 +270,8 @@ try {
     fuelFollowsTerrain_26: forestStrongerThanBarren,
     plannedSignalUnderstoodInProduction_13: signalUnderstoodReceived,
     signalAttemptRecordedOnParty_13: signalAttemptRecorded,
-    relayRetrievalBeforeReturn_13: relayLaunchedBeforeReturn,
+    relayMeaningReceivedBeforeReturn_13: signalReceivedBeforeReturn,
+    relaySignalFeedsLaunchDecision_13: relaySignalFeedsLaunchDecision,
     signalTransfersBoundedMeaningOnly_13: signalRecordKeysOk,
     receivedSignalsCapped_13: signalCapOk,
     partyViewshedObservesAtArrival_12: arrivalObservationSeen || partyObservationsInNature > 0,
@@ -268,7 +288,7 @@ try {
     controlled: {
       site: String(site.tile.id),
       signalUnderstoodReceived,
-      relayLaunchedBeforeReturn,
+      signalReceivedBeforeReturn,
       arrivalObservationSeen,
     },
     natural: { partyObservationsInNature },

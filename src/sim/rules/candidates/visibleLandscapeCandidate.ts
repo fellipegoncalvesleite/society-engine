@@ -8,6 +8,7 @@
 // family module depends only on the shared candidate contract, scoring kit, edge
 // context, and constants — never on the decision orchestrator. Extracted verbatim
 // from bandDecision.ts; behavior is byte-identical.
+import { LANDSCAPE_VISIBILITY_MAX_RANGE_KM } from "../../agents/landscapeVisibility";
 import { deriveProbeDiminishingReturn } from "../../agents/probeMemory";
 import { getLocalUsePressureValue } from "../../agents/pressure";
 import { getAnchorHoldBonus } from "../../agents/residentialAnchor";
@@ -27,7 +28,6 @@ import { getCandidateEdgeMemo } from "../decisionEdgeContext";
 import {
   clamp01,
   emptyScoreBreakdown,
-  getGridDistance,
   makeReason,
   numericTileIdPart,
   round2,
@@ -58,7 +58,7 @@ export function buildVisibleLandscapeProbeCandidate(
     )
     .sort((left, right) =>
       right.confidence - left.confidence ||
-      left.distanceTiles - right.distanceTiles ||
+      left.distanceKm - right.distanceKm ||
       left.cueId.localeCompare(right.cueId),
     )[0];
 
@@ -71,8 +71,8 @@ export function buildVisibleLandscapeProbeCandidate(
     return undefined;
   }
 
-  const distance = getGridDistance(currentTile, targetTile);
-  if (distance <= 0 || distance > 10) {
+  const distanceKm = cue.distanceKm;
+  if (!Number.isFinite(distanceKm) || distanceKm <= 0 || distanceKm > LANDSCAPE_VISIBILITY_MAX_RANGE_KM) {
     return undefined;
   }
 
@@ -103,19 +103,19 @@ export function buildVisibleLandscapeProbeCandidate(
     ) + (band.returnTrend?.chronicDecline === true ? 0.2 : 0),
   );
   const nearbyWaterUrgency =
-    isWaterCue && !cue.blockedByTerrain ? clamp01(bandPoorness * (distance <= 6 ? 1 : 0.5)) : 0;
+    isWaterCue && !cue.blockedByTerrain ? clamp01(bandPoorness * (distanceKm <= 9 ? 1 : 0.5)) : 0;
   const routeConfidence = clamp01(
     cue.confidence * 0.42 +
       edgeMemo.riverAssessment.knownFordValue * 0.22 +
       edgeMemo.riverAssessment.riverCorridorValue * 0.18 +
-      (distance <= 5 ? 0.12 : 0),
+      (distanceKm <= 7.5 ? 0.12 : 0),
   );
   const scoreBreakdown: ScoreBreakdown = {
     ...emptyScoreBreakdown(),
     foodValue: clamp01((currentRecord.observedRichness ?? 0.35) * 0.16),
     waterValue: clamp01((currentRecord.observedWaterAccess ?? 0.35) * 0.16 + (cue.kind === "visible_water" ? cue.confidence * 0.16 : 0) + nearbyWaterUrgency * 0.22),
     memoryConfidence: cue.confidence,
-    movementCost: clamp01(distance / 12),
+    movementCost: clamp01(distanceKm / LANDSCAPE_VISIBILITY_MAX_RANGE_KM),
     riskCost: clamp01(
       edgeMemo.riverAssessment.riverCrossingRisk * 0.34 +
         (band.pressureState?.riskPressure ?? 0) * 0.12 +
@@ -156,7 +156,7 @@ export function buildVisibleLandscapeProbeCandidate(
     scoutValue: cue.confidence,
     uncertainty: round2(1 - cue.confidence),
     crossingRisk: edgeMemo.riverAssessment.riverCrossingRisk,
-    travelCost: distance,
+    travelCost: distanceKm,
     basis,
   });
   const diminishingReturn = deriveProbeDiminishingReturn(band.probeMemory, targetTile.id, Number(world.time.tick), {
@@ -191,7 +191,7 @@ export function buildVisibleLandscapeProbeCandidate(
         scoutValue: cue.confidence,
         uncertainty: round2(1 - cue.confidence),
         crossingRisk: edgeMemo.riverAssessment.riverCrossingRisk,
-        travelCost: distance,
+        travelCost: distanceKm,
         basis,
       }),
     ],

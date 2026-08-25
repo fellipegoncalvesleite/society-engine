@@ -16,6 +16,7 @@ import { deriveBandPatchReturnView } from "../../sim/agents/patchExploitationKno
 import { readSeasonalEcologyHint } from "../../sim/agents/seasonalEcologyReader";
 import { classifyMovementContext, deriveFamiliarCountry, deriveInheritedRangeContext } from "../../sim/agents/familiarCountry";
 import { deriveSocialRangeRecognition } from "../../sim/agents/socialRangeRecognition";
+import { LANDSCAPE_VISIBILITY_MAX_RANGE_KM } from "../../sim/agents/landscapeVisibility";
 import { deriveLineageIdentity } from "../../sim/agents/lineageIdentity";
 import { deriveFordContext } from "../../sim/agents/fordContext";
 import { deriveDemographicRenewal } from "../../sim/agents/demographicRenewal";
@@ -2306,11 +2307,6 @@ export function ReportedKnowledgeDetails({
   );
 }
 
-// PERCEPTION-MOBILITY-1B — 1 tile = 1.5 km (the documented map scale). Visibility
-// reaches VISIBILITY_RADIUS_TILES (10) from camp.
-const KM_PER_TILE = 1.5;
-const VISIBILITY_RADIUS_TILES = 10;
-
 function cueClarity(cue: { readonly blockedByTerrain: boolean; readonly confidence: number }): string {
   if (cue.blockedByTerrain) {
     return "blocked";
@@ -2348,7 +2344,7 @@ export function VisibleLandscapeDetails({
       <Detail label="viewpoint / camp tile" value={String(band.position)} />
       <Detail
         label="visibility range"
-        value={`${VISIBILITY_RADIUS_TILES} tiles · ~${formatNumber(VISIBILITY_RADIUS_TILES * KM_PER_TILE)} km (1 tile = ${KM_PER_TILE} km)`}
+        value={`${formatNumber(LANDSCAPE_VISIBILITY_MAX_RANGE_KM)} km physical maximum (raster-independent)`}
       />
       {cues.length === 0 ? (
         <Detail label="cues" value="no distant visible cues currently remembered" />
@@ -2362,7 +2358,7 @@ export function VisibleLandscapeDetails({
             <Detail
               key={cue.cueId}
               label={`${cue.kind} ${cue.direction}`}
-              value={`${cue.distanceTiles} tiles (~${formatNumber(cue.distanceTiles * KM_PER_TILE)} km) · ${cueClarity(cue)} · conf ${formatNumber(cue.confidence)} · ${cueStatusLabel(cue.status)} · scout/probe interest ${cue.influencedScoutOrProbeCount}`}
+              value={`${formatNumber(cue.distanceKm)} km · ${cue.distanceTiles} cells topology/debug · ${cueClarity(cue)} · conf ${formatNumber(cue.confidence)} · ${cueStatusLabel(cue.status)} · scout/probe interest ${cue.influencedScoutOrProbeCount}`}
             />
           ))}
         </>
@@ -2428,9 +2424,7 @@ export function ActivityTraceDetails({ band }: { readonly band: Band }) {
           <Detail
             key={`${String(trip.tick)}:${index}`}
             label={`${activityTypeLabel(trip.taskGroupType)} → ${String(trip.targetTileId)}`}
-            value={`${trip.season} · ${seasonalActivityReason(trip)} · ${trip.distanceTiles} tiles (~${formatNumber(
-              trip.distanceTiles * KM_PER_TILE,
-            )} km) · ${trip.activityOutcome} · food urgency ${formatNumber(
+            value={`${trip.season} · ${seasonalActivityReason(trip)} · ${trip.distanceTiles} tiles (topology) · ${trip.activityOutcome} · food urgency ${formatNumber(
               band.pressureState?.foodStress ?? 0,
             )} · water urgency ${formatNumber(
               band.pressureState?.waterStress ?? 0,

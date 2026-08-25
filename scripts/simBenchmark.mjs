@@ -35810,7 +35810,7 @@ function runTargetedSkillRankCheck(modules) {
   const ctx = (skill) => ({
     currentTileId: "tile:targeted:sr:home", currentTick: tick, season: "summer",
     waterStress: 0.2, foodStress: 0.3, perCapitaReturn: 0.6, chronicDecline: false,
-    scoutCapacity: 0.7, exhaustedRangeStress: 0.2, distanceTo: () => 3,
+    scoutCapacity: 0.7, exhaustedRangeStress: 0.2, distanceKmTo: () => 3,
     probeNovelty: () => 1, probeNoGain: () => 0, exploitationSkill: skill,
   });
   const aUnskilled = mem("a_sr_unskilled", "generic_plant_food");
@@ -38454,7 +38454,7 @@ function runTargetedPatchReturnBehaviorCheck(modules) {
     chronicDecline: false,
     scoutCapacity: 0.7,
     exhaustedRangeStress: 0.2,
-    distanceTo: overrides.distanceTo ?? (() => 3),
+    distanceKmTo: overrides.distanceKmTo ?? (() => 3),
     probeNovelty: () => 1,
     probeNoGain: () => 0,
     recentPlantUseTests: overrides.recentPlantUseTests,
@@ -38724,17 +38724,19 @@ function runTargetedPatchReturnBehaviorCheck(modules) {
       selCautious.patchReturnGuidance.guidanceReason === "cautious_testing_preferred",
   );
 
-  // 6 — locality/bounds: guidance can neither extend the scout envelope nor revive a
-  // candidate the presence/VOI gates rejected (it is applied strictly post-gate).
-  const selOutOfRange = scout.selectResourceScoutTarget(
+  // 6 — locality/bounds: straight-line physical distance is a smooth selection cost, not
+  // a universal reach gate. A farther KNOWN belief remains selectable here; the physical
+  // route/time executor decides whether a party can actually reach it. Guidance still
+  // cannot revive a candidate rejected by the presence/VOI gates.
+  const selFarKnown = scout.selectResourceScoutTarget(
     { patchMemories: [promisingMemory], cap: 48 },
-    makeContext({ distanceTo: () => 11 }),
+    makeContext({ distanceKmTo: () => 11 }),
   );
   const selFaint = scout.selectResourceScoutTarget({ patchMemories: [faintPromisingMemory], cap: 48 }, ctx);
-  cases.bounds = { outOfRange: selOutOfRange === undefined, faintPresence: selFaint === undefined };
+  cases.bounds = { farKnownSelectable: selFarKnown !== undefined, faintPresence: selFaint === undefined };
   pushCheck(
-    "S7_guidance_cannot_extend_envelope_or_create_candidates",
-    selOutOfRange === undefined && selFaint === undefined,
+    "S7_distance_not_universal_reach_gate_and_guidance_cannot_create_candidates",
+    selFarKnown !== undefined && selFaint === undefined,
   );
 
   // 7 — determinism: repeated full selection is deep-equal.
@@ -38750,7 +38752,7 @@ function runTargetedPatchReturnBehaviorCheck(modules) {
     cases,
     constraints: {
       behaviorHook: "selection-only bias inside selectResourceScoutTarget — the ONLY consumer of patch-return knowledge in src/sim (resourceScout.ts importer; verified by the static guard grep)",
-      appliedPostGate: "bias is added after the SCOUT_MIN_PRESENCE / SCOUT_VOI_MIN gates: it reorders already-valid candidates and can never create, remove, or range-extend one",
+      appliedPostGate: "bias is added after the SCOUT_MIN_PRESENCE / SCOUT_VOI_MIN gates: it reorders already-valid candidates and can never create or revive one that failed the evidence gates",
       voiScoreUntouched: "the exported voiScore (which weighs scout-vs-stay in bandDecision) stays the raw VOI; the bias exists only in the argmax key",
       eligibilityGatesUntouched: "plant-use eligibility/testing gates are evaluated unchanged after the scout observes; guidance carries no eligibility input",
       noTruthInput: "guidance derives from the band's own patch memories + capped test/cause rings only (no WorldState/tile/truth parameter exists)",

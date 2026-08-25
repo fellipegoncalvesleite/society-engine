@@ -179,7 +179,11 @@ import { MOVEMENT_TIEBREAK_EPSILON, seededTieBreakJitter } from "../core/seededV
 import type { KnownTileRecord, KnowledgeState, TileObservation } from "../knowledge/types";
 // EXPEDITIONARY-4 §11 — the single known-tile observation writer (also used by returned
 // expedition parties, so walked observations enter knowledge through one pipeline).
-import { observeTileAndNearby } from "../agents/tileObservation";
+import {
+  collectDirectObservationTargets,
+  observeTileAndNearby,
+  type ObservationTarget,
+} from "../agents/tileObservation";
 import { getNeighborTiles, getTile } from "../world/generate";
 import {
   getRiverCrossingForMovement,
@@ -433,11 +437,6 @@ import {
 interface KnownTileCandidate {
   readonly tile: Tile;
   readonly record: KnownTileRecord;
-  readonly distance: number;
-}
-
-interface ObservationTarget {
-  readonly tile: Tile;
   readonly distance: number;
 }
 
@@ -975,7 +974,7 @@ export function applyBandDecision(
       ? []
       : shouldObserveNewArea
         ? collectMigrationObservationTargets(world, migrationWalk?.path ?? [], observationTile)
-        : [{ tile: observationTile, distance: 0 }];
+        : [{ tile: observationTile, distanceKm: 0 }];
   const observedTileIds = observationTargets.map((target) => target.tile.id);
   const updatedKnowledge = measureDecision(
     profiler,
@@ -5159,16 +5158,16 @@ function collectMigrationObservationTargets(
     }
     for (const target of collectObservationTargets(world, centerTile)) {
       const existing = byTileId.get(target.tile.id);
-      if (existing === undefined || target.distance < existing.distance) {
+      if (existing === undefined || target.distanceKm < existing.distanceKm) {
         byTileId.set(target.tile.id, target);
       }
     }
   }
   return Array.from(byTileId.values())
     .sort((left, right) =>
-      left.distance === right.distance
+      left.distanceKm === right.distanceKm
         ? compareTiles(left.tile, right.tile)
-        : left.distance - right.distance,
+        : left.distanceKm - right.distanceKm,
     )
     .slice(0, MIGRATION_OBSERVATION_CAP);
 }
@@ -5177,25 +5176,7 @@ function collectObservationTargets(
   world: WorldState,
   currentTile: Tile,
 ): readonly ObservationTarget[] {
-  const byTileId = new Map<TileId, ObservationTarget>();
-
-  byTileId.set(currentTile.id, { tile: currentTile, distance: 0 });
-
-  for (const neighbor of getNeighborTiles(world, currentTile.id)) {
-    byTileId.set(neighbor.id, { tile: neighbor, distance: 1 });
-
-    for (const secondRing of getNeighborTiles(world, neighbor.id)) {
-      if (!byTileId.has(secondRing.id)) {
-        byTileId.set(secondRing.id, { tile: secondRing, distance: 2 });
-      }
-    }
-  }
-
-  return Array.from(byTileId.values()).sort((left, right) =>
-    left.distance === right.distance
-      ? compareTiles(left.tile, right.tile)
-      : left.distance - right.distance,
-  );
+  return collectDirectObservationTargets(world, currentTile);
 }
 
 function getUnknownFrontierCrossingHints(

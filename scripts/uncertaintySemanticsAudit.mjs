@@ -60,7 +60,7 @@ try {
     .slice(0, 60);
 
   const observe = (tile, acquisition) =>
-    tileObs.observeTileAndNearby(world, emptyKnowledge, [{ tile, distance: 0 }], acquisition)
+    tileObs.observeTileAndNearby(world, emptyKnowledge, [{ tile, distanceKm: 0 }], acquisition)
       .observedTiles[tile.id];
 
   const rows = candidates.map((tile) => {

@@ -12,7 +12,8 @@
 // strongest possible form of "it cannot read what it cannot reach".
 //
 // RUNTIME (C): five invariants sampled across a real long run:
-//   C1 the plan never names a tile the band has not observed (no unseen target);
+//   C1 at launch, the plan anchor must come from band-held observed/inferred/self knowledge
+//      (never an unseen target pulled from world truth);
 //   C2 while a party is away, NO tile it is standing on / has walked to exists in the
 //      residential band's observedTiles (party-local knowledge, §11);
 //   C3 a LOST party's tiles are never added to residential knowledge (§11);
@@ -139,6 +140,9 @@ try {
     // Track, per away expedition, the tiles it has walked and whether it was lost.
     const awayTrail = new Map();
     const lostTrails = new Map();
+    // C1 is a launch-time provenance invariant. Check each plan once: a legitimate
+    // inferred anchor may expire from bounded frontier memory while the party is still away.
+    const inspectedPlans = new Set();
 
     // Warm the band up seasonally until it is under enough range/dispersal pressure to
     // start exploring, then switch to DAILY stepping. Daily stepping is what actually
@@ -151,21 +155,28 @@ try {
     }
 
     for (let day = 1; day <= 360 * 12; day += 1) {
+      const priorWorld = world;
       world = runner.stepSim(world, 1, "daily");
 
       for (const band of Object.values(world.bands)) {
         const residential = band.knowledge.observedTiles;
+        const priorBand = priorWorld.bands[band.id];
 
         for (const x of band.expeditions ?? []) {
           if (x.taskKind !== "frontier_exploration") continue;
 
           observed.awayPartySamples += 1;
 
-          // C1 — the plan's anchor must be a tile the band ALREADY knows. The plan must
-          // carry no other tile at all.
+          // C1 — the plan's anchor must be a tile the band ALREADY knows AT LAUNCH.
+          // Check each expedition plan once. The audit samples after a daily step, while
+          // frontier-memory TTL pruning may occur in that same step, so accept provenance
+          // from either side of that one-step boundary. Rechecking an old plan against
+          // today's bounded memory would falsely turn normal forgetting into omniscience.
           const plan = x.frontierPlan;
+          const planKey = `${String(band.id)}:${x.id}`;
 
-          if (plan !== undefined) {
+          if (plan !== undefined && !inspectedPlans.has(planKey)) {
+            inspectedPlans.add(planKey);
             observed.plansInspected += 1;
 
             // The anchor must be BAND-KNOWN. Band-known has two legitimate forms:
@@ -178,16 +189,27 @@ try {
             //     band HAS seen, and it carries direction only, never value.
             // Anything else would be a tile pulled out of world truth.
             const inferred = band.frontierKnowledge?.inferredTiles ?? {};
+            const priorInferred = priorBand?.frontierKnowledge?.inferredTiles ?? {};
             const anchorIsObserved = residential[plan.anchorTileId] !== undefined;
             const anchorIsInferred = inferred[plan.anchorTileId] !== undefined;
             const anchorIsSelf = plan.anchorTileId === band.position;
+            const anchorWasObserved = priorBand?.knowledge.observedTiles[plan.anchorTileId] !== undefined;
+            const anchorWasInferred = priorInferred[plan.anchorTileId] !== undefined;
+            const anchorWasSelf = priorBand !== undefined && plan.anchorTileId === priorBand.position;
+            const anchorKnownAcrossLaunchBoundary =
+              anchorIsObserved || anchorIsInferred || anchorIsSelf ||
+              anchorWasObserved || anchorWasInferred || anchorWasSelf;
 
-            if (!anchorIsObserved && !anchorIsInferred && !anchorIsSelf) {
+            if (!anchorKnownAcrossLaunchBoundary) {
               violations.C1_plan_names_unobserved_tile += 1;
               anchorProvenance.unknown.push({ basis: plan.basis, tileId: String(plan.anchorTileId) });
             } else {
               anchorProvenance[
-                anchorIsObserved ? "observed" : anchorIsInferred ? "inferred" : "self"
+                anchorIsObserved || anchorWasObserved
+                  ? "observed"
+                  : anchorIsInferred || anchorWasInferred
+                    ? "inferred"
+                    : "self"
               ] += 1;
             }
 

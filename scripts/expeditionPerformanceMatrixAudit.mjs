@@ -121,7 +121,7 @@ try {
         mobilityDerivation: timeUnit(() => mob.deriveMobilityCapacity(band0), 10000),
         tripCandidate: timeUnit(() => trips.selectExpeditionTripCandidate(run.world, band0, 6, 36), 500),
         viewshedPerObserver: timeUnit(() => visibility.advanceVisibleLandscapeCues(run.world, { ...band0, visibleLandscapeCues: [] }), 300),
-        signalDetection: timeUnit((i) => fire.classifySmokeDetection({ distanceTiles: (i % 14) + 1, occluded: i % 3 === 0, visibilityFactor: 0.8, strength: 0.5, planned: i % 2 === 0 }), 100000),
+        signalDetection: timeUnit((i) => fire.classifySmokeDetection({ distanceKm: (i % 14) + 1, occluded: i % 3 === 0, visibilityFactor: 0.8, strength: 0.5, planned: i % 2 === 0 }), 100000),
         acuteRiskSweepPerBand: timeUnit(() => acute.applyAcuteRiskToBand(run.world, { ...band0, acuteRisk: undefined }), 200),
       },
       routePlanningNote: "no distant memory exists; candidate selection returns undefined before any route BFS",

@@ -2,9 +2,9 @@
 //
 // A smoke signal is a PHYSICAL event: an away party standing at a real tile raises a
 // real fire (present fuel, wetness, and its own lived fire competence decide whether
-// it can), and the residential camp either sees the column or does not (distance,
-// terrain occlusion, present visibility). A deliberate meaning is understood ONLY
-// when the convention was planned before departure — anyone else, and any unplanned
+// it can), and the residential camp either sees the column or does not (physical
+// distance, terrain occlusion, present visibility). A deliberate meaning is understood
+// ONLY when the convention was planned before departure — anyone else, and any unplanned
 // smoke, reads as ambiguous "someone's fire" at best.
 //
 // Signals transfer a BOUNDED meaning, never the party's observation ledger, and
@@ -12,6 +12,7 @@
 // capped and expire.
 import type { DayNumber, TileId } from "../core/types";
 import { getTileAtCoord } from "../world/generate";
+import { getEuclideanPhysicalDistanceKm } from "../world/spatialGeometry";
 import type { WorldState } from "../world/types";
 import { deriveEnvironmentalVisibility, deriveFireFeasibility } from "./environmentBoundary";
 import type {
@@ -23,8 +24,16 @@ import type {
   SmokeSignalOutcome,
 } from "./types";
 
-/** Beyond this many tiles no smoke column reads at all (bounded perception). */
-export const SMOKE_MAX_VISIBLE_TILES = 14;
+/**
+ * SCALE-1 Task 5 — smoke has its own calibrated/model physical detection range,
+ * independent of the landscape-cue range and raster resolution. 21 km is a
+ * legacy-equivalent compatibility calibration for the former 14-cell Map-2 limit,
+ * NOT a universal human smoke-visibility constant. WORLD-M0/later empirical work may
+ * refine it from plume size, observer elevation, vegetation, atmosphere and weather.
+ */
+export const SMOKE_MAX_VISIBLE_RANGE_KM = 21;
+const SMOKE_NEAR_MAX_KM = 6;
+const SMOKE_MIDDLE_MAX_KM = 13.5;
 /** Bounded per-party attempts and per-band received records. */
 export const SIGNAL_ATTEMPT_CAP = 2;
 export const RECEIVED_SIGNAL_CAP = 6;
@@ -32,7 +41,7 @@ export const RECEIVED_SIGNAL_CAP = 6;
 export const RECEIVED_SIGNAL_TTL_DAYS = 12;
 
 export interface SmokeDetectionInput {
-  readonly distanceTiles: number;
+  readonly distanceKm: number;
   readonly occluded: boolean;
   /** Present environmental visibility at the RECEIVER (0..1). */
   readonly visibilityFactor: number;
@@ -44,8 +53,8 @@ export interface SmokeDetectionInput {
 
 /**
  * Pure, deterministic detection physics. Every §13.4 outcome is reachable:
- * infeasible fire → not_feasible; beyond range → too_distant; terrain in the way →
- * occluded; poor visibility → visibility_suppressed; weak column at long range →
+ * infeasible fire → not_feasible; beyond physical range → too_distant; terrain in the
+ * way → occluded; poor visibility → visibility_suppressed; weak column at long range →
  * missed; seen without a planned convention → seen_ambiguous; planned and seen →
  * seen_understood.
  */
@@ -54,7 +63,7 @@ export function classifySmokeDetection(input: SmokeDetectionInput): SmokeSignalO
     return "not_feasible";
   }
 
-  if (input.distanceTiles > SMOKE_MAX_VISIBLE_TILES) {
+  if (!Number.isFinite(input.distanceKm) || input.distanceKm > SMOKE_MAX_VISIBLE_RANGE_KM) {
     return "too_distant";
   }
 
@@ -66,11 +75,12 @@ export function classifySmokeDetection(input: SmokeDetectionInput): SmokeSignalO
     return "visibility_suppressed";
   }
 
-  // Legibility falls with distance and rises with column strength and clear air.
+  // Legibility falls with physical distance and rises with column strength and clear air.
+  const distanceFactor = 1 - Math.max(0, input.distanceKm) / SMOKE_MAX_VISIBLE_RANGE_KM;
   const legibility =
     input.strength * 0.55 +
     input.visibilityFactor * 0.3 +
-    (1 - input.distanceTiles / SMOKE_MAX_VISIBLE_TILES) * 0.35;
+    distanceFactor * 0.35;
 
   if (legibility < 0.55) {
     return "missed";
@@ -124,7 +134,7 @@ export interface ResolvedSmokeSignal {
  * Resolve ONE deliberate same-band signal attempt from a party at `sourceTileId`
  * toward its own residential camp. The attempt consumes the party's work/labor
  * for the moment it is made (the caller charges that); this resolves only the
- * physics. Deterministic.
+ * physics. Deterministic and constant-size: one known source/receiver pair, no world scan.
  */
 export function resolveSmokeSignal(params: {
   readonly world: WorldState;
@@ -141,13 +151,13 @@ export function resolveSmokeSignal(params: {
   const receiverVisibility = deriveEnvironmentalVisibility(world, band.position);
   const source = world.tiles[sourceTileId];
   const camp = world.tiles[band.position];
-  const distanceTiles =
+  const distanceKm =
     source === undefined || camp === undefined
       ? Number.POSITIVE_INFINITY
-      : Math.max(Math.abs(source.coord.x - camp.coord.x), Math.abs(source.coord.y - camp.coord.y));
+      : getEuclideanPhysicalDistanceKm(world.config, source.coord, camp.coord);
   const occluded = isSmokeLineOccluded(world, sourceTileId, band.position);
   const outcome = classifySmokeDetection({
-    distanceTiles,
+    distanceKm,
     occluded,
     visibilityFactor: receiverVisibility.visibilityFactor,
     strength: fire.strength,
@@ -172,7 +182,8 @@ export function resolveSmokeSignal(params: {
     day,
     tick: world.time.tick,
     direction: directionBetween(world, band.position, sourceTileId),
-    distanceBand: distanceTiles <= 4 ? "near" : distanceTiles <= 9 ? "middle" : "far",
+    distanceBand: smokeDistanceBand(distanceKm),
+    distanceKm,
     outcome,
     // The meaning crosses ONLY when the planned convention was understood.
     ...(outcome === "seen_understood" ? { meaning } : {}),
@@ -208,6 +219,16 @@ export function findUnderstoodSignal(
   return pruneExpiredSignals(band.receivedSmokeSignals, day).find(
     (signal) => signal.meaning === meaning && signal.aboutTileId === aboutTileId,
   );
+}
+
+function smokeDistanceBand(distanceKm: number): ReceivedSmokeSignal["distanceBand"] {
+  if (distanceKm <= SMOKE_NEAR_MAX_KM) {
+    return "near";
+  }
+  if (distanceKm <= SMOKE_MIDDLE_MAX_KM) {
+    return "middle";
+  }
+  return "far";
 }
 
 function directionBetween(world: WorldState, fromTileId: TileId, toTileId: TileId): LandscapeVisibilityDirection {

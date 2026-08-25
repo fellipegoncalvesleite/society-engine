@@ -13,13 +13,65 @@ import type {
   TileObservation,
 } from "../knowledge/types";
 import { getDepletionAdjustedRichness } from "../world/depletion";
+import { getTileAtCoord } from "../world/generate";
+import {
+  getEuclideanPhysicalDistanceKm,
+  getRasterWindowForPhysicalRadius,
+} from "../world/spatialGeometry";
 import type { Tile, WorldState } from "../world/types";
 
 export const RECENT_TILE_OBSERVATION_HISTORY_LIMIT = 180;
+/**
+ * SCALE-1 Task 5 — direct nearby observation has a physical footprint too. The 2 km
+ * ceiling is a provisional, legacy-equivalent model calibration that preserves useful
+ * partial second-ring Map-1 behavior without letting larger Map-2 cells expand what one
+ * standing observer can know. It is NOT a universal human observation radius; WORLD-M0
+ * may refine evidence-specific perception using the later physical substrate.
+ */
+export const DIRECT_OBSERVATION_MAX_RANGE_KM = 2;
+const DIRECT_OBSERVATION_NEAR_RANGE_KM = 1.5;
+const DIRECT_OBSERVATION_EPSILON_KM = 1e-9;
 
 export interface ObservationTarget {
   readonly tile: Tile;
-  readonly distance: number;
+  readonly distanceKm: number;
+}
+
+/**
+ * Physical radius -> bounded raster window -> exact physical filter. This helper owns
+ * direct nearby observation candidate geometry for residential/investigation callers.
+ */
+export function collectDirectObservationTargets(
+  world: WorldState,
+  centerTile: Tile,
+): readonly ObservationTarget[] {
+  const window = getRasterWindowForPhysicalRadius(
+    world.config,
+    centerTile.coord,
+    DIRECT_OBSERVATION_MAX_RANGE_KM,
+  );
+  const targets: ObservationTarget[] = [];
+
+  for (let y = window.minY; y <= window.maxY; y += 1) {
+    for (let x = window.minX; x <= window.maxX; x += 1) {
+      const tile = getTileAtCoord(world, { x, y });
+      if (tile === undefined) {
+        continue;
+      }
+      const distanceKm = getEuclideanPhysicalDistanceKm(
+        world.config,
+        centerTile.coord,
+        tile.coord,
+      );
+      if (distanceKm <= DIRECT_OBSERVATION_MAX_RANGE_KM + DIRECT_OBSERVATION_EPSILON_KM) {
+        targets.push({ tile, distanceKm });
+      }
+    }
+  }
+
+  return targets.sort((left, right) =>
+    left.distanceKm - right.distanceKm || String(left.tile.id).localeCompare(String(right.tile.id)),
+  );
 }
 
 function clamp01(value: number): number {
@@ -37,7 +89,7 @@ export function getObservedRisk(tile: Tile): number {
 
 /**
  * Apply a bounded set of physical observation targets to a band's knowledge state.
- * Confidence falls with observation distance; a visited tile (distance 0) counts a
+ * Confidence falls with physical observation distance; a visited tile (0 km) counts a
  * visit. This is band-perception, not hidden truth: everything recorded is what a
  * person standing there (or nearby) can see.
  */
@@ -256,16 +308,24 @@ function observeTile(
   // crossing does NOT establish is ecological adequacy, so the general-purpose confidence
   // for a shallow traversal sits below a residential observation and rises with repeat
   // visits rather than being pinned at 1.0 by one walk-past.
-  const baseConfidence = target.distance === 0 ? 1 : target.distance === 1 ? 0.68 : 0.34;
+  const baseConfidence =
+    target.distanceKm <= DIRECT_OBSERVATION_EPSILON_KM
+      ? 1
+      : target.distanceKm <= DIRECT_OBSERVATION_NEAR_RANGE_KM + DIRECT_OBSERVATION_EPSILON_KM
+        ? 0.68
+        : 0.34;
   const priorVisits = existingRecord?.visits ?? 0;
   const confidence = shallow && !restore.confidence
-    ? Math.min(0.72, 0.4 + priorVisits * 0.08) * (target.distance === 0 ? 1 : baseConfidence)
+    ? Math.min(0.72, 0.4 + priorVisits * 0.08) *
+      (target.distanceKm <= DIRECT_OBSERVATION_EPSILON_KM ? 1 : baseConfidence)
     : baseConfidence;
   const existingSeasons = existingRecord?.seasonsObserved ?? [];
   const seasonsObserved = existingSeasons.includes(world.time.season)
     ? existingSeasons
     : [...existingSeasons, world.time.season];
-  const visits = (existingRecord?.visits ?? 0) + (target.distance === 0 ? 1 : 0);
+  const visits =
+    (existingRecord?.visits ?? 0) +
+    (target.distanceKm <= DIRECT_OBSERVATION_EPSILON_KM ? 1 : 0);
   const observedRisk = getObservedRisk(target.tile);
   const record: KnownTileRecord = {
     tileId: target.tile.id,
