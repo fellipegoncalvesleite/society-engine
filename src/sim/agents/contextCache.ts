@@ -8,6 +8,7 @@ import type {
 import type { WorldState } from "../world/types";
 import { getTile, getTileAtCoord } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
+import { getEuclideanPhysicalDistanceKm } from "../world/spatialGeometry";
 import type {
   Band,
   DryMarginMobilityContext,
@@ -22,8 +23,17 @@ import type { ResidentialAnchorContext } from "./residentialAnchor";
 import type { SeasonalRoundScoringContext } from "./seasonalRound";
 import { isLivingBand } from "./bandLifecycle";
 
+// PROVENANCE D — TECHNICAL CAP/INDEX GRANULARITY. Raster-cell buckets affect lookup fan-out only;
+// exact physical distance below remains the behavior gate.
 const SPATIAL_BUCKET_SIZE = 5;
-const DEFAULT_NEARBY_RADIUS = 4;
+
+// PROVENANCE C — MODEL / PROVISIONAL SCALE-1 CALIBRATION. The legacy cache/local-density rules
+// used 4-cell neighborhoods and a +1-cell decay shoulder for local-density queries.
+// Map 2 is 1.5 km/cell, so simply treating those integers as kilometers would be false provenance.
+// The known-opportunity source is bounded by candidate count, not by a second physical radius;
+// canonical traversal time decides whether a remembered candidate is behaviorally reachable.
+export const DEFAULT_NEARBY_RADIUS_KM = 4;
+const LOCAL_POPULATION_DECAY_SHOULDER_KM = 1;
 const MAX_SALIENT_PLACES = 16;
 const MAX_SALIENT_CORRIDORS = 12;
 const MAX_FRONTIER_CANDIDATES = 16;
@@ -149,7 +159,7 @@ export function buildTickContextCache(
     salientMemoryByBandId.set(band.id, reusedSalientMemory ?? buildSalientBandMemorySummary(world, band));
     nearbyBandsByBandId.set(
       band.id,
-      getNearbyActiveBandIdsForTile(world, bandSpatialIndex, band.position, DEFAULT_NEARBY_RADIUS)
+      getNearbyActiveBandIdsForTile(world, bandSpatialIndex, band.position, DEFAULT_NEARBY_RADIUS_KM)
         .filter((nearbyBandId) => nearbyBandId !== band.id),
     );
   }
@@ -258,7 +268,7 @@ export function getNearbyActiveBandIdsForTile(
   world: WorldState,
   index: BandSpatialIndex,
   tileId: TileId,
-  radius = DEFAULT_NEARBY_RADIUS,
+  radiusKm = DEFAULT_NEARBY_RADIUS_KM,
 ): readonly BandId[] {
   const tile = getTile(world, tileId);
 
@@ -266,14 +276,20 @@ export function getNearbyActiveBandIdsForTile(
     return [];
   }
 
-  const memoKey = `${String(tileId)}:${radius}`;
+  const memoKey = `${String(tileId)}:${radiusKm.toFixed(6)}km`;
   const memoized = index.nearbyByTileRadius.get(memoKey);
 
   if (memoized !== undefined) {
     return memoized;
   }
 
-  const bucketRadius = Math.ceil(radius / index.bucketSize) + 1;
+  const cellWidthKm = Math.max(1e-9, world.config.spatial.cellWidthKm);
+  const cellHeightKm = Math.max(1e-9, world.config.spatial.cellHeightKm);
+  const rasterRadius = Math.max(
+    Math.ceil(radiusKm / cellWidthKm),
+    Math.ceil(radiusKm / cellHeightKm),
+  );
+  const bucketRadius = Math.ceil(rasterRadius / index.bucketSize) + 1;
   const centerBucket = getBucketCoord(tile.coord.x, tile.coord.y, index.bucketSize);
   const candidateIds = new Set<BandId>();
 
@@ -296,7 +312,7 @@ export function getNearbyActiveBandIdsForTile(
       const band = world.bands[bandId];
       const bandTile = band === undefined ? undefined : getTile(world, band.position);
 
-      return bandTile !== undefined && getGridDistance(tile, bandTile) <= radius;
+      return bandTile !== undefined && getPhysicalDistanceKm(world, tile, bandTile) <= radiusKm + 1e-9;
     })
     .sort(compareBandIds);
 
@@ -309,7 +325,7 @@ export function getLocalPopulationEstimateFromCache(
   world: WorldState,
   cache: TickContextCache,
   tileId: TileId,
-  radius = DEFAULT_NEARBY_RADIUS,
+  radiusKm = DEFAULT_NEARBY_RADIUS_KM,
 ): number {
   const tile = getTile(world, tileId);
 
@@ -317,7 +333,7 @@ export function getLocalPopulationEstimateFromCache(
     return 0;
   }
 
-  return getNearbyActiveBandIdsForTile(world, cache.bandSpatialIndex, tileId, radius)
+  return getNearbyActiveBandIdsForTile(world, cache.bandSpatialIndex, tileId, radiusKm)
     .reduce((total, bandId) => {
       const band = world.bands[bandId];
       const bandTile = band === undefined ? undefined : getTile(world, band.position);
@@ -326,8 +342,11 @@ export function getLocalPopulationEstimateFromCache(
         return total;
       }
 
-      const distance = getGridDistance(tile, bandTile);
-      const weight = (radius + 1 - distance) / (radius + 1);
+      const distanceKm = getPhysicalDistanceKm(world, tile, bandTile);
+      const denominator = radiusKm + LOCAL_POPULATION_DECAY_SHOULDER_KM;
+      const weight = denominator <= 0
+        ? (distanceKm <= 1e-9 ? 1 : 0)
+        : (radiusKm + LOCAL_POPULATION_DECAY_SHOULDER_KM - distanceKm) / denominator;
 
       return total + band.demography.population * Math.max(0, weight);
     }, 0);
@@ -337,9 +356,9 @@ export function getLocalBandCountFromCache(
   world: WorldState,
   cache: TickContextCache,
   tileId: TileId,
-  radius = DEFAULT_NEARBY_RADIUS,
+  radiusKm = DEFAULT_NEARBY_RADIUS_KM,
 ): number {
-  return getNearbyActiveBandIdsForTile(world, cache.bandSpatialIndex, tileId, radius).length;
+  return getNearbyActiveBandIdsForTile(world, cache.bandSpatialIndex, tileId, radiusKm).length;
 }
 
 export function getSalientMemorySummary(
@@ -353,7 +372,7 @@ export function getBandIdsWithSalientMemoryNearTile(
   world: WorldState,
   cache: TickContextCache,
   tileId: TileId,
-  radius = 2,
+  radiusTiles = 2,
 ): readonly BandId[] {
   const tile = getTile(world, tileId);
 
@@ -363,9 +382,11 @@ export function getBandIdsWithSalientMemoryNearTile(
 
   const bandIds = new Set<BandId>();
 
-  for (let y = tile.coord.y - radius; y <= tile.coord.y + radius; y += 1) {
-    for (let x = tile.coord.x - radius; x <= tile.coord.x + radius; x += 1) {
-      if (Math.abs(tile.coord.x - x) + Math.abs(tile.coord.y - y) > radius) {
+  // TOPOLOGICAL memory-index lookup only. This does not represent physical presence,
+  // encounter range, competition, or visiting reachability.
+  for (let y = tile.coord.y - radiusTiles; y <= tile.coord.y + radiusTiles; y += 1) {
+    for (let x = tile.coord.x - radiusTiles; x <= tile.coord.x + radiusTiles; x += 1) {
+      if (Math.abs(tile.coord.x - x) + Math.abs(tile.coord.y - y) > radiusTiles) {
         continue;
       }
 
@@ -588,14 +609,11 @@ function isKnownOpportunityRecord(
   tileId: TileId,
 ): boolean {
   const tile = getTile(world, tileId);
-  const currentTile = getTile(world, band.position);
 
   return (
     tile !== undefined &&
-    currentTile !== undefined &&
     tile.id !== band.position &&
-    isBandPassableDestination(tile) &&
-    getGridDistance(tile, currentTile) <= 8
+    isBandPassableDestination(tile)
   );
 }
 
@@ -655,11 +673,12 @@ function getBucketKey(x: number, y: number): string {
   return `${x},${y}`;
 }
 
-function getGridDistance(
+function getPhysicalDistanceKm(
+  world: WorldState,
   first: NonNullable<ReturnType<typeof getTile>>,
   second: NonNullable<ReturnType<typeof getTile>>,
 ): number {
-  return Math.abs(first.coord.x - second.coord.x) + Math.abs(first.coord.y - second.coord.y);
+  return getEuclideanPhysicalDistanceKm(world.config, first.coord, second.coord);
 }
 
 function compareBands(left: Band, right: Band): number {

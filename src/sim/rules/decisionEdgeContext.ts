@@ -5,6 +5,7 @@
 // a move/probe edge import getCandidateEdgeMemo from here instead of the
 // orchestrator. Behavior is byte-identical to the pre-extraction inline versions.
 import { deriveBandTendencies } from "../agents/bandTendency";
+import { deriveBandRiverCrossingCapability } from "../agents/crossingCapability";
 import { deriveCrossingPracticeRelief } from "../agents/crossingPractice";
 import { deriveReportedKnowledgeTargetBias } from "../agents/reportedKnowledge";
 import type { Band } from "../agents/types";
@@ -98,7 +99,7 @@ export function getRiverMovementAssessment(
   toTileId: TileId,
   intentKind: MobilityIntentKind | undefined,
 ): RiverMovementAssessment {
-  const capability = getBandRiverCrossingCapability(band);
+  const capability = deriveBandRiverCrossingCapability(band);
   const crossing = getRiverCrossingForMovement(world, fromTileId, toTileId);
   const fromTile = world.tiles[fromTileId];
   const toTile = world.tiles[toTileId];
@@ -140,29 +141,6 @@ export function getRiverMovementAssessment(
     blockedCrossingPenalty: seasonalState?.isBlockedWithoutCapability === true ? 1 : 0,
     memoryUseCount,
     crossingPracticeRelief,
-  };
-}
-
-export function getBandRiverCrossingCapability(band: Band): RiverCrossingCapability {
-  const crossingPractice = Object.values(band.crossingMemories).some((memory) =>
-    memory.useCount >= 2 && memory.successConfidence >= 0.5);
-  const aquaticPractice = (band.recentIntraSeasonTrips ?? []).filter((trip) =>
-    trip.taskGroupType === "fishing_group" || trip.taskGroupType === "water_group").length >= 3;
-  const engineeringResponse = (band.practicalAdaptation?.responses ?? []).some((response) =>
-    response.family === "engineering_structure" &&
-    (response.status === "forming" || response.status === "active"));
-  const fragments = band.practicalAdaptation?.fragments ?? [];
-  const componentSubjects = new Set(fragments
-    .filter((fragment) => fragment.knowledgeState !== "incorrect" && fragment.knowledgeState !== "dormant")
-    .map((fragment) => fragment.subject));
-  const componentBasis = componentSubjects.has("buoyancy_under_load") &&
-    componentSubjects.has("binding_under_load") &&
-    componentSubjects.has("staged_shuttle_crossing");
-
-  return {
-    canUseFords: true,
-    canUseShallowCrossings: crossingPractice || aquaticPractice || engineeringResponse,
-    canAttemptBasicRaftCrossing: engineeringResponse && componentBasis,
   };
 }
 

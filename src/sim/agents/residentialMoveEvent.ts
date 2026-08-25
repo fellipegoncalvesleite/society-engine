@@ -43,7 +43,7 @@ import { deriveCarriedWaterRelief, deriveCarryingRelief } from "./adaptationBoun
 // module no longer carries private tiles-per-day constants.
 import { deriveTravelPace } from "./bandMobility";
 import { getRoutePhysicalLengthKm, getRouteTravelTimeDays } from "./traversal";
-import { getBandRiverCrossingCapability } from "../rules/decisionEdgeContext";
+import { deriveBandRiverCrossingCapability } from "./crossingCapability";
 import { deriveTemporaryWatercraftAssessmentForMove } from "./storageSuitability";
 import type {
   Band,
@@ -140,7 +140,7 @@ function buildResidentialMoveEvent(
         ? deriveTravelPace(band, "emergency_residential_move", { urgency: 0.5 }).kmPerTravelDay
         : ordinaryPace;
   const completedRouteTravelDays = getRouteTravelTimeDays(
-    world, pathTiles, paceKmPerDay, getBandRiverCrossingCapability(band),
+    world, pathTiles, paceKmPerDay, deriveBandRiverCrossingCapability(band),
   );
   // A staged leg may have spent additional time on the next unfinished edge. Count that
   // time in duration/hardship without pretending the band occupied a sub-cell position.

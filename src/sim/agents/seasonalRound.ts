@@ -1,4 +1,7 @@
 import type { ResidentialAnchorContext } from "./residentialAnchor";
+import { deriveTravelPace } from "./bandMobility";
+import { deriveBandRiverCrossingCapability } from "./crossingCapability";
+import { expandBoundedTravelReach } from "./physicalAccess";
 import { getLocalUsePressureValue } from "./pressure";
 import type {
   Band,
@@ -16,7 +19,12 @@ import type {
 import type { ReasonId, Season, TileId, WorldTime } from "../core/types";
 import { getTile } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
-import type { Tile, WorldState } from "../world/types";
+import { getEuclideanPhysicalDistanceKm } from "../world/spatialGeometry";
+import type { WorldState } from "../world/types";
+
+// PROVENANCE C — MODEL / PROVISIONAL SCALE-1 CALIBRATION. Used only when reading a legacy anchor
+// state that predates the explicit logistical travel-time field; new anchors persist their budget.
+const LEGACY_STATE_LOGISTICAL_TRAVEL_BUDGET_DAYS = 0.75;
 
 // Multi-year seasonal-round coherence (checkpoint 2I.4). Infers a band's mobile
 // seasonal pattern (dry-refuge return ↔ wet dispersal) from its anchor memories
@@ -102,7 +110,7 @@ export function getSeasonalRoundScoringContext(
   const refugeViable = isRememberedRefugeViable(world, band, rememberedDryRefugeTileId);
   const currentDistanceFromRememberedRefuge = rememberedDryRefugeTileId === undefined
     ? undefined
-    : gridDistanceBetween(world, band.position, rememberedDryRefugeTileId);
+    : physicalDistanceBetweenKm(world, band.position, rememberedDryRefugeTileId);
   const driftAllowedByWaterStress = (band.pressureState?.waterStress ?? 0) > REFUGE_DRIFT_ALLOWED_WATER_STRESS;
   const dryRefugeStickiness = abovePullConfidence && dryApproaching && refugeViable && !driftAllowedByWaterStress
     ? round2(strength)
@@ -453,6 +461,17 @@ function computeWetCatchmentRotation(
   }
 
   const wetRange = collectWetRangeTiles(round);
+  const logisticalBudgetDays = anchor.logisticalTravelTimeBudgetDays ?? LEGACY_STATE_LOGISTICAL_TRAVEL_BUDGET_DAYS;
+  const logisticalPaceKmPerDay = deriveTravelPace(band, "task_camp_shuttle").kmPerTravelDay;
+  const logisticalReach = new Set(
+    expandBoundedTravelReach(
+      world,
+      anchor.anchorTileId,
+      logisticalPaceKmPerDay,
+      logisticalBudgetDays,
+      deriveBandRiverCrossingCapability(band),
+    ).reachable.map((entry) => entry.tileId),
+  );
   const candidateIds = [...new Set<TileId>([...anchor.catchmentTileIds, ...wetRange])]
     .filter((tileId) => tileId !== anchor.anchorTileId)
     .slice(0, MAX_ROTATION_CANDIDATES);
@@ -468,7 +487,7 @@ function computeWetCatchmentRotation(
       continue;
     }
 
-    if (gridDistance(anchorTile, tile) > anchor.logisticalRadius) {
+    if (!logisticalReach.has(tile.id)) {
       continue;
     }
 
@@ -601,15 +620,13 @@ function isRememberedRefugeViable(
   return provenReliable || (record.observedWaterAccess ?? 0) >= REFUGE_VIABLE_MIN_WATER;
 }
 
-function gridDistanceBetween(world: WorldState, fromTileId: TileId, toTileId: TileId): number | undefined {
+function physicalDistanceBetweenKm(world: WorldState, fromTileId: TileId, toTileId: TileId): number | undefined {
   const from = getTile(world, fromTileId);
   const to = getTile(world, toTileId);
 
-  return from === undefined || to === undefined ? undefined : gridDistance(from, to);
-}
-
-function gridDistance(first: Tile, second: Tile): number {
-  return Math.abs(first.coord.x - second.coord.x) + Math.abs(first.coord.y - second.coord.y);
+  return from === undefined || to === undefined
+    ? undefined
+    : getEuclideanPhysicalDistanceKm(world.config, from.coord, to.coord);
 }
 
 function mergePhaseRecord(

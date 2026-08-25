@@ -25,7 +25,7 @@ function makeTiles(maxX) {
     const neighbors = [];
     if (x - 1 >= 0) neighbors.push(`tile:${x - 1},0`);
     if (x + 1 <= maxX) neighbors.push(`tile:${x + 1},0`);
-    tiles[id] = { id, coord: { x, y: 0 }, neighbors };
+    tiles[id] = { id, coord: { x, y: 0 }, neighbors, movementCost: 1, isAquatic: false };
   }
   return tiles;
 }
@@ -45,7 +45,26 @@ function makeBand(id, position, catchment, { adults = 10, dependents = 0, elders
 function makeWorldCache(maxX, bandList) {
   const bands = {};
   for (const b of bandList) bands[b.id] = b;
-  const world = { tiles: makeTiles(maxX), bands };
+  const world = {
+    config: {
+      width: maxX + 1,
+      height: 1,
+      seasonsPerYear: 4,
+      yearsPerGeneration: 25,
+      ticksPerGeneration: 100,
+      spatial: {
+        cellWidthKm: 1,
+        cellHeightKm: 1,
+        coordinateFrame: "cartesian_cell_centers",
+        connectivity: "cardinal_4",
+      },
+    },
+    tiles: makeTiles(maxX),
+    bands,
+    rivers: {},
+    riverCrossings: {},
+    time: { tick: 0, season: "summer" },
+  };
   const cache = {
     activeBandIds: bandList.map((b) => b.id).sort((a, c) => String(a).localeCompare(String(c))),
     sharedCatchmentMemo: {},

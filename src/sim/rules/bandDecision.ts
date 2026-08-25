@@ -397,10 +397,10 @@ import {
   RESOURCE_SCOUT_SCORE_WEIGHT,
   VISIBLE_LANDSCAPE_PROBE_SCORE_WEIGHT,
 } from "./decisionConstants";
+import { deriveBandRiverCrossingCapability } from "../agents/crossingCapability";
 // CORE-PIPELINE-DECOMPOSITION-2 — candidate edge / river-crossing assessment.
 import {
   formatRiverCapability,
-  getBandRiverCrossingCapability,
   getCandidateEdgeMemo,
   getReportedKnowledgeTargetBias,
   getRiverCorridorValue,
@@ -1888,7 +1888,12 @@ function makeAnchorStayReason(
     anchorTileId: tileId,
     tetheringWaterTileId: anchor.tetheringWaterTileId,
     season: time.season,
+    // Legacy topological radius is retained only for diagnostics; physical fields carry meaning.
     foragingRadius: anchor.foragingRadius,
+    foragingRadiusKm: anchor.foragingRadiusKm,
+    foragingTravelTimeBudgetDays: anchor.foragingTravelTimeBudgetDays,
+    reachableCatchmentAreaKm2: anchor.reachableCatchmentAreaKm2,
+    knownCatchmentAreaKm2: anchor.knownCatchmentAreaKm2,
     catchmentTileCount: anchor.catchmentTileIds.length,
     holdValue: anchor.holdValue,
     forayValue: anchor.forayValue,
@@ -1920,7 +1925,7 @@ function makeAnchorRadiusReason(
       ? "drought_tether_tightened"
       : "water_tethered_foraging_radius";
 
-  return makeReason(decisionId, "secondary", radius.radiusTiles, {
+  return makeReason(decisionId, "secondary", radius.maxPhysicalReachKm ?? radius.radiusTiles, {
     type,
     strength: clamp01(anchorContext.anchor.anchorWaterSecurity),
     confidence: 0.6,
@@ -1929,6 +1934,10 @@ function makeAnchorRadiusReason(
     anchorTileId: radius.anchorTileId,
     season: time.season,
     foragingRadius: radius.radiusTiles,
+    foragingRadiusKm: radius.maxPhysicalReachKm,
+    foragingTravelTimeBudgetDays: radius.travelTimeBudgetDays,
+    reachableCatchmentAreaKm2: radius.reachableAreaKm2,
+    knownCatchmentAreaKm2: radius.knownReachableAreaKm2,
     catchmentTileCount: radius.reachableKnownTileIds.length,
     anchorWaterSecurity: anchorContext.anchor.anchorWaterSecurity,
     catchmentReturnEstimate: anchorContext.anchor.catchmentReturnEstimate,
@@ -5118,7 +5127,7 @@ function deriveAppliedMigrationWalk(
     kmPerTravelDay: pace.kmPerTravelDay,
     availableTravelDays,
     edgeRemainder: band.residentialTravelEdgeRemainder,
-    crossingCapability: getBandRiverCrossingCapability(band),
+    crossingCapability: deriveBandRiverCrossingCapability(band),
   });
   const completedPath = routeTileIds.slice(1, advanced.routeIndex + 1);
   const exhaustedTime = advanced.unusedTravelDays <= 1e-9 && advanced.routeIndex < routeTileIds.length - 1;

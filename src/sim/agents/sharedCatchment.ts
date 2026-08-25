@@ -1,4 +1,6 @@
-import { deriveCommittedMobilityPools, partyCompositionTotal } from "./bandMobility";
+import { deriveCommittedMobilityPools, deriveTravelPace, partyCompositionTotal } from "./bandMobility";
+import { deriveBandRiverCrossingCapability } from "./crossingCapability";
+import { expandBoundedTravelReach } from "./physicalAccess";
 import type { TickContextCache } from "./contextCache";
 import type { Band } from "./types";
 import type { BandId, TileId } from "../core/types";
@@ -20,9 +22,13 @@ import type { WorldState } from "../world/types";
 // competition), exactly as overlapping foragers would. Bounded: each footprint is
 // capped, and the index is memoized on the cache (built at most once per cache).
 
-const MAX_FOOTPRINT_TILES = 16;
-const FOOTPRINT_FALLBACK_RADIUS = 2;
-const fallbackFootprintCandidateIdsByTiles = new WeakMap<WorldState["tiles"], Map<TileId, readonly TileId[]>>();
+// No cell-count cap is allowed to define the exploited/contested land. The travel-time
+// budget bounds graph expansion physically; residentialAnchor keeps its own 16-cell
+// persisted summary purely as a TECHNICAL retention cap.
+// PROVENANCE C — MODEL / PROVISIONAL SCALE-1 CALIBRATION. This fallback matches the provisional
+// ordinary residential-anchor budget for legacy states that do not yet carry the physical field.
+// It is a compatibility default, not a research-backed foraging law.
+const DEFAULT_FORAGING_TRAVEL_BUDGET_DAYS = 0.5;
 
 export interface TileClaim {
   readonly totalWeight: number;
@@ -31,7 +37,10 @@ export interface TileClaim {
 
 export interface FootprintTile {
   readonly tileId: TileId;
+  /** Physical route distance in km (legacy `distance` consumers now receive physical units). */
   readonly distance: number;
+  readonly distanceKm: number;
+  readonly travelTimeDays: number;
   readonly weight: number;
 }
 
@@ -56,33 +65,42 @@ export function getBandForagingFootprint(
   }
 
   const draw = getBandForagingDraw(band);
-  const candidateIds = collectFootprintCandidateIds(world, band, band.position);
+  const travelTimeBudgetDays = Math.max(
+    0,
+    band.residentialAnchor?.foragingTravelTimeBudgetDays ?? DEFAULT_FORAGING_TRAVEL_BUDGET_DAYS,
+  );
+  const pace = deriveTravelPace(band, "resource_expedition").kmPerTravelDay;
+  const access = expandBoundedTravelReach(
+    world, band.position, pace, travelTimeBudgetDays, deriveBandRiverCrossingCapability(band),
+  );
   const tiles: FootprintTile[] = [];
 
-  for (const tileId of candidateIds) {
-    const record = band.knowledge.observedTiles[tileId];
-    const tile = getTile(world, tileId);
+  // Physical reach is deliberately broader than retained anchor summaries. Resource/support
+  // eligibility is then filtered through THIS band's observed records, preserving the knowledge
+  // boundary even though traversal itself can cross unknown country.
+  for (const reachable of access.reachable) {
+    const record = band.knowledge.observedTiles[reachable.tileId];
+    const tile = getTile(world, reachable.tileId);
 
-    // Only the band's OWN known, existing tiles contribute support. This mirrors
-    // the carrying-capacity yield sum exactly (anchor catchment, or a radius-2
-    // ring fallback), so a solo band's support is unchanged and only overlapping
-    // bands degrade each other. The candidate set is already bounded.
-    if (record === undefined || tile === undefined) {
+    if (record === undefined || tile === undefined || tile.isAquatic) {
       continue;
     }
 
-    const distance = gridDistance(originTile.coord, tile.coord);
-
-    tiles.push({ tileId, distance, weight: round4(draw * distanceDecay(distance)) });
+    const decay = travelTimeDecay(reachable.travelTimeDays, travelTimeBudgetDays);
+    tiles.push({
+      tileId: reachable.tileId,
+      distance: reachable.physicalDistanceKm,
+      distanceKm: reachable.physicalDistanceKm,
+      travelTimeDays: reachable.travelTimeDays,
+      weight: round4(draw * decay),
+    });
   }
 
-  return tiles
-    .sort((left, right) =>
-      left.distance === right.distance
-        ? String(left.tileId).localeCompare(String(right.tileId))
-        : left.distance - right.distance,
-    )
-    .slice(0, MAX_FOOTPRINT_TILES);
+  return tiles.sort((left, right) =>
+    left.travelTimeDays === right.travelTimeDays
+      ? String(left.tileId).localeCompare(String(right.tileId))
+      : left.travelTimeDays - right.travelTimeDays,
+  );
 }
 
 // Memoized accessor: builds the index on first use for a given cache and reuses it
@@ -186,74 +204,17 @@ export function getOverlappingBandIds(
   return [...overlapping].sort(compareBandIds);
 }
 
-function collectFootprintCandidateIds(
-  world: WorldState,
-  band: Band,
-  originTileId: TileId,
-): readonly TileId[] {
-  const anchorCatchment = band.residentialAnchor?.catchmentTileIds;
-  const candidates = new Set<TileId>([originTileId]);
-
-  if (anchorCatchment !== undefined && anchorCatchment.length > 0) {
-    for (const tileId of anchorCatchment) {
-      candidates.add(tileId);
-    }
-
-    return [...candidates];
+function travelTimeDecay(travelTimeDays: number, travelTimeBudgetDays: number): number {
+  if (travelTimeDays <= 0 || travelTimeBudgetDays <= 0) {
+    return 1;
   }
 
-  return getFallbackFootprintCandidateIds(world, originTileId);
+  // Physical/travel-time decay: the edge of the usable budget retains a modest
+  // claim, matching the old qualitative taper without tying it to cell count.
+  const fraction = clamp01(travelTimeDays / travelTimeBudgetDays);
+  return 1 - fraction * 0.7;
 }
 
-function getFallbackFootprintCandidateIds(
-  world: WorldState,
-  originTileId: TileId,
-): readonly TileId[] {
-  let cachedByOrigin = fallbackFootprintCandidateIdsByTiles.get(world.tiles);
-
-  if (cachedByOrigin === undefined) {
-    cachedByOrigin = new Map<TileId, readonly TileId[]>();
-    fallbackFootprintCandidateIdsByTiles.set(world.tiles, cachedByOrigin);
-  }
-
-  const cached = cachedByOrigin.get(originTileId);
-
-  if (cached !== undefined) {
-    return cached;
-  }
-
-  const candidates = new Set<TileId>([originTileId]);
-
-  // Fallback foraging range before an anchor forms: a bounded ring-walk outward
-  // over grid topology to FOOTPRINT_FALLBACK_RADIUS (O(radius^2), independent of
-  // how many tiles the band knows). Only known tiles are scored later.
-  let frontier: TileId[] = [originTileId];
-
-  for (let depth = 0; depth < FOOTPRINT_FALLBACK_RADIUS; depth += 1) {
-    const next: TileId[] = [];
-
-    for (const tileId of frontier) {
-      const tile = getTile(world, tileId);
-
-      if (tile === undefined) {
-        continue;
-      }
-
-      for (const neighborId of tile.neighbors) {
-        if (!candidates.has(neighborId)) {
-          candidates.add(neighborId);
-          next.push(neighborId);
-        }
-      }
-    }
-
-    frontier = next;
-  }
-
-  const result = [...candidates];
-  cachedByOrigin.set(originTileId, result);
-  return result;
-}
 
 // CORRECTION-34A §9 — LOCAL EXTRACTION EFFORT. Read the history before changing this.
 //
@@ -323,28 +284,6 @@ function isAwayPhaseForEffort(phase: string): boolean {
   return phase === "prepared" || phase === "outbound" || phase === "operating" || phase === "returning";
 }
 
-function distanceDecay(distance: number): number {
-  if (distance <= 0) {
-    return 1;
-  }
-
-  if (distance === 1) {
-    return 0.7;
-  }
-
-  if (distance === 2) {
-    return 0.45;
-  }
-
-  return 0.3;
-}
-
-function gridDistance(
-  from: { readonly x: number; readonly y: number },
-  to: { readonly x: number; readonly y: number },
-): number {
-  return Math.abs(from.x - to.x) + Math.abs(from.y - to.y);
-}
 
 function compareBandIds(left: BandId, right: BandId): number {
   return String(left).localeCompare(String(right));
