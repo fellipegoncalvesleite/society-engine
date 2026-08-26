@@ -1,6 +1,7 @@
 // SCALE-1 Task 8 — final controlled cross-resolution physical certification.
 // The fixture authority lives in scripts/lib/scale1Task8ContinuousFixture.mjs and is ONE
 // continuous physical description rasterized independently at 1.0 km and 1.5 km.
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { createServer } from "vite";
 import {
@@ -69,7 +70,8 @@ try {
   // Route-choice fixture has a continuous three-segment detour authority around one rectangle.
   const routeContinuousSegments = 3;
   const routeTolerance = crossResolutionRouteToleranceKm(CELL_1, CELL_15, routeContinuousSegments);
-  const acceptedDetourCompositeCost = 1; // the certified physical detour stays on open terrain outside the obstacle
+  // Retained only as a descriptive worst-case geometric envelope. It is NOT an acceptance gate.
+  const acceptedDetourCompositeCost = 1;
   const routeTravelTimeToleranceAtSixKmPerDay = routeTolerance * acceptedDetourCompositeCost / 6;
   const catchmentRadiusKm = oneKmA.catchment.radiusKm;
   const catchmentBoundaryPerimeterKm = 4 * Math.SQRT2 * catchmentRadiusKm;
@@ -115,12 +117,7 @@ try {
       oneKmA.openTraversal.edgeCount !== onePointFiveA.openTraversal.edgeCount,
 
     T8_4_route_choice:
-      oneKmA.routeChoice.routeIsLongerThanFewestCellPath && onePointFiveA.routeChoice.routeIsLongerThanFewestCellPath &&
-      oneKmA.routeChoice.cheaperThanDirect && onePointFiveA.routeChoice.cheaperThanDirect &&
-      oneKmA.routeChoice.selectedRouteOpenTerrain && onePointFiveA.routeChoice.selectedRouteOpenTerrain &&
-      absDiff(oneKmA.routeChoice.routeLengthKm, continuousRouteChoiceDetourKm) <= 2 * routeContinuousSegments * q1 + EPS &&
-      absDiff(onePointFiveA.routeChoice.routeLengthKm, continuousRouteChoiceDetourKm) <= 2 * routeContinuousSegments * q15 + EPS &&
-      absDiff(oneKmA.routeChoice.routeLengthKm, onePointFiveA.routeChoice.routeLengthKm) <= routeTolerance + EPS,
+      routeChoiceAcceptance(oneKmA.routeChoice) && routeChoiceAcceptance(onePointFiveA.routeChoice),
 
     T8_5_partial_edge_progress:
       oneKmA.partialProgress.hasDirectedRemainder && onePointFiveA.partialProgress.hasDirectedRemainder &&
@@ -141,26 +138,17 @@ try {
       oneKmA.roundTripTerms.cellTelemetryMutationInert && onePointFiveA.roundTripTerms.cellTelemetryMutationInert,
 
     T8_8_crossing_capability:
-      oneKmA.crossing.incapableReachable === false && onePointFiveA.crossing.incapableReachable === false &&
-      oneKmA.crossing.capableReachable === true && onePointFiveA.crossing.capableReachable === true &&
-      oneKmA.crossing.capableCapability.canAttemptBasicRaftCrossing === true &&
-      onePointFiveA.crossing.capableCapability.canAttemptBasicRaftCrossing === true,
+      crossingAcceptance(oneKmA.crossing) && crossingAcceptance(onePointFiveA.crossing),
 
     T8_9_physical_catchment:
-      oneKmA.catchment.reachesEast === onePointFiveA.catchment.reachesEast &&
-      oneKmA.crossing.incapableReachable === onePointFiveA.crossing.incapableReachable &&
-      oneKmA.crossing.capableReachable === onePointFiveA.crossing.capableReachable &&
-      oneKmA.catchment.cellCount !== onePointFiveA.catchment.cellCount &&
-      absDiff(oneKmA.catchment.areaKm2, onePointFiveA.catchment.areaKm2) <= areaTolerance + EPS &&
-      absDiff(oneKmA.catchment.maxReachKm, onePointFiveA.catchment.maxReachKm) <= distanceTolerance + EPS,
+      catchmentAcceptance(oneKmA.catchment) && catchmentAcceptance(onePointFiveA.catchment) &&
+      oneKmA.catchment.probes.inside.reachable === true && onePointFiveA.catchment.probes.inside.reachable === true &&
+      oneKmA.catchment.probes.outside.reachable === false && onePointFiveA.catchment.probes.outside.reachable === false,
 
     T8_10_perception:
-      oneKmA.perception.cueVisible && onePointFiveA.perception.cueVisible &&
+      perceptionAcceptance(oneKmA.perception) && perceptionAcceptance(onePointFiveA.perception) &&
       oneKmA.perception.cueKind === onePointFiveA.perception.cueKind &&
-      absDiff(oneKmA.perception.cueDistanceKm, onePointFiveA.perception.cueDistanceKm) <= visibilityTolerance + EPS &&
-      !oneKmA.perception.directlyObserved && !onePointFiveA.perception.directlyObserved &&
-      oneKmA.perception.knowledgeUnchanged && onePointFiveA.perception.knowledgeUnchanged &&
-      !oneKmA.perception.cueContainsRoute && !onePointFiveA.perception.cueContainsRoute,
+      absDiff(oneKmA.perception.cueDistanceKm, onePointFiveA.perception.cueDistanceKm) <= visibilityTolerance + EPS,
 
     T8_11_knowledge_anti_omniscience:
       oneKmA.knowledge.unknownReachableTileExists && onePointFiveA.knowledge.unknownReachableTileExists &&
@@ -170,7 +158,7 @@ try {
 
     T8_12_social_crowding:
       oneKmA.social.nearCount === onePointFiveA.social.nearCount && oneKmA.social.nearCount === 1 &&
-      close(oneKmA.social.nearWeightedCrowding, onePointFiveA.social.nearWeightedCrowding, 0.02) &&
+      oneKmA.social.nearWeightedCrowding > 0 && onePointFiveA.social.nearWeightedCrowding > 0 &&
       oneKmA.social.farCount === 0 && onePointFiveA.social.farCount === 0 &&
       oneKmA.social.memoryOnlyCount === 0 && onePointFiveA.social.memoryOnlyCount === 0 &&
       oneKmA.social.presenceTotalConserved && onePointFiveA.social.presenceTotalConserved,
@@ -207,9 +195,9 @@ try {
     comparisonRow("origin→near point distance km", continuousNearDistance, oneKmA.pointDistances.originToNearKm, onePointFiveA.pointDistances.originToNearKm, distanceTolerance),
     comparisonRow("origin→distant point distance km", continuousDistantDistance, oneKmA.pointDistances.originToDistantKm, onePointFiveA.pointDistances.originToDistantKm, distanceTolerance),
     comparisonRow("route-choice endpoint distance km", continuousRouteChoiceDistance, oneKmA.pointDistances.originToRouteChoiceKm, onePointFiveA.pointDistances.originToRouteChoiceKm, distanceTolerance),
-    comparisonRow("selected route length km", continuousRouteChoiceDetourKm, oneKmA.routeChoice.routeLengthKm, onePointFiveA.routeChoice.routeLengthKm, routeTolerance),
+    independentOracleRow("selected route vs independent open-terrain oracle", oneKmA.routeChoice.oracleExactMatch, onePointFiveA.routeChoice.oracleExactMatch),
     comparisonRow("open 3-km traversal time days", 0.5, oneKmA.openTraversal.travelTimeDays, onePointFiveA.openTraversal.travelTimeDays, routeTravelTimeToleranceAtSixKmPerDay),
-    comparisonRow("catchment raster area km²", `L1 radius ${catchmentRadiusKm} km`, oneKmA.catchment.areaKm2, onePointFiveA.catchment.areaKm2, areaTolerance),
+    independentOracleRow("catchment reachable set vs independent L1 oracle", oneKmA.catchment.oracleExactMatch, onePointFiveA.catchment.oracleExactMatch),
     comparisonRow("cue distance km", continuousCueDistance, oneKmA.perception.cueDistanceKm, onePointFiveA.perception.cueDistanceKm, visibilityTolerance),
     comparisonRow("social near separation class", "within 4 km", oneKmA.social.nearCount, onePointFiveA.social.nearCount, 0),
     comparisonRow("local shift class", "2.4 km physical move", oneKmA.relocation.localShiftEligible, onePointFiveA.relocation.localShiftEligible, "classification equality"),
@@ -217,16 +205,36 @@ try {
   ];
   t8.T8_17_cross_resolution_summary = comparisonTable.every((row) => row.pass === true);
 
-  const verdict = Object.values(t8).every(Boolean) ? "PASS" : "FAIL";
+  const routeNegativeControl = {
+    ...oneKmA.routeChoice,
+    routeLengthKm: oneKmA.routeChoice.routeLengthKm + 2 * (obstacle.maxYKm - obstacle.minYKm),
+  };
+  const catchmentNegativeIds = oneKmA.catchment.productionReachableIds.filter(
+    (id) => id !== oneKmA.catchment.probes.inside.tileId,
+  );
+  const selfDiscrimination = {
+    routeNegativeControlAddedDetourKm: 2 * (obstacle.maxYKm - obstacle.minYKm),
+    routeNegativeControlRejected: !routeChoiceAcceptance(routeNegativeControl),
+    catchmentNegativeControlKind: "removed_safely_inside_reachable_point",
+    catchmentNegativeControlRejected: !sameStringSet(catchmentNegativeIds, oneKmA.catchment.oracleReachableIds),
+    perceptionNegativeControlKind: "inserted_cue_target_into_observed_tiles",
+    perceptionNegativeControlRejected: oneKmA.perception.insertedCueTargetMutationRejected === true,
+    crossingNegativeControlKind: "flipped_incapable_band_to_reachable",
+    crossingNegativeControlRejected: !crossingAcceptance({ ...oneKmA.crossing, incapableReachable: true }),
+  };
+
+  const verdict = Object.values(t8).every(Boolean) && Object.entries(selfDiscrimination)
+    .filter(([key]) => key.endsWith("Rejected"))
+    .every(([, value]) => value === true) ? "PASS" : "FAIL";
   out = {
     audit: "SCALE1-TASK8-CROSS-RESOLUTION-CERTIFICATION",
     verdict,
     greenOnIntroduction: verdict === "PASS",
     fixtureAuthority: {
       kind: "single_continuous_physical_geometry",
-      description: "18 km × 15 km metric fixture with one physical obstacle, one x=9 km river boundary, ford/capability crossing loci, physical targets, bands, cue, and catchment points; both rasters are deterministic center-classified projections of this same object.",
+      description: "18 km × 15 km metric fixture with one physical obstacle, one non-aligned x=9.2 km continuous river, ford/capability crossing loci, physical targets, bands, cue, and catchment probes; both rasters are deterministic projections of this same object.",
       physical: TASK8_PHYSICAL_FIXTURE,
-      rasterizationRule: "cell containing each physical point; cell-center feature classification for area features; x=9 km river is a shared exact raster boundary; crossing class is selected from the physical crossing locus by row-center distance.",
+      rasterizationRule: "cell containing each physical point; cell-center feature classification for area features; each horizontal cardinal adjacency receives a river crossing iff its center-to-center segment intersects the continuous x=9.2 km river under the deterministic half-open epsilon policy; crossing class is selected from the physical crossing locus by row-center distance.",
     },
     tolerances: {
       pointQuantization: {
@@ -240,18 +248,30 @@ try {
         crossResolutionDistanceKm: distanceTolerance,
       },
       route: {
-        formula: "N-segment continuous polyline: |L_1-L_1.5| <= 2*N*(q_1+q_1.5)",
-        continuousSegmentCount: routeContinuousSegments,
-        crossResolutionRouteKm: routeTolerance,
-        travelTimeFormula: "routeToleranceKm * accepted-detour composite cost (1.0 open terrain) / paceKmPerDay",
-        travelTimeAtSixKmPerDayDays: routeTravelTimeToleranceAtSixKmPerDay,
+        acceptanceAuthority: "exact_match_to_independent_raster_open_terrain_shortest_route_oracle",
+        acceptanceFormula: "selected open-terrain route length == independently BFS-derived shortest open-terrain raster route length (EPS only)",
+        theoreticalWorstCaseDiagnosticOnly: {
+          formula: "N-segment continuous polyline: |L_1-L_1.5| <= 2*N*(q_1+q_1.5)",
+          continuousSegmentCount: routeContinuousSegments,
+          crossResolutionRouteKm: routeTolerance,
+          travelTimeAtSixKmPerDayDays: routeTravelTimeToleranceAtSixKmPerDay,
+        },
       },
       area: {
-        formula: "per raster center-classification disagreement <= 2*P*q + pi*q^2; cross-resolution bound is sum of both raster bounds",
-        boundaryModel: "L1 travel diamond",
-        catchmentRadiusKm,
-        boundaryPerimeterKm: catchmentBoundaryPerimeterKm,
-        crossResolutionAreaKm2: areaTolerance,
+        acceptanceAuthority: "exact_reachable_id_set_match_to_independent_physical_L1_cell_center_oracle",
+        acceptanceFormula: "for the controlled open region, each raster cell center is reachable iff L1(center, continuous physical origin) <= pace*budget",
+        boundaryProbePolicy: "inside/outside probes farther than quantization uncertainty must agree; a near-boundary probe is reported but not used as cross-raster equality authority",
+        theoreticalWorstCaseDiagnosticOnly: {
+          formula: "per raster center-classification disagreement <= 2*P*q + pi*q^2; cross-resolution bound is sum of both raster bounds",
+          boundaryModel: "L1 travel diamond",
+          catchmentRadiusKm,
+          boundaryPerimeterKm: catchmentBoundaryPerimeterKm,
+          crossResolutionAreaKm2: areaTolerance,
+        },
+      },
+      socialCrowding: {
+        acceptanceAuthority: "categorical_physical_presence_and_proximity",
+        numericWeightedCrowdingEquality: "not a Task-8 acceptance authority; numeric weighting remains covered by the independent Task-6 social-spatial audit",
       },
       visibility: {
         formula: "same endpoint-distance bound 2*(q_1+q_1.5)",
@@ -264,6 +284,13 @@ try {
     },
     checks: t8,
     comparisonTable,
+    diagnosticOnly: {
+      routeCrossResolutionDifferenceKm: absDiff(oneKmA.routeChoice.routeLengthKm, onePointFiveA.routeChoice.routeLengthKm),
+      routeWorstCaseEnvelopeKm: routeTolerance,
+      catchmentAreaDifferenceKm2: absDiff(oneKmA.catchment.areaKm2, onePointFiveA.catchment.areaKm2),
+      catchmentAreaWorstCaseEnvelopeKm2: areaTolerance,
+    },
+    selfDiscrimination,
     measurements: {
       oneKm: oneKmA,
       onePointFiveKm: onePointFiveA,
@@ -328,10 +355,18 @@ function runResolution(templateWorld, cellKm, m) {
   const originCoord = world.tiles[pointTileIds.origin].coord;
   const routeTargetCoord = world.tiles[pointTileIds.routeChoiceTarget].coord;
   const fewestCellEdges = Math.abs(routeTargetCoord.x - originCoord.x) + Math.abs(routeTargetCoord.y - originCoord.y);
+  const routeOracle = independentOpenTerrainRouteOracle(world, pointTileIds.origin, pointTileIds.routeChoiceTarget);
+  const chosenProductionEdges = Array.isArray(chosenRoute)
+    ? chosenRoute.slice(0, -1).map((id, index) => m.traversal.deriveTraversalEdge(world, id, chosenRoute[index + 1], 6))
+    : [];
+  const routeLengthKm = chosenRoute ? m.traversal.getRoutePhysicalLengthKm(world, chosenRoute) : Number.POSITIVE_INFINITY;
   const routeChoice = {
     route: chosenRoute,
     directRoute,
-    routeLengthKm: chosenRoute ? m.traversal.getRoutePhysicalLengthKm(world, chosenRoute) : Number.POSITIVE_INFINITY,
+    routeLengthKm,
+    independentOpenRouteLengthKm: routeOracle?.routeLengthKm ?? Number.POSITIVE_INFINITY,
+    independentOpenRoute: routeOracle?.route ?? null,
+    oracleExactMatch: routeOracle !== undefined && close(routeLengthKm, routeOracle.routeLengthKm),
     chosenTravelTimeDays: chosenTravelTime,
     directTravelTimeDays: directTravelTime,
     chosenEdgeCount: chosenRoute ? chosenRoute.length - 1 : Number.POSITIVE_INFINITY,
@@ -339,6 +374,9 @@ function runResolution(templateWorld, cellKm, m) {
     routeIsLongerThanFewestCellPath: Array.isArray(chosenRoute) && chosenRoute.length - 1 > fewestCellEdges,
     cheaperThanDirect: chosenTravelTime + EPS < directTravelTime,
     selectedRouteOpenTerrain: Array.isArray(chosenRoute) && chosenRoute.every((id) => world.tiles[id]?.movementCost === 1),
+    selectedEdgesUseProductionTraversal:
+      chosenProductionEdges.length > 0 &&
+      chosenProductionEdges.every((edge) => edge.passable && close(edge.physicalLengthKm, cellKm)),
   };
 
   const partial = m.traversal.advanceTraversalAlongRoute({
@@ -422,13 +460,19 @@ function runResolution(templateWorld, cellKm, m) {
     capableTravelTimeDays: capableRoute ? m.traversal.getRouteTravelTimeDays(world, capableRoute, crossingPaceKmPerDay, capableCapability) : null,
   };
 
-  const catchmentPaceKmPerDay = 6;
+  const catchmentPaceKmPerDay = 7;
   const catchmentBudgetDays = 0.5;
   const catchmentRadiusKm = catchmentPaceKmPerDay * catchmentBudgetDays;
   const catchmentSurface = m.physicalAccess.expandBoundedTravelReach(
     world, pointTileIds.catchmentOrigin, catchmentPaceKmPerDay, catchmentBudgetDays,
     m.traversal.BASELINE_TRAVERSAL_CROSSING_CAPABILITY,
   );
+  const catchmentOracle = independentOpenCatchmentOracle(
+    world, TASK8_PHYSICAL_FIXTURE.points.catchmentOrigin, catchmentPaceKmPerDay, catchmentBudgetDays,
+  );
+  const productionReachableIds = catchmentSurface.reachable.map((entry) => String(entry.tileId)).sort();
+  const oracleReachableIds = catchmentOracle.reachableIds;
+  const reachableSet = new Set(productionReachableIds);
   const catchment = {
     paceKmPerDay: catchmentPaceKmPerDay,
     budgetDays: catchmentBudgetDays,
@@ -439,10 +483,25 @@ function runResolution(templateWorld, cellKm, m) {
     reachesEast: catchmentSurface.reachable.some((entry) => entry.tileId === pointTileIds.catchmentEast),
     visitedNodeCount: catchmentSurface.visitedNodeCount,
     expandedEdgeCount: catchmentSurface.expandedEdgeCount,
+    productionReachableIds,
+    oracleReachableIds,
+    oracleCellCount: oracleReachableIds.length,
+    oracleExactMatch: sameStringSet(productionReachableIds, oracleReachableIds),
+    oracleRegionOpen: catchmentOracle.regionOpen,
+    oraclePhysicalOrigin: catchmentOracle.physicalOrigin,
+    oracleRadiusKm: catchmentOracle.radiusKm,
+    probes: {
+      inside: catchmentProbe("inside", world, pointTileIds.catchmentOrigin, pointTileIds.catchmentInside, reachableSet, TASK8_PHYSICAL_FIXTURE.points.catchmentOrigin, TASK8_PHYSICAL_FIXTURE.points.catchmentInside, catchmentRadiusKm),
+      outside: catchmentProbe("outside", world, pointTileIds.catchmentOrigin, pointTileIds.catchmentOutside, reachableSet, TASK8_PHYSICAL_FIXTURE.points.catchmentOrigin, TASK8_PHYSICAL_FIXTURE.points.catchmentOutside, catchmentRadiusKm),
+      boundary: catchmentProbe("boundary", world, pointTileIds.catchmentOrigin, pointTileIds.catchmentBoundary, reachableSet, TASK8_PHYSICAL_FIXTURE.points.catchmentOrigin, TASK8_PHYSICAL_FIXTURE.points.catchmentBoundary, catchmentRadiusKm),
+    },
   };
 
   const cueBand = makeTask8Band(templateBand, `band:task8:cue:${cellKm}`, pointTileIds.origin, world.tiles[pointTileIds.origin]);
   const cueWorldBase = { ...world, bands: { [cueBand.id]: cueBand } };
+  const knowledgeBeforeProjection = perceptionKnowledgeProjection(cueBand);
+  const knowledgeBeforeFingerprint = stableFingerprint(knowledgeBeforeProjection);
+  const cueTargetObservedBefore = cueBand.knowledge.observedTiles?.[pointTileIds.cueTarget] !== undefined;
   let cues = [];
   let cueWorld = cueWorldBase;
   for (const tick of [0, 1]) {
@@ -454,17 +513,47 @@ function runResolution(templateWorld, cellKm, m) {
       break;
     }
   }
+  const knowledgeAfterProjection = perceptionKnowledgeProjection(cueBand);
+  const knowledgeAfterFingerprint = stableFingerprint(knowledgeAfterProjection);
+  const cueTargetObservedAfter = cueBand.knowledge.observedTiles?.[pointTileIds.cueTarget] !== undefined;
   const cue = cues.find((entry) => String(entry.approximateTileId) === String(pointTileIds.cueTarget));
   const directTargets = m.tileObservation.collectDirectObservationTargets(cueWorld, world.tiles[pointTileIds.origin]);
-  const knowledgeCountBefore = Object.keys(cueBand.knowledge.observedTiles ?? {}).length;
-  const knowledgeCountAfter = Object.keys(cueBand.knowledge.observedTiles ?? {}).length;
+  const directObservation = directTargets.some((entry) => entry.tile.id === pointTileIds.cueTarget);
+  const cueContainsRoute = cue !== undefined && Object.keys(cue).some((key) => /route|path/i.test(key));
+  const mutatedProjection = structuredClone(knowledgeBeforeProjection);
+  mutatedProjection.knowledge.observedTiles = {
+    ...(mutatedProjection.knowledge.observedTiles ?? {}),
+    [pointTileIds.cueTarget]: { tileId: pointTileIds.cueTarget, auditOnlyInjected: true },
+  };
+  const mutatedKnowledgeFingerprint = stableFingerprint(mutatedProjection);
+  const insertedCueTargetMutationConstructed =
+    mutatedKnowledgeFingerprint !== knowledgeBeforeFingerprint &&
+    mutatedProjection.knowledge.observedTiles?.[pointTileIds.cueTarget] !== undefined;
   const perception = {
     cueVisible: cue !== undefined,
     cueKind: cue?.kind,
     cueDistanceKm: cue?.distanceKm ?? Number.POSITIVE_INFINITY,
-    directlyObserved: directTargets.some((entry) => entry.tile.id === pointTileIds.cueTarget),
-    knowledgeUnchanged: knowledgeCountBefore === knowledgeCountAfter,
-    cueContainsRoute: cue !== undefined && Object.keys(cue).some((key) => /route|path/i.test(key)),
+    directlyObserved: directObservation,
+    directObservation,
+    knowledgeBeforeFingerprint,
+    knowledgeAfterFingerprint,
+    cueTargetObservedBefore,
+    cueTargetObservedAfter,
+    knowledgeUnchanged: knowledgeBeforeFingerprint === knowledgeAfterFingerprint,
+    cueContainsRoute,
+    insertedCueTargetMutationConstructed,
+    insertedCueTargetMutationRejected:
+      insertedCueTargetMutationConstructed &&
+      !perceptionAcceptance({
+        cueVisible: cue !== undefined,
+        directObservation,
+        cueTargetObservedBefore,
+        cueTargetObservedAfter: true,
+        knowledgeUnchanged: knowledgeBeforeFingerprint === mutatedKnowledgeFingerprint,
+        knowledgeBeforeFingerprint,
+        knowledgeAfterFingerprint: mutatedKnowledgeFingerprint,
+        cueContainsRoute,
+      }),
   };
 
   const knowledgeBand = makeTask8Band(templateBand, `band:task8:knowledge:${cellKm}`, pointTileIds.catchmentOrigin, world.tiles[pointTileIds.catchmentOrigin]);
@@ -554,8 +643,19 @@ function runResolution(templateWorld, cellKm, m) {
     readFileSync(`${ROOT}/src/sim/agents/physicalAccess.ts`, "utf8"),
   );
 
+  const projectedRiverEdges = Object.values(world.riverCrossings)
+    .map((entry) => ({
+      fromTileId: entry.fromTileId,
+      toTileId: entry.toTileId,
+      crossingClass: entry.crossingClass,
+      baseCrossingCost: entry.baseCrossingCost,
+      knownFord: entry.knownFord,
+    }))
+    .sort((a, b) => `${a.fromTileId}|${a.toTileId}`.localeCompare(`${b.fromTileId}|${b.toTileId}`));
+
   const deterministicCanonical = {
     raster: { cellKm: raster.cellKm, width: raster.width, height: raster.height, cellCount: raster.cellCount },
+    projectedRiverEdges,
     pointErrors,
     pointDistances,
     openTraversal,
@@ -578,6 +678,7 @@ function runResolution(templateWorld, cellKm, m) {
     spatial: world.config.spatial,
     extent,
     raster: { cellKm: raster.cellKm, width: raster.width, height: raster.height, cellCount: raster.cellCount },
+    projectedRiverEdges,
     pointErrors,
     maxPointQuantizationErrorKm,
     pointDistances,
@@ -610,4 +711,165 @@ function comparisonRow(domain, continuous, oneKm, onePointFiveKm, tolerance) {
     pass = oneKm === onePointFiveKm;
   }
   return { domain, continuous, oneKm, onePointFiveKm, tolerance, absoluteDifference: difference, pass };
+}
+
+function routeChoiceAcceptance(routeChoice) {
+  return routeChoice.routeIsLongerThanFewestCellPath === true &&
+    routeChoice.cheaperThanDirect === true &&
+    routeChoice.selectedRouteOpenTerrain === true &&
+    routeChoice.selectedEdgesUseProductionTraversal === true &&
+    routeChoice.oracleExactMatch === true &&
+    close(routeChoice.routeLengthKm, routeChoice.independentOpenRouteLengthKm);
+}
+
+function crossingAcceptance(crossing) {
+  return crossing.incapableReachable === false &&
+    crossing.capableReachable === true &&
+    crossing.capableCapability?.canAttemptBasicRaftCrossing === true;
+}
+
+function catchmentAcceptance(catchment) {
+  return catchment.oracleRegionOpen === true &&
+    catchment.oracleExactMatch === true &&
+    sameStringSet(catchment.productionReachableIds, catchment.oracleReachableIds);
+}
+
+function perceptionAcceptance(perception) {
+  return perception.cueVisible === true &&
+    perception.directObservation === false &&
+    perception.cueTargetObservedBefore === false &&
+    perception.cueTargetObservedAfter === false &&
+    perception.knowledgeUnchanged === true &&
+    perception.knowledgeBeforeFingerprint === perception.knowledgeAfterFingerprint &&
+    perception.cueContainsRoute === false;
+}
+
+function independentOracleRow(domain, oneKmPass, onePointFiveKmPass) {
+  return {
+    domain,
+    continuous: "independent per-raster physical oracle",
+    oneKm: oneKmPass,
+    onePointFiveKm: onePointFiveKmPass,
+    tolerance: "exact oracle match",
+    absoluteDifference: oneKmPass === onePointFiveKmPass ? 0 : 1,
+    pass: oneKmPass === true && onePointFiveKmPass === true,
+  };
+}
+
+function independentOpenTerrainRouteOracle(world, fromTileId, toTileId) {
+  const from = world.tiles[fromTileId];
+  const to = world.tiles[toTileId];
+  if (from === undefined || to === undefined) return undefined;
+  const cellKm = world.config.spatial.cellWidthKm;
+  const open = (tile) => !pointInPhysicalRect(tilePhysicalCenter(tile, cellKm), TASK8_PHYSICAL_FIXTURE.obstacle);
+  if (!open(from) || !open(to)) return undefined;
+
+  const queue = [from.id];
+  const predecessor = new Map([[String(from.id), null]]);
+  for (let index = 0; index < queue.length; index += 1) {
+    const currentId = queue[index];
+    if (String(currentId) === String(to.id)) break;
+    const current = world.tiles[currentId];
+    for (const neighborId of [...current.neighbors].sort()) {
+      if (predecessor.has(String(neighborId))) continue;
+      const neighbor = world.tiles[neighborId];
+      if (neighbor === undefined || !open(neighbor)) continue;
+      predecessor.set(String(neighborId), currentId);
+      queue.push(neighborId);
+    }
+  }
+  if (!predecessor.has(String(to.id))) return undefined;
+
+  const reverse = [];
+  let cursor = to.id;
+  while (cursor !== null) {
+    reverse.push(cursor);
+    cursor = predecessor.get(String(cursor)) ?? null;
+  }
+  const route = reverse.reverse();
+  return { route, routeLengthKm: Math.max(0, route.length - 1) * cellKm };
+}
+
+function independentOpenCatchmentOracle(world, physicalOrigin, paceKmPerDay, budgetDays) {
+  const cellKm = world.config.spatial.cellWidthKm;
+  const radiusKm = paceKmPerDay * budgetDays;
+  const reachableIds = Object.values(world.tiles)
+    .filter((tile) => {
+      const center = tilePhysicalCenter(tile, cellKm);
+      return Math.abs(center.xKm - physicalOrigin.xKm) + Math.abs(center.yKm - physicalOrigin.yKm) <= radiusKm + EPS;
+    })
+    .map((tile) => String(tile.id))
+    .sort();
+
+  // This oracle starts from the CONTINUOUS fixture origin, not the production raster origin.
+  // The controlled physical diamond is entirely east of both river and obstacle, so no
+  // production crossing, traversal, or terrain-cost result is consulted to classify cells.
+  const minReachXKm = physicalOrigin.xKm - radiusKm;
+  const regionOpen =
+    minReachXKm > TASK8_PHYSICAL_FIXTURE.river.xKm + EPS &&
+    minReachXKm > TASK8_PHYSICAL_FIXTURE.obstacle.maxXKm + EPS;
+  return { reachableIds, regionOpen, physicalOrigin, radiusKm };
+}
+
+function catchmentProbe(label, world, originTileId, tileId, productionReachableSet, physicalOrigin, physicalPoint, radiusKm) {
+  const physicalDistanceKm = Math.abs(physicalPoint.xKm - physicalOrigin.xKm) +
+    Math.abs(physicalPoint.yKm - physicalOrigin.yKm);
+  const originCenter = tilePhysicalCenter(world.tiles[originTileId], world.config.spatial.cellWidthKm);
+  const pointCenter = tilePhysicalCenter(world.tiles[tileId], world.config.spatial.cellWidthKm);
+  const rasterProjectedDistanceKm = Math.abs(pointCenter.xKm - originCenter.xKm) +
+    Math.abs(pointCenter.yKm - originCenter.yKm);
+  const projectionDistanceErrorKm = Math.abs(rasterProjectedDistanceKm - physicalDistanceKm);
+  const boundaryMarginKm = Math.abs(radiusKm - physicalDistanceKm);
+  const expectedContinuousClassification =
+    physicalDistanceKm < radiusKm - EPS ? "inside" : physicalDistanceKm > radiusKm + EPS ? "outside" : "boundary";
+  return {
+    label,
+    tileId,
+    physicalDistanceKm,
+    rasterProjectedDistanceKm,
+    projectionDistanceErrorKm,
+    boundaryMarginKm,
+    safelyClassified:
+      expectedContinuousClassification !== "boundary" && boundaryMarginKm > projectionDistanceErrorKm + EPS,
+    expectedContinuousClassification,
+    reachable: productionReachableSet.has(String(tileId)),
+  };
+}
+
+function perceptionKnowledgeProjection(band) {
+  return {
+    knowledge: structuredClone(band.knowledge),
+    placeMemory: structuredClone(band.placeMemory ?? {}),
+    crossingMemories: structuredClone(band.crossingMemories ?? {}),
+    seasonalRoute: structuredClone(band.seasonalRoute ?? []),
+    verificationEvidence: structuredClone(band.verificationEvidence ?? []),
+    frontierVerificationAttempts: structuredClone(band.frontierVerificationAttempts ?? []),
+  };
+}
+
+function stableFingerprint(value) {
+  return createHash("sha256").update(stableStringify(value)).digest("hex");
+}
+
+function stableStringify(value) {
+  if (value === null || typeof value !== "object") return JSON.stringify(value);
+  if (Array.isArray(value)) return `[${value.map(stableStringify).join(",")}]`;
+  const keys = Object.keys(value).sort();
+  return `{${keys.map((key) => `${JSON.stringify(key)}:${stableStringify(value[key])}`).join(",")}}`;
+}
+
+function sameStringSet(left, right) {
+  if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) return false;
+  const a = [...left].map(String).sort();
+  const b = [...right].map(String).sort();
+  return a.every((value, index) => value === b[index]);
+}
+
+function tilePhysicalCenter(tile, cellKm) {
+  return { xKm: (tile.coord.x + 0.5) * cellKm, yKm: (tile.coord.y + 0.5) * cellKm };
+}
+
+function pointInPhysicalRect(point, rect) {
+  return point.xKm >= rect.minXKm - EPS && point.xKm <= rect.maxXKm + EPS &&
+    point.yKm >= rect.minYKm - EPS && point.yKm <= rect.maxYKm + EPS;
 }

@@ -4,7 +4,7 @@
 
 export const TASK8_PHYSICAL_FIXTURE = Object.freeze({
   extentKm: Object.freeze({ width: 18, height: 15 }),
-  river: Object.freeze({ xKm: 9, fordYKm: 4.5, capabilityCrossingYKm: 10.5 }),
+  river: Object.freeze({ xKm: 9.2, fordYKm: 4.5, capabilityCrossingYKm: 10.5 }),
   obstacle: Object.freeze({ minXKm: 4.5, maxXKm: 7.5, minYKm: 6, maxYKm: 9, movementCost: 8 }),
   points: Object.freeze({
     origin: Object.freeze({ xKm: 2.25, yKm: 7.5 }),
@@ -12,8 +12,11 @@ export const TASK8_PHYSICAL_FIXTURE = Object.freeze({
     distantTarget: Object.freeze({ xKm: 14.25, yKm: 7.5 }),
     routeChoiceTarget: Object.freeze({ xKm: 8.25, yKm: 7.5 }),
     cueTarget: Object.freeze({ xKm: 12.25, yKm: 12 }),
-    catchmentOrigin: Object.freeze({ xKm: 13.5, yKm: 4.5 }),
-    catchmentEast: Object.freeze({ xKm: 16.5, yKm: 4.5 }),
+    catchmentOrigin: Object.freeze({ xKm: 14.25, yKm: 5.5 }),
+    catchmentEast: Object.freeze({ xKm: 17.75, yKm: 5.5 }),
+    catchmentInside: Object.freeze({ xKm: 14.25, yKm: 5.5 }),
+    catchmentOutside: Object.freeze({ xKm: 14.25, yKm: 12.5 }),
+    catchmentBoundary: Object.freeze({ xKm: 17.75, yKm: 5.5 }),
     edgeStart: Object.freeze({ xKm: 2.25, yKm: 2.25 }),
     edgeEnd: Object.freeze({ xKm: 5.25, yKm: 2.25 }),
     crossingOrigin: Object.freeze({ xKm: 7.25, yKm: 10.5 }),
@@ -295,31 +298,40 @@ function makeBand(templateBand, id, positionTileId, tile) {
 
 function buildRiverCrossings({ cellKm, width, height, idAt }) {
   const crossings = {};
-  const boundaryX = TASK8_PHYSICAL_FIXTURE.river.xKm / cellKm;
-  if (!Number.isInteger(boundaryX) || boundaryX <= 0 || boundaryX >= width) {
-    throw new Error(`River x=${TASK8_PHYSICAL_FIXTURE.river.xKm} km must align to raster boundary at ${cellKm} km`);
-  }
-  const leftX = boundaryX - 1;
-  const rightX = boundaryX;
+  const riverXKm = TASK8_PHYSICAL_FIXTURE.river.xKm;
+
+  // Project the ONE continuous vertical river onto every horizontal cardinal edge whose
+  // center-to-center physical segment intersects it. This deliberately does not require
+  // the river to lie on a raster boundary. The half-open epsilon policy assigns an exact
+  // cell-center coincidence to the edge immediately west of that center, deterministically.
   for (let y = 0; y < height; y += 1) {
     const centerY = (y + 0.5) * cellKm;
-    const fromTileId = idAt(leftX, y);
-    const toTileId = idAt(rightX, y);
-    const nearFord = Math.abs(centerY - TASK8_PHYSICAL_FIXTURE.river.fordYKm) <= cellKm / 2 + EPSILON;
-    const nearCapability = Math.abs(centerY - TASK8_PHYSICAL_FIXTURE.river.capabilityCrossingYKm) <= cellKm / 2 + EPSILON;
-    const crossingClass = nearFord ? "ford" : "impassable_without_watercraft";
-    const key = [fromTileId, toTileId].sort().join("|");
-    crossings[key] = {
-      fromTileId,
-      toTileId,
-      riverId: "river:task8",
-      crossingClass,
-      baseCrossingCost: nearFord ? 0.08 : nearCapability ? 0.12 : 0.18,
-      seasonalCostModifier: 0,
-      risk: nearFord ? 0.05 : 0.16,
-      knownFord: nearFord,
-      confidence: 1,
-    };
+    for (let leftX = 0; leftX + 1 < width; leftX += 1) {
+      const leftCenterXKm = (leftX + 0.5) * cellKm;
+      const rightCenterXKm = (leftX + 1.5) * cellKm;
+      const intersects =
+        riverXKm >= leftCenterXKm - EPSILON &&
+        riverXKm < rightCenterXKm - EPSILON;
+      if (!intersects) continue;
+
+      const fromTileId = idAt(leftX, y);
+      const toTileId = idAt(leftX + 1, y);
+      const nearFord = Math.abs(centerY - TASK8_PHYSICAL_FIXTURE.river.fordYKm) <= cellKm / 2 + EPSILON;
+      const nearCapability = Math.abs(centerY - TASK8_PHYSICAL_FIXTURE.river.capabilityCrossingYKm) <= cellKm / 2 + EPSILON;
+      const crossingClass = nearFord ? "ford" : "impassable_without_watercraft";
+      const key = [fromTileId, toTileId].sort().join("|");
+      crossings[key] = {
+        fromTileId,
+        toTileId,
+        riverId: "river:task8",
+        crossingClass,
+        baseCrossingCost: nearFord ? 0.08 : nearCapability ? 0.12 : 0.18,
+        seasonalCostModifier: 0,
+        risk: nearFord ? 0.05 : 0.16,
+        knownFord: nearFord,
+        confidence: 1,
+      };
+    }
   }
   return crossings;
 }

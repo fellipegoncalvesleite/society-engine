@@ -88,6 +88,18 @@ function certifyMap(kind, expectedCellKm, expectedExtent, runner, geometry, trav
     const probeWorld = { ...initialA, time: { ...initialA.time, tick } };
     return visibility.advanceVisibleLandscapeCues(probeWorld, activeBand);
   });
+  const cueRows = cueSamples.flat();
+  const cueSemanticsValid = cueRows.every((cue) =>
+    initialA.tiles[cue.approximateTileId] !== undefined &&
+    Number.isFinite(cue.distanceKm) &&
+    cue.distanceKm >= visibility.LANDSCAPE_VISIBILITY_MIN_RANGE_KM - 1e-9 &&
+    cue.distanceKm <= visibility.LANDSCAPE_VISIBILITY_MAX_RANGE_KM + 1e-9 &&
+    Number.isFinite(cue.confidence) && cue.confidence > 0 && cue.confidence <= 1 &&
+    !Object.keys(cue).some((key) => /route|path/i.test(key)),
+  );
+  const meaningfulCue = cueRows
+    .filter((cue) => initialA.tiles[cue.approximateTileId] !== undefined && Number.isFinite(cue.distanceKm))
+    .sort((left, right) => String(left.cueId).localeCompare(String(right.cueId)))[0];
 
   const finalA = runner.stepSim(initialA, RUN_SEASONS, "seasonal");
   const finalB = runner.stepSim(initialB, RUN_SEASONS, "seasonal");
@@ -139,11 +151,21 @@ function certifyMap(kind, expectedCellKm, expectedExtent, runner, geometry, trav
       directObservationCount: directObservation.length,
       directObservationMaxDistanceKm: Math.max(0, ...directObservation.map((entry) => entry.distanceKm)),
       cueCountsAtRefreshPhases: cueSamples.map((cues) => cues.length),
+      meaningfulCueCount: cueRows.length,
+      allCueSemanticsValid: cueSemanticsValid,
+      deterministicMeaningfulCue: meaningfulCue === undefined ? null : {
+        cueId: meaningfulCue.cueId,
+        kind: meaningfulCue.kind,
+        approximateTileId: meaningfulCue.approximateTileId,
+        distanceKm: meaningfulCue.distanceKm,
+        confidence: meaningfulCue.confidence,
+        status: meaningfulCue.status,
+      },
     },
     accessPerceptionExercised:
       directObservation.length > 0 &&
       directObservation.every((entry) => entry.distanceKm <= observation.DIRECT_OBSERVATION_MAX_RANGE_KM + 1e-9) &&
-      cueSamples.length === 2,
+      cueRows.length > 0 && cueSemanticsValid && meaningfulCue !== undefined,
     initialFingerprint: initialFingerprintA,
     initialRepeatFingerprint: initialFingerprintB,
     initializationDeterministic: initialFingerprintA === initialFingerprintB,
