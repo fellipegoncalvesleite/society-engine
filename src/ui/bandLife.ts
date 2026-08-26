@@ -570,7 +570,7 @@ function deriveTripDetail(trip: IntraSeasonTripRecord): string {
       : trip.outcome === "overnight"
         ? "stays out overnight"
         : "continues for several days";
-  const distance = `${trip.distanceTiles} tile${trip.distanceTiles === 1 ? "" : "s"} out`;
+  const distance = `${Math.round(trip.distanceKm * 10) / 10} km out`;
   const result = summarizeReturn(trip);
 
   return `${capFirst(timing)} · ${distance}${result === "" ? "" : ` · ${result}`}`;
@@ -653,7 +653,7 @@ function deriveMovementLine(
   latestMove: ResidentialMoveEvent | undefined,
 ): string {
   if (latestMove !== undefined) {
-    return `${describeMoveCause(latestMove.cause)} over ${latestMove.distanceTiles} tile${latestMove.distanceTiles === 1 ? "" : "s"}`;
+    return `${describeMoveCause(latestMove.cause)} over ${Math.round(latestMove.distanceKm * 10) / 10} km`;
   }
 
   switch (rangeContext) {

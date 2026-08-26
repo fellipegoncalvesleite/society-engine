@@ -21,15 +21,21 @@ import type {
   PlaceAttachment,
   TileObservation,
 } from "../knowledge/types";
-import { getNeighborTiles, getTile } from "../world/generate";
+import { getTile } from "../world/generate";
 import { hashSeedString } from "../core/seededVariation";
 import { getDepletionAdjustedRichness } from "../world/depletion";
 import type { Tile, WorldState } from "../world/types";
+import { getEuclideanPhysicalDistanceKm, getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
 import {
   deriveCurrentLivingEcologyProjection,
   deriveCurrentLivingEcologyTile,
   type CurrentLivingEcologyTileProjection,
 } from "../world/ecologicalProjection";
+
+// SCALE-1 provisional compatibility calibration: the legacy initial-band spacing gate was
+// 9 cells on the canonical 1.5-km raster, i.e. 13.5 km physical Euclidean separation.
+// This preserves Map-2 compatibility without making raster topology behavioral authority.
+const INITIAL_SPAWN_SEPARATION_KM = 13.5;
 
 interface SpawnProfile {
   readonly role: InitialSpawnProfileRole;
@@ -295,8 +301,18 @@ export type InitialBandPlacementValidation =
 
 interface KnownTileWithDistance {
   readonly tile: Tile;
-  readonly distance: number;
+  readonly distanceKm: number;
 }
+
+/**
+ * SCALE-1 Task 7 — founder-local familiarity is distinct from optical observation.
+ * Three kilometres preserves the legacy Map-2 two-cardinal-step bootstrap while making
+ * the modeled country band physically stable across raster resolutions.
+ */
+const INITIAL_LOCAL_FAMILIARITY_RADIUS_KM = 3;
+const INITIAL_LOCAL_FAMILIARITY_NEAR_KM = 1.5;
+/** Legacy Map-2 four-cell setup awareness stated as a provisional physical distance. */
+const INITIAL_NEARBY_BAND_AWARENESS_RADIUS_KM = 6;
 
 export interface PlacementEcologyPreview {
   readonly tileId: TileId;
@@ -880,7 +896,8 @@ function selectSpawnCandidate(
     .sort(compareSpawnCandidates);
 
   const separatedCandidate = rankedCandidates.find((candidate) =>
-    alreadySelected.every((selected) => tileDistance(candidate.tile, selected.tile) >= 9),
+    alreadySelected.every((selected) =>
+      getEuclideanPhysicalDistanceKm(world.config, candidate.tile.coord, selected.tile.coord) >= INITIAL_SPAWN_SEPARATION_KM),
   );
 
   return separatedCandidate ?? rankedCandidates[0];
@@ -998,8 +1015,12 @@ function createInitialKnowledgeState(
   const tileObservationHistory: TileObservation[] = [];
 
   for (const knownTile of knownTiles) {
-    const confidence = knownTile.distance === 0 ? 1 : knownTile.distance === 1 ? 0.72 : 0.38;
-    const visits = knownTile.distance === 0 ? 1 : 0;
+    const confidence = knownTile.distanceKm === 0
+      ? 1
+      : knownTile.distanceKm <= INITIAL_LOCAL_FAMILIARITY_NEAR_KM + 1e-9
+        ? 0.72
+        : 0.38;
+    const visits = knownTile.distanceKm === 0 ? 1 : 0;
 
     observedTiles[knownTile.tile.id] = {
       tileId: knownTile.tile.id,
@@ -1064,7 +1085,11 @@ function addNearbyBandKnowledge(world: WorldState, bands: readonly Band[]): read
 
       const otherTile = getTile(world, otherBand.position);
 
-      if (otherTile === undefined || tileDistance(bandTile, otherTile) > 4) {
+      if (
+        otherTile === undefined ||
+        getEuclideanPhysicalDistanceKm(world.config, bandTile.coord, otherTile.coord) >
+          INITIAL_NEARBY_BAND_AWARENESS_RADIUS_KM + 1e-9
+      ) {
         continue;
       }
 
@@ -1094,25 +1119,43 @@ function addNearbyBandKnowledge(world: WorldState, bands: readonly Band[]): read
 }
 
 function collectKnownTiles(world: WorldState, currentTile: Tile): readonly KnownTileWithDistance[] {
-  const byTileId = new Map<TileId, KnownTileWithDistance>();
-
-  byTileId.set(currentTile.id, { tile: currentTile, distance: 0 });
-
-  for (const neighbor of getNeighborTiles(world, currentTile.id)) {
-    byTileId.set(neighbor.id, { tile: neighbor, distance: 1 });
-
-    for (const secondRing of getNeighborTiles(world, neighbor.id)) {
-      if (!byTileId.has(secondRing.id)) {
-        byTileId.set(secondRing.id, { tile: secondRing, distance: 2 });
-      }
+  const known: KnownTileWithDistance[] = [];
+  for (const tile of Object.values(world.tiles)) {
+    const distanceKm = getManhattanPhysicalDistanceKm(world.config, currentTile.coord, tile.coord);
+    if (distanceKm <= INITIAL_LOCAL_FAMILIARITY_RADIUS_KM + 1e-9) {
+      known.push({ tile, distanceKm });
     }
   }
-
-  return Array.from(byTileId.values()).sort((left, right) =>
-    left.distance === right.distance
+  return known.sort((left, right) =>
+    left.distanceKm === right.distanceKm
       ? compareTilesByCoord(left.tile, right.tile)
-      : left.distance - right.distance,
+      : left.distanceKm - right.distanceKm,
   );
+}
+
+/** Audit-only exposure of founder-local physical familiarity without constructing a Band. */
+export function deriveSpawnSeparationPhysicalAssessmentForAudit(
+  world: WorldState,
+  firstTileId: TileId,
+  secondTileId: TileId,
+): { readonly distanceKm: number; readonly eligible: boolean } | undefined {
+  const first = getTile(world, firstTileId);
+  const second = getTile(world, secondTileId);
+  if (first === undefined || second === undefined) {
+    return undefined;
+  }
+  const distanceKm = getEuclideanPhysicalDistanceKm(world.config, first.coord, second.coord);
+  return { distanceKm, eligible: distanceKm >= INITIAL_SPAWN_SEPARATION_KM };
+}
+
+export function deriveInitialLocalKnowledgeForAudit(
+  world: WorldState,
+  currentTileId: TileId,
+): readonly { readonly tileId: TileId; readonly distanceKm: number }[] {
+  const currentTile = getTile(world, currentTileId);
+  return currentTile === undefined
+    ? []
+    : collectKnownTiles(world, currentTile).map((entry) => ({ tileId: entry.tile.id, distanceKm: entry.distanceKm }));
 }
 
 function createInitialPlaceAttachment(world: WorldState, tile: Tile): PlaceAttachment {
@@ -1230,7 +1273,7 @@ function getNearbyOpportunityValue(world: WorldState, tile: Tile): number {
   let bestValue = 0;
 
   for (const knownTile of knownTiles) {
-    if (knownTile.distance === 0) {
+    if (knownTile.distanceKm === 0) {
       continue;
     }
 
@@ -1276,10 +1319,6 @@ function getInitialHealthProfile(): HealthProfile {
     injuryBurden: 0.06,
     mortalityRisk: 0.08,
   };
-}
-
-function tileDistance(first: Tile, second: Tile): number {
-  return Math.hypot(first.coord.x - second.coord.x, first.coord.y - second.coord.y);
 }
 
 function clamp01(value: number): number {

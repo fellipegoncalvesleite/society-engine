@@ -116,12 +116,14 @@ import { frontierIntentHold, frontierIntentPull } from "../agents/frontierIntent
 import { frontierResidenceInwardDamp, frontierResidenceOriginPullRelief, frontierResidenceStayHold } from "../agents/frontierResidence";
 import { isChannelCorridorLand, isNearWaterMarginLand } from "../agents/frontierKnowledge";
 import { getDepletionAdjustedRichness } from "../world/depletion";
+import { LOCAL_EVIDENCE_NEAR_KM } from "../agents/physicalProximity";
 import {
   deriveDryMarginMobilityContext,
   getDryMarginAttachmentMultiplier,
 } from "../agents/dryMargin";
 import {
   deriveResidentialAnchorContext,
+  deriveResidentialLogisticalAccessForBand,
   getAnchorHoldBonus,
   getAnchorRelocationHysteresis,
   summarizeIntraSeasonActivity,
@@ -194,6 +196,7 @@ import {
 } from "../world/hydrography";
 import { getSeasonalTileConditions } from "../world/seasonal";
 import type { RiverCrossingProfile, Tile, WorldState } from "../world/types";
+import { getCardinalEdgeLengthKm } from "../world/spatialGeometry";
 import {
   advanceCorridorHeading,
   advanceFrontierProbeCadence,
@@ -218,7 +221,6 @@ import { RECENT_BAND_DECISION_HISTORY_LIMIT } from "./decisionArchive";
 // same id-ordered arrays. Values are immutable projections of world.tiles only,
 // not band knowledge or hidden richness, so decision semantics stay identical.
 const sortedNeighborIdsByTile = new WeakMap<Tile, readonly TileId[]>();
-const knownMoveRadiusCacheByTiles = new WeakMap<WorldState["tiles"], Map<TileId, readonly TileId[]>>();
 const knownTileStatsByObservedTiles = new WeakMap<KnowledgeState["observedTiles"], KnownTileStats>();
 const corridorLookupByTravelCorridors = new WeakMap<
   Band["travelCorridors"],
@@ -274,13 +276,12 @@ const BELIEF_PROBE_SCORE_WEIGHT = 2.4;
 // yield logic evaluate the tile. EMPIRICAL CONSTANT.
 const INFERRED_FRONTIER_EXPLORE_PULL = 0.16;
 
-// Inferred-frontier PROBE radius (M0.7): a SETTLED band holding inferred near-water
-// corridor knowledge (it dwells on the margin, so its immediate neighbours are already
-// observed and explore_unknown_neighbor cannot act) may send a residence-UNCHANGED
-// logistical_probe to the NEAREST inferred frontier tile within this bounded radius —
-// observing it (inference → real KnownTileRecord) without relocating. Small, so the probe
-// stays a plausible local reconnaissance, not a long expedition.
-const INFERRED_FRONTIER_PROBE_RADIUS = 4;
+// SCALE-1 Task 7: inferred-frontier probing is a provisional PHYSICAL local-recon
+// envelope. Six kilometres preserves the legacy Map-2 four-cell compatibility fixture;
+// cells remain only the BFS representation. This is not an empirical universal law.
+const INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM = 6;
+// Legacy two-cell Map-2 "local evidence" distinction, now explicitly physical.
+const INFERRED_FRONTIER_LOCAL_EVIDENCE_KM = 3;
 
 // M0.16B — off-corridor SIDE-COUNTRY probe (knowledge CONSUMPTION). M0.16 formed abundant
 // off-corridor side existence beliefs but they were behaviourally INERT: the M0.7 gate rejects
@@ -437,7 +438,11 @@ import {
 interface KnownTileCandidate {
   readonly tile: Tile;
   readonly record: KnownTileRecord;
-  readonly distance: number;
+  /** Topological diagnostic only. */
+  readonly distanceTiles: number;
+  readonly physicalDistanceKm: number;
+  readonly travelTimeDays: number;
+  readonly travelBurden: number;
 }
 
 interface UnknownFrontierCandidate {
@@ -454,7 +459,9 @@ interface UnknownFrontierCandidate {
 
 interface InferredFrontierProbeTarget {
   readonly tileId: TileId;
-  readonly routeDistance: number;
+  /** Topological telemetry only. */
+  readonly routeDistanceTiles: number;
+  readonly physicalDistanceKm: number;
   readonly routeRisk: number;
 }
 
@@ -1207,10 +1214,9 @@ export function applyBandDecision(
     pressureState: pressureUpdate.pressureState,
     causalTraces: pressureUpdate.causalTraces,
   };
+  // Current residence truth for environment-reading response context only. Physical move
+  // severity below comes from the executed residential event, not this endpoint topology.
   const adaptiveOriginTile = getTile(world, band.position);
-  const residentialMoveDistance = moved && adaptiveOriginTile !== undefined && observationTile !== undefined
-    ? getGridDistance(adaptiveOriginTile, observationTile)
-    : 0;
   // INVENTION-1: the residential-move event ring is derived HERE (hoisted from
   // the return literal — identical pure derivation) so the carrying efficacy
   // can read the realized hardship of THIS season's move.
@@ -1250,6 +1256,9 @@ export function applyBandDecision(
     prior: band.residentialMovementIntentOutcomes,
   });
   const latestMoveEvent = moved ? recentResidentialMoveEvents?.[0] : undefined;
+  // Canonical completed physical route distance. The residential event already resolved the
+  // executed path; downstream adaptation/efficacy must not reconstruct severity from cells.
+  const residentialMoveDistance = latestMoveEvent?.distanceKm ?? 0;
   // INVENTION-1: practical-response efficacy contexts. The applied plan is the
   // SAME derivation the migration walk consumed; the counterfactual plan
   // disables the practical reliefs so the budget delta isolates the response's
@@ -1772,6 +1781,7 @@ function buildStayCandidate(
     tile,
     record,
     0,
+    0,
     riverAssessment,
     decisionCache,
   );
@@ -1966,7 +1976,8 @@ function buildMoveCandidate(
     band,
     candidate.tile,
     candidate.record,
-    candidate.distance,
+    candidate.physicalDistanceKm,
+    candidate.travelBurden,
     riverAssessment,
     decisionCache,
   );
@@ -2222,7 +2233,7 @@ function buildExploreCandidate(
 // the near-water margin holds inferred corridor knowledge but has no unknown immediate
 // neighbours (its 2-ring is observed), so explore_unknown_neighbor cannot act on it. This
 // emits a residence-UNCHANGED logistical_probe to the NEAREST inferred frontier tile
-// within INFERRED_FRONTIER_PROBE_RADIUS — a cautious reconnaissance that, when applied,
+// within the provisional physical probe envelope — a cautious reconnaissance that, when applied,
 // OBSERVES the tile (inference → real KnownTileRecord) WITHOUT relocating. It expresses
 // curiosity about reachable land it believes EXISTS, NOT richness: the score adds NO
 // resource/yield value (inference carries none), is low-confidence and route/risk-checked,
@@ -2296,7 +2307,7 @@ function buildInferredFrontierProbeCandidate(
     ...emptyScoreBreakdown(),
     waterRefugeSecurity: decisionCache.dryMarginContext?.stayMoveScout?.currentRefugeSecurity ?? 0,
     memoryConfidence: 0.2, // existence-only inference → low confidence
-    movementCost: clamp01(target.routeDistance / 8 + 0.12),
+    movementCost: clamp01(target.physicalDistanceKm / INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM + 0.12),
     riskCost: clamp01(
       Math.max(target.routeRisk, edgeMemo.riverAssessment.riverCrossingRisk) * 0.34 +
         (band.pressureState?.riskPressure ?? 0) * 0.14,
@@ -2342,8 +2353,13 @@ function findReachableInferredFrontierProbeTarget(
   inferred: InferredFrontierTiles,
   decisionCache: CandidateEvaluationCache,
 ): InferredFrontierProbeTarget | undefined {
-  const queue: Array<{ readonly tileId: TileId; readonly distance: number; readonly routeRisk: number }> = [
-    { tileId: currentTile.id, distance: 0, routeRisk: 0 },
+  const queue: Array<{
+    readonly tileId: TileId;
+    readonly routeDistanceTiles: number;
+    readonly physicalDistanceKm: number;
+    readonly routeRisk: number;
+  }> = [
+    { tileId: currentTile.id, routeDistanceTiles: 0, physicalDistanceKm: 0, routeRisk: 0 },
   ];
   const visited = new Set<TileId>([currentTile.id]);
   let best: InferredFrontierProbeTarget | undefined;
@@ -2352,7 +2368,10 @@ function findReachableInferredFrontierProbeTarget(
     const current = queue[index];
     const fromTile = getTile(world, current.tileId);
 
-    if (fromTile === undefined || current.distance >= INFERRED_FRONTIER_PROBE_RADIUS) {
+    if (
+      fromTile === undefined ||
+      current.physicalDistanceKm >= INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM - 1e-9
+    ) {
       continue;
     }
 
@@ -2389,28 +2408,34 @@ function findReachableInferredFrontierProbeTarget(
         continue;
       }
 
-      const distance = current.distance + 1;
+      const physicalDistanceKm =
+        current.physicalDistanceKm + getCardinalEdgeLengthKm(world.config, fromTile.coord, neighborTile.coord);
+      if (physicalDistanceKm > INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM + 1e-9) {
+        continue;
+      }
+      const routeDistanceTiles = current.routeDistanceTiles + 1;
       const routeRisk = Math.max(current.routeRisk, edgeMemo.riverAssessment.riverCrossingRisk);
       visited.add(neighborId);
 
       if (inferred[neighborId] !== undefined && band.knowledge.observedTiles[neighborId] === undefined) {
         const candidate: InferredFrontierProbeTarget = {
           tileId: neighborId,
-          routeDistance: distance,
+          routeDistanceTiles,
+          physicalDistanceKm,
           routeRisk,
         };
 
         if (
           best === undefined ||
-          candidate.routeDistance < best.routeDistance ||
-          (candidate.routeDistance === best.routeDistance && compareTileIds(candidate.tileId, best.tileId) < 0)
+          candidate.physicalDistanceKm < best.physicalDistanceKm ||
+          (candidate.physicalDistanceKm === best.physicalDistanceKm && compareTileIds(candidate.tileId, best.tileId) < 0)
         ) {
           best = candidate;
         }
       }
 
-      if (distance < INFERRED_FRONTIER_PROBE_RADIUS) {
-        queue.push({ tileId: neighborId, distance, routeRisk });
+      if (physicalDistanceKm < INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM - 1e-9) {
+        queue.push({ tileId: neighborId, routeDistanceTiles, physicalDistanceKm, routeRisk });
       }
     }
   }
@@ -2497,7 +2522,7 @@ function buildSideCountryProbeCandidate(
   const target = findReachableSideProbeTarget(world, band, currentTile, inferred, decisionCache);
 
   if (target === undefined) {
-    return undefined; // no reachable inferred SIDE tile within the probe radius
+    return undefined; // no reachable inferred SIDE tile within the physical probe envelope
   }
 
   const edgeMemo = getCandidateEdgeMemo(
@@ -2520,7 +2545,7 @@ function buildSideCountryProbeCandidate(
       inferred[target.tileId] !== undefined ||
       edgeMemo.riverAssessment.knownFordValue > 0.12 ||
       edgeMemo.riverAssessment.riverCorridorValue > 0.12,
-    localEvidence: target.routeDistance <= 2,
+    localEvidence: target.physicalDistanceKm <= INFERRED_FRONTIER_LOCAL_EVIDENCE_KM + 1e-9,
   });
   // Information-motive breakdown: existence-only (low memoryConfidence), the principled
   // `explorationValue` channel carries the value (information is worth gathering even when
@@ -2532,7 +2557,7 @@ function buildSideCountryProbeCandidate(
     memoryConfidence: 0.2, // existence-only inference → low confidence
     routeValue: reportedTargetBias.opportunityBias,
     explorationValue: SIDE_COUNTRY_PROBE_EXPLORATION_VALUE + reportedTargetBias.opportunityBias * 0.12,
-    movementCost: clamp01(target.routeDistance / 8 + 0.12),
+    movementCost: clamp01(target.physicalDistanceKm / INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM + 0.12),
     riskCost: clamp01(
       Math.max(target.routeRisk, edgeMemo.riverAssessment.riverCrossingRisk) * 0.34 +
         (band.pressureState?.riskPressure ?? 0) * 0.14 +
@@ -2571,7 +2596,7 @@ function buildSideCountryProbeCandidate(
   };
 }
 
-// M0.16B: nearest reachable inferred OFF-CORRIDOR SIDE tile within the probe radius. Mirrors
+// M0.16B: nearest reachable inferred OFF-CORRIDOR SIDE tile within the physical probe envelope. Mirrors
 // findReachableInferredFrontierProbeTarget's bounded id-ordered BFS, but a tile only qualifies
 // as a target when its inference source is `off_corridor_side_inference` (so the side probe
 // never accidentally observes a margin/corridor tile — those are M0.7's domain). Land-only,
@@ -2583,8 +2608,13 @@ function findReachableSideProbeTarget(
   inferred: InferredFrontierTiles,
   decisionCache: CandidateEvaluationCache,
 ): InferredFrontierProbeTarget | undefined {
-  const queue: Array<{ readonly tileId: TileId; readonly distance: number; readonly routeRisk: number }> = [
-    { tileId: currentTile.id, distance: 0, routeRisk: 0 },
+  const queue: Array<{
+    readonly tileId: TileId;
+    readonly routeDistanceTiles: number;
+    readonly physicalDistanceKm: number;
+    readonly routeRisk: number;
+  }> = [
+    { tileId: currentTile.id, routeDistanceTiles: 0, physicalDistanceKm: 0, routeRisk: 0 },
   ];
   const visited = new Set<TileId>([currentTile.id]);
   let best: InferredFrontierProbeTarget | undefined;
@@ -2593,7 +2623,10 @@ function findReachableSideProbeTarget(
     const current = queue[index];
     const fromTile = getTile(world, current.tileId);
 
-    if (fromTile === undefined || current.distance >= INFERRED_FRONTIER_PROBE_RADIUS) {
+    if (
+      fromTile === undefined ||
+      current.physicalDistanceKm >= INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM - 1e-9
+    ) {
       continue;
     }
 
@@ -2630,7 +2663,12 @@ function findReachableSideProbeTarget(
         continue;
       }
 
-      const distance = current.distance + 1;
+      const physicalDistanceKm =
+        current.physicalDistanceKm + getCardinalEdgeLengthKm(world.config, fromTile.coord, neighborTile.coord);
+      if (physicalDistanceKm > INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM + 1e-9) {
+        continue;
+      }
+      const routeDistanceTiles = current.routeDistanceTiles + 1;
       const routeRisk = Math.max(current.routeRisk, edgeMemo.riverAssessment.riverCrossingRisk);
       visited.add(neighborId);
 
@@ -2643,26 +2681,48 @@ function findReachableSideProbeTarget(
       ) {
         const candidate: InferredFrontierProbeTarget = {
           tileId: neighborId,
-          routeDistance: distance,
+          routeDistanceTiles,
+          physicalDistanceKm,
           routeRisk,
         };
 
         if (
           best === undefined ||
-          candidate.routeDistance < best.routeDistance ||
-          (candidate.routeDistance === best.routeDistance && compareTileIds(candidate.tileId, best.tileId) < 0)
+          candidate.physicalDistanceKm < best.physicalDistanceKm ||
+          (candidate.physicalDistanceKm === best.physicalDistanceKm && compareTileIds(candidate.tileId, best.tileId) < 0)
         ) {
           best = candidate;
         }
       }
 
-      if (distance < INFERRED_FRONTIER_PROBE_RADIUS) {
-        queue.push({ tileId: neighborId, distance, routeRisk });
+      if (physicalDistanceKm < INFERRED_FRONTIER_PROBE_MAX_DISTANCE_KM - 1e-9) {
+        queue.push({ tileId: neighborId, routeDistanceTiles, physicalDistanceKm, routeRisk });
       }
     }
   }
 
   return best;
+}
+
+/**
+ * Audit-only controlled probe-target seam. It uses the same band-known, passability and
+ * crossing checks as production while exposing only target identity + physical route burden.
+ */
+export function deriveInferredFrontierProbeTargetForAudit(
+  world: WorldState,
+  band: Band,
+  sideCountryOnly: boolean,
+): InferredFrontierProbeTarget | undefined {
+  const currentTile = getTile(world, band.position);
+  const inferred = band.frontierKnowledge?.inferredTiles;
+  if (currentTile === undefined || inferred === undefined) return undefined;
+  const decisionCache = {
+    edgeScoresByEdgeKey: new Map(),
+    profiler: undefined,
+  } as unknown as CandidateEvaluationCache;
+  return sideCountryOnly
+    ? findReachableSideProbeTarget(world, band, currentTile, inferred, decisionCache)
+    : findReachableInferredFrontierProbeTarget(world, band, currentTile, inferred, decisionCache);
 }
 
 // M0.8: bounded corridor RELOCATION. A SETTLED band that has formed inferred shore-corridor
@@ -3368,7 +3428,6 @@ function getKnownMoveCandidates(
   decisionCache: CandidateEvaluationCache,
 ): readonly KnownTileCandidate[] {
   const currentTile = getTile(world, band.position);
-
   if (currentTile === undefined) {
     return [];
   }
@@ -3377,79 +3436,66 @@ function getKnownMoveCandidates(
     decisionCache.profiler,
     "knownMoveCandidateFiltering",
     () => {
+      const access = deriveResidentialLogisticalAccessForBand(world, band);
       const candidates: KnownTileCandidate[] = [];
-      const tileIds = measureDecision(
-        decisionCache.profiler,
-        "knownMoveCandidateRadiusLookup",
-        () => getTileIdsWithinKnownMoveRadius(world, currentTile),
-      );
 
-      for (const tileId of tileIds) {
-        const record = band.knowledge.observedTiles[tileId];
-        const tile = getTile(world, tileId);
-
-        if (record === undefined || tile === undefined) {
-          continue;
-        }
-
-        const distance = getGridDistance(currentTile, tile);
+      for (const entry of access.reachable) {
+        if (entry.tileId === band.position) continue;
+        const record = band.knowledge.observedTiles[entry.tileId];
+        const tile = getTile(world, entry.tileId);
+        if (record === undefined || tile === undefined) continue;
 
         if (getCandidateEdgeMemo(world, band, band.position, tile.id, undefined, decisionCache).toTilePassable) {
-          candidates.push({ tile, record, distance });
+          const distanceTiles = getGridDistance(currentTile, tile);
+          const travelBurden = access.travelTimeBudgetDays <= 0
+            ? 1
+            : clamp01(entry.travelTimeDays / access.travelTimeBudgetDays);
+          candidates.push({
+            tile,
+            record,
+            distanceTiles,
+            physicalDistanceKm: entry.physicalDistanceKm,
+            travelTimeDays: entry.travelTimeDays,
+            travelBurden,
+          });
         }
       }
 
-      decisionCache.profiler?.count?.("knownMoveCandidatesConsidered", tileIds.length);
+      decisionCache.profiler?.count?.("knownMoveCandidatesConsidered", access.reachable.length);
       decisionCache.profiler?.count?.("knownMoveCandidatesAccepted", candidates.length);
-
-      return candidates;
+      return candidates.sort((left, right) =>
+        left.travelTimeDays - right.travelTimeDays || compareTiles(left.tile, right.tile),
+      );
     },
   );
 }
 
-function getTileIdsWithinKnownMoveRadius(
+export function deriveKnownMovePhysicalAssessmentForAudit(
   world: WorldState,
-  currentTile: Tile,
-): readonly TileId[] {
-  let cache = knownMoveRadiusCacheByTiles.get(world.tiles);
-
-  if (cache === undefined) {
-    cache = new Map<TileId, readonly TileId[]>();
-    knownMoveRadiusCacheByTiles.set(world.tiles, cache);
-  }
-
-  const cached = cache.get(currentTile.id);
-
-  if (cached !== undefined) {
-    return cached;
-  }
-
-  const tileIds = new Set<TileId>();
-
-  for (const neighborId of getSortedNeighborIds(currentTile)) {
-    tileIds.add(neighborId);
-    const neighbor = getTile(world, neighborId);
-
-    if (neighbor === undefined) {
-      continue;
-    }
-
-    for (const secondRingId of getSortedNeighborIds(neighbor)) {
-      if (secondRingId !== currentTile.id) {
-        tileIds.add(secondRingId);
-      }
-    }
-  }
-
-  const result = [...tileIds]
-    .map((tileId) => getTile(world, tileId))
-    .filter((tile): tile is Tile => tile !== undefined && getGridDistance(currentTile, tile) <= 2)
-    .sort(compareTiles)
-    .map((tile) => tile.id);
-
-  cache.set(currentTile.id, result);
-
-  return result;
+  band: Band,
+  targetTileId: TileId,
+): {
+  readonly eligible: boolean;
+  readonly distanceTiles: number;
+  readonly physicalDistanceKm: number;
+  readonly travelTimeDays: number;
+  readonly travelBurden: number;
+} | undefined {
+  const currentTile = getTile(world, band.position);
+  const targetTile = getTile(world, targetTileId);
+  if (currentTile === undefined || targetTile === undefined) return undefined;
+  const access = deriveResidentialLogisticalAccessForBand(world, band);
+  const entry = access.reachable.find((candidate) => candidate.tileId === targetTileId);
+  return {
+    eligible: entry !== undefined,
+    distanceTiles: getGridDistance(currentTile, targetTile),
+    physicalDistanceKm: entry?.physicalDistanceKm ?? getCardinalEdgeLengthKm(world.config, currentTile.coord, targetTile.coord),
+    travelTimeDays: entry?.travelTimeDays ?? Number.POSITIVE_INFINITY,
+    travelBurden:
+      entry === undefined || access.travelTimeBudgetDays <= 0
+        ? 1
+        : clamp01(entry.travelTimeDays / access.travelTimeBudgetDays),
+  };
 }
 
 function applyAdaptiveDecisionShaping(
@@ -3772,7 +3818,8 @@ function buildKnownTileScoreBreakdown(
   band: Band,
   tile: Tile,
   record: KnownTileRecord,
-  distance: number,
+  physicalDistanceKm: number,
+  travelBurden: number,
   riverAssessment: RiverMovementAssessment,
   decisionCache: CandidateEvaluationCache,
 ): ScoreBreakdown {
@@ -3789,13 +3836,16 @@ function buildKnownTileScoreBreakdown(
       (isLeanSeason ? 0.18 : 0) -
       (seasonWasObserved ? 0 : 0.06),
   );
-  const movementCost = distance === 0
-    ? 0
-    : clamp01(
-        ((record.observedMovementCost ?? 1.6) * Math.max(1, distance) - 1) / 3 +
-          decisionCache.pressureSnapshot.bandPressureState.fatiguePressure * 0.28 +
-          getRecentRelocationSettlementCost(world, band),
-      );
+  // SCALE-1 Task 7 — movement burden is physical route-time use of the band's current
+  // logistical access budget. Observed terrain cost remains a modest band-known modifier,
+  // but raster cell count no longer changes the score.
+  const observedTerrainBurden = clamp01(((record.observedMovementCost ?? 1.6) - 1) / 2);
+  const movementCost = clamp01(
+    travelBurden * 0.72 +
+      observedTerrainBurden * 0.18 +
+      decisionCache.pressureSnapshot.bandPressureState.fatiguePressure * 0.28 +
+      getRecentRelocationSettlementCost(world, band),
+  );
   const baseRiskCost = clamp01(record.observedRisk ?? 0.35);
   const foodValue = clamp01(
     record.observedRichness * 0.62 +
@@ -3826,7 +3876,7 @@ function buildKnownTileScoreBreakdown(
   const placeAttachment = tileMemo.placeAttachment;
   const attachmentValue = tileMemo.attachmentValue;
   const populationPressure = getPopulationPressure(band);
-  const isStay = distance === 0;
+  const isStay = physicalDistanceKm <= 1e-9;
   const ecologicalMovePressure = clamp01(
     (band.ecologicalStressCauses?.foodDeficit ?? 0) * 0.24 +
       (band.ecologicalStressCauses?.sharedCatchmentCrowding ?? 0) * 0.22 +
@@ -3903,7 +3953,7 @@ function buildKnownTileScoreBreakdown(
       riverAssessment.riverCorridorValue > 0.12 ||
       tile.hasCreek === true ||
       sideCountryEvidence > 0.18,
-    localEvidence: distance <= 2,
+    localEvidence: physicalDistanceKm <= LOCAL_EVIDENCE_NEAR_KM,
   });
   const creekCorridorBias =
     !isStay && tile.hasCreek === true && record.confidence > 0.34

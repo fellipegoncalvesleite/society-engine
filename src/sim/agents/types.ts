@@ -1685,7 +1685,10 @@ export interface IntraSeasonTripRecord {
   readonly startDay: DayNumber;
   readonly endDay: DayNumber;
   readonly activityStatus: IntraSeasonTripActivityStatus;
+  /** Topological route/candidate telemetry only. */
   readonly distanceTiles: number;
+  /** Canonical outbound physical route length. */
+  readonly distanceKm: number;
   readonly estimatedDurationDays: number;
   readonly cause: IntraSeasonTripCause;
   readonly movementType: IntraSeasonTripMovementType;
@@ -1712,7 +1715,7 @@ export interface IntraSeasonTripRecord {
   readonly activityMemoryEffect: ActivityMemoryEffectRecord;
   // TIME-1C breadcrumb: the deterministic tile-by-tile outbound route origin→target
   // (inclusive). The trip is logically NOT a teleport even if the UI compresses it —
-  // history preserves every crossed tile. Bounded by MAX_TRIP_DISTANCE_TILES + 1.
+  // history preserves every crossed tile. The search horizon is derived from physical reach.
   readonly pathTiles: readonly TileId[];
   readonly tilesCrossed: number;
   readonly roundTripTiles: number;
@@ -1734,8 +1737,8 @@ export interface IntraSeasonTripRecord {
 //
 // An expedition is a MORE CAPABLE LIFECYCLE of the same task-group/party system
 // that `IntraSeasonTripRecord` already records — not a parallel simulator. A
-// same-day trip (<= MAX_TRIP_DISTANCE_TILES) is resolved in one day's reducer by
-// intraSeasonTrips; an expedition reaches country BEYOND that daily envelope and
+// same-day trip is resolved only when physical route time + on-site work fit one day;
+// an expedition reaches country beyond that physical daily envelope and
 // therefore must physically spend days walking out, working, and walking back.
 // It deposits its result through the SAME IntraSeasonTripRecord + the SAME
 // canonical food ledger (humanFoodSupport), exactly once, at RETURN.
@@ -2267,9 +2270,9 @@ export interface FrontierExplorationPlan {
   readonly anchorTileId: TileId;
   /** Confidence in the directional hypothesis itself (not in what lies out there). */
   readonly headingConfidence: number;
-  /** Outward tiles the party may walk before the return reserve binds. */
+  /** Legacy topological/search diagnostic derived from the physical duration envelope; never reach authority. */
   readonly outboundBudgetTiles: number;
-  /** Tiles of walking capacity held back so the party can plausibly get home. */
+  /** Legacy topological/search diagnostic derived from the same physical envelope; never reach authority. */
   readonly returnReserveTiles: number;
   /** Literal non-claims — asserted by construction, checked by the anti-omniscience audit. */
   readonly noHiddenDestination: true;
@@ -4063,7 +4066,7 @@ export interface OpenEraAccumulator {
   readonly daughterBandIds: readonly BandId[];
   readonly movesCount: number;
   readonly yearsAccumulated: number;
-  // Consecutive yearly observations at ≥ RELOCATION_MIN_DISTANCE_TILES from startTileId.
+  // Consecutive yearly observations beyond the physical relocation-significance threshold.
   readonly awayFromStartYears: number;
 }
 
@@ -4342,7 +4345,9 @@ export interface ForagingTripFailureMemory {
   readonly failureCount: number;
   readonly lowReturnCount: number;
   readonly successCount: number;
+  /** Topological telemetry only. */
   readonly longestDistanceTiles: number;
+  readonly longestDistanceKm: number;
   readonly meanReturn: NormalizedIntensity;
   readonly confidencePenalty: NormalizedIntensity;
   readonly action: TripAdaptationAction;
@@ -4353,7 +4358,9 @@ export interface ForagingTripFailureMemory {
 
 export interface NearbyForagingOpportunityProbe {
   readonly tileId: TileId;
+  /** Topological telemetry only. */
   readonly distanceTiles: number;
+  readonly distanceKm: number;
   readonly relativeOpportunity: NormalizedIntensity;
   readonly probeReadiness: NormalizedIntensity;
   readonly currentOverCapacity: NormalizedIntensity;
@@ -7370,7 +7377,10 @@ export type PressureReliefCandidateActionStrategy =
 export interface PressureReliefCandidate {
   readonly id: string;
   readonly tileId: TileId;
+  /** Topological diagnostic only. */
   readonly distanceTiles: number;
+  readonly distanceKm: number;
+  readonly travelTimeDays: number;
   readonly relationToCurrentCluster: PressureReliefCandidateRelation;
   readonly knownness: NormalizedIntensity;
   readonly supportAdequacy: NormalizedIntensity;
@@ -7459,7 +7469,8 @@ export interface RangeRotationPressureReliefState {
   readonly caps: {
     readonly candidateCap: number;
     readonly rejectedCandidateCap: number;
-    readonly searchRadiusTiles: number;
+    readonly travelTimeBudgetDays: number;
+    readonly maxPhysicalReachKm: number;
     readonly capsHeld: boolean;
   };
   readonly integrity: {
@@ -7477,7 +7488,10 @@ export interface LocalCampShiftRecord {
   readonly tick: TickNumber;
   readonly fromTileId: TileId;
   readonly toTileId: TileId;
+  /** Topological cell distance retained for diagnostics only. */
   readonly distance: number;
+  /** Canonical physical endpoint distance in km. */
+  readonly distanceKm: number;
   readonly reason: string;
   readonly outcome: EstablishmentOutcome;
   readonly confidence: NormalizedIntensity;

@@ -754,7 +754,7 @@ export function deriveCareCondition(band: Band): number {
 // IMPROVEMENT opportunity on an already-functional practice.
 export function deriveMeasureCondition(band: Band): number {
   const events = band.recentResidentialMoveEvents ?? [];
-  const stagedLegs = events.filter((event) => (event.distanceTiles ?? 0) >= 2).length;
+  const stagedLegs = events.filter((event) => event.durationDays >= 2).length;
   const waterHardship = events.filter((event) => (event.hardshipReason ?? "").includes("water")).length;
   const shuttles = events.filter((event) => (event.temporaryWatercraft?.shuttleTrips ?? 0) >= 2).length;
   const carriedWaterActive = (band.practicalAdaptation?.responses ?? [])
@@ -1434,6 +1434,7 @@ export interface PracticalAdaptationAdvanceInput {
   readonly band: Band; // pre-decision band (holds prior state)
   readonly currentTick: TickNumber;
   readonly moved: boolean;
+  /** Completed residential route distance in physical km. */
   readonly residentialMoveDistance: number;
   readonly crossedThisSeason: boolean;
   readonly latestMoveEvent?: ResidentialMoveEvent;

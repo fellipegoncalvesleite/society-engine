@@ -25,6 +25,24 @@ export function getEuclideanPhysicalDistanceKm(config: WorldConfig, first: Coord
   return Math.hypot(right.xKm - left.xKm, right.yKm - left.yKm);
 }
 
+/** Physical length of a cardinal-grid Manhattan displacement. Useful only when the modeled
+ * geometry is explicitly a cardinal route/locus metric; Euclidean range uses the helper above. */
+export function getManhattanPhysicalDistanceKm(config: WorldConfig, first: Coord, second: Coord): number {
+  return (
+    Math.abs(second.x - first.x) * config.spatial.cellWidthKm +
+    Math.abs(second.y - first.y) * config.spatial.cellHeightKm
+  );
+}
+
+/** Physical L-infinity displacement, preserving the old square-neighborhood geometry without
+ * treating raster cell counts as distance. */
+export function getChebyshevPhysicalDistanceKm(config: WorldConfig, first: Coord, second: Coord): number {
+  return Math.max(
+    Math.abs(second.x - first.x) * config.spatial.cellWidthKm,
+    Math.abs(second.y - first.y) * config.spatial.cellHeightKm,
+  );
+}
+
 export function getCardinalEdgeLengthKm(config: WorldConfig, from: Coord, to: Coord): number {
   const dx = Math.abs(to.x - from.x);
   const dy = Math.abs(to.y - from.y);

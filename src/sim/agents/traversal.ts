@@ -112,6 +112,30 @@ export function deriveTraversalEdge(
   };
 }
 
+/**
+ * Technical graph-search horizon derived from the physical travel budget. This is deliberately
+ * conservative: it assumes every traversed edge has the minimum possible terrain multiplier and
+ * no crossing penalty, so any route that could physically fit the budget is guaranteed to fit
+ * inside this cell-count search envelope. It is a search/allocation cap only, never behavioral reach.
+ */
+export function deriveTechnicalRouteSearchHorizonTiles(
+  world: WorldState,
+  kmPerTravelDay: number,
+  travelTimeBudgetDays: number,
+): number {
+  const pace = Math.max(0, kmPerTravelDay);
+  const budget = Math.max(0, travelTimeBudgetDays);
+  if (pace <= 0 || budget <= 0) return 1;
+  const minimumEdgeKm = Math.max(
+    1e-9,
+    Math.min(world.config.spatial.cellWidthKm, world.config.spatial.cellHeightKm),
+  );
+  const fastestPossibleEdgeDays = minimumEdgeKm * MIN_TERRAIN_COST_MULTIPLIER / pace;
+  const physicalEdgeCeiling = Math.max(1, Math.ceil(budget / fastestPossibleEdgeDays));
+  const finiteWorldCeiling = Math.max(1, Object.keys(world.tiles).length - 1);
+  return Math.min(physicalEdgeCeiling, finiteWorldCeiling);
+}
+
 export function getRoutePhysicalLengthKm(world: WorldState, routeTileIds: readonly TileId[]): number {
   let totalKm = 0;
   for (let index = 0; index + 1 < routeTileIds.length; index += 1) {

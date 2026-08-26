@@ -47,6 +47,19 @@ import {
   taskCampRefusedByEvidence,
 } from "./verificationEvidence";
 import { derivePhysicalRoundTripTiming } from "./intraSeasonTrips";
+import { deriveTravelPace } from "./bandMobility";
+import { deriveResidentialForagingAccessForBand } from "./residentialAnchor";
+import {
+  deriveTechnicalRouteSearchHorizonTiles,
+  getRoutePhysicalLengthKm,
+} from "./traversal";
+import { EXPEDITION_MAX_DURATION_DAYS } from "./expeditionLimits";
+import {
+  buildExpeditionPhysicalRouteSurface,
+  deriveExpeditionOneWaySearchBudgetDays,
+  reconstructExpeditionPhysicalRoute,
+  type ExpeditionPhysicalRouteSurface,
+} from "./expeditionRouteSearch";
 // CORRECTION-23J §5 — the identity of an operation the production selector actually chose.
 import { derivePendingOperationAtTile } from "./pendingOperation";
 // CORRECTION-23I — audit-only refusal counting and the typed dependency shape.
@@ -73,8 +86,6 @@ const VERIFICATION_RETRY_TICKS = 24;
 const VERIFICATION_MIN_NEED = 0.3;
 /** A record must look at least this promising on the band's OWN coarse impression. */
 const VERIFICATION_MIN_PROMISE = 0.28;
-/** Beyond this the place is not a verification target; it is an exploration problem. */
-export const VERIFICATION_MAX_DISTANCE_TILES = 24;
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 const round2 = (v: number): number => Math.round(v * 100) / 100;
@@ -224,91 +235,186 @@ export interface VerificationCandidate {
   readonly promisingSignal: string;
   readonly missingEvidence: string;
   readonly informationDeficit: number;
+  /** Topological diagnostic only. */
   readonly distanceTiles: number;
+  readonly physicalDistanceKm: number;
+  readonly travelBurden: number;
   readonly score: number;
+  /** Transient route from the same physical surface used to approve this candidate. */
+  readonly routeTileIds: readonly TileId[];
+}
+
+export interface VerificationPhysicalAssessment {
+  readonly eligible: boolean;
+  readonly insideWorkingRange: boolean;
+  readonly distanceTiles: number;
+  readonly physicalDistanceKm: number;
+  readonly totalDays: number;
+  readonly travelBurden: number;
+  readonly searchHorizonTiles: number;
+  readonly routeTileIds: readonly TileId[];
+}
+
+interface VerificationPhysicalSurfaceContext {
+  readonly routes: ExpeditionPhysicalRouteSurface;
+  readonly insideWorkingRangeTileIds: ReadonlySet<TileId>;
+  readonly searchHorizonTiles: number;
+  readonly travelTimeBudgetDays: number;
+}
+
+function buildVerificationPhysicalSurface(
+  world: WorldState,
+  band: Band,
+  targetTileIds: readonly TileId[],
+  surfaceReuseKey: string,
+): VerificationPhysicalSurfaceContext {
+  const pace = deriveTravelPace(band, "selected_reconnaissance_party").kmPerTravelDay;
+  const searchHorizonTiles = deriveTechnicalRouteSearchHorizonTiles(
+    world,
+    pace,
+    EXPEDITION_MAX_DURATION_DAYS,
+  );
+  const travelTimeBudgetDays = deriveExpeditionOneWaySearchBudgetDays(
+    EXPEDITION_MAX_DURATION_DAYS,
+    VERIFICATION_ON_SITE_DAYS,
+  );
+  const localAccess = deriveResidentialForagingAccessForBand(world, band);
+  return {
+    routes: buildExpeditionPhysicalRouteSurface({
+      world,
+      band,
+      travelContext: "selected_reconnaissance_party",
+      travelTimeBudgetDays,
+      targetTileIds,
+      diagnosticCaller: "verification_selector",
+      surfaceReuseKey,
+    }),
+    insideWorkingRangeTileIds: new Set(localAccess.reachable.map((entry) => entry.tileId)),
+    searchHorizonTiles,
+    travelTimeBudgetDays,
+  };
+}
+
+function deriveVerificationPhysicalAssessmentFromSurface(
+  world: WorldState,
+  band: Band,
+  targetTileId: TileId,
+  context: VerificationPhysicalSurfaceContext,
+): VerificationPhysicalAssessment | undefined {
+  const here = getTile(world, band.position);
+  const target = getTile(world, targetTileId);
+  if (here === undefined || target === undefined || !isBandPassableDestination(target)) return undefined;
+
+  const route = reconstructExpeditionPhysicalRoute(context.routes, targetTileId);
+  if (route === undefined) return undefined;
+  const timing = derivePhysicalRoundTripTiming(
+    world,
+    band,
+    route,
+    VERIFICATION_ON_SITE_DAYS,
+    "selected_reconnaissance_party",
+  );
+  const travelDays = timing.outboundTravelDays + timing.returnTravelDays;
+  const insideWorkingRange = context.insideWorkingRangeTileIds.has(targetTileId);
+  return {
+    eligible:
+      !insideWorkingRange &&
+      Number.isFinite(timing.totalDays) &&
+      timing.totalDays <= EXPEDITION_MAX_DURATION_DAYS,
+    insideWorkingRange,
+    distanceTiles: Math.abs(target.coord.x - here.coord.x) + Math.abs(target.coord.y - here.coord.y),
+    physicalDistanceKm: getRoutePhysicalLengthKm(world, route),
+    totalDays: timing.totalDays,
+    travelBurden: Number.isFinite(travelDays) ? travelDays / (1 + travelDays) : 1,
+    searchHorizonTiles: context.searchHorizonTiles,
+    routeTileIds: route,
+  };
+}
+
+/** Physical verification reach. The cell horizon is retained as a diagnostic only. */
+export function deriveVerificationPhysicalAssessment(
+  world: WorldState,
+  band: Band,
+  targetTileId: TileId,
+): VerificationPhysicalAssessment | undefined {
+  const context = buildVerificationPhysicalSurface(
+    world,
+    band,
+    [targetTileId],
+    `verification:single:${String(band.id)}:${String(targetTileId)}`,
+  );
+  return deriveVerificationPhysicalAssessmentFromSurface(world, band, targetTileId, context);
+}
+
+export const deriveVerificationPhysicalAssessmentForAudit = deriveVerificationPhysicalAssessment;
+
+/** Audit seam proving one physical surface can serve several known verification targets. */
+export function deriveVerificationPhysicalAssessmentsForAudit(
+  world: WorldState,
+  band: Band,
+  targetTileIds: readonly TileId[],
+) {
+  const stableTargets = [...new Set(targetTileIds)].sort((left, right) => String(left).localeCompare(String(right)));
+  const context = buildVerificationPhysicalSurface(
+    world,
+    band,
+    stableTargets,
+    `verification:audit-batch:${String(band.id)}`,
+  );
+  return {
+    travelTimeBudgetDays: context.travelTimeBudgetDays,
+    visitedNodeCount: context.routes.physicalSurface.visitedNodeCount,
+    expandedEdgeCount: context.routes.physicalSurface.expandedEdgeCount,
+    assessments: stableTargets.map((targetTileId) => ({
+      targetTileId,
+      assessment: deriveVerificationPhysicalAssessmentFromSurface(world, band, targetTileId, context),
+    })),
+  };
 }
 
 /**
  * §9 — the bounded, deterministic selector.
  *
- * ELIGIBILITY IS APPLIED BEFORE RANKING. An ineligible high-scoring target can never
- * suppress an eligible lower-scoring one — that was the candidate-masking defect
- * CORRECTION-18 had to repair elsewhere, and it is not repeated here.
+ * Cheap band-known eligibility forms the bounded candidate set first. One physical traversal
+ * surface is then reused for that set, and exact round-trip timing is applied before ranking.
  */
 export function selectVerificationCandidate(
   world: WorldState,
   band: Band,
   need: VerificationNeed,
-  // CORRECTION-23H §5 — audit-only out-parameter. §5 requires EVERY eligible candidate to be
-  // evaluated, not only the winner this function returns, and re-deriving the eligible set in
-  // an audit would be a second copy of the selector rather than the selector. Passing an array
-  // here fills it with exactly the list the production sort below consumes. Undefined in every
-  // normal world; the production return value is unaffected in both cases.
   auditEligibleOut?: VerificationCandidate[],
 ): VerificationCandidate | undefined {
-  if (need.need < VERIFICATION_MIN_NEED) {
-    return undefined;
-  }
+  if (need.need < VERIFICATION_MIN_NEED) return undefined;
 
   const here = getTile(world, band.position);
-
-  if (here === undefined) {
-    return undefined;
-  }
+  if (here === undefined) return undefined;
 
   const attempts = band.frontierVerificationAttempts ?? [];
   const currentTick = Number(world.time.tick);
   const season = world.time.season;
-  const eligible: VerificationCandidate[] = [];
   const candidateDependencies = new Map<string, LaunchDecisionDependency>();
-  let examined = 0;
+  const epistemicCandidates: Array<{
+    readonly record: KnownTileRecord;
+    readonly question: FrontierVerificationQuestion;
+    readonly distanceTiles: number;
+    readonly dependency: LaunchDecisionDependency;
+    readonly gap: NonNullable<ReturnType<typeof describeVerificationGap>>;
+  }> = [];
 
-  // Farthest-first is wrong here and nearest-first biases toward the existing catchment, so
-  // iterate in stable id order and let the score decide. Bounded by the candidate cap.
   const records = Object.values(band.knowledge.observedTiles).sort((a, b) =>
     String(a.tileId).localeCompare(String(b.tileId)),
   );
 
   for (const record of records) {
-    if (examined >= VERIFICATION_CANDIDATE_CAP) {
-      break;
-    }
-
-    if (record.tileId === band.position) {
-      continue;
-    }
+    if (epistemicCandidates.length >= VERIFICATION_CANDIDATE_CAP) break;
+    if (record.tileId === band.position) continue;
 
     const tile = getTile(world, record.tileId);
-
-    if (tile === undefined || !isBandPassableDestination(tile)) {
-      continue;
-    }
-
-    const distance =
-      Math.abs(tile.coord.x - here.coord.x) + Math.abs(tile.coord.y - here.coord.y);
-
-    // Too close to be worth a party (it is inside the working range), or too far to be a
-    // verification rather than an exploration problem.
-    if (distance < 3 || distance > VERIFICATION_MAX_DISTANCE_TILES) {
-      continue;
-    }
-
-    examined += 1;
+    if (tile === undefined || !isBandPassableDestination(tile)) continue;
+    const distance = Math.abs(tile.coord.x - here.coord.x) + Math.abs(tile.coord.y - here.coord.y);
 
     for (const question of QUESTION_PRIORITY) {
-      const state = classifyPlaceForQuestion(record, question, attempts);
-
-      // Only promising-but-unverified places are verification targets. `unknown` is an
-      // exploration problem; `known_poor` is a reason NOT to go; already-verified needs
-      // no repeat.
-      if (state !== "promising_unverified") {
-        continue;
-      }
-
-      // CORRECTION-23B §11 — RETRY MEMORY, not the display ring. The 12-entry
-      // `frontierVerificationAttempts` history is a read-model bound and turned over in
-      // under two years, which is why one band re-verified one place 1,186 times in 500
-      // years. The gate now consults the upserted evidence store, keyed by real conditions.
+      if (classifyPlaceForQuestion(record, question, attempts) !== "promising_unverified") continue;
       if (
         !mayAskAgain(band, record.tileId, question, {
           currentTick,
@@ -319,75 +425,62 @@ export function selectVerificationCandidate(
       ) {
         continue;
       }
+      if (question === "resource_test_possible" && !resourceTestEligible(band, record.tileId)) continue;
 
-      // §7 Option A — a stock-backed test is only worth attempting where food was
-      // physically found. This is eligibility, never support: it authorises asking a
-      // harder question, and creates no patch, stock, yield or receipt.
-      if (question === "resource_test_possible" && !resourceTestEligible(band, record.tileId)) {
-        continue;
-      }
-
-      // ─────────────────────────────────────────────────────────────────────────────────
-      // CORRECTION-23I §5/§6/§7/§8 — THE DECISION-DEPENDENCY GATE.
-      //
-      // Everything above establishes that the band COULD ask. This establishes that the
-      // answer would change something the band is actually deciding. CORRECTION-23H measured
-      // what happens without it: across 1.63 million candidates, immediate action relevance
-      // never exceeded 1.5% in any world, two questions were tautological in practice
-      // (confirmation rates 0.98 and 1.00), and 94% of every physically consequential answer
-      // in the simulation was one branch of one question.
-      //
-      // A place being interesting, uncertain, distant or highly ranked is not a reason to
-      // spend two people and a week of walking on it.
-      // ─────────────────────────────────────────────────────────────────────────────────
       const dependency = deriveLaunchDecisionDependency(world, band, record.tileId, question, distance);
-
-      if (dependency === undefined) {
-        continue;
-      }
-
+      if (dependency === undefined) continue;
       const gap = describeVerificationGap(record, question);
+      if (gap === undefined) continue;
 
-      if (gap === undefined) {
-        continue;
-      }
-
-      // Score: how promising it looked, how badly the answer is needed, discounted by the
-      // walk. All band-known. Distance is a real cost here (the party has to get there and
-      // back), and it appears once.
-      const score = round2(
-        gap.promise * 0.44 +
-          gap.informationDeficit * 0.3 +
-          need.need * 0.24 -
-          clamp01(distance / VERIFICATION_MAX_DISTANCE_TILES) * 0.22 -
-          clamp01(record.observedRisk ?? 0.3) * 0.16,
-      );
-
-      // CORRECTION-23I §5/§12 — the approved candidate carries its decision dependency, so a
-      // launch can always be explained by the reason it was allowed rather than reconstructed.
+      epistemicCandidates.push({ record, question, distanceTiles: distance, dependency, gap });
       candidateDependencies.set(`${String(record.tileId)}|${question}`, dependency);
-
-      eligible.push({
-        tileId: record.tileId,
-        question,
-        promisingSignal: gap.promisingSignal,
-        missingEvidence: gap.missingEvidence,
-        informationDeficit: round2(gap.informationDeficit),
-        distanceTiles: distance,
-        score,
-      });
-      // One question per place per pass: the highest-priority open question.
       break;
     }
   }
 
-  if (auditEligibleOut !== undefined) {
-    auditEligibleOut.push(...eligible);
+  if (epistemicCandidates.length === 0) return undefined;
+
+  const physicalContext = buildVerificationPhysicalSurface(
+    world,
+    band,
+    epistemicCandidates.map((candidate) => candidate.record.tileId),
+    `verification:selection:${String(band.id)}:${currentTick}`,
+  );
+  const eligible: VerificationCandidate[] = [];
+
+  for (const candidate of epistemicCandidates) {
+    const physical = deriveVerificationPhysicalAssessmentFromSurface(
+      world,
+      band,
+      candidate.record.tileId,
+      physicalContext,
+    );
+    if (physical === undefined || !physical.eligible) continue;
+
+    const score = round2(
+      candidate.gap.promise * 0.44 +
+        candidate.gap.informationDeficit * 0.3 +
+        need.need * 0.24 -
+        clamp01(physical.travelBurden) * 0.22 -
+        clamp01(candidate.record.observedRisk ?? 0.3) * 0.16,
+    );
+
+    eligible.push({
+      tileId: candidate.record.tileId,
+      question: candidate.question,
+      promisingSignal: candidate.gap.promisingSignal,
+      missingEvidence: candidate.gap.missingEvidence,
+      informationDeficit: round2(candidate.gap.informationDeficit),
+      distanceTiles: candidate.distanceTiles,
+      physicalDistanceKm: round2(physical.physicalDistanceKm),
+      travelBurden: round2(physical.travelBurden),
+      score,
+      routeTileIds: physical.routeTileIds,
+    });
   }
 
-  if (eligible.length === 0) {
-    return undefined;
-  }
+  if (auditEligibleOut !== undefined) auditEligibleOut.push(...eligible);
+  if (eligible.length === 0) return undefined;
 
   const winner = [...eligible].sort((left, right) =>
     right.score === left.score
@@ -395,15 +488,9 @@ export function selectVerificationCandidate(
       : right.score - left.score,
   )[0];
 
-  // CORRECTION-23I §12 — record the winning launch's decision dependency for the debug
-  // projection and the acceptance matrix. Audit-only: a no-op when nothing is recording.
   if (winner !== undefined && isRecordingLaunchDependencies()) {
     const dependency = candidateDependencies.get(`${String(winner.tileId)}|${winner.question}`);
-
     if (dependency !== undefined) {
-      // CORRECTION-23J §8 — stamped in DAYS. This recorded `currentTick` before, which put launch
-      // records on a different timeline from the expedition and camp records they must be joined
-      // to; a 90x unit mismatch cannot be paired.
       recordLaunchDependency({ ...dependency, day: deriveCurrentDay(world) });
     }
   }

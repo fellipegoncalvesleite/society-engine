@@ -284,7 +284,7 @@ export function advanceProvisionalSubsistence(world: WorldState, day: number): T
       depletionApplied = round4(harvest.depletionApplied);
       failureReason = harvest.failureReason;
       // The group is STANDING on the source, so there is no transport leg and no transport loss —
-      // the same `min(0.25, roundTripTiles * 0.012)` rule production applies, at zero tiles. The
+      // the same physical-distance transport-loss rule production applies, at zero route km. The
       // patch's own processing loss is charged in full.
       const processingLoss = harvestedUnits * harvest.processingLossRate;
       usableUnits = round4(Math.max(0, harvestedUnits - processingLoss));

@@ -219,14 +219,14 @@ export function ForagingAdaptationDetails({ band }: { readonly band: Band }) {
         <Detail
           key={`${String(memory.tileId)}:${memory.taskGroupType}:${index}`}
           label={`trip memory ${index + 1}`}
-          value={`${String(memory.tileId)} · ${memory.taskGroupType} · ${memory.action} · trips ${memory.recentTripCount} · failures ${memory.failureCount} · low returns ${memory.lowReturnCount} · successes ${memory.successCount} · mean ${formatNumber(memory.meanReturn)} · distance ${memory.longestDistanceTiles} · penalty ${formatNumber(memory.confidencePenalty)} · rest ${memory.restTicksSuggested}`}
+          value={`${String(memory.tileId)} · ${memory.taskGroupType} · ${memory.action} · trips ${memory.recentTripCount} · failures ${memory.failureCount} · low returns ${memory.lowReturnCount} · successes ${memory.successCount} · mean ${formatNumber(memory.meanReturn)} · distance ${formatNumber(memory.longestDistanceKm)} km · penalty ${formatNumber(memory.confidencePenalty)} · rest ${memory.restTicksSuggested}`}
         />
       ))}
       {adaptation.nearbyOpportunityProbes.slice(0, 6).map((probe, index) => (
         <Detail
           key={`${String(probe.tileId)}:${index}`}
           label={`nearby probe ${index + 1}`}
-          value={`${String(probe.tileId)} · ${probe.comparison} · distance ${probe.distanceTiles} · readiness ${formatNumber(probe.probeReadiness)} · relative ${formatNumber(probe.relativeOpportunity)} · over-capacity ${formatNumber(probe.currentOverCapacity)} · risk ${formatNumber(probe.riskPenalty)} · confidence ${formatNumber(probe.confidence)}`}
+          value={`${String(probe.tileId)} · ${probe.comparison} · distance ${formatNumber(probe.distanceKm)} km · readiness ${formatNumber(probe.probeReadiness)} · relative ${formatNumber(probe.relativeOpportunity)} · over-capacity ${formatNumber(probe.currentOverCapacity)} · risk ${formatNumber(probe.riskPenalty)} · confidence ${formatNumber(probe.confidence)}`}
         />
       ))}
     </>
@@ -1931,7 +1931,7 @@ export function DailyTaskGroupDetails({
           <Detail label="selected target" value={String(selectedTrip.targetTileId)} />
           <Detail
             label="selected route"
-            value={`${selectedTrip.distanceTiles} out, ${selectedTrip.roundTripTiles} round, ${selectedTrip.tilesCrossed} crossed`}
+            value={`${formatNumber(selectedTrip.distanceKm)} km out, ${formatNumber(selectedTrip.distanceKm * 2)} km round; ${selectedTrip.distanceTiles} out/${selectedTrip.roundTripTiles} round cells (topology), ${selectedTrip.tilesCrossed} crossed`}
           />
           <Detail label="selected status" value={formatActivityTripStatus(selectedTrip)} />
           <Detail
@@ -1956,7 +1956,7 @@ export function DailyTaskGroupDetails({
       <Detail label="latest target" value={String(latest.targetTileId)} />
       <Detail
         label="latest distance"
-        value={`${latest.distanceTiles} out, ${latest.roundTripTiles} round, ${latest.estimatedDurationDays}d, ${latest.outcome}`}
+        value={`${formatNumber(latest.distanceKm)} km out, ${formatNumber(latest.distanceKm * 2)} km round; ${latest.distanceTiles} out/${latest.roundTripTiles} round cells (topology), ${latest.estimatedDurationDays}d, ${latest.outcome}`}
       />
       <Detail
         label="latest result"
@@ -1975,7 +1975,7 @@ export function DailyTaskGroupDetails({
       <Detail label="recent objectives" value={formatCounts(objectiveCounts)} />
       <Detail
         label="recent range"
-        value={`${recent.length}/${trips.length} shown, max one-way ${Math.max(...recent.map((trip) => trip.distanceTiles))} tiles, no effect: ${
+        value={`${recent.length}/${trips.length} shown, max one-way ${formatNumber(Math.max(...recent.map((trip) => trip.distanceKm)))} km, no effect: ${
           recent.every((trip) => trip.noResidentialRelocation && trip.noYieldChange && trip.noStressChange)
             ? "yes"
             : "no"
@@ -2444,7 +2444,7 @@ export function ActivityTraceDetails({ band }: { readonly band: Band }) {
           <Detail
             key={`${String(trip.tick)}:${index}`}
             label={`${activityTypeLabel(trip.taskGroupType)} → ${String(trip.targetTileId)}`}
-            value={`${trip.season} · ${seasonalActivityReason(trip)} · ${trip.distanceTiles} tiles (topology) · ${trip.activityOutcome} · food urgency ${formatNumber(
+            value={`${trip.season} · ${seasonalActivityReason(trip)} · ${formatNumber(trip.distanceKm)} km physical · ${trip.distanceTiles} cells (topology) · ${trip.activityOutcome} · food urgency ${formatNumber(
               band.pressureState?.foodStress ?? 0,
             )} · water urgency ${formatNumber(
               band.pressureState?.waterStress ?? 0,
@@ -2497,9 +2497,7 @@ export function ResidentialMoveTraceDetails({ band }: { readonly band: Band }) {
             <Detail
               key={String(move.eventId)}
               label={`${move.moveKind} · ${move.cause}`}
-              value={`${move.status} · ${move.distanceTiles} tiles (${formatNumber(
-                move.distanceKm,
-              )} km physical) · hardship ${move.hardshipLevel ?? "n/a"} ${formatNumber(
+              value={`${move.status} · ${formatNumber(move.distanceKm)} km physical (${move.distanceTiles} cells topology) · hardship ${move.hardshipLevel ?? "n/a"} ${formatNumber(
                 move.hardshipRisk ?? 0,
               )} (${move.hardshipOutcome ?? "accepted"}: ${move.hardshipReason ?? "not evaluated"}) · conf ${formatNumber(
                 move.confidence,
@@ -3016,7 +3014,7 @@ export function getDayOfSeason(day: IntraSeasonTripRecord["day"]): number {
 export function formatActivityTrip(trip: IntraSeasonTripRecord): string {
   return `${trip.groupLabel} (${trip.estimatedPeopleCount}); ${trip.objectiveLabel}; ${trip.cause}; ${String(
     trip.targetTileId,
-  )}; ${trip.distanceTiles} out/${trip.roundTripTiles} round; ${trip.outcome}; ${trip.activityOutcome}; ${trip.resourceReturn.returnedResourceKind}${formatPlantPatchTrace(trip)}; memory=${trip.activityMemoryEffect.effectType}; ${formatTripGuard(trip)}`;
+  )}; ${formatNumber(trip.distanceKm)} km out/${formatNumber(trip.distanceKm * 2)} km round (${trip.distanceTiles}/${trip.roundTripTiles} cells topology); ${trip.outcome}; ${trip.activityOutcome}; ${trip.resourceReturn.returnedResourceKind}${formatPlantPatchTrace(trip)}; memory=${trip.activityMemoryEffect.effectType}; ${formatTripGuard(trip)}`;
 }
 
 export function formatActivityTripStatus(trip: IntraSeasonTripRecord): string {
@@ -4383,7 +4381,7 @@ export function ResidentialMoveDetails({ band }: { readonly band: Band }) {
           <Detail label="from -> to" value={`${latest.fromTileId} -> ${latest.toTileId}`} />
           <Detail
             label="season window"
-            value={`day ${latest.startDay}-${latest.endDay} (${latest.durationDays}d), ${latest.distanceTiles} tiles`}
+            value={`day ${latest.startDay}-${latest.endDay} (${latest.durationDays}d), ${formatNumber(latest.distanceKm)} km physical (${latest.distanceTiles} cells topology)`}
           />
           <Detail label="status" value={latest.status} />
           <Detail label="route length" value={String(latest.pathTiles.length)} />

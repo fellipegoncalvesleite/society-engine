@@ -1,6 +1,7 @@
 import type { ReasonId, TileId } from "../core/types";
 import type { RiverCrossingClass, RiverCrossingProfile, RiverSegmentProfile, WorldState } from "../world/types";
 import { makeRiverCrossingKey } from "../world/hydrography";
+import { getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
 import type {
   ResourceEcologyActivityTrace,
   ResourceEcologyBroadType,
@@ -204,7 +205,7 @@ interface MaterialBasis {
 
 interface KnownCrossingCandidate {
   readonly crossing: RiverCrossingProfile;
-  readonly distanceScore: number;
+  readonly distanceScoreKm: number;
   readonly hasMemory: boolean;
   readonly useCount: number;
   readonly successConfidence: number;
@@ -864,13 +865,10 @@ function chooseKnownCrossingCandidate(
     if (a === undefined || b === undefined) {
       continue;
     }
-    const nearDistance = Math.min(
-      gridDistance(from, a) + gridDistance(to, b),
-      gridDistance(from, b) + gridDistance(to, a),
-    );
+    const nearDistanceKm = crossingPhysicalDistanceScoreKm(world, from.id, to.id, a.id, b.id);
     candidates.push({
       crossing,
-      distanceScore: nearDistance,
+      distanceScoreKm: nearDistanceKm,
       hasMemory: memory !== undefined,
       useCount: memory?.useCount ?? 0,
       successConfidence: memory?.successConfidence ?? crossing.confidence * 0.45,
@@ -879,7 +877,7 @@ function chooseKnownCrossingCandidate(
 
   return candidates
     .sort((left, right) =>
-      left.distanceScore - right.distanceScore ||
+      left.distanceScoreKm - right.distanceScoreKm ||
       Number(right.hasMemory) - Number(left.hasMemory) ||
       right.successConfidence - left.successConfidence ||
       makeRiverCrossingKey(left.crossing.fromTileId, left.crossing.toTileId)
@@ -1128,11 +1126,44 @@ function watercraftTripCapacity(kind: TemporaryWatercraftKind): number {
   }
 }
 
-function gridDistance(
-  left: { readonly coord: { readonly x: number; readonly y: number } },
-  right: { readonly coord: { readonly x: number; readonly y: number } },
+function crossingPhysicalDistanceScoreKm(
+  world: WorldState,
+  fromTileId: TileId,
+  toTileId: TileId,
+  crossingATileId: TileId,
+  crossingBTileId: TileId,
 ): number {
-  return Math.abs(left.coord.x - right.coord.x) + Math.abs(left.coord.y - right.coord.y);
+  const from = world.tiles[fromTileId];
+  const to = world.tiles[toTileId];
+  const a = world.tiles[crossingATileId];
+  const b = world.tiles[crossingBTileId];
+  if (from === undefined || to === undefined || a === undefined || b === undefined) {
+    return Number.POSITIVE_INFINITY;
+  }
+  return Math.min(
+    getManhattanPhysicalDistanceKm(world.config, from.coord, a.coord) +
+      getManhattanPhysicalDistanceKm(world.config, to.coord, b.coord),
+    getManhattanPhysicalDistanceKm(world.config, from.coord, b.coord) +
+      getManhattanPhysicalDistanceKm(world.config, to.coord, a.coord),
+  );
+}
+
+export function deriveCrossingPhysicalDistanceScoreForAudit(
+  world: WorldState,
+  fromTileId: TileId,
+  toTileId: TileId,
+  crossingATileId: TileId,
+  crossingBTileId: TileId,
+): { readonly distanceScoreKm: number } {
+  return {
+    distanceScoreKm: crossingPhysicalDistanceScoreKm(
+      world,
+      fromTileId,
+      toTileId,
+      crossingATileId,
+      crossingBTileId,
+    ),
+  };
 }
 
 function uniqueClassIds(values: readonly ResourceEcologyClassId[]): readonly ResourceEcologyClassId[] {

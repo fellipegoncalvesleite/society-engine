@@ -351,7 +351,7 @@ function PlaceEvidence({
             <li key={String(entry.tileId)}>
               <div className="knowledge-evidence-head">
                 <strong>{String(entry.tileId)}</strong>
-                {entry.distanceTiles === undefined ? null : <Chip>{entry.distanceTiles} tiles</Chip>}
+                {entry.distanceTiles === undefined ? null : <Chip>{entry.distanceTiles} cells topology</Chip>}
                 <Chip>{entry.provenance}</Chip>
                 <Chip>
                   {entry.visits} visit{entry.visits === 1 ? "" : "s"}
@@ -435,7 +435,7 @@ function WhatThisBandIsAboutToForget({
             <div className="knowledge-evidence-head">
               <strong>{String(place.tileId)}</strong>
               {place.distanceTiles === undefined ? null : (
-                <Chip>{place.distanceTiles} tiles away</Chip>
+                <Chip>{place.distanceTiles} cells away (topology)</Chip>
               )}
               <Chip>{place.wouldBeRetained ? "kept" : "dropped next compression"}</Chip>
               {place.evidenceClasses.map((className) => (
@@ -523,7 +523,7 @@ function GoingBackToFindOut({
               <li key={`w:${String(row.tileId)}`}>
                 <div className="knowledge-evidence-head">
                   <strong>{String(row.tileId)}</strong>
-                  {row.distanceTiles === undefined ? null : <Chip>{row.distanceTiles} tiles</Chip>}
+                  {row.distanceTiles === undefined ? null : <Chip>{row.distanceTiles} cells topology</Chip>}
                 </div>
                 <span className="knowledge-domain-basis">Water presence: {row.presence}</span>
                 <span className="knowledge-domain-basis">Physical access: {row.physicalAccess}</span>
@@ -548,7 +548,7 @@ function GoingBackToFindOut({
             <li key={`p:${String(target.tileId)}:${target.question}`}>
               <div className="knowledge-evidence-head">
                 <strong>{String(target.tileId)}</strong>
-                {target.distanceTiles === undefined ? null : <Chip>{target.distanceTiles} tiles</Chip>}
+                {target.distanceTiles === undefined ? null : <Chip>{target.distanceTiles} cells topology</Chip>}
                 <Chip>{target.question.replace(/_/g, " ")}</Chip>
                 <Chip>{target.state.replace(/_/g, " ")}</Chip>
                 {target.blockedReason === undefined ? null : <Chip>blocked</Chip>}
@@ -563,7 +563,7 @@ function GoingBackToFindOut({
             <li key={`k:${String(target.tileId)}:${target.question}`}>
               <div className="knowledge-evidence-head">
                 <strong>{String(target.tileId)}</strong>
-                {target.distanceTiles === undefined ? null : <Chip>{target.distanceTiles} tiles</Chip>}
+                {target.distanceTiles === undefined ? null : <Chip>{target.distanceTiles} cells topology</Chip>}
                 <Chip>{target.question.replace(/_/g, " ")}</Chip>
                 <Chip>known poor</Chip>
               </div>

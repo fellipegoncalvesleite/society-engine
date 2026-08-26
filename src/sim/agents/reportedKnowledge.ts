@@ -1828,7 +1828,7 @@ function precisionForTrip(trip: IntraSeasonTripRecord): ReportedKnowledgePrecisi
   if (trip.activityOutcome === "failed_due_to_distance" || trip.movementType === "overnight_hunt_or_scout") {
     return "vague_direction";
   }
-  if (trip.distanceTiles >= 6 || trip.outcome !== "returns_same_day") {
+  if (trip.distanceKm >= 9 || trip.outcome !== "returns_same_day") {
     return "approximate_region";
   }
   return "exact_observed_area";

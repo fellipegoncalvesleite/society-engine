@@ -578,7 +578,7 @@ function deriveCareTravelBurden(
     ? 0
     : clamp01(crossing.dependents / Math.max(1, loads.population) * 0.42 + crossing.elders / Math.max(1, loads.population) * 0.34 + crossing.shuttleTrips / 12 + crossing.seasonExposureRisk * 0.28);
   const longMoveBurden = Math.max(0, ...(band.recentResidentialMoveEvents ?? []).map((move) =>
-    clamp01(move.distanceTiles / 18 * 0.34 + (move.hardshipRisk ?? 0) * 0.52),
+    clamp01(move.distanceKm / 27 * 0.34 + (move.hardshipRisk ?? 0) * 0.52),
   ));
   const childElderWeather = Math.max(0, ...weatherMemories.map((memory) => memory.childElderRisk));
   const adultLaborAvailable = clamp01(loads.adultLaborShare - sickness.careBurden * 0.18 - nursingBurden * 0.12);
@@ -615,7 +615,7 @@ function deriveMaterialWear(
   const huntingTrips = (band.recentIntraSeasonTrips ?? []).filter((trip) => trip.taskGroupType === "hunting_group").length;
   const fishingTrips = (band.recentIntraSeasonTrips ?? []).filter((trip) => trip.taskGroupType === "fishing_group").length;
   const gatheringTrips = (band.recentIntraSeasonTrips ?? []).filter((trip) => trip.taskGroupType === "plant_gathering_group" || trip.taskGroupType === "local_foraging_group").length;
-  const longTrips = (band.recentIntraSeasonTrips ?? []).filter((trip) => trip.distanceTiles >= 5).length;
+  const longTrips = (band.recentIntraSeasonTrips ?? []).filter((trip) => trip.distanceKm >= 7.5).length;
   const moves = band.recentResidentialMoveEvents ?? [];
   const crossingUse = moves.filter((move) => move.temporaryWatercraft !== undefined).length;
   const heavyCarry = Math.max(0, ...cards.map((card) => burdenValue(card.carryBurden) * card.storageConfidence));

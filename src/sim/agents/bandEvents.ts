@@ -28,6 +28,10 @@ import type {
 } from "./types";
 import { isProvisionalSuccessor } from "./bandLifecycle";
 
+// SCALE-1 provisional compatibility calibration: the legacy route-talk selector used
+// three cells on the canonical 1.5-km raster, i.e. 4.5 km outbound physical distance.
+const ROUTE_TALK_DISTANCE_KM = 4.5;
+
 const RECENT_EVENT_LIMIT = 48;
 const LAST_10_YEAR_EVENT_LIMIT = 80;
 const LAST_25_YEAR_EVENT_LIMIT = 120;
@@ -705,7 +709,7 @@ function pushForagingAdaptationTalk(candidates: CampTalkCandidate[], world: Worl
       stateKey: `talk:adaptation:trip:${String(badTrip.tileId)}:${badTrip.action}:${badTrip.failureCount}:${badTrip.lowReturnCount}`,
       whyShown: "recent activity trips repeatedly underperformed",
       rawSource: "Band.foragingAdaptation.tripFailureMemories",
-      rawReason: `tile=${String(badTrip.tileId)}; task=${badTrip.taskGroupType}; failures=${badTrip.failureCount}; lowReturns=${badTrip.lowReturnCount}; successes=${badTrip.successCount}; distance=${badTrip.longestDistanceTiles}; penalty=${round2(badTrip.confidencePenalty)}`,
+      rawReason: `tile=${String(badTrip.tileId)}; task=${badTrip.taskGroupType}; failures=${badTrip.failureCount}; lowReturns=${badTrip.lowReturnCount}; successes=${badTrip.successCount}; distanceKm=${round2(badTrip.longestDistanceKm)}; penalty=${round2(badTrip.confidencePenalty)}`,
       confidenceStatus: badTrip.recoveredBySuccess ? "recovering after success" : `rest suggested ${badTrip.restTicksSuggested} ticks`,
       interpretationKind: "interpretation",
       relatedTileId: badTrip.tileId,
@@ -1209,7 +1213,7 @@ function pushMovementTalk(candidates: CampTalkCandidate[], world: WorldState, ba
           : move.cause === "poor_return"
             ? "Bad returns made leaving sound more reasonable."
             : "The move is remembered through practical causes, not a grand story.",
-        move.distanceTiles >= 4
+        move.distanceKm >= 6
           ? "Long moves make even quiet people count the cost."
           : "A short move can still change what feels familiar.",
       ]),
@@ -1217,7 +1221,7 @@ function pushMovementTalk(candidates: CampTalkCandidate[], world: WorldState, ba
       whyShown: "recent residential movement or route hardship",
       rawSource: "Band.recentResidentialMoveEvents",
       rawReason: `${move.cause}; status=${move.status}; hardship=${move.hardshipLevel ?? "none"}; outcome=${move.hardshipOutcome ?? "accepted"}`,
-      confidenceStatus: `distance ${move.distanceTiles}; duration ${move.durationDays}`,
+      confidenceStatus: `distance ${round2(move.distanceKm)} km; duration ${move.durationDays}`,
       interpretationKind: "direct_state",
       relatedTileId: move.toTileId,
       reasonIds: move.reasonIds,
@@ -1265,7 +1269,7 @@ function pushMovementTalk(candidates: CampTalkCandidate[], world: WorldState, ba
     entry.taskGroupType === "memory_refresh_group" ||
     entry.activityOutcome === "failed_due_to_water_risk" ||
     entry.activityOutcome === "abandoned_due_to_risk" ||
-    entry.distanceTiles >= 3
+    entry.distanceKm >= ROUTE_TALK_DISTANCE_KM
   );
   if (trip !== undefined) {
     candidates.push({
@@ -1280,7 +1284,7 @@ function pushMovementTalk(candidates: CampTalkCandidate[], world: WorldState, ba
           : trip.activityOutcome === "abandoned_due_to_risk"
             ? "Nobody likes a route that sends people back before the work starts."
             : "The scouts gave the camp more to argue about, not a simple answer.",
-        trip.distanceTiles >= 3
+        trip.distanceKm >= 4.5
           ? "Farther edges sound possible until people start counting the return."
           : "The route talk stays close to known ground.",
         "The line is grounded in a trip trace, not in hidden map knowledge.",
@@ -1288,7 +1292,7 @@ function pushMovementTalk(candidates: CampTalkCandidate[], world: WorldState, ba
       stateKey: `talk:route-trip:${trip.taskGroupType}:${trip.activityOutcome}:${String(trip.targetTileId)}`,
       whyShown: "recent trip changed route confidence or caution",
       rawSource: "Band.recentIntraSeasonTrips",
-      rawReason: `${trip.taskGroupType}; outcome=${trip.activityOutcome}; distance=${trip.distanceTiles}; summary=${trip.activityOutcomeSummary}`,
+      rawReason: `${trip.taskGroupType}; outcome=${trip.activityOutcome}; distance=${round2(trip.distanceKm)} km; summary=${trip.activityOutcomeSummary}`,
       confidenceStatus: `return confidence ${round2(trip.resourceReturn.returnConfidence)}`,
       interpretationKind: "interpretation",
       relatedTileId: trip.targetTileId,
@@ -2251,7 +2255,7 @@ function deriveForagingAdaptationEvents(band: Band): readonly BandReadableEventC
       description: badTrip.action === "abandon_temporarily"
         ? "A repeated low-return trip target is being abandoned for now."
         : "Repeated underperformance lowered trust in a target.",
-      detail: `task ${badTrip.taskGroupType}; failures ${badTrip.failureCount}; low returns ${badTrip.lowReturnCount}; successes ${badTrip.successCount}; mean return ${round2(badTrip.meanReturn)}; distance ${badTrip.longestDistanceTiles}; penalty ${round2(badTrip.confidencePenalty)}; recovered ${badTrip.recoveredBySuccess}`,
+      detail: `task ${badTrip.taskGroupType}; failures ${badTrip.failureCount}; low returns ${badTrip.lowReturnCount}; successes ${badTrip.successCount}; mean return ${round2(badTrip.meanReturn)}; distance ${round2(badTrip.longestDistanceKm)} km; penalty ${round2(badTrip.confidencePenalty)}; recovered ${badTrip.recoveredBySuccess}`,
       stateKey: `adaptation:trip:${String(badTrip.tileId)}:${badTrip.action}:${badTrip.failureCount}:${badTrip.lowReturnCount}`,
       rawSource: "Band.foragingAdaptation.tripFailureMemories",
       rawReason: "recent activity trace outcomes repeatedly underperformed",

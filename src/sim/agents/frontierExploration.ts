@@ -40,6 +40,8 @@ import { getTile } from "../world/generate";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
 import { LANDSCAPE_VISIBILITY_MAX_RANGE_KM } from "./landscapeVisibility";
+import { getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
+import { deriveResidentialForagingAccessForBand } from "./residentialAnchor";
 import type {
   Band,
   ExpeditionObservation,
@@ -52,14 +54,6 @@ import type {
 
 // ── Bounds. Hard caps on state and search; never tuning dials. ────────────────────
 
-/**
- * §13 — the breadcrumb trail cap. The trail is the party's ONLY way home, so it must
- * hold the whole walked corridor; it is bounded by forcing the return once the trail
- * reaches this length. 37 entries = an origin tile plus a 36-tile outbound walk, which
- * is exactly the existing `EXPEDITION_MAX_ROUTE_TILES` physical envelope — this cap can
- * therefore never be the thing that truncates a feasible journey (§10).
- */
-export const FRONTIER_MAX_BREADCRUMB_TILES = 37;
 /**
  * §13 — bounded carried observations for an exploratory route. The shared
  * `EXPEDITION_OBSERVATION_CAP` of 6 is sized for a there-and-back task with one target;
@@ -77,10 +71,9 @@ export const FRONTIER_OBSERVATION_CAP = 12;
 export const FRONTIER_STEP_BRANCHING = 4;
 /** Eligibility floor: below this blended band-known evidence no party is raised. */
 const FRONTIER_ELIGIBILITY_THRESHOLD = 0.5;
-/** Distance beyond which a known-unused-habitat candidate is not "inside the parent catchment". */
-export const PARENT_CATCHMENT_RADIUS_TILES = 8;
-/** A corridor/edge anchor must be at least this far out to define a usable heading. */
-const MIN_ANCHOR_DISTANCE_TILES = 2;
+// PROVENANCE D — provisional physical compatibility calibration: the former two-cell heading
+// anchor on the canonical raster represented about 3 km of displacement.
+const MIN_ANCHOR_DISTANCE_KM = 3;
 
 const clamp01 = (value: number): number => Math.max(0, Math.min(1, value));
 const round2 = (value: number): number => Math.round(value * 100) / 100;
@@ -144,14 +137,13 @@ export function deriveFrontierExplorationEligibility(
   // Does the band already know a viable destination OUTSIDE the range it works? This
   // reads the band's OWN opportunity record and its OWN position — never world truth.
   const opportunity = band.daughterColonization?.bestKnownUnusedHabitatOpportunity;
-  const opportunityDistance =
+  const parentCatchment = deriveResidentialForagingAccessForBand(world, band);
+  const opportunityInsideParentCatchment =
     opportunity === undefined
       ? undefined
-      : gridDistanceBetween(world, band.position, opportunity.candidateTileId);
+      : parentCatchment.reachable.some((entry) => entry.tileId === opportunity.candidateTileId);
   const noKnownNonOverlappingDestination =
-    opportunity === undefined ||
-    opportunityDistance === undefined ||
-    opportunityDistance <= PARENT_CATCHMENT_RADIUS_TILES;
+    opportunity === undefined || opportunityInsideParentCatchment !== false;
   // Exhausted known opportunity: the band holds an opportunity record that its own
   // criteria already REJECTED, or holds none at all while under real pressure.
   const exhaustedKnownOpportunity =
@@ -343,16 +335,15 @@ export function buildFrontierPlan(params: {
 
 export type FrontierStepOutcome =
   | { readonly kind: "step"; readonly tileId: TileId }
-  | { readonly kind: "blocked" }
-  | { readonly kind: "budget_reached" };
+  | { readonly kind: "blocked" };
 
 /**
  * Choose the party's next physical step. Reads ONLY:
  *   - the already-walked trail (to avoid re-walking and to know the way back);
  *   - the four tiles physically touching the party's feet (existence + passability);
  *   - broad relief/hydrography visible from those adjacent tiles;
- *   - the plan's heading;
- *   - remaining outward budget and the reserved return.
+ *   - the plan's heading.
+ * Physical return capacity is enforced by the expedition lifecycle before this local step chooser runs.
  *
  * It NEVER reads a distant tile, a stock, a richness value, or any property of country
  * more than one step away. A tile's `resourceProfile.waterAccess` is deliberately NOT
@@ -362,16 +353,7 @@ export type FrontierStepOutcome =
 export function chooseNextFrontierStep(
   world: WorldState,
   expedition: ExpeditionRecord,
-  outwardTilesRemaining: number,
 ): FrontierStepOutcome {
-  if (outwardTilesRemaining <= 0) {
-    return { kind: "budget_reached" };
-  }
-
-  if (expedition.routeTileIds.length >= FRONTIER_MAX_BREADCRUMB_TILES) {
-    return { kind: "budget_reached" };
-  }
-
   const plan = expedition.frontierPlan;
   const stand = getTile(world, expedition.positionTileId);
 
@@ -436,45 +418,6 @@ export function chooseNextFrontierStep(
 
 // ─────────────────────────────────────────────────────────────────────────────
 // §10 — RETURN-BUDGET AUTHORITY.
-// ─────────────────────────────────────────────────────────────────────────────
-
-/**
- * How many more tiles the party may walk OUTWARD before it must turn for home.
- *
- * The reserve is computed from the same physical envelope every other expedition uses —
- * the party's remaining days before the hard deadline, and the walking it must still do
- * to retrace its own trail. No cap is raised to make a run succeed (§10): if the physics
- * says a journey does not fit, the party turns back and the journey honestly does not
- * happen.
- *
- * `tilesPerDay` is the party's ACTUAL physical pace, passed in by the lifecycle. It is
- * never inflated by need.
- */
-export function deriveOutwardTilesRemaining(params: {
-  readonly trailLength: number;
-  readonly tilesPerDay: number;
-  readonly daysElapsed: number;
-  readonly maxDurationDays: number;
-  readonly outboundBudgetTiles: number;
-}): number {
-  const { trailLength, tilesPerDay, daysElapsed, maxDurationDays, outboundBudgetTiles } = params;
-  const pace = Math.max(1, tilesPerDay);
-  // Days the party must still spend walking home along the trail it has already laid.
-  const returnLegDays = Math.ceil(Math.max(0, trailLength - 1) / pace);
-  // Days left before the party is overdue, minus the walk home. One day of slack is held
-  // so the reserve binds BEFORE the deadline rather than exactly on it.
-  const daysAvailableOutward = maxDurationDays - daysElapsed - returnLegDays - 1;
-
-  if (daysAvailableOutward <= 0) {
-    return 0;
-  }
-
-  // The plan's own outward budget also binds: a party does not walk to the edge of its
-  // physical envelope just because it could.
-  const budgetRemaining = outboundBudgetTiles - Math.max(0, trailLength - 1);
-  return Math.max(0, Math.min(daysAvailableOutward * pace, budgetRemaining));
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 // §13 — BOUNDED BREADCRUMB / OBSERVATION REPRESENTATION.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -614,7 +557,7 @@ function farthestCorridorInferredTile(world: WorldState, band: Band, origin: Til
   }
 
   let best: Tile | undefined;
-  let bestDistance = MIN_ANCHOR_DISTANCE_TILES - 1;
+  let bestDistanceKm = MIN_ANCHOR_DISTANCE_KM - 1e-9;
 
   for (const record of Object.values(inferred)) {
     if (record.source !== "corridor_continuation_inference") {
@@ -627,11 +570,14 @@ function farthestCorridorInferredTile(world: WorldState, band: Band, origin: Til
       continue;
     }
 
-    const distance = gridDistance(origin.coord, tile.coord);
+    const distanceKm = getManhattanPhysicalDistanceKm(world.config, origin.coord, tile.coord);
 
-    if (distance > bestDistance || (distance === bestDistance && best !== undefined && String(tile.id) < String(best.id))) {
+    if (
+      distanceKm > bestDistanceKm ||
+      (distanceKm === bestDistanceKm && best !== undefined && String(tile.id) < String(best.id))
+    ) {
       best = tile;
-      bestDistance = distance;
+      bestDistanceKm = distanceKm;
     }
   }
 
@@ -641,7 +587,7 @@ function farthestCorridorInferredTile(world: WorldState, band: Band, origin: Til
 /** A KNOWN tile with at least one UNKNOWN neighbour, farthest from camp. Existence only. */
 function farthestKnownEdgeTile(world: WorldState, band: Band, origin: Tile): Tile | undefined {
   let best: Tile | undefined;
-  let bestDistance = MIN_ANCHOR_DISTANCE_TILES - 1;
+  let bestDistanceKm = MIN_ANCHOR_DISTANCE_KM - 1e-9;
 
   for (const record of Object.values(band.knowledge.observedTiles)) {
     const tile = getTile(world, record.tileId);
@@ -658,11 +604,14 @@ function farthestKnownEdgeTile(world: WorldState, band: Band, origin: Tile): Til
       continue;
     }
 
-    const distance = gridDistance(origin.coord, tile.coord);
+    const distanceKm = getManhattanPhysicalDistanceKm(world.config, origin.coord, tile.coord);
 
-    if (distance > bestDistance || (distance === bestDistance && best !== undefined && String(tile.id) < String(best.id))) {
+    if (
+      distanceKm > bestDistanceKm ||
+      (distanceKm === bestDistanceKm && best !== undefined && String(tile.id) < String(best.id))
+    ) {
       best = tile;
-      bestDistance = distance;
+      bestDistanceKm = distanceKm;
     }
   }
 
@@ -672,7 +621,7 @@ function farthestKnownEdgeTile(world: WorldState, band: Band, origin: Tile): Til
 /** A tile the band knows only SECOND HAND (inherited/reported), farthest from camp. */
 function farthestSecondHandTile(world: WorldState, band: Band, origin: Tile): Tile | undefined {
   let best: Tile | undefined;
-  let bestDistance = MIN_ANCHOR_DISTANCE_TILES - 1;
+  let bestDistanceKm = MIN_ANCHOR_DISTANCE_KM - 1e-9;
 
   for (const record of Object.values(band.knowledge.observedTiles)) {
     if (record.knowledgeSource === "personally_observed" || record.knowledgeSource === "physically_seen_on_spawn") {
@@ -685,15 +634,35 @@ function farthestSecondHandTile(world: WorldState, band: Band, origin: Tile): Ti
       continue;
     }
 
-    const distance = gridDistance(origin.coord, tile.coord);
+    const distanceKm = getManhattanPhysicalDistanceKm(world.config, origin.coord, tile.coord);
 
-    if (distance > bestDistance || (distance === bestDistance && best !== undefined && String(tile.id) < String(best.id))) {
+    if (
+      distanceKm > bestDistanceKm ||
+      (distanceKm === bestDistanceKm && best !== undefined && String(tile.id) < String(best.id))
+    ) {
       best = tile;
-      bestDistance = distance;
+      bestDistanceKm = distanceKm;
     }
   }
 
   return best;
+}
+
+export function deriveFrontierPhysicalClassifiersForAudit(
+  world: WorldState,
+  band: Band,
+  targetTileId: TileId,
+): { readonly insideParentCatchment: boolean; readonly anchorFarEnough: boolean; readonly physicalDistanceKm: number } | undefined {
+  const origin = getTile(world, band.position);
+  const target = getTile(world, targetTileId);
+  if (origin === undefined || target === undefined) return undefined;
+  const physicalDistanceKm = getManhattanPhysicalDistanceKm(world.config, origin.coord, target.coord);
+  const parentCatchment = deriveResidentialForagingAccessForBand(world, band);
+  return {
+    insideParentCatchment: parentCatchment.reachable.some((entry) => entry.tileId === targetTileId),
+    anchorFarEnough: physicalDistanceKm >= MIN_ANCHOR_DISTANCE_KM,
+    physicalDistanceKm,
+  };
 }
 
 function unitVector(from: Coord, to: Coord): Coord | undefined {

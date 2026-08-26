@@ -2,6 +2,7 @@ import type { BandId, DecisionId, ReasonId, TileId, TickNumber } from "../core/t
 import type { Action, Decision, NormalizedIntensity } from "../rules/types";
 import { getTile } from "../world/generate";
 import type { Tile, WorldState } from "../world/types";
+import { getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
 import { deriveBandTendencies } from "./bandTendency";
 import { deriveCampFootholdProfile } from "./campFoothold";
 import type { InvestigationOutcomeRingEntry } from "./pendingInvestigation";
@@ -26,6 +27,7 @@ import type {
   TemporaryTaskPartyRecord,
 } from "./types";
 import { getCanonicalFoodStress } from "./seasonalSurvival";
+import { deriveResidentialLogisticalAccessForBand } from "./residentialAnchor";
 
 const LOCAL_SHIFT_CAP = 8;
 const TEMPORARY_TASK_PARTY_CAP = 6;
@@ -33,18 +35,19 @@ const OLD_CAMP_DECAY_CAP = 6;
 const STAGNATION_ESCAPE_CAP = 8;
 const RELIEF_CANDIDATE_CAP = 6;
 const RELIEF_REJECTED_CANDIDATE_CAP = 4;
-const RELIEF_SEARCH_RADIUS_TILES = 4;
 const EVIDENCE_PER_ITEM_CAP = 4;
 const BEHAVIOR_DELTA_CAP = 0.22;
 const SAMPLE_CAP = 10;
+// SCALE-1 provisional compatibility calibrations. Legacy local/micro camp-shift envelopes were
+// 2 and 1 cells respectively on the canonical 1.5-km raster. These are model compatibility
+// scales, not universal settlement thresholds.
+const LOCAL_SHIFT_MAX_DISTANCE_KM = 3;
+const MICRO_SHIFT_MAX_DISTANCE_KM = 1.5;
+// Legacy per-cell establishment/recovery increments restated directly per physical km.
+const SAME_CLUSTER_RECOVERY_NEED_PER_KM = 4 / 75;
+const RELOCATION_RECOVERY_NEED_PER_KM = 0.08;
+const LOCAL_SHIFT_CONFIDENCE_PER_KM = 2 / 75;
 
-interface ReliefRadiusEntry {
-  readonly tile: Tile;
-  readonly distance: number;
-}
-
-const sortedNeighborIdsByTile = new WeakMap<Tile, readonly TileId[]>();
-const reliefRadiusEntriesByTiles = new WeakMap<WorldState["tiles"], Map<string, readonly ReliefRadiusEntry[]>>();
 
 export interface CampMovementInfluence {
   readonly scale: CampMovementScale;
@@ -352,17 +355,18 @@ export function advanceCampMovementState(input: CampMovementAdvanceInput): CampM
   const prior = input.previousBand.campMovement;
   const signals = deriveSignals(input.updatedBand);
   const decisionTrace = buildDecisionTrace(input.decision);
-  const distance = tileDistance(input.world, input.previousBand.position, input.nextPosition);
+  const distanceTiles = tileDistance(input.world, input.previousBand.position, input.nextPosition);
+  const distanceKm = getCampMovePhysicalDistanceKm(input.world, input.previousBand.position, input.nextPosition);
   const rangeRotation = deriveRangeRotationPressureReliefState(input.world, input.updatedBand, prior, signals, {
     input,
     decisionTrace,
-    moveDistance: distance,
+    moveDistanceKm: distanceKm,
   });
   const localShift = input.moved &&
-    distance <= 2 &&
+    distanceKm <= LOCAL_SHIFT_MAX_DISTANCE_KM + 1e-9 &&
     (decisionTrace?.scale === "local_camp_shift" || decisionTrace?.scale === "pressure_relief_move") &&
     decisionTrace.scoreDelta > 0
-    ? makeLocalShiftRecord(input, distance, decisionTrace)
+    ? makeLocalShiftRecord(input, distanceTiles, distanceKm, decisionTrace)
     : undefined;
   // CORRECTION-26 §12 — A RECORD ONLY WHEN A PARTY ACTUALLY WENT.
   //
@@ -374,7 +378,7 @@ export function advanceCampMovementState(input: CampMovementAdvanceInput): CampM
   // party physically departed. A selected-but-unexecuted investigation writes nothing here
   // and stays inspectable through `band.recentInvestigationOutcomes`.
   const temporaryParty = makeTemporaryTaskPartyRecord(input);
-  const currentEstablishment = advanceEstablishment(input, prior?.currentEstablishment, signals, distance);
+  const currentEstablishment = advanceEstablishment(input, prior?.currentEstablishment, signals, distanceKm);
   const oldCampDecay = capOldCampDecay([
     ...maybeOldCampDecay(input, prior, signals),
     ...(prior?.oldCampDecay ?? []),
@@ -539,7 +543,8 @@ export function deriveCampMovementProfile(world: WorldState, band: Band): CampMo
     caps: state.caps,
     integrity: {
       behaviorActive: true,
-      localShiftDistinctFromRelocation: state.recentLocalShifts.every((shift) => shift.distance <= 2),
+      localShiftDistinctFromRelocation: state.recentLocalShifts.every((shift) =>
+        getCampMovePhysicalDistanceKm(world, shift.fromTileId, shift.toTileId) <= LOCAL_SHIFT_MAX_DISTANCE_KM + 1e-9),
       temporaryTaskPartiesNotSettlement: state.temporaryTaskParties.every((camp) => camp.noSettlement && camp.noInventory),
       establishmentNotSettlement: state.currentEstablishment?.noSettlement ?? true,
       oldAnchorDecayGradual: state.oldCampDecay.every((record) => record.decayAmount <= 0.12 && record.canRecover),
@@ -564,7 +569,7 @@ export function deriveCampMovementProfile(world: WorldState, band: Band): CampMo
 interface RangeRotationAdvanceContext {
   readonly input: CampMovementAdvanceInput;
   readonly decisionTrace: CampMovementDecisionTrace | undefined;
-  readonly moveDistance: number;
+  readonly moveDistanceKm: number;
 }
 
 function deriveRangeRotationPressureReliefState(
@@ -636,7 +641,8 @@ function deriveRangeRotationPressureReliefState(
     caps: {
       candidateCap: RELIEF_CANDIDATE_CAP,
       rejectedCandidateCap: RELIEF_REJECTED_CANDIDATE_CAP,
-      searchRadiusTiles: RELIEF_SEARCH_RADIUS_TILES,
+      travelTimeBudgetDays: deriveResidentialLogisticalAccessForBand(world, band).travelTimeBudgetDays,
+      maxPhysicalReachKm: maxReliefReachKm(world, band),
       capsHeld: candidates.length <= RELIEF_CANDIDATE_CAP && rejectedCandidates.length <= RELIEF_REJECTED_CANDIDATE_CAP,
     },
     integrity: {
@@ -676,9 +682,13 @@ function collectPressureReliefCandidates(
     return [];
   }
 
-  const entries = getTilesWithinReliefRadius(world, current, RELIEF_SEARCH_RADIUS_TILES)
-    .filter((entry) => entry.tile.id !== current.id && isPlausibleCampTile(entry.tile))
-    .map((entry) => makePressureReliefCandidate({
+  const access = deriveResidentialLogisticalAccessForBand(world, band);
+  const entries = access.reachable
+    .map((entry) => ({ entry, tile: getTile(world, entry.tileId) }))
+    .filter((item): item is { readonly entry: (typeof access.reachable)[number]; readonly tile: Tile } =>
+      item.tile !== undefined && item.tile.id !== current.id && isPlausibleCampTile(item.tile),
+    )
+    .map(({ entry, tile }) => makePressureReliefCandidate({
       world,
       band,
       current,
@@ -689,8 +699,10 @@ function collectPressureReliefCandidates(
       signals,
       nonFoodPressure,
       localOrbitTrap,
-      tile: entry.tile,
-      distance: entry.distance,
+      tile,
+      distanceTiles: tileDistanceByCoord(current, tile),
+      physicalDistanceKm: entry.physicalDistanceKm,
+      travelTimeDays: entry.travelTimeDays,
     }))
     .filter((candidate): candidate is PressureReliefCandidate => candidate !== undefined)
     .sort(comparePressureReliefCandidatesForChoice)
@@ -711,7 +723,9 @@ function makePressureReliefCandidate(input: {
   readonly nonFoodPressure: number;
   readonly localOrbitTrap: LocalOrbitTrapState;
   readonly tile: Tile;
-  readonly distance: number;
+  readonly distanceTiles: number;
+  readonly physicalDistanceKm: number;
+  readonly travelTimeDays: number;
 }): PressureReliefCandidate | undefined {
   const observed = input.band.knowledge.observedTiles[input.tile.id];
   const inferred = input.band.frontierKnowledge?.inferredTiles[input.tile.id];
@@ -731,15 +745,16 @@ function makePressureReliefCandidate(input: {
   const sameCluster = localClusterId(input.tile) === input.currentCluster;
   const sameRange = localRangeId(input.tile) === input.currentRange;
   const sameRiverCountry = isSameRiverCountry(input.current, input.tile);
-  const familiarCountry = observed !== undefined || (inferred !== undefined && input.distance <= RELIEF_SEARCH_RADIUS_TILES);
+  const familiarCountry = observed !== undefined || inferred !== undefined;
   const relationToCurrentCluster =
     sameCluster
       ? "same_local_cluster"
       : sameRange || sameRiverCountry
         ? "nearby_known_range"
         : "edge_of_familiar_country";
+  const physicalTravelBurden = input.travelTimeDays / (1 + input.travelTimeDays);
   const travelCost = clamp01(
-    input.distance / (RELIEF_SEARCH_RADIUS_TILES + 1) * 0.42 +
+    physicalTravelBurden * 0.42 +
       ((observed?.observedMovementCost ?? 1.4) - 1) * 0.12 +
       (sameRiverCountry ? 0 : 0.08),
   );
@@ -754,7 +769,7 @@ function makePressureReliefCandidate(input: {
   const strictFoodBetter = supportDelta > 0.05;
   const supportGoodEnough = support >= Math.max(0.28, input.currentSupport - 0.16);
   const waterGoodEnough = water >= Math.max(0.28, Math.min(0.48, input.currentWater - 0.1));
-  const routeAcceptable = travelCost <= 0.58 || input.distance <= 2 || sameRiverCountry;
+  const routeAcceptable = travelCost <= 0.58 || input.travelTimeDays <= 0.2 || sameRiverCountry;
   const pressureReliefScore = round2(clamp01(
     usePressureDifference * 0.38 +
       campSicknessWearRelief * 0.26 +
@@ -791,7 +806,7 @@ function makePressureReliefCandidate(input: {
   const actionStrategy =
     blockedReason !== undefined
       ? "blocked"
-      : observed === undefined || knownness < 0.34 || input.distance > 2
+      : observed === undefined || knownness < 0.34 || input.physicalDistanceKm > 3
         ? "scout_probe"
         : "move_to_tile";
   const status =
@@ -811,7 +826,9 @@ function makePressureReliefCandidate(input: {
   return {
     id: `pressure-relief:${String(input.band.id)}:${String(input.tile.id)}`,
     tileId: input.tile.id,
-    distanceTiles: input.distance,
+    distanceTiles: input.distanceTiles,
+    distanceKm: round2(input.physicalDistanceKm),
+    travelTimeDays: round2(input.travelTimeDays),
     relationToCurrentCluster,
     knownness: round2(knownness),
     supportAdequacy: round2(support),
@@ -892,7 +909,8 @@ function detectLocalOrbitTrap(
   const microMoves = recentMoves.filter((move) => {
     const from = getTile(world, move.fromTileId);
     const to = getTile(world, move.toTileId);
-    return from !== undefined && to !== undefined && tileDistanceByCoord(from, to) <= 1;
+    return from !== undefined && to !== undefined &&
+      getManhattanPhysicalDistanceKm(world.config, from.coord, to.coord) <= MICRO_SHIFT_MAX_DISTANCE_KM + 1e-9;
   });
   const shiftedTiles = uniqueStrings([
     ...microMoves.flatMap((move) => [String(move.fromTileId), String(move.toTileId)]),
@@ -907,7 +925,8 @@ function detectLocalOrbitTrap(
     ? 0
     : shiftedTiles.filter((tileId) => {
         const tile = getTile(world, tileId as TileId);
-        return tile !== undefined && tileDistanceByCoord(currentTile, tile) <= 2;
+        return tile !== undefined &&
+          getManhattanPhysicalDistanceKm(world.config, currentTile.coord, tile.coord) <= LOCAL_SHIFT_MAX_DISTANCE_KM + 1e-9;
       }).length;
   const sameClusterLoop =
     shiftedTiles.length > 0 &&
@@ -923,7 +942,8 @@ function detectLocalOrbitTrap(
   ));
   const detected =
     pressure >= 0.42 &&
-    (microMoves.length >= 3 || (prior?.recentLocalShifts.filter((shift) => shift.distance <= 1).length ?? 0) >= 2) &&
+    (microMoves.length >= 3 || (prior?.recentLocalShifts.filter((shift) =>
+      getCampMovePhysicalDistanceKm(world, shift.fromTileId, shift.toTileId) <= MICRO_SHIFT_MAX_DISTANCE_KM + 1e-9).length ?? 0) >= 2) &&
     sameClusterLoop;
 
   return {
@@ -935,7 +955,7 @@ function detectLocalOrbitTrap(
     pressure,
     escalation: "none",
     basis: [
-      microMoves.length >= 3 ? "recent whole-band moves are mostly 1-tile moves" : undefined,
+      microMoves.length >= 3 ? "recent whole-band moves are mostly <=1.5 km moves" : undefined,
       sameClusterLoop ? "recent moves remain inside the same local cluster" : undefined,
       signals.currentUsePressure > 0.35 ? "local use pressure remains high" : undefined,
       (band.rangeSaturation?.saturationPressure ?? 0) > 0.55 ? "range saturation remains high" : undefined,
@@ -1012,7 +1032,8 @@ function deriveEstablishmentScopeState(
   const traceScale = advanceContext?.decisionTrace?.scale;
   const sameClusterShift = moved && previousCluster !== undefined && previousCluster === currentCluster;
   const newClusterMove = moved && previousCluster !== undefined && previousCluster !== currentCluster;
-  const carriedOver = sameClusterShift && (advanceContext?.moveDistance ?? 99) <= 2;
+  const carriedOver = sameClusterShift &&
+    (advanceContext?.moveDistanceKm ?? Number.POSITIVE_INFINITY) <= LOCAL_SHIFT_MAX_DISTANCE_KM + 1e-9;
   const scope =
     !moved
       ? "continued_place"
@@ -1020,7 +1041,7 @@ function deriveEstablishmentScopeState(
         ? "pressure_relief_shift"
         : carriedOver
           ? "same_cluster_shift"
-          : (advanceContext?.moveDistance ?? 0) > 2
+          : (advanceContext?.moveDistanceKm ?? 0) > LOCAL_SHIFT_MAX_DISTANCE_KM
             ? "outward_relocation"
             : "new_cluster_establishment";
 
@@ -1071,64 +1092,23 @@ function pressureReliefEvidence(
   };
 }
 
-function getTilesWithinReliefRadius(
-  world: WorldState,
-  current: Tile,
-  radius: number,
-): readonly ReliefRadiusEntry[] {
-  let cachedByOrigin = reliefRadiusEntriesByTiles.get(world.tiles);
-
-  if (cachedByOrigin === undefined) {
-    cachedByOrigin = new Map<string, readonly ReliefRadiusEntry[]>();
-    reliefRadiusEntriesByTiles.set(world.tiles, cachedByOrigin);
-  }
-
-  const cacheKey = `${String(current.id)}:${radius}`;
-  const cached = cachedByOrigin.get(cacheKey);
-
-  if (cached !== undefined) {
-    return cached;
-  }
-
-  const visited = new Set<TileId>([current.id]);
-  const queue: ReliefRadiusEntry[] = [{ tile: current, distance: 0 }];
-  const result: ReliefRadiusEntry[] = [];
-
-  for (let index = 0; index < queue.length; index += 1) {
-    const entry = queue[index];
-    if (entry.distance >= radius) {
-      continue;
-    }
-    for (const neighborId of getSortedTileNeighborIds(entry.tile)) {
-      if (visited.has(neighborId)) {
-        continue;
-      }
-      const tile = getTile(world, neighborId);
-      if (tile === undefined) {
-        continue;
-      }
-      visited.add(neighborId);
-      const next = { tile, distance: entry.distance + 1 };
-      queue.push(next);
-      result.push(next);
-    }
-  }
-
-  const sorted = result.sort((left, right) => left.distance - right.distance || compareTileIds(left.tile.id, right.tile.id));
-  cachedByOrigin.set(cacheKey, sorted);
-  return sorted;
+function maxReliefReachKm(world: WorldState, band: Band): number {
+  const access = deriveResidentialLogisticalAccessForBand(world, band);
+  return round2(Math.max(0, ...access.reachable.map((entry) => entry.physicalDistanceKm)));
 }
 
-function getSortedTileNeighborIds(tile: Tile): readonly TileId[] {
-  const cached = sortedNeighborIdsByTile.get(tile);
-
-  if (cached !== undefined) {
-    return cached;
-  }
-
-  const sorted = [...tile.neighbors].sort(compareTileIds);
-  sortedNeighborIdsByTile.set(tile, sorted);
-  return sorted;
+export function derivePressureReliefPhysicalAssessmentForAudit(
+  world: WorldState,
+  band: Band,
+  targetTileId: TileId,
+): { readonly reachable: boolean; readonly physicalDistanceKm: number; readonly travelTimeDays: number } {
+  const access = deriveResidentialLogisticalAccessForBand(world, band);
+  const entry = access.reachable.find((candidate) => candidate.tileId === targetTileId);
+  return {
+    reachable: entry !== undefined,
+    physicalDistanceKm: entry?.physicalDistanceKm ?? Number.POSITIVE_INFINITY,
+    travelTimeDays: entry?.travelTimeDays ?? Number.POSITIVE_INFINITY,
+  };
 }
 
 function supportAdequacy(tile: Tile, record: { readonly observedRichness: number; readonly observedAquaticPotential: number; readonly confidence: number } | undefined): number {
@@ -1232,20 +1212,16 @@ function chooseLocalShiftTarget(
     return undefined;
   }
   const blockedBacktrack = prior?.oscillationGuard.lastBlockedPair;
-  const candidates = current.neighbors
-    .flatMap((neighborId) => {
-      const neighbor = getTile(world, neighborId);
-      if (neighbor === undefined) {
-        return [];
-      }
-      return [neighbor, ...neighbor.neighbors.map((id) => getTile(world, id)).filter((tile): tile is Tile => tile !== undefined)];
-    })
-    .filter((tile, index, all) =>
+  // The reachable-access reader provides a bounded route-aware candidate set. The physical
+  // 3-km envelope is behavioral authority; raster hop count is not.
+  const candidates = deriveResidentialLogisticalAccessForBand(world, band).reachable
+    .filter((entry) => entry.physicalDistanceKm <= LOCAL_SHIFT_MAX_DISTANCE_KM + 1e-9)
+    .map((entry) => getTile(world, entry.tileId))
+    .filter((tile): tile is Tile =>
+      tile !== undefined &&
       tile.id !== current.id &&
-      all.findIndex((other) => other.id === tile.id) === index &&
       band.knowledge.observedTiles[tile.id] !== undefined &&
       isPlausibleCampTile(tile) &&
-      tileDistanceByCoord(current, tile) <= 2 &&
       !(blockedBacktrack !== undefined && blockedBacktrack[0] === band.position && blockedBacktrack[1] === tile.id))
     .map((tile) => scoreLocalShiftTile(band, current, tile))
     .filter((entry): entry is LocalTarget => entry !== undefined)
@@ -1316,7 +1292,7 @@ function advanceEstablishment(
   input: CampMovementAdvanceInput,
   prior: NewPlaceEstablishmentState | undefined,
   signals: CampMovementSignals,
-  moveDistance: number,
+  moveDistanceKm: number,
 ): NewPlaceEstablishmentState {
   const samePlace = prior !== undefined && prior.tileId === input.nextPosition && !input.moved;
   const previousTile = getTile(input.world, input.previousBand.position);
@@ -1328,7 +1304,7 @@ function advanceEstablishment(
     prior !== undefined &&
     previousClusterId !== undefined &&
     previousClusterId === nextClusterId &&
-    moveDistance <= 2;
+    moveDistanceKm <= LOCAL_SHIFT_MAX_DISTANCE_KM + 1e-9;
   const carriedOver = samePlace || sameClusterShift;
   const startedTick = carriedOver ? prior?.startedTick ?? input.world.time.tick : input.world.time.tick;
   const ageTicks = carriedOver ? (prior?.ageTicks ?? 0) + 1 : Math.max(0, input.updatedBand.consecutiveSeasonsOnTile);
@@ -1338,7 +1314,7 @@ function advanceEstablishment(
       ? "continued_place"
       : sameClusterShift
         ? "same_cluster_shift"
-        : moveDistance > 2
+        : moveDistanceKm > LOCAL_SHIFT_MAX_DISTANCE_KM
           ? "outward_relocation"
           : "new_cluster_establishment";
   const priorFamiliarity = sameClusterShift ? (prior?.localFamiliarity ?? 0) * 0.62 : samePlace ? prior?.localFamiliarity ?? 0 : signals.localFamiliarity;
@@ -1347,8 +1323,8 @@ function advanceEstablishment(
     (samePlace
       ? (prior?.recoveryNeed ?? 0) * 0.72
       : sameClusterShift
-        ? Math.min(0.52, (prior?.recoveryNeed ?? 0.18) * 0.58 + moveDistance * 0.08)
-        : Math.min(0.68, moveDistance * 0.12 + (input.crossingBlocked ? 0.18 : 0))) +
+        ? Math.min(0.52, (prior?.recoveryNeed ?? 0.18) * 0.58 + moveDistanceKm * SAME_CLUSTER_RECOVERY_NEED_PER_KM)
+        : Math.min(0.68, moveDistanceKm * RELOCATION_RECOVERY_NEED_PER_KM + (input.crossingBlocked ? 0.18 : 0))) +
       (signals.collapsePressure > 0.55 ? 0.08 : 0),
   );
   const confidence = round2(clamp01(
@@ -1414,7 +1390,8 @@ function advanceEstablishment(
 
 function makeLocalShiftRecord(
   input: CampMovementAdvanceInput,
-  distance: number,
+  distanceTiles: number,
+  distanceKm: number,
   trace: CampMovementDecisionTrace | undefined,
 ): LocalCampShiftRecord {
   const outcome: EstablishmentOutcome = input.destinationBlocked || input.crossingBlocked
@@ -1427,12 +1404,13 @@ function makeLocalShiftRecord(
     tick: input.world.time.tick,
     fromTileId: input.previousBand.position,
     toTileId: input.nextPosition,
-    distance,
+    distance: distanceTiles,
+    distanceKm: round2(distanceKm),
     reason: trace?.scale === "pressure_relief_move"
       ? trace.basis[0] ?? "pressure relief shift to a less worn nearby place"
       : trace?.basis[0] ?? "nearby camp shift attempted with existing movement",
     outcome,
-    confidence: round2(outcome === "failed" ? 0.22 : 0.46 + Math.min(0.22, distance * 0.04)),
+    confidence: round2(outcome === "failed" ? 0.22 : 0.46 + Math.min(0.22, distanceKm * LOCAL_SHIFT_CONFIDENCE_PER_KM)),
     evidenceRefs: capEvidence([
       movementEvidence(input, input.nextPosition, "nearby residential base moved", 0.62),
       adaptiveEvidence(input),
@@ -1902,6 +1880,27 @@ function isTargetedEscapeAction(actionType: Action["type"]): boolean {
 
 function compareTileIds(left: TileId, right: TileId): number {
   return String(left).localeCompare(String(right));
+}
+
+export function deriveCampMovementPhysicalAssessmentForAudit(
+  world: WorldState,
+  fromTileId: TileId,
+  toTileId: TileId,
+): { readonly distanceKm: number; readonly microShift: boolean; readonly localShiftEligible: boolean } {
+  const distanceKm = getCampMovePhysicalDistanceKm(world, fromTileId, toTileId);
+  return {
+    distanceKm,
+    microShift: distanceKm <= MICRO_SHIFT_MAX_DISTANCE_KM + 1e-9,
+    localShiftEligible: distanceKm <= LOCAL_SHIFT_MAX_DISTANCE_KM + 1e-9,
+  };
+}
+
+function getCampMovePhysicalDistanceKm(world: WorldState, firstId: TileId, secondId: TileId): number {
+  const first = getTile(world, firstId);
+  const second = getTile(world, secondId);
+  return first === undefined || second === undefined
+    ? Number.POSITIVE_INFINITY
+    : getManhattanPhysicalDistanceKm(world.config, first.coord, second.coord);
 }
 
 function tileDistance(world: WorldState, firstId: TileId, secondId: TileId): number {

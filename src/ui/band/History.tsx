@@ -144,7 +144,7 @@ function buildTimeline(band: Band, currentTick: number): readonly TimelineItem[]
   }
 
   for (const event of band.recentResidentialMoveEvents ?? []) {
-    const residentialText = describeResidentialMove(event.moveKind, event.cause, event.distanceTiles, event.durationDays);
+    const residentialText = describeResidentialMove(event.moveKind, event.cause, event.distanceKm, event.durationDays);
     items.push({
       key: `rm-${String(event.eventId)}`,
       tick: Number(event.tick),
@@ -969,10 +969,10 @@ function describeMovementHistory(intentKind: string | undefined): Pick<TimelineI
 function describeResidentialMove(
   moveKind: string,
   cause: string,
-  distanceTiles: number,
+  distanceKm: number,
   durationDays: number,
 ): Pick<TimelineItem, "icon" | "title" | "detail"> {
-  const distance = `${distanceTiles} tile${distanceTiles === 1 ? "" : "s"}`;
+  const distance = `${Math.round(distanceKm * 10) / 10} km`;
   const duration = `${durationDays} day${durationDays === 1 ? "" : "s"}`;
 
   switch (cause) {

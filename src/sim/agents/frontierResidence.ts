@@ -33,6 +33,7 @@ import type { BandId, Coord, ReasonId, TickNumber, TileId } from "../core/types"
 import type { Band, FrontierResidenceValue } from "./types";
 import type { WorldState } from "../world/types";
 import { getTile } from "../world/generate";
+import { getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
 
 // --- Bounds (all small: a residence-earned tie-breaker, never a teleport/freeze) ---
 const MAX_LOCAL_VALUE = 0.8;
@@ -43,9 +44,9 @@ const EVIDENCE_THRESHOLD = 0.3; // below this the tick counts as UNsupported (de
 // Establishment gate — below BOTH of these the value accrues silently (no behaviour).
 const ESTABLISH_AGE = 4; // ~1 year of dwelling before residence can act as a hold
 const ESTABLISH_VALUE = 0.3;
-// Manhattan radius around the anchor within which the daughter counts as "dwelling"
-// at the same locus (so a small forage shuffle does not reset residence).
-const ANCHOR_RADIUS = 4;
+// PROVENANCE D — provisional physical compatibility calibrations. These preserve the former
+// canonical-raster displacement bands in km while removing raster cell count as authority.
+const ANCHOR_RADIUS_KM = 6;
 // M0.5 principled return-pull reduction: instead of M0.4's force-magnitude additive
 // damp, an established frontier daughter's ORIGIN-WARD memory pull (her attachment /
 // return-place / inherited-familiarity / familiar-corridor draw toward an INWARD
@@ -54,7 +55,7 @@ const ANCHOR_RADIUS = 4;
 // scales an existing pull DOWN (never adds), so it can never push her anywhere unsafe.
 const RETURN_RELIEF = 0.85;
 const MIN_ORIGIN_PULL = 0.15;
-// "Reached a frontier" gates (Manhattan tiles from her LINEAGE origin — the founder's
+// "Reached a frontier" gates (physical Manhattan km from her LINEAGE origin — the founder's
 // ancestral tile, band-known lineage knowledge). Residence must NOT engage near the
   // origin (that would just freeze a daughter locally and break reach, the M0.4
 // regression we saw); it only acts on a locus she has genuinely pushed out to. Three
@@ -67,9 +68,9 @@ const MIN_ORIGIN_PULL = 0.15;
 //              strictly BEYOND the audit radius (>10) and nudged off positions inside
 //              it, so a daughter who would otherwise settle right AT the boundary
 //              consolidates one tile out and the >10 streak can actually accumulate.
-const REACHED_FRONTIER_ENGAGE = 10;
-const ESTABLISHED_ANCHOR_MIN = 9;
-const HOLD_TARGET_DISTANCE = 11;
+const REACHED_FRONTIER_ENGAGE_KM = 15;
+const ESTABLISHED_ANCHOR_MIN_KM = 13.5;
+const HOLD_TARGET_DISTANCE_KM = 16.5;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
@@ -83,7 +84,7 @@ function round2(value: number): number {
   return Math.round(value * 100) / 100;
 }
 
-function manhattan(world: WorldState, fromTileId: TileId, toTileId: TileId): number | undefined {
+function physicalManhattanKm(world: WorldState, fromTileId: TileId, toTileId: TileId): number | undefined {
   const fromTile = getTile(world, fromTileId);
   const toTile = getTile(world, toTileId);
 
@@ -91,7 +92,16 @@ function manhattan(world: WorldState, fromTileId: TileId, toTileId: TileId): num
     return undefined;
   }
 
-  return Math.abs(fromTile.coord.x - toTile.coord.x) + Math.abs(fromTile.coord.y - toTile.coord.y);
+  return getManhattanPhysicalDistanceKm(world.config, fromTile.coord, toTile.coord);
+}
+
+export function deriveFrontierResidencePhysicalDistanceForAudit(
+  world: WorldState,
+  fromTileId: TileId,
+  toTileId: TileId,
+): { readonly physicalDistanceKm: number } | undefined {
+  const physicalDistanceKm = physicalManhattanKm(world, fromTileId, toTileId);
+  return physicalDistanceKm === undefined ? undefined : { physicalDistanceKm };
 }
 
 function directionBetween(
@@ -275,7 +285,7 @@ export function advanceFrontierResidence(
     return undefined;
   }
 
-  const reachedDistance = manhattan(world, position, lineageOriginTileId) ?? 0;
+  const reachedDistance = physicalManhattanKm(world, position, lineageOriginTileId) ?? 0;
   const outwardHeading =
     directionBetween(world, lineageOriginTileId, position) ?? prior?.outwardHeading;
 
@@ -290,7 +300,7 @@ export function advanceFrontierResidence(
     // origin — at a locus with some band-known support. No intent dependency: the
     // outward heading comes from her natal vector, so residence is durable past the
     // drift intent. Near-origin daughters never establish (preserves M0.3 reach).
-    if (reachedDistance < REACHED_FRONTIER_ENGAGE || evidence.localValueEvidence < EVIDENCE_THRESHOLD) {
+    if (reachedDistance < REACHED_FRONTIER_ENGAGE_KM || evidence.localValueEvidence < EVIDENCE_THRESHOLD) {
       return undefined;
     }
 
@@ -299,8 +309,8 @@ export function advanceFrontierResidence(
     residenceAge = 1;
     priorValue = 0;
   } else {
-    const priorAnchorDistance = manhattan(world, prior.anchorTileId, lineageOriginTileId) ?? 0;
-    const distanceFromAnchor = manhattan(world, position, prior.anchorTileId) ?? 0;
+    const priorAnchorDistance = physicalManhattanKm(world, prior.anchorTileId, lineageOriginTileId) ?? 0;
+    const distanceFromAnchor = physicalManhattanKm(world, position, prior.anchorTileId) ?? 0;
 
     if (reachedDistance > priorAnchorDistance) {
       // She pushed FURTHER out → consolidate the new, farther frontier locus.
@@ -308,7 +318,7 @@ export function advanceFrontierResidence(
       anchorDistanceFromNatal = reachedDistance;
       residenceAge = prior.residenceAge + 1;
       priorValue = prior.frontierLocalValue;
-    } else if (distanceFromAnchor <= ANCHOR_RADIUS) {
+    } else if (distanceFromAnchor <= ANCHOR_RADIUS_KM) {
       // Still dwelling at / near her outer anchor → keep accruing residence.
       anchorTileId = prior.anchorTileId;
       anchorDistanceFromNatal = priorAnchorDistance;
@@ -346,7 +356,7 @@ export function advanceFrontierResidence(
   const established =
     residenceAge >= ESTABLISH_AGE &&
     frontierLocalValue >= ESTABLISH_VALUE &&
-    anchorDistanceFromNatal >= ESTABLISHED_ANCHOR_MIN;
+    anchorDistanceFromNatal >= ESTABLISHED_ANCHOR_MIN_KM;
   const confidence = clamp01(
     evidence.confidence * 0.6 + Math.min(1, residenceAge / 24) * 0.4,
   );
@@ -387,7 +397,7 @@ export function frontierResidenceStayHold(world: WorldState, band: Band): number
 
   const lineageOriginTileId = getLineageOriginTileId(world, band);
   const reached =
-    lineageOriginTileId === undefined ? undefined : manhattan(world, band.position, lineageOriginTileId);
+    lineageOriginTileId === undefined ? undefined : physicalManhattanKm(world, band.position, lineageOriginTileId);
 
   if (reached === undefined) {
     return 0;
@@ -397,7 +407,7 @@ export function frontierResidenceStayHold(world: WorldState, band: Band): number
   // penalty for being inside (that risked ejecting her toward a worse tile): the
   // retention comes from holding the reached locus + resisting inward retreat, never
   // from pushing her around.
-  if (reached < HOLD_TARGET_DISTANCE) {
+  if (reached < HOLD_TARGET_DISTANCE_KM) {
     return 0;
   }
 
@@ -434,8 +444,8 @@ export function frontierResidenceOriginPullRelief(
     return 1;
   }
 
-  const reached = manhattan(world, band.position, lineageOriginTileId);
-  const destinationReached = manhattan(world, destinationTileId, lineageOriginTileId);
+  const reached = physicalManhattanKm(world, band.position, lineageOriginTileId);
+  const destinationReached = physicalManhattanKm(world, destinationTileId, lineageOriginTileId);
 
   if (reached === undefined || destinationReached === undefined || destinationReached >= reached) {
     // Outward / sideways move (or unknown) → leave the origin-ward pull untouched.
@@ -474,8 +484,8 @@ export function frontierResidenceInwardDamp(
     return 0;
   }
 
-  const reached = manhattan(world, band.position, lineageOriginTileId);
-  const destinationReached = manhattan(world, destinationTileId, lineageOriginTileId);
+  const reached = physicalManhattanKm(world, band.position, lineageOriginTileId);
+  const destinationReached = physicalManhattanKm(world, destinationTileId, lineageOriginTileId);
 
   if (reached === undefined || destinationReached === undefined) {
     return 0;
