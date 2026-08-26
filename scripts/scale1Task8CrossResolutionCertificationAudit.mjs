@@ -28,6 +28,17 @@ const server = await createServer({
 const CELL_1 = 1;
 const CELL_15 = 1.5;
 const EPS = 1e-9;
+const OPEN_TRAVERSAL_DISTANCE_KM = physicalDistanceBetweenPoints(
+  TASK8_PHYSICAL_FIXTURE.points.edgeStart,
+  TASK8_PHYSICAL_FIXTURE.points.edgeEnd,
+);
+const OPEN_TRAVERSAL_PACE_KM_PER_DAY = 6;
+const EXPECTED_OPEN_TRAVEL_TIME_DAYS = OPEN_TRAVERSAL_DISTANCE_KM / OPEN_TRAVERSAL_PACE_KM_PER_DAY;
+const OPEN_TRAVERSAL_ORACLE = Object.freeze({
+  expectedDistanceKm: OPEN_TRAVERSAL_DISTANCE_KM,
+  paceKmPerDay: OPEN_TRAVERSAL_PACE_KM_PER_DAY,
+  expectedTravelTimeDays: EXPECTED_OPEN_TRAVEL_TIME_DAYS,
+});
 const close = (a, b, tolerance = EPS) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tolerance + EPS;
 const absDiff = (a, b) => Number.isFinite(a) && Number.isFinite(b) ? Math.abs(a - b) : Number.POSITIVE_INFINITY;
 
@@ -111,9 +122,8 @@ try {
       !oneKmA.fixedOnePointFiveReconstruction && !onePointFiveA.fixedOnePointFiveReconstruction,
 
     T8_3_edge_traversal:
-      oneKmA.openTraversal.allEdgesUseActualCellKm && onePointFiveA.openTraversal.allEdgesUseActualCellKm &&
-      oneKmA.openTraversal.routeLengthKm === 3 && onePointFiveA.openTraversal.routeLengthKm === 3 &&
-      close(oneKmA.openTraversal.travelTimeDays, onePointFiveA.openTraversal.travelTimeDays, routeTravelTimeToleranceAtSixKmPerDay) &&
+      openTraversalAcceptance(oneKmA.openTraversal, OPEN_TRAVERSAL_ORACLE) &&
+      openTraversalAcceptance(onePointFiveA.openTraversal, OPEN_TRAVERSAL_ORACLE) &&
       oneKmA.openTraversal.edgeCount !== onePointFiveA.openTraversal.edgeCount,
 
     T8_4_route_choice:
@@ -196,7 +206,13 @@ try {
     comparisonRow("origin→distant point distance km", continuousDistantDistance, oneKmA.pointDistances.originToDistantKm, onePointFiveA.pointDistances.originToDistantKm, distanceTolerance),
     comparisonRow("route-choice endpoint distance km", continuousRouteChoiceDistance, oneKmA.pointDistances.originToRouteChoiceKm, onePointFiveA.pointDistances.originToRouteChoiceKm, distanceTolerance),
     independentOracleRow("selected route vs independent open-terrain oracle", oneKmA.routeChoice.oracleExactMatch, onePointFiveA.routeChoice.oracleExactMatch),
-    comparisonRow("open 3-km traversal time days", 0.5, oneKmA.openTraversal.travelTimeDays, onePointFiveA.openTraversal.travelTimeDays, routeTravelTimeToleranceAtSixKmPerDay),
+    continuousOracleComparisonRow(
+      "open 3-km traversal time days",
+      EXPECTED_OPEN_TRAVEL_TIME_DAYS,
+      oneKmA.openTraversal.travelTimeDays,
+      onePointFiveA.openTraversal.travelTimeDays,
+      EPS,
+    ),
     independentOracleRow("catchment reachable set vs independent L1 oracle", oneKmA.catchment.oracleExactMatch, onePointFiveA.catchment.oracleExactMatch),
     comparisonRow("cue distance km", continuousCueDistance, oneKmA.perception.cueDistanceKm, onePointFiveA.perception.cueDistanceKm, visibilityTolerance),
     comparisonRow("social near separation class", "within 4 km", oneKmA.social.nearCount, onePointFiveA.social.nearCount, 0),
@@ -205,6 +221,18 @@ try {
   ];
   t8.T8_17_cross_resolution_summary = comparisonTable.every((row) => row.pass === true);
 
+  const openTraversalTimeNegativeControl = {
+    oneKm: { ...oneKmA.openTraversal, travelTimeDays: 1.0 },
+    onePointFiveKm: { ...onePointFiveA.openTraversal, travelTimeDays: 1.0 },
+  };
+  const openTraversalTimeNegativeControlResult = {
+    oneKmAccepted: openTraversalAcceptance(openTraversalTimeNegativeControl.oneKm, OPEN_TRAVERSAL_ORACLE),
+    onePointFiveKmAccepted: openTraversalAcceptance(openTraversalTimeNegativeControl.onePointFiveKm, OPEN_TRAVERSAL_ORACLE),
+    crossResolutionDifferenceDays: absDiff(
+      openTraversalTimeNegativeControl.oneKm.travelTimeDays,
+      openTraversalTimeNegativeControl.onePointFiveKm.travelTimeDays,
+    ),
+  };
   const routeNegativeControl = {
     ...oneKmA.routeChoice,
     routeLengthKm: oneKmA.routeChoice.routeLengthKm + 2 * (obstacle.maxYKm - obstacle.minYKm),
@@ -221,6 +249,15 @@ try {
     perceptionNegativeControlRejected: oneKmA.perception.insertedCueTargetMutationRejected === true,
     crossingNegativeControlKind: "flipped_incapable_band_to_reachable",
     crossingNegativeControlRejected: !crossingAcceptance({ ...oneKmA.crossing, incapableReachable: true }),
+    openTraversalTimeNegativeControl: {
+      expected: OPEN_TRAVERSAL_ORACLE,
+      corrupted: openTraversalTimeNegativeControl,
+      result: openTraversalTimeNegativeControlResult,
+    },
+    openTraversalTimeNegativeControlRejected:
+      openTraversalTimeNegativeControlResult.crossResolutionDifferenceDays <= EPS &&
+      openTraversalTimeNegativeControlResult.oneKmAccepted === false &&
+      openTraversalTimeNegativeControlResult.onePointFiveKmAccepted === false,
   };
 
   const verdict = Object.values(t8).every(Boolean) && Object.entries(selfDiscrimination)
@@ -277,6 +314,13 @@ try {
         formula: "same endpoint-distance bound 2*(q_1+q_1.5)",
         crossResolutionVisibilityKm: visibilityTolerance,
       },
+      openTraversal: {
+        acceptanceAuthority: "continuous physical distance divided by physical pace",
+        expectedDistanceKm: OPEN_TRAVERSAL_DISTANCE_KM,
+        paceKmPerDay: OPEN_TRAVERSAL_PACE_KM_PER_DAY,
+        expectedTravelTimeDays: EXPECTED_OPEN_TRAVEL_TIME_DAYS,
+        numericEpsilon: EPS,
+      },
     },
     rasters: {
       oneKm: oneKmA.raster,
@@ -300,6 +344,9 @@ try {
         routeChoiceEndpointDistanceKm: continuousRouteChoiceDistance,
         routeChoiceDetourKm: continuousRouteChoiceDetourKm,
         cueDistanceKm: continuousCueDistance,
+        openTraversalDistanceKm: OPEN_TRAVERSAL_DISTANCE_KM,
+        openTraversalPaceKmPerDay: OPEN_TRAVERSAL_PACE_KM_PER_DAY,
+        openTraversalTravelTimeDays: EXPECTED_OPEN_TRAVEL_TIME_DAYS,
       },
     },
   };
@@ -336,13 +383,17 @@ function runResolution(templateWorld, cellKm, m) {
   const openRoute = directCardinalRoute(world, pointTileIds.edgeStart, pointTileIds.edgeEnd);
   const openEdges = [];
   for (let index = 0; index + 1 < openRoute.length; index += 1) {
-    openEdges.push(m.traversal.deriveTraversalEdge(world, openRoute[index], openRoute[index + 1], 6));
+    openEdges.push(m.traversal.deriveTraversalEdge(
+      world, openRoute[index], openRoute[index + 1], OPEN_TRAVERSAL_PACE_KM_PER_DAY,
+    ));
   }
   const openTraversal = {
     edgeCount: openEdges.length,
     allEdgesUseActualCellKm: openEdges.every((edge) => edge.passable && close(edge.physicalLengthKm, cellKm)),
     routeLengthKm: m.traversal.getRoutePhysicalLengthKm(world, openRoute),
-    travelTimeDays: m.traversal.getRouteTravelTimeDays(world, openRoute, 6),
+    travelTimeDays: m.traversal.getRouteTravelTimeDays(
+      world, openRoute, OPEN_TRAVERSAL_PACE_KM_PER_DAY,
+    ),
   };
 
   const routeChoiceSurface = m.physicalAccess.expandBoundedTravelRouteSurface(
@@ -711,6 +762,31 @@ function comparisonRow(domain, continuous, oneKm, onePointFiveKm, tolerance) {
     pass = oneKm === onePointFiveKm;
   }
   return { domain, continuous, oneKm, onePointFiveKm, tolerance, absoluteDifference: difference, pass };
+}
+
+function continuousOracleComparisonRow(domain, continuous, oneKm, onePointFiveKm, tolerance = EPS) {
+  const oneKmDifferenceFromContinuous = absDiff(oneKm, continuous);
+  const onePointFiveKmDifferenceFromContinuous = absDiff(onePointFiveKm, continuous);
+  return {
+    domain,
+    continuous,
+    oneKm,
+    onePointFiveKm,
+    tolerance,
+    absoluteDifference: absDiff(oneKm, onePointFiveKm),
+    oneKmDifferenceFromContinuous,
+    onePointFiveKmDifferenceFromContinuous,
+    pass:
+      oneKmDifferenceFromContinuous <= tolerance &&
+      onePointFiveKmDifferenceFromContinuous <= tolerance,
+  };
+}
+
+function openTraversalAcceptance(openTraversal, oracle) {
+  return openTraversal.allEdgesUseActualCellKm === true &&
+    close(openTraversal.routeLengthKm, oracle.expectedDistanceKm, 0) &&
+    close(openTraversal.travelTimeDays, oracle.expectedTravelTimeDays, 0) &&
+    close(oracle.expectedTravelTimeDays, oracle.expectedDistanceKm / oracle.paceKmPerDay, 0);
 }
 
 function routeChoiceAcceptance(routeChoice) {

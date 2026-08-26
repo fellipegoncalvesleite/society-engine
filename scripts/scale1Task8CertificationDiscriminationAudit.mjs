@@ -52,6 +52,8 @@ const checks = {
   H5_crowding_numeric_equality_not_acceptance_authority:
     main.tolerances?.socialCrowding?.acceptanceAuthority === "categorical_physical_presence_and_proximity",
   N4_crossing_negative_control_rejected: self.crossingNegativeControlRejected === true,
+  H6_open_traversal_equal_but_wrong_time_rejected:
+    self.openTraversalTimeNegativeControlRejected === true,
 };
 
 const out = {
