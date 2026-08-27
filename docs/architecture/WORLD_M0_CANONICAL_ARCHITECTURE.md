@@ -29,7 +29,12 @@ WORLD-M0 is not a daily Earth-system simulator. It is a compile-and-certify arch
 WorldRecipe
 → deterministic physical-world compilation
 → canonical living-ecology realization
-→ physical/ecological/resolution/convergence/human-feasibility certification
+→ deterministic PRE-SEAL candidate physical/ecology state
+→ M0.5 pre-seal physical/ecological/resolution/determinism certification
+→ M0.6 bounded abiotic + living-ecology convergence
+→ final initialized genesisEnvironmentState
+→ FINAL PACKAGE SEAL + packageDigest
+→ M0.6 Human-Ecology Feasibility against the sealed WorldM0Package
 → one-way legacy cutover and Items 1–5 / SCALE-1 migration certification
 → runtime/adversarial closure
 → frozen WORLD-M0 authority
@@ -37,7 +42,7 @@ WorldRecipe
 
 The physical compiler owns stable pre-human truth: spatial frame, relief, hydrography, climate normals, climatological water behavior, broad causal substrate, soil-hydraulic substrate, bounded sub-cell heterogeneity, and physical feature definitions. The immediate ecology realization owns the baseline physical geometry and identity of living sources/ranges needed by the existing extraction/receipt architecture. Later mutable simulation history is stored in overlays tied to the exact sealed base package.
 
-WORLD-M0 becomes the sole production physical authority only at M0.7. M0.1 through M0.6 build and certify a candidate while ordinary production continues to use the existing authority. This staging is mandatory because an intermediate state where both old and new generators influence production would create parallel truth.
+WORLD-M0 becomes the sole production physical authority only at M0.7. M0.1 through M0.5 build and certify deterministic **pre-seal** candidate components/state. M0.6 then performs bounded convergence, materializes the final initialized `genesisEnvironmentState`, seals the final `WorldM0Package` and computes `packageDigest`, and only then runs Human-Ecology Feasibility against that sealed package. Ordinary production continues to use the existing authority throughout M0.1–M0.6. This staging is mandatory because an intermediate state where both old and new generators influence production would create parallel truth.
 
 WORLD-M0 must preserve the accepted Society Engine causal spine:
 
@@ -153,9 +158,9 @@ M0.3  Climate / Water / Substrate / Sub-cell Foundation
   ↓
 M0.4  Canonical Living-Ecology Realization
   ↓
-M0.5  Dual-Resolution + Determinism + Physical/Ecology Certification
+M0.5  PRE-SEAL Dual-Resolution + Determinism + Physical/Ecology Certification
   ↓
-M0.6  Pre-human Convergence + Human-Ecology Feasibility
+M0.6  Convergence → Final Genesis State → Package Seal → Human-Ecology Feasibility
   ↓
 M0.7  Legacy Authority Cutover + Items 1–5 + SCALE-1 Migration
   ↓
@@ -167,9 +172,9 @@ M0.8  Runtime + Adversarial Closure + Final Freeze
 | **M0.1** | WorldRecipe, identity, serialization principles, coordinate/spatial contract, version axes, failure model | no terrain/ecology generation; no production cutover | legacy remains authoritative |
 | **M0.2** | land/ocean topology, relief, canonical hydrography, basins, lakes, coastline, physical crossing geometry | no human route knowledge; no ecology authority | no move |
 | **M0.3** | climate normals, climatological hydrology, broad substrate, soil hydraulics, groundwater tendency, sub-cell model, feature registry | no weather history; no detailed deposits; no human material knowledge | no move |
-| **M0.4** | canonical baseline concentrated/diffuse/mobile living ecology and genesis dynamic state | no terrain-food floor; no human demographic tuning | no move |
-| **M0.5** | independent 1.0/1.5 representations, deterministic identity, physical/ecological plausibility, performance evidence | no post-hoc tolerance tuning; no silent resolution fallback | resolution may freeze; production does not move |
-| **M0.6** | bounded abiotic/ecological initialization convergence and world-side human-ecology feasibility | no fertility/mortality/health/Item-6 coefficient tuning | no move |
+| **M0.4** | canonical baseline concentrated/diffuse/mobile living ecology plus deterministic pre-seal candidate state/initialization inputs | no final converged `genesisEnvironmentState`; no terrain-food floor; no human demographic tuning | no move |
+| **M0.5** | PRE-SEAL certification of independent 1.0/1.5 candidate representations, deterministic compiler behavior, physical/ecological plausibility, conservation/area scaling, and operational feasibility | no final `WorldM0Package`/`packageDigest`; no post-hoc tolerance tuning; no silent resolution fallback | resolution may freeze; production does not move |
+| **M0.6** | ordered internal phases: bounded abiotic/ecological convergence → final `genesisEnvironmentState` → final package seal/`packageDigest` → Human-Ecology Feasibility against that sealed package | no mutation after seal; no fertility/mortality/health/Item-6 coefficient tuning | no move |
 | **M0.7** | one-way domain cutover, legacy-writer retirement, Items 1–5 migration, SCALE-1 regression | no long-lived dual authority; no automatic semantic redesign | WORLD-M0 becomes sole production physical authority |
 | **M0.8** | runtime determinism, boundedness/performance, adversarial controls, freeze ledger | no new scope or opportunistic redesign | accepted M0 authority may freeze |
 
@@ -225,7 +230,7 @@ A recipe that explicitly selects ML and a semantically equivalent procedural rec
 
 ## 6. Canonical WorldM0Package contract
 
-`WorldM0Package` is the sealed canonical physical/ecological content produced by a successful compile and baseline realization. It is not a larger legacy `Tile` object and it does not contain the certification bundle that certifies it.
+`WorldM0Package` is the **final sealed** canonical physical/ecological content produced only after successful M0.6 convergence has materialized the final initialized `genesisEnvironmentState`. M0.1–M0.5 may produce deterministic candidate components/state and evidence, but they do not yet produce the final package or final `packageDigest`. `WorldM0Package` is not a larger legacy `Tile` object and it does not contain the certification bundle that certifies it.
 
 Conceptually:
 
@@ -255,19 +260,19 @@ WorldM0Package
 └── packageDigest
 ```
 
-The package separates immutable definitions from the initial dynamic state needed to start simulation. A concentrated living source may have an immutable identity and geometry while its current stock/condition is mutable overlay state. A mobile population may have a stable stock/range authority while abundance, range weighting, or condition changes later. This avoids the contradiction of trying to make depletion mutate the immutable base.
+The package separates immutable definitions from the initial dynamic state needed to start simulation. Before sealing, M0.4/M0.5 hold these as deterministic candidate components/state. M0.6 convergence receives that accepted pre-seal candidate and computes any state requiring bounded relaxation; the successful output is the final `genesisEnvironmentState`. Only then are `physicalBase`, `livingEcologyBase`, final `genesisEnvironmentState`, and `generationProvenance` assembled/finalized into `WorldM0Package`. A concentrated living source may have an immutable identity and geometry while its current stock/condition is mutable overlay state. A mobile population may have a stable stock/range authority while abundance, range weighting, or condition changes later. No already-sealed immutable package is mutated to obtain the genesis state.
 
-`generationProvenance` may include identities needed to reproduce and interpret the sealed package: recipe digest, compiler versions, deterministic stage identities, asset digests, numeric-kernel identity, and bounded generation diagnostics. It MUST NOT include review verdicts or certification evidence whose purpose is to attest that `packageDigest` is acceptable.
+`generationProvenance` may include identities needed to reproduce and interpret the sealed package: recipe/compiler identity, deterministic generation and convergence stage identities, asset identities/digests, numeric-kernel identity, and bounded generation/convergence diagnostics required to reproduce the final content. It MUST NOT include review verdicts, accept/reject governance, post-seal certification evidence, or adversarial-review results. Those belong downstream and must not create circular package identity.
 
-The package digest is computed from canonical package content excluding the digest field itself and excluding any certification bundle. Exact byte layout, compression, chunking, and canonical geometry encoding remain M0.1/M0.3 implementation decisions, but compression or transport representation must not create ambiguous canonical identity.
+Only after all required M0.6 convergence gates pass is the package canonically serialized and `packageDigest` computed from canonical package content excluding the digest field itself and excluding any certification bundle. Exact byte layout, compression, chunking, and canonical geometry encoding remain M0.1/M0.3 implementation decisions, but compression or transport representation must not create ambiguous canonical identity. M0.5 component/evidence digests are not the final `packageDigest`.
 
-Once sealed, immutable package structures are read-only authority. Later simulation never rewrites the original package to represent history.
+Once sealed, immutable package structures are read-only authority. No M0.6 feasibility step or later simulation step may mutate the sealed package to represent initialization or history.
 
 ---
 
 ## 7. WorldM0CertificationBundle separation
 
-Certification is conceptually and cryptographically downstream of the sealed package.
+Final certification is conceptually and cryptographically downstream of the sealed package. M0.5 may create deterministic pre-seal certification evidence and component/evidence-artifact digests before the package exists; those artifacts are later incorporated or referenced by the final certification bundle and are never called the final `packageDigest`.
 
 ```text
 WorldM0Package
@@ -292,7 +297,7 @@ WorldM0CertificationBundle
   └── certificationDigest
 ```
 
-The package MUST NOT depend on the certification bundle. The certification bundle MUST reference the exact sealed `packageDigest`. This removes circular identity.
+The package MUST NOT depend on the certification bundle. The final certification bundle MUST reference the exact sealed `packageDigest` created after M0.6 convergence. Pre-seal M0.5 evidence can be referenced downstream, but certification content is never package content and never participates in `packageDigest`. This removes circular identity.
 
 A certification digest attests to an evidence bundle about a package; it is not the package's physical identity. Re-certifying the same immutable package with additional evidence can therefore produce a new certification bundle without changing `packageDigest`.
 
@@ -573,7 +578,7 @@ The immutable base owns at least:
 - baseline ecology source/range identity and geometry;
 - generation provenance.
 
-Genesis state initializes the mutable environment. Later runtime overlays, tied to the exact base/package digest, own changing state such as:
+The final `genesisEnvironmentState`, materialized by M0.6 convergence and then sealed into the package, initializes the mutable environment. Later runtime overlays, tied to the exact base/package digest, own changing state such as:
 
 - depletion and recovery;
 - current fauna abundance/distribution state;
@@ -679,13 +684,26 @@ Required end-state classification:
 | `world.rivers` | read-only compatibility projection of canonical reaches |
 | `world.riverCrossings` | derived physical projection or retire; no epistemic fields inside physical authority |
 | `resourceProfile` | derived habitat/opportunity summary only |
-| `riskProfile` | derived baseline susceptibility summary only; not weather/hazard history |
+| `Tile.seasonalProfile` | **DERIVED COMPATIBILITY / TEMPORARY ADAPTER** from climate normals plus canonical realized living ecology/current overlay as appropriate; never independently writable production truth |
+| `riskProfile` | temporary composed compatibility view only; baseline susceptibility/context may derive from M0, while realized dynamic authorities remain domain-specific |
 | `carryingCapacity` | compatibility/human diagnostic only; never physical food |
 | legacy plant occurrence generation | loses occurrence authority; adapts to canonical ecology sources if retained |
 | legacy fauna/aquatic geography generation | loses placement/range authority; reusable stock dynamics may migrate behind canonical range authority |
 | spawn readers | consume M0-derived physical/evidence interfaces, not legacy tile truth |
 | observation writers | preserve epistemic ownership while changing physical signal supplier |
 | `materialAffordance` | remains projection/human interpretation, never canonical geology |
+
+`Tile.seasonalProfile` is explicitly transitional. Its new authority is climate normals plus canonical realized living ecology/current overlay as appropriate. It MUST NOT remain independently writable production truth, and it retires once all production consumers use explicit climate/ecology interfaces or an explicitly derived read model. This specification does not claim it is already unused.
+
+Legacy `riskProfile` is a mixed-domain compatibility surface, not a canonical cross-domain risk authority. The M0.7 adapter may temporarily compose it for old consumers, but its components must be classified by owner:
+
+- flood susceptibility/context → derived from M0 terrain/hydro/climate normals;
+- drought susceptibility/context → derived from M0 climate/water normals;
+- dynamic actual flood/drought/weather state → later Item 12 authority;
+- mature disease transmission/exposure authority → later disease ecology/epidemiology checkpoint;
+- depletion/current ecological condition → ecology runtime overlay, not generic risk truth.
+
+The adapter may preserve legacy field shape during migration, but that composed object MUST NOT become a new canonical cross-domain risk store.
 
 Map 1 becomes `REGRESSION_FIXTURE`. Map 2 becomes `MIGRATION + CROSS-RESOLUTION REGRESSION_FIXTURE`. The frozen Task-8 continuous fixture remains a permanent SCALE-1 regression/certification fixture.
 
@@ -773,6 +791,7 @@ Certification must prove:
 6. Physical effects remain tied to the accepted execution/result/receipt provenance.
 7. `band.practicalAdaptation` remains the sole canonical Item-5 practical causal/history authority.
 8. No new `technologies`, `materialKnowledge`, M0-backed efficacy store, or equivalent parallel practical-history authority appears.
+9. Every accepted Item-5 physical experiment that requires a real material occurrence has a legitimate M0-era physical provider for that occurrence. Broad M0 prospectivity is not substituted for detailed occurrence where the experiment requires an actual occurrence; if M0 cannot truthfully provide the needed occurrence, migration certification must say so rather than manufacture it.
 
 Semantic redesign is justified only if actual migration evidence demonstrates that the accepted causal architecture cannot survive. Examples include proof that candidate generation must read hidden truth, that uncertain/incorrect `HumanMaterialBelief` can no longer be represented, that material presence necessarily bypasses execution, or that physical-result provenance cannot remain separate.
 
@@ -827,7 +846,7 @@ A storage or projection change alone is not a reopening trigger.
 
 ## 21. 1.0-vs-1.5 certification gate
 
-M0.5 compares two independently compiled representations of the **same continuous physical world**:
+M0.5 is a **PRE-SEAL** certification gate. It compares two independently compiled representations of the **same continuous physical world** and certifies candidate representation/semantics, not a final package whose genesis state is still subject to M0.6 convergence:
 
 ```text
 continuous recipe / physical fixture
@@ -870,13 +889,15 @@ Decision rule:
 - **both fail:** generation or certification architecture is defective.
 - **both agree but are equally wrong:** both fail.
 
+M0.5 may emit deterministic candidate-component digests and evidence-artifact digests for this gate. It MUST NOT emit or consume the final `packageDigest`, because the final initialized `genesisEnvironmentState` does not exist until M0.6 convergence. The resolution decision remains at M0.5: later M0.6/M0.8 runtime or package-size evidence that contradicts the predeclared operational feasibility assumption blocks freeze and returns the architecture to review rather than silently changing resolution.
+
 Until this gate closes, statements that “WORLD-M0 is 1 km” are shorthand for intended nominal architecture, not certified production authority.
 
 ---
 
 ## 22. Determinism / identity / versioning
 
-WORLD-M0 determinism means that a complete supported recipe plus declared implementation/runtime identity produces one canonical package identity, not merely that a seed produces visually similar output.
+WORLD-M0 determinism means that a complete supported recipe plus declared implementation/runtime identity produces one deterministic pre-seal candidate through M0.5 and, after deterministic M0.6 convergence and sealing, one canonical final package identity. A seed producing visually similar output is insufficient.
 
 Identity/version axes must remain distinct, including at least:
 
@@ -899,11 +920,14 @@ Any change capable of changing canonical generated content requires an identity-
 Required determinism tests include:
 
 ```text
-same complete recipe, same supported environment, clean repeat
-→ same canonical package/provenance/digest
+same complete recipe, same supported environment, clean repeat through M0.5
+→ same pre-seal candidate/component identities and evidence-artifact digests
+
+same complete recipe, deterministic M0.6 convergence + seal
+→ same final genesisEnvironmentState, canonical package/provenance/packageDigest
 
 same complete recipe, second process
-→ same result
+→ same corresponding pre-seal and final results
 
 serialize recipe → load → regenerate
 → same result
@@ -962,7 +986,7 @@ Physical plausibility is not visual plausibility. Screenshots may help review bu
 
 ## 24. Ecology reality certification
 
-M0.4–M0.5 must prove that baseline ecology is real physical state rather than decorative habitat scoring.
+M0.4–M0.5 must prove that the **pre-seal candidate** baseline ecology is real physical state rather than decorative habitat scoring. This certifies ecology representation, source identity, geometry, conservation, area scaling, and genesis semantics; it does not claim that final pre-human convergence has already happened or that a final `packageDigest` exists.
 
 ### Concentrated-source gates
 
@@ -1010,9 +1034,29 @@ A mutation connecting habitat potential, `resourceProfile`, `carryingCapacity`, 
 
 ## 25. Pre-human convergence
 
-M0.6 initializes only state that genuinely requires dynamic relaxation. Immutable relief, hydrography, climate normals, substrate identity, and other generated base truth do not need artificial time evolution.
+M0.6 owns the final initialized genesis state and the final package seal. It receives the accepted deterministic **pre-seal** candidate produced by M0.4/M0.5; it does not receive an already-sealed immutable package and mutate it.
 
-Two bounded initialization phases may be used:
+The required internal M0.6 order is:
+
+```text
+M0.6A  bounded convergence
+       ├── abiotic initialization where dynamic relaxation is required
+       └── living-ecology initialization where dynamic relaxation is required
+
+M0.6B  materialize final genesisEnvironmentState
+
+M0.6C  FINAL PACKAGE SEAL
+       ├── assemble/finalize WorldM0Package
+       ├── canonical serialization
+       └── compute packageDigest
+
+M0.6D  Human-Ecology Feasibility
+       └── consumes the newly sealed WorldM0Package
+```
+
+These are ordered internal phases of M0.6, not four new roadmap checkpoints.
+
+M0.6 initializes only state that genuinely requires dynamic relaxation. Immutable relief, hydrography, climate normals, substrate identity, and other generated base truth do not need artificial time evolution. Two bounded initialization families may be used:
 
 ```text
 A. abiotic initialization
@@ -1041,25 +1085,27 @@ Required determinism:
 
 ```text
 same recipe
+→ same accepted pre-seal candidate
 → same initialization trajectory
 → same convergence decision
 → same convergence cycle
-→ same initialized-state digest
+→ same final genesisEnvironmentState
+→ same package seal/packageDigest
 ```
 
-If a bounded maximum is reached without convergence, generation is rejected with a typed non-convergence failure. No random restart, silent tolerance relaxation, or unbounded spin-up is permitted.
+If a bounded maximum is reached without convergence, generation is rejected with a typed non-convergence failure and **no final package is sealed**. No random restart, silent tolerance relaxation, or unbounded spin-up is permitted.
 
-Initialization must not become a hidden repair stage that masks a defective generator.
+Initialization must not become a hidden repair stage that masks a defective generator. After M0.6C seal, the package is immutable; Human-Ecology Feasibility may reject the package or trigger architecture review, but it does not mutate that sealed package in place.
 
 ---
 
 ## 26. Human-ecology feasibility
 
-The M0.6 Human-Ecology Feasibility gate is a diagnostic of the generated world, not full human population calibration.
+The M0.6 Human-Ecology Feasibility gate is the **post-seal M0.6D** diagnostic of the generated world, not full human population calibration. It runs only after successful M0.6 convergence, final `genesisEnvironmentState` materialization, and M0.6C package sealing.
 
 Inputs include:
 
-- the sealed candidate physical/ecological package;
+- the newly sealed `WorldM0Package` and exact `packageDigest`;
 - versioned reference capability envelopes;
 - existing SCALE-1 physical movement/crossing/access semantics;
 - existing physical extraction/receipt semantics.
@@ -1146,7 +1192,7 @@ Hard architectural constraints:
 - no time-only unbounded mutable overlay growth;
 - no arbitrary whole-world source count that changes physical density.
 
-Before M0.5 chooses 1.0 km, a concrete supported-hardware performance, memory, and package-size envelope must be declared. If both 1.0 and 1.5 km are physically correct but 1.0 km exceeds that envelope, the gate returns to review rather than silently choosing 1.5 km.
+Before M0.5 chooses 1.0 km, a concrete supported-hardware performance, memory, and package-size feasibility envelope must be declared and exercised against the pre-seal candidate/operational representation. This is the M0.5 operational feasibility decision, not a claim that the final post-convergence package size is already known. The actual sealed package must satisfy the corresponding later M0.6/M0.8 runtime/package-size closure gates. If both 1.0 and 1.5 km are physically correct but 1.0 km fails the M0.5 operational envelope, the gate returns to review rather than silently choosing 1.5 km.
 
 ---
 
@@ -1207,10 +1253,11 @@ WORLD-M0 may be declared `ACCEPTED / FROZEN` only at M0.8 after all closure clas
 - physical plausibility matrix accepted;
 - hydro/water/substrate constraints accepted;
 - ecology reality and area-scaling gates accepted;
-- pre-human convergence accepted;
-- human-ecology feasibility accepted without human coefficient tuning;
-- 1.0-vs-1.5 gate accepted and final strategic resolution explicitly frozen;
-- final `K` and final numerical representation are certified at their designated gates.
+- 1.0-vs-1.5 PRE-SEAL gate accepted and final strategic resolution explicitly frozen at M0.5;
+- final `K` and final numerical representation are certified at their designated gates;
+- pre-human convergence accepted and final `genesisEnvironmentState` materialized before seal;
+- final `WorldM0Package` sealed and `packageDigest` computed only after convergence;
+- human-ecology feasibility accepted against that sealed package without human coefficient tuning.
 
 ### 29.3 Migration complete
 
@@ -1224,7 +1271,7 @@ WORLD-M0 may be declared `ACCEPTED / FROZEN` only at M0.8 after all closure clas
 
 ### 29.4 Runtime/boundedness complete
 
-- same full recipe reproduces the same package/provenance/digest on every declared deterministic environment;
+- same full recipe reproduces the same pre-seal candidate and, after deterministic M0.6 convergence/seal, the same final package/provenance/digest on every declared deterministic environment;
 - save/load identity is certified;
 - generation and runtime data structures are bounded;
 - predeclared memory/runtime/package-size envelopes pass;
@@ -1282,6 +1329,8 @@ WORLD-1 deepens this same physical authority. It does not replace M0 with a para
 ---
 
 ## 31. Explicit unresolved implementation/scientific decisions
+
+The lifecycle ordering itself is **not** unresolved: M0.5 certifies the pre-seal candidate and resolution semantics; M0.6 converges and materializes final `genesisEnvironmentState`; only then is `WorldM0Package` sealed and `packageDigest` computed; Human-Ecology Feasibility consumes that sealed package. The open decisions below may parameterize those phases but may not reorder them or create a final package earlier.
 
 The following decisions are deliberately open. They are not omissions and must not be silently frozen by an implementer.
 
