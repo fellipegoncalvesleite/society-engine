@@ -39,6 +39,27 @@ const OPEN_TRAVERSAL_ORACLE = Object.freeze({
   paceKmPerDay: OPEN_TRAVERSAL_PACE_KM_PER_DAY,
   expectedTravelTimeDays: EXPECTED_OPEN_TRAVEL_TIME_DAYS,
 });
+// Audit-only frozen SCALE-1 policy. These values intentionally duplicate the physical
+// calibration contract instead of importing production constants: a silent production
+// semantic change must fail this independent certification oracle.
+const TASK8_CALIBRATION_POLICY = Object.freeze({
+  familiarityRadiusKm: 3,
+  controlledDistances: Object.freeze({ fissionKm: 6, accessKm: 3, protoCampKm: 6 }),
+  fission: Object.freeze({
+    spacingCloseKm: 3,
+    spacingMidKm: 7.5,
+    spacingFarKm: 12,
+    distancePenaltyStartKm: 12,
+    distancePenaltyRampKm: 27,
+    nearbyRangeMinKm: 4.5,
+    nearbyRangeMaxKm: 12,
+    localEvidenceKm: 4.5,
+    inheritedParentCoreKm: 3,
+    inheritanceDistanceScaleKm: 12,
+  }),
+  access: Object.freeze({ nearKm: 3, extendedKm: 4.5 }),
+  protoCamp: Object.freeze({ kinNearbyKm: 6 }),
+});
 const close = (a, b, tolerance = EPS) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tolerance + EPS;
 const absDiff = (a, b) => Number.isFinite(a) && Number.isFinite(b) ? Math.abs(a - b) : Number.POSITIVE_INFINITY;
 
@@ -179,13 +200,13 @@ try {
       oneKmA.relocation.microShift === onePointFiveA.relocation.microShift && oneKmA.relocation.microShift === false &&
       oneKmA.relocation.significant === onePointFiveA.relocation.significant && oneKmA.relocation.significant === true,
 
-    T8_14_spawn_fission_proximity:
-      oneKmA.calibrations.spawnTooNearEligible === false && onePointFiveA.calibrations.spawnTooNearEligible === false &&
-      oneKmA.calibrations.spawnFarEnoughEligible === true && onePointFiveA.calibrations.spawnFarEnoughEligible === true &&
-      oneKmA.calibrations.fissionEquivalentKey === onePointFiveA.calibrations.fissionEquivalentKey &&
-      oneKmA.calibrations.accessEquivalentKey === onePointFiveA.calibrations.accessEquivalentKey &&
-      oneKmA.calibrations.protoCampEquivalentKey === onePointFiveA.calibrations.protoCampEquivalentKey &&
-      absDiff(oneKmA.calibrations.familiarityMaxKm, onePointFiveA.calibrations.familiarityMaxKm) <= distanceTolerance + EPS,
+    T8_14_spawn_fission_proximity: t814Acceptance(
+      oneKmA.calibrations,
+      oneKmA.calibrationOracle,
+      onePointFiveA.calibrations,
+      onePointFiveA.calibrationOracle,
+      distanceTolerance,
+    ),
 
     T8_15_bounded_route_search:
       oneKmA.routeSearch.targetsReusedInOneSurface && onePointFiveA.routeSearch.targetsReusedInOneSurface &&
@@ -218,6 +239,10 @@ try {
     comparisonRow("social near separation class", "within 4 km", oneKmA.social.nearCount, onePointFiveA.social.nearCount, 0),
     comparisonRow("local shift class", "2.4 km physical move", oneKmA.relocation.localShiftEligible, onePointFiveA.relocation.localShiftEligible, "classification equality"),
     comparisonRow("capability crossing reachable", "capable=true; incapable=false", oneKmA.crossing.capableReachable, onePointFiveA.crossing.capableReachable, "classification equality"),
+    independentOracleRow("founder familiarity vs independent 3-km oracle", oneKmA.calibrationOracleAssessment.familiarity, onePointFiveA.calibrationOracleAssessment.familiarity),
+    independentOracleRow("fission calibration vs independent 6-km oracle", oneKmA.calibrationOracleAssessment.fission, onePointFiveA.calibrationOracleAssessment.fission),
+    independentOracleRow("access proximity vs independent 3/4.5-km oracle", oneKmA.calibrationOracleAssessment.access, onePointFiveA.calibrationOracleAssessment.access),
+    independentOracleRow("proto-camp kin proximity vs independent 6-km oracle", oneKmA.calibrationOracleAssessment.protoCamp, onePointFiveA.calibrationOracleAssessment.protoCamp),
   ];
   t8.T8_17_cross_resolution_summary = comparisonTable.every((row) => row.pass === true);
 
@@ -232,6 +257,22 @@ try {
       openTraversalTimeNegativeControl.oneKm.travelTimeDays,
       openTraversalTimeNegativeControl.onePointFiveKm.travelTimeDays,
     ),
+  };
+  const familiarityWrong = {
+    oneKm: corruptFamiliarity(oneKmA.calibrations),
+    onePointFiveKm: corruptFamiliarity(onePointFiveA.calibrations),
+  };
+  const fissionWrong = {
+    oneKm: corruptFission(oneKmA.calibrations),
+    onePointFiveKm: corruptFission(onePointFiveA.calibrations),
+  };
+  const accessWrong = {
+    oneKm: corruptAccess(oneKmA.calibrations),
+    onePointFiveKm: corruptAccess(onePointFiveA.calibrations),
+  };
+  const protoCampWrong = {
+    oneKm: corruptProtoCamp(oneKmA.calibrations),
+    onePointFiveKm: corruptProtoCamp(onePointFiveA.calibrations),
   };
   const routeNegativeControl = {
     ...oneKmA.routeChoice,
@@ -258,6 +299,34 @@ try {
       openTraversalTimeNegativeControlResult.crossResolutionDifferenceDays <= EPS &&
       openTraversalTimeNegativeControlResult.oneKmAccepted === false &&
       openTraversalTimeNegativeControlResult.onePointFiveKmAccepted === false,
+    familiarityEqualButWrongControl: {
+      kind: "all_reported_familiarity_distances_and_max_for_both_rasters_forced_to_100_km",
+      legacyEqualityOnlyAccepted: legacyT814EqualityAcceptance(familiarityWrong.oneKm, familiarityWrong.onePointFiveKm, distanceTolerance),
+    },
+    familiarityEqualButWrongRejected:
+      legacyT814EqualityAcceptance(familiarityWrong.oneKm, familiarityWrong.onePointFiveKm, distanceTolerance) === true &&
+      t814Acceptance(familiarityWrong.oneKm, oneKmA.calibrationOracle, familiarityWrong.onePointFiveKm, onePointFiveA.calibrationOracle, distanceTolerance) === false,
+    fissionEqualButWrongControl: {
+      kind: "both_rasters_spacing_pressure_forced_to_1_at_the_controlled_6_km_distance",
+      legacyEqualityOnlyAccepted: legacyT814EqualityAcceptance(fissionWrong.oneKm, fissionWrong.onePointFiveKm, distanceTolerance),
+    },
+    fissionEqualButWrongRejected:
+      legacyT814EqualityAcceptance(fissionWrong.oneKm, fissionWrong.onePointFiveKm, distanceTolerance) === true &&
+      t814Acceptance(fissionWrong.oneKm, oneKmA.calibrationOracle, fissionWrong.onePointFiveKm, onePointFiveA.calibrationOracle, distanceTolerance) === false,
+    accessEqualButWrongControl: {
+      kind: "both_rasters_near_and_extended_forced_false_at_the_controlled_3_km_distance",
+      legacyEqualityOnlyAccepted: legacyT814EqualityAcceptance(accessWrong.oneKm, accessWrong.onePointFiveKm, distanceTolerance),
+    },
+    accessEqualButWrongRejected:
+      legacyT814EqualityAcceptance(accessWrong.oneKm, accessWrong.onePointFiveKm, distanceTolerance) === true &&
+      t814Acceptance(accessWrong.oneKm, oneKmA.calibrationOracle, accessWrong.onePointFiveKm, onePointFiveA.calibrationOracle, distanceTolerance) === false,
+    protoCampEqualButWrongControl: {
+      kind: "both_rasters_kin_nearby_forced_false_at_the_controlled_6_km_distance",
+      legacyEqualityOnlyAccepted: legacyT814EqualityAcceptance(protoCampWrong.oneKm, protoCampWrong.onePointFiveKm, distanceTolerance),
+    },
+    protoCampEqualButWrongRejected:
+      legacyT814EqualityAcceptance(protoCampWrong.oneKm, protoCampWrong.onePointFiveKm, distanceTolerance) === true &&
+      t814Acceptance(protoCampWrong.oneKm, oneKmA.calibrationOracle, protoCampWrong.onePointFiveKm, onePointFiveA.calibrationOracle, distanceTolerance) === false,
   };
 
   const verdict = Object.values(t8).every(Boolean) && Object.entries(selfDiscrimination)
@@ -335,6 +404,11 @@ try {
       catchmentAreaWorstCaseEnvelopeKm2: areaTolerance,
     },
     selfDiscrimination,
+    calibrationPolicy: TASK8_CALIBRATION_POLICY,
+    calibrationOracles: {
+      oneKm: oneKmA.calibrationOracle,
+      onePointFiveKm: onePointFiveA.calibrationOracle,
+    },
     measurements: {
       oneKm: oneKmA,
       onePointFiveKm: onePointFiveA,
@@ -663,9 +737,12 @@ function runResolution(templateWorld, cellKm, m) {
   const fission = m.demography.deriveFissionPhysicalDistanceCalibrationForAudit(world, pointTileIds.origin, pointTileIds.fission);
   const access = m.accessNorms.deriveAccessNormPhysicalProximityForAudit(world, pointTileIds.origin, pointTileIds.socialNear);
   const proto = m.protoCamps.deriveProtoCampPhysicalProximityForAudit(world, pointTileIds.origin, pointTileIds.fission);
+  const calibrationOracle = buildTask8CalibrationOracle(world, pointTileIds);
   const calibrations = {
     spawnTooNearEligible: spawnTooNear?.eligible,
     spawnFarEnoughEligible: spawnFarEnough?.eligible,
+    familiarity,
+    familiarityProductionIds: familiarity.map((entry) => String(entry.tileId)).sort(),
     familiarityMaxKm: Math.max(0, ...familiarity.map((entry) => entry.distanceKm)),
     fissionEquivalentKey: fission ? [fission.spacingPressure, fission.distancePenalty, fission.nearbyRangeValue, fission.localEvidence, fission.inheritedParentCore].join("|") : "missing",
     accessEquivalentKey: access ? [access.near, access.extended].join("|") : "missing",
@@ -674,6 +751,7 @@ function runResolution(templateWorld, cellKm, m) {
     access,
     proto,
   };
+  const calibrationOracleAssessment = calibrationAcceptance(calibrations, calibrationOracle);
 
   const routeSearchTargets = [pointTileIds.nearTarget, pointTileIds.routeChoiceTarget, pointTileIds.socialNear];
   const routeSearchSurface = m.physicalAccess.expandBoundedTravelRouteSurface(
@@ -721,6 +799,8 @@ function runResolution(templateWorld, cellKm, m) {
     social,
     relocation,
     calibrations,
+    calibrationOracle,
+    calibrationOracleAssessment,
     routeSearch,
     fixedOnePointFiveReconstruction,
   };
@@ -745,10 +825,200 @@ function runResolution(templateWorld, cellKm, m) {
     social,
     relocation,
     calibrations,
+    calibrationOracle,
+    calibrationOracleAssessment,
     routeSearch,
     fixedOnePointFiveReconstruction,
     deterministicCanonical,
   };
+}
+
+function buildTask8CalibrationOracle(world, pointTileIds) {
+  const familiarity = independentFamiliarityOracle(world, pointTileIds.origin, TASK8_CALIBRATION_POLICY.familiarityRadiusKm);
+  const fissionDistanceKm = physicalDistanceBetweenPoints(
+    TASK8_PHYSICAL_FIXTURE.points.origin,
+    TASK8_PHYSICAL_FIXTURE.points.fission,
+  );
+  const accessDistanceKm = physicalDistanceBetweenPoints(
+    TASK8_PHYSICAL_FIXTURE.points.origin,
+    TASK8_PHYSICAL_FIXTURE.points.socialNear,
+  );
+  const protoCampDistanceKm = physicalDistanceBetweenPoints(
+    TASK8_PHYSICAL_FIXTURE.points.origin,
+    TASK8_PHYSICAL_FIXTURE.points.fission,
+  );
+  return {
+    familiarity,
+    fixtureDistanceAnchorsExact:
+      close(fissionDistanceKm, TASK8_CALIBRATION_POLICY.controlledDistances.fissionKm) &&
+      close(accessDistanceKm, TASK8_CALIBRATION_POLICY.controlledDistances.accessKm) &&
+      close(protoCampDistanceKm, TASK8_CALIBRATION_POLICY.controlledDistances.protoCampKm),
+    fission: deriveIndependentFissionCalibration(fissionDistanceKm),
+    access: {
+      physicalDistanceKm: accessDistanceKm,
+      near: accessDistanceKm <= TASK8_CALIBRATION_POLICY.access.nearKm + EPS,
+      extended: accessDistanceKm <= TASK8_CALIBRATION_POLICY.access.extendedKm + EPS,
+    },
+    protoCamp: {
+      physicalDistanceKm: protoCampDistanceKm,
+      kinNearby: protoCampDistanceKm <= TASK8_CALIBRATION_POLICY.protoCamp.kinNearbyKm + EPS,
+    },
+  };
+}
+
+function independentFamiliarityOracle(world, originTileId, radiusKm) {
+  const origin = world.tiles[originTileId];
+  if (origin === undefined) {
+    return { originTileId, radiusKm, expectedRows: [], expectedIds: [], boundaryIds: [], boundaryDistanceKm: null, boundaryExercised: false };
+  }
+  const expectedRows = Object.values(world.tiles)
+    .map((tile) => ({
+      tileId: tile.id,
+      expectedDistanceKm: independentManhattanCenterDistanceKm(world, origin, tile),
+    }))
+    .filter((row) => row.expectedDistanceKm <= radiusKm + EPS)
+    .sort((left, right) => String(left.tileId).localeCompare(String(right.tileId)));
+  const boundaryIds = expectedRows
+    .filter((row) => close(row.expectedDistanceKm, radiusKm))
+    .map((row) => String(row.tileId));
+  return {
+    originTileId,
+    radiusKm,
+    cellWidthKm: world.config.spatial.cellWidthKm,
+    cellHeightKm: world.config.spatial.cellHeightKm,
+    expectedRows,
+    expectedIds: expectedRows.map((row) => String(row.tileId)),
+    boundaryIds,
+    boundaryDistanceKm: boundaryIds.length > 0 ? radiusKm : null,
+    boundaryExercised: boundaryIds.length > 0,
+    design: "rasterized origin tile + independent |dx|*cellWidthKm + |dy|*cellHeightKm center-distance arithmetic; no production distance helper",
+  };
+}
+
+function independentManhattanCenterDistanceKm(world, firstTile, secondTile) {
+  const widthKm = world.config.spatial.cellWidthKm;
+  const heightKm = world.config.spatial.cellHeightKm;
+  return Math.abs(secondTile.coord.x - firstTile.coord.x) * widthKm +
+    Math.abs(secondTile.coord.y - firstTile.coord.y) * heightKm;
+}
+
+function deriveIndependentFissionCalibration(physicalDistanceKm) {
+  const p = TASK8_CALIBRATION_POLICY.fission;
+  const spacingPressure = physicalDistanceKm <= p.spacingCloseKm + EPS
+    ? 1
+    : physicalDistanceKm <= p.spacingMidKm + EPS
+      ? 0.62
+      : physicalDistanceKm <= p.spacingFarKm + EPS
+        ? 0.28
+        : 0;
+  return {
+    physicalDistanceKm,
+    spacingPressure,
+    distancePenalty: clamp01Audit(Math.max(0, physicalDistanceKm - p.distancePenaltyStartKm) / p.distancePenaltyRampKm),
+    nearbyRangeValue: physicalDistanceKm >= p.nearbyRangeMinKm - EPS && physicalDistanceKm <= p.nearbyRangeMaxKm + EPS ? 0.16 : 0,
+    localEvidence: physicalDistanceKm <= p.localEvidenceKm + EPS,
+    inheritedParentCore: physicalDistanceKm <= p.inheritedParentCoreKm + EPS,
+    inheritanceDistanceValue: clamp01Audit(1 - physicalDistanceKm / p.inheritanceDistanceScaleKm),
+  };
+}
+
+function calibrationAcceptance(calibrations, oracle) {
+  const fixtureDistanceAnchorsExact = oracle?.fixtureDistanceAnchorsExact === true;
+  return {
+    familiarity: fixtureDistanceAnchorsExact && familiarityAcceptance(calibrations.familiarity, oracle.familiarity),
+    fission: fixtureDistanceAnchorsExact && fissionCalibrationAcceptance(calibrations.fission, oracle.fission),
+    access: fixtureDistanceAnchorsExact && accessCalibrationAcceptance(calibrations.access, oracle.access),
+    protoCamp: fixtureDistanceAnchorsExact && protoCampCalibrationAcceptance(calibrations.proto, oracle.protoCamp),
+  };
+}
+
+function t814Acceptance(oneKm, oneKmOracle, onePointFiveKm, onePointFiveKmOracle, distanceTolerance) {
+  const oneKmAccepted = calibrationAcceptance(oneKm, oneKmOracle);
+  const onePointFiveKmAccepted = calibrationAcceptance(onePointFiveKm, onePointFiveKmOracle);
+  return oneKm.spawnTooNearEligible === false && onePointFiveKm.spawnTooNearEligible === false &&
+    oneKm.spawnFarEnoughEligible === true && onePointFiveKm.spawnFarEnoughEligible === true &&
+    Object.values(oneKmAccepted).every(Boolean) && Object.values(onePointFiveKmAccepted).every(Boolean) &&
+    oneKm.fissionEquivalentKey === onePointFiveKm.fissionEquivalentKey &&
+    oneKm.accessEquivalentKey === onePointFiveKm.accessEquivalentKey &&
+    oneKm.protoCampEquivalentKey === onePointFiveKm.protoCampEquivalentKey &&
+    absDiff(oneKm.familiarityMaxKm, onePointFiveKm.familiarityMaxKm) <= distanceTolerance + EPS;
+}
+
+function legacyT814EqualityAcceptance(oneKm, onePointFiveKm, distanceTolerance) {
+  return oneKm.spawnTooNearEligible === false && onePointFiveKm.spawnTooNearEligible === false &&
+    oneKm.spawnFarEnoughEligible === true && onePointFiveKm.spawnFarEnoughEligible === true &&
+    oneKm.fissionEquivalentKey === onePointFiveKm.fissionEquivalentKey &&
+    oneKm.accessEquivalentKey === onePointFiveKm.accessEquivalentKey &&
+    oneKm.protoCampEquivalentKey === onePointFiveKm.protoCampEquivalentKey &&
+    absDiff(oneKm.familiarityMaxKm, onePointFiveKm.familiarityMaxKm) <= distanceTolerance + EPS;
+}
+
+function familiarityAcceptance(actualRows, oracle) {
+  if (!Array.isArray(actualRows) || oracle?.boundaryExercised !== true) return false;
+  const actualIds = actualRows.map((row) => String(row.tileId));
+  if (!sameStringSet(actualIds, oracle.expectedIds)) return false;
+  const expectedById = new Map(oracle.expectedRows.map((row) => [String(row.tileId), row.expectedDistanceKm]));
+  return actualRows.every((row) => {
+    const expectedDistanceKm = expectedById.get(String(row.tileId));
+    return expectedDistanceKm !== undefined &&
+      close(row.distanceKm, expectedDistanceKm) &&
+      row.distanceKm <= oracle.radiusKm + EPS;
+  });
+}
+
+function fissionCalibrationAcceptance(actual, expected) {
+  return actual !== undefined && expected !== undefined &&
+    close(actual.physicalDistanceKm, expected.physicalDistanceKm) &&
+    close(actual.spacingPressure, expected.spacingPressure) &&
+    close(actual.distancePenalty, expected.distancePenalty) &&
+    close(actual.nearbyRangeValue, expected.nearbyRangeValue) &&
+    actual.localEvidence === expected.localEvidence &&
+    actual.inheritedParentCore === expected.inheritedParentCore &&
+    close(actual.inheritanceDistanceValue, expected.inheritanceDistanceValue);
+}
+
+function accessCalibrationAcceptance(actual, expected) {
+  return actual !== undefined && expected !== undefined &&
+    close(actual.physicalDistanceKm, expected.physicalDistanceKm) &&
+    actual.near === expected.near &&
+    actual.extended === expected.extended;
+}
+
+function protoCampCalibrationAcceptance(actual, expected) {
+  return actual !== undefined && expected !== undefined &&
+    close(actual.physicalDistanceKm, expected.physicalDistanceKm) &&
+    actual.kinNearby === expected.kinNearby;
+}
+
+function corruptFamiliarity(calibrations) {
+  return {
+    ...calibrations,
+    familiarity: calibrations.familiarity.map((row) => ({ ...row, distanceKm: 100 })),
+    familiarityMaxKm: 100,
+  };
+}
+
+function corruptFission(calibrations) {
+  const fission = { ...calibrations.fission, spacingPressure: 1 };
+  return {
+    ...calibrations,
+    fission,
+    fissionEquivalentKey: [fission.spacingPressure, fission.distancePenalty, fission.nearbyRangeValue, fission.localEvidence, fission.inheritedParentCore].join("|"),
+  };
+}
+
+function corruptAccess(calibrations) {
+  const access = { ...calibrations.access, near: false, extended: false };
+  return { ...calibrations, access, accessEquivalentKey: [access.near, access.extended].join("|") };
+}
+
+function corruptProtoCamp(calibrations) {
+  const proto = { ...calibrations.proto, kinNearby: false };
+  return { ...calibrations, proto, protoCampEquivalentKey: String(proto.kinNearby) };
+}
+
+function clamp01Audit(value) {
+  return value < 0 ? 0 : value > 1 ? 1 : value;
 }
 
 function comparisonRow(domain, continuous, oneKm, onePointFiveKm, tolerance) {

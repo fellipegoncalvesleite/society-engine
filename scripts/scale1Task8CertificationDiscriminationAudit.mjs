@@ -54,6 +54,14 @@ const checks = {
   N4_crossing_negative_control_rejected: self.crossingNegativeControlRejected === true,
   H6_open_traversal_equal_but_wrong_time_rejected:
     self.openTraversalTimeNegativeControlRejected === true,
+  H7A_familiarity_equal_but_wrong_rejected:
+    self.familiarityEqualButWrongRejected === true,
+  H7B_fission_equal_but_wrong_rejected:
+    self.fissionEqualButWrongRejected === true,
+  H7C_access_equal_but_wrong_rejected:
+    self.accessEqualButWrongRejected === true,
+  H7D_proto_camp_equal_but_wrong_rejected:
+    self.protoCampEqualButWrongRejected === true,
 };
 
 const out = {
