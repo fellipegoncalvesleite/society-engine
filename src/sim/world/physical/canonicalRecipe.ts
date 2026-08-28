@@ -1,12 +1,15 @@
 import type { WorldRecipeV1 } from "./recipe";
 import { parseWorldRecipe } from "./recipe";
 import type { WorldM0Result } from "./failures";
+import { worldM0Failure } from "./failures";
 import type { WorldM0AssetManifestDigest, WorldM0RecipeDigest } from "./identity";
 import { sha256DigestBytes } from "./identity";
 import {
   computeWorldM0AssetManifestDigest,
   encodeCanonicalWorldM0AssetManifest,
 } from "./canonicalAssets";
+
+const MAX_CANONICAL_BYTES = 1_048_576;
 
 export interface WorldM0RecipeIdentity {
   readonly recipeDigest: WorldM0RecipeDigest;
@@ -75,7 +78,11 @@ export function encodeCanonicalWorldRecipe(
   if (!parsed.ok) return parsed;
   const canonical = canonicalRecipeText(parsed.value);
   if (!canonical.ok) return canonical;
-  return { ok: true, value: new TextEncoder().encode(canonical.value) };
+  const bytes = new TextEncoder().encode(canonical.value);
+  if (bytes.byteLength > MAX_CANONICAL_BYTES) {
+    return worldM0Failure("INVALID_RECIPE", "$", "canonical recipe exceeds 1 MiB");
+  }
+  return { ok: true, value: bytes };
 }
 
 export async function computeWorldRecipeDigest(
@@ -106,4 +113,42 @@ export async function computeWorldM0RecipeIdentity(
       assetManifestDigest: assetManifestDigest.value,
     },
   };
+}
+
+
+function equalBytes(left: Uint8Array, right: Uint8Array): boolean {
+  if (left.byteLength !== right.byteLength) return false;
+  for (let index = 0; index < left.byteLength; index += 1) {
+    if (left[index] !== right[index]) return false;
+  }
+  return true;
+}
+
+export function decodeCanonicalWorldRecipe(
+  bytes: Uint8Array,
+): WorldM0Result<WorldRecipeV1> {
+  if (!(bytes instanceof Uint8Array) || bytes.byteLength > MAX_CANONICAL_BYTES) {
+    return worldM0Failure("INVALID_RECIPE", "$", "canonical recipe input exceeds bounds");
+  }
+  let text: string;
+  try {
+    text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+  } catch {
+    return worldM0Failure("INVALID_RECIPE", "$", "canonical recipe is not valid UTF-8");
+  }
+  let input: unknown;
+  try {
+    input = JSON.parse(text);
+  } catch {
+    return worldM0Failure("INVALID_RECIPE", "$", "canonical recipe is not valid JSON");
+  }
+  const parsed = parseWorldRecipe(input);
+  if (!parsed.ok) {
+    return worldM0Failure("INVALID_RECIPE", "$", "canonical recipe shape is invalid");
+  }
+  const reencoded = encodeCanonicalWorldRecipe(parsed.value);
+  if (!reencoded.ok || !equalBytes(bytes, reencoded.value)) {
+    return worldM0Failure("INVALID_RECIPE", "$", "serialized recipe bytes are not canonical");
+  }
+  return { ok: true, value: parsed.value };
 }
