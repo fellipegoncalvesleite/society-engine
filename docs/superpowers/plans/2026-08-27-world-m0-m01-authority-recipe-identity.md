@@ -29,7 +29,7 @@
 2. `src/sim/world/spatialGeometry.ts` already computes cell area, physical extent, cell centers, and physical distances from `WorldConfig.spatial`; M0.1 must not create a competing geometry implementation.
 3. `src/sim/world/generate.ts` currently contains both 1.0 km and 1.5 km world configurations and the legacy production `createWorld` path. It must remain unchanged in M0.1.
 4. `SimulationSeed` is already a branded string in `src/sim/core/types.ts`. The FNV-1a helpers in `generate.ts` and `seededVariation.ts` are 32-bit generation/run-variation hashes, not cryptographic world identity and must remain unrelated to `recipeDigest`.
-5. The application TypeScript target includes DOM APIs and runs in the browser; production M0.1 source must not import `node:crypto`. Use `globalThis.crypto.subtle.digest("SHA-256", bytes)` so source remains browser-compatible. Existing audit scripts may continue using Node built-ins.
+5. The application TypeScript target includes DOM APIs and runs in the browser; production M0.1 source must not import `node:crypto`. Use native `globalThis.crypto.subtle.digest` with an owned `ArrayBuffer`-backed `Uint8Array.from(bytes)` input so source remains browser-compatible and TypeScript 6 DOM-compatible without casts. Existing audit scripts may continue using Node built-ins.
 6. `src/store.ts` is an in-memory Zustand store and is not a canonical save/load layer. M0.1 therefore owns canonical asset-manifest and recipe encode/decode only, not UI/store persistence integration.
 7. The repository has no conventional unit-test framework. Accepted architecture work uses executable `scripts/*.mjs` Vite-SSR audits. M0.1 follows that established TDD convention.
 8. Existing spatial/determinism regressions include `scripts/scale1SpatialAuthorityAudit.mjs`, `scripts/scale1Task7CrossResolutionAudit.mjs`, `scripts/canonicalStateFingerprint.mjs`, and `scripts/itemThreeDeterminismAudit.mjs`.
@@ -622,19 +622,30 @@ function encodeSafeInteger(value: number): string {
 
 `canonicalAssets.ts` validates the manifest, sorts a copy of records with an explicit `<`/`>` ASCII comparator over `(assetId, version, role, digest)`, writes fields in the frozen manifest order, and never mutates caller arrays. `canonicalRecipe.ts` validates the recipe, writes fields in the frozen recipe order, and delegates the nested `assets` representation to the same canonical manifest writer/rules rather than maintaining a second ordering implementation.
 
-Implement SHA-256 with Web Crypto:
+Implement SHA-256 with native Web Crypto using a real owned `ArrayBuffer`-backed copy that satisfies this repository's TypeScript 6 DOM `BufferSource` contract without casts or suppression:
 
 ```ts
 export async function sha256DigestBytes(
   bytes: Uint8Array,
 ): Promise<WorldM0Sha256Digest> {
-  const digest = await globalThis.crypto.subtle.digest("SHA-256", bytes);
+  const ownedBytes = Uint8Array.from(bytes);
+
+  const digest = await globalThis.crypto.subtle.digest(
+    "SHA-256",
+    ownedBytes,
+  );
+
   const hex = Array.from(new Uint8Array(digest), (byte) =>
     byte.toString(16).padStart(2, "0"),
   ).join("");
+
   return `sha256:${hex}` as WorldM0Sha256Digest;
 }
 ```
+
+`Uint8Array.from(bytes)` preserves the exact byte sequence. The copy changes only backing-buffer ownership/type compatibility for the Web Crypto transport boundary; it does not add, remove, normalize, prefix, suffix, BOM-tag, length-encode, timestamp, or otherwise alter any digest input byte. Therefore `sha256DigestBytes` still hashes exactly the canonical bytes supplied by its caller, and the frozen manifest and recipe golden digests remain unchanged.
+
+Passing the unconstrained `bytes: Uint8Array<ArrayBufferLike>` parameter directly to `globalThis.crypto.subtle.digest` is not the approved implementation under this repository's TypeScript version. Do not solve the compiler error with `bytes as BufferSource`, `bytes as any`, or suppression comments.
 
 `computeWorldM0AssetManifestDigest` hashes only canonical manifest bytes. `computeWorldRecipeDigest` hashes only canonical recipe bytes. `computeWorldM0RecipeIdentity` parses once, computes both, and returns the two branded values without storing either digest back into the recipe.
 
@@ -647,7 +658,7 @@ npx tsc -p tsconfig.json --noEmit
 npm run build
 ```
 
-Expected: all exit 0; exact canonical manifest/recipe bytes and golden digests match; every semantic identity mutation changes the intended identity axis; ordering-only changes alter neither manifest nor recipe canonical bytes.
+Expected: all exit 0. In particular, `npx tsc -p tsconfig.json --noEmit` must compile the exact owned-`ArrayBuffer` Web Crypto input form above without a `BufferSource` cast or `any` cast. Exact canonical manifest/recipe bytes and the frozen golden digests must still match; every semantic identity mutation changes the intended identity axis; ordering-only changes alter neither manifest nor recipe canonical bytes. TypeScript compile success plus golden digest equality are the authoritative proof that the ownership copy is transport-only and identity semantics are unchanged.
 
 - [ ] **Step 6: Commit Task 2**
 
@@ -723,8 +734,8 @@ Required assertions:
 ```js
 const checks = {
   allRequiredAssetsPresent: completeResolution?.ok === true,
-  missingPhysicalAssetFails:
-    missingPhysical?.error?.code === "MISSING_REQUIRED_ASSET",
+  genericMissingRequiredAssetFails:
+    genericMissingRequiredAsset?.error?.code === "MISSING_REQUIRED_ASSET",
   physicalDigestMismatchFails:
     physicalMismatch?.error?.code === "ASSET_DIGEST_MISMATCH",
   selectedMlPresentPasses: selectedMlPresent?.ok === true,
@@ -738,7 +749,9 @@ const checks = {
 };
 ```
 
-Also prove the resolver does not mutate the recipe or replace a failed selected ML identity with `null` by serializing canonical recipe bytes and the standalone canonical manifest before and after failed resolution and requiring byte equality for both.
+Construct `genericMissingRequiredAsset` by evaluating `validateRequiredAssetResolution(manifest, resolved)` with any required manifest identity absent, including an `ml_model` role when useful: the generic validator must return `MISSING_REQUIRED_ASSET` and must not infer current ML selection merely from the manifest role. Construct `selectedMlMissing` independently by evaluating `validateSelectedMlResolution(mlProposal, resolved)` for a non-null selected identity whose exact `(assetId, assetVersion)` is absent; it must return `SELECTED_ML_ASSET_MISSING`. Construct `selectedMlMismatch` independently with the exact selected key present but the digest changed; it must return `ASSET_DIGEST_MISMATCH`.
+
+Also prove failed resolution mutates nothing: serialize canonical recipe bytes and the standalone canonical manifest before and after failure and require byte equality for both, and snapshot `mlProposal` before the call and require the same selection afterward. A failed selected-ML resolution must not replace the proposal with `null`, select a different model, or invoke procedural fallback.
 
 - [ ] **Step 2: Run RED**
 
@@ -750,7 +763,18 @@ Expected: exit 1; manifest structure exists from Task 1 but immutable resolution
 
 - [ ] **Step 3: Implement minimum immutable-resolution behavior**
 
-Index `resolved` by `(assetId, version)` after rejecting duplicate resolved keys. For each manifest record, absence returns `MISSING_REQUIRED_ASSET` except a selected ML model, whose absence returns `SELECTED_ML_ASSET_MISSING`; digest disagreement returns `ASSET_DIGEST_MISMATCH`. Resolution accepts only identity metadata and performs no filesystem access, network access, model import, or procedural fallback.
+Index `resolved` by `(assetId, version)` only after rejecting duplicate resolved identities deterministically; never use first-wins or last-wins behavior. Keep the two exported validators' ownership separate:
+
+- `validateRequiredAssetResolution(manifest, resolved)` owns generic required-manifest completeness. Every manifest entry must resolve. Missing any required manifest identity returns `MISSING_REQUIRED_ASSET`; any resolved digest disagreement returns `ASSET_DIGEST_MISMATCH`. This function has no ML-selection argument and MUST NOT infer that an `ml_model` manifest record is currently selected merely from its role.
+- `validateSelectedMlResolution(mlProposal, resolved)` owns selection-specific resolution. If `mlProposal === null`, return success without selecting or substituting a model. If `mlProposal !== null`, absence of the exact selected `(assetId, assetVersion)` returns `SELECTED_ML_ASSET_MISSING`; digest disagreement returns `ASSET_DIGEST_MISMATCH`; success requires the exact immutable identity match. This function MUST NOT mutate `mlProposal`, replace it with `null`, choose another manifest model, or invoke procedural fallback.
+
+For recipe-level selected-ML validation, make the orchestration order explicit and deterministic:
+
+1. validate selected-ML structure and manifest binding as part of recipe validation;
+2. run `validateSelectedMlResolution`;
+3. run `validateRequiredAssetResolution` for generic manifest completeness.
+
+This ordering intentionally gives a missing selected model the user-facing `SELECTED_ML_ASSET_MISSING` result at the selected-ML layer, while the generic validator remains honest: if evaluated independently on the same incomplete manifest resolution it returns `MISSING_REQUIRED_ASSET`. The two codes describe different validation layers and are not contradictory. Resolution accepts only identity metadata and performs no filesystem access, network access, model import, or procedural fallback.
 
 - [ ] **Step 4: Run targeted GREEN and identity regressions**
 
@@ -1087,7 +1111,7 @@ for term in compiler''Family compiler''Versions UNSUPPORTED_''COMPILER_VERSION c
 done
 ```
 
-Also inspect every occurrence of `assetManifestDigest`, `canonical manifest`, `encodeCanonical`, `decodeCanonical`, `physicalGeneratorVersion`, `ecologyRealizerVersion`, `repairPolicyVersion`, and `numericKernelVersion`; every remaining occurrence must agree with the corrected model. Finally inspect every exported name referenced by audit scripts and confirm it exists exactly once in the M0.1 production namespace.
+Also inspect every occurrence of `assetManifestDigest`, `canonical manifest`, `encodeCanonical`, `decodeCanonical`, `physicalGeneratorVersion`, `ecologyRealizerVersion`, `repairPolicyVersion`, and `numericKernelVersion`; every remaining occurrence must agree with the corrected model. For this runtime-compatibility closure, additionally inspect every occurrence of `sha256DigestBytes`, `crypto.subtle.digest`, `BufferSource`, `Uint8Array.from`, `validateRequiredAssetResolution`, `validateSelectedMlResolution`, `MISSING_REQUIRED_ASSET`, `SELECTED_ML_ASSET_MISSING`, and `ASSET_DIGEST_MISMATCH`. There must be no stale hashing snippet that passes the original unconstrained `bytes` argument directly to Web Crypto, no cast/suppression workaround, and no wording that makes the generic manifest validator infer ML-selection semantics. Finally inspect every exported name referenced by audit scripts and confirm it exists exactly once in the M0.1 production namespace.
 
 - [ ] **Step 7: Commit Task 5**
 
@@ -1193,6 +1217,8 @@ There are no unresolved M0.1 implementation decisions left hidden from the imple
 - [ ] Verify `src/sim/world/generate.ts`, `types.ts`, `spatialTypes.ts`, `spatialGeometry.ts`, `src/store.ts`, and `package.json` have zero implementation diff.
 - [ ] Verify no final-package, generated-physical-field, ecology, certification, or cutover lifecycle appears in M0.1 source.
 - [ ] Verify M0.1 recipe identity changes when every content-changing seam changes, required-asset changes also change `assetManifestDigest`, and ordering-only manifest changes alter neither canonical identity.
+- [ ] Verify `sha256DigestBytes` passes an owned `Uint8Array.from(bytes)` copy to Web Crypto, uses no `BufferSource`/`any` cast, compiles under the repository TypeScript configuration, and preserves the frozen manifest/recipe golden digests exactly.
+- [ ] Verify generic required-manifest absence is owned by `MISSING_REQUIRED_ASSET`, selected-ML absence is owned independently by `SELECTED_ML_ASSET_MISSING`, digest disagreement is `ASSET_DIGEST_MISMATCH`, and selected-ML recipe orchestration evaluates selection-specific resolution before generic manifest completeness.
 - [ ] Verify explicit selected ML identity cannot become procedural/null after asset-resolution failure.
 - [ ] Verify canonicalization/digest complexity is bounded by recipe/manifest size rather than world size.
 - [ ] Run the zero-match placeholder and stale-name scans from Task 5 and require no contradictory occurrences.
