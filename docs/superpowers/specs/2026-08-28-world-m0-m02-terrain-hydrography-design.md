@@ -48,7 +48,7 @@ The checkpoint must solve these foundational questions:
 5. what deserves persistent drainage-reach identity before climate exists;
 6. how coastline, basins, valleys and crossing-candidate geometry are represented;
 7. how M0.2 state remains resolution-aware without freezing the final 1 km production choice;
-8. how identity-bearing constants/assets are resolved and verified before physical generation;
+8. how identity-bearing constants/content are resolved and verified before physical generation;
 9. how the accepted broad provenance/landform scaffold is retained without pre-implementing M0.3 geology;
 10. how correctness is tested independently of visual plausibility.
 
@@ -63,8 +63,9 @@ Selected pipeline:
 ```text
 validated WorldRecipeV1
 → validate supported M0.2 physical-generator version
-→ resolve and digest-verify M0.2 physical constants/assets
-→ derive deterministic broad landform-provenance scaffold
+→ validate M0.1 asset resolution + generator-specific asset policy
+→ resolve and digest-verify M0.2 physical constants content
+→ derive deterministic broad landform-provenance provinces
 → derive deterministic macro relief/coast scaffold
 → synthesize correlated multiscale relief
 → apply sea level
@@ -163,7 +164,7 @@ M0.3 supplies normal hydraulic state. Later human systems decide observation, kn
 
 ---
 
-## 4. M0.1 content-resolution extension
+## 4. M0.1 content and asset-resolution extension
 
 M0.1 correctly froze identity-bearing `WorldM0ContentIdentity` values without consuming their payloads. M0.2 is the first checkpoint that needs physical constants content.
 
@@ -175,11 +176,10 @@ Compilation receives an explicit immutable content-resolution input conceptually
 WorldM0ResolvedContent
 ├── id
 ├── version
-├── canonicalBytes
-└── actualDigest  // computed or verified from canonicalBytes
+└── canonicalBytes
 ```
 
-The resolver operates as:
+The resolver never trusts a caller-supplied digest. It operates as:
 
 ```text
 WorldM0ContentIdentity from recipe
@@ -210,6 +210,19 @@ No compiled fallback constant may replace an identity-bearing missing value.
 
 The same generic resolver is an extension seam for M0.3 `climateConditioning`; M0.2 must not consume climate-conditioning payload semantics early.
 
+### M0.2 v1 asset policy
+
+Before physical compilation, M0.2 calls the accepted M0.1 required-asset resolution validator.
+
+The procedural M0.2 v1 generator consumes **no external `physical_input` assets**. Therefore under this generator version:
+
+- `assets.required` must be empty;
+- `mlProposal` must be `null`;
+- a non-empty required manifest fails as unsupported for the selected generator version even if its bytes/digests resolve correctly;
+- an asset may not remain “required” merely to change recipe identity while being ignored by generation.
+
+A future physical-generator version may explicitly consume immutable physical-input or ML assets, but each supported asset must have a named semantic role and fail closed when absent/mismatched.
+
 ---
 
 ## 5. M0.2 physical constants profile
@@ -220,7 +233,7 @@ The v1 profile includes at least:
 
 - transient analysis-cell size;
 - terrain synthesis frequency/amplitude bands;
-- broad landform-provenance scaffold parameters;
+- broad landform-provenance province placement/blending parameters;
 - macro relief / coast scaffold parameters;
 - absolute elevation bounds;
 - sea-level treatment contract;
@@ -258,7 +271,29 @@ The transient analysis raster is scratch state only. It is never serialized as a
 
 M0.2 does not simulate plate tectonics and does not create detailed lithology. It synthesizes correlated multiscale relief constrained by explicit physical extent, sea level, deterministic macrostructure and a **minimal broad landform-provenance scaffold** required by the accepted architecture.
 
-The scaffold is canonical M0.2 physical state. It may distinguish only coarse terrain-forming provenance families needed to make the relief extensible, such as stable upland/massif tendency, basin/lowland tendency, broad sedimentary/accumulation tendency, volcanic/igneous-style high-relief tendency or other equally coarse versioned families selected by the implementation plan. The exact taxonomy must remain small and physically interpretable.
+### Frozen v1 provenance families
+
+M0.2 v1 has exactly four broad terrain-forming provenance families:
+
+```text
+stable_denudational
+orogenic_uplift
+volcanic_constructive
+sedimentary_basin
+```
+
+These are generator-scale physical provenance classes, not claims that Society Engine simulated the tectonic/geological history that produced them.
+
+The candidate stores a bounded `LandformProvenanceProvince` registry. Each province has deterministic identity, bounded geometry/influence, and exactly one v1 family. Province edges may blend deterministically during scratch terrain synthesis, but no dense permanent 250 m provenance raster is retained. Strategic summaries may expose dominant/intersecting province identities or area fractions derived from the province registry.
+
+Intended semantics:
+
+- `stable_denudational` — broad old/stable terrain with comparatively subdued organized relief under v1 parameters;
+- `orogenic_uplift` — elongated/organized high-relief ridge and mountain tendency;
+- `volcanic_constructive` — localized constructive high-relief/massif tendency;
+- `sedimentary_basin` — broad low-relief basin/depositional accommodation tendency.
+
+The exact numeric influence of each family is physical-constants data and therefore identity-bearing.
 
 The scaffold MUST NOT claim:
 
@@ -268,7 +303,7 @@ The scaffold MUST NOT claim:
 - exact erodibility/permeability values that M0.3 has not yet resolved;
 - human-recognized material opportunity.
 
-M0.3 consumes this scaffold and may refine it into canonical broad substrate/parent-material/hydraulic classes. It may not independently generate a contradictory provenance field.
+M0.3 consumes this province scaffold and may refine it into canonical broad substrate/parent-material/hydraulic classes. It may not independently generate a contradictory provenance field.
 
 Required terrain properties:
 
@@ -276,7 +311,7 @@ Required terrain properties:
 - different strategic representation of the same controlled physical fixture must not change the intended large-scale physical semantics;
 - relief is spatially correlated across several scales rather than independent cell noise;
 - macro ridges/basins/coastal structure arise from deterministic continuous fields rather than strategic-cell labels;
-- the broad provenance scaffold conditions relief in a bounded declared way rather than acting as a decorative label;
+- provenance provinces condition relief in a bounded declared way rather than acting as decorative labels;
 - no biome or ecology label may cause terrain;
 - no human state may be read;
 - no hidden randomness outside the recipe/compiler identity is permitted.
@@ -293,7 +328,7 @@ Strategic persistent terrain state should preserve physically interpretable summ
 - aspect or directional slope summary where needed;
 - land/ocean status;
 - coastline relation;
-- broad landform-provenance identity/class;
+- provenance province intersections/area fractions or equivalent bounded summary;
 - drainage/basin membership identities.
 
 The exact numeric quantization/serialization for later final package fields remains an M0.5 certification concern. M0.2 must nevertheless define deterministic in-memory values and a schema-local canonical audit encoding for its own evidence.
@@ -302,7 +337,7 @@ The exact numeric quantization/serialization for later final package fields rema
 
 ## 7. World-edge / boundary contract
 
-M0.2 v1 uses a finite-domain physical boundary. Array edges are not implicit hydrologic outlets.
+M0.2 v1 uses a finite-domain `finite_open_outflow` boundary model. Array edges are not implicit untyped hydrologic outlets.
 
 Every drainage terminal must be explicitly classified as one of:
 
@@ -314,15 +349,15 @@ external domain outlet
 
 Rules:
 
-- off-map outflow is valid only through an explicit external-domain outlet classification;
+- a terrestrial drainage path that leaves the finite domain is materialized as an explicit `external_domain_outlet` feature at the boundary intersection;
+- off-map outflow is valid only through such an explicit feature;
 - external inflow is not fabricated;
 - periodic/wraparound hydrology is unsupported in v1;
 - closed domain walls are not silently assumed;
-- boundary behavior is identity-bearing through the physical-generator/constants profile;
 - every non-closed terrestrial drainage component must resolve to an explicit valid terminal;
 - outlet identity must remain deterministic under iteration-order changes.
 
-This avoids accidental physical semantics from array bounds.
+This avoids accidental physical semantics from array bounds while still allowing regional worlds whose watersheds continue beyond the modeled domain.
 
 ---
 
@@ -483,7 +518,7 @@ Conceptually:
 ```text
 WorldM0TerrainHydroCandidateV1
 ├── source identities / generator identity
-├── broad landform-provenance scaffold
+├── landform-provenance province registry
 ├── strategic terrain summaries
 ├── land/ocean topology
 ├── coastline geometry
@@ -501,18 +536,14 @@ It must not contain:
 - climatological discharge;
 - groundwater state;
 - soil hydraulics;
-- detailed lithology/geology beyond the minimal broad landform-provenance scaffold;
+- detailed lithology/geology beyond the four-family landform-provenance scaffold;
 - sub-cell ecological mosaic;
 - plants/fauna/aquatic source realization;
 - human knowledge;
 - runtime weather history;
 - final package digest.
 
-### Terrain-cause provenance decision
-
-The accepted architecture requires broad provenance before correlated relief. M0.2 therefore retains the minimal broad landform-provenance scaffold as canonical candidate state and M0.3 must consume/refine it. There is no second hidden throwaway geology/provenance field.
-
-If a terrain primitive needs additional temporary latent noise to construct relief, that latent value must be deterministically derived from recipe-bound generator/constants inputs and discarded. It may not be interpreted as lithology or become an independent M0.3 writer.
+There is no second hidden throwaway geology/provenance field. If a terrain primitive needs temporary latent noise to construct relief, that latent value must be deterministically derived from recipe-bound generator/constants inputs and discarded. It may not be interpreted as lithology or become an independent M0.3 writer.
 
 ---
 
@@ -522,8 +553,8 @@ M0.2 determinism means more than “same seed looks similar.”
 
 Required:
 
-- same canonical recipe bytes + same resolved content/assets + same compiler versions → byte-identical **M0.2 canonical audit encoding** and digest;
-- iteration order over maps/sets/object keys must not change reach/basin/candidate identity;
+- same canonical recipe bytes + same resolved content + same compiler versions → byte-identical **M0.2 canonical audit encoding** and digest under the supported M0.2 reference runtime/numeric kernel;
+- iteration order over maps/sets/object keys must not change province/reach/basin/candidate identity;
 - geometry IDs derive from canonical deterministic ordering/provenance, not allocation order;
 - priority-queue tie behavior is deterministic;
 - floating-point comparisons that affect topology use explicit numeric-kernel/tolerance rules;
@@ -533,7 +564,9 @@ Required:
 
 M0.2 must define a schema-local canonical audit encoding and `terrainHydroCandidateDigest` for evidence/reproducibility. This digest is **not** `packageDigest`, does not seal `WorldM0Package`, and does not freeze the final M0.5 package quantization scheme. It records exact M0.2 candidate semantics under the M0.2 schema/version so later evidence can identify the reviewed candidate unambiguously.
 
-The audit encoding must have explicit field/record order and exact numeric encoding defined by the M0.2 candidate schema/numeric-kernel contract. M0.5 may adopt a different final package quantization/schema only through explicit versioned certification; it must not rewrite historical M0.2 evidence as though the old digest never existed.
+The audit encoding must have explicit field/record order and exact numeric encoding defined by the M0.2 candidate schema/numeric-kernel contract. The implementation plan must prescribe that encoding before candidate digest code is written. M0.5 may adopt a different final package quantization/schema only through explicit versioned certification; it must not rewrite historical M0.2 evidence as though the old digest never existed.
+
+Cross-runtime and dual-resolution compiler certification remains formally owned by M0.5. M0.2 must still prove exact repeatability in its declared reference runtime and preserve all information M0.5 needs to test supported runtime/resolution equivalence later.
 
 M0.2 may use floating point internally where justified, but topology/identity-affecting comparisons must be controlled by the frozen numeric-kernel identity. Final physical package-field quantization remains M0.5-owned.
 
@@ -546,6 +579,7 @@ M0.2 should extend the WORLD-M0 typed failure namespace with checkpoint-specific
 The exact code names are implementation-plan details, but distinct failures must exist for at least:
 
 - unsupported M0.2 generator version/mode;
+- unsupported required asset for procedural v1;
 - unsupported non-null ML selection under procedural v1;
 - physical constants missing/mismatched/invalid;
 - duplicate resolved content identity;
@@ -638,15 +672,19 @@ Same controlled physical terrain interpreted through 1.0 km and 1.5 km strategic
 
 Proves physical units remain stable while strategic cell cardinality changes.
 
-### F11 — broad provenance causality
+### F11 — provenance-family causality
 
-Two fixtures hold seed, macro relief controls and spatial extent fixed while changing only one supported broad provenance/landform input.
+Controlled fixtures change only the selected provenance province family while holding spatial extent, seed and other macro controls fixed.
 
-Proves the scaffold has a bounded declared effect on relief and candidate digest while never materializing detailed geology/material occurrence.
+Proves each of the four v1 families has a bounded declared effect on relief/candidate identity while never materializing detailed geology/material occurrence.
 
 ### F12 — resolved-content failure matrix
 
 Missing, duplicate, wrong-digest and malformed physical-constants content all fail before terrain generation.
+
+### F13 — procedural-v1 asset rejection
+
+A validly resolved but non-empty required physical-input manifest and a validly resolved selected ML proposal both fail as unsupported under procedural v1 rather than being silently ignored.
 
 ---
 
@@ -667,7 +705,7 @@ Required corruptions include:
 - exceed geometry/count/repair bounds;
 - mutate candidate IDs/order while preserving approximate visual shape;
 - inject `knownFord`/human `confidence` into the physical crossing authority;
-- substitute different physical-constants bytes under the same claimed digest;
+- substitute different physical-constants bytes under the same recipe identity;
 - import M0.2 candidate truth into ordinary production behavior before M0.7.
 
 A test that only compares the implementation with another path through the same implementation is insufficient.
@@ -682,7 +720,7 @@ M0.2 natural evidence must report at least:
 
 - land/ocean fraction;
 - elevation range and relief distribution;
-- broad provenance/landform-family area distribution;
+- provenance-family province count and physical area distribution;
 - basin count and physical area distribution;
 - closed-basin count/area;
 - drainage reach/node count;
@@ -717,7 +755,7 @@ Required design constraints:
 - transient raster storage uses bounded numeric arrays, not one object per 250 m cell;
 - scratch arrays are released after candidate extraction;
 - no permanent dense sub-grid is retained;
-- persistent drainage/basin/crossing geometry is bounded by physical/identity-bearing rules;
+- persistent province/drainage/basin/crossing geometry is bounded by physical/identity-bearing rules;
 - no O(N²) all-cell pair search;
 - geometry simplification is deterministic;
 - repair loops have hard identity-bearing budgets;
@@ -779,7 +817,7 @@ M0.2 MUST NOT implement:
 - final lake water balance/fill state;
 - groundwater tendency;
 - soil hydraulics;
-- detailed lithology/geology beyond the minimal broad landform-provenance scaffold;
+- detailed lithology/geology beyond the four-family landform-provenance scaffold;
 - detailed mineral/material occurrence;
 - wetlands as hydrologically realized state;
 - weather, floods, drought events or wildfire;
@@ -801,7 +839,7 @@ M0.2 MUST NOT implement:
 
 M0.2 will be canonical shadow authority for:
 
-- deterministic broad landform-provenance scaffold;
+- deterministic four-family landform-provenance province scaffold;
 - deterministic terrain/relief candidate;
 - land/ocean topology;
 - coastline geometry;
@@ -824,14 +862,15 @@ Future work must preserve:
 - SCALE-1 strategic connectivity is not confused with hydrologic routing;
 - human knowledge remains separate from physical crossing geometry;
 - M0.3 hydrates M0.2 rather than generating a second drainage world;
-- M0.3 refines/consumes the M0.2 broad provenance scaffold rather than repainting a contradictory substrate;
+- M0.3 refines/consumes the M0.2 provenance provinces rather than repainting a contradictory substrate;
 - no production authority moves before M0.7.
 
 ### Current simplifications
 
 - no tectonic evolution simulation;
 - procedural multiscale terrain rather than learned Earth prior;
-- minimal broad landform-provenance scaffold rather than detailed geology;
+- four broad provenance families rather than detailed geology;
+- no external generator assets in procedural v1;
 - fixed 250 m transient analysis raster for generator v1;
 - representation threshold for persistent drainage skeleton rather than universal channel-head law;
 - one-receiver persistent drainage topology;
@@ -846,7 +885,7 @@ M0.3 may add:
 - active-water regime;
 - hydraulic geometry;
 - normal lake/wetland/floodplain hydrology;
-- broad substrate/parent material/soil hydraulics/groundwater controls by refining the M0.2 provenance scaffold;
+- broad substrate/parent material/soil hydraulics/groundwater controls by refining the M0.2 provenance provinces;
 - sub-cell physical mosaic.
 
 M0.5 may certify/freeze:
@@ -891,7 +930,7 @@ M0.2 requires explicit correction if later evidence proves:
 - basin/outlet conservation fails;
 - M0.3 cannot hydrate/refine the candidate without inventing contradictory drainage/provenance;
 - the scratch/geometry representation is operationally untenable at required extents;
-- deterministic identity fails across supported runtimes;
+- deterministic identity fails across supported runtimes after M0.5 certification;
 - the chosen routing method creates material grid artifacts that fail M0.5 cross-resolution evidence;
 - a frozen physical fact requires information M0.2 permanently destroyed;
 - scientific evidence shows a load-bearing M0.2 mechanism materially wrong.
@@ -911,11 +950,13 @@ After acceptance, the implementation plan must:
 3. use strict TDD / RED-first analytical fixtures;
 4. split work into independently reviewable commits;
 5. implement explicit content resolution before generation consumes physical constants;
-6. implement provenance scaffold, terrain, depression analysis, routing and persistent graph as separate bounded modules;
-7. create adversarial corruptions before claiming closure;
-8. run existing M0.1 and SCALE-1 regressions;
-9. prove no ordinary production caller imports M0.2 candidate truth;
-10. stop after M0.2 candidate/certification work and not start M0.3.
+6. enforce procedural-v1 empty-asset/null-ML policy before terrain compilation;
+7. implement provenance provinces, terrain, depression analysis, routing and persistent graph as separate bounded modules;
+8. prescribe the M0.2 canonical audit encoding before candidate-digest implementation;
+9. create adversarial corruptions before claiming closure;
+10. run existing M0.1 and SCALE-1 regressions;
+11. prove no ordinary production caller imports M0.2 candidate truth;
+12. stop after M0.2 candidate/certification work and not start M0.3.
 
 ---
 
