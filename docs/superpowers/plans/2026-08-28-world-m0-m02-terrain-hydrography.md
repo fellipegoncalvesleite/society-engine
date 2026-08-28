@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Implement the deterministic, procedural WORLD-M0 M0.2 terrain + hydrographic physical foundation as a shadow-only pre-seal candidate: verified physical-constants content, four-family landform provenance, correlated relief, canonical land/ocean + coastline topology, deterministic depression and finite-open-outflow routing, D∞-style contributing-area analysis, one-receiver persistent geomorphic drainage, retained depression/basin geometry, terrain-derived valley/floodplain/crossing candidates, strategic aggregation, candidate validation, canonical audit identity, controlled scientific fixtures, adversarial discrimination, natural seeded evidence, and boundedness evidence—without moving production authority or starting M0.3.
+**Goal:** Implement the deterministic, procedural WORLD-M0 M0.2 terrain + hydrographic physical foundation as a shadow-only pre-seal candidate: verified physical-constants content, four-family landform provenance, correlated relief, canonical land/ocean + coastline topology, deterministic depression and finite-open-outflow routing, Tarboton D∞ contributing-area analysis, one-receiver persistent geomorphic drainage, retained depression/basin geometry, terrain-derived valley/floodplain/crossing candidates, strategic aggregation, candidate validation, canonical audit identity, controlled scientific fixtures, adversarial discrimination, natural seeded evidence, and boundedness evidence—without moving production authority or starting M0.3.
 
 **Architecture:** Extend the existing `src/sim/world/physical/` M0.1 namespace with focused M0.2 modules. The pure compiler receives a validated `WorldRecipeV1`, explicit resolved immutable content bytes, and the already-frozen M0.1 asset-resolution inputs. Procedural physical-generator v1 accepts only an empty required-asset manifest and `mlProposal: null`. It resolves and digest-verifies physical constants, builds a deterministic 250 m scratch terrain analysis, vectorizes/aggregates all persistent state, validates the candidate, discards scratch state, and returns an immutable `WorldM0TerrainHydroCandidateV1` plus a schema-local `terrainHydroCandidateDigest`. Legacy `createWorld` and all legacy terrain/hydrography readers remain the sole ordinary production physical authority through M0.6.
 
@@ -13,7 +13,7 @@
 **Global Constraints:**
 
 - Work only from the reviewed design lineage above. Do not branch from `main` or stale WORLD-M0 work.
-- M0.2 is procedural, constraint-first, deterministic, `finite_open_outflow`, transient 250 m analysis, Priority-Flood-class depression analysis, D∞-style contributing-flow analysis, and one-downstream-receiver persistent drainage.
+- M0.2 is procedural, constraint-first, deterministic, `finite_open_outflow`, transient 250 m analysis, Priority-Flood-class depression analysis plus the project-specific retained-basin state machine frozen below, Tarboton D∞ contributing-flow analysis, and one-downstream-receiver persistent drainage.
 - The 250 m analysis raster is generation-only. For the 300 km × 180 km controlled fixture it is exactly 1200 × 720 = 864,000 cells. No alternative resolution may be substituted under physical-generator v1.
 - SCALE-1 `cardinal_4` remains human strategic connectivity. M0.2 hydrology uses its own 8-neighbor terrain neighborhood and never redefines SCALE-1 distance, area, travel, edge, or traversal semantics.
 - Every physical length, area, threshold, density, count normalization, and geometry measurement is expressed in physical units. Scratch-cell count is never a physical-law input.
@@ -112,12 +112,22 @@ export interface WorldM0PhysicalConstantsV1 {
     readonly fineAmplitudeMeters: number;
     readonly stableElevationOffsetMeters: number;
     readonly stableReliefMultiplier: number;
+    readonly stableAspectRatio: number;
     readonly orogenicElevationOffsetMeters: number;
     readonly orogenicReliefMultiplier: number;
+    readonly orogenicAspectRatio: number;
+    readonly orogenicRidgeAmplitudeMeters: number;
+    readonly orogenicRidgeCrossWidthFraction: number;
     readonly volcanicElevationOffsetMeters: number;
     readonly volcanicReliefMultiplier: number;
+    readonly volcanicAspectRatio: number;
+    readonly volcanicMassifAmplitudeMeters: number;
+    readonly volcanicRadialFalloffExponent: number;
     readonly sedimentaryElevationOffsetMeters: number;
     readonly sedimentaryReliefMultiplier: number;
+    readonly sedimentaryAspectRatio: number;
+    readonly sedimentaryBowlDepthMeters: number;
+    readonly sedimentaryBowlFalloffExponent: number;
     readonly continentalMarginMeters: number;
     readonly seaLevelTreatment: "base_plus_recipe_offset_mm_v1";
     readonly baseSeaLevelMeters: number;
@@ -127,6 +137,8 @@ export interface WorldM0PhysicalConstantsV1 {
   readonly depression: {
     readonly retainedMinAreaM2: number;
     readonly retainedMinDepthMeters: number;
+    readonly protectedClosedBasinRatePer65536: number;
+    readonly maxProtectedClosedBasins: number;
     readonly maxRetainedBasins: number;
     readonly maxRepairOperations: number;
   };
@@ -200,6 +212,7 @@ export interface LandformProvenanceProvince {
   readonly center: WorldM0PointM;
   readonly radiusXM: number;
   readonly radiusYM: number;
+  readonly axisAngleRadians: number;
   readonly influenceRadiusM: number;
   readonly elevationOffsetMeters: number;
   readonly reliefMultiplier: number;
@@ -221,7 +234,7 @@ export interface TerrainCatchment {
   readonly id: string;
   readonly terminalId: string;
   readonly areaM2: number;
-  readonly boundary: readonly WorldM0PointM[];
+  readonly boundaryRings: readonly (readonly WorldM0PointM[])[];
 }
 
 export interface TerrainDepressionBasin {
@@ -232,7 +245,7 @@ export interface TerrainDepressionBasin {
   readonly outletTerminalId: string | null;
   readonly closedEndorheic: boolean;
   readonly areaM2: number;
-  readonly boundary: readonly WorldM0PointM[];
+  readonly boundaryRings: readonly (readonly WorldM0PointM[])[];
 }
 
 export interface TerrainDrainageNode {
@@ -252,6 +265,7 @@ export interface TerrainDrainageReach {
   readonly geometry: readonly WorldM0PointM[];
   readonly lengthMeters: number;
   readonly contributingAreaM2: number;
+  readonly localContributingAreaM2: number;
   readonly meanTerrainGradient: number;
   readonly localReliefMeters: number;
   readonly channelIncisionMeters: number;
@@ -260,7 +274,7 @@ export interface TerrainDrainageReach {
 export interface TerrainValleyCandidate {
   readonly id: string;
   readonly reachId: string;
-  readonly boundary: readonly WorldM0PointM[];
+  readonly boundaryRings: readonly (readonly WorldM0PointM[])[];
   readonly areaM2: number;
   readonly localReliefMeters: number;
 }
@@ -268,7 +282,7 @@ export interface TerrainValleyCandidate {
 export interface TerrainFloodplainCandidate {
   readonly id: string;
   readonly reachId: string;
-  readonly boundary: readonly WorldM0PointM[];
+  readonly boundaryRings: readonly (readonly WorldM0PointM[])[];
   readonly areaM2: number;
   readonly terrainSlope: number;
 }
@@ -354,13 +368,13 @@ The encoder for `world-m0-terrain-hydro-candidate/v1` is schema-specific; it nev
 - Safe integers use base-10 `String(value)` and reject `-0`.
 - Every finite non-integer binary64 is encoded as a JSON string `"f64:<16 lowercase hex>"`, where the 16 hex digits are the big-endian IEEE-754 binary64 bytes written by `DataView.setFloat64(0, value, false)`. NaN, ±Infinity, and `-0` are invalid.
 - This binary64 audit encoding records exact M0.2 reference-runtime candidate semantics. It is not M0.5 final package quantization.
-- Registries are canonicalized by ascending ASCII `id` without locale APIs. Duplicate IDs fail.
-- `strategicTerrain` sorts by `(row,column)` ascending.
-- `provenanceFractions` and every list of referenced IDs sort ASCII ascending.
-- Coastline polylines sort by their first canonical point then encoded point sequence. Closed rings must already be producer-normalized: lexicographically smallest point first, deterministic orientation, final repeated point equal to first. The encoder rejects non-normalized rings rather than repairing them.
-- Catchment/depression/valley/floodplain polygon rings use the same normalized closed-ring rule.
-- Reach geometry order is semantically upstream → downstream and is never reversed merely for sorting.
-- `WorldM0StrategicEdgeRef.first` is always the lexicographically smaller endpoint.
+- Every **semantically unordered entity registry** is canonicalized exactly as B01 requires: validate every ASCII `id`, reject duplicate IDs, copy the caller array, sort the copy by `compareAscii(left.id,right.id)`, encode that copy, and never mutate caller state. Caller insertion/order is not an error. This applies to provenance provinces, terminals, catchments, drainage nodes, drainage reaches as a registry, depression basins, valleys, floodplain candidates, and crossing candidates. Unordered non-entity keyed collections use the equally explicit keys below; they are never allowed to fall back to insertion order.
+- `strategicTerrain` is semantically keyed by cell and is canonicalized by copying and sorting `(row,column)` ascending; duplicate cell keys fail.
+- `provenanceFractions` and every unordered referenced-ID list are copied, duplicate-checked by their semantic key, and ASCII-sorted before encoding.
+- **Semantically ordered** sequences are never reordered for canonicalization. Reach geometry remains upstream → downstream. Ring point traversal remains its producer-normalized traversal. Reversing either changes semantics or fails normalization; the encoder must not make it equivalent by sorting points.
+- Point order is exact lexicographic `(xM,yM)`, x first then y, using finite canonical binary64 comparison; `-0`, NaN, and infinities are invalid.
+- Coastline consumes the exact closed-ring/open-polyline orientation and start conventions frozen in §§8–9. The encoder copies the coastline registry, rejects duplicate §8 `coastKey` values, and sorts only by `compareAscii(coastKey)`; it never reverses/rotates traversal to manufacture equivalence. Closed physical-region polygon rings use the separate frozen ring-role key from §8.
+- `WorldM0StrategicEdgeRef.first` is always the lexicographically smaller endpoint under `(row,column)`; producer helpers canonicalize the relation before persistence and the encoder rejects a malformed persistent edge.
 - Canonicalization never mutates caller arrays or objects.
 - `terrainHydroCandidateDigest` is SHA-256 over exactly these canonical bytes, encoded as `sha256:<64 lowercase hex>` and branded separately from recipe/package digests.
 
@@ -374,6 +388,7 @@ export interface TerrainScratchGrid {
   readonly height: number;
   readonly cellSizeMeters: 250;
   readonly cellAreaM2: 62_500;
+  readonly budget: TerrainScratchBudget;
   readonly elevationMeters: Float64Array;
   readonly landMask: Uint8Array;
   readonly routingElevationMeters: Float64Array;
@@ -382,32 +397,26 @@ export interface TerrainScratchGrid {
 }
 ```
 
-Additional stage-local arrays are created only by their owner and released after vectorization/aggregation. Row-major scratch indexing is an internal array-addressing detail only; no row-major cell ID appears in persistent candidate state. Allocation derives dimensions from physical extent / 250 m, checks exact divisibility, `maxAnalysisCells`, and deterministic scratch-byte accounting before allocating. The 300 km × 180 km fixture must report 1200 × 720, 864,000 cells, and 62,500 m² per cell.
+`TerrainScratchBudget` is the single allocation ledger frozen in §14 below. Every deterministic transient typed-array analysis buffer—base scratch, coastline/depression buffers, heap backing storage, D∞ arrays, persistent-reduction buffers, and any future M0.2 full-raster buffer—must be allocated through that ledger. The protected-basin intent mechanism frozen in §10 is a bounded per-component token registry and deliberately introduces **no separate dense protection raster**; its dense component label is already one of the Task-6 budgeted buffers. Row-major scratch indexing is an internal array-addressing detail only; no row-major cell ID appears in persistent candidate state. Allocation derives dimensions from physical extent / 250 m, checks exact divisibility, `maxAnalysisCells`, and an all-or-nothing byte preflight before any typed array in a requested batch is constructed. The 300 km × 180 km fixture must report 1200 × 720, 864,000 cells, and 62,500 m² per cell.
 
 ### 5. Deterministic terrain primitive and numeric-kernel policy
 
 - Seed derivation uses the existing browser-compatible SHA-256 helper once on canonical seed/generator stage text, then a fixed `Math.imul` integer mixer for stateless coordinate values. No `Math.random`, clock, locale, object insertion order, or legacy generator PRNG is imported.
-- Correlated terrain uses fixed-operation-order bilinear value fields at the identity-bearing macro/meso/fine wavelengths from verified constants. The four province families apply only the verified family-specific elevation offset/relief multiplier.
-- Province geometry is bounded axis-aligned elliptical influence in physical metres. No temporary province raster persists.
+- Correlated terrain uses fixed-operation-order bilinear value fields at the identity-bearing macro/meso/fine wavelengths from verified constants. Family labels are not decorative amplitude aliases: the exact v1 family-dependent spatial operators frozen in §13 below modify the same controlled base field using identity-bearing aspect/falloff/shape constants.
+- Province geometry is a bounded rotated ellipse in physical metres with persisted `axisAngleRadians`; no temporary province raster persists.
 - Topology-affecting binary64 comparisons use exact finite binary64 values under the declared `numericKernelVersion` and fixed operation/order rules. Exact ties use explicit canonical neighbor/facet order. M0.2 claims exact repeatability only in its declared reference runtime; M0.5 owns cross-runtime certification.
-- The fixed 8-neighbor order is `E, NE, N, NW, W, SW, S, SE`. D∞ facets are adjacent pairs in that cyclic order. Priority queues order by `(routingElevationMeters, flatRank, scratchIndex)` with explicit numeric comparisons; no runtime sort stability is relied upon for a physical choice.
+- The fixed 8-neighbor order is `E, NE, N, NW, W, SW, S, SE`. D∞ facets are adjacent pairs in that cyclic order. Queue order is stage-specific and frozen below: Priority-Flood uses §10.2 `(provisionalRoutingElevation, point.xM, point.yM, scratchIndex)`; flat-rank seed/level ties use §10.7 point/neighbor order; D∞ topological ready-cell ties use §11 physical point order. `scratchIndex` can only be the final unreachable tie after a unique physical point in Priority-Flood and is never a physical routing choice. No runtime sort stability is relied upon.
 
 ### 6. World edge, depression, D∞, and persistent-drainage semantics
 
-- Raw physical elevation never gets overwritten by routing conditioning.
-- Deterministic Priority-Flood derives `routingElevationMeters`, spill information, ordinary conditioned depressions, retained depressions, flat ranks, and terminal candidates.
-- Retained depression classification uses the identity-bearing physical area/depth criteria. Count bounds fail; they never discard a basin.
-- Closed retained basins route internally to one explicit `retained_closed_basin` terminal. They are never filled through to ocean/external space.
-- Exorheic retained depressions preserve floor/boundary/spill/outlet geometry while the routing surface may use the spill elevation to route onward.
-- Ocean outlets are explicit terminal features where terrestrial drainage reaches canonical ocean topology.
-- A domain boundary cell is not an outlet merely because it is on the array edge. A boundary-local physical outlet candidate must be selected deterministically; if a non-closed terrestrial component otherwise has no terminal, the bounded repair policy may create one explicit `external_domain_outlet` at the component's deterministic lowest valid boundary point and increment the repair count. Exhausting the verified repair budget fails compilation.
-- No external inflow, wraparound routing, or silent closed wall exists.
-- D∞ evaluates the 8 triangular facets around each cell in canonical facet order. The steepest valid downslope plane direction may split weight across the two bounding facet neighbors. If the interior descent vector lies outside the facet, the steeper valid facet edge wins. Exact ties use canonical facet/neighbor order. Equal-elevation flat routing may follow only a lower `flatRank` produced by depression/flat conditioning.
-- The scratch contributing-flow graph must be acyclic: each cell receiver must strictly decrease `(routing elevation, flat rank, canonical scratch index)` under the numeric-kernel policy. Contributing area initializes at 62,500 m² per terrestrial analysis cell and accumulates in reverse topological order. Split weights are analysis-only state.
-- Persistent drainage eligibility uses `persistenceAreaM2` plus the declared terrain/relief representation checks; it never uses raw cell count or climate/hydrology truth.
-- Catchment membership follows the deterministic primary receiver so catchments form a non-overlapping physical partition; D∞ split weights remain the contributing-area analysis and are not reinterpreted as fractional persistent catchment geometry.
-- Persistent extraction selects one deterministic primary downstream path and contracts eligible cell chains into source/confluence/terminal nodes and reaches. Every non-terminal reach has exactly one `downstreamReachId`; the persistent graph is acyclic and ends at its typed terminal.
-- Reach IDs/nodes/catchments/basins/geometry IDs derive only after canonical physical ordering; allocation order never becomes identity.
+- Raw physical elevation never gets overwritten by routing conditioning. The complete pre-conditioning component discovery, spill ordering, retained/protected-basin state machine, finite-edge policy, routing-surface update, and flat-rank policy are frozen in §10 and are normative for Tasks 4, 6, 7, and 9.
+- Priority-Flood is the DEM depression-processing mechanism, not the project-specific endorheic policy. Society Engine's protected closed-basin decision is the deterministic identity-bearing layer in §10.
+- Ocean outlets, external-domain outlets, and retained closed-basin terminals are explicit and mechanically distinct. Array-edge adjacency alone never assigns terminal kind.
+- `d_infinity_v1` means the Tarboton triangular-facet mathematics in §11. No D8, MFD, or heuristic substitute is conforming. Flats use the separate deterministic rank rule only when no positive D∞ facet exists.
+- D∞ split contributing area is transient analysis truth. The deterministic primary receiver is reduced according to §12 for catchments and the one-receiver persistent graph.
+- **V1 persistent eligibility is area-threshold-only:** a terrestrial analysis cell is eligible iff `flow.contributingAreaM2[cell] >= constants.drainage.persistenceAreaM2`. There is no hidden slope, local-relief, valley, or climate gate in v1. `persistenceAreaM2` is an identity-bearing implementation representation parameter, not a universal channel-head law.
+- Persistent reach `contributingAreaM2` is the primary-receiver physical area at the exact downstream measurement anchor frozen in §12; `localContributingAreaM2` is its independent retained conservation witness. This is intentionally distinct from transient split D∞ area used for eligibility.
+- Reach IDs/nodes/catchments/basins/geometry IDs derive only after canonical physical ordering under §8; allocation order never becomes identity.
 
 ### 7. Terrain-only valleys, floodplain candidates, crossings, and strategic projection
 
@@ -416,6 +425,370 @@ Additional stage-local arrays are created only by their owner and released after
 - A crossing candidate exists only when persistent drainage geometry intersects a cardinal strategic edge. Its state is exactly the physical fields frozen above; exact-key structural audits reject any epistemic/hydraulic additions.
 - Strategic aggregation groups exact 250 m analysis cells into the explicit M0.1 strategic grid. Physical totals use m²/m, not cell counts. 1000 m and 1500 m both divide the 250 m basis exactly.
 - Provenance fraction, land/ocean area, elevation, relief, slope, coast length, and feature references derive from canonical physical state. Strategic `terrainKind`, biome, movement cost, resource/risk/seasonal/carrying-capacity projections are not produced.
+
+### 8. Canonical collection, point/ring, persistent-ID, and simplification contract
+
+These conventions are implementation authority for Tasks 2–3 and every producer of persistent geometry. They are not choices left to a future module.
+
+**ASCII comparator and collection semantics.** Every string passed to canonical `compareAscii` must already be validated as printable 7-bit ASCII (`0x20..0x7e` for each code unit); a non-ASCII canonical key/ID is invalid rather than locale-normalized. Compare left-to-right by `charCodeAt(i)`: at the first differing code unit return `-1` when left is smaller and `1` when right is smaller; if every shared position is equal, the shorter string sorts first; equal strings return `0`. Do not use `localeCompare`, host collation, case folding, normalization, or insertion order.
+
+A collection is either schema-declared unordered or schema-declared ordered. For every unordered **entity registry**, validate every ID, reject duplicate IDs, copy the caller collection, and sort the copy with `compareAscii(left.id,right.id)`; never mutate caller state. For unordered non-entity collections: `coastline` validates every `coastKey`, rejects duplicate `coastKey`, copies, and sorts by `compareAscii(coastKey)`; every strategic feature-ID list validates every referenced ASCII ID, rejects duplicate IDs, copies, and sorts by `compareAscii(id)`; `provenanceFractions` validates every `provinceId`, rejects duplicate `provinceId`, copies, and sorts by `compareAscii(provinceId)`; `strategicTerrain` validates each numeric `(row,column)` key, rejects duplicate cell keys, copies, and sorts numerically by row then column. Reversing caller insertion order is a positive determinism control, not an error. Ordered sequences include upstream→downstream reach points, each normalized coastline-polyline traversal, and the point traversal of each already-normalized polygon ring. They are never sorted/reversed merely to canonicalize bytes.
+
+**Physical point coordinates.** Scratch coordinates use x-right/y-up. Row 0 is the north/top row. For cell size `d = 250`, cell `(row,column)` has center
+
+```text
+x = (column + 0.5) * d
+y = (height - row - 0.5) * d
+```
+
+and cell-boundary vertices are integer multiples of `d`. Point comparison is exact finite binary64 lexicographic `(xM,yM)`, x first then y; `-0`, NaN, and infinities fail before comparison. No epsilon participates in canonical ordering.
+
+**Ring representation.** Every ring is simple, closed, and stores its canonical first point exactly twice total: once at index 0 and once as the final point; no other consecutive duplicate is allowed. Signed area is
+
+```text
+A2 = Σ_i (x_i * y_{i+1} - x_{i+1} * y_i)
+```
+
+for all non-repeated edges. In x-right/y-up coordinates, `A2 > 0` is counter-clockwise and `A2 < 0` is clockwise; zero fails. Outer physical-region rings are counter-clockwise. Hole rings are clockwise. The lexicographically smallest ring point is rotated to index 0 without changing traversal direction; if that coordinate appears more than once before closure, the ring is invalid rather than tie-resolved by implementation choice. Catchment, depression, valley, and floodplain `boundaryRings` may contain multiple disconnected outer rings and nested holes because diagonal terrain connectivity can create cell unions that touch only at vertices. Ring role is determined independently by exact containment depth against the unsimplified cell-edge geometry: even depth is outer, odd depth is hole. Canonical ring-registry order is `(outer-before-hole, containmentDepth, firstPoint, encodedPointSequence)`.
+
+**Coastline polyline representation.** Coastline is not forced closed at a finite regional boundary. Every coastline item is an oriented, simple cell-edge polyline with land on its left and canonical ocean on its right for every segment. A closed item follows the ring representation above: island/outer land boundaries are CCW and ocean-hole boundaries are CW, with lexicographically smallest point as the repeated start/end. An open item stores each endpoint once, has at least two distinct points, and both endpoints must lie on the physical domain boundary; its orientation is fixed by land-left/ocean-right and therefore may **not** be reversed merely to put the lexicographically smaller endpoint first. Domain-exterior edges themselves are never coastline.
+
+The coastline registry has an exact ASCII semantic key, independent of insertion order. For each finite canonical coordinate `v`, define `f64key(v)` as exactly 16 lowercase hexadecimal digits from `DataView.setFloat64(0, v, false)`; `-0`, NaN, and infinities fail before keying. Define `pt(p) = f64key(p.xM) + "," + f64key(p.yM)`. For a normalized coastline polyline define `coastKey = (closed ? "c|" : "o|") + points.map(pt).join(";")`. Duplicate `coastKey` fails `M02_CANDIDATE_INVALID`. Producer order is component smallest-member point, then `compareAscii(coastKey)`. Canonical audit encoding treats the coastline registry as unordered: copy the caller array and sort the copy by `compareAscii(coastKey(left), coastKey(right))`; caller order is not an error and point traversal is never reversed/rotated to change this key.
+
+**Persistent ID namespaces.** IDs are assigned only after canonical physical records have been sorted, never from insertion/allocation order. Every registry uses a fixed ASCII namespace and a zero-based 16-lowercase-hex-digit ordinal:
+
+```text
+province:0000000000000000
+terminal:0000000000000000
+catchment:0000000000000000
+drainage-node:0000000000000000
+drainage-reach:0000000000000000
+depression-basin:0000000000000000
+valley:0000000000000000
+floodplain:0000000000000000
+crossing:0000000000000000
+```
+
+Persistent collections that are not entity registries receive **no invented synthetic ID**: coastline polylines are keyed by their frozen closed/open geometry key; `strategicTerrain` records are keyed by `(row,column)`; `provenanceFractions` entries are keyed by `provinceId`; ordered geometry points are positions inside their owning entity. This exhausts the persistent candidate collections: every entity registry uses one namespace above, and every non-entity persistent collection has its exact semantic key named here.
+
+The ordinal formatter accepts only safe non-negative integers and left-pads to exactly 16 hex digits; overflow is `M02_BOUND_EXCEEDED`. Every physical tuple comparison below compares fields left-to-right with exact numeric/ASCII/point comparators; if two candidate records have an identical complete physical sort key, fail `M02_CANDIDATE_INVALID` before ID assignment rather than relying on sort stability or allocation order. Canonical physical sort keys are: province `(family,center,radiusXM,radiusYM,axisAngleRadians,influenceRadiusM,offset,multiplier)`; terminal `(kind-order retained_closed_basin,ocean_outlet,external_domain_outlet, point)`; catchment `(terminal physical key, boundary-ring key, areaM2)`; node `(point, kind-order source,confluence,terminal, transient terminal physical key)`; reach `(upstream node physical key, downstream node physical key, ordered geometry, terminal/catchment physical key)`; basin `(closed flag, floor, spill-null-last, boundary-ring key, catchment physical key)`; valley/floodplain `(reach physical key,boundary-ring key)`; crossing `(reach physical key,strategic edge,intersection,leftBank,rightBank)`. Transient physical keys—not eventual IDs—resolve cross-registry dependencies while sorting. After IDs are assigned, unordered registries may be presented in any insertion order to the canonical encoder; bytes are still produced from a sorted copy.
+
+**Exact v1 simplifier.** `simplifyToleranceMeters` is the maximum Euclidean perpendicular displacement permitted for deletion of an interior vertex. V1 uses deterministic iterative safe-vertex deletion, not an implementation-selected RDP variant:
+
+1. Work on the producer-normalized ordered polyline; for a ring, temporarily omit only the repeated final point and protect the canonical start vertex. For an open reach, protect both endpoints and every topology-critical node/confluence/terminal intersection. For an open finite-border coastline, protect both physical-domain endpoints.
+2. For each unprotected vertex `v` with current neighbors `(p,n)`, compute squared Euclidean point-to-segment distance with this exact binary64 operation order; `p` and `n` must be distinct or the geometry is invalid before simplification:
+
+```text
+dx = n.xM - p.xM
+dy = n.yM - p.yM
+wx = v.xM - p.xM
+wy = v.yM - p.yM
+len2 = dx*dx + dy*dy
+t = (wx*dx + wy*dy) / len2
+tc = min(1, max(0, t))
+qx = p.xM + tc*dx
+qy = p.yM + tc*dy
+ex = v.xM - qx
+ey = v.yM - qy
+distanceSquared = ex*ex + ey*ey
+toleranceSquared = simplifyToleranceMeters * simplifyToleranceMeters
+```
+
+No fused/reassociated alternate formula is the audit oracle. It is a deletion candidate only when `distanceSquared <= toleranceSquared`.
+3. Order candidate deletions by `(distanceSquared, v.xM, v.yM, originalVertexOrdinal)` and attempt the smallest tuple first. Recompute neighboring candidate distances after every accepted deletion; do not depend on sort stability.
+4. A deletion is accepted only if replacement segment `p→n` creates no proper intersection or overlap with any non-adjacent segment of the same geometry or any sibling ring and preserves all protected endpoints. For persistent reaches, it also must not create an intersection/overlap with any other persistent reach except at an already-shared protected source/confluence/terminal endpoint; a simplification chord may never manufacture a crossing, confluence, or shared segment. If the geometry is a ring, it must also keep nonzero signed area with the required orientation and containment depth; for raster-derived closed coastline/catchment/depression boundaries, additionally scan the finite analysis-cell-center set in the changed triangle/bounding box and require identical before/after inside/outside classification. For an **open finite-border coastline**, no diagonal shortcut is permitted: deletion is allowed only when `p,v,n` are exactly collinear, `v` lies on segment `p→n`, and `p→n` equals the same oriented land↔ocean boundary segment geometrically; both domain-boundary endpoints remain protected. Thus open coastline simplification removes only redundant collinear vertices and can never move the finite land/ocean partition.
+5. Repeat until no eligible safe deletion remains. Restore the final repeated ring start exactly once and re-check normalization. No insertion is performed.
+6. If a feature still exceeds its verified vertex bound, return `M02_BOUND_EXCEEDED`; never exceed tolerance, reverse a ring, remove a topology-critical endpoint, or accept a topology-changing chord to hit the bound.
+
+The audit independently supplies crossing/intersection/inside-outside checks and includes a fixture where an apparently low-error chord would cross a non-adjacent segment: production must retain that vertex. This algorithm applies consistently in Tasks 5, 8, 9, and 10 where simplification is needed.
+
+### 9. Exact v1 cell-edge coastline topology
+
+M0.2 v1 uses **cell-edge boundary topology**, not marching-squares interpolation. Land components for coastline construction use cardinal edge adjacency only. Diagonal corner contact alone never merges land components. For each cardinally connected land component, enumerate **only** cell edges whose opposite in-domain cell is canonical ocean; a physical-domain exterior is not ocean and contributes no coastline edge. Orient every retained edge so land interior lies on the left and ocean lies on the right.
+
+Trace oriented edges component-by-component. At an ordinary vertex, continue with the unique unused outgoing edge belonging to that same component. At a geometric degree-4 vertex caused by two diagonally touching land components, continue around the **same cardinally connected land component**; never pair edges diagonally into the other component. A closed trace normalizes as the corresponding §8 ring. An open trace is valid only when both endpoints lie on the physical domain boundary and follows the §8 land-left open-polyline rule. Component producer order is by lexicographically smallest member-cell center; within a component, traces use the frozen closed/open geometry key. This resolves the saddle without endpoint-sort ambiguity and does not reinterpret finite-domain outflow as ocean.
+
+The mandatory checkerboard fixture embeds a 2×2 checkerboard inside a one-cell ocean halo on a 4×4 domain, `d=250`, row 0 north. The central 2×2 has land at `(row=1,col=1)` and `(row=2,col=2)` and ocean on the other two diagonal cells; every halo cell is ocean. Its exact normalized coastline output is two separate CCW outer rings, in canonical component order:
+
+```text
+[(250,500),(500,500),(500,750),(250,750),(250,500)]
+[(500,250),(750,250),(750,500),(500,500),(500,250)]
+```
+
+They share only vertex `(500,500)` and must not be spliced into a diagonal figure. Reversing cell iteration must reproduce these exact rings. A second audit swaps the central land/ocean diagonals so land is at `(row=1,col=2)` and `(row=2,col=1)`. Its exact component-ordered output is:
+
+```text
+[(250,250),(500,250),(500,500),(250,500),(250,250)]
+[(500,500),(750,500),(750,750),(500,750),(500,500)]
+```
+
+Again the shared vertex is contact only, not a diagonal pairing. No determinism-only assertion substitutes for these expected coordinates.
+
+A separate finite-border fixture is a 3×3 domain with the entire left column land and the other six cells ocean. The only canonical coastline is the **open** two-point polyline `[(250,0),(250,750)]`, directed south→north so land is on the left. The west/north/south domain-exterior edges are not coastline. This literal fixture distinguishes canonical ocean boundary from `external_domain_outlet`/finite-domain exterior semantics.
+
+### 10. Complete deterministic v1 depression / retained-basin / terminal state machine
+
+Priority-Flood terminology follows Barnes, Lehman & Mulla (2014): it provides deterministic DEM depression processing/filling and watershed support. It does **not** decide Society Engine's intentional closed-basin semantics. The project-specific state machine below does.
+
+**10.1 Valid outlet seeds before conditioning.** Land components for finite-boundary classification are cardinally connected. A canonical ocean outlet seed is a terrestrial cell sharing a cardinal cell edge with canonical ocean; if one cell has several ocean edges, its terminal point is the smallest land↔ocean boundary-edge midpoint under point order. There is at most one ocean seed per terrestrial cell.
+
+External-domain candidacy is component-level, not generic cell-edge adjacency. For each cardinal land component intersecting the raster boundary, enumerate outward cardinal boundary crossings whose inside cell is **not already an ocean-seed cell**, then select at most one by `(rawElevationMeters of inside cell, boundary intersection point, outward order E,N,W,S)`. If that filtered set is non-empty, its first tuple is the component's `external_domain_outlet` seed. If it is empty and the component already has one or more ocean seeds, no external seed is added for that component; the known ocean outlets are its valid finite-domain terminals. If it is empty and the component has no ocean seed, fail `M02_TERMINAL_INVALID` because a boundary-touching non-ocean component cannot be left terminal-free. Other boundary cells are not terminals merely because they are array-edge cells. A basin/path is classified external only if its canonical routing reaches the selected external-seed cell; merely containing/touching a raster-edge cell is insufficient. No external inflow is fabricated.
+
+Terminal seed identity is transient but exact and does not depend on a future catchment or persistent ID. Reuse §8 `pt(point)` and emit exactly `terminal-seed:ocean|<pt>` for an ocean outlet, `terminal-seed:external|<pt>` for an external-domain outlet, and `terminal-seed:closed|<pt>` for a protected closed floor terminal. A terrestrial scratch cell may own at most one terminal seed; protected floor cells cannot overlap an existing outlet seed because valid Priority-Flood seed cells are never raw depression members. Duplicate token, duplicate `(kind,point)`, or duplicate owner cell is `M02_TERMINAL_INVALID`.
+
+Discovery order is not terminal identity. After all protected components are known, collect the final seed records, copy/sort by `compareAscii(token)`, clear `scratch.terminalIndex` to `-1`, and assign each owner cell the sorted seed ordinal. `TerrainDepressionAnalysis.terminalSeeds` is emitted in that token order; reverse ocean/component discovery must therefore reproduce both token order and `terminalIndex` bytes. Task 8 uses the token only to match transient routing state; persistent terminal physical ordering is `(kind-order, point)` because duplicate `(kind,point)` has already failed. It assigns `terminal:<16hex>` from those persisted fields, then derives catchment physical keys/IDs, eliminating any terminal↔catchment identity cycle and allowing Task 12 to re-derive terminal ordering from candidate state alone.
+
+**10.2 Pre-conditioning raw depression discovery.** Before `scratch.routingElevationMeters` is changed, run deterministic Priority-Flood from the valid ocean/external seeds into a budgeted stage-local `provisionalRoutingElevation` buffer. Heap entries are scratch indices only and compare `(provisionalRoutingElevation, cell point x,y, scratchIndex)`; neighbor expansion is `E,NE,N,NW,W,SW,S,SE`. The raw elevation array is never written. Candidate depression cells are exactly terrestrial cells with `provisionalRoutingElevation > elevationMeters` under exact finite binary64 comparison. Candidate depression components are maximal terrain-8-connected sets of candidate cells sharing the same exact provisional spill elevation. This definition is based on raw cells plus the separately computed provisional routing surface and occurs before final routing conditioning is committed.
+
+Component discovery itself is canonically ordered without retaining an object-per-component table: scan candidate cells by physical point `(xM,yM)` ascending (column ascending; within a column, row descending because y increases north). The first unlabelled candidate begins the next component, so its point is that component's unique `smallestMemberPoint` and its zero-based discovery ordinal is canonical. Flood that component using the fixed terrain-8 neighbor order while requiring the same exact provisional spill elevation; `depressionLabel` records membership and the reusable `heapIndex` buffer is the component queue. Thus component order is exactly `(smallestMemberPoint)` and cannot depend on heap/insertion order.
+
+Within the current component, equal-height cells are grouped by terrain-8 exact-elevation connectivity. `floorElevationMeters` is the minimum raw elevation. If multiple disjoint minimum-elevation plateaus tie, select the plateau whose smallest physical point is lexicographically first; `canonicalFloorCell` is that plateau's smallest point. The transient component identity is `(canonicalComponentOrdinal, smallestMemberPoint, spillElevationMeters, floorElevationMeters, canonicalFloorPoint)`. No sorted member-cell sequence or per-component JS object is retained: the current component's bounding box/count/floor/spill statistics are scalar state, persistent retained geometry is vectorized immediately, and `depressionLabel` remains the membership oracle until Task-6 release.
+
+**10.3 Spill candidates and tie rule.** A spill candidate is every terrain-8 neighbor pair `(inside,outside)` with `inside` in the depression component, `outside` not in it, and `outside` terrestrial/ocean, plus an explicit external boundary crossing when the inside cell owns the component's selected external seed. For a terrestrial outside cell, `candidateElevation = max(rawInside, rawOutside)`; for canonical ocean, use `max(rawInside, seaLevelMeters)`; for an external crossing use `rawInside`. Order candidates by:
+
+```text
+(candidateElevation,
+ outsideKind: terrestrial < ocean < external,
+ insidePoint.x, insidePoint.y,
+ outsideOrBoundaryPoint.x, outsideOrBoundaryPoint.y,
+ neighborOrOutwardOrdinal)
+```
+
+and use the first. No heap/insertion-order tie is observable. For an unprotected depression produced by the provisional fill, the resulting elevation must equal its provisional spill elevation or compilation fails `M02_ROUTING_UNRESOLVABLE`.
+
+**10.4 Deterministic intentional closed-basin protection.** Task 4 derives the transient `TerrainProtectedBasinIntentKey {a,b,c,d}` with the exact length-prefixed UTF-8/SHA-256/big-endian-u32 primitive frozen in Task 4, using stage tag `world-m0:m02:protected-basin-intent:v1`. No human/climate state participates and no dense protection raster exists. As each raw component is processed in the canonical smallest-member-point order from §10.2, Task 6 computes:
+
+```text
+h0 = mix32(intent.a ^ floorRow ^ rotl32(floorColumn, 11))
+h1 = mix32(intent.b ^ spillF64High ^ rotl32(spillF64Low, 7))
+h2 = mix32(h0 ^ rotl32(h1, 13) ^ intent.c ^ intent.d)
+score16 = h2 >>> 16
+protected = score16 < protectedClosedBasinRatePer65536
+```
+
+where `mix32(x)` is exactly `x ^= x>>>16; x=Math.imul(x,0x7feb352d); x^=x>>>15; x=Math.imul(x,0x846ca68b); x^=x>>>16; return x>>>0`, `rotl32` is unsigned 32-bit rotate-left, and `spillF64High/Low` are the big-endian IEEE-754 words of the exact spill elevation. `protectedClosedBasinRatePer65536` is an integer in `[0,65536]`. A protected component receives transient token `protected-basin:<16-lowercase-hex component ordinal>`. If protected count exceeds `maxProtectedClosedBasins`, fail `M02_BOUND_EXCEEDED`; never drop/select the first N. This token is generator truth controlled by seed/constants/generator identity, bounded, transient, non-epistemic, and not a 250 m persistent authority.
+
+**10.5 Retention and closed/exorheic classification.** `areaM2 = memberCellCount * 62_500`. `depthMeters = spillElevationMeters - floorElevationMeters`. A component is retained iff `(areaM2 >= retainedMinAreaM2 && depthMeters >= retainedMinDepthMeters) || protected`. It is `closedEndorheic === true` **iff protected is true**. Protected retained basins terminate at a `retained_closed_basin` terminal at the canonical floor point with exact transient token `terminal-seed:closed|<pt(canonicalFloorPoint)>` and expose `spillElevationMeters: null`, `outletTerminalId: null` persistently; the transient physical rim/spill remains in Task-6 analysis for validation. An unprotected retained component is exorheic: it preserves raw floor/area/boundary/spill geometry while routing continues through the canonical spill to ocean/external/another downstream basin. Every retained component receives transient analysis token `depression-analysis:<16-lowercase-hex canonicalComponentOrdinal>`; this token is independent of future persistent IDs. A protected closed terminal seed sets `retainedDepressionToken` to that analysis token; ocean/external seeds set it null. An unretained component is an ordinary routing depression and produces no persistent basin. Task 6 does **not** predict an exorheic basin's eventual terminal ID/token: Task 8 resolves that after primary routing while catchment membership is live.
+
+**10.6 Final routing surface.** Start `routingElevationMeters` as a copy of raw elevation. For every ordinary or retained-exorheic component, copy the provisional conditioned values for its member cells; raw elevation remains unchanged and retained raw geometry stays in the Task-6 analysis record for Task 9. For every protected closed component, keep raw elevations unchanged and install its floor terminal. A protected component may not be overwritten by a later fill pass; a mismatch is `M02_PROTECTED_BASIN_DESTROYED`.
+
+**10.7 Flat ranks.** Flat ranks are integer routing order, not synthetic elevation. First set `flatRank=-1`. For each maximal terrain-8 connected equal-`routingElevationMeters` flat, identify exit seeds: cells having a valid lower-routing neighbor or an explicit ocean/external terminal. For a protected closed floor plateau, the sole exit seed is `canonicalFloorCell`. Sort seeds by `(point, terminal-kind/neighbor order)` and assign rank 0. Perform deterministic breadth-first expansion over equal-elevation flat neighbors in fixed terrain-8 order; a first visit gets `parentRank+1`, with same-level queue ties by point order. Every flat cell must receive a finite non-negative rank. D∞ may route across an equal-elevation edge only from larger rank to smaller rank; it may never use scratch-index order alone as a physical descent. Failing to rank a nonterminal flat is `M02_ROUTING_UNRESOLVABLE`.
+
+**10.8 Exact F5/F6/F7 depression goldens.** The independent audit uses the same 5×5 raw grid (row 0 north), with all cells terrestrial and `d=250`:
+
+```text
+9 9 9 9 9
+9 6 5 6 9
+9 5 1 1 5
+9 6 5 6 4
+9 9 9 9 3
+```
+
+The depression component is exactly `{(2,2),(2,3)}`; equal-height floor plateau is both cells; canonical floor is `(2,2)`; physical area is `125000 m²`; canonical spill is the `(2,3)→(3,4)` SE neighbor pair at elevation `4`; depth is `3`. In each isolated F5/F6/F7 run this is canonical component ordinal 0, so a retained analysis token is exactly `depression-analysis:0000000000000000`.
+
+For F5, set thresholds above this area/depth and `protectedClosedBasinRatePer65536=0`: it is not retained, both component routing elevations become `4`, spill-side flat rank `(2,3)=1`, `(2,2)=2` with outside spill cell `(3,4)=0`, and routing ultimately reaches the fixture's explicit `external_domain_outlet` terminal.
+
+For F6, pass audit-controlled `protectedIntentKey={a:0,b:0,c:0,d:0}` and `protectedClosedBasinRatePer65536=42612` while keeping area/depth below ordinary retention. With floor row/column `(2,2)` and spill binary64 words `0x40100000,0x00000000`, §10.4 must produce `h0=1710706095`, `h1=3575335380`, `h2=2792555385`, `score16=42611`, so protection is exactly true. The component is retained/protected/closed with `protectedIntentToken="protected-basin:0000000000000000"`; raw elevations remain `1,1` and routing elevations remain `1,1`; floor ranks are `(2,2)=0`, `(2,3)=1`; terminal kind is exactly `retained_closed_basin` at canonical floor center `(625,625)` with the §10.1 closed-terminal token; this basin has no ocean/external outlet.
+
+For F7, set `protectedClosedBasinRatePer65536=0` and thresholds `retainedMinAreaM2 <= 125000`, `retainedMinDepthMeters <= 3`: component is retained but exorheic, token `depression-analysis:0000000000000000`, routing elevations/ranks match F5, persistent spill is `4`, and onward primary routing reaches the fixture's canonical `external_domain_outlet` terminal. Audits hard-code these cells/values and derive none of them by calling production depression helpers.
+
+**10.9 Exact `repair:v1` routing repair.** Repair is not a second basin policy and never changes raw elevation, retention, protection, terminal class, spill selection, thresholds, or IDs. It exists only for an ordinary/retained-exorheic component whose copied routing surface is internally inconsistent with its already-frozen canonical spill. Immediately after §10.6 copies provisional conditioning into `scratch.routingElevationMeters` and before final flat ranking, scan that component's `depressionLabel` membership and require every member's routing elevation to equal its `spillElevationMeters`. If all match, use zero repair operations. If any member differs, the component is repair-eligible only when it is unprotected and has the canonical spill pair from §10.3; otherwise fail `M02_ROUTING_UNRESOLVABLE`. Before any write, require `repairOperationCount < maxRepairOperations`; if false, return `M02_REPAIR_BUDGET_EXHAUSTED` with no routing changes. One repair operation then sets `routingElevationMeters[cell] = spillElevationMeters` for **every** cell with that component label, in physical-point scan order, increments the count once, and seeds the later flat-rank BFS from the canonical spill-side inside cell. Recheck that every repaired member can reach that seed through equal routing elevation; failure is `M02_ROUTING_UNRESOLVABLE`. No iterative threshold relaxation or alternate spill search exists.
+
+The repair golden reuses F5 after component/spill discovery and the normal §10.6 copy, then audit-injects a synthetic routing mismatch `routingElevation(2,2)=5` while `(2,3)=4` and canonical spill remains `4`. With `maxRepairOperations=1`, expected post-repair routing is exactly `(2,2)=4,(2,3)=4`, `repairOperationCount=1`, raw elevations remain `1,1`, and final ranks remain `(2,3)=1,(2,2)=2`; with `maxRepairOperations=0`, the same fixture must fail `M02_REPAIR_BUDGET_EXHAUSTED` **before either routing cell is written**. The audit injects this mismatch through an audit-only input seam around the repair primitive; production terrain generation never fabricates a mismatch to exercise the budget.
+
+### 11. Exact `d_infinity_v1` mathematical contract
+
+This section is the implementation contract for Task 7. It follows Tarboton (1997), *Water Resources Research* 33(2), 309–319, DOI `10.1029/96WR03137`, and the authoritative TauDEM D-Infinity documentation. The paper defines steepest descent over eight block-centred triangular facets, clamps an out-of-facet slope to the steepest facet edge, measures direction counter-clockwise from east, and proportions flow between the two adjacent neighbors by angular proximity. Society Engine changes only the already-declared boundary/flat handling and uses iterative topological accumulation instead of recursive depth-dependent evaluation.
+
+Let cell size `d=250`. Scratch x increases east; y increases north; row index increases south. The center cell has elevation `e0`. Neighbor order/angles are:
+
+```text
+E  0: 0
+NE 1: π/4
+N  2: π/2
+NW 3: 3π/4
+W  4: π
+SW 5: 5π/4
+S  6: 3π/2
+SE 7: 7π/4
+```
+
+The eight facets, in exact tie order, are. Each row also freezes the local orthonormal basis: `a` points from the center to side neighbor `e1`; `b` points from `e1` toward diagonal neighbor `e2`. Therefore the two facet coordinate vectors from the center are exactly `p1=d*a` and `p2=d*(a+b)`.
+
+| facet | angular sector | side `e1` | diagonal `e2` | `a` | `b` | global angle from local `r` |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0 | E→NE | E | NE | `(1,0)` | `(0,1)` | `α = r` |
+| 1 | NE→N | N | NE | `(0,1)` | `(1,0)` | `α = π/2 - r` |
+| 2 | N→NW | N | NW | `(0,1)` | `(-1,0)` | `α = π/2 + r` |
+| 3 | NW→W | W | NW | `(-1,0)` | `(0,1)` | `α = π - r` |
+| 4 | W→SW | W | SW | `(-1,0)` | `(0,-1)` | `α = π + r` |
+| 5 | SW→S | S | SW | `(0,-1)` | `(-1,0)` | `α = 3π/2 - r` |
+| 6 | S→SE | S | SE | `(0,-1)` | `(1,0)` | `α = 3π/2 + r` |
+| 7 | SE→E | E | SE | `(1,0)` | `(0,-1)` | `α = 2π - r`, normalize exact `2π` to `0` |
+
+A facet is geometrically evaluable only when both listed neighbor cells exist in bounds and are terrestrial. Ocean/external exits are represented by Task-6 terminal cells; an incomplete/no-data facet is skipped rather than inventing an elevation beyond the domain.
+
+For each evaluable facet calculate the exact elevation differences, planar downslope-gradient components, vector, direction and magnitude in this operation order:
+
+```text
+dz1 = e0 - e1
+dz2 = e1 - e2
+s1  = dz1 / d
+s2  = dz2 / d
+g   = s1*a + s2*b
+r   = atan2(s2, s1)
+
+if r < 0:
+    r = 0
+    g = s1*a
+    s = s1
+else if r > π/4:
+    r = π/4
+    g = ((e0 - e2) / (2*d)) * (a+b)
+    s = (e0 - e2) / (sqrt(2) * d)
+else:
+    s = hypot(s1, s2)
+```
+
+For the interior case `0 <= r <= π/4`, `g=s1*a+s2*b` is the planar **downslope** vector and `s=|g|`; for either outside-facet case the vector is clamped to the named boundary direction before comparison. `atan2` is the unambiguous reference-runtime evaluation of Tarboton's `atan(s2/s1)` expression. A facet candidate is downslope only when final `s > 0` exactly. Select the candidate with greatest `s`; exact binary64 slope ties use the lower facet number above. No tolerance changes facet selection. Convert its local `r` to `α` with the table and normalize to `[0,2π)`.
+
+Let the selected facet's angular bounding neighbors in counter-clockwise order have direct angles `θ0` and `θ1`, with unwrapped `θ1 = θ0 + π/4` (for facet 7 use E as `2π`). Let `αu` be the selected angle unwrapped into that interval. Define
+
+```text
+q = (αu - θ0) / (π/4)
+w0 = 1 - q
+w1 = q
+```
+
+with `q` required in `[0,1]`. A mathematically exact zero weight is omitted: if `q===0`, only lower-angle neighbor receives weight 1; if `q===1`, only upper-angle neighbor receives weight 1. Otherwise both receivers must be downstream under `(routingElevation,flatRank)`, are stored in facet angular order, and `abs((w0+w1)-1) <= validation.finiteTolerance` is mandatory. Do not renormalize an invalid negative/out-of-range weight into validity.
+
+If no positive facet exists, the cell is a flat/pit case. If it is an explicit Task-6 terminal cell, it has no cell receiver and `terminalReceiver` names that terminal seed. Otherwise use exactly one terrain-8 equal-routing-elevation neighbor with lower `flatRank`: take minimum `(flatRank, neighborOrdinal, point)` and assign it weight 1 with the direct neighbor angle. If neither positive D∞ descent nor a lower-rank flat neighbor exists, fail `M02_ROUTING_UNRESOLVABLE`. This flat fallback is not D8 terrain routing: it is used only after D∞ has no positive facet and follows the independently frozen flat rank.
+
+**Primary receiver.** If there is one positive-weight receiver, it is primary. If there are two, the larger D∞ weight is primary; an exact weight tie uses the lower terrain-neighbor ordinal `E,NE,N,NW,W,SW,S,SE`. Secondary is the other. This primary rule is the sole raster reduction consumed by Task 8.
+
+**Acyclic ordering and contributing area.** A valid receiver must strictly decrease `(routingElevationMeters, flatRank)` lexicographically; scratch index alone never makes an equal flat edge downhill. Build incoming-edge counts iteratively. Kahn processing starts with all terrestrial cells having zero contributing-flow incoming edges, ordered by physical point, and emits `topologicalOrder` upstream→downstream. On pop, add `contributingAreaM2[cell] * weight` to each receiver and decrement that receiver's incoming count. Each terrestrial cell starts with exactly `62_500 m²`; ocean cells start zero and never enter the order. Processing count must equal terrestrial cell count or fail `M02_DRAINAGE_CYCLE`. No recursion depends on world depth.
+
+**Hard-coded D∞ goldens.** Task 7 and F1/F2/F4 evidence include a 3×3 block-centred harness where the center is index 4 and all eight perimeter cells are explicit terminal sinks, so central facet math and accumulation have independent closed-form expectations:
+
+1. Plane `z = 100 - 2*xCell - 1*yCell`: center selects facet 0 `(E index 5, NE index 2)`, `α = 0.4636476090008061`, `wE = 0.40966552939826695`, `wNE = 0.590334470601733`, center area `62500`, E area after receipt `88104.09558739168`, NE area `99395.90441260832`.
+2. Plane `z = 100 - 2*xCell`: exact cardinal descent; facet 0 wins the facet-0/facet-7 edge tie, `α=0`, E is sole receiver with weight 1, E area `125000`.
+3. Plane `z = 100 - xCell - yCell`: exact NE facet boundary; facets 0 and 1 have equal steepest slope and facet 0 wins, `α=π/4`, NE is sole receiver with weight 1, NE area `125000`.
+4. Finite-border fixture uses the north-east corner index 2 of a 3×3 plane `z = 100 + xCell`; all out-of-bounds facets are skipped, facet 4 `(W,SW)` is the first complete steepest facet, `α=π`, W index 1 is sole receiver with weight 1, W area `125000`.
+5. Deterministic-flat fixture uses a 3×3 all-terrestrial routing surface with every `routingElevationMeters=100`, center index 4 `flatRank=1`, every perimeter cell `flatRank=0`, and every perimeter cell an explicit terminal sink. No facet has positive slope, so `selectedFacet=null` and `usedFlatRankFallback=true`; the fixed lower-rank-neighbor tie resolves to E index 5 by canonical neighbor ordinal, `α=0`, E is the sole receiver with weight 1, and E area becomes `125000`.
+
+The audit hard-codes the elevation/rank arrays, receiver indices, selected facet (including exact `null` for flat fallback), angles, weights, and area values above; expected values must not be generated by `evaluateDInfinityCellDecision`, `analyzeDInfinityFlow`, or any shared production helper.
+
+### 12. Exact v1 primary-receiver catchment and persistent-graph reduction
+
+Task 8 consumes Task-7 split flow but creates a one-receiver physical representation as follows.
+
+1. **Primary raster and catchments.** Use exactly the primary receiver rule in §11. Independently accumulate `primaryContributingAreaM2`: initialize every terrestrial cell with `62_500`, then in Task-7 upstream→downstream topological order add the full value to the primary receiver only. Following primary receivers from any terrestrial cell must reach exactly one typed terminal. All cells ending at the same terminal form one catchment. `catchment.areaM2` is exact member count × `62_500`, and `boundaryRings` are extracted from member-cell edges with §9 degree-4 component handling and §8 ring rules. Catchments partition terrestrial cells: no fractional membership and no overlap.
+2. **Eligibility.** `eligible[cell]` is exactly `landMask[cell] && flow.contributingAreaM2[cell] >= persistenceAreaM2`. There is no second relief/slope/valley predicate. D∞ split area remains the eligibility analysis quantity.
+3. **Downstream closure support.** Let `R` be the union of every primary-receiver cell path beginning at an eligible cell and continuing through zero or more ineligible cells to its terminal. This makes threshold entry explicit without allowing a below-threshold gap to create a terrestrial dead end. A cell not in `R` is not persistent geometry.
+4. **Sources/confluences/terminals.** On the directed primary subgraph induced by `R`, represented indegree is the number of distinct `R` cells whose primary receiver is the cell. A source is an upstream-most `R` cell with indegree 0; it must itself be eligible and is the first threshold entry on that represented path. A confluence is any nonterminal `R` cell with represented indegree ≥2, whether that merge cell itself is above or below the area threshold. Every typed terminal reached by `R` becomes one terminal node. This preserves a merger that happens in a short below-threshold gap rather than deleting topology.
+5. **Chain contraction and direction.** Any `R` cell with represented indegree 1, outdegree 1, and no source/confluence/terminal role is an interior chain point. Maximal such chains contract into one reach between topology-critical nodes. Source/confluence node points are their terrestrial cell centers. An ocean/external terminal node point is the exact Task-6 boundary midpoint; a retained-closed terminal node point is its canonical floor-cell center. Pre-simplification reach geometry is always upstream→downstream: start with the upstream node point, include each distinct terrestrial primary-path cell center in path order, and end with the downstream node point. For an ocean/external terminal this appends the boundary midpoint after the last terrestrial center; for source/confluence/closed-floor nodes do not duplicate an already-identical center. There is no branch-order dependence.
+6. **`minReachLengthMeters`.** First form maximal primary-path chains whose endpoints are topology-critical source/confluence/terminal nodes; this critical-to-critical chain is the persistent reach authority. `minReachLengthMeters` may never merge across, delete, or relocate one of those critical endpoints. Therefore a critical-to-critical reach whose measured length is below the threshold is retained unchanged as one reach. If implementation creates transient degree-2 chunk breakpoints solely to keep working geometry bounded, all `minReachLengthMeters` comparisons use the **unsimplified** fixed-order Euclidean length of the physical subsegment, before §8 simplification. Process subsegments upstream→downstream: whenever a subsegment is shorter than `minReachLengthMeters`, remove that noncritical breakpoint and merge the subsegment with the immediately downstream subsegment if one exists, otherwise with the immediately upstream subsegment; restart the scan after each merge. Such breakpoints never become persistent nodes. After this deterministic coalescing, simplify the resulting critical-to-critical geometry with §8; if it still cannot satisfy the vertex bound without topology change, fail `M02_BOUND_EXCEEDED` rather than introducing a synthetic persistent node or deleting a short critical reach. A dedicated fixture sets the constant longer than a source→confluence reach and requires that exact source, confluence, reach, geometry orientation, and downstream linkage to remain.
+7. **Reach measurement anchor.** Reach `lengthMeters` is the fixed-order Euclidean sum over its final §8-simplified upstream→downstream geometry, including the last-center→boundary-terminal segment where applicable. `contributingAreaM2` is the `primaryContributingAreaM2` at the reach's last terrestrial path cell **before** its downstream topology-critical node/terminal. For an incoming reach to a confluence, use its predecessor cell, not the shared confluence cell; for the outgoing reach, the confluence cell is part of that downstream reach. For a terminal reach, use the last terrestrial cell before the terminal boundary point, or the terminal floor cell for a closed basin.
+8. **Independent local-area witness.** Assign each terrestrial catchment cell's own `62_500 m²` exactly once to the first persistent reach encountered when following its primary path; if it first arrives exactly at a confluence, assign it to the outgoing downstream reach. Cells upstream of a source that are not themselves in `R` still enter that source reach and are assigned there. `localContributingAreaM2` is the sum of these independently assigned cell areas, never computed as a subtraction of reach totals. For every reach, validator requires `contributingAreaM2 ≈ localContributingAreaM2 + Σ contributingAreaM2(immediately upstream reaches)` within `areaToleranceM2`. At a represented terminal, terminal-reaching reach totals must reconcile to catchment `areaM2`; a catchment with no eligible cell has no reaches and is validated directly by member-area/boundary conservation.
+9. **Terminal/downstream links.** Each reach names exactly one catchment and terminal. A reach ending at a terminal has `downstreamReachId=null`. Otherwise, all reaches entering a confluence point to the unique outgoing reach. The graph is a DAG and no reach crosses catchment terminal identity.
+10. **Retained-depression linkage.** After the §12.11 terminal/catchment IDs and reciprocal links are complete, but while `catchmentRoot` still exists, iterate Task-6 retained depressions by ASCII `depression-analysis:*` token. The catchment root at `canonicalFloorCell` must resolve to exactly one catchment and terminal. Emit `(depressionToken,catchmentId,terminalId)` exactly once. For a protected closed basin the terminal kind must be `retained_closed_basin`; for an exorheic retained depression it may be `ocean_outlet`, `external_domain_outlet`, or a downstream `retained_closed_basin` reached by the primary route. Missing/duplicate/mismatched links are `M02_TERMINAL_INVALID`. This bounded link registry is the sole Task-9 source of eventual basin terminal identity.
+11. **IDs after physics / reciprocal-link assembly.** Build provisional terminal physical records containing only persisted `kind` and `point` plus their transient seed token for routing lookup. Reject duplicate `(kind,point)`, sort by §8 `(kind-order,point)`, and assign terminal IDs. Next build complete catchment physical records using the referenced terminal **physical key** (not its newly assigned ID) plus boundary/area, sort, and assign catchment IDs. Only then materialize final `TerrainHydroTerminal {id,kind,point,catchmentId}` and `TerrainCatchment {id,terminalId,...}` reciprocal references and require a one-to-one terminal↔catchment pairing. Node/reach IDs follow after node roles, reach chains, areas, local-area witnesses, and normalized geometry are complete. Validators re-derive all physical keys by dereferencing candidate records; no transient token or persistent ID participates in the physical sort key that creates an earlier dependency.
+
+**Exact Task-8/F1–F3 graph goldens** are audit-side synthetic primary-receiver witnesses with `d=250`; they do not call production graph builders to derive expectations:
+
+- **F1 planar 1×5 chain west→east**, threshold `125000`: indices `0→1→2→3→4→external terminal` at `(1250,125)`; D∞ eligibility is indices `1..4`. Expected one source at cell 1 center `(375,125)`, no confluence, 2 nodes (source + `external_domain_outlet` terminal), 1 reach with `downstreamReachId=null` and that external terminal, catchment members `{0,1,2,3,4}`, catchment area `312500`, reach `contributingAreaM2=312500`, `localContributingAreaM2=312500`.
+- **F2 two-sided ridge cross-section 1×6**, primary paths `2→1→0→west external terminal (0,125)` and `3→4→5→east external terminal (1500,125)`, with all six cells eligible for this graph fixture. Expected sources at cell 2 `(625,125)` and cell 3 `(875,125)`, zero confluences, 4 nodes (2 source + west/east `external_domain_outlet` terminals), 2 reaches; each reach has `downstreamReachId=null` and names only its own west/east terminal. The two catchments are exactly `{0,1,2}` and `{3,4,5}`, each `187500 m²`; each reach contribution/local witness is `187500`; no link crosses the ridge.
+- **F3 five-cell Y on a 2×4 fixture:** A=`(row1,col0)` center `(125,125)`, B=`(row0,col1)` center `(375,375)`, C=`(row1,col1)` center `(375,125)`, D=`(row1,col2)` center `(625,125)`, E=`(row1,col3)` center `(875,125)`, east external terminal point `(1000,125)`, with primary paths `A→C`, `B→C`, `C→D→E→terminal`. Expected source count 2 at A/B, confluence count 1 at C, node count 4 (2 source + confluence + east `external_domain_outlet` terminal), reach count 3, both tributary `downstreamReachId` values equal the trunk reach, trunk `downstreamReachId=null` and names the east external terminal, all three reaches name that same terminal/catchment, one catchment of these 5 cells = `312500 m²`; each tributary reach has `contributingAreaM2=62500` and `localContributingAreaM2=62500`; trunk has `contributingAreaM2=312500` and `localContributingAreaM2=187500`, so `312500 = 187500 + 62500 + 62500` exactly.
+
+Task 13 stores the exact row/column/receiver arrays for these fixtures so source/confluence/terminal locations are literal values, not inferred from a production helper.
+
+### 13. Minimum deterministic v1 provenance-family morphology
+
+The four families share correlated base relief but must have independently measurable spatial tendencies. Let rotated coordinates around province center be
+
+```text
+u =  cos(axisAngle)*dx + sin(axisAngle)*dy
+v = -sin(axisAngle)*dx + cos(axisAngle)*dy
+rho2 = (u/radiusXM)^2 + (v/radiusYM)^2
+I = rho2 < 1 ? (1-rho2)^2 : 0
+```
+
+with fixed operation order. `axisAngleRadians` is derived deterministically from the province seed word as `2π * uint32 / 2^32` and persisted. Let `baseRadiusM` be the existing deterministic draw in inclusive `[provinceMinRadiusMeters, provinceMaxRadiusMeters]` and let `aspect` be the selected family's identity-bearing aspect ratio (`aspect >= 1`). V1 radius derivation is exact: `majorRadiusM = baseRadiusM`, `minorRadiusM = baseRadiusM / aspect`, `radiusXM = majorRadiusM`, `radiusYM = minorRadiusM`, and `influenceRadiusM = majorRadiusM`. The persisted `axisAngleRadians` rotates those local x/y radii through `u,v`; no second random radius, axis swap, area-preserving rescale, or implementation-selected aspect transform exists.
+
+- `stable_denudational`: `radiusXM/radiusYM = stableAspectRatio` with the controlled profile near 1; no added directional ridge/massif/bowl term; correlated local bands are multiplied by `stableReliefMultiplier < 1`. This yields broad, comparatively isotropic, subdued local relief.
+- `orogenic_uplift`: `radiusXM/radiusYM = orogenicAspectRatio > 1`; add `orogenicRidgeAmplitudeMeters * I * max(0, 1 - abs(v)/(orogenicRidgeCrossWidthFraction*radiusYM))^2` before the bounded family relief multiplier. The deterministic persisted axis therefore organizes positive high relief along an elongated ridge zone.
+- `volcanic_constructive`: `radiusXM/radiusYM = volcanicAspectRatio` constrained near 1; add `volcanicMassifAmplitudeMeters * max(0,1-sqrt(rho2))^volcanicRadialFalloffExponent`. This is a localized approximately radial positive massif and is materially less elongated than the controlled orogenic case.
+- `sedimentary_basin`: `radiusXM/radiusYM = sedimentaryAspectRatio` constrained broad/near-isotropic; add `-sedimentaryBowlDepthMeters * max(0,1-rho2)^sedimentaryBowlFalloffExponent` and use `sedimentaryReliefMultiplier < 1`. This is a broad negative/low-elevation accommodation bowl with subdued internal relief.
+
+The existing family elevation offsets still apply, but the spatial terms above—not enum labels or offset-only differences—are the causal morphology distinction. Every aspect/amplitude/falloff/width constant is strict verified physical-constants content and canonical encoded in Task 1; no morphology-affecting literal may hide in source.
+
+F11 freezes one exact morphology audit rather than leaving metric selection to the worker. Use the normal 300 km × 180 km / 250 m controlled domain, seed text `world-m0-m02-f11-morphology-v1`, center `(150000,90000)`, `baseRadiusM=40000`, and `axisAngleRadians=0`. First synthesize `zBase` with one audit-only neutral `stable_denudational` province having `radiusXM=radiusYM=influenceRadiusM=40000`, `elevationOffsetMeters=0`, and `reliefMultiplier=1`; because stable has no additive ridge/massif/bowl term, this is the common correlated terrain baseline. Then synthesize four separate grids from the same seed/common constants, each with exactly one province at that center/axis, the §13 radius formula for its family aspect, and that family's persisted offset/multiplier. For each family cell `i` inside its own `rho2 < 1` support, define `delta_i = zFamily_i - zBase_i`; no production morphology helper computes the oracle metrics.
+
+The audit metrics are exact:
+
+```text
+weight_i = abs(delta_i)
+Muu = sum(weight_i * u_i^2) / sum(weight_i)
+Mvv = sum(weight_i * v_i^2) / sum(weight_i)
+anisotropy = max(Muu,Mvv) / min(Muu,Mvv)
+
+inner = cells with sqrt(rho2) <= 0.25
+midAnnulus = cells with 0.50 <= sqrt(rho2) <= 0.75
+outerAnnulus = cells with 0.65 <= sqrt(rho2) <= 0.90
+radialConcentration = mean(delta over inner) - mean(delta over midAnnulus)
+centerEdgeTendency = mean(delta over inner) - mean(delta over outerAnnulus)
+
+localRelief_i = max(delta over i plus in-support terrain-8 neighbors)
+              - min(delta over i plus in-support terrain-8 neighbors)
+q90LocalRelief = sorted(localRelief)[ceil(0.90*n)-1]
+```
+
+All denominators/sample sets must be non-empty and finite or the fixture fails. Required literal comparisons are: `orogenic.anisotropy > stable.anisotropy`; `orogenic.anisotropy > volcanic.anisotropy`; `volcanic.radialConcentration > 0`; `sedimentary.centerEdgeTendency < 0`; `stable.q90LocalRelief < orogenic.q90LocalRelief`; `sedimentary.q90LocalRelief < orogenic.q90LocalRelief`; and support-cell counts for stable, volcanic, and sedimentary are each greater than orogenic under the shared 40 km major radius. These strict comparisons—not an enum check, output digest difference, or post-hoc tolerance—are the F11 morphology acceptance oracle. A source-level mutation that removes the orogenic directional ridge term or volcanic radial term must make at least its corresponding metric comparison fail and must restore bytes identically afterward.
+
+### 14. `maxScratchBytes` peak-live transient allocation contract
+
+`analysis.maxScratchBytes` means **maximum total deterministic peak-live transient M0.2 dense raster/analysis payload storage**, not the size of `TerrainScratchGrid` alone. Every O(N), O(component-count), or otherwise analysis-cardinality numeric buffer must be a ledger-owned typed array; implementing the same state as a JS `Array`, `Map`, `Set`, or object-per-cell/component structure to evade accounting is forbidden. JS engine object/header/GC overhead for bounded post-vectorization feature records is not deterministically byte-addressable and is reported separately as observed process memory, but such records are limited by the explicit feature/count bounds and may not carry dense per-cell membership. Thus `maxScratchBytes` accounts every scalable dense analysis payload while a strong M0.2 owner reference is live.
+
+`terrainScratch.ts` owns the only full-raster allocation path:
+
+```ts
+export interface TerrainScratchBudgetSnapshot {
+  readonly maxBytes: number;
+  readonly liveBytes: number;
+  readonly peakBytes: number;
+}
+
+export interface TerrainScratchArrayRequest {
+  readonly label: string;
+  readonly kind: "u8" | "i32" | "f64";
+  readonly length: number;
+}
+
+export interface TerrainScratchBudget {
+  readonly snapshot: () => TerrainScratchBudgetSnapshot;
+  readonly allocateBatch: (
+    requests: readonly TerrainScratchArrayRequest[],
+  ) => WorldM0Result<readonly (Uint8Array | Int32Array | Float64Array)[]>;
+  readonly release: (label: string) => WorldM0Result<true>;
+}
+```
+
+`allocateBatch` validates unique labels and safe non-negative integer lengths, computes each `length * BYTES_PER_ELEMENT` with checked multiplication, checked-adds the full batch to current live bytes, and compares the prospective total with `maxBytes` **before constructing any array in the batch**. Only after the entire preflight succeeds are arrays constructed and registered. On any construction failure, already-created members of that batch are deregistered and references dropped before returning failure. `release` is exact-once, removes the owner reference/ledger entry, and checked-subtracts bytes; aliases after release are forbidden. The compiler diagnostics report the ledger's deterministic `peakBytes`. No M0.2 stage may construct an O(N) typed array directly outside this owner; static audits search M0.2 source for bypasses.
+
+For `N = width*height`, planned full-cell storage is explicitly:
+
+| Lifetime/stage | Buffers | bytes/cell added | peak with still-live prerequisites |
+| --- | --- | ---: | ---: |
+| base scratch | elevation f64 (8), land u8 (1), routing f64 (8), flatRank i32 (4), terminalIndex i32 (4) | 25 | 25N |
+| Task 5 stage-local | landComponentLabel i32 (4), coastVisit u8 (1) | 5 | 30N; `coastVisit` is a four-edge visited bitmask, so no edge `Set`/object table exists; release after coastline |
+| Task 6 stage-local | provisionalRouting f64 (8), depressionLabel i32 (4), floodState u8 (1), minimumPlateauLabel i32 (4), heapIndex i32 (4) | 21 | 46N; before depression labeling, `depressionLabel` + `heapIndex` are reused to label/queue cardinal land components for §10.1 external-seed selection, then cleared; `heapIndex` is subsequently reused as Priority-Flood heap, depression-component queue, plateau queue, and flat-rank BFS queue; after flood state is no longer needed, `floodState` is cleared/reused as the four-edge visited bitmask for one retained-component boundary at a time; no second dense land/component/queue/edge table exists; release after retained analysis/ranks are vectorized |
+| Task 7 retained flow | primaryReceiver i32 (4), secondaryReceiver i32 (4), primaryWeight f64 (8), secondaryWeight f64 (8), terminalReceiver i32 (4), contributingArea f64 (8), topologicalOrder i32 (4) | 40 | 65N |
+| Task 7 temporary | incomingCount i32 (4) | 4 | **69N**; release after order/accumulation |
+| Task 8 stage-local while flow lives | primaryContributingArea f64 (8), catchmentRoot i32 (4), persistentEligible u8 (1), representedSupport u8 (1), representedIndegree i32 (4), firstReachAssignment i32 (4) | 22 | **87N**; after eligibility/topology extraction is materialized, clear/reuse `persistentEligible` as the four-edge catchment-boundary visited bitmask while `catchmentRoot` remains the membership oracle; no extra dense edge table exists; release after graph/vector geometry is materialized |
+
+Any later implementation need for another full-cell/component-cardinality buffer must first add it to this table/ledger-backed batch and still fit the verified identity-bearing bound; it may not bypass accounting by switching container type. Task 6 processes one depression component at a time from `depressionLabel` and vectorizes only retained bounded records; Task 8 uses the six listed dense arrays plus Task-7 flow arrays and may not create a per-cell adjacency `Map`. Bounded post-vectorization feature registries remain subject to their explicit count/vertex bounds and observed-process-memory evidence.
+
+The mandatory budget negative fixture uses the shared `N=864000` grid and sets `maxScratchBytes=50_000_000`: base (21,600,000 bytes) and Task-6 peak (39,744,000 bytes) fit, but Task-7's batch would require a 59,616,000-byte peak (`69N`). Task 7 must fail `M02_BOUND_EXCEEDED` during its batch preflight with **zero flow arrays allocated**. The normal shared bound `134_217_728` also exceeds the declared Task-8 peak `75,168,000` (`87N`). Audits verify ledger live/peak counts exactly and fail if any full-raster allocation bypasses the budget.
 
 ---
 
@@ -455,7 +828,7 @@ export function validateWorldM0TerrainHydroPolicy(
 ): WorldM0Result<true>;
 ```
 
-The support constant deliberately preserves the already-frozen M0.1 compiler-axis values; M0.2 adds no new recipe axis/version. `validateWorldM0TerrainHydroGeneratorMode(...)` specifically requires `physicalGeneratorVersion === "physical:v1"` for this M0.2 compiler and returns `M02_UNSUPPORTED_GENERATOR_MODE` before the shared M0.1 support validator can collapse that case into a generic version-axis failure. The policy function, not the constants parser, owns cross-object constraints: procedural v1 requires empty `assets.required`, null `mlProposal`, exact 250 m analysis cells, `finite_open_outflow`, the prescribed flow literals, exact divisibility of the physical extent by 250 m, and `analysisCellCount <= maxAnalysisCells`. Task 4 owns the layout-dependent `maxScratchBytes` check because only the concrete scratch allocator knows the actual typed-array byte requirement; it must compute that requirement and fail before allocating any array.
+The support constant deliberately preserves the already-frozen M0.1 compiler-axis values; M0.2 adds no new recipe axis/version. `validateWorldM0TerrainHydroGeneratorMode(...)` specifically requires `physicalGeneratorVersion === "physical:v1"` for this M0.2 compiler and returns `M02_UNSUPPORTED_GENERATOR_MODE` before the shared M0.1 support validator can collapse that case into a generic version-axis failure. The policy function, not the constants parser, owns cross-object constraints: procedural v1 requires empty `assets.required`, null `mlProposal`, exact 250 m analysis cells, `finite_open_outflow`, the prescribed flow literals, exact divisibility of the physical extent by 250 m, and `analysisCellCount <= maxAnalysisCells`. Task 4 introduces the shared `TerrainScratchBudget`, but `maxScratchBytes` has the cross-stage peak-live meaning frozen in §14. Every later stage must preflight its complete typed-array batch through the same ledger before allocating; no stage-local allocation may reinterpret the bound as base-scratch-only.
 
 **Failure codes added:**
 
@@ -507,12 +880,22 @@ Generalize `WorldM0Result<T>` so its error can carry M0.1 or M0.2 codes while pr
     fineAmplitudeMeters: 70,
     stableElevationOffsetMeters: 80,
     stableReliefMultiplier: 0.65,
+    stableAspectRatio: 1.1,
     orogenicElevationOffsetMeters: 700,
     orogenicReliefMultiplier: 1.6,
+    orogenicAspectRatio: 3.0,
+    orogenicRidgeAmplitudeMeters: 500,
+    orogenicRidgeCrossWidthFraction: 0.4,
     volcanicElevationOffsetMeters: 850,
     volcanicReliefMultiplier: 1.8,
+    volcanicAspectRatio: 1.1,
+    volcanicMassifAmplitudeMeters: 650,
+    volcanicRadialFalloffExponent: 2.0,
     sedimentaryElevationOffsetMeters: -250,
     sedimentaryReliefMultiplier: 0.55,
+    sedimentaryAspectRatio: 1.25,
+    sedimentaryBowlDepthMeters: 350,
+    sedimentaryBowlFalloffExponent: 1.5,
     continentalMarginMeters: 30_000,
     seaLevelTreatment: "base_plus_recipe_offset_mm_v1",
     baseSeaLevelMeters: 0,
@@ -522,6 +905,8 @@ Generalize `WorldM0Result<T>` so its error can carry M0.1 or M0.2 codes while pr
   depression: {
     retainedMinAreaM2: 1_000_000,
     retainedMinDepthMeters: 5,
+    protectedClosedBasinRatePer65536: 4_096,
+    maxProtectedClosedBasins: 1_024,
     maxRetainedBasins: 4_096,
     maxRepairOperations: 4_096,
   },
@@ -557,16 +942,7 @@ Generalize `WorldM0Result<T>` so its error can carry M0.1 or M0.2 codes while pr
 
 These are controlled generator-fixture values used to make tasks executable and stress-test identity-bearing representation parameters; they are not universal Earth thresholds. Natural-world evidence reports diagnostics without promoting these numbers into scientific pass bands. The fixture uses an independent audit-side canonical writer matching the frozen byte-format contract, computes SHA-256 with Node `createHash("sha256")`, and writes that digest into the cloned recipe before the production resolver is invoked.
 
-- [ ] **Step 0: Capture reviewed-base production fingerprints before any implementation source changes.**
-
-```bash
-node scripts/canonicalStateFingerprint.mjs --map map1 --years 40 > /tmp/world-m0-m02-map1.before.json
-node scripts/canonicalStateFingerprint.mjs --map map2 --years 40 > /tmp/world-m0-m02-map2.before.json
-```
-
-Keep these `/tmp` files outside Git for Task 16 parity comparison.
-
-- [ ] **Step 1: Create the RED content/policy audit.** The audit must guard absent modules and emit JSON `verdict: "FAIL"`, not crash. It independently asserts: valid empty-asset/null-ML recipe accepted; 250 m constants accepted; exact 1200×720 dimensions derivable; missing content → `M02_CONTENT_MISSING`; duplicate id/version → `M02_CONTENT_DUPLICATE`; wrong bytes → `M02_CONTENT_DIGEST_MISMATCH`; unsupported schema/version → `M02_CONTENT_VERSION_UNSUPPORTED`; malformed/unknown/missing/non-finite/out-of-bound constants → `M02_CONTENT_INVALID`; unsupported M0.2 physical-generator version → `M02_UNSUPPORTED_GENERATOR_MODE`; non-empty required physical-input manifest, despite valid asset resolution, → `M02_REQUIRED_ASSET_UNSUPPORTED`; valid selected ML identity → `M02_ML_UNSUPPORTED`; M0.1 digest validation still executes before the M0.2 policy branch.
+- [ ] **Step 1: Create the RED content/policy audit.** The audit must guard absent modules and emit JSON `verdict: "FAIL"`, not crash. It independently asserts: valid empty-asset/null-ML recipe accepted; 250 m constants accepted; exact 1200×720 dimensions derivable; missing content → `M02_CONTENT_MISSING`; duplicate id/version → `M02_CONTENT_DUPLICATE`; wrong bytes → `M02_CONTENT_DIGEST_MISMATCH`; unsupported schema/version → `M02_CONTENT_VERSION_UNSUPPORTED`; malformed/unknown/missing/non-finite/out-of-bound constants—including invalid family aspect/falloff/amplitude, protected-basin rate/count, and peak-live byte bound—→ `M02_CONTENT_INVALID`; unsupported M0.2 physical-generator version → `M02_UNSUPPORTED_GENERATOR_MODE`; non-empty required physical-input manifest, despite valid asset resolution, → `M02_REQUIRED_ASSET_UNSUPPORTED`; valid selected ML identity → `M02_ML_UNSUPPORTED`; M0.1 digest validation still executes before the M0.2 policy branch.
 
 - [ ] **Step 2: Run RED.**
 
@@ -576,7 +952,7 @@ node scripts/worldM0M02ContentPolicyAudit.mjs
 
 Expected: exit 1 with named missing-module/content-policy checks false.
 
-- [ ] **Step 3: Implement the smallest content/failure/policy surface.** Strict constants parsing rejects unknown keys at every level, unsafe integers for count/byte bounds, non-finite physical values, invalid intrinsic min/max relationships, non-250 cell size, and unsupported boundary/flow literals. `validateWorldM0TerrainHydroPolicy(...)` separately rejects world-size-dependent violations by combining the parsed constants with the existing `WorldM0SpatialGridIdentity` before any allocation. Copy resolved bytes before hashing/decoding. No filesystem APIs in `src/sim/world/physical/`.
+- [ ] **Step 3: Implement the smallest content/failure/policy surface.** Strict constants parsing rejects unknown keys at every level, unsafe integers for count/byte bounds, non-finite physical values, invalid intrinsic min/max relationships, non-250 cell size, unsupported boundary/flow literals, aspect ratios `< 1`, non-positive morphology falloff/amplitude/width values, `protectedClosedBasinRatePer65536` outside `[0,65536]`, and protected/retained count inconsistencies. `validateWorldM0TerrainHydroPolicy(...)` separately rejects world-size-dependent violations by combining the parsed constants with the existing `WorldM0SpatialGridIdentity` before any allocation. Copy resolved bytes before hashing/decoding. No filesystem APIs in `src/sim/world/physical/`.
 
 - [ ] **Step 4: Run GREEN + inherited M0.1 contract checks.**
 
@@ -587,6 +963,8 @@ node scripts/worldM0M01AssetIdentityAudit.mjs
 node scripts/worldM0M01CanonicalIdentityAudit.mjs
 npx tsc -p tsconfig.json --noEmit
 ```
+
+Expected GREEN: every command exits 0; the M0.2 audit reports `verdict: "PASS"` for content/policy ordering and exact typed failures, all three inherited M0.1 audits remain PASS, and TypeScript reports no errors.
 
 - [ ] **Step 5: Commit Task 1.**
 
@@ -621,12 +999,21 @@ export function canonicalStrategicEdge(
   first: WorldM0StrategicCellRef,
   second: WorldM0StrategicCellRef,
 ): WorldM0Result<WorldM0StrategicEdgeRef>;
-export function isNormalizedClosedRing(points: readonly WorldM0PointM[]): boolean;
+export function comparePointM(left: WorldM0PointM, right: WorldM0PointM): number;
+export function signedRingArea2(points: readonly WorldM0PointM[]): WorldM0Result<number>;
+export function isNormalizedClosedRing(
+  points: readonly WorldM0PointM[],
+  role: "outer" | "hole",
+): boolean;
+export function formatTerrainHydroId(
+  namespace: "province" | "terminal" | "catchment" | "drainage-node" | "drainage-reach" | "depression-basin" | "valley" | "floodplain" | "crossing",
+  ordinal: number,
+): WorldM0Result<string>;
 ```
 
 `encodeTerrainHydroAuditNumber(1.5)` must produce the exact big-endian IEEE-754 representation for `1.5`; integer inputs remain decimal numbers at the higher-level writer, while this helper is only for non-integer binary64 string tokens. The audit hard-codes known bit patterns for `1.5`, `-2.25`, and `0.1` and checks that NaN, infinities, and `-0` fail.
 
-- [ ] **Step 1: Write RED schema/numeric audit.** Assert exact candidate key sets; exact crossing candidate key set; no forbidden crossing/human/hydraulic names; strategic edge canonicality and cardinal adjacency; normalized closed-ring checks; fixed ASCII comparator behavior independent of locale; binary64 golden tokens; all candidate registries are readonly persistent arrays/objects and expose no typed-array/scratch field.
+- [ ] **Step 1: Write RED schema/numeric audit.** Assert exact candidate key sets including `axisAngleRadians`, `boundaryRings`, and reach `localContributingAreaM2`; exact crossing candidate key set; no forbidden crossing/human/hydraulic names; strategic edge canonicality and cardinal adjacency; §8 x-then-y point order; exact signed-area orientation (`outer=CCW`, `hole=CW`), canonical smallest start, single repeated closure; fixed ID namespace/16-hex formatter goldens; fixed ASCII comparator behavior independent of locale; binary64 golden tokens; all candidate registries are readonly persistent arrays/objects and expose no typed-array/scratch field. Reverse an upstream→downstream reach geometry in the complete schema fixture and require that it is not accepted/normalized as semantically equivalent.
 
 - [ ] **Step 2: Run RED.**
 
@@ -636,7 +1023,7 @@ node scripts/worldM0M02CandidateSchemaAudit.mjs
 
 Expected: exit 1 because the schema/numeric modules are absent.
 
-- [ ] **Step 3: Implement only the schema + numeric helpers.** Do not add terrain generation, canonical candidate serialization, or hashing in this task. Reject non-cardinal strategic edges. Ring normalization requires at least four points, exact closure, lexicographically minimal first point, and deterministic signed-area orientation chosen once by this module.
+- [ ] **Step 3: Implement only the schema + numeric helpers.** Do not add terrain generation, canonical candidate serialization, or hashing in this task. Reject non-cardinal strategic edges. Ring normalization implements §8 exactly: at least four stored points, exact closure, x-then-y canonical start, explicit outer-CCW/hole-CW signed area, one repeated start, and no implementation-selected orientation. `formatTerrainHydroId` implements the frozen namespaces/16-hex ordinal format. No geometry simplification occurs in this task.
 
 - [ ] **Step 4: Run GREEN.**
 
@@ -644,6 +1031,8 @@ Expected: exit 1 because the schema/numeric modules are absent.
 node scripts/worldM0M02CandidateSchemaAudit.mjs
 npx tsc -p tsconfig.json --noEmit
 ```
+
+Expected GREEN: both commands exit 0; the schema audit reports all exact-key/numeric/ring/ID invariants PASS, including ordered-geometry non-reordering, and TypeScript reports no errors.
 
 - [ ] **Step 5: Commit Task 2.**
 
@@ -677,15 +1066,17 @@ export async function computeTerrainHydroCandidateDigest(
 ): Promise<WorldM0Result<WorldM0TerrainHydroCandidateDigest>>;
 ```
 
-The encoder implements exactly the field/record/numeric ordering frozen above. Its Task-3 checks are limited to runtime shape, exact keys, finite/canonical numeric form, ID uniqueness/order, edge orientation, and ring normalization needed to make the audit bytes unambiguous; whole-candidate graph/topology semantics remain owned by Task 12. It never silently fixes ID order, edge orientation, or ring orientation.
+The encoder implements exactly the field/record/numeric ordering frozen above. Its Task-3 checks are limited to runtime shape, exact keys, finite/canonical numeric form, ID validity/uniqueness, edge orientation, and closed/open geometry normalization needed to make the audit bytes unambiguous; whole-candidate graph/topology semantics remain owned by Task 12. For every schema-declared unordered entity registry it validates IDs, rejects duplicates, copies, and `compareAscii`-sorts the copy by ID exactly as §8 freezes; non-entity unordered collections use only their named §8 keys. Caller insertion order is not an error and caller arrays are never mutated. For semantically ordered reach/ring point sequences it never reverses, rotates, or point-sorts to manufacture equivalence. It does not repair malformed edge or ring orientation.
 
-- [ ] **Step 1: Create one small complete synthetic candidate and a RED identity audit.** Hard-code its expected canonical UTF-8 text. Independently compute the expected SHA-256 with Node `createHash` in the audit. Reverse insertion/order of every semantically unordered registry and prove bytes/digest unchanged. Mutate one valid identity-bearing value in turn—recipe digest, physical-constants digest, province family/effect, one terrain value, coastline point, terminal kind, basin area, reach geometry, crossing geometry—and prove bytes/digest change. Change only a forbidden input key and require schema failure, not silent omission.
+- [ ] **Step 1: Create one small complete synthetic candidate and a RED identity audit.** Hard-code its expected canonical UTF-8 text. Independently compute the expected SHA-256 with Node `createHash` in the audit. Required B01 controls are literal: **A)** reverse every semantically unordered registry plus unordered referenced-ID/provenance-fraction lists and prove bytes/digest unchanged while input arrays remain element-identical; **B)** duplicate one ID/key in each representative unordered collection and require `M02_CANDIDATE_INVALID` with the collection/duplicate path; **C)** reverse an upstream→downstream reach geometry and require different/invalid semantics—not byte identity. Mutate one valid identity-bearing value in turn—recipe digest, physical-constants digest, province axis/family effect, one terrain value, coastline point, terminal kind, basin area, reach `localContributingAreaM2`, crossing geometry—and prove bytes/digest change. Change only a forbidden input key and require schema failure, not silent omission.
 
 - [ ] **Step 2: Run RED.**
 
 ```bash
 node scripts/worldM0M02CandidateIdentityAudit.mjs
 ```
+
+Expected RED: exit 1 because canonical M0.2 candidate encoding/digest is not yet implemented; the audit must identify the missing encoder/digest or failed B01 canonical-identity control rather than crash.
 
 - [ ] **Step 3: Implement fixed-schema canonical writers and digest.** No generic recursive JSON canonicalizer. No locale comparison. Use Task-2 binary64 tokens for all non-integer candidate numbers. Enforce `validation.maxCandidateCanonicalBytes` later in compiler validation; this standalone encoder remains schema-validity focused.
 
@@ -697,6 +1088,8 @@ node scripts/worldM0M01CanonicalIdentityAudit.mjs
 node scripts/worldM0M01RoundTripNegativeControlsAudit.mjs
 npx tsc -p tsconfig.json --noEmit
 ```
+
+Expected GREEN: every command exits 0; B01 unordered reversal is byte/digest-identical without caller mutation, duplicate keys fail `M02_CANDIDATE_INVALID`, ordered reach reversal is non-equivalent, M0.1 identity/round-trip regressions remain PASS, and TypeScript reports no errors.
 
 - [ ] **Step 5: Commit Task 3.**
 
@@ -730,15 +1123,27 @@ export interface TerrainHydroSeedKey {
   readonly d: number;
 }
 
+export type TerrainProtectedBasinIntentKey = TerrainHydroSeedKey;
+
 export async function deriveTerrainHydroSeedKey(
   seed: string,
   physicalGeneratorVersion: string,
 ): Promise<TerrainHydroSeedKey>;
 
+export async function deriveProtectedBasinIntentKey(
+  seed: string,
+  physicalGeneratorVersion: string,
+): Promise<TerrainProtectedBasinIntentKey>;
+
+export function createTerrainScratchBudget(
+  maxScratchBytes: number,
+): WorldM0Result<TerrainScratchBudget>;
+
 export function allocateTerrainScratchGrid(
   extentWidthMeters: number,
   extentHeightMeters: number,
   constants: WorldM0PhysicalConstantsV1,
+  budget: TerrainScratchBudget,
 ): WorldM0Result<TerrainScratchGrid>;
 
 export function generateLandformProvenanceProvinces(
@@ -756,9 +1161,13 @@ export function synthesizeRawTerrain(
 ): WorldM0Result<true>;
 ```
 
-Province assignment cycles through a canonical family order so any valid fixture with at least four provinces contains every family. Province IDs derive after canonical geometry/family sorting (`province:0000`, ...), not generation loop order. Each family uses only its verified constants effect. Province count bounds fail rather than drop provinces.
+`deriveTerrainHydroSeedKey` and `deriveProtectedBasinIntentKey` share one exact stage-key primitive. UTF-8 encode the fixed ASCII stage tag, append one `0x00`, append a 4-byte unsigned big-endian byte length then UTF-8 bytes for `physicalGeneratorVersion`, then the same 4-byte unsigned big-endian length + UTF-8 bytes for `seed`. Reject either encoded length above `0xffffffff`. SHA-256 those exact bytes. `a,b,c,d` are the first 16 digest bytes read as four unsigned **big-endian** u32 words in order; the remaining digest bytes do not enter the key. Tags are exactly `world-m0:m02:terrain-seed:v1` and `world-m0:m02:protected-basin-intent:v1` respectively. No locale, JSON object ordering, UTF-16 code-unit length, platform newline, or host endianness participates.
 
-- [ ] **Step 1: RED audit.** Assert 300×180 km → 1200×720/864,000 exactly; every scratch array has exact bounded length/type; pre-allocation failure when cell/byte limits are exceeded; no object-per-cell structure; same recipe yields byte-identical raw elevation bytes; different seed changes terrain; all four provenance families occur; every province is bounded inside/influencing the physical domain; controlled family-only substitutions change the declared elevation/relief effect; no detailed-geology/material field exists; source contains no `Math.random` and no import from legacy `generate.ts`.
+The Task-4 audit hard-codes this derivation golden for `physicalGeneratorVersion="physical:v1"`, `seed="world-m0-m02-seed-golden"`: terrain digest `660b66c65f541076512c05fddce4f6c450a7acc69f2765094f0b1c9263ebfb9c` and key `{a:1712023238,b:1599344758,c:1361839613,d:3705992900}`; protected-intent digest `02127519dd0c6836c40cbeae86af2b5c1f083618d1c0d328957189ef48ca9631` and key `{a:34764057,b:3708577846,c:3289169582,d:2259626844}`. These literal values discriminate byte order and stage-tag separation.
+
+Province assignment cycles through a canonical family order so any valid fixture with at least four provinces contains every family. Persistent province IDs derive only after §8 canonical physical sorting using `province:<16hex>`, not generation loop order. Every province stores deterministic `axisAngleRadians`; radius/aspect and the exact family spatial operator are §13 identity-bearing behavior. Task 4 also derives the bounded protected-basin intent seed key for Task 6; this key does not classify a basin until §10 raw-component discovery. Province/count bounds fail rather than drop records.
+
+- [ ] **Step 1: RED audit.** Assert 300×180 km → 1200×720/864,000 exactly; base scratch allocation is exactly `25N` bytes through the shared ledger; pre-allocation failure when cell/byte limits are exceeded; no direct full-raster typed-array allocation bypass; no object-per-cell structure; same recipe yields byte-identical raw elevation/province/axis bytes and protected-intent key; the two literal SHA/key goldens above match exactly; different seed changes terrain; all four provenance families occur; every province is bounded inside/influencing the physical domain. F11-style controlled family substitutions independently measure §13 anisotropy, radial concentration, signed center-edge tendency, and local relief—not enum/amplitude labels alone. Audit strict encoding changes when any new morphology constant changes, rejects a hidden source literal that would alter morphology, and confirms no detailed-geology/material field, `Math.random`, or legacy `generate.ts` import.
 
 - [ ] **Step 2: Run RED.**
 
@@ -766,7 +1175,9 @@ Province assignment cycles through a canonical family order so any valid fixture
 node scripts/worldM0M02TerrainProvenanceAudit.mjs
 ```
 
-- [ ] **Step 3: Implement minimum deterministic synthesis.** Macro/meso/fine value fields use physical metre wavelengths and a fixed stateless coordinate mixer. Apply a deterministic broad coast/continental scaffold first, then correlated bands, then continuous province weighting. Enforce min/max raw elevation bounds and finite values. Do not set land/ocean or routing state here.
+Expected RED: exit 1 because the Task-4 scratch/provenance/synthesis surface is absent; at least the named allocation, deterministic terrain, protected-intent, or F11 morphology contract is reported missing/false rather than inferred from another module.
+
+- [ ] **Step 3: Implement minimum deterministic synthesis.** Macro/meso/fine value fields use physical metre wavelengths and the fixed stateless coordinate mixer. Apply deterministic broad coast/continental scaffold, correlated bands, then the exact §13 rotated family morphology terms; no family may collapse to offset/multiplier-only behavior. Enforce min/max raw elevation bounds and finite values. Create the §14 budget first and batch-preflight all five base arrays before allocating any of them. Derive—not materialize densely—the §10 protected-basin intent key. Do not set land/ocean or routing state here.
 
 - [ ] **Step 4: Run GREEN + build.**
 
@@ -775,6 +1186,8 @@ node scripts/worldM0M02TerrainProvenanceAudit.mjs
 npx tsc -p tsconfig.json --noEmit
 npm run build
 ```
+
+Expected GREEN: every command exits 0; exact 1200×720/25N allocation, deterministic seed/protected-intent behavior, bounded rotated province geometry, and morphology-based F11 controls report PASS; TypeScript and the production build succeed.
 
 - [ ] **Step 5: Commit Task 4.**
 
@@ -812,9 +1225,9 @@ export function deriveLandOceanAndCoastline(
 ): WorldM0Result<TerrainCoastlineResult>;
 ```
 
-Land is `rawElevation > baseSeaLevelMeters + seaLevelOffsetMm / 1000`; equality is ocean under v1. Coastline is extracted from exact land/ocean cell-edge transitions in physical coordinates, stitched with deterministic endpoint ordering, simplified only by the verified deterministic tolerance, and normalized before persistent output.
+Land is `rawElevation > baseSeaLevelMeters + seaLevelOffsetMm / 1000`; equality is ocean under v1. Coastline uses the exact §9 cardinal-component/cell-edge topology, including degree-4 diagonal-contact handling and finite-border open polylines, then the exact §8 topology-preserving simplifier and closed/open normalization. Endpoint sorting alone is forbidden.
 
-- [ ] **Step 1: RED analytical coastline audit.** Build an independent island height fixture with known sea-level contour on the 250 m grid. Assert exact land/ocean physical area; closed coastline; no out-of-domain points; no dependence on `terrainKind`; sea-level offset changes expected cells/coastline and candidate-relevant bytes; reversed cell traversal yields identical normalized coastline.
+- [ ] **Step 1: RED analytical coastline audit.** Build an independent island height fixture with known sea-level contour on the 250 m grid. Assert exact land/ocean physical area; closed normalized island/hole rings; no out-of-domain points; no dependence on `terrainKind`; sea-level offset changes expected cells/coastline and candidate-relevant bytes; reversed cell traversal yields identical normalized coastline. Add the mandatory §9 ocean-haloed 2×2 diagonal checkerboard and hard-code the two exact five-point rings; assert the shared degree-4 vertex does not merge components. Add the §9 finite-border left-column fixture and require exactly open `[(250,0),(250,750)]` with no domain-exterior coastline edges. Add one ocean-hole ring and assert outer CCW/hole CW ordering. Add a simplification witness where deleting a within-tolerance point would alter cell-center classification and require that point to remain.
 
 - [ ] **Step 2: Run RED.**
 
@@ -822,7 +1235,9 @@ Land is `rawElevation > baseSeaLevelMeters + seaLevelOffsetMm / 1000`; equality 
 node scripts/worldM0M02CoastlineAudit.mjs
 ```
 
-- [ ] **Step 3: Implement land/ocean classification and deterministic edge stitching.** No marching-squares interpolation is needed for v1 authority: canonical coastline lies on exact 250 m cell boundaries, making area and topology independently auditable. Geometry simplification may remove only collinear/within-tolerance redundant points and must preserve closure/topology.
+Expected RED: exit 1 because the coastline authority is absent; the audit must report missing land/ocean/coast behavior, including the literal checkerboard degree-4 topology oracle, rather than crash.
+
+- [ ] **Step 3: Implement land/ocean classification and §9 deterministic component-aware edge tracing.** No marching-squares interpolation is permitted for v1 authority: canonical coastline uses exact 250 m land↔ocean cell edges only. At degree-4 diagonal contacts, follow the same cardinal land component; at finite-domain endpoints emit the exact oriented open polyline and never add a domain-exterior edge. Allocate/release Task-5 dense labels through §14. Apply only the exact §8 simplifier, preserving closed-ring role or open endpoints/orientation, raster partition, and topology; fail bounds instead of taking an unsafe shortcut.
 
 - [ ] **Step 4: Run GREEN.**
 
@@ -831,6 +1246,8 @@ node scripts/worldM0M02CoastlineAudit.mjs
 node scripts/worldM0M02TerrainProvenanceAudit.mjs
 npx tsc -p tsconfig.json --noEmit
 ```
+
+Expected GREEN: every command exits 0; coastline area/topology/simplification controls PASS, the ocean-haloed 2×2 checkerboard produces exactly two same-component normalized rings, the finite-border fixture produces exactly the one open land↔ocean polyline and no exterior-edge coastline, the upstream terrain/provenance audit remains PASS, and TypeScript reports no errors.
 
 - [ ] **Step 5: Commit Task 5.**
 
@@ -855,7 +1272,7 @@ git commit -m "feat(world-m0): derive land ocean and coastline"
 
 ```ts
 export interface TerrainTerminalSeed {
-  readonly id: string;
+  readonly token: string; // transient physical key; persistent `terminal:*` ID is Task 8 only
   readonly kind: TerrainHydroTerminalKind;
   readonly point: WorldM0PointM;
   readonly retainedDepressionToken: string | null;
@@ -863,12 +1280,14 @@ export interface TerrainTerminalSeed {
 
 export interface TerrainRetainedDepressionAnalysis {
   readonly token: string;
+  readonly canonicalFloorCell: number;
   readonly floorElevationMeters: number;
-  readonly spillElevationMeters: number | null;
+  readonly physicalSpillElevationMeters: number;
+  readonly persistentSpillElevationMeters: number | null;
+  readonly protectedIntentToken: string | null;
   readonly closedEndorheic: boolean;
   readonly areaM2: number;
-  readonly boundary: readonly WorldM0PointM[];
-  readonly outletTerminalSeedId: string | null;
+  readonly boundaryRings: readonly (readonly WorldM0PointM[])[];
 }
 
 export interface TerrainDepressionAnalysis {
@@ -878,15 +1297,27 @@ export interface TerrainDepressionAnalysis {
   readonly repairOperationCount: number;
 }
 
+export function repairDepressionRoutingV1(
+  scratch: TerrainScratchGrid,
+  depressionLabel: Int32Array,
+  componentLabel: number,
+  spillElevationMeters: number,
+  canonicalSpillInsideCell: number,
+  repairOperationCount: number,
+  constants: WorldM0PhysicalConstantsV1,
+): WorldM0Result<number>;
+
 export function analyzeTerrainDepressionsAndBoundaries(
   scratch: TerrainScratchGrid,
+  seaLevelMeters: number,
+  protectedIntentKey: TerrainProtectedBasinIntentKey,
   constants: WorldM0PhysicalConstantsV1,
 ): WorldM0Result<TerrainDepressionAnalysis>;
 ```
 
 The function writes only scratch `routingElevationMeters`, `flatRank`, `terminalIndex`; it never mutates `elevationMeters` or `landMask`.
 
-- [ ] **Step 1: RED F4/F5/F6/F7/F9-style audit.** Independent arrays cover deterministic flat, ordinary depression + spill, protected/retained endorheic depression, exorheic retained basin, explicit external boundary outlet. Snapshot raw elevation bytes before/after and require identity. Assert closed basin has no ocean/external outlet; exorheic basin has floor/spill/outlet; ordinary depression is conditioned but not retained; boundary cells do not all become outlets; every non-closed terrestrial component ends at ocean/external terminal; terminal IDs survive reversed insertion/traversal order; repair-budget exhaustion returns `M02_REPAIR_BUDGET_EXHAUSTED`.
+- [ ] **Step 1: RED F4/F5/F6/F7/F9-style audit.** Independently encode the complete §10 state machine: raw candidate-component membership, equal-height floor plateau, canonical floor, all spill candidates and canonical tuple winner, protection score/token, retention, closed/exorheic status, terminal kind, routing surface, and flat ranks. F5/F6/F7 use the exact 5×5 grid/values in §10.8. Snapshot raw elevation bytes before/after and require identity. F9 proves a high non-selected raster-edge cell is not an external terminal and the one component-level canonical boundary crossing is. Reverse ocean/heap/component discovery and require identical ASCII-sorted terminal tokens, `terminalIndex` bytes, retained tokens, and terminal physical keys. Add a boundary cell that is both ocean-adjacent and on the finite edge; prove the external-seed filter never assigns a second terminal to that cell. Run the §10.9 synthetic F5 routing-mismatch golden directly against `repairDepressionRoutingV1`: one permitted operation must restore exact spill routing/ranks without raw mutation, while zero budget must fail before writes. Force protected count/retained count/repair budget overflow and require their typed failures. The audit also verifies Task-6 `46N` peak and releases every stage-local ledger entry.
 
 - [ ] **Step 2: Run RED.**
 
@@ -894,7 +1325,9 @@ The function writes only scratch `routingElevationMeters`, `flatRank`, `terminal
 node scripts/worldM0M02DepressionBoundaryAudit.mjs
 ```
 
-- [ ] **Step 3: Implement a dependency-free deterministic binary min-heap Priority-Flood.** Queue comparison is explicit `(routingElevation, flatRank, scratchIndex)`. Identify depression floor/depth/area/spill from raw vs conditioned terrain. Retain only depressions satisfying verified physical area/depth criteria or closed-component topology, fail if retained count exceeds the bound, normalize retained-depression analysis geometry, and materialize deterministic terminal seeds. The deterministic lowest valid boundary point repair is used only when a non-closed component otherwise lacks a terminal and consumes one repair budget unit.
+Expected RED: exit 1 because the complete Task-6 depression/boundary authority is absent; at least one named F5/F6/F7/F9 component, spill, protection, terminal, routing-surface, or flat-rank oracle is false/missing.
+
+- [ ] **Step 3: Implement §10 exactly with a dependency-free budget-backed binary min-heap Priority-Flood.** Perform component-level ocean/external seed discovery, provisional fill without touching raw/final routing, canonical component/floor/spill discovery, deterministic protection-score selection, area/depth-or-protection retention, explicit protected-closed versus retained-exorheic classification, final routing-surface copy, and flat-rank BFS. `or closed-component topology` is not a policy: the only intentional closed rule is §10.4 protection. Terminal seeds carry transient tokens only; persistent IDs wait for Task 8. Use §10.9 `repair:v1` only for the exact provisional-spill inconsistency trigger; it performs the one frozen whole-component spill reset, never changes policy/thresholds/spill, and preflights the repair budget before writes. All Task-6 dense buffers are one §14 batch and are released after vectorized analysis is materialized.
 
 - [ ] **Step 4: Run GREEN.**
 
@@ -903,6 +1336,8 @@ node scripts/worldM0M02DepressionBoundaryAudit.mjs
 node scripts/worldM0M02CoastlineAudit.mjs
 npx tsc -p tsconfig.json --noEmit
 ```
+
+Expected GREEN: every command exits 0; F5/F6/F7/F9 exact component/floor/spill/protection/terminal/routing/rank outputs and Task-6 ledger accounting PASS, coastline remains PASS, and TypeScript reports no errors.
 
 - [ ] **Step 5: Commit Task 6.**
 
@@ -913,7 +1348,7 @@ git commit -m "feat(world-m0): condition m0.2 depression routing"
 
 ---
 
-### Task 7: Implement deterministic 8-neighbor D∞-style flow direction and physical contributing area
+### Task 7: Implement exact Tarboton D∞ flow direction and physical contributing area
 
 **Files:**
 - Create: `src/sim/world/physical/terrainFlow.ts`
@@ -926,6 +1361,23 @@ git commit -m "feat(world-m0): condition m0.2 depression routing"
 **Interfaces:**
 
 ```ts
+export type TerrainNeighborOrdinal = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type TerrainFacetOrdinal = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+
+export interface TerrainFlowReceiverDecision {
+  readonly receiverIndex: number;
+  readonly neighborOrdinal: TerrainNeighborOrdinal;
+  readonly weight: number;
+}
+
+export interface TerrainDInfinityCellDecision {
+  readonly selectedFacet: TerrainFacetOrdinal | null;
+  readonly directionRadians: number | null;
+  readonly usedFlatRankFallback: boolean;
+  readonly receivers: readonly TerrainFlowReceiverDecision[];
+  readonly terminalReceiverIndex: number | null;
+}
+
 export interface TerrainFlowAnalysis {
   readonly primaryReceiver: Int32Array;
   readonly secondaryReceiver: Int32Array;
@@ -936,6 +1388,11 @@ export interface TerrainFlowAnalysis {
   readonly topologicalOrder: Int32Array;
 }
 
+export function evaluateDInfinityCellDecision(
+  scratch: TerrainScratchGrid,
+  centerIndex: number,
+): WorldM0Result<TerrainDInfinityCellDecision>;
+
 export function analyzeDInfinityFlow(
   scratch: TerrainScratchGrid,
   terminalSeeds: readonly TerrainTerminalSeed[],
@@ -943,7 +1400,7 @@ export function analyzeDInfinityFlow(
 ): WorldM0Result<TerrainFlowAnalysis>;
 ```
 
-- [ ] **Step 1: RED analytical flow audit.** F1 planar slope: monotonic receiver chain, one terminal, known physical-area accumulation. F2 ridge: no cross-ridge leakage, two catchment sides conserve terrestrial area. F4 flat: no cycle and iteration-order-invariant receivers. Include a controlled diagonal plane where D∞ must split between two neighbors and weights must sum exactly within verified numeric tolerance. Mutate one receiver into a cycle and require `M02_DRAINAGE_CYCLE` from the flow invariant checker.
+- [ ] **Step 1: RED analytical flow audit.** Hard-code independent expectations for all five §11 numerical goldens and call the production-used pure `evaluateDInfinityCellDecision(...)` only as the observed side: assert exact selected facet/null-flat marker, receiver indices/neighbor ordinals, flow angle, weights, and contributing areas. Add F1 planar and F2 ridge whole-grid accumulation arrays, F4 flat ranks, and prove no cross-ridge leakage/cycle/order dependence. Assert two-receiver weights conserve one within `finiteTolerance`, exact zero-weight receiver is omitted, primary rule is larger weight then canonical-neighbor tie, incomplete border facets are skipped, and explicit terminal cells do not invent off-grid neighbors. Mutate one receiver into a cycle and require `M02_DRAINAGE_CYCLE`. Add the §14 50,000,000-byte budget fixture: Task-7 all-or-nothing preflight must fail before **any** flow array exists even though base/Task-6 storage fit. The audit expected values must be literal/oracle-side numbers and arrays; it may not call production helpers to generate them.
 
 - [ ] **Step 2: Run RED.**
 
@@ -951,7 +1408,9 @@ export function analyzeDInfinityFlow(
 node scripts/worldM0M02FlowAudit.mjs
 ```
 
-- [ ] **Step 3: Implement fixed-order facet evaluation and accumulation.** Do not use SCALE-1 neighbors or raw strategic cardinal connectivity. Each terrestrial cell contributes exactly 62,500 m² initially. Acyclic topological order is explicit; no recursive graph traversal whose stack depth scales with world size.
+Expected RED: exit 1 because exact `d_infinity_v1` is absent; the audit must report at least one of the five literal facet/flat goldens, receiver/weight/angle expectations, cycle rejection, or peak-live preflight as missing/false.
+
+- [ ] **Step 3: Implement the §11 equations/table/policies literally.** `evaluateDInfinityCellDecision(...)` is the single pure per-cell decision authority used by `analyzeDInfinityFlow(...)`, so the audit-visible facet/angle result and the accumulated receivers cannot drift into two algorithms. Do not substitute D8/MFD or a D∞-inspired heuristic; do not use SCALE-1 neighbors. Use square-cell `d=250`, the exact facet basis/coordinate vectors, `dz1/dz2`, planar downslope vector, clamp rules, positive-slope and facet-tie tests, angular split equation, terminal/incomplete-facet policy, deterministic flat-rank fallback, and primary rule. Batch-preflight the seven retained flow arrays plus temporary incoming-count array through §14. Accumulate `62_500 m²` per terrestrial cell with iterative Kahn upstream→downstream order; no recursion whose depth scales with the world.
 
 - [ ] **Step 4: Run GREEN.**
 
@@ -960,6 +1419,8 @@ node scripts/worldM0M02FlowAudit.mjs
 node scripts/scale1SpatialAuthorityAudit.mjs
 npx tsc -p tsconfig.json --noEmit
 ```
+
+Expected GREEN: every command exits 0; all five hard-coded D∞/flat goldens, primary receiver, conservation, cycle rejection, border behavior, and Task-7 budget-negative control PASS; SCALE-1 spatial authority remains PASS and TypeScript reports no errors.
 
 - [ ] **Step 5: Commit Task 7.**
 
@@ -976,31 +1437,38 @@ git commit -m "feat(world-m0): add deterministic dinfinity flow"
 - Create: `src/sim/world/physical/terrainDrainage.ts`
 - Create: `scripts/worldM0M02DrainageGraphAudit.mjs`
 
-**Consumes:** raw/routing terrain, split-flow analysis, deterministic terminal seeds, persistence representation constants.
+**Consumes:** raw/routing terrain, split-flow analysis, Task-6 depression analysis/terminal seeds, persistence representation constants.
 
 **Produces:** canonical typed terminals, catchments, nodes, and reaches with deterministic IDs and one downstream receiver.
 
 **Interfaces:**
 
 ```ts
+export interface TerrainRetainedDepressionDrainageLink {
+  readonly depressionToken: string;
+  readonly catchmentId: string;
+  readonly terminalId: string;
+}
+
 export interface TerrainDrainageGraphResult {
   readonly terminals: readonly TerrainHydroTerminal[];
   readonly catchments: readonly TerrainCatchment[];
   readonly nodes: readonly TerrainDrainageNode[];
   readonly reaches: readonly TerrainDrainageReach[];
+  readonly retainedDepressionLinks: readonly TerrainRetainedDepressionDrainageLink[];
 }
 
 export function extractPersistentDrainageGraph(
   scratch: TerrainScratchGrid,
   flow: TerrainFlowAnalysis,
-  terminalSeeds: readonly TerrainTerminalSeed[],
+  depression: TerrainDepressionAnalysis,
   constants: WorldM0PhysicalConstantsV1,
 ): WorldM0Result<TerrainDrainageGraphResult>;
 ```
 
-Persistent `downstreamReachId` is selected through the deterministic primary D∞ receiver and contraction of non-persistent intermediate cells. Contributing-area threshold remains an implementation representation parameter, not a perennial-river assertion.
+Task 8 implements §12 exactly. Eligibility is area-threshold-only on transient D∞ `flow.contributingAreaM2`; downstream closure support follows the deterministic §11 primary receiver through below-threshold cells; catchments and stored persistent reach areas use full primary-receiver physical area. `localContributingAreaM2` is independently assigned from cell membership. While `catchmentRoot` is still live, each retained depression's `canonicalFloorCell` is mapped once to the canonical catchment/terminal and emitted as a bounded `TerrainRetainedDepressionDrainageLink`; links sort by ASCII `depressionToken` and duplicate/missing tokens fail. The threshold remains an implementation representation parameter, not a perennial-river assertion.
 
-- [ ] **Step 1: RED F1/F2/F3/highland audit.** Y-confluence must yield two upstream branches and one downstream trunk after the confluence; contributing area at the downstream reach equals the physical upstream total within declared tolerance; IDs remain identical under reversed input traversal; all reaches have positive length; no reach is uphill by raw terrain gradient; catchment areas sum to terrestrial area exactly within declared physical tolerance; each nonterminal reach has one downstream reach; all paths terminate; threshold stress variants change represented skeleton density but never alter underlying flow/catchment conservation.
+- [ ] **Step 1: RED F1/F2/F3/highland audit.** Hard-code the §12 F1/F2/F3 primary-receiver arrays and exact expected source locations/count, confluence location/count, node/reach counts, downstream links, terminal links, catchment memberships/areas, `contributingAreaM2`, and `localContributingAreaM2`; do not derive expected topology with production extraction. Assert area-only eligibility: hold D∞ area fixed while varying slope/relief and require identical eligible mask/graph; move an area just below/at threshold and require the exact threshold-entry change. Verify a short topology-critical F3 reach survives even when `minReachLengthMeters` is longer. IDs remain identical under reversed traversal; catchment areas partition terrestrial area; all paths terminate. Add exact retained-depression link witnesses: F6's analysis token maps to the catchment ending at its `retained_closed_basin` terminal; F7's token maps to the catchment ending at the fixture's exact `external_domain_outlet` terminal reached by its primary spill route. Add Task-8 §14 peak accounting (`87N`) and exact release of its six dense buffers.
 
 - [ ] **Step 2: Run RED.**
 
@@ -1008,7 +1476,9 @@ Persistent `downstreamReachId` is selected through the deterministic primary D�
 node scripts/worldM0M02DrainageGraphAudit.mjs
 ```
 
-- [ ] **Step 3: Implement graph extraction with bounded adjacency maps keyed by canonical scratch indices only during analysis.** Assign persistent IDs after sorting physical source/confluence/terminal points and canonical reach paths. Geometry coordinates use cell-center physical metres. Derive `channelIncisionMeters` and local relief from terrain cross-section only. Reject node/reach bounds instead of truncating.
+Expected RED: exit 1 because the persistent primary-receiver reduction is absent; the audit must identify a named F1/F2/F3 source/confluence/reach/catchment/area/local-area expectation as missing/false.
+
+- [ ] **Step 3: Implement §12 graph extraction with exactly the budgeted primary-area/catchment/eligible/support/indegree/assignment arrays; do not add a per-cell JS adjacency map/set/object layer.** Form represented support as downstream closure of eligible cells; source/confluence roles use represented indegree; contract only degree-2 noncritical chains; materialize object records only after chains become bounded persistent-feature candidates; never prune a critical short reach. Compute catchment cell-edge `boundaryRings` with §§8–9, primary physical areas, exact reach measurement anchors, and independently assigned local-area witnesses. Before releasing `catchmentRoot`, resolve every bounded `depression.retainedDepressions` token through its `canonicalFloorCell` to exactly one catchment and that catchment's terminal, then sort the resulting links by ASCII token. Derive terrain gradient/relief/incision from raw terrain only. Assign all persistent IDs only after canonical physical ordering. Reject bounds instead of truncating.
 
 - [ ] **Step 4: Run GREEN.**
 
@@ -1017,6 +1487,8 @@ node scripts/worldM0M02DrainageGraphAudit.mjs
 node scripts/worldM0M02FlowAudit.mjs
 npx tsc -p tsconfig.json --noEmit
 ```
+
+Expected GREEN: every command exits 0; exact F1/F2/F3 graph topology, area-only eligibility, critical-short-reach retention, catchment partition, local-area conservation, exact F6/F7 retained-depression links, and Task-8 peak/release checks PASS; flow remains PASS and TypeScript reports no errors.
 
 - [ ] **Step 5: Commit Task 8.**
 
@@ -1060,7 +1532,7 @@ export function deriveTerrainValleyGeometry(
 ): WorldM0Result<TerrainValleyGeometryResult>;
 ```
 
-- [ ] **Step 1: RED geometry audit.** F5 ordinary depression stays absent from retained basin registry; F6 closed basin preserves floor/area/catchment/closed terminal with null spill/outlet where topologically closed; F7 exorheic basin has deterministic spill/outlet and no water level; mountain-to-lowland reach yields terrain-aligned valley geometry; low-slope near-reach terrain can become floodplain candidate while isolated flat terrain cannot; no field named season/frequency/wetland/waterDepth/discharge occurs; polygon area/bounds/closure are independently checked.
+- [ ] **Step 1: RED geometry audit.** Reuse the exact §10.8 independent F5/F6/F7 values: F5 absent from retained registry; F6 retains exact area/boundary/floor/catchment/closed terminal with persistent null spill/outlet but transient physical spill preserved for validation; F7 has spill 4, canonical onward outlet, and no water level. Assert basin `boundaryRings` role/orientation/area independently. As a discriminating input mutation, clone valid F6 analysis but set `persistentSpillElevationMeters=4` while `closedEndorheic=true`; basin finalization must reject it with `M02_CANDIDATE_INVALID` on the closed-basin spill invariant rather than silently reclassify it. Mountain-to-lowland reach yields terrain-aligned valley geometry; low-slope near-reach terrain can become floodplain candidate while isolated flat terrain cannot; no season/frequency/wetland/waterDepth/discharge field occurs; all region rings use §8 simplification/normalization.
 
 - [ ] **Step 2: Run RED.**
 
@@ -1068,7 +1540,9 @@ export function deriveTerrainValleyGeometry(
 node scripts/worldM0M02BasinValleyAudit.mjs
 ```
 
-- [ ] **Step 3: Implement geometry by bounded raster-boundary extraction + deterministic simplification.** Geometry may inspect a bounded physical-radius window per represented reach cell; it must not perform all-cell/all-reach pair scans. Count/vertex overflow is `M02_BOUND_EXCEEDED`.
+Expected RED: exit 1 because retained-basin/valley/floodplain finalization is absent; the audit must identify a named F5/F6/F7 persistent geometry or terrain-derived candidate invariant as missing/false.
+
+- [ ] **Step 3: Finalize basins directly from Task-6 boundary/floor/spill/protection truth without rediscovering or reclassifying closed/exorheic state.** Task 6 has already vectorized retained `boundaryRings`, area, floor, physical/persistent spill, and protection token before releasing its dense labels; Task 8 has emitted exactly one `retainedDepressionLinks` entry per retained token while catchment membership was live. Task 9 consumes those bounded records and never requests a retained member-cell array. Validate the frozen tuple before geometry: `closedEndorheic` requires protected intent + null persistent spill and a linked `retained_closed_basin` terminal; exorheic requires non-null persistent spill and the exact Task-8 linked terminal. Contradictory/missing linkage is `M02_CANDIDATE_INVALID`, not a reclassification opportunity. Derive valley/floodplain `boundaryRings` with §§8–9 cell-union topology and apply the exact safe simplifier. Geometry may inspect a bounded physical-radius window per represented reach cell; no all-cell/all-reach scan. Count/vertex overflow is `M02_BOUND_EXCEEDED`, never unsafe simplification.
 
 - [ ] **Step 4: Run GREEN.**
 
@@ -1077,6 +1551,8 @@ node scripts/worldM0M02BasinValleyAudit.mjs
 node scripts/worldM0M02DrainageGraphAudit.mjs
 npx tsc -p tsconfig.json --noEmit
 ```
+
+Expected GREEN: every command exits 0; F5/F6/F7 persistent basin semantics/rings and terrain-only valley/floodplain candidate controls PASS, drainage graph remains PASS, and TypeScript reports no errors.
 
 - [ ] **Step 5: Commit Task 9.**
 
@@ -1116,7 +1592,9 @@ export function derivePhysicalCrossingCandidates(
 node scripts/worldM0M02CrossingAudit.mjs
 ```
 
-- [ ] **Step 3: Implement bounded spatial edge intersection.** Derive only candidate edges whose physical bounding boxes overlap each reach segment; no all-edge × all-reach search. Canonicalize edge orientation through Task-2 helper. IDs sort by `(reachId, strategicEdge, intersection)` before numbering.
+Expected RED: exit 1 because the physical crossing-candidate derivation is absent; the X1 exact intersection/geometry/forbidden-key oracle must be named as missing/false.
+
+- [ ] **Step 3: Implement bounded spatial edge intersection.** Derive only candidate edges whose physical bounding boxes overlap each reach segment; no all-edge × all-reach search. Canonicalize edge orientation through Task-2 helper. Transient crossing physical records sort by §8 `(reach physical key, strategicEdge,intersection,leftBank,rightBank)` before `crossing:<16hex>` IDs are assigned. Ordered reach geometry is never reversed. Any geometry simplification uses §8 exactly.
 
 - [ ] **Step 4: Run GREEN + legacy crossing source remains untouched.**
 
@@ -1125,6 +1603,8 @@ node scripts/worldM0M02CrossingAudit.mjs
 git diff --exit-code 73cc38b916e236339897c59686638efafd569b6e -- src/sim/world/hydrography.ts src/sim/world/types.ts
 npx tsc -p tsconfig.json --noEmit
 ```
+
+Expected GREEN: every command exits 0; X1 exact physical crossing and forbidden epistemic/hydraulic-key checks PASS, both legacy production files have zero diff from the canonical predecessor, and TypeScript reports no errors.
 
 - [ ] **Step 5: Commit Task 10.**
 
@@ -1169,7 +1649,9 @@ export function aggregateStrategicTerrain(
 node scripts/worldM0M02StrategicAggregationAudit.mjs
 ```
 
-- [ ] **Step 3: Implement exact integer grouping.** Require strategic cell dimensions divisible by 250. Use physical cell area/line intersection lengths for totals. Sort all referenced IDs. Do not emit terrain enum, biome, resource/risk/seasonal/carrying-capacity, movement cost, or legacy river flags.
+Expected RED: exit 1 because strategic aggregation from the 250 m physical basis is absent; the F10 physical-total/cross-resolution/reference-order oracle must be named as missing/false.
+
+- [ ] **Step 3: Implement exact integer grouping.** Require strategic cell dimensions divisible by 250. Use physical cell area/line intersection lengths for totals. Treat all strategic feature-reference lists as semantically unordered: duplicate-check, copy, and ASCII-sort the copy per §8; caller order is not an error. Do not emit terrain enum, biome, resource/risk/seasonal/carrying-capacity, movement cost, or legacy river flags.
 
 - [ ] **Step 4: Run GREEN + SCALE-1 cross-resolution regression.**
 
@@ -1179,6 +1661,8 @@ node scripts/scale1SpatialAuthorityAudit.mjs
 node scripts/scale1Task7CrossResolutionAudit.mjs
 npx tsc -p tsconfig.json --noEmit
 ```
+
+Expected GREEN: every command exits 0; F10 physical-total and unordered-reference canonicalization checks PASS at both strategic resolutions, SCALE-1 authority/cross-resolution regressions remain PASS, and TypeScript reports no errors.
 
 - [ ] **Step 5: Commit Task 11.**
 
@@ -1253,13 +1737,14 @@ parse recipe
 → resolve+digest+strict-decode physical constants
 → run `validateWorldM0TerrainHydroPolicy(recipe, spatialIdentity, constants)` for procedural-v1 empty-required/null-ML and exact 250 m analysis divisibility/cell-count bounds
 → derive recipe identity
-→ derive seed key
+→ derive terrain seed key + protected-basin intent key
+→ create shared peak-live scratch budget
 → provenance provinces
 → allocate/synthesize raw terrain
 → land/ocean + coastline
 → depression/boundary/routing surface
 → D∞ contributing flow
-→ persistent catchments/nodes/reaches
+→ persistent terminals/catchments/nodes/reaches + retained-depression drainage links
 → retained basin geometry
 → valley/floodplain-candidate geometry
 → crossing candidates
@@ -1274,7 +1759,7 @@ parse recipe
 
 `TerrainHydroCompileDiagnostics` contains no wall-clock or process-memory values; those are external evidence only and never affect candidate digest.
 
-- [ ] **Step 1: RED validator/compiler audit.** Compile the valid shared fixture and assert complete candidate identity, exact analysis dimensions, deep immutability, no typed arrays reachable recursively from candidate, no scratch-shaped keys, candidate bytes under verified cap, graph/terminal/coast/area/geometry invariants. Assert policy/content failures occur before terrain functions by instrumenting audit-only function-call counters around module imports or by intentionally supplying impossible generation constants behind a prior invalid content/policy input. Run same compile twice and require canonical bytes + digest identical.
+- [ ] **Step 1: RED validator/compiler audit.** Compile the valid shared fixture and assert complete candidate identity, exact analysis dimensions, deterministic scratch `peakBytes` equals the ledger, deep immutability, no typed arrays reachable recursively from candidate, no scratch-shaped keys, candidate bytes under verified cap, graph/terminal/coast/ring/ID/area/geometry invariants. Independently recompute every persistent reach conservation equation from retained fields and catchment closure. Add a candidate mutation that changes an upstream reach `10→11` and its downstream reach `20→21` (fixture-scaled equivalents are acceptable) so positivity and monotonicity remain true; require failure specifically on `localContributingAreaM2 + upstream = downstream` conservation before any unrelated validator. Assert policy/content failures occur before terrain functions. Run same compile twice and require canonical bytes + digest identical.
 
 - [ ] **Step 2: Run RED.**
 
@@ -1282,7 +1767,9 @@ parse recipe
 node scripts/worldM0M02CompilerAudit.mjs
 ```
 
-- [ ] **Step 3: Implement validator + coordinator.** Validator independently traverses the assembled candidate and checks finite values, unique IDs/references, normalized geometry, candidate bounds, coastline/land-ocean consistency, catchment area conservation, terminal completeness, no reach cycle, no uphill reach, contributing-area monotonicity, basin semantics, crossing exact keys, and forbidden-state absence. Validation does not call generator helpers to rediscover expected answers.
+Expected RED: exit 1 because the whole-candidate validator/compiler coordinator is absent; the audit must name the missing compile/validation boundary, including retained contributing-area conservation, rather than crash.
+
+- [ ] **Step 3: Implement validator + coordinator.** Coordinator owns one §14 budget from base allocation through Task-8 release and refuses any bypass. Validator independently traverses the assembled candidate and checks finite values, exact §8 ID derivation from physical sorting (while allowing unordered registry insertion order), normalized outer/hole rings, candidate bounds, coastline/land-ocean consistency, catchment partition/area, terminal completeness, reach DAG/uphill constraints, exact local contributing-area conservation and terminal/catchment closure, §10 basin semantics, crossing exact keys, and forbidden-state absence. Put conservation validation before generic monotonicity so the targeted preserving-monotonic mutation fails for the intended reason. Validation does not call generator helpers or discarded scratch to rediscover expected answers.
 
 - [ ] **Step 4: Run GREEN + candidate identity + build.**
 
@@ -1293,6 +1780,8 @@ npx tsc -p tsconfig.json --noEmit
 npx tsc -p tsconfig.node.json --noEmit
 npm run build
 ```
+
+Expected GREEN: every command exits 0; whole-candidate validation/compiler and canonical identity report PASS, the positive/monotonic-but-wrong contributing-area mutation is rejected specifically by conservation, both TypeScript projects report no errors, and the production build succeeds.
 
 - [ ] **Step 5: Commit Task 12.**
 
@@ -1322,17 +1811,17 @@ node scripts/worldM0M02ScientificFixturesAudit.mjs
 Expected: exit 1 because the consolidated audit does not exist yet. This RED proves the required matrix evidence is missing, not that a production defect must be manufactured. If resuming an interrupted Task 13 where the audit already exists, preserve it and require the incomplete matrix to exit 1 with the first named missing fixture/oracle before completing the remaining fixture coverage.
 
 - [ ] **Step 1: Encode independent fixtures and analytical expectations:**
-  - **F1 planar slope:** known monotonic drainage, no uphill, no cycle, known physical area accumulation, one terminal.
-  - **F2 two-basin ridge:** exact watershed split, no cross-ridge leakage, domain terrestrial area conserved.
-  - **F3 Y confluence:** two tributaries → one trunk, one downstream receiver after confluence, exact physical contributing-area relation, deterministic IDs.
-  - **F4 flat/tied terrain:** bounded flat resolution, no cycle, receiver identity unchanged by reversed iteration.
-  - **F5 ordinary depression with spill:** routing succeeds, raw terrain unchanged, no retained closed basin invented.
-  - **F6 intentional/protected endorheic basin:** closed terminal only, no ocean/external outlet, basin survives conditioning.
-  - **F7 exorheic depression/lake-basin geometry:** deterministic floor/spill/outlet; no normal water level.
-  - **F8 island/coast:** closed coastline, exact land/ocean agreement, sea-level sensitivity.
+  - **F1 planar slope:** §11 D∞ plane golden plus §12 exact graph source/node/reach/catchment/link/area/local-area outputs; no uphill/cycle; one terminal.
+  - **F2 two-basin ridge:** §11/§12 exact split, receiver/catchment/source/node/reach/terminal outputs, no cross-ridge leakage, domain terrestrial area conserved.
+  - **F3 Y confluence:** §12 hard-coded A/B/C/D/E/terminal locations, 2 sources + 1 confluence + 3 reaches, exact downstream links and `312500 = 187500 + 62500 + 62500` local-area conservation.
+  - **F4 flat/tied terrain:** §10 flat-rank expectations, no cycle, receiver identity unchanged by reversed iteration, plus §11 exact facet-boundary tie fixture.
+  - **F5 ordinary depression with spill:** exact §10.8 member/floor/spill/routing/rank/non-retention/terminal outputs.
+  - **F6 intentional/protected endorheic basin:** exact §10.8 protection token/retention/floor/ranks/closed terminal and no ocean/external outlet.
+  - **F7 exorheic depression/lake-basin geometry:** exact §10.8 component/floor/spill/outlet/ranks/exorheic classification; no normal water level.
+  - **F8 island/coast:** closed island/hole coastline plus finite-border open coastline, exact land/ocean agreement, sea-level sensitivity, §9 checkerboard degree-4 exact rings, and no domain-exterior coastline edges.
   - **F9 explicit external-domain outlet:** explicit typed boundary feature; edge cells are not automatically outlets.
   - **F10 strategic aggregation:** same 250 m physical basis through 1.0/1.5 km projections; identical physical totals/core features.
-  - **F11 provenance-family causality:** all four family-only substitutions have bounded, declared relief effects and no detailed geology fields.
+  - **F11 provenance-family causality:** independently measured §13 anisotropy, radial concentration, signed center-edge tendency, and local-relief effects for all four family-only substitutions; no enum-label/amplitude-only oracle and no detailed geology fields.
   - **F12 resolved-content matrix:** missing/duplicate/wrong digest/malformed/unsupported/out-of-bound content fails before generation.
   - **F13 procedural-v1 asset rejection:** non-empty required physical asset and selected ML fail closed despite valid resolution.
   - **X1 physical crossing:** known strategic-edge/reach intersection yields physical-only candidate with zero epistemic/hydraulic keys.
@@ -1362,6 +1851,8 @@ node scripts/worldM0M02CrossingAudit.mjs
 node scripts/worldM0M02StrategicAggregationAudit.mjs
 node scripts/worldM0M02CompilerAudit.mjs
 ```
+
+Expected GREEN: every command exits 0; F1–F13 and X1 are all present with independent literal/oracle-side expectations, and every narrow audit plus whole compiler audit reports PASS without deriving expected answers from production helpers.
 
 - [ ] **Step 5: Commit Task 13.**
 
@@ -1398,7 +1889,7 @@ Expected: exit 1 because the adversarial audit does not exist yet. If resuming a
 - [ ] **Step 1: Add in-memory candidate corruptions with expected failure reason:**
   1. add a drainage cycle → `M02_DRAINAGE_CYCLE`;
   2. reverse one reach uphill → `M02_CANDIDATE_INVALID` with uphill-reach path;
-  3. corrupt one reach `contributingAreaM2` to a non-positive or downstream-decreasing physical area → `M02_CANDIDATE_INVALID` with the contributing-area/monotonicity path;
+  3. first mutate an upstream/downstream pair by `10→11` and `20→21` (or exact fixture-scaled values), preserving positivity and monotonicity but not `local + upstream = downstream` → `M02_CANDIDATE_INVALID` specifically at the contributing-area conservation path; separately test non-positive/downstream-decreasing area after that;
   4. duplicate, omit, or misassign catchment/basin membership or linkage—including a depression basin whose `catchmentId` points at the wrong catchment → basin/catchment conservation or geometry failure;
   5. remove required terminal → `M02_TERMINAL_INVALID`;
   6. replace an ocean/external terminal with a terrestrial dead end, and separately inject an out-of-contract terminal `kind` literal → `M02_TERMINAL_INVALID` / candidate schema failure for the intended terminal-class reason;
@@ -1406,20 +1897,20 @@ Expected: exit 1 because the adversarial audit does not exist yet. If resuming a
   8. erase protected closed basin → `M02_PROTECTED_BASIN_DESTROYED` or linked basin invariant failure;
   9. inject NaN and Infinity into elevation/geometry → candidate numeric failure;
   10. exceed geometry/node/reach/crossing bound → `M02_BOUND_EXCEEDED`;
-  11. mutate IDs/order while keeping approximate geometry → canonical identity/ID-order validator failure;
+  11. mutate a persistent ID ordinal/namespace while keeping physical geometry → §8 ID-derivation failure. Separately reverse only unordered registry/list insertion order and require **PASS with identical canonical bytes/digest**, proving B01 rather than treating order as corruption;
   12. inject `knownFord`/human confidence into a crossing object → exact-key candidate failure.
 
 - [ ] **Step 2: Add pre-compile corruptions:**
-  13. repair budget zero on a fixture requiring repair → `M02_REPAIR_BUDGET_EXHAUSTED`;
+  13. §10.9 synthetic F5 routing mismatch with repair budget zero → `M02_REPAIR_BUDGET_EXHAUSTED` before either component routing cell changes;
   14. non-empty required manifest under procedural v1 → `M02_REQUIRED_ASSET_UNSUPPORTED`;
   15. selected ML under procedural v1 → `M02_ML_UNSUPPORTED`;
   16. alter physical-constants bytes without updating recipe digest → `M02_CONTENT_DIGEST_MISMATCH`;
   17. duplicate resolved physical constants identity → `M02_CONTENT_DUPLICATE`;
-  18. exceed analysis cell/scratch-byte bound before allocation → `M02_BOUND_EXCEEDED`/analysis-grid failure.
+  18. exceed analysis-cell bound; then use the §14 `50_000_000` byte fixture where base/Task-6 fit but Task-7 peak does not → `M02_BOUND_EXCEEDED` before any Task-7 flow array allocation.
 
 - [ ] **Step 3: Add source-level discrimination mutations with byte-identical restoration:**
   19. bypass the M0.2 resolved-content digest comparison in `content.ts`; the content-policy/adversarial audit must fail;
-  20. change one canonical facet/tie comparator in `terrainFlow.ts`; F4/determinism fixture must fail;
+  20. change one §11 facet equation/order, angular split, primary tie, or flat-rank comparator in `terrainFlow.ts`; the hard-coded D∞/F4 fixture must fail;
   21. inject a production import of `compileTerrainHydro.ts` into a temporary copy/mutation of a legacy production module; the production-firewall audit introduced in Task 16 must reject it. If Task 16 does not yet exist when Task 14 is executed sequentially, stage this mutation case in the adversarial script as disabled-by-missing-audit and activate/require it in Task 16 before closure.
 
 - [ ] **Step 4: Run the completed adversarial matrix before any mutation-driven fix.**
@@ -1439,6 +1930,8 @@ node scripts/worldM0M02AdversarialAudit.mjs
 node scripts/worldM0M02ScientificFixturesAudit.mjs
 git diff --check
 ```
+
+Expected GREEN: all commands exit 0; every corruption is rejected for its declared reason, all reversible source mutations report `restoredByteIdentical: true`, unordered-order positive controls remain byte/digest-identical, the scientific matrix remains PASS, and diff whitespace hygiene is clean.
 
 The adversarial output must state every mutated source file's original/restored SHA-256 and `restoredByteIdentical: true`.
 
@@ -1481,7 +1974,7 @@ Each emitted metric record also carries the interpretation class frozen in Step 
 - valley/floodplain-candidate physical area;
 - crossing-candidate count/density;
 - deterministic repair/conditioning counts;
-- deterministic scratch peak bytes from compiler diagnostics;
+- deterministic **peak-live total** scratch/analysis bytes from the shared §14 compiler ledger;
 - observed `process.memoryUsage()` peak delta around compilation;
 - monotonic wall-clock compile duration from `process.hrtime.bigint()`;
 - canonical candidate byte length;
@@ -1573,14 +2066,40 @@ node scripts/worldM0M02CompatibilityClosureAudit.mjs
 
 Expected: exit 1 because the Task-16 closure audit does not exist yet. This is an evidence-boundary RED, not a request to introduce a production violation. If resuming an interrupted Task 16 where the checker already exists, preserve it and instead use Task-14 source mutation #21 as the RED witness: the checker must exit nonzero for the temporary early-production import and identify the production-authority violation before the helper restores bytes identically.
 
-- [ ] **Step 1: Capture final legacy deterministic fingerprints for comparison with Task-1 reviewed-base witnesses.**
+- [ ] **Step 1: Independently create reviewed-base and current legacy fingerprints in this Task-16 process.** No Task-1 temporary artifact is an input. The immutable reviewed base is exactly `7e3ee5f90f699734d913166b5b77a33d0be65dab`. Use a disposable detached worktree and Task-16-owned temporary directory; verify package manifests are unchanged before reusing the current install.
 
 ```bash
-node scripts/canonicalStateFingerprint.mjs --map map1 --years 40 > /tmp/world-m0-m02-map1.after.json
-node scripts/canonicalStateFingerprint.mjs --map map2 --years 40 > /tmp/world-m0-m02-map2.after.json
+set -euo pipefail
+CURRENT_ROOT="$(pwd)"
+BASE_PARENT="$(mktemp -d /tmp/world-m0-m02-base.XXXXXX)"
+BASE_WT="$BASE_PARENT/worktree"
+FP_DIR="$(mktemp -d /tmp/world-m0-m02-fp.XXXXXX)"
+git status --porcelain=v1 --untracked-files=all > "$FP_DIR/current-status.before"
+cleanup_m02_base() {
+  git worktree remove --force "$BASE_WT" >/dev/null 2>&1 || true
+  rm -rf "$BASE_PARENT" "$FP_DIR"
+}
+trap cleanup_m02_base EXIT INT TERM
+
+git worktree add --detach "$BASE_WT" 7e3ee5f90f699734d913166b5b77a33d0be65dab
+cmp "$CURRENT_ROOT/package.json" "$BASE_WT/package.json"
+cmp "$CURRENT_ROOT/package-lock.json" "$BASE_WT/package-lock.json"
+# M0.2 is forbidden to change dependencies; reuse the already-installed dependency tree read-only.
+ln -s "$CURRENT_ROOT/node_modules" "$BASE_WT/node_modules"
+
+( cd "$BASE_WT" && node scripts/canonicalStateFingerprint.mjs --map map1 --years 40 ) > "$FP_DIR/map1.base.json"
+( cd "$BASE_WT" && node scripts/canonicalStateFingerprint.mjs --map map2 --years 40 ) > "$FP_DIR/map2.base.json"
+node scripts/canonicalStateFingerprint.mjs --map map1 --years 40 > "$FP_DIR/map1.head.json"
+node scripts/canonicalStateFingerprint.mjs --map map2 --years 40 > "$FP_DIR/map2.head.json"
+cmp "$FP_DIR/map1.base.json" "$FP_DIR/map1.head.json"
+cmp "$FP_DIR/map2.base.json" "$FP_DIR/map2.head.json"
+git -C "$BASE_WT" diff --exit-code
+git -C "$BASE_WT" status --short --untracked-files=no
+git status --porcelain=v1 --untracked-files=all > "$FP_DIR/current-status.after"
+cmp "$FP_DIR/current-status.before" "$FP_DIR/current-status.after"
 ```
 
-Task 1 must already have produced `/tmp/world-m0-m02-map1.before.json` and `/tmp/world-m0-m02-map2.before.json` from exact reviewed base `7e3ee5f...`. Any later fingerprint change is a STOP/investigate signal; do not retune legacy coefficients.
+Expected: both fingerprint `cmp` commands succeed. The detached checkout has no tracked changes, and the current checkout's status after the helper is byte-identical to its captured pre-helper status: Task-16's deliberate uncommitted edits may exist, but this helper creates, deletes, or mutates nothing in the current checkout. The symlinked ignored dependency directory is temporary and never source authority. The Task-16 audit/helper owns equivalent `try/finally` cleanup so a failing comparison still removes the detached worktree and temporary artifacts. Any fingerprint change is a STOP/investigate signal; do not retune legacy coefficients.
 
 - [ ] **Step 2: Create the compatibility closure audit, activate Task-14 source mutation #21, then run GREEN on restored source.** The Task-14 mutation must demonstrate that the checker rejects a temporary ordinary-production import and that restoration is byte-identical; the unmodified tree must then satisfy the same checker.
 
@@ -1621,14 +2140,7 @@ node scripts/itemThreeDeterminismAudit.mjs \
 
 Expected: four-way equivalence, daily repeat identity, fresh-process identity, and non-vacuous Item-3 behavior remain true.
 
-- [ ] **Step 6: Compare production fingerprints from exact reviewed base and final M0.2 implementation.**
-
-```bash
-cmp /tmp/world-m0-m02-map1.before.json /tmp/world-m0-m02-map1.after.json
-cmp /tmp/world-m0-m02-map2.before.json /tmp/world-m0-m02-map2.after.json
-```
-
-Expected: byte-identical JSON/fingerprints because no production consumer imports M0.2.
+- [ ] **Step 6: Re-run Task 16's self-owned fresh-base comparison after all reversible source mutations.** Invoke the same Task-16 helper/procedure from Step 1, creating a **new** detached `7e3ee5f...` worktree and new temporary fingerprint directory; do not reuse prior process-local files. Expected: byte-identical Map-1/Map-2 fingerprints, every reversible mutation reports restored byte identity, disposable worktree/temp files are removed, and current-worktree status is byte-identical to the status captured immediately before the helper. Task-16's own deliberate edits are still uncommitted at this point, so **do not** claim the worktree is clean here; the final clean-tree requirement is Step 11 after the Task-16 commit.
 
 - [ ] **Step 7: Run full M0.2 evidence set.**
 
@@ -1702,11 +2214,11 @@ Status must be clean. Stop after M0.2 review/certification handoff. Do not start
 | --- | --- | --- |
 | resolved-content collection | explicit finite record count; each constants payload byte length checked before decode | typed content failure |
 | analysis dimensions | exact extent/250 m; controlled fixture 1200×720; must satisfy verified max cells | fail before allocation |
-| scratch arrays | typed numeric arrays; deterministic byte accounting under `maxScratchBytes` | fail before allocation |
+| transient raster/analysis arrays | one shared §14 peak-live ledger across base + all stage-local/D∞/drainage typed arrays; batch preflight before construction | fail before the requested batch, never exceed peak |
 | province registry | verified identity-bearing count, finite physical radii/influence | fail, never truncate |
-| retained basins | physical area/depth representation criteria + verified max count | fail, never erase basin |
+| retained basins | §10 area+depth or deterministic protected-intent criterion + verified retained/protected max counts | fail, never erase/protection-prune basin |
 | routing repairs | exact `maxRepairOperations` | typed budget exhaustion |
-| drainage nodes/reaches | physical persistence threshold + verified count bounds | fail, never drop arbitrary branch |
+| drainage nodes/reaches | §12 D∞ area-only eligibility, downstream closure support, topology-critical short-reach retention + verified count bounds | fail, never drop arbitrary source/confluence/terminal connection |
 | crossing candidates | geometry-derived + verified max count | fail, never select first N |
 | feature vertices | deterministic physical simplification tolerance + per-feature vertex bounds | fail if simplification cannot satisfy topology-preserving bound |
 | strategic summaries | exactly strategic row×column count from M0.1 grid identity | no hidden extra grid |
@@ -1731,17 +2243,17 @@ No O(N²) all-cell pair operation is permitted. Priority-Flood is O(N log N), D�
 
 | Fixture | Primary tasks | Independent property |
 | --- | --- | --- |
-| F1 planar slope | 7, 8, 13 | monotonic flow, physical contributing area, single terminal |
-| F2 two-basin ridge | 7, 8, 13 | watershed split, no leakage, area conservation |
-| F3 Y confluence | 8, 13 | deterministic graph connectivity and confluence area |
+| F1 planar slope | 7, 8, 13 | hard-coded D∞ facet/weights/area plus exact source/node/reach/catchment/local-area outputs |
+| F2 two-basin ridge | 7, 8, 13 | exact receiver/catchment/source/reach split, no leakage, area conservation |
+| F3 Y confluence | 8, 13 | exact 2-source/1-confluence/3-reach links and independent local-area equation |
 | F4 flat/tied | 6, 7, 13 | deterministic finite flat resolution, no cycle/order dependence |
-| F5 ordinary depression | 6, 9, 13 | routing conditioning without replacing raw terrain/retaining false basin |
-| F6 endorheic basin | 6, 9, 13 | closed terminal survives conditioning |
-| F7 exorheic basin | 6, 9, 13 | floor/spill/outlet geometry without water occupancy |
-| F8 island/coast | 5, 13 | coastline/land-ocean agreement + sea-level sensitivity |
+| F5 ordinary depression | 6, 9, 13 | exact component/floor/spill/routing/ranks/non-retention/terminal golden |
+| F6 endorheic basin | 6, 9, 13 | exact deterministic protection token + closed floor/ranks/terminal/no outlet |
+| F7 exorheic basin | 6, 9, 13 | exact retained-exorheic component/floor/spill/ranks/onward outlet |
+| F8 island/coast | 5, 13 | closed island/hole + finite-border open coastline, land/ocean agreement, sea-level sensitivity, checkerboard exact rings, no domain-exterior coastline |
 | F9 external outlet | 6, 13 | explicit finite-domain outlet, no array-edge semantics |
 | F10 strategic aggregation | 11, 13 | physical-unit invariance across 1.0/1.5 km summaries |
-| F11 provenance causality | 4, 13 | all four families have bounded declared effect |
+| F11 provenance causality | 4, 13 | independent anisotropy/radial/center-edge/local-relief morphology measurements |
 | F12 content failure matrix | 1, 13 | missing/duplicate/digest/schema failure before terrain |
 | F13 procedural asset rejection | 1, 13 | unsupported asset/ML fail closed |
 | X1 crossing candidate | 10, 13 | physical strategic-edge intersection, zero epistemic fields |
@@ -1752,7 +2264,7 @@ No O(N²) all-cell pair operation is permitted. Priority-Flood is O(N log N), D�
 | --- | --- |
 | directed reach cycle | flow/whole-candidate graph validator |
 | uphill reversed reach | whole-candidate terrain-gradient validator |
-| wrong contributing area | reach/catchment physical-area validator |
+| monotonic-but-wrong contributing areas | independent reach `localContributingAreaM2` conservation + catchment closure validator |
 | duplicate/missing basin membership | catchment conservation validator |
 | missing/invalid outlet | terminal completeness validator |
 | ocean terminal changed to dead end | terminal type/topology validator |
@@ -1760,14 +2272,15 @@ No O(N²) all-cell pair operation is permitted. Priority-Flood is O(N log N), D�
 | protected endorheic basin erased | protected basin invariant |
 | NaN/Infinity | numeric/schema/candidate validator |
 | count/geometry bound exceeded | fail-closed bound validator |
+| base scratch fits but Task-7 peak exceeds `maxScratchBytes` | §14 all-or-nothing shared budget preflight before flow allocation |
 | repair budget exceeded | typed repair-budget failure |
-| candidate IDs/order made allocation-dependent | schema/canonical identity/order validator |
+| invalid persistent ID namespace/ordinal | §8 physical-sort ID validator; unordered registry reversal is a positive canonicalization control |
 | `knownFord`/confidence injected in crossing | exact-key crossing structural validator |
 | unsupported ML accepted | procedural policy validator |
 | non-empty required manifest accepted | procedural policy validator |
 | constants bytes changed under same digest | resolved-content SHA-256 validator |
 | content digest check bypassed in source | reversible source mutation + F12 |
-| flow tie comparator made insertion-dependent | reversible source mutation + F4 |
+| D∞ facet/split/primary/flat comparator corrupted | reversible source mutation + hard-coded §11/F4 goldens |
 | 250 m scratch retained in candidate | recursive candidate-shape/scratch audit |
 | M0.2 imported into production early | production-firewall static audit + reversible import mutation |
 
@@ -1833,22 +2346,22 @@ Any deterministic production fingerprint change is a blocker because M0.2 is sha
 | §3.3 crossing candidate ≠ ford | Task 10/13/14; exact-key physical-only crossing schema |
 | §4 content-resolution extension | Task 1 + F12 |
 | §4 M0.2 v1 asset policy | Task 1 + F13 + Task 14 |
-| §5 physical constants profile | Task 1 constants schema + boundedness table |
-| §5 frozen 250 m scratch | Tasks 4/11/12/15; exact 1200×720 fixture |
-| §6 provenance/terrain | Task 4; four-family persistent province registry; strategic provenance summary |
-| §7 finite-open world edge | Task 6 + F9 + terminal validator |
-| §8 depression conditioning | Tasks 6/9 + F5/F6/F7 |
-| §9 D∞ flow | Task 7 + F1/F2/F4 |
-| §10 persistent drainage | Task 8 + F1/F2/F3; identity-bearing physical threshold |
-| §11 coastline/basin/valley/floodplain | Tasks 5/9 + F5–F8 |
+| §5 physical constants profile | Tasks 1/4 + §§13–14 identity-bearing morphology/protection/peak-live constants + boundedness table |
+| §5 frozen 250 m scratch | §14 + Tasks 4/6/7/8/11/12/15; exact 1200×720 fixture and 87N peak ledger |
+| §6 provenance/terrain | §13 + Tasks 1/4/F11; rotated identity-bearing provinces with distinct stable/orogenic/volcanic/sedimentary spatial morphology |
+| §7 finite-open world edge | §10 component-level ocean/external seed policy + Task 6/F9/terminal validator |
+| §8 depression conditioning | §10 complete state machine + Tasks 4/6/9 + exact F5/F6/F7 goldens |
+| §9 D∞ flow | §11 Tarboton equations/facet table/splits/primary/topological accumulation + Task 7 exact numerical goldens |
+| §10 persistent drainage | §12 area-only eligibility/full primary reduction/minReach semantics/local-area conservation + Task 8 exact F1/F2/F3 |
+| §11 coastline/basin/valley/floodplain | §§8–10 exact ring/open-coast/simplifier/checkerboard + Tasks 5/9 + F5–F8 |
 | §12 physical crossings | Task 10 + X1 + epistemic structural mutation |
 | §13 candidate boundary | Task-2 candidate schema; Task 12 scratch-release/forbidden-state validation |
-| §14 determinism/audit identity | numeric encoding contract before Task 3; Tasks 3/14/15 |
+| §14 determinism/audit identity | §8 unordered-copy sorting/point/ring/ID rules + numeric encoding before Task 3; Tasks 2/3/14/15 |
 | §15 typed failures | Task 1 exact M0.2 failure code set; validators throughout |
 | §16 F1–F13 | Task 13 coverage table |
 | §17 adversarial corruptions | Task 14 + corruption table |
 | §18 natural evidence | Task 15 exact diagnostics |
-| §19 boundedness/performance | boundedness table; Tasks 4/9/10/12/15 |
+| §19 boundedness/performance | §14 peak-live shared ledger + boundedness table; Tasks 4/6/7/8/9/10/12/15 |
 | §20 legacy/migration | Task 16 inventory + zero production import |
 | §21 non-goals | Global Constraints + Task-16 forbidden-symbol/source audits |
 | §22 owned facts/invariants/simplifications | candidate schema + Tasks 4–12 + future seams below |
@@ -1856,7 +2369,7 @@ Any deterministic production fingerprint change is a blocker because M0.2 is sha
 | §22 forbidden shortcuts | Global Constraints + Tasks 13/14/16 |
 | §22 reopening triggers | 250 m blocker rule, validator/science escalation, no silent redesign |
 | §23 plan entry conditions | exact reviewed base, strict TDD, separate modules, encoding-before-digest, regressions/firewall |
-| §24 research basis | consumed through accepted reviewed design; implementation plan introduces no competing scientific premise |
+| §24 research basis | accepted reviewed design plus implementation-level verification of Tarboton 1997 D∞/TauDEM and Barnes–Lehman–Mulla 2014 Priority-Flood terminology; no competing scientific premise |
 
 **Spec coverage result expected before plan commit:** every substantive reviewed section maps to at least one concrete task/audit above; no uncovered normative requirement remains.
 
@@ -1867,18 +2380,18 @@ Implementation order is intentionally acyclic:
 1. Task 1 owns generic failures/content/constants/policy.
 2. Task 2 owns persistent types and numeric-order helpers.
 3. Task 3 owns canonical candidate audit encoding/digest, consuming Task 2 only.
-4. Task 4 owns seed/provenance/scratch/raw terrain.
-5. Task 5 adds land/ocean/coast.
-6. Task 6 adds routing/depression/terminals.
-7. Task 7 adds split-flow analysis.
-8. Task 8 adds catchments/nodes/reaches.
-9. Task 9 adds retained-basin finalization and valley/floodplain geometry.
+4. Task 4 owns terrain/protected-intent seed keys, the shared peak-live scratch budget, rotated provenance, and raw terrain.
+5. Task 5 adds land/ocean/coast using §§8–9 closed-ring/open-coast topology, simplifier, and budgeted labels.
+6. Task 6 adds §10 depression components/protection/routing/flat ranks/transient terminal tokens.
+7. Task 7 adds exact §11 D∞ split-flow analysis and primary receiver.
+8. Task 8 adds §12 primary terminals/catchments/nodes/reaches, independent local-area witnesses, and bounded retained-depression→catchment/terminal links while dense membership is still live.
+9. Task 9 consumes those links for retained-basin finalization and adds valley/floodplain geometry.
 10. Task 10 adds crossing candidates.
 11. Task 11 aggregates strategic summaries.
 12. Task 12 is the first whole compiler/validator and consumes every prior production interface.
 13. Tasks 13–16 add independent evidence, mutation discrimination, natural measurements, and firewall/regression closure.
 
-Later tasks do not reference an exported production symbol that lacks an earlier owning task. Scratch-only typed arrays do not leak into persistent types. `TerrainHydroCompileDiagnostics` is introduced only with the compiler and is not used by earlier physical modules.
+Later tasks do not reference an exported production symbol that lacks an earlier owning task. Scratch-only typed arrays and protected-intent tokens do not leak into persistent types. `boundaryRings`, province `axisAngleRadians`, and reach `localContributingAreaM2` are persistent Task-2 fields consumed consistently by Tasks 3/5/8/9/11/12–14; `TerrainRetainedDepressionDrainageLink` is a Task-8 bounded transient-to-persistent bridge consumed only by Task 9/compiler assembly and never serialized as a new candidate authority. `TerrainHydroCompileDiagnostics` is introduced only with the compiler and is not used by earlier physical modules.
 
 ## Authority self-review
 
@@ -1901,13 +2414,59 @@ The implementation described here does not:
 
 1. **250 m operational risk:** 864,000 cells is accepted architecture, but peak memory/runtime must be measured. If bounded typed-array implementation still proves operationally untenable at required fixtures, implementation stops for architecture review instead of changing resolution.
 2. **Binary64 cross-runtime scope:** M0.2 freezes exact reference-runtime audit bytes. M0.5, not M0.2, certifies supported cross-runtime identity and final package quantization.
-3. **Persistent drainage threshold:** `persistenceAreaM2` is an identity-bearing representation abstraction, not a natural universal channel-head law. M0.3 hydration may add runoff/discharge while preserving M0.2 topology unless later evidence triggers formal correction.
+3. **Persistent drainage threshold:** `persistenceAreaM2` is the sole v1 eligibility gate and an identity-bearing representation abstraction, not a natural universal channel-head law. Terrain gradient/relief remain reach properties, not hidden eligibility predicates. M0.3 hydration may add runoff/discharge while preserving M0.2 topology unless later evidence triggers formal correction.
 4. **Retained depression occupancy:** M0.2 stores geomorphic basin/spill/closed topology only. M0.3 decides climatological water occupancy/level.
 5. **Crossing semantics:** M0.2 stops at terrain geometry. M0.3 supplies normal hydraulics; M0.7 later migrates physical crossing providers; human crossing/navigation knowledge remains separate.
 6. **Provenance depth:** four families are intentionally broad. M0.3 refines them into broad substrate/hydraulic classes; WORLD-1 owns detailed geology/material occurrence.
 7. **Finite-domain external outlets:** v1 materializes explicit off-map terminals and no external inflow. A future regional coupling model would require a new versioned boundary contract.
 8. **No delta hydraulics:** one-receiver persistent topology avoids fabricated distributary hydraulics. Rich delta/distributary behavior is a named future seam.
 9. **Portable authority docs absent:** the two prompt-named portable authority files were not present in inspected Git/worktrees. This plan relies on higher-ranked accepted Git/source/spec evidence and records the absence rather than fabricating status content.
+
+## Implementation-plan review-finding closure matrix
+
+| Finding | Corrected authority | Required discriminating evidence |
+| --- | --- | --- |
+| B01 unordered registry contradiction | canonical encoding + §8 + Tasks 2–3/14 | reverse unordered registries → same bytes/digest/no mutation; duplicate ID → typed fail; reverse ordered reach points → non-equivalent |
+| B02 coastline degree-4 ambiguity | §§8–9 + Task 5 + F8 | exact ocean-haloed 2×2 checkerboard two-ring coordinates + swapped-diagonal counterpart; finite-border open coast proves domain exterior is not ocean |
+| B03 depression state machine | §§10.1–10.9 + Tasks 4/6/7/8/9/12/13/14 | exact F5/F6/F7 component/floor/spill/protection/routing/rank/terminal goldens plus `repair:v1` mismatch/budget golden |
+| B04 D∞ mathematics | §11 + Task 7/F1/F2/F4 | hard-coded facet/vector/angle/weight/receiver/area goldens for split/cardinal/facet-tie/border plus exact flat fallback |
+| B05 persistent reduction | §12 + Task 8/F1–F3 | area-only eligibility, exact sources/confluence/nodes/reaches/links/catchments/areas/short critical reach |
+| M01 provenance morphology | constants schema + §13 + Tasks 1/4/F11 | exact delta-field anisotropy/radial-concentration/center-edge/q90-local-relief metrics + directional/radial source mutation discrimination |
+| M02 peak scratch accounting | constants + §14 + Tasks 1/4/5/6/7/8/12/15 | all scalable dense state ledger-owned; no per-cell/component JS bypass; base fits, Task-7 peak fails pre-allocation; exact live/peak/release checks |
+| M03 geometry/identity choices | §§8–9 + Tasks 2–3/5/8/9/10 | x/y order, CCW/CW closed rings + oriented finite-border open coast, complete semantic keys/16-hex entity namespaces, topology-safe simplifier failure-on-bound |
+| M04 contributing-area oracle | candidate reach field + §12 + Tasks 8/12/14 | monotonic-positive 10→11 / 20→21 style mutation fails local-area conservation specifically |
+| M05 Task-16 baseline provenance | Task 16 | fresh detached `7e3ee5f...` execution and Task-16-owned temp files; no Task-1 temporary dependency |
+
+**Closure result required before this correction is implementation-ready:** all ten rows are represented in RED/GREEN task instructions and no row requires an implementation worker to invent a canonical policy.
+
+**Required review dependency traces:**
+
+| Trace | Frozen path |
+| --- | --- |
+| B03 | §10 → Task 4 protected intent → Task 6 depression/repair → Task 7 terminal-aware flow → Task 8 terminal/catchment graph → Task 9 retained geometry → Task 12 validator → Tasks 13/14 fixtures/adversarial controls |
+| B04 → B05 → M04 | §11 exact D∞ → Task 7 split/primary analysis → §12/Task 8 persistent reduction → `localContributingAreaM2` → Tasks 12/14 conservation oracle |
+| M01 | physical constants → Task 1 strict decoder/identity → §13/Task 4 morphology → F11 exact morphology oracle |
+| M02 | physical constants `maxScratchBytes` → §14 shared ledger → every dense allocation stage Tasks 4/5/6/7/8 and compiler Task 12 → Task 15 peak-live evidence |
+| M03 | §8 geometry/identity canon → Tasks 2/3/5/8/9/10 producers/encoder |
+
+## Zero-context executability questions
+
+Before handoff, answer from this document alone:
+
+- **Can D∞ be implemented without inventing equations? YES.** §11 freezes coordinates, row/column direction, physical centers, terrain-8 order, all eight facet vectors, elevation differences, planar downslope vector/equations, clamping, angles, weights, receiver/primary ties, border/terminal/flat behavior, topological order, physical-area accumulation, and five hard-coded numerical goldens.
+- **Can F5/F6/F7 be classified without inventing basin policy? YES.** §§10.1–10.9 freeze component discovery/order, equal-height floors, spill candidates/ties, protection derivation, retention, closed/exorheic classification, finite-boundary interaction, raw/routing separation, flat ranks, and exact repair behavior with literal goldens.
+- **Can checkerboard coastline be generated without choosing topology? YES.** §§8–9 freeze cardinal components, land-left cell-edge tracing, same-component degree-4 continuation, no diagonal pairing, closed/open representation, and literal ocean-haloed checkerboard coordinates.
+- **Can F1/F2/F3 persistent graph be constructed without choosing topology? YES.** §12 freezes primary receiver, area-only eligibility, threshold entry, source/confluence/terminal roles, deterministic chain contraction, exact `minReachLengthMeters` coalescing, catchments, reach orientation/areas, downstream links, and IDs after physical ordering, with literal F1/F2/F3 outputs.
+
+- Can Task 3 canonicalize an unordered registry without deciding whether caller order is invalid? **Yes: §8/B01 says copy-sort unordered collections and preserve ordered geometry.**
+- Can Task 5 trace the checkerboard saddle without selecting a diagonal pairing? **Yes: §9 says cardinal land components and same-component continuation, with exact expected rings.**
+- Can Tasks 6/9 classify F5/F6/F7 without inventing closed-basin/spill/flat policy? **Yes: §10 freezes component, floor, spill, protection, retention, terminal, routing, and rank rules.**
+- Can Task 7 implement `d_infinity_v1` without reopening Tarboton to determine missing equations? **Yes: §11 freezes coordinates, eight facets, equations, clamping, angles, weights, ties, borders, flats, primary receiver, and iterative accumulation.**
+- Can Task 8 determine eligibility/source/confluence/threshold entry/chain contraction/short reach/catchment/area semantics without inventing a channel law? **Yes: §12 freezes them and makes eligibility area-only.**
+- Can a worker determine ring orientation, point order, ID format, or simplifier? **No discretion remains: §8 is exact.**
+- Can any stage interpret `maxScratchBytes` as its private array budget? **No: §14 is one peak-live ledger.**
+- Can Task 12 reject a positive/monotonic but numerically wrong reach area using retained state only? **Yes: `localContributingAreaM2` is independently retained and catchment closure is checked.**
+- Can Task 16 run alone in a fresh process after Tasks 1–15 are committed? **Yes: it creates and cleans its own immutable-base worktree and fingerprints.**
 
 ## Writing-plans self-review procedure before committing this document
 
@@ -1919,8 +2478,10 @@ PLAN=docs/superpowers/plans/2026-08-28-world-m0-m02-terrain-hydrography.md
 # 1. Exact required header/path
 head -n 3 "$PLAN"
 
-# 2. Placeholder scan: any match is a plan defect to remove
-grep -nEi 'TB''D|TO''DO|FIX''ME|implement la''ter|appro''priate|handle edge ca''ses|write te''sts|similar t''o|et''c\.|as ne''eded|future wo''rk' "$PLAN" && exit 1 || true
+# 2. Placeholder / implementation-discretion scan. Print every occurrence and review it.
+# A match is allowed only when it is a concrete normative instruction (for example,
+# an algorithm saying which candidate to select); ambiguous future-worker discretion is a defect.
+grep -nEi 'TB''D|TO''DO|FIX''ME|implement la''ter|appro''priate|sim''ilar to|as ne''eded|handle edge ca''ses|cho''ose|chosen during implement''ation|decide during implement''ation|implementation-def''ined|write te''sts|et''c\.|future wo''rk' "$PLAN" || true
 
 # 3. Required fixture names / core contracts
 for term in \
@@ -1933,7 +2494,12 @@ for term in \
   'knownFord' \
   '250 m' \
   '1200 × 720' \
-  '864,000'; do
+  '864,000' \
+  'localContributingAreaM2' \
+  'protectedClosedBasinRatePer65536' \
+  'checkerboard' \
+  'Tarboton' \
+  'TerrainScratchBudget'; do
   grep -nF "$term" "$PLAN" >/dev/null || exit 1
 done
 
@@ -1967,5 +2533,8 @@ Then manually perform:
 5. **Task dependency check:** each task is executable in order without relying on an undefined future production interface.
 6. **Command check:** every task has an exact RED command, implementation boundary, GREEN/regression command, and commit command.
 7. **Legacy check:** ordinary production files remain untouched and the final firewall has an adversarial import mutation proving discrimination.
+8. **Algorithm completeness:** answer YES from the plan itself to every zero-context question above—especially exact D∞ equations, F5/F6/F7 basin policy, checkerboard pairing, and F1/F2/F3 persistent reduction.
+9. **Review closure:** verify B01–B05 and M01–M05 each map to a corrected section, a RED expectation, a GREEN command, and a targeted positive/negative control.
+10. **Task-16 independence:** search for stale Task-1 fingerprint dependency language and require zero matches; Task 16 must create/clean its own immutable-base comparison evidence.
 
-Only after all seven checks pass should this plan document be committed and pushed. The plan itself is the only intended file change on `chatgpt/plan/world-m0-m02`.
+Only after all ten checks pass should this plan document be committed and pushed. The plan itself is the only intended file change on `chatgpt/plan/world-m0-m02`.
