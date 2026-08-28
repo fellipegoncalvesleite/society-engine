@@ -72,3 +72,20 @@ export function parseWorldM0ContentIdentity(
     },
   };
 }
+
+export async function sha256DigestBytes(
+  bytes: Uint8Array,
+): Promise<WorldM0Sha256Digest> {
+  const ownedBytes = Uint8Array.from(bytes);
+
+  const digest = await globalThis.crypto.subtle.digest(
+    "SHA-256",
+    ownedBytes,
+  );
+
+  const hex = Array.from(new Uint8Array(digest), (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("");
+
+  return `sha256:${hex}` as WorldM0Sha256Digest;
+}
