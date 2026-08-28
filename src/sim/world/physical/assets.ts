@@ -120,3 +120,104 @@ export function parseWorldM0MlProposalIdentity(
     },
   };
 }
+
+export interface WorldM0ResolvedAsset {
+  readonly assetId: string;
+  readonly version: string;
+  readonly digest: WorldM0Sha256Digest;
+}
+
+function buildResolvedAssetIndex(
+  resolved: readonly WorldM0ResolvedAsset[],
+): WorldM0Result<Map<string, WorldM0ResolvedAsset>> {
+  if (!Array.isArray(resolved)) {
+    return worldM0Failure("INVALID_RECIPE", "resolved", "resolved assets must be an array");
+  }
+  const index = new Map<string, WorldM0ResolvedAsset>();
+  for (let position = 0; position < resolved.length; position += 1) {
+    const candidate: unknown = resolved[position];
+    if (!isWorldM0Record(candidate) ||
+        !hasExactWorldM0Keys(candidate, ["assetId", "version", "digest"])) {
+      return worldM0Failure("INVALID_RECIPE", `resolved[${position}]`, "invalid resolved asset identity shape");
+    }
+    const assetId = candidate.assetId;
+    const version = candidate.version;
+    const digest = candidate.digest;
+    if (!isWorldM0IdentityToken(assetId)) {
+      return worldM0Failure("INVALID_RECIPE", `resolved[${position}].assetId`, "invalid identity token");
+    }
+    if (!isWorldM0IdentityToken(version)) {
+      return worldM0Failure("INVALID_RECIPE", `resolved[${position}].version`, "invalid identity token");
+    }
+    if (!isWorldM0Sha256Digest(digest)) {
+      return worldM0Failure("INVALID_RECIPE", `resolved[${position}].digest`, "invalid SHA-256 digest");
+    }
+    const key = `${assetId}\u0000${version}`;
+    if (index.has(key)) {
+      return worldM0Failure("INVALID_RECIPE", `resolved[${position}]`, "duplicate resolved asset identity");
+    }
+    index.set(key, { assetId, version, digest });
+  }
+  return { ok: true, value: index };
+}
+
+export function validateRequiredAssetResolution(
+  manifest: WorldM0AssetManifest,
+  resolved: readonly WorldM0ResolvedAsset[],
+): WorldM0Result<true> {
+  const parsedManifest = parseWorldM0AssetManifest(manifest);
+  if (!parsedManifest.ok) return parsedManifest;
+  const resolvedIndex = buildResolvedAssetIndex(resolved);
+  if (!resolvedIndex.ok) return resolvedIndex;
+
+  for (const required of parsedManifest.value.required) {
+    const key = `${required.assetId}\u0000${required.version}`;
+    const actual = resolvedIndex.value.get(key);
+    if (actual === undefined) {
+      return worldM0Failure(
+        "MISSING_REQUIRED_ASSET",
+        `assets.required:${required.assetId}@${required.version}`,
+        "required immutable asset identity is missing",
+      );
+    }
+    if (actual.digest !== required.digest) {
+      return worldM0Failure(
+        "ASSET_DIGEST_MISMATCH",
+        `assets.required:${required.assetId}@${required.version}`,
+        "resolved asset digest disagrees with required manifest identity",
+      );
+    }
+  }
+  return { ok: true, value: true };
+}
+
+export function validateSelectedMlResolution(
+  mlProposal: WorldM0MlProposalIdentity | null,
+  resolved: readonly WorldM0ResolvedAsset[],
+): WorldM0Result<true> {
+  if (mlProposal === null) return { ok: true, value: true };
+
+  const parsedProposal = parseWorldM0MlProposalIdentity(mlProposal);
+  if (!parsedProposal.ok) return parsedProposal;
+  const resolvedIndex = buildResolvedAssetIndex(resolved);
+  if (!resolvedIndex.ok) return resolvedIndex;
+
+  const selected = parsedProposal.value;
+  const key = `${selected.assetId}\u0000${selected.assetVersion}`;
+  const actual = resolvedIndex.value.get(key);
+  if (actual === undefined) {
+    return worldM0Failure(
+      "SELECTED_ML_ASSET_MISSING",
+      "mlProposal",
+      "selected immutable ML asset identity is missing",
+    );
+  }
+  if (actual.digest !== selected.assetDigest) {
+    return worldM0Failure(
+      "ASSET_DIGEST_MISMATCH",
+      "mlProposal.assetDigest",
+      "resolved selected ML digest disagrees with recipe identity",
+    );
+  }
+  return { ok: true, value: true };
+}

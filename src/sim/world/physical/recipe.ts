@@ -12,8 +12,17 @@ import {
   isWorldM0Record,
   parseWorldM0ContentIdentity,
 } from "./identity";
-import type { WorldM0AssetManifest, WorldM0MlProposalIdentity } from "./assets";
-import { parseWorldM0AssetManifest, parseWorldM0MlProposalIdentity } from "./assets";
+import type {
+  WorldM0AssetManifest,
+  WorldM0MlProposalIdentity,
+  WorldM0ResolvedAsset,
+} from "./assets";
+import {
+  parseWorldM0AssetManifest,
+  parseWorldM0MlProposalIdentity,
+  validateRequiredAssetResolution,
+  validateSelectedMlResolution,
+} from "./assets";
 import type { WorldM0SpatialRecipe } from "./spatialGrid";
 import { deriveWorldM0SpatialGridIdentity, parseWorldM0SpatialRecipe } from "./spatialGrid";
 
@@ -148,7 +157,27 @@ export function parseWorldRecipe(input: unknown): WorldM0Result<WorldRecipeV1> {
   } else {
     const parsedMl = parseWorldM0MlProposalIdentity(input.mlProposal);
     if (!parsedMl.ok) return parsedMl;
-    mlProposal = parsedMl.value;
+    const selectedMlProposal = parsedMl.value;
+    mlProposal = selectedMlProposal;
+    const manifestMatches = assets.value.required.filter((asset) =>
+      asset.role === "ml_model" &&
+      asset.assetId === selectedMlProposal.assetId &&
+      asset.version === selectedMlProposal.assetVersion
+    );
+    if (manifestMatches.length !== 1) {
+      return worldM0Failure(
+        "INVALID_RECIPE",
+        "mlProposal",
+        "selected ML identity must bind exactly one ml_model manifest record",
+      );
+    }
+    if (manifestMatches[0].digest !== selectedMlProposal.assetDigest) {
+      return worldM0Failure(
+        "INVALID_RECIPE",
+        "mlProposal.assetDigest",
+        "selected ML digest must equal the bound manifest digest",
+      );
+    }
   }
 
   return {
@@ -205,4 +234,17 @@ export function validateWorldRecipeSupport(
     );
   }
   return { ok: true, value: recipe };
+}
+
+export function validateWorldRecipeAssetResolution(
+  recipe: WorldRecipeV1,
+  resolved: readonly WorldM0ResolvedAsset[],
+): WorldM0Result<true> {
+  const parsed = parseWorldRecipe(recipe);
+  if (!parsed.ok) return parsed;
+
+  const selectedMl = validateSelectedMlResolution(parsed.value.mlProposal, resolved);
+  if (!selectedMl.ok) return selectedMl;
+
+  return validateRequiredAssetResolution(parsed.value.assets, resolved);
 }
