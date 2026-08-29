@@ -99,15 +99,26 @@ const cw = Object.freeze([ccw[0], ccw[3], ccw[2], ccw[1], ccw[0]]);
 const nonCanonicalStart = Object.freeze([ccw[1], ccw[2], ccw[3], ccw[0], ccw[1]]);
 const duplicateStart = Object.freeze([ccw[0], ccw[1], ccw[0], ccw[3], ccw[0]]);
 const doubleClosure = Object.freeze([...ccw, ccw[0]]);
+const selfIntersecting = Object.freeze([
+  Object.freeze({ xM: 0, yM: 0 }),
+  Object.freeze({ xM: 4, yM: 0 }),
+  Object.freeze({ xM: 1, yM: 3 }),
+  Object.freeze({ xM: 3, yM: 3 }),
+  Object.freeze({ xM: 0, yM: 0 }),
+]);
 
 const upstreamPoint = Object.freeze({ xM: 10, yM: 20 });
 const downstreamPoint = Object.freeze({ xM: 30, yM: 20 });
 const reachGeometry = Object.freeze([upstreamPoint, Object.freeze({ xM: 20, yM: 21 }), downstreamPoint]);
 const reversedReachGeometry = Object.freeze([...reachGeometry].reverse());
-const orderedReachAccepted = (points) =>
-  points.length >= 2 &&
-  points[0].xM === upstreamPoint.xM && points[0].yM === upstreamPoint.yM &&
-  points.at(-1).xM === downstreamPoint.xM && points.at(-1).yM === downstreamPoint.yM;
+const sameFixturePoint = (left, right) => left?.xM === right?.xM && left?.yM === right?.yM;
+const fixtureReachDirectionsMatchDeclaredNodes = (fixture) => fixture.drainageReaches.every((reach) => {
+  const upstream = fixture.drainageNodes.find((node) => node.id === reach.upstreamNodeId);
+  const downstream = fixture.drainageNodes.find((node) => node.id === reach.downstreamNodeId);
+  return upstream !== undefined && downstream !== undefined && Array.isArray(reach.geometry) &&
+    reach.geometry.length >= 2 && sameFixturePoint(reach.geometry[0], upstream.point) &&
+    sameFixturePoint(reach.geometry.at(-1), downstream.point);
+});
 
 const candidate = Object.freeze({
   schema: "world-m0-terrain-hydro-candidate/v1",
@@ -118,10 +129,21 @@ const candidate = Object.freeze({
   numericKernelVersion: "numeric:v1",
   analysis: Object.freeze({ cellSizeMeters: 250, width: 1200, height: 720, boundaryModel: "finite_open_outflow", flowAlgorithm: "d_infinity_v1" }),
   provenanceProvinces: Object.freeze([]), strategicTerrain: Object.freeze([]), coastline: Object.freeze([]),
-  terminals: Object.freeze([]), catchments: Object.freeze([]), drainageNodes: Object.freeze([]),
+  terminals: Object.freeze([]), catchments: Object.freeze([]),
+  drainageNodes: Object.freeze([
+    Object.freeze({ id: "drainage-node:0000000000000000", point: upstreamPoint, kind: "source", terminalId: null }),
+    Object.freeze({ id: "drainage-node:0000000000000001", point: downstreamPoint, kind: "terminal", terminalId: "terminal:0000000000000000" }),
+  ]),
   drainageReaches: Object.freeze([Object.freeze({ id: "drainage-reach:0000000000000000", upstreamNodeId: "drainage-node:0000000000000000", downstreamNodeId: "drainage-node:0000000000000001", downstreamReachId: null, catchmentId: "catchment:0000000000000000", terminalId: "terminal:0000000000000000", geometry: reachGeometry, lengthMeters: 20, contributingAreaM2: 62500, localContributingAreaM2: 62500, meanTerrainGradient: 0.01, localReliefMeters: 4, channelIncisionMeters: 1 })]),
   depressionBasins: Object.freeze([]), valleys: Object.freeze([]), floodplainCandidates: Object.freeze([]), crossingCandidates: Object.freeze([]),
   deterministicProvenance: Object.freeze({ repairOperationCount: 0, conditionedDepressionCount: 0, retainedDepressionCount: 0 }),
+});
+const reversedReachCandidate = Object.freeze({
+  ...candidate,
+  drainageReaches: Object.freeze(candidate.drainageReaches.map((reach) => Object.freeze({
+    ...reach,
+    geometry: reversedReachGeometry,
+  }))),
 });
 
 const forbiddenNames = ["knownFord", "confidence", "fordability", "risk", "crossingClass", "baseCrossingCost", "waterDepth", "width", "velocity", "watercraft", "bridge", "ferry", "precipitation", "runoff", "recharge", "baseflow", "discharge", "regime", "wetted"];
@@ -132,6 +154,10 @@ const candidateArrayTypesReadonly = persistentArrayProperties.every((name) => {
   const property = candidateDeclaration?.members.find((member) => memberName(member) === name);
   return property?.type?.getText(sourceFile).startsWith("readonly ") === true;
 });
+const reachGeometryProperty = interfaces.get("TerrainDrainageReach")?.members.find(
+  (member) => memberName(member) === "geometry",
+);
+const reachGeometryIsOrderedReadonlyArray = reachGeometryProperty?.type?.getText(sourceFile) === "readonly WorldM0PointM[]";
 
 const originalLocaleCompare = String.prototype.localeCompare;
 let asciiWithoutLocale = false;
@@ -169,11 +195,14 @@ const checks = {
   signedAreaOrientationExact: okValue(call("signedRingArea2", ccw)) === 8 && okValue(call("signedRingArea2", cw)) === -8,
   normalizedRingRoles: call("isNormalizedClosedRing", ccw, "outer") === true && call("isNormalizedClosedRing", cw, "hole") === true && call("isNormalizedClosedRing", ccw, "hole") === false && call("isNormalizedClosedRing", cw, "outer") === false,
   ringStartAndClosureStrict: call("isNormalizedClosedRing", nonCanonicalStart, "outer") === false && call("isNormalizedClosedRing", duplicateStart, "outer") === false && call("isNormalizedClosedRing", doubleClosure, "outer") === false && call("isNormalizedClosedRing", ccw.slice(0, 3), "outer") === false,
+  selfIntersectingRingRejected: okValue(call("signedRingArea2", selfIntersecting)) === 6 && call("isNormalizedClosedRing", selfIntersecting, "outer") === false,
   binary64Goldens: okValue(call("encodeTerrainHydroAuditNumber", 1.5)) === "f64:3ff8000000000000" && okValue(call("encodeTerrainHydroAuditNumber", -2.25)) === "f64:c002000000000000" && okValue(call("encodeTerrainHydroAuditNumber", 0.1)) === "f64:3fb999999999999a",
   invalidBinary64Rejected: [NaN, Infinity, -Infinity, -0].every((value) => failureCode(call("encodeTerrainHydroAuditNumber", value)) === "M02_CANDIDATE_INVALID"),
   idGoldens: ["province", "terminal", "catchment", "drainage-node", "drainage-reach", "depression-basin", "valley", "floodplain", "crossing"].every((namespace) => okValue(call("formatTerrainHydroId", namespace, 0)) === `${namespace}:0000000000000000`) && okValue(call("formatTerrainHydroId", "crossing", 0xabcdef)) === "crossing:0000000000abcdef",
   idBoundsTyped: failureCode(call("formatTerrainHydroId", "province", -1)) === "M02_BOUND_EXCEEDED" && failureCode(call("formatTerrainHydroId", "province", Number.MAX_SAFE_INTEGER + 1)) === "M02_BOUND_EXCEEDED",
-  orderedReachGeometryNotReordered: orderedReachAccepted(reachGeometry) && !orderedReachAccepted(reversedReachGeometry) && JSON.stringify(reachGeometry) !== JSON.stringify(reversedReachGeometry),
+  reachGeometryPersistentOrderedArray: reachGeometryIsOrderedReadonlyArray,
+  completeFixtureReachDirectionAccepted: fixtureReachDirectionsMatchDeclaredNodes(candidate),
+  reversedCompleteFixtureReachDirectionRejected: !fixtureReachDirectionsMatchDeclaredNodes(reversedReachCandidate),
 };
 
 const out = {
