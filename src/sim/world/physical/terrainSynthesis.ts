@@ -98,10 +98,6 @@ export function synthesizeRawTerrain(
   const terrain = constants.terrain;
   const extentWidthMeters = scratch.width * scratch.cellSizeMeters;
   const extentHeightMeters = scratch.height * scratch.cellSizeMeters;
-  const requiresOrogenicSpatialContribution = provinces.some((province) => province.family === "orogenic_uplift");
-  const requiresVolcanicSpatialContribution = provinces.some((province) => province.family === "volcanic_constructive");
-  let observedOrogenicSpatialContribution = false;
-  let observedVolcanicSpatialContribution = false;
   for (let row = 0; row < scratch.height; row += 1) {
     const yM = (row + 0.5) * scratch.cellSizeMeters;
     for (let column = 0; column < scratch.width; column += 1) {
@@ -128,18 +124,15 @@ export function synthesizeRawTerrain(
         const rho2 = uRatio * uRatio + vRatio * vRatio;
         if (!(rho2 < 1)) continue;
         const influence = (1 - rho2) ** 2;
-        const boundaryDistanceM = (1 - Math.sqrt(rho2)) * Math.min(province.radiusXM, province.radiusYM);
-        const blend = Math.min(1, boundaryDistanceM / terrain.provinceBlendMeters);
+        const radialRatio = Math.sqrt(dx * dx + dy * dy) / province.radiusYM;
+        const boundaryDistanceM = (1 - radialRatio) * province.radiusYM;
+        const blend = radialRatio < 1
+          ? Math.min(1, boundaryDistanceM / terrain.provinceBlendMeters)
+          : 0;
         const spatialTerm = familySpatialTerm(province, u, v, rho2, influence, constants);
-        if (province.family === "orogenic_uplift" && spatialTerm !== 0) {
-          observedOrogenicSpatialContribution = true;
-        }
-        if (province.family === "volcanic_constructive" && spatialTerm !== 0) {
-          observedVolcanicSpatialContribution = true;
-        }
-        const familyRelief = province.reliefMultiplier * (correlatedBands + spatialTerm);
-        const familyDelta = province.elevationOffsetMeters + familyRelief - correlatedBands;
-        elevation += blend * familyDelta;
+        const familyBackgroundDelta = province.elevationOffsetMeters +
+          province.reliefMultiplier * correlatedBands - correlatedBands;
+        elevation += blend * familyBackgroundDelta + province.reliefMultiplier * spatialTerm;
       }
 
       if (!Number.isFinite(elevation)) {
@@ -150,14 +143,6 @@ export function synthesizeRawTerrain(
         Math.min(terrain.maxElevationMeters, elevation),
       );
     }
-  }
-  if ((requiresOrogenicSpatialContribution && !observedOrogenicSpatialContribution) ||
-      (requiresVolcanicSpatialContribution && !observedVolcanicSpatialContribution)) {
-    return worldM0Failure(
-      "M02_TERRAIN_BOUNDS_INVALID",
-      "provenanceProvinces",
-      "a spatial provenance operator produced no in-domain contribution",
-    );
   }
   return { ok: true, value: true };
 }

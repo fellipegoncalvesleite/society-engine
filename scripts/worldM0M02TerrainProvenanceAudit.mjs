@@ -284,6 +284,21 @@ const oneProvince = terrainSeed
 const oneProvinceAxisWord = terrainSeed
   ? modules.random?.terrainHydroCoordinateWord?.(terrainSeed, 0, 0, 3)
   : undefined;
+const invalidFamilyConstantCases = [
+  ["stableReliefMultiplier", 1],
+  ["orogenicAspectRatio", 1],
+  ["sedimentaryReliefMultiplier", 1],
+];
+const invalidFamilyConstantResults = invalidFamilyConstantCases.map(([name, value]) => {
+  const changed = clonePhysicalConstants();
+  changed.terrain[name] = value;
+  return {
+    parsed: modules.physicalConstants?.parseWorldM0PhysicalConstants?.(changed),
+    provinces: terrainSeed
+      ? modules.provenance?.generateLandformProvenanceProvinces?.(terrainSeed, WIDTH_M, HEIGHT_M, changed)
+      : undefined,
+  };
+});
 
 function releaseGrid(terrainGrid) {
   if (!terrainGrid) return false;
@@ -464,7 +479,7 @@ async function runMorphologyMutation(search, replacement, family, suffix) {
       ? mutated.synthesis?.synthesizeRawTerrain?.(familyGrid, mutatedSeed, [province], constants)
       : undefined;
     synthesisFailed = baseSynthesis?.ok !== true || familySynthesis?.ok !== true;
-    if (!synthesisFailed) {
+    if (baseGrid && familyGrid) {
       metrics = measureF11(familyGrid, province, baseGrid);
     }
     releaseGrid(baseGrid);
@@ -502,10 +517,8 @@ const orogenicMutationBreaksRequiredComparison = orogenicMutation.metrics !== un
   stable.q90LocalRelief < orogenicMutation.metrics.q90LocalRelief &&
   sedimentary.q90LocalRelief < orogenicMutation.metrics.q90LocalRelief
 );
-const orogenicMutationDiscriminated = orogenicMutation.synthesisFailed || orogenicMutationBreaksRequiredComparison;
 const volcanicMutationBreaksRequiredComparison = volcanicMutation.metrics !== undefined &&
   !(volcanicMutation.metrics.radialConcentration > 0);
-const volcanicMutationDiscriminated = volcanicMutation.synthesisFailed || volcanicMutationBreaksRequiredComparison;
 
 const sources = Object.fromEntries(Object.entries(paths).map(([name, path]) => [name, existsSync(path) ? readFileSync(path, "utf8") : ""]));
 const task4Production = Object.values(sources).join("\n");
@@ -616,6 +629,11 @@ const checks = {
   persistedAxisUsesExactSeedWordFormula:
     oneProvince !== undefined && Number.isSafeInteger(oneProvinceAxisWord) &&
     oneProvince.axisAngleRadians === 2 * Math.PI * (oneProvinceAxisWord / 0x1_0000_0000),
+  exactFamilyConstantInequalitiesEnforced:
+    invalidFamilyConstantResults.every(({ parsed, provinces: invalidProvinces }) =>
+      failure(parsed)?.code === "M02_CONTENT_INVALID" &&
+      failure(invalidProvinces)?.code === "M02_TERRAIN_BOUNDS_INVALID"
+    ),
   provinceCountBoundFailsClosed: failure(excessiveProvinceResult)?.code === "M02_BOUND_EXCEEDED",
   rawTerrainSynthesisSucceeded: synthesisResult?.ok === true && repeatSynthesis?.ok === true && otherSynthesis?.ok === true,
   rawTerrainFiniteBoundedAndCorrelated: elevationsFiniteAndBounded && terrainVaries,
@@ -632,9 +650,11 @@ const checks = {
     typeof orogenicAxisZeroDigest === "string" && typeof orogenicAxisRotatedDigest === "string" &&
     orogenicAxisZeroDigest !== orogenicAxisRotatedDigest,
   orogenicDirectionalMutationDiscriminated:
-    orogenicMutation.applied && orogenicMutation.restored && orogenicMutationDiscriminated,
+    orogenicMutation.applied && orogenicMutation.restored && !orogenicMutation.synthesisFailed &&
+    orogenicMutationBreaksRequiredComparison,
   volcanicRadialMutationDiscriminated:
-    volcanicMutation.applied && volcanicMutation.restored && volcanicMutationDiscriminated,
+    volcanicMutation.applied && volcanicMutation.restored && !volcanicMutation.synthesisFailed &&
+    volcanicMutationBreaksRequiredComparison,
   physicalConstantsEncodingCoversMorphology: morphologyEncodingChecks.every(Boolean),
   noHiddenMorphologySourceLiteral:
     noHiddenMorphologyLiteral && requiredMorphologyConstants.every((name) => task4Production.includes(name)),

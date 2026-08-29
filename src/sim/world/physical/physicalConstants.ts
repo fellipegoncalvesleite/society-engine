@@ -185,6 +185,15 @@ export function parseWorldM0PhysicalConstants(
   for (const key of ["stableAspectRatio", "orogenicAspectRatio", "volcanicAspectRatio", "sedimentaryAspectRatio"] as const) {
     if (!finite(terrain.value[key]) || terrain.value[key] < 1) return invalid(`terrain.${key}`, "aspect ratio must be finite and at least one");
   }
+  if ((terrain.value.orogenicAspectRatio as number) <= 1) {
+    return invalid("terrain.orogenicAspectRatio", "orogenic aspect ratio must be greater than one");
+  }
+  if ((terrain.value.stableReliefMultiplier as number) >= 1) {
+    return invalid("terrain.stableReliefMultiplier", "stable relief multiplier must be less than one");
+  }
+  if ((terrain.value.sedimentaryReliefMultiplier as number) >= 1) {
+    return invalid("terrain.sedimentaryReliefMultiplier", "sedimentary relief multiplier must be less than one");
+  }
   for (const key of [
     "stableElevationOffsetMeters", "orogenicElevationOffsetMeters", "volcanicElevationOffsetMeters",
     "sedimentaryElevationOffsetMeters", "baseSeaLevelMeters", "minElevationMeters", "maxElevationMeters",

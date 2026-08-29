@@ -106,6 +106,15 @@ export function generateLandformProvenanceProvinces(
       minimumRadius <= 0 || minimumRadius > maximumRadius) {
     return worldM0Failure("M02_TERRAIN_BOUNDS_INVALID", "terrain.provinceMinRadiusMeters", "invalid provenance radius interval");
   }
+  if (constants.terrain.orogenicAspectRatio <= 1 ||
+      constants.terrain.stableReliefMultiplier >= 1 ||
+      constants.terrain.sedimentaryReliefMultiplier >= 1) {
+    return worldM0Failure(
+      "M02_TERRAIN_BOUNDS_INVALID",
+      "terrain",
+      "provenance family constants violate required aspect or relief inequalities",
+    );
+  }
 
   const generated: ProvincePhysicalRecord[] = [];
   for (let index = 0; index < count; index += 1) {
