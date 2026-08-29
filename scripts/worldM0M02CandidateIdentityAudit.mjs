@@ -1,0 +1,139 @@
+import { createHash } from "node:crypto";
+import { existsSync } from "node:fs";
+import { createServer } from "vite";
+
+const ROOT = process.cwd();
+const modulePath = `${ROOT}/src/sim/world/physical/canonicalTerrainHydro.ts`;
+const server = await createServer({ root: `${ROOT}/src`, configFile: false, appType: "custom", server: { middlewareMode: true, hmr: false, ws: false }, logLevel: "error" });
+let canonical;
+try { if (existsSync(modulePath)) canonical = await server.ssrLoadModule("/sim/world/physical/canonicalTerrainHydro.ts"); } catch {} finally { await server.close(); }
+
+const id = (namespace, ordinal) => `${namespace}:${ordinal.toString(16).padStart(16, "0")}`;
+const p = (xM, yM) => ({ xM, yM });
+const ring = (x, y) => [p(x, y), p(x + 8, y), p(x + 8, y + 8), p(x, y + 8), p(x, y)];
+const rings = (x, y) => [ring(x + 10, y), ring(x, y)];
+const ids = {
+  province: [id("province", 0), id("province", 1)], terminal: [id("terminal", 0), id("terminal", 1)], catchment: [id("catchment", 0), id("catchment", 1)],
+  node: [id("drainage-node", 0), id("drainage-node", 1)], reach: [id("drainage-reach", 0), id("drainage-reach", 1)], basin: [id("depression-basin", 0), id("depression-basin", 1)],
+  valley: [id("valley", 0), id("valley", 1)], floodplain: [id("floodplain", 0), id("floodplain", 1)], crossing: [id("crossing", 0), id("crossing", 1)],
+};
+const candidate = {
+  schema: "world-m0-terrain-hydro-candidate/v1", recipeDigest: `sha256:${"11".repeat(32)}`,
+  physicalConstants: { id: "physical:constants", version: "v1", digest: `sha256:${"22".repeat(32)}` },
+  physicalGeneratorVersion: "physical:v1", repairPolicyVersion: "repair:v1", numericKernelVersion: "numeric:v1",
+  analysis: { cellSizeMeters: 250, width: 1200, height: 720, boundaryModel: "finite_open_outflow", flowAlgorithm: "d_infinity_v1" },
+  provenanceProvinces: [
+    { id: ids.province[1], family: "orogenic_uplift", center: p(20, 20), radiusXM: 11.5, radiusYM: 12.5, axisAngleRadians: 0.25, influenceRadiusM: 21.5, elevationOffsetMeters: 2.5, reliefMultiplier: 1.25 },
+    { id: ids.province[0], family: "stable_denudational", center: p(10, 10), radiusXM: 10.5, radiusYM: 11.5, axisAngleRadians: 0.125, influenceRadiusM: 20.5, elevationOffsetMeters: -1.5, reliefMultiplier: 0.75 },
+  ],
+  strategicTerrain: [1, 0].map((n) => ({
+    cell: { row: n, column: 0 }, landOceanClass: n ? "mixed" : "land", landAreaM2: 50000 + n, oceanAreaM2: 12500 - n,
+    elevationMinMeters: -1.5 + n, elevationMaxMeters: 20.5 + n, elevationMeanMeters: 7.25 + n, localReliefMeters: 22.5 + n,
+    slopeMean: 0.125 + n / 100, coastlineLengthMeters: 250.5 + n,
+    provenanceFractions: [{ provinceId: ids.province[1], areaFraction: 0.25 }, { provinceId: ids.province[0], areaFraction: 0.75 }],
+    catchmentIds: [...ids.catchment].reverse(), reachIds: [...ids.reach].reverse(), depressionBasinIds: [...ids.basin].reverse(), valleyCandidateIds: [...ids.valley].reverse(), floodplainCandidateIds: [...ids.floodplain].reverse(), crossingCandidateIds: [...ids.crossing].reverse(),
+  })),
+  coastline: [[p(0, 250), p(125, 0)], [p(0, 0), p(250, 0)]],
+  terminals: [{ id: ids.terminal[1], kind: "external_domain_outlet", point: p(40, 10), catchmentId: ids.catchment[1] }, { id: ids.terminal[0], kind: "ocean_outlet", point: p(20, 10), catchmentId: ids.catchment[0] }],
+  catchments: [{ id: ids.catchment[1], terminalId: ids.terminal[1], areaM2: 125000.5, boundaryRings: rings(20, 20) }, { id: ids.catchment[0], terminalId: ids.terminal[0], areaM2: 62500.5, boundaryRings: rings(0, 20) }],
+  drainageNodes: [{ id: ids.node[1], point: p(40, 10), kind: "terminal", terminalId: ids.terminal[1] }, { id: ids.node[0], point: p(10, 10), kind: "source", terminalId: null }],
+  drainageReaches: [
+    { id: ids.reach[1], upstreamNodeId: ids.node[1], downstreamNodeId: ids.node[0], downstreamReachId: ids.reach[0], catchmentId: ids.catchment[1], terminalId: ids.terminal[1], geometry: [p(30, 10), p(35, 11), p(40, 10)], lengthMeters: 10.5, contributingAreaM2: 125000.5, localContributingAreaM2: 62500.25, meanTerrainGradient: 0.02, localReliefMeters: 3.5, channelIncisionMeters: 1.5 },
+    { id: ids.reach[0], upstreamNodeId: ids.node[0], downstreamNodeId: ids.node[1], downstreamReachId: null, catchmentId: ids.catchment[0], terminalId: ids.terminal[0], geometry: [p(10, 10), p(15, 11), p(20, 10)], lengthMeters: 10.25, contributingAreaM2: 62500.5, localContributingAreaM2: 31250.25, meanTerrainGradient: 0.01, localReliefMeters: 2.5, channelIncisionMeters: 1.25 },
+  ],
+  depressionBasins: [{ id: ids.basin[1], catchmentId: ids.catchment[1], floorElevationMeters: -2.5, spillElevationMeters: null, outletTerminalId: null, closedEndorheic: true, areaM2: 3000.5, boundaryRings: rings(20, 40) }, { id: ids.basin[0], catchmentId: ids.catchment[0], floorElevationMeters: -1.5, spillElevationMeters: 0.5, outletTerminalId: ids.terminal[0], closedEndorheic: false, areaM2: 2000.5, boundaryRings: rings(0, 40) }],
+  valleys: [{ id: ids.valley[1], reachId: ids.reach[1], boundaryRings: rings(20, 60), areaM2: 4000.5, localReliefMeters: 5.5 }, { id: ids.valley[0], reachId: ids.reach[0], boundaryRings: rings(0, 60), areaM2: 3500.5, localReliefMeters: 4.5 }],
+  floodplainCandidates: [{ id: ids.floodplain[1], reachId: ids.reach[1], boundaryRings: rings(20, 80), areaM2: 2500.5, terrainSlope: 0.02 }, { id: ids.floodplain[0], reachId: ids.reach[0], boundaryRings: rings(0, 80), areaM2: 1500.5, terrainSlope: 0.01 }],
+  crossingCandidates: [
+    { id: ids.crossing[1], reachId: ids.reach[1], strategicEdge: { first: { row: 1, column: 0 }, second: { row: 1, column: 1 } }, intersection: p(35, 10), leftBank: p(35, 11), rightBank: p(35, 9), channelIncisionMeters: 1.5, firstApproachSlope: 0.03, secondApproachSlope: 0.04 },
+    { id: ids.crossing[0], reachId: ids.reach[0], strategicEdge: { first: { row: 0, column: 0 }, second: { row: 0, column: 1 } }, intersection: p(15, 10), leftBank: p(15, 11), rightBank: p(15, 9), channelIncisionMeters: 1.25, firstApproachSlope: 0.01, secondApproachSlope: 0.02 },
+  ],
+  deterministicProvenance: { repairOperationCount: 2, conditionedDepressionCount: 1, retainedDepressionCount: 1 },
+};
+
+const goldenCandidate = {
+  ...structuredClone(candidate),
+  provenanceProvinces: [], strategicTerrain: [], coastline: [], terminals: [], catchments: [], drainageNodes: [],
+  drainageReaches: [], depressionBasins: [], valleys: [], floodplainCandidates: [], crossingCandidates: [],
+  deterministicProvenance: { repairOperationCount: 0, conditionedDepressionCount: 0, retainedDepressionCount: 0 },
+};
+const EXPECTED_CANONICAL_TEXT =
+  `{"schema":"world-m0-terrain-hydro-candidate/v1","recipeDigest":"sha256:1111111111111111111111111111111111111111111111111111111111111111",` +
+  `"physicalConstants":{"id":"physical:constants","version":"v1","digest":"sha256:2222222222222222222222222222222222222222222222222222222222222222"},` +
+  `"physicalGeneratorVersion":"physical:v1","repairPolicyVersion":"repair:v1","numericKernelVersion":"numeric:v1",` +
+  `"analysis":{"cellSizeMeters":250,"width":1200,"height":720,"boundaryModel":"finite_open_outflow","flowAlgorithm":"d_infinity_v1"},` +
+  `"provenanceProvinces":[],"strategicTerrain":[],"coastline":[],"terminals":[],"catchments":[],"drainageNodes":[],` +
+  `"drainageReaches":[],"depressionBasins":[],"valleys":[],"floodplainCandidates":[],"crossingCandidates":[],` +
+  `"deterministicProvenance":{"repairOperationCount":0,"conditionedDepressionCount":0,"retainedDepressionCount":0}}`;
+const encode = (value) => canonical?.encodeCanonicalTerrainHydroCandidate?.(value);
+const digestCandidate = async (value) => canonical?.computeTerrainHydroCandidateDigest?.(value);
+const text = (result) => result?.ok ? new TextDecoder().decode(result.value) : undefined;
+const bytes = (result) => result?.ok ? Buffer.from(result.value).toString("hex") : undefined;
+const failure = (result) => result?.ok === false ? result.error : undefined;
+const clone = () => structuredClone(candidate);
+const baseEncoded = encode(candidate);
+const baseDigest = await digestCandidate(candidate);
+const goldenEncoded = encode(goldenCandidate);
+const goldenDigest = await digestCandidate(goldenCandidate);
+const actualText = text(goldenEncoded);
+const expectedDigest = `sha256:${createHash("sha256").update(EXPECTED_CANONICAL_TEXT).digest("hex")}`;
+
+const reversed = clone();
+const registries = ["provenanceProvinces", "strategicTerrain", "coastline", "terminals", "catchments", "drainageNodes", "drainageReaches", "depressionBasins", "valleys", "floodplainCandidates", "crossingCandidates"];
+for (const key of registries) reversed[key].reverse();
+for (const key of ["catchments", "depressionBasins", "valleys", "floodplainCandidates"]) {
+  for (const entity of reversed[key]) entity.boundaryRings.reverse();
+}
+for (const summary of reversed.strategicTerrain) {
+  summary.provenanceFractions.reverse();
+  for (const key of ["catchmentIds", "reachIds", "depressionBasinIds", "valleyCandidateIds", "floodplainCandidateIds", "crossingCandidateIds"]) summary[key].reverse();
+}
+const watchedArrays = registries.map((key) => reversed[key])
+  .concat(["catchments", "depressionBasins", "valleys", "floodplainCandidates"].flatMap((key) => reversed[key].map((entity) => entity.boundaryRings)))
+  .concat(reversed.strategicTerrain.flatMap((summary) => [summary.provenanceFractions, summary.catchmentIds, summary.reachIds, summary.depressionBasinIds, summary.valleyCandidateIds, summary.floodplainCandidateIds, summary.crossingCandidateIds]));
+const watchedElements = watchedArrays.map((value) => [...value]);
+const reversedEncoded = encode(reversed);
+const reversedDigest = await digestCandidate(reversed);
+const callerUnmutated = watchedArrays.every((value, index) => value.length === watchedElements[index].length && value.every((entry, itemIndex) => entry === watchedElements[index][itemIndex]));
+
+const duplicateCases = {
+  entityRegistry: ["provenanceProvinces", (value) => { value.provenanceProvinces[1].id = value.provenanceProvinces[0].id; }],
+  coastline: ["coastline", (value) => { value.coastline[1] = structuredClone(value.coastline[0]); }],
+  strategicTerrain: ["strategicTerrain", (value) => { value.strategicTerrain[1].cell = structuredClone(value.strategicTerrain[0].cell); }],
+  provenanceFractions: ["provenanceFractions", (value) => { value.strategicTerrain[0].provenanceFractions[1].provinceId = value.strategicTerrain[0].provenanceFractions[0].provinceId; }],
+  referencedIds: ["reachIds", (value) => { value.strategicTerrain[0].reachIds[1] = value.strategicTerrain[0].reachIds[0]; }],
+  boundaryRings: ["boundaryRings", (value) => { value.catchments[0].boundaryRings[1] = structuredClone(value.catchments[0].boundaryRings[0]); }],
+};
+const duplicateChecks = {};
+for (const [name, [pathPart, mutate]] of Object.entries(duplicateCases)) {
+  const changed = clone(); mutate(changed); const error = failure(encode(changed));
+  duplicateChecks[`${name}DuplicateTypedPath`] = error?.code === "M02_CANDIDATE_INVALID" && error.path.includes(pathPart);
+}
+const reversedReach = clone(); reversedReach.drainageReaches[1].geometry.reverse();
+const reversedReachEncoded = encode(reversedReach);
+const mutations = {
+  recipeDigest: (value) => { value.recipeDigest = `sha256:${"33".repeat(32)}`; }, physicalConstantsDigest: (value) => { value.physicalConstants.digest = `sha256:${"44".repeat(32)}`; },
+  provinceAxis: (value) => { value.provenanceProvinces[0].axisAngleRadians = 0.375; }, provinceFamilyEffect: (value) => { value.provenanceProvinces[0].elevationOffsetMeters = 3.5; },
+  terrainValue: (value) => { value.strategicTerrain[0].elevationMeanMeters = 9.5; }, coastlinePoint: (value) => { value.coastline[0][1].xM = 126; },
+  terminalKind: (value) => { value.terminals[0].kind = "retained_closed_basin"; }, basinArea: (value) => { value.depressionBasins[0].areaM2 = 3001.5; },
+  reachLocalArea: (value) => { value.drainageReaches[0].localContributingAreaM2 = 62501.25; }, crossingGeometry: (value) => { value.crossingCandidates[0].intersection.xM = 36; },
+};
+const mutationChecks = {};
+for (const [name, mutate] of Object.entries(mutations)) {
+  const changed = clone(); mutate(changed); const encoded = encode(changed); const changedDigest = await digestCandidate(changed);
+  mutationChecks[`${name}ChangesBytesAndDigest`] = encoded?.ok === true && changedDigest?.ok === true && bytes(encoded) !== bytes(baseEncoded) && changedDigest.value !== baseDigest?.value;
+}
+const forbidden = clone(); forbidden.crossingCandidates[0].knownFord = true;
+const forbiddenError = failure(encode(forbidden));
+const checks = {
+  canonicalEncoderExists: typeof canonical?.encodeCanonicalTerrainHydroCandidate === "function", candidateDigestExists: typeof canonical?.computeTerrainHydroCandidateDigest === "function",
+  exactCanonicalUtf8Text: actualText === EXPECTED_CANONICAL_TEXT, independentNodeSha256Oracle: goldenDigest?.ok === true && goldenDigest.value === expectedDigest,
+  allUnorderedReversalsByteIdentical: bytes(baseEncoded) !== undefined && bytes(baseEncoded) === bytes(reversedEncoded),
+  allUnorderedReversalsDigestIdentical: baseDigest?.ok === true && reversedDigest?.ok === true && baseDigest.value === reversedDigest.value,
+  callerArraysRemainElementIdentical: callerUnmutated, ...duplicateChecks,
+  orderedReachReversalNonEquivalent: reversedReachEncoded?.ok === false || bytes(reversedReachEncoded) !== bytes(baseEncoded), ...mutationChecks,
+  forbiddenKeyRejectedNotOmitted: forbiddenError?.code === "M02_CANDIDATE_INVALID" && forbiddenError.path.includes("crossingCandidates"),
+};
+const out = { check: "WORLD-M0-M0.2-CANDIDATE-IDENTITY", verdict: Object.values(checks).every(Boolean) ? "PASS" : "FAIL", checks, witnesses: { expectedDigest, actualDigest: goldenDigest?.value } };
+console.log(JSON.stringify(out, null, 2));
+if (out.verdict !== "PASS") process.exitCode = 1;
