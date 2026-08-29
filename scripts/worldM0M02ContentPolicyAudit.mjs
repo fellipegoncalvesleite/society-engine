@@ -145,8 +145,34 @@ const requiredParsed = parseRecipe(requiredAssetRecipe);
 const requiredAssetResolution = requiredParsed?.ok
   ? recipeModule?.validateWorldRecipeAssetResolution?.(requiredParsed.value, requiredResolvedAssets)
   : requiredParsed;
+let orderingPolicyCallCount = 0;
+const invokeOrderingPolicy = (recipe, spatialIdentity, physicalConstants) => {
+  orderingPolicyCallCount += 1;
+  return policy?.validateWorldM0TerrainHydroPolicy?.(recipe, spatialIdentity, physicalConstants);
+};
+const validateResolvedTerrainHydroPolicy = (recipe, resolvedAssets, spatialIdentity, physicalConstants) => {
+  const assetResolution = recipeModule?.validateWorldRecipeAssetResolution?.(recipe, resolvedAssets);
+  if (assetResolution?.ok !== true) return assetResolution;
+  return invokeOrderingPolicy(recipe, spatialIdentity, physicalConstants);
+};
+const wrongDigestResolvedAssets = structuredClone(requiredResolvedAssets);
+wrongDigestResolvedAssets[0].digest = digestPair("66");
+const digestBeforePolicy = requiredParsed?.ok && validConstants?.ok && spatial?.ok
+  ? validateResolvedTerrainHydroPolicy(
+      requiredParsed.value,
+      wrongDigestResolvedAssets,
+      spatial.value,
+      validConstants.value,
+    )
+  : requiredParsed;
+const orderingPolicyCallsAfterDigestMismatch = orderingPolicyCallCount;
 const requiredAssetPolicy = requiredParsed?.ok && validConstants?.ok && spatial?.ok
-  ? policy?.validateWorldM0TerrainHydroPolicy?.(requiredParsed.value, spatial.value, validConstants.value)
+  ? validateResolvedTerrainHydroPolicy(
+      requiredParsed.value,
+      requiredResolvedAssets,
+      spatial.value,
+      validConstants.value,
+    )
   : undefined;
 
 const selectedMlRecipe = structuredClone(requiredAssetRecipe);
@@ -164,12 +190,6 @@ const selectedResolution = selectedParsed?.ok
 const selectedPolicy = selectedParsed?.ok && validConstants?.ok && spatial?.ok
   ? policy?.validateWorldM0TerrainHydroPolicy?.(selectedParsed.value, spatial.value, validConstants.value)
   : undefined;
-
-const wrongDigestResolvedAssets = structuredClone(requiredResolvedAssets);
-wrongDigestResolvedAssets[0].digest = digestPair("66");
-const digestBeforePolicy = requiredParsed?.ok
-  ? recipeModule?.validateWorldRecipeAssetResolution?.(requiredParsed.value, wrongDigestResolvedAssets)
-  : requiredParsed;
 
 const tooManyCellsConstants = clonePhysicalConstants();
 tooManyCellsConstants.analysis.maxAnalysisCells = 863_999;
@@ -221,7 +241,11 @@ const checks = {
   selectedMlUnsupportedTyped: selectedPolicy?.error?.code === "M02_ML_UNSUPPORTED",
   m01DigestValidationPrecedesM02Policy:
     digestBeforePolicy?.error?.code === "ASSET_DIGEST_MISMATCH" &&
-    requiredAssetPolicy?.error?.code === "M02_REQUIRED_ASSET_UNSUPPORTED",
+    orderingPolicyCallsAfterDigestMismatch === 0,
+  m02PolicyReachableAfterValidM01Resolution:
+    requiredAssetResolution?.ok === true &&
+    requiredAssetPolicy?.error?.code === "M02_REQUIRED_ASSET_UNSUPPORTED" &&
+    orderingPolicyCallCount > 0,
   analysisCellBoundFailsClosed: tooManyCells?.error?.code === "M02_ANALYSIS_GRID_UNSUPPORTED",
   nonDivisibleAnalysisGridFailsClosed:
     nonDivisiblePolicy?.error?.code === "M02_ANALYSIS_GRID_UNSUPPORTED",
