@@ -216,6 +216,15 @@ function requireSimpleOpenSequence(points: readonly WorldM0PointM[], path: strin
       if (samePoint(points[first], points[second])) reject(`${path}[${second}]`, "duplicate point in open geometry");
     }
   }
+  for (let first = 0; first < points.length - 2; first += 1) {
+    const previous = points[first];
+    const shared = points[first + 1];
+    const next = points[first + 2];
+    if (orientation(previous, shared, next) === 0 &&
+        (pointOnSegment(next, previous, shared) || pointOnSegment(previous, shared, next))) {
+      reject(path, "adjacent open-geometry segments overlap beyond their shared endpoint");
+    }
+  }
   for (let first = 0; first < points.length - 1; first += 1) {
     for (let second = first + 2; second < points.length - 1; second += 1) {
       if (segmentsIntersect(points[first], points[first + 1], points[second], points[second + 1])) {

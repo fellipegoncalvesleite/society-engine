@@ -65,6 +65,35 @@ const EXPECTED_CANONICAL_TEXT =
   `"provenanceProvinces":[],"strategicTerrain":[],"coastline":[],"terminals":[],"catchments":[],"drainageNodes":[],` +
   `"drainageReaches":[],"depressionBasins":[],"valleys":[],"floodplainCandidates":[],"crossingCandidates":[],` +
   `"deterministicProvenance":{"repairOperationCount":0,"conditionedDepressionCount":0,"retainedDepressionCount":0}}`;
+
+const nestedGoldenCandidate = {
+  ...structuredClone(goldenCandidate),
+  provenanceProvinces: [
+    { id: ids.province[1], family: "orogenic_uplift", center: p(2, 2), radiusXM: 2, radiusYM: 3, axisAngleRadians: 0, influenceRadiusM: 4, elevationOffsetMeters: 1, reliefMultiplier: 1 },
+    { id: ids.province[0], family: "stable_denudational", center: p(1, 1), radiusXM: 1, radiusYM: 2, axisAngleRadians: 0, influenceRadiusM: 3, elevationOffsetMeters: -1, reliefMultiplier: 0.5 },
+  ],
+  strategicTerrain: [{
+    cell: { row: 0, column: 0 }, landOceanClass: "land", landAreaM2: 50000, oceanAreaM2: 0,
+    elevationMinMeters: -1, elevationMaxMeters: 2, elevationMeanMeters: 0, localReliefMeters: 3, slopeMean: 0, coastlineLengthMeters: 250,
+    provenanceFractions: [], catchmentIds: [ids.catchment[1], ids.catchment[0]], reachIds: [ids.reach[1], ids.reach[0]],
+    depressionBasinIds: [], valleyCandidateIds: [], floodplainCandidateIds: [], crossingCandidateIds: [],
+  }],
+  coastline: [[p(0, 0), p(250, 0)]],
+  catchments: [{ id: ids.catchment[0], terminalId: ids.terminal[0], areaM2: 50000, boundaryRings: [ring(0, 20)] }],
+};
+const EXPECTED_NESTED_CANONICAL_TEXT =
+  `{"schema":"world-m0-terrain-hydro-candidate/v1","recipeDigest":"sha256:1111111111111111111111111111111111111111111111111111111111111111",` +
+  `"physicalConstants":{"id":"physical:constants","version":"v1","digest":"sha256:2222222222222222222222222222222222222222222222222222222222222222"},` +
+  `"physicalGeneratorVersion":"physical:v1","repairPolicyVersion":"repair:v1","numericKernelVersion":"numeric:v1",` +
+  `"analysis":{"cellSizeMeters":250,"width":1200,"height":720,"boundaryModel":"finite_open_outflow","flowAlgorithm":"d_infinity_v1"},` +
+  `"provenanceProvinces":[{"id":"province:0000000000000000","family":"stable_denudational","center":{"xM":1,"yM":1},"radiusXM":1,"radiusYM":2,"axisAngleRadians":0,"influenceRadiusM":3,"elevationOffsetMeters":-1,"reliefMultiplier":"f64:3fe0000000000000"},` +
+  `{"id":"province:0000000000000001","family":"orogenic_uplift","center":{"xM":2,"yM":2},"radiusXM":2,"radiusYM":3,"axisAngleRadians":0,"influenceRadiusM":4,"elevationOffsetMeters":1,"reliefMultiplier":1}],` +
+  `"strategicTerrain":[{"cell":{"row":0,"column":0},"landOceanClass":"land","landAreaM2":50000,"oceanAreaM2":0,"elevationMinMeters":-1,"elevationMaxMeters":2,"elevationMeanMeters":0,"localReliefMeters":3,"slopeMean":0,"coastlineLengthMeters":250,"provenanceFractions":[],` +
+  `"catchmentIds":["catchment:0000000000000000","catchment:0000000000000001"],"reachIds":["drainage-reach:0000000000000000","drainage-reach:0000000000000001"],"depressionBasinIds":[],"valleyCandidateIds":[],"floodplainCandidateIds":[],"crossingCandidateIds":[]}],` +
+  `"coastline":[[{"xM":0,"yM":0},{"xM":250,"yM":0}]],"terminals":[],` +
+  `"catchments":[{"id":"catchment:0000000000000000","terminalId":"terminal:0000000000000000","areaM2":50000,"boundaryRings":[[{"xM":0,"yM":20},{"xM":8,"yM":20},{"xM":8,"yM":28},{"xM":0,"yM":28},{"xM":0,"yM":20}]]}],` +
+  `"drainageNodes":[],"drainageReaches":[],"depressionBasins":[],"valleys":[],"floodplainCandidates":[],"crossingCandidates":[],` +
+  `"deterministicProvenance":{"repairOperationCount":0,"conditionedDepressionCount":0,"retainedDepressionCount":0}}`;
 const encode = (value) => canonical?.encodeCanonicalTerrainHydroCandidate?.(value);
 const digestCandidate = async (value) => canonical?.computeTerrainHydroCandidateDigest?.(value);
 const text = (result) => result?.ok ? new TextDecoder().decode(result.value) : undefined;
@@ -76,7 +105,11 @@ const baseDigest = await digestCandidate(candidate);
 const goldenEncoded = encode(goldenCandidate);
 const goldenDigest = await digestCandidate(goldenCandidate);
 const actualText = text(goldenEncoded);
+const nestedGoldenEncoded = encode(nestedGoldenCandidate);
+const nestedGoldenDigest = await digestCandidate(nestedGoldenCandidate);
+const nestedActualText = text(nestedGoldenEncoded);
 const expectedDigest = `sha256:${createHash("sha256").update(EXPECTED_CANONICAL_TEXT).digest("hex")}`;
+const expectedNestedDigest = `sha256:${createHash("sha256").update(EXPECTED_NESTED_CANONICAL_TEXT).digest("hex")}`;
 
 const reversed = clone();
 const registries = ["provenanceProvinces", "strategicTerrain", "coastline", "terminals", "catchments", "drainageNodes", "drainageReaches", "depressionBasins", "valleys", "floodplainCandidates", "crossingCandidates"];
@@ -111,6 +144,9 @@ for (const [name, [pathPart, mutate]] of Object.entries(duplicateCases)) {
 }
 const reversedReach = clone(); reversedReach.drainageReaches[1].geometry.reverse();
 const reversedReachEncoded = encode(reversedReach);
+const adjacentBacktracking = clone();
+adjacentBacktracking.drainageReaches[0].geometry = [p(10, 10), p(20, 10), p(15, 10)];
+const adjacentBacktrackingError = failure(encode(adjacentBacktracking));
 const mutations = {
   recipeDigest: (value) => { value.recipeDigest = `sha256:${"33".repeat(32)}`; }, physicalConstantsDigest: (value) => { value.physicalConstants.digest = `sha256:${"44".repeat(32)}`; },
   provinceAxis: (value) => { value.provenanceProvinces[0].axisAngleRadians = 0.375; }, provinceFamilyEffect: (value) => { value.provenanceProvinces[0].elevationOffsetMeters = 3.5; },
@@ -128,12 +164,18 @@ const forbiddenError = failure(encode(forbidden));
 const checks = {
   canonicalEncoderExists: typeof canonical?.encodeCanonicalTerrainHydroCandidate === "function", candidateDigestExists: typeof canonical?.computeTerrainHydroCandidateDigest === "function",
   exactCanonicalUtf8Text: actualText === EXPECTED_CANONICAL_TEXT, independentNodeSha256Oracle: goldenDigest?.ok === true && goldenDigest.value === expectedDigest,
+  independentNestedCanonicalUtf8Text: nestedActualText === EXPECTED_NESTED_CANONICAL_TEXT,
+  independentNestedNodeSha256Oracle: nestedGoldenDigest?.ok === true && nestedGoldenDigest.value === expectedNestedDigest,
+  nestedGoldenFreezesBinary64Literal: EXPECTED_NESTED_CANONICAL_TEXT.includes('"f64:3fe0000000000000"'),
+  nestedGoldenFreezesRegistryAndReferencedIdSorting: nestedActualText?.indexOf('province:0000000000000000') < nestedActualText?.indexOf('province:0000000000000001') && nestedActualText?.includes('"catchmentIds":["catchment:0000000000000000","catchment:0000000000000001"]'),
   allUnorderedReversalsByteIdentical: bytes(baseEncoded) !== undefined && bytes(baseEncoded) === bytes(reversedEncoded),
   allUnorderedReversalsDigestIdentical: baseDigest?.ok === true && reversedDigest?.ok === true && baseDigest.value === reversedDigest.value,
   callerArraysRemainElementIdentical: callerUnmutated, ...duplicateChecks,
-  orderedReachReversalNonEquivalent: reversedReachEncoded?.ok === false || bytes(reversedReachEncoded) !== bytes(baseEncoded), ...mutationChecks,
+  orderedReachReversalNonEquivalent: reversedReachEncoded?.ok === false || bytes(reversedReachEncoded) !== bytes(baseEncoded),
+  adjacentBacktrackingRejected: adjacentBacktrackingError?.code === "M02_CANDIDATE_INVALID" && adjacentBacktrackingError.path.includes("drainageReaches"),
+  ...mutationChecks,
   forbiddenKeyRejectedNotOmitted: forbiddenError?.code === "M02_CANDIDATE_INVALID" && forbiddenError.path.includes("crossingCandidates"),
 };
-const out = { check: "WORLD-M0-M0.2-CANDIDATE-IDENTITY", verdict: Object.values(checks).every(Boolean) ? "PASS" : "FAIL", checks, witnesses: { expectedDigest, actualDigest: goldenDigest?.value } };
+const out = { check: "WORLD-M0-M0.2-CANDIDATE-IDENTITY", verdict: Object.values(checks).every(Boolean) ? "PASS" : "FAIL", checks, witnesses: { expectedDigest, actualDigest: goldenDigest?.value, expectedNestedDigest, actualNestedDigest: nestedGoldenDigest?.value } };
 console.log(JSON.stringify(out, null, 2));
 if (out.verdict !== "PASS") process.exitCode = 1;
