@@ -94,6 +94,34 @@ function runAndRelease(width, height, elevations, fixtureConstants = constants, 
   return { ...fixture, value, landMask, snapshot, released };
 }
 
+function runMaximumScaleComb() {
+  const width = 1200;
+  const height = 720;
+  const createBudget = modules.scratch?.createTerrainScratchBudget;
+  const allocateGrid = modules.scratch?.allocateTerrainScratchGrid;
+  const budgetResult = createBudget?.(constants.analysis.maxScratchBytes);
+  const gridResult = budgetResult?.ok === true
+    ? allocateGrid?.(width * CELL_SIZE, height * CELL_SIZE, constants, budgetResult.value)
+    : undefined;
+  const grid = okValue(gridResult);
+  if (!grid) return { budgetResult, gridResult };
+  grid.elevationMeters.fill(0);
+  const baseRow = height - 2;
+  for (let column = 1; column < width - 1; column += 1) {
+    grid.elevationMeters[baseRow * width + column] = 1;
+  }
+  for (let column = 1; column < width - 1; column += 2) {
+    for (let row = 1; row <= baseRow; row += 1) {
+      grid.elevationMeters[row * width + column] = 1;
+    }
+  }
+  const result = modules.coastline?.deriveLandOceanAndCoastline?.(grid, 0, constants);
+  const value = okValue(result);
+  const snapshot = budgetResult.value.snapshot();
+  const released = releaseGrid(grid);
+  return { budgetResult, gridResult, result, value, snapshot, released };
+}
+
 const expectedCheckerboard = Object.freeze([
   polyline([[250, 500], [500, 500], [500, 750], [250, 750], [250, 500]]),
   polyline([[500, 250], [750, 250], [750, 500], [500, 500], [500, 250]]),
@@ -108,6 +136,10 @@ const expectedFiniteBorder = Object.freeze([
 const expectedDonut = Object.freeze([
   polyline([[250, 250], [1000, 250], [1000, 1000], [250, 1000], [250, 250]]),
   polyline([[500, 500], [500, 750], [750, 750], [750, 500], [500, 500]]),
+]);
+const expectedBridgedComponent = Object.freeze([
+  polyline([[250, 250], [250, 500], [500, 500], [500, 250], [250, 250]]),
+  polyline([[500, 0], [500, 250], [750, 250]]),
 ]);
 
 const equalityFixture = runAndRelease(2, 2, [0, 1, -1, 0]);
@@ -138,6 +170,11 @@ const donutElevations = [
   0, 0, 0, 0, 0,
 ];
 const donutFixture = runAndRelease(5, 5, donutElevations);
+const bridgedComponentFixture = runAndRelease(3, 3, [
+  1, 1, 1,
+  1, 0, 1,
+  1, 1, 0,
+]);
 
 const seaOffsetFixture = makeFixture(3, 3, [
   0, 0, 0,
@@ -175,6 +212,7 @@ const threeItemsElevations = [
   0, 0, 0, 0, 0, 0, 0,
 ];
 const threeItemsFixture = runAndRelease(7, 7, threeItemsElevations);
+const maximumScaleCombFixture = runMaximumScaleComb();
 
 const lowConstants = clonePhysicalConstants();
 lowConstants.analysis.maxScratchBytes = 31 * 9 - 1;
@@ -184,10 +222,50 @@ const lowBudgetSnapshot = lowBudgetFixture.budget?.snapshot();
 const lowBudgetLandUntouched = lowBudgetFixture.grid?.landMask.every((value) => value === 0) === true;
 const lowBudgetReleased = releaseGrid(lowBudgetFixture.grid);
 
+const mismatchedAuthorityConstants = clonePhysicalConstants();
+mismatchedAuthorityConstants.analysis.maxScratchBytes = 31 * 9 - 1;
+const mismatchedBudgetResult = modules.scratch?.createTerrainScratchBudget?.(constants.analysis.maxScratchBytes);
+const mismatchedGridResult = mismatchedBudgetResult?.ok === true
+  ? modules.scratch?.allocateTerrainScratchGrid?.(3 * CELL_SIZE, 3 * CELL_SIZE, constants, mismatchedBudgetResult.value)
+  : undefined;
+const mismatchedGrid = okValue(mismatchedGridResult);
+if (mismatchedGrid) mismatchedGrid.elevationMeters.fill(1);
+const mismatchedAuthorityResult = mismatchedGrid
+  ? modules.coastline?.deriveLandOceanAndCoastline?.(mismatchedGrid, 0, mismatchedAuthorityConstants)
+  : undefined;
+const mismatchedAuthorityFailure = failure(mismatchedAuthorityResult);
+const mismatchedAuthoritySnapshot = mismatchedBudgetResult?.ok === true ? mismatchedBudgetResult.value.snapshot() : undefined;
+const mismatchedAuthorityLandUntouched = mismatchedGrid?.landMask.every((value) => value === 0) === true;
+const mismatchedAuthorityReleased = releaseGrid(mismatchedGrid);
+
+const unexpectedLiveConstants = clonePhysicalConstants();
+unexpectedLiveConstants.analysis.maxScratchBytes = 31 * 9;
+const unexpectedLiveBudgetResult = modules.scratch?.createTerrainScratchBudget?.(unexpectedLiveConstants.analysis.maxScratchBytes);
+const unexpectedLiveGridResult = unexpectedLiveBudgetResult?.ok === true
+  ? modules.scratch?.allocateTerrainScratchGrid?.(3 * CELL_SIZE, 3 * CELL_SIZE, unexpectedLiveConstants, unexpectedLiveBudgetResult.value)
+  : undefined;
+const unexpectedLiveGrid = okValue(unexpectedLiveGridResult);
+const unexpectedLiveAllocation = unexpectedLiveBudgetResult?.ok === true
+  ? unexpectedLiveBudgetResult.value.allocateBatch([{ label: "task5AuditUnexpectedLive", kind: "u8", length: 1 }])
+  : undefined;
+if (unexpectedLiveGrid) unexpectedLiveGrid.elevationMeters.fill(1);
+const unexpectedLiveResult = unexpectedLiveGrid && unexpectedLiveAllocation?.ok === true
+  ? modules.coastline?.deriveLandOceanAndCoastline?.(unexpectedLiveGrid, 0, unexpectedLiveConstants)
+  : undefined;
+const unexpectedLiveFailure = failure(unexpectedLiveResult);
+const unexpectedLiveSnapshot = unexpectedLiveBudgetResult?.ok === true ? unexpectedLiveBudgetResult.value.snapshot() : undefined;
+const unexpectedLiveLandUntouched = unexpectedLiveGrid?.landMask.every((value) => value === 0) === true;
+const unexpectedLiveExtraReleased = unexpectedLiveAllocation?.ok === true
+  ? unexpectedLiveBudgetResult?.value.release("task5AuditUnexpectedLive")?.ok === true
+  : false;
+const unexpectedLiveGridReleased = releaseGrid(unexpectedLiveGrid);
+
 async function runSourceOrderMutations() {
   const absent = {
     traversalApplied: false,
     producerShuffleApplied: false,
+    scheduleInstrumentationApplied: false,
+    noSortMutationApplied: false,
     restored: !existsSync(COASTLINE_PATH),
   };
   if (!existsSync(COASTLINE_PATH) || threeItemsFixture.value === undefined) return absent;
@@ -197,10 +275,42 @@ async function runSourceOrderMutations() {
   const traversalReplacement = "const cell = cellCount - 1 - traversalIndex; // audit:cell-traversal";
   const producerNeedle = "const unsimplified = traces; // audit:producer-order";
   const producerReplacement = "const unsimplified = traces.length >= 3 ? [traces[1], traces[2], traces[0], ...traces.slice(3)] : traces; // audit:producer-order";
+  const sortNeedle = "  unsimplified.sort((left, right) => compareAscii(left.preKey, right.preKey));\n";
+  const scheduleNeedle = "  for (let index = 0; index < unsimplified.length; index += 1) {\n    const simplified = simplifyTrace(\n";
+  const scheduleReplacement = `  for (let index = 0; index < unsimplified.length; index += 1) {\n    globalThis.__WORLD_M0_M02_COAST_SCHEDULE__ ??= [];\n    globalThis.__WORLD_M0_M02_COAST_SCHEDULE__.push({\n      preKey: unsimplified[index].preKey,\n      earlierCount: finalBySchedule.length,\n      laterStart: index + 1,\n      laterCount: unsimplified.length - index - 1,\n    });\n    const simplified = simplifyTrace(\n`;
   let traversalValue;
   let shuffledValue;
+  let canonicalScheduleValue;
+  let noSortScheduleValue;
+  let canonicalSchedule;
+  let noSortSchedule;
   let traversalApplied = false;
   let producerShuffleApplied = false;
+  let scheduleInstrumentationApplied = false;
+  let noSortMutationApplied = false;
+
+  const runThreeItems = async (mutatedSource, cacheSuffix) => {
+    writeFileSync(COASTLINE_PATH, mutatedSource);
+    globalThis.__WORLD_M0_M02_COAST_SCHEDULE__ = [];
+    const mutated = await loadModules(cacheSuffix);
+    const createBudget = mutated.scratch?.createTerrainScratchBudget;
+    const allocateGrid = mutated.scratch?.allocateTerrainScratchGrid;
+    const budget = createBudget?.(constants.analysis.maxScratchBytes);
+    const grid = budget?.ok === true
+      ? okValue(allocateGrid?.(7 * CELL_SIZE, 7 * CELL_SIZE, constants, budget.value))
+      : undefined;
+    if (grid) grid.elevationMeters.set(threeItemsElevations);
+    const value = grid
+      ? okValue(mutated.coastline?.deriveLandOceanAndCoastline?.(grid, 0, constants))
+      : undefined;
+    const schedule = Array.isArray(globalThis.__WORLD_M0_M02_COAST_SCHEDULE__)
+      ? globalThis.__WORLD_M0_M02_COAST_SCHEDULE__.map((entry) => ({ ...entry }))
+      : undefined;
+    releaseGrid(grid);
+    delete globalThis.__WORLD_M0_M02_COAST_SCHEDULE__;
+    return { value, schedule };
+  };
+
   try {
     if (source.includes(traversalNeedle)) {
       traversalApplied = true;
@@ -213,28 +323,39 @@ async function runSourceOrderMutations() {
     writeFileSync(COASTLINE_PATH, original);
     if (source.includes(producerNeedle)) {
       producerShuffleApplied = true;
-      writeFileSync(COASTLINE_PATH, source.replace(producerNeedle, producerReplacement));
-      const mutated = await loadModules("?audit-shuffled-producer-order");
-      const createBudget = mutated.scratch?.createTerrainScratchBudget;
-      const allocateGrid = mutated.scratch?.allocateTerrainScratchGrid;
-      const budget = createBudget?.(constants.analysis.maxScratchBytes);
-      const grid = budget?.ok === true
-        ? okValue(allocateGrid?.(7 * CELL_SIZE, 7 * CELL_SIZE, constants, budget.value))
-        : undefined;
-      if (grid) grid.elevationMeters.set(threeItemsElevations);
-      shuffledValue = grid
-        ? okValue(mutated.coastline?.deriveLandOceanAndCoastline?.(grid, 0, constants))
-        : undefined;
-      releaseGrid(grid);
+      const producerSource = source.replace(producerNeedle, producerReplacement);
+      const shuffled = await runThreeItems(producerSource, "?audit-shuffled-producer-order");
+      shuffledValue = shuffled.value;
+      if (producerSource.includes(sortNeedle) && producerSource.includes(scheduleNeedle)) {
+        scheduleInstrumentationApplied = true;
+        const instrumentedSource = producerSource.replace(scheduleNeedle, scheduleReplacement);
+        const canonical = await runThreeItems(instrumentedSource, "?audit-canonical-pre-key-schedule");
+        canonicalScheduleValue = canonical.value;
+        canonicalSchedule = canonical.schedule;
+        noSortMutationApplied = true;
+        const noSort = await runThreeItems(
+          instrumentedSource.replace(sortNeedle, ""),
+          "?audit-no-pre-key-sort",
+        );
+        noSortScheduleValue = noSort.value;
+        noSortSchedule = noSort.schedule;
+      }
     }
   } finally {
+    delete globalThis.__WORLD_M0_M02_COAST_SCHEDULE__;
     writeFileSync(COASTLINE_PATH, original);
   }
   return {
     traversalApplied,
     producerShuffleApplied,
+    scheduleInstrumentationApplied,
+    noSortMutationApplied,
     traversalValue,
     shuffledValue,
+    canonicalScheduleValue,
+    noSortScheduleValue,
+    canonicalSchedule,
+    noSortSchedule,
     restored: readFileSync(COASTLINE_PATH).equals(original),
   };
 }
@@ -279,6 +400,10 @@ const checks = {
     exactGeometry(donutFixture.value?.coastline, expectedDonut) &&
     signedArea2(donutFixture.value?.coastline[0] ?? []) > 0 &&
     signedArea2(donutFixture.value?.coastline[1] ?? []) < 0,
+  bridgedSameComponentDegree4Topology:
+    exactGeometry(bridgedComponentFixture.value?.coastline, expectedBridgedComponent) &&
+    signedArea2(bridgedComponentFixture.value?.coastline[0] ?? []) < 0 &&
+    bridgedComponentFixture.value?.coastline[1]?.filter((candidatePoint) => samePoint(candidatePoint, point(500, 250))).length === 1,
   allCoordinatesWithinFiniteDomain: noOutOfDomainPoint,
   terrainKindIsNotAnAuthority:
     bytesEqual(bytes(terrainKindFixtureA.value), bytes(terrainKindFixtureB.value)) &&
@@ -300,6 +425,18 @@ const checks = {
   shuffledThreeItemProducerOrderRestoresExactFinalBytes:
     threeItemsFixture.value?.coastline.length === 3 && orderMutations.producerShuffleApplied &&
     bytesEqual(bytes(orderMutations.shuffledValue?.coastline), bytes(threeItemsFixture.value.coastline)),
+  canonicalPreKeyScheduleDiscriminatesNoSortMutation:
+    orderMutations.scheduleInstrumentationApplied && orderMutations.noSortMutationApplied &&
+    Array.isArray(orderMutations.canonicalSchedule) && orderMutations.canonicalSchedule.length === 3 &&
+    orderMutations.canonicalSchedule.every((entry, index, schedule) =>
+      entry.earlierCount === index && entry.laterStart === index + 1 && entry.laterCount === schedule.length - index - 1 &&
+      (index === 0 || schedule[index - 1].preKey < entry.preKey)
+    ) &&
+    Array.isArray(orderMutations.noSortSchedule) && orderMutations.noSortSchedule.length === 3 &&
+    JSON.stringify(orderMutations.noSortSchedule.map((entry) => entry.preKey)) !==
+      JSON.stringify(orderMutations.canonicalSchedule.map((entry) => entry.preKey)) &&
+    bytesEqual(bytes(orderMutations.canonicalScheduleValue?.coastline), bytes(threeItemsFixture.value.coastline)) &&
+    bytesEqual(bytes(orderMutations.noSortScheduleValue?.coastline), bytes(threeItemsFixture.value.coastline)),
   mutationSourceRestoredByteIdentically: orderMutations.restored,
   exactTask5PeakAndRelease:
     checkerboardFixture.snapshot?.liveBytes === 26 * 16 && checkerboardFixture.snapshot.peakBytes === 31 * 16 &&
@@ -308,6 +445,24 @@ const checks = {
   task5BatchBoundFailsBeforeClassification:
     lowBudgetFailure?.code === "M02_BOUND_EXCEEDED" && lowBudgetSnapshot?.liveBytes === 26 * 9 &&
     lowBudgetSnapshot.peakBytes === 26 * 9 && lowBudgetLandUntouched && lowBudgetReleased,
+  task5UsesSuppliedScratchAuthority:
+    mismatchedAuthorityFailure?.code === "M02_BOUND_EXCEEDED" &&
+    mismatchedAuthoritySnapshot?.liveBytes === 26 * 9 && mismatchedAuthoritySnapshot.peakBytes === 26 * 9 &&
+    mismatchedAuthorityLandUntouched && mismatchedAuthorityReleased,
+  task5PreflightIncludesUnexpectedLiveBytes:
+    unexpectedLiveFailure?.code === "M02_BOUND_EXCEEDED" &&
+    unexpectedLiveSnapshot?.liveBytes === 26 * 9 + 1 && unexpectedLiveSnapshot.peakBytes === 26 * 9 + 1 &&
+    unexpectedLiveLandUntouched && unexpectedLiveExtraReleased && unexpectedLiveGridReleased,
+  rawCoastlineWorkAvoidsQuadraticGlobalScans:
+    !source.includes("function geometryIsSimple(") &&
+    !source.includes("let cursor: CandidateVertex") &&
+    !source.includes("for (let left = 0; left < open.length; left += 1)"),
+  maximumScaleCombStaysWithinVerifiedBounds:
+    maximumScaleCombFixture.value?.coastline.length === 1 &&
+    maximumScaleCombFixture.value.coastline[0].length === 2399 &&
+    maximumScaleCombFixture.snapshot?.liveBytes === 26 * 864_000 &&
+    maximumScaleCombFixture.snapshot.peakBytes === 31 * 864_000 &&
+    maximumScaleCombFixture.released,
   productionUsesCellEdgesAndSharedScratchOnly:
     source.includes("landComponentLabel") && source.includes("coastVisit") &&
     source.includes("budget.allocateBatch") && source.includes("budget.release") &&
@@ -328,8 +483,26 @@ const out = {
     actualFiniteBorder: finiteBorderFixture.value?.coastline ?? null,
     expectedDonut,
     actualDonut: donutFixture.value?.coastline ?? null,
+    expectedBridgedComponent,
+    actualBridgedComponent: bridgedComponentFixture.value?.coastline ?? null,
     scratchAfterTask5: checkerboardFixture.snapshot ?? null,
     lowBudgetFailure: lowBudgetFailure ?? null,
+    mismatchedAuthorityFailure: mismatchedAuthorityFailure ?? null,
+    mismatchedAuthoritySnapshot: mismatchedAuthoritySnapshot ?? null,
+    unexpectedLiveFailure: unexpectedLiveFailure ?? null,
+    unexpectedLiveSnapshot: unexpectedLiveSnapshot ?? null,
+    maximumScaleComb: {
+      ok: maximumScaleCombFixture.result?.ok === true,
+      featureCount: maximumScaleCombFixture.value?.coastline.length ?? null,
+      vertexCounts: maximumScaleCombFixture.value?.coastline.map((line) => line.length) ?? null,
+      snapshot: maximumScaleCombFixture.snapshot ?? null,
+      released: maximumScaleCombFixture.released ?? false,
+    },
+    canonicalSchedule: orderMutations.canonicalSchedule ?? null,
+    noSortSchedule: orderMutations.noSortSchedule ?? null,
+    noSortOutputStillMatches: bytesEqual(
+      bytes(orderMutations.noSortScheduleValue?.coastline), bytes(threeItemsFixture.value?.coastline),
+    ),
     sourceMutationRestored: orderMutations.restored,
   },
 };

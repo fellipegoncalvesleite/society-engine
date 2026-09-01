@@ -24,14 +24,6 @@ interface CoastTrace {
   readonly componentOrder: number;
 }
 
-interface CandidateVertex {
-  readonly index: number;
-  readonly distanceSquared: number;
-  readonly xM: number;
-  readonly yM: number;
-  readonly originalOrdinal: number;
-}
-
 const NORTH = 0;
 const EAST = 1;
 const SOUTH = 2;
@@ -117,6 +109,90 @@ function coastlineKey(
   return key;
 }
 
+const TRACE_VERTEX_MARK_SHIFT = 4;
+
+interface TraceVertexMarker {
+  readonly cell: number;
+  readonly mask: number;
+}
+
+function traceVertexMarker(
+  point: WorldM0PointM,
+  scratch: TerrainScratchGrid,
+): TraceVertexMarker | undefined {
+  const gridX = point.xM / scratch.cellSizeMeters;
+  const gridY = point.yM / scratch.cellSizeMeters;
+  if (!Number.isSafeInteger(gridX) || !Number.isSafeInteger(gridY) ||
+      gridX < 0 || gridX > scratch.width || gridY < 0 || gridY > scratch.height) {
+    return undefined;
+  }
+
+  let bestCell = -1;
+  let bestCorner = -1;
+  const rows = [scratch.height - gridY - 1, scratch.height - gridY];
+  const columns = [gridX - 1, gridX];
+  for (const row of rows) {
+    if (row < 0 || row >= scratch.height) continue;
+    for (const column of columns) {
+      if (column < 0 || column >= scratch.width) continue;
+      const cell = row * scratch.width + column;
+      if (scratch.landMask[cell] !== 1 || (bestCell >= 0 && cell >= bestCell)) continue;
+      const topY = scratch.height - row;
+      const bottomY = topY - 1;
+      let corner = -1;
+      if (gridY === topY && gridX === column) corner = 0;
+      else if (gridY === topY && gridX === column + 1) corner = 1;
+      else if (gridY === bottomY && gridX === column + 1) corner = 2;
+      else if (gridY === bottomY && gridX === column) corner = 3;
+      if (corner >= 0) {
+        bestCell = cell;
+        bestCorner = corner;
+      }
+    }
+  }
+  return bestCell < 0
+    ? undefined
+    : { cell: bestCell, mask: 1 << (TRACE_VERTEX_MARK_SHIFT + bestCorner) };
+}
+
+function clearTraceVertexMarks(
+  points: readonly WorldM0PointM[],
+  count: number,
+  scratch: TerrainScratchGrid,
+  coastVisit: Uint8Array,
+): void {
+  for (let index = 0; index < count; index += 1) {
+    const marker = traceVertexMarker(points[index], scratch);
+    if (marker !== undefined) coastVisit[marker.cell] &= ~marker.mask;
+  }
+}
+
+function validateTraceVertices(
+  points: readonly WorldM0PointM[],
+  closed: boolean,
+  scratch: TerrainScratchGrid,
+  coastVisit: Uint8Array,
+): WorldM0Result<true> {
+  const pointCount = closed ? points.length - 1 : points.length;
+  for (let index = 0; index < pointCount; index += 1) {
+    const marker = traceVertexMarker(points[index], scratch);
+    if (marker === undefined) {
+      clearTraceVertexMarks(points, index, scratch, coastVisit);
+      return invalid("coastline", "coastline vertex is not on the verified raster lattice");
+    }
+    if ((coastVisit[marker.cell] & marker.mask) !== 0) {
+      clearTraceVertexMarks(points, index, scratch, coastVisit);
+      return invalid(
+        "coastline",
+        closed ? "closed coastline repeats a vertex before closure" : "open coastline repeats a vertex",
+      );
+    }
+    coastVisit[marker.cell] |= marker.mask;
+  }
+  clearTraceVertexMarks(points, pointCount, scratch, coastVisit);
+  return { ok: true, value: true };
+}
+
 function normalizeTrace(
   points: readonly WorldM0PointM[],
   closed: boolean,
@@ -124,22 +200,19 @@ function normalizeTrace(
   heightMeters: number,
   keyView: DataView,
   componentOrder: number,
+  scratch: TerrainScratchGrid,
+  coastVisit: Uint8Array,
 ): WorldM0Result<CoastTrace> {
   if (closed) {
     if (points.length < 4 || !samePoint(points[0], points[points.length - 1])) {
       return invalid("coastline", "closed coastline must contain a non-degenerate exact closure");
     }
+    const unique = validateTraceVertices(points, true, scratch, coastVisit);
+    if (!unique.ok) return unique;
     const open = points.slice(0, -1);
     let first = 0;
     for (let index = 1; index < open.length; index += 1) {
       if (comparePointM(open[index], open[first]) < 0) first = index;
-    }
-    for (let left = 0; left < open.length; left += 1) {
-      for (let right = left + 1; right < open.length; right += 1) {
-        if (samePoint(open[left], open[right])) {
-          return invalid("coastline", "closed coastline repeats a vertex before closure");
-        }
-      }
     }
     const normalized = open.slice(first).concat(open.slice(0, first));
     normalized.push(normalized[0]);
@@ -155,14 +228,8 @@ function normalizeTrace(
   if (points.length < 2 || samePoint(points[0], points[points.length - 1])) {
     return invalid("coastline", "open coastline must contain two distinct endpoints");
   }
-  for (let left = 0; left < points.length; left += 1) {
-    for (let right = left + 1; right < points.length; right += 1) {
-      if (samePoint(points[left], points[right])) {
-        return invalid("coastline", "open coastline repeats a vertex");
-      }
-    }
-  }
-  if (!geometryIsSimple(points, false)) return invalid("coastline", "open coastline is not simple");
+  const unique = validateTraceVertices(points, false, scratch, coastVisit);
+  if (!unique.ok) return unique;
   const first = points[0];
   const last = points[points.length - 1];
   const firstOnBoundary = first.xM === 0 || first.xM === widthMeters || first.yM === 0 || first.yM === heightMeters;
@@ -175,118 +242,15 @@ function normalizeTrace(
   return { ok: true, value: { points: points.slice(), closed: false, preKey, componentOrder } };
 }
 
-function orientation(a: WorldM0PointM, b: WorldM0PointM, c: WorldM0PointM): number {
-  const cross = (b.xM - a.xM) * (c.yM - a.yM) - (b.yM - a.yM) * (c.xM - a.xM);
-  return cross < 0 ? -1 : cross > 0 ? 1 : 0;
-}
-
-function onSegment(a: WorldM0PointM, b: WorldM0PointM, p: WorldM0PointM): boolean {
-  return p.xM >= Math.min(a.xM, b.xM) && p.xM <= Math.max(a.xM, b.xM) &&
-    p.yM >= Math.min(a.yM, b.yM) && p.yM <= Math.max(a.yM, b.yM);
-}
-
-type SegmentRelation = "none" | "touch" | "proper" | "overlap";
-
-function segmentRelation(
-  a: WorldM0PointM,
-  b: WorldM0PointM,
-  c: WorldM0PointM,
-  d: WorldM0PointM,
-): SegmentRelation {
-  const abc = orientation(a, b, c);
-  const abd = orientation(a, b, d);
-  const cda = orientation(c, d, a);
-  const cdb = orientation(c, d, b);
-  if (abc !== 0 && abd !== 0 && abc !== abd && cda !== 0 && cdb !== 0 && cda !== cdb) {
-    return "proper";
-  }
-  if (abc === 0 && abd === 0 && cda === 0 && cdb === 0) {
-    const useX = a.xM !== b.xM;
-    const a0 = useX ? a.xM : a.yM;
-    const a1 = useX ? b.xM : b.yM;
-    const c0 = useX ? c.xM : c.yM;
-    const c1 = useX ? d.xM : d.yM;
-    const low = Math.max(Math.min(a0, a1), Math.min(c0, c1));
-    const high = Math.min(Math.max(a0, a1), Math.max(c0, c1));
-    if (low < high) return "overlap";
-    return low === high ? "touch" : "none";
-  }
-  if ((abc === 0 && onSegment(a, b, c)) || (abd === 0 && onSegment(a, b, d)) ||
-      (cda === 0 && onSegment(c, d, a)) || (cdb === 0 && onSegment(c, d, b))) {
-    return "touch";
-  }
-  return "none";
-}
-
-function geometryIsSimple(points: readonly WorldM0PointM[], closed: boolean): boolean {
-  const edgeCount = closed ? points.length : points.length - 1;
-  for (let first = 0; first < edgeCount; first += 1) {
-    const firstNext = closed ? (first + 1) % points.length : first + 1;
-    for (let second = first + 1; second < edgeCount; second += 1) {
-      const secondNext = closed ? (second + 1) % points.length : second + 1;
-      const adjacent = second === first + 1 || (closed && first === 0 && second === edgeCount - 1);
-      if (!adjacent && segmentRelation(
-        points[first], points[firstNext], points[second], points[secondNext],
-      ) !== "none") return false;
-    }
-  }
-  return true;
-}
-
-function pointClassification(point: WorldM0PointM, ring: readonly WorldM0PointM[]): -1 | 0 | 1 {
-  let inside = false;
-  for (let current = 0, previous = ring.length - 1; current < ring.length; previous = current, current += 1) {
-    const a = ring[previous];
-    const b = ring[current];
-    if (orientation(a, b, point) === 0 && onSegment(a, b, point)) return -1;
-    const crosses = (a.yM > point.yM) !== (b.yM > point.yM);
-    if (crosses) {
-      const intersectionX = a.xM + (point.yM - a.yM) * (b.xM - a.xM) / (b.yM - a.yM);
-      if (intersectionX > point.xM) inside = !inside;
-    }
-  }
-  return inside ? 1 : 0;
-}
-
-function rasterClassificationPreserved(
-  current: readonly WorldM0PointM[],
-  proposed: readonly WorldM0PointM[],
+function collinearReplacementIsExact(
   p: WorldM0PointM,
   v: WorldM0PointM,
   n: WorldM0PointM,
-  scratch: TerrainScratchGrid,
 ): boolean {
-  const cellSize = scratch.cellSizeMeters;
-  const minX = Math.min(p.xM, v.xM, n.xM);
-  const maxX = Math.max(p.xM, v.xM, n.xM);
-  const minY = Math.min(p.yM, v.yM, n.yM);
-  const maxY = Math.max(p.yM, v.yM, n.yM);
-  const firstColumn = Math.max(0, Math.ceil(minX / cellSize - 0.5));
-  const lastColumn = Math.min(scratch.width - 1, Math.floor(maxX / cellSize - 0.5));
-  const firstBottomRow = Math.max(0, Math.ceil(minY / cellSize - 0.5));
-  const lastBottomRow = Math.min(scratch.height - 1, Math.floor(maxY / cellSize - 0.5));
-  for (let bottomRow = firstBottomRow; bottomRow <= lastBottomRow; bottomRow += 1) {
-    for (let column = firstColumn; column <= lastColumn; column += 1) {
-      const center = { xM: (column + 0.5) * cellSize, yM: (bottomRow + 0.5) * cellSize };
-      if (pointClassification(center, current) !== pointClassification(center, proposed)) return false;
-    }
-  }
-  return true;
-}
-
-function candidateLess(left: CandidateVertex, right: CandidateVertex | undefined): boolean {
-  if (right === undefined) return true;
-  if (left.distanceSquared !== right.distanceSquared) return left.distanceSquared < right.distanceSquared;
-  if (left.xM !== right.xM) return left.xM < right.xM;
-  if (left.yM !== right.yM) return left.yM < right.yM;
-  return left.originalOrdinal < right.originalOrdinal;
-}
-
-function candidateGreater(left: CandidateVertex, right: CandidateVertex): boolean {
-  if (left.distanceSquared !== right.distanceSquared) return left.distanceSquared > right.distanceSquared;
-  if (left.xM !== right.xM) return left.xM > right.xM;
-  if (left.yM !== right.yM) return left.yM > right.yM;
-  return left.originalOrdinal > right.originalOrdinal;
+  const cross = (v.xM - p.xM) * (n.yM - p.yM) - (v.yM - p.yM) * (n.xM - p.xM);
+  return cross === 0 &&
+    v.xM >= Math.min(p.xM, n.xM) && v.xM <= Math.max(p.xM, n.xM) &&
+    v.yM >= Math.min(p.yM, n.yM) && v.yM <= Math.max(p.yM, n.yM);
 }
 
 function pointToSegmentDistanceSquared(p: WorldM0PointM, v: WorldM0PointM, n: WorldM0PointM): number {
@@ -305,38 +269,42 @@ function pointToSegmentDistanceSquared(p: WorldM0PointM, v: WorldM0PointM, n: Wo
   return ex * ex + ey * ey;
 }
 
-function peerRelationPreserved(
+function rasterCornerHasProtectedCellCenter(
   p: WorldM0PointM,
   v: WorldM0PointM,
   n: WorldM0PointM,
-  earlierFinalPeers: readonly CoastTrace[],
-  laterUnsimplifiedPeers: readonly CoastTrace[],
-  laterStart: number,
+  scratch: TerrainScratchGrid,
 ): boolean {
-  const peerPreserved = (peer: CoastTrace): boolean => {
-    const pointCount = peer.closed ? peer.points.length - 1 : peer.points.length;
-    const edgeCount = peer.closed ? pointCount : pointCount - 1;
-    for (let edge = 0; edge < edgeCount; edge += 1) {
-      const a = peer.points[edge];
-      const b = peer.points[(edge + 1) % pointCount];
-      const next = segmentRelation(p, n, a, b);
-      const previousFirst = segmentRelation(p, v, a, b);
-      const previousSecond = segmentRelation(v, n, a, b);
-      if (next === "proper" || next === "overlap") return false;
-      if (previousFirst === "proper" || previousFirst === "overlap" ||
-          previousSecond === "proper" || previousSecond === "overlap") return false;
-      const previouslyTouched = previousFirst === "touch" || previousSecond === "touch";
-      if ((next === "touch") !== previouslyTouched) return false;
-    }
-    return true;
-  };
-  for (const peer of earlierFinalPeers) {
-    if (!peerPreserved(peer)) return false;
+  const cellSize = scratch.cellSizeMeters;
+  const pvx = p.xM - v.xM;
+  const pvy = p.yM - v.yM;
+  const nvx = n.xM - v.xM;
+  const nvy = n.yM - v.yM;
+  const pHorizontal = pvy === 0 && pvx !== 0;
+  const pVertical = pvx === 0 && pvy !== 0;
+  const nHorizontal = nvy === 0 && nvx !== 0;
+  const nVertical = nvx === 0 && nvy !== 0;
+  if (!((pHorizontal && nVertical) || (pVertical && nHorizontal))) return false;
+
+  const horizontal = pHorizontal ? pvx : nvx;
+  const vertical = pVertical ? pvy : nvy;
+  const horizontalLength = Math.abs(horizontal);
+  const verticalLength = Math.abs(vertical);
+  if (horizontalLength < cellSize || verticalLength < cellSize ||
+      horizontalLength % cellSize !== 0 || verticalLength % cellSize !== 0) {
+    return false;
   }
-  for (let index = laterStart; index < laterUnsimplifiedPeers.length; index += 1) {
-    if (!peerPreserved(laterUnsimplifiedPeers[index])) return false;
+  // The center of the raster cell in the corner wedge is inside or exactly on
+  // the proposed diagonal because c/(2a) + c/(2b) <= 1 for a,b >= c.
+  if (cellSize * (horizontalLength + verticalLength) > 2 * horizontalLength * verticalLength) {
+    return false;
   }
-  return true;
+  const centerX = v.xM + Math.sign(horizontal) * cellSize / 2;
+  const centerY = v.yM + Math.sign(vertical) * cellSize / 2;
+  const column = centerX / cellSize - 0.5;
+  const bottomRow = centerY / cellSize - 0.5;
+  return Number.isSafeInteger(column) && Number.isSafeInteger(bottomRow) &&
+    column >= 0 && column < scratch.width && bottomRow >= 0 && bottomRow < scratch.height;
 }
 
 function simplifyTrace(
@@ -349,70 +317,69 @@ function simplifyTrace(
   maxVertices: number,
   keyView: DataView,
 ): WorldM0Result<CoastTrace> {
-  const points = trace.closed ? trace.points.slice(0, -1) : trace.points.slice();
-  const requiredAreaSign = trace.closed ? Math.sign(signedArea2(trace.points)) : 0;
-  const toleranceSquared = toleranceMeters * toleranceMeters;
-  let cursor: CandidateVertex | undefined;
-  while (true) {
-    let best: CandidateVertex | undefined;
-    const firstCandidate = trace.closed ? 1 : 1;
-    const lastCandidate = trace.closed ? points.length - 1 : points.length - 2;
-    if (trace.closed && points.length <= 3) break;
-    for (let index = firstCandidate; index <= lastCandidate; index += 1) {
-      const previous = points[(index - 1 + points.length) % points.length];
-      const vertex = points[index];
-      const next = points[(index + 1) % points.length];
-      const distanceSquared = pointToSegmentDistanceSquared(previous, vertex, next);
-      if (distanceSquared <= toleranceSquared) {
-        const candidate = {
-          index,
-          distanceSquared,
-          xM: vertex.xM,
-          yM: vertex.yM,
-          // Normalization rejects duplicate vertices, so exact (x,y) already makes
-          // the final ordinal discriminator unreachable without a second dense buffer.
-          originalOrdinal: 0,
-        };
-        if ((cursor === undefined || candidateGreater(candidate, cursor)) && candidateLess(candidate, best)) {
-          best = candidate;
-        }
-      }
-    }
-    if (best === undefined) break;
+  if (laterStart !== earlierFinalPeers.length + 1 || laterStart < 1 ||
+      laterStart > laterUnsimplifiedPeers.length) {
+    return invalid("coastline", "domain-0 simplification peer schedule is inconsistent");
+  }
 
-    const index = best.index;
-    const previous = points[(index - 1 + points.length) % points.length];
-    const vertex = points[index];
-    const next = points[(index + 1) % points.length];
-    const geometricallyIdentical = orientation(previous, vertex, next) === 0 &&
-      onSegment(previous, next, vertex);
-    let safe = trace.closed || geometricallyIdentical;
-    if (!trace.closed) {
-      safe = geometricallyIdentical;
+  const source = trace.closed ? trace.points.slice(0, -1) : trace.points.slice();
+  const points: WorldM0PointM[] = [];
+  // For cell-edge coastline, every exact-collinear deletion has distanceSquared=0,
+  // is safe against every peer because p->n is geometrically identical to p->v->n,
+  // and commutes with every other such deletion. The frozen tuple therefore has an
+  // all-zero safe phase before any positive-distance candidate. Collapse that phase
+  // in one local pass instead of repeatedly rescanning the whole trace.
+  for (const point of source) {
+    points.push(point);
+    while (points.length >= 3) {
+      const last = points.length - 1;
+      if (!collinearReplacementIsExact(points[last - 2], points[last - 1], points[last])) break;
+      points[last - 1] = points[last];
+      points.pop();
     }
-    const proposed = points.slice();
-    proposed.splice(index, 1);
-    if (safe && trace.closed && !geometricallyIdentical) {
-      const closedProposed = proposed.concat(proposed[0]);
-      const area2 = signedArea2(closedProposed);
-      safe = Number.isFinite(area2) && Math.sign(area2) === requiredAreaSign &&
-        rasterClassificationPreserved(points, proposed, previous, vertex, next, scratch);
-    }
-    if (safe && !geometricallyIdentical) safe = geometryIsSimple(proposed, trace.closed);
-    if (safe && !geometricallyIdentical) {
-      safe = peerRelationPreserved(
-        previous, vertex, next, earlierFinalPeers, laterUnsimplifiedPeers, laterStart,
-      );
-    }
-    if (safe) {
-      points.splice(index, 1);
-      cursor = undefined;
-    } else {
-      cursor = best;
+  }
+  if (trace.closed) {
+    // Ring index 0 is the protected canonical start. Only the final interior
+    // vertex may collapse across the temporary closure edge.
+    while (points.length > 3 &&
+           collinearReplacementIsExact(points[points.length - 2], points[points.length - 1], points[0])) {
+      points.pop();
     }
   }
 
+  const toleranceSquared = toleranceMeters * toleranceMeters;
+  const firstCandidate = 1;
+  const lastCandidate = trace.closed ? points.length - 1 : points.length - 2;
+  for (let index = firstCandidate; index <= lastCandidate; index += 1) {
+    const previous = points[(index - 1 + points.length) % points.length];
+    const vertex = points[index];
+    const next = points[(index + 1) % points.length];
+    const distanceSquared = pointToSegmentDistanceSquared(previous, vertex, next);
+    if (!Number.isFinite(distanceSquared)) {
+      return invalid("coastline", "simplification candidate has invalid point-to-segment distance");
+    }
+    if (distanceSquared > toleranceSquared) continue;
+    if (collinearReplacementIsExact(previous, vertex, next)) {
+      return invalid("coastline", "exact-collinear simplification phase left a deletable vertex");
+    }
+    if (trace.closed && !rasterCornerHasProtectedCellCenter(previous, vertex, next, scratch)) {
+      return invalid("coastline", "closed raster simplification candidate lacks its protected cell-center witness");
+    }
+    // Open finite-border coastline forbids every non-collinear shortcut. For a
+    // closed cell-edge ring, the witnessed cell center lies inside/on the changed
+    // corner triangle, so the diagonal would change before/after raster
+    // classification. Thus every remaining in-tolerance candidate is rejected
+    // without an all-pairs geometry or peer rescan.
+  }
+
   const finalPoints = trace.closed ? points.concat(points[0]) : points;
+  if (trace.closed) {
+    const beforeSign = Math.sign(signedArea2(trace.points));
+    const afterSign = Math.sign(signedArea2(finalPoints));
+    if (beforeSign === 0 || afterSign !== beforeSign) {
+      return invalid("coastline", "closed coastline simplification changed ring orientation");
+    }
+  }
   if (finalPoints.length > maxVertices) {
     return bound("geometry.maxPolylineVerticesPerFeature", "final coastline exceeds the verified vertex bound");
   }
@@ -448,6 +415,26 @@ export function deriveLandOceanAndCoastline(
   const maximumCoastEdges = 4 * cellCount;
   if (!Number.isSafeInteger(maximumCoastEdges)) {
     return bound("coastline", "finite raster coastline edge bound exceeds the safe-integer range");
+  }
+  const task5BatchBytes = 5 * cellCount;
+  if (!Number.isSafeInteger(task5BatchBytes) ||
+      !Number.isSafeInteger(constants.analysis.maxScratchBytes) ||
+      constants.analysis.maxScratchBytes <= 0 || Object.is(constants.analysis.maxScratchBytes, -0)) {
+    return bound("analysis.maxScratchBytes", "invalid Task-5 scratch byte authority");
+  }
+  const budgetSnapshot = scratch.budget.snapshot();
+  if (!Number.isSafeInteger(budgetSnapshot.maxBytes) || budgetSnapshot.maxBytes <= 0 ||
+      !Number.isSafeInteger(budgetSnapshot.liveBytes) || budgetSnapshot.liveBytes < 0 ||
+      !Number.isSafeInteger(budgetSnapshot.peakBytes) || budgetSnapshot.peakBytes < budgetSnapshot.liveBytes ||
+      budgetSnapshot.liveBytes > budgetSnapshot.maxBytes || budgetSnapshot.peakBytes > budgetSnapshot.maxBytes) {
+    return invalid("scratch.budget", "scratch ledger snapshot is internally inconsistent");
+  }
+  const prospectiveTask5LiveBytes = budgetSnapshot.liveBytes + task5BatchBytes;
+  if (!Number.isSafeInteger(prospectiveTask5LiveBytes) ||
+      budgetSnapshot.maxBytes > constants.analysis.maxScratchBytes ||
+      budgetSnapshot.peakBytes > constants.analysis.maxScratchBytes ||
+      prospectiveTask5LiveBytes > constants.analysis.maxScratchBytes) {
+    return bound("analysis.maxScratchBytes", "Task-5 peak-live scratch exceeds the supplied authority");
   }
   for (let cell = 0; cell < cellCount; cell += 1) {
     if (!Number.isFinite(scratch.elevationMeters[cell])) {
@@ -566,7 +553,7 @@ export function deriveLandOceanAndCoastline(
             const nextDirection = direction(start, end);
             const cross = previousDirection.x * nextDirection.y - previousDirection.y * nextDirection.x;
             const dot = previousDirection.x * nextDirection.x + previousDirection.y * nextDirection.y;
-            turn = cross > 0 ? 3 : dot > 0 ? 2 : cross < 0 ? 1 : 0;
+            turn = cross < 0 ? 3 : dot > 0 ? 2 : cross > 0 ? 1 : 0;
           }
           if (bestCell < 0 || turn > bestTurn ||
               (turn === bestTurn && (cell < bestCell || (cell === bestCell && side < bestSide)))) {
@@ -604,7 +591,7 @@ export function deriveLandOceanAndCoastline(
       if (sameVertex(end, firstVertex)) {
         const normalized = normalizeTrace(
           points, true, scratch.width * scratch.cellSizeMeters,
-          scratch.height * scratch.cellSizeMeters, keyView, pointOrdinal(component),
+          scratch.height * scratch.cellSizeMeters, keyView, pointOrdinal(component), scratch, coastVisit,
         );
         if (!normalized.ok) return normalized;
         traces.push(normalized.value);
@@ -617,7 +604,7 @@ export function deriveLandOceanAndCoastline(
         }
         const normalized = normalizeTrace(
           points, false, scratch.width * scratch.cellSizeMeters,
-          scratch.height * scratch.cellSizeMeters, keyView, pointOrdinal(component),
+          scratch.height * scratch.cellSizeMeters, keyView, pointOrdinal(component), scratch, coastVisit,
         );
         if (!normalized.ok) return normalized;
         traces.push(normalized.value);
