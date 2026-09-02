@@ -39,6 +39,7 @@ const COMMON_OWNERS = [6, 3, 0, 7, 1, 8, 2, 5];
 const COMMON_ORDINALS = [2, 4, 6, 1, -1, 7, 0, 3, 5];
 const ZERO_RANKS_9 = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 const G5_RANKS = [0, 0, 0, 0, 1, 0, 0, 0, 0];
+const FLAT_RANK_BINDING_RANKS = [3, 0, 2, 3, 3, 4, 3, 3, 3];
 const G1_ROUTING = [98, 96, 94, 99, 97, 95, 100, 98, 96];
 const G1_AREA = [62500, 62500, 99395.90441260832, 62500, 62500, 88104.09558739168, 62500, 62500, 62500];
 const F1_PRIMARY = [-1, -1, -1, -1, 2, -1, -1, -1, -1];
@@ -330,6 +331,62 @@ async function runTraversalSourceMutation(modules, baselineF1, baselineF2) {
   };
 }
 
+async function runFlatRankSourceMutation(modules) {
+  const absent = { applied: false, rejected: false, selectedFirstEqual: false, restored: !existsSync(FLOW_PATH), result: null };
+  if (!existsSync(FLOW_PATH) || !modules.flow) return absent;
+  const original = readFileSync(FLOW_PATH);
+  const source = original.toString("utf8");
+  const selectionNeedle = `    if (neighbor < 0 || scratch.landMask[neighbor] !== 1 ||
+        scratch.routingElevationMeters[neighbor] !== centerElevation ||
+        scratch.flatRank[neighbor] >= scratch.flatRank[centerIndex]) continue;
+    const rank = scratch.flatRank[neighbor];
+    if (rank < bestRank ||
+        (rank === bestRank && (bestOrdinal < 0 || ordinal < bestOrdinal)) ||
+        (rank === bestRank && ordinal === bestOrdinal && compareCellPoint(neighbor, bestReceiver, scratch) < 0)) {
+      bestReceiver = neighbor;
+      bestOrdinal = ordinal;
+      bestRank = rank;
+    }
+`;
+  if (!source.includes(selectionNeedle)) return absent;
+  const mutatedSelection = `    if (neighbor < 0 || scratch.landMask[neighbor] !== 1 ||
+        scratch.routingElevationMeters[neighbor] !== centerElevation) continue;
+    bestReceiver = neighbor;
+    bestOrdinal = ordinal;
+    bestRank = 0;
+    break;
+`;
+  let rejected = false;
+  let selectedFirstEqual = false;
+  let result = null;
+  try {
+    writeFileSync(FLOW_PATH, source.replace(selectionNeedle, mutatedSelection));
+    const mutated = await loadModules("?audit-flow-ignore-flat-rank");
+    const observed = checkGoldenDecision(mutated, {
+      width: 3, height: 3,
+      routing: Array(9).fill(100),
+      flatRank: FLAT_RANK_BINDING_RANKS,
+      kinds: COMMON_KINDS, ordinals: COMMON_ORDINALS, owners: COMMON_OWNERS,
+    }, 4, {
+      selectedFacet: null, directionRadians: Math.PI / 2, usedFlatRankFallback: true, terminalReceiverOrdinal: null,
+      receivers: [{ receiverIndex: 1, neighborOrdinal: 2, weight: 1 }],
+    });
+    rejected = !observed.pass;
+    result = observed.result;
+    selectedFirstEqual = observed.result?.receivers?.length === 1 &&
+      observed.result.receivers[0]?.receiverIndex === 5 && observed.result.receivers[0]?.neighborOrdinal === 0;
+  } finally {
+    writeFileSync(FLOW_PATH, original);
+  }
+  return {
+    applied: true,
+    rejected,
+    selectedFirstEqual,
+    restored: readFileSync(FLOW_PATH).equals(original),
+    result,
+  };
+}
+
 async function runBudgetNegative(modules) {
   const result = {
     baseBytes: 22_464_000,
@@ -422,6 +479,9 @@ const checks = {
   g3DiagonalZeroWeightOmitted: false,
   g4BorderIncompleteFacetsSkipped: false,
   g5FlatFallbackLiteralRank: false,
+  flatRankBindingMinimumLowerRank: false,
+  flatRankIgnoreMutationRejected: false,
+  flatRankMutationRestored: false,
   g6TerminalPositive004Precedence: false,
   primaryHalfTieCanonicalNeighbor: false,
   f1FullArrays: false,
@@ -517,6 +577,23 @@ if (modulePresent) {
   checks.g5FlatFallbackLiteralRank = g5.pass && arraysExact(G5_RANKS, [0, 0, 0, 0, 1, 0, 0, 0, 0]) &&
     g5Analysis.result?.ok && g5Analysis.result.value.primaryReceiver[4] === 5 &&
     g5Analysis.result.value.secondaryReceiver[4] === -1 && g5Analysis.result.value.contributingAreaM2[5] === 125000;
+
+  const flatRankBindingDefinition = {
+    ...common,
+    routing: Array(9).fill(100),
+    flatRank: FLAT_RANK_BINDING_RANKS,
+  };
+  const flatRankBinding = checkGoldenDecision(modules, flatRankBindingDefinition, 4, {
+    selectedFacet: null, directionRadians: Math.PI / 2, usedFlatRankFallback: true, terminalReceiverOrdinal: null,
+    receivers: [{ receiverIndex: 1, neighborOrdinal: 2, weight: 1 }],
+  });
+  const flatRankBindingAnalysis = runFixtureAnalysis(modules, flatRankBindingDefinition);
+  checks.flatRankBindingMinimumLowerRank = flatRankBinding.pass &&
+    arraysExact(FLAT_RANK_BINDING_RANKS, [3, 0, 2, 3, 3, 4, 3, 3, 3]) &&
+    flatRankBindingAnalysis.result?.ok && flatRankBindingAnalysis.result.value.primaryReceiver[4] === 1 &&
+    flatRankBindingAnalysis.result.value.secondaryReceiver[4] === -1 &&
+    flatRankBindingAnalysis.result.value.contributingAreaM2[1] === 125000;
+  evidence.flatRankBinding = flatRankBinding.result;
 
   const g6Definition = {
     width: 3, height: 3,
@@ -634,6 +711,11 @@ if (modulePresent) {
   checks.reversedDiscoveryEquivalentF2 = discovery.applied && discovery.f2Equivalent;
   checks.discoveryMutationRestored = discovery.applied && discovery.restored;
   evidence.discovery = discovery;
+
+  const flatRankMutation = await runFlatRankSourceMutation(modules);
+  checks.flatRankIgnoreMutationRejected = flatRankMutation.applied && flatRankMutation.rejected && flatRankMutation.selectedFirstEqual;
+  checks.flatRankMutationRestored = flatRankMutation.applied && flatRankMutation.restored;
+  evidence.flatRankMutation = flatRankMutation;
 
   const budget = await runBudgetNegative(modules);
   checks.budgetTask6PeakExact = budget.task6PeakExact && budget.beforeTask7Exact;
