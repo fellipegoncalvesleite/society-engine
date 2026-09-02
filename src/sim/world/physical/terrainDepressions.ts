@@ -46,6 +46,7 @@ const EDGE_NORTH = 0;
 const EDGE_EAST = 1;
 const EDGE_SOUTH = 2;
 const EDGE_WEST = 3;
+const RING_VERTEX_MARK_SHIFT = 4;
 
 const TASK6_STAGE_LABELS = [
   "provisionalRoutingElevation",
@@ -272,10 +273,106 @@ function comparePoint(left: WorldM0PointM, right: WorldM0PointM): number {
   return left.yM < right.yM ? -1 : left.yM > right.yM ? 1 : 0;
 }
 
-function normalizeRing(points: readonly WorldM0PointM[]): WorldM0Result<readonly WorldM0PointM[]> {
+interface BoundaryVertexMarker {
+  readonly cell: number;
+  readonly mask: number;
+}
+
+function boundaryVertexMarker(
+  point: WorldM0PointM,
+  scratch: TerrainScratchGrid,
+): BoundaryVertexMarker | undefined {
+  const gridX = point.xM / scratch.cellSizeMeters;
+  const gridY = point.yM / scratch.cellSizeMeters;
+  if (!Number.isSafeInteger(gridX) || !Number.isSafeInteger(gridY) ||
+      gridX < 0 || gridX > scratch.width || gridY < 0 || gridY > scratch.height) {
+    return undefined;
+  }
+
+  let bestCell = -1;
+  let bestCorner = -1;
+  const rowAbove = scratch.height - gridY - 1;
+  const rowBelow = scratch.height - gridY;
+  const columnLeft = gridX - 1;
+  const columnRight = gridX;
+  for (let rowChoice = 0; rowChoice < 2; rowChoice += 1) {
+    const row = rowChoice === 0 ? rowAbove : rowBelow;
+    if (row < 0 || row >= scratch.height) continue;
+    for (let columnChoice = 0; columnChoice < 2; columnChoice += 1) {
+      const column = columnChoice === 0 ? columnLeft : columnRight;
+      if (column < 0 || column >= scratch.width) continue;
+      const cell = row * scratch.width + column;
+      if (bestCell >= 0 && cell >= bestCell) continue;
+      const top = scratch.height - row;
+      const bottom = top - 1;
+      let corner = -1;
+      if (gridY === top && gridX === column) corner = 0;
+      else if (gridY === top && gridX === column + 1) corner = 1;
+      else if (gridY === bottom && gridX === column + 1) corner = 2;
+      else if (gridY === bottom && gridX === column) corner = 3;
+      if (corner >= 0) {
+        bestCell = cell;
+        bestCorner = corner;
+      }
+    }
+  }
+  return bestCell < 0
+    ? undefined
+    : { cell: bestCell, mask: 1 << (RING_VERTEX_MARK_SHIFT + bestCorner) };
+}
+
+function clearBoundaryVertexMarks(
+  points: readonly WorldM0PointM[],
+  count: number,
+  scratch: TerrainScratchGrid,
+  edgeVisit: Uint8Array,
+): void {
+  for (let index = 0; index < count; index += 1) {
+    const marker = boundaryVertexMarker(points[index], scratch);
+    if (marker !== undefined) edgeVisit[marker.cell] &= ~marker.mask;
+  }
+}
+
+function validateBoundaryRingVertices(
+  points: readonly WorldM0PointM[],
+  scratch: TerrainScratchGrid,
+  edgeVisit: Uint8Array,
+): WorldM0Result<true> {
+  const pointCount = points.length - 1;
+  for (let index = 0; index < pointCount; index += 1) {
+    const marker = boundaryVertexMarker(points[index], scratch);
+    if (marker === undefined) {
+      clearBoundaryVertexMarks(points, index, scratch, edgeVisit);
+      return worldM0Failure(
+        "M02_BASIN_GEOMETRY_INVALID",
+        "boundaryRings",
+        "depression boundary vertex is not on the verified raster lattice",
+      );
+    }
+    if ((edgeVisit[marker.cell] & marker.mask) !== 0) {
+      clearBoundaryVertexMarks(points, index, scratch, edgeVisit);
+      return worldM0Failure(
+        "M02_BASIN_GEOMETRY_INVALID",
+        "boundaryRings",
+        "depression boundary repeats an internal vertex",
+      );
+    }
+    edgeVisit[marker.cell] |= marker.mask;
+  }
+  clearBoundaryVertexMarks(points, pointCount, scratch, edgeVisit);
+  return { ok: true, value: true };
+}
+
+function normalizeRing(
+  points: readonly WorldM0PointM[],
+  scratch: TerrainScratchGrid,
+  edgeVisit: Uint8Array,
+): WorldM0Result<readonly WorldM0PointM[]> {
   if (points.length < 4 || comparePoint(points[0], points[points.length - 1]) !== 0) {
     return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression boundary ring is not exactly closed");
   }
+  const vertices = validateBoundaryRingVertices(points, scratch, edgeVisit);
+  if (!vertices.ok) return vertices;
   const open = points.slice(0, -1);
   let first = 0;
   for (let index = 1; index < open.length; index += 1) {
@@ -283,14 +380,9 @@ function normalizeRing(points: readonly WorldM0PointM[]): WorldM0Result<readonly
   }
   const normalized = open.slice(first).concat(open.slice(0, first));
   normalized.push(normalized[0]);
-  for (let left = 0; left + 1 < normalized.length; left += 1) {
-    if (comparePoint(normalized[left], normalized[left + 1]) === 0) {
+  for (let index = 0; index + 1 < normalized.length; index += 1) {
+    if (comparePoint(normalized[index], normalized[index + 1]) === 0) {
       return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression boundary has a zero-length edge");
-    }
-    for (let right = left + 1; right + 1 < normalized.length; right += 1) {
-      if (comparePoint(normalized[left], normalized[right]) === 0) {
-        return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression boundary repeats an internal vertex");
-      }
     }
   }
   const area2 = signedArea2(normalized);
@@ -300,34 +392,6 @@ function normalizeRing(points: readonly WorldM0PointM[]): WorldM0Result<readonly
   return { ok: true, value: normalized };
 }
 
-function pointInsideRing(point: WorldM0PointM, ring: readonly WorldM0PointM[]): boolean {
-  let inside = false;
-  for (let index = 0; index + 1 < ring.length; index += 1) {
-    const a = ring[index];
-    const b = ring[index + 1];
-    const crosses = (a.yM > point.yM) !== (b.yM > point.yM);
-    if (!crosses) continue;
-    const x = a.xM + (point.yM - a.yM) * (b.xM - a.xM) / (b.yM - a.yM);
-    if (x > point.xM) inside = !inside;
-  }
-  return inside;
-}
-
-function ringInteriorProbe(ring: readonly WorldM0PointM[]): WorldM0PointM {
-  const first = ring[0];
-  const second = ring[1];
-  const dx = second.xM - first.xM;
-  const dy = second.yM - first.yM;
-  const area2 = signedArea2(ring);
-  const midX = (first.xM + second.xM) / 2;
-  const midY = (first.yM + second.yM) / 2;
-  const scale = 0.25;
-  if (area2 > 0) {
-    return { xM: midX - Math.sign(dy) * scale * Math.max(Math.abs(dx), Math.abs(dy)), yM: midY + Math.sign(dx) * scale * Math.max(Math.abs(dx), Math.abs(dy)) };
-  }
-  return { xM: midX + Math.sign(dy) * scale * Math.max(Math.abs(dx), Math.abs(dy)), yM: midY - Math.sign(dx) * scale * Math.max(Math.abs(dx), Math.abs(dy)) };
-}
-
 function compareRingSequences(left: readonly WorldM0PointM[], right: readonly WorldM0PointM[]): number {
   const length = Math.min(left.length, right.length);
   for (let index = 0; index < length; index += 1) {
@@ -335,6 +399,267 @@ function compareRingSequences(left: readonly WorldM0PointM[], right: readonly Wo
     if (compared !== 0) return compared;
   }
   return left.length < right.length ? -1 : left.length > right.length ? 1 : 0;
+}
+
+function compareBoundaryProbeOrder(
+  leftRing: readonly WorldM0PointM[],
+  leftProbeKey: number,
+  rightRing: readonly WorldM0PointM[],
+  rightProbeKey: number,
+): number {
+  if (leftProbeKey !== rightProbeKey) return leftProbeKey < rightProbeKey ? -1 : 1;
+  const firstPoint = comparePoint(leftRing[0], rightRing[0]);
+  return firstPoint !== 0 ? firstPoint : compareRingSequences(leftRing, rightRing);
+}
+
+function compareBoundaryCanonicalOrder(
+  leftRing: readonly WorldM0PointM[],
+  leftDepth: number,
+  rightRing: readonly WorldM0PointM[],
+  rightDepth: number,
+): number {
+  const leftRole = leftDepth % 2;
+  const rightRole = rightDepth % 2;
+  if (leftRole !== rightRole) return leftRole - rightRole;
+  if (leftDepth !== rightDepth) return leftDepth < rightDepth ? -1 : 1;
+  const firstPoint = comparePoint(leftRing[0], rightRing[0]);
+  return firstPoint !== 0 ? firstPoint : compareRingSequences(leftRing, rightRing);
+}
+
+function sortRingKeyPairs(
+  rings: (readonly WorldM0PointM[])[],
+  keys: Int32Array,
+  count: number,
+  compare: (
+    leftRing: readonly WorldM0PointM[], leftKey: number,
+    rightRing: readonly WorldM0PointM[], rightKey: number,
+  ) => number,
+): void {
+  const swap = (left: number, right: number): void => {
+    const ring = rings[left];
+    rings[left] = rings[right];
+    rings[right] = ring;
+    const key = keys[left];
+    keys[left] = keys[right];
+    keys[right] = key;
+  };
+  const siftDown = (rootStart: number, length: number): void => {
+    let root = rootStart;
+    while (true) {
+      const left = root * 2 + 1;
+      if (left >= length) return;
+      let best = left;
+      const right = left + 1;
+      if (right < length && compare(rings[right], keys[right], rings[left], keys[left]) > 0) best = right;
+      if (compare(rings[best], keys[best], rings[root], keys[root]) <= 0) return;
+      swap(root, best);
+      root = best;
+    }
+  };
+  for (let root = Math.floor(count / 2) - 1; root >= 0; root -= 1) siftDown(root, count);
+  for (let end = count - 1; end > 0; end -= 1) {
+    swap(0, end);
+    siftDown(0, end);
+  }
+}
+
+function sortBoundaryEvents(
+  eventKeys: Int32Array,
+  eventRingOrdinals: Int32Array,
+  eventCount: number,
+): void {
+  const compare = (left: number, right: number): number => {
+    if (eventKeys[left] !== eventKeys[right]) return eventKeys[left] < eventKeys[right] ? -1 : 1;
+    return eventRingOrdinals[left] < eventRingOrdinals[right]
+      ? -1
+      : eventRingOrdinals[left] > eventRingOrdinals[right] ? 1 : 0;
+  };
+  const swap = (left: number, right: number): void => {
+    const key = eventKeys[left];
+    eventKeys[left] = eventKeys[right];
+    eventKeys[right] = key;
+    const ring = eventRingOrdinals[left];
+    eventRingOrdinals[left] = eventRingOrdinals[right];
+    eventRingOrdinals[right] = ring;
+  };
+  const siftDown = (rootStart: number, length: number): void => {
+    let root = rootStart;
+    while (true) {
+      const left = root * 2 + 1;
+      if (left >= length) return;
+      let best = left;
+      const right = left + 1;
+      if (right < length && compare(right, left) > 0) best = right;
+      if (compare(best, root) <= 0) return;
+      swap(root, best);
+      root = best;
+    }
+  };
+  for (let root = Math.floor(eventCount / 2) - 1; root >= 0; root -= 1) siftDown(root, eventCount);
+  for (let end = eventCount - 1; end > 0; end -= 1) {
+    swap(0, end);
+    siftDown(0, end);
+  }
+}
+
+function boundaryRingProbeKey(
+  ring: readonly WorldM0PointM[],
+  scratch: TerrainScratchGrid,
+): number | undefined {
+  const d = scratch.cellSizeMeters;
+  const x0 = ring[0].xM / d;
+  const y0 = ring[0].yM / d;
+  const x1 = ring[1].xM / d;
+  const y1 = ring[1].yM / d;
+  if (![x0, y0, x1, y1].every(Number.isSafeInteger)) return undefined;
+  const dx = x1 - x0;
+  const dy = y1 - y0;
+  if (Math.abs(dx) + Math.abs(dy) !== 1) return undefined;
+  const area2 = signedArea2(ring);
+  if (!Number.isFinite(area2) || area2 === 0) return undefined;
+  const orientation = area2 > 0 ? 1 : -1;
+  const probeX2 = 2 * x0 + dx - orientation * dy;
+  const probeY2 = 2 * y0 + dy + orientation * dx;
+  if (!Number.isSafeInteger(probeX2) || !Number.isSafeInteger(probeY2) ||
+      probeX2 % 2 === 0 || probeY2 % 2 === 0) return undefined;
+  const column = (probeX2 - 1) / 2;
+  const bottomRow = (probeY2 - 1) / 2;
+  const row = scratch.height - 1 - bottomRow;
+  if (!Number.isSafeInteger(row) || !Number.isSafeInteger(column) ||
+      row < 0 || row >= scratch.height || column < 0 || column >= scratch.width) return undefined;
+  return row * scratch.width + column;
+}
+
+function boundaryRingRepresentative(
+  ring: readonly WorldM0PointM[],
+  scratch: TerrainScratchGrid,
+  depressionLabel: Int32Array,
+  componentLabel: number,
+): { readonly cell: number; readonly mask: number } | undefined {
+  const d = scratch.cellSizeMeters;
+  const startX = ring[0].xM / d;
+  const startY = ring[0].yM / d;
+  const endX = ring[1].xM / d;
+  const endY = ring[1].yM / d;
+  if (![startX, startY, endX, endY].every(Number.isSafeInteger)) return undefined;
+  const rowAbove = scratch.height - startY - 1;
+  const rowBelow = scratch.height - startY;
+  const columnLeft = startX - 1;
+  const columnRight = startX;
+  for (let rowChoice = 0; rowChoice < 2; rowChoice += 1) {
+    const row = rowChoice === 0 ? rowAbove : rowBelow;
+    if (row < 0 || row >= scratch.height) continue;
+    for (let columnChoice = 0; columnChoice < 2; columnChoice += 1) {
+      const column = columnChoice === 0 ? columnLeft : columnRight;
+      if (column < 0 || column >= scratch.width) continue;
+      const cell = row * scratch.width + column;
+      if (depressionLabel[cell] !== componentLabel) continue;
+      for (let side = EDGE_NORTH; side <= EDGE_WEST; side += 1) {
+        const start = edgeStart(cell, side, scratch);
+        const end = edgeEnd(cell, side, scratch);
+        if (start.x === startX && start.y === startY && end.x === endX && end.y === endY) {
+          return { cell, mask: 1 << side };
+        }
+      }
+    }
+  }
+  return undefined;
+}
+
+function computeBoundaryContainmentDepths(
+  rings: (readonly WorldM0PointM[])[],
+  scratch: TerrainScratchGrid,
+  depressionLabel: Int32Array,
+  componentLabel: number,
+  eventKeys: Int32Array,
+  eventRingOrdinals: Int32Array,
+  eventCount: number,
+  edgeVisit: Uint8Array,
+): WorldM0Result<true> {
+  const ringCount = rings.length;
+  // The boundary trace is complete here. Reuse one low oriented-edge bit per
+  // ring as a row-local parity flag; the remaining Task-6 raster scratch stays
+  // fixed, so containment adds no new scalable allocation.
+  for (let ringOrdinal = 0; ringOrdinal < ringCount; ringOrdinal += 1) {
+    const representative = boundaryRingRepresentative(rings[ringOrdinal], scratch, depressionLabel, componentLabel);
+    if (representative === undefined) {
+      return worldM0Failure(
+        "M02_BASIN_GEOMETRY_INVALID",
+        "boundaryRings",
+        "depression boundary lacks an exact oriented representative edge",
+      );
+    }
+    edgeVisit[representative.cell] &= ~representative.mask;
+  }
+
+  let eventCursor = 0;
+  let probeIndex = 0;
+  while (probeIndex < ringCount) {
+    const firstProbeKey = boundaryRingProbeKey(rings[probeIndex], scratch);
+    if (firstProbeKey === undefined) {
+      return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression boundary lacks an exact interior probe cell");
+    }
+    const probeRow = Math.floor(firstProbeKey / scratch.width);
+    while (eventCursor < eventCount && Math.floor(eventKeys[eventCursor] / scratch.width) < probeRow) eventCursor += 1;
+    const toggledStart = eventCursor;
+    let activeCount = 0;
+
+    while (probeIndex < ringCount) {
+      const probeKey = boundaryRingProbeKey(rings[probeIndex], scratch);
+      if (probeKey === undefined || Math.floor(probeKey / scratch.width) !== probeRow) break;
+      const probeColumn = probeKey - probeRow * scratch.width;
+      while (eventCursor < eventCount && Math.floor(eventKeys[eventCursor] / scratch.width) === probeRow &&
+             eventKeys[eventCursor] - probeRow * scratch.width <= probeColumn) {
+        const ringOrdinal = eventRingOrdinals[eventCursor];
+        if (!Number.isSafeInteger(ringOrdinal) || ringOrdinal < 0 || ringOrdinal >= ringCount) {
+          return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression boundary event has an invalid ring ordinal");
+        }
+        const representative = boundaryRingRepresentative(rings[ringOrdinal], scratch, depressionLabel, componentLabel);
+        if (representative === undefined) {
+          return worldM0Failure(
+            "M02_BASIN_GEOMETRY_INVALID",
+            "boundaryRings",
+            "depression boundary event lacks an exact representative edge",
+          );
+        }
+        if ((edgeVisit[representative.cell] & representative.mask) !== 0) {
+          edgeVisit[representative.cell] &= ~representative.mask;
+          activeCount -= 1;
+        } else {
+          edgeVisit[representative.cell] |= representative.mask;
+          activeCount += 1;
+        }
+        eventCursor += 1;
+      }
+      // Every probe lies inside its own ring, so at least probeIndex + 1
+      // events are already consumed. This makes eventKeys[probeIndex] dead and
+      // safe to reuse for the exact containment depth without another buffer.
+      if (probeIndex >= eventCursor || activeCount <= 0) {
+        return worldM0Failure(
+          "M02_BASIN_GEOMETRY_INVALID",
+          "boundaryRings",
+          "depression boundary containment sweep did not cross its own ring",
+        );
+      }
+      eventKeys[probeIndex] = activeCount - 1;
+      probeIndex += 1;
+    }
+
+    for (let index = toggledStart; index < eventCursor; index += 1) {
+      const ringOrdinal = eventRingOrdinals[index];
+      const representative = boundaryRingRepresentative(rings[ringOrdinal], scratch, depressionLabel, componentLabel);
+      if (representative === undefined) {
+        return worldM0Failure(
+          "M02_BASIN_GEOMETRY_INVALID",
+          "boundaryRings",
+          "depression boundary cleanup lacks an exact representative edge",
+        );
+      }
+      edgeVisit[representative.cell] &= ~representative.mask;
+    }
+    while (eventCursor < eventCount && Math.floor(eventKeys[eventCursor] / scratch.width) === probeRow) eventCursor += 1;
+  }
+  return { ok: true, value: true };
 }
 
 function traceComponentBoundaryRings(
@@ -465,35 +790,73 @@ function traceComponentBoundaryRings(
         cell = next.cell;
         side = next.side;
       }
-      const normalized = normalizeRing(points);
+      const normalized = normalizeRing(points, scratch, edgeVisit);
       if (!normalized.ok) return normalized;
       rings.push(normalized.value);
     }
   }
 
-  const depths: number[] = [];
-  for (let index = 0; index < rings.length; index += 1) {
-    const probe = ringInteriorProbe(rings[index]);
-    let depth = 0;
-    for (let other = 0; other < rings.length; other += 1) {
-      if (other !== index && pointInsideRing(probe, rings[other])) depth += 1;
+  const ringCount = rings.length;
+  if (ringCount > memberCount || ringCount > members.length) {
+    return bound("boundaryRings", "depression ring count exceeds current component scratch authority");
+  }
+  for (let ringOrdinal = 0; ringOrdinal < ringCount; ringOrdinal += 1) {
+    const probeKey = boundaryRingProbeKey(rings[ringOrdinal], scratch);
+    if (probeKey === undefined) {
+      return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression boundary lacks an exact interior probe cell");
     }
-    const area2 = signedArea2(rings[index]);
-    if ((depth % 2 === 0 && area2 <= 0) || (depth % 2 === 1 && area2 >= 0)) {
+    members[ringOrdinal] = probeKey;
+  }
+  sortRingKeyPairs(rings, members, ringCount, compareBoundaryProbeOrder);
+
+  // Encode each vertical unit boundary edge as the raster cell-center scanline
+  // position immediately to its right. Horizontal half-cell scanlines never hit
+  // a lattice vertex, including diagonal-only component contacts.
+  let eventCount = 0;
+  for (let ringOrdinal = 0; ringOrdinal < ringCount; ringOrdinal += 1) {
+    const ring = rings[ringOrdinal];
+    for (let pointIndex = 0; pointIndex + 1 < ring.length; pointIndex += 1) {
+      const start = ring[pointIndex];
+      const end = ring[pointIndex + 1];
+      const startX = start.xM / scratch.cellSizeMeters;
+      const startY = start.yM / scratch.cellSizeMeters;
+      const endX = end.xM / scratch.cellSizeMeters;
+      const endY = end.yM / scratch.cellSizeMeters;
+      if (![startX, startY, endX, endY].every(Number.isSafeInteger) ||
+          Math.abs(endX - startX) + Math.abs(endY - startY) !== 1) {
+        return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression boundary is not an exact unit cell-edge trace");
+      }
+      if (startX !== endX || startX === scratch.width) continue;
+      const row = scratch.height - 1 - Math.min(startY, endY);
+      const key = row * scratch.width + startX;
+      if (!Number.isSafeInteger(key) || key < 0 || key >= members.length || eventCount >= members.length) {
+        return bound("boundaryRings", "depression boundary event count exceeds current component scratch authority");
+      }
+      members[eventCount] = key;
+      componentParent[eventCount] = ringOrdinal;
+      eventCount += 1;
+    }
+  }
+  sortBoundaryEvents(members, componentParent, eventCount);
+  for (let eventIndex = 1; eventIndex < eventCount; eventIndex += 1) {
+    if (members[eventIndex] === members[eventIndex - 1]) {
+      return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression boundary reuses a vertical scanline event");
+    }
+  }
+  const depths = computeBoundaryContainmentDepths(
+    rings, scratch, depressionLabel, componentLabel, members, componentParent, eventCount, edgeVisit,
+  );
+  if (!depths.ok) return depths;
+  for (let ringOrdinal = 0; ringOrdinal < ringCount; ringOrdinal += 1) {
+    const depth = members[ringOrdinal];
+    const area2 = signedArea2(rings[ringOrdinal]);
+    if (!Number.isSafeInteger(depth) || depth < 0 ||
+        (depth % 2 === 0 && area2 <= 0) || (depth % 2 === 1 && area2 >= 0)) {
       return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression ring orientation disagrees with containment depth");
     }
-    depths.push(depth);
   }
-  const entries = rings.map((ring, index) => ({ ring, depth: depths[index] }));
-  entries.sort((left, right) => {
-    const leftRole = left.depth % 2;
-    const rightRole = right.depth % 2;
-    if (leftRole !== rightRole) return leftRole - rightRole;
-    if (left.depth !== right.depth) return left.depth - right.depth;
-    const firstPoint = comparePoint(left.ring[0], right.ring[0]);
-    return firstPoint !== 0 ? firstPoint : compareRingSequences(left.ring, right.ring);
-  });
-  return { ok: true, value: entries.map((entry) => entry.ring) };
+  sortRingKeyPairs(rings, members, ringCount, compareBoundaryCanonicalOrder);
+  return { ok: true, value: rings };
 }
 
 function releaseTask6Stage(scratch: TerrainScratchGrid): WorldM0Result<true> {

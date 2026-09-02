@@ -141,6 +141,139 @@ function compactOwnerContract(analysis, grid) {
   return true;
 }
 
+const F5_PROVISIONAL_ROUTING = [
+  9, 9, 9, 9, 9,
+  9, 6, 5, 6, 9,
+  9, 5, 4, 4, 5,
+  9, 6, 5, 6, 4,
+  9, 9, 9, 9, 3,
+];
+const F5_RAW_COMPONENT = [12, 13];
+const F5_FLOOR_PLATEAU = [12, 13];
+const F5_SPILL_TUPLES = [
+  [6, 0, 12, 8, 875, 875, 1],
+  [5, 0, 12, 7, 625, 875, 2],
+  [6, 0, 12, 6, 375, 875, 3],
+  [5, 0, 12, 11, 375, 625, 4],
+  [6, 0, 12, 16, 375, 375, 5],
+  [5, 0, 12, 17, 625, 375, 6],
+  [6, 0, 12, 18, 875, 375, 7],
+  [5, 0, 13, 14, 1125, 625, 0],
+  [9, 0, 13, 9, 1125, 875, 1],
+  [6, 0, 13, 8, 875, 875, 2],
+  [5, 0, 13, 7, 625, 875, 3],
+  [5, 0, 13, 17, 625, 375, 5],
+  [6, 0, 13, 18, 875, 375, 6],
+  [4, 0, 13, 19, 1125, 375, 7],
+];
+const F5_CHOSEN_SPILL = [4, 0, 13, 19, 1125, 375, 7];
+const F6_PROTECTION_LITERALS = Object.freeze({
+  h0: 1_710_706_095,
+  h1: 3_575_335_380,
+  h2: 2_792_555_385,
+  score16: 42_611,
+});
+
+function auditRotl32(value, shift) {
+  const word = value >>> 0;
+  return ((word << shift) | (word >>> (32 - shift))) >>> 0;
+}
+
+function auditMixU32(value) {
+  let mixed = value >>> 0;
+  mixed ^= mixed >>> 16;
+  mixed = Math.imul(mixed, 0x7feb_352d);
+  mixed ^= mixed >>> 15;
+  mixed = Math.imul(mixed, 0x846c_a68b);
+  mixed ^= mixed >>> 16;
+  return mixed >>> 0;
+}
+
+function auditCellPoint(cell, width = 5, height = 5) {
+  const row = Math.floor(cell / width);
+  const column = cell - row * width;
+  return [(column + 0.5) * CELL_SIZE, (height - row - 0.5) * CELL_SIZE];
+}
+
+function compareAuditCellPoint(left, right, width = 5) {
+  const leftRow = Math.floor(left / width);
+  const rightRow = Math.floor(right / width);
+  const leftColumn = left - leftRow * width;
+  const rightColumn = right - rightRow * width;
+  if (leftColumn !== rightColumn) return leftColumn - rightColumn;
+  if (leftRow !== rightRow) return rightRow - leftRow;
+  return left - right;
+}
+
+function compareAuditSpillTuple(left, right) {
+  for (const index of [0, 1]) {
+    if (left[index] !== right[index]) return left[index] - right[index];
+  }
+  const inside = compareAuditCellPoint(left[2], right[2]);
+  if (inside !== 0) return inside;
+  for (const index of [4, 5, 6]) {
+    if (left[index] !== right[index]) return left[index] - right[index];
+  }
+  return 0;
+}
+
+function deriveIndependentF5RawOracle() {
+  const members = [];
+  for (let column = 0; column < 5; column += 1) {
+    for (let row = 4; row >= 0; row -= 1) {
+      const cell = row * 5 + column;
+      if (F5_PROVISIONAL_ROUTING[cell] > F567_ELEVATIONS[cell] && F5_PROVISIONAL_ROUTING[cell] === 4) {
+        members.push(cell);
+      }
+    }
+  }
+  const floorElevation = Math.min(...members.map((cell) => F567_ELEVATIONS[cell]));
+  const floorPlateau = members.filter((cell) => F567_ELEVATIONS[cell] === floorElevation);
+  floorPlateau.sort(compareAuditCellPoint);
+  const canonicalFloorCell = floorPlateau[0];
+  const memberSet = new Set(members);
+  const neighborRows = [0, -1, -1, -1, 0, 1, 1, 1];
+  const neighborColumns = [1, 1, 0, -1, -1, -1, 0, 1];
+  const spillTuples = [];
+  for (const inside of members) {
+    const row = Math.floor(inside / 5);
+    const column = inside - row * 5;
+    for (let ordinal = 0; ordinal < 8; ordinal += 1) {
+      const nr = row + neighborRows[ordinal];
+      const nc = column + neighborColumns[ordinal];
+      if (nr < 0 || nr >= 5 || nc < 0 || nc >= 5) continue;
+      const outside = nr * 5 + nc;
+      if (memberSet.has(outside)) continue;
+      const [outsideX, outsideY] = auditCellPoint(outside);
+      spillTuples.push([
+        Math.max(F567_ELEVATIONS[inside], F567_ELEVATIONS[outside]),
+        0, inside, outside, outsideX, outsideY, ordinal,
+      ]);
+    }
+  }
+  const chosenSpill = spillTuples.slice().sort(compareAuditSpillTuple)[0];
+  const spillBits = new ArrayBuffer(8);
+  const spillView = new DataView(spillBits);
+  spillView.setFloat64(0, chosenSpill[0], false);
+  const floorRow = Math.floor(canonicalFloorCell / 5);
+  const floorColumn = canonicalFloorCell - floorRow * 5;
+  const h0 = auditMixU32((floorRow ^ auditRotl32(floorColumn, 11)) >>> 0);
+  const h1 = auditMixU32((spillView.getUint32(0, false) ^ auditRotl32(spillView.getUint32(4, false), 7)) >>> 0);
+  const h2 = auditMixU32((h0 ^ auditRotl32(h1, 13)) >>> 0);
+  return {
+    provisionalRouting: F5_PROVISIONAL_ROUTING.slice(),
+    members,
+    floorElevation,
+    floorPlateau,
+    canonicalFloorCell,
+    spillTuples,
+    chosenSpill,
+    protection: { h0, h1, h2, score16: h2 >>> 16 },
+  };
+}
+
+const independentF5RawOracle = deriveIndependentF5RawOracle();
+
 const f5Constants = clonePhysicalConstants();
 f5Constants.depression.retainedMinAreaM2 = 1_000_000;
 f5Constants.depression.retainedMinDepthMeters = 10;
@@ -466,6 +599,53 @@ const countMutations = await runCountMutations();
 const repairSeamMutation = await runRepairSeamMutation();
 const maximumTask6 = runMaximumTask6ScratchFixture();
 
+function inspectPairwiseBoundaryPaths(sourceFile) {
+  let quadraticVertexPairScan = false;
+  let allRingsContainmentScan = false;
+  const loopVariables = [];
+  const loopVariable = (node) => {
+    if (!ts.isForStatement(node) || !node.initializer || !ts.isVariableDeclarationList(node.initializer) ||
+        node.initializer.declarations.length !== 1) return undefined;
+    const name = node.initializer.declarations[0].name;
+    return ts.isIdentifier(name) ? name.text : undefined;
+  };
+  const containsCall = (node, name) => {
+    let found = false;
+    const walk = (child) => {
+      if (found) return;
+      if (ts.isCallExpression(child) && child.expression.getText(sourceFile) === name) {
+        found = true;
+        return;
+      }
+      ts.forEachChild(child, walk);
+    };
+    walk(node);
+    return found;
+  };
+  const visit = (node) => {
+    const variable = loopVariable(node);
+    if (variable !== undefined) {
+      const ancestors = new Set(loopVariables);
+      const text = node.getText(sourceFile);
+      if (variable === "right" && ancestors.has("left") && containsCall(node, "comparePoint") &&
+          text.includes("normalized[left]") && text.includes("normalized[right]")) {
+        quadraticVertexPairScan = true;
+      }
+      if (variable === "other" && ancestors.has("index") && containsCall(node, "pointInsideRing") &&
+          text.includes("rings[other]")) {
+        allRingsContainmentScan = true;
+      }
+      loopVariables.push(variable);
+      ts.forEachChild(node, visit);
+      loopVariables.pop();
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return { quadraticVertexPairScan, allRingsContainmentScan };
+}
+
 function inspectProductionSource() {
   if (!existsSync(DEPRESSION_PATH)) return { sourceExists: false };
   const source = readFileSync(DEPRESSION_PATH, "utf8");
@@ -489,6 +669,7 @@ function inspectProductionSource() {
     ts.forEachChild(node, visit);
   }
   visit(sourceFile);
+  const pairwiseBoundaryPaths = inspectPairwiseBoundaryPaths(sourceFile);
   return {
     sourceExists: true,
     forbiddenNew,
@@ -497,6 +678,13 @@ function inspectProductionSource() {
     hasStageLabels: TASK6_STAGE_LABELS.every((label) => source.includes(label)),
     hasTerminalOwnerVector: source.includes("terminalOwnerCells"),
     hasTask7Leak: /DInfinity|d_infinity|contributingAreaM2|primaryReceiver|secondaryReceiver/.test(source),
+    quadraticVertexPairScan: pairwiseBoundaryPaths.quadraticVertexPairScan,
+    allRingsContainmentScan: pairwiseBoundaryPaths.allRingsContainmentScan,
+    hasBoundedRingVertexMarkers:
+      source.includes("RING_VERTEX_MARK_SHIFT") && source.includes("boundaryVertexMarker") &&
+      source.includes("validateBoundaryRingVertices"),
+    hasBoundedRingContainmentSweep:
+      source.includes("sortBoundaryEvents") && source.includes("computeBoundaryContainmentDepths"),
   };
 }
 
@@ -509,6 +697,28 @@ const f6RingArea2 = ringArea2(f6Retained[0]?.boundaryRings?.[0]);
 const f7RingArea2 = ringArea2(f7Retained[0]?.boundaryRings?.[0]);
 
 const checks = {
+  independentRawF5ComponentFloorAndFullSpillOracle:
+    JSON.stringify(independentF5RawOracle.provisionalRouting) === JSON.stringify(F5_PROVISIONAL_ROUTING) &&
+    JSON.stringify(independentF5RawOracle.members) === JSON.stringify(F5_RAW_COMPONENT) &&
+    independentF5RawOracle.floorElevation === 1 &&
+    JSON.stringify(independentF5RawOracle.floorPlateau) === JSON.stringify(F5_FLOOR_PLATEAU) &&
+    independentF5RawOracle.canonicalFloorCell === 12 &&
+    JSON.stringify(independentF5RawOracle.spillTuples) === JSON.stringify(F5_SPILL_TUPLES) &&
+    JSON.stringify(independentF5RawOracle.chosenSpill) === JSON.stringify(F5_CHOSEN_SPILL),
+
+  exactIndependentF6ProtectionArithmetic:
+    independentF5RawOracle.protection.h0 === F6_PROTECTION_LITERALS.h0 &&
+    independentF5RawOracle.protection.h1 === F6_PROTECTION_LITERALS.h1 &&
+    independentF5RawOracle.protection.h2 === F6_PROTECTION_LITERALS.h2 &&
+    independentF5RawOracle.protection.score16 === F6_PROTECTION_LITERALS.score16 &&
+    independentF5RawOracle.protection.score16 < f6Constants.depression.protectedClosedBasinRatePer65536 &&
+    !(independentF5RawOracle.protection.score16 < f5Constants.depression.protectedClosedBasinRatePer65536),
+
+  retainedBoundaryHasNoQuadraticPairwisePaths:
+    sourceInspection.sourceExists && sourceInspection.quadraticVertexPairScan === false &&
+    sourceInspection.allRingsContainmentScan === false && sourceInspection.hasBoundedRingVertexMarkers === true &&
+    sourceInspection.hasBoundedRingContainmentSweep === true,
+
   task6ProductionAuthorityExists:
     existsSync(DEPRESSION_PATH) &&
     typeof modules.depressions?.analyzeTerrainDepressionsAndBoundaries === "function" &&
@@ -615,6 +825,17 @@ const out = {
   verdict: Object.values(checks).every(Boolean) ? "PASS" : "FAIL",
   checks,
   witnesses: {
+    independentF5RawOracle: {
+      provisionalRouting: independentF5RawOracle.provisionalRouting,
+      members: independentF5RawOracle.members,
+      floorElevation: independentF5RawOracle.floorElevation,
+      floorPlateau: independentF5RawOracle.floorPlateau,
+      canonicalFloorCell: independentF5RawOracle.canonicalFloorCell,
+      spillTuples: independentF5RawOracle.spillTuples,
+      chosenSpill: independentF5RawOracle.chosenSpill,
+      protection: independentF5RawOracle.protection,
+      expectedProtection: F6_PROTECTION_LITERALS,
+    },
     f5: f5.analysis ? {
       routing12: f5.grid.routingElevationMeters[12],
       routing13: f5.grid.routingElevationMeters[13],
