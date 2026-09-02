@@ -174,6 +174,50 @@ const F6_PROTECTION_LITERALS = Object.freeze({
   score16: 42_611,
 });
 
+const SPILL_TIE_WIDTH = 2;
+const SPILL_TIE_HEIGHT = 3;
+const SPILL_TIE_ELEVATIONS = [
+  0, 0,
+  1, 1,
+  0, 0,
+];
+const SPILL_TIE_COMPONENT = [0, 1];
+const SPILL_TIE_MINIMA = [
+  [1, 0, 0, 2, 125, 375, 6],
+  [1, 0, 0, 3, 375, 375, 7],
+  [1, 0, 1, 2, 125, 375, 5],
+  [1, 0, 1, 3, 375, 375, 6],
+];
+const SPILL_TIE_CHOSEN = [1, 0, 0, 2, 125, 375, 6];
+
+const NESTED_BOUNDARY_COMPONENT_CELLS = [
+  [2, 2], [2, 3], [2, 4], [2, 5], [2, 6],
+  [3, 2], [3, 3], [3, 6],
+  [4, 2], [4, 4], [4, 6],
+  [5, 2], [5, 6],
+  [6, 2], [6, 3], [6, 4], [6, 5], [6, 6],
+];
+const NESTED_BOUNDARY_RINGS = [
+  [[500, 500], [750, 500], [1000, 500], [1250, 500], [1500, 500], [1750, 500],
+    [1750, 750], [1750, 1000], [1750, 1250], [1750, 1500], [1750, 1750], [1500, 1750],
+    [1250, 1750], [1000, 1750], [750, 1750], [500, 1750], [500, 1500], [500, 1250],
+    [500, 1000], [500, 750], [500, 500]],
+  [[1000, 1000], [1250, 1000], [1250, 1250], [1000, 1250], [1000, 1000]],
+  [[750, 750], [750, 1000], [750, 1250], [1000, 1250], [1000, 1500], [1250, 1500],
+    [1500, 1500], [1500, 1250], [1500, 1000], [1500, 750], [1250, 750], [1000, 750], [750, 750]],
+];
+
+const SHARED_VERTEX_COMPONENT_CELLS = [
+  [2, 2], [2, 3], [2, 4],
+  [3, 2], [3, 4],
+  [4, 2], [4, 3],
+];
+const SHARED_VERTEX_BOUNDARY_RINGS = [
+  [[500, 500], [750, 500], [1000, 500], [1000, 750], [1250, 750], [1250, 1000],
+    [1250, 1250], [1000, 1250], [750, 1250], [500, 1250], [500, 1000], [500, 750], [500, 500]],
+  [[750, 750], [750, 1000], [1000, 1000], [1000, 750], [750, 750]],
+];
+
 function auditRotl32(value, shift) {
   const word = value >>> 0;
   return ((word << shift) | (word >>> (32 - shift))) >>> 0;
@@ -205,16 +249,46 @@ function compareAuditCellPoint(left, right, width = 5) {
   return left - right;
 }
 
-function compareAuditSpillTuple(left, right) {
+function compareAuditSpillTuple(left, right, width = 5) {
   for (const index of [0, 1]) {
     if (left[index] !== right[index]) return left[index] - right[index];
   }
-  const inside = compareAuditCellPoint(left[2], right[2]);
+  const inside = compareAuditCellPoint(left[2], right[2], width);
   if (inside !== 0) return inside;
   for (const index of [4, 5, 6]) {
     if (left[index] !== right[index]) return left[index] - right[index];
   }
   return 0;
+}
+
+function deriveIndependentSpillTieOracle(elevations, members, width = 5, height = 5) {
+  const memberSet = new Set(members);
+  const neighborRows = [0, -1, -1, -1, 0, 1, 1, 1];
+  const neighborColumns = [1, 1, 0, -1, -1, -1, 0, 1];
+  const spillTuples = [];
+  for (const inside of members) {
+    const row = Math.floor(inside / width);
+    const column = inside - row * width;
+    for (let ordinal = 0; ordinal < 8; ordinal += 1) {
+      const nr = row + neighborRows[ordinal];
+      const nc = column + neighborColumns[ordinal];
+      if (nr < 0 || nr >= height || nc < 0 || nc >= width) continue;
+      const outside = nr * width + nc;
+      if (memberSet.has(outside)) continue;
+      const [outsideX, outsideY] = auditCellPoint(outside, width, height);
+      spillTuples.push([
+        Math.max(elevations[inside], elevations[outside]),
+        0, inside, outside, outsideX, outsideY, ordinal,
+      ]);
+    }
+  }
+  const sorted = spillTuples.slice().sort((left, right) => compareAuditSpillTuple(left, right, width));
+  const minimumElevation = sorted[0]?.[0];
+  return {
+    spillTuples,
+    minima: sorted.filter((tuple) => tuple[0] === minimumElevation),
+    chosenSpill: sorted[0],
+  };
 }
 
 function deriveIndependentF5RawOracle() {
@@ -273,6 +347,19 @@ function deriveIndependentF5RawOracle() {
 }
 
 const independentF5RawOracle = deriveIndependentF5RawOracle();
+const spillTieOracle = deriveIndependentSpillTieOracle(
+  SPILL_TIE_ELEVATIONS, SPILL_TIE_COMPONENT, SPILL_TIE_WIDTH, SPILL_TIE_HEIGHT,
+);
+
+const spillTieConstants = clonePhysicalConstants();
+spillTieConstants.depression.retainedMinAreaM2 = 1_000_000;
+spillTieConstants.depression.retainedMinDepthMeters = 10;
+spillTieConstants.depression.protectedClosedBasinRatePer65536 = 0;
+const spillTie = runAnalysis(
+  SPILL_TIE_WIDTH, SPILL_TIE_HEIGHT, SPILL_TIE_ELEVATIONS,
+  Array(SPILL_TIE_WIDTH * SPILL_TIE_HEIGHT).fill(1), spillTieConstants,
+);
+const spillTieFinish = finishFixture(spillTie);
 
 const f5Constants = clonePhysicalConstants();
 f5Constants.depression.retainedMinAreaM2 = 1_000_000;
@@ -363,6 +450,52 @@ const lowOwnerFailure = failure(lowOwner.result);
 const lowOwnerSnapshot = lowOwner.budget?.snapshot();
 const lowOwnerBaseReleased = releaseBase(lowOwner.grid);
 const lowOwnerFinalSnapshot = lowOwner.budget?.snapshot();
+
+function ringPointPairs(ring) {
+  return Array.isArray(ring) ? ring.map((point) => [point.xM, point.yM]) : [];
+}
+
+function runRetainedBoundaryFixture(width, height, componentCells) {
+  const constants = clonePhysicalConstants();
+  constants.depression.retainedMinAreaM2 = 1;
+  constants.depression.retainedMinDepthMeters = 1;
+  constants.depression.protectedClosedBasinRatePer65536 = 0;
+  const elevations = Array(width * height).fill(9);
+  for (const [row, column] of componentCells) elevations[row * width + column] = 1;
+  const fixture = runAnalysis(width, height, elevations, Array(width * height).fill(1), constants);
+  const retained = fixture.analysis?.retainedDepressions?.[0];
+  const summary = {
+    ok: fixture.result?.ok === true,
+    conditionedDepressionCount: fixture.analysis?.conditionedDepressionCount,
+    retainedCount: fixture.analysis?.retainedDepressions?.length,
+    canonicalFloorCell: retained?.canonicalFloorCell,
+    physicalSpillElevationMeters: retained?.physicalSpillElevationMeters,
+    areaM2: retained?.areaM2,
+    rings: retained?.boundaryRings?.map((ring) => ({
+      points: ringPointPairs(ring),
+      area2: ringArea2(ring),
+    })) ?? [],
+    snapshot: fixture.snapshot,
+    rawUnchanged: fixture.rawUnchanged,
+  };
+  const finish = finishFixture(fixture);
+  return { ...summary, finish };
+}
+
+function runRetainedBoundaryRuntimeFixtures() {
+  const nested = runRetainedBoundaryFixture(9, 9, NESTED_BOUNDARY_COMPONENT_CELLS);
+  const sharedVertex = runRetainedBoundaryFixture(7, 7, SHARED_VERTEX_COMPONENT_CELLS);
+  const checkerCells = [];
+  for (let row = 1; row <= 50; row += 1) {
+    for (let column = 1; column <= 50; column += 1) {
+      if ((row + column) % 2 === 0) checkerCells.push([row, column]);
+    }
+  }
+  const checker = runRetainedBoundaryFixture(52, 52, checkerCells);
+  return { nested, sharedVertex, checker };
+}
+
+const boundaryRuntime = runRetainedBoundaryRuntimeFixtures();
 
 async function runOrderMutations() {
   const absent = {
@@ -646,6 +779,57 @@ function inspectPairwiseBoundaryPaths(sourceFile) {
   return { quadraticVertexPairScan, allRingsContainmentScan };
 }
 
+function hasCanonicalSpillTieComparator(source) {
+  const fields = [
+    "if (elevation !== bestElevation) return elevation < bestElevation ? -1 : 1;",
+    "if (outsideKind !== bestOutsideKind) return outsideKind < bestOutsideKind ? -1 : 1;",
+    "const insideComparison = compareCellPoint(inside, bestInside, scratch);",
+    "if (insideComparison !== 0) return insideComparison;",
+    "if (outsideX !== bestOutsideX) return outsideX < bestOutsideX ? -1 : 1;",
+    "if (outsideY !== bestOutsideY) return outsideY < bestOutsideY ? -1 : 1;",
+    "return neighborOrdinal < bestNeighborOrdinal ? -1 : neighborOrdinal > bestNeighborOrdinal ? 1 : 0;",
+  ];
+  let cursor = source.indexOf("const compareSpillCandidate = (");
+  if (cursor < 0) return false;
+  for (const field of fields) {
+    const next = source.indexOf(field, cursor);
+    if (next < 0) return false;
+    cursor = next + field.length;
+  }
+  return true;
+}
+
+function runSpillTieComparatorMutations() {
+  if (!existsSync(DEPRESSION_PATH)) {
+    return { baselineCanonical: false, insideRejected: false, outsideRejected: false, ordinalRejected: false };
+  }
+  const source = readFileSync(DEPRESSION_PATH, "utf8");
+  const insideNeedle = "const insideComparison = compareCellPoint(inside, bestInside, scratch);";
+  const outsideNeedle = "if (outsideX !== bestOutsideX) return outsideX < bestOutsideX ? -1 : 1;";
+  const ordinalNeedle =
+    "return neighborOrdinal < bestNeighborOrdinal ? -1 : neighborOrdinal > bestNeighborOrdinal ? 1 : 0;";
+  const insideMutated = source.includes(insideNeedle)
+    ? source.replace(insideNeedle, "const insideComparison = -compareCellPoint(inside, bestInside, scratch);")
+    : source;
+  const outsideMutated = source.includes(outsideNeedle)
+    ? source.replace(outsideNeedle, "if (outsideX !== bestOutsideX) return outsideX > bestOutsideX ? -1 : 1;")
+    : source;
+  const ordinalMutated = source.includes(ordinalNeedle)
+    ? source.replace(
+      ordinalNeedle,
+      "return neighborOrdinal > bestNeighborOrdinal ? -1 : neighborOrdinal < bestNeighborOrdinal ? 1 : 0;",
+    )
+    : source;
+  return {
+    baselineCanonical: hasCanonicalSpillTieComparator(source),
+    insideRejected: insideMutated !== source && !hasCanonicalSpillTieComparator(insideMutated),
+    outsideRejected: outsideMutated !== source && !hasCanonicalSpillTieComparator(outsideMutated),
+    ordinalRejected: ordinalMutated !== source && !hasCanonicalSpillTieComparator(ordinalMutated),
+  };
+}
+
+const spillTieComparatorMutations = runSpillTieComparatorMutations();
+
 function inspectProductionSource() {
   if (!existsSync(DEPRESSION_PATH)) return { sourceExists: false };
   const source = readFileSync(DEPRESSION_PATH, "utf8");
@@ -685,6 +869,7 @@ function inspectProductionSource() {
       source.includes("validateBoundaryRingVertices"),
     hasBoundedRingContainmentSweep:
       source.includes("sortBoundaryEvents") && source.includes("computeBoundaryContainmentDepths"),
+    hasCanonicalSpillTieComparator: hasCanonicalSpillTieComparator(source),
   };
 }
 
@@ -718,6 +903,53 @@ const checks = {
     sourceInspection.sourceExists && sourceInspection.quadraticVertexPairScan === false &&
     sourceInspection.allRingsContainmentScan === false && sourceInspection.hasBoundedRingVertexMarkers === true &&
     sourceInspection.hasBoundedRingContainmentSweep === true,
+
+  runtimeRetainedBoundaryTopologyAndScaling:
+    boundaryRuntime.nested.ok && boundaryRuntime.nested.conditionedDepressionCount === 1 &&
+    boundaryRuntime.nested.retainedCount === 1 && boundaryRuntime.nested.canonicalFloorCell === 56 &&
+    boundaryRuntime.nested.physicalSpillElevationMeters === 9 && boundaryRuntime.nested.areaM2 === 1_125_000 &&
+    JSON.stringify(boundaryRuntime.nested.rings.map((ring) => ring.points)) === JSON.stringify(NESTED_BOUNDARY_RINGS) &&
+    JSON.stringify(boundaryRuntime.nested.rings.map((ring) => ring.area2)) ===
+      JSON.stringify([3_125_000, 125_000, -1_000_000]) &&
+    boundaryRuntime.nested.snapshot?.liveBytes === 26 * 81 + 4 &&
+    boundaryRuntime.nested.snapshot?.peakBytes === 47 * 81 + 4 && boundaryRuntime.nested.rawUnchanged &&
+    boundaryRuntime.nested.finish.ownerReleased && boundaryRuntime.nested.finish.baseReleased &&
+    boundaryRuntime.nested.finish.finalSnapshot?.liveBytes === 0 &&
+    boundaryRuntime.sharedVertex.ok && boundaryRuntime.sharedVertex.conditionedDepressionCount === 1 &&
+    boundaryRuntime.sharedVertex.retainedCount === 1 && boundaryRuntime.sharedVertex.canonicalFloorCell === 30 &&
+    boundaryRuntime.sharedVertex.physicalSpillElevationMeters === 9 && boundaryRuntime.sharedVertex.areaM2 === 437_500 &&
+    JSON.stringify(boundaryRuntime.sharedVertex.rings.map((ring) => ring.points)) ===
+      JSON.stringify(SHARED_VERTEX_BOUNDARY_RINGS) &&
+    JSON.stringify(boundaryRuntime.sharedVertex.rings.map((ring) => ring.area2)) ===
+      JSON.stringify([1_000_000, -125_000]) &&
+    boundaryRuntime.sharedVertex.snapshot?.liveBytes === 26 * 49 + 4 &&
+    boundaryRuntime.sharedVertex.snapshot?.peakBytes === 47 * 49 + 4 && boundaryRuntime.sharedVertex.rawUnchanged &&
+    boundaryRuntime.sharedVertex.finish.ownerReleased && boundaryRuntime.sharedVertex.finish.baseReleased &&
+    boundaryRuntime.sharedVertex.finish.finalSnapshot?.liveBytes === 0 &&
+    boundaryRuntime.checker.ok && boundaryRuntime.checker.conditionedDepressionCount === 1 &&
+    boundaryRuntime.checker.retainedCount === 1 && boundaryRuntime.checker.areaM2 === 78_125_000 &&
+    boundaryRuntime.checker.rings.length === 1_250 &&
+    boundaryRuntime.checker.rings.every((ring) => ring.points.length === 5 && ring.area2 === 125_000) &&
+    boundaryRuntime.checker.rings.reduce((sum, ring) => sum + ring.area2, 0) === 156_250_000 &&
+    boundaryRuntime.checker.snapshot?.liveBytes === 26 * 2_704 + 4 &&
+    boundaryRuntime.checker.snapshot?.peakBytes === 47 * 2_704 + 4 && boundaryRuntime.checker.rawUnchanged &&
+    boundaryRuntime.checker.finish.ownerReleased && boundaryRuntime.checker.finish.baseReleased &&
+    boundaryRuntime.checker.finish.finalSnapshot?.liveBytes === 0,
+
+  equalElevationSpillTieIsMutationDiscriminated:
+    JSON.stringify(spillTieOracle.minima) === JSON.stringify(SPILL_TIE_MINIMA) &&
+    JSON.stringify(spillTieOracle.chosenSpill) === JSON.stringify(SPILL_TIE_CHOSEN) &&
+    spillTie.result?.ok === true && spillTie.analysis?.conditionedDepressionCount === 1 &&
+    spillTie.analysis?.retainedDepressions.length === 0 &&
+    JSON.stringify(Array.from(spillTie.grid?.routingElevationMeters ?? [])) ===
+      JSON.stringify([1, 1, 1, 1, 0, 0]) &&
+    JSON.stringify(Array.from(spillTie.analysis?.terminalOwners.terminalOwnerCells ?? [])) === JSON.stringify([4]) &&
+    spillTie.grid?.terminalKindByCell[4] === 2 && spillTie.grid?.terminalOrdinalByCell[4] === 0 &&
+    spillTie.rawUnchanged && spillTie.snapshot?.liveBytes === 26 * 6 + 4 &&
+    spillTie.snapshot?.peakBytes === 47 * 6 + 4 && spillTieFinish.ownerReleased && spillTieFinish.baseReleased &&
+    spillTieFinish.finalSnapshot?.liveBytes === 0 && sourceInspection.hasCanonicalSpillTieComparator &&
+    spillTieComparatorMutations.baselineCanonical && spillTieComparatorMutations.insideRejected &&
+    spillTieComparatorMutations.outsideRejected && spillTieComparatorMutations.ordinalRejected,
 
   task6ProductionAuthorityExists:
     existsSync(DEPRESSION_PATH) &&
@@ -866,6 +1098,38 @@ const out = {
       rawUnchanged: maximumTask6.rawUnchanged ?? false,
       released: maximumTask6.ownerReleased === true && maximumTask6.baseReleased === true,
       finalSnapshot: maximumTask6.finalSnapshot ?? null,
+    },
+    spillTie: {
+      width: SPILL_TIE_WIDTH,
+      height: SPILL_TIE_HEIGHT,
+      elevations: SPILL_TIE_ELEVATIONS,
+      rawComponent: SPILL_TIE_COMPONENT,
+      minima: spillTieOracle.minima,
+      chosen: spillTieOracle.chosenSpill,
+      routing: Array.from(spillTie.grid?.routingElevationMeters ?? []),
+      owners: Array.from(spillTie.analysis?.terminalOwners.terminalOwnerCells ?? []),
+      comparatorMutations: spillTieComparatorMutations,
+    },
+    retainedBoundaryRuntime: {
+      nested: {
+        canonicalFloorCell: boundaryRuntime.nested.canonicalFloorCell,
+        areaM2: boundaryRuntime.nested.areaM2,
+        rings: boundaryRuntime.nested.rings,
+        snapshot: boundaryRuntime.nested.snapshot,
+      },
+      sharedVertex: {
+        canonicalFloorCell: boundaryRuntime.sharedVertex.canonicalFloorCell,
+        areaM2: boundaryRuntime.sharedVertex.areaM2,
+        rings: boundaryRuntime.sharedVertex.rings,
+        snapshot: boundaryRuntime.sharedVertex.snapshot,
+      },
+      checker: {
+        ringCount: boundaryRuntime.checker.rings.length,
+        totalArea2: boundaryRuntime.checker.rings.reduce((sum, ring) => sum + ring.area2, 0),
+        areaM2: boundaryRuntime.checker.areaM2,
+        snapshot: boundaryRuntime.checker.snapshot,
+        released: boundaryRuntime.checker.finish.finalSnapshot?.liveBytes === 0,
+      },
     },
     sourceInspection,
   },
