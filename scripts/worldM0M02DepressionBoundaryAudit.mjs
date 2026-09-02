@@ -190,6 +190,61 @@ const SPILL_TIE_MINIMA = [
 ];
 const SPILL_TIE_CHOSEN = [1, 0, 0, 2, 125, 375, 6];
 
+const F5_EQUAL_SPILL_ELEVATIONS = [
+  9, 9, 9, 9, 9,
+  9, 6, 5, 6, 9,
+  9, 5, 1, 1, 5,
+  9, 6, 5, 6, 5,
+  9, 9, 9, 9, 3,
+];
+const F5_EQUAL_SPILL_MINIMA = [
+  [5, 0, 12, 11, 375, 625, 4],
+  [5, 0, 12, 17, 625, 375, 6],
+  [5, 0, 12, 7, 625, 875, 2],
+  [5, 0, 13, 17, 625, 375, 5],
+  [5, 0, 13, 7, 625, 875, 3],
+  [5, 0, 13, 19, 1125, 375, 7],
+  [5, 0, 13, 14, 1125, 625, 0],
+];
+const F5_EQUAL_SPILL_CHOSEN = [5, 0, 12, 11, 375, 625, 4];
+const F5_EQUAL_SPILL_REVERSED_INSIDE_CHOSEN = [5, 0, 13, 17, 625, 375, 5];
+const F5_EQUAL_SPILL_REVERSED_OUTSIDE_X_CHOSEN = [5, 0, 12, 17, 625, 375, 6];
+
+const SPILL_Y_WIDTH = 3;
+const SPILL_Y_HEIGHT = 3;
+const SPILL_Y_ELEVATIONS = [
+  9, 1, 9,
+  9, 0, 9,
+  9, 1, 9,
+];
+const SPILL_Y_COMPONENT = [4];
+const SPILL_Y_MINIMA = [
+  [1, 0, 4, 7, 375, 125, 6],
+  [1, 0, 4, 1, 375, 625, 2],
+];
+const SPILL_Y_CHOSEN = [1, 0, 4, 7, 375, 125, 6];
+const SPILL_Y_REVERSED_CHOSEN = [1, 0, 4, 1, 375, 625, 2];
+
+const SPILL_KIND_WIDTH = 3;
+const SPILL_KIND_HEIGHT = 3;
+const SPILL_KIND_ELEVATIONS = [
+  0, 1, 9,
+  9, 0, 9,
+  9, 9, 9,
+];
+const SPILL_KIND_LAND_MASK = [
+  0, 1, 1,
+  1, 1, 1,
+  1, 1, 1,
+];
+const SPILL_KIND_COMPONENT = [4];
+const SPILL_KIND_MINIMA = [
+  [1, 0, 4, 1, 375, 625, 2],
+  [1, 1, 4, 0, 125, 625, 3],
+];
+const SPILL_KIND_CHOSEN = [1, 0, 4, 1, 375, 625, 2];
+const SPILL_KIND_REVERSED_CHOSEN = [1, 1, 4, 0, 125, 625, 3];
+
 const NESTED_BOUNDARY_COMPONENT_CELLS = [
   [2, 2], [2, 3], [2, 4], [2, 5], [2, 6],
   [3, 2], [3, 3], [3, 6],
@@ -261,7 +316,9 @@ function compareAuditSpillTuple(left, right, width = 5) {
   return 0;
 }
 
-function deriveIndependentSpillTieOracle(elevations, members, width = 5, height = 5) {
+function deriveIndependentSpillTieOracle(
+  elevations, members, width = 5, height = 5, landMask = Array(width * height).fill(1), seaLevelMeters = 0,
+) {
   const memberSet = new Set(members);
   const neighborRows = [0, -1, -1, -1, 0, 1, 1, 1];
   const neighborColumns = [1, 1, 0, -1, -1, -1, 0, 1];
@@ -276,9 +333,11 @@ function deriveIndependentSpillTieOracle(elevations, members, width = 5, height 
       const outside = nr * width + nc;
       if (memberSet.has(outside)) continue;
       const [outsideX, outsideY] = auditCellPoint(outside, width, height);
+      const outsideKind = landMask[outside] === 1 ? 0 : 1;
+      const outsideElevation = outsideKind === 0 ? elevations[outside] : seaLevelMeters;
       spillTuples.push([
-        Math.max(elevations[inside], elevations[outside]),
-        0, inside, outside, outsideX, outsideY, ordinal,
+        Math.max(elevations[inside], outsideElevation),
+        outsideKind, inside, outside, outsideX, outsideY, ordinal,
       ]);
     }
   }
@@ -349,6 +408,16 @@ function deriveIndependentF5RawOracle() {
 const independentF5RawOracle = deriveIndependentF5RawOracle();
 const spillTieOracle = deriveIndependentSpillTieOracle(
   SPILL_TIE_ELEVATIONS, SPILL_TIE_COMPONENT, SPILL_TIE_WIDTH, SPILL_TIE_HEIGHT,
+);
+const f5EqualSpillOracle = deriveIndependentSpillTieOracle(
+  F5_EQUAL_SPILL_ELEVATIONS, F5_RAW_COMPONENT, 5, 5,
+);
+const spillYOracle = deriveIndependentSpillTieOracle(
+  SPILL_Y_ELEVATIONS, SPILL_Y_COMPONENT, SPILL_Y_WIDTH, SPILL_Y_HEIGHT,
+);
+const spillKindOracle = deriveIndependentSpillTieOracle(
+  SPILL_KIND_ELEVATIONS, SPILL_KIND_COMPONENT, SPILL_KIND_WIDTH, SPILL_KIND_HEIGHT,
+  SPILL_KIND_LAND_MASK, 1,
 );
 
 const spillTieConstants = clonePhysicalConstants();
@@ -455,14 +524,19 @@ function ringPointPairs(ring) {
   return Array.isArray(ring) ? ring.map((point) => [point.xM, point.yM]) : [];
 }
 
-function runRetainedBoundaryFixture(width, height, componentCells) {
+function retainedBoundaryInputs(width, height, componentCells) {
+  const elevations = Array(width * height).fill(9);
+  for (const [row, column] of componentCells) elevations[row * width + column] = 1;
+  return { elevations, landMask: Array(width * height).fill(1) };
+}
+
+function runRetainedBoundaryFixture(width, height, componentCells, authorityModules = modules) {
   const constants = clonePhysicalConstants();
   constants.depression.retainedMinAreaM2 = 1;
   constants.depression.retainedMinDepthMeters = 1;
   constants.depression.protectedClosedBasinRatePer65536 = 0;
-  const elevations = Array(width * height).fill(9);
-  for (const [row, column] of componentCells) elevations[row * width + column] = 1;
-  const fixture = runAnalysis(width, height, elevations, Array(width * height).fill(1), constants);
+  const inputs = retainedBoundaryInputs(width, height, componentCells);
+  const fixture = runAnalysis(width, height, inputs.elevations, inputs.landMask, constants, ZERO_INTENT, authorityModules);
   const retained = fixture.analysis?.retainedDepressions?.[0];
   const summary = {
     ok: fixture.result?.ok === true,
@@ -482,20 +556,252 @@ function runRetainedBoundaryFixture(width, height, componentCells) {
   return { ...summary, finish };
 }
 
+function checkerBoundaryComponentCells() {
+  const cells = [];
+  for (let row = 1; row <= 50; row += 1) {
+    for (let column = 1; column <= 50; column += 1) {
+      if ((row + column) % 2 === 0) cells.push([row, column]);
+    }
+  }
+  return cells;
+}
+
 function runRetainedBoundaryRuntimeFixtures() {
   const nested = runRetainedBoundaryFixture(9, 9, NESTED_BOUNDARY_COMPONENT_CELLS);
   const sharedVertex = runRetainedBoundaryFixture(7, 7, SHARED_VERTEX_COMPONENT_CELLS);
-  const checkerCells = [];
-  for (let row = 1; row <= 50; row += 1) {
-    for (let column = 1; column <= 50; column += 1) {
-      if ((row + column) % 2 === 0) checkerCells.push([row, column]);
-    }
-  }
-  const checker = runRetainedBoundaryFixture(52, 52, checkerCells);
+  const checker = runRetainedBoundaryFixture(52, 52, checkerBoundaryComponentCells());
   return { nested, sharedVertex, checker };
 }
 
 const boundaryRuntime = runRetainedBoundaryRuntimeFixtures();
+
+async function runRepeatedInternalVertexMutation() {
+  const absent = { applied: false, exactRejection: false, rawUnchanged: false, restored: !existsSync(DEPRESSION_PATH) };
+  if (!existsSync(DEPRESSION_PATH)) return absent;
+  const original = readFileSync(DEPRESSION_PATH);
+  const source = original.toString("utf8");
+  const needle = "        points.push(pointFromGridVertex(end, scratch));\n        edgeCount += 1;";
+  if (!source.includes(needle)) return absent;
+  let exactRejection = false;
+  let rawUnchanged = false;
+  let observedException = null;
+  try {
+    const mutatedSource = source.replace(
+      needle,
+      "        points.push(pointFromGridVertex(end, scratch));\n" +
+      "        if (edgeCount === 1) points.push(points[0]); // audit mutation: repeated internal vertex\n" +
+      "        edgeCount += 1;",
+    );
+    writeFileSync(DEPRESSION_PATH, mutatedSource);
+    const mutated = await loadModules("?audit-repeated-internal-boundary-vertex");
+    const inputs = retainedBoundaryInputs(9, 9, NESTED_BOUNDARY_COMPONENT_CELLS);
+    const constants = clonePhysicalConstants();
+    constants.depression.retainedMinAreaM2 = 1;
+    constants.depression.retainedMinDepthMeters = 1;
+    constants.depression.protectedClosedBasinRatePer65536 = 0;
+    try {
+      const fixture = runAnalysis(9, 9, inputs.elevations, inputs.landMask, constants, ZERO_INTENT, mutated);
+      const error = failure(fixture.result);
+      exactRejection = error?.code === "M02_BASIN_GEOMETRY_INVALID" &&
+        error?.path === "boundaryRings" && error?.detail === "depression boundary repeats an internal vertex";
+      rawUnchanged = fixture.rawUnchanged;
+      releaseBase(fixture.grid);
+    } catch (error) {
+      observedException = error instanceof Error ? error.message : String(error);
+    }
+  } finally {
+    writeFileSync(DEPRESSION_PATH, original);
+  }
+  return {
+    applied: true,
+    exactRejection,
+    rawUnchanged,
+    observedException,
+    restored: readFileSync(DEPRESSION_PATH).equals(original),
+  };
+}
+
+function instrumentBoundaryWorkSource(source) {
+  let instrumented = source;
+  const compareNeedle = "function comparePoint(left: WorldM0PointM, right: WorldM0PointM): number {";
+  const representativeNeedle = [
+    "function boundaryRingRepresentative(",
+    "  ring: readonly WorldM0PointM[],",
+    "  scratch: TerrainScratchGrid,",
+    "  depressionLabel: Int32Array,",
+    "  componentLabel: number,",
+    "): { readonly cell: number; readonly mask: number } | undefined {",
+  ].join("\n");
+  const pointInsideNeedle = [
+    "function pointInsideRing(point: WorldM0PointM, ring: readonly WorldM0PointM[]): boolean {",
+    "  let inside = false;",
+    "  for (let index = 0; index + 1 < ring.length; index += 1) {",
+  ].join("\n");
+  let compareApplied = false;
+  let containmentApplied = false;
+  if (instrumented.includes(compareNeedle)) {
+    compareApplied = true;
+    instrumented = instrumented.replace(
+      compareNeedle,
+      `${compareNeedle}\n  if (globalThis.__TASK6_BOUNDARY_WORK__) globalThis.__TASK6_BOUNDARY_WORK__.vertexComparisons += 1;`,
+    );
+  }
+  if (instrumented.includes(representativeNeedle)) {
+    containmentApplied = true;
+    instrumented = instrumented.replace(
+      representativeNeedle,
+      `${representativeNeedle}\n  if (globalThis.__TASK6_BOUNDARY_WORK__) globalThis.__TASK6_BOUNDARY_WORK__.containmentOps += 16;`,
+    );
+  }
+  if (instrumented.includes(pointInsideNeedle)) {
+    containmentApplied = true;
+    instrumented = instrumented.replace(
+      pointInsideNeedle,
+      `${pointInsideNeedle}\n    if (globalThis.__TASK6_BOUNDARY_WORK__) globalThis.__TASK6_BOUNDARY_WORK__.containmentOps += 1;`,
+    );
+  }
+  return { source: instrumented, compareApplied, containmentApplied };
+}
+
+const HISTORICAL_VERTEX_SCAN_CURRENT_NORMALIZE = `  for (let index = 0; index + 1 < normalized.length; index += 1) {
+    if (comparePoint(normalized[index], normalized[index + 1]) === 0) {
+      return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression boundary has a zero-length edge");
+    }
+  }`;
+const HISTORICAL_VERTEX_SCAN = `  for (let left = 0; left + 1 < normalized.length; left += 1) {
+    if (comparePoint(normalized[left], normalized[left + 1]) === 0) {
+      return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression boundary has a zero-length edge");
+    }
+    for (let right = left + 1; right + 1 < normalized.length; right += 1) {
+      if (comparePoint(normalized[left], normalized[right]) === 0) {
+        return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression boundary repeats an internal vertex");
+      }
+    }
+  }`;
+const HISTORICAL_CONTAINMENT_HELPERS = `function pointInsideRing(point: WorldM0PointM, ring: readonly WorldM0PointM[]): boolean {
+  let inside = false;
+  for (let index = 0; index + 1 < ring.length; index += 1) {
+    const a = ring[index];
+    const b = ring[index + 1];
+    const crosses = (a.yM > point.yM) !== (b.yM > point.yM);
+    if (!crosses) continue;
+    const x = a.xM + (point.yM - a.yM) * (b.xM - a.xM) / (b.yM - a.yM);
+    if (x > point.xM) inside = !inside;
+  }
+  return inside;
+}
+
+function ringInteriorProbe(ring: readonly WorldM0PointM[]): WorldM0PointM {
+  const first = ring[0];
+  const second = ring[1];
+  const dx = second.xM - first.xM;
+  const dy = second.yM - first.yM;
+  const area2 = signedArea2(ring);
+  const midX = (first.xM + second.xM) / 2;
+  const midY = (first.yM + second.yM) / 2;
+  const scale = 0.25;
+  if (area2 > 0) {
+    return { xM: midX - Math.sign(dy) * scale * Math.max(Math.abs(dx), Math.abs(dy)), yM: midY + Math.sign(dx) * scale * Math.max(Math.abs(dx), Math.abs(dy)) };
+  }
+  return { xM: midX + Math.sign(dy) * scale * Math.max(Math.abs(dx), Math.abs(dy)), yM: midY - Math.sign(dx) * scale * Math.max(Math.abs(dx), Math.abs(dy)) };
+}
+
+`;
+const HISTORICAL_CONTAINMENT_LOOP = `  for (let index = 0; index < rings.length; index += 1) {
+    const probe = ringInteriorProbe(rings[index]);
+    let depth = 0;
+    for (let other = 0; other < rings.length; other += 1) {
+      if (other !== index && pointInsideRing(probe, rings[other])) depth += 1;
+    }
+    const area2 = signedArea2(rings[index]);
+    if ((depth % 2 === 0 && area2 <= 0) || (depth % 2 === 1 && area2 >= 0)) {
+      return worldM0Failure("M02_BASIN_GEOMETRY_INVALID", "boundaryRings", "depression ring orientation disagrees with containment depth");
+    }
+  }
+`;
+
+async function runBoundaryWorkDiscrimination() {
+  const absent = {
+    baselineApplied: false, baselineWithinBounds: false, historicalVertexRejected: false,
+    historicalContainmentRejected: false, restored: !existsSync(DEPRESSION_PATH),
+  };
+  if (!existsSync(DEPRESSION_PATH)) return absent;
+  const original = readFileSync(DEPRESSION_PATH);
+  const source = original.toString("utf8");
+  const longWidth = 258;
+  const longHeight = 3;
+  const longCells = Array.from({ length: 256 }, (_, index) => [1, index + 1]);
+  const checkerCells = checkerBoundaryComponentCells();
+  const execute = async (candidateSource, tag, which) => {
+    const instrumented = instrumentBoundaryWorkSource(candidateSource);
+    globalThis.__TASK6_BOUNDARY_WORK__ = { vertexComparisons: 0, containmentOps: 0 };
+    writeFileSync(DEPRESSION_PATH, instrumented.source);
+    const authorityModules = await loadModules(`?audit-boundary-work-${tag}`);
+    const fixture = which === "long"
+      ? runRetainedBoundaryFixture(longWidth, longHeight, longCells, authorityModules)
+      : runRetainedBoundaryFixture(52, 52, checkerCells, authorityModules);
+    const work = { ...globalThis.__TASK6_BOUNDARY_WORK__ };
+    delete globalThis.__TASK6_BOUNDARY_WORK__;
+    return { fixture, work, compareApplied: instrumented.compareApplied, containmentApplied: instrumented.containmentApplied };
+  };
+  try {
+    const baselineLong = await execute(source, "baseline-long", "long");
+    const baselineChecker = await execute(source, "baseline-checker", "checker");
+    const openVertexCount = baselineLong.fixture.rings.reduce((sum, ring) => sum + Math.max(0, ring.points.length - 1), 0);
+    const checkerEdgeCount = baselineChecker.fixture.rings.reduce((sum, ring) => sum + Math.max(0, ring.points.length - 1), 0);
+    const vertexBound = 16 * openVertexCount + 1_024;
+    const containmentBound = 80 * (checkerEdgeCount + baselineChecker.fixture.rings.length) + 4_096;
+
+    const historicalVertexSource = source.includes(HISTORICAL_VERTEX_SCAN_CURRENT_NORMALIZE)
+      ? source.replace(HISTORICAL_VERTEX_SCAN_CURRENT_NORMALIZE, HISTORICAL_VERTEX_SCAN)
+      : source;
+    const historicalVertex = await execute(historicalVertexSource, "historical-vertex", "long");
+
+    const helperMarker = "function compareRingSequences(";
+    const ringCountNeedle = "  const ringCount = rings.length;\n";
+    let historicalContainmentSource = source;
+    let historicalContainmentApplied = false;
+    if (historicalContainmentSource.includes(helperMarker) && historicalContainmentSource.includes(ringCountNeedle)) {
+      historicalContainmentApplied = true;
+      historicalContainmentSource = historicalContainmentSource.replace(
+        helperMarker,
+        `${HISTORICAL_CONTAINMENT_HELPERS}${helperMarker}`,
+      );
+      historicalContainmentSource = historicalContainmentSource.replace(
+        ringCountNeedle,
+        `${ringCountNeedle}${HISTORICAL_CONTAINMENT_LOOP}`,
+      );
+    }
+    const historicalContainment = await execute(historicalContainmentSource, "historical-containment", "checker");
+    return {
+      baselineApplied: baselineLong.compareApplied && baselineChecker.containmentApplied,
+      baselineWithinBounds:
+        baselineLong.fixture.ok && baselineChecker.fixture.ok &&
+        baselineLong.work.vertexComparisons <= vertexBound && baselineChecker.work.containmentOps <= containmentBound,
+      baseline: {
+        longRingOpenVertices: openVertexCount,
+        vertexComparisons: baselineLong.work.vertexComparisons,
+        vertexBound,
+        checkerRingCount: baselineChecker.fixture.rings.length,
+        checkerEdgeCount,
+        containmentOps: baselineChecker.work.containmentOps,
+        containmentBound,
+      },
+      historicalVertexApplied: historicalVertexSource !== source,
+      historicalVertexRejected:
+        historicalVertex.fixture.ok && historicalVertex.work.vertexComparisons > vertexBound,
+      historicalVertex: { vertexComparisons: historicalVertex.work.vertexComparisons, vertexBound },
+      historicalContainmentApplied,
+      historicalContainmentRejected:
+        historicalContainment.fixture.ok && historicalContainment.work.containmentOps > containmentBound,
+      historicalContainment: { containmentOps: historicalContainment.work.containmentOps, containmentBound },
+      restored: true,
+    };
+  } finally {
+    delete globalThis.__TASK6_BOUNDARY_WORK__;
+    writeFileSync(DEPRESSION_PATH, original);
+  }
+}
 
 async function runOrderMutations() {
   const absent = {
@@ -727,6 +1033,8 @@ function runMaximumTask6ScratchFixture() {
   return { ...fixture, result, analysis, snapshot, rawUnchanged, ownerReleased, baseReleased, finalSnapshot };
 }
 
+const repeatedInternalVertexMutation = await runRepeatedInternalVertexMutation();
+const boundaryWorkDiscrimination = await runBoundaryWorkDiscrimination();
 const orderMutations = await runOrderMutations();
 const countMutations = await runCountMutations();
 const repairSeamMutation = await runRepairSeamMutation();
@@ -799,36 +1107,151 @@ function hasCanonicalSpillTieComparator(source) {
   return true;
 }
 
-function runSpillTieComparatorMutations() {
-  if (!existsSync(DEPRESSION_PATH)) {
-    return { baselineCanonical: false, insideRejected: false, outsideRejected: false, ordinalRejected: false };
-  }
-  const source = readFileSync(DEPRESSION_PATH, "utf8");
-  const insideNeedle = "const insideComparison = compareCellPoint(inside, bestInside, scratch);";
-  const outsideNeedle = "if (outsideX !== bestOutsideX) return outsideX < bestOutsideX ? -1 : 1;";
-  const ordinalNeedle =
-    "return neighborOrdinal < bestNeighborOrdinal ? -1 : neighborOrdinal > bestNeighborOrdinal ? 1 : 0;";
-  const insideMutated = source.includes(insideNeedle)
-    ? source.replace(insideNeedle, "const insideComparison = -compareCellPoint(inside, bestInside, scratch);")
-    : source;
-  const outsideMutated = source.includes(outsideNeedle)
-    ? source.replace(outsideNeedle, "if (outsideX !== bestOutsideX) return outsideX > bestOutsideX ? -1 : 1;")
-    : source;
-  const ordinalMutated = source.includes(ordinalNeedle)
-    ? source.replace(
-      ordinalNeedle,
-      "return neighborOrdinal > bestNeighborOrdinal ? -1 : neighborOrdinal < bestNeighborOrdinal ? 1 : 0;",
-    )
-    : source;
-  return {
-    baselineCanonical: hasCanonicalSpillTieComparator(source),
-    insideRejected: insideMutated !== source && !hasCanonicalSpillTieComparator(insideMutated),
-    outsideRejected: outsideMutated !== source && !hasCanonicalSpillTieComparator(outsideMutated),
-    ordinalRejected: ordinalMutated !== source && !hasCanonicalSpillTieComparator(ordinalMutated),
+async function runSpillTieComparatorMutations() {
+  const absent = {
+    baselineCanonical: false, bindingFixtureReached: false, insideDiscriminated: false,
+    outsideXDiscriminated: false, outsideYDiscriminated: false, outsideKindDiscriminated: false,
+    restored: !existsSync(DEPRESSION_PATH),
   };
+  if (!existsSync(DEPRESSION_PATH)) return absent;
+  const original = readFileSync(DEPRESSION_PATH);
+  const source = original.toString("utf8");
+  const candidateNeedle = "          const outsideY = centerY(outside, scratch);";
+  const winnerNeedle = "      if (bestInside < 0 || !Number.isFinite(bestSpillElevation)) {";
+  const insideNeedle = "const insideComparison = compareCellPoint(inside, bestInside, scratch);";
+  const outsideXNeedle = "if (outsideX !== bestOutsideX) return outsideX < bestOutsideX ? -1 : 1;";
+  const outsideYNeedle = "if (outsideY !== bestOutsideY) return outsideY < bestOutsideY ? -1 : 1;";
+  const outsideKindNeedle = "if (outsideKind !== bestOutsideKind) return outsideKind < bestOutsideKind ? -1 : 1;";
+
+  const withCapture = (candidateSource) => {
+    let captured = candidateSource;
+    let candidateApplied = false;
+    let winnerApplied = false;
+    if (captured.includes(candidateNeedle)) {
+      candidateApplied = true;
+      captured = captured.replace(
+        candidateNeedle,
+        `${candidateNeedle}\n` +
+        "          globalThis.__TASK6_SPILL_CAPTURE__?.candidates.push([canonicalComponentOrdinal, candidateElevation, outsideKind, inside, outside, outsideX, outsideY, neighborOrdinal]);",
+      );
+    }
+    if (captured.includes(winnerNeedle)) {
+      winnerApplied = true;
+      captured = captured.replace(
+        winnerNeedle,
+        "      globalThis.__TASK6_SPILL_CAPTURE__?.winners.push({ componentOrdinal: canonicalComponentOrdinal, members: Array.from(heapIndex.subarray(0, memberCount)), winner: [bestSpillElevation, bestOutsideKind, bestInside, bestOutsideX, bestOutsideY, bestNeighborOrdinal] });\n" + winnerNeedle,
+      );
+    }
+    return { source: captured, candidateApplied, winnerApplied };
+  };
+  const runVariant = async (candidateSource, tag, spec) => {
+    const capturedSource = withCapture(candidateSource);
+    globalThis.__TASK6_SPILL_CAPTURE__ = { candidates: [], winners: [] };
+    writeFileSync(DEPRESSION_PATH, capturedSource.source);
+    const authorityModules = await loadModules(`?audit-spill-runtime-${tag}`);
+    const constants = structuredClone(spec.constants);
+    const fixture = runAnalysis(
+      spec.width, spec.height, spec.elevations, spec.landMask, constants, ZERO_INTENT, authorityModules,
+    );
+    const capture = structuredClone(globalThis.__TASK6_SPILL_CAPTURE__);
+    delete globalThis.__TASK6_SPILL_CAPTURE__;
+    finishFixture(fixture);
+    const candidates = capture.candidates.filter((tuple) => tuple[0] === 0).map((tuple) => tuple.slice(1));
+    const minimumElevation = candidates.length > 0 ? Math.min(...candidates.map((tuple) => tuple[0])) : undefined;
+    const minima = candidates
+      .filter((tuple) => tuple[0] === minimumElevation)
+      .sort((left, right) => compareAuditSpillTuple(left, right, spec.width));
+    const winnerCapture = capture.winners.find((entry) => entry.componentOrdinal === 0);
+    const winner = winnerCapture?.winner;
+    const fullWinner = winner ? candidates.find((tuple) =>
+      tuple[0] === winner[0] && tuple[1] === winner[1] && tuple[2] === winner[2] &&
+      tuple[4] === winner[3] && tuple[5] === winner[4] && tuple[6] === winner[5]) : undefined;
+    return {
+      ok: fixture.result?.ok === true,
+      rawUnchanged: fixture.rawUnchanged,
+      candidateApplied: capturedSource.candidateApplied,
+      winnerApplied: capturedSource.winnerApplied,
+      members: winnerCapture?.members ?? [],
+      minima,
+      winner: fullWinner ?? null,
+    };
+  };
+
+  const bindingSpec = {
+    width: 5, height: 5, elevations: F5_EQUAL_SPILL_ELEVATIONS, landMask: Array(25).fill(1), constants: f5Constants,
+  };
+  const yConstants = structuredClone(f5Constants);
+  const ySpec = {
+    width: SPILL_Y_WIDTH, height: SPILL_Y_HEIGHT, elevations: SPILL_Y_ELEVATIONS,
+    landMask: Array(SPILL_Y_WIDTH * SPILL_Y_HEIGHT).fill(1), constants: yConstants,
+  };
+  const kindConstants = structuredClone(f5Constants);
+  kindConstants.terrain.baseSeaLevelMeters = 1;
+  const kindSpec = {
+    width: SPILL_KIND_WIDTH, height: SPILL_KIND_HEIGHT, elevations: SPILL_KIND_ELEVATIONS,
+    landMask: SPILL_KIND_LAND_MASK, constants: kindConstants,
+  };
+  const reverse = (needle, replacement) => source.includes(needle) ? source.replace(needle, replacement) : source;
+  try {
+    const baseline = await runVariant(source, "baseline-f5-equal", bindingSpec);
+    const insideSource = reverse(insideNeedle, "const insideComparison = -compareCellPoint(inside, bestInside, scratch);");
+    const inside = await runVariant(insideSource, "reverse-inside", bindingSpec);
+    const outsideXSource = reverse(
+      outsideXNeedle, "if (outsideX !== bestOutsideX) return outsideX > bestOutsideX ? -1 : 1;",
+    );
+    const outsideX = await runVariant(outsideXSource, "reverse-outside-x", bindingSpec);
+    const yBaseline = await runVariant(source, "baseline-outside-y", ySpec);
+    const outsideYSource = reverse(
+      outsideYNeedle, "if (outsideY !== bestOutsideY) return outsideY > bestOutsideY ? -1 : 1;",
+    );
+    const outsideY = await runVariant(outsideYSource, "reverse-outside-y", ySpec);
+    const kindBaseline = await runVariant(source, "baseline-outside-kind", kindSpec);
+    const outsideKindSource = reverse(
+      outsideKindNeedle, "if (outsideKind !== bestOutsideKind) return outsideKind > bestOutsideKind ? -1 : 1;",
+    );
+    const outsideKind = await runVariant(outsideKindSource, "reverse-outside-kind", kindSpec);
+    return {
+      baselineCanonical: hasCanonicalSpillTieComparator(source),
+      bindingFixtureReached:
+        baseline.ok && baseline.rawUnchanged && baseline.candidateApplied && baseline.winnerApplied &&
+        JSON.stringify(baseline.members) === JSON.stringify(F5_RAW_COMPONENT) &&
+        JSON.stringify(baseline.minima) === JSON.stringify(F5_EQUAL_SPILL_MINIMA) &&
+        JSON.stringify(baseline.winner) === JSON.stringify(F5_EQUAL_SPILL_CHOSEN),
+      baseline,
+      insideApplied: insideSource !== source,
+      insideDiscriminated:
+        inside.ok && JSON.stringify(inside.winner) === JSON.stringify(F5_EQUAL_SPILL_REVERSED_INSIDE_CHOSEN),
+      inside,
+      outsideXApplied: outsideXSource !== source,
+      outsideXDiscriminated:
+        outsideX.ok && JSON.stringify(outsideX.winner) === JSON.stringify(F5_EQUAL_SPILL_REVERSED_OUTSIDE_X_CHOSEN),
+      outsideX,
+      outsideYFixtureReached:
+        yBaseline.ok && JSON.stringify(yBaseline.members) === JSON.stringify(SPILL_Y_COMPONENT) &&
+        JSON.stringify(yBaseline.minima) === JSON.stringify(SPILL_Y_MINIMA) &&
+        JSON.stringify(yBaseline.winner) === JSON.stringify(SPILL_Y_CHOSEN),
+      outsideYApplied: outsideYSource !== source,
+      outsideYDiscriminated:
+        outsideY.ok && JSON.stringify(outsideY.winner) === JSON.stringify(SPILL_Y_REVERSED_CHOSEN),
+      outsideY,
+      outsideKindFixtureReached:
+        kindBaseline.ok && JSON.stringify(kindBaseline.members) === JSON.stringify(SPILL_KIND_COMPONENT) &&
+        JSON.stringify(kindBaseline.minima) === JSON.stringify(SPILL_KIND_MINIMA) &&
+        JSON.stringify(kindBaseline.winner) === JSON.stringify(SPILL_KIND_CHOSEN),
+      outsideKindApplied: outsideKindSource !== source,
+      outsideKindDiscriminated:
+        outsideKind.ok && JSON.stringify(outsideKind.winner) === JSON.stringify(SPILL_KIND_REVERSED_CHOSEN),
+      outsideKind,
+      runtimeOrdinalClaimed: false,
+      restored: true,
+    };
+  } finally {
+    delete globalThis.__TASK6_SPILL_CAPTURE__;
+    writeFileSync(DEPRESSION_PATH, original);
+  }
 }
 
-const spillTieComparatorMutations = runSpillTieComparatorMutations();
+const spillTieComparatorMutations = await runSpillTieComparatorMutations();
 
 function inspectProductionSource() {
   if (!existsSync(DEPRESSION_PATH)) return { sourceExists: false };
@@ -904,6 +1327,16 @@ const checks = {
     sourceInspection.allRingsContainmentScan === false && sourceInspection.hasBoundedRingVertexMarkers === true &&
     sourceInspection.hasBoundedRingContainmentSweep === true,
 
+  repeatedInternalBoundaryVertexRejectionIsRuntimeDiscriminated:
+    repeatedInternalVertexMutation.applied && repeatedInternalVertexMutation.exactRejection &&
+    repeatedInternalVertexMutation.rawUnchanged && repeatedInternalVertexMutation.restored,
+
+  retainedBoundaryWorkIsRuntimeBoundedAndMutationDiscriminated:
+    boundaryWorkDiscrimination.baselineApplied && boundaryWorkDiscrimination.baselineWithinBounds &&
+    boundaryWorkDiscrimination.historicalVertexApplied && boundaryWorkDiscrimination.historicalVertexRejected &&
+    boundaryWorkDiscrimination.historicalContainmentApplied &&
+    boundaryWorkDiscrimination.historicalContainmentRejected && boundaryWorkDiscrimination.restored,
+
   runtimeRetainedBoundaryTopologyAndScaling:
     boundaryRuntime.nested.ok && boundaryRuntime.nested.conditionedDepressionCount === 1 &&
     boundaryRuntime.nested.retainedCount === 1 && boundaryRuntime.nested.canonicalFloorCell === 56 &&
@@ -948,8 +1381,19 @@ const checks = {
     spillTie.rawUnchanged && spillTie.snapshot?.liveBytes === 26 * 6 + 4 &&
     spillTie.snapshot?.peakBytes === 47 * 6 + 4 && spillTieFinish.ownerReleased && spillTieFinish.baseReleased &&
     spillTieFinish.finalSnapshot?.liveBytes === 0 && sourceInspection.hasCanonicalSpillTieComparator &&
-    spillTieComparatorMutations.baselineCanonical && spillTieComparatorMutations.insideRejected &&
-    spillTieComparatorMutations.outsideRejected && spillTieComparatorMutations.ordinalRejected,
+    JSON.stringify(f5EqualSpillOracle.minima) === JSON.stringify(F5_EQUAL_SPILL_MINIMA) &&
+    JSON.stringify(f5EqualSpillOracle.chosenSpill) === JSON.stringify(F5_EQUAL_SPILL_CHOSEN) &&
+    JSON.stringify(spillYOracle.minima) === JSON.stringify(SPILL_Y_MINIMA) &&
+    JSON.stringify(spillYOracle.chosenSpill) === JSON.stringify(SPILL_Y_CHOSEN) &&
+    JSON.stringify(spillKindOracle.minima) === JSON.stringify(SPILL_KIND_MINIMA) &&
+    JSON.stringify(spillKindOracle.chosenSpill) === JSON.stringify(SPILL_KIND_CHOSEN) &&
+    spillTieComparatorMutations.baselineCanonical && spillTieComparatorMutations.bindingFixtureReached &&
+    spillTieComparatorMutations.insideApplied && spillTieComparatorMutations.insideDiscriminated &&
+    spillTieComparatorMutations.outsideXApplied && spillTieComparatorMutations.outsideXDiscriminated &&
+    spillTieComparatorMutations.outsideYFixtureReached && spillTieComparatorMutations.outsideYApplied &&
+    spillTieComparatorMutations.outsideYDiscriminated && spillTieComparatorMutations.outsideKindFixtureReached &&
+    spillTieComparatorMutations.outsideKindApplied && spillTieComparatorMutations.outsideKindDiscriminated &&
+    spillTieComparatorMutations.runtimeOrdinalClaimed === false && spillTieComparatorMutations.restored,
 
   task6ProductionAuthorityExists:
     existsSync(DEPRESSION_PATH) &&
@@ -1091,6 +1535,8 @@ const out = {
     orderMutations,
     countMutations,
     repairSeamMutation,
+    repeatedInternalVertexMutation,
+    boundaryWorkDiscrimination,
     maximumTask6: {
       ok: maximumTask6.result?.ok === true,
       terminalCount: maximumTask6.analysis?.terminalOwners.terminalCount ?? null,
@@ -1109,6 +1555,14 @@ const out = {
       routing: Array.from(spillTie.grid?.routingElevationMeters ?? []),
       owners: Array.from(spillTie.analysis?.terminalOwners.terminalOwnerCells ?? []),
       comparatorMutations: spillTieComparatorMutations,
+      f5EqualElevationBinding: {
+        elevations: F5_EQUAL_SPILL_ELEVATIONS,
+        rawComponent: F5_RAW_COMPONENT,
+        minima: f5EqualSpillOracle.minima,
+        chosen: f5EqualSpillOracle.chosenSpill,
+      },
+      outsideYFixture: { minima: spillYOracle.minima, chosen: spillYOracle.chosenSpill },
+      outsideKindFixture: { minima: spillKindOracle.minima, chosen: spillKindOracle.chosenSpill },
     },
     retainedBoundaryRuntime: {
       nested: {
