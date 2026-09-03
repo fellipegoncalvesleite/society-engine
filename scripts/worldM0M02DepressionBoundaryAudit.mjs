@@ -111,9 +111,36 @@ function runAnalysis(width, height, elevations, landMask, constants, intent = ZE
 }
 
 function finishFixture(fixture) {
+  // The production release contract detaches every released backing buffer.
+  // Preserve only audit-owned copies needed by later mutation/comparison code;
+  // never rely on a strong alias surviving ledger release.
+  const gridSnapshot = fixture.grid ? {
+    elevationMeters: new Float64Array(fixture.grid.elevationMeters),
+    landMask: new Uint8Array(fixture.grid.landMask),
+    routingElevationMeters: new Float64Array(fixture.grid.routingElevationMeters),
+    flatRank: new Int32Array(fixture.grid.flatRank),
+    terminalKindByCell: new Uint8Array(fixture.grid.terminalKindByCell),
+    terminalOrdinalByCell: new Int32Array(fixture.grid.terminalOrdinalByCell),
+  } : undefined;
+  const ownerSnapshot = fixture.analysis
+    ? new Int32Array(fixture.analysis.terminalOwners.terminalOwnerCells)
+    : undefined;
   const ownerReleased = fixture.analysis ? releaseTerminalOwners(fixture.grid, fixture.analysis) : true;
   const baseReleased = releaseBase(fixture.grid);
-  return { ownerReleased, baseReleased, finalSnapshot: fixture.budget?.snapshot() };
+  const finalSnapshot = fixture.budget?.snapshot();
+  if (fixture.grid && gridSnapshot) Object.assign(fixture.grid, gridSnapshot);
+  if (fixture.analysis && ownerSnapshot && gridSnapshot) {
+    fixture.analysis = {
+      ...fixture.analysis,
+      terminalOwners: {
+        ...fixture.analysis.terminalOwners,
+        terminalKindByCell: gridSnapshot.terminalKindByCell,
+        terminalOrdinalByCell: gridSnapshot.terminalOrdinalByCell,
+        terminalOwnerCells: ownerSnapshot,
+      },
+    };
+  }
+  return { ownerReleased, baseReleased, finalSnapshot };
 }
 
 function ringArea2(ring) {
@@ -485,6 +512,9 @@ const repairResult = repairFixture.grid
 const repairRawUnchanged = repairFixture.grid
   ? sameBytes(repairRaw, exactBytes(repairFixture.grid.elevationMeters))
   : false;
+const repairRoutingAfter = repairFixture.grid
+  ? [repairFixture.grid.routingElevationMeters[12], repairFixture.grid.routingElevationMeters[13]]
+  : undefined;
 const repairReleased = releaseBase(repairFixture.grid);
 
 const repairZeroConstants = clonePhysicalConstants();
@@ -1448,7 +1478,7 @@ const checks = {
 
   exactRepairPrimitiveAndNoRawWrite:
     repairResult?.ok === true && repairResult.value === 1 &&
-    repairFixture.grid?.routingElevationMeters[12] === 4 && repairFixture.grid?.routingElevationMeters[13] === 4 &&
+    repairRoutingAfter?.[0] === 4 && repairRoutingAfter?.[1] === 4 &&
     repairRawUnchanged && repairReleased,
 
   repairBudgetFailsBeforeWrites:

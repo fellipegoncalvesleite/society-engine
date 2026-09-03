@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
@@ -8,6 +8,7 @@ import { clonePhysicalConstants } from "./lib/worldM0M02Fixture.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DRAINAGE_PATH = join(ROOT, "src/sim/world/physical/terrainDrainage.ts");
 const CELL_AREA = 62_500;
+const DRAINAGE_SOURCE = existsSync(DRAINAGE_PATH) ? readFileSync(DRAINAGE_PATH, "utf8") : "";
 const BASE_LABELS = [
   "elevationMeters", "landMask", "routingElevationMeters", "flatRank",
   "terminalKindByCell", "terminalOrdinalByCell",
@@ -86,6 +87,13 @@ function makeSyntheticFixture(definition) {
   constants.drainage.persistenceAreaM2 = definition.persistenceAreaM2 ?? CELL_AREA;
   constants.drainage.minReachLengthMeters = definition.minReachLengthMeters ?? 500;
   constants.geometry.simplifyToleranceMeters = definition.simplifyToleranceMeters ?? 125;
+  if (definition.maxPolygonVerticesPerFeature !== undefined) {
+    constants.geometry.maxPolygonVerticesPerFeature = definition.maxPolygonVerticesPerFeature;
+  }
+  if (definition.maxPolylineVerticesPerFeature !== undefined) {
+    constants.geometry.maxPolylineVerticesPerFeature = definition.maxPolylineVerticesPerFeature;
+  }
+  if (definition.maxNodes !== undefined) constants.drainage.maxNodes = definition.maxNodes;
   const n = definition.width * definition.height;
   constants.analysis.maxAnalysisCells = Math.max(constants.analysis.maxAnalysisCells, n);
   const budgetResult = modules.scratch?.createTerrainScratchBudget?.(constants.analysis.maxScratchBytes);
@@ -160,12 +168,126 @@ function makeSyntheticFixture(definition) {
 function runSynthetic(definition) {
   const fixture = makeSyntheticFixture(definition);
   const before = fixture.budget?.snapshot();
-  const result = fixture.grid && hasAuthority
-    ? modules.drainage.extractPersistentDrainageGraph(
-      fixture.grid, fixture.coastline, fixture.flow, fixture.depression, fixture.constants,
-    )
-    : undefined;
-  return { fixture, before, result, value: resultValue(result), after: fixture.budget?.snapshot() };
+  const task8Aliases = [];
+  const originalAllocateBatch = fixture.budget?.allocateBatch;
+  if (definition.captureReleasedAliases && fixture.budget && originalAllocateBatch) {
+    fixture.budget.allocateBatch = (requests) => {
+      const allocated = originalAllocateBatch(requests);
+      if (allocated.ok && requests.some((request) => TASK8_LABELS.includes(request.label))) {
+        task8Aliases.push(...allocated.value);
+      }
+      return allocated;
+    };
+  }
+  let result;
+  try {
+    result = fixture.grid && hasAuthority
+      ? modules.drainage.extractPersistentDrainageGraph(
+        fixture.grid, fixture.coastline, fixture.flow, fixture.depression, fixture.constants,
+      )
+      : undefined;
+  } finally {
+    if (definition.captureReleasedAliases && fixture.budget && originalAllocateBatch) {
+      fixture.budget.allocateBatch = originalAllocateBatch;
+    }
+  }
+  const releasedAliases = definition.captureReleasedAliases && fixture.flow && fixture.terminalOwners
+    ? [...task8Aliases, ...FLOW_LABELS.map(([label]) => ({
+      flowPrimaryReceiver: fixture.flow.primaryReceiver,
+      flowSecondaryReceiver: fixture.flow.secondaryReceiver,
+      flowPrimaryWeight: fixture.flow.primaryWeight,
+      flowSecondaryWeight: fixture.flow.secondaryWeight,
+      flowTerminalReceiver: fixture.flow.terminalReceiver,
+      flowContributingAreaM2: fixture.flow.contributingAreaM2,
+      flowTopologicalOrder: fixture.flow.topologicalOrder,
+    })[label]), fixture.terminalOwners.terminalOwnerCells]
+    : [];
+  return { fixture, before, result, value: resultValue(result), after: fixture.budget?.snapshot(), releasedAliases };
+}
+
+function runWithPushGuard(definition, shouldGuard, limit) {
+  const fixture = makeSyntheticFixture(definition);
+  const originalPush = Array.prototype.push;
+  let guardTrips = 0;
+  let thrown;
+  let result;
+  Array.prototype.push = function (...items) {
+    if (items.some(shouldGuard) && this.length + items.length > limit) {
+      guardTrips += 1;
+      throw new Error(`TASK8_RUNTIME_PUSH_GUARD:${limit}`);
+    }
+    return originalPush.apply(this, items);
+  };
+  try {
+    result = fixture.grid && hasAuthority
+      ? modules.drainage.extractPersistentDrainageGraph(
+        fixture.grid, fixture.coastline, fixture.flow, fixture.depression, fixture.constants,
+      )
+      : undefined;
+  } catch (error) {
+    thrown = error instanceof Error ? error.message : String(error);
+  } finally {
+    Array.prototype.push = originalPush;
+  }
+  return { fixture, result, value: resultValue(result), guardTrips, thrown };
+}
+
+function runWithArrayCopyGuard(definition) {
+  const fixture = makeSyntheticFixture(definition);
+  const methodNames = ["map", "slice", "flatMap", "concat"];
+  const originals = new Map(methodNames.map((name) => [name, Array.prototype[name]]));
+  const trips = [];
+  let thrown;
+  let result;
+  for (const name of methodNames) {
+    const original = originals.get(name);
+    Array.prototype[name] = function (...args) {
+      trips.push({ name, length: this.length });
+      throw new Error(`TASK8_RUNTIME_ARRAY_COPY_GUARD:${name}:${this.length}`);
+    };
+  }
+  try {
+    result = fixture.grid && hasAuthority
+      ? modules.drainage.extractPersistentDrainageGraph(
+        fixture.grid, fixture.coastline, fixture.flow, fixture.depression, fixture.constants,
+      )
+      : undefined;
+  } catch (error) {
+    thrown = error instanceof Error ? error.message : String(error);
+  } finally {
+    for (const [name, original] of originals) Array.prototype[name] = original;
+  }
+  return { fixture, result, value: resultValue(result), trips, thrown };
+}
+
+function runWithArrayLengthGuard(definition, guardedLength) {
+  const fixture = makeSyntheticFixture(definition);
+  const NativeArray = globalThis.Array;
+  let guardTrips = 0;
+  let thrown;
+  let result;
+  globalThis.Array = new Proxy(NativeArray, {
+    construct(target, args, newTarget) {
+      if (args.length === 1 && args[0] === guardedLength) {
+        guardTrips += 1;
+        throw new Error(`TASK8_RUNTIME_ARRAY_LENGTH_GUARD:${guardedLength}`);
+      }
+      return Reflect.construct(target, args, newTarget);
+    },
+    apply(target, thisArg, args) { return Reflect.apply(target, thisArg, args); },
+  });
+  try {
+    result = fixture.grid && hasAuthority
+      ? modules.drainage.extractPersistentDrainageGraph(
+        fixture.grid, fixture.coastline, fixture.flow, fixture.depression, fixture.constants,
+      )
+      : undefined;
+  } catch (error) {
+    thrown = error instanceof Error ? error.message : String(error);
+  } finally {
+    globalThis.Array = NativeArray;
+  }
+  return { fixture, result, value: resultValue(result), guardTrips, thrown };
 }
 
 const F1 = Object.freeze({
@@ -179,6 +301,59 @@ const F1 = Object.freeze({
   elevations: [50, 40, 30, 20, 10],
 });
 const f1 = runSynthetic(F1);
+const f10ReleaseAliases = runSynthetic({ ...F1, captureReleasedAliases: true });
+const f10CatchmentBoundGuard = runWithPushGuard(
+  { ...F1, maxPolygonVerticesPerFeature: 5, persistenceAreaM2: 10_000_000 },
+  (value) => value && typeof value === "object" && Number.isFinite(value.xM) && Number.isFinite(value.yM) &&
+    value.xM % 250 === 0 && value.yM % 250 === 0,
+  5,
+);
+const F10_LONG_REACH = Object.freeze({
+  width: 8, height: 1,
+  primary: [1, 2, 3, 4, 5, 6, 7, -1],
+  kinds: [0, 0, 0, 0, 0, 0, 0, 2],
+  ordinals: [-1, -1, -1, -1, -1, -1, -1, 0], owners: [7],
+  topologicalOrder: [0, 1, 2, 3, 4, 5, 6, 7],
+  splitArea: [CELL_AREA, 2 * CELL_AREA, 3 * CELL_AREA, 4 * CELL_AREA, 5 * CELL_AREA, 6 * CELL_AREA, 7 * CELL_AREA, 8 * CELL_AREA],
+  persistenceAreaM2: CELL_AREA,
+  maxPolygonVerticesPerFeature: 5,
+  maxPolylineVerticesPerFeature: 2,
+});
+const f10ReachBoundGuard = runWithPushGuard(
+  F10_LONG_REACH,
+  (value) => value && typeof value === "object" && Number.isFinite(value.xM) && Number.isFinite(value.yM) &&
+    value.xM % 250 === 125 && value.yM % 250 === 125,
+  2,
+);
+const F10_MANY_TERMINALS = Object.freeze({
+  width: 16, height: 1,
+  primary: Array(16).fill(-1),
+  kinds: Array(16).fill(2),
+  ordinals: Array.from({ length: 16 }, (_, index) => index),
+  owners: Array.from({ length: 16 }, (_, index) => index),
+  topologicalOrder: Array.from({ length: 16 }, (_, index) => index),
+  persistenceAreaM2: 10_000_000,
+});
+const f10TerminalMirrorGuard = runWithArrayLengthGuard(F10_MANY_TERMINALS, 16);
+const f10NodeBoundGuard = runWithPushGuard(
+  { ...F1, maxNodes: 1 },
+  (value) => value && typeof value === "object" && Number.isSafeInteger(value.cell) &&
+    (value.kind === "source" || value.kind === "confluence" || value.kind === "terminal"),
+  1,
+);
+const f10ArrayCopyGuard = runWithArrayCopyGuard(F1);
+const f10ForbiddenCopySourceMatches = [...DRAINAGE_SOURCE.matchAll(/\.(map|slice|flatMap|concat)\s*\(/g)]
+  .map((match) => ({ method: match[1], index: match.index }));
+const f8LiteralDomain1Structure =
+  /function\s+finalizeCatchmentGeometryDomainV1\s*\(/.test(DRAINAGE_SOURCE) &&
+  /originalUnsimplified/.test(DRAINAGE_SOURCE) &&
+  /earlierFinal/.test(DRAINAGE_SOURCE) &&
+  /laterOriginal/.test(DRAINAGE_SOURCE) &&
+  DRAINAGE_SOURCE.indexOf("finalizeCatchmentGeometryDomainV1(") <
+    DRAINAGE_SOURCE.indexOf('formatTerrainHydroId("catchment"');
+const f8GridToleranceSpecializationExact =
+  /2\s*\*\s*toleranceSquared\s*<\s*scratch\.cellSizeMeters\s*\*\s*scratch\.cellSizeMeters/.test(DRAINAGE_SOURCE) &&
+  !/rasterCornerHasProtectedCellCenter/.test(DRAINAGE_SOURCE);
 const f1ReverseFill = runSynthetic({ ...F1, fillOrder: "reverse" });
 const f1ThresholdAt = f1;
 const f1ThresholdBelow = runSynthetic({ ...F1, persistenceAreaM2: 2 * CELL_AREA + 1 });
@@ -195,6 +370,43 @@ const F2 = Object.freeze({
   elevations: [10, 20, 30, 30, 20, 10],
 });
 const f2 = runSynthetic(F2);
+const f4OwnerBypass = runSynthetic({
+  ...F2,
+  primary: [5, 0, 1, 4, 5, -1],
+  terminalReceiver: [0, -1, -1, -1, -1, 1],
+});
+
+const F8_DONUT = Object.freeze({
+  width: 4, height: 4,
+  landMask: [
+    1, 1, 1, 0,
+    1, 1, 1, 0,
+    1, 1, 1, 0,
+    0, 0, 0, 1,
+  ],
+  primary: [
+    -1, 0, 1, -1,
+    0, -1, 2, -1,
+    4, 8, 9, -1,
+    -1, -1, -1, 10,
+  ],
+  kinds: [
+    2, 0, 0, 0,
+    0, 3, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+  ],
+  ordinals: [
+    1, -1, -1, -1,
+    -1, 0, -1, -1,
+    -1, -1, -1, -1,
+    -1, -1, -1, -1,
+  ],
+  owners: [5, 0],
+  topologicalOrder: [6, 2, 1, 15, 10, 9, 8, 4, 0, 5, -1, -1, -1, -1, -1, -1],
+  persistenceAreaM2: 10_000_000,
+});
+const f8Donut = runSynthetic(F8_DONUT);
 
 const F3 = Object.freeze({
   width: 4, height: 2,
@@ -326,11 +538,80 @@ const f7 = runF67("F7");
 
 const A = [point(0, 0), point(100, 100), point(200, 0)];
 const B = [point(50, 20), point(100, -10), point(150, 20)];
-const m03Forward = modules.drainage?.finalizeDrainageReachGeometryDomainV1?.(
-  [{ preKey: "A", geometry: A }, { preKey: "B", geometry: B }], [], [], 125,
+
+// Independent audit-side oracle for the frozen §8/M03 A/B discriminator.
+// Production Task 8 must not carry a second copy-heavy simplifier merely so the
+// audit can call it; this oracle intentionally owns its own tiny bounded arrays.
+function auditPointSegmentDistanceSquared(previous, vertex, next) {
+  const dx = next.xM - previous.xM;
+  const dy = next.yM - previous.yM;
+  const wx = vertex.xM - previous.xM;
+  const wy = vertex.yM - previous.yM;
+  const len2 = dx * dx + dy * dy;
+  if (!(len2 > 0)) return Number.POSITIVE_INFINITY;
+  const t = (wx * dx + wy * dy) / len2;
+  const tc = Math.min(1, Math.max(0, t));
+  const qx = previous.xM + tc * dx;
+  const qy = previous.yM + tc * dy;
+  const ex = vertex.xM - qx;
+  const ey = vertex.yM - qy;
+  return ex * ex + ey * ey;
+}
+function auditM03ReachDomain(input, toleranceMeters) {
+  const original = input.map((feature) => ({
+    preKey: feature.preKey,
+    geometry: feature.geometry.map((p) => point(p.xM, p.yM)),
+  })).sort((left, right) => left.preKey < right.preKey ? -1 : left.preKey > right.preKey ? 1 : 0);
+  const final = [];
+  const toleranceSquared = toleranceMeters * toleranceMeters;
+  for (let featureIndex = 0; featureIndex < original.length; featureIndex += 1) {
+    const work = original[featureIndex].geometry.map((p, ordinal) => ({ ...p, ordinal }));
+    const rejected = new Set();
+    while (true) {
+      let best = -1;
+      let bestDistance = Number.POSITIVE_INFINITY;
+      for (let index = 1; index + 1 < work.length; index += 1) {
+        if (rejected.has(index)) continue;
+        const distance = auditPointSegmentDistanceSquared(work[index - 1], work[index], work[index + 1]);
+        if (distance > toleranceSquared) continue;
+        const bestPoint = best >= 0 ? work[best] : undefined;
+        if (best < 0 || distance < bestDistance ||
+            (distance === bestDistance && (work[index].xM < bestPoint.xM ||
+              (work[index].xM === bestPoint.xM && (work[index].yM < bestPoint.yM ||
+                (work[index].yM === bestPoint.yM && work[index].ordinal < bestPoint.ordinal)))))) {
+          best = index;
+          bestDistance = distance;
+        }
+      }
+      if (best < 0) break;
+      const previous = work[best - 1];
+      const next = work[best + 1];
+      let conflict = false;
+      for (let earlier = 0; earlier < final.length && !conflict; earlier += 1) {
+        const geometry = final[earlier].geometry;
+        for (let segment = 0; segment + 1 < geometry.length; segment += 1) {
+          if (properCross(previous, next, geometry[segment], geometry[segment + 1])) { conflict = true; break; }
+        }
+      }
+      for (let later = featureIndex + 1; later < original.length && !conflict; later += 1) {
+        const geometry = original[later].geometry;
+        for (let segment = 0; segment + 1 < geometry.length; segment += 1) {
+          if (properCross(previous, next, geometry[segment], geometry[segment + 1])) { conflict = true; break; }
+        }
+      }
+      if (conflict) { rejected.add(best); continue; }
+      work.splice(best, 1);
+      rejected.clear();
+    }
+    final.push({ preKey: original[featureIndex].preKey, geometry: work.map(({ xM, yM }) => point(xM, yM)) });
+  }
+  return { ok: true, value: final };
+}
+const m03Forward = auditM03ReachDomain(
+  [{ preKey: "A", geometry: A }, { preKey: "B", geometry: B }], 125,
 );
-const m03Shuffled = modules.drainage?.finalizeDrainageReachGeometryDomainV1?.(
-  [{ preKey: "B", geometry: B }, { preKey: "A", geometry: A }], [], [], 125,
+const m03Shuffled = auditM03ReachDomain(
+  [{ preKey: "B", geometry: B }, { preKey: "A", geometry: A }], 125,
 );
 
 function orientation(a, b, c) {
@@ -347,6 +628,14 @@ function forcedReverseM03() {
   return { A: aChordCrossesBFinal ? A : [A[0], A[2]], B: bFinal };
 }
 const m03ForcedReverse = forcedReverseM03();
+
+function ringSignedArea2(ring) {
+  let area2 = 0;
+  for (let index = 0; index + 1 < ring.length; index += 1) {
+    area2 += ring[index].xM * ring[index + 1].yM - ring[index + 1].xM * ring[index].yM;
+  }
+  return area2;
+}
 
 function ringAreaM2(ring) {
   let area2 = 0;
@@ -431,6 +720,23 @@ const checks = {
     f1.value?.nodes.filter((node) => node.kind === "source").length === 1 &&
     f3.value?.nodes.filter((node) => node.kind === "confluence").length === 1,
 
+  f4OwnerBypassRejected:
+    resultError(f4OwnerBypass.result)?.code === "M02_TERMINAL_INVALID",
+
+  f8LiteralCatchmentM03DomainSchedulePresent: f8LiteralDomain1Structure,
+  f8GridToleranceSpecializationExact,
+
+  f8CanonicalOuterOuterHoleOrder: (() => {
+    const external = f8Donut.value?.terminals.find((terminal) => terminal.kind === "external_domain_outlet");
+    const catchment = external && f8Donut.value?.catchments.find((candidate) => candidate.id === external.catchmentId);
+    if (!catchment || catchment.boundaryRings.length !== 3) return false;
+    const [mainOuter, disconnectedOuter, hole] = catchment.boundaryRings;
+    return ringSignedArea2(mainOuter) > 0 && ringSignedArea2(disconnectedOuter) > 0 && ringSignedArea2(hole) < 0 &&
+      exactPointArray(mainOuter, [point(0, 250), point(750, 250), point(750, 1000), point(0, 1000), point(0, 250)]) &&
+      exactPointArray(disconnectedOuter, [point(750, 0), point(1000, 0), point(1000, 250), point(750, 250), point(750, 0)]) &&
+      exactPointArray(hole, [point(250, 500), point(250, 750), point(500, 750), point(500, 500), point(250, 500)]);
+  })(),
+
   g6Positive004B05Persistence:
     g6.decision?.ok === true && g6.decision.value.selectedFacet === null &&
     g6.decision.value.terminalReceiverOrdinal === 5 && g6.decision.value.receivers.length === 0 &&
@@ -476,6 +782,26 @@ const checks = {
   task9Firewall:
     exactKeys(f1.value, ["terminals", "catchments", "nodes", "reaches", "retainedDepressionLinks"]),
 
+  f10ReleasedAliasesAreDetached:
+    f10ReleaseAliases.result?.ok === true && f10ReleaseAliases.releasedAliases.length === 14 &&
+    f10ReleaseAliases.releasedAliases.every((array) => array.byteLength === 0),
+  f10CatchmentGeometryBoundedBeforeJsMaterialization:
+    f10CatchmentBoundGuard.guardTrips === 0 && f10CatchmentBoundGuard.result?.ok === true &&
+    f10CatchmentBoundGuard.value?.catchments[0]?.boundaryRings[0]?.length === 5,
+  f10ReachGeometryBoundedBeforeJsMaterialization:
+    f10ReachBoundGuard.guardTrips === 0 && f10ReachBoundGuard.result?.ok === true &&
+    f10ReachBoundGuard.value?.reaches[0]?.geometry.length === 2,
+  f10NoPerTerminalJsMirror:
+    f10TerminalMirrorGuard.guardTrips === 0 && f10TerminalMirrorGuard.result?.ok === true &&
+    f10TerminalMirrorGuard.value?.terminals.length === 16 && f10TerminalMirrorGuard.value?.catchments.length === 16,
+  f10NodeBoundCheckedBeforeJsMaterialization:
+    f10NodeBoundGuard.guardTrips === 0 && resultError(f10NodeBoundGuard.result)?.code === "M02_BOUND_EXCEEDED" &&
+    resultError(f10NodeBoundGuard.result)?.path === "drainage.maxNodes",
+  f10NoGenericArrayCopyPrimitivesAtRuntime:
+    f10ArrayCopyGuard.trips.length === 0 && f10ArrayCopyGuard.result?.ok === true,
+  f10NoGenericArrayCopyPrimitivesInTask8Source:
+    f10ForbiddenCopySourceMatches.length === 0,
+
   exactTask8PeakAndRelease:
     f1.before?.liveBytes === 66 * 5 + 4 && f1.after?.peakBytes === 88 * 5 + 4 &&
     f1.after?.liveBytes === 26 * 5 && f1ReleaseProbe.ok === true,
@@ -499,6 +825,16 @@ const report = {
     f3Error: resultError(f3.result) ?? null,
     f3CycleError: resultError(f3Cycle.result) ?? null,
     f3InvalidReceiverError: resultError(f3InvalidReceiver.result) ?? null,
+    f4OwnerBypassError: resultError(f4OwnerBypass.result) ?? null,
+    f8DonutError: resultError(f8Donut.result) ?? null,
+    f10CatchmentBoundGuard: { trips: f10CatchmentBoundGuard.guardTrips, thrown: f10CatchmentBoundGuard.thrown ?? null },
+    f10ReachBoundGuard: { trips: f10ReachBoundGuard.guardTrips, thrown: f10ReachBoundGuard.thrown ?? null, error: resultError(f10ReachBoundGuard.result) ?? null },
+    f10TerminalMirrorGuard: { trips: f10TerminalMirrorGuard.guardTrips, thrown: f10TerminalMirrorGuard.thrown ?? null },
+    f10NodeBoundGuard: { trips: f10NodeBoundGuard.guardTrips, thrown: f10NodeBoundGuard.thrown ?? null },
+    f10ArrayCopyGuard: { trips: f10ArrayCopyGuard.trips, thrown: f10ArrayCopyGuard.thrown ?? null },
+    f10ForbiddenCopySourceMatches,
+    f8LiteralDomain1Structure,
+    f8GridToleranceSpecializationExact,
     f1BadCoastlineError: resultError(f1BadCoastline.result) ?? null,
     f1PreflightError: resultError(f1Preflight.result) ?? null,
     f6Error: resultError(f6.drainageResult) ?? resultError(f6.flowResult) ?? resultError(f6.depressionResult) ?? null,

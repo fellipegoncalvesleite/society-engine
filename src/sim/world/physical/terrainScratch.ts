@@ -138,11 +138,19 @@ export function createTerrainScratchBudget(
       if (allocation === undefined) {
         return invalidFailure("scratch.label", "scratch allocation is absent or already released");
       }
-      allocations.delete(label);
       const nextLiveBytes = liveBytes - allocation.bytes;
       if (!Number.isSafeInteger(nextLiveBytes) || nextLiveBytes < 0) {
         return invalidFailure("scratch.liveBytes", "scratch ledger underflow");
       }
+      try {
+        structuredClone(allocation.value.buffer, { transfer: [allocation.value.buffer] });
+      } catch {
+        return invalidFailure("scratch.label", "scratch allocation backing buffer could not be detached at release");
+      }
+      if (allocation.value.byteLength !== 0) {
+        return invalidFailure("scratch.label", "scratch allocation alias remained live after release");
+      }
+      allocations.delete(label);
       liveBytes = nextLiveBytes;
       return { ok: true, value: true };
     },
