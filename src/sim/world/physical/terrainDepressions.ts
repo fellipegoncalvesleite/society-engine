@@ -204,7 +204,7 @@ function terminalKindOrder(kind: number): number {
   return 3;
 }
 
-function terminalPointCoordinates(
+export function terminalPointCoordinates(
   cell: number,
   kind: number,
   scratch: TerrainScratchGrid,
