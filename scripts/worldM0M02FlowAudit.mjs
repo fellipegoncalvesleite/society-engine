@@ -95,21 +95,13 @@ function arraysExact(actual, expected) {
   return true;
 }
 
-function arraysClose(actual, expected, tolerance = 1e-9) {
-  if (!actual || actual.length !== expected.length) return false;
-  for (let index = 0; index < expected.length; index += 1) {
-    if (Math.abs(actual[index] - expected[index]) > tolerance) return false;
-  }
-  return true;
-}
-
 function receiverExact(receivers, expected) {
   if (!Array.isArray(receivers) || receivers.length !== expected.length) return false;
   return expected.every((item, index) => {
     const observed = receivers[index];
     return observed?.receiverIndex === item.receiverIndex &&
       observed?.neighborOrdinal === item.neighborOrdinal &&
-      Math.abs(observed.weight - item.weight) <= 1e-15;
+      Object.is(observed.weight, item.weight);
   });
 }
 
@@ -119,7 +111,7 @@ function decisionMatches(result, expected) {
   return value.selectedFacet === expected.selectedFacet &&
     (expected.directionRadians === null
       ? value.directionRadians === null
-      : Math.abs(value.directionRadians - expected.directionRadians) <= 1e-15) &&
+      : Object.is(value.directionRadians, expected.directionRadians)) &&
     value.usedFlatRankFallback === expected.usedFlatRankFallback &&
     value.terminalReceiverOrdinal === expected.terminalReceiverOrdinal &&
     receiverExact(value.receivers, expected.receivers);
@@ -227,10 +219,10 @@ function flowArraysMatch(result, expected) {
   const value = result.value;
   return arraysExact(value.primaryReceiver, expected.primaryReceiver) &&
     arraysExact(value.secondaryReceiver, expected.secondaryReceiver) &&
-    arraysClose(value.primaryWeight, expected.primaryWeight) &&
-    arraysClose(value.secondaryWeight, expected.secondaryWeight) &&
+    arraysExact(value.primaryWeight, expected.primaryWeight) &&
+    arraysExact(value.secondaryWeight, expected.secondaryWeight) &&
     arraysExact(value.terminalReceiver, expected.terminalReceiver) &&
-    arraysClose(value.contributingAreaM2, expected.contributingAreaM2) &&
+    arraysExact(value.contributingAreaM2, expected.contributingAreaM2) &&
     arraysExact(value.topologicalOrder, expected.topologicalOrder);
 }
 
@@ -387,6 +379,87 @@ async function runFlatRankSourceMutation(modules) {
   };
 }
 
+async function runExactGoldenDriftMutations(modules) {
+  const absent = {
+    weightApplied: false,
+    weightDriftObserved: false,
+    weightRejected: false,
+    areaApplied: false,
+    areaDriftObserved: false,
+    areaRejected: false,
+    restored: !existsSync(FLOW_PATH),
+  };
+  if (!existsSync(FLOW_PATH) || !modules.flow) return absent;
+  const original = readFileSync(FLOW_PATH);
+  const source = original.toString("utf8");
+  const needle = "  const incomingReleased = scratch.budget.release(FLOW_LABELS[7]);";
+  if (!source.includes(needle)) return absent;
+  const definition = {
+    width: 3, height: 3, routing: G1_ROUTING, flatRank: ZERO_RANKS_9,
+    kinds: COMMON_KINDS, ordinals: COMMON_ORDINALS, owners: COMMON_OWNERS,
+  };
+  const expected = {
+    primaryReceiver: F1_PRIMARY,
+    secondaryReceiver: F1_SECONDARY,
+    primaryWeight: F1_PRIMARY_WEIGHT,
+    secondaryWeight: F1_SECONDARY_WEIGHT,
+    terminalReceiver: COMMON_ORDINALS,
+    contributingAreaM2: G1_AREA,
+    topologicalOrder: F1_TOPO,
+  };
+  let weightApplied = false;
+  let weightDriftObserved = false;
+  let weightRejected = false;
+  let areaApplied = false;
+  let areaDriftObserved = false;
+  let areaRejected = false;
+  try {
+    const weightMutation = [
+      "  if (cellCount === 9 && primaryReceiver[4] === 2 && secondaryReceiver[4] === 5) {",
+      "    primaryWeight[4] += 5e-10;",
+      "    secondaryWeight[4] -= 5e-10;",
+      "  }",
+      "",
+      needle,
+    ].join("\n");
+    writeFileSync(FLOW_PATH, source.replace(needle, weightMutation));
+    weightApplied = true;
+    const weightModules = await loadModules("?audit-flow-exact-weight-drift");
+    const weight = runFixtureAnalysis(weightModules, definition);
+    weightDriftObserved = weight.result?.ok === true &&
+      Object.is(weight.result.value.primaryWeight[4], F1_PRIMARY_WEIGHT[4] + 5e-10) &&
+      Object.is(weight.result.value.secondaryWeight[4], F1_SECONDARY_WEIGHT[4] - 5e-10);
+    weightRejected = weightDriftObserved && !flowArraysMatch(weight.result, expected);
+
+    writeFileSync(FLOW_PATH, original);
+    const areaMutation = [
+      "  if (cellCount === 9 && primaryReceiver[4] === 2 && secondaryReceiver[4] === 5) {",
+      "    contributingAreaM2[4] += 5e-10;",
+      "  }",
+      "",
+      needle,
+    ].join("\n");
+    writeFileSync(FLOW_PATH, source.replace(needle, areaMutation));
+    areaApplied = true;
+    const areaModules = await loadModules("?audit-flow-exact-area-drift");
+    const area = runFixtureAnalysis(areaModules, definition);
+    areaDriftObserved = area.result?.ok === true &&
+      Object.is(area.result.value.contributingAreaM2[4], G1_AREA[4] + 5e-10);
+    areaRejected = areaDriftObserved && !flowArraysMatch(area.result, expected);
+  } finally {
+    writeFileSync(FLOW_PATH, original);
+  }
+  return {
+    weightApplied,
+    weightDriftObserved,
+    weightRejected,
+    areaApplied,
+    areaDriftObserved,
+    areaRejected,
+    restored: readFileSync(FLOW_PATH).equals(original),
+  };
+}
+
 async function runBudgetNegative(modules) {
   const result = {
     baseBytes: 22_464_000,
@@ -482,6 +555,9 @@ const checks = {
   flatRankBindingMinimumLowerRank: false,
   flatRankIgnoreMutationRejected: false,
   flatRankMutationRestored: false,
+  exactWeightDriftMutationRejected: false,
+  exactAreaDriftMutationRejected: false,
+  exactGoldenDriftMutationRestored: false,
   g6TerminalPositive004Precedence: false,
   primaryHalfTieCanonicalNeighbor: false,
   f1FullArrays: false,
@@ -521,7 +597,7 @@ if (modulePresent) {
   checks.g1Plane = g1.pass && g1GoldenAnalysis.result?.ok &&
     g1GoldenAnalysis.result.value.primaryReceiver[4] === 2 &&
     g1GoldenAnalysis.result.value.secondaryReceiver[4] === 5 &&
-    arraysClose(g1GoldenAnalysis.result.value.contributingAreaM2, G1_AREA);
+    arraysExact(g1GoldenAnalysis.result.value.contributingAreaM2, G1_AREA);
   evidence.g1 = g1.result;
 
   const g2 = checkGoldenDecision(modules, { ...common, routing: [100, 98, 96, 100, 98, 96, 100, 98, 96], flatRank: ZERO_RANKS_9 }, 4, {
@@ -716,6 +792,14 @@ if (modulePresent) {
   checks.flatRankIgnoreMutationRejected = flatRankMutation.applied && flatRankMutation.rejected && flatRankMutation.selectedFirstEqual;
   checks.flatRankMutationRestored = flatRankMutation.applied && flatRankMutation.restored;
   evidence.flatRankMutation = flatRankMutation;
+
+  const exactGoldenDrift = await runExactGoldenDriftMutations(modules);
+  checks.exactWeightDriftMutationRejected = exactGoldenDrift.weightApplied &&
+    exactGoldenDrift.weightDriftObserved && exactGoldenDrift.weightRejected;
+  checks.exactAreaDriftMutationRejected = exactGoldenDrift.areaApplied &&
+    exactGoldenDrift.areaDriftObserved && exactGoldenDrift.areaRejected;
+  checks.exactGoldenDriftMutationRestored = exactGoldenDrift.restored;
+  evidence.exactGoldenDriftMutation = exactGoldenDrift;
 
   const budget = await runBudgetNegative(modules);
   checks.budgetTask6PeakExact = budget.task6PeakExact && budget.beforeTask7Exact;
