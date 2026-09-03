@@ -62,6 +62,14 @@ function ringRoleAreaExact(rings, expectedAreaM2) {
 function exactKeys(value, keys) { return value && JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort()); }
 function bytes(v) { return Buffer.from(JSON.stringify(v), "utf8"); }
 function sameBytes(a,b) { return bytes(a).equals(bytes(b)); }
+function safeCall(fn) {
+  try { return fn(); } catch (error) { return { thrown: error instanceof Error ? error.message : String(error) }; }
+}
+function coastlineFor(grid, coastline = []) {
+  const landCells = grid ? [...grid.landMask].filter((value)=>value===1).length : 0;
+  const cellAreaM2 = grid?.cellAreaM2 ?? AREA;
+  return { seaLevelMeters:0, coastline, landAreaM2:landCells*cellAreaM2, oceanAreaM2:((grid?.landMask.length??0)-landCells)*cellAreaM2 };
+}
 
 function makeGrid(width, height, elevations, landMask = Array(width*height).fill(1), constants = clonePhysicalConstants()) {
   const budget = ok(modules.scratch?.createTerrainScratchBudget?.(constants.analysis.maxScratchBytes));
@@ -90,22 +98,22 @@ const retainedBase = {
 const f5Grid = makeGrid(5,5,Array(25).fill(9));
 const f5 = modules.basins?.finalizeDepressionBasins?.(f5Grid.grid,
   {retainedDepressions:[],terminalOwners:{terminalKindByCell:f5Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f5Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
-  {terminals:[],catchments:[],nodes:[],reaches:[],retainedDepressionLinks:[]},f5Grid.constants);
+  coastlineFor(f5Grid.grid), {terminals:[],catchments:[],nodes:[],reaches:[],retainedDepressionLinks:[]},f5Grid.constants);
 
 const f6Grid = makeGrid(5,5,Array(25).fill(9));
 const f6Dep = {...retainedBase,persistentSpillElevationMeters:null,protectedIntentToken:"protected-basin:0000000000000000",closedEndorheic:true};
 const f6 = modules.basins?.finalizeDepressionBasins?.(f6Grid.grid,
   {retainedDepressions:[f6Dep],terminalOwners:{terminalKindByCell:f6Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f6Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
-  drainageFor("retained_closed_basin"),f6Grid.constants);
+  coastlineFor(f6Grid.grid), drainageFor("retained_closed_basin"),f6Grid.constants);
 const f6Bad = modules.basins?.finalizeDepressionBasins?.(f6Grid.grid,
   {retainedDepressions:[{...f6Dep,persistentSpillElevationMeters:4}],terminalOwners:{terminalKindByCell:f6Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f6Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
-  drainageFor("retained_closed_basin"),f6Grid.constants);
+  coastlineFor(f6Grid.grid), drainageFor("retained_closed_basin"),f6Grid.constants);
 
 const f7Grid = makeGrid(5,5,Array(25).fill(9));
 const f7Dep = {...retainedBase,persistentSpillElevationMeters:4,protectedIntentToken:null,closedEndorheic:false};
 const f7Drain = drainageFor("external_domain_outlet",point(1250,125));
 const f7 = modules.basins?.finalizeDepressionBasins?.(f7Grid.grid,
-  {retainedDepressions:[f7Dep],terminalOwners:{terminalKindByCell:f7Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f7Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},f7Drain,f7Grid.constants);
+  {retainedDepressions:[f7Dep],terminalOwners:{terminalKindByCell:f7Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f7Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},coastlineFor(f7Grid.grid),f7Drain,f7Grid.constants);
 
 const twoGrid = makeGrid(5,5,Array(25).fill(9));
 const ringB = ring([0,0],[250,0],[250,250],[0,250],[0,0]);
@@ -120,8 +128,8 @@ const twoDrain={terminals:[term0,term1],catchments:[
   {depressionToken:f6Dep.token,catchmentId:id("catchment",0),terminalId:term0.id},
   {depressionToken:depB.token,catchmentId:id("catchment",1),terminalId:term1.id}]};
 const depAnalysis=(items)=>({retainedDepressions:items,terminalOwners:{terminalKindByCell:twoGrid.grid?.terminalKindByCell,terminalOrdinalByCell:twoGrid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:2,repairOperationCount:0});
-const d3Forward=modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([f6Dep,depB]),twoDrain,twoGrid.constants);
-const d3Reverse=modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([{...depB,boundaryRings:[...depB.boundaryRings].reverse()},f6Dep]),{...twoDrain,retainedDepressionLinks:[...twoDrain.retainedDepressionLinks].reverse()},twoGrid.constants);
+const d3Forward=modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([f6Dep,depB]),coastlineFor(twoGrid.grid),twoDrain,twoGrid.constants);
+const d3Reverse=modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([{...depB,boundaryRings:[...depB.boundaryRings].reverse()},f6Dep]),coastlineFor(twoGrid.grid),{...twoDrain,retainedDepressionLinks:[...twoDrain.retainedDepressionLinks].reverse()},twoGrid.constants);
 
 const vc=clonePhysicalConstants(); vc.geometry.valleySearchRadiusMeters=500; vc.geometry.valleyRelativeReliefMeters=30; vc.geometry.floodplainCandidateMaxSlope=0.03;
 const w=7,h=7; const elevations=[];
@@ -134,10 +142,27 @@ const valleyGrid=makeGrid(w,h,elevations,Array(w*h).fill(1),vc);
 const reachA={id:id("drainage-reach",0),upstreamNodeId:id("drainage-node",0),downstreamNodeId:id("drainage-node",1),downstreamReachId:null,
   catchmentId:id("catchment",0),terminalId:id("terminal",0),geometry:[point(375,875),point(875,875),point(1375,875)],lengthMeters:1000,
   contributingAreaM2:500000,localContributingAreaM2:500000,meanTerrainGradient:0.01,localReliefMeters:70,channelIncisionMeters:20};
-const reachB={...reachA,id:id("drainage-reach",1),geometry:[point(375,375),point(875,375),point(1375,375)]};
+const reachB={...reachA,id:id("drainage-reach",1),upstreamNodeId:id("drainage-node",2),downstreamNodeId:id("drainage-node",3),
+  catchmentId:id("catchment",1),terminalId:id("terminal",1),geometry:[point(375,375),point(875,375),point(1375,375)]};
+const valleyTerminals=[
+  {id:id("terminal",0),kind:"external_domain_outlet",point:reachA.geometry.at(-1),catchmentId:id("catchment",0)},
+  {id:id("terminal",1),kind:"external_domain_outlet",point:reachB.geometry.at(-1),catchmentId:id("catchment",1)},
+];
+const valleyNodes=[
+  {id:id("drainage-node",0),point:reachA.geometry[0],kind:"source",terminalId:null},
+  {id:id("drainage-node",1),point:reachA.geometry.at(-1),kind:"terminal",terminalId:valleyTerminals[0].id},
+  {id:id("drainage-node",2),point:reachB.geometry[0],kind:"source",terminalId:null},
+  {id:id("drainage-node",3),point:reachB.geometry.at(-1),kind:"terminal",terminalId:valleyTerminals[1].id},
+];
+const valleyCatchments=[
+  {id:id("catchment",0),terminalId:valleyTerminals[0].id,areaM2:25*AREA,boundaryRings:[ring([0,750],[1750,750],[1750,1750],[0,1750],[0,750])]},
+  {id:id("catchment",1),terminalId:valleyTerminals[1].id,areaM2:24*AREA,boundaryRings:[ring([0,0],[1750,0],[1750,750],[0,750],[0,0])]},
+];
+const valleyDrainage={terminals:valleyTerminals,catchments:valleyCatchments,nodes:valleyNodes,reaches:[reachA,reachB],retainedDepressionLinks:[]};
+const valleyDrainageReverse={...valleyDrainage,terminals:[...valleyTerminals].reverse(),catchments:[...valleyCatchments].reverse(),nodes:[...valleyNodes].reverse(),reaches:[reachB,reachA]};
 const valleyBudgetBefore=valleyGrid.budget?.snapshot?.();
-const valleysForward=modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,[reachA,reachB],vc);
-const valleysReverse=modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,[reachB,reachA],vc);
+const valleysForward=safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,valleyDrainage,vc));
+const valleysReverse=safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,valleyDrainageReverse,vc));
 const valleyBudgetAfter=valleyGrid.budget?.snapshot?.();
 const vv=ok(valleysForward); const vvRev=ok(valleysReverse);
 
@@ -148,34 +173,103 @@ const rawCells=[8,16];
 const rawForward=modules.valleys?.traceTask9CellUnionRingsV1?.(rawCells,valleyGrid.grid,"audit.rawRings");
 const rawReverse=modules.valleys?.traceTask9CellUnionRingsV1?.([...rawCells].reverse(),valleyGrid.grid,"audit.rawRings");
 
+const longConstants=clonePhysicalConstants(); longConstants.geometry.valleySearchRadiusMeters=250; longConstants.geometry.valleyRelativeReliefMeters=100; longConstants.geometry.floodplainCandidateMaxSlope=1;
+const longGrid=makeGrid(50,50,Array(2500).fill(10),Array(2500).fill(1),longConstants);
+const longTerminal={id:id("terminal",0),kind:"external_domain_outlet",point:point(12375,12375),catchmentId:id("catchment",0)};
+const longNodes=[{id:id("drainage-node",0),point:point(125,125),kind:"source",terminalId:null},{id:id("drainage-node",1),point:longTerminal.point,kind:"terminal",terminalId:longTerminal.id}];
+const longReach={...reachA,id:id("drainage-reach",0),upstreamNodeId:longNodes[0].id,downstreamNodeId:longNodes[1].id,catchmentId:id("catchment",0),terminalId:longTerminal.id,geometry:[longNodes[0].point,longNodes[1].point],lengthMeters:Math.hypot(12250,12250)};
+const longDrainage={terminals:[longTerminal],catchments:[{id:id("catchment",0),terminalId:longTerminal.id,areaM2:2500*AREA,boundaryRings:[ring([0,0],[12500,0],[12500,12500],[0,12500],[0,0])]}],nodes:longNodes,reaches:[longReach],retainedDepressionLinks:[]};
+const longCorridor=safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(longGrid.grid,longDrainage,longConstants));
+
 const f6Value=ok(f6)?.[0]; const f7Value=ok(f7)?.[0];
+
+// Correction RED discriminators. These call the frozen corrected interfaces directly;
+// the pre-correction Task-9 commit must fail them for the named architectural reasons.
+const correctionF6 = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(
+  f6Grid.grid,
+  {retainedDepressions:[f6Dep],terminalOwners:{terminalKindByCell:f6Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f6Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
+  coastlineFor(f6Grid.grid), drainageFor("retained_closed_basin"), f6Grid.constants));
+
+const safeNonCollinearRing = ring([0,0],[250,0],[500,250],[750,250],[750,750],[0,750],[0,0]);
+const nonCollinearBeforeVertices = safeNonCollinearRing.length;
+const correctionNonCollinear = safeCall(()=>modules.basins?.simplifyTask9NormalizedRasterRingFeatureV1?.(
+  [safeNonCollinearRing], f6Grid.grid, f6Grid.constants, "audit.nonCollinear", { preserveRasterClassification:false }));
+const nonCollinearAfter = ok(correctionNonCollinear);
+
+
+const blockingReference=[point(250,50),point(250,150)];
+const safeFinalReference=[point(500,375),point(500,625)];
+const referenceProtected=safeCall(()=>modules.basins?.simplifyTask9NormalizedRasterRingFeatureV1?.(
+  [safeNonCollinearRing],f6Grid.grid,f6Grid.constants,"audit.referenceProtected",
+  {preserveRasterClassification:false,references:[{originalGeometry:blockingReference,currentGeometry:blockingReference}]}));
+const earlierFinalReference=safeCall(()=>modules.basins?.simplifyTask9NormalizedRasterRingFeatureV1?.(
+  [safeNonCollinearRing],f6Grid.grid,f6Grid.constants,"audit.earlierFinal",
+  {preserveRasterClassification:false,references:[{originalGeometry:blockingReference,currentGeometry:safeFinalReference}]}));
+const referenceProtectedValue=ok(referenceProtected),earlierFinalValue=ok(earlierFinalReference);
+const referenceProtectionWitness=Array.isArray(referenceProtectedValue)&&Array.isArray(nonCollinearAfter)&&
+  referenceProtectedValue[0]?.length>nonCollinearAfter[0]?.length;
+const earlierFinalLaterOriginalWitness=Array.isArray(earlierFinalValue)&&Array.isArray(referenceProtectedValue)&&
+  earlierFinalValue[0]?.length<referenceProtectedValue[0]?.length;
+
+const duplicatePreKeyDrain={...twoDrain,terminals:[term1,{...term1,id:id("terminal",2),catchmentId:id("catchment",2)}],catchments:[
+  twoDrain.catchments[1],{...twoDrain.catchments[1],id:id("catchment",2),terminalId:id("terminal",2)}],retainedDepressionLinks:[
+  {depressionToken:depB.token,catchmentId:id("catchment",1),terminalId:id("terminal",1)},
+  {depressionToken:"depression-analysis:0000000000000002",catchmentId:id("catchment",2),terminalId:id("terminal",2)}]};
+const duplicatePreKeyDep={...depB,token:"depression-analysis:0000000000000002"};
+const duplicatePreKeyResult=safeCall(()=>modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([depB,duplicatePreKeyDep]),coastlineFor(twoGrid.grid),duplicatePreKeyDrain,twoGrid.constants));
+
+const correctionValleys = safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,valleyDrainage,vc));
+const correctionValleyValue=ok(correctionValleys);
+
+const f6HardCodedRing = sameBytes(f6Value?.boundaryRings, [F_RING]) && area2(F_RING)/2===125000;
+const diagonalSharedVertexSeparate = ok(rawForward)?.length===2 && (()=>{
+  const first=ok(rawForward)?.[0]??[], second=ok(rawForward)?.[1]??[];
+  const firstOpen=first.slice(0,-1), secondOpen=second.slice(0,-1);
+  return firstOpen.some(a=>secondOpen.some(b=>a.xM===b.xM&&a.yM===b.yM));
+})();
+const countBoundConstants=structuredClone(vc); countBoundConstants.drainage.maxReaches=1;
+const countBoundResult=safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,valleyDrainage,countBoundConstants));
+
 const forbidden=/\b(season|frequency|wetland|waterDepth|discharge|rainfall|runoff|precipitation)\b/i;
 const basinSource=existsSync(BASINS_PATH)?readFileSync(BASINS_PATH,"utf8"):"";
 const valleySource=existsSync(VALLEYS_PATH)?readFileSync(VALLEYS_PATH,"utf8"):"";
 const checks={
   authorityPresent: typeof modules.basins?.finalizeDepressionBasins === "function" && typeof modules.valleys?.deriveTerrainValleyGeometry === "function",
+  domain3ConsumesFinalCoastlineAuthority: ok(correctionF6)?.[0]?.closedEndorheic===true,
+  domains45ConsumeFinalDrainagePhysicalAuthority: Array.isArray(correctionValleyValue?.valleys) && Array.isArray(correctionValleyValue?.floodplainCandidates),
+  toleranceDrivenNonCollinearDeletion: Array.isArray(nonCollinearAfter) && nonCollinearAfter[0]?.length < nonCollinearBeforeVertices,
   f5Absent: Array.isArray(ok(f5)) && ok(f5).length===0,
+  f6RingIndependentHardCoded: f6HardCodedRing,
   f6ClosedExact: f6Value?.id===id("depression-basin",0) && f6Value?.catchmentId===id("catchment",0) && f6Value?.floorElevationMeters===1 &&
     f6Value?.spillElevationMeters===null && f6Value?.outletTerminalId===null && f6Value?.closedEndorheic===true && f6Value?.areaM2===125000 &&
     ringRoleAreaExact(f6Value?.boundaryRings,125000),
   f6ContradictionRejected: err(f6Bad)?.code==="M02_CANDIDATE_INVALID" && /spill/i.test(err(f6Bad)?.path??err(f6Bad)?.detail??""),
   f7ExorheicExact: f7Value?.spillElevationMeters===4 && f7Value?.outletTerminalId===id("terminal",0) && f7Value?.closedEndorheic===false && f7Value?.areaM2===125000,
   domain3OrderAndRingRegistryInvariant: ok(d3Forward) && ok(d3Reverse) && sameBytes(ok(d3Forward),ok(d3Reverse)),
+  domain3ExactPreKeyRejectsEqualPhysicalTuples: err(duplicatePreKeyResult)?.code==="M02_CANDIDATE_INVALID" && /pre-key/i.test(err(duplicatePreKeyResult)?.detail??""),
+  domain3FinalReferenceProtection: referenceProtectionWitness && /coastline\.coastline/.test(basinSource) && /drainage\.catchments/.test(basinSource) && /drainage\.reaches/.test(basinSource),
+  earlierFinalLaterOriginalReferenceSemantics: earlierFinalLaterOriginalWitness,
   domain3IdsAfterGeometry: ok(d3Forward)?.every((b,i)=>b.id===id("depression-basin",i)),
   valleyProduced: Array.isArray(vv?.valleys) && vv.valleys.length>=1 && vv.valleys.every(v=>v.areaM2>0 && v.boundaryRings.length>0),
   floodplainProducedNearReach: Array.isArray(vv?.floodplainCandidates) && vv.floodplainCandidates.length>=1,
   isolatedFlatExcluded: vv?.floodplainCandidates?.every(fp=>fp.boundaryRings.every(r=>!r.some(p=>p.xM===0 && p.yM===1750))) ?? false,
   domains45InputOrderInvariant: vv && vvRev && sameBytes(vv,vvRev),
   domains45UseReachPhysicalPreKey: reachPhysicalIdWitness===true,
+  domains45IdsAfterFinalGeometry: vv?.valleys?.every((v,i)=>v.id===id("valley",i)) && vv?.floodplainCandidates?.every((v,i)=>v.id===id("floodplain",i)),
+  domains45CompleteBeforeDeletion: /const valleyDomain:GeometryCandidate\[\]=\[\],floodDomain:GeometryCandidate\[\]=\[\]/.test(valleySource) &&
+    valleySource.indexOf("const finalizedValleys=finalizeGeometryDomain")>valleySource.indexOf("for(const authority of authorities)"),
   domains45RawRingProducerOrderInvariant: ok(rawForward)?.length===2 && sameBytes(ok(rawForward),ok(rawReverse)) && ok(rawForward)?.every((r)=>area2(r)>0),
+  diagonalSharedVertexOuterRingsStaySeparate: diagonalSharedVertexSeparate,
+  candidateCountOverflowFailsClosed: err(countBoundResult)?.code==="M02_BOUND_EXCEEDED",
+  longReachUsesBoundedLocalCorridor: ok(longCorridor)?.valleys?.length===1 && err(longCorridor)===undefined,
   candidateKeysExact: vv?.valleys?.every(v=>exactKeys(v,["id","reachId","boundaryRings","areaM2","localReliefMeters"])) &&
     vv?.floodplainCandidates?.every(v=>exactKeys(v,["id","reachId","boundaryRings","areaM2","terrainSlope"])),
   noHydraulicEpistemicFields: !forbidden.test(basinSource) && !forbidden.test(valleySource),
   task9DenseAnalysisUsesScratchBudget: Boolean(valleyBudgetBefore && valleyBudgetAfter && valleyBudgetAfter.liveBytes===valleyBudgetBefore.liveBytes && valleyBudgetAfter.peakBytes>valleyBudgetBefore.peakBytes),
   noJsPerCellMembership: !/new\s+Set<number>|(?:valleyCells|floodCells)\s*:\s*number\[\]/.test(valleySource),
-  polygonBoundFailure: (()=>{ const c=structuredClone(vc); c.geometry.maxPolygonVerticesPerFeature=4; const r=modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,[reachA],c); return err(r)?.code==="M02_BOUND_EXCEEDED"; })(),
+  polygonBoundFailure: (()=>{ const c=structuredClone(vc); c.geometry.maxPolygonVerticesPerFeature=4; const one={...valleyDrainage,terminals:[valleyTerminals[0]],catchments:[valleyCatchments[0]],nodes:valleyNodes.slice(0,2),reaches:[reachA]}; const r=safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,one,c)); return err(r)?.code==="M02_BOUND_EXCEEDED"; })(),
 };
 const passed=Object.values(checks).every(Boolean);
-console.log(JSON.stringify({audit:"WORLD-M0 M0.2 Task 9 basin/valley geometry",checks,loadError:modules.loadError,verdict:passed?"PASS":"FAIL"},null,2));
-for(const g of [f5Grid.grid,f6Grid.grid,f7Grid.grid,twoGrid.grid,valleyGrid.grid]) releaseGrid(g);
+console.log(JSON.stringify({audit:"WORLD-M0 M0.2 Task 9 basin/valley geometry",checks,evidence:{nonCollinearAfter,referenceProtectedValue,earlierFinalValue},loadError:modules.loadError,verdict:passed?"PASS":"FAIL"},null,2));
+for(const g of [f5Grid.grid,f6Grid.grid,f7Grid.grid,twoGrid.grid,valleyGrid.grid,longGrid.grid]) releaseGrid(g);
 if(!passed) process.exitCode=1;
