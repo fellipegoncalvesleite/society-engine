@@ -7,6 +7,7 @@ import {
   canonicalStrategicEdge,
   compareAscii,
   comparePointM,
+  isNormalizedClosedRing,
   signedRingArea2,
 } from "./terrainHydroNumeric";
 import type {
@@ -261,6 +262,102 @@ function validatePointSequence(
   return { ok: true, value: true };
 }
 
+function pointOnSegmentExact(
+  point: WorldM0PointM,
+  first: WorldM0PointM,
+  second: WorldM0PointM,
+): boolean {
+  const cross = (point.yM - first.yM) * (second.xM - first.xM) -
+    (point.xM - first.xM) * (second.yM - first.yM);
+  return cross === 0 && point.xM >= Math.min(first.xM, second.xM) &&
+    point.xM <= Math.max(first.xM, second.xM) && point.yM >= Math.min(first.yM, second.yM) &&
+    point.yM <= Math.max(first.yM, second.yM);
+}
+
+function orientationExact(
+  first: WorldM0PointM,
+  second: WorldM0PointM,
+  third: WorldM0PointM,
+): number {
+  const cross = (second.xM - first.xM) * (third.yM - first.yM) -
+    (second.yM - first.yM) * (third.xM - first.xM);
+  return cross < 0 ? -1 : cross > 0 ? 1 : 0;
+}
+
+function segmentsIntersectExact(
+  first: WorldM0PointM,
+  second: WorldM0PointM,
+  third: WorldM0PointM,
+  fourth: WorldM0PointM,
+): boolean {
+  const firstThird = orientationExact(first, second, third);
+  const firstFourth = orientationExact(first, second, fourth);
+  const thirdFirst = orientationExact(third, fourth, first);
+  const thirdSecond = orientationExact(third, fourth, second);
+  if (firstThird !== firstFourth && thirdFirst !== thirdSecond) return true;
+  return (firstThird === 0 && pointOnSegmentExact(third, first, second)) ||
+    (firstFourth === 0 && pointOnSegmentExact(fourth, first, second)) ||
+    (thirdFirst === 0 && pointOnSegmentExact(first, third, fourth)) ||
+    (thirdSecond === 0 && pointOnSegmentExact(second, third, fourth));
+}
+
+function validateSimpleOpenSequence(
+  points: readonly WorldM0PointM[],
+  path: string,
+): WorldM0Result<true> {
+  for (let first = 0; first < points.length; first += 1) {
+    for (let second = first + 1; second < points.length; second += 1) {
+      if (samePoint(points[first], points[second])) {
+        return invalid(`${path}[${second}]`, "duplicate point in open geometry");
+      }
+    }
+  }
+  for (let first = 0; first < points.length - 2; first += 1) {
+    const previous = points[first];
+    const shared = points[first + 1];
+    const next = points[first + 2];
+    if (orientationExact(previous, shared, next) === 0 &&
+        (pointOnSegmentExact(next, previous, shared) || pointOnSegmentExact(previous, shared, next))) {
+      return invalid(path, "adjacent open-geometry segments overlap beyond their shared endpoint");
+    }
+  }
+  for (let first = 0; first < points.length - 1; first += 1) {
+    for (let second = first + 2; second < points.length - 1; second += 1) {
+      if (segmentsIntersectExact(points[first], points[first + 1], points[second], points[second + 1])) {
+        return invalid(path, "open geometry is not simple");
+      }
+    }
+  }
+  return { ok: true, value: true };
+}
+
+function validateCoastlineSequence(
+  points: readonly WorldM0PointM[],
+  path: string,
+  widthM: number,
+  heightM: number,
+  maximumVertices: number,
+): WorldM0Result<true> {
+  if (!Array.isArray(points) || points.length < 2 || points.length > maximumVertices) {
+    return invalid(path, `coastline geometry must contain between 2 and ${maximumVertices} points`);
+  }
+  const closed = samePoint(points[0], points[points.length - 1]);
+  const checked = validatePointSequence(points, path, widthM, heightM, maximumVertices, closed);
+  if (!checked.ok) return checked;
+  if (closed) {
+    if (!isNormalizedClosedRing(points, "outer") && !isNormalizedClosedRing(points, "hole")) {
+      return invalid(path, "closed coastline must be an already-normalized ring");
+    }
+    return { ok: true, value: true };
+  }
+  const onBoundary = (point: WorldM0PointM) => point.xM === 0 || point.yM === 0 ||
+    point.xM === widthM || point.yM === heightM;
+  if (!onBoundary(points[0]) || !onBoundary(points[points.length - 1])) {
+    return invalid(path, "open coastline endpoints must be distinct domain-boundary points");
+  }
+  return validateSimpleOpenSequence(points, path);
+}
+
 function validateRings(
   rings: readonly (readonly WorldM0PointM[])[],
   path: string,
@@ -333,8 +430,8 @@ function validatePhysicalRegistries(
   const coastline: (readonly WorldM0PointM[])[] = [];
   for (let index = 0; index < coastlineInput.length; index += 1) {
     const line: readonly WorldM0PointM[] = coastlineInput[index];
-    const checked = validatePointSequence(
-      line, `coastline[${index}]`, widthM, heightM, constants.geometry.maxPolylineVerticesPerFeature, false,
+    const checked = validateCoastlineSequence(
+      line, `coastline[${index}]`, widthM, heightM, constants.geometry.maxPolylineVerticesPerFeature,
     );
     if (!checked.ok) return checked;
     coastline.push(line);
@@ -508,41 +605,39 @@ function provinceMetrics(provinces: readonly LandformProvenanceProvince[]): read
   }));
 }
 
-/**
- * Province geometry is the only persisted provenance-space authority available
- * at Task 11. Give each exact 250 m physical cell to the nearest normalized
- * rotated province geometry, with canonical province ID as the exact tie order.
- * Strategic fractions are then integrated physical cell areas, not a dominant
- * strategic enum and not a new persistent provenance raster.
- */
-function nearestProvinceOrdinal(xM: number, yM: number, metrics: readonly ProvinceMetric[]): number {
-  let best = 0;
-  let bestRho2 = Number.POSITIVE_INFINITY;
-  for (let index = 0; index < metrics.length; index += 1) {
-    const metric = metrics[index];
-    const dx = xM - metric.province.center.xM;
-    const dy = yM - metric.province.center.yM;
-    const u = metric.cosine * dx + metric.sine * dy;
-    const v = -metric.sine * dx + metric.cosine * dy;
-    const rho2 = (u / metric.province.radiusXM) ** 2 + (v / metric.province.radiusYM) ** 2;
-    if (rho2 < bestRho2) {
-      bestRho2 = rho2;
-      best = index;
-    }
-  }
-  return best;
+function provinceSupportsPoint(metric: ProvinceMetric, xM: number, yM: number): boolean {
+  const dx = xM - metric.province.center.xM;
+  const dy = yM - metric.province.center.yM;
+  const u = metric.cosine * dx + metric.sine * dy;
+  const v = -metric.sine * dx + metric.cosine * dy;
+  const rho2 = (u / metric.province.radiusXM) ** 2 + (v / metric.province.radiusYM) ** 2;
+  return rho2 < 1;
+}
+
+function provincePhysicalBounds(metric: ProvinceMetric): RectM {
+  const halfWidthM = Math.hypot(
+    metric.province.radiusXM * metric.cosine,
+    metric.province.radiusYM * metric.sine,
+  );
+  const halfHeightM = Math.hypot(
+    metric.province.radiusXM * metric.sine,
+    metric.province.radiusYM * metric.cosine,
+  );
+  return {
+    minX: metric.province.center.xM - halfWidthM,
+    minY: metric.province.center.yM - halfHeightM,
+    maxX: metric.province.center.xM + halfWidthM,
+    maxY: metric.province.center.yM + halfHeightM,
+  };
 }
 
 function createBaseSummaries(
   scratch: TerrainScratchGrid,
   spatial: WorldM0SpatialGridIdentity,
   geometry: StrategicGeometry,
-  provinces: readonly LandformProvenanceProvince[],
 ): MutableStrategicSummary[] {
   const summaries: MutableStrategicSummary[] = [];
-  const metrics = provinceMetrics(provinces);
   const groupCellCount = geometry.analysisColumnsPerCell * geometry.analysisRowsPerCell;
-  const provinceCellCounts = new Int32Array(provinces.length);
   for (let strategicRow = 0; strategicRow < spatial.rowCount; strategicRow += 1) {
     const analysisRowStart = strategicRow * geometry.analysisRowsPerCell;
     for (let strategicColumn = 0; strategicColumn < spatial.columnCount; strategicColumn += 1) {
@@ -552,10 +647,8 @@ function createBaseSummaries(
       let elevationMaximum = Number.NEGATIVE_INFINITY;
       let elevationSum = 0;
       let slopeSum = 0;
-      provinceCellCounts.fill(0);
       for (let rowOffset = 0; rowOffset < geometry.analysisRowsPerCell; rowOffset += 1) {
         const analysisRow = analysisRowStart + rowOffset;
-        const yM = scratch.height * scratch.cellSizeMeters - (analysisRow + 0.5) * scratch.cellSizeMeters;
         for (let columnOffset = 0; columnOffset < geometry.analysisColumnsPerCell; columnOffset += 1) {
           const analysisColumn = analysisColumnStart + columnOffset;
           const cell = analysisRow * scratch.width + analysisColumn;
@@ -565,20 +658,10 @@ function createBaseSummaries(
           elevationMaximum = Math.max(elevationMaximum, elevation);
           elevationSum += elevation;
           slopeSum += localTerrainSlope(analysisRow, analysisColumn, scratch);
-          const xM = (analysisColumn + 0.5) * scratch.cellSizeMeters;
-          provinceCellCounts[nearestProvinceOrdinal(xM, yM, metrics)] += 1;
         }
       }
       const landAreaM2 = landCells * scratch.cellAreaM2;
       const oceanAreaM2 = geometry.cellAreaM2 - landAreaM2;
-      const provenanceFractions: { provinceId: string; areaFraction: number }[] = [];
-      for (let index = 0; index < provinces.length; index += 1) {
-        if (provinceCellCounts[index] === 0) continue;
-        provenanceFractions.push({
-          provinceId: provinces[index].id,
-          areaFraction: provinceCellCounts[index] / groupCellCount,
-        });
-      }
       summaries.push({
         cell: { row: strategicRow, column: strategicColumn },
         landOceanClass: landAreaM2 === 0 ? "ocean" : oceanAreaM2 === 0 ? "land" : "mixed",
@@ -590,7 +673,7 @@ function createBaseSummaries(
         localReliefMeters: elevationMaximum - elevationMinimum,
         slopeMean: slopeSum / groupCellCount,
         coastlineLengthMeters: 0,
-        provenanceFractions,
+        provenanceFractions: [],
         catchmentIds: [],
         reachIds: [],
         depressionBasinIds: [],
@@ -602,6 +685,59 @@ function createBaseSummaries(
   }
   return summaries;
 }
+
+// audit:province-support-producer:start
+function accumulateProvinceSupportFractions(
+  scratch: TerrainScratchGrid,
+  spatial: WorldM0SpatialGridIdentity,
+  geometry: StrategicGeometry,
+  provinces: readonly LandformProvenanceProvince[],
+  summaries: MutableStrategicSummary[],
+): WorldM0Result<true> {
+  const metrics = provinceMetrics(provinces);
+  for (const metric of metrics) {
+    const bounds = provincePhysicalBounds(metric);
+    const minimumColumn = Math.max(0, Math.floor(bounds.minX / scratch.cellSizeMeters));
+    const maximumColumn = Math.min(scratch.width - 1, Math.floor(bounds.maxX / scratch.cellSizeMeters));
+    const minimumSouthRow = Math.max(0, Math.floor(bounds.minY / scratch.cellSizeMeters));
+    const maximumSouthRow = Math.min(scratch.height - 1, Math.floor(bounds.maxY / scratch.cellSizeMeters));
+    if (minimumColumn > maximumColumn || minimumSouthRow > maximumSouthRow) continue;
+
+    const supportedCountsByStrategicCell = new Map<number, number>();
+    for (let southRow = minimumSouthRow; southRow <= maximumSouthRow; southRow += 1) {
+      const analysisRow = scratch.height - 1 - southRow;
+      const yM = (scratch.height - analysisRow - 0.5) * scratch.cellSizeMeters;
+      for (let analysisColumn = minimumColumn; analysisColumn <= maximumColumn; analysisColumn += 1) {
+        const xM = (analysisColumn + 0.5) * scratch.cellSizeMeters;
+        if (!provinceSupportsPoint(metric, xM, yM)) continue; // audit:province-support-membership
+        const strategicRow = Math.floor(analysisRow / geometry.analysisRowsPerCell);
+        const strategicColumn = Math.floor(analysisColumn / geometry.analysisColumnsPerCell);
+        const strategicCell = strategicRow * spatial.columnCount + strategicColumn;
+        supportedCountsByStrategicCell.set(
+          strategicCell,
+          (supportedCountsByStrategicCell.get(strategicCell) ?? 0) + 1,
+        );
+      }
+    }
+
+    for (const [strategicCell, supportedCellCount] of supportedCountsByStrategicCell) {
+      const areaFraction = supportedCellCount * ANALYSIS_CELL_AREA_M2 / geometry.cellAreaM2;
+      if (!positiveNumber(areaFraction) || areaFraction > 1 ||
+          summaries[strategicCell].provenanceFractions.some((item) => item.provinceId === metric.province.id)) {
+        return invalid(
+          "strategicTerrain.provenanceFractions",
+          "province support aggregation produced an invalid or duplicate physical area fraction",
+        );
+      }
+      summaries[strategicCell].provenanceFractions.push({
+        provinceId: metric.province.id,
+        areaFraction,
+      });
+    }
+  }
+  return { ok: true, value: true };
+}
+// audit:province-support-producer:end
 
 function pointToStrategicCell(
   point: WorldM0PointM,
@@ -842,6 +978,7 @@ function finalizeSummaries(summaries: MutableStrategicSummary[]): readonly Strat
   ];
   for (const summary of summaries) {
     summary.provenanceFractions.sort((left, right) => compareAscii(left.provinceId, right.provinceId));
+    // audit:independent-provenance-no-normalization
     for (const key of keys) summary[key].sort(compareAscii);
   }
   return summaries.map((summary) => ({
@@ -885,7 +1022,11 @@ export function aggregateStrategicTerrain(
   );
   if (!physical.ok) return physical;
 
-  const summaries = createBaseSummaries(scratch, spatial, geometry, physical.value.provinces);
+  const summaries = createBaseSummaries(scratch, spatial, geometry);
+  const provenance = accumulateProvinceSupportFractions(
+    scratch, spatial, geometry, physical.value.provinces, summaries,
+  );
+  if (!provenance.ok) return provenance;
 
   for (const line of physical.value.coastline) {
     forEachLinePiece(line, spatial, geometry, (cell, lengthMeters) => {
