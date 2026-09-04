@@ -1333,11 +1333,82 @@ export function analyzeTerrainDepressionsAndBoundaries(
           return failStage(terminalInvalid("terminalOwners", "protected floor overlaps a pre-conditioning outlet owner"));
         }
         scratch.terminalKindByCell[canonicalFloorCell] = TERRAIN_TERMINAL_RETAINED_CLOSED_BASIN;
+
+        // Protected Closed-Basin Internal Routing: reuse the provisional spill as a finite upper
+        // bound, then flood only this exact component outward from its sole canonical terminal.
+        // With node-elevation minimax costs, the first queue discovery is final because the first
+        // reached predecessor has the smallest routing value available on the current frontier.
+        const firstProtectedMember = heapIndex[0];
         for (let index = 0; index < memberCount; index += 1) {
           const cell = heapIndex[index];
-          if (scratch.routingElevationMeters[cell] !== scratch.elevationMeters[cell]) {
-            return failStage(protectedDestroyed("routingElevationMeters", "protected closed basin raw routing surface was overwritten"));
+          minimumPlateauLabel[cell] = index + 1 < memberCount ? heapIndex[index + 1] : -1;
+          scratch.routingElevationMeters[cell] = provisionalRoutingElevation[cell];
+          floodState[cell] = 0;
+        }
+        scratch.routingElevationMeters[canonicalFloorCell] = scratch.elevationMeters[canonicalFloorCell];
+        floodState[canonicalFloorCell] = 1;
+        heapSize = 0;
+        const compareProtectedRoutingHeap = (left: number, right: number): number => {
+          const leftElevation = scratch.routingElevationMeters[left];
+          const rightElevation = scratch.routingElevationMeters[right];
+          if (leftElevation !== rightElevation) return leftElevation < rightElevation ? -1 : 1;
+          return compareCellPoint(left, right, scratch);
+        };
+        heapPush(canonicalFloorCell, compareProtectedRoutingHeap);
+        let reachedMemberCount = 0;
+        while (heapSize > 0) {
+          const cell = heapPop(compareProtectedRoutingHeap);
+          reachedMemberCount += 1;
+          const internalRow = rowOf(cell, scratch.width);
+          const internalColumn = columnOf(cell, scratch.width);
+          for (let neighborOrdinal = 0; neighborOrdinal < 8; neighborOrdinal += 1) {
+            const neighborRow = internalRow + TERRAIN_8_ROW[neighborOrdinal];
+            const neighborColumn = internalColumn + TERRAIN_8_COLUMN[neighborOrdinal];
+            if (!inBounds(neighborRow, neighborColumn, scratch)) continue;
+            const neighbor = neighborRow * scratch.width + neighborColumn;
+            if (depressionLabel[neighbor] !== canonicalComponentOrdinal || floodState[neighbor] !== 0) continue;
+            const candidate = Math.max(
+              scratch.elevationMeters[neighbor], scratch.routingElevationMeters[cell],
+            );
+            if (candidate < scratch.elevationMeters[neighbor] || candidate > bestSpillElevation) {
+              return failStage(protectedDestroyed(
+                "routingElevationMeters",
+                "protected closed basin internal routing violates raw or spill bounds",
+              ));
+            }
+            scratch.routingElevationMeters[neighbor] = candidate;
+            floodState[neighbor] = 1;
+            heapPush(neighbor, compareProtectedRoutingHeap);
           }
+        }
+        if (reachedMemberCount !== memberCount) {
+          return failStage(protectedDestroyed(
+            "routingElevationMeters",
+            "protected closed basin internal routing did not reach every component member",
+          ));
+        }
+        if (scratch.routingElevationMeters[canonicalFloorCell] !== scratch.elevationMeters[canonicalFloorCell]) {
+          return failStage(protectedDestroyed(
+            "routingElevationMeters",
+            "protected closed basin canonical-floor routing changed from raw elevation",
+          ));
+        }
+        let restoredMember = firstProtectedMember;
+        for (let index = 0; index < memberCount; index += 1) {
+          if (restoredMember < 0) {
+            return failStage(protectedDestroyed(
+              "routingElevationMeters",
+              "protected closed basin member traversal ended before its declared count",
+            ));
+          }
+          heapIndex[index] = restoredMember;
+          restoredMember = minimumPlateauLabel[restoredMember];
+        }
+        if (restoredMember >= 0) {
+          return failStage(protectedDestroyed(
+            "routingElevationMeters",
+            "protected closed basin member traversal exceeded its declared count",
+          ));
         }
       } else {
         conditionedDepressionCount += 1;
