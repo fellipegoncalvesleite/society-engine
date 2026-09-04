@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
@@ -44,7 +44,7 @@ const hashTyped = (array) => createHash("sha256")
   .update(Buffer.from(array.buffer, array.byteOffset, array.byteLength)).digest("hex");
 const summaryDigest = (summaries) => hashText(stable(summaries));
 
-async function loadAuthority() {
+async function loadAuthority(cacheSuffix = "") {
   const loaded = { strategic: undefined, loadError: undefined };
   const server = await createServer({
     root: join(ROOT, "src"), configFile: false, appType: "custom",
@@ -52,7 +52,7 @@ async function loadAuthority() {
   });
   try {
     if (existsSync(STRATEGIC_PATH)) {
-      loaded.strategic = await server.ssrLoadModule("/sim/world/physical/terrainStrategic.ts");
+      loaded.strategic = await server.ssrLoadModule(`/sim/world/physical/terrainStrategic.ts${cacheSuffix}`);
     }
   } catch (error) {
     loaded.loadError = error instanceof Error ? error.message : String(error);
@@ -121,10 +121,10 @@ function makeScratch() {
   };
 }
 
-function province(ordinal, family, center, radiusXM, radiusYM, elevationOffsetMeters, reliefMultiplier) {
+function province(ordinal, family, center, radiusXM, radiusYM, elevationOffsetMeters, reliefMultiplier, axisAngleRadians = 0) {
   return {
     id: id("province", ordinal), family, center, radiusXM, radiusYM,
-    axisAngleRadians: 0, influenceRadiusM: radiusXM, elevationOffsetMeters, reliefMultiplier,
+    axisAngleRadians, influenceRadiusM: radiusXM, elevationOffsetMeters, reliefMultiplier,
   };
 }
 
@@ -285,6 +285,122 @@ function expectedLandOcean(scratch) {
   return { land: landCells * CELL_AREA_M2, ocean: (CELL_COUNT - landCells) * CELL_AREA_M2 };
 }
 
+function provinceSupportsPoint(candidate, xM, yM) {
+  const dx = xM - candidate.center.xM;
+  const dy = yM - candidate.center.yM;
+  const cosine = Math.cos(candidate.axisAngleRadians);
+  const sine = Math.sin(candidate.axisAngleRadians);
+  const u = cosine * dx + sine * dy;
+  const v = -sine * dx + cosine * dy;
+  const rho2 = (u / candidate.radiusXM) ** 2 + (v / candidate.radiusYM) ** 2;
+  return rho2 < 1;
+}
+
+function independentProvinceAreas(provinces) {
+  const areas = new Map(provinces.map((candidate) => [candidate.id, 0]));
+  for (let row = 0; row < HEIGHT; row += 1) {
+    const yM = HEIGHT_M - (row + 0.5) * CELL_M;
+    for (let column = 0; column < WIDTH; column += 1) {
+      const xM = (column + 0.5) * CELL_M;
+      for (const candidate of provinces) {
+        if (provinceSupportsPoint(candidate, xM, yM)) {
+          areas.set(candidate.id, areas.get(candidate.id) + CELL_AREA_M2);
+        }
+      }
+    }
+  }
+  return areas;
+}
+
+function strategicCellForPoint(xM, yM, spatial) {
+  const cellWidthM = WIDTH_M / spatial.columnCount;
+  const cellHeightM = HEIGHT_M / spatial.rowCount;
+  const column = Math.min(spatial.columnCount - 1, Math.max(0, Math.floor(xM / cellWidthM)));
+  const southRow = Math.min(spatial.rowCount - 1, Math.max(0, Math.floor(yM / cellHeightM)));
+  return { row: spatial.rowCount - 1 - southRow, column };
+}
+
+function summaryAt(summaries, spatial, cell) {
+  return summaries?.[cell.row * spatial.columnCount + cell.column];
+}
+
+function independentFractionsForCell(provinces, spatial, cell) {
+  const cellWidthM = WIDTH_M / spatial.columnCount;
+  const cellHeightM = HEIGHT_M / spatial.rowCount;
+  const columnsPerCell = cellWidthM / CELL_M;
+  const rowsPerCell = cellHeightM / CELL_M;
+  const counts = new Map();
+  const analysisRowStart = cell.row * rowsPerCell;
+  const analysisColumnStart = cell.column * columnsPerCell;
+  for (let rowOffset = 0; rowOffset < rowsPerCell; rowOffset += 1) {
+    const analysisRow = analysisRowStart + rowOffset;
+    const yM = HEIGHT_M - (analysisRow + 0.5) * CELL_M;
+    for (let columnOffset = 0; columnOffset < columnsPerCell; columnOffset += 1) {
+      const analysisColumn = analysisColumnStart + columnOffset;
+      const xM = (analysisColumn + 0.5) * CELL_M;
+      for (const candidate of provinces) {
+        if (provinceSupportsPoint(candidate, xM, yM)) counts.set(candidate.id, (counts.get(candidate.id) ?? 0) + 1);
+      }
+    }
+  }
+  const groupCellCount = columnsPerCell * rowsPerCell;
+  return [...counts.entries()]
+    .map(([provinceId, count]) => ({ provinceId, areaFraction: count / groupCellCount }))
+    .sort((left, right) => left.provinceId.localeCompare(right.provinceId));
+}
+
+function fractionsMatch(actual, expected) {
+  return Array.isArray(actual) && actual.length === expected.length && actual.every((item, index) =>
+    item.provinceId === expected[index].provinceId && near(item.areaFraction, expected[index].areaFraction, 1e-12));
+}
+
+function provenanceSemanticWitnesses(summaries, spatial, provinces, cells) {
+  const overlap = summaryAt(summaries, spatial, cells.overlap)?.provenanceFractions;
+  const gap = summaryAt(summaries, spatial, cells.gap)?.provenanceFractions;
+  const north = summaryAt(summaries, spatial, cells.north)?.provenanceFractions;
+  const southMirror = summaryAt(summaries, spatial, cells.southMirror)?.provenanceFractions;
+  const strictBoundary = summaryAt(summaries, spatial, cells.strictBoundary)?.provenanceFractions;
+  const expectedOverlap = independentFractionsForCell(provinces, spatial, cells.overlap);
+  const expectedGap = independentFractionsForCell(provinces, spatial, cells.gap);
+  const expectedNorth = independentFractionsForCell(provinces, spatial, cells.north);
+  const expectedSouthMirror = independentFractionsForCell(provinces, spatial, cells.southMirror);
+  const expectedStrictBoundary = independentFractionsForCell(provinces, spatial, cells.strictBoundary);
+  const overlapSum = overlap?.reduce((sum, item) => sum + item.areaFraction, 0);
+  const gapSum = gap?.reduce((sum, item) => sum + item.areaFraction, 0);
+  return {
+    overlapMatches: fractionsMatch(overlap, expectedOverlap) && expectedOverlap.length >= 2 && overlapSum > 1,
+    gapMatches: fractionsMatch(gap, expectedGap) && expectedGap.length === 0 && gapSum === 0,
+    northMatches: fractionsMatch(north, expectedNorth) && expectedNorth.length > 0,
+    southMirrorMatches: fractionsMatch(southMirror, expectedSouthMirror) && expectedSouthMirror.length === 0,
+    strictBoundaryMatches: fractionsMatch(strictBoundary, expectedStrictBoundary) && expectedStrictBoundary.length === 0,
+    overlapSum,
+    gapSum,
+    overlap,
+    gap,
+    north,
+    southMirror,
+    strictBoundary,
+  };
+}
+
+function boundedCandidateMembershipCount(provinces) {
+  let count = 0;
+  for (const candidate of provinces) {
+    const cosine = Math.cos(candidate.axisAngleRadians);
+    const sine = Math.sin(candidate.axisAngleRadians);
+    const halfX = Math.hypot(candidate.radiusXM * cosine, candidate.radiusYM * sine);
+    const halfY = Math.hypot(candidate.radiusXM * sine, candidate.radiusYM * cosine);
+    const minimumColumn = Math.max(0, Math.floor((candidate.center.xM - halfX) / CELL_M));
+    const maximumColumn = Math.min(WIDTH - 1, Math.floor((candidate.center.xM + halfX) / CELL_M));
+    const minimumSouthRow = Math.max(0, Math.floor((candidate.center.yM - halfY) / CELL_M));
+    const maximumSouthRow = Math.min(HEIGHT - 1, Math.floor((candidate.center.yM + halfY) / CELL_M));
+    if (minimumColumn <= maximumColumn && minimumSouthRow <= maximumSouthRow) {
+      count += (maximumColumn - minimumColumn + 1) * (maximumSouthRow - minimumSouthRow + 1);
+    }
+  }
+  return count;
+}
+
 function exactSummaryShape(summary) {
   return stable(Object.keys(summary ?? {}).sort()) === stable([...EXPECTED_SUMMARY_KEYS].sort()) &&
     FORBIDDEN_KEYS.every((key) => !(key in (summary ?? {})));
@@ -304,9 +420,7 @@ function summariesCanonical(summaries, spatial, strategicCellAreaM2) {
       .every(Number.isFinite)) return false;
     const fractionIds = summary.provenanceFractions?.map((item) => item.provinceId) ?? [];
     if (!sortedUnique(fractionIds) || summary.provenanceFractions.some((item) =>
-      !Number.isFinite(item.areaFraction) || item.areaFraction < 0 || item.areaFraction > 1)) return false;
-    const fractionSum = summary.provenanceFractions.reduce((sum, item) => sum + item.areaFraction, 0);
-    if (!near(fractionSum, 1, 1e-12)) return false;
+      !Number.isFinite(item.areaFraction) || !(item.areaFraction > 0) || item.areaFraction > 1)) return false;
     for (const key of ["catchmentIds", "reachIds", "depressionBasinIds", "valleyCandidateIds", "floodplainCandidateIds", "crossingCandidateIds"]) {
       if (!Array.isArray(summary[key]) || !sortedUnique(summary[key])) return false;
     }
@@ -322,6 +436,138 @@ function referencedIds(summaries, key) {
 
 function provenanceAreasEquivalent(left, right, ids) {
   return ids.every((provinceId) => near(left.get(provinceId) ?? 0, right.get(provinceId) ?? 0, 0.01));
+}
+
+async function runSourceMutationControls(semanticFixture, semanticCells, semanticConstants, boundedFixture, boundedConstants) {
+  const absent = {
+    normalizationApplied: false,
+    normalizationDiscriminated: false,
+    nearestApplied: false,
+    nearestDiscriminated: false,
+    boundedInstrumentationApplied: false,
+    boundedResultOk: false,
+    membershipCalls: undefined,
+    expectedMembershipCalls: boundedCandidateMembershipCount(boundedFixture?.provinces ?? []),
+    restored: !existsSync(STRATEGIC_PATH),
+  };
+  if (!existsSync(STRATEGIC_PATH) || !semanticFixture || !boundedFixture) return absent;
+  const original = readFileSync(STRATEGIC_PATH);
+  const source = original.toString("utf8");
+  const normalizationNeedle = "    // audit:independent-provenance-no-normalization\n";
+  const producerStart = "// audit:province-support-producer:start";
+  const producerEnd = "// audit:province-support-producer:end";
+  const membershipNeedle = "        if (!provinceSupportsPoint(metric, xM, yM)) continue; // audit:province-support-membership";
+  let normalizationApplied = false;
+  let normalizationDiscriminated = false;
+  let nearestApplied = false;
+  let nearestDiscriminated = false;
+  let boundedInstrumentationApplied = false;
+  let boundedResultOk = false;
+  let membershipCalls;
+
+  const runWithSource = async (mutatedSource, suffix, fixtureValue, spatial, constantsValue) => {
+    writeFileSync(STRATEGIC_PATH, mutatedSource);
+    const mutated = await loadAuthority(`?task11-audit=${suffix}`);
+    return invoke(mutated.strategic?.aggregateStrategicTerrain, fixtureValue, spatial, constantsValue);
+  };
+
+  try {
+    if (source.includes(normalizationNeedle)) {
+      normalizationApplied = true;
+      const normalizationSource = source.replace(
+        normalizationNeedle,
+        `    const provenanceTotal = summary.provenanceFractions.reduce((sum, item) => sum + item.areaFraction, 0);\n` +
+        `    if (provenanceTotal > 0) {\n` +
+        `      for (const item of summary.provenanceFractions) {\n` +
+        `        (item as { areaFraction: number }).areaFraction /= provenanceTotal;\n` +
+        `      }\n` +
+        `    }\n`,
+      );
+      const normalized = await runWithSource(normalizationSource, "normalize", semanticFixture, makeSpatial(1000), semanticConstants);
+      const witnesses = provenanceSemanticWitnesses(valueOf(normalized), makeSpatial(1000), semanticFixture.provinces, semanticCells);
+      normalizationDiscriminated = normalized?.ok === true && !witnesses.overlapMatches;
+    }
+    writeFileSync(STRATEGIC_PATH, original);
+
+    const startIndex = source.indexOf(producerStart);
+    const endIndex = source.indexOf(producerEnd);
+    if (startIndex >= 0 && endIndex > startIndex) {
+      nearestApplied = true;
+      const afterEnd = endIndex + producerEnd.length;
+      const legacyProducer = `${producerStart}\n` +
+`function accumulateProvinceSupportFractions(\n` +
+`  scratch: TerrainScratchGrid,\n` +
+`  spatial: WorldM0SpatialGridIdentity,\n` +
+`  geometry: StrategicGeometry,\n` +
+`  provinces: readonly LandformProvenanceProvince[],\n` +
+`  summaries: MutableStrategicSummary[],\n` +
+`): WorldM0Result<true> {\n` +
+`  const metrics = provinceMetrics(provinces);\n` +
+`  const groupCellCount = geometry.analysisColumnsPerCell * geometry.analysisRowsPerCell;\n` +
+`  const counts = summaries.map(() => new Int32Array(provinces.length));\n` +
+`  for (let analysisRow = 0; analysisRow < scratch.height; analysisRow += 1) {\n` +
+`    const yM = (scratch.height - analysisRow - 0.5) * scratch.cellSizeMeters;\n` +
+`    for (let analysisColumn = 0; analysisColumn < scratch.width; analysisColumn += 1) {\n` +
+`      const xM = (analysisColumn + 0.5) * scratch.cellSizeMeters;\n` +
+`      let best = 0;\n` +
+`      let bestRho2 = Number.POSITIVE_INFINITY;\n` +
+`      for (let index = 0; index < metrics.length; index += 1) {\n` +
+`        const metric = metrics[index];\n` +
+`        const dx = xM - metric.province.center.xM;\n` +
+`        const dy = yM - metric.province.center.yM;\n` +
+`        const u = metric.cosine * dx + metric.sine * dy;\n` +
+`        const v = -metric.sine * dx + metric.cosine * dy;\n` +
+`        const rho2 = (u / metric.province.radiusXM) ** 2 + (v / metric.province.radiusYM) ** 2;\n` +
+`        if (rho2 < bestRho2) { bestRho2 = rho2; best = index; }\n` +
+`      }\n` +
+`      const strategicRow = Math.floor(analysisRow / geometry.analysisRowsPerCell);\n` +
+`      const strategicColumn = Math.floor(analysisColumn / geometry.analysisColumnsPerCell);\n` +
+`      counts[strategicRow * spatial.columnCount + strategicColumn][best] += 1;\n` +
+`    }\n` +
+`  }\n` +
+`  for (let cell = 0; cell < summaries.length; cell += 1) {\n` +
+`    for (let index = 0; index < provinces.length; index += 1) {\n` +
+`      if (counts[cell][index] === 0) continue;\n` +
+`      summaries[cell].provenanceFractions.push({ provinceId: provinces[index].id, areaFraction: counts[cell][index] / groupCellCount });\n` +
+`    }\n` +
+`  }\n` +
+`  return { ok: true, value: true };\n` +
+`}\n${producerEnd}`;
+      const nearestSource = source.slice(0, startIndex) + legacyProducer + source.slice(afterEnd);
+      const nearest = await runWithSource(nearestSource, "nearest", semanticFixture, makeSpatial(1000), semanticConstants);
+      const witnesses = provenanceSemanticWitnesses(valueOf(nearest), makeSpatial(1000), semanticFixture.provinces, semanticCells);
+      nearestDiscriminated = nearest?.ok === true && (!witnesses.overlapMatches || !witnesses.gapMatches);
+    }
+    writeFileSync(STRATEGIC_PATH, original);
+
+    if (source.includes(membershipNeedle)) {
+      boundedInstrumentationApplied = true;
+      const instrumented = source.replace(
+        membershipNeedle,
+        `        (globalThis as any).__WORLD_M0_M02_TASK11_MEMBERSHIP_CALLS__ = ` +
+        `((globalThis as any).__WORLD_M0_M02_TASK11_MEMBERSHIP_CALLS__ ?? 0) + 1;\n` + membershipNeedle,
+      );
+      globalThis.__WORLD_M0_M02_TASK11_MEMBERSHIP_CALLS__ = 0;
+      const bounded = await runWithSource(instrumented, "bounded-count", boundedFixture, makeSpatial(1000), boundedConstants);
+      boundedResultOk = bounded?.ok === true;
+      membershipCalls = globalThis.__WORLD_M0_M02_TASK11_MEMBERSHIP_CALLS__;
+      delete globalThis.__WORLD_M0_M02_TASK11_MEMBERSHIP_CALLS__;
+    }
+  } finally {
+    delete globalThis.__WORLD_M0_M02_TASK11_MEMBERSHIP_CALLS__;
+    writeFileSync(STRATEGIC_PATH, original);
+  }
+  return {
+    normalizationApplied,
+    normalizationDiscriminated,
+    nearestApplied,
+    nearestDiscriminated,
+    boundedInstrumentationApplied,
+    boundedResultOk,
+    membershipCalls,
+    expectedMembershipCalls: boundedCandidateMembershipCount(boundedFixture.provinces),
+    restored: readFileSync(STRATEGIC_PATH).equals(original),
+  };
 }
 
 const loaded = await loadAuthority();
@@ -399,6 +645,56 @@ const physicalRegistryIds = fixture ? {
   crossingCandidateIds: fixture.crossingCandidates.map((item) => item.id).sort(),
 } : undefined;
 
+const expectedProvenanceAreas = fixture ? independentProvinceAreas(fixture.provinces) : new Map();
+
+const semanticConstants = clonePhysicalConstants();
+semanticConstants.terrain.provenanceProvinceCount = 4;
+const semanticProvinces = [
+  province(0, "stable_denudational", p(10_500, 10_500), 15_000, 15_000, 80, 0.65),
+  province(1, "orogenic_uplift", p(11_500, 10_500), 15_000, 15_000, 700, 1.6),
+  province(2, "volcanic_constructive", p(200_500, 170_500), 20_000, 15_000, 850, 1.8, Math.PI / 3),
+  province(3, "sedimentary_basin", p(250_125, 150_125), 15_000, 15_000, -250, 0.55),
+];
+const semanticFixture = fixture ? { ...makePhysicalFixture(), provinces: semanticProvinces } : undefined;
+const semanticCells = {
+  overlap: strategicCellForPoint(10_500, 10_500, spatial1000),
+  gap: strategicCellForPoint(150_500, 90_500, spatial1000),
+  north: strategicCellForPoint(200_500, 170_500, spatial1000),
+  southMirror: strategicCellForPoint(200_500, HEIGHT_M - 170_500, spatial1000),
+  strictBoundary: strategicCellForPoint(265_125, 150_125, spatial1000),
+};
+const semanticResult = semanticFixture ? invoke(aggregate, semanticFixture, spatial1000, semanticConstants) : undefined;
+const semanticReverseResult = semanticFixture
+  ? invoke(aggregate, reverseFixtureRegistries(semanticFixture), spatial1000, semanticConstants)
+  : undefined;
+const semanticSummaries = valueOf(semanticResult);
+const semanticWitnesses = provenanceSemanticWitnesses(semanticSummaries, spatial1000, semanticProvinces, semanticCells);
+
+const closedSquare = [p(1000, 1000), p(2000, 1000), p(2000, 2000), p(1000, 2000), p(1000, 1000)];
+const closedFixture = fixture ? { ...makePhysicalFixture(), coastline: [closedSquare] } : undefined;
+const closed1000 = closedFixture ? invoke(aggregate, closedFixture, spatial1000, constants) : undefined;
+const closed1500 = closedFixture ? invoke(aggregate, closedFixture, spatial1500, constants) : undefined;
+const closedTotal1000 = totals(valueOf(closed1000)).coastline;
+const closedTotal1500 = totals(valueOf(closed1500)).coastline;
+const openTouchedCells1000 = summaries1000?.filter((summary) => summary.coastlineLengthMeters > 0).length ?? 0;
+
+const boundedConstants = clonePhysicalConstants();
+boundedConstants.terrain.provenanceProvinceCount = 8;
+const boundedCenters = [
+  [25_000, 25_000], [75_000, 25_000], [125_000, 25_000], [175_000, 25_000],
+  [225_000, 25_000], [275_000, 25_000], [75_000, 145_000], [225_000, 145_000],
+];
+const boundedFamilies = ["stable_denudational", "orogenic_uplift", "volcanic_constructive", "sedimentary_basin"];
+const boundedProvinces = boundedCenters.map(([xM, yM], index) => province(
+  index, boundedFamilies[index % boundedFamilies.length], p(xM, yM), 15_000, 15_000,
+  index % 4 === 3 ? -250 : 80 + index, index % 4 === 0 ? 0.65 : 1.2,
+));
+const boundedFixture = fixture ? { ...makePhysicalFixture(), provinces: boundedProvinces } : undefined;
+const sourceMutationControls = await runSourceMutationControls(
+  semanticFixture, semanticCells, semanticConstants, boundedFixture, boundedConstants,
+);
+const strategicSource = existsSync(STRATEGIC_PATH) ? readFileSync(STRATEGIC_PATH, "utf8") : "";
+
 const checks = [
   ["F10 strategic aggregation boundary exists", hasAuthority],
   ["F10-A exact represented physical area at 1000 m",
@@ -413,9 +709,9 @@ const checks = [
     expected !== undefined && totals1000.ocean === expected.ocean && totals1500.ocean === expected.ocean],
   ["F10-F coastline physical length is resolution invariant physical metres",
     near(totals1000.coastline, coastlineExpected) && near(totals1500.coastline, coastlineExpected) && totals1000.coastline > 300_000],
-  ["F10-G provenance integrated area preserves the domain and each province across resolutions",
-    near([...totals1000.provenanceArea.values()].reduce((a, b) => a + b, 0), WORLD_AREA_M2, 0.01) &&
-    near([...totals1500.provenanceArea.values()].reduce((a, b) => a + b, 0), WORLD_AREA_M2, 0.01) &&
+  ["F10-G provenance integrated area is independent physical province support at both resolutions",
+    provenanceAreasEquivalent(totals1000.provenanceArea, expectedProvenanceAreas, provinceIds) &&
+    provenanceAreasEquivalent(totals1500.provenanceArea, expectedProvenanceAreas, provinceIds) &&
     provenanceAreasEquivalent(totals1000.provenanceArea, totals1500.provenanceArea, provinceIds)],
   ["F10-H persistent feature IDs and physical geometry are unchanged by projection",
     beforeInputs !== undefined && beforeInputs === afterInputs && stable(scratchBefore) === stable(scratchAfter)],
@@ -434,6 +730,40 @@ const checks = [
     beforeInputs !== undefined && beforeInputs === afterInputs && stable(scratchBefore) === stable(scratchAfter)],
   ["F10-N strategic dimensions not divisible by 250 m fail closed",
     failureOf(nonDivisible)?.code === "M02_ANALYSIS_GRID_UNSUPPORTED" && failureOf(nonDivisible)?.path === "spatial"],
+  ["F10-O overlapping province supports are independently retained and may sum above one",
+    semanticResult?.ok === true && semanticWitnesses.overlapMatches],
+  ["F10-P unsupported provenance gaps remain empty and may sum below one",
+    semanticResult?.ok === true && semanticWitnesses.gapMatches],
+  ["F10-Q provenance fractions are not normalized into a partition",
+    semanticWitnesses.overlapSum > 1 && semanticWitnesses.gapSum < 1],
+  ["F10-R provenance uses canonical north-up physical coordinates with row zero north",
+    semanticWitnesses.northMatches && semanticWitnesses.southMirrorMatches],
+  ["F10-S persisted ellipse support keeps the exact strict rho-squared-less-than-one boundary",
+    semanticWitnesses.strictBoundaryMatches],
+  ["F10-T semantic provenance output is byte-identical under province registry reversal",
+    Array.isArray(semanticSummaries) && summaryDigest(semanticSummaries) === summaryDigest(valueOf(semanticReverseResult))],
+  ["F10-U exact closed square coastline is accepted and conserves its 4000 m perimeter",
+    closed1000?.ok === true && closed1500?.ok === true && near(closedTotal1000, 4000) && near(closedTotal1500, 4000)],
+  ["F10-V open finite-boundary coastline remains accepted and length-conserving",
+    result1000?.ok === true && result1500?.ok === true &&
+    near(totals1000.coastline, coastlineExpected) && near(totals1500.coastline, coastlineExpected)],
+  ["F10-W coastline accumulation is physical segment length rather than touch, vertex, or segment count",
+    near(totals1000.coastline, coastlineExpected) && openTouchedCells1000 > 0 &&
+    !near(totals1000.coastline, openTouchedCells1000) &&
+    !near(totals1000.coastline, fixture?.coastline[0]?.length ?? -1) &&
+    !near(totals1000.coastline, (fixture?.coastline[0]?.length ?? 1) - 1)],
+  ["F10-X nearest-winner provenance classifier mutation is behaviorally rejected",
+    sourceMutationControls.nearestApplied && sourceMutationControls.nearestDiscriminated],
+  ["F10-Y per-strategic-cell provenance normalization mutation is behaviorally rejected",
+    sourceMutationControls.normalizationApplied && sourceMutationControls.normalizationDiscriminated],
+  ["F10-Z province support producer is bounded to conservative province-local candidate ranges",
+    sourceMutationControls.boundedInstrumentationApplied && sourceMutationControls.boundedResultOk &&
+    Number.isSafeInteger(sourceMutationControls.membershipCalls) &&
+    sourceMutationControls.membershipCalls === sourceMutationControls.expectedMembershipCalls &&
+    sourceMutationControls.membershipCalls < CELL_COUNT * boundedProvinces.length &&
+    strategicSource.includes("provincePhysicalBounds") && !strategicSource.includes("nearestProvinceOrdinal")],
+  ["F10-AA reversible Task-11 source mutations restore production bytes exactly",
+    sourceMutationControls.restored],
 ];
 
 console.log(`WORLD-M0 M0.2 Task-11 strategic aggregation audit: authority=${hasAuthority ? "present" : "MISSING"}`);
@@ -450,6 +780,14 @@ if (hasAuthority) {
     coastlineLengthMeters1500: totals1500.coastline,
     provenanceArea1000: Object.fromEntries(totals1000.provenanceArea),
     provenanceArea1500: Object.fromEntries(totals1500.provenanceArea),
+    expectedProvenanceArea: Object.fromEntries(expectedProvenanceAreas),
+    provenanceAreaSum1000: [...totals1000.provenanceArea.values()].reduce((a, b) => a + b, 0),
+    provenanceAreaSum1500: [...totals1500.provenanceArea.values()].reduce((a, b) => a + b, 0),
+    semanticCells,
+    semanticWitnesses,
+    closedCoastline: { total1000: closedTotal1000, total1500: closedTotal1500, expected: 4000 },
+    openCoastlineTouchedCells1000: openTouchedCells1000,
+    sourceMutationControls,
   }, null, 2));
 }
 const passed = hasAuthority && checks.every(([, ok]) => ok === true);
