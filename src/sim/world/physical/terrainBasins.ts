@@ -550,8 +550,7 @@ export function finalizeDepressionBasins(
       }
     } else if (item.protectedIntentToken !== null || item.persistentSpillElevationMeters === null ||
                !Number.isFinite(item.persistentSpillElevationMeters) ||
-               item.persistentSpillElevationMeters !== item.physicalSpillElevationMeters ||
-               terminal.kind === "retained_closed_basin") {
+               item.persistentSpillElevationMeters !== item.physicalSpillElevationMeters) {
       return invalid("retainedDepressions.spill", "exorheic basin requires no protected intent, exact finite persistent spill, and an onward terminal");
     }
     const normalized = normalizeTask9RasterRingFeatureV1(item.boundaryRings, scratch, "depressionBasins.boundaryRings");
