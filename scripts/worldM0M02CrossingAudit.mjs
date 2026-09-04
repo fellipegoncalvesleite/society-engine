@@ -194,16 +194,30 @@ const hostileNearCornerExact = hostileNearCornerValue?.length === 2 &&
   hostileNearCornerHorizontal?.intersection.yM === 1000 &&
   hostileNearCornerHorizontal.intersection.xM < 1000 && 1000 - hostileNearCornerHorizontal.intersection.xM < 0.001;
 
-// The vertical x=1000 intersection is generated from this exact persistent
-// reach segment at t=0.7. Binary64 interpolation produces y=950.0000000000002,
-// so strict geometric rediscovery by cross===0 rejects the point even though
-// this segment is the authority that generated it.
-const generatedDirectionReach = reach(6, [p(125, 2875), p(1375, 125)]);
+// The vertical x=1000 intersection is generated from persistent segment 1 at
+// t=0.7. Segment 0 stays inside one strategic cell and has a different tangent.
+// Binary64 interpolation produces y=950.0000000000002, so strict geometric
+// rediscovery by cross===0 rejects the point even though segment 1 generated it.
+const generatedDirectionReach = reach(6, [p(375, 2625), p(125, 2875), p(1375, 125)]);
 const generatedDirectionResult = run([generatedDirectionReach]);
 const generatedDirectionValue = valueOf(generatedDirectionResult);
 const generatedDirectionCandidate = generatedDirectionValue?.find((candidate) =>
   samePoint(candidate.intersection, p(1000, 950.0000000000002)));
-const generatedIntersectionDirectionAuthority = generatedDirectionCandidate !== undefined;
+const generatedIntersectionDirectionAuthority = generatedDirectionCandidate !== undefined &&
+  samePoint(generatedDirectionCandidate.leftBank, p(1125, 1125)) &&
+  samePoint(generatedDirectionCandidate.rightBank, p(875, 875));
+
+// The same non-vertex physical event is generated twice by one canonical reach.
+// Segment 0 reaches it first; segment 2 revisits it with a different tangent.
+// Duplicate suppression must retain the minimum producing segment index, not
+// whichever duplicate happened to be written last.
+const duplicateSegmentReach = reach(7, [p(625, 2125), p(1375, 2125), p(1375, 2625), p(625, 1625)]);
+const duplicateSegmentResult = run([duplicateSegmentReach]);
+const duplicateSegmentValue = valueOf(duplicateSegmentResult);
+const duplicateSegmentCandidate = duplicateSegmentValue?.find((candidate) => samePoint(candidate.intersection, p(1000, 2125)));
+const duplicateMinimumSegmentAuthority = duplicateSegmentCandidate !== undefined &&
+  samePoint(duplicateSegmentCandidate.leftBank, p(875, 2375)) &&
+  samePoint(duplicateSegmentCandidate.rightBank, p(875, 1875));
 
 // A boundary-near crossing whose projected left-bank target is outside the
 // raster. The authorized 1000 m physical radius still contains (125,1625),
@@ -661,6 +675,28 @@ const mutationJ = await runSourceMutation(
   },
 );
 
+// F13-K: invert duplicate suppression from minimum producing-segment index to
+// maximum. The revisited non-vertex event must then resolve direction from the
+// later segment and lose the canonical segment-0 bank orientation.
+const minimumSegmentNeedle = "  if (existing === undefined || segmentIndex < existing.segmentIndex) events.set(key, event);\n";
+const maximumSegmentReplacement = "  if (existing === undefined || segmentIndex > existing.segmentIndex) events.set(key, event);\n";
+const mutationK = await runSourceMutation(
+  "K latest duplicate segment wins",
+  (source) => replaceOnce(source, minimumSegmentNeedle, maximumSegmentReplacement),
+  (mutantDerive) => {
+    const result = runWith(mutantDerive, [duplicateSegmentReach]);
+    const value = valueOf(result);
+    const candidate = value?.find((item) => samePoint(item.intersection, p(1000, 2125)));
+    const stillUsesMinimum = candidate !== undefined &&
+      samePoint(candidate.leftBank, p(875, 2375)) &&
+      samePoint(candidate.rightBank, p(875, 1875));
+    return {
+      detected: duplicateMinimumSegmentAuthority && result?.ok === true && candidate !== undefined && stillUsesMinimum === false,
+      result,
+    };
+  },
+);
+
 const f13A = mutationA.applied && mutationA.detected && mutationA.restored;
 const f13B = mutationBGuard.applied && mutationBGuard.detected && mutationBGuard.restored &&
   mutationBRelaxed.applied && mutationBRelaxed.detected && mutationBRelaxed.restored;
@@ -674,9 +710,10 @@ const f13H = mutationHRegistry.applied && mutationHRegistry.detected && mutation
   mutationHGeometry.applied && mutationHGeometry.detected && mutationHGeometry.restored;
 const f13I = mutationI.applied && mutationI.detected && mutationI.restored;
 const f13J = mutationJ.applied && mutationJ.detected && mutationJ.restored;
+const f13K = mutationK.applied && mutationK.detected && mutationK.restored;
 const mutationSourcesRestored = [
   mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon,
-  mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI, mutationJ,
+  mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI, mutationJ, mutationK,
 ].every((item) => item.restored === true) && readFileSync(CROSSING_PATH).equals(CROSSING_BYTES);
 
 const noTask9Dependency = !/terrainBasins|TerrainDepressionBasin|TerrainValleyCandidate|TerrainFloodplainCandidate|floodplain|retainedBasins/.test(CROSSING_SOURCE);
@@ -693,6 +730,7 @@ const checks = [
   ["binary64-hostile exact corner remains non-authoritative", hostileExactCorner],
   ["binary64-hostile near-corner is not epsilon-snapped", hostileNearCornerExact],
   ["generated intersection retains producing-segment direction authority", generatedIntersectionDirectionAuthority],
+  ["duplicate event retains minimum producing-segment authority", duplicateMinimumSegmentAuthority],
   ["boundary bank search covers complete authorized physical radius", bankRadiusBoundaryWitness],
   ["bank radius below valid witness distance rejects", bankRadiusNegativeControl],
   ["same-edge vertex touch duplicate suppression", duplicateSuppressionOk],
@@ -717,6 +755,7 @@ const checks = [
   ["F13-H caller-input mutation mutants discriminated", f13H],
   ["F13-I old target-centered bank-radius mutant discriminated", f13I],
   ["F13-J strict-cross direction rediscovery mutant discriminated", f13J],
+  ["F13-K latest-duplicate-segment mutant discriminated", f13K],
   ["mutation source restored byte-identically", mutationSourcesRestored],
   ["no Task-9 dependency", noTask9Dependency],
   ["bounded spatial derivation source witness", boundedSpatialSource],
@@ -726,8 +765,9 @@ console.log(`WORLD-M0 M0.2 Task-10 crossing audit: authority=${hasAuthority ? "p
 if (loaded.loadError) console.log(`load error: ${loaded.loadError}`);
 for (const [name, ok] of checks) console.log(`${ok ? "PASS" : "FAIL"} ${name}`);
 if (!generatedIntersectionDirectionAuthority) console.log("generated-direction evidence:", JSON.stringify(generatedDirectionResult));
+if (!duplicateMinimumSegmentAuthority) console.log("duplicate-segment evidence:", JSON.stringify(duplicateSegmentResult));
 if (!bankRadiusBoundaryWitness) console.log("bank-radius boundary evidence:", JSON.stringify(bankRadiusResult));
-const failedMutations = [mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon, mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI, mutationJ]
+const failedMutations = [mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon, mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI, mutationJ, mutationK]
   .filter((item) => item.applied !== true || item.detected !== true || item.restored !== true);
 if (failedMutations.length > 0) console.log("F13 mutation evidence:", JSON.stringify(failedMutations, null, 2));
 const passed = hasAuthority && checks.every(([, ok]) => ok === true);
