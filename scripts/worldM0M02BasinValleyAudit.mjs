@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { createServer } from "vite";
 import { clonePhysicalConstants } from "./lib/worldM0M02Fixture.mjs";
 
@@ -60,7 +60,7 @@ function ringRoleAreaExact(rings, expectedAreaM2) {
   return signedPhysicalArea===expectedAreaM2;
 }
 function exactKeys(value, keys) { return value && JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort()); }
-function bytes(v) { return Buffer.from(JSON.stringify(v), "utf8"); }
+function bytes(v) { return Buffer.from(JSON.stringify(v) ?? "undefined", "utf8"); }
 function sameBytes(a,b) { return bytes(a).equals(bytes(b)); }
 function safeCall(fn) {
   try { return fn(); } catch (error) { return { thrown: error instanceof Error ? error.message : String(error) }; }
@@ -96,24 +96,24 @@ const retainedBase = {
   physicalSpillElevationMeters:4, areaM2:125000, boundaryRings:[F_RING],
 };
 const f5Grid = makeGrid(5,5,Array(25).fill(9));
-const f5 = modules.basins?.finalizeDepressionBasins?.(f5Grid.grid,
+const f5 = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f5Grid.grid,
   {retainedDepressions:[],terminalOwners:{terminalKindByCell:f5Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f5Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
-  coastlineFor(f5Grid.grid), {terminals:[],catchments:[],nodes:[],reaches:[],retainedDepressionLinks:[]},f5Grid.constants);
+  coastlineFor(f5Grid.grid), {terminals:[],catchments:[],nodes:[],reaches:[],retainedDepressionLinks:[]},f5Grid.constants));
 
 const f6Grid = makeGrid(5,5,Array(25).fill(9));
 const f6Dep = {...retainedBase,persistentSpillElevationMeters:null,protectedIntentToken:"protected-basin:0000000000000000",closedEndorheic:true};
-const f6 = modules.basins?.finalizeDepressionBasins?.(f6Grid.grid,
+const f6 = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f6Grid.grid,
   {retainedDepressions:[f6Dep],terminalOwners:{terminalKindByCell:f6Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f6Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
-  coastlineFor(f6Grid.grid), drainageFor("retained_closed_basin"),f6Grid.constants);
-const f6Bad = modules.basins?.finalizeDepressionBasins?.(f6Grid.grid,
+  coastlineFor(f6Grid.grid), drainageFor("retained_closed_basin"),f6Grid.constants));
+const f6Bad = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f6Grid.grid,
   {retainedDepressions:[{...f6Dep,persistentSpillElevationMeters:4}],terminalOwners:{terminalKindByCell:f6Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f6Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
-  coastlineFor(f6Grid.grid), drainageFor("retained_closed_basin"),f6Grid.constants);
+  coastlineFor(f6Grid.grid), drainageFor("retained_closed_basin"),f6Grid.constants));
 
 const f7Grid = makeGrid(5,5,Array(25).fill(9));
 const f7Dep = {...retainedBase,persistentSpillElevationMeters:4,protectedIntentToken:null,closedEndorheic:false};
 const f7Drain = drainageFor("external_domain_outlet",point(1250,125));
-const f7 = modules.basins?.finalizeDepressionBasins?.(f7Grid.grid,
-  {retainedDepressions:[f7Dep],terminalOwners:{terminalKindByCell:f7Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f7Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},coastlineFor(f7Grid.grid),f7Drain,f7Grid.constants);
+const f7 = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f7Grid.grid,
+  {retainedDepressions:[f7Dep],terminalOwners:{terminalKindByCell:f7Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f7Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},coastlineFor(f7Grid.grid),f7Drain,f7Grid.constants));
 
 const twoGrid = makeGrid(5,5,Array(25).fill(9));
 const ringB = ring([0,0],[250,0],[250,250],[0,250],[0,0]);
@@ -128,8 +128,8 @@ const twoDrain={terminals:[term0,term1],catchments:[
   {depressionToken:f6Dep.token,catchmentId:id("catchment",0),terminalId:term0.id},
   {depressionToken:depB.token,catchmentId:id("catchment",1),terminalId:term1.id}]};
 const depAnalysis=(items)=>({retainedDepressions:items,terminalOwners:{terminalKindByCell:twoGrid.grid?.terminalKindByCell,terminalOrdinalByCell:twoGrid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:2,repairOperationCount:0});
-const d3Forward=modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([f6Dep,depB]),coastlineFor(twoGrid.grid),twoDrain,twoGrid.constants);
-const d3Reverse=modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([{...depB,boundaryRings:[...depB.boundaryRings].reverse()},f6Dep]),coastlineFor(twoGrid.grid),{...twoDrain,retainedDepressionLinks:[...twoDrain.retainedDepressionLinks].reverse()},twoGrid.constants);
+const d3Forward=safeCall(()=>modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([f6Dep,depB]),coastlineFor(twoGrid.grid),twoDrain,twoGrid.constants));
+const d3Reverse=safeCall(()=>modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([{...depB,boundaryRings:[...depB.boundaryRings].reverse()},f6Dep]),coastlineFor(twoGrid.grid),{...twoDrain,retainedDepressionLinks:[...twoDrain.retainedDepressionLinks].reverse()},twoGrid.constants));
 
 const vc=clonePhysicalConstants(); vc.geometry.valleySearchRadiusMeters=500; vc.geometry.valleyRelativeReliefMeters=30; vc.geometry.floodplainCandidateMaxSlope=0.03;
 const w=7,h=7; const elevations=[];
@@ -168,6 +168,35 @@ const vv=ok(valleysForward); const vvRev=ok(valleysReverse);
 
 const reachPhysicalIdWitness=vv?.valleys?.find((v)=>v.reachId===reachB.id)?.id===id("valley",0) &&
   vv?.floodplainCandidates?.find((v)=>v.reachId===reachB.id)?.id===id("floodplain",0);
+
+// Exact Task-8 reach physical-key discriminator. Both reaches start at the same
+// physical point, so the legacy geometry-only key falls through to downstream
+// geometry and orders the confluence reach first. Frozen Task-8 authority orders
+// the SOURCE upstream-node kind before CONFLUENCE, so the source reach must own
+// Domain-4/5 ordinal zero even though its persistent reach ID is ordinal one.
+const exactKeyStart=point(375,875), exactKeySourceEnd=point(1375,875), exactKeyConfluenceEnd=point(875,375);
+const exactKeyTermSource={id:id("terminal",10),kind:"external_domain_outlet",point:exactKeySourceEnd,catchmentId:id("catchment",10)};
+const exactKeyTermConfluence={id:id("terminal",11),kind:"external_domain_outlet",point:exactKeyConfluenceEnd,catchmentId:id("catchment",11)};
+const exactKeyNodes=[
+  {id:id("drainage-node",10),point:exactKeyStart,kind:"source",terminalId:null},
+  {id:id("drainage-node",11),point:exactKeySourceEnd,kind:"terminal",terminalId:exactKeyTermSource.id},
+  {id:id("drainage-node",12),point:exactKeyStart,kind:"confluence",terminalId:null},
+  {id:id("drainage-node",13),point:exactKeyConfluenceEnd,kind:"terminal",terminalId:exactKeyTermConfluence.id},
+];
+const exactKeyCatchments=[
+  {id:id("catchment",10),terminalId:exactKeyTermSource.id,areaM2:25*AREA,boundaryRings:[ring([0,750],[1750,750],[1750,1750],[0,1750],[0,750])]},
+  {id:id("catchment",11),terminalId:exactKeyTermConfluence.id,areaM2:24*AREA,boundaryRings:[ring([0,0],[1750,0],[1750,750],[0,750],[0,0])]},
+];
+const exactKeySourceReach={...reachA,id:id("drainage-reach",1),upstreamNodeId:exactKeyNodes[0].id,downstreamNodeId:exactKeyNodes[1].id,
+  catchmentId:exactKeyCatchments[0].id,terminalId:exactKeyTermSource.id,geometry:[exactKeyStart,exactKeySourceEnd],lengthMeters:1000};
+const exactKeyConfluenceReach={...reachA,id:id("drainage-reach",0),upstreamNodeId:exactKeyNodes[2].id,downstreamNodeId:exactKeyNodes[3].id,
+  catchmentId:exactKeyCatchments[1].id,terminalId:exactKeyTermConfluence.id,geometry:[exactKeyStart,exactKeyConfluenceEnd],lengthMeters:Math.hypot(500,500)};
+const exactKeyDrainage={terminals:[exactKeyTermSource,exactKeyTermConfluence],catchments:exactKeyCatchments,nodes:exactKeyNodes,
+  reaches:[exactKeyConfluenceReach,exactKeySourceReach],retainedDepressionLinks:[]};
+const exactKeyResult=safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,exactKeyDrainage,vc));
+const exactKeyValue=ok(exactKeyResult);
+const exactTask8PhysicalKeyWitness=exactKeyValue?.valleys?.find((v)=>v.reachId===exactKeySourceReach.id)?.id===id("valley",0) &&
+  exactKeyValue?.floodplainCandidates?.find((v)=>v.reachId===exactKeySourceReach.id)?.id===id("floodplain",0);
 
 const rawCells=[8,16];
 const rawForward=modules.valleys?.traceTask9CellUnionRingsV1?.(rawCells,valleyGrid.grid,"audit.rawRings");
@@ -211,6 +240,23 @@ const referenceProtectionWitness=Array.isArray(referenceProtectedValue)&&Array.i
 const earlierFinalLaterOriginalWitness=Array.isArray(earlierFinalValue)&&Array.isArray(referenceProtectedValue)&&
   earlierFinalValue[0]?.length<referenceProtectedValue[0]?.length;
 
+// End-to-end Domain-3 coastline witness. The blocking final coastline trace
+// crosses a legal simplification chord but is disjoint from the ORIGINAL ring,
+// so finalizeDepressionBasins must retain the two otherwise-deletable vertices.
+const coastDep={token:"depression-analysis:0000000000000003",canonicalFloorCell:1,floorElevationMeters:1,
+  physicalSpillElevationMeters:4,persistentSpillElevationMeters:4,protectedIntentToken:null,closedEndorheic:false,areaM2:468750,boundaryRings:[safeNonCollinearRing]};
+const coastTerm={id:id("terminal",3),kind:"external_domain_outlet",point:point(875,1125),catchmentId:id("catchment",3)};
+const coastCatch={id:id("catchment",3),terminalId:coastTerm.id,areaM2:AREA,boundaryRings:[ring([750,1000],[1000,1000],[1000,1250],[750,1250],[750,1000])]};
+const coastDrain={terminals:[coastTerm],catchments:[coastCatch],nodes:[],reaches:[],retainedDepressionLinks:[
+  {depressionToken:coastDep.token,catchmentId:coastCatch.id,terminalId:coastTerm.id}]};
+const coastAnalysis={retainedDepressions:[coastDep],terminalOwners:{terminalKindByCell:twoGrid.grid?.terminalKindByCell,terminalOrdinalByCell:twoGrid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0};
+const coastUnblocked=safeCall(()=>modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,coastAnalysis,coastlineFor(twoGrid.grid),coastDrain,twoGrid.constants));
+const coastBlocked=safeCall(()=>modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,coastAnalysis,coastlineFor(twoGrid.grid,[blockingReference]),coastDrain,twoGrid.constants));
+const coastUnblockedValue=ok(coastUnblocked)?.[0],coastBlockedValue=ok(coastBlocked)?.[0];
+const domain3FinalCoastlineWitness=Boolean(coastUnblockedValue&&coastBlockedValue&&
+  coastUnblockedValue.boundaryRings[0].length<coastBlockedValue.boundaryRings[0].length&&
+  coastBlockedValue.boundaryRings[0].length===safeNonCollinearRing.length);
+
 const duplicatePreKeyDrain={...twoDrain,terminals:[term1,{...term1,id:id("terminal",2),catchmentId:id("catchment",2)}],catchments:[
   twoDrain.catchments[1],{...twoDrain.catchments[1],id:id("catchment",2),terminalId:id("terminal",2)}],retainedDepressionLinks:[
   {depressionToken:depB.token,catchmentId:id("catchment",1),terminalId:id("terminal",1)},
@@ -230,6 +276,100 @@ const diagonalSharedVertexSeparate = ok(rawForward)?.length===2 && (()=>{
 const countBoundConstants=structuredClone(vc); countBoundConstants.drainage.maxReaches=1;
 const countBoundResult=safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,valleyDrainage,countBoundConstants));
 
+async function runDomain3ScheduleMutations() {
+  const absent={instrumentationApplied:false,noSortMutationApplied:false,allOriginalMutationApplied:false,restored:!existsSync(BASINS_PATH)};
+  if(!existsSync(BASINS_PATH))return absent;
+  const original=readFileSync(BASINS_PATH);
+  const source=original.toString("utf8");
+  const sortNeedle='  originalDomain.sort(compareBasinDomain3PreKey);\n';
+  const featureNeedle='  for (let index = 0; index < originalDomain.length; index += 1) {\n    const candidate = originalDomain[index];\n';
+  const featureReplacement='  for (let index = 0; index < originalDomain.length; index += 1) {\n    const candidate = originalDomain[index];\n    globalThis.__WORLD_M0_M02_D3_SCHEDULE__ ??= [];\n    globalThis.__WORLD_M0_M02_D3_SCHEDULE__.push({kind:"feature",index,token:candidate.analysis.token,domainLength:originalDomain.length,finalCount:finalDomain.length});\n';
+  const peerNeedle='      const currentPeer = peer < index ? finalDomain[peer].boundaryRings : originalPeer;\n';
+  const peerReplacement=peerNeedle+'      globalThis.__WORLD_M0_M02_D3_SCHEDULE__.push({kind:"peer",index,peer,state:peer < index ? "earlier" : "later",usesExpected:peer < index ? currentPeer === finalDomain[peer].boundaryRings : currentPeer === originalPeer});\n';
+  if(!source.includes(sortNeedle)||!source.includes(featureNeedle)||!source.includes(peerNeedle))return absent;
+  const instrumented=source.replace(featureNeedle,featureReplacement).replace(peerNeedle,peerReplacement);
+  const run=async(mutatedSource,suffix)=>{
+    writeFileSync(BASINS_PATH,mutatedSource);
+    globalThis.__WORLD_M0_M02_D3_SCHEDULE__=[];
+    const mutated=await loadModules(suffix);
+    const value=safeCall(()=>mutated.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([f6Dep,depB]),coastlineFor(twoGrid.grid),twoDrain,twoGrid.constants));
+    const trace=Array.isArray(globalThis.__WORLD_M0_M02_D3_SCHEDULE__)?globalThis.__WORLD_M0_M02_D3_SCHEDULE__.map((entry)=>({...entry})):undefined;
+    delete globalThis.__WORLD_M0_M02_D3_SCHEDULE__;
+    return {value,trace};
+  };
+  let canonical,noSort,allOriginal;
+  try {
+    canonical=await run(instrumented,"?audit-task9-d3-canonical");
+    noSort=await run(instrumented.replace(sortNeedle,""),"?audit-task9-d3-no-sort");
+    const allOriginalSource=instrumented.replace(peerNeedle,'      const currentPeer = originalPeer;\n');
+    allOriginal=await run(allOriginalSource,"?audit-task9-d3-all-original");
+  } finally {
+    delete globalThis.__WORLD_M0_M02_D3_SCHEDULE__;
+    writeFileSync(BASINS_PATH,original);
+  }
+  return {instrumentationApplied:true,noSortMutationApplied:true,allOriginalMutationApplied:true,canonical,noSort,allOriginal,restored:readFileSync(BASINS_PATH).equals(original)};
+}
+
+async function runDomains45ScheduleMutations() {
+  const absent={instrumentationApplied:false,prematureMutationApplied:false,restored:!existsSync(VALLEYS_PATH)};
+  if(!existsSync(VALLEYS_PATH))return absent;
+  const original=readFileSync(VALLEYS_PATH);
+  const source=original.toString("utf8");
+  const finalizeNeedle='):WorldM0Result<readonly GeometryCandidate[]> {\n  // M03 domains 4/5: collect every unsimplified feature before this sort and before\n';
+  const finalizeReplacement='):WorldM0Result<readonly GeometryCandidate[]> {\n  globalThis.__WORLD_M0_M02_D45_SCHEDULE__ ??= [];\n  globalThis.__WORLD_M0_M02_D45_SCHEDULE__.push({kind:"finalize",path,produced:globalThis.__WORLD_M0_M02_D45_PRODUCED__ ?? 0,domainLength:domain.length});\n  // M03 domains 4/5: collect every unsimplified feature before this sort and before\n';
+  const producerNeedle='    const derived=deriveReachGeometry(authority,scratch,constants);if(!derived.ok)return derived;\n';
+  const producerReplacement=producerNeedle+'    globalThis.__WORLD_M0_M02_D45_PRODUCED__=(globalThis.__WORLD_M0_M02_D45_PRODUCED__ ?? 0)+1;\n    globalThis.__WORLD_M0_M02_D45_SCHEDULE__ ??= [];\n    globalThis.__WORLD_M0_M02_D45_SCHEDULE__.push({kind:"producer",produced:globalThis.__WORLD_M0_M02_D45_PRODUCED__});\n';
+  const valleyIdNeedle='    const ident=formatTerrainHydroId("valley",index);if(!ident.ok)return ident;\n';
+  const valleyIdReplacement='    globalThis.__WORLD_M0_M02_D45_SCHEDULE__.push({kind:"id",path:"valleys",index,boundaryFinal:item.boundaryRings!==undefined});\n'+valleyIdNeedle;
+  const floodIdNeedle='    const ident=formatTerrainHydroId("floodplain",index);if(!ident.ok)return ident;\n';
+  const floodIdReplacement='    globalThis.__WORLD_M0_M02_D45_SCHEDULE__.push({kind:"id",path:"floodplainCandidates",index,boundaryFinal:item.boundaryRings!==undefined});\n'+floodIdNeedle;
+  if(!source.includes(finalizeNeedle)||!source.includes(producerNeedle)||!source.includes(valleyIdNeedle)||!source.includes(floodIdNeedle))return absent;
+  const instrumented=source.replace(finalizeNeedle,finalizeReplacement).replace(producerNeedle,producerReplacement).replace(valleyIdNeedle,valleyIdReplacement).replace(floodIdNeedle,floodIdReplacement);
+  const prematureProducer=producerReplacement+'    if(globalThis.__WORLD_M0_M02_D45_PRODUCED__===1){\n      const auditPremature=finalizeGeometryDomain(valleyDomain,scratch,constants,"audit-premature-valleys");if(!auditPremature.ok)return auditPremature;\n      const auditEarlyId=formatTerrainHydroId("valley",0);if(!auditEarlyId.ok)return auditEarlyId;\n      globalThis.__WORLD_M0_M02_D45_SCHEDULE__.push({kind:"id",path:"audit-premature-valleys",index:0,boundaryFinal:false});\n    }\n';
+  const premature=instrumented.replace(producerReplacement,prematureProducer);
+  const run=async(mutatedSource,suffix)=>{
+    writeFileSync(VALLEYS_PATH,mutatedSource);
+    globalThis.__WORLD_M0_M02_D45_PRODUCED__=0; globalThis.__WORLD_M0_M02_D45_SCHEDULE__=[];
+    const mutated=await loadModules(suffix);
+    const value=safeCall(()=>mutated.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,valleyDrainage,vc));
+    const trace=Array.isArray(globalThis.__WORLD_M0_M02_D45_SCHEDULE__)?globalThis.__WORLD_M0_M02_D45_SCHEDULE__.map((entry)=>({...entry})):undefined;
+    delete globalThis.__WORLD_M0_M02_D45_PRODUCED__; delete globalThis.__WORLD_M0_M02_D45_SCHEDULE__;
+    return {value,trace};
+  };
+  let canonical,prematureRun;
+  try {
+    canonical=await run(instrumented,"?audit-task9-d45-canonical");
+    prematureRun=await run(premature,"?audit-task9-d45-premature");
+  } finally {
+    delete globalThis.__WORLD_M0_M02_D45_PRODUCED__; delete globalThis.__WORLD_M0_M02_D45_SCHEDULE__;
+    writeFileSync(VALLEYS_PATH,original);
+  }
+  return {instrumentationApplied:true,prematureMutationApplied:true,canonical,premature:prematureRun,restored:readFileSync(VALLEYS_PATH).equals(original)};
+}
+
+const domain3ScheduleAudit=await runDomain3ScheduleMutations();
+const domains45ScheduleAudit=await runDomains45ScheduleMutations();
+const d3CanonicalFeatures=domain3ScheduleAudit.canonical?.trace?.filter((entry)=>entry.kind==="feature")??[];
+const d3NoSortFeatures=domain3ScheduleAudit.noSort?.trace?.filter((entry)=>entry.kind==="feature")??[];
+const d3CanonicalPeers=domain3ScheduleAudit.canonical?.trace?.filter((entry)=>entry.kind==="peer")??[];
+const d3AllOriginalPeers=domain3ScheduleAudit.allOriginal?.trace?.filter((entry)=>entry.kind==="peer")??[];
+const domain3RuntimeScheduleWitness=domain3ScheduleAudit.instrumentationApplied&&domain3ScheduleAudit.noSortMutationApplied&&domain3ScheduleAudit.allOriginalMutationApplied&&domain3ScheduleAudit.restored&&
+  ok(domain3ScheduleAudit.canonical?.value)&&d3CanonicalFeatures.length===2&&d3CanonicalFeatures[0]?.token===depB.token&&d3CanonicalFeatures[1]?.token===f6Dep.token&&
+  d3CanonicalFeatures.every((entry,index)=>entry.domainLength===2&&entry.finalCount===index)&&d3CanonicalPeers.length===2&&d3CanonicalPeers.every((entry)=>entry.usesExpected===true)&&
+  d3NoSortFeatures.length===2&&d3NoSortFeatures[0]?.token===f6Dep.token&&d3NoSortFeatures[1]?.token===depB.token&&
+  d3AllOriginalPeers.some((entry)=>entry.state==="earlier"&&entry.usesExpected===false);
+
+const d45Trace=domains45ScheduleAudit.canonical?.trace??[];
+const d45Finalize=d45Trace.filter((entry)=>entry.kind==="finalize");
+const d45Ids=d45Trace.filter((entry)=>entry.kind==="id");
+const d45FirstFinalize=d45Trace.findIndex((entry)=>entry.kind==="finalize");
+const d45FirstId=d45Trace.findIndex((entry)=>entry.kind==="id");
+const d45PrematureTrace=domains45ScheduleAudit.premature?.trace??[];
+const domains45RuntimeBarrierWitness=domains45ScheduleAudit.instrumentationApplied&&domains45ScheduleAudit.prematureMutationApplied&&domains45ScheduleAudit.restored&&
+  ok(domains45ScheduleAudit.canonical?.value)&&d45Finalize.length===2&&d45Finalize.every((entry)=>entry.produced===2)&&
+  d45FirstFinalize===2&&d45FirstId>d45Trace.map((entry)=>entry.kind).lastIndexOf("finalize")&&d45Ids.length>0&&d45Ids.every((entry)=>entry.boundaryFinal===true)&&
+  d45PrematureTrace.some((entry)=>entry.kind==="finalize"&&entry.produced===1)&&d45PrematureTrace.some((entry)=>entry.kind==="id"&&entry.boundaryFinal===false);
+
 const forbidden=/\b(season|frequency|wetland|waterDepth|discharge|rainfall|runoff|precipitation)\b/i;
 const basinSource=existsSync(BASINS_PATH)?readFileSync(BASINS_PATH,"utf8"):"";
 const valleySource=existsSync(VALLEYS_PATH)?readFileSync(VALLEYS_PATH,"utf8"):"";
@@ -247,17 +387,17 @@ const checks={
   f7ExorheicExact: f7Value?.spillElevationMeters===4 && f7Value?.outletTerminalId===id("terminal",0) && f7Value?.closedEndorheic===false && f7Value?.areaM2===125000,
   domain3OrderAndRingRegistryInvariant: ok(d3Forward) && ok(d3Reverse) && sameBytes(ok(d3Forward),ok(d3Reverse)),
   domain3ExactPreKeyRejectsEqualPhysicalTuples: err(duplicatePreKeyResult)?.code==="M02_CANDIDATE_INVALID" && /pre-key/i.test(err(duplicatePreKeyResult)?.detail??""),
-  domain3FinalReferenceProtection: referenceProtectionWitness && /coastline\.coastline/.test(basinSource) && /drainage\.catchments/.test(basinSource) && /drainage\.reaches/.test(basinSource),
-  earlierFinalLaterOriginalReferenceSemantics: earlierFinalLaterOriginalWitness,
+  domain3FinalReferenceProtection: referenceProtectionWitness && domain3FinalCoastlineWitness,
+  domain3CompletePeerSchedule: domain3RuntimeScheduleWitness,
+  earlierFinalLaterOriginalReferenceSemantics: earlierFinalLaterOriginalWitness && domain3RuntimeScheduleWitness,
   domain3IdsAfterGeometry: ok(d3Forward)?.every((b,i)=>b.id===id("depression-basin",i)),
   valleyProduced: Array.isArray(vv?.valleys) && vv.valleys.length>=1 && vv.valleys.every(v=>v.areaM2>0 && v.boundaryRings.length>0),
   floodplainProducedNearReach: Array.isArray(vv?.floodplainCandidates) && vv.floodplainCandidates.length>=1,
   isolatedFlatExcluded: vv?.floodplainCandidates?.every(fp=>fp.boundaryRings.every(r=>!r.some(p=>p.xM===0 && p.yM===1750))) ?? false,
   domains45InputOrderInvariant: vv && vvRev && sameBytes(vv,vvRev),
-  domains45UseReachPhysicalPreKey: reachPhysicalIdWitness===true,
-  domains45IdsAfterFinalGeometry: vv?.valleys?.every((v,i)=>v.id===id("valley",i)) && vv?.floodplainCandidates?.every((v,i)=>v.id===id("floodplain",i)),
-  domains45CompleteBeforeDeletion: /const valleyDomain:GeometryCandidate\[\]=\[\],floodDomain:GeometryCandidate\[\]=\[\]/.test(valleySource) &&
-    valleySource.indexOf("const finalizedValleys=finalizeGeometryDomain")>valleySource.indexOf("for(const authority of authorities)"),
+  domains45UseReachPhysicalPreKey: reachPhysicalIdWitness===true && exactTask8PhysicalKeyWitness===true,
+  domains45IdsAfterFinalGeometry: vv?.valleys?.every((v,i)=>v.id===id("valley",i)) && vv?.floodplainCandidates?.every((v,i)=>v.id===id("floodplain",i)) && domains45RuntimeBarrierWitness,
+  domains45CompleteBeforeDeletion: domains45RuntimeBarrierWitness,
   domains45RawRingProducerOrderInvariant: ok(rawForward)?.length===2 && sameBytes(ok(rawForward),ok(rawReverse)) && ok(rawForward)?.every((r)=>area2(r)>0),
   diagonalSharedVertexOuterRingsStaySeparate: diagonalSharedVertexSeparate,
   candidateCountOverflowFailsClosed: err(countBoundResult)?.code==="M02_BOUND_EXCEEDED",
@@ -267,9 +407,10 @@ const checks={
   noHydraulicEpistemicFields: !forbidden.test(basinSource) && !forbidden.test(valleySource),
   task9DenseAnalysisUsesScratchBudget: Boolean(valleyBudgetBefore && valleyBudgetAfter && valleyBudgetAfter.liveBytes===valleyBudgetBefore.liveBytes && valleyBudgetAfter.peakBytes>valleyBudgetBefore.peakBytes),
   noJsPerCellMembership: !/new\s+Set<number>|(?:valleyCells|floodCells)\s*:\s*number\[\]/.test(valleySource),
+  mutationSourcesRestoredByteIdentically: domain3ScheduleAudit.restored===true && domains45ScheduleAudit.restored===true,
   polygonBoundFailure: (()=>{ const c=structuredClone(vc); c.geometry.maxPolygonVerticesPerFeature=4; const one={...valleyDrainage,terminals:[valleyTerminals[0]],catchments:[valleyCatchments[0]],nodes:valleyNodes.slice(0,2),reaches:[reachA]}; const r=safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,one,c)); return err(r)?.code==="M02_BOUND_EXCEEDED"; })(),
 };
 const passed=Object.values(checks).every(Boolean);
-console.log(JSON.stringify({audit:"WORLD-M0 M0.2 Task 9 basin/valley geometry",checks,evidence:{nonCollinearAfter,referenceProtectedValue,earlierFinalValue},loadError:modules.loadError,verdict:passed?"PASS":"FAIL"},null,2));
+console.log(JSON.stringify({audit:"WORLD-M0 M0.2 Task 9 basin/valley geometry",checks,evidence:{nonCollinearAfter,referenceProtectedValue,earlierFinalValue,domain3FinalCoastlineWitness,exactTask8PhysicalKeyWitness,domain3Schedule:domain3ScheduleAudit.canonical?.trace,domain3NoSortSchedule:domain3ScheduleAudit.noSort?.trace,domain3AllOriginalSchedule:domain3ScheduleAudit.allOriginal?.trace,domains45Schedule:d45Trace,domains45PrematureSchedule:d45PrematureTrace},loadError:modules.loadError,verdict:passed?"PASS":"FAIL"},null,2));
 for(const g of [f5Grid.grid,f6Grid.grid,f7Grid.grid,twoGrid.grid,valleyGrid.grid,longGrid.grid]) releaseGrid(g);
 if(!passed) process.exitCode=1;
