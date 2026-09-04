@@ -279,6 +279,67 @@ function pointOnGeometry(point: WorldM0PointM, geometry: readonly WorldM0PointM[
   for (let index = 0; index + 1 < geometry.length; index += 1) if (pointOnSegment(point, geometry[index], geometry[index + 1], tolerance)) return true;
   return false;
 }
+function pointInRing(point: WorldM0PointM, ring: readonly WorldM0PointM[]): boolean {
+  let inside = false;
+  for (let index = 0, previousIndex = ring.length - 2; index < ring.length - 1; previousIndex = index, index += 1) {
+    const current = ring[index];
+    const previous = ring[previousIndex];
+    if ((current.yM > point.yM) !== (previous.yM > point.yM)) {
+      const crossingX = current.xM + ((point.yM - current.yM) * (previous.xM - current.xM)) /
+        (previous.yM - current.yM);
+      if (crossingX > point.xM) inside = !inside;
+    }
+  }
+  return inside;
+}
+function registryContainsOrTouches(
+  point: WorldM0PointM,
+  rings: readonly (readonly WorldM0PointM[])[],
+  tolerance: number,
+): boolean {
+  for (const ring of rings) {
+    for (let index = 0; index + 1 < ring.length; index += 1) {
+      if (pointOnSegment(point, ring[index], ring[index + 1], tolerance)) return true;
+    }
+  }
+  let inside = false;
+  for (const ring of rings) if (pointInRing(point, ring)) inside = !inside;
+  return inside;
+}
+function ringInteriorProbe(ring: readonly WorldM0PointM[]): WorldM0PointM | undefined {
+  const area = signedRingArea2(ring);
+  if (!area.ok) return undefined;
+  const first = ring[0]; const second = ring[1];
+  const dx = second.xM - first.xM; const dy = second.yM - first.yM;
+  const length = Math.hypot(dx, dy);
+  if (!(length > 0)) return undefined;
+  const side = Math.sign(area.value);
+  return {
+    xM: (first.xM + second.xM) / 2 + side * (-dy / length),
+    yM: (first.yM + second.yM) / 2 + side * (dx / length),
+  };
+}
+function featureContainedInCatchment(
+  featureRings: readonly (readonly WorldM0PointM[])[],
+  catchmentRings: readonly (readonly WorldM0PointM[])[],
+  tolerance: number,
+): boolean {
+  for (const ring of featureRings) {
+    const area = signedRingArea2(ring);
+    if (!area.ok) return false;
+    if (area.value > 0) {
+      const probe = ringInteriorProbe(ring);
+      if (!probe || !registryContainsOrTouches(probe, catchmentRings, tolerance)) return false;
+    }
+    for (let index = 0; index + 1 < ring.length; index += 1) {
+      const first = ring[index]; const second = ring[index + 1];
+      const midpoint = { xM: (first.xM + second.xM) / 2, yM: (first.yM + second.yM) / 2 };
+      if (!registryContainsOrTouches(first, catchmentRings, tolerance) ||
+          !registryContainsOrTouches(midpoint, catchmentRings, tolerance)) return false;
+    }
+  }
+  return true;
+}
 function geometryLength(geometry: readonly WorldM0PointM[]): number {
   let total = 0;
   for (let index = 0; index + 1 < geometry.length; index += 1) total += Math.hypot(geometry[index + 1].xM - geometry[index].xM, geometry[index + 1].yM - geometry[index].yM);
@@ -497,9 +558,12 @@ export function validateTerrainHydroCandidate(
     const rings = validateRings(basin.boundaryRings, `$.depressionBasins[${index}].boundaryRings`, widthM, heightM, constants.geometry.maxPolygonVerticesPerFeature); if (!rings.ok) return rings;
     const catchment = catchmentMap.value.get(basin.catchmentId)!; const terminal = terminalMap.value.get(catchment.terminalId)!;
     if (basin.areaM2 > catchment.areaM2 + constants.validation.areaToleranceM2) return invalid(`$.depressionBasins[${index}].areaM2`, "basin area exceeds linked catchment area");
+    if (!featureContainedInCatchment(basin.boundaryRings, catchment.boundaryRings, constants.validation.finiteTolerance)) {
+      return invalid(`$.depressionBasins[${index}].catchmentId`, "basin physical geometry is not contained by linked catchment geometry");
+    }
     if (basin.closedEndorheic) {
       if (basin.spillElevationMeters !== null || basin.outletTerminalId !== null || terminal.kind !== "retained_closed_basin") return invalid(`$.depressionBasins[${index}]`, "closed basin requires null persistent spill/outlet and retained-closed terminal");
-    } else if (basin.spillElevationMeters === null || basin.outletTerminalId !== terminal.id || terminal.kind === "retained_closed_basin") {
+    } else if (basin.spillElevationMeters === null || basin.outletTerminalId !== terminal.id) {
       return invalid(`$.depressionBasins[${index}]`, "exorheic basin requires finite persistent spill and exact onward terminal link");
     }
   }
@@ -549,14 +613,11 @@ export function validateTerrainHydroCandidate(
     }
     if (!Array.isArray(summary.provenanceFractions)) return invalid(`$.strategicTerrain[${index}].provenanceFractions`, "provenance fractions must be an array");
     const fractionIds = new Set<string>();
-    let fractionTotal = 0;
     for (const fraction of summary.provenanceFractions) {
       if (fractionIds.has(fraction.provinceId)) return invalid(`$.strategicTerrain[${index}].provenanceFractions`, "duplicate provenance reference");
       fractionIds.add(fraction.provinceId);
       if (!hasExactKeys(fraction, ["provinceId", "areaFraction"]) || !provinceMap.value.has(fraction.provinceId) || !(fraction.areaFraction > 0) || fraction.areaFraction > 1 + constants.validation.finiteTolerance) return invalid(`$.strategicTerrain[${index}].provenanceFractions`, "invalid provenance fraction/reference");
-      fractionTotal += fraction.areaFraction;
     }
-    if (fractionTotal > 1 + constants.validation.finiteTolerance) return invalid(`$.strategicTerrain[${index}].provenanceFractions`, "overlapping provenance fractions exceed unit area");
   }
   if (candidate.strategicTerrain.length === 0 || (maxRow + 1) * (maxColumn + 1) !== candidate.strategicTerrain.length) return invalid("$.strategicTerrain", "strategic summaries must form one complete rectangular grid");
   if (!approximately(strategicLandArea + strategicOceanArea, domainAreaM2, constants.validation.areaToleranceM2) ||

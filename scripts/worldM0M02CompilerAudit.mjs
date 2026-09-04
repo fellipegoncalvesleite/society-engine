@@ -21,6 +21,7 @@ const digestPair = (pair) => `sha256:${pair.repeat(32)}`;
 const p = (xM, yM) => ({ xM, yM });
 const failureCode = (result) => result?.ok === false ? result.error?.code : undefined;
 const failurePath = (result) => result?.ok === false ? result.error?.path : undefined;
+const failureDetail = (result) => result?.ok === false ? result.error?.detail : undefined;
 const stable = (value) => JSON.stringify(value);
 const shaBytes = (bytes) => `sha256:${createHash("sha256").update(bytes).digest("hex")}`;
 const bytesHash = (bytes) => createHash("sha256").update(Buffer.from(bytes)).digest("hex");
@@ -165,6 +166,49 @@ function makeF3Candidate(fixture) {
   };
 }
 
+function makeBasinLinkCandidate(fixture) {
+  const terminal0 = id("terminal", 0);
+  const terminal1 = id("terminal", 1);
+  const catchment0 = id("catchment", 0);
+  const catchment1 = id("catchment", 1);
+  const basin0 = id("depression-basin", 0);
+  const strategicTerrain = [];
+  for (let row = 0; row < 2; row += 1) for (let column = 0; column < 4; column += 1) {
+    strategicTerrain.push({
+      cell: { row, column }, landOceanClass: "land", landAreaM2: 62_500, oceanAreaM2: 0,
+      elevationMinMeters: 0, elevationMaxMeters: 0, elevationMeanMeters: 0,
+      localReliefMeters: 0, slopeMean: 0, coastlineLengthMeters: 0,
+      provenanceFractions: [], catchmentIds: [column < 2 ? catchment0 : catchment1], reachIds: [],
+      depressionBasinIds: row === 1 && column === 0 ? [basin0] : [],
+      valleyCandidateIds: [], floodplainCandidateIds: [], crossingCandidateIds: [],
+    });
+  }
+  return {
+    schema: "world-m0-terrain-hydro-candidate/v1",
+    recipeDigest: digestPair("22"),
+    physicalConstants: fixture.recipe.physicalConstants,
+    physicalGeneratorVersion: "physical:v1", repairPolicyVersion: "repair:v1", numericKernelVersion: "numeric:v1",
+    analysis: { cellSizeMeters: 250, width: 4, height: 2, boundaryModel: "finite_open_outflow", flowAlgorithm: "d_infinity_v1" },
+    provenanceProvinces: [], strategicTerrain, coastline: [],
+    terminals: [
+      { id: terminal0, kind: "external_domain_outlet", point: p(0, 125), catchmentId: catchment0 },
+      { id: terminal1, kind: "external_domain_outlet", point: p(1_000, 125), catchmentId: catchment1 },
+    ],
+    catchments: [
+      { id: catchment0, terminalId: terminal0, areaM2: 250_000, boundaryRings: [[p(0, 0), p(500, 0), p(500, 500), p(0, 500), p(0, 0)]] },
+      { id: catchment1, terminalId: terminal1, areaM2: 250_000, boundaryRings: [[p(500, 0), p(1_000, 0), p(1_000, 500), p(500, 500), p(500, 0)]] },
+    ],
+    drainageNodes: [], drainageReaches: [],
+    depressionBasins: [{
+      id: basin0, catchmentId: catchment0, floorElevationMeters: 0, spillElevationMeters: 1,
+      outletTerminalId: terminal0, closedEndorheic: false, areaM2: 62_500,
+      boundaryRings: [[p(0, 0), p(250, 0), p(250, 250), p(0, 250), p(0, 0)]],
+    }],
+    valleys: [], floodplainCandidates: [], crossingCandidates: [],
+    deterministicProvenance: { repairOperationCount: 0, conditionedDepressionCount: 1, retainedDepressionCount: 1 },
+  };
+}
+
 const loaded = await loadAuthority();
 const compile = loaded.compiler?.compileWorldM0TerrainHydro;
 const validate = loaded.validator?.validateTerrainHydroCandidate;
@@ -303,13 +347,41 @@ const epistemicLeak = mutateAndValidate((value) => { value.crossingCandidates[0]
 const hydraulicLeak = mutateAndValidate((value) => { value.crossingCandidates[0].waterDepth = 1; });
 const scratchLeak = mutateAndValidate((value) => { value.scratchLeak = new Uint8Array(1); });
 
-let wrongBasinLink;
-if (candidate?.depressionBasins?.length > 0 && candidate.catchments.length > 1) {
-  const mutated = deepClone(candidate);
-  const current = mutated.depressionBasins[0].catchmentId;
-  mutated.depressionBasins[0].catchmentId = mutated.catchments.find((item) => item.id !== current).id;
-  wrongBasinLink = validate(mutated, constants);
-}
+// Focused Task-12 validator discriminators. The control is intentionally tiny so
+// each named invariant can be tested without depending on whether the full natural
+// fixture happens to materialize a retained basin in a particular seed.
+const basinLinkCandidate = makeBasinLinkCandidate(fixture);
+const basinLinkControl = hasAuthority ? validate(basinLinkCandidate, f3Constants) : undefined;
+
+const exorheicDownstreamClosedCandidate = deepClone(basinLinkCandidate);
+exorheicDownstreamClosedCandidate.terminals[0].kind = "retained_closed_basin";
+const exorheicDownstreamClosedValidation = hasAuthority ? validate(exorheicDownstreamClosedCandidate, f3Constants) : undefined;
+const exorheicMissingSpillCandidate = deepClone(exorheicDownstreamClosedCandidate);
+exorheicMissingSpillCandidate.depressionBasins[0].spillElevationMeters = null;
+const exorheicMissingSpillValidation = hasAuthority ? validate(exorheicMissingSpillCandidate, f3Constants) : undefined;
+
+const overlappingProvenanceCandidate = deepClone(f3Candidate);
+overlappingProvenanceCandidate.provenanceProvinces = [
+  { id: id("province", 0), family: "stable_denudational", center: p(125, 125), radiusXM: 100, radiusYM: 100, axisAngleRadians: 0, influenceRadiusM: 100, elevationOffsetMeters: 0, reliefMultiplier: 1 },
+  { id: id("province", 1), family: "stable_denudational", center: p(375, 125), radiusXM: 100, radiusYM: 100, axisAngleRadians: 0, influenceRadiusM: 100, elevationOffsetMeters: 0, reliefMultiplier: 1 },
+];
+overlappingProvenanceCandidate.strategicTerrain.find((summary) => summary.landOceanClass === "land").provenanceFractions = [
+  { provinceId: id("province", 0), areaFraction: 0.75 },
+  { provinceId: id("province", 1), areaFraction: 0.75 },
+];
+const overlappingProvenanceConstants = deepClone(f3Constants);
+overlappingProvenanceConstants.terrain.provenanceProvinceCount = 2;
+const provenanceBefore = stable(overlappingProvenanceCandidate.strategicTerrain.map((summary) => summary.provenanceFractions));
+const overlappingProvenanceValidation = hasAuthority ? validate(overlappingProvenanceCandidate, overlappingProvenanceConstants) : undefined;
+const provenanceAfter = stable(overlappingProvenanceCandidate.strategicTerrain.map((summary) => summary.provenanceFractions));
+const oversizedIndividualProvenance = deepClone(overlappingProvenanceCandidate);
+oversizedIndividualProvenance.strategicTerrain.find((summary) => summary.provenanceFractions.length > 0).provenanceFractions[0].areaFraction = 1.01;
+const oversizedIndividualProvenanceValidation = hasAuthority ? validate(oversizedIndividualProvenance, overlappingProvenanceConstants) : undefined;
+
+const wrongBasinLinkCandidate = deepClone(basinLinkCandidate);
+wrongBasinLinkCandidate.depressionBasins[0].catchmentId = id("catchment", 1);
+wrongBasinLinkCandidate.depressionBasins[0].outletTerminalId = id("terminal", 1);
+const wrongBasinLink = hasAuthority ? validate(wrongBasinLinkCandidate, f3Constants) : undefined;
 
 const compilerSource = existsSync(COMPILER_PATH) ? readFileSync(COMPILER_PATH, "utf8") : "";
 const sequenceMarkers = [
@@ -369,7 +441,13 @@ const checks = {
   missing_terminal_rejected: missingTerminal?.ok === false,
   duplicate_terminal_rejected: duplicateTerminal?.ok === false,
   terminal_catchment_break_rejected: brokenTerminalCatchment?.ok === false,
-  wrong_basin_catchment_link_rejected: wrongBasinLink === undefined ? candidate?.depressionBasins?.length === 0 || candidate?.catchments?.length < 2 : wrongBasinLink.ok === false,
+  basin_link_control_valid: basinLinkControl?.ok === true,
+  exorheic_downstream_retained_closed_accepted: exorheicDownstreamClosedValidation?.ok === true,
+  exorheic_downstream_retained_closed_still_requires_finite_spill: exorheicMissingSpillValidation?.ok === false,
+  overlapping_independent_provenance_fractions_accepted: overlappingProvenanceValidation?.ok === true && provenanceBefore === provenanceAfter,
+  provenance_fraction_individual_upper_bound_retained: oversizedIndividualProvenanceValidation?.ok === false,
+  wrong_basin_catchment_link_rejected: failureCode(wrongBasinLink) === "M02_CANDIDATE_INVALID" &&
+    String(failurePath(wrongBasinLink)).includes("depressionBasins") && /physical|geometry|catchment/i.test(String(failureDetail(wrongBasinLink))),
   invalid_crossing_edge_rejected: invalidCrossing?.ok === false,
   duplicate_persistent_id_rejected: duplicateId?.ok === false,
   nan_rejected: nanResult?.ok === false,
@@ -397,6 +475,9 @@ console.log(JSON.stringify({
     f3WholeError: f3Whole?.ok === false ? f3Whole.error : null,
     cycleError: cycleResult?.ok === false ? cycleResult.error : null,
     uphillError: uphillResult?.ok === false ? uphillResult.error : null,
+    basinLinkControlError: basinLinkControl?.ok === false ? basinLinkControl.error : null,
+    exorheicDownstreamClosedValidationError: exorheicDownstreamClosedValidation?.ok === false ? exorheicDownstreamClosedValidation.error : null,
+    overlappingProvenanceValidationError: overlappingProvenanceValidation?.ok === false ? overlappingProvenanceValidation.error : null,
     wrongBasinLinkError: wrongBasinLink?.ok === false ? wrongBasinLink.error : null,
     budget: budgetEvidence ? {
       task6Peak: budgetEvidence.task6Peak,
