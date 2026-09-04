@@ -194,6 +194,32 @@ const hostileNearCornerExact = hostileNearCornerValue?.length === 2 &&
   hostileNearCornerHorizontal?.intersection.yM === 1000 &&
   hostileNearCornerHorizontal.intersection.xM < 1000 && 1000 - hostileNearCornerHorizontal.intersection.xM < 0.001;
 
+// A boundary-near crossing whose projected left-bank target is outside the
+// raster. The authorized 1000 m physical radius still contains (125,1625),
+// which is outside the historical target-centered +/-1 candidate window.
+const bankRadiusSpatial = makeSpatial(1000, 2);
+const bankRadiusScratch = makeScratch(2000);
+const bankRadiusReach = reach(5, [p(0, 875), p(250, 1875)]);
+const bankRadiusConstants = clonePhysicalConstants();
+bankRadiusConstants.geometry.bankSearchRadiusMeters = 1000;
+const bankRadiusResult = run(
+  [bankRadiusReach], bankRadiusConstants, bankRadiusScratch, bankRadiusSpatial,
+);
+const bankRadiusValue = valueOf(bankRadiusResult);
+const bankRadiusCandidate = bankRadiusValue?.[0];
+const bankRadiusBoundaryWitness = bankRadiusValue?.length === 1 &&
+  samePoint(bankRadiusCandidate?.intersection, p(31.25, 1000)) &&
+  samePoint(bankRadiusCandidate?.leftBank, p(125, 1625)) &&
+  samePoint(bankRadiusCandidate?.rightBank, p(375, 875));
+
+const bankRadiusNegativeConstants = clonePhysicalConstants();
+bankRadiusNegativeConstants.geometry.bankSearchRadiusMeters = 600;
+const bankRadiusNegativeResult = run(
+  [bankRadiusReach], bankRadiusNegativeConstants, bankRadiusScratch, bankRadiusSpatial,
+);
+const bankRadiusNegativeControl = errorCode(bankRadiusNegativeResult) === "M02_CANDIDATE_INVALID" &&
+  bankRadiusNegativeResult?.error?.path === "crossing.bank";
+
 const touchValue = valueOf(run([reach(0, [p(625, 3125), p(1000, 3125), p(625, 3375)])]));
 const duplicateSuppressionOk = touchValue?.length === 1 && samePoint(touchValue[0].intersection, p(1000, 3125));
 
@@ -550,6 +576,42 @@ const mutationHGeometry = await runSourceMutation(
   },
 );
 
+// F13-I: restore the historical target-centered +/-1 bank window. The
+// boundary-radius witness must fail because its valid left-bank center is
+// outside that stencil even though it is inside the authorized physical radius.
+const radiusBoundsNeedle = `  const minColumn = radiusM === undefined
+    ? approximateColumn - 1
+    : Math.max(0, Math.ceil((crossing.xM - radiusM) / scratch.cellSizeMeters - 0.5));
+  const maxColumn = radiusM === undefined
+    ? approximateColumn + 1
+    : Math.min(scratch.width - 1, Math.floor((crossing.xM + radiusM) / scratch.cellSizeMeters - 0.5));
+  const minSouthRow = radiusM === undefined
+    ? approximateSouthRow - 1
+    : Math.max(0, Math.ceil((crossing.yM - radiusM) / scratch.cellSizeMeters - 0.5));
+  const maxSouthRow = radiusM === undefined
+    ? approximateSouthRow + 1
+    : Math.min(scratch.height - 1, Math.floor((crossing.yM + radiusM) / scratch.cellSizeMeters - 0.5));
+`;
+const oldRadiusWindow = `  const minColumn = approximateColumn - 1;
+  const maxColumn = approximateColumn + 1;
+  const minSouthRow = approximateSouthRow - 1;
+  const maxSouthRow = approximateSouthRow + 1;
+`;
+const mutationI = await runSourceMutation(
+  "I target-centered bank-radius window",
+  (source) => replaceOnce(source, radiusBoundsNeedle, oldRadiusWindow),
+  (mutantDerive) => {
+    const result = runWith(
+      mutantDerive, [bankRadiusReach], bankRadiusConstants, bankRadiusScratch, bankRadiusSpatial,
+    );
+    return {
+      detected: bankRadiusBoundaryWitness && errorCode(result) === "M02_CANDIDATE_INVALID" &&
+        result?.error?.path === "crossing.bank",
+      result,
+    };
+  },
+);
+
 const f13A = mutationA.applied && mutationA.detected && mutationA.restored;
 const f13B = mutationBGuard.applied && mutationBGuard.detected && mutationBGuard.restored &&
   mutationBRelaxed.applied && mutationBRelaxed.detected && mutationBRelaxed.restored;
@@ -561,9 +623,10 @@ const f13F = mutationF.applied && mutationF.detected && mutationF.restored;
 const f13G = mutationG.applied && mutationG.detected && mutationG.restored;
 const f13H = mutationHRegistry.applied && mutationHRegistry.detected && mutationHRegistry.restored &&
   mutationHGeometry.applied && mutationHGeometry.detected && mutationHGeometry.restored;
+const f13I = mutationI.applied && mutationI.detected && mutationI.restored;
 const mutationSourcesRestored = [
   mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon,
-  mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry,
+  mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI,
 ].every((item) => item.restored === true) && readFileSync(CROSSING_PATH).equals(CROSSING_BYTES);
 
 const noTask9Dependency = !/terrainBasins|TerrainDepressionBasin|TerrainValleyCandidate|TerrainFloodplainCandidate|floodplain|retainedBasins/.test(CROSSING_SOURCE);
@@ -579,6 +642,8 @@ const checks = [
   ["rational-parameter strategic corner uses exact tie handling", rationalCornerOk],
   ["binary64-hostile exact corner remains non-authoritative", hostileExactCorner],
   ["binary64-hostile near-corner is not epsilon-snapped", hostileNearCornerExact],
+  ["boundary bank search covers complete authorized physical radius", bankRadiusBoundaryWitness],
+  ["bank radius below valid witness distance rejects", bankRadiusNegativeControl],
   ["same-edge vertex touch duplicate suppression", duplicateSuppressionOk],
   ["reversed/shuffled reach registry canonical output", orderInvariant],
   ["crossing IDs assigned after physical ordering", physicalIdBarrier],
@@ -599,6 +664,7 @@ const checks = [
   ["F13-F silent truncation mutant discriminated", f13F],
   ["F13-G epistemic/hydraulic field mutant discriminated", f13G],
   ["F13-H caller-input mutation mutants discriminated", f13H],
+  ["F13-I old target-centered bank-radius mutant discriminated", f13I],
   ["mutation source restored byte-identically", mutationSourcesRestored],
   ["no Task-9 dependency", noTask9Dependency],
   ["bounded spatial derivation source witness", boundedSpatialSource],
@@ -607,7 +673,8 @@ const checks = [
 console.log(`WORLD-M0 M0.2 Task-10 crossing audit: authority=${hasAuthority ? "present" : "MISSING"}`);
 if (loaded.loadError) console.log(`load error: ${loaded.loadError}`);
 for (const [name, ok] of checks) console.log(`${ok ? "PASS" : "FAIL"} ${name}`);
-const failedMutations = [mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon, mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry]
+if (!bankRadiusBoundaryWitness) console.log("bank-radius boundary evidence:", JSON.stringify(bankRadiusResult));
+const failedMutations = [mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon, mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI]
   .filter((item) => item.applied !== true || item.detected !== true || item.restored !== true);
 if (failedMutations.length > 0) console.log("F13 mutation evidence:", JSON.stringify(failedMutations, null, 2));
 const passed = hasAuthority && checks.every(([, ok]) => ok === true);

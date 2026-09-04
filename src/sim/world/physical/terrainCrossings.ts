@@ -307,13 +307,25 @@ function nearestCell(
 ): WorldM0Result<{ readonly point: WorldM0PointM; readonly elevationMeters: number }> {
   const approximateColumn = Math.floor(target.xM / scratch.cellSizeMeters);
   const approximateSouthRow = Math.floor(target.yM / scratch.cellSizeMeters);
+  const minColumn = radiusM === undefined
+    ? approximateColumn - 1
+    : Math.max(0, Math.ceil((crossing.xM - radiusM) / scratch.cellSizeMeters - 0.5));
+  const maxColumn = radiusM === undefined
+    ? approximateColumn + 1
+    : Math.min(scratch.width - 1, Math.floor((crossing.xM + radiusM) / scratch.cellSizeMeters - 0.5));
+  const minSouthRow = radiusM === undefined
+    ? approximateSouthRow - 1
+    : Math.max(0, Math.ceil((crossing.yM - radiusM) / scratch.cellSizeMeters - 0.5));
+  const maxSouthRow = radiusM === undefined
+    ? approximateSouthRow + 1
+    : Math.min(scratch.height - 1, Math.floor((crossing.yM + radiusM) / scratch.cellSizeMeters - 0.5));
   let bestRow = -1;
   let bestColumn = -1;
   let bestDistanceSquared = Number.POSITIVE_INFINITY;
   let bestPoint: WorldM0PointM | undefined;
-  for (let column = approximateColumn - 1; column <= approximateColumn + 1; column += 1) {
+  for (let column = minColumn; column <= maxColumn; column += 1) {
     if (column < 0 || column >= scratch.width) continue;
-    for (let southRow = approximateSouthRow - 1; southRow <= approximateSouthRow + 1; southRow += 1) {
+    for (let southRow = minSouthRow; southRow <= maxSouthRow; southRow += 1) {
       if (southRow < 0 || southRow >= scratch.height) continue;
       const row = scratch.height - 1 - southRow;
       const point = cellCenter(scratch, row, column);
