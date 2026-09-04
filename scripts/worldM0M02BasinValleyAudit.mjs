@@ -114,6 +114,32 @@ const f7Dep = {...retainedBase,persistentSpillElevationMeters:4,protectedIntentT
 const f7Drain = drainageFor("external_domain_outlet",point(1250,125));
 const f7 = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f7Grid.grid,
   {retainedDepressions:[f7Dep],terminalOwners:{terminalKindByCell:f7Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f7Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},coastlineFor(f7Grid.grid),f7Drain,f7Grid.constants));
+const f7Ocean = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f7Grid.grid,
+  {retainedDepressions:[f7Dep],terminalOwners:{terminalKindByCell:f7Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f7Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
+  coastlineFor(f7Grid.grid),drainageFor("ocean_outlet",point(625,125)),f7Grid.constants));
+const f7ProtectedBad = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f7Grid.grid,
+  {retainedDepressions:[{...f7Dep,protectedIntentToken:"protected-basin:0000000000000001"}],terminalOwners:{terminalKindByCell:f7Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f7Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
+  coastlineFor(f7Grid.grid),f7Drain,f7Grid.constants));
+const f7NullSpillBad = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f7Grid.grid,
+  {retainedDepressions:[{...f7Dep,persistentSpillElevationMeters:null}],terminalOwners:{terminalKindByCell:f7Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f7Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
+  coastlineFor(f7Grid.grid),f7Drain,f7Grid.constants));
+const f7MismatchSpillBad = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f7Grid.grid,
+  {retainedDepressions:[{...f7Dep,persistentSpillElevationMeters:5}],terminalOwners:{terminalKindByCell:f7Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f7Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
+  coastlineFor(f7Grid.grid),f7Drain,f7Grid.constants));
+const f6OceanBad = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f6Grid.grid,
+  {retainedDepressions:[f6Dep],terminalOwners:{terminalKindByCell:f6Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f6Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
+  coastlineFor(f6Grid.grid),drainageFor("ocean_outlet",point(625,125)),f6Grid.constants));
+const f6ExternalBad = safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f6Grid.grid,
+  {retainedDepressions:[f6Dep],terminalOwners:{terminalKindByCell:f6Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f6Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
+  coastlineFor(f6Grid.grid),drainageFor("external_domain_outlet",point(1250,125)),f6Grid.constants));
+const f7MissingCatchmentDrain={...f7Drain,retainedDepressionLinks:[{...f7Drain.retainedDepressionLinks[0],catchmentId:id("catchment",9)}]};
+const f7MissingCatchmentBad=safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f7Grid.grid,
+  {retainedDepressions:[f7Dep],terminalOwners:{terminalKindByCell:f7Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f7Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
+  coastlineFor(f7Grid.grid),f7MissingCatchmentDrain,f7Grid.constants));
+const f7NonreciprocalDrain={...f7Drain,catchments:[{...f7Drain.catchments[0],terminalId:id("terminal",9)}]};
+const f7NonreciprocalBad=safeCall(()=>modules.basins?.finalizeDepressionBasins?.(f7Grid.grid,
+  {retainedDepressions:[f7Dep],terminalOwners:{terminalKindByCell:f7Grid.grid?.terminalKindByCell,terminalOrdinalByCell:f7Grid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:1,repairOperationCount:0},
+  coastlineFor(f7Grid.grid),f7NonreciprocalDrain,f7Grid.constants));
 
 const twoGrid = makeGrid(5,5,Array(25).fill(9));
 const ringB = ring([0,0],[250,0],[250,250],[0,250],[0,0]);
@@ -128,6 +154,14 @@ const twoDrain={terminals:[term0,term1],catchments:[
   {depressionToken:f6Dep.token,catchmentId:id("catchment",0),terminalId:term0.id},
   {depressionToken:depB.token,catchmentId:id("catchment",1),terminalId:term1.id}]};
 const depAnalysis=(items)=>({retainedDepressions:items,terminalOwners:{terminalKindByCell:twoGrid.grid?.terminalKindByCell,terminalOrdinalByCell:twoGrid.grid?.terminalOrdinalByCell,terminalOwnerCells:new Int32Array(0),terminalCount:0},conditionedDepressionCount:2,repairOperationCount:0});
+// Task-8 derives both links from catchmentRoot[canonicalFloorCell]. The upstream
+// exorheic depression therefore legitimately resolves to the SAME catchment and
+// retained-closed terminal as the different downstream protected depression.
+const downstreamClosedDrain={terminals:[term0],catchments:[twoDrain.catchments[0]],nodes:[],reaches:[],retainedDepressionLinks:[
+  {depressionToken:f6Dep.token,catchmentId:term0.catchmentId,terminalId:term0.id},
+  {depressionToken:depB.token,catchmentId:term0.catchmentId,terminalId:term0.id}]};
+const exorheicDownstreamClosed=safeCall(()=>modules.basins?.finalizeDepressionBasins?.(
+  twoGrid.grid,depAnalysis([depB,f6Dep]),coastlineFor(twoGrid.grid),downstreamClosedDrain,twoGrid.constants));
 const d3Forward=safeCall(()=>modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([f6Dep,depB]),coastlineFor(twoGrid.grid),twoDrain,twoGrid.constants));
 const d3Reverse=safeCall(()=>modules.basins?.finalizeDepressionBasins?.(twoGrid.grid,depAnalysis([{...depB,boundaryRings:[...depB.boundaryRings].reverse()},f6Dep]),coastlineFor(twoGrid.grid),{...twoDrain,retainedDepressionLinks:[...twoDrain.retainedDepressionLinks].reverse()},twoGrid.constants));
 
@@ -211,6 +245,8 @@ const longDrainage={terminals:[longTerminal],catchments:[{id:id("catchment",0),t
 const longCorridor=safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(longGrid.grid,longDrainage,longConstants));
 
 const f6Value=ok(f6)?.[0]; const f7Value=ok(f7)?.[0];
+const f7OceanValue=ok(f7Ocean)?.[0];
+const exorheicDownstreamClosedValue=ok(exorheicDownstreamClosed);
 
 // Correction RED discriminators. These call the frozen corrected interfaces directly;
 // the pre-correction Task-9 commit must fail them for the named architectural reasons.
@@ -275,6 +311,26 @@ const diagonalSharedVertexSeparate = ok(rawForward)?.length===2 && (()=>{
 })();
 const countBoundConstants=structuredClone(vc); countBoundConstants.drainage.maxReaches=1;
 const countBoundResult=safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,valleyDrainage,countBoundConstants));
+
+async function runExorheicDownstreamClosedMutation() {
+  const absent={mutationApplied:false,restored:!existsSync(BASINS_PATH)};
+  if(!existsSync(BASINS_PATH))return absent;
+  const original=readFileSync(BASINS_PATH);
+  const source=original.toString("utf8");
+  const needle='               item.persistentSpillElevationMeters !== item.physicalSpillElevationMeters) {\n';
+  const replacement='               item.persistentSpillElevationMeters !== item.physicalSpillElevationMeters ||\n               terminal.kind === "retained_closed_basin") {\n';
+  if(!source.includes(needle)||source.indexOf(needle)!==source.lastIndexOf(needle))return absent;
+  let value;
+  try {
+    writeFileSync(BASINS_PATH,source.replace(needle,replacement));
+    const mutated=await loadModules("?audit-task9-exorheic-downstream-closed-mutant");
+    value=safeCall(()=>mutated.basins?.finalizeDepressionBasins?.(
+      twoGrid.grid,depAnalysis([depB,f6Dep]),coastlineFor(twoGrid.grid),downstreamClosedDrain,twoGrid.constants));
+  } finally {
+    writeFileSync(BASINS_PATH,original);
+  }
+  return {mutationApplied:true,value,restored:readFileSync(BASINS_PATH).equals(original)};
+}
 
 async function runDomain3ScheduleMutations() {
   const absent={instrumentationApplied:false,noSortMutationApplied:false,allOriginalMutationApplied:false,restored:!existsSync(BASINS_PATH)};
@@ -347,6 +403,7 @@ async function runDomains45ScheduleMutations() {
   return {instrumentationApplied:true,prematureMutationApplied:true,canonical,premature:prematureRun,restored:readFileSync(VALLEYS_PATH).equals(original)};
 }
 
+const exorheicDownstreamClosedMutationAudit=await runExorheicDownstreamClosedMutation();
 const domain3ScheduleAudit=await runDomain3ScheduleMutations();
 const domains45ScheduleAudit=await runDomains45ScheduleMutations();
 const d3CanonicalFeatures=domain3ScheduleAudit.canonical?.trace?.filter((entry)=>entry.kind==="feature")??[];
@@ -385,6 +442,15 @@ const checks={
     ringRoleAreaExact(f6Value?.boundaryRings,125000),
   f6ContradictionRejected: err(f6Bad)?.code==="M02_CANDIDATE_INVALID" && /spill/i.test(err(f6Bad)?.path??err(f6Bad)?.detail??""),
   f7ExorheicExact: f7Value?.spillElevationMeters===4 && f7Value?.outletTerminalId===id("terminal",0) && f7Value?.closedEndorheic===false && f7Value?.areaM2===125000,
+  f7ExorheicOceanExact: f7OceanValue?.spillElevationMeters===4 && f7OceanValue?.outletTerminalId===id("terminal",0) && f7OceanValue?.closedEndorheic===false,
+  exorheicDownstreamClosedAccepted: Array.isArray(exorheicDownstreamClosedValue) && exorheicDownstreamClosedValue.length===2 &&
+    exorheicDownstreamClosedValue.some((basin)=>basin.closedEndorheic===false && basin.spillElevationMeters===5 && basin.outletTerminalId===term0.id && basin.catchmentId===term0.catchmentId) &&
+    exorheicDownstreamClosedValue.some((basin)=>basin.closedEndorheic===true && basin.spillElevationMeters===null && basin.outletTerminalId===null && basin.catchmentId===term0.catchmentId),
+  closedRejectsNonclosedTerminal: [f6OceanBad,f6ExternalBad].every((result)=>err(result)?.code==="M02_CANDIDATE_INVALID" && /spill/i.test(err(result)?.path??err(result)?.detail??"")),
+  malformedExorheicTupleRejected: [f7ProtectedBad,f7NullSpillBad,f7MismatchSpillBad].every((result)=>err(result)?.code==="M02_CANDIDATE_INVALID" && /spill/i.test(err(result)?.path??err(result)?.detail??"")),
+  malformedExorheicLinkageRejected: [f7MissingCatchmentBad,f7NonreciprocalBad].every((result)=>err(result)?.code==="M02_CANDIDATE_INVALID" && /retainedDepressionLinks/i.test(err(result)?.path??err(result)?.detail??"")),
+  exorheicDownstreamClosedMutationDiscriminated: exorheicDownstreamClosedMutationAudit.mutationApplied===true && exorheicDownstreamClosedMutationAudit.restored===true &&
+    err(exorheicDownstreamClosedMutationAudit.value)?.code==="M02_CANDIDATE_INVALID" && err(exorheicDownstreamClosedMutationAudit.value)?.path==="retainedDepressions.spill",
   domain3OrderAndRingRegistryInvariant: ok(d3Forward) && ok(d3Reverse) && sameBytes(ok(d3Forward),ok(d3Reverse)),
   domain3ExactPreKeyRejectsEqualPhysicalTuples: err(duplicatePreKeyResult)?.code==="M02_CANDIDATE_INVALID" && /pre-key/i.test(err(duplicatePreKeyResult)?.detail??""),
   domain3FinalReferenceProtection: referenceProtectionWitness && domain3FinalCoastlineWitness,
@@ -407,10 +473,10 @@ const checks={
   noHydraulicEpistemicFields: !forbidden.test(basinSource) && !forbidden.test(valleySource),
   task9DenseAnalysisUsesScratchBudget: Boolean(valleyBudgetBefore && valleyBudgetAfter && valleyBudgetAfter.liveBytes===valleyBudgetBefore.liveBytes && valleyBudgetAfter.peakBytes>valleyBudgetBefore.peakBytes),
   noJsPerCellMembership: !/new\s+Set<number>|(?:valleyCells|floodCells)\s*:\s*number\[\]/.test(valleySource),
-  mutationSourcesRestoredByteIdentically: domain3ScheduleAudit.restored===true && domains45ScheduleAudit.restored===true,
+  mutationSourcesRestoredByteIdentically: exorheicDownstreamClosedMutationAudit.restored===true && domain3ScheduleAudit.restored===true && domains45ScheduleAudit.restored===true,
   polygonBoundFailure: (()=>{ const c=structuredClone(vc); c.geometry.maxPolygonVerticesPerFeature=4; const one={...valleyDrainage,terminals:[valleyTerminals[0]],catchments:[valleyCatchments[0]],nodes:valleyNodes.slice(0,2),reaches:[reachA]}; const r=safeCall(()=>modules.valleys?.deriveTerrainValleyGeometry?.(valleyGrid.grid,one,c)); return err(r)?.code==="M02_BOUND_EXCEEDED"; })(),
 };
 const passed=Object.values(checks).every(Boolean);
-console.log(JSON.stringify({audit:"WORLD-M0 M0.2 Task 9 basin/valley geometry",checks,evidence:{nonCollinearAfter,referenceProtectedValue,earlierFinalValue,domain3FinalCoastlineWitness,exactTask8PhysicalKeyWitness,domain3Schedule:domain3ScheduleAudit.canonical?.trace,domain3NoSortSchedule:domain3ScheduleAudit.noSort?.trace,domain3AllOriginalSchedule:domain3ScheduleAudit.allOriginal?.trace,domains45Schedule:d45Trace,domains45PrematureSchedule:d45PrematureTrace},loadError:modules.loadError,verdict:passed?"PASS":"FAIL"},null,2));
+console.log(JSON.stringify({audit:"WORLD-M0 M0.2 Task 9 basin/valley geometry",checks,evidence:{exorheicDownstreamClosedError:err(exorheicDownstreamClosed),exorheicDownstreamClosedMutationError:err(exorheicDownstreamClosedMutationAudit.value),exorheicDownstreamClosedMutationRestored:exorheicDownstreamClosedMutationAudit.restored,f6OceanError:err(f6OceanBad),f6ExternalError:err(f6ExternalBad),f7ProtectedError:err(f7ProtectedBad),f7NullSpillError:err(f7NullSpillBad),f7MismatchSpillError:err(f7MismatchSpillBad),f7MissingCatchmentError:err(f7MissingCatchmentBad),f7NonreciprocalError:err(f7NonreciprocalBad),nonCollinearAfter,referenceProtectedValue,earlierFinalValue,domain3FinalCoastlineWitness,exactTask8PhysicalKeyWitness,domain3Schedule:domain3ScheduleAudit.canonical?.trace,domain3NoSortSchedule:domain3ScheduleAudit.noSort?.trace,domain3AllOriginalSchedule:domain3ScheduleAudit.allOriginal?.trace,domains45Schedule:d45Trace,domains45PrematureSchedule:d45PrematureTrace},loadError:modules.loadError,verdict:passed?"PASS":"FAIL"},null,2));
 for(const g of [f5Grid.grid,f6Grid.grid,f7Grid.grid,twoGrid.grid,valleyGrid.grid,longGrid.grid]) releaseGrid(g);
 if(!passed) process.exitCode=1;
