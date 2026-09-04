@@ -6,6 +6,7 @@ import { clonePhysicalConstants } from "./lib/worldM0M02Fixture.mjs";
 
 const ROOT = process.cwd();
 const DEPRESSION_PATH = `${ROOT}/src/sim/world/physical/terrainDepressions.ts`;
+const FLOW_PATH = `${ROOT}/src/sim/world/physical/terrainFlow.ts`;
 const CELL_SIZE = 250;
 const BASE_LABELS = [
   "elevationMeters",
@@ -22,12 +23,26 @@ const TASK6_STAGE_LABELS = [
   "minimumPlateauLabel",
   "heapIndex",
 ];
+const FLOW_RETAINED_LABELS = [
+  "flowPrimaryReceiver",
+  "flowSecondaryReceiver",
+  "flowPrimaryWeight",
+  "flowSecondaryWeight",
+  "flowTerminalReceiver",
+  "flowContributingAreaM2",
+  "flowTopologicalOrder",
+];
 const F567_ELEVATIONS = [
   9, 9, 9, 9, 9,
   9, 6, 5, 6, 9,
   9, 5, 1, 1, 5,
   9, 6, 5, 6, 4,
   9, 9, 9, 9, 3,
+];
+const PROTECTED_MULTI_SINK_ELEVATIONS = [
+  9, 9, 9, 9, 9,
+  9, 1, 3, 2, 4,
+  9, 9, 9, 9, 9,
 ];
 const ZERO_INTENT = Object.freeze({ a: 0, b: 0, c: 0, d: 0 });
 
@@ -44,6 +59,9 @@ async function loadModules(cacheSuffix = "") {
     loaded.scratch = await server.ssrLoadModule("/sim/world/physical/terrainScratch.ts");
     if (existsSync(DEPRESSION_PATH)) {
       loaded.depressions = await server.ssrLoadModule(`/sim/world/physical/terrainDepressions.ts${cacheSuffix}`);
+    }
+    if (existsSync(FLOW_PATH)) {
+      loaded.flow = await server.ssrLoadModule(`/sim/world/physical/terrainFlow.ts${cacheSuffix}`);
     }
   } catch {
     // Missing/incomplete Task-6 production authority is the required RED state.
@@ -470,6 +488,169 @@ f6Constants.depression.retainedMinDepthMeters = 10;
 f6Constants.depression.protectedClosedBasinRatePer65536 = 42_612;
 const f6 = runAnalysis(5, 5, F567_ELEVATIONS, Array(25).fill(1), f6Constants);
 const f6Finish = finishFixture(f6);
+
+const protectedMultiSinkConstants = clonePhysicalConstants();
+protectedMultiSinkConstants.depression.retainedMinAreaM2 = 1_000_000;
+protectedMultiSinkConstants.depression.retainedMinDepthMeters = 10;
+protectedMultiSinkConstants.depression.protectedClosedBasinRatePer65536 = 65_536;
+const protectedMultiSink = runAnalysis(
+  5, 3, PROTECTED_MULTI_SINK_ELEVATIONS, Array(15).fill(1), protectedMultiSinkConstants,
+);
+const protectedMultiSinkFailure = failure(protectedMultiSink.result);
+const protectedMultiSinkRetained = protectedMultiSink.analysis?.retainedDepressions ?? [];
+const protectedMultiSinkFlowResult = protectedMultiSink.analysis && modules.flow
+  ? modules.flow.analyzeDInfinityFlow(
+    protectedMultiSink.grid,
+    protectedMultiSink.analysis.terminalOwners,
+    protectedMultiSinkConstants,
+  )
+  : undefined;
+const protectedMultiSinkFlow = okValue(protectedMultiSinkFlowResult);
+const protectedMultiSinkTraversal = [];
+if (protectedMultiSinkFlow) {
+  let cell = 8;
+  const visited = new Set();
+  while (cell >= 0 && !visited.has(cell)) {
+    protectedMultiSinkTraversal.push(cell);
+    visited.add(cell);
+    if (protectedMultiSink.grid.terminalKindByCell[cell] !== 0) break;
+    cell = protectedMultiSinkFlow.primaryReceiver[cell];
+  }
+}
+const protectedMultiSinkSnapshot = protectedMultiSink.grid ? {
+  raw: [
+    protectedMultiSink.grid.elevationMeters[6],
+    protectedMultiSink.grid.elevationMeters[7],
+    protectedMultiSink.grid.elevationMeters[8],
+  ],
+  routing: [
+    protectedMultiSink.grid.routingElevationMeters[6],
+    protectedMultiSink.grid.routingElevationMeters[7],
+    protectedMultiSink.grid.routingElevationMeters[8],
+  ],
+  ranks: [
+    protectedMultiSink.grid.flatRank[6],
+    protectedMultiSink.grid.flatRank[7],
+    protectedMultiSink.grid.flatRank[8],
+  ],
+  kinds: Array.from(protectedMultiSink.grid.terminalKindByCell),
+  owners: Array.from(protectedMultiSink.analysis?.terminalOwners.terminalOwnerCells ?? []),
+  primaryReceivers: protectedMultiSinkFlow ? Array.from(protectedMultiSinkFlow.primaryReceiver) : null,
+  terminalReceivers: protectedMultiSinkFlow ? Array.from(protectedMultiSinkFlow.terminalReceiver) : null,
+} : null;
+for (const label of FLOW_RETAINED_LABELS) protectedMultiSink.grid?.budget.release(label);
+const protectedMultiSinkFinish = finishFixture(protectedMultiSink);
+
+async function runProtectedRoutingMutationDiscrimination() {
+  const original = readFileSync(DEPRESSION_PATH, "utf8");
+  const candidateNeedle = `const candidate = Math.max(
+              scratch.elevationMeters[neighbor], scratch.routingElevationMeters[cell],
+            );`;
+  const terminalNeedle =
+    "scratch.terminalKindByCell[canonicalFloorCell] = TERRAIN_TERMINAL_RETAINED_CLOSED_BASIN;";
+  const floorNeedle =
+    "scratch.routingElevationMeters[canonicalFloorCell] = scratch.elevationMeters[canonicalFloorCell];";
+  const mutations = [
+    {
+      name: "restoreRawProtectedRouting",
+      mutate: (source) => source.replace(candidateNeedle, "const candidate = scratch.elevationMeters[neighbor];"),
+    },
+    {
+      name: "flattenProtectedToFloor",
+      mutate: (source) => source.replace(candidateNeedle, "const candidate = scratch.elevationMeters[canonicalFloorCell];"),
+    },
+    {
+      name: "copyOuterSpillWholesale",
+      mutate: (source) => source.replace(candidateNeedle, "const candidate = bestSpillElevation;"),
+    },
+    {
+      name: "manufactureSecondClosedTerminal",
+      mutate: (source) => source.replace(
+        terminalNeedle,
+        `${terminalNeedle}\n        if (cellCount === 15) scratch.terminalKindByCell[8] = TERRAIN_TERMINAL_RETAINED_CLOSED_BASIN;`,
+      ),
+    },
+    {
+      name: "permitOuterSpillExit",
+      mutate: (source) => source
+        .replace(terminalNeedle, "scratch.terminalKindByCell[canonicalFloorCell] = TERRAIN_TERMINAL_NONE;")
+        .replace(floorNeedle, "scratch.routingElevationMeters[canonicalFloorCell] = bestSpillElevation;"),
+    },
+    {
+      name: "changeCanonicalFloor",
+      mutate: (source) => source.replace(
+        terminalNeedle,
+        `if (cellCount === 15) canonicalFloorCell = 8;\n        ${terminalNeedle}`,
+      ),
+    },
+    {
+      name: "lowerBelowRawTerrain",
+      mutate: (source) => source.replace(candidateNeedle, "const candidate = scratch.elevationMeters[neighbor] - 1;"),
+    },
+    {
+      name: "changeF6EqualHeightRouting",
+      mutate: (source) => source.replace(
+        candidateNeedle,
+        `${candidateNeedle.slice(0, -1)} +\n              (scratch.elevationMeters[neighbor] === scratch.routingElevationMeters[cell] ? 1 : 0);`,
+      ),
+    },
+  ];
+  const results = {};
+  try {
+    for (let index = 0; index < mutations.length; index += 1) {
+      const mutation = mutations[index];
+      const mutated = mutation.mutate(original);
+      const applied = mutated !== original;
+      if (applied) writeFileSync(DEPRESSION_PATH, mutated);
+      const authorityModules = applied ? await loadModules(`?audit-protected-routing-${index}`) : {};
+      const multi = applied
+        ? runAnalysis(
+          5, 3, PROTECTED_MULTI_SINK_ELEVATIONS, Array(15).fill(1),
+          protectedMultiSinkConstants, ZERO_INTENT, authorityModules,
+        )
+        : {};
+      const f6Mutation = applied
+        ? runAnalysis(5, 5, F567_ELEVATIONS, Array(25).fill(1), f6Constants, ZERO_INTENT, authorityModules)
+        : {};
+      const multiRetained = multi.analysis?.retainedDepressions ?? [];
+      const multiMatches = multi.result?.ok === true && multiRetained.length === 1 &&
+        multiRetained[0].canonicalFloorCell === 6 && multiRetained[0].closedEndorheic === true &&
+        multi.grid?.routingElevationMeters[6] === 1 && multi.grid?.routingElevationMeters[7] === 3 &&
+        multi.grid?.routingElevationMeters[8] === 3 && multi.grid?.flatRank[6] === 0 &&
+        multi.grid?.flatRank[7] === 0 && multi.grid?.flatRank[8] === 1 &&
+        multi.grid?.terminalKindByCell[6] === 3 && multi.grid?.terminalKindByCell[8] === 0 &&
+        multi.grid?.terminalKindByCell[9] === 2 &&
+        Array.from(multi.grid?.terminalKindByCell ?? []).filter((kind) => kind === 3).length === 1;
+      const f6Matches = f6Mutation.result?.ok === true &&
+        f6Mutation.grid?.routingElevationMeters[12] === 1 && f6Mutation.grid?.routingElevationMeters[13] === 1 &&
+        f6Mutation.grid?.flatRank[12] === 0 && f6Mutation.grid?.flatRank[13] === 1;
+      results[mutation.name] = {
+        applied,
+        discriminated: !multiMatches || !f6Matches,
+        multiError: failure(multi.result) ?? null,
+        multiRouting: multi.grid
+          ? [multi.grid.routingElevationMeters[6], multi.grid.routingElevationMeters[7], multi.grid.routingElevationMeters[8]]
+          : null,
+        f6Routing: f6Mutation.grid
+          ? [f6Mutation.grid.routingElevationMeters[12], f6Mutation.grid.routingElevationMeters[13]]
+          : null,
+      };
+      finishFixture(multi);
+      finishFixture(f6Mutation);
+      writeFileSync(DEPRESSION_PATH, original);
+    }
+  } finally {
+    writeFileSync(DEPRESSION_PATH, original);
+  }
+  return {
+    cases: results,
+    allApplied: Object.values(results).every((item) => item.applied),
+    allDiscriminated: Object.values(results).every((item) => item.discriminated),
+    restored: readFileSync(DEPRESSION_PATH, "utf8") === original,
+  };
+}
+
+const protectedRoutingMutations = await runProtectedRoutingMutationDiscrimination();
 
 const f7Constants = clonePhysicalConstants();
 f7Constants.depression.retainedMinAreaM2 = 125_000;
@@ -1455,6 +1636,29 @@ const checks = {
     f6Retained[0].boundaryRings.length === 1 && f6RingArea2 === 250_000 &&
     compactOwnerContract(f6.analysis, f6.grid) && f6.rawUnchanged,
 
+  protectedMultiSinkRoutesOnlyToCanonicalFloor:
+    protectedMultiSink.result?.ok === true && protectedMultiSinkRetained.length === 1 &&
+    protectedMultiSinkRetained[0].canonicalFloorCell === 6 &&
+    protectedMultiSinkRetained[0].physicalSpillElevationMeters === 4 &&
+    protectedMultiSinkRetained[0].persistentSpillElevationMeters === null &&
+    protectedMultiSinkRetained[0].protectedIntentToken === "protected-basin:0000000000000000" &&
+    protectedMultiSinkRetained[0].closedEndorheic === true &&
+    JSON.stringify(protectedMultiSinkSnapshot?.raw) === JSON.stringify([1, 3, 2]) &&
+    JSON.stringify(protectedMultiSinkSnapshot?.routing) === JSON.stringify([1, 3, 3]) &&
+    JSON.stringify(protectedMultiSinkSnapshot?.ranks) === JSON.stringify([0, 0, 1]) &&
+    protectedMultiSinkSnapshot?.kinds.filter((kind) => kind === 3).length === 1 &&
+    protectedMultiSinkSnapshot?.kinds[6] === 3 && protectedMultiSinkSnapshot?.kinds[8] === 0 &&
+    protectedMultiSinkSnapshot?.kinds[9] === 2 &&
+    protectedMultiSinkFlowResult?.ok === true &&
+    JSON.stringify(protectedMultiSinkTraversal) === JSON.stringify([8, 7, 6]) &&
+    protectedMultiSinkSnapshot?.terminalReceivers?.[6] === protectedMultiSink.grid?.terminalOrdinalByCell[6] &&
+    protectedMultiSinkFinish.ownerReleased && protectedMultiSinkFinish.baseReleased &&
+    protectedMultiSinkFinish.finalSnapshot?.liveBytes === 0,
+
+  protectedRoutingMutationsAreDiscriminated:
+    protectedRoutingMutations.allApplied && protectedRoutingMutations.allDiscriminated &&
+    protectedRoutingMutations.restored,
+
   exactF7RetainedExorheicDepression:
     f7.result?.ok === true && f7Retained.length === 1 &&
     f7Retained[0].token === "depression-analysis:0000000000000000" &&
@@ -1554,6 +1758,13 @@ const out = {
       owners: Array.from(f6.analysis.terminalOwners.terminalOwnerCells),
       snapshot: f6.snapshot,
     } : null,
+    protectedMultiSink: {
+      error: protectedMultiSinkFailure ?? null,
+      retained: protectedMultiSinkRetained[0] ?? null,
+      state: protectedMultiSinkSnapshot,
+      traversal: protectedMultiSinkTraversal,
+    },
+    protectedRoutingMutations,
     f7: f7.analysis ? {
       retained: f7Retained[0] ?? null,
       owners: Array.from(f7.analysis.terminalOwners.terminalOwnerCells),
