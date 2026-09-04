@@ -19,6 +19,7 @@ import type { TerrainScratchGrid } from "./terrainScratch";
 interface CrossingEvent {
   readonly edge: WorldM0StrategicEdgeRef;
   readonly intersection: WorldM0PointM;
+  readonly segmentIndex: number;
 }
 
 interface PendingCrossing {
@@ -167,15 +168,17 @@ function addEvent(
   secondRow: number,
   secondColumn: number,
   intersection: WorldM0PointM,
+  segmentIndex: number,
 ): WorldM0Result<true> {
   const edge = canonicalStrategicEdge(
     { row: firstRow, column: firstColumn },
     { row: secondRow, column: secondColumn },
   );
   if (!edge.ok) return edge;
-  const event = { edge: edge.value, intersection };
+  const event = { edge: edge.value, intersection, segmentIndex };
   const key = eventKey(event);
-  if (!events.has(key)) events.set(key, event);
+  const existing = events.get(key);
+  if (existing === undefined || segmentIndex < existing.segmentIndex) events.set(key, event);
   return { ok: true, value: true };
 }
 
@@ -241,7 +244,7 @@ function collectReachEvents(
         if (verticalBoundaryHitsInternalCorner(start, end, xM, strategicHeightM, spatial.rowCount)) continue;
         const row = yM === spatial.extentHeightMeters ? 0 :
           yM === 0 ? spatial.rowCount - 1 : Math.floor((spatial.extentHeightMeters - yM) / strategicHeightM);
-        const added = addEvent(events, row, boundary - 1, row, boundary, { xM, yM });
+        const added = addEvent(events, row, boundary - 1, row, boundary, { xM, yM }, segmentIndex);
         if (!added.ok) return added;
       }
     }
@@ -258,7 +261,7 @@ function collectReachEvents(
         if (horizontalBoundaryHitsInternalCorner(start, end, yM, strategicWidthM, spatial.columnCount)) continue;
         const column = xM === spatial.extentWidthMeters ? spatial.columnCount - 1 :
           xM === 0 ? 0 : Math.floor(xM / strategicWidthM);
-        const added = addEvent(events, boundary - 1, column, boundary, column, { xM, yM });
+        const added = addEvent(events, boundary - 1, column, boundary, column, { xM, yM }, segmentIndex);
         if (!added.ok) return added;
       }
     }
@@ -266,7 +269,14 @@ function collectReachEvents(
   return { ok: true, value: [...events.values()] };
 }
 
-function localDirection(reach: TerrainDrainageReach, point: WorldM0PointM): WorldM0Result<WorldM0PointM> {
+function localDirection(
+  reach: TerrainDrainageReach,
+  point: WorldM0PointM,
+  segmentIndex: number,
+): WorldM0Result<WorldM0PointM> {
+  if (!Number.isSafeInteger(segmentIndex) || segmentIndex < 0 || segmentIndex + 1 >= reach.geometry.length) {
+    return invalid("crossing.direction", "producing reach segment index is invalid");
+  }
   for (let vertex = 0; vertex < reach.geometry.length; vertex += 1) {
     if (!samePoint(reach.geometry[vertex], point)) continue;
     const start = vertex > 0 ? reach.geometry[vertex - 1] : reach.geometry[vertex];
@@ -277,18 +287,13 @@ function localDirection(reach: TerrainDrainageReach, point: WorldM0PointM): Worl
     if (!(length > 0)) return invalid("crossing.direction", "crossing vertex has no non-zero local tangent");
     return { ok: true, value: { xM: dx / length, yM: dy / length } };
   }
-  for (let segment = 0; segment + 1 < reach.geometry.length; segment += 1) {
-    const start = reach.geometry[segment];
-    const end = reach.geometry[segment + 1];
-    const cross = (point.xM - start.xM) * (end.yM - start.yM) - (point.yM - start.yM) * (end.xM - start.xM);
-    if (cross !== 0 || point.xM < Math.min(start.xM, end.xM) || point.xM > Math.max(start.xM, end.xM) ||
-        point.yM < Math.min(start.yM, end.yM) || point.yM > Math.max(start.yM, end.yM)) continue;
-    const dx = end.xM - start.xM;
-    const dy = end.yM - start.yM;
-    const length = Math.hypot(dx, dy);
-    return { ok: true, value: { xM: dx / length, yM: dy / length } };
-  }
-  return invalid("crossing.direction", "intersection is not on its persistent reach geometry");
+  const start = reach.geometry[segmentIndex];
+  const end = reach.geometry[segmentIndex + 1];
+  const dx = end.xM - start.xM;
+  const dy = end.yM - start.yM;
+  const length = Math.hypot(dx, dy);
+  if (!(length > 0)) return invalid("crossing.direction", "producing reach segment has zero length");
+  return { ok: true, value: { xM: dx / length, yM: dy / length } };
 }
 
 function cellCenter(scratch: TerrainScratchGrid, row: number, column: number): WorldM0PointM {
@@ -352,7 +357,7 @@ function nearestCell(
 function deriveBanks(
   scratch: TerrainScratchGrid,
   reach: TerrainDrainageReach,
-  intersection: WorldM0PointM,
+  event: CrossingEvent,
   radiusM: number,
 ): WorldM0Result<{
   readonly leftBank: WorldM0PointM;
@@ -361,7 +366,8 @@ function deriveBanks(
   readonly firstApproachSlope: number;
   readonly secondApproachSlope: number;
 }> {
-  const direction = localDirection(reach, intersection);
+  const intersection = event.intersection;
+  const direction = localDirection(reach, intersection, event.segmentIndex);
   if (!direction.ok) return direction;
   const leftNormal = { xM: -direction.value.yM, yM: direction.value.xM };
   const rightNormal = { xM: -leftNormal.xM, yM: -leftNormal.yM };
@@ -415,7 +421,7 @@ export function derivePhysicalCrossingCandidates(
       if (pending.length >= constants.geometry.maxCrossingCandidates) {
         return bound("geometry.maxCrossingCandidates", "physical crossing candidate count exceeds verified bound");
       }
-      const banks = deriveBanks(scratch, reach, event.intersection, constants.geometry.bankSearchRadiusMeters);
+      const banks = deriveBanks(scratch, reach, event, constants.geometry.bankSearchRadiusMeters);
       if (!banks.ok) return banks;
       pending.push({
         reach,

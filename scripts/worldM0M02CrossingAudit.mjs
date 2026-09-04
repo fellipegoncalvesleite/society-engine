@@ -194,6 +194,17 @@ const hostileNearCornerExact = hostileNearCornerValue?.length === 2 &&
   hostileNearCornerHorizontal?.intersection.yM === 1000 &&
   hostileNearCornerHorizontal.intersection.xM < 1000 && 1000 - hostileNearCornerHorizontal.intersection.xM < 0.001;
 
+// The vertical x=1000 intersection is generated from this exact persistent
+// reach segment at t=0.7. Binary64 interpolation produces y=950.0000000000002,
+// so strict geometric rediscovery by cross===0 rejects the point even though
+// this segment is the authority that generated it.
+const generatedDirectionReach = reach(6, [p(125, 2875), p(1375, 125)]);
+const generatedDirectionResult = run([generatedDirectionReach]);
+const generatedDirectionValue = valueOf(generatedDirectionResult);
+const generatedDirectionCandidate = generatedDirectionValue?.find((candidate) =>
+  samePoint(candidate.intersection, p(1000, 950.0000000000002)));
+const generatedIntersectionDirectionAuthority = generatedDirectionCandidate !== undefined;
+
 // A boundary-near crossing whose projected left-bank target is outside the
 // raster. The authorized 1000 m physical radius still contains (125,1625),
 // which is outside the historical target-centered +/-1 candidate window.
@@ -402,13 +413,13 @@ const canonicalEdgeNeedle = `  const edge = canonicalStrategicEdge(
     { row: secondRow, column: secondColumn },
   );
   if (!edge.ok) return edge;
-  const event = { edge: edge.value, intersection };
+  const event = { edge: edge.value, intersection, segmentIndex };
 `;
 const relaxedEdgeReplacement = `  const edge = { ok: true, value: {
     first: { row: firstRow, column: firstColumn },
     second: { row: secondRow, column: secondColumn },
   } };
-  const event = { edge: edge.value, intersection };
+  const event = { edge: edge.value, intersection, segmentIndex };
 `;
 const mutationBRelaxed = await runSourceMutation(
   "B relaxed diagonal validation",
@@ -438,7 +449,7 @@ const verticalCornerFourWay = `        if (verticalBoundaryHitsInternalCorner(st
             [cornerRow - 1, boundary, cornerRow, boundary],
           ];
           for (const [firstRow, firstColumn, secondRow, secondColumn] of cornerEdges) {
-            const cornerAdded = addEvent(events, firstRow, firstColumn, secondRow, secondColumn, { xM, yM });
+            const cornerAdded = addEvent(events, firstRow, firstColumn, secondRow, secondColumn, { xM, yM }, segmentIndex);
             if (!cornerAdded.ok) return cornerAdded;
           }
           continue;
@@ -612,6 +623,44 @@ const mutationI = await runSourceMutation(
   },
 );
 
+// F13-J: discard the exact producing-segment authority and restore the prior
+// strict geometric rediscovery. The binary64-generated witness must then fail
+// at crossing.direction even though the event came from that exact segment.
+const directDirectionNeedle = `  const start = reach.geometry[segmentIndex];
+  const end = reach.geometry[segmentIndex + 1];
+  const dx = end.xM - start.xM;
+  const dy = end.yM - start.yM;
+  const length = Math.hypot(dx, dy);
+  if (!(length > 0)) return invalid("crossing.direction", "producing reach segment has zero length");
+  return { ok: true, value: { xM: dx / length, yM: dy / length } };
+`;
+const strictRediscoveryDirection = `  for (let segment = 0; segment + 1 < reach.geometry.length; segment += 1) {
+    const start = reach.geometry[segment];
+    const end = reach.geometry[segment + 1];
+    const cross = (point.xM - start.xM) * (end.yM - start.yM) - (point.yM - start.yM) * (end.xM - start.xM);
+    if (cross !== 0 || point.xM < Math.min(start.xM, end.xM) || point.xM > Math.max(start.xM, end.xM) ||
+        point.yM < Math.min(start.yM, end.yM) || point.yM > Math.max(start.yM, end.yM)) continue;
+    const dx = end.xM - start.xM;
+    const dy = end.yM - start.yM;
+    const length = Math.hypot(dx, dy);
+    return { ok: true, value: { xM: dx / length, yM: dy / length } };
+  }
+  return invalid("crossing.direction", "intersection is not on its persistent reach geometry");
+`;
+const mutationJ = await runSourceMutation(
+  "J strict-cross direction rediscovery",
+  (source) => replaceOnce(source, directDirectionNeedle, strictRediscoveryDirection),
+  (mutantDerive) => {
+    const result = runWith(mutantDerive, [generatedDirectionReach]);
+    return {
+      detected: generatedIntersectionDirectionAuthority && errorCode(result) === "M02_CANDIDATE_INVALID" &&
+        result?.error?.path === "crossing.direction" &&
+        result?.error?.detail === "intersection is not on its persistent reach geometry",
+      result,
+    };
+  },
+);
+
 const f13A = mutationA.applied && mutationA.detected && mutationA.restored;
 const f13B = mutationBGuard.applied && mutationBGuard.detected && mutationBGuard.restored &&
   mutationBRelaxed.applied && mutationBRelaxed.detected && mutationBRelaxed.restored;
@@ -624,9 +673,10 @@ const f13G = mutationG.applied && mutationG.detected && mutationG.restored;
 const f13H = mutationHRegistry.applied && mutationHRegistry.detected && mutationHRegistry.restored &&
   mutationHGeometry.applied && mutationHGeometry.detected && mutationHGeometry.restored;
 const f13I = mutationI.applied && mutationI.detected && mutationI.restored;
+const f13J = mutationJ.applied && mutationJ.detected && mutationJ.restored;
 const mutationSourcesRestored = [
   mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon,
-  mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI,
+  mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI, mutationJ,
 ].every((item) => item.restored === true) && readFileSync(CROSSING_PATH).equals(CROSSING_BYTES);
 
 const noTask9Dependency = !/terrainBasins|TerrainDepressionBasin|TerrainValleyCandidate|TerrainFloodplainCandidate|floodplain|retainedBasins/.test(CROSSING_SOURCE);
@@ -642,6 +692,7 @@ const checks = [
   ["rational-parameter strategic corner uses exact tie handling", rationalCornerOk],
   ["binary64-hostile exact corner remains non-authoritative", hostileExactCorner],
   ["binary64-hostile near-corner is not epsilon-snapped", hostileNearCornerExact],
+  ["generated intersection retains producing-segment direction authority", generatedIntersectionDirectionAuthority],
   ["boundary bank search covers complete authorized physical radius", bankRadiusBoundaryWitness],
   ["bank radius below valid witness distance rejects", bankRadiusNegativeControl],
   ["same-edge vertex touch duplicate suppression", duplicateSuppressionOk],
@@ -665,6 +716,7 @@ const checks = [
   ["F13-G epistemic/hydraulic field mutant discriminated", f13G],
   ["F13-H caller-input mutation mutants discriminated", f13H],
   ["F13-I old target-centered bank-radius mutant discriminated", f13I],
+  ["F13-J strict-cross direction rediscovery mutant discriminated", f13J],
   ["mutation source restored byte-identically", mutationSourcesRestored],
   ["no Task-9 dependency", noTask9Dependency],
   ["bounded spatial derivation source witness", boundedSpatialSource],
@@ -673,8 +725,9 @@ const checks = [
 console.log(`WORLD-M0 M0.2 Task-10 crossing audit: authority=${hasAuthority ? "present" : "MISSING"}`);
 if (loaded.loadError) console.log(`load error: ${loaded.loadError}`);
 for (const [name, ok] of checks) console.log(`${ok ? "PASS" : "FAIL"} ${name}`);
+if (!generatedIntersectionDirectionAuthority) console.log("generated-direction evidence:", JSON.stringify(generatedDirectionResult));
 if (!bankRadiusBoundaryWitness) console.log("bank-radius boundary evidence:", JSON.stringify(bankRadiusResult));
-const failedMutations = [mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon, mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI]
+const failedMutations = [mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon, mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI, mutationJ]
   .filter((item) => item.applied !== true || item.detected !== true || item.restored !== true);
 if (failedMutations.length > 0) console.log("F13 mutation evidence:", JSON.stringify(failedMutations, null, 2));
 const passed = hasAuthority && checks.every(([, ok]) => ok === true);
