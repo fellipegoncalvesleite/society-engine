@@ -387,6 +387,14 @@ Retained intentional basins remain explicit geometry with:
 
 A protected retained basin must survive the routing-conditioning process. A negative-control mutation that fills/deletes such a basin must fail M0.2 certification.
 
+### Protected Closed-Basin Internal Routing
+
+A protected retained closed component has exactly one terminal: its existing canonical floor. Raw `elevationMeters`, protection, retention, closed/endorheic classification, canonical-floor identity, and the physical outer spill pair/elevation remain unchanged; persistent spill remains null, and no component-exterior cell may participate in or receive the closed basin's route.
+
+Task 6 derives a component-local routing surface with a minimax Priority-Flood seeded only at the canonical floor. Set `internalRouting[floor] = rawElevation[floor]`; when a reached member `u` considers a terrain-8 neighbor `v` carrying the same depression label, the candidate is `max(rawElevation[v], internalRouting[u])`, and the final value is the minimum candidate over all component-internal floor-to-member paths. The queue uses the existing finite physical order `(routingElevation, point.xM, point.yM, scratchIndex)`, with scratch index only as the final unreachable physical-point tie; insertion order and epsilon comparisons are forbidden.
+
+For every member, `rawElevation[cell] <= routingElevation[cell] <= physicalSpillElevation`; the canonical floor equals its raw elevation exactly. The operation is raise-only relative to physical terrain, although it may lower the provisional outer-spill upper bound. Existing flat-rank authority then provides every non-floor member a strictly lower-routing neighbor or an equal-routing neighbor with lower rank, eventually reaching the canonical-floor terminal. Repair-v1 does not run on protected components.
+
 No actual normal water level is assigned in M0.2.
 
 ---
