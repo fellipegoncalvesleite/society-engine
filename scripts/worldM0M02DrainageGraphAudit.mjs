@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
@@ -203,6 +203,46 @@ function runSynthetic(definition) {
     })[label]), fixture.terminalOwners.terminalOwnerCells]
     : [];
   return { fixture, before, result, value: resultValue(result), after: fixture.budget?.snapshot(), releasedAliases };
+}
+
+function replaceSourceExactlyOnce(source, needle, replacement) {
+  const first = source.indexOf(needle);
+  if (first < 0 || first !== source.lastIndexOf(needle)) return undefined;
+  return source.slice(0, first) + replacement + source.slice(first + needle.length);
+}
+
+function independentLocalWitnessSourceGuard(source) {
+  return source.includes("reaches[firstReachAssignment[current]].localAreaM2 += scratch.cellAreaM2;") &&
+    source.includes("reaches[firstReachAssignment[cell]].localAreaM2 += scratch.cellAreaM2;") &&
+    !/localAreaM2\s*=\s*primaryArea\[reach\.measurementCell\]\s*-/.test(source);
+}
+
+async function runDrainageSourceMutation(label, mutateSource, exercise) {
+  const originalBytes = readFileSync(DRAINAGE_PATH);
+  const originalSource = originalBytes.toString("utf8");
+  const mutatedSource = mutateSource(originalSource);
+  if (typeof mutatedSource !== "string" || mutatedSource === originalSource) {
+    return { applied: false, detected: false, restored: readFileSync(DRAINAGE_PATH).equals(originalBytes), detail: null };
+  }
+  const originalDrainage = modules.drainage;
+  let detected = false;
+  let detail = null;
+  try {
+    writeFileSync(DRAINAGE_PATH, mutatedSource);
+    const loaded = await loadModules(`?task8_mutant=${encodeURIComponent(label)}`);
+    if (loaded.loadError !== undefined || typeof loaded.drainage?.extractPersistentDrainageGraph !== "function") {
+      detail = { loadError: loaded.loadError ?? "mutated drainage authority absent" };
+    } else {
+      modules.drainage = loaded.drainage;
+      const outcome = exercise(mutatedSource);
+      detected = outcome?.detected === true;
+      detail = outcome?.detail ?? null;
+    }
+  } finally {
+    modules.drainage = originalDrainage;
+    writeFileSync(DRAINAGE_PATH, originalBytes);
+  }
+  return { applied: true, detected, restored: readFileSync(DRAINAGE_PATH).equals(originalBytes), detail };
 }
 
 function runWithPushGuard(definition, shouldGuard, limit) {
@@ -424,6 +464,18 @@ const f3 = runSynthetic(F3);
 const f3SiblingOrder = runSynthetic({ ...F3, topologicalOrder: [1, 4, 5, 6, 7, -1, -1, -1] });
 const f3Cycle = runSynthetic({ ...F3, primary: [-1, 5, -1, -1, 5, 6, 5, -1] });
 const f3InvalidReceiver = runSynthetic({ ...F3, primary: [-1, 5, -1, -1, 99, 6, 7, -1] });
+const F3_TERMINAL_OWNER_MERGE = Object.freeze({
+  width: 2, height: 2,
+  landMask: [0, 1, 1, 1],
+  primary: [-1, 3, 3, -1],
+  kinds: [0, 0, 0, 2],
+  ordinals: [-1, -1, -1, 0], owners: [3],
+  topologicalOrder: [2, 1, 3, -1],
+  splitArea: [0, CELL_AREA, CELL_AREA, 3 * CELL_AREA],
+  persistenceAreaM2: CELL_AREA,
+  elevations: [0, 40, 50, 30],
+});
+const f3TerminalOwnerMerge = runSynthetic(F3_TERMINAL_OWNER_MERGE);
 const f1BadCoastline = runSynthetic({ ...F1, coastline: {
   seaLevelMeters: 0, coastline: [], landAreaM2: 0, oceanAreaM2: 0,
 } });
@@ -461,6 +513,91 @@ const f2Sources = f2.value?.nodes.filter((node) => node.kind === "source") ?? []
 const f3TribA = reachByEndpoints(f3.value, point(125, 125), point(375, 125));
 const f3TribB = reachByEndpoints(f3.value, point(375, 375), point(375, 125));
 const f3Trunk = reachByEndpoints(f3.value, point(375, 125), point(875, 0));
+const f3TerminalMergeTribA = reachByEndpoints(f3TerminalOwnerMerge.value, point(125, 125), point(375, 125));
+const f3TerminalMergeTribB = reachByEndpoints(f3TerminalOwnerMerge.value, point(375, 375), point(375, 125));
+const f3TerminalMergeTrunk = reachByEndpoints(f3TerminalOwnerMerge.value, point(375, 125), point(375, 0));
+
+const oldTerminalOwnerMergeMutation = await runDrainageSourceMutation(
+  "old-terminal-owner-merge",
+  (source) => replaceSourceExactlyOnce(
+    source,
+    "      const terminalMerge = representedIndegree[cell] >= 2 && !samePoint(cellCenter, terminal.point);",
+    "      const terminalMerge = false;",
+  ),
+  () => {
+    const mutant = runSynthetic(F3_TERMINAL_OWNER_MERGE);
+    return {
+      detected: mutant.result?.ok === true && mutant.value?.nodes.filter((node) => node.kind === "confluence").length === 0 &&
+        mutant.value?.reaches.length === 2,
+      detail: { error: resultError(mutant.result) ?? null, nodeKinds: mutant.value?.nodes.map((node) => node.kind) ?? null,
+        reachCount: mutant.value?.reaches.length ?? null },
+    };
+  },
+);
+
+const droppedOffSupportMutation = await runDrainageSourceMutation(
+  "drop-off-support-cell",
+  (source) => replaceSourceExactlyOnce(
+    source,
+    "    if (scratch.landMask[cell] !== 1 || firstReachAssignment[cell] >= 0) continue;",
+    "    if (scratch.landMask[cell] !== 1 || firstReachAssignment[cell] >= 0 || representedSupport[cell] !== 1) continue;",
+  ),
+  () => {
+    const mutant = runSynthetic(F1);
+    return {
+      detected: mutant.result?.ok === true && mutant.value?.reaches[0]?.localContributingAreaM2 === 4 * CELL_AREA,
+      detail: { error: resultError(mutant.result) ?? null,
+        localContributingAreaM2: mutant.value?.reaches[0]?.localContributingAreaM2 ?? null },
+    };
+  },
+);
+
+const incomingConfluenceAssignmentMutation = await runDrainageSourceMutation(
+  "assign-confluence-cell-incoming",
+  (source) => replaceSourceExactlyOnce(
+    source,
+    "    firstReachAssignment[node.cell] = outgoing.transientOrdinal;",
+    "    const incoming = reaches.find((reach) => reach.downstreamCell === node.cell);\n" +
+      "    firstReachAssignment[node.cell] = incoming?.transientOrdinal ?? outgoing.transientOrdinal;",
+  ),
+  () => {
+    const mutant = runSynthetic(F3);
+    const trunk = reachByEndpoints(mutant.value, point(375, 125), point(875, 0));
+    const tribA = reachByEndpoints(mutant.value, point(125, 125), point(375, 125));
+    const tribB = reachByEndpoints(mutant.value, point(375, 375), point(375, 125));
+    return {
+      detected: mutant.result?.ok === true && (trunk?.localContributingAreaM2 !== 3 * CELL_AREA ||
+        tribA?.localContributingAreaM2 !== CELL_AREA || tribB?.localContributingAreaM2 !== CELL_AREA),
+      detail: { error: resultError(mutant.result) ?? null, trunkLocal: trunk?.localContributingAreaM2 ?? null,
+        tribALocal: tribA?.localContributingAreaM2 ?? null, tribBLocal: tribB?.localContributingAreaM2 ?? null },
+    };
+  },
+);
+
+const residualLocalAreaMutation = await runDrainageSourceMutation(
+  "derive-local-as-residual",
+  (source) => replaceSourceExactlyOnce(
+    source,
+    "\n  // Final physical identity sort uses the finalized geometry, not the domain-2",
+    "\n  for (const reach of reaches) {\n" +
+      "    let upstreamTotalM2 = 0;\n" +
+      "    for (const candidate of reaches) {\n" +
+      "      if (candidate !== reach && candidate.downstreamCell === reach.upstreamCell) {\n" +
+      "        upstreamTotalM2 += primaryArea[candidate.measurementCell];\n" +
+      "      }\n" +
+      "    }\n" +
+      "    reach.localAreaM2 = primaryArea[reach.measurementCell] - upstreamTotalM2;\n" +
+      "  }\n\n" +
+      "  // Final physical identity sort uses the finalized geometry, not the domain-2",
+  ),
+  (mutatedSource) => {
+    const mutant = runSynthetic(F3);
+    return {
+      detected: mutant.result?.ok === true && !independentLocalWitnessSourceGuard(mutatedSource),
+      detail: { error: resultError(mutant.result) ?? null, sourceGuard: independentLocalWitnessSourceGuard(mutatedSource) },
+    };
+  },
+);
 
 function setupG6() {
   const definition = {
@@ -694,6 +831,24 @@ const checks = {
     f3Trunk?.contributingAreaM2 === f3Trunk?.localContributingAreaM2 +
       f3TribA?.contributingAreaM2 + f3TribB?.contributingAreaM2,
 
+  terminalOwnerMergePreservesConfluenceBeforeBoundaryTerminal:
+    f3TerminalOwnerMerge.result?.ok === true &&
+    f3TerminalOwnerMerge.value?.terminals.length === 1 && f3TerminalOwnerMerge.value?.catchments.length === 1 &&
+    f3TerminalOwnerMerge.value?.nodes.filter((node) => node.kind === "source").length === 2 &&
+    f3TerminalOwnerMerge.value?.nodes.filter((node) => node.kind === "confluence").length === 1 &&
+    f3TerminalOwnerMerge.value?.nodes.filter((node) => node.kind === "terminal").length === 1 &&
+    f3TerminalOwnerMerge.value?.nodes.length === 4 && f3TerminalOwnerMerge.value?.reaches.length === 3 &&
+    samePoint(f3TerminalOwnerMerge.value.terminals[0].point, point(375, 0)) &&
+    f3TerminalOwnerMerge.value.catchments[0].areaM2 === 3 * CELL_AREA &&
+    f3TerminalMergeTribA?.contributingAreaM2 === CELL_AREA && f3TerminalMergeTribA?.localContributingAreaM2 === CELL_AREA &&
+    f3TerminalMergeTribB?.contributingAreaM2 === CELL_AREA && f3TerminalMergeTribB?.localContributingAreaM2 === CELL_AREA &&
+    f3TerminalMergeTrunk?.contributingAreaM2 === 3 * CELL_AREA && f3TerminalMergeTrunk?.localContributingAreaM2 === CELL_AREA &&
+    f3TerminalMergeTribA?.downstreamReachId === f3TerminalMergeTrunk?.id &&
+    f3TerminalMergeTribB?.downstreamReachId === f3TerminalMergeTrunk?.id &&
+    f3TerminalMergeTrunk?.downstreamReachId === null &&
+    f3TerminalMergeTrunk?.contributingAreaM2 === f3TerminalMergeTrunk?.localContributingAreaM2 +
+      f3TerminalMergeTribA?.contributingAreaM2 + f3TerminalMergeTribB?.contributingAreaM2,
+
   criticalShortReachSurvivesMinLength:
     f3TribA && f3TribB && f3.value?.reaches.length === 3 &&
     f3TribA.lengthMeters < F3.minReachLengthMeters && f3TribB.lengthMeters < F3.minReachLengthMeters,
@@ -708,6 +863,15 @@ const checks = {
   primaryFullAreaAndLocalConservation:
     f1Reach?.contributingAreaM2 === 5 * CELL_AREA && f1Reach?.localContributingAreaM2 === 5 * CELL_AREA &&
     f3Trunk?.contributingAreaM2 === 5 * CELL_AREA && f3Trunk?.localContributingAreaM2 === 3 * CELL_AREA,
+  independentLocalWitnessUsesCellAssignment: independentLocalWitnessSourceGuard(DRAINAGE_SOURCE),
+  oldTerminalOwnerMergeMutantKilled:
+    oldTerminalOwnerMergeMutation.applied && oldTerminalOwnerMergeMutation.detected && oldTerminalOwnerMergeMutation.restored,
+  droppedOffSupportCellMutantKilled:
+    droppedOffSupportMutation.applied && droppedOffSupportMutation.detected && droppedOffSupportMutation.restored,
+  incomingConfluenceAssignmentMutantKilled:
+    incomingConfluenceAssignmentMutation.applied && incomingConfluenceAssignmentMutation.detected && incomingConfluenceAssignmentMutation.restored,
+  residualLocalAreaMutantKilled:
+    residualLocalAreaMutation.applied && residualLocalAreaMutation.detected && residualLocalAreaMutation.restored,
   terminalCatchmentBijectionAndPartition:
     [f1.value, f2.value, f3.value].every((value) => value && value.terminals.length === value.catchments.length &&
       value.terminals.length <= 1_000_000 &&
@@ -823,6 +987,11 @@ const report = {
     f1Error: resultError(f1.result) ?? null,
     f2Error: resultError(f2.result) ?? null,
     f3Error: resultError(f3.result) ?? null,
+    f3TerminalOwnerMergeError: resultError(f3TerminalOwnerMerge.result) ?? null,
+    oldTerminalOwnerMergeMutation,
+    droppedOffSupportMutation,
+    incomingConfluenceAssignmentMutation,
+    residualLocalAreaMutation,
     f3CycleError: resultError(f3Cycle.result) ?? null,
     f3InvalidReceiverError: resultError(f3InvalidReceiver.result) ?? null,
     f4OwnerBypassError: resultError(f4OwnerBypass.result) ?? null,

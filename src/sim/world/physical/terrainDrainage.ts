@@ -346,6 +346,7 @@ interface NodeCandidate {
   readonly point: WorldM0PointM;
   readonly kind: "source" | "confluence" | "terminal";
   readonly terminalOrdinal: number;
+  terminalTwinNodeOrdinal?: number;
   id?: string;
 }
 interface ReachCandidate {
@@ -804,9 +805,22 @@ export function extractPersistentDrainageGraph(
     if (representedSupport[cell] !== 1) continue;
     const terminalOrdinal = scratch.terminalOrdinalByCell[cell];
     if (terminalOrdinal >= 0) {
-      if (nodes.length >= constants.drainage.maxNodes) return fail(bound("drainage.maxNodes", "persistent node count exceeds bound"));
       const terminal = terminals[terminalOrdinal];
       if (!terminal) return fail(terminalInvalid("drainage.nodes", "terminal node ordinal has no finalized terminal"));
+      const cellCenter = center(cell, scratch);
+      const terminalMerge = representedIndegree[cell] >= 2 && !samePoint(cellCenter, terminal.point);
+      if (nodes.length + (terminalMerge ? 2 : 1) > constants.drainage.maxNodes) {
+        return fail(bound("drainage.maxNodes", "persistent node count exceeds bound"));
+      }
+      // A boundary terminal owner is still a terrestrial represented cell. If
+      // two represented branches first merge there, preserve that already-live
+      // merge at the cell center and then represent the owner-center→boundary
+      // terminal segment as the unique outgoing reach. Collapsing the merge
+      // directly into the terminal would make every incoming branch measure the
+      // whole catchment at the shared owner cell.
+      if (terminalMerge) {
+        nodes.push({ cell, point: cellCenter, kind: "confluence", terminalOrdinal: catchmentRoot[cell] });
+      }
       nodes.push({ cell, point: terminal.point, kind: "terminal", terminalOrdinal });
     } else if (representedIndegree[cell] === 0) {
       if (persistentEligible[cell] !== 1) return fail(invalid("drainage.sources", "represented source is not an eligible threshold entry"));
@@ -828,7 +842,27 @@ export function extractPersistentDrainageGraph(
     }
   }
   representedIndegree.fill(-1);
-  for (let index = 0; index < nodes.length; index += 1) representedIndegree[nodes[index].cell] = index;
+  firstReachAssignment.fill(-1);
+  for (let index = 0; index < nodes.length; index += 1) {
+    const node = nodes[index];
+    if (node.kind === "terminal") firstReachAssignment[node.cell] = index;
+    else representedIndegree[node.cell] = index;
+  }
+  for (const node of nodes) {
+    if (node.kind === "confluence" && scratch.terminalOrdinalByCell[node.cell] >= 0) {
+      const terminalTwinNodeOrdinal = firstReachAssignment[node.cell];
+      if (terminalTwinNodeOrdinal < 0 || nodes[terminalTwinNodeOrdinal]?.kind !== "terminal") {
+        return fail(terminalInvalid("drainage.nodes", "terminal-owner confluence lacks its terminal node"));
+      }
+      node.terminalTwinNodeOrdinal = terminalTwinNodeOrdinal;
+    }
+  }
+  for (let cell = 0; cell < cellCount; cell += 1) {
+    if (representedIndegree[cell] < 0 && firstReachAssignment[cell] >= 0) {
+      representedIndegree[cell] = firstReachAssignment[cell];
+    }
+  }
+  firstReachAssignment.fill(-1);
   const nodeForCell = (cell: number): NodeCandidate | undefined => {
     const index = representedIndegree[cell];
     return index >= 0 ? nodes[index] : undefined;
@@ -845,6 +879,25 @@ export function extractPersistentDrainageGraph(
     let minimumElevationMeters = scratch.elevationMeters[upstream.cell];
     let maximumElevationMeters = scratch.elevationMeters[upstream.cell];
     firstReachAssignment[upstream.cell] = transientOrdinal;
+    if (upstream.terminalTwinNodeOrdinal !== undefined) {
+      const downstream = nodes[upstream.terminalTwinNodeOrdinal];
+      if (!downstream || downstream.kind !== "terminal" || downstream.cell !== upstream.cell) {
+        return fail(terminalInvalid("drainage.reaches", "terminal-owner confluence has an invalid terminal continuation"));
+      }
+      reaches.push({
+        upstreamCell: upstream.cell,
+        downstreamCell: downstream.cell,
+        upstreamNodeOrdinal,
+        downstreamNodeOrdinal: upstream.terminalTwinNodeOrdinal,
+        terminalOrdinal: catchmentRoot[upstream.cell],
+        measurementCell: upstream.cell,
+        transientOrdinal,
+        minimumElevationMeters,
+        maximumElevationMeters,
+        localAreaM2: 0,
+      });
+      continue;
+    }
     let current = upstream.cell;
     let next = flow.primaryReceiver[current];
     let steps = 0;
