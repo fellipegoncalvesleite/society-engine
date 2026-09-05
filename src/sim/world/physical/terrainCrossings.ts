@@ -354,6 +354,18 @@ function nearestCell(
   return { ok: true, value: { point: bestPoint, elevationMeters } };
 }
 
+/** A linear half-plane predicate attains its maximum at an extreme corner.
+ * Test the raster-center rectangle, not the exterior physical boundary. */
+function bankSideRepresentable(
+  scratch: TerrainScratchGrid,
+  crossing: WorldM0PointM,
+  normal: WorldM0PointM,
+): boolean {
+  const xM = (normal.xM > 0 ? scratch.width - 0.5 : 0.5) * scratch.cellSizeMeters;
+  const yM = (normal.yM > 0 ? scratch.height - 0.5 : 0.5) * scratch.cellSizeMeters;
+  return (xM - crossing.xM) * normal.xM + (yM - crossing.yM) * normal.yM > 0;
+}
+
 function deriveBanks(
   scratch: TerrainScratchGrid,
   reach: TerrainDrainageReach,
@@ -365,12 +377,14 @@ function deriveBanks(
   readonly channelIncisionMeters: number;
   readonly firstApproachSlope: number;
   readonly secondApproachSlope: number;
-}> {
+} | null> {
   const intersection = event.intersection;
   const direction = localDirection(reach, intersection, event.segmentIndex);
   if (!direction.ok) return direction;
   const leftNormal = { xM: -direction.value.yM, yM: direction.value.xM };
   const rightNormal = { xM: -leftNormal.xM, yM: -leftNormal.yM };
+  if (!bankSideRepresentable(scratch, intersection, leftNormal) ||
+      !bankSideRepresentable(scratch, intersection, rightNormal)) return { ok: true, value: null };
   const sampleDistanceM = Math.min(radiusM, scratch.cellSizeMeters);
   const leftTarget = {
     xM: intersection.xM + leftNormal.xM * sampleDistanceM,
@@ -418,11 +432,12 @@ export function derivePhysicalCrossingCandidates(
     const events = collectReachEvents(reach, spatial, validated.value.strategicWidthM, validated.value.strategicHeightM);
     if (!events.ok) return events;
     for (const event of events.value) {
+      const banks = deriveBanks(scratch, reach, event, constants.geometry.bankSearchRadiusMeters);
+      if (!banks.ok) return banks;
+      if (banks.value === null) continue;
       if (pending.length >= constants.geometry.maxCrossingCandidates) {
         return bound("geometry.maxCrossingCandidates", "physical crossing candidate count exceeds verified bound");
       }
-      const banks = deriveBanks(scratch, reach, event, constants.geometry.bankSearchRadiusMeters);
-      if (!banks.ok) return banks;
       pending.push({
         reach,
         strategicEdge: event.edge,

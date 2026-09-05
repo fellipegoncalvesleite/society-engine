@@ -71,10 +71,10 @@ function makeSpatial(cellMeters = 1000, count = 4) {
   });
 }
 
-function makeScratch(extentMeters = 4000) {
+function makeScratch(extentMeters = 4000, heightMeters = extentMeters) {
   const cellSizeMeters = 250;
   const width = extentMeters / cellSizeMeters;
-  const height = width;
+  const height = heightMeters / cellSizeMeters;
   const length = width * height;
   const elevationMeters = new Float64Array(length);
   for (let row = 0; row < height; row += 1) {
@@ -244,6 +244,29 @@ const bankRadiusNegativeResult = run(
 );
 const bankRadiusNegativeControl = errorCode(bankRadiusNegativeResult) === "M02_CANDIDATE_INVALID" &&
   bankRadiusNegativeResult?.error?.path === "crossing.bank";
+
+// Literal natural finite-domain witness: left half-plane y < 125 is empty.
+const finiteScratch = makeScratch(300_000, 180_000);
+const finiteSpatial = {
+  ...makeSpatial(1000, 300), extentHeightMeters: 180_000, rowCount: 180,
+  physicalExtentKm: { widthKm: 300, heightKm: 180, areaKm2: 54_000 },
+};
+const finiteReach = reach(0x675, [p(94625, 125), p(86000, 125)]);
+const finiteResult = run([finiteReach], clonePhysicalConstants(), finiteScratch, finiteSpatial);
+const finiteBoundaryOmitted = finiteResult?.ok === true && finiteResult.value.length === 0;
+// Omit only ineligible events, even when the persistent count is already full.
+const mixedConstants = clonePhysicalConstants();
+mixedConstants.geometry.maxCrossingCandidates = 1;
+const mixedResult = run([basicReach, reach(8, [p(1375, 125), p(1000, 125)])], mixedConstants, basicScratch);
+const finiteEventOnly = mixedResult?.ok === true && stable(mixedResult.value) === stable(basicValue);
+// A representable side with radius 150 can reach only collinear centers.
+// Relaxing the strict side predicate must not manufacture banks on the reach.
+const strictConstants = clonePhysicalConstants();
+strictConstants.geometry.bankSearchRadiusMeters = 150;
+const strictReach = reach(9, [p(875, 2125), p(1125, 2125)]);
+const strictSpatial = makeSpatial(250, 16);
+const strictResult = run([strictReach], strictConstants, makeScratch(), strictSpatial);
+const strictSideRejected = errorCode(strictResult) === "M02_CANDIDATE_INVALID" && strictResult?.error?.path === "crossing.bank";
 
 const touchValue = valueOf(run([reach(0, [p(625, 3125), p(1000, 3125), p(625, 3375)])]));
 const duplicateSuppressionOk = touchValue?.length === 1 && samePoint(touchValue[0].intersection, p(1000, 3125));
@@ -697,6 +720,40 @@ const mutationK = await runSourceMutation(
   },
 );
 
+// F13-L/M/N distinguish finite-domain eligibility from search failure and
+// strict bank membership. Each mutation loads real production and restores bytes.
+const mutationL = await runSourceMutation(
+  "L omit every missing-bank event",
+  (source) => replaceOnce(source, "      if (!banks.ok) return banks;", "      if (!banks.ok) continue;"),
+  (fn) => {
+    const result = runWith(fn, [bankRadiusReach], bankRadiusNegativeConstants, bankRadiusScratch, bankRadiusSpatial);
+    return { detected: bankRadiusNegativeControl && result?.ok === true && result.value.length === 0, result };
+  },
+);
+const eligibilityNeedle = `  if (!bankSideRepresentable(scratch, intersection, leftNormal) ||
+      !bankSideRepresentable(scratch, intersection, rightNormal)) return { ok: true, value: null };
+`;
+const mutationM = await runSourceMutation(
+  "M fail structurally unrepresentable event",
+  (source) => replaceOnce(source, eligibilityNeedle, ""),
+  (fn) => {
+    const result = runWith(fn, [finiteReach], clonePhysicalConstants(), finiteScratch, finiteSpatial);
+    return { detected: finiteBoundaryOmitted && errorCode(result) === "M02_CANDIDATE_INVALID" && result.error.path === "crossing.bank", result };
+  },
+);
+const mutationN = await runSourceMutation(
+  "N admit collinear bank centers",
+  (source) => replaceOnce(source,
+    "fromCrossingX * sideNormal.xM + fromCrossingY * sideNormal.yM <= 0",
+    "fromCrossingX * sideNormal.xM + fromCrossingY * sideNormal.yM < 0"),
+  (fn) => {
+    const result = runWith(fn, [strictReach], strictConstants, makeScratch(), strictSpatial);
+    return { detected: strictSideRejected && result?.ok === true && result.value.length > 0 &&
+      result.value.every((c) => c.leftBank.yM === c.intersection.yM && c.rightBank.yM === c.intersection.yM), result };
+  },
+);
+const finiteMutations = [mutationL, mutationM, mutationN];
+
 const f13A = mutationA.applied && mutationA.detected && mutationA.restored;
 const f13B = mutationBGuard.applied && mutationBGuard.detected && mutationBGuard.restored &&
   mutationBRelaxed.applied && mutationBRelaxed.detected && mutationBRelaxed.restored;
@@ -712,6 +769,7 @@ const f13I = mutationI.applied && mutationI.detected && mutationI.restored;
 const f13J = mutationJ.applied && mutationJ.detected && mutationJ.restored;
 const f13K = mutationK.applied && mutationK.detected && mutationK.restored;
 const mutationSourcesRestored = [
+  ...finiteMutations,
   mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon,
   mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI, mutationJ, mutationK,
 ].every((item) => item.restored === true) && readFileSync(CROSSING_PATH).equals(CROSSING_BYTES);
@@ -720,6 +778,10 @@ const noTask9Dependency = !/terrainBasins|TerrainDepressionBasin|TerrainValleyCa
 const boundedSpatialSource = /maxCrossingCandidates/.test(CROSSING_SOURCE) && !/for\s*\([^)]*strategic.*edge/i.test(CROSSING_SOURCE);
 
 const checks = [
+  ...finiteMutations.map((m) => [`F13-${m.label} mutant discriminated`, m.applied && m.detected && m.restored]),
+  ["natural finite-boundary event omitted", finiteBoundaryOmitted],
+  ["omit only structurally ineligible events before count bound", finiteEventOnly],
+  ["collinear raster centers cannot serve as banks", strictSideRejected],
   ["X1 exact physical crossing geometry", x1Exact],
   ["inside-cell no candidate", noInsideCandidate],
   ["horizontal strategic boundary", horizontalBoundaryOk],
@@ -762,12 +824,13 @@ const checks = [
 ];
 
 console.log(`WORLD-M0 M0.2 Task-10 crossing audit: authority=${hasAuthority ? "present" : "MISSING"}`);
+if (!finiteBoundaryOmitted) console.log("finite-boundary evidence:", JSON.stringify(finiteResult));
 if (loaded.loadError) console.log(`load error: ${loaded.loadError}`);
 for (const [name, ok] of checks) console.log(`${ok ? "PASS" : "FAIL"} ${name}`);
 if (!generatedIntersectionDirectionAuthority) console.log("generated-direction evidence:", JSON.stringify(generatedDirectionResult));
 if (!duplicateMinimumSegmentAuthority) console.log("duplicate-segment evidence:", JSON.stringify(duplicateSegmentResult));
 if (!bankRadiusBoundaryWitness) console.log("bank-radius boundary evidence:", JSON.stringify(bankRadiusResult));
-const failedMutations = [mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon, mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI, mutationJ, mutationK]
+const failedMutations = [...finiteMutations, mutationA, mutationBGuard, mutationBRelaxed, mutationC, mutationDFloatEquality, mutationDEpsilon, mutationE, mutationF, mutationG, mutationHRegistry, mutationHGeometry, mutationI, mutationJ, mutationK]
   .filter((item) => item.applied !== true || item.detected !== true || item.restored !== true);
 if (failedMutations.length > 0) console.log("F13 mutation evidence:", JSON.stringify(failedMutations, null, 2));
 const passed = hasAuthority && checks.every(([, ok]) => ok === true);
