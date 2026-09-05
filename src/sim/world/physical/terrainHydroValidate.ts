@@ -371,7 +371,13 @@ export function validateTerrainHydroReachConservation(
     const list = upstream.get(reach.downstreamReachId) ?? [];
     list.push(reach); upstream.set(reach.downstreamReachId, list);
   }
-  for (const reach of reaches) {
+  // Check receiving reaches first so F3 reports the retained trunk equation,
+  // then check headwater witnesses. Canonical IDs make failure order independent
+  // of caller registry insertion order.
+  const conservationOrder = [...reaches].sort((left, right) =>
+    Number(upstream.has(right.id)) - Number(upstream.has(left.id)) ||
+    (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
+  for (const reach of conservationOrder) {
     const expected = reach.localContributingAreaM2 + (upstream.get(reach.id) ?? []).reduce((sum, item) => sum + item.contributingAreaM2, 0);
     if (!approximately(reach.contributingAreaM2, expected, constants.validation.areaToleranceM2)) {
       return invalid(

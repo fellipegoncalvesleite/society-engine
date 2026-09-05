@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
@@ -383,6 +383,28 @@ wrongBasinLinkCandidate.depressionBasins[0].catchmentId = id("catchment", 1);
 wrongBasinLinkCandidate.depressionBasins[0].outletTerminalId = id("terminal", 1);
 const wrongBasinLink = hasAuthority ? validate(wrongBasinLinkCandidate, f3Constants) : undefined;
 
+// Reversible behavioral discriminator for the old F3 validation order.
+const validatorBytes = readFileSync(VALIDATOR_PATH);
+let f3OrderMutation;
+try {
+  const source = validatorBytes.toString("utf8");
+  const needle = "  for (const reach of conservationOrder) {";
+  const mutated = source.replace(needle, "  for (const reach of reaches) {");
+  if (mutated === source || source.indexOf(needle) !== source.lastIndexOf(needle)) {
+    f3OrderMutation = { applied: false, detected: false };
+  } else {
+    writeFileSync(VALIDATOR_PATH, mutated);
+    const mutant = await loadAuthority();
+    const result = mutant.validator?.validateTerrainHydroCandidate(f3Mutation, f3Constants);
+    f3OrderMutation = { applied: true, detected: result?.ok === false &&
+      failurePath(result) === `drainageReaches[${id("drainage-reach", 0)}].localContributingAreaM2` &&
+      failureDetail(result) === "local contributing-area conservation failed: stored=62501, expected=62500", result };
+  }
+} finally {
+  writeFileSync(VALIDATOR_PATH, validatorBytes);
+}
+f3OrderMutation.restored = readFileSync(VALIDATOR_PATH).equals(validatorBytes);
+
 const compilerSource = existsSync(COMPILER_PATH) ? readFileSync(COMPILER_PATH, "utf8") : "";
 const sequenceMarkers = [
   "parseWorldRecipe", "validateWorldM0TerrainHydroGeneratorMode", "validateWorldRecipeSupport",
@@ -401,6 +423,7 @@ const sequenceOrdered = sequencePositions.every((position, index) => position >=
 const diagnostics = firstCompile?.ok === true ? firstCompile.value.diagnostics : undefined;
 const expectedPeak = diagnostics ? 88 * diagnostics.analysisCells + 4 * diagnostics.terminalCount : undefined;
 const checks = {
+  f3_old_order_mutant_killed: f3OrderMutation.applied && f3OrderMutation.detected && f3OrderMutation.restored,
   compiler_boundary_present: typeof compile === "function",
   validator_boundary_present: typeof validate === "function",
   retained_local_contributing_area_conservation_present: typeof validateConservation === "function",
@@ -434,8 +457,8 @@ const checks = {
   shared_budget_task7_fails_before_batch: failureCode(budgetEvidence?.task7) === "M02_BOUND_EXCEEDED" && budgetEvidence?.beforeTask7?.liveBytes === 26 * N + 4 * T && budgetEvidence?.afterTask7?.liveBytes === budgetEvidence?.beforeTask7?.liveBytes && budgetEvidence?.afterTask7?.peakBytes === budgetEvidence?.beforeTask7?.peakBytes,
 
   f3_control_candidate_valid: f3Base?.ok === true,
-  f3_focused_conservation_rejects_one_m2: failureCode(f3Focused) === "M02_CANDIDATE_INVALID" && String(failurePath(f3Focused)).includes("localContributingAreaM2"),
-  f3_whole_validator_same_first_invariant: failureCode(f3Whole) === "M02_CANDIDATE_INVALID" && String(failurePath(f3Whole)).includes("localContributingAreaM2"),
+  f3_focused_conservation_rejects_one_m2: failureCode(f3Focused) === "M02_CANDIDATE_INVALID" && failurePath(f3Focused) === `drainageReaches[${id("drainage-reach", 1)}].localContributingAreaM2` && failureDetail(f3Focused) === "local contributing-area conservation failed: stored=312500, expected=312501",
+  f3_whole_validator_same_first_invariant: failureCode(f3Whole) === "M02_CANDIDATE_INVALID" && failurePath(f3Whole) === failurePath(f3Focused) && failureDetail(f3Whole) === "local contributing-area conservation failed: stored=312500, expected=312501",
   cycle_rejected: cycleResult?.ok === false,
   uphill_reversed_reach_rejected: failureCode(uphillResult) === "M02_CANDIDATE_INVALID" && String(failurePath(uphillResult)).includes("drainageReaches"),
   missing_terminal_rejected: missingTerminal?.ok === false,
@@ -465,6 +488,7 @@ console.log(JSON.stringify({
   verdict,
   checks,
   evidence: {
+    f3OrderMutation,
     loadError: loaded.loadError ?? null,
     firstCompileError: firstCompile?.ok === false ? firstCompile.error : null,
     secondCompileError: secondCompile?.ok === false ? secondCompile.error : null,
