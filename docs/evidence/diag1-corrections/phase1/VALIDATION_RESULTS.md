@@ -1,5 +1,20 @@
 # Phase 1 validation results
 
+## Phase 1B current result — supersedes historical cache residual below
+
+**IMPLEMENTED / PENDING INDEPENDENT FINAL REVIEW.** Starting published HEAD `d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333`; original executable base remains `73cc38b916e236339897c59686638efafd569b6e`. The world-specific seasonal tile, seasonal crossing and same-class movement-crossing memo omissions are corrected after executable REDs. Only seasonal.ts/hydrography.ts production code changes; formulas and the four existing Phase1 fixes are preserved.
+
+Focused GREEN27/27; old cache mutants loaded1/executed14,14,8 and behaviorally detected. Conservation65/65, provenance10/10 (overlapping), all four original mechanism mutants, natural s1/s2, recovery18/18, numeric chain and ecology20/20 pass. Both TypeScript projects/build/import/graph pass. Natural full-world hashes remain exactly equal to published stabilized Phase1.
+
+The unchanged original mixed-map matrix now **PASSES**, as do separate Map1/Map2 controls: full serialized state agrees across daily/weekly/monthly/seasonal/repeat/fresh-process modes over1260days, and isolated hashes equal their mixed-process counterparts. Original failing results remain preserved, not overwritten. See `phase1b/PHASE1B_REPORT.md`, `phase1b/VALIDATION_RESULTS.md`, `phase1b/CACHE_AUTHORITY.md`, and current `DETERMINISM_SCOPE.json`.
+
+- map1: six-way full-world hash `aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3`; bands5, population155, active parties2, plant-depletion entries1313.
+- map2: six-way full-world hash `77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79`; bands9, population235, active parties8, plant-depletion entries1303.
+
+The two independently inherited knowledge-choice and Item4 fixed-preparation failures remain disclosed. This closes the executed mixed-map prerequisite, not independent Phase1 acceptance. The user pre-authorizes Phase2 only after a fresh exact-published-HEAD review of the complete original-base→HEAD range returns SPEC PASS, CODE QUALITY PASS, Critical0, Important0, no unresolved architecture contradiction and PHASE2 AUTHORIZATION YES. No Phase2 base is claimed before that verdict. No Phase3 or Task12 resumption.
+
+## Historical published Phase 1 report (preserved)
+
 Production commit: 9268d211e7d370911d3d8fd875429db4d4d06741. Tests below match the final production source bytes. Earlier failed/intermediate files remain preserved.
 
 | Check | Exit | Seconds | Command evidence |

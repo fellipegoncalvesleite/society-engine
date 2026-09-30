@@ -1,0 +1,11 @@
+{
+  "canonicalByteIdentical": true,
+  "originalPhase1FilesByteIdentical": {
+    "src/sim/agents/expedition.ts": true,
+    "src/sim/agents/expeditionCargo.ts": true,
+    "src/sim/agents/viability.ts": true,
+    "src/sim/agents/plantStock.ts": true,
+    "src/sim/agents/bandMobility.ts": true,
+    "src/sim/agents/intraSeasonTrips.ts": true
+  }
+}

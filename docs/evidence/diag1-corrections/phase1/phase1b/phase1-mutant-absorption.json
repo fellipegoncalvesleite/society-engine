@@ -1,0 +1,118 @@
+{
+  "command": [
+    "/Users/fellipegoncalvesleite/.local/node/bin/node",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs",
+    "--scope",
+    "absorption",
+    "--mutant",
+    "absorption",
+    "--out",
+    "docs/evidence/diag1-corrections/phase1/phase1b/phase1-mutant-absorption.json"
+  ],
+  "auditScriptSha256": "13376dd7a9731f6f09a541635a2286fa519aa495a19e1343b3efe0fcacfb603e",
+  "runtime": "v24.18.0",
+  "sourceHead": "d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333",
+  "sourceBefore": {
+    "src/sim/agents/viability.ts": "5fbf86950be4f90c1841e4aa323e228384e818045ec0cefc27eca3a62d12585f",
+    "src/sim/agents/plantStock.ts": "9317f0bf486223b549a2e61171faba929996b83c1797609a96e175c16503ed6d",
+    "src/sim/agents/plantPatches.ts": "3bd184194ffe9f542696500249f639c166b767bd65309559903a6998c78dfa7f",
+    "src/sim/agents/intraSeasonTrips.ts": "84893cd0f9ffbd2f41c3e880bc6f52d52c3b526ec496241bca66cffc7127a68d",
+    "src/sim/agents/bandMobility.ts": "893eac223f7399fb83987a56317d6b5d72e9f924d34443d1e99fadd1aaa01973",
+    "src/sim/agents/expedition.ts": "e0ebb2c64c69f3a9d3970d0d62c5d46314f9dc47a590fee3252e1d223ed2cb81",
+    "src/sim/agents/expeditionCargo.ts": "0a70fe8471143c2704d877f7509425a2dbf21cdfce236980542bb74dcba6caf5",
+    "src/sim/agents/types.ts": "533b8f0d3b8fa5f93286140da93a570dfa4001a146c337ebae407d72d05580b5"
+  },
+  "sourceAfter": {
+    "src/sim/agents/viability.ts": "5fbf86950be4f90c1841e4aa323e228384e818045ec0cefc27eca3a62d12585f",
+    "src/sim/agents/plantStock.ts": "9317f0bf486223b549a2e61171faba929996b83c1797609a96e175c16503ed6d",
+    "src/sim/agents/plantPatches.ts": "3bd184194ffe9f542696500249f639c166b767bd65309559903a6998c78dfa7f",
+    "src/sim/agents/intraSeasonTrips.ts": "84893cd0f9ffbd2f41c3e880bc6f52d52c3b526ec496241bca66cffc7127a68d",
+    "src/sim/agents/bandMobility.ts": "893eac223f7399fb83987a56317d6b5d72e9f924d34443d1e99fadd1aaa01973",
+    "src/sim/agents/expedition.ts": "e0ebb2c64c69f3a9d3970d0d62c5d46314f9dc47a590fee3252e1d223ed2cb81",
+    "src/sim/agents/expeditionCargo.ts": "0a70fe8471143c2704d877f7509425a2dbf21cdfce236980542bb74dcba6caf5",
+    "src/sim/agents/types.ts": "533b8f0d3b8fa5f93286140da93a570dfa4001a146c337ebae407d72d05580b5"
+  },
+  "mutation": {
+    "mutant": "absorption",
+    "loaded": 1,
+    "executed": 18,
+    "bytesRestored": true,
+    "detected": true
+  },
+  "rows": [
+    {
+      "name": "B-002 current-body conservation abc",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n38 !== 46\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:254:16\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:250:13"
+    },
+    {
+      "name": "B-002 current-body conservation cba",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: affected population projection\n\n30 !== 38\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:256:60\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:250:13"
+    },
+    {
+      "name": "B-002 current-body conservation bac",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: affected population projection\n\n8 !== 0\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:256:60\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:250:13"
+    },
+    {
+      "name": "B-002 current-body conservation bca",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n38 !== 46\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:254:16\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:250:13"
+    },
+    {
+      "name": "B-002 current-body conservation cab",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: affected population projection\n\n8 !== 0\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:256:60\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:250:13"
+    },
+    {
+      "name": "B-002 current-body conservation acb",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n38 !== 46\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:254:16\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:250:13"
+    },
+    {
+      "name": "B-002 current-body conservation abcde",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n38 !== 62\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:254:16\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:250:13"
+    },
+    {
+      "name": "B-002 target loses eligibility when its support departs",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: current C risk must reject the old cached target\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:269:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:260:11"
+    },
+    {
+      "name": "B-002 admission and resolved target share one current decision",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: parent opportunity .52 must not authorize daughter opportunity .38\n+ actual - expected\n\n+ undefined\n- 'band:c'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:284:33\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:274:11"
+    },
+    {
+      "name": "B-002 bounded sweep timing for unrelated healthy bands",
+      "pass": true,
+      "evidence": [
+        {
+          "count": 200,
+          "milliseconds": 13.793125000000032
+        },
+        {
+          "count": 400,
+          "milliseconds": 47.71449999999993
+        }
+      ]
+    },
+    {
+      "name": "B-002 arrivals rescue B before its turn",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n0 !== 16\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:299:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:297:11"
+    },
+    {
+      "name": "B-002 single transfer and healthy no-transfer",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n30 !== 38\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:305:50\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:303:11"
+    },
+    {
+      "name": "B-002 multiple arrivals, terminal/zero and provisional exclusion",
+      "pass": true
+    }
+  ],
+  "pass": false
+}

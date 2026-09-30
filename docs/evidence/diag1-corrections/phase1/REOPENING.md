@@ -27,3 +27,12 @@ Invariant: no productive worker implies no performed work, take/depletion, recei
 Causal owner: bandMobility available pools, intraSeasonTrips selection/execution and remaining-investigation admission.
 Blast radius: local same-day staffing and investigation remainder; positive shares/caps, body-based provision rates and nonworking-person distinctions unchanged. Pending investigations do not reserve in advance (existing priority is ordinary trip then investigation).
 RED: baseline/extra-controls.json actual zero-adult band has canonical available pools 0, yet creates one worker and .0148 usable food (.017 raw take); matched 20-adult positive control works.
+
+
+## Phase 1B — cross-world derived physical cache isolation (2026-09-30)
+
+Authority: explicit continuation request, starting at d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333. This supersedes the earlier unassigned-cache scope boundary only for this correction. The four earlier fixes and their coefficients remain byte-identical.
+
+Pre-edit behavioral RED: `phase1b/red-confirmed.json`, eight failed equality assertions with positive same-world cache controls. Both seasonal caches use shared WorldTime/IDs without complete physical authority. The movement-crossing memo also reads changed riverCrossings while keying only on shared tiles; the executed collision qualifies for the prompt's same-class exception. Smallest correction is immutable physical-container/time/actual-input scoping in seasonal.ts and hydrography.ts, retaining all cold formulas and caching. Details and future invalidation contract: `phase1b/CACHE_AUTHORITY.md`.
+
+No acceptance or freeze. Phase 2 remains forbidden until a fresh independent read-only reviewer of the committed/pushed exact Phase-1 HEAD returns SPEC PASS, CODE QUALITY PASS, Critical0, Important0, no new unresolved architecture contradiction and PHASE2 AUTHORIZATION YES. The user has already authorized that conditional continuation; the implementer cannot substitute self-review. Task12 remains paused.

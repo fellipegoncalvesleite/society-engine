@@ -1,0 +1,41 @@
+{
+  "command": [
+    "/Users/fellipegoncalvesleite/.local/node/bin/node",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1DeterminismAudit.mjs",
+    "--map",
+    "map1",
+    "--out",
+    "docs/evidence/diag1-corrections/phase1/phase1b/determinism-map1.json"
+  ],
+  "rows": [
+    {
+      "kind": "map1",
+      "seed": "diag1-phase1:determinism:map1",
+      "span": 1260,
+      "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+      "digests": {
+        "daily": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "weekly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "monthly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "seasonal": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "repeat": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "fresh": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3"
+      },
+      "elapsed": {
+        "daily": 313.306626375,
+        "weekly": 337.912254625,
+        "monthly": 351.52336354199997,
+        "seasonal": 329.5386610000001,
+        "repeat": 214.3125297089999
+      },
+      "occurrence": {
+        "bands": 5,
+        "population": 155,
+        "activeParties": 2,
+        "returnOutcomes": 21,
+        "plantDepletionEntries": 1313
+      },
+      "pass": true
+    }
+  ]
+}

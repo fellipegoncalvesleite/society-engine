@@ -21,8 +21,16 @@ export interface RiverCrossingCapability {
   readonly canAttemptBasicRaftCrossing: boolean;
 }
 
-const movementCrossingMemo = new WeakMap<WorldState["tiles"], Map<string, RiverCrossingProfile | null>>();
-const seasonalCrossingStateMemo = new WeakMap<WorldTime, Map<string, SeasonalRiverCrossingState>>();
+// Both physical containers are authoritative; tiles can be shared by worlds
+// whose crossing topology differs. Weak keys release obsolete input versions.
+const movementCrossingMemo = new WeakMap<
+  WorldState["tiles"],
+  WeakMap<WorldState["riverCrossings"], Map<string, RiverCrossingProfile | null>>
+>();
+const seasonalCrossingStateMemo = new WeakMap<
+  WorldState["rivers"],
+  WeakMap<WorldTime, WeakMap<RiverCrossingProfile, Map<string, SeasonalRiverCrossingState>>>
+>();
 
 export function makeRiverId(id: string): RiverId {
   return `river:${id}` as RiverId;
@@ -48,11 +56,18 @@ export function getRiverCrossingForMovement(
   fromTileId: TileId,
   toTileId: TileId,
 ): RiverCrossingProfile | undefined {
-  let cachedByEdge = movementCrossingMemo.get(world.tiles);
+  let cachedByCrossings = movementCrossingMemo.get(world.tiles);
+
+  if (cachedByCrossings === undefined) {
+    cachedByCrossings = new WeakMap();
+    movementCrossingMemo.set(world.tiles, cachedByCrossings);
+  }
+
+  let cachedByEdge = cachedByCrossings.get(world.riverCrossings);
 
   if (cachedByEdge === undefined) {
     cachedByEdge = new Map<string, RiverCrossingProfile | null>();
-    movementCrossingMemo.set(world.tiles, cachedByEdge);
+    cachedByCrossings.set(world.riverCrossings, cachedByEdge);
   }
 
   const cacheKey = `${String(fromTileId)}->${String(toTileId)}`;
@@ -152,21 +167,35 @@ export function getSeasonalRiverCrossingState(
   crossing: RiverCrossingProfile,
   capability: RiverCrossingCapability,
 ): SeasonalRiverCrossingState {
-  let cachedByCrossing = seasonalCrossingStateMemo.get(world.time);
+  let cachedByTime = seasonalCrossingStateMemo.get(world.rivers);
 
-  if (cachedByCrossing === undefined) {
-    cachedByCrossing = new Map<string, SeasonalRiverCrossingState>();
-    seasonalCrossingStateMemo.set(world.time, cachedByCrossing);
+  if (cachedByTime === undefined) {
+    cachedByTime = new WeakMap();
+    seasonalCrossingStateMemo.set(world.rivers, cachedByTime);
   }
 
+  let cachedByCrossing = cachedByTime.get(world.time);
+
+  if (cachedByCrossing === undefined) {
+    cachedByCrossing = new WeakMap();
+    cachedByTime.set(world.time, cachedByCrossing);
+  }
+
+  let cachedByCapability = cachedByCrossing.get(crossing);
+
+  if (cachedByCapability === undefined) {
+    cachedByCapability = new Map<string, SeasonalRiverCrossingState>();
+    cachedByCrossing.set(crossing, cachedByCapability);
+  }
+
+  // The actual crossing object carries every physical input. Only the eight
+  // boolean capability combinations remain as strong entries per crossing.
   const cacheKey = [
-    `${String(crossing.fromTileId)}->${String(crossing.toTileId)}`,
-    crossing.crossingClass,
     capability.canUseFords ? "f" : "-",
     capability.canUseShallowCrossings ? "s" : "-",
     capability.canAttemptBasicRaftCrossing ? "r" : "-",
   ].join("|");
-  const cached = cachedByCrossing.get(cacheKey);
+  const cached = cachedByCapability.get(cacheKey);
 
   if (cached !== undefined) {
     return cached;
@@ -197,7 +226,7 @@ export function getSeasonalRiverCrossingState(
     isBlockedWithoutCapability: isCrossingBlocked(crossing.crossingClass, capability, effectiveRisk),
   };
 
-  cachedByCrossing.set(cacheKey, state);
+  cachedByCapability.set(cacheKey, state);
   return state;
 }
 

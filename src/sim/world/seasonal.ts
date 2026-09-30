@@ -13,20 +13,32 @@ export interface SeasonalTileConditions {
   readonly currentMovementDifficulty: number;
 }
 
-const seasonalTileConditionsByTime = new WeakMap<WorldTime, Map<TileId, SeasonalTileConditions>>();
+// Physical inputs are immutable: world-owned rivers, time, and the actual tile.
+// Shared clocks and tile labels alone do not identify the same physical world.
+const seasonalTileConditionsByRivers = new WeakMap<
+  WorldState["rivers"],
+  WeakMap<WorldTime, WeakMap<Tile, SeasonalTileConditions>>
+>();
 
 export function getSeasonalTileConditions(
   world: WorldState,
   tile: Tile,
 ): SeasonalTileConditions {
-  let cachedByTile = seasonalTileConditionsByTime.get(world.time);
+  let cachedByTime = seasonalTileConditionsByRivers.get(world.rivers);
 
-  if (cachedByTile === undefined) {
-    cachedByTile = new Map<TileId, SeasonalTileConditions>();
-    seasonalTileConditionsByTime.set(world.time, cachedByTile);
+  if (cachedByTime === undefined) {
+    cachedByTime = new WeakMap();
+    seasonalTileConditionsByRivers.set(world.rivers, cachedByTime);
   }
 
-  const cached = cachedByTile.get(tile.id);
+  let cachedByTile = cachedByTime.get(world.time);
+
+  if (cachedByTile === undefined) {
+    cachedByTile = new WeakMap<Tile, SeasonalTileConditions>();
+    cachedByTime.set(world.time, cachedByTile);
+  }
+
+  const cached = cachedByTile.get(tile);
 
   if (cached !== undefined) {
     return cached;
@@ -77,7 +89,7 @@ export function getSeasonalTileConditions(
     currentMovementDifficulty,
   };
 
-  cachedByTile.set(tile.id, result);
+  cachedByTile.set(tile, result);
   return result;
 }
 

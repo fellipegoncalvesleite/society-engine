@@ -1,0 +1,1 @@
+{"mutant":"tile","loaded":1,"executed":11,"detected":true,"passed":20,"total":23,"failed":["tile A-B every field warm equals cold","tile B-A every field warm equals cold","tile object replacement warm equals cold"]}

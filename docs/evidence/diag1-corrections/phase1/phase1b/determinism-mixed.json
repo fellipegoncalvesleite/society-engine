@@ -1,0 +1,68 @@
+{
+  "command": [
+    "/Users/fellipegoncalvesleite/.local/node/bin/node",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1DeterminismAudit.mjs",
+    "--out",
+    "docs/evidence/diag1-corrections/phase1/phase1b/determinism-mixed.json"
+  ],
+  "rows": [
+    {
+      "kind": "map1",
+      "seed": "diag1-phase1:determinism:map1",
+      "span": 1260,
+      "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+      "digests": {
+        "daily": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "weekly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "monthly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "seasonal": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "repeat": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "fresh": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3"
+      },
+      "elapsed": {
+        "daily": 285.646353375,
+        "weekly": 314.962363875,
+        "monthly": 300.3948362919999,
+        "seasonal": 303.4851532910001,
+        "repeat": 328.50810016599996
+      },
+      "occurrence": {
+        "bands": 5,
+        "population": 155,
+        "activeParties": 2,
+        "returnOutcomes": 21,
+        "plantDepletionEntries": 1313
+      },
+      "pass": true
+    },
+    {
+      "kind": "map2",
+      "seed": "diag1-phase1:determinism:map2",
+      "span": 1260,
+      "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+      "digests": {
+        "daily": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+        "weekly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+        "monthly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+        "seasonal": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+        "repeat": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+        "fresh": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79"
+      },
+      "elapsed": {
+        "daily": 89.39821099999989,
+        "weekly": 90.29104558299994,
+        "monthly": 83.116142,
+        "seasonal": 91.49449462499982,
+        "repeat": 85.82677808299987
+      },
+      "occurrence": {
+        "bands": 9,
+        "population": 235,
+        "activeParties": 8,
+        "returnOutcomes": 26,
+        "plantDepletionEntries": 1303
+      },
+      "pass": true
+    }
+  ]
+}

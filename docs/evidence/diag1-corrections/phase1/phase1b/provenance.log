@@ -1,0 +1,10 @@
+PASS B-001 complete raw receipt migrates and two-unit rounding boundary is accepted
+PASS B-001 refuses incomplete/inconsistent provenance: missing processing loss
+PASS B-001 refuses incomplete/inconsistent provenance: missing all raw fields
+PASS B-001 refuses incomplete/inconsistent provenance: positive usable with zero harvest
+PASS B-001 refuses incomplete/inconsistent provenance: inconsistent depletion
+PASS B-001 refuses incomplete/inconsistent provenance: negative raw loss
+PASS B-001 refuses incomplete/inconsistent provenance: nonfinite raw harvest
+PASS B-001 refuses incomplete/inconsistent provenance: finite raw imbalance beyond two rounding units
+PASS B-001 zero work requires explicit complete zero retained receipt
+PASS B-001 information only requires explicit complete zero retained receipt

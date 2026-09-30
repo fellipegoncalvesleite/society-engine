@@ -1,0 +1,54 @@
+{
+  "baselineProduction": "9268d211e7d370911d3d8fd875429db4d4d06741",
+  "baselineEvidence": "stabilized/natural/nutrition/",
+  "currentEvidence": "phase1b/natural/nutrition/",
+  "rows": [
+    {
+      "seed": "diag1b:s1",
+      "map": "map2_single_origin",
+      "years": 5,
+      "beforeFingerprint": "7754db710582b76c8ed5ffb4d7f234615d620d49a808859f1cdd59be850ab4cb",
+      "afterFingerprint": "7754db710582b76c8ed5ffb4d7f234615d620d49a808859f1cdd59be850ab4cb",
+      "sameFullWorld": true,
+      "summary": {
+        "observedParties": 4,
+        "foodWorkingParties": 2,
+        "completedFoodParties": 2,
+        "multiWorkCompleted": 1,
+        "cargoLossParties": 0,
+        "zeroLastTakeLossParties": 0,
+        "positiveLastTakeLossParties": 0,
+        "totalMissingHarvest": 0,
+        "totalDelivered": 0.09670000000000001
+      },
+      "population": [
+        32,
+        31
+      ]
+    },
+    {
+      "seed": "diag1b:s2",
+      "map": "map2_single_origin",
+      "years": 5,
+      "beforeFingerprint": "0bb19d895c2f060f770ffae21d8db28084cc7b4a278e0d11da01b72e0888cafb",
+      "afterFingerprint": "0bb19d895c2f060f770ffae21d8db28084cc7b4a278e0d11da01b72e0888cafb",
+      "sameFullWorld": true,
+      "summary": {
+        "observedParties": 4,
+        "foodWorkingParties": 2,
+        "completedFoodParties": 2,
+        "multiWorkCompleted": 1,
+        "cargoLossParties": 0,
+        "zeroLastTakeLossParties": 0,
+        "positiveLastTakeLossParties": 0,
+        "totalMissingHarvest": 0,
+        "totalDelivered": 0.09670000000000001
+      },
+      "population": [
+        32,
+        31
+      ]
+    }
+  ],
+  "interpretation": "The isolated single-origin conservation witnesses retain byte-identical full-world fingerprints. No population-growth oracle."
+}

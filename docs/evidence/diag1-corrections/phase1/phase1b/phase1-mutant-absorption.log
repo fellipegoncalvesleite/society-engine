@@ -1,0 +1,13 @@
+FAIL B-002 current-body conservation abc
+FAIL B-002 current-body conservation cba
+FAIL B-002 current-body conservation bac
+FAIL B-002 current-body conservation bca
+FAIL B-002 current-body conservation cab
+FAIL B-002 current-body conservation acb
+FAIL B-002 current-body conservation abcde
+FAIL B-002 target loses eligibility when its support departs
+FAIL B-002 admission and resolved target share one current decision
+PASS B-002 bounded sweep timing for unrelated healthy bands
+FAIL B-002 arrivals rescue B before its turn
+FAIL B-002 single transfer and healthy no-transfer
+PASS B-002 multiple arrivals, terminal/zero and provisional exclusion

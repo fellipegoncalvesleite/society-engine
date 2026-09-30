@@ -1,7 +1,7 @@
 # Society Engine
 # Cumulative Checkpoint and System Record
 
-**Record version:** 2026-09-30-r11 (reconciled Phase 1, implementation pending review)  
+**Record version:** 2026-09-30-r12 (Phase 1B implemented, pending independent final review)
 **Project identity:** Society Engine. Legacy project names are historical only.  
 **Previously documented accepted published baseline:** Roadmap Items 1–5 remain frozen; SCALE-1 is frozen; the Item-5.5
 architecture gate has produced the canonical WORLD-M0 program; WORLD-M0 M0.1 is frozen and integrated.  
@@ -27,23 +27,41 @@ systems for future work, preserve deferred seams and make architectural weakness
 ## Current correction implementation boundary — supersedes inherited planning-only status
 
 <!-- DIAG1_PHASE1_CURRENT_START -->
-## Current authority — DIAG-1 Correction Phase 1
+## Current authority — DIAG-1 Correction Phase 1 including Phase 1B
 
-**IMPLEMENTED / PENDING REVIEW — not accepted or frozen.** User-authorized bounded correction on `fix/diag1-human-support`, exact accepted base `73cc38b916e236339897c59686638efafd569b6e`. Production commit: `9268d211e7d370911d3d8fd875429db4d4d06741`. The later documentation commit records that production identity; final published HEAD/remote status is exported independently.
+**IMPLEMENTED / PENDING INDEPENDENT FINAL REVIEW — not accepted or frozen.** User-authorized bounded correction on `fix/diag1-human-support`, exact accepted base `73cc38b916e236339897c59686638efafd569b6e`. Original four-finding production commit: `9268d211e7d370911d3d8fd875429db4d4d06741`; Phase-1B starts from published `d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333`. Final production/published identities are recorded after committing the candidate.
 
-This block supersedes older current/unstarted/accepted headlines only for this four-finding correction. Frozen Item 4 (`11f085930462f981fcca45faf37b67d961196adb`), Item 5 (`cdfc7c7fe84f16bd79275ccf9b0d0c352a521cef`), SCALE-1 (`30e1440c237c0f09bb1403687b8da9899fbfd41b`) and M0.1 (`43c4c45615d375da6d25cf92ef328458ddcad347`) remain preserved ancestry. No merge to main or frozen branch is authorized.
+This block supersedes older current/unstarted/accepted headlines only for this correction and the explicitly reopened Phase-1B cache prerequisite. Frozen Item 4 (`11f085930462f981fcca45faf37b67d961196adb`), Item 5 (`cdfc7c7fe84f16bd79275ccf9b0d0c352a521cef`), SCALE-1 (`30e1440c237c0f09bb1403687b8da9899fbfd41b`) and M0.1 (`43c4c45615d375da6d25cf92ef328458ddcad347`) remain preserved ancestry. No merge to main or frozen branch is authorized.
 
 - B-001: `expeditionCargo.ts` owns at most three actual source/work lots. Capacity before declared FIFO charge; applied versus unfulfilled charge; explicit loss; one positive source batch at physical home return. Optional pending observation and bounded UI history cannot gate food. One nondeposit journey summary feeds behavioral/UI readers.
 - B-002: `viability.ts` re-reads current source per sorted ID and resolves one consistent current target/opportunity decision, transfers current bodies atomically and refreshes affected projections. Arrivals may rescue later sources. Existing cohort policy/thresholds/provisional exclusion remain.
 - B-003/F2: `plantStock.ts` caches only immutable derived descriptions in one WeakMap generation per tile; complete time/tile causal signature, live world depletion, unchanged realization/formulas.
 - B-004/F6: canonical available residential productive workers include prepared/away parties and performed same-day work. Selection and immediate execution refuse zero. Unexecuted investigation proposals reserve none.
+- Phase 1B: seasonal tile and crossing caches bind immutable world-owned rivers plus time and actual tile/crossing objects. Movement crossing additionally binds the actual crossing container. Cold computation is authority; formulas are unchanged. Focused RED proves all three old mechanisms; GREEN27/27 and three loaded/executed old-source mutants are recorded in `phase1/phase1b/`. The unchanged1260-day mixed-map matrix and both isolated-map matrices pass all six full-state comparisons, including fresh processes; old failures remain preserved.
 - Migration is explicitly partial: exact provable old cargo only, otherwise preserved-input `ExpeditionCargoProvenanceError`; no invented source or outbound stores. The app has no live-world importer.
 - Evidence, RED/GREEN/mutations, reader map, tested boundaries and residuals: [phase report](evidence/diag1-corrections/phase1/PHASE1_REPORT.md), [execution ledger](evidence/diag1-corrections/phase1/PROGRESS.md), [Future Evolution Contract](evidence/diag1-corrections/phase1/FUTURE_EVOLUTION_CONTRACT.md). Paths are repository-relative; from docs/ use `evidence/diag1-corrections/phase1/`.
 - Focused command: `node scripts/diag1Phase1ConservationAudit.mjs --out artifacts/diag1-phase1/conservation.json`. All historical audit outputs must be redirected; final command manifests record actual statuses/configuration/source hashes. No whole-game PASS or growth guarantee.
 - Root Item-4 checkout and parked Task12 checkout remain read-only; no `src/sim/world/physical/` changes. WORLD-M0 stays shadow-only before M0.7. Phase 2/3 and every other DIAG-1 finding remain unimplemented/open.
-- **Next action:** independent phase review and supervising acceptance of the exact final HEAD, then a documentation-only acceptance update before Phase 2. No worker may self-accept. Commit and push only `fix/diag1-human-support`; preserve the isolated worktree for review.
+- **Next action:** commit/push Phase 1B, then obtain a fresh read-only review of the complete `73cc38b` → exact final published HEAD range. The user pre-authorizes Phase 2 only after SPEC PASS, CODE QUALITY PASS, Critical0, Important0, no unresolved architecture contradiction and PHASE 2 AUTHORIZATION YES. Record that exact reviewed SHA before Phase-2 edits. No worker self-acceptance or invented freeze; a remaining mixed-map failure stops continuation. Commit and push only `fix/diag1-human-support`.
 
 <!-- DIAG1_PHASE1_CURRENT_END -->
+
+## Phase 1B current result — supersedes historical cache residual below
+
+**IMPLEMENTED / PENDING INDEPENDENT FINAL REVIEW.** Starting published HEAD `d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333`; original executable base remains `73cc38b916e236339897c59686638efafd569b6e`. The world-specific seasonal tile, seasonal crossing and same-class movement-crossing memo omissions are corrected after executable REDs. Only seasonal.ts/hydrography.ts production code changes; formulas and the four existing Phase1 fixes are preserved.
+
+Focused GREEN27/27; old cache mutants loaded1/executed14,14,8 and behaviorally detected. Conservation65/65, provenance10/10 (overlapping), all four original mechanism mutants, natural s1/s2, recovery18/18, numeric chain and ecology20/20 pass. Both TypeScript projects/build/import/graph pass. Natural full-world hashes remain exactly equal to published stabilized Phase1.
+
+The unchanged original mixed-map matrix now **PASSES**, as do separate Map1/Map2 controls: full serialized state agrees across daily/weekly/monthly/seasonal/repeat/fresh-process modes over1260days, and isolated hashes equal their mixed-process counterparts. Original failing results remain preserved, not overwritten. See `phase1b/PHASE1B_REPORT.md`, `phase1b/VALIDATION_RESULTS.md`, `phase1b/CACHE_AUTHORITY.md`, and current `DETERMINISM_SCOPE.json`.
+
+- map1: six-way full-world hash `aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3`; bands5, population155, active parties2, plant-depletion entries1313.
+- map2: six-way full-world hash `77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79`; bands9, population235, active parties8, plant-depletion entries1303.
+
+The two independently inherited knowledge-choice and Item4 fixed-preparation failures remain disclosed. This closes the executed mixed-map prerequisite, not independent Phase1 acceptance. The user pre-authorizes Phase2 only after a fresh exact-published-HEAD review of the complete original-base→HEAD range returns SPEC PASS, CODE QUALITY PASS, Critical0, Important0, no unresolved architecture contradiction and PHASE2 AUTHORIZATION YES. No Phase2 base is claimed before that verdict. No Phase3 or Task12 resumption.
+
+### Preserved cumulative history resumes below
+
+
 
 This complete successor preserves all supplied r10 content below, reconciles the recovered r9 diagnostic addition in the attributed appendix, and adds the Phase 1 execution report and Future Evolution Contract. Historical r10 statements that r9 was unseen and no implementation occurred describe that supervising pass, not this successor. The original local r9 is preserved byte-for-byte separately. r9's historical Item 13 work-group reference is resolved to canonical/r10 future Item 14. The original long-run scenario remains unresolved. The canonical bundle remains byte-identical 2026-09-29-r11; no permanent roadmap/rule change was made.
 

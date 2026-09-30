@@ -1,0 +1,458 @@
+{
+  "auditSha256": "8eaf2b5f31f000ace391f3d77dcbb5834aa2ba03867b5b2b8ad5afdf0c587977",
+  "head": "d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333",
+  "mutant": "none",
+  "loaded": 0,
+  "executed": 0,
+  "behaviorallyDetected": true,
+  "restored": true,
+  "sourceBefore": {
+    "src/sim/world/seasonal.ts": "a93c9795b2922cdea08bedc33660608fb98c02e4187e5e4d405c1587cd2f7c78",
+    "src/sim/world/hydrography.ts": "4031606579e0e15e63f9ced793693f7f1ea595b0373c8042c6bf00e64914eef4"
+  },
+  "sourceAfter": {
+    "src/sim/world/seasonal.ts": "a93c9795b2922cdea08bedc33660608fb98c02e4187e5e4d405c1587cd2f7c78",
+    "src/sim/world/hydrography.ts": "4031606579e0e15e63f9ced793693f7f1ea595b0373c8042c6bf00e64914eef4"
+  },
+  "rows": [
+    {
+      "name": "tile A-B distinct physical inputs",
+      "pass": true
+    },
+    {
+      "name": "tile A-B every field warm equals cold",
+      "pass": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   currentAquaticReliability: 0.8587177660145321,\n+   currentDroughtStress: 0.34190366654771637,\n+   currentFloodStress: 0.6318879880127105,\n+   currentFoodEstimate: 72.78,\n+   currentMovementDifficulty: 3.54,\n+   currentWaterStress: 0.9814491280504243,\n-   currentAquaticReliability: 0.9226065350243005,\n-   currentDroughtStress: 0.18769525764474085,\n-   currentFloodStress: 0.6398578203228176,\n-   currentFoodEstimate: 82.01,\n-   currentMovementDifficulty: 3.39,\n-   currentWaterStress: 0.10955688007784266,\n    tileId: 'tile:1:1',\n    time: {\n      day: 0,\n      dayOfSeason: 0,\n      daysPerYear: 360,\n"
+    },
+    {
+      "name": "tile A-B same-world cached retrieval",
+      "pass": true
+    },
+    {
+      "name": "crossing A-B distinct physical inputs",
+      "pass": true
+    },
+    {
+      "name": "crossing A-B every field warm equals cold",
+      "pass": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    crossing: {\n+     baseCrossingCost: 2,\n-     baseCrossingCost: 11,\n      confidence: 1,\n      crossingClass: 'ford',\n      fromTileId: 'tile:1:1',\n      knownFord: true,\n+     risk: 0.2,\n-     risk: 0.91,\n      riverId: 'river:fixture',\n+     seasonalCostModifier: 0.3,\n-     seasonalCostModifier: 0.8,\n      toTileId: 'tile:2:1'\n    },\n+   effectiveCrossingCost: 2.13,\n+   effectiveRisk: 0.24,\n-   effectiveCrossingCost: 7.92,\n-   effectiveRisk: 0.68,\n    isBlockedWithoutCapability: false,\n+   isFloodSeason: true,\n-   isFloodSeason: false,\n    season: 'spring'\n  }\n"
+    },
+    {
+      "name": "crossing A-B same-world cached retrieval",
+      "pass": true
+    },
+    {
+      "name": "movement A-B different crossing container with shared tiles",
+      "pass": true
+    },
+    {
+      "name": "movement A-B warm equals cold",
+      "pass": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   baseCrossingCost: 2,\n-   baseCrossingCost: 11,\n    confidence: 1,\n    crossingClass: 'ford',\n    fromTileId: 'tile:1:1',\n    knownFord: true,\n+   risk: 0.2,\n-   risk: 0.91,\n    riverId: 'river:fixture',\n+   seasonalCostModifier: 0.3,\n-   seasonalCostModifier: 0.8,\n    toTileId: 'tile:2:1'\n  }\n"
+    },
+    {
+      "name": "movement A-B same-world cached retrieval",
+      "pass": true
+    },
+    {
+      "name": "tile B-A distinct physical inputs",
+      "pass": true
+    },
+    {
+      "name": "tile B-A every field warm equals cold",
+      "pass": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   currentAquaticReliability: 0.9226065350243005,\n+   currentDroughtStress: 0.18769525764474085,\n+   currentFloodStress: 0.6398578203228176,\n+   currentFoodEstimate: 82.01,\n+   currentMovementDifficulty: 3.39,\n+   currentWaterStress: 0.10955688007784266,\n-   currentAquaticReliability: 0.8587177660145321,\n-   currentDroughtStress: 0.34190366654771637,\n-   currentFloodStress: 0.6318879880127105,\n-   currentFoodEstimate: 72.78,\n-   currentMovementDifficulty: 3.54,\n-   currentWaterStress: 0.9814491280504243,\n    tileId: 'tile:1:1',\n    time: {\n      day: 0,\n      dayOfSeason: 0,\n      daysPerYear: 360,\n"
+    },
+    {
+      "name": "tile B-A same-world cached retrieval",
+      "pass": true
+    },
+    {
+      "name": "crossing B-A distinct physical inputs",
+      "pass": true
+    },
+    {
+      "name": "crossing B-A every field warm equals cold",
+      "pass": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    crossing: {\n+     baseCrossingCost: 11,\n-     baseCrossingCost: 2,\n      confidence: 1,\n      crossingClass: 'ford',\n      fromTileId: 'tile:1:1',\n      knownFord: true,\n+     risk: 0.91,\n-     risk: 0.2,\n      riverId: 'river:fixture',\n+     seasonalCostModifier: 0.8,\n-     seasonalCostModifier: 0.3,\n      toTileId: 'tile:2:1'\n    },\n+   effectiveCrossingCost: 7.92,\n+   effectiveRisk: 0.68,\n-   effectiveCrossingCost: 2.13,\n-   effectiveRisk: 0.24,\n    isBlockedWithoutCapability: false,\n+   isFloodSeason: false,\n-   isFloodSeason: true,\n    season: 'spring'\n  }\n"
+    },
+    {
+      "name": "crossing B-A same-world cached retrieval",
+      "pass": true
+    },
+    {
+      "name": "movement B-A different crossing container with shared tiles",
+      "pass": true
+    },
+    {
+      "name": "movement B-A warm equals cold",
+      "pass": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   baseCrossingCost: 11,\n-   baseCrossingCost: 2,\n    confidence: 1,\n    crossingClass: 'ford',\n    fromTileId: 'tile:1:1',\n    knownFord: true,\n+   risk: 0.91,\n-   risk: 0.2,\n    riverId: 'river:fixture',\n+   seasonalCostModifier: 0.8,\n-   seasonalCostModifier: 0.3,\n    toTileId: 'tile:2:1'\n  }\n"
+    },
+    {
+      "name": "movement B-A same-world cached retrieval",
+      "pass": true
+    },
+    {
+      "name": "tile object replacement warm equals cold",
+      "pass": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    currentAquaticReliability: 0.8587177660145321,\n    currentDroughtStress: 0.34190366654771637,\n    currentFloodStress: 0.6318879880127105,\n    currentFoodEstimate: 72.78,\n+   currentMovementDifficulty: 3.54,\n-   currentMovementDifficulty: 15.33,\n    currentWaterStress: 0.9814491280504243,\n    tileId: 'tile:1:1',\n    time: {\n      day: 0,\n      dayOfSeason: 0,\n"
+    },
+    {
+      "name": "tile object replacement is causal",
+      "pass": true
+    },
+    {
+      "name": "crossing object replacement warm equals cold",
+      "pass": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    crossing: {\n+     baseCrossingCost: 2,\n-     baseCrossingCost: 12,\n      confidence: 1,\n      crossingClass: 'ford',\n      fromTileId: 'tile:1:1',\n      knownFord: true,\n      risk: 0.2,\n...\n    },\n+   effectiveCrossingCost: 2.13,\n-   effectiveCrossingCost: 12.79,\n    effectiveRisk: 0.24,\n    isBlockedWithoutCapability: false,\n    isFloodSeason: true,\n    season: 'spring'\n  }\n"
+    },
+    {
+      "name": "source byte preservation",
+      "pass": true
+    },
+    {
+      "name": "fresh-process parity",
+      "pass": true
+    }
+  ],
+  "observations": {
+    "tile-A-B": {
+      "first": {
+        "tileId": "tile:1:1",
+        "time": {
+          "tick": 0,
+          "seasonTick": 0,
+          "day": 0,
+          "dayOfSeason": 0,
+          "seasonLengthDays": 90,
+          "daysPerYear": 360,
+          "year": 0,
+          "season": "spring",
+          "seasonIndex": 0,
+          "generation": {
+            "index": 0,
+            "yearWithinGeneration": 0,
+            "tickWithinGeneration": 0
+          }
+        },
+        "currentFoodEstimate": 72.78,
+        "currentWaterStress": 0.9814491280504243,
+        "currentFloodStress": 0.6318879880127105,
+        "currentDroughtStress": 0.34190366654771637,
+        "currentAquaticReliability": 0.8587177660145321,
+        "currentMovementDifficulty": 3.54
+      },
+      "warm": {
+        "tileId": "tile:1:1",
+        "time": {
+          "tick": 0,
+          "seasonTick": 0,
+          "day": 0,
+          "dayOfSeason": 0,
+          "seasonLengthDays": 90,
+          "daysPerYear": 360,
+          "year": 0,
+          "season": "spring",
+          "seasonIndex": 0,
+          "generation": {
+            "index": 0,
+            "yearWithinGeneration": 0,
+            "tickWithinGeneration": 0
+          }
+        },
+        "currentFoodEstimate": 72.78,
+        "currentWaterStress": 0.9814491280504243,
+        "currentFloodStress": 0.6318879880127105,
+        "currentDroughtStress": 0.34190366654771637,
+        "currentAquaticReliability": 0.8587177660145321,
+        "currentMovementDifficulty": 3.54
+      },
+      "cold": {
+        "tileId": "tile:1:1",
+        "time": {
+          "tick": 0,
+          "seasonTick": 0,
+          "day": 0,
+          "dayOfSeason": 0,
+          "seasonLengthDays": 90,
+          "daysPerYear": 360,
+          "year": 0,
+          "season": "spring",
+          "seasonIndex": 0,
+          "generation": {
+            "index": 0,
+            "yearWithinGeneration": 0,
+            "tickWithinGeneration": 0
+          }
+        },
+        "currentFoodEstimate": 82.01,
+        "currentWaterStress": 0.10955688007784266,
+        "currentFloodStress": 0.6398578203228176,
+        "currentDroughtStress": 0.18769525764474085,
+        "currentAquaticReliability": 0.9226065350243005,
+        "currentMovementDifficulty": 3.39
+      }
+    },
+    "crossing-A-B": {
+      "prior": {
+        "crossing": {
+          "fromTileId": "tile:1:1",
+          "toTileId": "tile:2:1",
+          "riverId": "river:fixture",
+          "crossingClass": "ford",
+          "baseCrossingCost": 2,
+          "seasonalCostModifier": 0.3,
+          "risk": 0.2,
+          "knownFord": true,
+          "confidence": 1
+        },
+        "season": "spring",
+        "effectiveCrossingCost": 2.13,
+        "effectiveRisk": 0.24,
+        "isFloodSeason": true,
+        "isBlockedWithoutCapability": false
+      },
+      "warm": {
+        "crossing": {
+          "fromTileId": "tile:1:1",
+          "toTileId": "tile:2:1",
+          "riverId": "river:fixture",
+          "crossingClass": "ford",
+          "baseCrossingCost": 2,
+          "seasonalCostModifier": 0.3,
+          "risk": 0.2,
+          "knownFord": true,
+          "confidence": 1
+        },
+        "season": "spring",
+        "effectiveCrossingCost": 2.13,
+        "effectiveRisk": 0.24,
+        "isFloodSeason": true,
+        "isBlockedWithoutCapability": false
+      },
+      "cold": {
+        "crossing": {
+          "fromTileId": "tile:1:1",
+          "toTileId": "tile:2:1",
+          "riverId": "river:fixture",
+          "crossingClass": "ford",
+          "baseCrossingCost": 11,
+          "seasonalCostModifier": 0.8,
+          "risk": 0.91,
+          "knownFord": true,
+          "confidence": 1
+        },
+        "season": "spring",
+        "effectiveCrossingCost": 7.92,
+        "effectiveRisk": 0.68,
+        "isFloodSeason": false,
+        "isBlockedWithoutCapability": false
+      }
+    },
+    "movement-A-B": {
+      "prior": {
+        "fromTileId": "tile:1:1",
+        "toTileId": "tile:2:1",
+        "riverId": "river:fixture",
+        "crossingClass": "ford",
+        "baseCrossingCost": 2,
+        "seasonalCostModifier": 0.3,
+        "risk": 0.2,
+        "knownFord": true,
+        "confidence": 1
+      },
+      "warm": {
+        "fromTileId": "tile:1:1",
+        "toTileId": "tile:2:1",
+        "riverId": "river:fixture",
+        "crossingClass": "ford",
+        "baseCrossingCost": 2,
+        "seasonalCostModifier": 0.3,
+        "risk": 0.2,
+        "knownFord": true,
+        "confidence": 1
+      },
+      "cold": {
+        "fromTileId": "tile:1:1",
+        "toTileId": "tile:2:1",
+        "riverId": "river:fixture",
+        "crossingClass": "ford",
+        "baseCrossingCost": 11,
+        "seasonalCostModifier": 0.8,
+        "risk": 0.91,
+        "knownFord": true,
+        "confidence": 1
+      }
+    },
+    "tile-B-A": {
+      "first": {
+        "tileId": "tile:1:1",
+        "time": {
+          "tick": 0,
+          "seasonTick": 0,
+          "day": 0,
+          "dayOfSeason": 0,
+          "seasonLengthDays": 90,
+          "daysPerYear": 360,
+          "year": 0,
+          "season": "spring",
+          "seasonIndex": 0,
+          "generation": {
+            "index": 0,
+            "yearWithinGeneration": 0,
+            "tickWithinGeneration": 0
+          }
+        },
+        "currentFoodEstimate": 82.01,
+        "currentWaterStress": 0.10955688007784266,
+        "currentFloodStress": 0.6398578203228176,
+        "currentDroughtStress": 0.18769525764474085,
+        "currentAquaticReliability": 0.9226065350243005,
+        "currentMovementDifficulty": 3.39
+      },
+      "warm": {
+        "tileId": "tile:1:1",
+        "time": {
+          "tick": 0,
+          "seasonTick": 0,
+          "day": 0,
+          "dayOfSeason": 0,
+          "seasonLengthDays": 90,
+          "daysPerYear": 360,
+          "year": 0,
+          "season": "spring",
+          "seasonIndex": 0,
+          "generation": {
+            "index": 0,
+            "yearWithinGeneration": 0,
+            "tickWithinGeneration": 0
+          }
+        },
+        "currentFoodEstimate": 82.01,
+        "currentWaterStress": 0.10955688007784266,
+        "currentFloodStress": 0.6398578203228176,
+        "currentDroughtStress": 0.18769525764474085,
+        "currentAquaticReliability": 0.9226065350243005,
+        "currentMovementDifficulty": 3.39
+      },
+      "cold": {
+        "tileId": "tile:1:1",
+        "time": {
+          "tick": 0,
+          "seasonTick": 0,
+          "day": 0,
+          "dayOfSeason": 0,
+          "seasonLengthDays": 90,
+          "daysPerYear": 360,
+          "year": 0,
+          "season": "spring",
+          "seasonIndex": 0,
+          "generation": {
+            "index": 0,
+            "yearWithinGeneration": 0,
+            "tickWithinGeneration": 0
+          }
+        },
+        "currentFoodEstimate": 72.78,
+        "currentWaterStress": 0.9814491280504243,
+        "currentFloodStress": 0.6318879880127105,
+        "currentDroughtStress": 0.34190366654771637,
+        "currentAquaticReliability": 0.8587177660145321,
+        "currentMovementDifficulty": 3.54
+      }
+    },
+    "crossing-B-A": {
+      "prior": {
+        "crossing": {
+          "fromTileId": "tile:1:1",
+          "toTileId": "tile:2:1",
+          "riverId": "river:fixture",
+          "crossingClass": "ford",
+          "baseCrossingCost": 11,
+          "seasonalCostModifier": 0.8,
+          "risk": 0.91,
+          "knownFord": true,
+          "confidence": 1
+        },
+        "season": "spring",
+        "effectiveCrossingCost": 7.92,
+        "effectiveRisk": 0.68,
+        "isFloodSeason": false,
+        "isBlockedWithoutCapability": false
+      },
+      "warm": {
+        "crossing": {
+          "fromTileId": "tile:1:1",
+          "toTileId": "tile:2:1",
+          "riverId": "river:fixture",
+          "crossingClass": "ford",
+          "baseCrossingCost": 11,
+          "seasonalCostModifier": 0.8,
+          "risk": 0.91,
+          "knownFord": true,
+          "confidence": 1
+        },
+        "season": "spring",
+        "effectiveCrossingCost": 7.92,
+        "effectiveRisk": 0.68,
+        "isFloodSeason": false,
+        "isBlockedWithoutCapability": false
+      },
+      "cold": {
+        "crossing": {
+          "fromTileId": "tile:1:1",
+          "toTileId": "tile:2:1",
+          "riverId": "river:fixture",
+          "crossingClass": "ford",
+          "baseCrossingCost": 2,
+          "seasonalCostModifier": 0.3,
+          "risk": 0.2,
+          "knownFord": true,
+          "confidence": 1
+        },
+        "season": "spring",
+        "effectiveCrossingCost": 2.13,
+        "effectiveRisk": 0.24,
+        "isFloodSeason": true,
+        "isBlockedWithoutCapability": false
+      }
+    },
+    "movement-B-A": {
+      "prior": {
+        "fromTileId": "tile:1:1",
+        "toTileId": "tile:2:1",
+        "riverId": "river:fixture",
+        "crossingClass": "ford",
+        "baseCrossingCost": 11,
+        "seasonalCostModifier": 0.8,
+        "risk": 0.91,
+        "knownFord": true,
+        "confidence": 1
+      },
+      "warm": {
+        "fromTileId": "tile:1:1",
+        "toTileId": "tile:2:1",
+        "riverId": "river:fixture",
+        "crossingClass": "ford",
+        "baseCrossingCost": 11,
+        "seasonalCostModifier": 0.8,
+        "risk": 0.91,
+        "knownFord": true,
+        "confidence": 1
+      },
+      "cold": {
+        "fromTileId": "tile:1:1",
+        "toTileId": "tile:2:1",
+        "riverId": "river:fixture",
+        "crossingClass": "ford",
+        "baseCrossingCost": 2,
+        "seasonalCostModifier": 0.3,
+        "risk": 0.2,
+        "knownFord": true,
+        "confidence": 1
+      }
+    }
+  },
+  "pass": false
+}

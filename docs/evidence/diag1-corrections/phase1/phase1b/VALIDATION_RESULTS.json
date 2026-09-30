@@ -1,0 +1,547 @@
+{
+  "status": "IMPLEMENTED / PENDING INDEPENDENT FINAL REVIEW",
+  "commands": [
+    {
+      "name": "build",
+      "exitCode": 0,
+      "elapsedSeconds": 30.380034625006374,
+      "sourcePreserved": true,
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "evidence": "build-command.json"
+    },
+    {
+      "name": "conservation",
+      "exitCode": 0,
+      "elapsedSeconds": 64.19679337499838,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/conservation.json"
+      ],
+      "evidence": "conservation-command.json"
+    },
+    {
+      "name": "determinism-map1",
+      "exitCode": 0,
+      "elapsedSeconds": 1810.1607220409933,
+      "sourcePreserved": true,
+      "command": [
+        "/Users/fellipegoncalvesleite/.local/node/bin/node",
+        "scripts/diag1Phase1DeterminismAudit.mjs",
+        "--map",
+        "map1",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/determinism-map1.json"
+      ],
+      "evidence": "determinism-map1-command.json"
+    },
+    {
+      "name": "determinism-map2",
+      "exitCode": 0,
+      "elapsedSeconds": 606.9033057920024,
+      "sourcePreserved": true,
+      "command": [
+        "/Users/fellipegoncalvesleite/.local/node/bin/node",
+        "scripts/diag1Phase1DeterminismAudit.mjs",
+        "--map",
+        "map2",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/determinism-map2.json"
+      ],
+      "evidence": "determinism-map2-command.json"
+    },
+    {
+      "name": "determinism-mixed",
+      "exitCode": 0,
+      "elapsedSeconds": 2435.295668125007,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1DeterminismAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/determinism-mixed.json"
+      ],
+      "evidence": "determinism-mixed-command.json"
+    },
+    {
+      "name": "graph",
+      "exitCode": 0,
+      "elapsedSeconds": 1.0945060840022052,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/checkGraph.mjs"
+      ],
+      "evidence": "graph-command.json"
+    },
+    {
+      "name": "green",
+      "exitCode": 0,
+      "elapsedSeconds": 1.9261564589978661,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/green.json"
+      ],
+      "evidence": "green-command.json"
+    },
+    {
+      "name": "green-expanded",
+      "exitCode": 0,
+      "elapsedSeconds": 1.7423304579860996,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/green-expanded.json"
+      ],
+      "evidence": "green-expanded-command.json"
+    },
+    {
+      "name": "import",
+      "exitCode": 0,
+      "elapsedSeconds": 0.4417086670000572,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/importBoundaryAudit.mjs"
+      ],
+      "evidence": "import-command.json"
+    },
+    {
+      "name": "living-ecology",
+      "exitCode": 0,
+      "elapsedSeconds": 25.51575220799714,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/livingEcologyFoodPipelineAudit.mjs"
+      ],
+      "evidence": "living-ecology-command.json"
+    },
+    {
+      "name": "mutant-crossing",
+      "exitCode": 1,
+      "elapsedSeconds": 1.3307896659971448,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--mutant",
+        "crossing",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/mutant-crossing.json"
+      ],
+      "evidence": "mutant-crossing-command.json"
+    },
+    {
+      "name": "mutant-crossing-expanded",
+      "exitCode": 1,
+      "elapsedSeconds": 1.4437492079887306,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--mutant",
+        "crossing",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/mutant-crossing-expanded.json"
+      ],
+      "evidence": "mutant-crossing-expanded-command.json"
+    },
+    {
+      "name": "mutant-movement",
+      "exitCode": 1,
+      "elapsedSeconds": 1.3394185420038411,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--mutant",
+        "movement",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/mutant-movement.json"
+      ],
+      "evidence": "mutant-movement-command.json"
+    },
+    {
+      "name": "mutant-movement-expanded",
+      "exitCode": 1,
+      "elapsedSeconds": 1.4415433750109514,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--mutant",
+        "movement",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/mutant-movement-expanded.json"
+      ],
+      "evidence": "mutant-movement-expanded-command.json"
+    },
+    {
+      "name": "mutant-tile",
+      "exitCode": 1,
+      "elapsedSeconds": 1.3385877910041017,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--mutant",
+        "tile",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/mutant-tile.json"
+      ],
+      "evidence": "mutant-tile-command.json"
+    },
+    {
+      "name": "mutant-tile-expanded",
+      "exitCode": 1,
+      "elapsedSeconds": 1.4414529589994345,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--mutant",
+        "tile",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/mutant-tile-expanded.json"
+      ],
+      "evidence": "mutant-tile-expanded-command.json"
+    },
+    {
+      "name": "natural-cache",
+      "exitCode": 0,
+      "elapsedSeconds": 239.31254874999286,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1CrossWorldCacheAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/natural-cache.json"
+      ],
+      "evidence": "natural-cache-command.json"
+    },
+    {
+      "name": "natural-s1",
+      "exitCode": 0,
+      "elapsedSeconds": 46.56460437500209,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s1"
+      ],
+      "evidence": "natural-s1-command.json"
+    },
+    {
+      "name": "natural-s2",
+      "exitCode": 0,
+      "elapsedSeconds": 41.52460241600056,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s2"
+      ],
+      "evidence": "natural-s2-command.json"
+    },
+    {
+      "name": "numeric-chain",
+      "exitCode": 0,
+      "elapsedSeconds": 183.81695745799516,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/numericResourceChainAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/numeric-chain.json"
+      ],
+      "evidence": "numeric-chain-command.json"
+    },
+    {
+      "name": "phase1-mutant-absorption",
+      "exitCode": 1,
+      "elapsedSeconds": 1.3194157920079306,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--scope",
+        "absorption",
+        "--mutant",
+        "absorption",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/phase1-mutant-absorption.json"
+      ],
+      "evidence": "phase1-mutant-absorption-command.json"
+    },
+    {
+      "name": "phase1-mutant-cache",
+      "exitCode": 1,
+      "elapsedSeconds": 4.592379084002459,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--scope",
+        "cache",
+        "--mutant",
+        "cache",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/phase1-mutant-cache.json"
+      ],
+      "evidence": "phase1-mutant-cache-command.json"
+    },
+    {
+      "name": "phase1-mutant-cargo",
+      "exitCode": 1,
+      "elapsedSeconds": 63.56032695900649,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--scope",
+        "cargo",
+        "--mutant",
+        "cargo",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/phase1-mutant-cargo.json"
+      ],
+      "evidence": "phase1-mutant-cargo-command.json"
+    },
+    {
+      "name": "phase1-mutant-labor",
+      "exitCode": 1,
+      "elapsedSeconds": 11.4182969579997,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--scope",
+        "labor",
+        "--mutant",
+        "labor",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/phase1-mutant-labor.json"
+      ],
+      "evidence": "phase1-mutant-labor-command.json"
+    },
+    {
+      "name": "provenance",
+      "exitCode": 0,
+      "elapsedSeconds": 0.9332609999983106,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--scope",
+        "provenance",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/provenance.json"
+      ],
+      "evidence": "provenance-command.json"
+    },
+    {
+      "name": "recovery-food",
+      "exitCode": 0,
+      "elapsedSeconds": 461.57711933300016,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/recoveryFoodAccountingAudit.mjs"
+      ],
+      "evidence": "recovery-food-command.json"
+    },
+    {
+      "name": "red-confirmed",
+      "exitCode": 1,
+      "elapsedSeconds": 1.8033417920087231,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/red-confirmed.json"
+      ],
+      "evidence": "red-confirmed-command.json"
+    },
+    {
+      "name": "type-app",
+      "exitCode": 0,
+      "elapsedSeconds": 18.58993112499593,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "evidence": "type-app-command.json"
+    },
+    {
+      "name": "type-node",
+      "exitCode": 0,
+      "elapsedSeconds": 1.428387957988889,
+      "sourcePreserved": true,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "tsconfig.node.json",
+        "--noEmit"
+      ],
+      "evidence": "type-node-command.json"
+    }
+  ],
+  "determinism": {
+    "status": "IMPLEMENTED / PENDING INDEPENDENT FINAL REVIEW",
+    "withinMap": {
+      "rows": [
+        {
+          "kind": "map1",
+          "seed": "diag1-phase1:determinism:map1",
+          "span": 1260,
+          "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+          "digests": {
+            "daily": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+            "weekly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+            "monthly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+            "seasonal": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+            "repeat": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+            "fresh": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3"
+          },
+          "elapsed": {
+            "daily": 313.306626375,
+            "weekly": 337.912254625,
+            "monthly": 351.52336354199997,
+            "seasonal": 329.5386610000001,
+            "repeat": 214.3125297089999
+          },
+          "occurrence": {
+            "bands": 5,
+            "population": 155,
+            "activeParties": 2,
+            "returnOutcomes": 21,
+            "plantDepletionEntries": 1313
+          },
+          "pass": true
+        },
+        {
+          "kind": "map2",
+          "seed": "diag1-phase1:determinism:map2",
+          "span": 1260,
+          "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+          "digests": {
+            "daily": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+            "weekly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+            "monthly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+            "seasonal": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+            "repeat": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+            "fresh": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79"
+          },
+          "elapsed": {
+            "daily": 99.047906334,
+            "weekly": 101.200113416,
+            "monthly": 95.33247712500001,
+            "seasonal": 93.498262375,
+            "repeat": 95.774791042
+          },
+          "occurrence": {
+            "bands": 9,
+            "population": 235,
+            "activeParties": 8,
+            "returnOutcomes": 26,
+            "plantDepletionEntries": 1303
+          },
+          "pass": true
+        }
+      ],
+      "withinMapEquivalent": true,
+      "mixedMapSameProcessEquivalent": true
+    },
+    "mixedMap": {
+      "command": [
+        "/Users/fellipegoncalvesleite/.local/node/bin/node",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1DeterminismAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/phase1b/determinism-mixed.json"
+      ],
+      "rows": [
+        {
+          "kind": "map1",
+          "seed": "diag1-phase1:determinism:map1",
+          "span": 1260,
+          "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+          "digests": {
+            "daily": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+            "weekly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+            "monthly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+            "seasonal": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+            "repeat": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+            "fresh": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3"
+          },
+          "elapsed": {
+            "daily": 285.646353375,
+            "weekly": 314.962363875,
+            "monthly": 300.3948362919999,
+            "seasonal": 303.4851532910001,
+            "repeat": 328.50810016599996
+          },
+          "occurrence": {
+            "bands": 5,
+            "population": 155,
+            "activeParties": 2,
+            "returnOutcomes": 21,
+            "plantDepletionEntries": 1313
+          },
+          "pass": true
+        },
+        {
+          "kind": "map2",
+          "seed": "diag1-phase1:determinism:map2",
+          "span": 1260,
+          "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+          "digests": {
+            "daily": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+            "weekly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+            "monthly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+            "seasonal": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+            "repeat": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+            "fresh": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79"
+          },
+          "elapsed": {
+            "daily": 89.39821099999989,
+            "weekly": 90.29104558299994,
+            "monthly": 83.116142,
+            "seasonal": 91.49449462499982,
+            "repeat": 85.82677808299987
+          },
+          "occurrence": {
+            "bands": 9,
+            "population": 235,
+            "activeParties": 8,
+            "returnOutcomes": 26,
+            "plantDepletionEntries": 1303
+          },
+          "pass": true
+        }
+      ]
+    },
+    "mixedMapStress": "phase1b/determinism-mixed.json",
+    "historicalPrePhase1B": "phase1b/HISTORICAL_DETERMINISM_SCOPE.json",
+    "historicalFailingMatrix": "regression-repaired/determinism-stable.json",
+    "conclusion": "The unchanged original full-state matrix passes both maps in one process. Isolated maps and fresh processes agree across daily, weekly, monthly, seasonal and repeat runs over1260physical days. Historical failing evidence is preserved.",
+    "futureDependencyDisposition": "Executed cross-world cache prerequisite now passes; independent exact-published-HEAD Phase1 review is still required before Phase2. No self-acceptance or freeze."
+  }
+}
