@@ -10,7 +10,7 @@ For simulated people, the correction prevents seasonal conditions or a river cro
 - Original executable Phase-1 base: `73cc38b916e236339897c59686638efafd569b6e`.
 - Original four-finding production commit: `9268d211e7d370911d3d8fd875429db4d4d06741`.
 - Phase-1B starting published HEAD: `d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333`.
-- Phase-1B production/final documentation SHA: recorded after the new commits; no self-referential hash is invented.
+- Phase-1B production/test/evidence SHA: `cf095e9160cf79a0cf9f7767fe76cc68d8d944b2`. Final documentation HEAD and remote parity are exported after the documentation commit; no self-referential hash is invented.
 - Production changes: only `src/sim/world/seasonal.ts` and `src/sim/world/hydrography.ts`.
 - New focused executable: `scripts/diag1Phase1BCacheAudit.mjs`.
 - No save schema, clock, physical generator, biological coefficient, knowledge authority or nutrition semantics change.
@@ -49,7 +49,7 @@ The two separately inherited failures remain outside this correction: `expeditio
 
 All world/time/object scopes are weak. Seasonal crossing retains at most eight capability combinations per live input tuple. Movement retains at most the finite requested directed-edge domain under the live physical containers. There is no new canonical history, world-ID table or serialized cache. `CACHE_AUTHORITY.md` maps actual cold inputs, consumers, invalidation and future evolution obligations.
 
-The parked Task12 HEAD, status, three dirty-file bytes and complete diff are captured in `start-preservation.json`; final comparison will be recorded before publication. Canonical bundle r11 remains byte-identical. No merge to main or WORLD-M0, no reset/rebase/amend, and no AI Git trailers.
+The parked Task12 HEAD, status, three dirty-file bytes and complete diff are captured in `start-preservation.json`; final comparison passed and is recorded in `final-preservation.json`. Canonical bundle r11 remains byte-identical. No merge to main or WORLD-M0, no reset/rebase/amend, and no AI Git trailers.
 
 After required matrix success and commit/push/remote parity, a fresh read-only worker must review the complete original-base→exact-final-HEAD range. Only SPEC PASS, CODE QUALITY PASS, Critical0, Important0, no unresolved architecture contradiction and explicit PHASE2 AUTHORIZATION YES permit continuation under the user's existing authorization. The implementation owner cannot supply that acceptance. Phase2 starting SHA must be the exact independently reviewed SHA.
 

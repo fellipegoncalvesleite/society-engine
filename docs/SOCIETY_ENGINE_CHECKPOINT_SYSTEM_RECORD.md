@@ -29,7 +29,7 @@ systems for future work, preserve deferred seams and make architectural weakness
 <!-- DIAG1_PHASE1_CURRENT_START -->
 ## Current authority — DIAG-1 Correction Phase 1 including Phase 1B
 
-**IMPLEMENTED / PENDING INDEPENDENT FINAL REVIEW — not accepted or frozen.** User-authorized bounded correction on `fix/diag1-human-support`, exact accepted base `73cc38b916e236339897c59686638efafd569b6e`. Original four-finding production commit: `9268d211e7d370911d3d8fd875429db4d4d06741`; Phase-1B starts from published `d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333`. Final production/published identities are recorded after committing the candidate.
+**IMPLEMENTED / PENDING INDEPENDENT FINAL REVIEW — not accepted or frozen.** User-authorized bounded correction on `fix/diag1-human-support`, exact accepted base `73cc38b916e236339897c59686638efafd569b6e`. Original four-finding production commit: `9268d211e7d370911d3d8fd875429db4d4d06741`; Phase-1B starts from published `d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333`. Phase-1B production commit: `cf095e9160cf79a0cf9f7767fe76cc68d8d944b2`. Final documentation HEAD/remote parity is exported after its documentation commit.
 
 This block supersedes older current/unstarted/accepted headlines only for this correction and the explicitly reopened Phase-1B cache prerequisite. Frozen Item 4 (`11f085930462f981fcca45faf37b67d961196adb`), Item 5 (`cdfc7c7fe84f16bd79275ccf9b0d0c352a521cef`), SCALE-1 (`30e1440c237c0f09bb1403687b8da9899fbfd41b`) and M0.1 (`43c4c45615d375da6d25cf92ef328458ddcad347`) remain preserved ancestry. No merge to main or frozen branch is authorized.
 

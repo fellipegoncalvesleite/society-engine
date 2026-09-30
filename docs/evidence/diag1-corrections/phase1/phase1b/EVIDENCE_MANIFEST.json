@@ -2,7 +2,7 @@
   "status": "IMPLEMENTED / PENDING INDEPENDENT FINAL REVIEW",
   "startingPublishedHead": "d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333",
   "originalExecutableBase": "73cc38b916e236339897c59686638efafd569b6e",
-  "headAtManifestGeneration": "d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333",
+  "headAtManifestGeneration": "cf095e9160cf79a0cf9f7767fe76cc68d8d944b2",
   "identityNote": "Command manifests record actual pre-commit source hashes. The source/audit hashes below bind those bytes to the published candidate; documentation HEAD/remote parity is separately exported after commit. This manifest excludes itself to avoid a self-hash cycle.",
   "sourceAndAudits": {
     "src/sim/world/seasonal.ts": "15e9505db190253714d6282b2bd8d32fdea973fe5775ddb14c64a9f528ffdfbf",
@@ -25,12 +25,16 @@
       "bytes": 1770
     },
     "PHASE1B_REPORT.md": {
-      "sha256": "df6bcb6158f524a45f0cdc1e92e49128f0964a31f71829250dbd5d7e3396bb3c",
-      "bytes": 7286
+      "sha256": "8933c734107819a8c2d4c54642b5eed1414a338f0c97ebd24edad21b17fd6f43",
+      "bytes": 7396
+    },
+    "PRODUCTION_IDENTITY.json": {
+      "sha256": "32627b95255d530fd8b313e216dc7d52f0598d755759a5cdafd234c1e26f343b",
+      "bytes": 628
     },
     "PROGRESS.md": {
-      "sha256": "0a33222b875b1f4babf80d328023939d3e4faaceec259af6d5d8cdb448c78a22",
-      "bytes": 5266
+      "sha256": "d364dc6c57c159721a423f9781c4fee87428b075057cc15158080aa240268388",
+      "bytes": 5530
     },
     "VALIDATION_RESULTS.json": {
       "sha256": "a6ac0ebbf86b43c6db2fb4a6a9b0ab0f8d8edc148fcdd410ffe3bfc32f05c96c",

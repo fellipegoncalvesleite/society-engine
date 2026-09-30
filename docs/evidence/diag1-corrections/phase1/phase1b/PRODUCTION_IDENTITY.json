@@ -1,0 +1,12 @@
+{
+  "phase1bStartingPublishedHead": "d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333",
+  "phase1bProductionCommit": "cf095e9160cf79a0cf9f7767fe76cc68d8d944b2",
+  "phase1OriginalProductionCommit": "9268d211e7d370911d3d8fd875429db4d4d06741",
+  "originalExecutableBase": "73cc38b916e236339897c59686638efafd569b6e",
+  "sourceHashes": {
+    "src/sim/world/seasonal.ts": "15e9505db190253714d6282b2bd8d32fdea973fe5775ddb14c64a9f528ffdfbf",
+    "src/sim/world/hydrography.ts": "d80d7b28d880eab95126fc1c62884eea9f3ebdb3187644370eb58b3696ed807a"
+  },
+  "reviewGate": "PENDING fresh exact-final-published-HEAD review",
+  "phase2Started": false
+}
