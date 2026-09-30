@@ -3,7 +3,7 @@
 <!-- DIAG1_PHASE1_CURRENT_START -->
 ## Current authority — DIAG-1 Correction Phase 1
 
-**IMPLEMENTED / PENDING REVIEW — not accepted or frozen.** User-authorized bounded correction on `fix/diag1-human-support`, exact accepted base `73cc38b916e236339897c59686638efafd569b6e`. Production commit: `Pending first implementation commit`. The later documentation commit records that production identity; final published HEAD/remote status is exported independently.
+**IMPLEMENTED / PENDING REVIEW — not accepted or frozen.** User-authorized bounded correction on `fix/diag1-human-support`, exact accepted base `73cc38b916e236339897c59686638efafd569b6e`. Production commit: `9268d211e7d370911d3d8fd875429db4d4d06741`. The later documentation commit records that production identity; final published HEAD/remote status is exported independently.
 
 This block supersedes older current/unstarted/accepted headlines only for this four-finding correction. Frozen Item 4 (`11f085930462f981fcca45faf37b67d961196adb`), Item 5 (`cdfc7c7fe84f16bd79275ccf9b0d0c352a521cef`), SCALE-1 (`30e1440c237c0f09bb1403687b8da9899fbfd41b`) and M0.1 (`43c4c45615d375da6d25cf92ef328458ddcad347`) remain preserved ancestry. No merge to main or frozen branch is authorized.
 

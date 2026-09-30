@@ -1,6 +1,6 @@
 # Phase 1 validation results
 
-Production commit: Recorded in subsequent documentation commit. Tests below match the final production source bytes. Earlier failed/intermediate files remain preserved.
+Production commit: 9268d211e7d370911d3d8fd875429db4d4d06741. Tests below match the final production source bytes. Earlier failed/intermediate files remain preserved.
 
 | Check | Exit | Seconds | Command evidence |
 |---|---:|---:|---|

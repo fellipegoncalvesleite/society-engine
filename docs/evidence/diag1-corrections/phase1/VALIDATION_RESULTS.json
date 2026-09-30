@@ -1,6 +1,6 @@
 {
   "status": "IMPLEMENTED / PENDING REVIEW",
-  "productionCommit": null,
+  "productionCommit": "9268d211e7d370911d3d8fd875429db4d4d06741",
   "corePassed": 62,
   "expandedProvenancePassed": 10,
   "overlappingProvenanceChecks": 7,

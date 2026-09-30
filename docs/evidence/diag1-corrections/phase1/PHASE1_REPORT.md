@@ -7,7 +7,7 @@
 - Base: `73cc38b916e236339897c59686638efafd569b6e`, tree `dcbedbed81f70a6ffc6e3c7ffb245e039a9254c6`.
 - Branch: `fix/diag1-human-support`; remote: `https://github.com/fellipegoncalvesleite/society-engine.git`.
 - Correction worktree: `/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support`.
-- Production commit will be recorded in a subsequent documentation commit. Exact final HEAD and remote verification are exported after that commit, avoiding a self-referential hash.
+- Production/test/evidence commit: `9268d211e7d370911d3d8fd875429db4d4d06741`. Exact final HEAD and remote verification are exported after the documentation commit, avoiding a self-referential hash.
 - The root Item-4 checkout and parked Task-12 checkout are read-only. Starting identities/hashes: `start-preservation.json` and `start-preservation-supplement.json`. Final verification is recorded separately.
 - Four reopening entries preceded behavior edits: `REOPENING.md`. No physical generator files, thresholds, yield/support coefficients, fertility/mortality, route-distance policy or accepted ancestry are retuned.
 

@@ -1,6 +1,6 @@
 {
   "exactBase": "73cc38b916e236339897c59686638efafd569b6e",
-  "productionCommit": null,
+  "productionCommit": "9268d211e7d370911d3d8fd875429db4d4d06741",
   "files": {
     "src/architecture/ArchitectureMapPage.tsx": "ed750255fd20f9b3b45992fe5e788936c08790b0e8768ba8ad60261cefc1ea54",
     "src/architecture/architecture.css": "97a973c4f918816fe99c652b141c51e7175114a6beb09de1e202c529794199f1",

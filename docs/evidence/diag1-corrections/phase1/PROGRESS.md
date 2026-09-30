@@ -1,6 +1,6 @@
 # DIAG-1 Phase 1 execution ledger
 
-Status: four bounded corrections IMPLEMENTED / PENDING REVIEW. Required validation executed with explicit inherited failures/coverage limits; preparing required production and documentation commits. Earlier Remaining entries below are chronological and superseded.
+Status: four bounded corrections IMPLEMENTED / PENDING REVIEW. Required validation executed with explicit inherited failures/coverage limits. Production/test/evidence commit 9268d211e7d370911d3d8fd875429db4d4d06741 recorded; subsequent documentation commit binds this identity. Publication and exact final HEAD are verified in the independent export. Earlier Remaining entries below are chronological and superseded.
 Spec: user pasted Phase 1; recovered package /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/task/correction-package.
 Base: 73cc38b916e236339897c59686638efafd569b6e, tree dcbedbed81f70a6ffc6e3c7ffb245e039a9254c6.
 Branch: fix/diag1-human-support. Worktree: /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support.
@@ -104,3 +104,7 @@ Recovered r9 must remain preserved and nonconflicting additions reconciled into 
 ## Commit preflight
 
 Production/test/current-handoff whitespace checks passed. The full staged whitespace check reports only original Markdown hard breaks in preserved canonical/history and raw build-log whitespace; these bytes are intentionally retained. See `staging-validation.json`. Full preservation checks passed in `preservation-precommit.json`. No physical-world or disposable cache paths are staged.
+
+## Production identity recorded
+
+Production/test/evidence commit `9268d211e7d370911d3d8fd875429db4d4d06741`, tree `117179c27bbfff14b771a6c920bec0c7755bf30f`, is a direct child of the exact authorized base. All 244 committed production source blobs match the executed validation manifests. This later documentation/evidence update changes no production or test source. Exact-final-HEAD independent review and supervising acceptance remain pending; no safe-deferral finding exists for the mixed-map residual.
