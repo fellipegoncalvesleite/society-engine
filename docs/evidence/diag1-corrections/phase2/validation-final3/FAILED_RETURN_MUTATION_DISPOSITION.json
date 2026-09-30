@@ -1,0 +1,11 @@
+{
+  "command": "node scripts/failedReturnContinuationMutationAudit.mjs --out <validation-final3>/failed-return-mutations.json",
+  "executionLocation": "isolated exact-source mutation snapshot",
+  "exitCode": 1,
+  "mutantsLoaded": false,
+  "mutantsKilled": 0,
+  "reason": "Canonical alternative full-memory continuation chooses tile109:58; actual local travel refuses every step toward destination. Baseline does not establish within120days. This is not a killed mutant or proof of the old complete mutation suite.",
+  "positiveAndBlockedEvidence": "failed-return-positive-and-blocked.json",
+  "stabilizationMutants": "successor-mutations.json",
+  "phase2MechanismMutants": "MECHANISM_MUTANTS_SUMMARY.json"
+}

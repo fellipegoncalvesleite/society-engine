@@ -1,0 +1,11 @@
+WebSocket server error: Port 24678 is already in use
+{"phase2MeasuredDeparture":{"parent":"band:varied-river-mid","target":"tile:113:57","refusals":[{"parent":"band:varied-estuary","target":"tile:193:87","refusal":"preparation:founder_cohort_declined","detail":"not_willing_on_held_evidence,separation_costs_those_who_stay"}]}}
+{"phase2MeasuredDeparture":{"parent":"band:varied-river-mid","target":"tile:113:57","refusals":[{"parent":"band:varied-estuary","target":"tile:193:87","refusal":"preparation:founder_cohort_declined","detail":"not_willing_on_held_evidence,separation_costs_those_who_stay"}]}}
+file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/successorStabilizationAudit.mjs:640
+  if (returnDeparture.ok !== true) throw new Error(`return-arm departure refused: ${returnDeparture.refusal}`);
+                                         ^
+
+Error: return-arm departure refused: preparation:founder_cohort_declined
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/successorStabilizationAudit.mjs:640:42
+
+Node.js v26.7.0

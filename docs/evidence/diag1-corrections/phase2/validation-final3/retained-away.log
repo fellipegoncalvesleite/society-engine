@@ -1,0 +1,21 @@
+{
+  "summary": {
+    "fixtures": 12,
+    "failing": 0,
+    "vacuous": 0
+  },
+  "verdicts": {
+    "L1_aging_without_movement": "NO_BODY_CHANGED_TILE",
+    "L2_dependent_becomes_adult": "MATURATION_DOES_NOT_TOUCH_PARTY",
+    "L3_ordinary_residential_death": "DEATH_CHANGES_RESIDENCE_NOT_THE_PARTY",
+    "L4_explicit_party_loss": "PARTY_LOCAL_OUTCOME_OWNS_THE_LOSS",
+    "L5_prepared_party_cancellation": "AT_CAMP_COMMITMENT_MOVES_NOBODY",
+    "L6_fission_with_sufficient_residential_population": "DAUGHTER_FROM_RESIDENTIAL_PEOPLE_PARTY_UNCHANGED",
+    "L7_fission_blocked_by_residential_unavailability": "BLOCKED_RATHER_THAN_BORROWING_AWAY_BODIES",
+    "L8_party_returns_after_protected_aging": "RETURN_RECONCILES_ONCE_NO_POPULATION_CREATED_OR_DELETED",
+    "L9_two_concurrent_parties_across_annual_demography": "BOTH_PARTIES_PHYSICALLY_CONSERVED",
+    "L10_population_collapse_below_away_headcount": "LABELLED_NON_HISTORICAL_REPAIR_AND_STATED_MODEL_LIMIT",
+    "L11_legacy_overcommitted_state": "DETERMINISTIC_DEFENSIVE_REPAIR_NO_INVENTED_HISTORY",
+    "L12_step_mode_equivalence_across_annual_boundary": "STEP_MODE_IDENTICAL_NO_ACTIVE_PARTY_CLAIM"
+  }
+}

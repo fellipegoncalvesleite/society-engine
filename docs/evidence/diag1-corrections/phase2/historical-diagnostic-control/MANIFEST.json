@@ -1,0 +1,25 @@
+{
+  "scope": "HISTORICAL DIAGNOSTIC ONLY. Removes the entire old residential movement fatigue contribution, including valid recent fatigue. Not the production 7-day decay, not current-source certification, and not a population target.",
+  "files": [
+    {
+      "original": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-29/files-mentioned-by-the-user-society-2/outputs/DIAG1/evidence/natural-good-s1-p34-y30-fatigue_off.json",
+      "copy": "natural-good-s1-p34-y30-fatigue_off.json",
+      "sha256": "185fa56419e4b8f15ac86bea039266aab7f11e370dbbb93bec06be4bf7babfef"
+    },
+    {
+      "original": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-29/files-mentioned-by-the-user-society-2/outputs/DIAG1/evidence/natural-good-s2-p34-y30-fatigue_off.json",
+      "copy": "natural-good-s2-p34-y30-fatigue_off.json",
+      "sha256": "9c97e4d5291c79f4a6443228efe034a005088a8f8ee677314f6632eed4aa11e2"
+    },
+    {
+      "original": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-29/files-mentioned-by-the-user-society-2/outputs/DIAG1/evidence/natural-good-s3-p34-y30-fatigue_off.json",
+      "copy": "natural-good-s3-p34-y30-fatigue_off.json",
+      "sha256": "e5a87f6f4a5860feca3abcd3fa2f3ad53451b21325ec6a9fc4fa57a55f020196"
+    },
+    {
+      "original": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-29/files-mentioned-by-the-user-society-2/outputs/DIAG1/probes/natural.mjs",
+      "copy": "natural.mjs",
+      "sha256": "39a37b961c545974d79c7df282c64425bf01ba38bf2b98d0b5008d2f0f5971b1"
+    }
+  ]
+}

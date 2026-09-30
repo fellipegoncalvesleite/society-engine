@@ -1,0 +1,9 @@
+{"fixtureDeparture":"band:varied-river-mid:provisional:1","attempts":[{"requestedFounders":11,"ok":false,"refusal":"preparation:founder_cohort_declined","detail":"not_willing_on_held_evidence,separation_costs_those_who_stay"},{"requestedFounders":3,"ok":false,"refusal":"preparation:founder_cohort_declined","detail":"not_willing_on_held_evidence,separation_costs_those_who_stay"},{"requestedFounders":2,"ok":false,"refusal":"preparation:founder_cohort_declined","detail":"not_willing_on_held_evidence,separation_costs_those_who_stay"}]}
+file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/provisionalReintegrationAudit.mjs:75
+  if (departure.ok !== true) throw new Error(`departure refused: ${departure.refusal}`);
+                                   ^
+
+Error: departure refused: bounded_real_cohort_requests_refused
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/provisionalReintegrationAudit.mjs:75:36
+
+Node.js v26.7.0

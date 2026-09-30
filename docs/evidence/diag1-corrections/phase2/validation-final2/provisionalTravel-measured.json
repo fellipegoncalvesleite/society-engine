@@ -1,0 +1,200 @@
+{
+  "generatedAt": "2026-09-30T20:09:35.098Z",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "observeDays": 180,
+  "parentId": "band:varied-river-mid",
+  "successorId": "band:varied-river-mid:provisional:1",
+  "targetTileId": "tile:113:57",
+  "departureTileId": "tile:109:57",
+  "straightLineDistance": 4,
+  "journey": {
+    "distinctPositions": 7,
+    "arrivedOnDay": 5,
+    "path": [
+      "tile:109:57",
+      "tile:110:57",
+      "tile:111:57",
+      "tile:112:57",
+      "tile:113:57",
+      "tile:114:57",
+      "tile:114:58"
+    ],
+    "phaseTrail": [
+      "travelling",
+      "establishing",
+      "stabilized"
+    ]
+  },
+  "sampleStepRecord": {
+    "bandId": "band:varied-river-mid:provisional:1",
+    "lineageId": "LIN-TRAVEL-1",
+    "phase": "travelling",
+    "fromTileId": "tile:109:57",
+    "toTileId": "tile:109:57",
+    "destinationTileId": "tile:113:57",
+    "moved": false,
+    "kmPerActiveDay": 1.882,
+    "gatherShare": 0.428,
+    "travelDaysConsumed": 0.572,
+    "completedPhysicalKm": 0,
+    "distanceRemaining": 4,
+    "impassableNeighboursRefused": 2,
+    "arrived": false,
+    "edgeTravelTimeRemainingDays": 0.1612624867162593,
+    "refusal": "edge_travel_incomplete"
+  },
+  "summary": {
+    "fixtures": 10,
+    "passing": 7,
+    "failing": 3,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "V1_outbound_starts_on_the_parents_tile",
+      "claim": "the successor begins its journey on the tile the founders physically left from, not at the destination — defect 2 was a daughter appearing 5 and 7 tiles away in a single day",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "startTile": "tile:109:57",
+        "parentTile": "tile:109:57",
+        "targetTile": "tile:113:57",
+        "distanceToTarget": 4
+      }
+    },
+    {
+      "id": "V2_every_step_is_contiguous",
+      "claim": "every completed provisional transition in the canonical breadcrumb trail is exactly one graph edge; a single day may now complete several such edges",
+      "verdict": "FAIL",
+      "nonVacuous": true,
+      "detail": {
+        "dayEndPositions": [
+          "tile:109:57",
+          "tile:110:57",
+          "tile:111:57",
+          "tile:112:57",
+          "tile:113:57",
+          "tile:114:57",
+          "tile:114:58"
+        ],
+        "completedEdgeSequenceLength": 5,
+        "nonContiguous": [
+          {
+            "from": "tile:112:57",
+            "to": "tile:114:58",
+            "manhattan": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "V3_the_group_never_stands_anywhere_it_could_not_walk",
+      "claim": "world passability is a physical execution constraint on every step, so no position in the whole journey is a tile people cannot occupy",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "impassableStops": []
+      }
+    },
+    {
+      "id": "V4_arrival_produces_establishing_not_stabilized",
+      "claim": "reaching the destination earns only the right to try to live there; arrival supplies neither positive commitment nor stabilization authority",
+      "verdict": "FAIL",
+      "nonVacuous": true,
+      "detail": {
+        "arrivedOnDay": 5,
+        "phaseTrail": [
+          "travelling",
+          "establishing",
+          "stabilized"
+        ],
+        "finalPhase": "stabilized",
+        "finalPosition": "tile:114:58"
+      }
+    },
+    {
+      "id": "V5_the_trail_is_ground_actually_walked_and_is_bounded",
+      "claim": "the retained trail contains completed physical edge origins only and remains bounded; unfinished edge progress is stored separately as a directed-edge time remainder",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "trailLength": 4,
+        "cap": 64,
+        "trailPassable": true,
+        "edgeRemainder": null,
+        "trail": [
+          "tile:109:57",
+          "tile:110:57",
+          "tile:111:57",
+          "tile:112:57"
+        ]
+      }
+    },
+    {
+      "id": "V6_pace_responds_to_real_burden",
+      "claim": "an injured column is slower than a whole one — measured through the CANONICAL `deriveTravelPace` authority rather than a second pace model invented here",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "whole": {
+          "kmPerActiveDay": 1.882,
+          "edgeRemainingDays": 0.1612624867162593
+        },
+        "injured": {
+          "kmPerActiveDay": 0.918,
+          "edgeRemainingDays": 0.931267973856209
+        }
+      }
+    },
+    {
+      "id": "V7_no_ordinary_system_moves_a_provisional_group",
+      "claim": "with the group held in a non-travel phase, sixty days of ordinary daily actions and seasonal processing move it exactly nowhere — so the position changes above are the travel authority's and nothing else's",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "startTile": "tile:109:57",
+        "after60Days": "tile:109:57",
+        "travelArmDistinctPositions": 7
+      }
+    },
+    {
+      "id": "V8_the_journey_is_deterministic",
+      "claim": "two identical departures walk the identical sequence of tiles",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "firstRunSteps": 7,
+        "secondRunSteps": 7
+      }
+    },
+    {
+      "id": "V9_travel_support_is_physically_sourced_or_absent",
+      "claim": "no ration, storage or capability appears from nothing — every support unit the group holds came from a real source that was really depleted, and a group that found nothing holds nothing",
+      "verdict": "FAIL",
+      "nonVacuous": true,
+      "detail": {
+        "residentialReceiptsDuringTravel": 1,
+        "storageCapacity": 0.16,
+        "travelSupportUnits": 0,
+        "travelDepletionApplied": 0,
+        "note": "travel receipts are successor-owned and live on the lifecycle record; `seasonalFoodReceipts` describes receipts from a residential camp, which a walking group does not have"
+      }
+    },
+    {
+      "id": "V10_hunger_never_improves_without_physically_extracted_support",
+      "claim": "the group's hunger over the journey may fall only if it physically took food from a real source and depleted it; walking is not eating",
+      "verdict": "PASS",
+      "nonVacuous": true,
+      "detail": {
+        "hunger": {
+          "atDeparture": 0.76,
+          "atEnd": 0.8
+        },
+        "travelSupportUnits": 0,
+        "travelDepletionApplied": 0,
+        "mechanism": "the departure seam supplies an opening measured interval from the founders' own lived samples, and provisionalTravelSubsistence closes further intervals from what the group physically extracted"
+      }
+    }
+  ]
+}

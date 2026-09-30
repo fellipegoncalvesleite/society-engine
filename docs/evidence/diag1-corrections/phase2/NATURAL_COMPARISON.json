@@ -1,0 +1,2581 @@
+{
+  "baseline": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
+  "candidate": "sourceBefore/sourceAfter in each final run",
+  "notes": [
+    "Population is an observation, never a pass condition.",
+    "Site labels are inherited DIAG1 proxies, not calibrated habitat classes.",
+    "These six executed courses remained residential: F4/provisional occurrence is proven separately by controlled actual-source lifecycle audits.",
+    "Experienced stress here integrates the represented90-day resident measurements at season boundaries, not invented historical daily detail.",
+    "Elapsed runtimes include concurrent load and are not an isolated benchmark.",
+    "An initial condition audit and source derivation distinguish initial unknown-history correction from subsequent movement-recency recovery."
+  ],
+  "rows": [
+    {
+      "tier": "good",
+      "seed": "s1",
+      "baselineFile": "docs/evidence/diag1-corrections/phase2/natural/baseline-v3-good-s1.json",
+      "candidateFile": "docs/evidence/diag1-corrections/phase2/natural/phase2-final1-good-s1.json",
+      "baseline": {
+        "physicalFoodTaken": 6.921900000000003,
+        "returnedUsableRawFood": 6.059999999999994,
+        "support": 606,
+        "integratedDemand": 2998.7999999999984,
+        "experiencedStressDayEquivalents": 8874.9,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 4.182871574073996,
+        "meanMovementAndOtherFatigue": 0.9752592592592612,
+        "candidateCalls": 3360,
+        "selectedCandidates": 475,
+        "selectedFoodCandidates": 475,
+        "foodTripExecutions": 475,
+        "zeroFoodSeasons": 88,
+        "measuredSeasons": 120,
+        "births": 14,
+        "deaths": 23,
+        "terminalRemoved": 0,
+        "population": 25
+      },
+      "candidate": {
+        "physicalFoodTaken": 26.607899999999983,
+        "returnedUsableRawFood": 23.24729999999997,
+        "support": 2324.73,
+        "integratedDemand": 3540.999999999998,
+        "experiencedStressDayEquivalents": 4933.8,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 6.684982499999859,
+        "meanMovementAndOtherFatigue": 0.212645370370392,
+        "candidateCalls": 3360,
+        "selectedCandidates": 1766,
+        "selectedFoodCandidates": 1755,
+        "foodTripExecutions": 1755,
+        "zeroFoodSeasons": 9,
+        "measuredSeasons": 120,
+        "births": 17,
+        "deaths": 19,
+        "terminalRemoved": 0,
+        "population": 32
+      },
+      "firstMetricDivergence": {
+        "fatigue": {
+          "day": 1,
+          "baseline": null,
+          "candidate": 0.02,
+          "baselinePosition": "tile:136:64",
+          "candidatePosition": "tile:136:64"
+        },
+        "pace": {
+          "day": 1,
+          "baseline": 6.685,
+          "candidate": 6.643,
+          "baselinePosition": "tile:136:64",
+          "candidatePosition": "tile:136:64"
+        },
+        "support": {
+          "day": 450,
+          "baseline": 16.29,
+          "candidate": 24.76,
+          "baselinePosition": "tile:136:66",
+          "candidatePosition": "tile:136:66"
+        },
+        "demand": {
+          "day": 720,
+          "baseline": 29.55,
+          "candidate": 29.35,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:67"
+        },
+        "foodStress": {
+          "day": 450,
+          "baseline": 0.45,
+          "candidate": 0.16,
+          "baselinePosition": "tile:136:66",
+          "candidatePosition": "tile:136:66"
+        },
+        "experiencedStress": {
+          "day": 450,
+          "baseline": 0.53,
+          "candidate": 0.46,
+          "baselinePosition": "tile:136:66",
+          "candidatePosition": "tile:136:66"
+        },
+        "population": {
+          "day": 1440,
+          "baseline": 33,
+          "candidate": 34,
+          "baselinePosition": "tile:136:67",
+          "candidatePosition": "tile:135:66"
+        },
+        "rawTake": {
+          "day": 366,
+          "baseline": 0.7355999999999998,
+          "candidate": 0.7035999999999998,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "rawReturned": {
+          "day": 366,
+          "baseline": 0.6507999999999998,
+          "candidate": 0.6228999999999998,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "candidates": {
+          "day": 372,
+          "baseline": 65,
+          "candidate": 66,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "foodCandidates": {
+          "day": 372,
+          "baseline": 65,
+          "candidate": 66,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "foodTripExecutions": {
+          "day": 372,
+          "baseline": 65,
+          "candidate": 66,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "births": {
+          "day": 3600,
+          "baseline": 4,
+          "candidate": 5,
+          "baselinePosition": "tile:137:68",
+          "candidatePosition": "tile:134:66"
+        },
+        "deaths": {
+          "day": 1440,
+          "baseline": 2,
+          "candidate": 1,
+          "baselinePosition": "tile:136:67",
+          "candidatePosition": "tile:135:66"
+        }
+      },
+      "firstObservedActionDivergence": {
+        "day": 54,
+        "baseline": {
+          "day": 54,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 0.20849999999999996,
+          "rawReturned": 0.1867,
+          "receiptCount": 9,
+          "tripCalls": 17,
+          "candidates": 14,
+          "foodCandidates": 14,
+          "foodTripExecutions": 14,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:136:64",
+              "phase": "residential",
+              "fatigue": null,
+              "pace": 6.685,
+              "support": null,
+              "demand": null,
+              "foodStress": null,
+              "experiencedStress": null,
+              "tripRecords": 14,
+              "knowledge": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:136:63",
+                "cause": "food_resource_check",
+                "resourceClassId": "animal_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:136:63",
+              "harvest": {
+                "sourceKind": "fauna_stock",
+                "sourceClass": "animal_food",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": false,
+                "physicalAvailability": 0,
+                "harvestedAmount": 0,
+                "depletionApplied": 0,
+                "transportLoss": 0,
+                "processingLoss": 0,
+                "usableSupport": 0,
+                "failureReason": "physical_source_absent",
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:54:fauna_stock:absent"
+                ]
+              }
+            }
+          ]
+        },
+        "candidate": {
+          "day": 54,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 0.20849999999999996,
+          "rawReturned": 0.1867,
+          "receiptCount": 9,
+          "tripCalls": 17,
+          "candidates": 14,
+          "foodCandidates": 14,
+          "foodTripExecutions": 14,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:136:64",
+              "phase": "residential",
+              "fatigue": 0.02,
+              "pace": 6.643,
+              "support": null,
+              "demand": null,
+              "foodStress": null,
+              "experiencedStress": null,
+              "tripRecords": 14,
+              "knowledge": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:136:63",
+                "cause": "food_resource_check",
+                "resourceClassId": "generic_plant_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:136:63",
+              "harvest": {
+                "sourceKind": "plant_patch",
+                "sourceId": "plant:tile:136:63:wild_grain_seed",
+                "sourceClass": "wild_grain_seed",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": true,
+                "physicalAvailability": 0,
+                "harvestedAmount": 0,
+                "depletionApplied": 0,
+                "transportLoss": 0,
+                "processingLoss": 0,
+                "usableSupport": 0,
+                "failureReason": "physically_exhausted",
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:54:plant_patch:plant:tile:136:63:wild_grain_seed"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "years2to6": [
+        {
+          "year": 2,
+          "baseline": {
+            "physicalFoodTaken": 0.43300000000000005,
+            "returnedUsableRawFood": 0.37849999999999984,
+            "support": 37.85,
+            "integratedDemand": 117.60000000000001,
+            "experiencedStressDayEquivalents": 244.8,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 4.1423749999999835,
+            "meanMovementAndOtherFatigue": 0.9850833333333329,
+            "candidateCalls": 112,
+            "selectedCandidates": 47,
+            "selectedFoodCandidates": 47,
+            "foodTripExecutions": 47,
+            "zeroFoodSeasons": 1,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.9725000000000004,
+            "returnedUsableRawFood": 0.8544,
+            "support": 85.44000000000001,
+            "integratedDemand": 117.4,
+            "experiencedStressDayEquivalents": 100.79999999999998,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 5.759925000000046,
+            "meanMovementAndOtherFatigue": 0.20677777777777745,
+            "candidateCalls": 112,
+            "selectedCandidates": 93,
+            "selectedFoodCandidates": 93,
+            "foodTripExecutions": 93,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 3,
+          "baseline": {
+            "physicalFoodTaken": 0,
+            "returnedUsableRawFood": 0,
+            "support": 0,
+            "integratedDemand": 118.35000000000001,
+            "experiencedStressDayEquivalents": 360,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.482544444444443,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 4,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 34
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.9974999999999998,
+            "returnedUsableRawFood": 0.8807000000000003,
+            "support": 88.07,
+            "integratedDemand": 118.2,
+            "experiencedStressDayEquivalents": 147.60000000000002,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 6.227569444444406,
+            "meanMovementAndOtherFatigue": 0.22397222222222193,
+            "candidateCalls": 112,
+            "selectedCandidates": 73,
+            "selectedFoodCandidates": 68,
+            "foodTripExecutions": 68,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 4,
+          "baseline": {
+            "physicalFoodTaken": 0,
+            "returnedUsableRawFood": 0,
+            "support": 0,
+            "integratedDemand": 118,
+            "experiencedStressDayEquivalents": 360,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.3592138888889127,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 4,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 33
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.7766999999999995,
+            "returnedUsableRawFood": 0.6850999999999989,
+            "support": 68.51,
+            "integratedDemand": 118.8,
+            "experiencedStressDayEquivalents": 151.20000000000002,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 6.078674999999996,
+            "meanMovementAndOtherFatigue": 0.22388888888888867,
+            "candidateCalls": 112,
+            "selectedCandidates": 71,
+            "selectedFoodCandidates": 65,
+            "foodTripExecutions": 65,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 5,
+          "baseline": {
+            "physicalFoodTaken": 0,
+            "returnedUsableRawFood": 0,
+            "support": 0,
+            "integratedDemand": 115.39999999999999,
+            "experiencedStressDayEquivalents": 360,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.3961944444444474,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 4,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 33
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.7284000000000006,
+            "returnedUsableRawFood": 0.642399999999999,
+            "support": 64.24000000000001,
+            "integratedDemand": 119.6,
+            "experiencedStressDayEquivalents": 167.39999999999998,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 5.708938888888901,
+            "meanMovementAndOtherFatigue": 0.22627777777777713,
+            "candidateCalls": 112,
+            "selectedCandidates": 65,
+            "selectedFoodCandidates": 65,
+            "foodTripExecutions": 65,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 6,
+          "baseline": {
+            "physicalFoodTaken": 0,
+            "returnedUsableRawFood": 0,
+            "support": 0,
+            "integratedDemand": 114,
+            "experiencedStressDayEquivalents": 360,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.4000000000000012,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 4,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 32
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.9019000000000013,
+            "returnedUsableRawFood": 0.7974000000000019,
+            "support": 79.74,
+            "integratedDemand": 118.2,
+            "experiencedStressDayEquivalents": 141.3,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 5.5375027777777195,
+            "meanMovementAndOtherFatigue": 0.22855555555555482,
+            "candidateCalls": 112,
+            "selectedCandidates": 77,
+            "selectedFoodCandidates": 77,
+            "foodTripExecutions": 77,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        }
+      ],
+      "bounds": {
+        "baseline": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 3160,
+          "maxMovement": 80,
+          "maxCompletedSpan": 0
+        },
+        "candidate": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 8447,
+          "maxMovement": 80,
+          "maxCompletedSpan": 720
+        }
+      },
+      "runtimeMs": {
+        "baseline": 60302,
+        "candidate": 54586
+      },
+      "bodyResidual": {
+        "baseline": 0,
+        "candidate": 0
+      },
+      "finalSnapshotHash": {
+        "baseline": "0e1a36cc2a1712f87317104a51bab176c143015dcc30467542756070596709f2",
+        "candidate": "45c1ccbe7c3a7027c88db5adbbb1bc49c0325e8f97ed305698f059b8f53283e0"
+      }
+    },
+    {
+      "tier": "good",
+      "seed": "s2",
+      "baselineFile": "docs/evidence/diag1-corrections/phase2/natural/baseline-v3-good-s2.json",
+      "candidateFile": "docs/evidence/diag1-corrections/phase2/natural/phase2-final1-good-s2.json",
+      "baseline": {
+        "physicalFoodTaken": 7.656999999999996,
+        "returnedUsableRawFood": 6.680299999999997,
+        "support": 668.03,
+        "integratedDemand": 2967.9499999999985,
+        "experiencedStressDayEquivalents": 9262.8,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 4.018976018518622,
+        "meanMovementAndOtherFatigue": 0.9813425925925926,
+        "candidateCalls": 3360,
+        "selectedCandidates": 492,
+        "selectedFoodCandidates": 492,
+        "foodTripExecutions": 492,
+        "zeroFoodSeasons": 94,
+        "measuredSeasons": 120,
+        "births": 14,
+        "deaths": 24,
+        "terminalRemoved": 0,
+        "population": 24
+      },
+      "candidate": {
+        "physicalFoodTaken": 23.471999999999984,
+        "returnedUsableRawFood": 20.353000000000005,
+        "support": 2035.3,
+        "integratedDemand": 3568.999999999998,
+        "experiencedStressDayEquivalents": 5563.8,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 6.67087916666677,
+        "meanMovementAndOtherFatigue": 0.21724351851853005,
+        "candidateCalls": 3360,
+        "selectedCandidates": 1676,
+        "selectedFoodCandidates": 1597,
+        "foodTripExecutions": 1597,
+        "zeroFoodSeasons": 13,
+        "measuredSeasons": 120,
+        "births": 17,
+        "deaths": 19,
+        "terminalRemoved": 0,
+        "population": 32
+      },
+      "firstMetricDivergence": {
+        "fatigue": {
+          "day": 1,
+          "baseline": null,
+          "candidate": 0.02,
+          "baselinePosition": "tile:136:64",
+          "candidatePosition": "tile:136:64"
+        },
+        "pace": {
+          "day": 1,
+          "baseline": 6.685,
+          "candidate": 6.643,
+          "baselinePosition": "tile:136:64",
+          "candidatePosition": "tile:136:64"
+        },
+        "support": {
+          "day": 450,
+          "baseline": 16.29,
+          "candidate": 24.76,
+          "baselinePosition": "tile:136:66",
+          "candidatePosition": "tile:136:66"
+        },
+        "demand": {
+          "day": 720,
+          "baseline": 29.55,
+          "candidate": 29.35,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:67"
+        },
+        "foodStress": {
+          "day": 450,
+          "baseline": 0.45,
+          "candidate": 0.16,
+          "baselinePosition": "tile:136:66",
+          "candidatePosition": "tile:136:66"
+        },
+        "experiencedStress": {
+          "day": 450,
+          "baseline": 0.53,
+          "candidate": 0.46,
+          "baselinePosition": "tile:136:66",
+          "candidatePosition": "tile:136:66"
+        },
+        "population": {
+          "day": 1080,
+          "baseline": 33,
+          "candidate": 34,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "rawTake": {
+          "day": 366,
+          "baseline": 0.7355999999999998,
+          "candidate": 0.7035999999999998,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "rawReturned": {
+          "day": 366,
+          "baseline": 0.6507999999999998,
+          "candidate": 0.6228999999999998,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "candidates": {
+          "day": 372,
+          "baseline": 65,
+          "candidate": 66,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "foodCandidates": {
+          "day": 372,
+          "baseline": 65,
+          "candidate": 66,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "foodTripExecutions": {
+          "day": 372,
+          "baseline": 65,
+          "candidate": 66,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "births": {
+          "day": 3600,
+          "baseline": 4,
+          "candidate": 5,
+          "baselinePosition": "tile:136:67",
+          "candidatePosition": "tile:135:67"
+        },
+        "deaths": {
+          "day": 1080,
+          "baseline": 2,
+          "candidate": 1,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        }
+      },
+      "firstObservedActionDivergence": {
+        "day": 54,
+        "baseline": {
+          "day": 54,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 0.20849999999999996,
+          "rawReturned": 0.1867,
+          "receiptCount": 9,
+          "tripCalls": 17,
+          "candidates": 14,
+          "foodCandidates": 14,
+          "foodTripExecutions": 14,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:136:64",
+              "phase": "residential",
+              "fatigue": null,
+              "pace": 6.685,
+              "support": null,
+              "demand": null,
+              "foodStress": null,
+              "experiencedStress": null,
+              "tripRecords": 14,
+              "knowledge": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:136:63",
+                "cause": "food_resource_check",
+                "resourceClassId": "animal_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:136:63",
+              "harvest": {
+                "sourceKind": "fauna_stock",
+                "sourceClass": "animal_food",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": false,
+                "physicalAvailability": 0,
+                "harvestedAmount": 0,
+                "depletionApplied": 0,
+                "transportLoss": 0,
+                "processingLoss": 0,
+                "usableSupport": 0,
+                "failureReason": "physical_source_absent",
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:54:fauna_stock:absent"
+                ]
+              }
+            }
+          ]
+        },
+        "candidate": {
+          "day": 54,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 0.20849999999999996,
+          "rawReturned": 0.1867,
+          "receiptCount": 9,
+          "tripCalls": 17,
+          "candidates": 14,
+          "foodCandidates": 14,
+          "foodTripExecutions": 14,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:136:64",
+              "phase": "residential",
+              "fatigue": 0.02,
+              "pace": 6.643,
+              "support": null,
+              "demand": null,
+              "foodStress": null,
+              "experiencedStress": null,
+              "tripRecords": 14,
+              "knowledge": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:136:63",
+                "cause": "food_resource_check",
+                "resourceClassId": "generic_plant_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:136:63",
+              "harvest": {
+                "sourceKind": "plant_patch",
+                "sourceId": "plant:tile:136:63:wild_grain_seed",
+                "sourceClass": "wild_grain_seed",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": true,
+                "physicalAvailability": 0,
+                "harvestedAmount": 0,
+                "depletionApplied": 0,
+                "transportLoss": 0,
+                "processingLoss": 0,
+                "usableSupport": 0,
+                "failureReason": "physically_exhausted",
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:54:plant_patch:plant:tile:136:63:wild_grain_seed"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "years2to6": [
+        {
+          "year": 2,
+          "baseline": {
+            "physicalFoodTaken": 0.2558,
+            "returnedUsableRawFood": 0.22129999999999994,
+            "support": 22.13,
+            "integratedDemand": 117.60000000000001,
+            "experiencedStressDayEquivalents": 292.5,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 4.114958333333318,
+            "meanMovementAndOtherFatigue": 0.9975000000000007,
+            "candidateCalls": 112,
+            "selectedCandidates": 41,
+            "selectedFoodCandidates": 41,
+            "foodTripExecutions": 41,
+            "zeroFoodSeasons": 2,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.9725000000000004,
+            "returnedUsableRawFood": 0.8544,
+            "support": 85.44000000000001,
+            "integratedDemand": 117.4,
+            "experiencedStressDayEquivalents": 100.79999999999998,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 5.733583333333364,
+            "meanMovementAndOtherFatigue": 0.21908333333333307,
+            "candidateCalls": 112,
+            "selectedCandidates": 93,
+            "selectedFoodCandidates": 93,
+            "foodTripExecutions": 93,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 3,
+          "baseline": {
+            "physicalFoodTaken": 0,
+            "returnedUsableRawFood": 0,
+            "support": 0,
+            "integratedDemand": 117.35000000000001,
+            "experiencedStressDayEquivalents": 360,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.335227777777778,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 4,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 2,
+            "terminalRemoved": 0,
+            "population": 33
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.9974999999999998,
+            "returnedUsableRawFood": 0.8806999999999998,
+            "support": 88.07,
+            "integratedDemand": 118.2,
+            "experiencedStressDayEquivalents": 147.60000000000002,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 6.177636111111101,
+            "meanMovementAndOtherFatigue": 0.22402777777777746,
+            "candidateCalls": 112,
+            "selectedCandidates": 73,
+            "selectedFoodCandidates": 68,
+            "foodTripExecutions": 68,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 4,
+          "baseline": {
+            "physicalFoodTaken": 0,
+            "returnedUsableRawFood": 0,
+            "support": 0,
+            "integratedDemand": 115,
+            "experiencedStressDayEquivalents": 360,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.3592138888889127,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 4,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 33
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.9352999999999998,
+            "returnedUsableRawFood": 0.7879999999999985,
+            "support": 78.79999999999998,
+            "integratedDemand": 118.8,
+            "experiencedStressDayEquivalents": 124.19999999999999,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 6.222525000000004,
+            "meanMovementAndOtherFatigue": 0.22152777777777613,
+            "candidateCalls": 112,
+            "selectedCandidates": 73,
+            "selectedFoodCandidates": 54,
+            "foodTripExecutions": 54,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 5,
+          "baseline": {
+            "physicalFoodTaken": 0,
+            "returnedUsableRawFood": 0,
+            "support": 0,
+            "integratedDemand": 115.39999999999999,
+            "experiencedStressDayEquivalents": 360,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.3991944444444364,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 4,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 33
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.6599999999999997,
+            "returnedUsableRawFood": 0.5819000000000005,
+            "support": 58.19,
+            "integratedDemand": 119.6,
+            "experiencedStressDayEquivalents": 186.3,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 6.610027777777782,
+            "meanMovementAndOtherFatigue": 0.17966666666666656,
+            "candidateCalls": 112,
+            "selectedCandidates": 61,
+            "selectedFoodCandidates": 61,
+            "foodTripExecutions": 61,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 6,
+          "baseline": {
+            "physicalFoodTaken": 0,
+            "returnedUsableRawFood": 0,
+            "support": 0,
+            "integratedDemand": 114,
+            "experiencedStressDayEquivalents": 360,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.4164611111111034,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 4,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 32
+          },
+          "candidate": {
+            "physicalFoodTaken": 1.3286000000000016,
+            "returnedUsableRawFood": 1.1642000000000015,
+            "support": 116.42,
+            "integratedDemand": 118.2,
+            "experiencedStressDayEquivalents": 90.9,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 6.1644388888889035,
+            "meanMovementAndOtherFatigue": 0.22394444444444261,
+            "candidateCalls": 112,
+            "selectedCandidates": 87,
+            "selectedFoodCandidates": 77,
+            "foodTripExecutions": 77,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        }
+      ],
+      "bounds": {
+        "baseline": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 3137,
+          "maxMovement": 80,
+          "maxCompletedSpan": 0
+        },
+        "candidate": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 8429,
+          "maxMovement": 80,
+          "maxCompletedSpan": 720
+        }
+      },
+      "runtimeMs": {
+        "baseline": 64729,
+        "candidate": 55672
+      },
+      "bodyResidual": {
+        "baseline": 0,
+        "candidate": 0
+      },
+      "finalSnapshotHash": {
+        "baseline": "e7d0c07fcdfaf8308a563c818359d1b95c3292e181100aabf38a388c47ce21c1",
+        "candidate": "1b405e20e341e444b30d2fad64a1f5139a9e679ae9ec8e23d839a10eef7f3744"
+      }
+    },
+    {
+      "tier": "good",
+      "seed": "s3",
+      "baselineFile": "docs/evidence/diag1-corrections/phase2/natural/baseline-v3-good-s3.json",
+      "candidateFile": "docs/evidence/diag1-corrections/phase2/natural/phase2-final1-good-s3.json",
+      "baseline": {
+        "physicalFoodTaken": 7.980499999999999,
+        "returnedUsableRawFood": 6.824700000000003,
+        "support": 682.4700000000001,
+        "integratedDemand": 2988.349999999998,
+        "experiencedStressDayEquivalents": 9018.000000000002,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 4.0964925000001156,
+        "meanMovementAndOtherFatigue": 0.9789259259259284,
+        "candidateCalls": 3360,
+        "selectedCandidates": 520,
+        "selectedFoodCandidates": 520,
+        "foodTripExecutions": 520,
+        "zeroFoodSeasons": 89,
+        "measuredSeasons": 120,
+        "births": 14,
+        "deaths": 23,
+        "terminalRemoved": 0,
+        "population": 25
+      },
+      "candidate": {
+        "physicalFoodTaken": 27.50280000000002,
+        "returnedUsableRawFood": 23.699599999999986,
+        "support": 2369.959999999999,
+        "integratedDemand": 3592.399999999998,
+        "experiencedStressDayEquivalents": 4851.000000000001,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 6.684244166666245,
+        "meanMovementAndOtherFatigue": 0.20861481481482677,
+        "candidateCalls": 3360,
+        "selectedCandidates": 1961,
+        "selectedFoodCandidates": 1949,
+        "foodTripExecutions": 1949,
+        "zeroFoodSeasons": 8,
+        "measuredSeasons": 120,
+        "births": 17,
+        "deaths": 19,
+        "terminalRemoved": 0,
+        "population": 32
+      },
+      "firstMetricDivergence": {
+        "fatigue": {
+          "day": 1,
+          "baseline": null,
+          "candidate": 0.02,
+          "baselinePosition": "tile:136:64",
+          "candidatePosition": "tile:136:64"
+        },
+        "pace": {
+          "day": 1,
+          "baseline": 6.685,
+          "candidate": 6.643,
+          "baselinePosition": "tile:136:64",
+          "candidatePosition": "tile:136:64"
+        },
+        "support": {
+          "day": 450,
+          "baseline": 16.29,
+          "candidate": 24.76,
+          "baselinePosition": "tile:136:66",
+          "candidatePosition": "tile:136:66"
+        },
+        "demand": {
+          "day": 720,
+          "baseline": 29.55,
+          "candidate": 29.35,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:67"
+        },
+        "foodStress": {
+          "day": 450,
+          "baseline": 0.45,
+          "candidate": 0.16,
+          "baselinePosition": "tile:136:66",
+          "candidatePosition": "tile:136:66"
+        },
+        "experiencedStress": {
+          "day": 450,
+          "baseline": 0.53,
+          "candidate": 0.46,
+          "baselinePosition": "tile:136:66",
+          "candidatePosition": "tile:136:66"
+        },
+        "population": {
+          "day": 1080,
+          "baseline": 33,
+          "candidate": 34,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:136:67"
+        },
+        "rawTake": {
+          "day": 366,
+          "baseline": 0.7355999999999998,
+          "candidate": 0.7035999999999998,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "rawReturned": {
+          "day": 366,
+          "baseline": 0.6507999999999998,
+          "candidate": 0.6228999999999998,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "candidates": {
+          "day": 372,
+          "baseline": 65,
+          "candidate": 66,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "foodCandidates": {
+          "day": 372,
+          "baseline": 65,
+          "candidate": 66,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "foodTripExecutions": {
+          "day": 372,
+          "baseline": 65,
+          "candidate": 66,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:135:66"
+        },
+        "births": {
+          "day": 3600,
+          "baseline": 4,
+          "candidate": 5,
+          "baselinePosition": "tile:136:67",
+          "candidatePosition": "tile:134:66"
+        },
+        "deaths": {
+          "day": 1080,
+          "baseline": 2,
+          "candidate": 1,
+          "baselinePosition": "tile:135:66",
+          "candidatePosition": "tile:136:67"
+        }
+      },
+      "firstObservedActionDivergence": {
+        "day": 54,
+        "baseline": {
+          "day": 54,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 0.20849999999999996,
+          "rawReturned": 0.1867,
+          "receiptCount": 9,
+          "tripCalls": 17,
+          "candidates": 14,
+          "foodCandidates": 14,
+          "foodTripExecutions": 14,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:136:64",
+              "phase": "residential",
+              "fatigue": null,
+              "pace": 6.685,
+              "support": null,
+              "demand": null,
+              "foodStress": null,
+              "experiencedStress": null,
+              "tripRecords": 14,
+              "knowledge": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:136:63",
+                "cause": "food_resource_check",
+                "resourceClassId": "animal_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:136:63",
+              "harvest": {
+                "sourceKind": "fauna_stock",
+                "sourceClass": "animal_food",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": false,
+                "physicalAvailability": 0,
+                "harvestedAmount": 0,
+                "depletionApplied": 0,
+                "transportLoss": 0,
+                "processingLoss": 0,
+                "usableSupport": 0,
+                "failureReason": "physical_source_absent",
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:54:fauna_stock:absent"
+                ]
+              }
+            }
+          ]
+        },
+        "candidate": {
+          "day": 54,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 0.20849999999999996,
+          "rawReturned": 0.1867,
+          "receiptCount": 9,
+          "tripCalls": 17,
+          "candidates": 14,
+          "foodCandidates": 14,
+          "foodTripExecutions": 14,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:136:64",
+              "phase": "residential",
+              "fatigue": 0.02,
+              "pace": 6.643,
+              "support": null,
+              "demand": null,
+              "foodStress": null,
+              "experiencedStress": null,
+              "tripRecords": 14,
+              "knowledge": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:136:63",
+                "cause": "food_resource_check",
+                "resourceClassId": "generic_plant_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:136:63",
+              "harvest": {
+                "sourceKind": "plant_patch",
+                "sourceId": "plant:tile:136:63:wild_grain_seed",
+                "sourceClass": "wild_grain_seed",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": true,
+                "physicalAvailability": 0,
+                "harvestedAmount": 0,
+                "depletionApplied": 0,
+                "transportLoss": 0,
+                "processingLoss": 0,
+                "usableSupport": 0,
+                "failureReason": "physically_exhausted",
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:54:plant_patch:plant:tile:136:63:wild_grain_seed"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "years2to6": [
+        {
+          "year": 2,
+          "baseline": {
+            "physicalFoodTaken": 0.2558,
+            "returnedUsableRawFood": 0.22129999999999994,
+            "support": 22.13,
+            "integratedDemand": 117.60000000000001,
+            "experiencedStressDayEquivalents": 292.5,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 4.07799444444443,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 36,
+            "selectedFoodCandidates": 36,
+            "foodTripExecutions": 36,
+            "zeroFoodSeasons": 2,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.9725000000000004,
+            "returnedUsableRawFood": 0.8544,
+            "support": 85.44000000000001,
+            "integratedDemand": 117.4,
+            "experiencedStressDayEquivalents": 100.79999999999998,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 5.744022222222241,
+            "meanMovementAndOtherFatigue": 0.2142222222222222,
+            "candidateCalls": 112,
+            "selectedCandidates": 93,
+            "selectedFoodCandidates": 93,
+            "foodTripExecutions": 93,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 3,
+          "baseline": {
+            "physicalFoodTaken": 0,
+            "returnedUsableRawFood": 0,
+            "support": 0,
+            "integratedDemand": 117.35000000000001,
+            "experiencedStressDayEquivalents": 360,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.3072777777777893,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 4,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 2,
+            "terminalRemoved": 0,
+            "population": 33
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.9974999999999998,
+            "returnedUsableRawFood": 0.8807000000000003,
+            "support": 88.07,
+            "integratedDemand": 118.2,
+            "experiencedStressDayEquivalents": 147.60000000000002,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 6.276397222222221,
+            "meanMovementAndOtherFatigue": 0.20144444444444384,
+            "candidateCalls": 112,
+            "selectedCandidates": 73,
+            "selectedFoodCandidates": 68,
+            "foodTripExecutions": 68,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 4,
+          "baseline": {
+            "physicalFoodTaken": 0.08800000000000008,
+            "returnedUsableRawFood": 0.03849999999999998,
+            "support": 3.85,
+            "integratedDemand": 115,
+            "experiencedStressDayEquivalents": 348.3,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.3467249999999873,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 3,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 33
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.7766999999999995,
+            "returnedUsableRawFood": 0.6850999999999989,
+            "support": 68.51,
+            "integratedDemand": 118.8,
+            "experiencedStressDayEquivalents": 151.20000000000002,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 6.078736111111107,
+            "meanMovementAndOtherFatigue": 0.22386111111111093,
+            "candidateCalls": 112,
+            "selectedCandidates": 71,
+            "selectedFoodCandidates": 65,
+            "foodTripExecutions": 65,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 5,
+          "baseline": {
+            "physicalFoodTaken": 0,
+            "returnedUsableRawFood": 0,
+            "support": 0,
+            "integratedDemand": 115.39999999999999,
+            "experiencedStressDayEquivalents": 360,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.3992277777777695,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 4,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 33
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.7284000000000006,
+            "returnedUsableRawFood": 0.6423999999999994,
+            "support": 64.24000000000001,
+            "integratedDemand": 119.6,
+            "experiencedStressDayEquivalents": 167.39999999999998,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 5.708938888888901,
+            "meanMovementAndOtherFatigue": 0.22627777777777713,
+            "candidateCalls": 112,
+            "selectedCandidates": 65,
+            "selectedFoodCandidates": 65,
+            "foodTripExecutions": 65,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 1,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        },
+        {
+          "year": 6,
+          "baseline": {
+            "physicalFoodTaken": 0,
+            "returnedUsableRawFood": 0,
+            "support": 0,
+            "integratedDemand": 114,
+            "experiencedStressDayEquivalents": 360,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 3.4164611111111034,
+            "meanMovementAndOtherFatigue": 1,
+            "candidateCalls": 112,
+            "selectedCandidates": 0,
+            "selectedFoodCandidates": 0,
+            "foodTripExecutions": 0,
+            "zeroFoodSeasons": 4,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 1,
+            "terminalRemoved": 0,
+            "population": 32
+          },
+          "candidate": {
+            "physicalFoodTaken": 0.9019000000000013,
+            "returnedUsableRawFood": 0.7974000000000014,
+            "support": 79.74,
+            "integratedDemand": 118.2,
+            "experiencedStressDayEquivalents": 141.3,
+            "stressCoverageDays": 360,
+            "meanPaceKmPerTravelDay": 5.5375027777777195,
+            "meanMovementAndOtherFatigue": 0.22855555555555482,
+            "candidateCalls": 112,
+            "selectedCandidates": 77,
+            "selectedFoodCandidates": 77,
+            "foodTripExecutions": 77,
+            "zeroFoodSeasons": 0,
+            "measuredSeasons": 4,
+            "births": 0,
+            "deaths": 0,
+            "terminalRemoved": 0,
+            "population": 34
+          }
+        }
+      ],
+      "bounds": {
+        "baseline": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 3160,
+          "maxMovement": 80,
+          "maxCompletedSpan": 0
+        },
+        "candidate": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 8461,
+          "maxMovement": 80,
+          "maxCompletedSpan": 720
+        }
+      },
+      "runtimeMs": {
+        "baseline": 32786,
+        "candidate": 55619
+      },
+      "bodyResidual": {
+        "baseline": 0,
+        "candidate": 0
+      },
+      "finalSnapshotHash": {
+        "baseline": "6d302181672f810dbcbf547764e49f12e62cff686ceef6a888af23d817bb7ff1",
+        "candidate": "9b90753105deec25f87ba83b66804eceeb067f72e3af1de91e05f4e5976a3fdf"
+      }
+    },
+    {
+      "tier": "exceptionally_rich",
+      "seed": "s1",
+      "baselineFile": "docs/evidence/diag1-corrections/phase2/natural/baseline-v3-exceptionally_rich-s1.json",
+      "candidateFile": "docs/evidence/diag1-corrections/phase2/natural/phase2-final1-exceptionally_rich-s1.json",
+      "baseline": {
+        "physicalFoodTaken": 37.59609999999996,
+        "returnedUsableRawFood": 32.51370000000002,
+        "support": 3251.37,
+        "integratedDemand": 3437.550000000002,
+        "experiencedStressDayEquivalents": 5688.899999999999,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 5.205826296296449,
+        "meanMovementAndOtherFatigue": 0.974759259259251,
+        "candidateCalls": 3360,
+        "selectedCandidates": 1605,
+        "selectedFoodCandidates": 1605,
+        "foodTripExecutions": 1605,
+        "zeroFoodSeasons": 45,
+        "measuredSeasons": 120,
+        "births": 18,
+        "deaths": 20,
+        "terminalRemoved": 0,
+        "population": 32
+      },
+      "candidate": {
+        "physicalFoodTaken": 35.475299999999926,
+        "returnedUsableRawFood": 30.49410000000005,
+        "support": 3049.409999999999,
+        "integratedDemand": 3606.6000000000013,
+        "experiencedStressDayEquivalents": 5137.200000000001,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 7.256462962962733,
+        "meanMovementAndOtherFatigue": 0.20557685185187013,
+        "candidateCalls": 3360,
+        "selectedCandidates": 1834,
+        "selectedFoodCandidates": 1833,
+        "foodTripExecutions": 1833,
+        "zeroFoodSeasons": 27,
+        "measuredSeasons": 120,
+        "births": 19,
+        "deaths": 20,
+        "terminalRemoved": 0,
+        "population": 33
+      },
+      "firstMetricDivergence": {
+        "fatigue": {
+          "day": 1,
+          "baseline": null,
+          "candidate": 0.01,
+          "baselinePosition": "tile:188:92",
+          "candidatePosition": "tile:188:92"
+        },
+        "pace": {
+          "day": 1,
+          "baseline": 6.685,
+          "candidate": 6.664,
+          "baselinePosition": "tile:188:92",
+          "candidatePosition": "tile:188:92"
+        },
+        "support": {
+          "day": 900,
+          "baseline": 34.94,
+          "candidate": 28.14,
+          "baselinePosition": "tile:187:92",
+          "candidatePosition": "tile:187:92"
+        },
+        "demand": {
+          "day": 720,
+          "baseline": 29.55,
+          "candidate": 29.35,
+          "baselinePosition": "tile:185:92",
+          "candidatePosition": "tile:185:92"
+        },
+        "foodStress": {
+          "day": 720,
+          "baseline": 0.78,
+          "candidate": 0.77,
+          "baselinePosition": "tile:185:92",
+          "candidatePosition": "tile:185:92"
+        },
+        "experiencedStress": {
+          "day": 900,
+          "baseline": 0.31,
+          "candidate": 0.32,
+          "baselinePosition": "tile:187:92",
+          "candidatePosition": "tile:187:92"
+        },
+        "population": {
+          "day": 3240,
+          "baseline": 34,
+          "candidate": 35,
+          "baselinePosition": "tile:190:93",
+          "candidatePosition": "tile:187:94"
+        },
+        "rawTake": {
+          "day": 726,
+          "baseline": 4.254200000000001,
+          "candidate": 4.253800000000001,
+          "baselinePosition": "tile:185:92",
+          "candidatePosition": "tile:185:92"
+        },
+        "rawReturned": {
+          "day": 726,
+          "baseline": 3.6993000000000005,
+          "candidate": 3.6989000000000005,
+          "baselinePosition": "tile:185:92",
+          "candidatePosition": "tile:185:92"
+        },
+        "candidates": {
+          "day": 1089,
+          "baseline": 245,
+          "candidate": 244,
+          "baselinePosition": "tile:186:93",
+          "candidatePosition": "tile:185:92"
+        },
+        "foodCandidates": {
+          "day": 1089,
+          "baseline": 245,
+          "candidate": 244,
+          "baselinePosition": "tile:186:93",
+          "candidatePosition": "tile:185:92"
+        },
+        "foodTripExecutions": {
+          "day": 1089,
+          "baseline": 245,
+          "candidate": 244,
+          "baselinePosition": "tile:186:93",
+          "candidatePosition": "tile:185:92"
+        },
+        "births": {
+          "day": 3240,
+          "baseline": 4,
+          "candidate": 5,
+          "baselinePosition": "tile:190:93",
+          "candidatePosition": "tile:187:94"
+        },
+        "deaths": {
+          "day": 3600,
+          "baseline": 6,
+          "candidate": 5,
+          "baselinePosition": "tile:187:94",
+          "candidatePosition": "tile:188:94"
+        }
+      },
+      "firstObservedActionDivergence": {
+        "day": 726,
+        "baseline": {
+          "day": 726,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 4.254200000000001,
+          "rawReturned": 3.6993000000000005,
+          "receiptCount": 90,
+          "tripCalls": 225,
+          "candidates": 175,
+          "foodCandidates": 175,
+          "foodTripExecutions": 175,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:185:92",
+              "phase": "residential",
+              "fatigue": 0.91,
+              "pace": 5.283,
+              "support": 6.65,
+              "demand": 29.55,
+              "foodStress": 0.78,
+              "experiencedStress": 0.19,
+              "tripRecords": 24,
+              "knowledge": 55
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:186:92",
+                "cause": "food_resource_check",
+                "resourceClassId": "generic_plant_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "plant",
+              "take": 0.0693,
+              "sourceId": "plant:tile:186:92:wetland_plant",
+              "depletion": 0.0693
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:186:92",
+              "harvest": {
+                "sourceKind": "plant_patch",
+                "sourceId": "plant:tile:186:92:wetland_plant",
+                "sourceClass": "wetland_plant",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": true,
+                "physicalAvailability": 0.1575,
+                "harvestedAmount": 0.0693,
+                "depletionApplied": 0.0693,
+                "transportLoss": 0.0017,
+                "processingLoss": 0.0073,
+                "usableSupport": 0.0604,
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:726:plant_patch:plant:tile:186:92:wetland_plant"
+                ]
+              }
+            },
+            {
+              "kind": "receipt",
+              "usable": 0.0604,
+              "sourceId": "plant:tile:186:92:wetland_plant"
+            }
+          ]
+        },
+        "candidate": {
+          "day": 726,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 4.253800000000001,
+          "rawReturned": 3.6989000000000005,
+          "receiptCount": 90,
+          "tripCalls": 225,
+          "candidates": 175,
+          "foodCandidates": 175,
+          "foodTripExecutions": 175,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:185:92",
+              "phase": "residential",
+              "fatigue": 0.14,
+              "pace": 7.021,
+              "support": 6.65,
+              "demand": 29.35,
+              "foodStress": 0.77,
+              "experiencedStress": 0.19,
+              "tripRecords": 24,
+              "knowledge": 64
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:186:92",
+                "cause": "food_resource_check",
+                "resourceClassId": "generic_plant_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "plant",
+              "take": 0.0689,
+              "sourceId": "plant:tile:186:92:wetland_plant",
+              "depletion": 0.0689
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:186:92",
+              "harvest": {
+                "sourceKind": "plant_patch",
+                "sourceId": "plant:tile:186:92:wetland_plant",
+                "sourceClass": "wetland_plant",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": true,
+                "physicalAvailability": 0.1575,
+                "harvestedAmount": 0.0689,
+                "depletionApplied": 0.0689,
+                "transportLoss": 0.0017,
+                "processingLoss": 0.0072,
+                "usableSupport": 0.06,
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:726:plant_patch:plant:tile:186:92:wetland_plant"
+                ]
+              }
+            },
+            {
+              "kind": "receipt",
+              "usable": 0.06,
+              "sourceId": "plant:tile:186:92:wetland_plant"
+            }
+          ]
+        }
+      },
+      "bounds": {
+        "baseline": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 3150,
+          "maxMovement": 80,
+          "maxCompletedSpan": 0
+        },
+        "candidate": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 8473,
+          "maxMovement": 80,
+          "maxCompletedSpan": 720
+        }
+      },
+      "runtimeMs": {
+        "baseline": 87541,
+        "candidate": 66776
+      },
+      "bodyResidual": {
+        "baseline": 0,
+        "candidate": 0
+      },
+      "finalSnapshotHash": {
+        "baseline": "e98e67fcfdce504e4b22f7a4c5762a8d5e29e80ebfa5ec9889c72a501f01bd88",
+        "candidate": "53985633d7484d9dcaff2e8149c983d1e0a0ff4ceb8a1c4eaa264267eab815fb"
+      }
+    },
+    {
+      "tier": "exceptionally_rich",
+      "seed": "s2",
+      "baselineFile": "docs/evidence/diag1-corrections/phase2/natural/baseline-v3-exceptionally_rich-s2.json",
+      "candidateFile": "docs/evidence/diag1-corrections/phase2/natural/phase2-final1-exceptionally_rich-s2.json",
+      "baseline": {
+        "physicalFoodTaken": 46.04589999999998,
+        "returnedUsableRawFood": 39.40209999999998,
+        "support": 3940.209999999999,
+        "integratedDemand": 3696.200000000002,
+        "experiencedStressDayEquivalents": 4328.099999999999,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 5.51166527777781,
+        "meanMovementAndOtherFatigue": 0.964759259259233,
+        "candidateCalls": 3360,
+        "selectedCandidates": 2050,
+        "selectedFoodCandidates": 2046,
+        "foodTripExecutions": 2046,
+        "zeroFoodSeasons": 19,
+        "measuredSeasons": 120,
+        "births": 19,
+        "deaths": 19,
+        "terminalRemoved": 0,
+        "population": 34
+      },
+      "candidate": {
+        "physicalFoodTaken": 45.00419999999992,
+        "returnedUsableRawFood": 39.021500000000096,
+        "support": 3902.15,
+        "integratedDemand": 3717.0000000000036,
+        "experiencedStressDayEquivalents": 3301.1999999999994,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 7.686929537036971,
+        "meanMovementAndOtherFatigue": 0.18662037037038515,
+        "candidateCalls": 3360,
+        "selectedCandidates": 2461,
+        "selectedFoodCandidates": 2453,
+        "foodTripExecutions": 2453,
+        "zeroFoodSeasons": 2,
+        "measuredSeasons": 120,
+        "births": 20,
+        "deaths": 17,
+        "terminalRemoved": 0,
+        "population": 37
+      },
+      "firstMetricDivergence": {
+        "fatigue": {
+          "day": 1,
+          "baseline": null,
+          "candidate": 0.01,
+          "baselinePosition": "tile:188:92",
+          "candidatePosition": "tile:188:92"
+        },
+        "pace": {
+          "day": 1,
+          "baseline": 6.685,
+          "candidate": 6.664,
+          "baselinePosition": "tile:188:92",
+          "candidatePosition": "tile:188:92"
+        },
+        "support": {
+          "day": 630,
+          "baseline": 46.01,
+          "candidate": 44.23,
+          "baselinePosition": "tile:186:92",
+          "candidatePosition": "tile:186:92"
+        },
+        "demand": {
+          "day": 720,
+          "baseline": 29.55,
+          "candidate": 29.35,
+          "baselinePosition": "tile:185:92",
+          "candidatePosition": "tile:185:92"
+        },
+        "foodStress": {
+          "day": 720,
+          "baseline": 0.78,
+          "candidate": 0.77,
+          "baselinePosition": "tile:185:92",
+          "candidatePosition": "tile:185:92"
+        },
+        "experiencedStress": {
+          "day": 900,
+          "baseline": 0.31,
+          "candidate": 0.32,
+          "baselinePosition": "tile:187:92",
+          "candidatePosition": "tile:187:92"
+        },
+        "population": {
+          "day": 2880,
+          "baseline": 34,
+          "candidate": 35,
+          "baselinePosition": "tile:184:92",
+          "candidatePosition": "tile:187:92"
+        },
+        "rawTake": {
+          "day": 558,
+          "baseline": 3.8509000000000007,
+          "candidate": 3.831700000000001,
+          "baselinePosition": "tile:187:92",
+          "candidatePosition": "tile:187:92"
+        },
+        "rawReturned": {
+          "day": 558,
+          "baseline": 3.3513999999999995,
+          "candidate": 3.3345999999999996,
+          "baselinePosition": "tile:187:92",
+          "candidatePosition": "tile:187:92"
+        },
+        "candidates": {
+          "day": 1089,
+          "baseline": 245,
+          "candidate": 244,
+          "baselinePosition": "tile:186:93",
+          "candidatePosition": "tile:185:92"
+        },
+        "foodCandidates": {
+          "day": 1089,
+          "baseline": 245,
+          "candidate": 244,
+          "baselinePosition": "tile:186:93",
+          "candidatePosition": "tile:185:92"
+        },
+        "foodTripExecutions": {
+          "day": 1089,
+          "baseline": 245,
+          "candidate": 244,
+          "baselinePosition": "tile:186:93",
+          "candidatePosition": "tile:185:92"
+        },
+        "births": {
+          "day": 2880,
+          "baseline": 3,
+          "candidate": 4,
+          "baselinePosition": "tile:184:92",
+          "candidatePosition": "tile:187:92"
+        },
+        "deaths": {
+          "day": 10080,
+          "baseline": 17,
+          "candidate": 16,
+          "baselinePosition": "tile:198:97",
+          "candidatePosition": "tile:187:94"
+        }
+      },
+      "firstObservedActionDivergence": {
+        "day": 558,
+        "baseline": {
+          "day": 558,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 3.8509000000000007,
+          "rawReturned": 3.3513999999999995,
+          "receiptCount": 77,
+          "tripCalls": 173,
+          "candidates": 135,
+          "foodCandidates": 135,
+          "foodTripExecutions": 135,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:187:92",
+              "phase": "residential",
+              "fatigue": 1,
+              "pace": 5.136,
+              "support": 84.5,
+              "demand": 29.35,
+              "foodStress": 0,
+              "experiencedStress": 0.18,
+              "tripRecords": 24,
+              "knowledge": 19
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:186:92",
+                "cause": "local_resource_use",
+                "resourceClassId": "generic_plant_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "plant",
+              "take": 0.07,
+              "sourceId": "plant:tile:186:92:wetland_plant",
+              "depletion": 0.07
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:186:92",
+              "harvest": {
+                "sourceKind": "plant_patch",
+                "sourceId": "plant:tile:186:92:wetland_plant",
+                "sourceClass": "wetland_plant",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": true,
+                "physicalAvailability": 0.0711,
+                "harvestedAmount": 0.07,
+                "depletionApplied": 0.07,
+                "transportLoss": 0.0017,
+                "processingLoss": 0.0074,
+                "usableSupport": 0.061,
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:558:plant_patch:plant:tile:186:92:wetland_plant"
+                ]
+              }
+            },
+            {
+              "kind": "receipt",
+              "usable": 0.061,
+              "sourceId": "plant:tile:186:92:wetland_plant"
+            }
+          ]
+        },
+        "candidate": {
+          "day": 558,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 3.831700000000001,
+          "rawReturned": 3.3345999999999996,
+          "receiptCount": 77,
+          "tripCalls": 173,
+          "candidates": 135,
+          "foodCandidates": 135,
+          "foodTripExecutions": 135,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:187:92",
+              "phase": "residential",
+              "fatigue": 0.21,
+              "pace": 6.919,
+              "support": 84.5,
+              "demand": 29.35,
+              "foodStress": 0,
+              "experiencedStress": 0.18,
+              "tripRecords": 24,
+              "knowledge": 64
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:186:92",
+                "cause": "local_resource_use",
+                "resourceClassId": "generic_plant_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "plant",
+              "take": 0.0508,
+              "sourceId": "plant:tile:186:92:wetland_plant",
+              "depletion": 0.0508
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:186:92",
+              "harvest": {
+                "sourceKind": "plant_patch",
+                "sourceId": "plant:tile:186:92:wetland_plant",
+                "sourceClass": "wetland_plant",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": true,
+                "physicalAvailability": 0.0508,
+                "harvestedAmount": 0.0508,
+                "depletionApplied": 0.0508,
+                "transportLoss": 0.0012,
+                "processingLoss": 0.0053,
+                "usableSupport": 0.0442,
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:558:plant_patch:plant:tile:186:92:wetland_plant"
+                ]
+              }
+            },
+            {
+              "kind": "receipt",
+              "usable": 0.0442,
+              "sourceId": "plant:tile:186:92:wetland_plant"
+            }
+          ]
+        }
+      },
+      "bounds": {
+        "baseline": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 3146,
+          "maxMovement": 80,
+          "maxCompletedSpan": 0
+        },
+        "candidate": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 8452,
+          "maxMovement": 80,
+          "maxCompletedSpan": 720
+        }
+      },
+      "runtimeMs": {
+        "baseline": 87213,
+        "candidate": 51052
+      },
+      "bodyResidual": {
+        "baseline": 0,
+        "candidate": 0
+      },
+      "finalSnapshotHash": {
+        "baseline": "522ec4432f84ca4c42448ad63bf4203ac34c0c5d5b1be5105aa1da01a6054fcb",
+        "candidate": "f5b00441c4d952bbc9849b22baf649b3c0a58b115a9d351b61d86dbe32cf4b0a"
+      }
+    },
+    {
+      "tier": "exceptionally_rich",
+      "seed": "s3",
+      "baselineFile": "docs/evidence/diag1-corrections/phase2/natural/baseline-v3-exceptionally_rich-s3.json",
+      "candidateFile": "docs/evidence/diag1-corrections/phase2/natural/phase2-final1-exceptionally_rich-s3.json",
+      "baseline": {
+        "physicalFoodTaken": 54.0041,
+        "returnedUsableRawFood": 46.63760000000003,
+        "support": 4663.760000000001,
+        "integratedDemand": 3702.200000000002,
+        "experiencedStressDayEquivalents": 3066.3,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 5.718529999999738,
+        "meanMovementAndOtherFatigue": 0.9714259259258904,
+        "candidateCalls": 3360,
+        "selectedCandidates": 2644,
+        "selectedFoodCandidates": 2635,
+        "foodTripExecutions": 2635,
+        "zeroFoodSeasons": 1,
+        "measuredSeasons": 120,
+        "births": 19,
+        "deaths": 17,
+        "terminalRemoved": 0,
+        "population": 36
+      },
+      "candidate": {
+        "physicalFoodTaken": 50.83400000000001,
+        "returnedUsableRawFood": 44.17080000000003,
+        "support": 4417.080000000001,
+        "integratedDemand": 3711.600000000003,
+        "experiencedStressDayEquivalents": 3141,
+        "stressCoverageDays": 10800,
+        "meanPaceKmPerTravelDay": 7.637978981481476,
+        "meanMovementAndOtherFatigue": 0.1938944444444625,
+        "candidateCalls": 3360,
+        "selectedCandidates": 2619,
+        "selectedFoodCandidates": 2615,
+        "foodTripExecutions": 2615,
+        "zeroFoodSeasons": 0,
+        "measuredSeasons": 120,
+        "births": 20,
+        "deaths": 17,
+        "terminalRemoved": 0,
+        "population": 37
+      },
+      "firstMetricDivergence": {
+        "fatigue": {
+          "day": 1,
+          "baseline": null,
+          "candidate": 0.01,
+          "baselinePosition": "tile:188:92",
+          "candidatePosition": "tile:188:92"
+        },
+        "pace": {
+          "day": 1,
+          "baseline": 6.685,
+          "candidate": 6.664,
+          "baselinePosition": "tile:188:92",
+          "candidatePosition": "tile:188:92"
+        },
+        "support": {
+          "day": 630,
+          "baseline": 46.01,
+          "candidate": 44.23,
+          "baselinePosition": "tile:186:92",
+          "candidatePosition": "tile:186:92"
+        },
+        "demand": {
+          "day": 720,
+          "baseline": 29.55,
+          "candidate": 29.35,
+          "baselinePosition": "tile:185:92",
+          "candidatePosition": "tile:185:92"
+        },
+        "foodStress": {
+          "day": 900,
+          "baseline": 0,
+          "candidate": 0.92,
+          "baselinePosition": "tile:187:92",
+          "candidatePosition": "tile:185:92"
+        },
+        "experiencedStress": {
+          "day": 720,
+          "baseline": 0.19,
+          "candidate": 0.2,
+          "baselinePosition": "tile:185:92",
+          "candidatePosition": "tile:185:92"
+        },
+        "population": {
+          "day": 9360,
+          "baseline": 36,
+          "candidate": 37,
+          "baselinePosition": "tile:187:93",
+          "candidatePosition": "tile:186:93"
+        },
+        "rawTake": {
+          "day": 558,
+          "baseline": 3.8509,
+          "candidate": 3.8317000000000005,
+          "baselinePosition": "tile:187:92",
+          "candidatePosition": "tile:187:92"
+        },
+        "rawReturned": {
+          "day": 558,
+          "baseline": 3.3514,
+          "candidate": 3.3346,
+          "baselinePosition": "tile:187:92",
+          "candidatePosition": "tile:187:92"
+        },
+        "candidates": {
+          "day": 819,
+          "baseline": 182,
+          "candidate": 181,
+          "baselinePosition": "tile:186:92",
+          "candidatePosition": "tile:184:92"
+        },
+        "foodCandidates": {
+          "day": 819,
+          "baseline": 182,
+          "candidate": 181,
+          "baselinePosition": "tile:186:92",
+          "candidatePosition": "tile:184:92"
+        },
+        "foodTripExecutions": {
+          "day": 819,
+          "baseline": 182,
+          "candidate": 181,
+          "baselinePosition": "tile:186:92",
+          "candidatePosition": "tile:184:92"
+        },
+        "births": {
+          "day": 9360,
+          "baseline": 16,
+          "candidate": 17,
+          "baselinePosition": "tile:187:93",
+          "candidatePosition": "tile:186:93"
+        }
+      },
+      "firstObservedActionDivergence": {
+        "day": 558,
+        "baseline": {
+          "day": 558,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 3.8509,
+          "rawReturned": 3.3514,
+          "receiptCount": 77,
+          "tripCalls": 173,
+          "candidates": 135,
+          "foodCandidates": 135,
+          "foodTripExecutions": 135,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:187:92",
+              "phase": "residential",
+              "fatigue": 0.92,
+              "pace": 5.316,
+              "support": 84.5,
+              "demand": 29.35,
+              "foodStress": 0,
+              "experiencedStress": 0.18,
+              "tripRecords": 24,
+              "knowledge": 54
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:186:92",
+                "cause": "local_resource_use",
+                "resourceClassId": "generic_plant_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "plant",
+              "take": 0.07,
+              "sourceId": "plant:tile:186:92:wetland_plant",
+              "depletion": 0.07
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:186:92",
+              "harvest": {
+                "sourceKind": "plant_patch",
+                "sourceId": "plant:tile:186:92:wetland_plant",
+                "sourceClass": "wetland_plant",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": true,
+                "physicalAvailability": 0.0711,
+                "harvestedAmount": 0.07,
+                "depletionApplied": 0.07,
+                "transportLoss": 0.0017,
+                "processingLoss": 0.0074,
+                "usableSupport": 0.061,
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:558:plant_patch:plant:tile:186:92:wetland_plant"
+                ]
+              }
+            },
+            {
+              "kind": "receipt",
+              "usable": 0.061,
+              "sourceId": "plant:tile:186:92:wetland_plant"
+            }
+          ]
+        },
+        "candidate": {
+          "day": 558,
+          "population": 34,
+          "births": 0,
+          "deaths": 0,
+          "terminalRemoved": 0,
+          "rawTake": 3.8317000000000005,
+          "rawReturned": 3.3346,
+          "receiptCount": 77,
+          "tripCalls": 173,
+          "candidates": 135,
+          "foodCandidates": 135,
+          "foodTripExecutions": 135,
+          "bands": [
+            {
+              "id": "band:custom:0",
+              "pop": 34,
+              "workers": 19,
+              "position": "tile:187:92",
+              "phase": "residential",
+              "fatigue": 0.12,
+              "pace": 7.122,
+              "support": 84.5,
+              "demand": 29.35,
+              "foodStress": 0,
+              "experiencedStress": 0.18,
+              "tripRecords": 24,
+              "knowledge": 64
+            }
+          ],
+          "events": [
+            {
+              "kind": "candidate",
+              "bandId": "band:custom:0",
+              "selected": {
+                "target": "tile:186:92",
+                "cause": "local_resource_use",
+                "resourceClassId": "generic_plant_food",
+                "distanceKm": 1.5
+              }
+            },
+            {
+              "kind": "plant",
+              "take": 0.0508,
+              "sourceId": "plant:tile:186:92:wetland_plant",
+              "depletion": 0.0508
+            },
+            {
+              "kind": "food_trip",
+              "bandId": "band:custom:0",
+              "target": "tile:186:92",
+              "harvest": {
+                "sourceKind": "plant_patch",
+                "sourceId": "plant:tile:186:92:wetland_plant",
+                "sourceClass": "wetland_plant",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": true,
+                "physicalAvailability": 0.0508,
+                "harvestedAmount": 0.0508,
+                "depletionApplied": 0.0508,
+                "transportLoss": 0.0012,
+                "processingLoss": 0.0053,
+                "usableSupport": 0.0442,
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:custom:0:558:plant_patch:plant:tile:186:92:wetland_plant"
+                ]
+              }
+            },
+            {
+              "kind": "receipt",
+              "usable": 0.0442,
+              "sourceId": "plant:tile:186:92:wetland_plant"
+            }
+          ]
+        }
+      },
+      "bounds": {
+        "baseline": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 3141,
+          "maxMovement": 80,
+          "maxCompletedSpan": 0
+        },
+        "candidate": {
+          "maxSamples": 8,
+          "maxSegments": 8,
+          "maxSupportBytes": 8384,
+          "maxMovement": 80,
+          "maxCompletedSpan": 720
+        }
+      },
+      "runtimeMs": {
+        "baseline": 84207,
+        "candidate": 54299
+      },
+      "bodyResidual": {
+        "baseline": 0,
+        "candidate": 0
+      },
+      "finalSnapshotHash": {
+        "baseline": "47c6f38f8f5f5f983f392eb53562dcb60d29eb51dd7282d93e74965bc925f3e5",
+        "candidate": "9a1b800133947d53be5755e53e429bf84b66c66f46409e2f1642d0522b65e26d"
+      }
+    }
+  ]
+}

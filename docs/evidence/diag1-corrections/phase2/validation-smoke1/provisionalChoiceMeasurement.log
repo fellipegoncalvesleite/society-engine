@@ -1,0 +1,54 @@
+{
+  "summary": {
+    "total": 11,
+    "passed": 10,
+    "failed": 0,
+    "vacuous": 1
+  },
+  "fixtures": [
+    {
+      "id": "H1_a_clear_homeward_step_is_reported_available",
+      "verdict": "PASS"
+    },
+    {
+      "id": "H2_no_closer_neighbour_is_reported_unavailable",
+      "verdict": "PASS"
+    },
+    {
+      "id": "H2b_a_present_observation_was_taken_today",
+      "verdict": "VACUOUS"
+    },
+    {
+      "id": "H3_outbound_blockage_does_not_suppress_a_homeward_step",
+      "verdict": "PASS"
+    },
+    {
+      "id": "H4_the_observation_is_computed_against_the_departure_tile_alone",
+      "verdict": "PASS"
+    },
+    {
+      "id": "H5_moving_the_parent_changes_nothing",
+      "verdict": "PASS"
+    },
+    {
+      "id": "H6_the_trail_does_not_affect_the_measurement",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A1_action_relative_to_departure_tracks_real_positions",
+      "verdict": "PASS"
+    },
+    {
+      "id": "A2_the_representation_is_bounded_and_holds_no_counters",
+      "verdict": "PASS"
+    },
+    {
+      "id": "P1_after_a_failed_return_there_is_no_target_at_all",
+      "verdict": "PASS"
+    },
+    {
+      "id": "P2_a_first_attempt_outward_step_executes_the_departure_target",
+      "verdict": "PASS"
+    }
+  ]
+}

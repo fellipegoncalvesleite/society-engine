@@ -1,0 +1,27 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "phase": "before",
+  "productionAcceptsPartyLabourAuthority": true,
+  "productionRefusesToResolveWithoutPartyLabour": true,
+  "headlines": {
+    "W1": "TARGET WORK IS INVARIANT TO RESIDENTIAL LABOR",
+    "W2": "TARGET WORK FOLLOWS PARTY PRODUCTIVE LABOR"
+  },
+  "W1": {
+    "home1": 5,
+    "home25": 5,
+    "return1": 0.0367,
+    "return25": 0.0367,
+    "harvest1": 0.0436,
+    "harvest25": 0.0436,
+    "depletion1": 0.0436,
+    "depletion25": 0.0436
+  },
+  "W2": {
+    "party2": 2,
+    "party5": 5
+  },
+  "W3": {
+    "targetWorkEqual": true
+  }
+}

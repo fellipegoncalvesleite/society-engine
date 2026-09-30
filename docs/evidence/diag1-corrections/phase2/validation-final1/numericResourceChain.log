@@ -1,0 +1,83 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "verdict": "NUMERIC_RESOURCE_CHAIN_RECONCILED",
+  "reconciliation": {
+    "units": "raw physical food",
+    "actualWorkOperations": 3,
+    "workReceipts": [
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:134:43:roots_tubers_uso",
+        "sourceClass": "roots_tubers_uso",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0243,
+        "harvestedAmount": 0.0243,
+        "depletionApplied": 0.0243,
+        "transportLoss": 0.0012,
+        "processingLoss": 0.0032,
+        "usableSupport": 0.02,
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:varied-pass-frontier:458:plant_patch:plant:tile:134:43:roots_tubers_uso"
+        ]
+      },
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:134:43:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0166,
+        "harvestedAmount": 0.0166,
+        "depletionApplied": 0.0166,
+        "transportLoss": 0.0008,
+        "processingLoss": 0.0012,
+        "usableSupport": 0.0146,
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:varied-pass-frontier:459:plant_patch:plant:tile:134:43:wild_grain_seed"
+        ]
+      },
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:134:43:roots_tubers_uso",
+        "sourceClass": "roots_tubers_uso",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "transportLoss": 0,
+        "processingLoss": 0,
+        "usableSupport": 0,
+        "failureReason": "physically_exhausted",
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:varied-pass-frontier:460:plant_patch:plant:tile:134:43:roots_tubers_uso"
+        ]
+      }
+    ],
+    "usableFoodTaken": 0.0346,
+    "declaredProvisionCharge": 0.018,
+    "explicitLosses": 0,
+    "independentlyExpectedDelivery": 0.0166,
+    "deliveredHarvestUnits": 0.0166,
+    "returnBatchUsableSupport": 0.0166,
+    "cargoBalance": {
+      "lotCount": 3,
+      "admittedUsableUnits": 0.0346,
+      "remainingUnits": 0,
+      "deliveredUnits": 0.0166,
+      "appliedProvisionUnits": 0.018,
+      "unfulfilledProvisionUnits": 0,
+      "postAdmissionLossUnits": 0,
+      "overflowUnits": 0
+    },
+    "identityHolds": true,
+    "identity": "sum(actual work usable food) - upstream overflow - post-admission loss - applied charge = delivered; unfulfilled charge is not food consumed. Admitted = remaining + delivered + applied charge + post-admission loss."
+  }
+}

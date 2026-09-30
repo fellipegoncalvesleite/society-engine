@@ -1,0 +1,15 @@
+WebSocket server error: Port 24678 is already in use
+{"fixtureDeparture":"band:varied-river-mid:provisional:1","attempts":[{"requestedFounders":11,"ok":true}]}
+PASS    T1  the departure conserves population and cohorts in a REAL world
+PASS    T2  the successor exists in the real world at the parent's tile
+PASS    T3  the successor is a live, undispersed, body-holding band on EVERY day it is provisional, and it leaves that state only through a NAMED lifecycle outcome
+PASS    T4  established viability never claims the provisional successor
+PASS    T5  the successor is not established and cannot fission after a real season
+PASS    T6  the band count grew by exactly one and nobody else vanished
+PASS    T7  no provisional group is left unresolved at zero population
+PASS    T8  a provisional group that loses everybody resolves through the fission lifecycle, not Item 6
+PASS    T9  the parent and successor are lineage-linked, and a third band is not
+PASS    T10  a world in which no departure happens is unaffected by everything added
+
+summary: {"total":10,"passing":10,"failing":0,"vacuous":0}
+written: /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/provisionalTwoDayIntegration-measured.json

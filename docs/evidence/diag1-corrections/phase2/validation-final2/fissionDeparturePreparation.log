@@ -1,0 +1,75 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "summary": {
+    "total": 16,
+    "passed": 16,
+    "failed": 0,
+    "vacuous": 0
+  },
+  "fixtures": [
+    {
+      "id": "A_a_valid_plan_prepares_a_complete_commitment_backed_departure",
+      "verdict": "PASS"
+    },
+    {
+      "id": "B_a_downward_revision_happens_before_commitment_and_binds_the_revised_terms",
+      "verdict": "PASS"
+    },
+    {
+      "id": "C_the_committed_cohort_is_the_revised_composition_not_the_requested_one",
+      "verdict": "PASS"
+    },
+    {
+      "id": "D_a_blocked_residual_produces_no_commitment_no_permit_and_no_departure_ready",
+      "verdict": "PASS"
+    },
+    {
+      "id": "E_a_physically_feasible_split_the_cohort_declines_produces_no_permit",
+      "verdict": "PASS"
+    },
+    {
+      "id": "F_the_writer_cannot_reach_a_commitment_without_a_measured_residual_consequence",
+      "verdict": "PASS"
+    },
+    {
+      "id": "G_an_unknown_or_absent_destination_produces_no_commitment_and_no_permit",
+      "verdict": "PASS"
+    },
+    {
+      "id": "H_the_exact_represented_allocation_is_canonical_and_survives_serialization",
+      "verdict": "PASS"
+    },
+    {
+      "id": "I_preparation_moves_no_bodies_and_creates_no_successor",
+      "verdict": "PASS"
+    },
+    {
+      "id": "J_identical_canonical_input_produces_an_identical_prepared_state",
+      "verdict": "PASS"
+    },
+    {
+      "id": "K_repeated_preparation_and_failure_cannot_grow_canonical_state",
+      "verdict": "PASS"
+    },
+    {
+      "id": "L_a_parent_that_changes_after_preparation_is_detected_as_stale",
+      "verdict": "PASS"
+    },
+    {
+      "id": "M_changed_founder_terms_or_destination_cannot_reuse_the_old_permit",
+      "verdict": "PASS"
+    },
+    {
+      "id": "N_abandonment_withdraws_the_permit_keeps_the_commitment_and_moves_nobody",
+      "verdict": "PASS"
+    },
+    {
+      "id": "O_departure_ready_is_no_longer_reachable_by_elapsed_time_alone",
+      "verdict": "PASS"
+    },
+    {
+      "id": "P_the_preparation_writer_has_one_natural_adapter_caller_and_departure_still_requires_it",
+      "verdict": "PASS"
+    }
+  ]
+}

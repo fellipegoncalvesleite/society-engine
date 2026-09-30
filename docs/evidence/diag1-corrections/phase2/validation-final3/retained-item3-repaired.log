@@ -1,0 +1,30 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "summary": {
+    "fixtures": 16,
+    "failing": 0,
+    "vacuous": 0,
+    "notConstructed": 0,
+    "failingIds": [],
+    "vacuousIds": [],
+    "notConstructedIds": []
+  },
+  "verdicts": {
+    "I1_two_bands_no_overlap": "NO_ENCOUNTER_NO_FRICTION_NO_EXPECTATION_NO_CROWDING",
+    "I2_overlap_without_social_evidence": "PHYSICAL_CROWDING_WITHOUT_INVENTED_SOCIAL_RISK_AND_NO_GLOBAL_CENSUS",
+    "I3_encounter_to_friction": "CO_PRESENCE_PRODUCES_ATTRIBUTABLE_FRICTION_WITH_NO_DUPLICATE_EPISODE",
+    "I4_friction_to_access_expectation": "EXPECTATION_DERIVES_FROM_HELD_EVIDENCE_NOT_FROM_CURRENT_WORLD_TRUTH",
+    "I5_single_social_pressure_path": "ZERO_EVIDENCE_ZERO_SOCIAL_PRESSURE_AND_ONE_BOUNDED_CROWDING_COST",
+    "I6_release_lifecycle": "ACTIVE_THEN_COOLING_THEN_RELEASED_WITH_RECORDS_RETAINED",
+    "I11_history_remains_while_state_is_inactive": "HISTORY_PRESERVED_CURRENT_STATE_INACTIVE",
+    "I16_release_then_reencounter": "REACTIVATION_ONLY_THROUGH_FRESH_EVIDENCE",
+    "I7_task_camp_inside_another_range": "PARTY_STANDS_WHERE_IT_IS_PARENT_NOT_GHOSTED_NO_INVENTED_SOCIAL_CONSEQUENCE",
+    "I8_concurrent_parties": "POPULATION_CONSERVED_HEADCOUNTS_AND_LABOR_INDEPENDENT",
+    "I9_non_working_party_member": "BODY_AWAY_NO_WORK_NO_CARRY_BUT_CONSUMES_AND_BURDENS",
+    "I10_target_removal_to_returned_support": "ONE_CHAIN_UNITS_DISTINCT_NO_SUPPORT_BEFORE_RETURN",
+    "I12_remote_record_isolation": "FOCAL_RESULT_UNCHANGED_BY_FIFTEEN_REMOTE_RECORDS",
+    "I13_prepared_party_boundary": "PREPARED_PEOPLE_ARE_RESIDENTIAL_THEIR_LABOR_IS_NOT",
+    "I14_annual_cohort_boundary_with_active_party": "AGING_MOVES_NO_BODY_LABOR_FOLLOWS_THE_CONVENTION",
+    "I15_invalid_target_work_contract": "ZERO_FRACTIONAL_AND_NON_FINITE_FAIL_BEFORE_READING_THE_TARGET"
+  }
+}

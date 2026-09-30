@@ -1,0 +1,40 @@
+{
+  "reason": "Real decimal exposure partition invariance RED, rounding-partition-first.json. Completed outputs remain valid for their recorded source; final certification will use corrected numeric aggregation. Incomplete long runs retained without PASS claim.",
+  "stopped": [
+    {
+      "pid": 30282,
+      "cmd": "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/files-pasted-by-the-user-difficulty/work/diag1-continuation/run_phase2.py physical final2",
+      "kind": "wrapper"
+    },
+    {
+      "pid": 30290,
+      "cmd": "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/files-pasted-by-the-user-difficulty/work/diag1-continuation/run_phase2.py long final2",
+      "kind": "wrapper"
+    },
+    {
+      "pid": 32920,
+      "cmd": "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/files-pasted-by-the-user-difficulty/work/diag1-continuation/run_measured.py measured final2",
+      "kind": "wrapper"
+    },
+    {
+      "pid": 30297,
+      "cmd": "node scripts/annualNutritionLikeForLikeAudit.mjs --out /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final2/annualNutritionLikeForLike.json",
+      "kind": "audit"
+    },
+    {
+      "pid": 30308,
+      "cmd": "/Users/fellipegoncalvesleite/.local/node/bin/node scripts/diag1Phase1DeterminismAudit.mjs --out docs/evidence/diag1-corrections/phase2/validation-final2/determinism-mixed.json",
+      "kind": "audit"
+    },
+    {
+      "pid": 33278,
+      "cmd": "node scripts/recoveryBasinAudit.mjs --out /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final2/recoveryBasin.json",
+      "kind": "audit"
+    },
+    {
+      "pid": 33953,
+      "cmd": "node scripts/provisionalTwoDayIntegrationAudit.mjs --warm-days 2100 --out /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final2/provisionalTwoDayIntegration-measured.json",
+      "kind": "audit"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+WebSocket server error: Port 24678 is already in use
+/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/seasonalSurvival.ts:177
+	const demand = pending?.demandUnits ?? support.humanFoodLedger?.populationDemand ?? carrying?.populationDemand.adultEquivalentDemand ?? 0;
+	                                                                                                              ^
+
+TypeError: Cannot read properties of undefined (reading 'adultEquivalentDemand')
+    at updateSeasonalSupportState (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/seasonalSurvival.ts:177:112)
+    at runArm (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/recoveryBasinAudit.mjs:108:17)
+    at Array.map (<anonymous>)
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/recoveryBasinAudit.mjs:280:24
+
+Node.js v26.7.0

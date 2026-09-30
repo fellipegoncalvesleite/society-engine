@@ -1,6 +1,6 @@
 # Phase 1B — world-specific seasonal cache isolation
 
-**IMPLEMENTED / PENDING INDEPENDENT FINAL REVIEW.** All three complete-state matrices passed. No Phase-1 acceptance or freeze, and no Phase-2 implementation, is claimed.
+**IMPLEMENTED / INDEPENDENT FINAL DEPENDENCY GATE PASSED.** All three complete-state matrices passed. The fresh review of exact `d8c6233872b6bcb76da5fe6c3747c889ec402eb9` returned SPEC PASS, CODE QUALITY PASS, Critical0, Important0, Minor0 and PHASE2 AUTHORIZATION YES; see `../FINAL_DISPOSITION.md`. No formal freeze is claimed. The implementation evidence and original pre-review next-step description below are preserved as history; the final disposition supersedes that next-step status.
 
 For simulated people, the correction prevents seasonal conditions or a river crossing from belonging to another world merely because the worlds share clock objects and labels. It changes cache identity, not food availability, movement formulas, birth/death rules or human thresholds. The earlier food/body/labor corrections remain intact.
 

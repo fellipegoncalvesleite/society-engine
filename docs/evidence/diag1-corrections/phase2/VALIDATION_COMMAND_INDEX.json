@@ -1,0 +1,1133 @@
+{
+  "sourceCount": 247,
+  "commands": [
+    {
+      "file": "annualNutritionLikeForLike-command.json",
+      "sha256": "55a7d5a83c6b0c43a4f64c270175a262ebd5abddbad526659b852b766c80208f",
+      "command": [
+        "node",
+        "scripts/annualNutritionLikeForLikeAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/annualNutritionLikeForLike.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 1211.6208622455597,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "build-command.json",
+      "sha256": "71b9b7f1c619e152c355298e5cad873fbe555b7808b92ed36d2242c3d62dca9c",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 26.141373872756958,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "contextLifecycle-command.json",
+      "sha256": "bb86f72afe5749daea98f2a25d7f4da01e89312fcfaf20e6740e5d9957f7a4bd",
+      "command": [
+        "node",
+        "scripts/contextLifecycleAudit.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 1181.7502658367157,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "diag1Phase1BCache-command.json",
+      "sha256": "80ff9eada612d0e3a3f0cd6ef0eccd461c03948c7978ef6875ef0f3d077891af",
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/diag1Phase1BCache.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 0.6018838882446289,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "diag1Phase1Conservation-command.json",
+      "sha256": "e270aa839d47eabb7327234baa0e0b6c28d0cbc392e136639b66eddc7254ee2e",
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/diag1Phase1Conservation.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 18.029605865478516,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "diag1Phase1Conservation-measured-command.json",
+      "sha256": "26845aa9308aa13e54b1f52324a490832af1429c4c29e32dd985563e422482e7",
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--scope",
+        "provenance",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/diag1Phase1Conservation-measured.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 0.5662820339202881,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "diag1Phase1CrossWorldCache-command.json",
+      "sha256": "005ed487230d8ddc433584b730f32555fd129c508e87b2f74d202c20e62673e9",
+      "command": [
+        "node",
+        "scripts/diag1Phase1CrossWorldCacheAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/diag1Phase1CrossWorldCache.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 87.69308423995972,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "diag1Phase2AnnualBoundary-measured-command.json",
+      "sha256": "896afacc6b1fd5b592129a28b0a7475bc276eddcffbfce0e53c9433c311e10f8",
+      "command": [
+        "node",
+        "scripts/diag1Phase2AnnualBoundaryAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/diag1Phase2AnnualBoundary-measured.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 116.03024291992188,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "diag1Phase2DemographyBoundary-measured-command.json",
+      "sha256": "8be8b5726f09c4f14ab5fc06ea67eb90bb6536cc649a1430a0179a9a0b83cd1f",
+      "command": [
+        "node",
+        "scripts/diag1Phase2DemographyBoundaryAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/diag1Phase2DemographyBoundary-measured.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 6.272906064987183,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "diag1Phase2FailedReturn-measured-command.json",
+      "sha256": "8f243d3791df1aa24bdf6093048727a96869c7a2a688f7703445db97f7e956fd",
+      "command": [
+        "node",
+        "scripts/diag1Phase2FailedReturnAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/diag1Phase2FailedReturn-measured.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 166.8812770843506,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "diag1Phase2Fatigue-command.json",
+      "sha256": "d1ce8087b930086654df6d37e3d0fb4404adeee0808ebe7a9c61f85dfcc90fc3",
+      "command": [
+        "node",
+        "scripts/diag1Phase2FatigueAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/diag1Phase2Fatigue.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 2.0133750438690186,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "diag1Phase2Migration-command.json",
+      "sha256": "92296b44e2b6a609661e016359431c0a9a2ec665d3367db53e8ba8c4d980afba",
+      "command": [
+        "node",
+        "scripts/diag1Phase2MigrationAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/diag1Phase2Migration.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 1.5618860721588135,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "diag1Phase2Rounding-measured-command.json",
+      "sha256": "3892d4bfb7330ea4f8916a683f0a109d0e6f7b64ad338347518a7806ca790363",
+      "command": [
+        "node",
+        "scripts/diag1Phase2RoundingAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/diag1Phase2Rounding-measured.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 8.347301006317139,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "diag1Phase2UnitsAndExposure-command.json",
+      "sha256": "9b5e661f1a9f78faa082d55fbe8e44e9a89dfd00494e1973917ccd74240345c0",
+      "command": [
+        "node",
+        "scripts/diag1Phase2UnitsAndExposureAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/diag1Phase2UnitsAndExposure.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 3.933986186981201,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "expeditionKnowledgeLatency-command.json",
+      "sha256": "a94eed7ebe5af508efdf37909e99cb413311a8687584d3218d6f3e4145852619",
+      "command": [
+        "node",
+        "scripts/expeditionKnowledgeLatencyAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/expeditionKnowledgeLatency.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 662.1079528331757,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "failedReturnContinuation-command.json",
+      "sha256": "b16fc6a7b5524f9b8567c88ba6049100ed1d64aa5668590253ee03b670ad6a39",
+      "command": [
+        "node",
+        "scripts/failedReturnContinuationAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/failedReturnContinuation.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 178.80900812149048,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "fissionDeparturePreparation-command.json",
+      "sha256": "cec748a9d132ad4279cadcb31e542d75db6eb7715afe3264e9b3722d1fa4eb99",
+      "command": [
+        "node",
+        "scripts/fissionDeparturePreparationAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/fissionDeparturePreparation.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 87.54447293281555,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "fissionDepartureSeam-command.json",
+      "sha256": "7d21cf4795e426d818894fd5b4df745f7334a4cc4cfd578485905d5fc6a46b79",
+      "command": [
+        "node",
+        "scripts/fissionDepartureSeamAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/fissionDepartureSeam.json",
+        "--out-ordering",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/departure-ordering.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 1.428077220916748,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "fissionFieldTransfer-command.json",
+      "sha256": "5cc4fc20c2ccdbc47866264cc3b6657d4ca9d489f5a30bc92935597f5b322dd4",
+      "command": [
+        "node",
+        "scripts/fissionFieldTransferAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/fissionFieldTransfer.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 71.04386496543884,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "graph-command.json",
+      "sha256": "4c7313f01ea60484316dae74ce7c30c9bb31da27271b1e2610123eb0ddc7128e",
+      "command": [
+        "node",
+        "scripts/checkGraph.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 0.7491180896759033,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "import-command.json",
+      "sha256": "3f72512de11e86215d8a6c43d4acdfad558bfee5c3135303c8f56b342af23a27",
+      "command": [
+        "node",
+        "scripts/importBoundaryAudit.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 0.22783398628234863,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "item4WholeIntegrationFreeze-command.json",
+      "sha256": "888b6f3e92a65708e9f730f1bc3535b97b1472297108b50f2900743ba27c344e",
+      "command": [
+        "node",
+        "scripts/item4WholeIntegrationFreezeAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/item4WholeIntegrationFreeze.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 65.28265714645386,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "livingEcologyFoodPipeline-command.json",
+      "sha256": "c091973e7dafa7d765b6f7d8c805accb1eb1af24afd2492a670037fadd3d0658",
+      "command": [
+        "node",
+        "scripts/livingEcologyFoodPipelineAudit.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 16.037834882736206,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "mobilityCapacity-command.json",
+      "sha256": "d7963f0d542dc9c3d621f9864fe0279261f78ba677114918a820e8e30157bce8",
+      "command": [
+        "node",
+        "scripts/mobilityCapacityAudit.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 764.0790138244629,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "numericResourceChain-command.json",
+      "sha256": "8d75d3b7c7202b46c961b6cbb4523f8d1258024e3dedaa1bbb7f70b7ba7706c7",
+      "command": [
+        "node",
+        "scripts/numericResourceChainAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/numericResourceChain.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 200.33825206756592,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase1-absorption-command.json",
+      "sha256": "3c9d9c924dc50e81ca072ba9770f161e7b01818e4ae5e1a6414146c4939032ef",
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--mutant",
+        "absorption",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase1-absorption.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 66.37585997581482,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase1-cache-command.json",
+      "sha256": "d3247ceb9d47c9b8aba76aec7fe6c95c951ae4f3de3f338aa9bd2d29b714380a",
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--mutant",
+        "cache",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase1-cache.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 68.93389797210693,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase1-cargo-command.json",
+      "sha256": "15ed8bb0c02714491de0693668a6e95d9563708dccb75dccc10310fbab5eafcf",
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--mutant",
+        "cargo",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase1-cargo.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 48.82764291763306,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase1-labor-command.json",
+      "sha256": "230278f6d462ca28c5978f5ed6f27e6606b198c65f406df40c4ad14e485d4981",
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--mutant",
+        "labor",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase1-labor.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 60.25799083709717,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase1-natural-explicit-s1-command.json",
+      "sha256": "d7012cb46ab195ac20d5c2be8efffe76069f864695441071dc802d0f4ff512d3",
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s1"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 36.90980792045593,
+      "beforeMatchesFinalSource": null,
+      "afterMatchesFinalSource": null,
+      "sourcePreserved": null
+    },
+    {
+      "file": "phase1-natural-explicit-s2-command.json",
+      "sha256": "b28a3429f68ecbf884743e5937335da9f7525709bc026e45ea0a0291fd95f8a0",
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s2"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 35.32327699661255,
+      "beforeMatchesFinalSource": null,
+      "afterMatchesFinalSource": null,
+      "sourcePreserved": null
+    },
+    {
+      "file": "phase1-natural-off-s1-command.json",
+      "sha256": "926cc83f36ce29877deefbb973733ccd86eee3a72d0e8a17a3faa6dca3446df5",
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s1",
+        "off"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 20.723371982574463,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase1-natural-off-s2-command.json",
+      "sha256": "5ac099f6edfe7616ec43ed941e2cb0caeb26473be6a28eb26e8bce01ffbd4e47",
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s2",
+        "off"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 20.330666065216064,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase1-natural-s1-command.json",
+      "sha256": "a16b42dc257bad22a764207a0ae7a0e69daa066289679f5c1393496c3bbcde1f",
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s1"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 0.4121980667114258,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase1-natural-s2-command.json",
+      "sha256": "85011cde86f81a831424e622b6d8cc9529a667540da989779d2bf4f8b3057143",
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s2"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 0.37363195419311523,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase1b-crossing-command.json",
+      "sha256": "8854ea5fd03c0417ff24e83cda5296051d92517c8437d1e83ed6ed2a129845f7",
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--mutant",
+        "crossing",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase1b-crossing.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 0.6455268859863281,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase1b-movement-command.json",
+      "sha256": "7de0da3c398ac8a51d2f0f325a02ebd051c3b1de5a393561957b7f3f49fbee14",
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--mutant",
+        "movement",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase1b-movement.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 0.6220278739929199,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase1b-tile-command.json",
+      "sha256": "5b698a00a3f55d4b27eeeb8bbdc6b8a6d5fe893ed807e6f38d028055673b5e47",
+      "command": [
+        "node",
+        "scripts/diag1Phase1BCacheAudit.mjs",
+        "--mutant",
+        "tile",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase1b-tile.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 0.7626750469207764,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase2-migration_guess-command.json",
+      "sha256": "10c1a634b8b7b4bfeb1a83faf750112e7dc8e447bb7325ddb735da18e883fc56",
+      "command": [
+        "node",
+        "scripts/diag1Phase2MigrationAudit.mjs",
+        "--mutant",
+        "migration_guess",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase2-migration_guess.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 3.1575100421905518,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase2-overlap-command.json",
+      "sha256": "6317116e1df739a49005f5340b142c72fd4927a4c3ee15dac194fe5d6bc94b3e",
+      "command": [
+        "node",
+        "scripts/diag1Phase2UnitsAndExposureAudit.mjs",
+        "--mutant",
+        "overlap",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase2-overlap.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 7.649996995925903,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase2-partition_rounding-command.json",
+      "sha256": "ee19859d3a187100e627b37e31d93e0cdd9a3bde0bcfef1c56713490da8355f7",
+      "command": [
+        "node",
+        "scripts/diag1Phase2RoundingAudit.mjs",
+        "--mutant",
+        "partition_rounding",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase2-partition_rounding.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 3.892564058303833,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase2-record_count-command.json",
+      "sha256": "4729a2559cc081ba01ca01df5e5182a1fdd28ba8c361476d08372d32d17ab751",
+      "command": [
+        "node",
+        "scripts/diag1Phase2UnitsAndExposureAudit.mjs",
+        "--mutant",
+        "record_count",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase2-record_count.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 6.942316055297852,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase2-stale_fatigue-command.json",
+      "sha256": "8ae5e9dbca71c1d23e70ab9096c29246d20df976fd7fa77917a553212bb0a155",
+      "command": [
+        "node",
+        "scripts/diag1Phase2FatigueAudit.mjs",
+        "--mutant",
+        "stale_fatigue",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase2-stale_fatigue.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 3.525219678878784,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "phase2-units-command.json",
+      "sha256": "1026c716b0f603fa6dd4db2dee2b423674fef40b6c23895630b464cd1bb8bc47",
+      "command": [
+        "node",
+        "scripts/diag1Phase2UnitsAndExposureAudit.mjs",
+        "--mutant",
+        "units",
+        "--out",
+        "docs/evidence/diag1-corrections/phase2/validation-final3/phase2-units.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 6.425679922103882,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "provisionalChoiceMeasurement-command.json",
+      "sha256": "a970995d0603d914ec7f98736a5219b229053815c4da39834d96fdae8506761c",
+      "command": [
+        "node",
+        "scripts/provisionalChoiceMeasurementAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/provisionalChoiceMeasurement.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 103.95499587059021,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "provisionalQuarantineContract-command.json",
+      "sha256": "0a1d481b994145af2ecf061abb6b62e3f73520375b44899fff7a2e322294def8",
+      "command": [
+        "node",
+        "scripts/provisionalQuarantineContractAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/provisionalQuarantineContract.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 117.21086096763611,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "provisionalReintegration-command.json",
+      "sha256": "653a0ba21bd083080cc009a751b8f573143db0e2883545024a1d7683f553f2c5",
+      "command": [
+        "node",
+        "scripts/provisionalReintegrationAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/provisionalReintegration.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 131.40170311927795,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "provisionalReturnReachability-command.json",
+      "sha256": "ff1462000ef7396802b41ee632264874b9df1c273381863d43b033f7ef2a6f40",
+      "command": [
+        "node",
+        "scripts/provisionalReturnReachabilityAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/provisionalReturnReachability.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 84.61577200889587,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "provisionalSubsistenceLifecycle-measured-command.json",
+      "sha256": "b6ad3f3070b38b74631e91e8ca4199418a4236642b724afa760afa655f0e7378",
+      "command": [
+        "node",
+        "scripts/provisionalSubsistenceLifecycleAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/provisionalSubsistenceLifecycle-measured.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 102.47984409332275,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "provisionalTravel-command.json",
+      "sha256": "fd6c7b8f3fa10227d0a69b8b35082b26e606602d14f150786764d304cb24f398",
+      "command": [
+        "node",
+        "scripts/provisionalTravelAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/provisionalTravel.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 139.77130603790283,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "provisionalTwoDayIntegration-command.json",
+      "sha256": "b0e54f2ddd3e0fa22c14fce60114ed68b5e77ac4eb01d8f379235d685a8a684b",
+      "command": [
+        "node",
+        "scripts/provisionalTwoDayIntegrationAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/provisionalTwoDayIntegration.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 91.17461609840393,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "provisionalTwoDayIntegration-measured-command.json",
+      "sha256": "650504fbbf1eb3e66ec706510a3d4eed433bec1bf70178bd0cfce7a8e96b378d",
+      "command": [
+        "node",
+        "scripts/provisionalTwoDayIntegrationAudit.mjs",
+        "--warm-days",
+        "2100",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/provisionalTwoDayIntegration-measured.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 371.0745928287506,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "recoveryBasin-command.json",
+      "sha256": "0844027aeb98cdac58d302cce83ec35840e3414aab63d9b21a00d4d22a246bfb",
+      "command": [
+        "node",
+        "scripts/recoveryBasinAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/recoveryBasin.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 420.01035165786743,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "recoveryFoodAccounting-command.json",
+      "sha256": "7af445ac2dcd9e993b4716da725a8be453a7f1f6e8e1d54ef63f183ff965a275",
+      "command": [
+        "node",
+        "scripts/recoveryFoodAccountingAudit.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 334.12238216400146,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-acute-risk-command.json",
+      "sha256": "005ab6e66977a15380df674606deddad41c620beb684065ea28e0a5950727d4c",
+      "command": [
+        "node",
+        "scripts/expeditionAcuteRiskAudit.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 275.6230981349945,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-away-command.json",
+      "sha256": "f478ec6e39d77c4eae89ec493bf3c65c0d702824be81c2f07130777097418586",
+      "command": [
+        "node",
+        "scripts/awayBodyOwnershipFixturesAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-away.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 131.05898904800415,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-headcount-stable-command.json",
+      "sha256": "3defc9094bde6dc59be606d7f5e04a70a92142ae8541df9e6607cb26a3bbd6b2",
+      "command": [
+        "node",
+        "scripts/headcountLaborFixturesAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-headcount-stable.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 534.7204670906067,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-item3-repaired-command.json",
+      "sha256": "3045f2bef6c17de34f2f05cf7659ecdbbfa2e670f8d71a5306c4b92a52ed651d",
+      "command": [
+        "node",
+        "scripts/itemThreeIntegrationFixturesAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-item3-repaired.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 181.3523268699646,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-lifecycle-command.json",
+      "sha256": "1a31e46e0e264ca81c52628141a7ea5f5dfeb0aa5009b4d8519eeeb3143be068",
+      "command": [
+        "node",
+        "scripts/expeditionLifecycleAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-lifecycle.json",
+        "--boundary-out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-lifecycle-boundary.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 975.9046499729156,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-lifecycle-superseded-command.json",
+      "sha256": "17710ba6c5fa511421ef826aa4c3fd0b5d3620e4bcae4a4efeab54f7153d6ede",
+      "command": [
+        "node",
+        "scripts/expeditionLifecycleAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-lifecycle.json",
+        "--boundary-out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-lifecycle-boundary.json"
+      ],
+      "exitCode": -9,
+      "runtimeSeconds": 99.2024450302124,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-presence-command.json",
+      "sha256": "e94ec9db61afa389fc0ae698f1a9543615492b83ced2de822ed173a37b9109f0",
+      "command": [
+        "node",
+        "scripts/physicalPresenceFixturesAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-presence-out.json",
+        "--out-person",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-presence-out-person.json",
+        "--out-timelines",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-presence-out-timelines.json",
+        "--out-expedition",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-presence-out-expedition.json",
+        "--out-sameday",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-presence-out-sameday.json",
+        "--out-social",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-presence-out-social.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 77.42827796936035,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-reader-admission-bounded-command.json",
+      "sha256": "4ca3703bddc5768cb5620e9eaa046a873eb1d17c1af3245078af1f3ccbfebdb8",
+      "command": [
+        "node",
+        "scripts/provisionalReaderAdmissionAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-reader-admission-bounded.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 68.46156311035156,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-reader-admission-bounded2100-command.json",
+      "sha256": "139d5ddc1c5f837bf3007b7536823739b250bb1b4d32698f991fb0045da2cd9f",
+      "command": [
+        "node",
+        "scripts/provisionalReaderAdmissionAudit.mjs",
+        "--warm-days",
+        "2100",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-reader-admission-bounded2100.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 75.60258197784424,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-reader-admission-command.json",
+      "sha256": "41cb289bbc625e2ee6b303706d3f6c5dc384c28e77d10776547e38977fc75b18",
+      "command": [
+        "node",
+        "scripts/provisionalReaderAdmissionAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-reader-admission.json"
+      ],
+      "exitCode": 1,
+      "runtimeSeconds": 64.22561693191528,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-reader-semantic-command.json",
+      "sha256": "3dc4737c68616e5183ce959b910e2f2ad67792bc81ea28cd8e7d648414fc1193",
+      "command": [
+        "node",
+        "scripts/provisionalReaderSemanticAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-reader-semantic.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 0.13538718223571777,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-target-labor-command.json",
+      "sha256": "944ef2ea8a9462ee4ffed0e676fb9e6d70e557af41391e1c6c33af16826cbadf",
+      "command": [
+        "node",
+        "scripts/targetWorkLaborAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-target-labor.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 24.997378826141357,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "retained-target-resolution-command.json",
+      "sha256": "408be15aa3750af1e947b6b9e836a788aa71aa3ce1f63d77039ff79d6169d4ea",
+      "command": [
+        "node",
+        "scripts/expeditionTargetResolutionAudit.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 157.4554340839386,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "scale1ResidentialTraversal-command.json",
+      "sha256": "b3203620d1240ea5a4fb15decbf45d9e04476f99525a5cf04aecc37475239b34",
+      "command": [
+        "node",
+        "scripts/scale1ResidentialTraversalAudit.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 0.4318699836730957,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "scale1Task7CrossResolution-command.json",
+      "sha256": "26f0bb9fc5198d56f60969bdb39d248c424f24b5d443d2517889be5b2f9f0c5c",
+      "command": [
+        "node",
+        "scripts/scale1Task7CrossResolutionAudit.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 2.190056800842285,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "scale1Traversal-command.json",
+      "sha256": "af2a47ea449b2ac9bf5b2b6f119b229ce3d031246b28d5b338481f1251298bda",
+      "command": [
+        "node",
+        "scripts/scale1TraversalAudit.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 0.5356369018554688,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "scale1TripTiming-command.json",
+      "sha256": "bca5dd6c7caf6aacc2c33ed2cc2ecee0ccb552fe399bce416c027b1fe596fb81",
+      "command": [
+        "node",
+        "scripts/scale1TripTimingAudit.mjs"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 1.0356597900390625,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "successorStabilization-command.json",
+      "sha256": "4eecfc350b69cf4512662a744b2a16262a00297249641d162008525d05f15cab",
+      "command": [
+        "node",
+        "scripts/successorStabilizationAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/successorStabilization.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 54.174232006073,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "typecheck-app-command.json",
+      "sha256": "925843f1508b626fdd59a030abfb869f6140d4c80e9a896f7eaf65bfd89f29d2",
+      "command": [
+        "node_modules/.bin/tsc",
+        "-p",
+        "tsconfig.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 20.4115891456604,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    },
+    {
+      "file": "typecheck-node-command.json",
+      "sha256": "9ea9f9df1e2f7d534a36b2eefae716ae5be780f771f2a8c38666ad5b0ee75cd7",
+      "command": [
+        "node_modules/.bin/tsc",
+        "-p",
+        "tsconfig.node.json"
+      ],
+      "exitCode": 0,
+      "runtimeSeconds": 1.3140690326690674,
+      "beforeMatchesFinalSource": true,
+      "afterMatchesFinalSource": true,
+      "sourcePreserved": true
+    }
+  ],
+  "note": "Null means no per-command snapshot was recorded, not failure or invented verification. Standalone harnesses additionally embed their own source hashes. Expected mutant exit1 and retained fixture refusals are classified in VALIDATION_RESULTS.md."
+}

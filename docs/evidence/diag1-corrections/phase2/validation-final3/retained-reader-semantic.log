@@ -1,0 +1,54 @@
+{
+  "filesScanned": 190,
+  "trueEnumerations": 60,
+  "keyedLookups": 40,
+  "enumViaCanonicalPredicate": 6,
+  "enumViaInlineStatus": 4,
+  "enumWithNoLifecycleFilter": 50,
+  "lexicalClaimedEnumerationSites": 160,
+  "lexicalOverstatementFactor": 2.67
+}
+
+canonical predicate imported by 25: src/sim/agents/bandEvents.ts, src/sim/agents/bandHistory.ts, src/sim/agents/bandIdentity.ts, src/sim/agents/contextCache.ts, src/sim/agents/demography.ts, src/sim/agents/expedition.ts, src/sim/agents/faunaStock.ts, src/sim/agents/fissionDepartureSeam.ts, src/sim/agents/intraSeasonTrips.ts, src/sim/agents/naturalFissionPreDeparture.ts, src/sim/agents/postReturnContinuation.ts, src/sim/agents/pressure.ts, src/sim/agents/protoCamps.ts, src/sim/agents/provisionalEstablishment.ts, src/sim/agents/provisionalLifecycleResolver.ts, src/sim/agents/provisionalReintegration.ts, src/sim/agents/provisionalReturnDecision.ts, src/sim/agents/provisionalTravel.ts, src/sim/agents/provisionalTravelSubsistence.ts, src/sim/agents/seasonalSurvival.ts, src/sim/agents/socialContext.ts, src/sim/agents/successorStabilization.ts, src/sim/agents/viability.ts, src/sim/runner/simRunner.ts, src/sim/tick/advance.ts
+
+true enumerations by file:
+   6  src/sim/agents/demography.ts  {"none":5,"inline_status_test":1}
+   6  src/sim/agents/spawn.ts  {"none":6}
+   4  src/sim/agents/postReturnContinuation.ts  {"none":4}
+   3  src/sim/agents/socialContext.ts  {"none":2,"inline_status_test":1}
+   3  src/sim/agents/viability.ts  {"none":3}
+   2  src/sim/agents/contextCache.ts  {"canonical_predicate":2}
+   2  src/sim/agents/protoCamps.ts  {"none":1,"canonical_predicate":1}
+   2  src/sim/agents/provisionalLifecycleResolver.ts  {"none":2}
+   2  src/sim/agents/provisionalReintegration.ts  {"none":2}
+   2  src/sim/agents/successorStabilization.ts  {"none":2}
+   1  src/sim/agents/accessNorms.ts  {"none":1}
+   1  src/sim/agents/acuteRisk.ts  {"none":1}
+   1  src/sim/agents/bandEvents.ts  {"none":1}
+   1  src/sim/agents/bandHistory.ts  {"none":1}
+   1  src/sim/agents/bodyCampLogistics.ts  {"none":1}
+   1  src/sim/agents/carryingCapacity.ts  {"inline_status_test":1}
+   1  src/sim/agents/crowding.ts  {"inline_status_test":1}
+   1  src/sim/agents/expedition.ts  {"none":1}
+   1  src/sim/agents/faunaStock.ts  {"canonical_predicate":1}
+   1  src/sim/agents/fissionDepartureSeam.ts  {"none":1}
+   1  src/sim/agents/foragingAdaptation.ts  {"none":1}
+   1  src/sim/agents/intraSeasonTrips.ts  {"none":1}
+   1  src/sim/agents/naturalFissionDeparture.ts  {"none":1}
+   1  src/sim/agents/naturalFissionPreDeparture.ts  {"none":1}
+   1  src/sim/agents/nutritionMigration.ts  {"none":1}
+   1  src/sim/agents/parentFissionAttemptResolver.ts  {"none":1}
+   1  src/sim/agents/pressure.ts  {"canonical_predicate":1}
+   1  src/sim/agents/provisionalEstablishment.ts  {"none":1}
+   1  src/sim/agents/provisionalReturnDecision.ts  {"none":1}
+   1  src/sim/agents/provisionalTravel.ts  {"none":1}
+   1  src/sim/agents/provisionalTravelSubsistence.ts  {"none":1}
+   1  src/sim/agents/relationshipMemory.ts  {"none":1}
+   1  src/sim/agents/resourceEcologyFoundation.ts  {"none":1}
+   1  src/sim/agents/seasonalSurvival.ts  {"canonical_predicate":1}
+   1  src/sim/agents/visibleNature.ts  {"none":1}
+   1  src/sim/runner/simRunner.ts  {"none":1}
+   1  src/sim/world/depletion.ts  {"none":1}
+   1  src/sim/world/mapEdits.ts  {"none":1}
+
+written: /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-reader-semantic.json

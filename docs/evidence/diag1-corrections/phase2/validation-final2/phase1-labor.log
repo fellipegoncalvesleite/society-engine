@@ -1,0 +1,56 @@
+PASS B-001 complete raw receipt migrates and two-unit rounding boundary is accepted
+PASS B-001 refuses incomplete/inconsistent provenance: missing processing loss
+PASS B-001 refuses incomplete/inconsistent provenance: missing all raw fields
+PASS B-001 refuses incomplete/inconsistent provenance: positive usable with zero harvest
+PASS B-001 refuses incomplete/inconsistent provenance: inconsistent depletion
+PASS B-001 refuses incomplete/inconsistent provenance: negative raw loss
+PASS B-001 refuses incomplete/inconsistent provenance: nonfinite raw harvest
+PASS B-001 refuses incomplete/inconsistent provenance: finite raw imbalance beyond two rounding units
+PASS B-001 zero work requires explicit complete zero retained receipt
+PASS B-001 information only requires explicit complete zero retained receipt
+PASS B-001 actual multi-work delivery equals independent surviving sum
+PASS B-002 current-body conservation abc
+PASS B-002 current-body conservation cba
+PASS B-002 current-body conservation bac
+PASS B-002 current-body conservation bca
+PASS B-002 current-body conservation cab
+PASS B-002 current-body conservation acb
+PASS B-002 current-body conservation abcde
+PASS B-002 target loses eligibility when its support departs
+PASS B-002 admission and resolved target share one current decision
+PASS B-002 bounded sweep timing for unrelated healthy bands
+PASS B-002 arrivals rescue B before its turn
+PASS B-002 single transfer and healthy no-transfer
+PASS B-002 multiple arrivals, terminal/zero and provisional exclusion
+PASS B-003 same-clock actual take 0/tile:0:0
+PASS B-003 same-clock actual take 0/tile:6:0
+PASS B-003 same-clock actual take 0/tile:93:15
+PASS B-003 same-clock actual take 90/tile:0:0
+PASS B-003 same-clock actual take 90/tile:6:0
+PASS B-003 same-clock actual take 90/tile:93:15
+PASS B-003 same-clock actual take 180/tile:0:0
+PASS B-003 same-clock actual take 180/tile:6:0
+PASS B-003 same-clock actual take 180/tile:93:15
+PASS B-003 same-clock actual take 270/tile:0:0
+PASS B-003 same-clock actual take 270/tile:6:0
+PASS B-003 same-clock actual take 270/tile:93:15
+PASS B-003 in-place causal tile revision invalidates
+PASS B-003 single generation after 1000 years
+PASS B-003 human/fauna/observer first-reader and JSON reload parity
+FAIL B-004 actual daily action adults=0
+PASS B-004 actual daily action adults=1
+PASS B-004 actual daily action adults=20
+PASS B-004 prepared workers committed=5
+FAIL B-004 prepared workers committed=10
+PASS B-004 outbound workers committed=5
+FAIL B-004 outbound workers committed=10
+PASS B-004 operating workers committed=5
+FAIL B-004 operating workers committed=10
+PASS B-004 returning workers committed=5
+FAIL B-004 returning workers committed=10
+FAIL B-004 actual partly/all away and nonfood execution controls
+PASS B-004 performed ordinary trip leaves a real investigation remainder
+PASS B-004 positive workers cannot manufacture absent or depleted food
+FAIL B-004 stale positive selection refuses execution after worker loss
+FAIL B-004 performed investigation and trip reserve only remaining workers
+PASS B-004 refused unperformed investigation does not reserve a worker

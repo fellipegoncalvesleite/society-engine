@@ -1,0 +1,61 @@
+{
+  "audit": "annualNutritionLikeForLike",
+  "checkpoint": "CORRECTION-17 §4",
+  "supersedes": {
+    "script": "scripts/candidateRepairIsolationAudit.mjs",
+    "claim": "A_annualNutritionSampling",
+    "why": "That claim compares annual mean seasonal food stress (one term) against foodDemographicPressure (a four-term composite). The two are different quantities by construction, so their numeric difference is NOT evidence of demographic overstatement and must not be cited as such."
+  },
+  "likeForLikeClaim": "stored annual nutrition output == exact reconstruction from the same previous360 completed physical days",
+  "measuredIndependently": [
+    "annual mean currentFoodStress",
+    "annual mean raw support ratio",
+    "recovery share over the same physical-day exposure",
+    "nutritional surplus over the same physical-day exposure",
+    "chronic food stress under the exact production formula",
+    "foodDemographicPressure reconstructed from those exact components"
+  ],
+  "perSeed": [
+    {
+      "seed": "map2_rich",
+      "map": "map2",
+      "comparisons": 20,
+      "mismatches": 0,
+      "exactMatch": true
+    }
+  ],
+  "totalComparisons": 20,
+  "totalMismatches": 0,
+  "reconstructionExact": true,
+  "mismatchExamples": [],
+  "behavioralConsumerSeparation": {
+    "claim": "every behavioral consumer still uses SEASONAL nutrition",
+    "annualConsumers": [
+      "src/sim/agents/demography.ts"
+    ],
+    "annualIsDemographyOnly": true,
+    "behavioralLeak": [],
+    "seasonalConsumerCount": 17,
+    "seasonalConsumers": [
+      "src/sim/agents/adaptiveHuman.ts",
+      "src/sim/agents/campMovement.ts",
+      "src/sim/agents/chronicHardship.ts",
+      "src/sim/agents/dryMargin.ts",
+      "src/sim/agents/fissionDepartureSeam.ts",
+      "src/sim/agents/fissionResidualMeasurement.ts",
+      "src/sim/agents/foragingAdaptation.ts",
+      "src/sim/agents/pressure.ts",
+      "src/sim/agents/provisionalEstablishment.ts",
+      "src/sim/agents/provisionalReintegration.ts",
+      "src/sim/agents/provisionalTravelSubsistence.ts",
+      "src/sim/agents/resourceScoutObservation.ts",
+      "src/sim/agents/socialContext.ts",
+      "src/sim/rules/bandDecision.ts",
+      "src/sim/rules/candidates/resourceScoutCandidate.ts",
+      "src/sim/rules/mobilityIntent.ts",
+      "src/ui/band/Technical.tsx"
+    ]
+  },
+  "productionCoefficientsChanged": false,
+  "verdict": "PASS"
+}

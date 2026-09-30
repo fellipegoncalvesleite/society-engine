@@ -1,0 +1,19 @@
+{
+  "fixtures": 9,
+  "passing": 9,
+  "failing": 0,
+  "vacuous": 0,
+  "fieldsBlockedByTheGate": 6
+}
+blockedByTheGate: decisions, moveEvents, protoCamp, storageCapacity, trips, viability
+movedInBothArms: dependents, hungerPressure, position, workingAdults
+movedOnlyWhileQuarantined: provisionalPhase
+PASS    Q1_ordinary_residential_systems_are_blocked
+PASS    Q2_each_block_is_a_positive_control_not_an_absence
+PASS    Q3_only_the_provisional_authorities_move_a_quarantined_group
+PASS    Q4_bodily_processes_still_reach_a_quarantined_group
+PASS    Q5_bodily_change_follows_the_demographic_cadence
+PASS    Q6_the_embodied_burden_is_not_cleared_by_the_quarantine
+PASS    Q7_the_gate_holds_in_every_live_phase_not_only_in_transit
+PASS    Q8_a_quarantined_group_is_still_physically_present
+PASS    Q9_CLOSED_a_group_can_no_longer_leave_quarantine_on_a_timer_into_ordinary_status

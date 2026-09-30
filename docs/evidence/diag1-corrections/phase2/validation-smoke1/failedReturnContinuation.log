@@ -1,0 +1,10 @@
+file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/lib/successorStabilizationFixture.mjs:145
+    throw new Error(`stabilization preparation refused: ${result.preparation.refusal} ${result.preparation.detail ?? ""}`);
+          ^
+
+Error: stabilization preparation refused: founder_cohort_declined not_willing_on_held_evidence,separation_costs_those_who_stay
+    at makeCanonicalStabilizationDeparture (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/lib/successorStabilizationFixture.mjs:145:11)
+    at makeGenuineUnresolvedFailedReturn (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/lib/failedReturnContinuationFixture.mjs:21:21)
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/failedReturnContinuationAudit.mjs:52:22
+
+Node.js v26.7.0

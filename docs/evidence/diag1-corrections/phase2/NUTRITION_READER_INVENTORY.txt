@@ -1,0 +1,124 @@
+src/sim/agents/viability.ts:291:      (seasonalSupport?.chronicDeficitStreak ?? 0) / 8 * 0.1 +
+src/sim/agents/bandIdentity.ts:248:      label: band.seasonalSupport.currentSeasonSupport.foodStress > 0.35
+src/sim/agents/bandIdentity.ts:251:      sourceId: `seasonal-support:${String(band.id)}:${band.seasonalSupport.currentSeasonSupport.year}:${band.seasonalSupport.currentSeasonSupport.season}`,
+src/sim/agents/bandIdentity.ts:254:      confidence: clamp01(0.45 + band.seasonalSupport.currentSeasonSupport.foodStress * 0.3),
+src/sim/agents/bandIdentity.ts:264:  const fallbackSignal = fallbackEvents.length > 0 || (band.seasonalSupport?.currentSeasonSupport.foodStress ?? 0) > 0.45;
+src/sim/agents/bandIdentity.ts:265:  const score = clamp01(gatheredCount * 0.1 + fishingCount * 0.12 + huntingCount * 0.08 + fallbackEvents.length * 0.18 + (band.seasonalSupport?.currentSeasonSupport.foodStress ?? 0) * 0.25);
+src/sim/agents/bandIdentity.ts:444:  const waterStress = band.seasonalSupport?.currentSeasonSupport.waterStress ?? 0;
+src/sim/agents/bandIdentity.ts:445:  const foodStress = band.seasonalSupport?.currentSeasonSupport.foodStress ?? 0;
+src/sim/agents/bandIdentity.ts:481:      sourceId: `seasonal-pressure:${String(band.id)}:${band.seasonalSupport.currentSeasonSupport.year}:${band.seasonalSupport.currentSeasonSupport.season}`,
+src/sim/agents/nutritionMigration.ts:20:    const chronology = migrateNutritionExposureHistory(support?.recentSamples ?? [],
+src/sim/agents/provisionalEstablishment.ts:97:  // requires two intervals closed here, and closing one overwrites `currentSeasonSupport`, so by the
+src/sim/agents/bandEvents.ts:779:  const current = support.currentSeasonSupport;
+src/sim/agents/bandEvents.ts:796:        rawSource: "Band.seasonalSupport.currentSeasonSupport + return trends",
+src/sim/agents/bandEvents.ts:808:  const recurring = support.seasonalHungerStreak >= 2 || support.deficitSeasonsLast4 >= 2;
+src/sim/agents/bandEvents.ts:826:    stateKey: `talk:survival:${hunger}:${stressBucket(current.foodStress)}:${Math.min(3, support.seasonalHungerStreak)}`,
+src/sim/agents/bandEvents.ts:829:    rawReason: `classification=${hunger}; foodStress=${round2(current.foodStress)}; streak=${support.seasonalHungerStreak}; deficit4=${support.deficitSeasonsLast4}; mode=${current.mode}`,
+src/sim/agents/bandEvents.ts:863:  const current = support?.currentSeasonSupport;
+src/sim/agents/bandEvents.ts:883:      rawSource: "Band.seasonalSupport.currentSeasonSupport",
+src/sim/agents/bandEvents.ts:1838:      stateKey: `talk:everyday:${world.time.season}:${band.position}:${stressBucket(support?.currentSeasonSupport.foodStress ?? 0)}`,
+src/sim/agents/bandEvents.ts:2604:  const current = support.currentSeasonSupport;
+src/sim/agents/bandEvents.ts:2632:      rawSource: "Band.seasonalSupport.currentSeasonSupport.waterStress",
+src/sim/agents/pressure.ts:147:  const currentSeason = seasonalSupport?.currentSeasonSupport;
+src/sim/agents/pressure.ts:153:      seasonalSupport?.currentSeasonSupport.mode === "dry" ? 0.16 : 0,
+src/sim/agents/dryMargin.ts:341:    (band.seasonalSupport?.currentSeasonSupport.clampedSupportRatio ?? 0) * 0.74 +
+src/sim/agents/dryMargin.ts:569:    (band.seasonalSupport?.currentSeasonSupport.clampedSupportRatio ?? 0) * 0.58 +
+src/sim/diagnostics/fissionDiagnostics.ts:31:  readonly recentFoodStress: number;
+src/sim/diagnostics/fissionDiagnostics.ts:36:  readonly chronicDeficitStreak: number;
+src/sim/agents/innerFission.ts:25:      seasonal?.currentSeasonSupport.foodStress ?? 0,
+src/sim/agents/innerFission.ts:26:      seasonal?.currentSeasonSupport.deficitRatio ?? 0,
+src/sim/agents/innerFission.ts:37:      seasonal?.currentSeasonSupport.waterStress ?? 0,
+src/sim/agents/seasonalSurvival.ts:35:  readonly recentFoodStress: number;
+src/sim/agents/seasonalSurvival.ts:58:  if (support.recentSamples.every(s => s.exposure !== undefined)) return support.recentSamples;
+src/sim/agents/seasonalSurvival.ts:59:  const migrated = migrateNutritionExposureHistory(support.recentSamples, { kind: "ordinary" });
+src/sim/agents/seasonalSurvival.ts:78:  if (support === undefined || support.recentSamples.length === 0) {
+src/sim/agents/seasonalSurvival.ts:88:      recentFoodStress: 0,
+src/sim/agents/seasonalSurvival.ts:102:  const recentFoodStress = clamp01(recent.foodStress);
+src/sim/agents/seasonalSurvival.ts:104:    (support.chronicDeficitStreak / SEASONAL_MEMORY_WINDOW) * 0.58 +
+src/sim/agents/seasonalSurvival.ts:110:  // the raw ratios in `recentSamples` are the only uncapped record of support above demand.
+src/sim/agents/seasonalSurvival.ts:123:    recentFoodStress: round2(recentFoodStress),
+src/sim/agents/seasonalSurvival.ts:128:      currentFoodStress * 0.42 + recentFoodStress * 0.34 + chronicFoodStress * 0.34 - recoveryRelief * 0.16,
+src/sim/agents/seasonalSurvival.ts:131:      currentFoodStress * 0.38 + recentFoodStress * 0.26 + chronicFoodStress * 0.48 - recoveryRelief * 0.14,
+src/sim/agents/seasonalSurvival.ts:167:        seasonal.recentFoodStress * 0.26 +
+src/sim/agents/seasonalSurvival.ts:274:    const closedEnd = band.seasonalSupport?.currentSeasonSupport.exposure?.endDay;
+src/sim/agents/seasonalSurvival.ts:410:  const recentSamples = insertNutritionExposure(baseSamples, sample);
+src/sim/agents/seasonalSurvival.ts:411:  const endDay = Math.max(...recentSamples.map(s => s.exposure!.endDay));
+src/sim/agents/seasonalSurvival.ts:412:  const latest = recentSamples[recentSamples.length - 1];
+src/sim/agents/seasonalSurvival.ts:413:  const lastSeasonSupport = recentSamples[recentSamples.length - 2];
+src/sim/agents/seasonalSurvival.ts:414:  const last4 = queryNutritionExposure(recentSamples, endDay, ANNUAL_NUTRITION_DAYS);
+src/sim/agents/seasonalSurvival.ts:415:  const last8 = queryNutritionExposure(recentSamples, endDay, NUTRITION_HISTORY_DAYS);
+src/sim/agents/seasonalSurvival.ts:422:  const seasonalHungerStreak = trailingExposureDays(last8.segments, endDay, hunger) / 90;
+src/sim/agents/seasonalSurvival.ts:423:  const chronicDeficitStreak = trailingExposureDays(last8.segments, endDay,
+src/sim/agents/seasonalSurvival.ts:435:  // Compatibility readers of currentSeasonSupport receive the current completed day.
+src/sim/agents/seasonalSurvival.ts:436:  // Full interval totals remain solely in recentSamples, including the open prefix.
+src/sim/agents/seasonalSurvival.ts:437:  const current = queryNutritionExposure(recentSamples, endDay, CURRENT_NUTRITION_DAYS);
+src/sim/agents/seasonalSurvival.ts:451:    seasonalHungerStreak,
+src/sim/agents/seasonalSurvival.ts:452:    chronicDeficitStreak,
+src/sim/agents/seasonalSurvival.ts:460:    chronicDeficitStreak,
+src/sim/agents/seasonalSurvival.ts:469:    currentSeasonSupport: sample,
+src/sim/agents/seasonalSurvival.ts:478:    recentSamples,
+src/sim/agents/seasonalSurvival.ts:479:    seasonalHungerStreak,
+src/sim/agents/seasonalSurvival.ts:480:    chronicDeficitStreak,
+src/sim/agents/seasonalSurvival.ts:540:  readonly seasonalHungerStreak: number;
+src/sim/agents/seasonalSurvival.ts:541:  readonly chronicDeficitStreak: number;
+src/sim/agents/seasonalSurvival.ts:545:  if (input.sample.rawSupportRatio < 0.58 || (input.chronicDeficitStreak >= 6 && input.sample.deficitRatio > 0.28)) {
+src/sim/agents/seasonalSurvival.ts:549:  if (input.chronicDeficitStreak >= 4 && input.seasonalHungerStreak >= 2) {
+src/sim/agents/seasonalSurvival.ts:553:  if (input.chronicDeficitStreak >= 4 || input.deficitSeasonsLast8 >= 5) {
+src/sim/agents/seasonalSurvival.ts:588:  readonly chronicDeficitStreak: number;
+src/sim/agents/seasonalSurvival.ts:591:  if (input.sample.rawSupportRatio < 0.58 || input.chronicDeficitStreak >= 8) {
+src/sim/agents/seasonalSurvival.ts:595:  if (input.chronicDeficitStreak >= 4 || input.deficitSeasonsLast8 >= 5) {
+src/sim/agents/bodyCampLogistics.ts:172:    support?.currentSeasonSupport.foodStress ?? 0,
+src/sim/agents/bodyCampLogistics.ts:179:    support?.currentSeasonSupport.waterStress ?? 0,
+src/sim/agents/bodyCampLogistics.ts:903:  if (loads.waterStress >= 0.34 || band.seasonalSupport?.currentSeasonSupport.mode === "dry") {
+src/sim/agents/demography.ts:268:  readonly recentFoodStress: number;
+src/sim/agents/demography.ts:300:  const recentFoodStress = nutrition.recentFoodStress;
+src/sim/agents/demography.ts:308:        : support?.chronicDeficitStreak !== undefined && support.chronicDeficitStreak >= 4
+src/sim/agents/demography.ts:331:          recentFoodStress * 0.1,
+src/sim/agents/demography.ts:366:    recentFoodStress,
+src/sim/agents/demography.ts:422:      seasonalSupport?.currentSeasonSupport.waterStress ?? 0,
+src/sim/agents/demography.ts:729:      rawSupportRatio: seasonalSupport?.currentSeasonSupport.rawSupportRatio ?? 0,
+src/sim/agents/demography.ts:732:      recentFoodStress: nutrition.recentFoodStress,
+src/sim/agents/demography.ts:737:      chronicDeficitStreak: seasonalSupport?.chronicDeficitStreak ?? 0,
+src/sim/agents/demography.ts:2929:  const seasonalHungerNoDeaths = noDeathStreakYears >= 10 && seasonalHunger && (band.seasonalSupport?.seasonalHungerStreak ?? 0) >= 3;
+src/sim/agents/fissionParentResidualViability.ts:254:  /** `SeasonalSupportState.chronicDeficitStreak`, in seasons. */
+src/sim/agents/fissionParentResidualViability.ts:255:  readonly chronicDeficitStreak: number;
+src/sim/agents/fissionParentResidualViability.ts:564:          clamp01(input.chronicDeficitStreak / 8) * 0.28,
+src/sim/agents/fissionParentResidualViability.ts:577:        chronicDeficitStreak: input.chronicDeficitStreak,
+src/sim/agents/biomeAdaptation.ts:182:      band.seasonalSupport?.currentSeasonSupport.clampedSupportRatio ??
+src/sim/agents/socialContext.ts:1287:  const waterStress = clamp01(pressure?.waterStress ?? band.seasonalSupport?.currentSeasonSupport.waterStress ?? 0);
+src/sim/agents/socialContext.ts:1296:      (band.seasonalSupport?.currentSeasonSupport.mode === "pulse" ? 0.34 : 0) +
+src/sim/agents/visibleNature.ts:1053:  const support = band.seasonalSupport?.currentSeasonSupport;
+src/sim/agents/visibleNature.ts:1071:      rawGrounding: "Band.seasonalSupport.currentSeasonSupport.waterStress + residential movement intent/execution outcome",
+src/sim/agents/bandHistory.ts:717:  readonly chronicDeficitStreak: number;
+src/sim/agents/bandHistory.ts:742:    chronicDeficitStreak: support?.chronicDeficitStreak ?? 0,
+src/sim/agents/bandHistory.ts:1020:  if (observation.chronicDeficitStreak >= C.LONG_HUNGER_MIN_STREAK_SEASONS && hungerNow) {
+src/sim/agents/bandHistory.ts:1023:      Math.max(foundingYear, year - Math.floor(observation.chronicDeficitStreak / 4)),
+src/sim/agents/bandHistory.ts:1030:      severity: clamp01(observation.chronicDeficitStreak / 24 + observation.crisisDeaths * 0.08),
+src/sim/agents/bandHistory.ts:1031:      summary: `food ran short season after season (${observation.chronicDeficitStreak} seasons)`,
+src/sim/agents/bandHistory.ts:1032:      detail: { streakSeasons: observation.chronicDeficitStreak, crisisDeaths: observation.crisisDeaths },
+src/sim/agents/problemPractice.ts:709:  addSeasonalEvidence(context, evidence, "food stress or low return is visible", Math.max(context.band.seasonalSupport?.currentSeasonSupport.foodStress ?? 0, context.band.seasonalSupport?.currentSeasonSupport.deficitRatio ?? 0), 0.18);
+src/sim/agents/problemPractice.ts:716:  const highStress = (context.band.seasonalSupport?.currentSeasonSupport.foodStress ?? 0) >= 0.42 ||
+src/sim/agents/problemPractice.ts:717:    (context.band.seasonalSupport?.currentSeasonSupport.deficitRatio ?? 0) >= 0.24;
+src/sim/agents/problemPractice.ts:839:  addSeasonalEvidence(context, evidence, "water stress or refuge pull is visible", Math.max(context.band.seasonalSupport?.currentSeasonSupport.waterStress ?? 0, (context.band.seasonalSupport?.waterStressSeasonsLast8 ?? 0) / 8), 0.16);
+src/sim/agents/fissionResidualMeasurement.ts:218:    chronicDeficitStreak: Math.max(0, band.seasonalSupport?.chronicDeficitStreak ?? 0),
+src/sim/agents/provisionalTravelSubsistence.ts:344:    const previousExposure = live.seasonalSupport?.recentSamples[live.seasonalSupport.recentSamples.length - 1]?.exposure;
+src/sim/agents/provisionalTravelSubsistence.ts:633:  const existing = band.seasonalSupport?.recentSamples[band.seasonalSupport.recentSamples.length - 1]?.exposure;
+src/sim/agents/materialAffordance.ts:1002:    support.currentSeasonSupport.waterStress,
+src/sim/agents/materialAffordance.ts:1003:    support.currentSeasonSupport.deficitRatio,
+src/sim/agents/types.ts:2853:  /** Latest completed physical-day projection; full interval quantities live in recentSamples. */
+src/sim/agents/types.ts:2854:  readonly currentSeasonSupport: SeasonalSupportSample;
+src/sim/agents/types.ts:2866:  readonly recentSamples: readonly SeasonalSupportSample[];
+src/sim/agents/types.ts:2867:  readonly seasonalHungerStreak: number;
+src/sim/agents/types.ts:2868:  readonly chronicDeficitStreak: number;
+src/sim/agents/types.ts:2877:  // summarize only the physical-support samples in `recentSamples`.
+src/sim/agents/types.ts:2879:  readonly recentFoodStress?: NormalizedIntensity;
+src/sim/agents/campFoothold.ts:811:  const waterStress = context.band.seasonalSupport?.currentSeasonSupport.waterStress ?? context.band.pressureState?.waterStress ?? 0;
+src/sim/agents/campFoothold.ts:1556:      support.currentSeasonSupport.foodStress,
+src/sim/agents/campFoothold.ts:1557:      support.currentSeasonSupport.waterStress,
+src/sim/agents/campFoothold.ts:1558:      support.currentSeasonSupport.deficitRatio,
+src/sim/agents/fissionDeparturePreparation.ts:158:  chronicDeficitStreak: (i) => `cd:${i.chronicDeficitStreak}`,
+src/sim/agents/bandChronicle.ts:1077:  for (const sample of band.seasonalSupport?.recentSamples ?? []) {
+src/sim/agents/bandChronicle.ts:1118:  const seasonalSamples = band.seasonalSupport?.recentSamples.filter((sample) => sample.year === year) ?? [];
+src/sim/agents/bandChronicle.ts:1682:    (band.seasonalSupport?.chronicDeficitStreak ?? 0) >= 2;
+src/sim/agents/bandChronicle.ts:2054:    (band.seasonalSupport?.chronicDeficitStreak ?? 0) >= 2 ||
+src/sim/agents/acuteRisk.ts:233:  const currentSupport = support?.currentSeasonSupport;

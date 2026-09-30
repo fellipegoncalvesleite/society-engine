@@ -1,0 +1,30 @@
+{
+  "status": "INTERMEDIATE CANDIDATE, NOT FINAL CERTIFICATION",
+  "reason": "Natural first-divergence investigation found daily fatigue refresh initializes absent pressure and replaces unrelated legacy pressure fields. Two behavioral REDs reproduced; interrupt remaining owned executions before source correction, preserve completed outputs, rerun affected final battery.",
+  "stoppedOwnedProcessGroups": [
+    25520,
+    27374,
+    27393,
+    28187,
+    28939
+  ],
+  "timestamp": "2026-09-30T19:52:33.838463+00:00",
+  "unresponsiveOwnedExecutionsForceStopped": [
+    {
+      "pid": 30372,
+      "command": "/Users/fellipegoncalvesleite/.local/node/bin/node /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1DeterminismAudit.mjs --child --map map1"
+    },
+    {
+      "pid": 30042,
+      "command": "node scripts/recoveryBasinAudit.mjs --out docs/evidence/diag1-corrections/phase2/recovery-basin-dated.json"
+    },
+    {
+      "pid": 28195,
+      "command": "node scripts/annualNutritionLikeForLikeAudit.mjs --out /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final1/annualNutritionLikeForLike.json"
+    },
+    {
+      "pid": 27400,
+      "command": "/Users/fellipegoncalvesleite/.local/node/bin/node scripts/diag1Phase1DeterminismAudit.mjs --out /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final1/determinism-mixed.json"
+    }
+  ]
+}

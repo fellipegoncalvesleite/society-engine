@@ -1,0 +1,8 @@
+file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/provisionalTravelAudit.mjs:82
+  if (departure.ok !== true) throw new Error(`departure refused: ${departure.refusal} ${departure.detail ?? ""}`);
+                                   ^
+
+Error: departure refused: preparation:founder_cohort_declined not_willing_on_held_evidence,separation_costs_those_who_stay
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/provisionalTravelAudit.mjs:82:36
+
+Node.js v26.7.0

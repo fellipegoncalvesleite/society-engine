@@ -1,0 +1,532 @@
+{
+  "audit": "annualNutritionLikeForLike",
+  "checkpoint": "CORRECTION-17 §4",
+  "supersedes": {
+    "script": "scripts/candidateRepairIsolationAudit.mjs",
+    "claim": "A_annualNutritionSampling",
+    "why": "That claim compares annual mean seasonal food stress (one term) against foodDemographicPressure (a four-term composite). The two are different quantities by construction, so their numeric difference is NOT evidence of demographic overstatement and must not be cited as such."
+  },
+  "likeForLikeClaim": "stored annual nutrition output == exact reconstruction from the same previous360 completed physical days",
+  "measuredIndependently": [
+    "annual mean currentFoodStress",
+    "annual mean raw support ratio",
+    "recovery share over the same physical-day exposure",
+    "nutritional surplus over the same physical-day exposure",
+    "chronic food stress under the exact production formula",
+    "foodDemographicPressure reconstructed from those exact components"
+  ],
+  "perSeed": [
+    {
+      "seed": "map2_rich",
+      "map": "map2",
+      "comparisons": 20,
+      "mismatches": 1,
+      "exactMatch": false
+    }
+  ],
+  "totalComparisons": 20,
+  "totalMismatches": 1,
+  "reconstructionExact": false,
+  "mismatchExamples": [
+    {
+      "seed": "map2_rich",
+      "year": 12,
+      "bandId": "band:custom:0",
+      "stored": {
+        "currentFoodStress": 0.29,
+        "recentFoodStress": 0.29,
+        "chronicFoodStress": 0.48,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.05,
+        "foodDemographicPressure": 0.38
+      },
+      "rebuilt": {
+        "currentFoodStress": 0.28,
+        "recentFoodStress": 0.28,
+        "chronicFoodStress": 0.48,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.05,
+        "foodDemographicPressure": 0.38
+      },
+      "diffs": {
+        "currentFoodStress": 0.009999999999999953,
+        "recentFoodStress": 0.009999999999999953,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodDemographicPressure": 0
+      },
+      "sourceSupport": {
+        "exposureVersion": 1,
+        "exposureAsOfDay": 4320,
+        "bandId": "band:custom:0",
+        "lastUpdatedTick": 48,
+        "currentSeasonSupport": {
+          "tick": 48,
+          "year": 12,
+          "season": "spring",
+          "rawSupportRatio": 0.24530744336569557,
+          "clampedSupportRatio": 0.2453074433657,
+          "perCapitaReturn": 0.2453,
+          "seasonalModifier": 0.34,
+          "foodStress": 0.75,
+          "waterStress": 0.02,
+          "deficitRatio": 0.7546925566343045,
+          "mode": "lean",
+          "exposure": {
+            "version": 1,
+            "startDay": 4319,
+            "endDay": 4320,
+            "durationDays": 1,
+            "producer": "residential",
+            "provenance": "physical_receipts_90_day_abstraction",
+            "quantityBasis": "actual",
+            "segments": [
+              {
+                "startDay": 4319,
+                "endDay": 4320,
+                "supportUnits": 0.08422222222222223,
+                "demandUnits": 0.34333333333333366,
+                "foodStress": 0.75,
+                "waterStress": 0.02,
+                "perCapitaReturn": 0.2453,
+                "recoveryEligible": false
+              }
+            ],
+            "supportUnits": 0.08422222222222223,
+            "demandUnits": 0.34333333333333366,
+            "foodStressDays": 0.75,
+            "waterStressDays": 0.02,
+            "recoveryDays": 0
+          }
+        },
+        "lastSeasonSupport": {
+          "tick": 47,
+          "year": 11,
+          "season": "winter",
+          "rawSupportRatio": 0.835,
+          "clampedSupportRatio": 0.835,
+          "perCapitaReturn": 0.835,
+          "seasonalModifier": 1.13,
+          "foodStress": 0.17,
+          "waterStress": 0.07,
+          "deficitRatio": 0.165,
+          "mode": "lean",
+          "exposure": {
+            "version": 1,
+            "startDay": 4140,
+            "endDay": 4230,
+            "durationDays": 90,
+            "producer": "residential",
+            "provenance": "physical_receipts_90_day_abstraction",
+            "quantityBasis": "actual",
+            "segments": [
+              {
+                "startDay": 4140,
+                "endDay": 4230,
+                "supportUnits": 25.8,
+                "demandUnits": 30.900000000000027,
+                "foodStress": 0.17,
+                "waterStress": 0.07,
+                "perCapitaReturn": 0.835,
+                "recoveryEligible": false
+              }
+            ],
+            "supportUnits": 25.8,
+            "demandUnits": 30.900000000000027,
+            "foodStressDays": 15.3,
+            "waterStressDays": 6.300000000000001,
+            "recoveryDays": 0
+          }
+        },
+        "rolling4SeasonSupport": 0.72,
+        "rolling8SeasonSupport": 0.72,
+        "rolling8SeasonRawSupport": 1.23,
+        "rolling4SeasonReturn": 0.72,
+        "rolling8SeasonReturn": 0.72,
+        "returnTrend4Season": -0.47,
+        "returnTrend8Season": -0.47,
+        "recentSamples": [
+          {
+            "tick": 41,
+            "year": 10,
+            "season": "summer",
+            "rawSupportRatio": 0.5224,
+            "clampedSupportRatio": 0.5224,
+            "perCapitaReturn": 0.5224,
+            "seasonalModifier": 0.89,
+            "foodStress": 0.48,
+            "waterStress": 0.03,
+            "deficitRatio": 0.4776,
+            "mode": "lean",
+            "exposure": {
+              "version": 1,
+              "startDay": 3600,
+              "endDay": 3690,
+              "durationDays": 90,
+              "producer": "residential",
+              "provenance": "physical_receipts_90_day_abstraction",
+              "quantityBasis": "actual",
+              "segments": [
+                {
+                  "startDay": 3600,
+                  "endDay": 3690,
+                  "supportUnits": 15.96,
+                  "demandUnits": 30.550000000000058,
+                  "foodStress": 0.48,
+                  "waterStress": 0.03,
+                  "perCapitaReturn": 0.5224,
+                  "recoveryEligible": false
+                }
+              ],
+              "supportUnits": 15.96,
+              "demandUnits": 30.550000000000058,
+              "foodStressDays": 43.199999999999996,
+              "waterStressDays": 2.6999999999999997,
+              "recoveryDays": 0
+            }
+          },
+          {
+            "tick": 42,
+            "year": 10,
+            "season": "autumn",
+            "rawSupportRatio": 3.4822,
+            "clampedSupportRatio": 1,
+            "perCapitaReturn": 1,
+            "seasonalModifier": 2,
+            "foodStress": 0,
+            "waterStress": 0.03,
+            "deficitRatio": 0,
+            "mode": "recovery",
+            "exposure": {
+              "version": 1,
+              "startDay": 3690,
+              "endDay": 3780,
+              "durationDays": 90,
+              "producer": "residential",
+              "provenance": "physical_receipts_90_day_abstraction",
+              "quantityBasis": "actual",
+              "segments": [
+                {
+                  "startDay": 3690,
+                  "endDay": 3780,
+                  "supportUnits": 106.38,
+                  "demandUnits": 30.550000000000058,
+                  "foodStress": 0,
+                  "waterStress": 0.03,
+                  "perCapitaReturn": 1,
+                  "recoveryEligible": true
+                }
+              ],
+              "supportUnits": 106.38,
+              "demandUnits": 30.550000000000058,
+              "foodStressDays": 0,
+              "waterStressDays": 2.6999999999999997,
+              "recoveryDays": 90
+            }
+          },
+          {
+            "tick": 43,
+            "year": 10,
+            "season": "winter",
+            "rawSupportRatio": 1.9162,
+            "clampedSupportRatio": 1,
+            "perCapitaReturn": 1,
+            "seasonalModifier": 2,
+            "foodStress": 0,
+            "waterStress": 0.07,
+            "deficitRatio": 0,
+            "mode": "recovery",
+            "exposure": {
+              "version": 1,
+              "startDay": 3780,
+              "endDay": 3870,
+              "durationDays": 90,
+              "producer": "residential",
+              "provenance": "physical_receipts_90_day_abstraction",
+              "quantityBasis": "actual",
+              "segments": [
+                {
+                  "startDay": 3780,
+                  "endDay": 3870,
+                  "supportUnits": 58.54,
+                  "demandUnits": 30.550000000000058,
+                  "foodStress": 0,
+                  "waterStress": 0.07,
+                  "perCapitaReturn": 1,
+                  "recoveryEligible": true
+                }
+              ],
+              "supportUnits": 58.54,
+              "demandUnits": 30.550000000000058,
+              "foodStressDays": 0,
+              "waterStressDays": 6.300000000000001,
+              "recoveryDays": 90
+            }
+          },
+          {
+            "tick": 44,
+            "year": 11,
+            "season": "spring",
+            "rawSupportRatio": 0.3476,
+            "clampedSupportRatio": 0.3476,
+            "perCapitaReturn": 0.3476,
+            "seasonalModifier": 0.48,
+            "foodStress": 0.65,
+            "waterStress": 0.07,
+            "deficitRatio": 0.6524,
+            "mode": "lean",
+            "exposure": {
+              "version": 1,
+              "startDay": 3870,
+              "endDay": 3960,
+              "durationDays": 90,
+              "producer": "residential",
+              "provenance": "physical_receipts_90_day_abstraction",
+              "quantityBasis": "actual",
+              "segments": [
+                {
+                  "startDay": 3870,
+                  "endDay": 3960,
+                  "supportUnits": 10.62,
+                  "demandUnits": 30.550000000000058,
+                  "foodStress": 0.65,
+                  "waterStress": 0.07,
+                  "perCapitaReturn": 0.3476,
+                  "recoveryEligible": false
+                }
+              ],
+              "supportUnits": 10.62,
+              "demandUnits": 30.550000000000058,
+              "foodStressDays": 58.5,
+              "waterStressDays": 6.300000000000001,
+              "recoveryDays": 0
+            }
+          },
+          {
+            "tick": 45,
+            "year": 11,
+            "season": "summer",
+            "rawSupportRatio": 1.7074,
+            "clampedSupportRatio": 1,
+            "perCapitaReturn": 1,
+            "seasonalModifier": 2,
+            "foodStress": 0,
+            "waterStress": 0.07,
+            "deficitRatio": 0,
+            "mode": "recovery",
+            "exposure": {
+              "version": 1,
+              "startDay": 3960,
+              "endDay": 4050,
+              "durationDays": 90,
+              "producer": "residential",
+              "provenance": "physical_receipts_90_day_abstraction",
+              "quantityBasis": "actual",
+              "segments": [
+                {
+                  "startDay": 3960,
+                  "endDay": 4050,
+                  "supportUnits": 52.76,
+                  "demandUnits": 30.900000000000027,
+                  "foodStress": 0,
+                  "waterStress": 0.07,
+                  "perCapitaReturn": 1,
+                  "recoveryEligible": true
+                }
+              ],
+              "supportUnits": 52.76,
+              "demandUnits": 30.900000000000027,
+              "foodStressDays": 0,
+              "waterStressDays": 6.300000000000001,
+              "recoveryDays": 90
+            }
+          },
+          {
+            "tick": 46,
+            "year": 11,
+            "season": "autumn",
+            "rawSupportRatio": 0.7835,
+            "clampedSupportRatio": 0.7835,
+            "perCapitaReturn": 0.7835,
+            "seasonalModifier": 1,
+            "foodStress": 0.22,
+            "waterStress": 0.04,
+            "deficitRatio": 0.2165,
+            "mode": "lean",
+            "exposure": {
+              "version": 1,
+              "startDay": 4050,
+              "endDay": 4140,
+              "durationDays": 90,
+              "producer": "residential",
+              "provenance": "physical_receipts_90_day_abstraction",
+              "quantityBasis": "actual",
+              "segments": [
+                {
+                  "startDay": 4050,
+                  "endDay": 4140,
+                  "supportUnits": 24.21,
+                  "demandUnits": 30.900000000000027,
+                  "foodStress": 0.22,
+                  "waterStress": 0.04,
+                  "perCapitaReturn": 0.7835,
+                  "recoveryEligible": false
+                }
+              ],
+              "supportUnits": 24.21,
+              "demandUnits": 30.900000000000027,
+              "foodStressDays": 19.8,
+              "waterStressDays": 3.6,
+              "recoveryDays": 0
+            }
+          },
+          {
+            "tick": 47,
+            "year": 11,
+            "season": "winter",
+            "rawSupportRatio": 0.835,
+            "clampedSupportRatio": 0.835,
+            "perCapitaReturn": 0.835,
+            "seasonalModifier": 1.13,
+            "foodStress": 0.17,
+            "waterStress": 0.07,
+            "deficitRatio": 0.165,
+            "mode": "lean",
+            "exposure": {
+              "version": 1,
+              "startDay": 4140,
+              "endDay": 4230,
+              "durationDays": 90,
+              "producer": "residential",
+              "provenance": "physical_receipts_90_day_abstraction",
+              "quantityBasis": "actual",
+              "segments": [
+                {
+                  "startDay": 4140,
+                  "endDay": 4230,
+                  "supportUnits": 25.8,
+                  "demandUnits": 30.900000000000027,
+                  "foodStress": 0.17,
+                  "waterStress": 0.07,
+                  "perCapitaReturn": 0.835,
+                  "recoveryEligible": false
+                }
+              ],
+              "supportUnits": 25.8,
+              "demandUnits": 30.900000000000027,
+              "foodStressDays": 15.3,
+              "waterStressDays": 6.300000000000001,
+              "recoveryDays": 0
+            }
+          },
+          {
+            "tick": 48,
+            "year": 12,
+            "season": "spring",
+            "rawSupportRatio": 0.2453,
+            "clampedSupportRatio": 0.2453,
+            "perCapitaReturn": 0.2453,
+            "seasonalModifier": 0.34,
+            "foodStress": 0.75,
+            "waterStress": 0.02,
+            "deficitRatio": 0.7547,
+            "mode": "lean",
+            "exposure": {
+              "version": 1,
+              "startDay": 4230,
+              "endDay": 4320,
+              "durationDays": 90,
+              "producer": "residential",
+              "provenance": "physical_receipts_90_day_abstraction",
+              "quantityBasis": "actual",
+              "segments": [
+                {
+                  "startDay": 4230,
+                  "endDay": 4320,
+                  "supportUnits": 7.58,
+                  "demandUnits": 30.900000000000027,
+                  "foodStress": 0.75,
+                  "waterStress": 0.02,
+                  "perCapitaReturn": 0.2453,
+                  "recoveryEligible": false
+                }
+              ],
+              "supportUnits": 7.58,
+              "demandUnits": 30.900000000000027,
+              "foodStressDays": 67.5,
+              "waterStressDays": 1.8,
+              "recoveryDays": 0
+            }
+          }
+        ],
+        "seasonalHungerStreak": 3,
+        "chronicDeficitStreak": 3,
+        "seasonalRecoveryStreak": 0,
+        "deficitSeasonsLast4": 3,
+        "deficitSeasonsLast8": 5,
+        "waterStressSeasonsLast4": 0,
+        "waterStressSeasonsLast8": 0,
+        "hungerClassification": "crisis_deficit",
+        "chronicDeficitClassification": "crisis_deficit",
+        "populationStableDespiteRecurringHunger": true,
+        "topSeasonalSupportReasons": [
+          "lean season reduced effective yield",
+          "the season reduced returns noticeably",
+          "worn ground gives less than it used to",
+          "plant patches are giving thin returns"
+        ],
+        "reasonIds": [
+          "reason:seasonal-support:band:custom:0:48:crisis_deficit"
+        ],
+        "currentFoodStress": 0.75,
+        "recentFoodStress": 0.29,
+        "chronicFoodStress": 0.48,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.58,
+        "foodDemographicPressure": 0.59,
+        "nutritionStateAvailable": true,
+        "residentialReceiptCursor": {
+          "periodTick": 47,
+          "physicalPlantHarvest": 0.08910000000000001,
+          "physicalFaunaHarvest": 0,
+          "aquaticHarvest": 0,
+          "transportLoss": 0.0021999999999999997,
+          "processingLoss": 0.011,
+          "totalUsableSupport": 0.0758
+        }
+      }
+    }
+  ],
+  "behavioralConsumerSeparation": {
+    "claim": "every behavioral consumer still uses SEASONAL nutrition",
+    "annualConsumers": [
+      "src/sim/agents/demography.ts"
+    ],
+    "annualIsDemographyOnly": true,
+    "behavioralLeak": [],
+    "seasonalConsumerCount": 17,
+    "seasonalConsumers": [
+      "src/sim/agents/adaptiveHuman.ts",
+      "src/sim/agents/campMovement.ts",
+      "src/sim/agents/chronicHardship.ts",
+      "src/sim/agents/dryMargin.ts",
+      "src/sim/agents/fissionDepartureSeam.ts",
+      "src/sim/agents/fissionResidualMeasurement.ts",
+      "src/sim/agents/foragingAdaptation.ts",
+      "src/sim/agents/pressure.ts",
+      "src/sim/agents/provisionalEstablishment.ts",
+      "src/sim/agents/provisionalReintegration.ts",
+      "src/sim/agents/provisionalTravelSubsistence.ts",
+      "src/sim/agents/resourceScoutObservation.ts",
+      "src/sim/agents/socialContext.ts",
+      "src/sim/rules/bandDecision.ts",
+      "src/sim/rules/candidates/resourceScoutCandidate.ts",
+      "src/sim/rules/mobilityIntent.ts",
+      "src/ui/band/Technical.tsx"
+    ]
+  },
+  "productionCoefficientsChanged": false,
+  "verdict": "FAIL"
+}

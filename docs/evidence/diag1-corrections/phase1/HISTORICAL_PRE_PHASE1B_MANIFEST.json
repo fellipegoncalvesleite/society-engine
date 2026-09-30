@@ -1,0 +1,83 @@
+{
+  "phase": 1,
+  "title": "Stop Losing Food and People",
+  "status": "IMPLEMENTED / PENDING REVIEW",
+  "exactBase": "73cc38b916e236339897c59686638efafd569b6e",
+  "baseTree": "dcbedbed81f70a6ffc6e3c7ffb245e039a9254c6",
+  "branch": "fix/diag1-human-support",
+  "remote": "https://github.com/fellipegoncalvesleite/society-engine.git",
+  "productionCommit": "9268d211e7d370911d3d8fd875429db4d4d06741",
+  "finalHead": "Recorded only in post-commit export FINAL_IDENTITY.json to avoid self-reference",
+  "issues": {
+    "B-001": {
+      "also": null,
+      "owner": "src/sim/agents/expeditionCargo.ts",
+      "invariant": "admitted usable = remaining + delivered + applied charge + explicit post-admission loss",
+      "red": [
+        "baseline/cargo-independent-red.json",
+        "baseline/nutrition/natural-s1-on.json",
+        "baseline/nutrition/natural-s2-on.json"
+      ],
+      "green": [
+        "stabilized/conservation.json",
+        "regression-repaired/provenance-final.json",
+        "CAUSAL_COMPARISON_STABILIZED.json"
+      ],
+      "migration": "Exact complete retained provenance only; ambiguous legacy cargo explicitly refused with input preserved",
+      "disposition": "IMPLEMENTED / PENDING REVIEW"
+    },
+    "B-002": {
+      "also": null,
+      "owner": "src/sim/agents/viability.ts",
+      "invariant": "Transfers conserve current whole-world bodies; before + births - deaths - explicit removals = after",
+      "red": [
+        "baseline/integration/absorption-minimal.json",
+        "review-target-decision-valid-cohorts-red.json"
+      ],
+      "green": [
+        "stabilized/conservation.json"
+      ],
+      "limitation": "Aggregate cohort policy retained; Item6 household/away ownership redesign not implemented",
+      "disposition": "IMPLEMENTED / PENDING REVIEW"
+    },
+    "B-003": {
+      "also": "F2",
+      "owner": "src/sim/agents/plantStock.ts",
+      "invariant": "One weak cache generation per tile with complete causal key; live depletion remains physical authority",
+      "red": [
+        "baseline/cache-controls.json"
+      ],
+      "green": [
+        "stabilized/conservation.json",
+        "regression-repaired/determinism-stable.json"
+      ],
+      "limitation": "Legacy materializer only; no WORLD-M0 cutover",
+      "disposition": "IMPLEMENTED / PENDING REVIEW"
+    },
+    "B-004": {
+      "also": "F6",
+      "owner": "src/sim/agents/bandMobility.ts + intraSeasonTrips.ts",
+      "invariant": "Zero available productive residential workers yields no work/take/trip/learning",
+      "red": [
+        "baseline/extra-controls.json",
+        "review-labor-red.json"
+      ],
+      "green": [
+        "stabilized/conservation.json"
+      ],
+      "limitation": "Existing shares/caps and ordinary/investigation ordering; future Item14 scheduling remains future",
+      "disposition": "IMPLEMENTED / PENDING REVIEW"
+    }
+  },
+  "sourceIdentity": "final-source-identities.json",
+  "validation": "VALIDATION_RESULTS.json",
+  "report": "PHASE1_REPORT.md",
+  "futureContract": "FUTURE_EVOLUTION_CONTRACT.md",
+  "review": "REVIEW.md",
+  "preservation": "preservation-precommit.json",
+  "inputs": "portable-input-identities.json",
+  "canonicalR11Sha256": "fb98348719fe92ab56f0487698597084e95540260c7e808f3b8669ab552fdbde",
+  "otherFindings": "All nonassigned DIAG-1 findings remain open; no Phase2/3 or Task12 authorization used",
+  "residualDependencyRisk": "Mixed-map failure is not certified nonblocking for acceptance or Phase2/3; see MIXED_MAP_RESIDUAL.md.",
+  "acceptance": "None. Independent exact-final-HEAD review and supervisor acceptance plus documentation-only acceptance update required before Phase2."
+}

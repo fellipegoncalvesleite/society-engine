@@ -1,0 +1,304 @@
+{
+  "generatedAt": "2026-09-30T20:58:18.795Z",
+  "checkpoint": "ROADMAP ITEM 4 §3 — measured reader admission for a provisional successor",
+  "supersedes": "The previous report's claim that \"the departure vertical slice is closed locally\". A successor being alive at the end of a season proves only that ordinary viability did not delete it. This audit measures what actually touched it.",
+  "method": "A real warmed map2 world with a provisional successor created by the production seam, advanced ONE DAY AT A TIME through the real advanceWorldByDays. Every observable is sampled after every day. An ordinary established band in the same world is sampled with the identical instrument on the identical days, so a zero on the successor can be distinguished from a quiet world.",
+  "seed": "audit27:natural:s1",
+  "warmDays": 2100,
+  "observedDays": 9,
+  "observeDaysRequested": 200,
+  "observationStoppedBecause": "the successor resolved and is no longer a live provisional group",
+  "successorId": "band:varied-river-mid:provisional:1",
+  "controlBandId": "band:varied-estuary",
+  "successorAtBirth": {
+    "position": "tile:109:57",
+    "population": 11,
+    "workingAdults": 7,
+    "dependents": 3,
+    "elders": 1,
+    "expeditions": 0,
+    "trips": 0,
+    "receipts": 0,
+    "receiptPeriod": null,
+    "viability": null,
+    "acuteRisk": 1,
+    "fissionEvents": 0,
+    "decisions": 0,
+    "moveEvents": 0,
+    "status": "moving",
+    "provisionalPhase": "travelling",
+    "protoCamp": 0
+  },
+  "successorAtEnd": {
+    "position": "tile:113:57",
+    "population": 11,
+    "workingAdults": 7,
+    "dependents": 3,
+    "elders": 1,
+    "expeditions": 0,
+    "trips": 0,
+    "receipts": 0,
+    "receiptPeriod": null,
+    "viability": null,
+    "acuteRisk": 1,
+    "fissionEvents": 0,
+    "decisions": 0,
+    "moveEvents": 0,
+    "status": "moving",
+    "provisionalPhase": "establishing",
+    "protoCamp": 0
+  },
+  "admission": [
+    {
+      "field": "position",
+      "successorChanges": 4,
+      "controlChanges": 0,
+      "successorFirstChanges": [
+        {
+          "day": 2102,
+          "from": "tile:109:57",
+          "to": "tile:110:57"
+        },
+        {
+          "day": 2103,
+          "from": "tile:110:57",
+          "to": "tile:111:57"
+        },
+        {
+          "day": 2104,
+          "from": "tile:111:57",
+          "to": "tile:112:57"
+        },
+        {
+          "day": 2105,
+          "from": "tile:112:57",
+          "to": "tile:113:57"
+        }
+      ],
+      "finding": "ADMITTED — a production path moved this on the successor"
+    },
+    {
+      "field": "population",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "workingAdults",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "dependents",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "elders",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "expeditions",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "trips",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "receipts",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "viability",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "acuteRisk",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "fissionEvents",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "decisions",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "moveEvents",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "status",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    },
+    {
+      "field": "provisionalPhase",
+      "successorChanges": 1,
+      "controlChanges": 0,
+      "successorFirstChanges": [
+        {
+          "day": 2106,
+          "from": "travelling",
+          "to": "establishing"
+        }
+      ],
+      "finding": "ADMITTED — a production path moved this on the successor"
+    },
+    {
+      "field": "protoCamp",
+      "successorChanges": 0,
+      "controlChanges": 0,
+      "successorFirstChanges": [],
+      "finding": "INCONCLUSIVE — neither the successor nor the control moved, so this seed exercises nothing here"
+    }
+  ],
+  "claims": {
+    "no_free_movement": {
+      "question": "was every position the successor occupied recorded by the provisional travel authority's own trail?",
+      "successorPositionChanges": 4,
+      "controlPositionChanges": 0,
+      "positionsOccupied": 5,
+      "positionsAccountedForByTheTrail": 5,
+      "unaccountedPositions": [],
+      "detail": [
+        {
+          "day": 2102,
+          "from": "tile:109:57",
+          "to": "tile:110:57"
+        },
+        {
+          "day": 2103,
+          "from": "tile:110:57",
+          "to": "tile:111:57"
+        },
+        {
+          "day": 2104,
+          "from": "tile:111:57",
+          "to": "tile:112:57"
+        },
+        {
+          "day": 2105,
+          "from": "tile:112:57",
+          "to": "tile:113:57"
+        }
+      ],
+      "holds": true,
+      "note": "A position change is legitimate ONLY if the travel authority recorded that step. Anything else would be an ordinary movement path having claimed a provisional group. The control's count says whether bands in this world move at all over the observed span."
+    },
+    "demographic_cadence": {
+      "question": "how many times did the successor's population change over the observed span?",
+      "successorPopulationChanges": 0,
+      "controlPopulationChanges": 0,
+      "detail": [],
+      "holds": true,
+      "note": "Demography is annual and spring-gated. The claim is NOT that the successor was updated once; it is that it was not updated MORE OFTEN than an ordinary band in the same world over the same days."
+    },
+    "receipt_attribution": {
+      "question": "did the successor acquire food receipts, and did it inherit any?",
+      "inheritedAtBirth": 0,
+      "successorReceiptChanges": 0,
+      "controlReceiptChanges": 0,
+      "detail": [],
+      "holds": true,
+      "note": "Inheritance at birth is the L3 claim and is measured. Whether it EARNS receipts is a subsistence question the successor should not be answering before travel exists."
+    },
+    "ordinary_subsistence_trips": {
+      "question": "did the successor run ordinary same-day trips?",
+      "successorTripChanges": 0,
+      "controlTripChanges": 0,
+      "detail": [],
+      "holds": null,
+      "note": "REPORTED, NOT ASSERTED. Whether a provisional group may forage where it stands is a §4 design question this audit measures rather than decides."
+    },
+    "expedition_launch": {
+      "question": "did the successor launch or inherit an expedition?",
+      "inheritedAtBirth": 0,
+      "successorExpeditionChanges": 0,
+      "controlExpeditionChanges": 0,
+      "detail": [],
+      "holds": true,
+      "note": "Inheritance is the L3 claim. A LAUNCH would be an established-band behaviour and is what §4 must block."
+    },
+    "established_viability_never_claims_it": {
+      "question": "did Band.viability ever become defined on the successor?",
+      "successorViabilityChanges": 0,
+      "finalViability": null,
+      "controlViabilityChanges": 0,
+      "holds": true,
+      "note": "The control's changes show established viability IS live in this world on the same days."
+    },
+    "never_fissions": {
+      "question": "did the successor record a fission event?",
+      "successorFissionChanges": 0,
+      "holds": true,
+      "note": "Its fissionEvents ring starts empty at construction."
+    }
+  },
+  "summary": {
+    "fieldsObserved": 16,
+    "admitted": 2,
+    "excluded": 0,
+    "inconclusive": 14,
+    "admittedFields": [
+      "position",
+      "provisionalPhase"
+    ],
+    "excludedFields": [],
+    "inconclusiveFields": [
+      "population",
+      "workingAdults",
+      "dependents",
+      "elders",
+      "expeditions",
+      "trips",
+      "receipts",
+      "viability",
+      "acuteRisk",
+      "fissionEvents",
+      "decisions",
+      "moveEvents",
+      "status",
+      "protoCamp"
+    ],
+    "claimsHolding": 6,
+    "claimsFailing": 0,
+    "claimsReportedNotAsserted": 1
+  }
+}

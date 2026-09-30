@@ -1,0 +1,9 @@
+WebSocket server error: Port 24678 is already in use
+file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/provisionalReaderAdmissionAudit.mjs:72
+  if (departure.ok !== true) throw new Error(`departure refused: ${departure.refusal}`);
+                                   ^
+
+Error: departure refused: preparation:founder_cohort_declined
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/provisionalReaderAdmissionAudit.mjs:72:36
+
+Node.js v24.18.0

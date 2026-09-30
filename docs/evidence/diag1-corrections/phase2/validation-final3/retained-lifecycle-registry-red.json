@@ -1,0 +1,24 @@
+{
+  "kind": "pre-fix audit-only RED",
+  "actualActionIds": [
+    "movement_fatigue_refresh",
+    "intra-season-trips",
+    "expeditions",
+    "residential_nutrition_demand",
+    "parent_fission_attempt_deadline",
+    "natural_fission_pre_departure",
+    "provisional_travel",
+    "provisional_reintegration",
+    "provisional_travel_subsistence",
+    "provisional_return_decision",
+    "post_return_reconsideration",
+    "post_return_disposition",
+    "provisional_establishment",
+    "successor_stabilization",
+    "post_return_establishment",
+    "provisional_lifecycle_deadline",
+    "natural_fission_departure"
+  ],
+  "legacyAssertion": false,
+  "reason": "Phase2 fatigue refresh intentionally precedes mobility consumers; the relative order of physical trips and expeditions is preserved."
+}

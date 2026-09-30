@@ -1,0 +1,245 @@
+{
+  "seed": "diag1b:s2",
+  "legacyCache": false,
+  "map": "map2_single_origin",
+  "years": 5,
+  "observe": true,
+  "transforms": 1,
+  "hookCount": 14,
+  "startPopulation": 32,
+  "endPopulation": 32,
+  "fingerprint": "34243eb423706928b72aa2b0556a3a443577167fad9f9c0eff016f3115c6feab",
+  "summary": {
+    "observedParties": 3,
+    "foodWorkingParties": 1,
+    "completedFoodParties": 1,
+    "multiWorkCompleted": 0,
+    "cargoLossParties": 0,
+    "zeroLastTakeLossParties": 0,
+    "positiveLastTakeLossParties": 0,
+    "totalMissingHarvest": 0,
+    "totalDelivered": 0
+  },
+  "parties": [
+    {
+      "id": "expedition:band:single-origin:186:distant_plant_gathering:9a24254d",
+      "task": "distant_plant_gathering",
+      "bandId": "band:single-origin",
+      "work": [
+        {
+          "day": 188,
+          "workDay": 1,
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:108:55:wild_grain_seed",
+          "physicalAvailability": 0.0346,
+          "harvested": 0,
+          "depletion": 0,
+          "transportLoss": 0,
+          "processingLoss": 0,
+          "taken": 0,
+          "cargo": 0,
+          "capacity": 0.72,
+          "lost": 0,
+          "provisions": 0.0168
+        }
+      ],
+      "completed": true,
+      "returnDay": 189,
+      "cargo": {
+        "accountingVersion": 1,
+        "lots": [
+          {
+            "id": "expedition:band:single-origin:186:distant_plant_gathering:9a24254d:work:1:188:plant_patch:plant:tile:108:55:wild_grain_seed",
+            "acquisitionOrder": 1,
+            "workRecord": {
+              "day": 188,
+              "tick": 2,
+              "season": "autumn",
+              "sourceBandId": "band:single-origin",
+              "originTileId": "tile:109:56",
+              "targetTileId": "tile:108:55",
+              "taskGroupType": "plant_gathering_group",
+              "groupLabel": "Plant gathering group",
+              "estimatedPeopleCount": 6,
+              "objective": "food_patch_check",
+              "objectiveLabel": "Food patch check",
+              "startDay": 188,
+              "endDay": 189,
+              "activityStatus": "completed_observation",
+              "distanceTiles": 2,
+              "distanceKm": 3,
+              "estimatedDurationDays": 2,
+              "cause": "food_resource_check",
+              "movementType": "overnight_hunt_or_scout",
+              "outcome": "overnight",
+              "activityResult": "failed_due_to_season_mismatch",
+              "activityOutcome": "failed_due_to_season_mismatch",
+              "activityOutcomeReasonIds": [
+                "reason:activity-outcome:band:single-origin:188:failed_due_to_season_mismatch:tile:108:55",
+                "reason:activity-season:band:single-origin:188:mismatch:tile:108:55"
+              ],
+              "activityOutcomeSummary": "deterministic_failed_due_to_season_mismatch; return=none; information_or_zero_return",
+              "resourceReturn": {
+                "returnedResourceKind": "none",
+                "semantics": {
+                  "category": "failed_or_none",
+                  "isPhysical": false,
+                  "contributesToNutrition": false,
+                  "materialDomain": "none"
+                },
+                "estimatedReturnValue": 0,
+                "returnConfidence": 0.6814,
+                "consumedByEconomy": false,
+                "noYieldCoupling": true,
+                "noCarryingCapacityCoupling": false,
+                "noPopulationChange": true,
+                "noStressChange": true,
+                "noSupportChange": false,
+                "reasonIds": [
+                  "reason:activity-return:band:single-origin:188:none:tile:108:55",
+                  "reason:physical-food-harvest:band:single-origin:188:plant_patch:plant:tile:108:55:wild_grain_seed"
+                ]
+              },
+              "shadowSubsistence": {
+                "shadowReturnKind": "none",
+                "shadowSupportDomain": "information",
+                "shadowGrossValue": 0,
+                "shadowTravelCost": 0,
+                "shadowRiskPenalty": 0,
+                "shadowNetValue": 0,
+                "shadowReliability": 0,
+                "contributesAtBaseSameDay": false,
+                "seasonalEcologyModifier": 1.0044,
+                "shadowConsumedByEconomy": false,
+                "noEconomyCoupling": true,
+                "reasonIds": [
+                  "reason:activity-shadow:band:single-origin:188:none:tile:108:55"
+                ]
+              },
+              "seasonalEcology": {
+                "domain": "plant_patch",
+                "season": "autumn",
+                "availabilityFactor": 0.6059,
+                "baselineFactor": 0.6735,
+                "seasonalDelta": -0.0676,
+                "wetDryTendency": "neutral",
+                "hiddenTendencyClass": "neutral",
+                "shadowSeasonalResult": "reduced",
+                "taughtSeasonalHint": true,
+                "driverSummary": "plant_patch autumn: env=0.61 sig=0.6 (neutral, neutral)",
+                "reasonIds": [
+                  "reason:seasonal-ecology:tile:108:55:autumn:plant_patch"
+                ]
+              },
+              "plantPatchTrace": {
+                "patchId": "plant:tile:108:55:wetland_plant",
+                "plantClassId": "wetland_plant",
+                "seasonalAvailability": "absent",
+                "abundanceTrend": "falling",
+                "lifecycleState": "absent",
+                "expectedReturnFactor": 0.2,
+                "currentDepletion": 0.82,
+                "pressure": 0.344,
+                "recoveryRate": 0.18,
+                "fallbackRole": "important",
+                "fallbackRank": 0.58,
+                "laborCost": 0.48,
+                "safetyRisk": "moderate",
+                "rawSource": "plantStock.derivePlantGatherPatchTrace from band-targeted plant activity tile",
+                "reasonIds": [
+                  "reason:plant-gather-trace:tile:108:55:plant:tile:108:55:wetland_plant:2"
+                ],
+                "depletionApplied": false,
+                "knowledgeUpdate": "failure_lowered_confidence",
+                "memoryUpdate": "resource_memory_update",
+                "protoCampInfluence": "fallback_refuge_signal"
+              },
+              "activityMemoryEffect": {
+                "sourceBandId": "band:single-origin",
+                "sourceTripDay": 188,
+                "tick": 2,
+                "season": "autumn",
+                "targetTileId": "tile:108:55",
+                "activityOutcome": "failed_due_to_season_mismatch",
+                "effectType": "none",
+                "effectSummary": "no activity memory update",
+                "confidenceDelta": 0,
+                "reasonIds": [],
+                "noHiddenTruth": true,
+                "targetKnownMemoryOnly": true,
+                "noNewResourceDiscovery": true,
+                "noFoodCoupling": true,
+                "noYieldCoupling": true,
+                "noCarryingCapacityCoupling": true,
+                "noPopulationChange": true,
+                "noStressChange": true,
+                "noSupportChange": true
+              },
+              "pathTiles": [
+                "tile:109:56",
+                "tile:108:56",
+                "tile:108:55"
+              ],
+              "tilesCrossed": 2,
+              "roundTripTiles": 4,
+              "activityDaysRepresented": 3,
+              "resourceClassId": "generic_plant_food",
+              "resultSummary": "deterministic_failed_due_to_season_mismatch; return=none; information_or_zero_return",
+              "reasonIds": [
+                "reason:intra-season-trip:band:single-origin:188:food_resource_check:tile:108:55",
+                "reason:activity-outcome:band:single-origin:188:failed_due_to_season_mismatch:tile:108:55",
+                "reason:activity-season:band:single-origin:188:mismatch:tile:108:55",
+                "reason:activity-return:band:single-origin:188:none:tile:108:55",
+                "reason:physical-food-harvest:band:single-origin:188:plant_patch:plant:tile:108:55:wild_grain_seed"
+              ],
+              "noResidentialRelocation": true,
+              "noYieldChange": true,
+              "noStressChange": true,
+              "noPopulationChange": true,
+              "noCarryingCapacityChange": true,
+              "noSupportChange": false,
+              "bandKnownTargetOnly": true,
+              "physicalFoodHarvest": {
+                "sourceKind": "plant_patch",
+                "sourceId": "plant:tile:108:55:wild_grain_seed",
+                "sourceClass": "wild_grain_seed",
+                "knownness": "known_target",
+                "attempted": true,
+                "physicalSourceFound": true,
+                "physicalAvailability": 0.0346,
+                "harvestedAmount": 0,
+                "depletionApplied": 0,
+                "transportLoss": 0,
+                "processingLoss": 0,
+                "usableSupport": 0,
+                "failureReason": "activity_failed",
+                "worldTruthDebugOnly": true,
+                "reasonIds": [
+                  "reason:physical-food-harvest:band:single-origin:188:plant_patch:plant:tile:108:55:wild_grain_seed"
+                ]
+              }
+            },
+            "admittedUsableUnits": 0,
+            "overflowUnits": 0,
+            "remainingUnits": 0,
+            "appliedProvisionUnits": 0,
+            "postAdmissionLossUnits": 0,
+            "deliveredUnits": 0
+          }
+        ],
+        "harvestUnits": 0,
+        "lostUnits": 0,
+        "provisionUnitsConsumed": 0.0216,
+        "carryCapacityUnits": 0.72,
+        "unfulfilledProvisionUnits": 0.0216,
+        "settled": true
+      },
+      "delivered": 0,
+      "expectedAfterProvisions": 0,
+      "unaccounted": 0,
+      "lastTaken": 0,
+      "reason": "seasonally_inactive",
+      "returnReceipts": []
+    }
+  ]
+}

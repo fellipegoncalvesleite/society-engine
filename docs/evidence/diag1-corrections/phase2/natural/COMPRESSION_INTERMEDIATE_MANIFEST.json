@@ -1,0 +1,177 @@
+[
+  {
+    "originalFile": "baseline-exceptionally_rich-s1.json",
+    "gzipFile": "baseline-exceptionally_rich-s1.json.gz",
+    "uncompressedBytes": 8977378,
+    "uncompressedSha256": "5f56fb775b8fd38d9c1a4f78602225e1e6f80303d488b96c16a6f8b9571e4bd8",
+    "gzipSha256": "ad86e68ddbe1026da9cf752f8a4a3855c8d6fb5f50c85988003e656cb76ac31b"
+  },
+  {
+    "originalFile": "baseline-exceptionally_rich-s2.json",
+    "gzipFile": "baseline-exceptionally_rich-s2.json.gz",
+    "uncompressedBytes": 9126859,
+    "uncompressedSha256": "f89e29f42259b76aa7a561cbb142d74d3926dff597105309f3cfabb0c12927fe",
+    "gzipSha256": "59ff8ac63c44e8dfda6cd3169ebcbb00c46eb0b9515296a66fc14726c94632ac"
+  },
+  {
+    "originalFile": "baseline-exceptionally_rich-s3.json",
+    "gzipFile": "baseline-exceptionally_rich-s3.json.gz",
+    "uncompressedBytes": 9309953,
+    "uncompressedSha256": "30479a829d13ed28fe6b270f6a7d6284868236ace7acad3fb245ad38feb102fc",
+    "gzipSha256": "ee893c6edf9899facf6be021347394d6d6b659a9188a80f61c92864fd57e75db"
+  },
+  {
+    "originalFile": "baseline-good-s1.json",
+    "gzipFile": "baseline-good-s1.json.gz",
+    "uncompressedBytes": 8613687,
+    "uncompressedSha256": "02f4476d01ff7923c819470a304a7a3fc2278ac3911fd35611ab02ec5954b29b",
+    "gzipSha256": "906aaf04f66e9f47d3be4b143556ea4b28d27315f148b03245a9cb3d9ce5dfda"
+  },
+  {
+    "originalFile": "baseline-good-s2.json",
+    "gzipFile": "baseline-good-s2.json.gz",
+    "uncompressedBytes": 8618240,
+    "uncompressedSha256": "3645e0298138924cf579ec39c68b32ccfe33082044597bbb34911348bca87f19",
+    "gzipSha256": "fbe39326b8425f782eddc60625ab9d3e2b0d0a6ca3a6693ef7585eb5705590f2"
+  },
+  {
+    "originalFile": "baseline-good-s3.json",
+    "gzipFile": "baseline-good-s3.json.gz",
+    "uncompressedBytes": 8608929,
+    "uncompressedSha256": "71221513ab4d388a00f3e252e4b0bdc7473cfbc85db85494d8004a9216e3b90d",
+    "gzipSha256": "88f73f2e64703611b64a8e37788978b22584349e752f7faab4e93b3dd3d7481f"
+  },
+  {
+    "originalFile": "baseline-v3-exceptionally_rich-s1.json",
+    "gzipFile": "baseline-v3-exceptionally_rich-s1.json.gz",
+    "uncompressedBytes": 10695818,
+    "uncompressedSha256": "2e6405b097c95f627598bcbf807046e2ad0852e4c0c9da27fdd574d6e84ffe85",
+    "gzipSha256": "597f87a524d0327025e5957c9ea77e30655e6f02c0897a67530e490e5a833378"
+  },
+  {
+    "originalFile": "baseline-v3-exceptionally_rich-s2.json",
+    "gzipFile": "baseline-v3-exceptionally_rich-s2.json.gz",
+    "uncompressedBytes": 11221843,
+    "uncompressedSha256": "01c9951074e1af55b0cfa7f0a48c1097c19b1fbf56749ca51e94e53901402bee",
+    "gzipSha256": "54fd4b5d647e41229c767526d01fe79f9638ae3b4b2df02a6e006e11b73dc33f"
+  },
+  {
+    "originalFile": "baseline-v3-exceptionally_rich-s3.json",
+    "gzipFile": "baseline-v3-exceptionally_rich-s3.json.gz",
+    "uncompressedBytes": 11898560,
+    "uncompressedSha256": "936a1301ce07eca2138dbb64f9fe7a755d12dcd6c0a6f94cacb6aa20fde95d65",
+    "gzipSha256": "02db484cf8e9b8cda9417e9e09f642180fcdd4fb95b821af0501e40fa21603b1"
+  },
+  {
+    "originalFile": "baseline-v3-good-s1.json",
+    "gzipFile": "baseline-v3-good-s1.json.gz",
+    "uncompressedBytes": 9372309,
+    "uncompressedSha256": "2086061a601c0ec73fc114613404d05252336784da6919301c333c68a09cc80c",
+    "gzipSha256": "79ba0d179fb329f788bae9e220de9e71b5438781ef41d5c027a96f9e799dbf20"
+  },
+  {
+    "originalFile": "baseline-v3-good-s2.json",
+    "gzipFile": "baseline-v3-good-s2.json.gz",
+    "uncompressedBytes": 9393786,
+    "uncompressedSha256": "05e63fb050f9b3742f4bdcaef4a2f9977a24e29bb1c19f05d00e45f1418a9251",
+    "gzipSha256": "398b702af9d648c5a68e1b22181c6f85c14887d98df87e2ae75751ce90422f6a"
+  },
+  {
+    "originalFile": "baseline-v3-good-s3.json",
+    "gzipFile": "baseline-v3-good-s3.json.gz",
+    "uncompressedBytes": 9400343,
+    "uncompressedSha256": "74aa0b5cef9e9bd81b55a801e4d6b8b3d313d2eb54f34920379770747fe55f93",
+    "gzipSha256": "d3ff48de49a7151f2ee2d864764f602d0e6acf4f2e0dbfaa5a9c71124dda6757"
+  },
+  {
+    "originalFile": "phase2-exploratory-good-s1-y6.json",
+    "gzipFile": "phase2-exploratory-good-s1-y6.json.gz",
+    "uncompressedBytes": 1864019,
+    "uncompressedSha256": "4baf7b5b84f9b0288aab2b2a17b91d32c910a4381f2187e56ed82121e1a60d6d",
+    "gzipSha256": "e5bd22cf9c4d5d88e55988af99f61fab39f76b22fa99738e862f73800672fb3a"
+  },
+  {
+    "originalFile": "phase2-final1-exceptionally_rich-s1.json",
+    "gzipFile": "phase2-final1-exceptionally_rich-s1.json.gz",
+    "uncompressedBytes": 11020248,
+    "uncompressedSha256": "a83c0208bca8fea4c14c0068ab66b319d94d28d7cc37f4d9328dc75eba03c6c5",
+    "gzipSha256": "168e95687fcb7eaa96f0045d54eddd0d8a83dd390fc627049d338fe8ed2180d4"
+  },
+  {
+    "originalFile": "phase2-final1-exceptionally_rich-s2.json",
+    "gzipFile": "phase2-final1-exceptionally_rich-s2.json.gz",
+    "uncompressedBytes": 11719562,
+    "uncompressedSha256": "4de01ae6f5fd4577bbe0a69342caad3cfe451d00936717d91174ce567bb8b8fb",
+    "gzipSha256": "c04ddb91445367db25cd9a35df305dcb5cea488ab4b1509d9bd0e48e6f0e30a9"
+  },
+  {
+    "originalFile": "phase2-final1-exceptionally_rich-s3.json",
+    "gzipFile": "phase2-final1-exceptionally_rich-s3.json.gz",
+    "uncompressedBytes": 11908202,
+    "uncompressedSha256": "83ee533509b5c8f794ad7a8e9f3dfcd5fdfb1c8f12e00157687fd641b55f3100",
+    "gzipSha256": "a815595d9b403cb855225ac6e56df42d1358d408f29a272b4361f658859055f0"
+  },
+  {
+    "originalFile": "phase2-final1-good-s1.json",
+    "gzipFile": "phase2-final1-good-s1.json.gz",
+    "uncompressedBytes": 10889713,
+    "uncompressedSha256": "d491f23d02bf2057f630429985e3686ca52fb89b3fb213d978340e9bcb59b978",
+    "gzipSha256": "e4a8141f3f7c2fc53680ebf8563acf2cacab383596e579b0a5e00d0b7aeb7ab0"
+  },
+  {
+    "originalFile": "phase2-final1-good-s2.json",
+    "gzipFile": "phase2-final1-good-s2.json.gz",
+    "uncompressedBytes": 10751817,
+    "uncompressedSha256": "64c57366e726619c69bfbcb04d230d805059fbadc02cf2943a1d9a42ae1baf68",
+    "gzipSha256": "5e45134dab30adb53e59407a06bdb03a7321019958b09207b5b9acc917771b75"
+  },
+  {
+    "originalFile": "phase2-final1-good-s3.json",
+    "gzipFile": "phase2-final1-good-s3.json.gz",
+    "uncompressedBytes": 11094247,
+    "uncompressedSha256": "57595969c28254fd68c7cde35387d5151f2c4d8aac22cdaa97b11eb411f0914d",
+    "gzipSha256": "02c0811972ebbe328f46d5c55569d88253a9ddc86c87098dfaf3b1789f56d3c6"
+  },
+  {
+    "originalFile": "phase2-final2-exceptionally_rich-s1.json",
+    "gzipFile": "phase2-final2-exceptionally_rich-s1.json.gz",
+    "uncompressedBytes": 11020248,
+    "uncompressedSha256": "42b660636448402e118fcf78e04c54d87deac2816a6c7cabfefde0a237d4a1a7",
+    "gzipSha256": "5f66aacfcc3cc2eee822de827c190aae86f5d5a5fac1103a1a90a69526c9ba8c"
+  },
+  {
+    "originalFile": "phase2-final2-exceptionally_rich-s2.json",
+    "gzipFile": "phase2-final2-exceptionally_rich-s2.json.gz",
+    "uncompressedBytes": 11719562,
+    "uncompressedSha256": "033bf11d0c78840854b327c9e2039bc5152cf7dd2e0bfd54d859d28c76d291af",
+    "gzipSha256": "adf4bea372b2e9f1869d885ceb50983a199a29a25698d0acc2d271816976e862"
+  },
+  {
+    "originalFile": "phase2-final2-exceptionally_rich-s3.json",
+    "gzipFile": "phase2-final2-exceptionally_rich-s3.json.gz",
+    "uncompressedBytes": 11766698,
+    "uncompressedSha256": "bca20dfe0414943baf0fb07b353358f300ca7db38e70141f0cbae34736e60f80",
+    "gzipSha256": "fb9425e748a2937d2327d04a3178e809fbfc82ae823efb7b87357908ea1940e9"
+  },
+  {
+    "originalFile": "phase2-final2-good-s1.json",
+    "gzipFile": "phase2-final2-good-s1.json.gz",
+    "uncompressedBytes": 10980524,
+    "uncompressedSha256": "1dbe58d4428b8547300c0e4d22e000dad6c70c94cdd6206905487808c4282449",
+    "gzipSha256": "52fc41b47555d229bd4965925bf0ba9fc2f1f1bdf75d53d41e67f1bac376b76d"
+  },
+  {
+    "originalFile": "phase2-final2-good-s2.json",
+    "gzipFile": "phase2-final2-good-s2.json.gz",
+    "uncompressedBytes": 11059029,
+    "uncompressedSha256": "895178672566fefb92e290f99244c9dc6fa956a0efc120330270b2af5719697a",
+    "gzipSha256": "bac5148a99ba29f23771d37a5fcba22de4a76bff1cb89c7f3387ce1a23d7fd13"
+  },
+  {
+    "originalFile": "phase2-final2-good-s3.json",
+    "gzipFile": "phase2-final2-good-s3.json.gz",
+    "uncompressedBytes": 10592502,
+    "uncompressedSha256": "87b9eb728357931d10b98ec597b68759d49f892b7f5e51ff50797842515db250",
+    "gzipSha256": "94fe133eb0014e9c604bdc86201531cfc734f237acd3db590252122910ae071d"
+  }
+]

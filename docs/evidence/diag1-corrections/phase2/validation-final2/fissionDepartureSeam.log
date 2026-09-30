@@ -1,0 +1,23 @@
+WebSocket server error: Port 24678 is already in use
+PASS    D1  a departure_ready attempt with a viable residual departs
+PASS    D2  population and all three cohorts are conserved exactly, measured after the mutation
+PASS    D3  a deliberately corrupted ledger is detected rather than reported conserved
+PASS    D4  the successor is created at the parent's tile, never at the target
+PASS    D5  the successor is living, is not established, and cannot fission
+PASS    D6  no viable status is asserted at departure
+PASS    D7  no storage, expedition or receipt is created by departing
+PASS    D8  the split does not make anybody less hungry
+PASS    D9  acute condition and death memory are carried, not reset and not duplicated
+PASS    D10  the resulting world has exactly one current owner for the departure
+PASS    D11  parent and successor are recognised as one split; an unrelated band is not
+PASS    D12  a departure is refused from every phase except departure_ready, even with a complete prepared record
+PASS    D13  a departure that would strand the parent is refused by the residual authority
+PASS    D14  when the residual authority revises the request down, the smaller group is the one that leaves
+PASS    D15  the parent's cohorts after are its own minus the departing group, not a re-derived shape
+PASS    D16  ordinary natural fission reaches this physical seam through exactly one adapter and the legacy daughter constructor still has no caller
+PASS    D17  the same request produces a byte-identical world and ledger
+PASS    D18  a refused departure returns the original world with nobody moved
+
+summary: {"total":18,"passing":18,"failing":0,"vacuous":0,"errored":0}
+written: /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final2/fissionDepartureSeam.json
+written: /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final2/departure-ordering.json

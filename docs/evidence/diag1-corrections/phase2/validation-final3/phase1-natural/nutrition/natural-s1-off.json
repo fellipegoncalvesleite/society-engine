@@ -1,0 +1,24 @@
+{
+  "seed": "diag1b:s1",
+  "legacyCache": false,
+  "map": "map2_single_origin",
+  "years": 5,
+  "observe": false,
+  "transforms": 0,
+  "hookCount": 0,
+  "startPopulation": 32,
+  "endPopulation": 32,
+  "fingerprint": "54bfb77ab16032751ae6f4a7f43ee991bd3375e03229f92f6dcb8c022674549d",
+  "summary": {
+    "observedParties": 0,
+    "foodWorkingParties": 0,
+    "completedFoodParties": 0,
+    "multiWorkCompleted": 0,
+    "cargoLossParties": 0,
+    "zeroLastTakeLossParties": 0,
+    "positiveLastTakeLossParties": 0,
+    "totalMissingHarvest": 0,
+    "totalDelivered": 0
+  },
+  "parties": []
+}

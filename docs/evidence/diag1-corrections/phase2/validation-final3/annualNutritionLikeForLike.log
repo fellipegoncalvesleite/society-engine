@@ -1,0 +1,12 @@
+[map2_rich] comparisons=120 mismatches=0 exact=true
+[map2_rich_small] comparisons=120 mismatches=0 exact=true
+[map1_default] comparisons=600 mismatches=0 exact=true
+
+── §4 ANNUAL NUTRITION LIKE-FOR-LIKE ──
+comparisons        840
+mismatches         0
+reconstruction     EXACT
+annual consumers   ["src/sim/agents/demography.ts"]
+demography-only    true
+seasonal consumers 17
+VERDICT            PASS

@@ -1,0 +1,12 @@
+file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1NaturalAudit.mjs:16
+if(existsSync(out))throw Error('Refusing to overwrite existing evidence: '+out);
+                         ^
+
+Error: Refusing to overwrite existing evidence: /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/artifacts/diag1-phase1-natural/nutrition/natural-s1-on.json
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1NaturalAudit.mjs:16:26
+    at ModuleJob.run (node:internal/modules/esm/module_job:569:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async node:internal/modules/esm/loader:650:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.7.0

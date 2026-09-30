@@ -1,0 +1,7 @@
+{
+  "currentlyResolvedPythonChildNode": "/opt/homebrew/bin/node",
+  "currentVersion": "v26.7.0",
+  "explicitMatrixRuntime": "/Users/fellipegoncalvesleite/.local/node/bin/node (v24.18.0)",
+  "directShellObservedVersion": "v26.7.0",
+  "limit": "Per-command runtime versions were not universally recorded. Do not infer general cross-runtime determinism; all final production bytes are independently hashed."
+}

@@ -1,0 +1,10 @@
+[map2_rich] comparisons=20 mismatches=1 exact=false
+
+── §4 ANNUAL NUTRITION LIKE-FOR-LIKE ──
+comparisons        20
+mismatches         1
+reconstruction     DIVERGENT
+annual consumers   ["src/sim/agents/demography.ts"]
+demography-only    true
+seasonal consumers 17
+VERDICT            FAIL

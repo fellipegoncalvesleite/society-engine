@@ -1,0 +1,44 @@
+src/sim/agents/successorStabilization.ts:123:  const supportRatio = demand <= 0 ? 0 : window.supportUnits / demand;
+src/sim/agents/successorStabilization.ts:145:      window.supportUnits > 0 &&
+src/sim/agents/successorStabilization.ts:179:      supportUnits: round4(window.supportUnits),
+src/sim/agents/provisionalEstablishment.ts:105:    : establishment.supportUnitsAtSite / establishment.demandUnitsAtSite;
+src/sim/agents/provisionalEstablishment.ts:138:      "ProvisionalEstablishmentState.supportUnitsAtSite / demandUnitsAtSite — accumulated only from TravelSubsistenceDay records lived at this site",
+src/sim/agents/provisionalEstablishment.ts:202:    supportUnitsAtSite: 0,
+src/sim/agents/provisionalEstablishment.ts:250:        base.productiveGatheringDaysAtSite + (livedToday && todayRecord.usableUnits > 0 ? 1 : 0),
+src/sim/agents/provisionalEstablishment.ts:252:      // The same day record, on both sides of the ledger. `usableUnits` is what this ground gave after
+src/sim/agents/provisionalEstablishment.ts:256:      supportUnitsAtSite: round4(base.supportUnitsAtSite + (livedToday ? convertUsableRawFoodToSupportUnits(todayRecord.usableUnits) : 0)),
+src/sim/agents/provisionalTravelSubsistence.ts:141:    supportUnits: 0,
+src/sim/agents/provisionalTravelSubsistence.ts:180:    : clamp01(1 - subsistence.supportUnits / subsistence.demandUnits);
+src/sim/agents/provisionalTravelSubsistence.ts:194:  const productive = recent.filter((entry) => entry.usableUnits > 0).length;
+src/sim/agents/provisionalTravelSubsistence.ts:280:    let usableUnits = 0;
+src/sim/agents/provisionalTravelSubsistence.ts:301:      usableUnits = round4(Math.max(0, harvestedUnits - processingLoss));
+src/sim/agents/provisionalTravelSubsistence.ts:311:      usableUnits,
+src/sim/agents/provisionalTravelSubsistence.ts:312:      supportUnits: convertUsableRawFoodToSupportUnits(usableUnits),
+src/sim/agents/provisionalTravelSubsistence.ts:328:      supportUnits: round4(previous.supportUnits + convertUsableRawFoodToSupportUnits(usableUnits)),
+src/sim/agents/provisionalTravelSubsistence.ts:330:      processingLossUnits: round4(previous.processingLossUnits + Math.max(0, harvestedUnits - usableUnits)),
+src/sim/agents/provisionalTravelSubsistence.ts:333:      gatheringDaysWithAnyTake: previous.gatheringDaysWithAnyTake + (usableUnits > 0 ? 1 : 0),
+src/sim/agents/provisionalTravelSubsistence.ts:403:  return subsistence.supportUnits > 0 && subsistence.depletionApplied > 0;
+src/sim/agents/provisionalTravelSubsistence.ts:458:    supportUnits: round4(open.supportUnits),
+src/sim/agents/provisionalTravelSubsistence.ts:465:    hadAnyOwnPhysicalTake: open.supportUnits > 0 && open.depletionApplied > 0,
+src/sim/agents/provisionalTravelSubsistence.ts:520:  const hadPhysicalTake = day.usableUnits > 0 && day.depletionApplied > 0;
+src/sim/agents/provisionalTravelSubsistence.ts:556:    supportUnits: round4(open.supportUnits + convertUsableRawFoodToSupportUnits(day.usableUnits)),
+src/sim/agents/provisionalTravelSubsistence.ts:578:  const hadPhysicalTake = day.usableUnits > 0 && day.depletionApplied > 0;
+src/sim/agents/provisionalTravelSubsistence.ts:584:    supportUnits: round4(convertUsableRawFoodToSupportUnits(day.usableUnits)),
+src/sim/agents/provisionalTravelSubsistence.ts:602:  const supportUnits = convertUsableRawFoodToSupportUnits(day.usableUnits);
+src/sim/agents/provisionalTravelSubsistence.ts:603:  const ratio = supportUnits / day.demandUnits;
+src/sim/agents/provisionalTravelSubsistence.ts:605:  const perCapitaReturn = day.gatheringWorkers <= 0 ? 0 : clamp01(day.usableUnits / TRAVEL_GATHER_PER_WORKER_DAY);
+src/sim/agents/provisionalTravelSubsistence.ts:606:  return { startDay: day.day - 1, endDay: day.day, supportUnits, demandUnits: day.demandUnits,
+src/sim/agents/provisionalTravelSubsistence.ts:613:  const rawSupportRatio = (exposure.supportUnits ?? 0) / (exposure.demandUnits ?? 1);
+src/sim/agents/provisionalTravelSubsistence.ts:642:  if (Math.abs((exposure.supportUnits ?? 0) - subsistence.supportUnits) > 1e-7 ||
+src/sim/agents/provisionalTravelSubsistence.ts:697:  const runningDeficit = clamp01(1 - subsistence.supportUnits / subsistence.demandUnits);
+src/sim/agents/provisionalTravelSubsistence.ts:717:  return subsistence.supportUnits > 0 && subsistence.depletionApplied <= 0;
+src/sim/agents/provisionalTravelSubsistence.ts:723:  return round4(subsistence.supportUnits / subsistence.demandUnits);
+src/sim/agents/postReturnContinuation.ts:164:  const support = days.reduce((sum, day) => sum + convertUsableRawFoodToSupportUnits(day.usableUnits), 0);
+src/sim/agents/postReturnContinuation.ts:240:  const supportUnits = days.reduce((sum, day) => sum + convertUsableRawFoodToSupportUnits(day.usableUnits), 0);
+src/sim/agents/postReturnContinuation.ts:266:      supportUnits: round4(supportUnits),
+src/sim/agents/postReturnContinuation.ts:309:    supportUnits >= demandUnits * RETURN_SUPPORT_RATIO_FLOOR
+src/sim/agents/postReturnContinuation.ts:425:  const supportRatio = demand <= 0 ? 0 : window.supportUnits / demand;
+src/sim/agents/postReturnContinuation.ts:438:      window.supportUnits > 0 && window.depletionApplied > 0,
+src/sim/agents/postReturnContinuation.ts:456:      supportUnits: round4(window.supportUnits),
+src/sim/agents/postReturnContinuation.ts:579:  const supportRatio = window === undefined || window.demandUnits <= 0 ? 0 : window.supportUnits / window.demandUnits;
+src/sim/agents/postReturnContinuation.ts:626:        supportUnits: round4(window.supportUnits),

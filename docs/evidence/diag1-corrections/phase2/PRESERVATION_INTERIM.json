@@ -1,0 +1,12 @@
+{
+  "task12Head": "809f7ed8f8582f4a6d9b6754bf216f47a6e39fc4",
+  "task12Status": " M scripts/worldM0M02CompilerAudit.mjs\n M src/sim/world/physical/compileTerrainHydro.ts\n M src/sim/world/physical/terrainHydroValidate.ts\n",
+  "files": {
+    "scripts/worldM0M02CompilerAudit.mjs": "7643e4ae8ac1b3f5ca955d72336847b9224fa9b3254b2f11dad4aa9524072afe",
+    "src/sim/world/physical/compileTerrainHydro.ts": "97804bf324e80698d5a362c356826b412ff3dc06d1fbb576ecd71e3deeeb4352",
+    "src/sim/world/physical/terrainHydroValidate.ts": "81b527e03d432b8b368ec10ad70ceab5ba381c87081d0bfe0687058e7540743a"
+  },
+  "unchangedFiles": true,
+  "diffSha256": "35756b7663b13fe295ad567c8fbd62f31fce89cb179da974f913ffb60397d74f",
+  "canonicalBundleSha256": "fb98348719fe92ab56f0487698597084e95540260c7e808f3b8669ab552fdbde"
+}

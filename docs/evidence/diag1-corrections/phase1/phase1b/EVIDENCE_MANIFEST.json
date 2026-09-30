@@ -1,5 +1,5 @@
 {
-  "status": "IMPLEMENTED / PENDING INDEPENDENT FINAL REVIEW",
+  "status": "INDEPENDENT EXACT-HEAD DEPENDENCY GATE PASSED; no formal freeze",
   "startingPublishedHead": "d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333",
   "originalExecutableBase": "73cc38b916e236339897c59686638efafd569b6e",
   "headAtManifestGeneration": "cf095e9160cf79a0cf9f7767fe76cc68d8d944b2",
@@ -20,13 +20,17 @@
       "sha256": "0c47cdaf687b9e7f85d0a6054022f1c8371e758c651f1e8664c202560bedcd8f",
       "bytes": 3296
     },
+    "HISTORICAL_PUBLISHED_MANIFEST.json": {
+      "sha256": "e24861c5b5ffb2378467975a9b500e2b3c0362a57d2ea120452bde31db8437f8",
+      "bytes": 14744
+    },
     "NATURAL_PRESERVATION.json": {
       "sha256": "2db43e68d404dbe13f979fa261107c1359ec2c3c10d790179b40874ff53c10bb",
       "bytes": 1770
     },
     "PHASE1B_REPORT.md": {
-      "sha256": "8933c734107819a8c2d4c54642b5eed1414a338f0c97ebd24edad21b17fd6f43",
-      "bytes": 7396
+      "sha256": "5d1b325c38e1e049b1eb1bbaef5733dbb1dd665cff935042c15d09786fe998e5",
+      "bytes": 7718
     },
     "PRODUCTION_IDENTITY.json": {
       "sha256": "32627b95255d530fd8b313e216dc7d52f0598d755759a5cdafd234c1e26f343b",
@@ -392,5 +396,7 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "bytes": 0
     }
-  }
+  },
+  "reviewedHead": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
+  "documentationRefreshNote": "Original published manifest retained byte-identically in HISTORICAL_PUBLISHED_MANIFEST.json and at reviewed Git HEAD. Current file hashes include the post-review status update; original execution outputs are unchanged."
 }

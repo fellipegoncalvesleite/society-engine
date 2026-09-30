@@ -1,0 +1,17 @@
+WebSocket server error: Port 24678 is already in use
+{"phase2MeasuredDeparture":{"parent":"band:varied-river-mid","target":"tile:113:57","refusals":[{"parent":"band:varied-estuary","target":"tile:193:87","refusal":"preparation:founder_cohort_declined","detail":"not_willing_on_held_evidence,separation_costs_those_who_stay"}]}}
+WebSocket server error: Port 24678 is already in use
+WebSocket server error: Port 24678 is already in use
+WebSocket server error: Port 24678 is already in use
+WebSocket server error: Port 24678 is already in use
+WebSocket server error: Port 24678 is already in use
+WebSocket server error: Port 24678 is already in use
+PASS    M1_lived_operation_requirement  removing the real-take/depletion conjunct makes N1/N3's fabricated-support arm stabilize
+PASS    M2_consumed_departure_provenance  removing the consumed-provenance kernel claim makes K6's named missing-provenance fixture succeed
+PASS    M3_monotonic_never_returned_proof  forcing the monotonic predicate true makes N6's real-return/overflow arm stabilize on stale evidence
+PASS    M4_timer_success_prohibition  reclassifying stabilized as elapsed-time-permitted makes N2/E3's full-proof timer request succeed
+PASS    M5_quarantine_release_initialization  removing the release camp initialization makes S7's real qualifying positive fixture refuse instead of publishing half-initialized established state
+PASS    M6_historical_completion_timing  removing the phase guard and hiding a stabilized write inside release makes N9's establishing-state call create completed history
+
+summary: {"total":6,"passing":6,"failing":0,"vacuous":0,"productionRestoredByteIdentically":true}
+written: /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/successor-mutations.json

@@ -1,13 +1,13 @@
 {
   "phase": 1,
   "title": "Stop Losing Food and People",
-  "status": "IMPLEMENTED / PENDING REVIEW",
+  "status": "PHASE1 INDEPENDENT EXACT-HEAD DEPENDENCY GATE PASSED; no formal freeze",
   "exactBase": "73cc38b916e236339897c59686638efafd569b6e",
   "baseTree": "dcbedbed81f70a6ffc6e3c7ffb245e039a9254c6",
   "branch": "fix/diag1-human-support",
   "remote": "https://github.com/fellipegoncalvesleite/society-engine.git",
   "productionCommit": "9268d211e7d370911d3d8fd875429db4d4d06741",
-  "finalHead": "Recorded only in post-commit export FINAL_IDENTITY.json to avoid self-reference",
+  "finalHead": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
   "issues": {
     "B-001": {
       "also": null,
@@ -78,6 +78,12 @@
   "inputs": "portable-input-identities.json",
   "canonicalR11Sha256": "fb98348719fe92ab56f0487698597084e95540260c7e808f3b8669ab552fdbde",
   "otherFindings": "All nonassigned DIAG-1 findings remain open; no Phase2/3 or Task12 authorization used",
-  "residualDependencyRisk": "Mixed-map failure is not certified nonblocking for acceptance or Phase2/3; see MIXED_MAP_RESIDUAL.md.",
-  "acceptance": "None. Independent exact-final-HEAD review and supervisor acceptance plus documentation-only acceptance update required before Phase2."
+  "residualDependencyRisk": "Phase1B closes mixed-map seasonal/crossing cache contamination; full mixed and isolated matrices pass. Knowledge-choice and Item4 preparation failures remain historical Phase1 residuals. Final Phase2 results are separately documented; no whole-game certification.",
+  "acceptance": "Fresh read-only exact-HEAD reviewer: SPEC PASS, CODE QUALITY PASS, Critical0, Important0, Minor0, PHASE2 AUTHORIZATION YES. This is the user-authorized dependency gate, not formal supervisor freeze or self-acceptance.",
+  "independentFinalReview": {
+    "report": "independent-final-review/REVIEW.md",
+    "sha256": "3d3924c4469c21a6eb0ea8d51dc1fa21e40b5f938c903118d313c31b63d91a63",
+    "reviewedHead": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9"
+  },
+  "historicalManifest": "HISTORICAL_PRE_PHASE1B_MANIFEST.json"
 }

@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "scripts/diag1Phase1NaturalAudit.mjs",
+    "diag1b:s2"
+  ],
+  "environment": {
+    "DIAG1_NATURAL_OUT": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/phase1-natural"
+  },
+  "exitCode": 0,
+  "runtimeSeconds": 35.32327699661255
+}

@@ -1,0 +1,152 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "check": "EXPEDITION-LIFECYCLE-1",
+  "verdict": "PASS",
+  "routeStateCap": 10801,
+  "routeBoundNegativeControl": {
+    "atCapAccepted": true,
+    "beyondCapRejected": true
+  },
+  "canonicalSampling": "daily",
+  "years": 40,
+  "checks": {
+    "registryBoundaryIsOrderedAndAcyclic": true,
+    "sameDayVsExpeditionBoundaryIsDurationBased": true,
+    "expeditionsLaunchNaturally": true,
+    "outboundLegIsPhysical": true,
+    "targetWorkOccurs": true,
+    "returnLegIsPhysical": true,
+    "travelTakesDays": true,
+    "noTeleportPositionAlwaysOnRoute": true,
+    "noFoodBeforePhysicalReturn": true,
+    "laborNeverOverCommitted": true,
+    "provisionsAreConsumed": true,
+    "returnedCargoBecomesFood": true,
+    "terminalOutcomesRecorded": true,
+    "activeExpeditionsBounded": true,
+    "outcomeRecordsBounded": true,
+    "routeLengthBounded": true,
+    "deterministicExpeditionIdentities": true,
+    "personConserved": true,
+    "operatingObservedNonVacuously": true,
+    "returningObservedNonVacuously": true,
+    "taskCampObservedNonVacuously": true
+  },
+  "durationBoundary": {
+    "oneTile": {
+      "outboundTravelDays": 0.2670157068062828,
+      "activityDays": 0.25,
+      "returnTravelDays": 0.2670157068062828,
+      "totalDays": 0.7840314136125657,
+      "durationDays": 1,
+      "sameDay": true,
+      "kmPerTravelDay": 6.685
+    },
+    "fourTiles": {
+      "outboundTravelDays": 0.849663425579656,
+      "activityDays": 0.25,
+      "returnTravelDays": 0.849663425579656,
+      "totalDays": 1.949326851159312,
+      "durationDays": 2,
+      "sameDay": false,
+      "kmPerTravelDay": 6.685
+    },
+    "fiveTiles": {
+      "outboundTravelDays": 1.0276738967838446,
+      "activityDays": 0.25,
+      "returnTravelDays": 1.0276738967838446,
+      "totalDays": 2.305347793567689,
+      "durationDays": 3,
+      "sameDay": false,
+      "kmPerTravelDay": 6.685
+    },
+    "tenTiles": {
+      "outboundTravelDays": 1.9184741959611074,
+      "activityDays": 0.25,
+      "returnTravelDays": 1.918474195961107,
+      "totalDays": 4.086948391922214,
+      "durationDays": 5,
+      "sameDay": false,
+      "kmPerTravelDay": 6.685
+    }
+  },
+  "observed": {
+    "launched": 353,
+    "completed": 341,
+    "aborted": 0,
+    "lost": 8,
+    "depositsWithFood": 37,
+    "informationOnly": 312,
+    "maxActivePerBand": 2,
+    "maxOutcomeRecords": 6,
+    "maxRouteTiles": 141,
+    "sawPrepared": false,
+    "sawOutbound": true,
+    "sawOperating": true,
+    "sawReturning": true,
+    "sawTaskCamp": true,
+    "sawConcurrentParties": true,
+    "phaseDays": {
+      "prepared": 0,
+      "outbound": 868,
+      "operating": 374,
+      "returning": 849
+    },
+    "taskCampDays": 344,
+    "samples": 14400,
+    "travelDaysSeen": 24,
+    "provisionsConsumed": 5.316800000000012,
+    "cargoLost": 0,
+    "laborOverCommitViolations": 0,
+    "positionOffRouteViolations": 0,
+    "personConservationViolations": 0,
+    "receiptsBeforeReturn": 0,
+    "deliveredUnits": 3.9086000000000007,
+    "outcomeReasons": {
+      "returned_information_only": 193,
+      "frontier_barrier_blocked": 37,
+      "frontier_return_budget_reached": 15,
+      "seasonally_inactive": 11,
+      "verification_confirmed": 25,
+      "returned_with_cargo": 37,
+      "evidence_stale": 5,
+      "physically_exhausted": 18,
+      "party_lost": 8
+    }
+  },
+  "boundaryBlindness": {
+    "sampling": {
+      "daily": 14400,
+      "seasonal": 160
+    },
+    "operating": {
+      "daily": 374,
+      "seasonal": 0
+    },
+    "returning": {
+      "daily": 849,
+      "seasonal": 0
+    },
+    "taskCampDays": {
+      "daily": 344,
+      "seasonal": 0
+    },
+    "sawOperating": {
+      "daily": true,
+      "seasonal": false
+    },
+    "sawReturning": {
+      "daily": true,
+      "seasonal": false
+    },
+    "sawTaskCamp": {
+      "daily": true,
+      "seasonal": false
+    },
+    "sawConcurrentParties": {
+      "daily": true,
+      "seasonal": false
+    },
+    "interpretation": "An expedition's whole lifecycle fits inside a season (EXPEDITION_MAX_DURATION_DAYS = 24 of 90), so a boundary sample can only ever catch a party that happens to straddle the boundary. The daily arm is canonical; the seasonal arm is retained to show why."
+  }
+}

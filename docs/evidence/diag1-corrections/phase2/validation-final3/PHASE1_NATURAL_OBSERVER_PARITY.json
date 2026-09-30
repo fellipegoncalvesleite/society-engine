@@ -1,0 +1,14 @@
+[
+  {
+    "seed": "s1",
+    "observerOn": "54bfb77ab16032751ae6f4a7f43ee991bd3375e03229f92f6dcb8c022674549d",
+    "observerOff": "54bfb77ab16032751ae6f4a7f43ee991bd3375e03229f92f6dcb8c022674549d",
+    "equal": true
+  },
+  {
+    "seed": "s2",
+    "observerOn": "1bfec4e4dbd86ade5287c6d4340522c0e3267f68c62a51ff9dec68590fede88e",
+    "observerOff": "1bfec4e4dbd86ade5287c6d4340522c0e3267f68c62a51ff9dec68590fede88e",
+    "equal": true
+  }
+]

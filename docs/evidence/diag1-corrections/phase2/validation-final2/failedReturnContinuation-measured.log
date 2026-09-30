@@ -1,0 +1,11 @@
+WebSocket server error: Port 24678 is already in use
+{"phase2MeasuredDeparture":{"parent":"band:varied-river-mid","target":"tile:113:57","refusals":[{"parent":"band:varied-estuary","target":"tile:193:87","refusal":"preparation:founder_cohort_declined","detail":"not_willing_on_held_evidence,separation_costs_those_who_stay"}]}}
+file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/lib/failedReturnContinuationFixture.mjs:190
+  throw new Error(`post-return continuation did not establish within ${maxDays} days`);
+        ^
+
+Error: post-return continuation did not establish within 120 days
+    at runRegisteredPostReturnContinuation (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/lib/failedReturnContinuationFixture.mjs:190:9)
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/failedReturnContinuationAudit.mjs:54:20
+
+Node.js v26.7.0

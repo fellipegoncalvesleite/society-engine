@@ -1,0 +1,55 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "check": "SCALE1-TRIP-TIMING",
+  "verdict": "PASS",
+  "checks": {
+    "physicalRoundTripHelperExists": true,
+    "physicalRasterScaleChangesTravelTime": true,
+    "workTimeIncluded": true,
+    "sameDayComputedFromTotalTime": true,
+    "longerRouteCanBecomeOvernight": true,
+    "outboundAndReturnBothCount": true,
+    "noSameDayTileBudgetAuthority": true,
+    "noExpeditionTilesPerDayAuthority": true,
+    "noExpeditionGlobalKmPerTile": true,
+    "noDirectOnePointFivePhysicalConversion": true
+  },
+  "measurements": {
+    "map1One": {
+      "outboundTravelDays": 0.14285714285714285,
+      "activityDays": 0.25,
+      "returnTravelDays": 0.14285714285714285,
+      "totalDays": 0.5357142857142857,
+      "durationDays": 1,
+      "sameDay": true,
+      "kmPerTravelDay": 7
+    },
+    "map15One": {
+      "outboundTravelDays": 0.21428571428571427,
+      "activityDays": 0.25,
+      "returnTravelDays": 0.21428571428571427,
+      "totalDays": 0.6785714285714286,
+      "durationDays": 1,
+      "sameDay": true,
+      "kmPerTravelDay": 7
+    },
+    "map15Two": {
+      "outboundTravelDays": 0.42857142857142855,
+      "activityDays": 0.25,
+      "returnTravelDays": 0.42857142857142855,
+      "totalDays": 1.1071428571428572,
+      "durationDays": 2,
+      "sameDay": false,
+      "kmPerTravelDay": 7
+    },
+    "noWork": {
+      "outboundTravelDays": 0.14285714285714285,
+      "activityDays": 0,
+      "returnTravelDays": 0.14285714285714285,
+      "totalDays": 0.2857142857142857,
+      "durationDays": 1,
+      "sameDay": true,
+      "kmPerTravelDay": 7
+    }
+  }
+}

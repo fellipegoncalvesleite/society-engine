@@ -1,0 +1,31 @@
+WebSocket server error: Port 24678 is already in use
+{"fixtureDeparture":"band:varied-river-mid:provisional:1","attempts":[{"requestedFounders":11,"ok":true}]}
+ADMISSION BY FIELD (successor vs control):
+  position           succ=  4  ctrl=  0  ADMITTED
+  population         succ=  0  ctrl=  0  INCONCLUSIVE
+  workingAdults      succ=  0  ctrl=  0  INCONCLUSIVE
+  dependents         succ=  0  ctrl=  0  INCONCLUSIVE
+  elders             succ=  0  ctrl=  0  INCONCLUSIVE
+  expeditions        succ=  0  ctrl=  0  INCONCLUSIVE
+  trips              succ=  0  ctrl=  0  INCONCLUSIVE
+  receipts           succ=  0  ctrl=  0  INCONCLUSIVE
+  viability          succ=  0  ctrl=  0  INCONCLUSIVE
+  acuteRisk          succ=  0  ctrl=  0  INCONCLUSIVE
+  fissionEvents      succ=  0  ctrl=  0  INCONCLUSIVE
+  decisions          succ=  0  ctrl=  0  INCONCLUSIVE
+  moveEvents         succ=  0  ctrl=  0  INCONCLUSIVE
+  status             succ=  0  ctrl=  0  INCONCLUSIVE
+  provisionalPhase   succ=  1  ctrl=  0  ADMITTED
+  protoCamp          succ=  0  ctrl=  0  INCONCLUSIVE
+
+CLAIMS:
+  HOLDS    no_free_movement
+  HOLDS    demographic_cadence
+  HOLDS    receipt_attribution
+  REPORTED ordinary_subsistence_trips
+  HOLDS    expedition_launch
+  HOLDS    established_viability_never_claims_it
+  HOLDS    never_fissions
+
+summary: {"fieldsObserved":16,"admitted":2,"excluded":0,"inconclusive":14,"admittedFields":["position","provisionalPhase"],"excludedFields":[],"inconclusiveFields":["population","workingAdults","dependents","elders","expeditions","trips","receipts","viability","acuteRisk","fissionEvents","decisions","moveEvents","status","protoCamp"],"claimsHolding":6,"claimsFailing":0,"claimsReportedNotAsserted":1}
+written: /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase2/validation-final3/retained-reader-admission-bounded2100.json

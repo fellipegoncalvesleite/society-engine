@@ -1,0 +1,16 @@
+WebSocket server error: Port 24678 is already in use
+{"phase2MeasuredDeparture":{"parent":"band:varied-river-mid","target":"tile:113:57","refusals":[{"parent":"band:varied-estuary","target":"tile:193:87","refusal":"preparation:founder_cohort_declined","detail":"not_willing_on_held_evidence,separation_costs_those_who_stay"}]}}
+/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/seasonalSurvival.ts:226
+		if (base.lastAdvancedDay !== day - 1) throw new __vite_ssr_import_5__.NutritionExposureError("invalid_exposure", "unmeasured residential day gap");
+		                                            ^
+
+NutritionExposureError: invalid_exposure: unmeasured residential day gap
+    at Object.advanceResidentialNutritionDemand [as apply] (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/seasonalSurvival.ts:226:47)
+    at runDailyActions (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/dailyActions.ts:29:22)
+    at Module.advanceWorldByDays (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/tick/advance.ts:92:54)
+    at runRegisteredPostReturnContinuation (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/lib/failedReturnContinuationFixture.mjs:147:29)
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/failedReturnContinuationAudit.mjs:54:20 {
+  code: 'invalid_exposure'
+}
+
+Node.js v26.7.0
