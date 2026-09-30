@@ -1,0 +1,130 @@
+[
+  {
+    "file": "phase1-absorption.json",
+    "mutant": "absorption",
+    "loaded": 1,
+    "executed": 27,
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase1-cache.json",
+    "mutant": "cache",
+    "loaded": 1,
+    "executed": 27376,
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase1-cargo.json",
+    "mutant": "cargo",
+    "loaded": 1,
+    "executed": 136,
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase1-labor.json",
+    "mutant": "labor",
+    "loaded": 1,
+    "executed": 932,
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase1b-crossing.json",
+    "mutant": "crossing",
+    "loaded": 1,
+    "executed": 14,
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase1b-movement.json",
+    "mutant": "movement",
+    "loaded": 1,
+    "executed": 8,
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase1b-tile.json",
+    "mutant": "tile",
+    "loaded": 1,
+    "executed": 14,
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase2-migration_guess.json",
+    "mutant": "migration_guess",
+    "loaded": {
+      "migration_guess": 1
+    },
+    "executed": {
+      "migration_guess": 3
+    },
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase2-overlap.json",
+    "mutant": "overlap",
+    "loaded": {
+      "overlap": 1
+    },
+    "executed": {
+      "overlap": 9
+    },
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase2-partition_rounding.json",
+    "mutant": "partition_rounding",
+    "loaded": {
+      "partition_rounding": 1
+    },
+    "executed": {
+      "partition_rounding": 858622
+    },
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase2-record_count.json",
+    "mutant": "record_count",
+    "loaded": {
+      "record_count": 1
+    },
+    "executed": {
+      "record_count": 7
+    },
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase2-stale_fatigue.json",
+    "mutant": "stale_fatigue",
+    "loaded": {
+      "stale_fatigue": 1
+    },
+    "executed": {
+      "stale_fatigue": 616
+    },
+    "detected": true,
+    "restored": true
+  },
+  {
+    "file": "phase2-units.json",
+    "mutant": "units",
+    "loaded": {
+      "units": 1
+    },
+    "executed": {
+      "units": 2165
+    },
+    "detected": true,
+    "restored": true
+  }
+]

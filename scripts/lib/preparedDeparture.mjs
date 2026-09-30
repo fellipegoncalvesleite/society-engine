@@ -111,3 +111,22 @@ export function prepareAndDepartOrThrow(args) {
   }
   return { preparation, departure };
 }
+
+/** Phase2 downstream fixture setup: try the original cohort then bounded smaller requests.
+ * Each attempt still runs the actual residual, consent, permit and transfer gates. This is used
+ * only by tests of what happens AFTER a departure; tests of willingness/refusal keep the exact
+ * original helper. Report every refusal, and never edit the parent's burdens to force consent.
+ */
+export function prepareContinuationFixtureDeparture(args) {
+  const attempts=[];
+  for(const requestedFounders of [...new Set([args.requestedFounders,3,2])]) {
+    const result=prepareAndDepart({...args,requestedFounders});
+    attempts.push({requestedFounders,ok:result.departure.ok,refusal:result.departure.refusal,detail:result.departure.detail});
+    if(result.departure.ok){
+      console.log(JSON.stringify({fixtureDeparture:args.successorBandId,attempts}));
+      return {...result,fixturePreparationAttempts:attempts};
+    }
+  }
+  console.log(JSON.stringify({fixtureDeparture:args.successorBandId,attempts}));
+  return {departure:{ok:false,refusal:'bounded_real_cohort_requests_refused',detail:JSON.stringify(attempts)}};
+}

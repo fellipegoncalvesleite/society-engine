@@ -2,7 +2,7 @@
 import { createServer } from "vite";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { prepareAndDepart } from "./lib/preparedDeparture.mjs";
+import { makeTileDry, exhaustTileFood } from "./lib/failedReturnContinuationFixture.mjs";
 import {
   loadSuccessorStabilizationModules,
   warmStabilizationWorld,
@@ -52,6 +52,7 @@ const server = await createServer({
 let output;
 try {
   const modules = await loadSuccessorStabilizationModules(server);
+  modules.phase2MeasuredFixtures = true; // Explicit bounded alternative; frozen whole-integration reproduction keeps its original fixed setup.
   const warm = warmStabilizationWorld(modules);
   const departure = makeCanonicalStabilizationDeparture(modules, warm);
   const qualifying = buildQualifyingPreReleaseWorld(modules, departure);
@@ -143,10 +144,9 @@ try {
 
   record(
     "S5_mobile_operation_not_sedentary_prosperity",
-    "the qualifying measurement may span several physically occupied tiles and succeeds at the existing return-failure floor rather than requiring prosperity or a fixed residence duration",
+    "the real qualifying measurement spans several physically occupied tiles; F4 now correctly reports its surplus, while inherited hunger need not disappear at release",
     (evidence?.assessmentWindow.tileIds.length ?? 0) > 1 &&
       evidence.assessmentWindow.supportRatio >= modules.returnDecision.RETURN_SUPPORT_RATIO_FLOOR &&
-      evidence.assessmentWindow.supportRatio < 1 &&
       stabilizedBand.hungerPressure > 0,
     (evidence?.assessmentWindow.tileIds.length ?? 0) > 1,
     {
@@ -156,6 +156,22 @@ try {
       hungerPressure: stabilizedBand.hungerPressure,
     },
   );
+
+  // Pure reader boundary control, separate from the real extraction/conservation proof S4.
+  // These hypothetical measured quantities are never passed to a world/event writer.
+  const thresholdControls = [modules.returnDecision.RETURN_SUPPORT_RATIO_FLOOR - .001,
+    modules.returnDecision.RETURN_SUPPORT_RATIO_FLOOR, .99].map(ratio => {
+    const live = qualifying.world.bands[successorId], history = live.provisionalSuccessor.operationHistory;
+    const windows = history.recentAssessmentWindows.map((window,i) => i === history.recentAssessmentWindows.length - 1
+      ? { ...window, demandUnits: 1, supportUnits: ratio } : window);
+    const probe = { ...live, provisionalSuccessor: { ...live.provisionalSuccessor,
+      operationHistory: { ...history, recentAssessmentWindows: windows } } };
+    return { ratio, evidence: modules.stabilization.deriveSuccessorIndependentOperationEvidence(probe, qualifying.day) };
+  });
+  record("S5b_support_reader_accepts_submaintenance_at_unchanged_failure_floor",
+    "a pure numerical boundary probe rejects below0.35 and accepts0.35 and0.99; it does not claim a natural low-support success or write a fabricated physical event",
+    thresholdControls[0].evidence.allRequirementsMet === false && thresholdControls.slice(1).every(x=>x.evidence.allRequirementsMet === true),
+    qualifying.evidence.allRequirementsMet === true, thresholdControls);
 
   record(
     "S6_atomic_stabilization_conserves_people_and_creates_no_duplicate_band",
@@ -611,33 +627,14 @@ try {
     },
   );
 
-  const returnParent = warm.bands["band:varied-river-mid"];
-  const returnHome = modules.generate.getTile(warm, returnParent.position);
-  const distanceFromReturnHome = (tile) =>
-    Math.abs(tile.coord.x - returnHome.coord.x) + Math.abs(tile.coord.y - returnHome.coord.y);
-  const returnTarget = Object.keys(returnParent.knowledge.observedTiles)
-    .map((id) => modules.generate.getTile(warm, id))
-    .filter((tile) =>
-      tile !== undefined &&
-      modules.passability.isBandPassableDestination(tile) &&
-      distanceFromReturnHome(tile) >= 4)
-    .sort((left, right) =>
-      distanceFromReturnHome(left) - distanceFromReturnHome(right) ||
-      String(left.id).localeCompare(String(right.id)))[0];
-  if (returnTarget === undefined) throw new Error("no return-arm target");
-  const returnDeparture = prepareAndDepart({
-    prep: modules.preparation,
-    seam: modules.seam,
-    world: warm,
-    parentId: returnParent.id,
-    today: Number(warm.time.day ?? 0),
-    lineageId: "LIN-SUCCESSOR-STABILIZATION-RETURN",
-    requestedFounders: Math.max(2, Math.floor(returnParent.demography.population * 0.35)),
-    targetTileId: String(returnTarget.id),
-    successorBandId: "band:successor-stabilization-return",
-  }).departure;
-  if (returnDeparture.ok !== true) throw new Error(`return-arm departure refused: ${returnDeparture.refusal}`);
-  let returnWorld = returnDeparture.world;
+  const returnFixture = makeCanonicalStabilizationDeparture(modules, warm, {
+    lineageId: "LIN-SUCCESSOR-STABILIZATION-RETURN", successorBandId: "band:successor-stabilization-return",
+  });
+  const returnTarget = returnFixture.target;
+  // Explicit controlled hardship after canonical consent: real target water is dry and its
+  // plant patches are physically harvested away. No support or outcome is injected.
+  let returnWorld = makeTileDry(returnFixture.departure.world, returnTarget.id);
+  returnWorld = exhaustTileFood(modules, returnWorld, returnTarget.id, returnFixture.departureDay);
   const returnTrace = [];
   let returnLastPhase;
   for (let offset = 1; offset <= 500; offset += 1) {
@@ -653,7 +650,7 @@ try {
   const returnedBand = returnWorld.bands["band:successor-stabilization-return"];
   record(
     "L2_failure_path_still_gives_up_and_physically_reintegrates",
-    "a different real successor reaches establishing, chooses returning from lived conditions and physically rejoins without being swallowed by the success authority",
+    "a canonically departed successor reaches a controlled dry depleted target, chooses returning from lived measurements and physically rejoins without success release",
     returnTrace.some((row) => row.phase === "establishing") &&
       returnTrace.some((row) => row.phase === "returning") &&
       returnTrace.some((row) => row.phase === "reintegrated") &&

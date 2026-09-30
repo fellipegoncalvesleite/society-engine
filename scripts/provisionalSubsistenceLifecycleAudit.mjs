@@ -59,6 +59,7 @@ try {
   const travel = await server.ssrLoadModule("/sim/agents/provisionalTravel.ts");
   const survival = await server.ssrLoadModule("/sim/agents/seasonalSurvival.ts");
   const plantStock = await server.ssrLoadModule("/sim/agents/plantStock.ts");
+  const exposure = await server.ssrLoadModule("/sim/agents/nutritionExposure.ts");
   const policy = await server.ssrLoadModule("/sim/agents/fissionFieldTransferPolicy.ts");
 
   const base = advance.advanceWorldByDays(runner.initSimWorld({ kind: "map2" }, SEED), WARM_DAYS);
@@ -97,6 +98,7 @@ try {
       acuteRisk: overrides.acuteRisk ?? donor.acuteRisk,
       hungerPressure: overrides.hungerPressure ?? donor.hungerPressure,
       provisionalSuccessor: {
+        nutritionUnitVersion: 1,
         phase,
         phaseEnteredDay: overrides.phaseEnteredDay ?? day0,
         history: [],
@@ -113,6 +115,27 @@ try {
   };
   const succ = (world, id = "band:fixture:provisional") => world.bands[id];
   const nutritionOf = (band) => survival.deriveCanonicalNutritionState(band?.seasonalSupport);
+  // Prescribed physical-time histories for controlled decision tests, not natural food-source proof.
+  // The real source/depletion controls remain N3/N4. Keep complete exposure, bounded recent-day view.
+  const measuredFixture = (count, support, daysWithoutWater = 0) => {
+    const days = Array.from({length: count}, (_, i) => ({ day: day0-count+i+1,
+      tileId: donor.position, demandUnits: .1, usableUnits: support/count/100,
+      supportUnits: support/count, harvestedUnits: support/count/100,
+      requestedUnits: support/count/100, depletionApplied: 0, gatheringWorkers: 1,
+      gatherShare: .5, waterStress: i < daysWithoutWater ? 1 : 0 }));
+    const e = exposure.makeNutritionExposure("provisional", "actual_daily_travel_subsistence",
+      days.map(sub.travelDayExposure), true);
+    return {
+      travelSubsistence: { ...sub.emptyTravelSubsistence(day0-count), lastAdvancedDay: day0,
+        daysElapsed: count, demandUnits: count*.1, supportUnits: support, daysWithoutWater,
+        waterStressDaySum: daysWithoutWater, harvestUnits: support/100,
+        gatheringDays: count, gatheringDaysWithAnyTake: support > 0 ? count : 0,
+        recentDays: days.slice(-12) },
+      seasonalSupport: survival.recordSupportInterval(donor.seasonalSupport,
+        sub.travelExposureSample(e, day0), donor, base.time,
+        {topSeasonalSupportReasons:["controlled dated decision fixture"], replaceSameTickSample:false})
+    };
+  };
 
   // Two real tiles: one that physically holds edible plants, one that does not.
   const time0 = base.time;
@@ -332,7 +355,7 @@ try {
       position: parentBand.position,
       acuteRisk: { ...parentBand.acuteRisk, recentEpisodes: [roadInjury, ...parentEpisodes.slice(0, 4)] },
     });
-    const merged = reint.performAtomicReintegration({ world: w, successorId: "band:fixture:provisional", today: day0 + 1 });
+    const merged = reint.performAtomicReintegration({ world: survival.advanceResidentialNutritionDemand(w, day0 + 1), successorId: "band:fixture:provisional", today: day0 + 1 });
     const afterParent = merged.ok === true ? merged.world.bands[donor.id] : undefined;
     const afterIds = new Set((afterParent?.acuteRisk?.recentEpisodes ?? []).map((e) => e.id));
     const ml = merged.ok === true ? merged.ledger.embodied.acuteRiskMerge : undefined;
@@ -394,22 +417,28 @@ try {
   // B17 / B18 — no instant relief, and the world conserves.
   {
     const parentBand = base.bands[donor.id];
-    const starving = {
-      ...parentBand.seasonalSupport,
-      currentSeasonSupport: { ...parentBand.seasonalSupport.currentSeasonSupport, foodStress: 1, rawSupportRatio: 0, clampedSupportRatio: 0, deficitRatio: 1 },
-    };
+    // Phase2: currentSeasonSupport is a projection, so a controlled hungry returner
+    // must carry measured hungry exposure, not an edited display-only current field.
+    const exposureOwner = await server.ssrLoadModule("/sim/agents/nutritionExposure.ts");
+    let starving;
+    for (const old of parentBand.seasonalSupport.recentSamples) {
+      const exposure = exposureOwner.makeNutritionExposure(old.exposure.producer, old.exposure.provenance,
+        old.exposure.segments.map(segment => ({ ...segment, supportUnits: 0, foodStress: 1, perCapitaReturn: 0, recoveryEligible: false })));
+      starving = survival.recordSupportInterval(starving,
+        { ...old, exposure, foodStress: 1, rawSupportRatio: 0, clampedSupportRatio: 0, deficitRatio: 1 },
+        parentBand, base.time, { topSeasonalSupportReasons: ["controlled measured hungry returner"], replaceSameTickSample: false });
+    }
     const w = makeSuccessor(base, { phase: "returning", position: parentBand.position, seasonalSupport: starving });
     const popBefore = Object.values(w.bands).reduce((t, b) => t + Math.round(b.demography.population), 0);
-    const merged = reint.performAtomicReintegration({ world: w, successorId: "band:fixture:provisional", today: day0 + 1 });
+    const merged = reint.performAtomicReintegration({ world: survival.advanceResidentialNutritionDemand(w, day0 + 1), successorId: "band:fixture:provisional", today: day0 + 1 });
     const popAfter = merged.ok === true
       ? Object.values(merged.world.bands).reduce((t, b) => t + Math.round(b.demography.population), 0)
       : -1;
     record(
       "B17_returned_hunger_does_not_become_instant_relief",
-      "absorbing a group that is measurably hungrier never leaves the camp better fed than it was, and the merged reading replaces the camp's current one rather than extending its window",
+      "absorbing a group that is measurably hungrier never leaves the camp better fed than it was, and the merged experience covers actual lived days without inventing another season",
       merged.ok === true && merged.ledger.embodied.parentReliefedByAbsorbingAHungrierGroup === false &&
-        merged.world.bands[donor.id].seasonalSupport.recentSamples.length ===
-          parentBand.seasonalSupport.recentSamples.length,
+        merged.world.bands[donor.id].seasonalSupport.currentSeasonSupport.exposure.endDay === day0 + 1,
       merged.ok === true,
       merged.ok === true ? { ...merged.ledger.embodied, acuteRiskMerge: undefined } : { refusal: merged.refusal },
     );
@@ -424,21 +453,15 @@ try {
 
   // ══ C — RETURN CAUSALITY ════════════════════════════════════════════════════════════════════════
   {
-    const badInterval = {
-      ...sub.emptyTravelSubsistence(day0),
-      daysElapsed: 20, demandUnits: 2, supportUnits: 0.1, daysWithoutWater: 2,
-    };
-    const goodInterval = {
-      ...sub.emptyTravelSubsistence(day0),
-      daysElapsed: 20, demandUnits: 2, supportUnits: 2.2, daysWithoutWater: 0,
-    };
-    const bad = succ(makeSuccessor(base, { phase: "establishing", phaseEnteredDay: day0 - 30, travelSubsistence: badInterval }));
-    const good = succ(makeSuccessor(base, { phase: "establishing", phaseEnteredDay: day0 - 30, travelSubsistence: goodInterval }));
+    const badFixture = measuredFixture(20, .1, 2);
+    const goodFixture = measuredFixture(20, 2.2);
+    const bad = succ(makeSuccessor(base, { phase: "establishing", phaseEnteredDay: day0 - 30, ...badFixture }));
+    const good = succ(makeSuccessor(base, { phase: "establishing", phaseEnteredDay: day0 - 30, ...goodFixture }));
     const badDecision = ret.deriveProvisionalReturnDecision(bad, day0);
     const goodDecision = ret.deriveProvisionalReturnDecision(good, day0);
     record(
       "C19_worsening_lived_conditions_can_trigger_return_intent",
-      "a group whose own measured support covered a tenth of what its bodies needed over twenty days decides to walk home, and names why",
+      "a group whose own measured support covered a twentieth of what its bodies needed over twenty days decides to walk home, and names why",
       badDecision.shouldReturn === true && badDecision.cause === "measured_support_failed_at_this_site",
       badDecision.measured.measuredDays >= 14,
       badDecision,
@@ -458,7 +481,7 @@ try {
         [donor.id]: { ...base.bands[donor.id], position: withoutPatch.id, demography: { ...donor.demography, population: 1 } },
       },
     };
-    const badElsewhere = succ(makeSuccessor(movedParentWorld, { phase: "establishing", phaseEnteredDay: day0 - 30, travelSubsistence: badInterval }));
+    const badElsewhere = succ(makeSuccessor(movedParentWorld, { phase: "establishing", phaseEnteredDay: day0 - 30, ...badFixture }));
     const decisionElsewhere = ret.deriveProvisionalReturnDecision(badElsewhere, day0);
     record(
       "C21_hidden_parent_movement_is_not_read",
@@ -469,7 +492,7 @@ try {
     );
     // C22 — intent does not teleport.
     const w = makeSuccessor(base, {
-      phase: "establishing", phaseEnteredDay: day0 - 30, travelSubsistence: badInterval,
+      phase: "establishing", phaseEnteredDay: day0 - 30, ...badFixture,
       position: withPatch.id, departureTileId: donor.position,
     });
     const decided = ret.advanceProvisionalReturnDecisions(w, day0);
@@ -698,7 +721,7 @@ try {
     // anything well.
     const spent = makeSuccessor(base, {
       phase: "returning", phaseEnteredDay: day0 - kernel.RETURN_MAX_DAYS - 1,
-      travelSubsistence: { ...sub.emptyTravelSubsistence(day0), daysElapsed: 30, demandUnits: 3, supportUnits: 0 },
+      ...measuredFixture(30, 0),
     });
     const settled = resolver.resolveProvisionalLifecycles(spent, day0);
     const settledBand = succ(settled.world);

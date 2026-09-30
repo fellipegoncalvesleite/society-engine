@@ -1,3 +1,4 @@
+import { convertUsableRawFoodToSupportUnits } from "./humanFoodSupport";
 /**
  * ROADMAP ITEM 4 — FAILED-RETURN DISPOSITION AND INDEPENDENT CONTINUATION.
  *
@@ -160,7 +161,7 @@ function selectContinuationTarget(
   days: readonly NonNullable<FissionLifecycleRecord["travelSubsistence"]>["recentDays"][number][],
 ): PostReturnContinuationDecisionEvidence["target"] | undefined {
   const demand = days.reduce((sum, day) => sum + Math.max(0, day.demandUnits), 0);
-  const support = days.reduce((sum, day) => sum + Math.max(0, day.usableUnits), 0);
+  const support = days.reduce((sum, day) => sum + convertUsableRawFoodToSupportUnits(day.usableUnits), 0);
   const meanWater = days.length <= 0
     ? 1
     : days.reduce((sum, day) => sum + Math.max(0, day.waterStress), 0) / days.length;
@@ -236,7 +237,7 @@ export function assessPostReturnContinuationDecision(
   const failedReturnBeganOnDay = originalFailedReturnBeganOnDay(record);
   const demandUnits = days.reduce((sum, day) => sum + Math.max(0, day.demandUnits), 0);
   const workerDays = days.reduce((sum, day) => sum + Math.max(0, day.gatheringWorkers), 0);
-  const supportUnits = days.reduce((sum, day) => sum + Math.max(0, day.usableUnits), 0);
+  const supportUnits = days.reduce((sum, day) => sum + convertUsableRawFoodToSupportUnits(day.usableUnits), 0);
   const meanWaterStress = days.length <= 0
     ? 1
     : days.reduce((sum, day) => sum + Math.max(0, day.waterStress), 0) / days.length;

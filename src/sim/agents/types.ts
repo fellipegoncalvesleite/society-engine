@@ -559,6 +559,8 @@ export interface PreparedCommitmentEvidence {
 }
 
 export interface FissionLifecycleRecord {
+  /** Version of all active support-valued provisional aggregates. Raw physical fields stay raw. */
+  readonly nutritionUnitVersion?: 1;
   readonly phase: FissionLifecyclePhase;
   readonly phaseEnteredDay: number;
   /** Bounded, newest last, capped by the kernel. */
@@ -877,6 +879,8 @@ export interface TravelSubsistenceDay {
   readonly requestedUnits: number;
   readonly harvestedUnits: number;
   readonly usableUnits: number;
+  /** Derived human support; usableUnits above remains RAW food. Absent in legacy records. */
+  readonly supportUnits?: number;
   readonly depletionApplied: number;
   readonly demandUnits: number;
   readonly waterStress: number;
@@ -2774,7 +2778,41 @@ export type SeasonalHungerClassification =
   | "crisis_deficit"
   | "recovery_after_crisis";
 
+/** Half-open completed physical-day exposure. Piecewise runs preserve exact horizon clipping. */
+export interface NutritionExposureSegment {
+  /** Fraction of the recomposed living group with known historical exposure; absent means all. */
+  readonly knownPopulationFraction?: number;
+  readonly startDay: number;
+  readonly endDay: number;
+  readonly supportUnits?: number;
+  readonly demandUnits?: number;
+  /** Legacy ratio-only measurement, or validated intensive ratio retained across a body allocation. */
+  readonly rawSupportRatio?: number;
+  readonly foodStress: number;
+  readonly waterStress: number;
+  readonly perCapitaReturn: number;
+  readonly recoveryEligible: boolean;
+}
+
+export interface NutritionExposureInterval {
+  readonly version: 1;
+  readonly startDay: number;
+  readonly endDay: number;
+  readonly durationDays: number;
+  readonly producer: "residential" | "provisional" | "inherited_condition" | "merged_condition";
+  readonly provenance: string;
+  readonly quantityBasis?: "actual" | "legacy_ratio_only";
+  readonly supportUnits?: number;
+  readonly demandUnits?: number;
+  readonly foodStressDays: number;
+  readonly waterStressDays: number;
+  readonly recoveryDays: number;
+  readonly segments: readonly NutritionExposureSegment[];
+  readonly open?: boolean;
+}
+
 export interface SeasonalSupportSample {
+  readonly exposure?: NutritionExposureInterval;
   readonly tick: TickNumber;
   readonly year: number;
   readonly season: Season;
@@ -2788,16 +2826,38 @@ export interface SeasonalSupportSample {
   readonly mode: SeasonalSupportMode;
 }
 
+export interface ResidentialFoodReceiptCursor {
+  readonly periodTick: TickNumber;
+  readonly physicalPlantHarvest: number;
+  readonly physicalFaunaHarvest: number;
+  readonly aquaticHarvest: number;
+  readonly transportLoss: number;
+  readonly processingLoss: number;
+  readonly totalUsableSupport: number;
+}
+
+/** One open residential measurement, not a second nutrition history or food stock. */
+export interface ResidentialNutritionInterval {
+  readonly startDay: number;
+  readonly lastAdvancedDay: number;
+  readonly demandUnits: number;
+  readonly receiptBaseline?: ResidentialFoodReceiptCursor;
+}
+
 export interface SeasonalSupportState {
+  readonly exposureVersion?: 1;
+  readonly residentialReceiptCursor?: ResidentialFoodReceiptCursor;
+  readonly exposureAsOfDay?: number;
   readonly bandId: BandId;
   readonly lastUpdatedTick: TickNumber;
+  /** Latest completed physical-day projection; full interval quantities live in recentSamples. */
   readonly currentSeasonSupport: SeasonalSupportSample;
+  /** Previous retained interval, a compatibility display rather than a time horizon. */
   readonly lastSeasonSupport?: SeasonalSupportSample;
   readonly rolling4SeasonSupport: NormalizedIntensity;
   readonly rolling8SeasonSupport: NormalizedIntensity;
-  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — mean UNCAPPED raw support ratio over the window
-  // (the rolling*SeasonSupport fields use the clamped ratio <=1, so surplus is invisible in
-  // them). Cached here so `deriveCanonicalNutritionState`'s surplus read stays O(1).
+  // Bounded720-day pooled raw support compatibility projection. Unknown absolute quantities
+  // use day-weighted known ratios; canonical consumers query the dated history directly.
   readonly rolling8SeasonRawSupport?: number;
   readonly rolling4SeasonReturn: NormalizedIntensity;
   readonly rolling8SeasonReturn: NormalizedIntensity;
@@ -4245,6 +4305,10 @@ export interface BandPressureState {
   readonly waterStress: NormalizedIntensity;
   readonly mobilityPressure: NormalizedIntensity;
   readonly fatiguePressure: NormalizedIntensity;
+  /** Separate, uncapped decomposition. Never recover acute illness by subtracting from a clamp. */
+  readonly nonMovementFatigue?: number;
+  readonly movementFatigue?: number;
+  readonly movementFatigueUpdatedDay?: number;
   readonly riskPressure: NormalizedIntensity;
   readonly placeAttachmentPull: NormalizedIntensity;
   readonly netMovePressure: NormalizedIntensity;
@@ -7968,6 +8032,7 @@ export interface Band {
   readonly ecologicalStressCauses?: EcologyStressCauseSummary;
   readonly returnTrend?: ReturnTrendMemory;
   readonly seasonalSupport?: SeasonalSupportState;
+  readonly nutritionResidentialInterval?: ResidentialNutritionInterval;
   readonly deathMemory?: DeathMemoryState;
   readonly innerFission?: InnerFissionState;
   readonly socialTension?: SocialTensionReadabilityState;

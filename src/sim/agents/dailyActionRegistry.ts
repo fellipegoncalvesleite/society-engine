@@ -1,3 +1,4 @@
+import { residentialNutritionDailyAction } from "./seasonalSurvival";
 // EXPEDITIONARY-2 (Slice A) — the neutral daily-action registry boundary.
 //
 // WHY THIS MODULE EXISTS: the registry used to live in `intraSeasonTrips.ts`. Adding
@@ -23,6 +24,7 @@
 // seasonal decision, so same-day trips that day already see the reduced camp labor,
 // and a returning party's receipt lands after the day's ordinary foraging is recorded
 // — a stable, explainable order rather than an emergent one.
+import { movementFatigueDailyAction } from "./pressure";
 import type { DailyAction } from "./dailyActions";
 import { expeditionDailyAction } from "./expedition";
 import { intraSeasonTripDailyAction } from "./intraSeasonTrips";
@@ -49,8 +51,10 @@ import { naturalFissionDepartureDailyAction } from "./naturalFissionDeparture";
  * here is the ONLY sanctioned way to run sub-season physical work.
  */
 export const DEFAULT_DAILY_ACTIONS: readonly DailyAction[] = [
+  movementFatigueDailyAction,
   intraSeasonTripDailyAction,
   expeditionDailyAction,
+  residentialNutritionDailyAction,
   // ROADMAP ITEM 4 — parent-side attempt bounds are declared in DAYS and are therefore checked
   // daily. Deadline comes before progression so a phase cannot advance on the day it is due and
   // thereby evade its maximum. Both reducers move no bodies.

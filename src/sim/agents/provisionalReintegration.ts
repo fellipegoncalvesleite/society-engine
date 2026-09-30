@@ -29,12 +29,12 @@
 import { auditFissionLineageOwnership, isBandTerminal, isProvisionalSuccessor } from "./bandLifecycle";
 import { requestTransition } from "./fissionLifecycleKernel";
 import { mergeAcuteRiskOnReintegration, type AcuteRiskMergeLedger } from "./acuteRisk";
-import { deriveCanonicalNutritionState, recordSupportInterval } from "./seasonalSurvival";
-import { closeOpenTravelInterval } from "./provisionalTravelSubsistence";
+import { deriveCanonicalNutritionState, mergeSupportHistories, closeResidentialSupportInterval } from "./seasonalSurvival";
+import { closeOpenTravelInterval, advanceProvisionalSubsistence } from "./provisionalTravelSubsistence";
 import { getWorldTimeForDay } from "../tick/time";
 import type { DailyAction } from "./dailyActions";
 import type { CohortCounts } from "./fissionFounderAllocation";
-import type { Band, FissionLifecycleRecord, SeasonalSupportSample } from "./types";
+import type { Band, FissionLifecycleRecord } from "./types";
 import type { BandId, DayNumber } from "../core/types";
 import type { WorldState } from "../world/types";
 
@@ -49,8 +49,8 @@ import type { WorldState } from "../world/types";
  *   EXACT AGGREGATE MERGE — cohorts (added line by line, never re-derived at ratios); acute-risk
  *     episodes (union by id, effect rederived); the demographic accumulators, which are fractional
  *     COUNTS OF PEOPLE and add exactly like the people do.
- *   CONSERVATIVE BURDEN — the current nutritional condition, written as ONE population-weighted
- *     sample REPLACING the parent's current one rather than extending its window. It is the arithmetic
+ *   CONSERVATIVE BURDEN — lived nutrition recomposed over the same dated spans, with no additional
+ *     elapsed day and no invented history for unmeasured bodies. It is the arithmetic
  *     of a merged group and it is checked in the direction that matters: absorbing a hungrier group
  *     never leaves the parent better fed.
  *   INVALIDATE — the successor's own travel subsistence interval. It measured a group that no longer
@@ -201,8 +201,8 @@ export function performAtomicReintegration(request: ReintegrationRequest): Reint
   // its condition before closing that interval would hand the parent a reading from whenever the group
   // was last measured, which on a short return is the day it left. The close is the same writer every
   // other interval goes through; it adds no food and invents no reading.
-  const successor = closeOpenTravelInterval(successorRaw, today);
-  const record = successor.provisionalSuccessor as FissionLifecycleRecord;
+  let successor = successorRaw;
+  let record = successor.provisionalSuccessor as FissionLifecycleRecord;
   const successorBefore = cohortsOf(successor);
   if (totalOf(successorBefore) <= 0) {
     // Nobody to hand back. The zero-population resolver owns this, and routing it here would transfer
@@ -211,7 +211,7 @@ export function performAtomicReintegration(request: ReintegrationRequest): Reint
   }
 
   const parentId = successor.parentBandId;
-  const parent = parentId === undefined ? undefined : world.bands[parentId];
+  let parent = parentId === undefined ? undefined : world.bands[parentId];
   if (parentId === undefined || parent === undefined) {
     return { ok: false, refusal: "parent_not_found" };
   }
@@ -232,6 +232,12 @@ export function performAtomicReintegration(request: ReintegrationRequest): Reint
       detail: `parent at ${String(parent.position)}, successor at ${String(successor.position)}`,
     };
   }
+
+  const measuredReturn = advanceProvisionalSubsistence({ ...world, bands: { [successor.id]: successor } }, today,
+    { reintegrationWithoutHarvest: true });
+  successor = closeOpenTravelInterval(measuredReturn.world.bands[successor.id], today);
+  record = successor.provisionalSuccessor as FissionLifecycleRecord;
+  parent = closeResidentialSupportInterval(parent, today);
 
   const transition = requestTransition({
     current: { phase: record.phase, phaseEnteredDay: record.phaseEnteredDay, history: record.history },
@@ -284,46 +290,11 @@ export function performAtomicReintegration(request: ReintegrationRequest): Reint
 
   // ── CONSERVATIVE BURDEN — the merged group's current nutritional condition. ──
   //
-  // One population-weighted sample appended to the parent's own record through the one support-interval
-  // writer. It is the honest arithmetic of a merged group: the people who come home bring the condition
-  // they are in, and the average of a group IS its average. What it may never do is relieve the parent
-  // by absorbing somebody hungrier, which the ledger measures rather than assumes.
-  const mergedSupport = ((): Band["seasonalSupport"] => {
-    const parentSupport = parent.seasonalSupport;
-    const parentSample = parentSupport?.currentSeasonSupport;
-    const successorSample = successor.seasonalSupport?.currentSeasonSupport;
-    if (parentSupport === undefined || parentSample === undefined) return successor.seasonalSupport;
-    if (successorSample === undefined) return parentSupport;
-    const weigh = (a: number, b: number): number =>
-      (a * parentPeople + b * successorPeople) / (parentPeople + successorPeople);
-    const time = getWorldTimeForDay(today as DayNumber);
-    const sample: SeasonalSupportSample = {
-      ...parentSample,
-      tick: time.tick,
-      year: time.year,
-      season: time.season,
-      rawSupportRatio: weigh(parentSample.rawSupportRatio, successorSample.rawSupportRatio),
-      clampedSupportRatio: weigh(parentSample.clampedSupportRatio, successorSample.clampedSupportRatio),
-      perCapitaReturn: weigh(parentSample.perCapitaReturn, successorSample.perCapitaReturn),
-      foodStress: weigh(parentSample.foodStress, successorSample.foodStress),
-      waterStress: weigh(parentSample.waterStress, successorSample.waterStress),
-      deficitRatio: weigh(parentSample.deficitRatio, successorSample.deficitRatio),
-    };
-    // ── THE MERGED SAMPLE REPLACES THE PARENT'S CURRENT ONE; IT DOES NOT EXTEND THE WINDOW. ──
-    //
-    // Appending was tried first and R5 CAUGHT IT: absorbing a group at hunger 0.99 left a parent at
-    // 0.14 reading 0.01. The weighted mean was right and the derived value was not, because a ninth
-    // sample pushed the oldest bad season out of the eight-slot ring and the rolling windows, streaks
-    // and classification all recomputed over a shifted history. **A reintegration is not another season
-    // lived; it is a re-reading of the season the camp is in, by a camp that now has more people in
-    // it.** Replacing the current sample keeps the history exactly as long and exactly as it was, so
-    // the only thing that moves is the thing that actually changed.
-    const previous = { ...parentSupport, recentSamples: parentSupport.recentSamples.slice(0, -1) };
-    return recordSupportInterval(previous, sample, parent, time, {
-      topSeasonalSupportReasons: [`${successorPeople} people rejoined carrying their own condition`],
-      replaceSameTickSample: false,
-    });
-  })();
+  // Recompose disjoint bodies' lived exposure over identical dates through the single history owner.
+  // Historical actual quantities add; experienced stress uses body weights and explicit unknown
+  // coverage. Reunion adds no elapsed time, inventory or nutrition receipt.
+  const mergedSupport = mergeSupportHistories(parent.seasonalSupport, successor.seasonalSupport,
+    parent, parentPeople, successorPeople, getWorldTimeForDay(today as DayNumber));
 
   const parentAfter: Band = {
     ...parent,

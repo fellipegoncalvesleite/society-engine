@@ -1,3 +1,8 @@
+import { deriveRecentMovementFatigue } from "./movementFatigue";
+import { getCalendarDay, getWorldTimeForDay } from "../tick/time";
+import { isLivingBand } from "./bandLifecycle";
+import type { DailyAction } from "./dailyActions";
+import type { DayNumber } from "../core/types";
 import type {
   Band,
   BandPressureState,
@@ -215,9 +220,8 @@ export function deriveBandPressureState(
       forestShelter * 0.02 -
       (waterWorksRelief.active ? waterWorksRelief.relief : 0),
   );
-  const fatiguePressure = clamp01(
-    getRecentMovementFatigue(band) +
-      acuteActivityPenalty * 0.62 +
+  const movementFatigue = deriveRecentMovementFatigue(band.movementHistory, getCalendarDay(world.time));
+  const nonMovementFatigue = acuteActivityPenalty * 0.62 +
       acuteStress * 0.24 +
       forestTravelCost * 0.05 +
       logisticsSicknessActivityPenalty * 0.26 +
@@ -227,8 +231,8 @@ export function deriveBandPressureState(
       waterWorksLabor * 0.42 -
       logisticsFireExposureReliefBias * 0.08 -
       relationshipPracticeEfficiencyBias * 0.08 -
-      relationshipRouteConfidenceBias * 0.06,
-  );
+      relationshipRouteConfidenceBias * 0.06;
+  const fatiguePressure = clamp01(movementFatigue + nonMovementFatigue);
   // CORRECTION-32 — `crowdingPenalty * 0.08` is GONE from risk.
   //
   // riskPressure is a DANGER signal: demography.ts:401/1780 and viability.ts:248 read it, so
@@ -378,6 +382,9 @@ export function deriveBandPressureState(
     waterStress: round2(waterStress),
     mobilityPressure: round2(mobilityPressure),
     fatiguePressure: round2(fatiguePressure),
+    movementFatigue,
+    nonMovementFatigue,
+    movementFatigueUpdatedDay: getCalendarDay(world.time),
     riskPressure: round2(riskPressure),
     placeAttachmentPull: round2(placeAttachmentPull),
     netMovePressure: round2(netMovePressure),
@@ -910,13 +917,39 @@ function getPressureSensitivity(record: KnownTileRecord): number {
   return clamp01(0.62 + (1 - regeneration) * 0.48);
 }
 
-function getRecentMovementFatigue(band: Band): number {
-  const recentMovementCount = band.movementHistory
-    .slice(-4)
-    .filter((movement) => movement.toTileId !== movement.fromTileId).length;
-
-  return clamp01(recentMovementCount / 5);
+/** Refresh only movement recency; preserve the uncapped separate embodied/physical terms.
+ * The pressure timestamp still identifies the last complete pressure derivation.
+ */
+export function refreshMovementFatigue(world: WorldState, day: number): WorldState {
+  let changed = false;
+  const bands = { ...world.bands };
+  for (const band of Object.values(world.bands)) {
+    if (!isLivingBand(band)) continue;
+    const previous = band.pressureState;
+    // No measured pressure exists yet. Its complete owner initializes it at the normal cadence;
+    // a movement-only refresh must not introduce unrelated pressure during an initial idle day.
+    if (previous === undefined) continue;
+    // Legacy pressure has no reversible decomposition: derive it through its real owner,
+    // never subtract the old movement term from a clamped total.
+    const pressure = previous?.nonMovementFatigue === undefined
+      ? deriveBandPressureState({ ...world, time: getWorldTimeForDay(day as DayNumber) }, band)
+      : previous;
+    const movementFatigue = deriveRecentMovementFatigue(band.movementHistory, day);
+    const fatiguePressure = round2(clamp01(movementFatigue + (pressure.nonMovementFatigue ?? 0)));
+    bands[band.id] = { ...band, pressureState: {
+      ...previous, nonMovementFatigue: pressure.nonMovementFatigue,
+      movementFatigue, fatiguePressure, movementFatigueUpdatedDay: day,
+    } };
+    changed = true;
+  }
+  return changed ? { ...world, bands } : world;
 }
+
+export const movementFatigueDailyAction: DailyAction = {
+  id: "movement_fatigue_refresh",
+  firesOnDayOfSeason: () => true,
+  apply: refreshMovementFatigue,
+};
 
 function addUnique<TValue>(values: readonly TValue[], ...nextValues: readonly TValue[]): readonly TValue[] {
   const merged = [...values];

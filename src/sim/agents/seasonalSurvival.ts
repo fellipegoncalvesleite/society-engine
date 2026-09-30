@@ -1,5 +1,19 @@
+import { derivePopulationDemand } from "./carryingCapacity";
+import { deriveHumanFoodSupportLedger, HARVEST_TO_SUPPORT_SCALE } from "./humanFoodSupport";
+import { readFreshAccumulator } from "./seasonalFoodReceipts";
+import type { WorldState } from "../world/types";
+import type { DailyAction } from "./dailyActions";
+import type { DayNumber, TickNumber } from "../core/types";
+import { getCalendarDay, getWorldTimeForDay } from "../tick/time";
+import { isLivingBand, isProvisionalSuccessor } from "./bandLifecycle";
+import {
+  ANNUAL_NUTRITION_DAYS, CURRENT_NUTRITION_DAYS, NUTRITION_HISTORY_DAYS,
+  clipNutritionExposure, insertNutritionExposure, makeNutritionExposure, migrateNutritionExposureHistory,
+  NutritionExposureError, queryNutritionExposure, segmentRatio, trailingExposureDays,
+} from "./nutritionExposure";
 import type {
   Band,
+  NutritionExposureSegment,
   CarryingCapacityState,
   SeasonalHungerClassification,
   SeasonalSupportMode,
@@ -40,13 +54,28 @@ export interface CanonicalNutritionState {
   readonly nutritionStateAvailable: boolean;
 }
 
+function exposureSamples(support: SeasonalSupportState): readonly SeasonalSupportSample[] {
+  if (support.recentSamples.every(s => s.exposure !== undefined)) return support.recentSamples;
+  const migrated = migrateNutritionExposureHistory(support.recentSamples, { kind: "ordinary" });
+  if (!migrated.ok) throw new NutritionExposureError(migrated.code, migrated.reason);
+  return migrated.samples;
+}
+
+export function querySupportExposure(support: SeasonalSupportState | undefined, endDay: number, horizonDays: number) {
+  return queryNutritionExposure(support === undefined ? [] : exposureSamples(support), endDay, horizonDays);
+}
+
+function exposureEndDay(support: SeasonalSupportState): number {
+  return support.exposureAsOfDay ?? Math.max(0, ...exposureSamples(support).map(s => s.exposure!.endDay));
+}
+
 // One authoritative translation from physical-support history into nutritional
 // consequences. It never adds support and never reads habitat potential,
 // remembered richness, projected trips, or the legacy hungerPressure field.
 export function deriveCanonicalNutritionState(
   support: SeasonalSupportState | undefined,
 ): CanonicalNutritionState {
-  if (support === undefined) {
+  if (support === undefined || support.recentSamples.length === 0) {
     // UNMEASURED, not starving. `undefined` means the band has not yet completed a
     // physical-food interval (new/daughter/fixture/legacy) — treating that as
     // chronic hunger wrongly punished comfortable bands and daughter bands. It is
@@ -66,8 +95,11 @@ export function deriveCanonicalNutritionState(
     };
   }
 
-  const currentFoodStress = clamp01(support.currentSeasonSupport.foodStress);
-  const recentFoodStress = clamp01(1 - support.rolling4SeasonSupport);
+  const endDay = exposureEndDay(support);
+  const current = querySupportExposure(support, endDay, CURRENT_NUTRITION_DAYS);
+  const recent = querySupportExposure(support, endDay, ANNUAL_NUTRITION_DAYS);
+  const currentFoodStress = clamp01(current.foodStress);
+  const recentFoodStress = clamp01(recent.foodStress);
   const chronicFoodStress = clamp01(
     (support.chronicDeficitStreak / SEASONAL_MEMORY_WINDOW) * 0.58 +
       (support.deficitSeasonsLast8 / SEASONAL_MEMORY_WINDOW) * 0.42,
@@ -79,13 +111,9 @@ export function deriveCanonicalNutritionState(
   // A deadband (`SURPLUS_ONSET`) keeps maintenance (ratio ~1.0) at 0; `SURPLUS_SPAN` sets how
   // far above it reaches full magnitude; the `recoveryRelief` gate requires the surplus to be
   // SUSTAINED (a real recovery streak), so a single good season cannot manufacture growth.
-  // O(1) read of the season-cached uncapped mean raw support. Falls back to the recentSamples
-  // mean only if the cache is absent (audit fixtures / legacy snapshots), then to neutral.
-  const meanRawSupport = support.rolling8SeasonRawSupport
-    ?? (support.recentSamples !== undefined && support.recentSamples.length > 0
-      ? support.recentSamples.reduce((sum, entry) => sum + Math.max(0, entry.rawSupportRatio), 0) /
-          support.recentSamples.length
-      : 1);
+  // Query the bounded physical horizon, preserving unknown absolute legacy quantities.
+  const chronic = querySupportExposure(support, endDay, NUTRITION_HISTORY_DAYS);
+  const meanRawSupport = chronic.pooledSupportRatio ?? chronic.rawSupport;
   const nutritionalSurplus = clamp01(
     clamp01((meanRawSupport - SURPLUS_ONSET) / SURPLUS_SPAN) * recoveryRelief,
   );
@@ -106,35 +134,11 @@ export function deriveCanonicalNutritionState(
   };
 }
 
-// REPEATED-BAND-EXPANSION-FISSION-14 — the ANNUAL nutrition read.
-//
-// `deriveCanonicalNutritionState` above is the SEASONAL read: it answers "how is
-// this band eating RIGHT NOW", which is exactly what movement, pressure, hardship
-// and social readability need. Demography is different: it runs ONCE A YEAR (see
-// `shouldRunAnnualDemography` — spring), and it integrates a whole year of births
-// and deaths. Feeding it the seasonal read made the annual vital rates a sample of
-// ONE season, and because the annual step always lands on the same season, that
-// sample is the SAME phase of the seasonal cycle every year.
-//
-// Measured on the physically richest map2 catchment (CORRECTION-14 baseline): the
-// four seasonal reads of one year were 2.03 / 1.65 / 1.06 / 0.09 raw support ratio,
-// i.e. an annual mean well above demand with one deep lean season — and the annual
-// demographic step read the 0.09 season every single year, for 500 years. Two
-// terms carried that error: `currentFoodStress` (instantaneous) and
-// `recoveryRelief` (a TRAILING streak, which a lean trailing season zeroes, which
-// in turn zeroed `nutritionalSurplus` no matter how good the year was). The other
-// two terms (`recentFoodStress`, `chronicFoodStress`) were already windowed.
-//
-// The annual read replaces exactly those two instantaneous terms with their
-// four-season (one-year) counterparts and changes nothing else:
-//   - currentFoodStress -> mean seasonal food stress across the year
-//   - recoveryRelief    -> share of the year's seasons that met the SAME recovery
-//                          condition the seasonal streak uses
-// It adds no food, changes no yield, demand, coefficient or threshold. A band that
-// is hungry all year still reads a full-year deficit, so deficits stay harmful and
-// severe deficit still declines faster than moderate deficit.
+// Annual demographic read: previous360 completed physical days. Experienced hunger is
+// integrated separately from pooled support; later food cannot repay earlier hungry days.
 export function deriveAnnualNutritionState(
   support: SeasonalSupportState | undefined,
+  currentDay?: number,
 ): CanonicalNutritionState {
   const seasonal = deriveCanonicalNutritionState(support);
 
@@ -142,19 +146,13 @@ export function deriveAnnualNutritionState(
     return seasonal;
   }
 
-  const year = support.recentSamples.slice(-SHORT_WINDOW);
-
-  if (year.length === 0) {
-    return seasonal;
-  }
-
-  const currentFoodStress = clamp01(mean(year.map((entry) => clamp01(entry.foodStress))));
-  const recoveryRelief = clamp01(year.filter(isRecoverySeason).length / year.length);
-  const meanRawSupport = support.rolling8SeasonRawSupport
-    ?? (support.recentSamples.length > 0
-      ? support.recentSamples.reduce((sum, entry) => sum + Math.max(0, entry.rawSupportRatio), 0) /
-          support.recentSamples.length
-      : 1);
+  const endDay = currentDay ?? exposureEndDay(support);
+  const year = querySupportExposure(support, endDay, ANNUAL_NUTRITION_DAYS);
+  if (!year.available) return { ...deriveCanonicalNutritionState(undefined), nutritionStateAvailable: false };
+  const currentFoodStress = clamp01(year.foodStress);
+  const recoveryRelief = clamp01(year.recoveryFraction);
+  const chronic = querySupportExposure(support, endDay, NUTRITION_HISTORY_DAYS);
+  const meanRawSupport = chronic.pooledSupportRatio ?? chronic.rawSupport;
   const nutritionalSurplus = clamp01(
     clamp01((meanRawSupport - SURPLUS_ONSET) / SURPLUS_SPAN) * recoveryRelief,
   );
@@ -195,11 +193,18 @@ export function updateSeasonalSupportState(
   band: Band,
   time: WorldTime,
 ): SeasonalSupportState | undefined {
-  if (carrying === undefined) {
+  if ((carrying === undefined && band.nutritionResidentialInterval === undefined) || isProvisionalSuccessor(band) || getCalendarDay(time) === 0) {
     return previous;
   }
 
-  const support = carrying.perCapitaReturn.supportDebug;
+  const endDay = getCalendarDay(time);
+  const pending = band.nutritionResidentialInterval?.lastAdvancedDay === endDay ? band.nutritionResidentialInterval : undefined;
+  const ledgerTick = Math.ceil(endDay / 90) as TickNumber;
+  const ledger = pending === undefined ? carrying?.perCapitaReturn.supportDebug.humanFoodLedger :
+    deriveHumanFoodSupportLedger(band, pending.demandUnits, ledgerTick, HARVEST_TO_SUPPORT_SCALE, endDay);
+  const rawRatio = ledger?.rawSupportRatio ?? carrying?.perCapitaReturn.supportDebug.rawSupportRatio ?? 0;
+  const support = { rawSupportRatio: rawRatio, clampedSupportRatio: clamp01(rawRatio),
+    deficitRatio: ledger?.foodStress ?? carrying?.perCapitaReturn.supportDebug.deficitRatio ?? 0, humanFoodLedger: ledger };
   // This is a demographic/readability trend, not a second food estimate.  The
   // old version compared two generic habitat-yield projections, so a depleted
   // tile could still look like a food pulse.  Compare the current physical
@@ -222,7 +227,7 @@ export function updateSeasonalSupportState(
     season: time.season,
     rawSupportRatio: support.rawSupportRatio,
     clampedSupportRatio: support.clampedSupportRatio,
-    perCapitaReturn: carrying.perCapitaReturn.perCapitaReturn,
+    perCapitaReturn: pending === undefined ? carrying?.perCapitaReturn.perCapitaReturn ?? 0 : clamp01(rawRatio),
     seasonalModifier,
     foodStress: round2(foodStress),
     waterStress: round2(waterStress),
@@ -236,10 +241,130 @@ export function updateSeasonalSupportState(
     }),
   };
 
-  return recordSupportInterval(previous, sample, band, time, {
-    topSeasonalSupportReasons: getTopSeasonalSupportReasons(carrying, sample),
+  const demand = pending?.demandUnits ?? support.humanFoodLedger?.populationDemand ?? carrying?.populationDemand.adultEquivalentDemand ?? 0;
+  const exposure = makeNutritionExposure("residential", "physical_receipts_90_day_abstraction", [{
+    startDay: pending?.startDay ?? Math.max(0, endDay - 90), endDay,
+    supportUnits: support.humanFoodLedger?.totalUsableSupport ?? support.rawSupportRatio * demand,
+    demandUnits: demand, foodStress: sample.foodStress, waterStress: sample.waterStress,
+    perCapitaReturn: sample.perCapitaReturn, recoveryEligible: isRecoverySeason(sample),
+  }]);
+  const measured = recordSupportInterval(previous, { ...sample, exposure }, band, time, {
+    topSeasonalSupportReasons: carrying === undefined ? ["actual completed residential interval"] : getTopSeasonalSupportReasons(carrying, sample),
     replaceSameTickSample: true,
   });
+  const receipts = readFreshAccumulator(band.seasonalFoodReceipts, ledgerTick);
+  return { ...measured, residentialReceiptCursor: receipts === undefined ? undefined : {
+    periodTick: receipts.periodTick, physicalPlantHarvest: receipts.physicalPlantHarvest,
+    physicalFaunaHarvest: receipts.physicalFaunaHarvest, aquaticHarvest: receipts.aquaticHarvest,
+    transportLoss: receipts.transportLoss, processingLoss: receipts.processingLoss,
+    totalUsableSupport: receipts.totalUsableSupport,
+  } };
+}
+
+/** Integrate actual resident bodies over completed days. Food stays in its receipt owner.
+ * Closing uses the known seasonal measurement abstraction, including partial residential spans.
+ */
+export function advanceResidentialNutritionDemand(world: WorldState, day: number): WorldState {
+  const bands = { ...world.bands };
+  let changed = false;
+  for (const band of Object.values(world.bands)) {
+    if (!isLivingBand(band) || isProvisionalSuccessor(band)) continue;
+    const prior = band.nutritionResidentialInterval;
+    if (prior && prior.lastAdvancedDay >= day) continue;
+    const closedEnd = band.seasonalSupport?.currentSeasonSupport.exposure?.endDay;
+    const base = prior === undefined || closedEnd === prior.lastAdvancedDay
+      ? { startDay: day - 1, lastAdvancedDay: day - 1, demandUnits: 0,
+          receiptBaseline: band.seasonalSupport?.residentialReceiptCursor } : prior;
+    if (base.lastAdvancedDay !== day - 1) throw new NutritionExposureError("invalid_exposure", "unmeasured residential day gap");
+    const demandUnits = Math.max(0, derivePopulationDemand(band).adultEquivalentDemand) / 90;
+    bands[band.id] = { ...band, nutritionResidentialInterval: {
+      ...base, lastAdvancedDay: day, demandUnits: base.demandUnits + demandUnits,
+    } };
+    changed = true;
+  }
+  return changed ? { ...world, bands } : world;
+}
+
+export const residentialNutritionDailyAction: DailyAction = {
+  id: "residential_nutrition_demand", firesOnDayOfSeason: () => true, apply: advanceResidentialNutritionDemand,
+};
+
+export function closeResidentialSupportInterval(band: Band, day: number): Band {
+  const pending = band.nutritionResidentialInterval;
+  if (pending === undefined || pending.lastAdvancedDay <= pending.startDay) return band;
+  if (pending.lastAdvancedDay !== day) throw new NutritionExposureError("invalid_exposure", "residential transition day not measured");
+  const support = updateSeasonalSupportState(band.seasonalSupport, band.carryingCapacity, band, getWorldTimeForDay(day as DayNumber));
+  return { ...band, seasonalSupport: support, nutritionResidentialInterval: undefined,
+    hungerPressure: deriveCanonicalNutritionState(support).foodMovementPressure };
+}
+
+/** Existing aggregate embodied-condition inheritance, now with dated quantities apportioned.
+ * This allocates past group measurements; it is not a food transfer, receipt or stock.
+ */
+export function allocateSupportHistory(support: SeasonalSupportState | undefined, band: Band, share: number,
+  time: WorldTime): SeasonalSupportState | undefined {
+  if (!support) return undefined;
+  if (!Number.isFinite(share) || share <= 0 || share > 1) throw new NutritionExposureError("invalid_exposure", "invalid embodied allocation share");
+  let result: SeasonalSupportState | undefined;
+  for (const sample of exposureSamples(support)) {
+    const e = sample.exposure!;
+    const exposure = makeNutritionExposure("inherited_condition", `allocated_embodied_history:${band.id}`,
+      e.segments.map(s => ({ ...s, rawSupportRatio: segmentRatio(s), supportUnits: s.supportUnits === undefined ? undefined : s.supportUnits * share,
+        demandUnits: s.demandUnits === undefined ? undefined : s.demandUnits * share })), false, e.quantityBasis);
+    result = recordSupportInterval(result, { ...sample, exposure }, band, time, {
+      topSeasonalSupportReasons: ["allocated condition carried by these bodies; no food transferred"], replaceSameTickSample: false,
+    });
+  }
+  return result;
+}
+
+/** Recompose the existing aggregate condition over the SAME lived physical spans.
+ * Returned people's experience is retained without inventing another season. Known quantities
+ * are added from the disjoint allocated groups; experienced stress uses the existing body weights.
+ * Unknown contributors remain explicitly marked, never supplied a fictitious comfortable history.
+ */
+export function mergeSupportHistories(parent: SeasonalSupportState | undefined, successor: SeasonalSupportState | undefined,
+  band: Band, parentPeople: number, successorPeople: number, time: WorldTime): SeasonalSupportState | undefined {
+  if (!parent && !successor) return undefined;
+  const left = parent ? exposureSamples(parent) : [], right = successor ? exposureSamples(successor) : [];
+  const endDay = getCalendarDay(time), startDay = Math.max(0, endDay - NUTRITION_HISTORY_DAYS);
+  const endpoints = [...new Set([startDay, endDay, ...[...left, ...right].flatMap(s =>
+    s.exposure!.segments.flatMap(p => [Math.max(startDay, p.startDay), Math.min(endDay, p.endDay)]))])]
+    .filter(d => d >= startDay && d <= endDay).sort((a, b) => a - b);
+  let result: SeasonalSupportState | undefined;
+  for (let i = 1; i < endpoints.length; i++) {
+    const a = endpoints[i - 1], b = endpoints[i];
+    const at = (samples: readonly SeasonalSupportSample[]) => samples.flatMap(s => {
+      const clipped = clipNutritionExposure(s.exposure!, a, b);
+      return clipped?.segments ?? [];
+    })[0];
+    const l = at(left), r = at(right);
+    if (!l && !r) continue;
+    const lw = l ? parentPeople * (l.knownPopulationFraction ?? 1) : 0;
+    const rw = r ? successorPeople * (r.knownPopulationFraction ?? 1) : 0;
+    const weight = lw + rw;
+    if (weight <= 0) continue;
+    const average = (field: "foodStress" | "waterStress" | "perCapitaReturn") =>
+      ((l?.[field] ?? 0) * lw + (r?.[field] ?? 0) * rw) / weight;
+    const actual = (!l || l.demandUnits !== undefined) && (!r || r.demandUnits !== undefined);
+    const rawRatio = ((l ? segmentRatio(l) : 0) * lw + (r ? segmentRatio(r) : 0) * rw) / weight;
+    const foodStress = average("foodStress"), waterStress = average("waterStress"), perCapitaReturn = average("perCapitaReturn");
+    const knownPopulationFraction = weight / (parentPeople + successorPeople);
+    const segment: NutritionExposureSegment = { startDay: a, endDay: b, knownPopulationFraction,
+      ...(actual ? { supportUnits: (l?.supportUnits ?? 0) + (r?.supportUnits ?? 0), demandUnits: (l?.demandUnits ?? 0) + (r?.demandUnits ?? 0) }
+        : { rawSupportRatio: rawRatio }),
+      foodStress, waterStress, perCapitaReturn,
+      recoveryEligible: knownPopulationFraction === 1 && rawRatio >= .98 && perCapitaReturn >= .48 && foodStress < .32 && waterStress < .42 };
+    const exposure = makeNutritionExposure("merged_condition", `reintegrated_embodied_history:${band.id}:${endDay}`, [segment], false,
+      actual ? "actual" : "legacy_ratio_only");
+    const sample: SeasonalSupportSample = { tick: time.tick, year: time.year, season: time.season,
+      exposure, rawSupportRatio: rawRatio, clampedSupportRatio: clamp01(rawRatio), perCapitaReturn,
+      seasonalModifier: 1, foodStress, waterStress, deficitRatio: clamp01(1 - rawRatio), mode: foodStress > 0 ? "lean" : "neutral" };
+    result = recordSupportInterval(result, sample, band, time, {
+      topSeasonalSupportReasons: ["recomposed lived condition; no additional elapsed day or food transfer"], replaceSameTickSample: false,
+    });
+  }
+  return result === undefined ? undefined : { ...result, residentialReceiptCursor: parent?.residentialReceiptCursor };
 }
 
 /**
@@ -264,36 +389,60 @@ export function recordSupportInterval(
   options: {
     readonly topSeasonalSupportReasons: readonly string[];
     /**
-     * True for the seasonal writer, which runs up to three times per tick and must converge to one
-     * sample per tick. False for interval producers whose intervals are their own unit and may close
-     * more than once inside a season — replacing there would silently delete a real measurement.
+     * Retained call-site compatibility flag. Replacement authority is exact physical interval
+     * and provenance; tick labels never decide which measured time may replace which.
      */
     readonly replaceSameTickSample: boolean;
   },
 ): SeasonalSupportState {
-  const sameTick = options.replaceSameTickSample &&
-    previous !== undefined && Number(previous.lastUpdatedTick) === Number(time.tick);
-  const baseSamples = sameTick ? previous.recentSamples.slice(0, -1) : previous?.recentSamples ?? [];
-  const recentSamples = [...baseSamples, sample].slice(-SEASONAL_MEMORY_WINDOW);
-  const lastSeasonSupport = baseSamples[baseSamples.length - 1];
-  const seasonalHungerStreak = countTrailing(recentSamples, (entry) => isFoodHungry(entry) || isWaterHungry(entry));
-  const chronicDeficitStreak = countTrailing(
-    recentSamples,
-    (entry) => entry.deficitRatio >= 0.16 || entry.rawSupportRatio < 0.88,
-  );
-  const seasonalRecoveryStreak = countTrailing(recentSamples, isRecoverySeason);
-  const last4 = recentSamples.slice(-SHORT_WINDOW);
-  const deficitSeasonsLast4 = last4.filter((entry) => entry.deficitRatio >= 0.12 || entry.rawSupportRatio < 0.92).length;
-  const deficitSeasonsLast8 = recentSamples.filter((entry) => entry.deficitRatio >= 0.12 || entry.rawSupportRatio < 0.92).length;
-  const waterStressSeasonsLast4 = last4.filter((entry) => entry.waterStress >= 0.5).length;
-  const waterStressSeasonsLast8 = recentSamples.filter((entry) => entry.waterStress >= 0.5).length;
-  const rolling4SeasonSupport = round2(mean(last4.map((entry) => entry.clampedSupportRatio)));
-  const rolling8SeasonSupport = round2(mean(recentSamples.map((entry) => entry.clampedSupportRatio)));
-  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — uncapped mean raw support, computed once per season
-  // here so the demographic surplus read is O(1) (see deriveCanonicalNutritionState).
-  const rolling8SeasonRawSupport = round2(mean(recentSamples.map((entry) => Math.max(0, entry.rawSupportRatio))));
-  const rolling4SeasonReturn = round2(mean(last4.map((entry) => entry.perCapitaReturn)));
-  const rolling8SeasonReturn = round2(mean(recentSamples.map((entry) => entry.perCapitaReturn)));
+  const baseSamples = previous === undefined ? [] : exposureSamples(previous);
+  if (sample.exposure === undefined) {
+    // Compatibility for explicitly ordinary historical measurements. Live provisional producers
+    // must supply physical chronology; their tick label is not a duration.
+    const migrated = migrateNutritionExposureHistory([sample], isProvisionalSuccessor(band)
+      ? { kind: "provisional" } : { kind: "ordinary" });
+    if (!migrated.ok) throw new NutritionExposureError(migrated.code, migrated.reason);
+    sample = migrated.samples[0];
+  }
+  if (sample.exposure!.endDay > getCalendarDay(time)) {
+    throw new NutritionExposureError("invalid_exposure", "nutrition measurement is future-dated");
+  }
+  const recentSamples = insertNutritionExposure(baseSamples, sample);
+  const endDay = Math.max(...recentSamples.map(s => s.exposure!.endDay));
+  const latest = recentSamples[recentSamples.length - 1];
+  const lastSeasonSupport = recentSamples[recentSamples.length - 2];
+  const last4 = queryNutritionExposure(recentSamples, endDay, ANNUAL_NUTRITION_DAYS);
+  const last8 = queryNutritionExposure(recentSamples, endDay, NUTRITION_HISTORY_DAYS);
+  const hunger = (s: (typeof last8.segments)[number]): boolean =>
+    Math.max(0, 1 - segmentRatio(s)) >= .1 || s.foodStress >= .42 || segmentRatio(s) < .94 || s.waterStress >= .5;
+  const deficit = (s: (typeof last8.segments)[number]): boolean =>
+    Math.max(0, 1 - segmentRatio(s)) >= .12 || segmentRatio(s) < .92;
+  const daysWhere = (segments: typeof last8.segments, predicate: typeof hunger): number =>
+    segments.reduce((n, s) => n + (predicate(s) ? (s.endDay - s.startDay) * (s.knownPopulationFraction ?? 1) : 0), 0);
+  const seasonalHungerStreak = trailingExposureDays(last8.segments, endDay, hunger) / 90;
+  const chronicDeficitStreak = trailingExposureDays(last8.segments, endDay,
+    s => Math.max(0, 1 - segmentRatio(s)) >= .16 || segmentRatio(s) < .88) / 90;
+  const seasonalRecoveryStreak = trailingExposureDays(last8.segments, endDay, s => s.recoveryEligible && (s.knownPopulationFraction ?? 1) === 1) / 90;
+  const deficitSeasonsLast4 = daysWhere(last4.segments, deficit) / 90;
+  const deficitSeasonsLast8 = daysWhere(last8.segments, deficit) / 90;
+  const waterStressSeasonsLast4 = daysWhere(last4.segments, s => s.waterStress >= .5) / 90;
+  const waterStressSeasonsLast8 = daysWhere(last8.segments, s => s.waterStress >= .5) / 90;
+  const rolling4SeasonSupport = round2(last4.clampedSupport);
+  const rolling8SeasonSupport = round2(last8.clampedSupport);
+  const rolling8SeasonRawSupport = round2(last8.pooledSupportRatio ?? last8.rawSupport);
+  const rolling4SeasonReturn = round2(last4.perCapitaReturn);
+  const rolling8SeasonReturn = round2(last8.perCapitaReturn);
+  // Compatibility readers of currentSeasonSupport receive the current completed day.
+  // Full interval totals remain solely in recentSamples, including the open prefix.
+  const current = queryNutritionExposure(recentSamples, endDay, CURRENT_NUTRITION_DAYS);
+  const rawSupportRatio = current.pooledSupportRatio ?? current.rawSupport;
+  const deficitRatio = clamp01(1 - rawSupportRatio);
+  sample = { ...latest, exposure: clipNutritionExposure(latest.exposure!, endDay - 1, endDay),
+    rawSupportRatio, clampedSupportRatio: current.clampedSupport,
+    perCapitaReturn: current.perCapitaReturn, foodStress: current.foodStress,
+    waterStress: current.waterStress, deficitRatio,
+    mode: classifySeasonalMode({ seasonalModifier: latest.seasonalModifier,
+      foodStress: current.foodStress, waterStress: current.waterStress, deficitRatio, previous }) };
   const hungerClassification = classifyHunger({
     sample,
     deficitSeasonsLast4,
@@ -313,6 +462,8 @@ export function recordSupportInterval(
   });
 
   const baseState: SeasonalSupportState = {
+    exposureVersion: 1,
+    exposureAsOfDay: endDay,
     bandId: band.id,
     lastUpdatedTick: time.tick,
     currentSeasonSupport: sample,
@@ -514,42 +665,15 @@ function makeSeasonalSupportReasonIds(
   return [`reason:seasonal-support:${band.id}:${time.tick}:${classification}` as ReasonId];
 }
 
-function isFoodHungry(sample: SeasonalSupportSample): boolean {
-  return sample.deficitRatio >= 0.1 || sample.foodStress >= 0.42 || sample.rawSupportRatio < 0.94;
-}
-
-function isWaterHungry(sample: SeasonalSupportSample): boolean {
-  return sample.waterStress >= 0.5;
-}
-
-function mean(values: readonly number[]): number {
-  if (values.length === 0) {
-    return 0;
-  }
-
-  return values.reduce((sum, value) => sum + value, 0) / values.length;
-}
-
-function countTrailing(
-  samples: readonly SeasonalSupportSample[],
-  predicate: (sample: SeasonalSupportSample) => boolean,
-): number {
-  let count = 0;
-
-  for (let index = samples.length - 1; index >= 0; index -= 1) {
-    if (!predicate(samples[index])) {
-      break;
-    }
-    count += 1;
-  }
-
-  return count;
-}
-
 function clamp01(value: number): number {
   return Math.max(0, Math.min(1, value));
 }
 
 function round2(value: number): number {
-  return Math.round(value * 100) / 100;
+  // Arithmetic on equivalent duration partitions can straddle an exact decimal half
+  // by a few binary ULPs. Resolve that numerical tie before the existing two-digit view.
+  const scaled = value * 100;
+  const half = Math.round(scaled * 2) / 2;
+  const stable = Math.abs(scaled - half) <= Number.EPSILON * Math.max(1, Math.abs(scaled)) * 8 ? half : scaled;
+  return Math.round(stable) / 100;
 }

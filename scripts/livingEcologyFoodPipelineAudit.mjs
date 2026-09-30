@@ -14,7 +14,7 @@ try {
   const { advanceWorldOneSeason } = await server.ssrLoadModule("/sim/tick/advance.ts");
   const { buildTickContextCache } = await server.ssrLoadModule("/sim/agents/contextCache.ts");
   const { deriveCarryingCapacity } = await server.ssrLoadModule("/sim/agents/carryingCapacity.ts");
-  const { updateSeasonalSupportState } = await server.ssrLoadModule("/sim/agents/seasonalSurvival.ts");
+  const { updateSeasonalSupportState, advanceResidentialNutritionDemand, closeResidentialSupportInterval } = await server.ssrLoadModule("/sim/agents/seasonalSurvival.ts");
   const plant = await server.ssrLoadModule("/sim/agents/plantStock.ts");
   const fauna = await server.ssrLoadModule("/sim/agents/faunaStock.ts");
   const food = await server.ssrLoadModule("/sim/agents/humanFoodSupport.ts");
@@ -114,7 +114,11 @@ try {
     const noReceiptCarrying = deriveCarryingCapacity(world, { ...band, recentIntraSeasonTrips: [] }, cache, carryingInput);
     const positiveCarrying = deriveCarryingCapacity(world, positiveBand, cache, carryingInput);
     if (noReceiptCarrying === undefined || positiveCarrying === undefined) throw new Error("carrying fixture unavailable");
-    const absenceSeasonal = updateSeasonalSupportState(undefined, noReceiptCarrying.state, noFoodBand, world.time);
+    // Day zero has no elapsed hunger. Measure ninety real completed resident days with no
+    // receipts before asking the downstream nutrition owner for deficit exposure.
+    let absenceWorld = { ...world, bands: { [noFoodBand.id]: { ...noFoodBand, seasonalSupport: undefined, carryingCapacity: noReceiptCarrying.state } } };
+    for (let day = 1; day <= 90; day += 1) absenceWorld = advanceResidentialNutritionDemand(absenceWorld, day);
+    const absenceSeasonal = closeResidentialSupportInterval(absenceWorld.bands[noFoodBand.id], 90).seasonalSupport;
 
     const advanced = advanceWorldOneSeason(world);
     const liveReceipts = Object.values(advanced.bands).flatMap((entry) =>

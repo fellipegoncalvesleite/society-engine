@@ -9,7 +9,7 @@
 // tile it left and finds nobody must NOT be reintegrated, must not be retargeted at a position it has
 // no way to know, and must not quietly disappear.
 import { createServer } from "vite";
-import { prepareAndDepart } from "./lib/preparedDeparture.mjs";
+import { prepareContinuationFixtureDeparture as prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -59,10 +59,7 @@ try {
 
   const here = generate.getTile(world, parent.position);
   const dist = (t) => Math.abs(t.coord.x - here.coord.x) + Math.abs(t.coord.y - here.coord.y);
-  const targetTile = Object.keys(parent.knowledge.observedTiles)
-    .map((id) => generate.getTile(world, id))
-    .filter((t) => t !== undefined && passability.isBandPassableDestination(t) && dist(t) >= 4)
-    .sort((a, b) => dist(a) - dist(b) || String(a.id).localeCompare(String(b.id)))[0];
+  const targetTile = bestKnownTargetAtDistance(generate, passability, world, parent, 4);
   if (targetTile === undefined) throw new Error("no known passable target at distance >= 4");
 
   const dayD = Number(world.time.day ?? 0);

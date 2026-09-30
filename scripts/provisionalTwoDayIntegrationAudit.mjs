@@ -14,7 +14,7 @@
 // never been measured: whether a provisional successor placed in a real world is still there, still
 // itself, and still unresolved-free after the real runner has had a full pass at it.
 import { createServer } from "vite";
-import { prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
+import { prepareContinuationFixtureDeparture as prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 

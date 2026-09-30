@@ -17,7 +17,7 @@
 // A reader is NOT classified safe because the tested seed happened to take no action. Every "no
 // change" line is reported next to the control band's line for the same field on the same days.
 import { createServer } from "vite";
-import { prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
+import { prepareContinuationFixtureDeparture, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -64,7 +64,8 @@ try {
   // live provisional group — the only days this audit's contract is about — were very few.
   const admTarget = bestKnownTargetAtDistance(generate, passability, world, parent, 4);
   if (admTarget === undefined) throw new Error("no known passable target at distance >= 4");
-  const departure = prepareAndDepart({
+  // Post-departure admission is the subject; all bounded cohort attempts still use real gates.
+  const departure = prepareContinuationFixtureDeparture({
     prep, seam, world: world, parentId: parent.id, today: dayD,
     lineageId: "LIN-ADM-1", requestedFounders: requested, targetTileId: String(admTarget.id),
     successorBandId: `${parent.id}:provisional:1`,

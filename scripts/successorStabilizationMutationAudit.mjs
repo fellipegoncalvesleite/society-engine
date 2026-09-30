@@ -83,6 +83,7 @@ const baselineServer = await makeServer("baseline");
 let baseline;
 try {
   const modules = await loadSuccessorStabilizationModules(baselineServer);
+  modules.phase2MeasuredFixtures = true; // All canonical gates retained; log the original fixed refusal.
   const warm = warmStabilizationWorld(modules);
   const departure = makeCanonicalStabilizationDeparture(modules, warm);
   const qualifying = buildQualifyingPreReleaseWorld(modules, departure);

@@ -48,6 +48,7 @@ const server = await createServer({
 let output;
 try {
   const modules = await loadSuccessorStabilizationModules(server);
+  modules.phase2MeasuredFixtures = true; // Explicit bounded alternative; frozen whole-integration reproduction keeps its original fixed setup.
   const warm = warmStabilizationWorld(modules);
   const unresolved = makeGenuineUnresolvedFailedReturn(modules, warm);
   const positive = runRegisteredPostReturnContinuation(modules, unresolved);

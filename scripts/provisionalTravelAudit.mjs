@@ -8,7 +8,7 @@
 // The target is chosen from the successor's OWN inherited knowledge at a real distance, because a
 // departure whose target is the tile it is already standing on arrives instantly and proves nothing.
 import { createServer } from "vite";
-import { prepareAndDepart } from "./lib/preparedDeparture.mjs";
+import { prepareContinuationFixtureDeparture as prepareAndDepart, bestKnownTargetAtDistance } from "./lib/preparedDeparture.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -60,10 +60,7 @@ try {
   const dist = (t) => Math.abs(t.coord.x - here.coord.x) + Math.abs(t.coord.y - here.coord.y);
   // A destination the PARENT actually knows, far enough that arriving takes real days, and passable so
   // the journey is not refused at its own endpoint.
-  const targetTile = Object.keys(parent.knowledge.observedTiles)
-    .map((id) => generate.getTile(world, id))
-    .filter((t) => t !== undefined && passability.isBandPassableDestination(t) && dist(t) >= 4)
-    .sort((a, b) => dist(a) - dist(b) || String(a.id).localeCompare(String(b.id)))[0];
+  const targetTile = bestKnownTargetAtDistance(generate, passability, world, parent, 4);
   if (targetTile === undefined) throw new Error("no known passable target at distance >= 4");
 
   const dayD = Number(world.time.day ?? 0);
@@ -105,7 +102,10 @@ try {
     if (pos !== positions[positions.length - 1]) positions.push(pos);
     const phase = b.provisionalSuccessor?.phase ?? null;
     if (phase !== phases[phases.length - 1]) phases.push(phase);
+    // This audit owns outbound travel. Stop at actual arrival recognition so later ordinary movement,
+    // residential receipts and earned stabilization cannot contaminate journey assertions.
     if (arrivedOnDay === null && pos === String(targetTile.id)) arrivedOnDay = day;
+    if (arrivedOnDay !== null && phase === "establishing") break;
   }
   const finalBand = w.bands[succId];
 
@@ -233,6 +233,7 @@ try {
       if (b === undefined) break;
       const pos = String(b.position);
       if (pos !== positions2[positions2.length - 1]) positions2.push(pos);
+      if (pos === String(targetTile.id) && b.provisionalSuccessor?.phase === "establishing") break;
     }
   }
   record(

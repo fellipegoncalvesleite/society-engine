@@ -54,7 +54,7 @@ import { degradeInheritedExploitationSkill } from "./exploitationSkill";
 import { inheritPracticalAdaptationForDaughter } from "./adaptationBoundary";
 import { inheritAdaptiveHumanForDaughter } from "./legacyAdaptiveHumanCompatibility";
 import { deriveDaughterColor } from "./lineageColor";
-import { deriveCanonicalNutritionState, recordSupportInterval } from "./seasonalSurvival";
+import { deriveCanonicalNutritionState, closeResidentialSupportInterval, allocateSupportHistory } from "./seasonalSurvival";
 import { beginProvisionalSeparationCourse } from "./provisionalSeparationCourse";
 import { appendSuccessorDepartureRecord } from "./successorHistory";
 import { getWorldTimeForDay } from "../tick/time";
@@ -62,7 +62,6 @@ import type { FounderDepartureAuthorization } from "./fissionCommitment";
 import type {
   Band,
   ConsumedDepartureProvenance,
-  SeasonalSupportSample,
   SeasonalSupportState,
   SuccessorDepartureRecord,
 } from "./types";
@@ -143,8 +142,8 @@ export type DepartureRefusal =
  * So the samples travel, re-identified, and every derived quantity is REBUILT from them by the one
  * writer rather than copied. What does NOT travel is anything computed from the parent's HEADCOUNT,
  * which is every field the policy grouped this one with. The window is bounded and self-clearing: each
- * interval the successor closes pushes an inherited sample out, so within eight of its own
- * measurements the group's record is entirely its own.
+ * interval advances the retained720-day horizon. Historical quantities are apportioned between
+ * the bodies that separate; their intensive condition is preserved, with no physical food transfer.
  *
  * If the parent has no measured state either, neither does the successor, and the seam refuses the
  * departure rather than inventing a reading.
@@ -153,23 +152,10 @@ function buildOpeningEmbodiedSupport(
   parent: Band,
   successorId: BandId,
   time: WorldTime,
+  successorPeople: number,
 ): SeasonalSupportState | undefined {
-  const parentSupport = parent.seasonalSupport;
-  if (parentSupport === undefined) return undefined;
-  const founderBand: Band = { ...parent, id: successorId };
-  const samples: readonly SeasonalSupportSample[] = parentSupport.recentSamples.length > 0
-    ? parentSupport.recentSamples
-    : [parentSupport.currentSeasonSupport];
-  let state: SeasonalSupportState | undefined;
-  for (const sample of samples) {
-    state = recordSupportInterval(state, sample, founderBand, time, {
-      topSeasonalSupportReasons: ["the condition the founders walked out with"],
-      // Each inherited sample is a distinct lived interval. Replacing on a shared tick would collapse
-      // the whole history into its last entry, which is the relief this function exists to prevent.
-      replaceSameTickSample: false,
-    });
-  }
-  return state;
+  return allocateSupportHistory(parent.seasonalSupport, { ...parent, id: successorId },
+    successorPeople / parent.demography.population, time);
 }
 
 /**
@@ -313,10 +299,11 @@ function measureWorldPopulation(world: WorldState): number {
  */
 export function performAtomicDeparture(request: DepartureRequest): DepartureOutcome {
   const { world, parentId, today } = request;
-  const parent = world.bands[parentId];
-  if (parent === undefined) {
+  const parentRaw = world.bands[parentId];
+  if (parentRaw === undefined) {
     return { ok: false, refusal: "parent_not_found" };
   }
+  let parent = parentRaw;
   if (world.bands[request.successorBandId] !== undefined) {
     return { ok: false, refusal: "successor_band_id_already_exists" };
   }
@@ -520,6 +507,10 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
     return { ok: false, refusal: "departure_authorization_not_live", detail: prepared.authorization.status };
   }
 
+  // Authorization/freshness reads the existing measured condition, exactly as preparation did.
+  // The physical transfer closes the outgoing residential measurement only AFTER those gates.
+  // Closing before the gate would change the state it validates and invalidate its own permit.
+  parent = closeResidentialSupportInterval(parent, today);
   const parentAfterBase: Band = {
     ...parent,
     demography: {
@@ -634,8 +625,13 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
     inheritedCorridorCount: Object.keys(inheritedCorridors).length,
     reasonIds: prepared.commitment.reasonIds.slice(0, 12).map((id) => String(id) as ReasonId),
   };
+  const allocatedParentSupport = allocateSupportHistory(parent.seasonalSupport, parent,
+    totalOf(parentAfterCohorts) / parent.demography.population, departureTime);
   const parentAfter: Band = {
     ...parentAfterBase,
+    seasonalSupport: allocatedParentSupport === undefined ? undefined : {
+      ...allocatedParentSupport, residentialReceiptCursor: parent.seasonalSupport?.residentialReceiptCursor,
+    },
     successorDepartureRecords: appendSuccessorDepartureRecord(parent.successorDepartureRecords, departureRecord),
   };
 
@@ -653,6 +649,7 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
     // ── CURRENT_LINEAGE_PROVENANCE ──
     parentBandId: parent.id,
     provisionalSuccessor: {
+      nutritionUnitVersion: 1,
       phase: successorLifecycle.phase,
       phaseEnteredDay: successorLifecycle.phaseEnteredDay,
       history: successorLifecycle.history,
@@ -733,7 +730,8 @@ export function performAtomicDeparture(request: DepartureRequest): DepartureOutc
     //
     // The window is bounded and self-clearing: each interval the successor closes pushes an inherited
     // sample out, so within eight of its own measurements the record is entirely its own.
-    seasonalSupport: buildOpeningEmbodiedSupport(parent, successorId, departureTime),
+    seasonalSupport: buildOpeningEmbodiedSupport(parent, successorId, departureTime, totalOf(successorCohorts)),
+    nutritionResidentialInterval: undefined,
 
     // ── DEGRADED_OR_PARTIAL_INHERITANCE ──
     knowledge: inheritedKnowledge,

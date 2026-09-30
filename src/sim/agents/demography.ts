@@ -1,3 +1,4 @@
+import { getCalendarDay } from "../tick/time";
 import type {
   Band,
   BandDemography,
@@ -74,6 +75,7 @@ import { getDepletionAdjustedRichness } from "../world/depletion";
 import { getNomadicScaleClass, NOMADIC_MAX_MOBILE_BANDS_WARNING_COUNT } from "./nomadicScale";
 import {
   deriveAnnualNutritionState,
+  querySupportExposure,
   type CanonicalNutritionState,
 } from "./seasonalSurvival";
 import type {
@@ -408,7 +410,7 @@ function computeBandDemography(
   // the single season it happens to land on. The seasonal read is retained for every
   // behavioral consumer (movement, pressure, hardship, social readability); only the
   // annual vital-rate step reads the annual state. See `deriveAnnualNutritionState`.
-  const nutrition = deriveAnnualNutritionState(seasonalSupport);
+  const nutrition = deriveAnnualNutritionState(seasonalSupport, getCalendarDay(world.time));
   const foodTerms = deriveFoodDemographyRateTerms(
     nutrition,
     seasonalSupport,
@@ -725,7 +727,7 @@ function computeBandDemography(
       workingAdults: cohorts.workingAdults,
       elders: cohorts.elders,
       rawSupportRatio: seasonalSupport?.currentSeasonSupport.rawSupportRatio ?? 0,
-      annualMeanRawSupport: getAnnualMeanRawSupport(seasonalSupport),
+      annualMeanRawSupport: getAnnualMeanRawSupport(seasonalSupport, getCalendarDay(world.time)),
       currentFoodStress: nutrition.currentFoodStress,
       recentFoodStress: nutrition.recentFoodStress,
       chronicFoodStress: nutrition.chronicFoodStress,
@@ -2522,21 +2524,12 @@ function hasFissionCooldownElapsed(time: WorldTime, band: Band, population: numb
   return latestPhysicalSeparationTick === undefined || Number(time.tick) - latestPhysicalSeparationTick >= requiredCooldown;
 }
 
-// CORRECTION-14 audit helper: the uncapped mean raw support over the last four
-// seasons — the YEAR the annual demographic step integrates. Read-only; used by
-// the audit record and by the annual nutrition read (see seasonalSurvival.ts).
-function getAnnualMeanRawSupport(support: SeasonalSupportState | undefined): number {
-  const samples = support?.recentSamples;
-
-  if (samples === undefined || samples.length === 0) {
-    return 1;
-  }
-
-  const window = samples.slice(-4);
-
-  return round4(
-    window.reduce((sum, entry) => sum + Math.max(0, entry.rawSupportRatio), 0) / window.length,
-  );
+// Read-only annual audit projection over the previous360 completed physical days.
+// Actual quantities pool; legacy unknown absolute amounts retain duration-weighted ratios.
+function getAnnualMeanRawSupport(support: SeasonalSupportState | undefined, day: number): number {
+  const exposure = querySupportExposure(support, day, 360);
+  // Availability is separately carried by nutritionStateAvailable; zero is no surplus inference.
+  return round4(exposure.pooledSupportRatio ?? exposure.rawSupport);
 }
 
 function getComfortablePopulation(

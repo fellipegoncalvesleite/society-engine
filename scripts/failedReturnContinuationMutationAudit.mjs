@@ -80,6 +80,7 @@ const baselineServer = await makeServer("baseline");
 let baseline;
 try {
   const modules = await loadSuccessorStabilizationModules(baselineServer);
+  modules.phase2MeasuredFixtures = true; // All canonical gates retained; log the original fixed refusal.
   const warm = warmStabilizationWorld(modules);
   const unresolved = makeGenuineUnresolvedFailedReturn(modules, warm);
   const positive = runRegisteredPostReturnContinuation(modules, unresolved);
@@ -396,6 +397,7 @@ try {
     ),
     probe: async (server) => {
       const modules = await loadSuccessorStabilizationModules(server);
+  modules.phase2MeasuredFixtures = true; // Explicit bounded alternative; frozen whole-integration reproduction keeps its original fixed setup.
       return runBlockedPostReturnCourse(modules, baseline.blockedFixture, 40);
     },
   });
@@ -442,6 +444,7 @@ try {
     },
     probe: async (server) => {
       const modules = await loadSuccessorStabilizationModules(server);
+  modules.phase2MeasuredFixtures = true; // Explicit bounded alternative; frozen whole-integration reproduction keeps its original fixed setup.
       const fixture = makeBlockedPostReturnCourse(modules, baseline.warm, {
         successorBandId: "band:failed-return-mutation-blocked",
         lineageId: "LIN-FAILED-RETURN-MUTATION-BLOCKED",
@@ -480,6 +483,7 @@ try {
     ),
     probe: async (server) => {
       const modules = await loadSuccessorStabilizationModules(server);
+  modules.phase2MeasuredFixtures = true; // Explicit bounded alternative; frozen whole-integration reproduction keeps its original fixed setup.
       return runBlockedPostReturnCourse(modules, baseline.blockedFixture, 80);
     },
   });
@@ -516,6 +520,7 @@ try {
     ),
     probe: async (server) => {
       const modules = await loadSuccessorStabilizationModules(server);
+  modules.phase2MeasuredFixtures = true; // Explicit bounded alternative; frozen whole-integration reproduction keeps its original fixed setup.
       return modules.postReturn.advancePostReturnDispositions(
         baseline.knowledgeReadyWorld,
         baseline.knowledgeDecisionDay,
@@ -552,6 +557,7 @@ try {
     ),
     probe: async (server) => {
       const modules = await loadSuccessorStabilizationModules(server);
+  modules.phase2MeasuredFixtures = true; // Explicit bounded alternative; frozen whole-integration reproduction keeps its original fixed setup.
       return modules.lifecycleResolver.resolveProvisionalLifecycles(
         baseline.zeroContinuingWorld,
         baseline.zeroDay,

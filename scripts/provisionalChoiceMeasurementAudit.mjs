@@ -167,12 +167,22 @@ try {
   const staleStamps = trace.filter((t) => t.storedHomewardAvailable !== null && t.storedHomewardDay !== day0 + t.day);
   const isOutboundOrArrivalTrial = (t) => t.phase === "travelling" || t.phase === "establishing";
   const transitionDays = trace.filter((t, i) => i > 0 && t.phase !== trace[i - 1].phase).map((t) => t.day);
-  const settledOffAttempt = trace.filter((t) => !isOutboundOrArrivalTrial(t) && !transitionDays.includes(t.day));
+  const naturalSettledOffAttempt = trace.filter((t) => !isOutboundOrArrivalTrial(t) && !transitionDays.includes(t.day));
+  // Corrected food units can let this reference group graduate before a settled return day.
+  // Exercise clearing explicitly with a stale true observation on a controlled returning band;
+  // the actual travel writer must clear it. This does not claim a natural return occurred.
+  const clearingInput={...dep.world,bands:{...dep.world.bands,[SID]:{...dep.world.bands[SID],
+    provisionalSuccessor:{...dep.world.bands[SID].provisionalSuccessor,phase:'returning',
+      homewardStepFromHereWasAvailable:true,homewardStepObservedOnDay:day0}}}};
+  const clearing=travel.advanceProvisionalTravel(clearingInput,day0+1).world.bands[SID].provisionalSuccessor;
+  const settledOffAttempt=[...naturalSettledOffAttempt,{phase:'returning',day:1,
+    storedHomewardAvailable:clearing.homewardStepFromHereWasAvailable??null,
+    storedHomewardDay:clearing.homewardStepObservedOnDay??null}];
   record("H2b_a_present_observation_was_taken_today",
     "whenever the homeward field carries a value its day stamp is TODAY, and on every settled day the question is not asked the field is cleared rather than left holding an older answer",
     staleStamps.length === 0 && settledOffAttempt.length > 0 && settledOffAttempt.every((t) => t.storedHomewardAvailable === null),
     trace.length > 0 && settledOffAttempt.length > 0,
-    { daysWithAStaleStamp: staleStamps.length, settledOffAttemptDays: settledOffAttempt.length,
+    { naturalSettledOffAttemptDays:naturalSettledOffAttempt.length, controlledStaleTrueClearing:clearing.homewardStepFromHereWasAvailable===undefined, daysWithAStaleStamp: staleStamps.length, settledOffAttemptDays: settledOffAttempt.length,
       settledOffAttemptDaysStillCarryingAValue: settledOffAttempt.filter((t) => t.storedHomewardAvailable !== null).length,
       phaseTransitionDays: transitionDays,
       transitionDayRows: trace.filter((t) => transitionDays.includes(t.day)).map((t) => ({

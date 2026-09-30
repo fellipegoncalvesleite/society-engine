@@ -1,3 +1,5 @@
+import { migrateWorldNutrition } from "../agents/nutritionMigration";
+import { NutritionExposureError } from "../agents/nutritionExposure";
 import type { Band } from "../agents/types";
 import { applyBandDeepHistoryContext } from "../agents/bandHistory";
 import { updateBandsDemographyAndFission } from "../agents/demography";
@@ -110,7 +112,9 @@ export function advanceWorldByDays(
     return world;
   }
 
-  let current = world;
+  const migration = migrateWorldNutrition(world);
+  if (!migration.ok) throw new NutritionExposureError(migration.code, `${migration.bandId}: ${migration.reason}`);
+  let current = migration.world;
   let currentDay = getCalendarDay(current.time);
   const targetDay = currentDay + days;
 

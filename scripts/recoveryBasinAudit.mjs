@@ -48,13 +48,16 @@ try {
   const demographyMod = await server.ssrLoadModule("/sim/agents/demography.ts");
   const survival = await server.ssrLoadModule("/sim/agents/seasonalSurvival.ts");
   const timeMod = await server.ssrLoadModule("/sim/tick/time.ts");
+  const demandAuthority = await server.ssrLoadModule("/sim/agents/carryingCapacity.ts");
   const { updateBandDemography } = demographyMod;
   const { updateSeasonalSupportState } = survival;
   const { getWorldTimeForTick } = timeMod;
 
-  const makeCarrying = (ratio, perCapitaReturn) => {
+  const makeCarrying = (ratio, perCapitaReturn, band) => {
     const foodStress = Math.max(0, Math.min(1, 1 - ratio));
+    const demand=Math.max(1,demandAuthority.derivePopulationDemand(band).adultEquivalentDemand);
     return {
+      populationDemand:{adultEquivalentDemand:demand},
       perCapitaReturn: {
         perCapitaReturn,
         supportDebug: {
@@ -62,7 +65,7 @@ try {
           clampedSupportRatio: Math.min(1, ratio),
           deficitRatio: foodStress,
           perCapitaReturn,
-          humanFoodLedger: { foodStress },
+          humanFoodLedger: { foodStress, populationDemand:demand, totalUsableSupport:ratio*demand },
         },
       },
     };
@@ -105,7 +108,7 @@ try {
     // Warm the nutrition history in the arm's OPENING regime (excluded from measurement).
     const warmRegime = spec.shockYears > 0 ? spec.shockRegime : GOOD;
     for (let s = 0; s < 12; s += 1) {
-      support = updateSeasonalSupportState(support, makeCarrying(warmRegime.ratio, warmRegime.perCapitaReturn), band, getWorldTimeForTick(tick));
+      support = updateSeasonalSupportState(support, makeCarrying(warmRegime.ratio, warmRegime.perCapitaReturn,band), band, getWorldTimeForTick(tick));
       tick += 1;
     }
     band = { ...band, seasonalSupport: support };
@@ -129,7 +132,7 @@ try {
       const inShock = year <= spec.shockYears;
       const regime = inShock ? spec.shockRegime : GOOD;
       for (let s = 0; s < 4; s += 1) {
-        support = updateSeasonalSupportState(support, makeCarrying(regime.ratio, regime.perCapitaReturn), band, getWorldTimeForTick(tick));
+        support = updateSeasonalSupportState(support, makeCarrying(regime.ratio, regime.perCapitaReturn,band), band, getWorldTimeForTick(tick));
         tick += 1;
       }
       const springTick = tick - (tick % 4);

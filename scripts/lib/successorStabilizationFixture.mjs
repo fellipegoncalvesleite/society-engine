@@ -42,6 +42,7 @@ export async function loadSuccessorStabilizationModules(server) {
     viability,
     protoCamps,
     postReturn,
+    nutrition,
   ] = await Promise.all([
     server.ssrLoadModule("/sim/runner/simRunner.ts"),
     server.ssrLoadModule("/sim/tick/advance.ts"),
@@ -71,6 +72,7 @@ export async function loadSuccessorStabilizationModules(server) {
     server.ssrLoadModule("/sim/agents/viability.ts"),
     server.ssrLoadModule("/sim/agents/protoCamps.ts"),
     server.ssrLoadModule("/sim/agents/postReturnContinuation.ts"),
+    server.ssrLoadModule("/sim/agents/seasonalSurvival.ts"),
   ]);
   return {
     runner,
@@ -101,6 +103,7 @@ export async function loadSuccessorStabilizationModules(server) {
     viability,
     protoCamps,
     postReturn,
+    nutrition,
   };
 }
 
@@ -141,6 +144,24 @@ export function makeCanonicalStabilizationDeparture(
     successorBandId,
     splitPressure: 1,
   });
+  if (result.departure.ok !== true && modules.phase2MeasuredFixtures) {
+    const refusals=[{parent:parent.id,target:target.id,refusal:result.departure.refusal,detail:result.departure.detail}];
+    for(const candidate of Object.values(warmWorld.bands).filter(modules.lifecycle.isEstablishedBand).sort((a,b)=>b.demography.population-a.demography.population)){
+      if(candidate.demography.workingAdults<6)continue;
+      const home=warmWorld.tiles[candidate.position];
+      const targets=Object.entries(candidate.knowledge.observedTiles).map(([id,r])=>({t:warmWorld.tiles[id],r}))
+        .filter(x=>x.t&&modules.passability.isBandPassableDestination(x.t)&&Math.abs(x.t.coord.x-home.coord.x)+Math.abs(x.t.coord.y-home.coord.y)>=4)
+        .sort((a,b)=>(b.r.visits??0)-(a.r.visits??0)||(b.r.seasonsObserved?.length??0)-(a.r.seasonsObserved?.length??0)||String(a.t.id).localeCompare(String(b.t.id))).slice(0,15);
+      for(const {t} of targets){
+        const next=prepareAndDepart({prep:modules.preparation,seam:modules.seam,world:warmWorld,parentId:candidate.id,today,lineageId,
+          requestedFounders:STABILIZATION_FIXTURE_FOUNDERS,targetTileId:t.id,successorBandId,splitPressure:1});
+        if(next.departure.ok){console.log(JSON.stringify({phase2MeasuredDeparture:{parent:candidate.id,target:t.id,refusals}}));return {
+          parent:candidate,target:t,departureDay:today,successorId:String(next.departure.successorId),preparation:next.preparation,departure:next.departure,fixtureRefusals:refusals};}
+        refusals.push({parent:candidate.id,target:t.id,refusal:next.departure.refusal,detail:next.departure.detail});
+      }
+    }
+    throw new Error('bounded measured Phase2 setup refused '+JSON.stringify(refusals));
+  }
   if (result.preparation.ok !== true) {
     throw new Error(`stabilization preparation refused: ${result.preparation.refusal} ${result.preparation.detail ?? ""}`);
   }
@@ -166,7 +187,8 @@ export function makeCanonicalStabilizationDeparture(
  * barrier can be perturbed without rewinding a successful transition.
  */
 export function advancePhysicalSuccessorDayWithoutStabilization(modules, world, day) {
-  let current = modules.travel.advanceProvisionalTravel(world, day).world;
+  let current = modules.nutrition.advanceResidentialNutritionDemand(world, day);
+  current = modules.travel.advanceProvisionalTravel(current, day).world;
   current = modules.reintegration.advanceProvisionalReintegrations(current, day).world;
   current = modules.subsistence.advanceProvisionalSubsistence(current, day).world;
   current = modules.returnDecision.advanceProvisionalReturnDecisions(current, day).world;

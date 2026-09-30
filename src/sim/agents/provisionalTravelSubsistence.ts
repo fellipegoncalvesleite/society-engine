@@ -1,3 +1,4 @@
+import { makeNutritionExposure, NutritionExposureError } from "./nutritionExposure";
 /**
  * ROADMAP ITEM 4 — WHAT A WALKING GROUP EATS AND DRINKS.
  *
@@ -50,6 +51,7 @@
  * unit its food arrives in; a walking group's interval is its own, and closing it is what turns "we
  * have not asked" into "we asked, and the answer is bad".
  */
+import { convertUsableRawFoodToSupportUnits } from "./humanFoodSupport";
 import { isProvisionalSuccessor } from "./bandLifecycle";
 import { derivePopulationDemand } from "./carryingCapacity";
 import { deriveCarriedWaterRelief } from "./adaptationBoundary";
@@ -59,6 +61,8 @@ import { getTile } from "../world/generate";
 import { getWorldTimeForDay } from "../tick/time";
 import type {
   Band,
+  NutritionExposureInterval,
+  NutritionExposureSegment,
   FissionLifecycleRecord,
   OpenSubsistenceAssessmentWindow,
   ProvisionalOperationHistory,
@@ -79,7 +83,7 @@ import type { DailyAction } from "./dailyActions";
 // it is reused rather than re-chosen.
 
 /**
- * One worker's day of gathering, in support units.
+ * One worker's day of gathering, in RAW harvest units.
  *
  * PRODUCTION'S OWN MAGNITUDE, not a new one: `buildTripRecord` sizes an ordinary gathering trip's
  * request as `estimatedPeopleCount * 0.035 + yieldConfidence * 0.22 + presenceConfidence * 0.08`. The
@@ -228,7 +232,9 @@ export interface TravelSubsistenceResult {
  * clock. A day is charged exactly once — `lastAdvancedDay` is the guard, so a re-entrant caller or a
  * differently batched step mode cannot feed a group twice or starve it twice.
  */
-export function advanceProvisionalSubsistence(world: WorldState, day: number): TravelSubsistenceResult {
+export function advanceProvisionalSubsistence(world: WorldState, day: number,
+  options?: { readonly reintegrationWithoutHarvest?: boolean },
+): TravelSubsistenceResult {
   const days: TravelSubsistenceDay[] = [];
   const closed: SeasonalSupportSample[] = [];
   let current = world;
@@ -241,13 +247,18 @@ export function advanceProvisionalSubsistence(world: WorldState, day: number): T
     if (!isSubsistencePhase(record.phase)) continue;
     if (Math.round(band.demography.population) <= 0) continue;
 
-    const previous = record.travelSubsistence ?? emptyTravelSubsistence(day);
+    const previous = record.travelSubsistence ?? emptyTravelSubsistence(day - 1);
     // A day may be charged exactly once. Without this a second caller on the same day would take
     // twice from the same patch and credit the take twice.
-    if (previous.daysElapsed > 0 && previous.lastAdvancedDay >= day) continue;
+    if (previous.lastAdvancedDay >= day) continue;
+    if (previous.lastAdvancedDay !== day - 1) throw new NutritionExposureError("invalid_exposure", "unmeasured provisional day gap");
 
     const live = bands[String(band.id)] ?? band;
-    const split = deriveTravelEffortSplit(live);
+    const normalSplit = deriveTravelEffortSplit(live);
+    // The existing reunion-before-foraging order grants no return-day extraction. Those bodies
+    // still lived the completed day: measure its demand/water explicitly before their transfer.
+    const split = options?.reintegrationWithoutHarvest
+      ? { ...normalSplit, gatheringWorkers: 0, gatherShare: 0 } : normalSplit;
     const demandUnits = deriveTravelDailyDemand(live);
     const tile = getTile(current, live.position);
 
@@ -298,6 +309,7 @@ export function advanceProvisionalSubsistence(world: WorldState, day: number): T
       requestedUnits,
       harvestedUnits,
       usableUnits,
+      supportUnits: convertUsableRawFoodToSupportUnits(usableUnits),
       depletionApplied,
       demandUnits,
       waterStress: round4(waterStress),
@@ -313,7 +325,7 @@ export function advanceProvisionalSubsistence(world: WorldState, day: number): T
       lastAdvancedDay: day,
       daysElapsed: previous.daysElapsed + 1,
       demandUnits: round4(previous.demandUnits + demandUnits),
-      supportUnits: round4(previous.supportUnits + usableUnits),
+      supportUnits: round4(previous.supportUnits + convertUsableRawFoodToSupportUnits(usableUnits)),
       harvestUnits: round4(previous.harvestUnits + harvestedUnits),
       processingLossUnits: round4(previous.processingLossUnits + Math.max(0, harvestedUnits - usableUnits)),
       depletionApplied: round4(previous.depletionApplied + depletionApplied),
@@ -329,11 +341,19 @@ export function advanceProvisionalSubsistence(world: WorldState, day: number): T
 
     // ── close the interval when its bound expires ──
     const shouldClose = advanced.daysElapsed >= TRAVEL_SUPPORT_INTERVAL_DAYS;
-    let seasonalSupport: SeasonalSupportState | undefined = live.seasonalSupport;
+    const previousExposure = live.seasonalSupport?.recentSamples[live.seasonalSupport.recentSamples.length - 1]?.exposure;
+    const prefix = previousExposure?.open && previousExposure.startDay === advanced.intervalStartDay
+      ? previousExposure.segments : [];
+    const exposure = makeNutritionExposure("provisional", "actual_daily_travel_subsistence",
+      [...prefix, travelDayExposure(dayRecord)], true);
+    let seasonalSupport: SeasonalSupportState | undefined = recordSupportInterval(live.seasonalSupport,
+      travelExposureSample(exposure, day), live, getWorldTimeForDay(day as DayNumber), {
+        topSeasonalSupportReasons: ["actual daily travel subsistence"], replaceSameTickSample: false,
+      });
     let subsistence = advanced;
     let closedSample: SeasonalSupportSample | undefined;
     if (shouldClose) {
-      const closure = closeTravelSupportInterval(live, advanced, day);
+      const closure = closeTravelSupportInterval({ ...live, seasonalSupport }, advanced, day);
       seasonalSupport = closure.support;
       subsistence = closure.next;
       closedSample = closure.sample;
@@ -349,6 +369,7 @@ export function advanceProvisionalSubsistence(world: WorldState, day: number): T
       hungerPressure: deriveTravelHunger({ ...live, seasonalSupport }, subsistence),
       provisionalSuccessor: {
         ...record,
+        nutritionUnitVersion: 1,
         travelSubsistence: subsistence,
         // The same physically charged day also advances bounded descriptive history. This history has
         // no attempt or lifecycle authority; every living subsistence phase is measured alike.
@@ -532,7 +553,7 @@ export function advanceOperationHistory(
         ? [...open.tileIdsWithAnyPhysicalTake, day.tileId]
         : open.tileIdsWithAnyPhysicalTake,
     days: open.days + 1,
-    supportUnits: round4(open.supportUnits + day.usableUnits),
+    supportUnits: round4(open.supportUnits + convertUsableRawFoodToSupportUnits(day.usableUnits)),
     demandUnits: round4(open.demandUnits + day.demandUnits),
     daysWithAnyPhysicalTake: open.daysWithAnyPhysicalTake + (hadPhysicalTake ? 1 : 0),
     waterStressDaySum: round4(open.waterStressDaySum + day.waterStress),
@@ -560,7 +581,7 @@ function openAssessmentWindowAt(
     tileIdsWithAnyPhysicalTake: hadPhysicalTake ? [day.tileId] : [],
     startDay: day.day,
     days: 1,
-    supportUnits: round4(day.usableUnits),
+    supportUnits: round4(convertUsableRawFoodToSupportUnits(day.usableUnits)),
     demandUnits: round4(day.demandUnits),
     daysWithAnyPhysicalTake: hadPhysicalTake ? 1 : 0,
     waterStressDaySum: round4(day.waterStress),
@@ -577,43 +598,52 @@ function openAssessmentWindowAt(
  * real demand is a ratio of zero, which is a food stress of one — the group is starving, and that is a
  * measurement rather than a penalty.
  */
+export function travelDayExposure(day: TravelSubsistenceDay): NutritionExposureSegment {
+  const supportUnits = convertUsableRawFoodToSupportUnits(day.usableUnits);
+  const ratio = supportUnits / day.demandUnits;
+  const foodStress = clamp01(1 - ratio);
+  const perCapitaReturn = day.gatheringWorkers <= 0 ? 0 : clamp01(day.usableUnits / TRAVEL_GATHER_PER_WORKER_DAY);
+  return { startDay: day.day - 1, endDay: day.day, supportUnits, demandUnits: day.demandUnits,
+    foodStress, waterStress: day.waterStress, perCapitaReturn,
+    recoveryEligible: ratio >= .98 && perCapitaReturn >= .48 && foodStress < .32 && day.waterStress < .42 };
+}
+
+export function travelExposureSample(exposure: NutritionExposureInterval, day: number): SeasonalSupportSample {
+  const time = getWorldTimeForDay(day as DayNumber);
+  const rawSupportRatio = (exposure.supportUnits ?? 0) / (exposure.demandUnits ?? 1);
+  const foodStress = exposure.foodStressDays / exposure.durationDays;
+  const waterStress = exposure.waterStressDays / exposure.durationDays;
+  const perCapitaReturn = exposure.segments.reduce((n, s) => n + (s.endDay - s.startDay) * s.perCapitaReturn, 0) / exposure.durationDays;
+  return { tick: time.tick, year: time.year, season: time.season, exposure,
+    rawSupportRatio: round4(rawSupportRatio), clampedSupportRatio: clamp01(rawSupportRatio),
+    perCapitaReturn, seasonalModifier: 1, foodStress, waterStress, deficitRatio: clamp01(1 - rawSupportRatio),
+    mode: waterStress >= TRAVEL_NO_WATER_STRESS && waterStress > foodStress ? "dry" : rawSupportRatio >= 1 ? "neutral" : "lean" };
+}
+
 export function closeTravelSupportInterval(
   band: Band,
   subsistence: TravelSubsistenceState,
   day: number,
 ): { readonly support: SeasonalSupportState; readonly sample: SeasonalSupportSample; readonly next: TravelSubsistenceState } {
-  const time = getWorldTimeForDay(day as DayNumber);
-  const demand = Math.max(0.0001, subsistence.demandUnits);
-  const rawSupportRatio = round4(subsistence.supportUnits / demand);
-  const waterStress = subsistence.daysElapsed <= 0
-    ? 0
-    : round4(clamp01(subsistence.waterStressDaySum / subsistence.daysElapsed));
-  const sample: SeasonalSupportSample = {
-    tick: time.tick,
-    year: time.year,
-    season: time.season,
-    rawSupportRatio,
-    clampedSupportRatio: clamp01(rawSupportRatio),
-    // What one worker-day of gathering actually returned, on the same 0..1 scale the residential
-    // per-capita return uses. It is measured, not projected.
-    perCapitaReturn: clamp01(
-      subsistence.gatheringDays <= 0
-        ? 0
-        : subsistence.supportUnits / (subsistence.gatheringDays * TRAVEL_GATHER_PER_WORKER_DAY),
-    ),
-    seasonalModifier: 1,
-    foodStress: clamp01(1 - rawSupportRatio),
-    waterStress,
-    deficitRatio: clamp01(1 - rawSupportRatio),
-    // The existing seasonal vocabulary, used for what it already means. `dry` when the binding
-    // constraint was water rather than food, so a group that starved and a group that could not drink
-    // are not filed under one word.
-    mode: waterStress >= TRAVEL_NO_WATER_STRESS && waterStress > clamp01(1 - rawSupportRatio)
-      ? "dry"
-      : rawSupportRatio >= 1
-        ? "neutral"
-        : "lean",
-  };
+  const endDay = subsistence.lastAdvancedDay;
+  if (day < endDay || endDay - subsistence.intervalStartDay !== subsistence.daysElapsed || subsistence.daysElapsed <= 0) {
+    throw new NutritionExposureError("invalid_exposure", "travel closure chronology disagrees with measured days");
+  }
+  const time = getWorldTimeForDay(endDay as DayNumber);
+  const existing = band.seasonalSupport?.recentSamples[band.seasonalSupport.recentSamples.length - 1]?.exposure;
+  let exposure: NutritionExposureInterval;
+  if (existing?.open && existing.producer === "provisional" && existing.startDay === subsistence.intervalStartDay && existing.endDay === endDay) {
+    exposure = makeNutritionExposure(existing.producer, existing.provenance, existing.segments);
+  } else {
+    const days = subsistence.recentDays.filter(d => d.day > subsistence.intervalStartDay && d.day <= endDay);
+    if (days.length !== subsistence.daysElapsed) throw new NutritionExposureError("unsupported_nutrition_migration", "travel closure lacks retained daily chronology");
+    exposure = makeNutritionExposure("provisional", "actual_daily_travel_subsistence", days.map(travelDayExposure));
+  }
+  if (Math.abs((exposure.supportUnits ?? 0) - subsistence.supportUnits) > 1e-7 ||
+      Math.abs((exposure.demandUnits ?? 0) - subsistence.demandUnits) > 1e-7) {
+    throw new NutritionExposureError("invalid_exposure", "travel aggregate units disagree with exposure");
+  }
+  const sample = travelExposureSample(exposure, endDay);
   const support = recordSupportInterval(band.seasonalSupport, sample, band, time, {
     topSeasonalSupportReasons: [
       `travel interval of ${subsistence.daysElapsed} days`,
@@ -627,7 +657,7 @@ export function closeTravelSupportInterval(
   return {
     support,
     sample,
-    next: { ...emptyTravelSubsistence(day), closedIntervals: subsistence.closedIntervals + 1 },
+    next: { ...emptyTravelSubsistence(endDay), closedIntervals: subsistence.closedIntervals + 1 },
   };
 }
 

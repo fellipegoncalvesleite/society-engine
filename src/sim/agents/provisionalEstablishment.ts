@@ -1,3 +1,4 @@
+import { convertUsableRawFoodToSupportUnits } from "./humanFoodSupport";
 /**
  * ROADMAP ITEM 4 — DESCRIPTIVE EARLY-ESTABLISHMENT MEASUREMENT.
  *
@@ -252,7 +253,7 @@ export function advanceProvisionalEstablishment(world: WorldState, today: number
       // the patch's own processing loss; `demandUnits` is what these bodies needed for that day. Both
       // are charged only on days actually lived here, so the ratio below cannot contain a single unit
       // the group did not earn at this site.
-      supportUnitsAtSite: round4(base.supportUnitsAtSite + (livedToday ? todayRecord.usableUnits : 0)),
+      supportUnitsAtSite: round4(base.supportUnitsAtSite + (livedToday ? convertUsableRawFoodToSupportUnits(todayRecord.usableUnits) : 0)),
       demandUnitsAtSite: round4(base.demandUnitsAtSite + (livedToday ? todayRecord.demandUnits : 0)),
     };
 

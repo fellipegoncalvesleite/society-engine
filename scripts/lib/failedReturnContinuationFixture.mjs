@@ -8,6 +8,25 @@ const replaceBand = (world, bandId, change) => ({
   bands: { ...world.bands, [bandId]: change(world.bands[bandId]) },
 });
 
+/** Controlled timer fixture: measure every elapsed day through the physical food owner.
+ * Decisions remain isolated until their named probe; no historical sample is fabricated.
+ */
+function measureWaitingThrough(modules, world, endDay) {
+  let current = world;
+  for (let day = Number(world.time.day) + 1; day <= endDay; day += 1) {
+    current = modules.nutrition.advanceResidentialNutritionDemand(current, day);
+    current = modules.subsistence.advanceProvisionalSubsistence(current, day).world;
+    current = { ...current, time: modules.time.getWorldTimeForDay(day) };
+    if (day % 90 === 0) current = closeMeasuredResidents(modules, current, day);
+  }
+  return current;
+}
+function closeMeasuredResidents(modules, world, day) {
+  return { ...world, bands: Object.fromEntries(Object.entries(world.bands).map(([id, band]) =>
+    [id, band.nutritionResidentialInterval?.lastAdvancedDay === day
+      ? modules.nutrition.closeResidentialSupportInterval(band, day) : band])) };
+}
+
 /**
  * Build the exact living debt through production transitions: depart, walk, arrive, let the bounded
  * establishment action fail, enter return, physically walk home, find the moved parent absent, and
@@ -36,6 +55,7 @@ export function makeGenuineUnresolvedFailedReturn(modules, warmWorld, {
   if (establishingDay === undefined) throw new Error("failed-return fixture never physically arrived");
 
   const failureDay = establishingDay + modules.kernel.ESTABLISHMENT_MAX_DAYS;
+  world = measureWaitingThrough(modules, world, failureDay);
   let resolved = modules.lifecycleResolver.resolveProvisionalLifecycles(world, failureDay);
   world = { ...resolved.world, time: modules.time.getWorldTimeForDay(failureDay) };
   if (world.bands[departure.successorId].provisionalSuccessor.phase !== "failed_early") {
@@ -44,6 +64,7 @@ export function makeGenuineUnresolvedFailedReturn(modules, warmWorld, {
   trace.push({ day: failureDay, phase: "failed_early", position: String(world.bands[departure.successorId].position) });
 
   const returnDay = failureDay + modules.kernel.FAILED_EARLY_MAX_DAYS;
+  world = measureWaitingThrough(modules, world, returnDay);
   resolved = modules.lifecycleResolver.resolveProvisionalLifecycles(world, returnDay);
   world = { ...resolved.world, time: modules.time.getWorldTimeForDay(returnDay) };
   const returning = world.bands[departure.successorId];
@@ -86,9 +107,13 @@ export function makeGenuineUnresolvedFailedReturn(modules, warmWorld, {
   for (let offset = 1; offset <= modules.kernel.RETURN_MAX_DAYS; offset += 1) {
     const day = returnDay + offset;
     const before = world.bands[departure.successorId];
+    world = modules.nutrition.advanceResidentialNutritionDemand(world, day);
     const moved = modules.travel.advanceProvisionalTravel(world, day);
     world = moved.world;
     world = modules.reintegration.advanceProvisionalReintegrations(world, day).world;
+    world = modules.subsistence.advanceProvisionalSubsistence(world, day).world;
+    world = { ...world, time: modules.time.getWorldTimeForDay(day) };
+    if (day % 90 === 0) world = closeMeasuredResidents(modules, world, day);
     const after = world.bands[departure.successorId];
     if (String(after.position) !== String(previous)) {
       const from = modules.generate.getTile(world, previous);
@@ -117,6 +142,7 @@ export function makeGenuineUnresolvedFailedReturn(modules, warmWorld, {
   });
 
   const unresolvedDay = returnDay + modules.kernel.RETURN_MAX_DAYS;
+  world = measureWaitingThrough(modules, world, unresolvedDay);
   resolved = modules.lifecycleResolver.resolveProvisionalLifecycles(world, unresolvedDay);
   world = { ...resolved.world, time: modules.time.getWorldTimeForDay(unresolvedDay) };
   const unresolved = world.bands[departure.successorId];
@@ -161,14 +187,14 @@ export function runRegisteredPostReturnContinuation(modules, fixture, maxDays = 
       throw new Error(`post-return continuation left its path at ${band?.provisionalSuccessor?.phase ?? "absent"}`);
     }
   }
-  throw new Error(`post-return continuation did not establish within ${maxDays} days`);
+  throw new Error(`post-return continuation did not establish within ${maxDays} days: ${JSON.stringify({trace, phase: world.bands[fixture.successorId].provisionalSuccessor.phase, commitment: world.bands[fixture.successorId].provisionalSuccessor.postReturnCommitment, evidence: modules.postReturn.derivePostReturnIndependentOperationEvidence?.(world.bands[fixture.successorId], Number(world.time.day))})}`);
 }
 
 function manhattan(left, right) {
   return Math.abs(left.coord.x - right.coord.x) + Math.abs(left.coord.y - right.coord.y);
 }
 
-function makeTileDry(world, tileId) {
+export function makeTileDry(world, tileId) {
   return {
     ...world,
     tiles: {
@@ -182,7 +208,7 @@ function makeTileDry(world, tileId) {
 }
 
 /** Physically exhaust every materialized food patch at one tile through the production stock owner. */
-function exhaustTileFood(modules, world, tileId, day) {
+export function exhaustTileFood(modules, world, tileId, day) {
   let current = world;
   for (let attempt = 0; attempt < 8; attempt += 1) {
     const tile = modules.generate.getTile(current, tileId);
@@ -210,8 +236,7 @@ function commitObservedCourse(modules, unresolved) {
   world = exhaustTileFood(modules, world, initial.position, unresolved.unresolvedDay);
   for (let offset = 1; offset <= modules.postReturn.POST_RETURN_DELIBERATION_MIN_DAYS; offset += 1) {
     const day = unresolved.unresolvedDay + offset;
-    world = modules.subsistence.advanceProvisionalSubsistence(world, day).world;
-    world = { ...world, time: modules.time.getWorldTimeForDay(day) };
+    world = measureWaitingThrough(modules, world, day);
   }
   const decisionDay = unresolved.unresolvedDay + modules.postReturn.POST_RETURN_DELIBERATION_MIN_DAYS;
   const decisionReadyWorld = world;
@@ -416,6 +441,7 @@ export function runFailedGroundAfterArrival(modules, warmWorld, options = {}, ma
 
   for (let offset = 1; offset <= maxDays; offset += 1) {
     const day = fixture.decisionDay + offset;
+    world = modules.nutrition.advanceResidentialNutritionDemand(world, day);
     world = modules.travel.advanceProvisionalTravel(world, day).world;
     world = modules.reintegration.advanceProvisionalReintegrations(world, day).world;
     world = modules.subsistence.advanceProvisionalSubsistence(world, day).world;

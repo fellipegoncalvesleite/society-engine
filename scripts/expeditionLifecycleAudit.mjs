@@ -45,16 +45,19 @@ try {
   // supposed to protect, and it had been failing since `4a272e5` without being noticed, because a
   // verification pass ran the Item 4 suites and not this one.
   //
-  // The PROPERTY is what this check is for: the two Item 3 actions exist, in that order, ahead of
-  // everything registered later, and every entry is a real applicable action. A new action appended by
-  // a later item is not a regression; one that displaces trips or expeditions is.
+  // Phase2 adds two explicit daily prerequisites: refresh dated movement fatigue before a trip
+  // reads pace, then measure residential demand after physical work/returns and before transitions.
+  // Preserve trips-before-expeditions and validate the new owner ordering rather than retaining
+  // the old absolute indexes, which would reject the authorized fatigue refresh itself.
   const actionIds = (registry.DEFAULT_DAILY_ACTIONS ?? []).map((action) => action?.id);
   const registryOk =
     Array.isArray(registry.DEFAULT_DAILY_ACTIONS) &&
-    registry.DEFAULT_DAILY_ACTIONS.length >= 2 &&
+    registry.DEFAULT_DAILY_ACTIONS.length >= 4 &&
     registry.DEFAULT_DAILY_ACTIONS.every((action) => typeof action?.apply === "function") &&
-    actionIds[0] === "intra-season-trips" &&
-    actionIds[1] === "expeditions" &&
+    actionIds[0] === "movement_fatigue_refresh" &&
+    actionIds[1] === "intra-season-trips" &&
+    actionIds[2] === "expeditions" &&
+    actionIds[3] === "residential_nutrition_demand" &&
     new Set(actionIds).size === actionIds.length;
 
   // §1 / SCALE-1: the split is physical round-trip time plus on-site work, never a tile budget.

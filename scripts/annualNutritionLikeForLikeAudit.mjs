@@ -20,7 +20,7 @@
 // WHAT THIS AUDIT DOES INSTEAD. A like-for-like reconstruction. It harvests REAL
 // production `seasonalSupport` states from a live run, and for each one:
 //
-//   1. measures annual mean `currentFoodStress` over the SAME four intended samples;
+//   1. measures annual mean `currentFoodStress` over the SAME previous360 completed physical days;
 //   2. measures annual mean raw support ratio over those samples;
 //   3. measures the recovery share over those samples (the production predicate);
 //   4. measures nutritional surplus over those samples;
@@ -29,7 +29,7 @@
 //
 // and proves
 //
-//     stored annual nutrition output == exact reconstruction from the same four samples
+//     stored annual nutrition output == exact reconstruction from the same physical-day exposure
 //
 // term by term, to exact float equality after the production's own rounding.
 //
@@ -52,7 +52,7 @@ const SURPLUS_ONSET = 1.12;
 const SURPLUS_SPAN = 0.6;
 
 const clamp01 = (v) => Math.max(0, Math.min(1, v));
-const round2 = (v) => Math.round(v * 100) / 100;
+const round2 = (v) => Math.floor((Math.round(v * 1e12) + 5e9) / 1e10) / 100;
 const mean = (xs) => (xs.length === 0 ? 0 : xs.reduce((s, v) => s + v, 0) / xs.length);
 const r3 = (v) => Math.round(v * 1000) / 1000;
 
@@ -60,73 +60,53 @@ const r3 = (v) => Math.round(v * 1000) / 1000;
 const isRecoverySeason = (e) =>
   e.rawSupportRatio >= 0.98 && e.perCapitaReturn >= 0.48 && e.foodStress < 0.32 && e.waterStress < 0.42;
 
-/**
- * INDEPENDENT reconstruction of the annual nutrition state from a seasonalSupport
- * snapshot. Mirrors seasonalSurvival.deriveAnnualNutritionState EXACTLY, including
- * which operands are rounded: `currentFoodStress` and `recoveryRelief` enter the
- * composite UNROUNDED (they are locals), while `recentFoodStress` and
- * `chronicFoodStress` enter ROUNDED (they come off the seasonal return object).
- * Reproducing that asymmetry is the whole point of a like-for-like check.
- */
+// Independent decimal oracle: the production stress measurements are bounded decimal
+// values. Sum their represented 12-decimal units as exact safe integers, avoiding a daily
+// accumulation artifact at e.g. .315. This does not call the production aggregation helper.
+const decimalTotal = (values) => values.reduce((n,value)=>n+Math.round(value*1e12),0)/1e12;
+// Independent physical-day expansion: no production exposure query or counters are called.
 function reconstructAnnualNutrition(support) {
-  // --- seasonal terms (deriveCanonicalNutritionState) ---
-  const seasonalRecentFoodStress = round2(clamp01(1 - support.rolling4SeasonSupport));
-  const seasonalChronicFoodStress = round2(
-    clamp01(
-      (support.chronicDeficitStreak / SEASONAL_MEMORY_WINDOW) * 0.58 +
-        (support.deficitSeasonsLast8 / SEASONAL_MEMORY_WINDOW) * 0.42,
-    ),
-  );
-
-  // --- the four intended samples ---
-  const year = (support.recentSamples ?? []).slice(-SHORT_WINDOW);
-
-  if (year.length === 0) {
-    return undefined;
+  const end = support.exposureAsOfDay;
+  const days = [];
+  for (const sample of support.recentSamples) for (const segment of sample.exposure.segments) {
+    for (let day = segment.startDay; day < segment.endDay; day++) {
+      if (day < end - 720 || day >= end) continue;
+      const fraction = segment.knownPopulationFraction ?? 1;
+      const duration = segment.endDay - segment.startDay;
+      days.push({day, fraction, stress:segment.foodStress, recovery:segment.recoveryEligible,
+        demand:segment.demandUnits === undefined ? undefined : segment.demandUnits/duration,
+        support:segment.supportUnits === undefined ? undefined : segment.supportUnits/duration,
+        ratio:Number((segment.rawSupportRatio ?? segment.supportUnits/segment.demandUnits).toPrecision(14)),
+        water:segment.waterStress});
+    }
   }
-
-  // (1) annual mean currentFoodStress
-  const currentFoodStress = clamp01(mean(year.map((e) => clamp01(e.foodStress))));
-  // (3) recovery share over the same four samples
-  const recoveryRelief = clamp01(year.filter(isRecoverySeason).length / year.length);
-  // (2) annual mean raw support ratio (production reads the cached rolling8 first)
-  const meanRawSupport =
-    support.rolling8SeasonRawSupport ??
-    ((support.recentSamples ?? []).length > 0
-      ? support.recentSamples.reduce((s, e) => s + Math.max(0, e.rawSupportRatio), 0) /
-        support.recentSamples.length
-      : 1);
-  // (4) nutritional surplus over the same four samples
-  const nutritionalSurplus = clamp01(clamp01((meanRawSupport - SURPLUS_ONSET) / SURPLUS_SPAN) * recoveryRelief);
-  // (6) the composite, reconstructed from the exact components
-  const foodDemographicPressure = round2(
-    clamp01(
-      currentFoodStress * 0.38 +
-        seasonalRecentFoodStress * 0.26 +
-        seasonalChronicFoodStress * 0.48 -
-        recoveryRelief * 0.14,
-    ),
-  );
-
-  return {
-    currentFoodStress: round2(currentFoodStress),
-    recentFoodStress: seasonalRecentFoodStress,
-    chronicFoodStress: seasonalChronicFoodStress,
-    recoveryRelief: round2(recoveryRelief),
-    nutritionalSurplus: round2(nutritionalSurplus),
-    foodDemographicPressure,
-    // measurement-only extras (NOT part of the stored state)
-    _sampleCount: year.length,
-    _annualMeanRawSupport: meanRawSupport,
-    _annualMeanFoodStressRaw: currentFoodStress,
-  };
+  const year=days.filter(d=>d.day>=end-360), weight=xs=>xs.reduce((n,d)=>n+d.fraction,0);
+  if(!year.length)return undefined;
+  const weighted=(xs,fn)=>decimalTotal(xs.map(d=>d.fraction*fn(d)))/weight(xs);
+  const currentFoodStress=weighted(year,d=>d.stress), recoveryRelief=weighted(year,d=>d.recovery?1:0);
+  const allActual=days.every(d=>d.demand!==undefined && d.fraction===1);
+  const meanRawSupport=allActual ? days.reduce((n,d)=>n+d.support,0)/days.reduce((n,d)=>n+d.demand,0) : weighted(days,d=>d.ratio);
+  const deficitDays=days.reduce((n,d)=>n+(Math.max(0,1-d.ratio)>=.12||d.ratio<.92?d.fraction:0),0);
+  let trailing=0,cursor=end;
+  for(const d of days.slice().sort((a,b)=>b.day-a.day)){
+    if(d.day!==cursor-1||!(Math.max(0,1-d.ratio)>=.16||d.ratio<.88))break;
+    trailing+=d.fraction;cursor=d.day;
+  }
+  const chronicFoodStress=round2(clamp01(trailing/720*.58+deficitDays/720*.42));
+  const recentFoodStress=round2(currentFoodStress);
+  return { currentFoodStress:round2(currentFoodStress), recentFoodStress, chronicFoodStress,
+    recoveryRelief:round2(recoveryRelief),
+    nutritionalSurplus:round2(clamp01(clamp01((meanRawSupport-SURPLUS_ONSET)/SURPLUS_SPAN)*recoveryRelief)),
+    foodDemographicPressure:round2(clamp01(currentFoodStress*.38+recentFoodStress*.26+chronicFoodStress*.48-recoveryRelief*.14)),
+    _sampleCount:year.length,_annualMeanRawSupport:meanRawSupport,_annualMeanFoodStressRaw:currentFoodStress };
 }
 
 const server = await createServer({
   root: `${process.cwd()}/src`,
   configFile: false,
   appType: "custom",
-  server: { middlewareMode: true },
+  cacheDir: `node_modules/.vite-annual-${process.pid}`,
+  server: { middlewareMode: true, hmr:false, watch:null, ws:false },
   logLevel: "error",
 });
 
@@ -144,7 +124,7 @@ try {
   const comparisons = [];
   const perSeed = [];
 
-  for (const s of SEEDS) {
+  for (const s of SEEDS.filter(s => !process.argv.includes("--seed-label") || s.label === process.argv[process.argv.indexOf("--seed-label") + 1])) {
     let world = runner.initSimWorld({ kind: s.map }, s.seed);
 
     if (s.tile !== undefined) {
@@ -158,7 +138,7 @@ try {
     // Harvest real production seasonalSupport states across a long horizon. Every
     // spring the annual demographic step runs; we compare the annual read on the
     // SAME support object the production step would consume.
-    for (let year = 1; year <= 120; year += 1) {
+    for (let year = 1; year <= Number(process.argv.includes("--years") ? process.argv[process.argv.indexOf("--years") + 1] : 120); year += 1) {
       for (let season = 0; season < 4; season += 1) {
         world = runner.stepSim(world, 1, "seasonal");
 
@@ -176,7 +156,7 @@ try {
 
           // PRODUCTION output — the actual function demography.ts:361 calls.
           const stored = survival.deriveAnnualNutritionState(support);
-          // INDEPENDENT reconstruction from the same four samples.
+          // INDEPENDENT reconstruction from the same physical-day exposure.
           const rebuilt = reconstructAnnualNutrition(support);
 
           if (rebuilt === undefined) {
@@ -216,6 +196,7 @@ try {
                 stored: Object.fromEntries(terms.map((t) => [t, stored[t]])),
                 rebuilt: Object.fromEntries(terms.map((t) => [t, rebuilt[t]])),
                 diffs,
+                sourceSupport: support,
               });
             }
           }
@@ -296,12 +277,12 @@ try {
         "demographic overstatement and must not be cited as such.",
     },
     likeForLikeClaim:
-      "stored annual nutrition output == exact reconstruction from the same four intended seasonal samples",
+      "stored annual nutrition output == exact reconstruction from the same previous360 completed physical days",
     measuredIndependently: [
       "annual mean currentFoodStress",
       "annual mean raw support ratio",
-      "recovery share over the same four samples",
-      "nutritional surplus over the same four samples",
+      "recovery share over the same physical-day exposure",
+      "nutritional surplus over the same physical-day exposure",
       "chronic food stress under the exact production formula",
       "foodDemographicPressure reconstructed from those exact components",
     ],
@@ -322,9 +303,11 @@ try {
     verdict: pass ? "PASS" : "FAIL",
   };
 
-  mkdirSync(join(process.cwd(), "docs/evidence/correction17"), { recursive: true });
+  const outIndex=process.argv.indexOf('--out');
+  const output=outIndex>=0?process.argv[outIndex+1]:join(process.cwd(), "docs/evidence/correction17/annual-nutrition-like-for-like.json");
+  mkdirSync(join(output, '..'), { recursive: true });
   writeFileSync(
-    join(process.cwd(), "docs/evidence/correction17/annual-nutrition-like-for-like.json"),
+    output,
     `${JSON.stringify(result, null, 2)}\n`,
   );
 
