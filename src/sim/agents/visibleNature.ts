@@ -30,6 +30,7 @@ import {
   type PlantSafetyRisk,
 } from "./plantPatches";
 import type { ResourceEcologyClassId, ResourceEcologyKnowledgeState } from "./resourceEcologyFoundation";
+import { getTripWorkReceipts } from "./physicalFoodReturn";
 import type { Band, IntraSeasonTripRecord } from "./types";
 
 export type VisibleFaunaArchetype =
@@ -720,7 +721,7 @@ function deriveVisiblePlantCards(
           memory.placeTileId === tileId && memory.resourceClassId === linkedResourceClassId,
         ) === true;
       const encountered = tileId === band.position || (band.recentIntraSeasonTrips ?? []).some((trip) =>
-        trip.targetTileId === tileId && trip.physicalFoodHarvest?.sourceKind === "plant_patch",
+        trip.targetTileId === tileId && getTripWorkReceipts(trip).some(receipt => receipt.sourceKind === "plant_patch"),
       );
       if (!remembered && !encountered) {
         continue;
@@ -890,7 +891,7 @@ function plantPatchToCard(
     );
   const directEncounter = tileId === band.position;
   const harvestReceipt = (band.recentIntraSeasonTrips ?? [])
-    .map((trip) => trip.physicalFoodHarvest)
+    .flatMap(getTripWorkReceipts)
     .find((receipt) => receipt?.sourceKind === "plant_patch" && receipt.sourceId === String(patch.patchId));
   // Normal band state uses only remembered/directly experienced quantities.
   // Exact sparse patch depletion remains world truth and is shown only in Technical.

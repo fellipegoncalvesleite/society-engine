@@ -1,0 +1,616 @@
+{
+  "status": "IMPLEMENTED / PENDING REVIEW",
+  "productionCommit": null,
+  "corePassed": 62,
+  "expandedProvenancePassed": 10,
+  "overlappingProvenanceChecks": 7,
+  "mutants": {
+    "cargo": {
+      "mutant": "cargo",
+      "loaded": 1,
+      "executed": 125,
+      "bytesRestored": true,
+      "detected": true
+    },
+    "absorption": {
+      "mutant": "absorption",
+      "loaded": 1,
+      "executed": 18,
+      "bytesRestored": true,
+      "detected": true
+    },
+    "cache": {
+      "mutant": "cache",
+      "loaded": 1,
+      "executed": 1043,
+      "bytesRestored": true,
+      "detected": true
+    },
+    "labor": {
+      "mutant": "labor",
+      "loaded": 1,
+      "executed": 59,
+      "bytesRestored": true,
+      "detected": true
+    }
+  },
+  "commands": [
+    {
+      "name": "Core conservation",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/stabilized/conservation.json"
+      ],
+      "elapsedSeconds": 41.23135423660278,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": ""
+    },
+    {
+      "name": "Recovery food accounting",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/recoveryFoodAccountingAudit.mjs"
+      ],
+      "elapsedSeconds": 335.436270236969,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": ""
+    },
+    {
+      "name": "Numeric resource chain",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/numericResourceChainAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/stabilized/numeric.json"
+      ],
+      "elapsedSeconds": 127.37363004684448,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": ""
+    },
+    {
+      "name": "Natural s1 observer on",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s1"
+      ],
+      "elapsedSeconds": 30.46281909942627,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": ""
+    },
+    {
+      "name": "Natural s2 observer on",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s2"
+      ],
+      "elapsedSeconds": 32.007928133010864,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": ""
+    },
+    {
+      "name": "Both TypeScript projects and production build",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "elapsedSeconds": 16.333823919296265,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": ""
+    },
+    {
+      "name": "Import boundary",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/importBoundaryAudit.mjs"
+      ],
+      "elapsedSeconds": 0.2797119617462158,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": ""
+    },
+    {
+      "name": "Architecture graph",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/checkGraph.mjs"
+      ],
+      "elapsedSeconds": 0.7410368919372559,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": ""
+    },
+    {
+      "name": "Old mechanism mutant: cargo",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--scope",
+        "cargo",
+        "--mutant",
+        "cargo",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/stabilized/mutant-cargo.json"
+      ],
+      "elapsedSeconds": 39.741527795791626,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": "Expected behavioral failure; not a load error"
+    },
+    {
+      "name": "Old mechanism mutant: absorption",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--scope",
+        "absorption",
+        "--mutant",
+        "absorption",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/stabilized/mutant-absorption.json"
+      ],
+      "elapsedSeconds": 0.720789909362793,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": "Expected behavioral failure; not a load error"
+    },
+    {
+      "name": "Old mechanism mutant: cache",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--scope",
+        "cache",
+        "--mutant",
+        "cache",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/stabilized/mutant-cache.json"
+      ],
+      "elapsedSeconds": 1.9804201126098633,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": "Expected behavioral failure; not a load error"
+    },
+    {
+      "name": "Old mechanism mutant: labor",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--scope",
+        "labor",
+        "--mutant",
+        "labor",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/stabilized/mutant-labor.json"
+      ],
+      "elapsedSeconds": 7.41803503036499,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "stabilized/commands.json",
+      "note": "Expected behavioral failure; not a load error"
+    },
+    {
+      "name": "provenance-final",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/diag1Phase1ConservationAudit.mjs",
+        "--scope",
+        "provenance",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/regression-repaired/provenance-final.json"
+      ],
+      "elapsedSeconds": 0.6038918495178223,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/provenance-final-command.json",
+      "note": ""
+    },
+    {
+      "name": "living-stable",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/livingEcologyFoodPipelineAudit.mjs"
+      ],
+      "elapsedSeconds": 12.046634674072266,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/living-stable-command.json",
+      "note": ""
+    },
+    {
+      "name": "headcount-stable",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/headcountLaborFixturesAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/regression-repaired/headcount-stable.json"
+      ],
+      "elapsedSeconds": 621.0199780464172,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/headcount-stable-command.json",
+      "note": ""
+    },
+    {
+      "name": "fission-stable",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/fissionFieldTransferAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/regression-repaired/fission-stable.json"
+      ],
+      "elapsedSeconds": 76.5425910949707,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/fission-stable-command.json",
+      "note": ""
+    },
+    {
+      "name": "away",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/awayBodyOwnershipFixturesAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/regression-repaired/away.json"
+      ],
+      "elapsedSeconds": 286.3329930305481,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/away-command.json",
+      "note": ""
+    },
+    {
+      "name": "target-labor",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/targetWorkLaborAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/regression-repaired/target-labor.json"
+      ],
+      "elapsedSeconds": 39.50869297981262,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/target-labor-command.json",
+      "note": ""
+    },
+    {
+      "name": "acute-risk",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/expeditionAcuteRiskAudit.mjs"
+      ],
+      "elapsedSeconds": 549.5934820175171,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/acute-risk-command.json",
+      "note": ""
+    },
+    {
+      "name": "lifecycle",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/expeditionLifecycleAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/regression-repaired/lifecycle.json",
+        "--boundary-out",
+        "docs/evidence/diag1-corrections/phase1/regression-repaired/lifecycle-boundary.json"
+      ],
+      "elapsedSeconds": 1761.8690829277039,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/lifecycle-command.json",
+      "note": ""
+    },
+    {
+      "name": "item3-repaired",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/itemThreeIntegrationFixturesAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/regression-repaired/item3-repaired.json"
+      ],
+      "elapsedSeconds": 216.59260177612305,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/item3-repaired-command.json",
+      "note": ""
+    },
+    {
+      "name": "determinism-map2-isolated",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/diag1Phase1DeterminismAudit.mjs",
+        "--map",
+        "map2",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/regression-repaired/determinism-map2-isolated.json"
+      ],
+      "elapsedSeconds": 218.57862401008606,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/determinism-map2-isolated-command.json",
+      "note": ""
+    },
+    {
+      "name": "natural-observer-off-s1",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s1",
+        "off"
+      ],
+      "elapsedSeconds": 27.99086022377014,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/natural-observer-off-s1-command.json",
+      "note": ""
+    },
+    {
+      "name": "natural-observer-off-s2",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/diag1Phase1NaturalAudit.mjs",
+        "diag1b:s2",
+        "off"
+      ],
+      "elapsedSeconds": 25.683670043945312,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/natural-observer-off-s2-command.json",
+      "note": ""
+    },
+    {
+      "name": "presence",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/physicalPresenceFixturesAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/regression-final/presence-out.json",
+        "--out-person",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/regression-final/presence-out-person.json",
+        "--out-timelines",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/regression-final/presence-out-timelines.json",
+        "--out-expedition",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/regression-final/presence-out-expedition.json",
+        "--out-sameday",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/regression-final/presence-out-sameday.json",
+        "--out-social",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/regression-final/presence-out-social.json"
+      ],
+      "elapsedSeconds": 101.89588022232056,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-final/commands.json",
+      "note": "Read verdicts and coverage limitations; exit0 alone is not a whole-surface certificate"
+    },
+    {
+      "name": "reader-admission",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/provisionalReaderAdmissionAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/regression-final/reader-admission.json"
+      ],
+      "elapsedSeconds": 84.76615381240845,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-final/commands.json",
+      "note": "Read verdicts and coverage limitations; exit0 alone is not a whole-surface certificate"
+    },
+    {
+      "name": "reader-semantic",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/provisionalReaderSemanticAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/regression-final/reader-semantic.json"
+      ],
+      "elapsedSeconds": 0.20584607124328613,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-final/commands.json",
+      "note": "Read verdicts and coverage limitations; exit0 alone is not a whole-surface certificate"
+    },
+    {
+      "name": "reintegration",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/provisionalReintegrationAudit.mjs",
+        "--out",
+        "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/regression-final/reintegration.json"
+      ],
+      "elapsedSeconds": 87.83172464370728,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-final/commands.json",
+      "note": "Read verdicts and coverage limitations; exit0 alone is not a whole-surface certificate"
+    },
+    {
+      "name": "target-resolution",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "command": [
+        "node",
+        "scripts/expeditionTargetResolutionAudit.mjs"
+      ],
+      "elapsedSeconds": 230.7471787929535,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-final/commands.json",
+      "note": "Read verdicts and coverage limitations; exit0 alone is not a whole-surface certificate"
+    },
+    {
+      "name": "Mixed-map full-state stress matrix",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "command": [
+        "node",
+        "scripts/diag1Phase1DeterminismAudit.mjs",
+        "--out",
+        "docs/evidence/diag1-corrections/phase1/regression-repaired/determinism-stable.json"
+      ],
+      "elapsedSeconds": 1219.9057626724243,
+      "sourceMatchesFinalProductionBytes": true,
+      "commandEvidence": "regression-repaired/determinism-stable-command.json",
+      "note": "Map1 six-way row passes; Map2 fails after Map1; an inherited seasonal memo collision is demonstrated but exclusive attribution is unproved. Failure retained, not hidden by isolated controls."
+    }
+  ],
+  "determinism": [
+    {
+      "kind": "map1",
+      "seed": "diag1-phase1:determinism:map1",
+      "span": 1260,
+      "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+      "digests": {
+        "daily": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "weekly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "monthly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "seasonal": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "repeat": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+        "fresh": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3"
+      },
+      "elapsed": {
+        "daily": 187.822308208,
+        "weekly": 154.11225966600003,
+        "monthly": 119.47052387500001,
+        "seasonal": 138.90109329199996,
+        "repeat": 110.31291299999994
+      },
+      "occurrence": {
+        "bands": 5,
+        "population": 155,
+        "activeParties": 2,
+        "returnOutcomes": 21,
+        "plantDepletionEntries": 1313
+      },
+      "pass": true
+    },
+    {
+      "kind": "map2",
+      "seed": "diag1-phase1:determinism:map2",
+      "span": 1260,
+      "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+      "digests": {
+        "daily": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+        "weekly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+        "monthly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+        "seasonal": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+        "repeat": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+        "fresh": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79"
+      },
+      "elapsed": {
+        "daily": 40.2399605,
+        "weekly": 44.272990834000005,
+        "monthly": 43.193067124999985,
+        "seasonal": 31.590668416,
+        "repeat": 29.171436749999994
+      },
+      "occurrence": {
+        "bands": 9,
+        "population": 235,
+        "activeParties": 8,
+        "returnOutcomes": 26,
+        "plantDepletionEntries": 1303
+      },
+      "pass": true
+    }
+  ],
+  "residuals": [
+    {
+      "audit": "Mixed-map full-state determinism",
+      "disposition": "INHERITED UNASSIGNED SEASONAL MEMO DEFECT",
+      "detail": "Map1 thenMap2 in one process fails full-state equivalence; unchanged world/seasonal.ts keys tile data by shared initial time and tile ID without world identity. Direct warm/cold mismatch reproduces on exact base. Isolated within-map controls are separate, not a cross-map PASS.",
+      "evidence": [
+        "DETERMINISM_SCOPE.json",
+        "regression-repaired/determinism-stable.json",
+        "determinism/cross-world-cache-current.json",
+        "determinism/cross-world-cache-exact-base.json"
+      ]
+    },
+    {
+      "audit": "expeditionKnowledgeLatencyAudit",
+      "disposition": "INHERITED EXPECTATION FAILURE",
+      "detail": "Full run 14/15. returnedEvidenceChangesLaterBehavior_11 false in both unchanged controlled exact-base and current runs; controlled-only probes omit natural loop.",
+      "evidence": [
+        "regression-initial/expeditionKnowledgeLatencyAudit.log",
+        "baseline/knowledge-controlled-exact-base.log",
+        "baseline/knowledge-controlled-wrong-root.log",
+        "baseline/knowledge-control-source.json"
+      ]
+    },
+    {
+      "audit": "item4WholeIntegrationFreezeAudit",
+      "disposition": "INHERITED FIXTURE PRECONDITION REFUSAL",
+      "detail": "Fixed parent/target preparation refused identically on exact base and corrected source; no six history assertions reached. No founder gate bypass.",
+      "evidence": [
+        "baseline/item4-history.json",
+        "baseline/item4-history-command.json",
+        "regression-repaired/item4-history.json",
+        "regression-repaired/item4-history-command.json"
+      ]
+    },
+    {
+      "audit": "physicalPresenceFixturesAudit",
+      "disposition": "COVERAGE LIMIT",
+      "detail": "Natural terminal/concurrent samples vacuous; same-day presence explicitly deferred; people/presence invariants pass."
+    },
+    {
+      "audit": "provisionalReaderAdmissionAudit",
+      "disposition": "COVERAGE LIMIT",
+      "detail": "6 holding claims; 14 of16 field-admission observations inconclusive. Semantic audit is inventory only."
+    },
+    {
+      "audit": "expeditionAcuteRiskAudit",
+      "disposition": "COVERAGE LIMIT",
+      "detail": "10 controlled checks pass; natural acute episode sightings0, not occurrence proof."
+    }
+  ]
+}

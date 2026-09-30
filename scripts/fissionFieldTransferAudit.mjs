@@ -162,7 +162,7 @@ try {
   let world = runner.initSimWorld({ kind: "map2" }, SEED);
   world = advance.advanceWorldByDays(world, WARM_DAYS);
   const parent = Object.values(world.bands)
-    .filter((b) => lc.isEstablishedBand(b) && b.demography.workingAdults >= 6 && b.demography.population >= 24)
+    .filter((b) => lc.isEstablishedBand(b) && b.demography.workingAdults >= 6 && b.demography.population >= 24 && b.residentialAnchor !== undefined && b.storageCapacity > 0 && (b.decisionHistory ?? []).length > 0)
     .sort((a, b) => b.demography.population - a.demography.population)[0];
   if (parent === undefined) throw new Error("no suitable parent band in the warmed world");
 

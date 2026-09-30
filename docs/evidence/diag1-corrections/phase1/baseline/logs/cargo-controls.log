@@ -1,0 +1,765 @@
+{
+  "scope": "controlled production expedition, actual remembered source; relocated fixture to target with zero-length home route to isolate work/return accounting; no claim of natural frequency",
+  "source": {
+    "band": "band:varied-dry-corridor-mid",
+    "patch": "patch:tile:74:111:fallback_food",
+    "tile": "tile:74:111"
+  },
+  "receipts": {
+    "count": 40,
+    "topCount": 16,
+    "current": {
+      "physicalPlantHarvest": 1.744,
+      "physicalFaunaHarvest": 0,
+      "aquaticHarvest": 0,
+      "storageContribution": 0,
+      "transitionalResidual": 0,
+      "grossPhysicalHarvest": 1.744,
+      "transportLoss": 0,
+      "processingLoss": 0.236,
+      "spoilageLoss": 0,
+      "accessLoss": 0,
+      "rawUsableHarvest": 0.4,
+      "harvestToSupportScale": 100,
+      "supportUnit": "adult_equivalent_season",
+      "supportUnitContract": "one raw usable harvest unit equals the declared scale of adult-equivalent seasonal food after recorded losses",
+      "totalUsableSupport": 40,
+      "populationDemand": 20,
+      "rawSupportRatio": 2,
+      "foodStress": 0,
+      "sourceReceipts": [
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        },
+        {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.01,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+            "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+          ]
+        }
+      ],
+      "sourceSeasonTick": 100,
+      "genericCatchmentFoodConsumed": false,
+      "residualRemovalPath": "none",
+      "reasonIds": [
+        "reason:human-food-ledger:band:varied-dry-corridor-mid:100"
+      ]
+    },
+    "stale": {
+      "physicalPlantHarvest": 0,
+      "physicalFaunaHarvest": 0,
+      "aquaticHarvest": 0,
+      "storageContribution": 0,
+      "transitionalResidual": 0,
+      "grossPhysicalHarvest": 0,
+      "transportLoss": 0,
+      "processingLoss": 0,
+      "spoilageLoss": 0,
+      "accessLoss": 0,
+      "rawUsableHarvest": 0,
+      "harvestToSupportScale": 100,
+      "supportUnit": "adult_equivalent_season",
+      "supportUnitContract": "one raw usable harvest unit equals the declared scale of adult-equivalent seasonal food after recorded losses",
+      "totalUsableSupport": 0,
+      "populationDemand": 20,
+      "rawSupportRatio": 0,
+      "foodStress": 1,
+      "sourceReceipts": [],
+      "genericCatchmentFoodConsumed": false,
+      "residualRemovalPath": "none",
+      "reasonIds": [
+        "reason:human-food-ledger:band:varied-dry-corridor-mid:none"
+      ]
+    },
+    "nonFoodNoOp": true,
+    "lateNoOp": true,
+    "newPeriodCount": 1
+  },
+  "multi": [
+    {
+      "day": 721,
+      "party": {
+        "phase": "operating",
+        "workDays": 1,
+        "cargo": {
+          "harvestUnits": 0.0377,
+          "lostUnits": 0,
+          "provisionUnitsConsumed": 0.006,
+          "carryCapacityUnits": 0.6
+        },
+        "harvest": {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.0377,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso"
+          ]
+        }
+      }
+    },
+    {
+      "day": 722,
+      "party": {
+        "phase": "operating",
+        "workDays": 2,
+        "cargo": {
+          "harvestUnits": 0.0525,
+          "lostUnits": 0,
+          "provisionUnitsConsumed": 0.012,
+          "carryCapacityUnits": 0.6
+        },
+        "harvest": {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0171,
+          "harvestedAmount": 0.0171,
+          "depletionApplied": 0.0171,
+          "transportLoss": 0,
+          "processingLoss": 0.0023,
+          "usableSupport": 0.0148,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:722:plant_patch:plant:tile:74:111:roots_tubers_uso"
+          ]
+        }
+      }
+    },
+    {
+      "day": 723,
+      "party": {
+        "phase": "returning",
+        "workDays": 3,
+        "cargo": {
+          "harvestUnits": 0.0525,
+          "lostUnits": 0,
+          "provisionUnitsConsumed": 0.018,
+          "carryCapacityUnits": 0.6
+        },
+        "harvest": {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0,
+          "harvestedAmount": 0,
+          "depletionApplied": 0,
+          "transportLoss": 0,
+          "processingLoss": 0,
+          "usableSupport": 0,
+          "failureReason": "physically_exhausted",
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:723:plant_patch:plant:tile:74:111:roots_tubers_uso"
+          ]
+        }
+      }
+    },
+    {
+      "day": 724,
+      "outcome": {
+        "id": "expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2",
+        "tick": 8,
+        "taskKind": "distant_plant_gathering",
+        "targetTileId": "tile:74:111",
+        "phase": "completed",
+        "outcomeReason": "physically_exhausted",
+        "distanceTiles": 0,
+        "distanceKm": 0,
+        "totalDays": 4,
+        "partyWorkers": 5,
+        "partyPeople": 5,
+        "deliveredHarvestUnits": 0,
+        "provisionUnitsConsumed": 0.022,
+        "lostUnits": 0,
+        "injuryLoad": 0,
+        "usedTaskCamp": false
+      }
+    },
+    {
+      "day": 725,
+      "outcome": {
+        "id": "expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2",
+        "tick": 8,
+        "taskKind": "distant_plant_gathering",
+        "targetTileId": "tile:74:111",
+        "phase": "completed",
+        "outcomeReason": "physically_exhausted",
+        "distanceTiles": 0,
+        "distanceKm": 0,
+        "totalDays": 4,
+        "partyWorkers": 5,
+        "partyPeople": 5,
+        "deliveredHarvestUnits": 0,
+        "provisionUnitsConsumed": 0.022,
+        "lostUnits": 0,
+        "injuryLoad": 0,
+        "usedTaskCamp": false
+      }
+    }
+  ],
+  "single": [
+    {
+      "day": 721,
+      "party": {
+        "phase": "returning",
+        "workDays": 3,
+        "cargo": {
+          "harvestUnits": 0.0377,
+          "lostUnits": 0,
+          "provisionUnitsConsumed": 0.006,
+          "carryCapacityUnits": 0.6
+        },
+        "harvest": {
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:74:111:roots_tubers_uso",
+          "sourceClass": "roots_tubers_uso",
+          "knownness": "stale_or_inferred_target",
+          "attempted": true,
+          "physicalSourceFound": true,
+          "physicalAvailability": 0.0607,
+          "harvestedAmount": 0.0436,
+          "depletionApplied": 0.0436,
+          "transportLoss": 0,
+          "processingLoss": 0.0059,
+          "usableSupport": 0.0377,
+          "worldTruthDebugOnly": true,
+          "reasonIds": [
+            "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso"
+          ]
+        }
+      }
+    },
+    {
+      "day": 722,
+      "outcome": {
+        "id": "expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2",
+        "tick": 8,
+        "taskKind": "distant_plant_gathering",
+        "targetTileId": "tile:74:111",
+        "phase": "completed",
+        "outcomeReason": "returned_with_cargo",
+        "distanceTiles": 0,
+        "distanceKm": 0,
+        "totalDays": 4,
+        "partyWorkers": 5,
+        "partyPeople": 5,
+        "deliveredHarvestUnits": 0.0277,
+        "provisionUnitsConsumed": 0.01,
+        "lostUnits": 0,
+        "injuryLoad": 0,
+        "usedTaskCamp": false
+      },
+      "acc": {
+        "periodTick": 8,
+        "receiptCount": 1,
+        "physicalPlantHarvest": 0.0436,
+        "physicalFaunaHarvest": 0,
+        "aquaticHarvest": 0,
+        "transportLoss": 0,
+        "processingLoss": 0.0059,
+        "totalUsableSupport": 0.0277,
+        "topReceipts": [
+          {
+            "sourceKind": "plant_patch",
+            "sourceId": "plant:tile:74:111:roots_tubers_uso",
+            "sourceClass": "roots_tubers_uso",
+            "knownness": "stale_or_inferred_target",
+            "attempted": true,
+            "physicalSourceFound": true,
+            "physicalAvailability": 0.0607,
+            "harvestedAmount": 0.0436,
+            "depletionApplied": 0.0436,
+            "transportLoss": 0,
+            "processingLoss": 0.0059,
+            "usableSupport": 0.0277,
+            "worldTruthDebugOnly": true,
+            "reasonIds": [
+              "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+              "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+            ]
+          }
+        ],
+        "reasonIds": [
+          "reason:seasonal-food-receipts:8"
+        ]
+      }
+    },
+    {
+      "day": 723,
+      "outcome": {
+        "id": "expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2",
+        "tick": 8,
+        "taskKind": "distant_plant_gathering",
+        "targetTileId": "tile:74:111",
+        "phase": "completed",
+        "outcomeReason": "returned_with_cargo",
+        "distanceTiles": 0,
+        "distanceKm": 0,
+        "totalDays": 4,
+        "partyWorkers": 5,
+        "partyPeople": 5,
+        "deliveredHarvestUnits": 0.0277,
+        "provisionUnitsConsumed": 0.01,
+        "lostUnits": 0,
+        "injuryLoad": 0,
+        "usedTaskCamp": false
+      },
+      "acc": {
+        "periodTick": 8,
+        "receiptCount": 1,
+        "physicalPlantHarvest": 0.0436,
+        "physicalFaunaHarvest": 0,
+        "aquaticHarvest": 0,
+        "transportLoss": 0,
+        "processingLoss": 0.0059,
+        "totalUsableSupport": 0.0277,
+        "topReceipts": [
+          {
+            "sourceKind": "plant_patch",
+            "sourceId": "plant:tile:74:111:roots_tubers_uso",
+            "sourceClass": "roots_tubers_uso",
+            "knownness": "stale_or_inferred_target",
+            "attempted": true,
+            "physicalSourceFound": true,
+            "physicalAvailability": 0.0607,
+            "harvestedAmount": 0.0436,
+            "depletionApplied": 0.0436,
+            "transportLoss": 0,
+            "processingLoss": 0.0059,
+            "usableSupport": 0.0277,
+            "worldTruthDebugOnly": true,
+            "reasonIds": [
+              "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+              "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+            ]
+          }
+        ],
+        "reasonIds": [
+          "reason:seasonal-food-receipts:8"
+        ]
+      }
+    },
+    {
+      "day": 724,
+      "outcome": {
+        "id": "expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2",
+        "tick": 8,
+        "taskKind": "distant_plant_gathering",
+        "targetTileId": "tile:74:111",
+        "phase": "completed",
+        "outcomeReason": "returned_with_cargo",
+        "distanceTiles": 0,
+        "distanceKm": 0,
+        "totalDays": 4,
+        "partyWorkers": 5,
+        "partyPeople": 5,
+        "deliveredHarvestUnits": 0.0277,
+        "provisionUnitsConsumed": 0.01,
+        "lostUnits": 0,
+        "injuryLoad": 0,
+        "usedTaskCamp": false
+      },
+      "acc": {
+        "periodTick": 8,
+        "receiptCount": 1,
+        "physicalPlantHarvest": 0.0436,
+        "physicalFaunaHarvest": 0,
+        "aquaticHarvest": 0,
+        "transportLoss": 0,
+        "processingLoss": 0.0059,
+        "totalUsableSupport": 0.0277,
+        "topReceipts": [
+          {
+            "sourceKind": "plant_patch",
+            "sourceId": "plant:tile:74:111:roots_tubers_uso",
+            "sourceClass": "roots_tubers_uso",
+            "knownness": "stale_or_inferred_target",
+            "attempted": true,
+            "physicalSourceFound": true,
+            "physicalAvailability": 0.0607,
+            "harvestedAmount": 0.0436,
+            "depletionApplied": 0.0436,
+            "transportLoss": 0,
+            "processingLoss": 0.0059,
+            "usableSupport": 0.0277,
+            "worldTruthDebugOnly": true,
+            "reasonIds": [
+              "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+              "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+            ]
+          }
+        ],
+        "reasonIds": [
+          "reason:seasonal-food-receipts:8"
+        ]
+      }
+    },
+    {
+      "day": 725,
+      "outcome": {
+        "id": "expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2",
+        "tick": 8,
+        "taskKind": "distant_plant_gathering",
+        "targetTileId": "tile:74:111",
+        "phase": "completed",
+        "outcomeReason": "returned_with_cargo",
+        "distanceTiles": 0,
+        "distanceKm": 0,
+        "totalDays": 4,
+        "partyWorkers": 5,
+        "partyPeople": 5,
+        "deliveredHarvestUnits": 0.0277,
+        "provisionUnitsConsumed": 0.01,
+        "lostUnits": 0,
+        "injuryLoad": 0,
+        "usedTaskCamp": false
+      },
+      "acc": {
+        "periodTick": 8,
+        "receiptCount": 1,
+        "physicalPlantHarvest": 0.0436,
+        "physicalFaunaHarvest": 0,
+        "aquaticHarvest": 0,
+        "transportLoss": 0,
+        "processingLoss": 0.0059,
+        "totalUsableSupport": 0.0277,
+        "topReceipts": [
+          {
+            "sourceKind": "plant_patch",
+            "sourceId": "plant:tile:74:111:roots_tubers_uso",
+            "sourceClass": "roots_tubers_uso",
+            "knownness": "stale_or_inferred_target",
+            "attempted": true,
+            "physicalSourceFound": true,
+            "physicalAvailability": 0.0607,
+            "harvestedAmount": 0.0436,
+            "depletionApplied": 0.0436,
+            "transportLoss": 0,
+            "processingLoss": 0.0059,
+            "usableSupport": 0.0277,
+            "worldTruthDebugOnly": true,
+            "reasonIds": [
+              "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso",
+              "reason:expedition-return:expedition:band:varied-dry-corridor-mid:720:distant_plant_gathering:9197aed2"
+            ]
+          }
+        ],
+        "reasonIds": [
+          "reason:seasonal-food-receipts:8"
+        ]
+      }
+    }
+  ],
+  "instrumentationParity": true
+}

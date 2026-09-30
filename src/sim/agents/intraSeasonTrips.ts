@@ -112,7 +112,7 @@ import { getWorldTimeForDay } from "../tick/time";
 import { isBandPassableDestination } from "../world/passability";
 import type { Tile, WorldState } from "../world/types";
 import { getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
-import { deriveTravelPace, type TravelContext } from "./bandMobility";
+import { deriveAvailableResidentialWorkers, deriveTravelPace, type TravelContext } from "./bandMobility";
 import { getTripRoundTripDistanceKm } from "./tripDistance";
 import { getRoutePhysicalLengthKm, getRouteTravelTimeDays } from "./traversal";
 import {
@@ -274,7 +274,7 @@ export function resolveExpeditionTargetWork(
     );
   }
 
-  const time = getWorldTimeForDay(day);
+  const time = getWorldTimeForDay(day as DayNumber);
   const faunaGeo = deriveFaunaStockGeography(world);
   // EXPEDITIONARY-4 §5.2 (multi-tile patch) — a remembered patch is anchored to an
   // approximate tile but may span linked tiles. If the walked route physically ends on
@@ -387,7 +387,10 @@ function applyTripDay(world: WorldState, day: number): WorldState {
             ...band,
             resourceKnowledgeState: candidate.seededResourceKnowledgeState,
           };
-    const initialRecord = buildTripRecord(currentWorld, activityBand, candidate, time.day ?? (day as DayNumber), time.tick, time.season, faunaGeo);
+    const initialRecord = buildResidentialTripRecord(currentWorld, activityBand, candidate, day, faunaGeo);
+    if (initialRecord === undefined) {
+      continue;
+    }
     const physicalResolution = resolvePhysicalFoodHarvest(currentWorld, initialRecord, time, faunaGeo);
     currentWorld = physicalResolution.world;
     const resolvedRecord = physicalResolution.record;
@@ -564,16 +567,8 @@ function executePendingInvestigation(
   // productive labour only. A non-working party member is deliberately NOT subtracted here: they
   // are drawn from no cohort this sum counts, and subtracting them would charge the residence for
   // labour that was never in `workingAdults`.
-  const awayWorkers = (band.expeditions ?? [])
-    .filter((expedition) =>
-      expedition.phase === "prepared" ||
-      expedition.phase === "outbound" ||
-      expedition.phase === "operating" ||
-      expedition.phase === "returning")
-    .reduce((total, expedition) => total + expedition.partyWorkers, 0);
-  const availableWorkers = Math.max(
-    0,
-    Math.round(band.demography.workingAdults - awayWorkers - tripWorkersUsedToday),
+  const availableWorkers = deriveAvailableResidentialWorkers(
+    band, Math.max(tripWorkersUsedToday, residentialWorkersUsedToday(band, day)),
   );
 
   if (availableWorkers < INVESTIGATION_MIN_PARTY_WORKERS) {
@@ -1057,6 +1052,9 @@ function selectTripCandidate(
   // multi-day candidate from their own call.
   requireSameDay: boolean = false,
 ): TripCandidate | undefined {
+  if (requireSameDay && deriveAvailableResidentialWorkers(band, residentialWorkersUsedToday(band, day)) === 0) {
+    return undefined;
+  }
   const origin = world.tiles[band.position];
 
   if (origin === undefined) {
@@ -1580,13 +1578,13 @@ function buildTripRecord(
   // propagates to every labour-dependent consumer by construction rather than by enumeration.
   //
   // The party path takes the party's own productive labour and applies NO floor of one: the
-  // residential estimator's `Math.max(1, ...)` exists so a band always fields someone at home, and
-  // importing it would let a party with no working members still request a person's work.
+  // residential estimator reads people at home; importing it here would incorrectly
+  // substitute residential workers for the physically present away party.
   //
   // CORRECTION-34F — and no rounding either. The value arrives validated as a positive integer, so
   // clamping it here could only ever disguise a caller that broke the contract.
   const estimatedPeopleCount = partyWork === undefined
-    ? estimateTaskGroupPeople(band, taskGroupType)
+    ? estimateTaskGroupPeople(band, taskGroupType, Number(day))
     : partyWork.productiveWorkers;
   const objective = deriveObjective(candidate.cause);
   const endDay = (Number(day) + estimatedDurationDays - 1) as DayNumber;
@@ -3171,23 +3169,40 @@ function deriveObjectiveLabel(objective: IntraSeasonTripObjective): string {
   }
 }
 
-function estimateTaskGroupPeople(band: Band, taskGroupType: IntraSeasonTripTaskGroupType): number {
-  // EXPEDITIONARY-2 (Slice E) — adults who are physically AWAY on an expedition are not
-  // at camp and cannot staff a same-day task group. They were committed exactly once when
-  // the party departed and return to availability only when it comes home. This is read
-  // straight off band state (rather than importing the expedition module) to keep the
-  // dependency direction one-way: expedition -> intraSeasonTrips, never back.
-  //
-  // CORRECTION-34D — a labour question against a labour cohort, so `partyWorkers` (productive
-  // labour) is the right term and non-working party members are correctly absent from it.
-  const awayWorkers = (band.expeditions ?? [])
-    .filter((expedition) =>
-      expedition.phase === "prepared" ||
-      expedition.phase === "outbound" ||
-      expedition.phase === "operating" ||
-      expedition.phase === "returning")
-    .reduce((total, expedition) => total + expedition.partyWorkers, 0);
-  const adults = Math.max(1, Math.round(Math.max(0, band.demography.workingAdults - awayWorkers)));
+// Only performed residential work reserves same-day labor. Expedition return
+// receipts describe earlier away work and cannot reserve these workers again.
+function residentialWorkersUsedToday(band: Band, day: number): number {
+  const trips = (band.recentIntraSeasonTrips ?? []).filter((record) =>
+    Number(record.day) === day &&
+    !record.reasonIds.some((reason) => String(reason).startsWith("reason:expedition-return:")),
+  ).reduce((sum, record) => sum + record.estimatedPeopleCount, 0);
+  const investigations = (band.recentInvestigationOutcomes ?? []).filter((record) =>
+    Number(record.resolvedDay) === day && record.executionId !== undefined,
+  ).reduce((sum, record) => sum + (record.partyWorkers ?? 0), 0);
+  return trips + investigations;
+}
+
+// Revalidate immediately before record creation, physical resolution or learning.
+// Selection is advisory; a stale candidate cannot itself supply workers.
+function buildResidentialTripRecord(
+  world: WorldState,
+  band: Band,
+  candidate: TripCandidate,
+  day: number,
+  faunaGeo: FaunaStockGeography,
+): IntraSeasonTripRecord | undefined {
+  if (deriveAvailableResidentialWorkers(band, residentialWorkersUsedToday(band, day)) === 0) {
+    return undefined;
+  }
+  const time = getWorldTimeForDay(day as DayNumber);
+  return buildTripRecord(world, band, candidate, day as DayNumber, time.tick, time.season, faunaGeo);
+}
+
+function estimateTaskGroupPeople(band: Band, taskGroupType: IntraSeasonTripTaskGroupType, day?: number): number {
+  const adults = deriveAvailableResidentialWorkers(band, day === undefined ? 0 : residentialWorkersUsedToday(band, day));
+  if (adults === 0) {
+    return 0;
+  }
   const baseShare =
     taskGroupType === "water_group" || taskGroupType === "memory_refresh_group"
       ? 0.12
@@ -3203,7 +3218,7 @@ function estimateTaskGroupPeople(band: Band, taskGroupType: IntraSeasonTripTaskG
         ? 6
         : 8;
 
-  return Math.max(1, Math.min(cap, Math.round(adults * baseShare)));
+  return Math.min(adults, Math.max(1, Math.min(cap, Math.round(adults * baseShare))));
 }
 
 function buildActivityLaborSummary(

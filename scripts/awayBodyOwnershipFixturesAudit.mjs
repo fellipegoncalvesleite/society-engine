@@ -45,7 +45,9 @@ try {
     id: "e:l", phase: "operating", partyWorkers: 6,
     partyComposition: { limited: 1, typical: 4, high: 1 },
     positionTileId: t1, routeTileIds: [base.position, t1], routeIndex: 1,
-    taskKind: "resource_retrieval", injuryLoad: 0, travelDaysElapsed: 2, hardDeadlineDay: 9999,
+    // This body-ownership fixture has never performed work or taken cargo.
+    // Explicit history lets the strict legacy-cargo boundary prove that fact.
+    taskKind: "resource_retrieval", workDaysElapsed: 0, injuryLoad: 0, travelDaysElapsed: 2, hardDeadlineDay: 9999,
     cargo: { harvestUnits: 0, carryCapacityUnits: expedition.deriveCarryCapacityUnits(base, 6, 0, tick), provisionUnitsConsumed: 0, lostUnits: 0 },
     ...over,
   });

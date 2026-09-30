@@ -1,0 +1,578 @@
+{
+  "sourceCommit": "73cc38b916e236339897c59686638efafd569b6e",
+  "sourceHash": "9317f0bf486223b549a2e61171faba929996b83c1797609a96e175c16503ed6d",
+  "rows": [
+    {
+      "id": "tile:0:0",
+      "t0": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "t1": {
+        "tick": 4,
+        "seasonTick": 4,
+        "day": 360,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 1,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 1,
+          "tickWithinGeneration": 4
+        }
+      },
+      "tileUnchanged": true,
+      "inputUndepleted": true,
+      "warm": {
+        "sourceId": "plant:tile:0:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:0:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.013,
+        "harvestedAmount": 0.013,
+        "depletionApplied": 0.013,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:0:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 4,
+            "cumulativeUse": 0.013
+          }
+        }
+      },
+      "cold": {
+        "sourceId": "plant:tile:0:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:0:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.013,
+        "harvestedAmount": 0.013,
+        "depletionApplied": 0.013,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:0:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 4,
+            "cumulativeUse": 0.013
+          }
+        }
+      }
+    },
+    {
+      "id": "tile:6:0",
+      "t0": {
+        "tick": 0,
+        "seasonTick": 0,
+        "day": 0,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 0
+        }
+      },
+      "t1": {
+        "tick": 4,
+        "seasonTick": 4,
+        "day": 360,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 1,
+        "season": "spring",
+        "seasonIndex": 0,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 1,
+          "tickWithinGeneration": 4
+        }
+      },
+      "tileUnchanged": true,
+      "inputUndepleted": true,
+      "warm": {
+        "sourceId": "plant:tile:6:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:6:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.0134,
+        "harvestedAmount": 0.0134,
+        "depletionApplied": 0.0134,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:6:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 4,
+            "cumulativeUse": 0.0134
+          }
+        }
+      },
+      "cold": {
+        "sourceId": "plant:tile:6:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:6:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.0134,
+        "harvestedAmount": 0.0134,
+        "depletionApplied": 0.0134,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:6:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 4,
+            "cumulativeUse": 0.0134
+          }
+        }
+      }
+    },
+    {
+      "id": "tile:0:0",
+      "t0": {
+        "tick": 1,
+        "seasonTick": 1,
+        "day": 90,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "summer",
+        "seasonIndex": 1,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 1
+        }
+      },
+      "t1": {
+        "tick": 5,
+        "seasonTick": 5,
+        "day": 450,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 1,
+        "season": "summer",
+        "seasonIndex": 1,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 1,
+          "tickWithinGeneration": 5
+        }
+      },
+      "tileUnchanged": true,
+      "inputUndepleted": true,
+      "warm": {
+        "sourceId": "plant:tile:0:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:0:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.0583,
+        "harvestedAmount": 0.0583,
+        "depletionApplied": 0.0583,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:0:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 5,
+            "cumulativeUse": 0.0583
+          }
+        }
+      },
+      "cold": {
+        "sourceId": "plant:tile:0:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:0:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.0583,
+        "harvestedAmount": 0.0583,
+        "depletionApplied": 0.0583,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:0:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 5,
+            "cumulativeUse": 0.0583
+          }
+        }
+      }
+    },
+    {
+      "id": "tile:6:0",
+      "t0": {
+        "tick": 1,
+        "seasonTick": 1,
+        "day": 90,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "summer",
+        "seasonIndex": 1,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 1
+        }
+      },
+      "t1": {
+        "tick": 5,
+        "seasonTick": 5,
+        "day": 450,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 1,
+        "season": "summer",
+        "seasonIndex": 1,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 1,
+          "tickWithinGeneration": 5
+        }
+      },
+      "tileUnchanged": true,
+      "inputUndepleted": true,
+      "warm": {
+        "sourceId": "plant:tile:6:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:6:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.0538,
+        "harvestedAmount": 0.0538,
+        "depletionApplied": 0.0538,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:6:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 5,
+            "cumulativeUse": 0.0538
+          }
+        }
+      },
+      "cold": {
+        "sourceId": "plant:tile:6:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:6:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.0538,
+        "harvestedAmount": 0.0538,
+        "depletionApplied": 0.0538,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:6:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 5,
+            "cumulativeUse": 0.0538
+          }
+        }
+      }
+    },
+    {
+      "id": "tile:0:0",
+      "t0": {
+        "tick": 2,
+        "seasonTick": 2,
+        "day": 180,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "autumn",
+        "seasonIndex": 2,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 2
+        }
+      },
+      "t1": {
+        "tick": 6,
+        "seasonTick": 6,
+        "day": 540,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 1,
+        "season": "autumn",
+        "seasonIndex": 2,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 1,
+          "tickWithinGeneration": 6
+        }
+      },
+      "tileUnchanged": true,
+      "inputUndepleted": true,
+      "warm": {
+        "sourceId": "plant:tile:0:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:0:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.0454,
+        "harvestedAmount": 0.0454,
+        "depletionApplied": 0.0454,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:0:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 6,
+            "cumulativeUse": 0.0454
+          }
+        }
+      },
+      "cold": {
+        "sourceId": "plant:tile:0:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:0:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.0454,
+        "harvestedAmount": 0.0454,
+        "depletionApplied": 0.0454,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:0:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 6,
+            "cumulativeUse": 0.0454
+          }
+        }
+      }
+    },
+    {
+      "id": "tile:6:0",
+      "t0": {
+        "tick": 2,
+        "seasonTick": 2,
+        "day": 180,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "autumn",
+        "seasonIndex": 2,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 2
+        }
+      },
+      "t1": {
+        "tick": 6,
+        "seasonTick": 6,
+        "day": 540,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 1,
+        "season": "autumn",
+        "seasonIndex": 2,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 1,
+          "tickWithinGeneration": 6
+        }
+      },
+      "tileUnchanged": true,
+      "inputUndepleted": true,
+      "warm": {
+        "sourceId": "plant:tile:6:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:6:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.0538,
+        "harvestedAmount": 0.0538,
+        "depletionApplied": 0.0538,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:6:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 6,
+            "cumulativeUse": 0.0538
+          }
+        }
+      },
+      "cold": {
+        "sourceId": "plant:tile:6:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:6:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0.0538,
+        "harvestedAmount": 0.0538,
+        "depletionApplied": 0.0538,
+        "processingLossRate": 0.0744,
+        "depletion": {
+          "plant:tile:6:0:wild_grain_seed": {
+            "depletion": 1,
+            "classId": "wild_grain_seed",
+            "lastUseTick": 6,
+            "cumulativeUse": 0.0538
+          }
+        }
+      }
+    },
+    {
+      "id": "tile:0:0",
+      "t0": {
+        "tick": 3,
+        "seasonTick": 3,
+        "day": 270,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "winter",
+        "seasonIndex": 3,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 3
+        }
+      },
+      "t1": {
+        "tick": 7,
+        "seasonTick": 7,
+        "day": 630,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 1,
+        "season": "winter",
+        "seasonIndex": 3,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 1,
+          "tickWithinGeneration": 7
+        }
+      },
+      "tileUnchanged": true,
+      "inputUndepleted": true,
+      "warm": {
+        "sourceId": "plant:tile:0:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:0:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "processingLossRate": 0.0744,
+        "failureReason": "physically_exhausted"
+      },
+      "cold": {
+        "sourceId": "plant:tile:0:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:0:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "processingLossRate": 0.0744,
+        "failureReason": "physically_exhausted"
+      }
+    },
+    {
+      "id": "tile:6:0",
+      "t0": {
+        "tick": 3,
+        "seasonTick": 3,
+        "day": 270,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 0,
+        "season": "winter",
+        "seasonIndex": 3,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 0,
+          "tickWithinGeneration": 3
+        }
+      },
+      "t1": {
+        "tick": 7,
+        "seasonTick": 7,
+        "day": 630,
+        "dayOfSeason": 0,
+        "seasonLengthDays": 90,
+        "daysPerYear": 360,
+        "year": 1,
+        "season": "winter",
+        "seasonIndex": 3,
+        "generation": {
+          "index": 0,
+          "yearWithinGeneration": 1,
+          "tickWithinGeneration": 7
+        }
+      },
+      "tileUnchanged": true,
+      "inputUndepleted": true,
+      "warm": {
+        "sourceId": "plant:tile:6:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:6:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "processingLossRate": 0.0744,
+        "failureReason": "physically_exhausted"
+      },
+      "cold": {
+        "sourceId": "plant:tile:6:0:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "sourceFound": true,
+        "patchId": "plant:tile:6:0:wild_grain_seed",
+        "plantClassId": "wild_grain_seed",
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "processingLossRate": 0.0744,
+        "failureReason": "physically_exhausted"
+      }
+    }
+  ]
+}

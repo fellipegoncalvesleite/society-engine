@@ -1,0 +1,49 @@
+{
+  "root": {
+    "path": "/Users/fellipegoncalvesleite/society-engine",
+    "head": "11f085930462f981fcca45faf37b67d961196adb",
+    "branch": "checkpoint/dynamic-fission-provisional-successor-38",
+    "status": "?? .DS_Store\n?? .continueignore\n?? .cursor/rules/00-repository-map.mdc\n?? .cursorindexingignore\n?? AGENTS.override.md\n?? ARCHITECTURE.md\n?? docs/.DS_Store\n?? src/.DS_Store",
+    "dirtyHashes": {
+      ".DS_Store": "ebfd4ba07e686dcda94a5a9394b6c2faaa48a0bfbffad93e29ed4fc100ccfe80",
+      ".continueignore": "2682a1bea7717bfd23e955df9588cd1132ab38a7961b3afe600c1cd49341eb74",
+      ".cursor/rules/00-repository-map.mdc": "a89722bbcd8beaa22c32d7910032ba51ac075f87ba602db7a1eb6599197472eb",
+      ".cursorindexingignore": "71037eae7e95abca71cc8a017319db1b236d6aa3fa9ac553c08f48aec9001236",
+      "AGENTS.override.md": "5f6c6486cf0c4760f163415afb39df68ea87262cd78451d10cbfa9ab9bc71945",
+      "ARCHITECTURE.md": "7b786675a7a6450e410adb385a8e9964f50e58cbccb80ae45328649a60278d77",
+      "docs/.DS_Store": "267b26ac285a0c91eee6e5801e49226ebcb9de1a74474463a1d43d90247ff6c2",
+      "src/.DS_Store": "b9c21157c56e0fe4c7a658ece268f0035f757d43fa789c4e98982aa86fa916fc"
+    },
+    "trackedDiff": "",
+    "preserved": true
+  },
+  "protected": {
+    "path": "/Users/fellipegoncalvesleite/society-engine/artifacts/worktrees/society-engine-world-m0-m02-task12-v2-after-boundary-entry",
+    "head": "809f7ed8f8582f4a6d9b6754bf216f47a6e39fc4",
+    "branch": "integration/world-m0-m02-task12-v2-after-boundary-entry",
+    "status": "M scripts/worldM0M02CompilerAudit.mjs\n M src/sim/world/physical/compileTerrainHydro.ts\n M src/sim/world/physical/terrainHydroValidate.ts",
+    "dirtyHashes": {
+      "src/sim/world/physical/compileTerrainHydro.ts": "97804bf324e80698d5a362c356826b412ff3dc06d1fbb576ecd71e3deeeb4352",
+      "src/sim/world/physical/terrainHydroValidate.ts": "81b527e03d432b8b368ec10ad70ceab5ba381c87081d0bfe0687058e7540743a",
+      "scripts/worldM0M02CompilerAudit.mjs": "7643e4ae8ac1b3f5ca955d72336847b9224fa9b3254b2f11dad4aa9524072afe"
+    },
+    "trackedDiff": "scripts/worldM0M02CompilerAudit.mjs            | 128 +++++++++++++++++++++++--\n src/sim/world/physical/compileTerrainHydro.ts  |   8 +-\n src/sim/world/physical/terrainHydroValidate.ts |  52 +++++++---\n 3 files changed, 165 insertions(+), 23 deletions(-)",
+    "preserved": true
+  },
+  "physicalFilesByteIdenticalToBase": {
+    "src/sim/world/physical/assets.ts": "686603a5a0341275b1d594bee2d6fed0e6f88cfcc8475b6f0d03cfcbf6f5ce52",
+    "src/sim/world/physical/canonicalAssets.ts": "f9460086acd080945021eb2a8a86448ee882a90990b2daf05e4f145ae9ac7948",
+    "src/sim/world/physical/canonicalRecipe.ts": "fcbb18d0e71e4995ad04ffb7ab27abf1375b7bcbfaba5c49d2b18cb47754a144",
+    "src/sim/world/physical/failures.ts": "831bb50a11093c73510ea891e4857dd85af98290b72424e1741f266e51e29f32",
+    "src/sim/world/physical/identity.ts": "aacc663edb6e0f1554ab3aa07f8aced5910efb62f879137f2489674367dddbb9",
+    "src/sim/world/physical/recipe.ts": "a804f3f1de3223c97513e5f5491d8f39f44b6c27524abcec7acc83317a2d9ebc",
+    "src/sim/world/physical/spatialGrid.ts": "d9c1c505e0d1fdcbfd69ea9fcb1270cf80c26c74315a38b1c90c6169e8a4e811"
+  },
+  "frozenParents": {
+    "11f085930462f981fcca45faf37b67d961196adb": true,
+    "cdfc7c7fe84f16bd79275ccf9b0d0c352a521cef": true,
+    "30e1440c237c0f09bb1403687b8da9899fbfd41b": true,
+    "43c4c45615d375da6d25cf92ef328458ddcad347": true
+  },
+  "pass": true
+}

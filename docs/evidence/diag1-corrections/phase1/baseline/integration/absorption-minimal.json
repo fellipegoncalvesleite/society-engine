@@ -1,0 +1,497 @@
+{
+  "production": {
+    "forward": {
+      "before": {
+        "population": 46,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:b",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:c",
+            "population": 30,
+            "transferred": 0,
+            "traces": []
+          }
+        ]
+      },
+      "after": {
+        "population": 38,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 0,
+            "transferred": 8,
+            "absorbedBy": "band:b",
+            "status": "absorbed",
+            "traces": [
+              {
+                "actorId": "band:a",
+                "value": 8
+              }
+            ]
+          },
+          {
+            "id": "band:b",
+            "population": 0,
+            "transferred": 8,
+            "absorbedBy": "band:c",
+            "status": "absorbed",
+            "traces": [
+              {
+                "actorId": "band:b",
+                "value": 8
+              }
+            ]
+          },
+          {
+            "id": "band:c",
+            "population": 38,
+            "transferred": 0,
+            "status": "viable",
+            "traces": [
+              {
+                "actorId": "band:b",
+                "value": 8
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "reverseIds": {
+      "before": {
+        "population": 46,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:c",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:b",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:a",
+            "population": 30,
+            "transferred": 0,
+            "traces": []
+          }
+        ]
+      },
+      "after": {
+        "population": 46,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 38,
+            "transferred": 0,
+            "status": "viable",
+            "traces": [
+              {
+                "actorId": "band:b",
+                "value": 8
+              }
+            ]
+          },
+          {
+            "id": "band:b",
+            "population": 0,
+            "transferred": 8,
+            "absorbedBy": "band:a",
+            "status": "absorbed",
+            "traces": [
+              {
+                "actorId": "band:b",
+                "value": 8
+              }
+            ]
+          },
+          {
+            "id": "band:c",
+            "population": 8,
+            "transferred": 0,
+            "status": "nonviable",
+            "traces": []
+          }
+        ]
+      }
+    },
+    "single": {
+      "before": {
+        "population": 38,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:c",
+            "population": 30,
+            "transferred": 0,
+            "traces": []
+          }
+        ]
+      },
+      "after": {
+        "population": 38,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 0,
+            "transferred": 8,
+            "absorbedBy": "band:c",
+            "status": "absorbed",
+            "traces": [
+              {
+                "actorId": "band:a",
+                "value": 8
+              }
+            ]
+          },
+          {
+            "id": "band:c",
+            "population": 38,
+            "transferred": 0,
+            "status": "viable",
+            "traces": [
+              {
+                "actorId": "band:a",
+                "value": 8
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "healthyNegative": {
+      "before": {
+        "population": 46,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:b",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:c",
+            "population": 30,
+            "transferred": 0,
+            "traces": []
+          }
+        ]
+      },
+      "after": {
+        "population": 46,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 8,
+            "transferred": 0,
+            "status": "fragile",
+            "traces": []
+          },
+          {
+            "id": "band:b",
+            "population": 8,
+            "transferred": 0,
+            "status": "fragile",
+            "traces": []
+          },
+          {
+            "id": "band:c",
+            "population": 30,
+            "transferred": 0,
+            "status": "viable",
+            "traces": []
+          }
+        ]
+      }
+    },
+    "replacements": 0
+  },
+  "freshBandCounterfactual": {
+    "forward": {
+      "before": {
+        "population": 46,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:b",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:c",
+            "population": 30,
+            "transferred": 0,
+            "traces": []
+          }
+        ]
+      },
+      "after": {
+        "population": 46,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 0,
+            "transferred": 8,
+            "absorbedBy": "band:b",
+            "status": "absorbed",
+            "traces": [
+              {
+                "actorId": "band:a",
+                "value": 8
+              }
+            ]
+          },
+          {
+            "id": "band:b",
+            "population": 0,
+            "transferred": 16,
+            "absorbedBy": "band:c",
+            "status": "absorbed",
+            "traces": [
+              {
+                "actorId": "band:a",
+                "value": 8
+              },
+              {
+                "actorId": "band:b",
+                "value": 16
+              }
+            ]
+          },
+          {
+            "id": "band:c",
+            "population": 46,
+            "transferred": 0,
+            "status": "viable",
+            "traces": [
+              {
+                "actorId": "band:b",
+                "value": 16
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "reverseIds": {
+      "before": {
+        "population": 46,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:c",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:b",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:a",
+            "population": 30,
+            "transferred": 0,
+            "traces": []
+          }
+        ]
+      },
+      "after": {
+        "population": 46,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 38,
+            "transferred": 0,
+            "status": "viable",
+            "traces": [
+              {
+                "actorId": "band:b",
+                "value": 8
+              }
+            ]
+          },
+          {
+            "id": "band:b",
+            "population": 0,
+            "transferred": 8,
+            "absorbedBy": "band:a",
+            "status": "absorbed",
+            "traces": [
+              {
+                "actorId": "band:b",
+                "value": 8
+              }
+            ]
+          },
+          {
+            "id": "band:c",
+            "population": 8,
+            "transferred": 0,
+            "status": "nonviable",
+            "traces": []
+          }
+        ]
+      }
+    },
+    "single": {
+      "before": {
+        "population": 38,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:c",
+            "population": 30,
+            "transferred": 0,
+            "traces": []
+          }
+        ]
+      },
+      "after": {
+        "population": 38,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 0,
+            "transferred": 8,
+            "absorbedBy": "band:c",
+            "status": "absorbed",
+            "traces": [
+              {
+                "actorId": "band:a",
+                "value": 8
+              }
+            ]
+          },
+          {
+            "id": "band:c",
+            "population": 38,
+            "transferred": 0,
+            "status": "viable",
+            "traces": [
+              {
+                "actorId": "band:a",
+                "value": 8
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "healthyNegative": {
+      "before": {
+        "population": 46,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:b",
+            "population": 8,
+            "transferred": 0,
+            "traces": []
+          },
+          {
+            "id": "band:c",
+            "population": 30,
+            "transferred": 0,
+            "traces": []
+          }
+        ]
+      },
+      "after": {
+        "population": 46,
+        "removed": 0,
+        "bands": [
+          {
+            "id": "band:a",
+            "population": 8,
+            "transferred": 0,
+            "status": "fragile",
+            "traces": []
+          },
+          {
+            "id": "band:b",
+            "population": 8,
+            "transferred": 0,
+            "status": "fragile",
+            "traces": []
+          },
+          {
+            "id": "band:c",
+            "population": 30,
+            "transferred": 0,
+            "status": "viable",
+            "traces": []
+          }
+        ]
+      }
+    },
+    "replacements": 1
+  },
+  "assertions": {
+    "productionForwardLosesEight": true,
+    "zeroDeclaredRemovals": true,
+    "singleAbsorptionConserves": true,
+    "healthyNegativeConserves": true,
+    "counterfactualConserves": true,
+    "reverseIdConserves": true,
+    "oneCounterfactualReplacement": true
+  }
+}

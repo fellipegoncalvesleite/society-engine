@@ -1,0 +1,219 @@
+{
+  "audit": "CORRECTION-34E-EXPEDITION-TARGET-WORK-LABOR",
+  "phase": "before",
+  "productionAcceptsPartyLabourAuthority": true,
+  "productionRefusesToResolveWithoutPartyLabour": true,
+  "target": "tile:74:111",
+  "band": "band:varied-dry-corridor-mid",
+  "patchId": "patch:tile:74:111:fallback_food",
+  "distanceTiles": 3,
+  "memoryPresenceConfidence": 0.37,
+  "memoryYieldConfidence": 0.06,
+  "chain": "resolveExpeditionTargetWork -> buildTripRecord -> resolvePhysicalFoodHarvest (real production)",
+  "headlines": {
+    "W1": "TARGET WORK IS INVARIANT TO RESIDENTIAL LABOR",
+    "W2": "TARGET WORK FOLLOWS PARTY PRODUCTIVE LABOR"
+  },
+  "W1_same_party_different_residential_labor": {
+    "arms": {
+      "residentialAdultsAtHome_1": {
+        "workingAdults": 6,
+        "partyWorkers": 5,
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnValueAfterHarvest": 0.0282,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0607,
+        "harvestedAmount": 0.0436,
+        "depletionApplied": 0.0436,
+        "transportLoss": 0.0109,
+        "processingLoss": 0.0045,
+        "usableSupport": 0.0282,
+        "shadowPeople": null,
+        "sourceId": "plant:tile:74:111:roots_tubers_uso",
+        "stockBefore": {
+          "plantPatchState": null,
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockAfter": {
+          "plantPatchState": "{\"depletion\":0.7181,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.0436}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockChangedAtTarget": true
+      },
+      "residentialAdultsAtHome_25": {
+        "workingAdults": 30,
+        "partyWorkers": 5,
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnValueAfterHarvest": 0.0282,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0607,
+        "harvestedAmount": 0.0436,
+        "depletionApplied": 0.0436,
+        "transportLoss": 0.0109,
+        "processingLoss": 0.0045,
+        "usableSupport": 0.0282,
+        "shadowPeople": null,
+        "sourceId": "plant:tile:74:111:roots_tubers_uso",
+        "stockBefore": {
+          "plantPatchState": null,
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockAfter": {
+          "plantPatchState": "{\"depletion\":0.7181,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.0436}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockChangedAtTarget": true
+      }
+    },
+    "invariant": true,
+    "note": "the party, its composition, its cargo, the target, the route, the season, the memory and the world stock are identical; ONLY the adults left at the residence differ"
+  },
+  "W2_same_residence_different_party_labor": {
+    "arms": {
+      "party_2_workers": {
+        "workingAdults": 12,
+        "residentialAfterCommitment": 10,
+        "partyWorkers": 2,
+        "estimatedPeopleCount": 2,
+        "activityOutcome": "partial_success",
+        "returnValueAfterHarvest": 0.0146,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0607,
+        "harvestedAmount": 0.0226,
+        "depletionApplied": 0.0226,
+        "transportLoss": 0.0056,
+        "processingLoss": 0.0023,
+        "usableSupport": 0.0146,
+        "shadowPeople": null,
+        "sourceId": "plant:tile:74:111:roots_tubers_uso",
+        "stockBefore": {
+          "plantPatchState": null,
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockAfter": {
+          "plantPatchState": "{\"depletion\":0.3722,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.0226}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockChangedAtTarget": true
+      },
+      "party_5_workers": {
+        "workingAdults": 15,
+        "residentialAfterCommitment": 10,
+        "partyWorkers": 5,
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnValueAfterHarvest": 0.0282,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0607,
+        "harvestedAmount": 0.0436,
+        "depletionApplied": 0.0436,
+        "transportLoss": 0.0109,
+        "processingLoss": 0.0045,
+        "usableSupport": 0.0282,
+        "shadowPeople": null,
+        "sourceId": "plant:tile:74:111:roots_tubers_uso",
+        "stockBefore": {
+          "plantPatchState": null,
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockAfter": {
+          "plantPatchState": "{\"depletion\":0.7181,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.0436}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockChangedAtTarget": true
+      }
+    },
+    "partyLabourChangesWork": true,
+    "note": "residential labour after commitment is 10 in BOTH arms, so any difference is attributable to the party"
+  },
+  "W3_productive_labor_vs_physical_headcount": {
+    "arms": {
+      "A_5workers_0nonworking_5bodies": {
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnValueAfterHarvest": 0.0282,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0607,
+        "harvestedAmount": 0.0436,
+        "depletionApplied": 0.0436,
+        "transportLoss": 0.0109,
+        "processingLoss": 0.0045,
+        "usableSupport": 0.0282,
+        "shadowPeople": null,
+        "sourceId": "plant:tile:74:111:roots_tubers_uso",
+        "stockBefore": {
+          "plantPatchState": null,
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockAfter": {
+          "plantPatchState": "{\"depletion\":0.7181,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.0436}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockChangedAtTarget": true
+      },
+      "B_5workers_2nonworking_7bodies": {
+        "estimatedPeopleCount": 5,
+        "activityOutcome": "partial_success",
+        "returnValueAfterHarvest": 0.0282,
+        "returnedResourceKind": "gathered_plant_food",
+        "requestWasCappedByAvailability": false,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0607,
+        "harvestedAmount": 0.0436,
+        "depletionApplied": 0.0436,
+        "transportLoss": 0.0109,
+        "processingLoss": 0.0045,
+        "usableSupport": 0.0282,
+        "shadowPeople": null,
+        "sourceId": "plant:tile:74:111:roots_tubers_uso",
+        "stockBefore": {
+          "plantPatchState": null,
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockAfter": {
+          "plantPatchState": "{\"depletion\":0.7181,\"classId\":\"roots_tubers_uso\",\"lastUseTick\":8,\"cumulativeUse\":0.0436}",
+          "faunaStockState": null,
+          "aquaticStockState": null,
+          "tileDepletion": null
+        },
+        "stockChangedAtTarget": true
+      }
+    },
+    "targetWorkEqual": true,
+    "note": "non-working bodies must not increase the take; consumption and pace burden are measured separately by the CORRECTION-34D fixtures"
+  }
+}

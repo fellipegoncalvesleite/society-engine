@@ -1,0 +1,12 @@
+{
+  "checkpoint": "ROADMAP ITEM 4 — FINAL WHOLE-INTEGRATION FREEZE",
+  "generatedAt": "2026-09-30T16:22:59.363Z",
+  "fixtures": [],
+  "summary": {
+    "total": 0,
+    "passed": 0,
+    "failed": 1,
+    "verdict": "FAIL"
+  },
+  "harnessError": "Error: stabilization preparation refused: founder_cohort_declined not_willing_on_held_evidence,destination_barely_known,separation_costs_those_who_stay\n    at makeCanonicalStabilizationDeparture (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/lib/successorStabilizationFixture.mjs:145:11)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/item4WholeIntegrationFreezeAudit.mjs:52:34"
+}

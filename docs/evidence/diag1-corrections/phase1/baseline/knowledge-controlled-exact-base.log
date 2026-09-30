@@ -1,0 +1,46 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "check": "EXPEDITION-KNOWLEDGE-LATENCY-1",
+  "verdict": "FAIL",
+  "checks": {
+    "verificationLaunchesForStaleEvidence_10": true,
+    "verificationUsesSmallFastParty_10": true,
+    "verificationCreatesNoFood_10": true,
+    "verificationBringsPhysicalEvidence_10": true,
+    "memoryUnchangedWhileAway_11": true,
+    "memoryChangesAtPhysicalReturn_11": true,
+    "returnedEvidenceChangesLaterBehavior_11": false,
+    "reconnaissanceLaunchesForWeakRoutes_10": true,
+    "reconnaissanceCreatesNoFood_10": true,
+    "walkedTilesStayLocalWhileAway_11": true,
+    "walkedTilesBecomeKnowledgeAtReturn_11": true,
+    "reconnaissanceDoesNotTouchPatchMemory_11": true,
+    "naturalInfoTasksOccur_10": false,
+    "naturalRetrievalStillDominant_10": false,
+    "noInfoTaskFoodInNature_10": true
+  },
+  "controlled": {
+    "verification": {
+      "launched": true,
+      "workers": 2,
+      "awayDays": 5,
+      "delivered": 0,
+      "observationKinds": [
+        "target_confirmed"
+      ],
+      "followedByRetrieval": false,
+      "phasesSeen": [
+        "outbound",
+        "operating",
+        "returning"
+      ]
+    },
+    "reconnaissance": {
+      "launched": true,
+      "delivered": 0,
+      "routeTiles": 13,
+      "knownAfterReturn": true
+    }
+  },
+  "naturalFamilyCounts": {}
+}

@@ -1,0 +1,34 @@
+FAIL B-002 current-body conservation abc
+FAIL B-002 current-body conservation cba
+FAIL B-002 current-body conservation bac
+FAIL B-002 current-body conservation bca
+FAIL B-002 current-body conservation cab
+FAIL B-002 current-body conservation acb
+FAIL B-002 current-body conservation abcde
+FAIL B-002 arrivals rescue B before its turn
+FAIL B-002 single transfer and healthy no-transfer
+PASS B-003 same-clock actual take 0/tile:0:0
+PASS B-003 same-clock actual take 0/tile:6:0
+FAIL B-003 same-clock actual take 0/tile:93:15
+FAIL B-003 same-clock actual take 90/tile:0:0
+FAIL B-003 same-clock actual take 90/tile:6:0
+FAIL B-003 same-clock actual take 90/tile:93:15
+FAIL B-003 same-clock actual take 180/tile:0:0
+FAIL B-003 same-clock actual take 180/tile:6:0
+PASS B-003 same-clock actual take 180/tile:93:15
+PASS B-003 same-clock actual take 270/tile:0:0
+PASS B-003 same-clock actual take 270/tile:6:0
+FAIL B-003 same-clock actual take 270/tile:93:15
+FAIL B-003 in-place causal tile revision invalidates
+FAIL B-003 single generation after 1000 years
+FAIL B-004 actual daily action adults=0
+PASS B-004 actual daily action adults=1
+PASS B-004 actual daily action adults=20
+PASS B-004 prepared workers committed=5
+FAIL B-004 prepared workers committed=10
+PASS B-004 outbound workers committed=5
+FAIL B-004 outbound workers committed=10
+PASS B-004 operating workers committed=5
+FAIL B-004 operating workers committed=10
+PASS B-004 returning workers committed=5
+FAIL B-004 returning workers committed=10

@@ -1,0 +1,100 @@
+{
+  "sameSeedSiteWindowComparisons": [
+    {
+      "seed": "diag1b:s1",
+      "map": "map2_single_origin",
+      "years": 5,
+      "baseline": {
+        "fingerprint": "5ca2d602efee3267098428cff440c9289ae7a5f53aef259703acac0aa4e5b700",
+        "summary": {
+          "observedParties": 3,
+          "foodWorkingParties": 1,
+          "completedFoodParties": 1,
+          "multiWorkCompleted": 1,
+          "cargoLossParties": 1,
+          "zeroLastTakeLossParties": 0,
+          "positiveLastTakeLossParties": 1,
+          "totalMissingHarvest": 0.057999999999999996,
+          "totalDelivered": 0.0199
+        },
+        "startPopulation": 32,
+        "endPopulation": 31
+      },
+      "after": {
+        "fingerprint": "7754db710582b76c8ed5ffb4d7f234615d620d49a808859f1cdd59be850ab4cb",
+        "summary": {
+          "observedParties": 4,
+          "foodWorkingParties": 2,
+          "completedFoodParties": 2,
+          "multiWorkCompleted": 1,
+          "cargoLossParties": 0,
+          "zeroLastTakeLossParties": 0,
+          "positiveLastTakeLossParties": 0,
+          "totalMissingHarvest": 0,
+          "totalDelivered": 0.09670000000000001
+        },
+        "startPopulation": 32,
+        "endPopulation": 31
+      },
+      "observerOffFingerprint": "7754db710582b76c8ed5ffb4d7f234615d620d49a808859f1cdd59be850ab4cb",
+      "observerInert": true
+    },
+    {
+      "seed": "diag1b:s2",
+      "map": "map2_single_origin",
+      "years": 5,
+      "baseline": {
+        "fingerprint": "fbcadfd09be742ba88d26a6ec86dd55a6fcc45b6ba11f12b9ae59ccd20ccd4b9",
+        "summary": {
+          "observedParties": 3,
+          "foodWorkingParties": 1,
+          "completedFoodParties": 1,
+          "multiWorkCompleted": 1,
+          "cargoLossParties": 1,
+          "zeroLastTakeLossParties": 0,
+          "positiveLastTakeLossParties": 1,
+          "totalMissingHarvest": 0.057999999999999996,
+          "totalDelivered": 0.0199
+        },
+        "startPopulation": 32,
+        "endPopulation": 31
+      },
+      "after": {
+        "fingerprint": "0bb19d895c2f060f770ffae21d8db28084cc7b4a278e0d11da01b72e0888cafb",
+        "summary": {
+          "observedParties": 4,
+          "foodWorkingParties": 2,
+          "completedFoodParties": 2,
+          "multiWorkCompleted": 1,
+          "cargoLossParties": 0,
+          "zeroLastTakeLossParties": 0,
+          "positiveLastTakeLossParties": 0,
+          "totalMissingHarvest": 0,
+          "totalDelivered": 0.09670000000000001
+        },
+        "startPopulation": 32,
+        "endPopulation": 31
+      },
+      "observerOffFingerprint": "0bb19d895c2f060f770ffae21d8db28084cc7b4a278e0d11da01b72e0888cafb",
+      "observerInert": true
+    }
+  ],
+  "heldCacheCargoWitness": {
+    "expeditionId": "expedition:band:single-origin:726:distant_plant_gathering:aaa6867a",
+    "baselineTakes": [
+      0.0638,
+      0.0302,
+      0.0199
+    ],
+    "baselineCharge": 0.036,
+    "baselineDelivered": 0.0199,
+    "baselineExpected": 0.0779,
+    "correctedCargoWithOldCacheDelivered": 0.0779,
+    "cargoRecoveredHoldingUpstreamCacheMechanism": 0.058,
+    "fullCorrectionDelivered": 0.09670000000000001,
+    "additionalDifferenceWithFixedCache": 0.0188,
+    "qualification": "Old-cache arm is an intentionally defective mechanism held constant only for causal isolation; never a proposed production mode. Full phase differences include changed upstream physical take; no claim all extra food comes from cargo."
+  },
+  "populationConclusion": "Both retained five-year seeds remain 32 to 31; no growth guarantee or demographic retuning.",
+  "pass": true
+}

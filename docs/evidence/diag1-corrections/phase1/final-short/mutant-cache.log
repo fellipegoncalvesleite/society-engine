@@ -1,0 +1,15 @@
+PASS B-003 same-clock actual take 0/tile:0:0
+PASS B-003 same-clock actual take 0/tile:6:0
+FAIL B-003 same-clock actual take 0/tile:93:15
+FAIL B-003 same-clock actual take 90/tile:0:0
+FAIL B-003 same-clock actual take 90/tile:6:0
+FAIL B-003 same-clock actual take 90/tile:93:15
+FAIL B-003 same-clock actual take 180/tile:0:0
+FAIL B-003 same-clock actual take 180/tile:6:0
+PASS B-003 same-clock actual take 180/tile:93:15
+PASS B-003 same-clock actual take 270/tile:0:0
+PASS B-003 same-clock actual take 270/tile:6:0
+FAIL B-003 same-clock actual take 270/tile:93:15
+FAIL B-003 in-place causal tile revision invalidates
+FAIL B-003 single generation after 1000 years
+FAIL B-003 human/fauna/observer first-reader and JSON reload parity

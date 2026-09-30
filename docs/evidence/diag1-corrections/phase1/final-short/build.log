@@ -1,0 +1,21 @@
+
+> emergent-civilization-simulation@0.1.0 build
+> tsc -p tsconfig.json && tsc -p tsconfig.node.json && vite build
+
+vite v8.0.14 building client environment for production...
+[2Ktransforming...✓ 2156 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                   0.41 kB │ gzip:   0.28 kB
+dist/assets/simWorker-prVKm15r.js             1,480.90 kB
+dist/assets/ArchitectureMapPage-B0BlZwvN.css      6.83 kB │ gzip:   1.70 kB
+dist/assets/index-Co1-eXBE.css                   87.10 kB │ gzip:  12.96 kB
+dist/assets/ArchitectureMapPage-Ci3FsSpj.js     377.54 kB │ gzip: 114.72 kB
+dist/assets/index-B4jf4j2g.js                 2,917.75 kB │ gzip: 784.68 kB
+
+✓ built in 1.38s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

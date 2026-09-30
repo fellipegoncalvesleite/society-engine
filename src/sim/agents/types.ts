@@ -1248,6 +1248,9 @@ export interface ActivityResourceReturnRecord {
 export type PhysicalFoodSourceKind = "plant_patch" | "fauna_stock" | "aquatic_stock";
 
 export interface PhysicalFoodHarvestRecord {
+  /** Present only on a physical expedition return; unique for its acquired lot. */
+  readonly returnDepositId?: string;
+  readonly cargoLotId?: string;
   readonly sourceKind: PhysicalFoodSourceKind;
   readonly sourceId?: string;
   readonly sourceClass: string;
@@ -1699,6 +1702,13 @@ export interface IntraSeasonTripRecord {
   readonly activityOutcomeSummary: string;
   readonly resourceReturn: ActivityResourceReturnRecord;
   readonly physicalFoodHarvest?: PhysicalFoodHarvestRecord;
+  /** One returned journey, never a deposit. Both arrays are bounded by work-operation count.
+   * Work observations remain in acquisition order; the separately credited batch preserves sources. */
+  readonly expeditionReturn?: {
+    readonly expeditionId: string;
+    readonly workReceipts: readonly PhysicalFoodHarvestRecord[];
+    readonly returnedFoodReceipts: readonly PhysicalFoodHarvestRecord[];
+  };
   // CORRECTION-4 §4 — this visit LOOKED without attempting a take (expedition
   // verification, `verifyOnly`). It is real physical presence and legitimately refreshes
   // knowledge, but it is NOT exploitation, so it must not suppress the gathering attempt
@@ -1870,13 +1880,44 @@ export interface ExpeditionPartyComposition {
   readonly high: number;
 }
 
-/** What the party physically carries home. Information is not cargo that feeds anyone. */
+/** One actual work contribution. At most one source per existing work operation. */
+export interface ExpeditionCargoLot {
+  readonly id: string;
+  readonly acquisitionOrder: number;
+  readonly workRecord: IntraSeasonTripRecord;
+  readonly admittedUsableUnits: number;
+  readonly overflowUnits: number;
+  readonly remainingUnits: number;
+  readonly appliedProvisionUnits: number;
+  readonly postAdmissionLossUnits: number;
+  readonly deliveredUnits: number;
+  readonly returnDepositId?: string;
+}
+
+export interface ExpeditionCargoBalance {
+  readonly lotCount: number;
+  readonly admittedUsableUnits: number;
+  readonly remainingUnits: number;
+  readonly deliveredUnits: number;
+  readonly appliedProvisionUnits: number;
+  readonly unfulfilledProvisionUnits: number;
+  readonly postAdmissionLossUnits: number;
+  readonly overflowUnits: number;
+}
+
+/** Raw physical food units. Lots own cargo; scalars are checked projections. */
 export interface ExpeditionCargo {
-  /** Physical harvest units actually drawn at the target (already depleted from the stock). */
+  /** Missing only on legacy records, explicitly checked before resumed execution. */
+  readonly accountingVersion?: 1;
+  readonly lots?: readonly ExpeditionCargoLot[];
+  /** Set once on return/loss; prohibits a second delivery or provision settlement. */
+  readonly settled?: boolean;
+  readonly unfulfilledProvisionUnits?: number;
+  /** Remaining physical food (before the declared charge is settled at return). */
   readonly harvestUnits: number;
-  /** Units lost in transit (spoilage/drop/abandonment on a hard leg). */
+  /** Compatibility projection: upstream overflow plus post-admission loss. */
   readonly lostUnits: number;
-  /** Units the party ate to feed itself while away (trip-local provisioning, never a store). */
+  /** Legacy field name: DECLARED charge, not proof that food existed or was eaten. */
   readonly provisionUnitsConsumed: number;
   /** The physical receipt resolved at the target; deposited into the ledger only on return. */
   readonly harvestReceipt?: PhysicalFoodHarvestRecord;
@@ -1970,10 +2011,8 @@ export interface ExpeditionRecord {
   readonly riskEpisodeIds: readonly string[];
   readonly outcomeReason?: ExpeditionOutcomeReason;
   /**
-   * The trip record resolved AT THE TARGET on the work day (its stock is already
-   * physically depleted). It is carried home as cargo and is NOT food for anyone
-   * until the return deposits it into `recentIntraSeasonTrips`. Holding the record
-   * rather than rebuilding one at return keeps a single trip-record builder.
+   * Latest target observation, used for knowledge/outcome. Cargo provenance is
+   * owned by cargo.lots, never reconstructed from this last-record projection.
    */
   readonly pendingReturnRecord?: IntraSeasonTripRecord;
   /**
@@ -2368,6 +2407,8 @@ export interface ExpeditionOutcomeSummary {
   readonly partyPeople?: number;
   /** Physical units that actually reached the residential camp (0 for information-only/failed). */
   readonly deliveredHarvestUnits: number;
+  /** Terminal raw-unit reconciliation; not a second food deposit. */
+  readonly cargoBalance?: ExpeditionCargoBalance;
   readonly provisionUnitsConsumed: number;
   readonly lostUnits: number;
   readonly injuryLoad: number;

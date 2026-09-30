@@ -1,0 +1,44 @@
+[
+  {
+    "source": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/prior-evidence/diag1b/diag1b-evidence/probes/runtime.mjs",
+    "sourceSha256": "bba57eb6a8878124759c4c8112da152a8fbf2df85e5f16fc52b0f21000315915",
+    "adapted": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/baseline-probes/runtime.mjs",
+    "adaptedSha256": "8e19bf45381fc961f0b5f81ab09bf1dc5d088f56a52b789ed67cb78e4dadc12e",
+    "change": "source/runtime/cache/output plumbing only; original probes preserved"
+  },
+  {
+    "source": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/prior-evidence/diag1b/diag1b-evidence/probes/harness.mjs",
+    "sourceSha256": "18e3dbbea5dca679893d48f8d9a51e6ccb30da8aaf1416f35a67fd5fb01f701e",
+    "adapted": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/baseline-probes/harness.mjs",
+    "adaptedSha256": "18e3dbbea5dca679893d48f8d9a51e6ccb30da8aaf1416f35a67fd5fb01f701e",
+    "change": "source/runtime/cache/output plumbing only; original probes preserved"
+  },
+  {
+    "source": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/prior-evidence/diag1b/diag1b-evidence/probes/nutrition/natural-cargo.mjs",
+    "sourceSha256": "abf892d5aa57fd126b0d1eca7a021768b719d86c2154767ede7edff72eb6d917",
+    "adapted": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/baseline-probes/nutrition/natural-cargo.mjs",
+    "adaptedSha256": "abf892d5aa57fd126b0d1eca7a021768b719d86c2154767ede7edff72eb6d917",
+    "change": "source/runtime/cache/output plumbing only; original probes preserved"
+  },
+  {
+    "source": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/prior-evidence/diag1b/diag1b-evidence/probes/nutrition/controls.mjs",
+    "sourceSha256": "79ecb9795ee9a06f029a9651404ef25ca2403698464b113121babd5986f8040b",
+    "adapted": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/baseline-probes/nutrition/controls.mjs",
+    "adaptedSha256": "79ecb9795ee9a06f029a9651404ef25ca2403698464b113121babd5986f8040b",
+    "change": "source/runtime/cache/output plumbing only; original probes preserved"
+  },
+  {
+    "source": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/prior-evidence/diag1b/diag1b-evidence/probes/integration/absorption-minimal.mjs",
+    "sourceSha256": "b62f0b0f9bf250e89e46fc85eed08ec91bb687d15d2d0e85e3bc3736c06ae313",
+    "adapted": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/baseline-probes/integration/absorption-minimal.mjs",
+    "adaptedSha256": "4d14e92a74db8bb94e0daf10c299e854ff50dbb3ca24a1fcb7fb8e5d33dd1cc4",
+    "change": "source/runtime/cache/output plumbing only; original probes preserved"
+  },
+  {
+    "source": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/prior-evidence/diag1b/diag1b-evidence/probes/extra-controls.mjs",
+    "sourceSha256": "1e066c06953a7f4f8413bcf5f32e4b1f01d22bb42a658bcaeddb7b51383bcdef",
+    "adapted": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/baseline-probes/extra-controls.mjs",
+    "adaptedSha256": "8143d0c9df2dbcc3180f82ad96af63e9bc99aea4b23cbe2da7496b3549ec23aa",
+    "change": "source/runtime/cache/output plumbing only; original probes preserved"
+  }
+]

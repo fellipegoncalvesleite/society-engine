@@ -1,0 +1,17 @@
+{
+  "arm": "after",
+  "verdicts": {
+    "P22_person_conservation": "PEOPLE_CONSERVED",
+    "P1_no_away_party_control": "RESIDENCE_ONLY_WHEN_NOBODY_IS_AWAY",
+    "P2_P3_P5_away_party_presence": "AWAY_BODIES_AT_THEIR_OWN_POSITION",
+    "P4_temporary_task_camp": "TASK_CAMP_PRESENCE_TIED_TO_EXPEDITION",
+    "P8_P18_terminal_records_occupy_nothing": "VACUOUS_NO_TERMINAL_RECORDS_OBSERVED",
+    "P9_concurrent_parties": "VACUOUS_NO_CONCURRENT_PARTIES_OBSERVED",
+    "P12_own_party_is_not_a_foreign_band": "OWN_PARTY_NEVER_FOREIGN",
+    "P10_P14_party_scale": "PARTY_SCALE_FOLLOWS_PARTY_SIZE",
+    "P15_P16_P17_same_day_parties_deferred": "DEFERRED_SAME_DAY_PRESENCE_NOT_IMPLEMENTED",
+    "P25_boundedness": "BOUNDED"
+  }
+}
+
+wrote /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/regression-final/presence-out.json

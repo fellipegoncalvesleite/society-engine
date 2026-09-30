@@ -1,0 +1,15 @@
+/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expeditionCargo.ts:63
+	if (!valid) throw new ExpeditionCargoProvenanceError("unknown", "lot bounds, source attribution, scalar projections or raw-unit balance");
+	                  ^
+
+ExpeditionCargoProvenanceError: Expedition unknown: cannot resume cargo; missing or inconsistent provenance: lot bounds, source attribution, scalar projections or raw-unit balance. Original saved record must be retained.
+    at assertExpeditionCargo (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expeditionCargo.ts:63:20)
+    at ensureExpeditionCargo (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expeditionCargo.ts:79:3)
+    at eval (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expedition.ts:406:164)
+    at Array.map (<anonymous>)
+    at reconcileExpeditionCommitment (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expedition.ts:406:47)
+    at applyExpeditionDay (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expedition.ts:2018:22)
+    at Object.apply (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expedition.ts:1404:10)
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/expeditionAcuteRiskAudit.mjs:158:53
+
+Node.js v26.7.0

@@ -1,0 +1,39 @@
+{
+  "root": {
+    "path": "/Users/fellipegoncalvesleite/society-engine",
+    "head": "11f085930462f981fcca45faf37b67d961196adb",
+    "tree": "d12ec349eb5923b93d2fff33bb2e5716861812da",
+    "branch": "checkpoint/dynamic-fission-provisional-successor-38",
+    "status": "?? .DS_Store\n?? .continueignore\n?? .cursor/rules/00-repository-map.mdc\n?? .cursorindexingignore\n?? AGENTS.override.md\n?? ARCHITECTURE.md\n?? docs/.DS_Store\n?? src/.DS_Store",
+    "dirtyHashes": {
+      ".DS_Store": "ebfd4ba07e686dcda94a5a9394b6c2faaa48a0bfbffad93e29ed4fc100ccfe80",
+      ".continueignore": "2682a1bea7717bfd23e955df9588cd1132ab38a7961b3afe600c1cd49341eb74",
+      ".cursor/rules/00-repository-map.mdc": "a89722bbcd8beaa22c32d7910032ba51ac075f87ba602db7a1eb6599197472eb",
+      ".cursorindexingignore": "71037eae7e95abca71cc8a017319db1b236d6aa3fa9ac553c08f48aec9001236",
+      "AGENTS.override.md": "5f6c6486cf0c4760f163415afb39df68ea87262cd78451d10cbfa9ab9bc71945",
+      "ARCHITECTURE.md": "7b786675a7a6450e410adb385a8e9964f50e58cbccb80ae45328649a60278d77",
+      "docs/.DS_Store": "267b26ac285a0c91eee6e5801e49226ebcb9de1a74474463a1d43d90247ff6c2",
+      "src/.DS_Store": "b9c21157c56e0fe4c7a658ece268f0035f757d43fa789c4e98982aa86fa916fc"
+    }
+  },
+  "protected": {
+    "path": "/Users/fellipegoncalvesleite/society-engine/artifacts/worktrees/society-engine-world-m0-m02-task12-v2-after-boundary-entry",
+    "head": "809f7ed8f8582f4a6d9b6754bf216f47a6e39fc4",
+    "tree": "6f06c7988654d6b644dd106f59f2f108017cc25e",
+    "branch": "integration/world-m0-m02-task12-v2-after-boundary-entry",
+    "status": "M scripts/worldM0M02CompilerAudit.mjs\n M src/sim/world/physical/compileTerrainHydro.ts\n M src/sim/world/physical/terrainHydroValidate.ts",
+    "dirtyHashes": {
+      "src/sim/world/physical/compileTerrainHydro.ts": "97804bf324e80698d5a362c356826b412ff3dc06d1fbb576ecd71e3deeeb4352",
+      "src/sim/world/physical/terrainHydroValidate.ts": "81b527e03d432b8b368ec10ad70ceab5ba381c87081d0bfe0687058e7540743a"
+    }
+  },
+  "correction": {
+    "path": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support",
+    "head": "73cc38b916e236339897c59686638efafd569b6e",
+    "tree": "dcbedbed81f70a6ffc6e3c7ffb245e039a9254c6",
+    "branch": "fix/diag1-human-support",
+    "status": "",
+    "dirtyHashes": {}
+  },
+  "remote": "https://github.com/fellipegoncalvesleite/society-engine.git"
+}

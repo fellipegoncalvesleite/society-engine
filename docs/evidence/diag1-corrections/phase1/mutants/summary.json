@@ -1,0 +1,86 @@
+[
+  {
+    "command": [
+      "node",
+      "scripts/diag1Phase1ConservationAudit.mjs",
+      "--scope",
+      "cargo",
+      "--mutant",
+      "cargo",
+      "--out",
+      "docs/evidence/diag1-corrections/phase1/mutants/cargo.json"
+    ],
+    "exitCode": 1,
+    "elapsedSeconds": 39.645297050476074,
+    "mutation": {
+      "mutant": "cargo",
+      "loaded": 1,
+      "executed": 125,
+      "bytesRestored": true,
+      "detected": true
+    }
+  },
+  {
+    "command": [
+      "node",
+      "scripts/diag1Phase1ConservationAudit.mjs",
+      "--scope",
+      "absorption",
+      "--mutant",
+      "absorption",
+      "--out",
+      "docs/evidence/diag1-corrections/phase1/mutants/absorption.json"
+    ],
+    "exitCode": 1,
+    "elapsedSeconds": 0.8172390460968018,
+    "mutation": {
+      "mutant": "absorption",
+      "loaded": 1,
+      "executed": 0,
+      "bytesRestored": true,
+      "detected": false
+    }
+  },
+  {
+    "command": [
+      "node",
+      "scripts/diag1Phase1ConservationAudit.mjs",
+      "--scope",
+      "cache",
+      "--mutant",
+      "cache",
+      "--out",
+      "docs/evidence/diag1-corrections/phase1/mutants/cache.json"
+    ],
+    "exitCode": 1,
+    "elapsedSeconds": 1.7825658321380615,
+    "mutation": {
+      "mutant": "cache",
+      "loaded": 1,
+      "executed": 1043,
+      "bytesRestored": true,
+      "detected": true
+    }
+  },
+  {
+    "command": [
+      "node",
+      "scripts/diag1Phase1ConservationAudit.mjs",
+      "--scope",
+      "labor",
+      "--mutant",
+      "labor",
+      "--out",
+      "docs/evidence/diag1-corrections/phase1/mutants/labor.json"
+    ],
+    "exitCode": 1,
+    "elapsedSeconds": 4.762436151504517,
+    "mutation": {
+      "mutant": "labor",
+      "loaded": 1,
+      "executed": 51,
+      "bytesRestored": true,
+      "detected": true
+    }
+  }
+]

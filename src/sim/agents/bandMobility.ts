@@ -382,6 +382,12 @@ export function deriveAvailableMobilityPools(band: Band): MobilityRolePools {
   return { limited, typical, high };
 }
 
+/** Productive residential supply after canonical commitments and today's work. */
+export function deriveAvailableResidentialWorkers(band: Band, workersUsedToday = 0): number {
+  const pools = deriveAvailableMobilityPools(band);
+  return Math.max(0, pools.limited + pools.typical + pools.high - workersUsedToday);
+}
+
 /**
  * Draw a party from the AVAILABLE pools, deterministically.
  *  - "fast"     — reconnaissance/verification: highest-capacity adults first.

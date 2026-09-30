@@ -1,0 +1,111 @@
+{
+  "seed": "diag1b:s1",
+  "map": "map2_single_origin",
+  "years": 5,
+  "observe": true,
+  "transforms": 1,
+  "hookCount": 16,
+  "startPopulation": 32,
+  "endPopulation": 31,
+  "fingerprint": "5ca2d602efee3267098428cff440c9289ae7a5f53aef259703acac0aa4e5b700",
+  "summary": {
+    "observedParties": 3,
+    "foodWorkingParties": 1,
+    "completedFoodParties": 1,
+    "multiWorkCompleted": 1,
+    "cargoLossParties": 1,
+    "zeroLastTakeLossParties": 0,
+    "positiveLastTakeLossParties": 1,
+    "totalMissingHarvest": 0.057999999999999996,
+    "totalDelivered": 0.0199
+  },
+  "parties": [
+    {
+      "id": "expedition:band:single-origin:726:distant_plant_gathering:aaa6867a",
+      "task": "distant_plant_gathering",
+      "bandId": "band:single-origin",
+      "work": [
+        {
+          "day": 728,
+          "workDay": 1,
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:109:57:wetland_plant",
+          "physicalAvailability": 0.108,
+          "harvested": 0.0733,
+          "depletion": 0.0733,
+          "transportLoss": 0.0018,
+          "processingLoss": 0.0077,
+          "taken": 0.0638,
+          "cargo": 0.0638,
+          "capacity": 0.72,
+          "lost": 0,
+          "provisions": 0.0168
+        },
+        {
+          "day": 729,
+          "workDay": 2,
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:109:57:wetland_plant",
+          "physicalAvailability": 0.0347,
+          "harvested": 0.0347,
+          "depletion": 0.0347,
+          "transportLoss": 0.0008,
+          "processingLoss": 0.0036,
+          "taken": 0.0302,
+          "cargo": 0.094,
+          "capacity": 0.72,
+          "lost": 0,
+          "provisions": 0.024
+        },
+        {
+          "day": 730,
+          "workDay": 3,
+          "sourceKind": "plant_patch",
+          "sourceId": "plant:tile:109:57:wild_grain_seed",
+          "physicalAvailability": 0.022,
+          "harvested": 0.022,
+          "depletion": 0.022,
+          "transportLoss": 0.0005,
+          "processingLoss": 0.0016,
+          "taken": 0.0199,
+          "cargo": 0.1139,
+          "capacity": 0.72,
+          "lost": 0,
+          "provisions": 0.0312
+        }
+      ],
+      "completed": true,
+      "returnDay": 731,
+      "cargo": {
+        "harvestUnits": 0.1139,
+        "lostUnits": 0,
+        "provisionUnitsConsumed": 0.036,
+        "carryCapacityUnits": 0.72
+      },
+      "delivered": 0.0199,
+      "expectedAfterProvisions": 0.0779,
+      "unaccounted": 0.057999999999999996,
+      "lastTaken": 0.0199,
+      "reason": "returned_with_cargo",
+      "returnReceipt": {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:109:57:wild_grain_seed",
+        "sourceClass": "wild_grain_seed",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.022,
+        "harvestedAmount": 0.022,
+        "depletionApplied": 0.022,
+        "transportLoss": 0.0005,
+        "processingLoss": 0.0016,
+        "usableSupport": 0.0199,
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:single-origin:730:plant_patch:plant:tile:109:57:wild_grain_seed",
+          "reason:expedition-return:expedition:band:single-origin:726:distant_plant_gathering:aaa6867a"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "check": "EXPEDITION-ACUTE-RISK-1",
+  "verdict": "PASS",
+  "checks": {
+    "expeditionExposureGeneratesEpisode_14": true,
+    "episodeHasPhysicalCauses_14": true,
+    "episodeStampsItsParty_14": true,
+    "sameExposureAppliedOnce_14": true,
+    "deterministicEpisodeIds_14": true,
+    "injurySlowsRealPace_14": true,
+    "severeInjuryForcesReturn_14": true,
+    "injuredPartyAbandonsCargo_14": true,
+    "deathsNeverWrittenByExpeditionCode_14": true,
+    "perExpeditionEpisodeCapHolds_14": true
+  },
+  "controlled": {
+    "physicalWorkReceipts": [
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:126:55:wetland_plant",
+        "sourceClass": "wetland_plant",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.1145,
+        "harvestedAmount": 0.0549,
+        "depletionApplied": 0.0549,
+        "transportLoss": 0.0061,
+        "processingLoss": 0.0052,
+        "usableSupport": 0.0435,
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:delta-coastal-foragers:721:plant_patch:plant:tile:126:55:wetland_plant"
+        ]
+      },
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:126:55:leaf_green",
+        "sourceClass": "leaf_green",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0864,
+        "harvestedAmount": 0.0549,
+        "depletionApplied": 0.0549,
+        "transportLoss": 0.0061,
+        "processingLoss": 0.0022,
+        "usableSupport": 0.0465,
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:delta-coastal-foragers:722:plant_patch:plant:tile:126:55:leaf_green"
+        ]
+      },
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:126:55:wetland_plant",
+        "sourceClass": "wetland_plant",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0596,
+        "harvestedAmount": 0.0549,
+        "depletionApplied": 0.0549,
+        "transportLoss": 0.0061,
+        "processingLoss": 0.0052,
+        "usableSupport": 0.0435,
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:delta-coastal-foragers:723:plant_patch:plant:tile:126:55:wetland_plant"
+        ]
+      }
+    ],
+    "actualUsable": 0.1335,
+    "controlledCarryCapacity": 0.1406,
+    "episodeId": "acute:band:delta-coastal-foragers:8:travel_accident:expedition:band:delta-coastal-foragers:720:distant_plant_gathering:78f24a9a:0",
+    "severity": "severe",
+    "injuryLoadAfter": 0.28,
+    "riskEpisodeIds": [
+      "acute:band:delta-coastal-foragers:8:travel_accident:expedition:band:delta-coastal-foragers:720:distant_plant_gathering:78f24a9a:0"
+    ],
+    "healthyKmPerDay": 4.074,
+    "injuredKmPerDay": 1.63,
+    "forcedReturnReason": "injury_forced_return",
+    "lostUnitsAfter": 0.0801
+  },
+  "natural": {
+    "expeditionEpisodeSightings": 0
+  }
+}

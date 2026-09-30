@@ -1,0 +1,476 @@
+{
+  "runtime": "v24.18.0",
+  "sourceCommit": "73cc38b916e236339897c59686638efafd569b6e",
+  "sensitivity": {
+    "incrementPositive": 1,
+    "incrementNonfood": 0,
+    "nonfoodPreservesReference": true,
+    "take": 0.0354
+  },
+  "labor": {
+    "day": 90,
+    "position": "tile:111:57",
+    "arms": [
+      {
+        "adults": 20,
+        "changed": true,
+        "availablePools": {
+          "limited": 4,
+          "typical": 13,
+          "high": 3
+        },
+        "record": {
+          "day": 96,
+          "tick": 1,
+          "season": "summer",
+          "sourceBandId": "band:custom:0",
+          "originTileId": "tile:111:57",
+          "targetTileId": "tile:111:56",
+          "taskGroupType": "plant_gathering_group",
+          "groupLabel": "Plant gathering group",
+          "estimatedPeopleCount": 4,
+          "objective": "food_patch_check",
+          "objectiveLabel": "Food patch check",
+          "startDay": 96,
+          "endDay": 96,
+          "activityStatus": "completed_observation",
+          "distanceTiles": 1,
+          "distanceKm": 1.5,
+          "estimatedDurationDays": 1,
+          "cause": "food_resource_check",
+          "movementType": "local_foraging_loop",
+          "outcome": "returns_same_day",
+          "activityResult": "target_found",
+          "activityOutcome": "target_found",
+          "activityOutcomeReasonIds": [
+            "reason:activity-outcome:band:custom:0:96:target_found:tile:111:56"
+          ],
+          "activityOutcomeSummary": "deterministic_target_found; return=gathered_plant_food; physical_receipt_feeds_support",
+          "resourceReturn": {
+            "returnedResourceKind": "gathered_plant_food",
+            "semantics": {
+              "category": "physical_food",
+              "isPhysical": true,
+              "contributesToNutrition": true,
+              "materialDomain": "plant_food"
+            },
+            "estimatedReturnValue": 0.0248,
+            "returnConfidence": 0.4616,
+            "consumedByEconomy": true,
+            "noYieldCoupling": true,
+            "noCarryingCapacityCoupling": false,
+            "noPopulationChange": true,
+            "noStressChange": true,
+            "noSupportChange": false,
+            "reasonIds": [
+              "reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56",
+              "reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant"
+            ]
+          },
+          "shadowSubsistence": {
+            "shadowReturnKind": "gathered_food_shadow",
+            "shadowSupportDomain": "food",
+            "shadowGrossValue": 0.0875,
+            "shadowTravelCost": 0.02,
+            "shadowRiskPenalty": 0.0112,
+            "shadowNetValue": 0.0563,
+            "shadowReliability": 0.3151,
+            "contributesAtBaseSameDay": true,
+            "seasonalEcologyModifier": 1.0257,
+            "shadowConsumedByEconomy": false,
+            "noEconomyCoupling": true,
+            "reasonIds": [
+              "reason:activity-shadow:band:custom:0:96:gathered_food_shadow:tile:111:56"
+            ]
+          },
+          "seasonalEcology": {
+            "domain": "plant_patch",
+            "season": "summer",
+            "availabilityFactor": 0.6343,
+            "baselineFactor": 0.712,
+            "seasonalDelta": -0.0778,
+            "wetDryTendency": "neutral",
+            "hiddenTendencyClass": "neutral",
+            "shadowSeasonalResult": "reduced",
+            "taughtSeasonalHint": true,
+            "driverSummary": "plant_patch summer: env=0.65 sig=0.6 (neutral, neutral)",
+            "reasonIds": [
+              "reason:seasonal-ecology:tile:111:56:summer:plant_patch"
+            ]
+          },
+          "plantPatchTrace": {
+            "patchId": "plant:tile:111:56:wetland_plant",
+            "plantClassId": "wetland_plant",
+            "seasonalAvailability": "active",
+            "abundanceTrend": "flat",
+            "lifecycleState": "active",
+            "expectedReturnFactor": 0.2,
+            "currentDepletion": 0.116,
+            "pressure": 0.049,
+            "recoveryRate": 0.18,
+            "fallbackRole": "important",
+            "fallbackRank": 0.58,
+            "laborCost": 0.48,
+            "safetyRisk": "moderate",
+            "rawSource": "plantStock.derivePlantGatherPatchTrace from band-targeted plant activity tile",
+            "reasonIds": [
+              "reason:plant-gather-trace:tile:111:56:plant:tile:111:56:wetland_plant:1"
+            ],
+            "depletionApplied": true,
+            "knowledgeUpdate": "confirmed_by_gathering",
+            "memoryUpdate": "resource_memory_update",
+            "protoCampInfluence": "fallback_refuge_signal"
+          },
+          "activityMemoryEffect": {
+            "sourceBandId": "band:custom:0",
+            "sourceTripDay": 96,
+            "tick": 1,
+            "season": "summer",
+            "targetTileId": "tile:111:56",
+            "patchId": "patch:tile:111:56:generic_plant_food",
+            "resourceClassId": "generic_plant_food",
+            "activityOutcome": "target_found",
+            "effectType": "confidence_refreshed",
+            "effectSummary": "confidence_refreshed; patch:tile:111:56:generic_plant_food; presenceConfidence +0.03; state observed->observed; memory_only_no_economy",
+            "confidenceBefore": {
+              "presenceConfidence": 0.53,
+              "seasonConfidence": 0.3,
+              "yieldConfidence": 0.35,
+              "safetyConfidence": 0.23,
+              "processingConfidence": 0,
+              "accessConfidence": 0.45,
+              "recoveryConfidence": 0
+            },
+            "confidenceAfter": {
+              "presenceConfidence": 0.56,
+              "seasonConfidence": 0.32,
+              "yieldConfidence": 0.36,
+              "safetyConfidence": 0.24,
+              "processingConfidence": 0,
+              "accessConfidence": 0.46,
+              "recoveryConfidence": 0
+            },
+            "mainConfidenceChannel": "presenceConfidence",
+            "confidenceDelta": 0.03,
+            "reasonIds": [
+              "reason:activity-memory:band:custom:0:96:confidence_refreshed:tile:111:56"
+            ],
+            "noHiddenTruth": true,
+            "targetKnownMemoryOnly": true,
+            "noNewResourceDiscovery": true,
+            "noFoodCoupling": true,
+            "noYieldCoupling": true,
+            "noCarryingCapacityCoupling": true,
+            "noPopulationChange": true,
+            "noStressChange": true,
+            "noSupportChange": true
+          },
+          "pathTiles": [
+            "tile:111:57",
+            "tile:111:56"
+          ],
+          "tilesCrossed": 1,
+          "roundTripTiles": 2,
+          "activityDaysRepresented": 3,
+          "resourceClassId": "generic_plant_food",
+          "resultSummary": "deterministic_target_found; return=gathered_plant_food; physical_receipt_feeds_support",
+          "reasonIds": [
+            "reason:intra-season-trip:band:custom:0:96:food_resource_check:tile:111:56",
+            "reason:activity-outcome:band:custom:0:96:target_found:tile:111:56",
+            "reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56",
+            "reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant",
+            "reason:activity-memory:band:custom:0:96:confidence_refreshed:tile:111:56"
+          ],
+          "noResidentialRelocation": true,
+          "noYieldChange": true,
+          "noStressChange": true,
+          "noPopulationChange": true,
+          "noCarryingCapacityChange": true,
+          "noSupportChange": false,
+          "bandKnownTargetOnly": true,
+          "physicalFoodHarvest": {
+            "sourceKind": "plant_patch",
+            "sourceId": "plant:tile:111:56:wetland_plant",
+            "sourceClass": "wetland_plant",
+            "knownness": "known_target",
+            "attempted": true,
+            "physicalSourceFound": true,
+            "physicalAvailability": 0.1696,
+            "harvestedAmount": 0.0285,
+            "depletionApplied": 0.0285,
+            "transportLoss": 0.0007,
+            "processingLoss": 0.003,
+            "usableSupport": 0.0248,
+            "worldTruthDebugOnly": true,
+            "reasonIds": [
+              "reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant"
+            ]
+          }
+        },
+        "accumulator": {
+          "periodTick": 1,
+          "receiptCount": 1,
+          "physicalPlantHarvest": 0.0285,
+          "physicalFaunaHarvest": 0,
+          "aquaticHarvest": 0,
+          "transportLoss": 0.0007,
+          "processingLoss": 0.003,
+          "totalUsableSupport": 0.0248,
+          "topReceipts": [
+            {
+              "sourceKind": "plant_patch",
+              "sourceId": "plant:tile:111:56:wetland_plant",
+              "sourceClass": "wetland_plant",
+              "knownness": "known_target",
+              "attempted": true,
+              "physicalSourceFound": true,
+              "physicalAvailability": 0.1696,
+              "harvestedAmount": 0.0285,
+              "depletionApplied": 0.0285,
+              "transportLoss": 0.0007,
+              "processingLoss": 0.003,
+              "usableSupport": 0.0248,
+              "worldTruthDebugOnly": true,
+              "reasonIds": [
+                "reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant"
+              ]
+            }
+          ],
+          "reasonIds": [
+            "reason:seasonal-food-receipts:1"
+          ]
+        }
+      },
+      {
+        "adults": 0,
+        "changed": true,
+        "availablePools": {
+          "limited": 0,
+          "typical": 0,
+          "high": 0
+        },
+        "record": {
+          "day": 96,
+          "tick": 1,
+          "season": "summer",
+          "sourceBandId": "band:custom:0",
+          "originTileId": "tile:111:57",
+          "targetTileId": "tile:111:56",
+          "taskGroupType": "plant_gathering_group",
+          "groupLabel": "Plant gathering group",
+          "estimatedPeopleCount": 1,
+          "objective": "food_patch_check",
+          "objectiveLabel": "Food patch check",
+          "startDay": 96,
+          "endDay": 96,
+          "activityStatus": "completed_observation",
+          "distanceTiles": 1,
+          "distanceKm": 1.5,
+          "estimatedDurationDays": 1,
+          "cause": "food_resource_check",
+          "movementType": "local_foraging_loop",
+          "outcome": "returns_same_day",
+          "activityResult": "target_found",
+          "activityOutcome": "target_found",
+          "activityOutcomeReasonIds": [
+            "reason:activity-outcome:band:custom:0:96:target_found:tile:111:56"
+          ],
+          "activityOutcomeSummary": "deterministic_target_found; return=gathered_plant_food; physical_receipt_feeds_support",
+          "resourceReturn": {
+            "returnedResourceKind": "gathered_plant_food",
+            "semantics": {
+              "category": "physical_food",
+              "isPhysical": true,
+              "contributesToNutrition": true,
+              "materialDomain": "plant_food"
+            },
+            "estimatedReturnValue": 0.0148,
+            "returnConfidence": 0.4616,
+            "consumedByEconomy": true,
+            "noYieldCoupling": true,
+            "noCarryingCapacityCoupling": false,
+            "noPopulationChange": true,
+            "noStressChange": true,
+            "noSupportChange": false,
+            "reasonIds": [
+              "reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56",
+              "reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant"
+            ]
+          },
+          "shadowSubsistence": {
+            "shadowReturnKind": "gathered_food_shadow",
+            "shadowSupportDomain": "food",
+            "shadowGrossValue": 0.0219,
+            "shadowTravelCost": 0.02,
+            "shadowRiskPenalty": 0.0112,
+            "shadowNetValue": 0,
+            "shadowReliability": 0.3151,
+            "contributesAtBaseSameDay": true,
+            "seasonalEcologyModifier": 1.0257,
+            "shadowConsumedByEconomy": false,
+            "noEconomyCoupling": true,
+            "reasonIds": [
+              "reason:activity-shadow:band:custom:0:96:gathered_food_shadow:tile:111:56"
+            ]
+          },
+          "seasonalEcology": {
+            "domain": "plant_patch",
+            "season": "summer",
+            "availabilityFactor": 0.6343,
+            "baselineFactor": 0.712,
+            "seasonalDelta": -0.0778,
+            "wetDryTendency": "neutral",
+            "hiddenTendencyClass": "neutral",
+            "shadowSeasonalResult": "reduced",
+            "taughtSeasonalHint": true,
+            "driverSummary": "plant_patch summer: env=0.65 sig=0.6 (neutral, neutral)",
+            "reasonIds": [
+              "reason:seasonal-ecology:tile:111:56:summer:plant_patch"
+            ]
+          },
+          "plantPatchTrace": {
+            "patchId": "plant:tile:111:56:wetland_plant",
+            "plantClassId": "wetland_plant",
+            "seasonalAvailability": "active",
+            "abundanceTrend": "flat",
+            "lifecycleState": "active",
+            "expectedReturnFactor": 0.2,
+            "currentDepletion": 0.116,
+            "pressure": 0.049,
+            "recoveryRate": 0.18,
+            "fallbackRole": "important",
+            "fallbackRank": 0.58,
+            "laborCost": 0.48,
+            "safetyRisk": "moderate",
+            "rawSource": "plantStock.derivePlantGatherPatchTrace from band-targeted plant activity tile",
+            "reasonIds": [
+              "reason:plant-gather-trace:tile:111:56:plant:tile:111:56:wetland_plant:1"
+            ],
+            "depletionApplied": true,
+            "knowledgeUpdate": "confirmed_by_gathering",
+            "memoryUpdate": "resource_memory_update",
+            "protoCampInfluence": "fallback_refuge_signal"
+          },
+          "activityMemoryEffect": {
+            "sourceBandId": "band:custom:0",
+            "sourceTripDay": 96,
+            "tick": 1,
+            "season": "summer",
+            "targetTileId": "tile:111:56",
+            "patchId": "patch:tile:111:56:generic_plant_food",
+            "resourceClassId": "generic_plant_food",
+            "activityOutcome": "target_found",
+            "effectType": "confidence_refreshed",
+            "effectSummary": "confidence_refreshed; patch:tile:111:56:generic_plant_food; presenceConfidence +0.03; state observed->observed; memory_only_no_economy",
+            "confidenceBefore": {
+              "presenceConfidence": 0.53,
+              "seasonConfidence": 0.3,
+              "yieldConfidence": 0.35,
+              "safetyConfidence": 0.23,
+              "processingConfidence": 0,
+              "accessConfidence": 0.45,
+              "recoveryConfidence": 0
+            },
+            "confidenceAfter": {
+              "presenceConfidence": 0.56,
+              "seasonConfidence": 0.32,
+              "yieldConfidence": 0.36,
+              "safetyConfidence": 0.24,
+              "processingConfidence": 0,
+              "accessConfidence": 0.46,
+              "recoveryConfidence": 0
+            },
+            "mainConfidenceChannel": "presenceConfidence",
+            "confidenceDelta": 0.03,
+            "reasonIds": [
+              "reason:activity-memory:band:custom:0:96:confidence_refreshed:tile:111:56"
+            ],
+            "noHiddenTruth": true,
+            "targetKnownMemoryOnly": true,
+            "noNewResourceDiscovery": true,
+            "noFoodCoupling": true,
+            "noYieldCoupling": true,
+            "noCarryingCapacityCoupling": true,
+            "noPopulationChange": true,
+            "noStressChange": true,
+            "noSupportChange": true
+          },
+          "pathTiles": [
+            "tile:111:57",
+            "tile:111:56"
+          ],
+          "tilesCrossed": 1,
+          "roundTripTiles": 2,
+          "activityDaysRepresented": 3,
+          "resourceClassId": "generic_plant_food",
+          "resultSummary": "deterministic_target_found; return=gathered_plant_food; physical_receipt_feeds_support",
+          "reasonIds": [
+            "reason:intra-season-trip:band:custom:0:96:food_resource_check:tile:111:56",
+            "reason:activity-outcome:band:custom:0:96:target_found:tile:111:56",
+            "reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56",
+            "reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant",
+            "reason:activity-memory:band:custom:0:96:confidence_refreshed:tile:111:56"
+          ],
+          "noResidentialRelocation": true,
+          "noYieldChange": true,
+          "noStressChange": true,
+          "noPopulationChange": true,
+          "noCarryingCapacityChange": true,
+          "noSupportChange": false,
+          "bandKnownTargetOnly": true,
+          "physicalFoodHarvest": {
+            "sourceKind": "plant_patch",
+            "sourceId": "plant:tile:111:56:wetland_plant",
+            "sourceClass": "wetland_plant",
+            "knownness": "known_target",
+            "attempted": true,
+            "physicalSourceFound": true,
+            "physicalAvailability": 0.1696,
+            "harvestedAmount": 0.017,
+            "depletionApplied": 0.017,
+            "transportLoss": 0.0004,
+            "processingLoss": 0.0018,
+            "usableSupport": 0.0148,
+            "worldTruthDebugOnly": true,
+            "reasonIds": [
+              "reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant"
+            ]
+          }
+        },
+        "accumulator": {
+          "periodTick": 1,
+          "receiptCount": 1,
+          "physicalPlantHarvest": 0.017,
+          "physicalFaunaHarvest": 0,
+          "aquaticHarvest": 0,
+          "transportLoss": 0.0004,
+          "processingLoss": 0.0018,
+          "totalUsableSupport": 0.0148,
+          "topReceipts": [
+            {
+              "sourceKind": "plant_patch",
+              "sourceId": "plant:tile:111:56:wetland_plant",
+              "sourceClass": "wetland_plant",
+              "knownness": "known_target",
+              "attempted": true,
+              "physicalSourceFound": true,
+              "physicalAvailability": 0.1696,
+              "harvestedAmount": 0.017,
+              "depletionApplied": 0.017,
+              "transportLoss": 0.0004,
+              "processingLoss": 0.0018,
+              "usableSupport": 0.0148,
+              "worldTruthDebugOnly": true,
+              "reasonIds": [
+                "reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant"
+              ]
+            }
+          ],
+          "reasonIds": [
+            "reason:seasonal-food-receipts:1"
+          ]
+        }
+      }
+    ]
+  }
+}

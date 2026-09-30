@@ -1,0 +1,22 @@
+WebSocket server error: Port 24678 is already in use
+WebSocket server error: Port 24678 is already in use
+{
+  "fourWay": {
+    "verdict": "ALL_FOUR_MODES_IDENTICAL_WITH_ITEM_3_BEHAVIOUR_PRESENT",
+    "allMatch": true,
+    "dailyRepeatIdentical": true,
+    "occurrence": {
+      "exploitationOutcomes": 6,
+      "outcomesDeliveringHarvest": 0,
+      "activePartiesAtEnd": 1,
+      "frictionRecords": 0,
+      "encounterRecords": 0,
+      "contactMemories": 0,
+      "livingBands": 9
+    }
+  },
+  "freshProcess": {
+    "verdict": "FRESH_PROCESS_IDENTICAL",
+    "identical": true
+  }
+}

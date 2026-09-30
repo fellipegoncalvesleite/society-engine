@@ -1,0 +1,10 @@
+FAIL B-002 current-body conservation abc
+FAIL B-002 current-body conservation cba
+FAIL B-002 current-body conservation bac
+FAIL B-002 current-body conservation bca
+FAIL B-002 current-body conservation cab
+FAIL B-002 current-body conservation acb
+FAIL B-002 current-body conservation abcde
+FAIL B-002 arrivals rescue B before its turn
+FAIL B-002 single transfer and healthy no-transfer
+PASS B-002 multiple arrivals, terminal/zero and provisional exclusion

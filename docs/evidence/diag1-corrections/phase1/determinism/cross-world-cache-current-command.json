@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1CrossWorldCacheAudit.mjs",
+    "--out",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/determinism/cross-world-cache-current.json"
+  ],
+  "cwd": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support",
+  "source": "unchanged final production hashes in final-source-identities.json",
+  "exitCode": 1,
+  "elapsedSeconds": 69.25678992271423
+}

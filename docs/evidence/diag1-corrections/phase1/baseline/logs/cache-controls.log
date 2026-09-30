@@ -1,0 +1,387 @@
+[{"id":"tile:0:0","season":"spring","warmTake":0.013,"coldTake":0.013},{"id":"tile:6:0","season":"spring","warmTake":0.0134,"coldTake":0.0134},{"id":"tile:0:0","season":"summer","warmTake":0.0389,"coldTake":0.0583},{"id":"tile:6:0","season":"summer","warmTake":0.0605,"coldTake":0.0538},{"id":"tile:0:0","season":"autumn","warmTake":0.0389,"coldTake":0.0454},{"id":"tile:6:0","season":"autumn","warmTake":0.047,"coldTake":0.0538},{"id":"tile:0:0","season":"winter","warmTake":0,"coldTake":0},{"id":"tile:6:0","season":"winter","warmTake":0,"coldTake":0}]
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: B-003: identical year-1 state must have identical physical take and depletion regardless of year-0 cache priming
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      depletion: {
+        'plant:tile:0:0:wild_grain_seed': {
+          classId: 'wild_grain_seed',
+...
+          classId: 'wild_grain_seed',
++         cumulativeUse: 0.0389,
+-         cumulativeUse: 0.0583,
+          depletion: 1,
+          lastUseTick: 5
+        }
+      },
++     depletionApplied: 0.0389,
++     harvestedAmount: 0.0389,
+-     depletionApplied: 0.0583,
+-     harvestedAmount: 0.0583,
+      patchId: 'plant:tile:0:0:wild_grain_seed',
++     physicalAvailability: 0.0389,
+-     physicalAvailability: 0.0583,
+      plantClassId: 'wild_grain_seed',
+      processingLossRate: 0.0744,
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      sourceId: 'plant:tile:0:0:wild_grain_seed'
+...
+          classId: 'wild_grain_seed',
++         cumulativeUse: 0.0605,
+-         cumulativeUse: 0.0538,
+          depletion: 1,
+          lastUseTick: 5
+        }
+      },
++     depletionApplied: 0.0605,
++     harvestedAmount: 0.0605,
+-     depletionApplied: 0.0538,
+-     harvestedAmount: 0.0538,
+      patchId: 'plant:tile:6:0:wild_grain_seed',
++     physicalAvailability: 0.0605,
+-     physicalAvailability: 0.0538,
+      plantClassId: 'wild_grain_seed',
+      processingLossRate: 0.0744,
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      sourceId: 'plant:tile:6:0:wild_grain_seed'
+...
+          classId: 'wild_grain_seed',
++         cumulativeUse: 0.0389,
+-         cumulativeUse: 0.0454,
+          depletion: 1,
+          lastUseTick: 6
+        }
+      },
++     depletionApplied: 0.0389,
++     harvestedAmount: 0.0389,
+-     depletionApplied: 0.0454,
+-     harvestedAmount: 0.0454,
+      patchId: 'plant:tile:0:0:wild_grain_seed',
++     physicalAvailability: 0.0389,
+-     physicalAvailability: 0.0454,
+      plantClassId: 'wild_grain_seed',
+      processingLossRate: 0.0744,
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      sourceId: 'plant:tile:0:0:wild_grain_seed'
+...
+          classId: 'wild_grain_seed',
++         cumulativeUse: 0.047,
+-         cumulativeUse: 0.0538,
+          depletion: 1,
+          lastUseTick: 6
+        }
+      },
++     depletionApplied: 0.047,
++     harvestedAmount: 0.047,
+-     depletionApplied: 0.0538,
+-     harvestedAmount: 0.0538,
+      patchId: 'plant:tile:6:0:wild_grain_seed',
++     physicalAvailability: 0.047,
+-     physicalAvailability: 0.0538,
+      plantClassId: 'wild_grain_seed',
+      processingLossRate: 0.0744,
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      sourceId: 'plant:tile:6:0:wild_grain_seed'
+
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1CacheBaseline.mjs:32:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      sourceId: 'plant:tile:0:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:0:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.013,
+      harvestedAmount: 0.013,
+      depletionApplied: 0.013,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:0:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 4,
+          cumulativeUse: 0.013
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:6:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:6:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.0134,
+      harvestedAmount: 0.0134,
+      depletionApplied: 0.0134,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:6:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 4,
+          cumulativeUse: 0.0134
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:0:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:0:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.0389,
+      harvestedAmount: 0.0389,
+      depletionApplied: 0.0389,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:0:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 5,
+          cumulativeUse: 0.0389
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:6:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:6:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.0605,
+      harvestedAmount: 0.0605,
+      depletionApplied: 0.0605,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:6:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 5,
+          cumulativeUse: 0.0605
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:0:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:0:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.0389,
+      harvestedAmount: 0.0389,
+      depletionApplied: 0.0389,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:0:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 6,
+          cumulativeUse: 0.0389
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:6:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:6:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.047,
+      harvestedAmount: 0.047,
+      depletionApplied: 0.047,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:6:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 6,
+          cumulativeUse: 0.047
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:0:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:0:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0,
+      harvestedAmount: 0,
+      depletionApplied: 0,
+      processingLossRate: 0.0744,
+      failureReason: 'physically_exhausted',
+      depletion: undefined
+    },
+    {
+      sourceId: 'plant:tile:6:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:6:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0,
+      harvestedAmount: 0,
+      depletionApplied: 0,
+      processingLossRate: 0.0744,
+      failureReason: 'physically_exhausted',
+      depletion: undefined
+    }
+  ],
+  expected: [
+    {
+      sourceId: 'plant:tile:0:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:0:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.013,
+      harvestedAmount: 0.013,
+      depletionApplied: 0.013,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:0:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 4,
+          cumulativeUse: 0.013
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:6:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:6:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.0134,
+      harvestedAmount: 0.0134,
+      depletionApplied: 0.0134,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:6:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 4,
+          cumulativeUse: 0.0134
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:0:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:0:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.0583,
+      harvestedAmount: 0.0583,
+      depletionApplied: 0.0583,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:0:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 5,
+          cumulativeUse: 0.0583
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:6:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:6:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.0538,
+      harvestedAmount: 0.0538,
+      depletionApplied: 0.0538,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:6:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 5,
+          cumulativeUse: 0.0538
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:0:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:0:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.0454,
+      harvestedAmount: 0.0454,
+      depletionApplied: 0.0454,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:0:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 6,
+          cumulativeUse: 0.0454
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:6:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:6:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0.0538,
+      harvestedAmount: 0.0538,
+      depletionApplied: 0.0538,
+      processingLossRate: 0.0744,
+      depletion: {
+        'plant:tile:6:0:wild_grain_seed': {
+          depletion: 1,
+          classId: 'wild_grain_seed',
+          lastUseTick: 6,
+          cumulativeUse: 0.0538
+        }
+      }
+    },
+    {
+      sourceId: 'plant:tile:0:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:0:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0,
+      harvestedAmount: 0,
+      depletionApplied: 0,
+      processingLossRate: 0.0744,
+      failureReason: 'physically_exhausted',
+      depletion: undefined
+    },
+    {
+      sourceId: 'plant:tile:6:0:wild_grain_seed',
+      sourceClass: 'wild_grain_seed',
+      sourceFound: true,
+      patchId: 'plant:tile:6:0:wild_grain_seed',
+      plantClassId: 'wild_grain_seed',
+      physicalAvailability: 0,
+      harvestedAmount: 0,
+      depletionApplied: 0,
+      processingLossRate: 0.0744,
+      failureReason: 'physically_exhausted',
+      depletion: undefined
+    }
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.7.0

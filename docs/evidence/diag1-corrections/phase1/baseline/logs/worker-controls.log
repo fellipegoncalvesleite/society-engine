@@ -1,0 +1,1 @@
+{"sensitivity":{"incrementPositive":1,"incrementNonfood":0,"nonfoodPreservesReference":true,"take":0.0354},"labor":{"day":90,"pos":"tile:111:57","arms":[{"adults":20,"changed":true,"workers":4,"take":0.0248},{"adults":0,"changed":true,"workers":1,"take":0.0148}]}}

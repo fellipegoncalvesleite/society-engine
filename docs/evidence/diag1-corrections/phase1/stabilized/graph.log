@@ -1,0 +1,10 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "check": "architecture graph integrity",
+  "verdict": "pass",
+  "nodes": 222,
+  "links": 766,
+  "duplicateIds": [],
+  "danglingLinks": [],
+  "summary": "graph 222/766, 0 dup, 0 dangling"
+}

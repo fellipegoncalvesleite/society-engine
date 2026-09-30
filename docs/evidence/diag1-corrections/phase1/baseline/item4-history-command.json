@@ -1,0 +1,19 @@
+{
+  "command": [
+    "node",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/item4WholeIntegrationFreezeAudit.mjs",
+    "--out",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/baseline/item4-history.json"
+  ],
+  "cwd": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/baseline-runtime",
+  "sourceCommit": "73cc38b916e236339897c59686638efafd569b6e",
+  "source": "git archive src exact base",
+  "scriptAndFixtureByteIdenticalToBase": [
+    "scripts/item4WholeIntegrationFreezeAudit.mjs",
+    "scripts/lib/successorStabilizationFixture.mjs",
+    "scripts/lib/failedReturnContinuationFixture.mjs",
+    "scripts/lib/preparedDeparture.mjs"
+  ],
+  "exitCode": 1,
+  "elapsedSeconds": 100.72352385520935
+}

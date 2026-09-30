@@ -1,0 +1,51 @@
+{
+  "check": "EXPEDITION-KNOWLEDGE-LATENCY-1",
+  "verdict": "FAIL",
+  "checks": {
+    "verificationLaunchesForStaleEvidence_10": true,
+    "verificationUsesSmallFastParty_10": true,
+    "verificationCreatesNoFood_10": true,
+    "verificationBringsPhysicalEvidence_10": true,
+    "memoryUnchangedWhileAway_11": true,
+    "memoryChangesAtPhysicalReturn_11": true,
+    "returnedEvidenceChangesLaterBehavior_11": false,
+    "reconnaissanceLaunchesForWeakRoutes_10": true,
+    "reconnaissanceCreatesNoFood_10": true,
+    "walkedTilesStayLocalWhileAway_11": true,
+    "walkedTilesBecomeKnowledgeAtReturn_11": true,
+    "reconnaissanceDoesNotTouchPatchMemory_11": true,
+    "naturalInfoTasksOccur_10": true,
+    "naturalRetrievalStillDominant_10": true,
+    "noInfoTaskFoodInNature_10": true
+  },
+  "controlled": {
+    "verification": {
+      "launched": true,
+      "workers": 2,
+      "awayDays": 5,
+      "delivered": 0,
+      "observationKinds": [
+        "target_confirmed"
+      ],
+      "followedByRetrieval": false,
+      "phasesSeen": [
+        "outbound",
+        "operating",
+        "returning"
+      ]
+    },
+    "reconnaissance": {
+      "launched": true,
+      "delivered": 0,
+      "routeTiles": 13,
+      "knownAfterReturn": true
+    }
+  },
+  "naturalFamilyCounts": {
+    "route_reconnaissance": 45,
+    "frontier_exploration": 58,
+    "frontier_verification": 26,
+    "distant_plant_gathering": 74,
+    "distant_patch_verification": 221
+  }
+}

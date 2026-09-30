@@ -1,0 +1,382 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/node/26.7.0/bin/node",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs",
+    "--out",
+    "docs/evidence/diag1-corrections/phase1/focused-b002-b004-green.json"
+  ],
+  "runtime": "v26.7.0",
+  "sourceHead": "73cc38b916e236339897c59686638efafd569b6e",
+  "sourceBefore": {
+    "src/sim/agents/viability.ts": "e34e0afe96c4ec55aed00098b47b228bd1a8ba2e3f55b4853ea949b2262c8da9",
+    "src/sim/agents/plantStock.ts": "9317f0bf486223b549a2e61171faba929996b83c1797609a96e175c16503ed6d",
+    "src/sim/agents/plantPatches.ts": "3bd184194ffe9f542696500249f639c166b767bd65309559903a6998c78dfa7f",
+    "src/sim/agents/intraSeasonTrips.ts": "4f46f1b5d561d4d251d47cabd2b73e3038f467c8914d52ae6d5190fd3ae3db74",
+    "src/sim/agents/bandMobility.ts": "893eac223f7399fb83987a56317d6b5d72e9f924d34443d1e99fadd1aaa01973",
+    "src/sim/agents/expedition.ts": "c1be724d36901130a89d45b946130be6de0d09c4707b0b8f298e6966e9d94987",
+    "src/sim/agents/types.ts": "317073578cd4774450440b909df5d7b6bfc13fc97d882521b86d93e162ed5627"
+  },
+  "sourceAfter": {
+    "src/sim/agents/viability.ts": "e34e0afe96c4ec55aed00098b47b228bd1a8ba2e3f55b4853ea949b2262c8da9",
+    "src/sim/agents/plantStock.ts": "9317f0bf486223b549a2e61171faba929996b83c1797609a96e175c16503ed6d",
+    "src/sim/agents/plantPatches.ts": "3bd184194ffe9f542696500249f639c166b767bd65309559903a6998c78dfa7f",
+    "src/sim/agents/intraSeasonTrips.ts": "4f46f1b5d561d4d251d47cabd2b73e3038f467c8914d52ae6d5190fd3ae3db74",
+    "src/sim/agents/bandMobility.ts": "893eac223f7399fb83987a56317d6b5d72e9f924d34443d1e99fadd1aaa01973",
+    "src/sim/agents/expedition.ts": "c1be724d36901130a89d45b946130be6de0d09c4707b0b8f298e6966e9d94987",
+    "src/sim/agents/types.ts": "317073578cd4774450440b909df5d7b6bfc13fc97d882521b86d93e162ed5627"
+  },
+  "rows": [
+    {
+      "name": "B-002 current-body conservation abc",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 16,
+          "status": "viable",
+          "traces": 1
+        },
+        {
+          "id": "band:c",
+          "population": 30,
+          "status": "viable",
+          "traces": 0
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation cba",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 38,
+          "status": "viable",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:c",
+          "population": 8,
+          "status": "nonviable",
+          "traces": 0
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation bac",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 16,
+          "status": "viable",
+          "traces": 1
+        },
+        {
+          "id": "band:c",
+          "population": 30,
+          "status": "viable",
+          "traces": 0
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation bca",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 30,
+          "status": "viable",
+          "traces": 0
+        },
+        {
+          "id": "band:b",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:c",
+          "population": 16,
+          "status": "viable",
+          "traces": 1
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation cab",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 38,
+          "status": "viable",
+          "traces": 1
+        },
+        {
+          "id": "band:c",
+          "population": 8,
+          "status": "nonviable",
+          "traces": 0
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation acb",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 30,
+          "status": "viable",
+          "traces": 0
+        },
+        {
+          "id": "band:c",
+          "population": 16,
+          "status": "viable",
+          "traces": 1
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation abcde",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 24,
+          "status": "viable",
+          "traces": 2
+        },
+        {
+          "id": "band:c",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:d",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:e",
+          "population": 38,
+          "status": "viable",
+          "traces": 1
+        }
+      ]
+    },
+    {
+      "name": "B-002 arrivals rescue B before its turn",
+      "pass": true
+    },
+    {
+      "name": "B-002 single transfer and healthy no-transfer",
+      "pass": true
+    },
+    {
+      "name": "B-003 same-clock actual take 0/tile:0:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.013,
+        "coldTake": 0.013
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 0/tile:6:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.0134,
+        "coldTake": 0.0134
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 0/tile:93:15",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.121,
+        "coldTake": 0.121
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 90/tile:0:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.0583,
+        "coldTake": 0.0583
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 90/tile:6:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.0538,
+        "coldTake": 0.0538
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 90/tile:93:15",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.1411,
+        "coldTake": 0.1411
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 180/tile:0:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.0454,
+        "coldTake": 0.0454
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 180/tile:6:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.0538,
+        "coldTake": 0.0538
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 180/tile:93:15",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.1003,
+        "coldTake": 0.1003
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 270/tile:0:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0,
+        "coldTake": 0
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 270/tile:6:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0,
+        "coldTake": 0
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 270/tile:93:15",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0,
+        "coldTake": 0
+      }
+    },
+    {
+      "name": "B-003 in-place causal tile revision invalidates",
+      "pass": true
+    },
+    {
+      "name": "B-003 single generation after 1000 years",
+      "pass": true
+    },
+    {
+      "name": "B-004 actual daily action adults=0",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected \"actual\" to be reference-equal to \"expected\":\n+ actual - expected\n... Skipped lines\n\n  {\n    activityDaysRepresented: 3,\n    activityMemoryEffect: {\n      activityOutcome: 'target_found',\n      confidenceAfter: {\n+       accessConfidence: 0.46,\n+       presenceConfidence: 0.56,\n-       accessConfidence: 0.51,\n-       presenceConfidence: 0.71,\n        processingConfidence: 0,\n        recoveryConfidence: 0,\n+       safetyConfidence: 0.24,\n+       seasonConfidence: 0.32,\n+       yieldConfidence: 0.36\n-       safetyConfidence: 0.29,\n-       seasonConfidence: 0.42,\n-       yieldConfidence: 0.41\n      },\n      confidenceBefore: {\n+       accessConfidence: 0.45,\n+       presenceConfidence: 0.53,\n-       accessConfidence: 0.5,\n-       presenceConfidence: 0.68,\n        processingConfidence: 0,\n        recoveryConfidence: 0,\n+       safetyConfidence: 0.23,\n+       seasonConfidence: 0.3,\n+       yieldConfidence: 0.35\n-       safetyConfidence: 0.28,\n-       seasonConfidence: 0.4,\n-       yieldConfidence: 0.4\n      },\n      confidenceDelta: 0.03,\n+     effectSummary: 'confidence_refreshed; patch:tile:111:56:generic_plant_food; presenceConfidence +0.03; state observed->observed; memory_only_no_economy',\n-     effectSummary: 'confidence_refreshed; patch:tile:112:56:generic_plant_food; presenceConfidence +0.03; state observed->observed; memory_only_no_economy',\n      effectType: 'confidence_refreshed',\n      mainConfidenceChannel: 'presenceConfidence',\n      noCarryingCapacityCoupling: true,\n      noFoodCoupling: true,\n      noHiddenTruth: true,\n...\n      noYieldCoupling: true,\n+     patchId: 'patch:tile:111:56:generic_plant_food',\n-     patchId: 'patch:tile:112:56:generic_plant_food',\n      reasonIds: [\n+       'reason:activity-memory:band:custom:0:96:confidence_refreshed:tile:111:56'\n-       'reason:activity-memory:band:custom:0:87:confidence_refreshed:tile:112:56'\n      ],\n      resourceClassId: 'generic_plant_food',\n+     season: 'summer',\n-     season: 'spring',\n      sourceBandId: 'band:custom:0',\n+     sourceTripDay: 96,\n-     sourceTripDay: 87,\n      targetKnownMemoryOnly: true,\n+     targetTileId: 'tile:111:56',\n+     tick: 1\n-     targetTileId: 'tile:112:56',\n-     tick: 0\n    },\n    activityOutcome: 'target_found',\n    activityOutcomeReasonIds: [\n+     'reason:activity-outcome:band:custom:0:96:target_found:tile:111:56'\n-     'reason:activity-outcome:band:custom:0:87:target_found:tile:112:56'\n    ],\n    activityOutcomeSummary: 'deterministic_target_found; return=gathered_plant_food; physical_receipt_feeds_support',\n    activityResult: 'target_found',\n    activityStatus: 'completed_observation',\n    bandKnownTargetOnly: true,\n    cause: 'food_resource_check',\n+   day: 96,\n-   day: 87,\n    distanceKm: 1.5,\n    distanceTiles: 1,\n+   endDay: 96,\n-   endDay: 87,\n    estimatedDurationDays: 1,\n+   estimatedPeopleCount: 1,\n-   estimatedPeopleCount: 4,\n    groupLabel: 'Plant gathering group',\n    movementType: 'local_foraging_loop',\n    noCarryingCapacityChange: true,\n    noPopulationChange: true,\n    noResidentialRelocation: true,\n...\n    objectiveLabel: 'Food patch check',\n+   originTileId: 'tile:111:57',\n-   originTileId: 'tile:111:56',\n    outcome: 'returns_same_day',\n    pathTiles: [\n+     'tile:111:57',\n      'tile:111:56',\n-     'tile:112:56'\n    ],\n    physicalFoodHarvest: {\n      attempted: true,\n+     depletionApplied: 0.017,\n+     harvestedAmount: 0.017,\n-     depletionApplied: 0.0274,\n-     harvestedAmount: 0.0274,\n      knownness: 'known_target',\n+     physicalAvailability: 0.1696,\n-     physicalAvailability: 0.0274,\n      physicalSourceFound: true,\n+     processingLoss: 0.0018,\n-     processingLoss: 0.0029,\n      reasonIds: [\n+       'reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant'\n-       'reason:physical-food-harvest:band:custom:0:87:plant_patch:plant:tile:112:56:wetland_plant'\n      ],\n      sourceClass: 'wetland_plant',\n+     sourceId: 'plant:tile:111:56:wetland_plant',\n-     sourceId: 'plant:tile:112:56:wetland_plant',\n      sourceKind: 'plant_patch',\n+     transportLoss: 0.0004,\n+     usableSupport: 0.0148,\n-     transportLoss: 0.0007,\n-     usableSupport: 0.0239,\n      worldTruthDebugOnly: true\n    },\n    plantPatchTrace: {\n+     abundanceTrend: 'flat',\n+     currentDepletion: 0.116,\n-     abundanceTrend: 'rising',\n-     currentDepletion: 0.811,\n      depletionApplied: true,\n      expectedReturnFactor: 0.2,\n      fallbackRank: 0.58,\n      fallbackRole: 'important',\n      knowledgeUpdate: 'confirmed_by_gathering',\n...\n      memoryUpdate: 'resource_memory_update',\n+     patchId: 'plant:tile:111:56:wetland_plant',\n-     patchId: 'plant:tile:112:56:wetland_plant',\n      plantClassId: 'wetland_plant',\n+     pressure: 0.049,\n-     pressure: 0.34,\n      protoCampInfluence: 'fallback_refuge_signal',\n      rawSource: 'plantStock.derivePlantGatherPatchTrace from band-targeted plant activity tile',\n      reasonIds: [\n+       'reason:plant-gather-trace:tile:111:56:plant:tile:111:56:wetland_plant:1'\n-       'reason:plant-gather-trace:tile:112:56:plant:tile:112:56:wetland_plant:0'\n      ],\n      recoveryRate: 0.18,\n      safetyRisk: 'moderate',\n      seasonalAvailability: 'active'\n    },\n    reasonIds: [\n+     'reason:intra-season-trip:band:custom:0:96:food_resource_check:tile:111:56',\n+     'reason:activity-outcome:band:custom:0:96:target_found:tile:111:56',\n+     'reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56',\n+     'reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant',\n+     'reason:activity-memory:band:custom:0:96:confidence_refreshed:tile:111:56'\n-     'reason:intra-season-trip:band:custom:0:87:food_resource_check:tile:112:56',\n-     'reason:activity-outcome:band:custom:0:87:target_found:tile:112:56',\n-     'reason:activity-return:band:custom:0:87:gathered_plant_food:tile:112:56',\n-     'reason:physical-food-harvest:band:custom:0:87:plant_patch:plant:tile:112:56:wetland_plant',\n-     'reason:activity-memory:band:custom:0:87:confidence_refreshed:tile:112:56'\n    ],\n    resourceClassId: 'generic_plant_food',\n    resourceReturn: {\n      consumedByEconomy: true,\n+     estimatedReturnValue: 0.0148,\n-     estimatedReturnValue: 0.0239,\n      noCarryingCapacityCoupling: false,\n      noPopulationChange: true,\n      noStressChange: true,\n      noSupportChange: false,\n      noYieldCoupling: true,\n      reasonIds: [\n+       'reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56',\n+       'reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant'\n-       'reason:activity-return:band:custom:0:87:gathered_plant_food:tile:112:56',\n-       'reason:physical-food-harvest:band:custom:0:87:plant_patch:plant:tile:112:56:wetland_plant'\n      ],\n+     returnConfidence: 0.4616,\n-     returnConfidence: 0.5736,\n      returnedResourceKind: 'gathered_plant_food',\n      semantics: {\n        category: 'physical_food',\n        contributesToNutrition: true,\n        isPhysical: true,\n...\n    roundTripTiles: 2,\n+   season: 'summer',\n-   season: 'spring',\n    seasonalEcology: {\n+     availabilityFactor: 0.6343,\n+     baselineFactor: 0.712,\n-     availabilityFactor: 0.6267,\n-     baselineFactor: 0.7028,\n      domain: 'plant_patch',\n+     driverSummary: 'plant_patch summer: env=0.65 sig=0.6 (neutral, neutral)',\n-     driverSummary: 'plant_patch spring: env=0.64 sig=0.6 (neutral, neutral)',\n      hiddenTendencyClass: 'neutral',\n      reasonIds: [\n+       'reason:seasonal-ecology:tile:111:56:summer:plant_patch'\n-       'reason:seasonal-ecology:tile:112:56:spring:plant_patch'\n      ],\n+     season: 'summer',\n+     seasonalDelta: -0.0778,\n-     season: 'spring',\n-     seasonalDelta: -0.076,\n      shadowSeasonalResult: 'reduced',\n      taughtSeasonalHint: true,\n      wetDryTendency: 'neutral'\n    },\n    shadowSubsistence: {\n...\n      reasonIds: [\n+       'reason:activity-shadow:band:custom:0:96:gathered_food_shadow:tile:111:56'\n-       'reason:activity-shadow:band:custom:0:87:gathered_food_shadow:tile:112:56'\n      ],\n+     seasonalEcologyModifier: 1.0257,\n-     seasonalEcologyModifier: 1.02,\n      shadowConsumedByEconomy: false,\n+     shadowGrossValue: 0.0219,\n+     shadowNetValue: 0,\n+     shadowReliability: 0.3151,\n-     shadowGrossValue: 0.1123,\n-     shadowNetValue: 0.0811,\n-     shadowReliability: 0.3981,\n      shadowReturnKind: 'gathered_food_shadow',\n      shadowRiskPenalty: 0.0112,\n      shadowSupportDomain: 'food',\n      shadowTravelCost: 0.02\n    },\n    sourceBandId: 'band:custom:0',\n+   startDay: 96,\n+   targetTileId: 'tile:111:56',\n-   startDay: 87,\n-   targetTileId: 'tile:112:56',\n    taskGroupType: 'plant_gathering_group',\n+   tick: 1,\n-   tick: 0,\n    tilesCrossed: 1\n  }\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:107:30\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:27:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:105:41"
+    },
+    {
+      "name": "B-004 actual daily action adults=1",
+      "pass": true,
+      "evidence": {
+        "adults": 1,
+        "workers": 1,
+        "take": 0.0148
+      }
+    },
+    {
+      "name": "B-004 actual daily action adults=20",
+      "pass": true,
+      "evidence": {
+        "adults": 20,
+        "workers": 4,
+        "take": 0.0248
+      }
+    },
+    {
+      "name": "B-004 prepared workers committed=5",
+      "pass": true
+    },
+    {
+      "name": "B-004 prepared workers committed=10",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(count<=available)\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:115:56\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:27:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:111:105"
+    },
+    {
+      "name": "B-004 outbound workers committed=5",
+      "pass": true
+    },
+    {
+      "name": "B-004 outbound workers committed=10",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(count<=available)\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:115:56\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:27:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:111:105"
+    },
+    {
+      "name": "B-004 operating workers committed=5",
+      "pass": true
+    },
+    {
+      "name": "B-004 operating workers committed=10",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(count<=available)\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:115:56\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:27:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:111:105"
+    },
+    {
+      "name": "B-004 returning workers committed=5",
+      "pass": true
+    },
+    {
+      "name": "B-004 returning workers committed=10",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(count<=available)\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:115:56\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:27:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:111:105"
+    }
+  ],
+  "pass": false
+}

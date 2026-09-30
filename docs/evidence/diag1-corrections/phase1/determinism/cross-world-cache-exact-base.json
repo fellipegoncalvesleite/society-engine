@@ -1,0 +1,88 @@
+{
+  "kind": "INHERITED UNASSIGNED CACHE DIAGNOSTIC, NOT PHASE1 GREEN",
+  "cwd": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/baseline-runtime",
+  "tileId": "tile:88:81",
+  "sharedInitialTime": true,
+  "firstConditions": {
+    "tileId": "tile:88:81",
+    "time": {
+      "tick": 0,
+      "seasonTick": 0,
+      "day": 0,
+      "dayOfSeason": 0,
+      "seasonLengthDays": 90,
+      "daysPerYear": 360,
+      "year": 0,
+      "season": "spring",
+      "seasonIndex": 0,
+      "generation": {
+        "index": 0,
+        "yearWithinGeneration": 0,
+        "tickWithinGeneration": 0
+      }
+    },
+    "currentFoodEstimate": 7.92,
+    "currentWaterStress": 1,
+    "currentFloodStress": 0,
+    "currentDroughtStress": 0.2034350946787812,
+    "currentAquaticReliability": 0,
+    "currentMovementDifficulty": 1.22
+  },
+  "warm": {
+    "tileId": "tile:88:81",
+    "time": {
+      "tick": 0,
+      "seasonTick": 0,
+      "day": 0,
+      "dayOfSeason": 0,
+      "seasonLengthDays": 90,
+      "daysPerYear": 360,
+      "year": 0,
+      "season": "spring",
+      "seasonIndex": 0,
+      "generation": {
+        "index": 0,
+        "yearWithinGeneration": 0,
+        "tickWithinGeneration": 0
+      }
+    },
+    "currentFoodEstimate": 7.92,
+    "currentWaterStress": 1,
+    "currentFloodStress": 0,
+    "currentDroughtStress": 0.2034350946787812,
+    "currentAquaticReliability": 0,
+    "currentMovementDifficulty": 1.22
+  },
+  "cold": {
+    "tileId": "tile:88:81",
+    "time": {
+      "tick": 0,
+      "seasonTick": 0,
+      "day": 0,
+      "dayOfSeason": 0,
+      "seasonLengthDays": 90,
+      "daysPerYear": 360,
+      "year": 0,
+      "season": "spring",
+      "seasonIndex": 0,
+      "generation": {
+        "index": 0,
+        "yearWithinGeneration": 0,
+        "tickWithinGeneration": 0
+      }
+    },
+    "currentFoodEstimate": 8.71,
+    "currentWaterStress": 0.9466240170029644,
+    "currentFloodStress": 0,
+    "currentDroughtStress": 0.14850345978539853,
+    "currentAquaticReliability": 0,
+    "currentMovementDifficulty": 1.22
+  },
+  "differing": [
+    "currentFoodEstimate",
+    "currentWaterStress",
+    "currentDroughtStress"
+  ],
+  "sourceSha256": "a93c9795b2922cdea08bedc33660608fb98c02e4187e5e4d405c1587cd2f7c78",
+  "invariantHolds": false
+}

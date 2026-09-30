@@ -1,0 +1,135 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/node/26.7.0/bin/node",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs",
+    "--scope",
+    "cache",
+    "--mutant",
+    "cache",
+    "--out",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/stabilized/mutant-cache.json"
+  ],
+  "auditScriptSha256": "81454e25a4503f8716a9d1e7f9dca7b395f439f0c4265cbe5153f496c10a8c96",
+  "runtime": "v26.7.0",
+  "sourceHead": "73cc38b916e236339897c59686638efafd569b6e",
+  "sourceBefore": {
+    "src/sim/agents/viability.ts": "5fbf86950be4f90c1841e4aa323e228384e818045ec0cefc27eca3a62d12585f",
+    "src/sim/agents/plantStock.ts": "9317f0bf486223b549a2e61171faba929996b83c1797609a96e175c16503ed6d",
+    "src/sim/agents/plantPatches.ts": "3bd184194ffe9f542696500249f639c166b767bd65309559903a6998c78dfa7f",
+    "src/sim/agents/intraSeasonTrips.ts": "84893cd0f9ffbd2f41c3e880bc6f52d52c3b526ec496241bca66cffc7127a68d",
+    "src/sim/agents/bandMobility.ts": "893eac223f7399fb83987a56317d6b5d72e9f924d34443d1e99fadd1aaa01973",
+    "src/sim/agents/expedition.ts": "e0ebb2c64c69f3a9d3970d0d62c5d46314f9dc47a590fee3252e1d223ed2cb81",
+    "src/sim/agents/expeditionCargo.ts": "0a70fe8471143c2704d877f7509425a2dbf21cdfce236980542bb74dcba6caf5",
+    "src/sim/agents/types.ts": "533b8f0d3b8fa5f93286140da93a570dfa4001a146c337ebae407d72d05580b5"
+  },
+  "sourceAfter": {
+    "src/sim/agents/viability.ts": "5fbf86950be4f90c1841e4aa323e228384e818045ec0cefc27eca3a62d12585f",
+    "src/sim/agents/plantStock.ts": "9317f0bf486223b549a2e61171faba929996b83c1797609a96e175c16503ed6d",
+    "src/sim/agents/plantPatches.ts": "3bd184194ffe9f542696500249f639c166b767bd65309559903a6998c78dfa7f",
+    "src/sim/agents/intraSeasonTrips.ts": "84893cd0f9ffbd2f41c3e880bc6f52d52c3b526ec496241bca66cffc7127a68d",
+    "src/sim/agents/bandMobility.ts": "893eac223f7399fb83987a56317d6b5d72e9f924d34443d1e99fadd1aaa01973",
+    "src/sim/agents/expedition.ts": "e0ebb2c64c69f3a9d3970d0d62c5d46314f9dc47a590fee3252e1d223ed2cb81",
+    "src/sim/agents/expeditionCargo.ts": "0a70fe8471143c2704d877f7509425a2dbf21cdfce236980542bb74dcba6caf5",
+    "src/sim/agents/types.ts": "533b8f0d3b8fa5f93286140da93a570dfa4001a146c337ebae407d72d05580b5"
+  },
+  "mutation": {
+    "mutant": "cache",
+    "loaded": 1,
+    "executed": 1043,
+    "bytesRestored": true,
+    "detected": true
+  },
+  "rows": [
+    {
+      "name": "B-003 same-clock actual take 0/tile:0:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.013,
+        "coldTake": 0.013
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 0/tile:6:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.0134,
+        "coldTake": 0.0134
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 0/tile:93:15",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    depletion: {\n      'plant:tile:93:15:wetland_plant': {\n        classId: 'wetland_plant',\n+       cumulativeUse: 0.1814,\n-       cumulativeUse: 0.121,\n        depletion: 1,\n        lastUseTick: 4\n      }\n    },\n+   depletionApplied: 0.1814,\n+   harvestedAmount: 0.1814,\n-   depletionApplied: 0.121,\n-   harvestedAmount: 0.121,\n    patchId: 'plant:tile:93:15:wetland_plant',\n+   physicalAvailability: 0.1814,\n-   physicalAvailability: 0.121,\n    plantClassId: 'wetland_plant',\n    processingLossRate: 0.1076,\n    sourceClass: 'wetland_plant',\n    sourceFound: true,\n    sourceId: 'plant:tile:93:15:wetland_plant'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:321:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:314:13"
+    },
+    {
+      "name": "B-003 same-clock actual take 90/tile:0:0",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    depletion: {\n      'plant:tile:0:0:wild_grain_seed': {\n        classId: 'wild_grain_seed',\n+       cumulativeUse: 0.0389,\n-       cumulativeUse: 0.0583,\n        depletion: 1,\n        lastUseTick: 5\n      }\n    },\n+   depletionApplied: 0.0389,\n+   harvestedAmount: 0.0389,\n-   depletionApplied: 0.0583,\n-   harvestedAmount: 0.0583,\n    patchId: 'plant:tile:0:0:wild_grain_seed',\n+   physicalAvailability: 0.0389,\n-   physicalAvailability: 0.0583,\n    plantClassId: 'wild_grain_seed',\n    processingLossRate: 0.0744,\n    sourceClass: 'wild_grain_seed',\n    sourceFound: true,\n    sourceId: 'plant:tile:0:0:wild_grain_seed'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:321:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:314:13"
+    },
+    {
+      "name": "B-003 same-clock actual take 90/tile:6:0",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    depletion: {\n      'plant:tile:6:0:wild_grain_seed': {\n        classId: 'wild_grain_seed',\n+       cumulativeUse: 0.0605,\n-       cumulativeUse: 0.0538,\n        depletion: 1,\n        lastUseTick: 5\n      }\n    },\n+   depletionApplied: 0.0605,\n+   harvestedAmount: 0.0605,\n-   depletionApplied: 0.0538,\n-   harvestedAmount: 0.0538,\n    patchId: 'plant:tile:6:0:wild_grain_seed',\n+   physicalAvailability: 0.0605,\n-   physicalAvailability: 0.0538,\n    plantClassId: 'wild_grain_seed',\n    processingLossRate: 0.0744,\n    sourceClass: 'wild_grain_seed',\n    sourceFound: true,\n    sourceId: 'plant:tile:6:0:wild_grain_seed'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:321:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:314:13"
+    },
+    {
+      "name": "B-003 same-clock actual take 90/tile:93:15",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    depletion: {\n      'plant:tile:93:15:wetland_plant': {\n        classId: 'wetland_plant',\n+       cumulativeUse: 0.1512,\n-       cumulativeUse: 0.1411,\n        depletion: 1,\n        lastUseTick: 5\n      }\n    },\n+   depletionApplied: 0.1512,\n+   harvestedAmount: 0.1512,\n-   depletionApplied: 0.1411,\n-   harvestedAmount: 0.1411,\n    patchId: 'plant:tile:93:15:wetland_plant',\n+   physicalAvailability: 0.1512,\n-   physicalAvailability: 0.1411,\n    plantClassId: 'wetland_plant',\n    processingLossRate: 0.1076,\n    sourceClass: 'wetland_plant',\n    sourceFound: true,\n    sourceId: 'plant:tile:93:15:wetland_plant'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:321:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:314:13"
+    },
+    {
+      "name": "B-003 same-clock actual take 180/tile:0:0",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    depletion: {\n      'plant:tile:0:0:wild_grain_seed': {\n        classId: 'wild_grain_seed',\n+       cumulativeUse: 0.0389,\n-       cumulativeUse: 0.0454,\n        depletion: 1,\n        lastUseTick: 6\n      }\n    },\n+   depletionApplied: 0.0389,\n+   harvestedAmount: 0.0389,\n-   depletionApplied: 0.0454,\n-   harvestedAmount: 0.0454,\n    patchId: 'plant:tile:0:0:wild_grain_seed',\n+   physicalAvailability: 0.0389,\n-   physicalAvailability: 0.0454,\n    plantClassId: 'wild_grain_seed',\n    processingLossRate: 0.0744,\n    sourceClass: 'wild_grain_seed',\n    sourceFound: true,\n    sourceId: 'plant:tile:0:0:wild_grain_seed'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:321:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:314:13"
+    },
+    {
+      "name": "B-003 same-clock actual take 180/tile:6:0",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    depletion: {\n      'plant:tile:6:0:wild_grain_seed': {\n        classId: 'wild_grain_seed',\n+       cumulativeUse: 0.047,\n-       cumulativeUse: 0.0538,\n        depletion: 1,\n        lastUseTick: 6\n      }\n    },\n+   depletionApplied: 0.047,\n+   harvestedAmount: 0.047,\n-   depletionApplied: 0.0538,\n-   harvestedAmount: 0.0538,\n    patchId: 'plant:tile:6:0:wild_grain_seed',\n+   physicalAvailability: 0.047,\n-   physicalAvailability: 0.0538,\n    plantClassId: 'wild_grain_seed',\n    processingLossRate: 0.0744,\n    sourceClass: 'wild_grain_seed',\n    sourceFound: true,\n    sourceId: 'plant:tile:6:0:wild_grain_seed'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:321:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:314:13"
+    },
+    {
+      "name": "B-003 same-clock actual take 180/tile:93:15",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.1003,
+        "coldTake": 0.1003
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 270/tile:0:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0,
+        "coldTake": 0
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 270/tile:6:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0,
+        "coldTake": 0
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 270/tile:93:15",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   depletion: {\n+     'plant:tile:93:15:wetland_plant': {\n+       classId: 'wetland_plant',\n+       cumulativeUse: 0.0101,\n+       depletion: 1,\n+       lastUseTick: 7\n+     }\n+   },\n+   depletionApplied: 0.0101,\n+   harvestedAmount: 0.0101,\n-   depletion: undefined,\n-   depletionApplied: 0,\n-   failureReason: 'physically_exhausted',\n-   harvestedAmount: 0,\n    patchId: 'plant:tile:93:15:wetland_plant',\n+   physicalAvailability: 0.0101,\n-   physicalAvailability: 0,\n    plantClassId: 'wetland_plant',\n    processingLossRate: 0.1076,\n    sourceClass: 'wetland_plant',\n    sourceFound: true,\n    sourceId: 'plant:tile:93:15:wetland_plant'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:321:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:314:13"
+    },
+    {
+      "name": "B-003 in-place causal tile revision invalidates",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    depletion: {\n+     'plant:tile:0:0:wild_grain_seed': {\n+       classId: 'wild_grain_seed',\n+       cumulativeUse: 0.0583,\n-     'plant:tile:0:0:roots_tubers_uso': {\n-       classId: 'roots_tubers_uso',\n-       cumulativeUse: 0.2218,\n        depletion: 1,\n        lastUseTick: 5\n      }\n    },\n+   depletionApplied: 0.0583,\n+   harvestedAmount: 0.0583,\n+   patchId: 'plant:tile:0:0:wild_grain_seed',\n+   physicalAvailability: 0.0583,\n+   plantClassId: 'wild_grain_seed',\n+   processingLossRate: 0.0744,\n+   sourceClass: 'wild_grain_seed',\n-   depletionApplied: 0.2218,\n-   harvestedAmount: 0.2218,\n-   patchId: 'plant:tile:0:0:roots_tubers_uso',\n-   physicalAvailability: 0.2218,\n-   plantClassId: 'roots_tubers_uso',\n-   processingLossRate: 0.1364,\n-   sourceClass: 'roots_tubers_uso',\n    sourceFound: true,\n+   sourceId: 'plant:tile:0:0:wild_grain_seed'\n-   sourceId: 'plant:tile:0:0:roots_tubers_uso'\n  }\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:330:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:325:11"
+    },
+    {
+      "name": "B-003 single generation after 1000 years",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: no season/year map\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:336:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:332:11"
+    },
+    {
+      "name": "B-003 human/fauna/observer first-reader and JSON reload parity",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    depletion: {\n      'plant:tile:6:0:wild_grain_seed': {\n        classId: 'wild_grain_seed',\n        cumulativeUse: 0.02,\n+       depletion: 0.3307,\n-       depletion: 0.372,\n        lastUseTick: 5\n      }\n    },\n    depletionApplied: 0.02,\n    harvestedAmount: 0.02,\n    patchId: 'plant:tile:6:0:wild_grain_seed',\n+   physicalAvailability: 0.0605,\n-   physicalAvailability: 0.0538,\n    plantClassId: 'wild_grain_seed',\n    processingLossRate: 0.0744,\n    sourceClass: 'wild_grain_seed',\n    sourceFound: true,\n    sourceId: 'plant:tile:6:0:wild_grain_seed'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:349:16\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:339:11"
+    }
+  ],
+  "pass": false
+}

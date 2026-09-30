@@ -3066,6 +3066,11 @@ export function formatSeasonalEcology(trip: IntraSeasonTripRecord): string {
 }
 
 export function formatTripGuard(trip: IntraSeasonTripRecord): string {
+  if (trip.expeditionReturn !== undefined) {
+    return trip.physicalFoodHarvest === undefined && trip.resourceReturn.consumedByEconomy === false &&
+      trip.expeditionReturn.returnedFoodReceipts.every(receipt => receipt.usableSupport > 0 && receipt.returnDepositId !== undefined)
+      ? "one returned journey; source receipts credited separately" : "return summary contract violated";
+  }
   const physicalFood = trip.resourceReturn.semantics.contributesToNutrition;
   const returnContractHeld = physicalFood
     ? trip.resourceReturn.consumedByEconomy === true &&

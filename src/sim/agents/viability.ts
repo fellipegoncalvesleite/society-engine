@@ -52,7 +52,15 @@ export function updateBandViabilityStates(world: WorldState): WorldState {
       return output;
     }, {});
 
-  for (const band of Object.values(bandsById).sort(compareBands)) {
+  // One deterministic sweep, but each transaction reads committed current bodies.
+  // An earlier arrival can rescue a later source before its turn.
+  for (const id of Object.values(bandsById).sort(compareBands).map((band) => band.id)) {
+    const current = bandsById[id];
+    const sweepWorld = { ...world, bands: bandsById as Readonly<Record<BandId, Band>> };
+    const band = isProvisionalSuccessor(current)
+      ? current
+      : { ...current, viability: deriveBandViabilityState(sweepWorld, current, true) };
+    bandsById[id] = band;
     // Ordinary absorption and collapse are Item 6's, and a group that has not yet had a chance to
     // establish has not failed at anything an established band could be judged for.
     if (isProvisionalSuccessor(band)) {
@@ -74,13 +82,11 @@ export function updateBandViabilityStates(world: WorldState): WorldState {
       continue;
     }
 
-    const target = getAbsorptionTarget(
-      {
-        ...world,
-        bands: bandsById as Readonly<Record<BandId, Band>>,
-      },
-      band,
-    );
+    // Eligibility, opportunity and target are one decision over the current sweep
+    // world. Publishing the source projection must not select a different target
+    // while retaining the first target's opportunity score.
+    const targetId = band.viability.supportSeekingTargetBandId;
+    const target = targetId === undefined ? undefined : bandsById[targetId];
 
     if (target !== undefined && band.viability.absorptionOpportunity >= 0.46) {
       const absorbingBand = bandsById[target.id];
@@ -131,6 +137,7 @@ export function updateBandViabilityStates(world: WorldState): WorldState {
         }),
         viability: {
           ...band.viability,
+          population: 0,
           status: target.id === band.parentBandId ? "absorbed" : "absorbed",
           weakBandClassification: "absorbed",
           weakBandFate: "absorbed",
@@ -143,6 +150,12 @@ export function updateBandViabilityStates(world: WorldState): WorldState {
           reasonIds: [...band.viability.reasonIds, absorbedReasonId].slice(-10),
         },
         causalTraces: [...band.causalTraces, absorbedTrace].slice(-80),
+      };
+      // Publish the recipient projection after both halves of the transfer commit.
+      const committedWorld = { ...world, bands: bandsById as Readonly<Record<BandId, Band>> };
+      bandsById[target.id] = {
+        ...bandsById[target.id],
+        viability: deriveBandViabilityState(committedWorld, bandsById[target.id], true),
       };
       continue;
     }
@@ -256,7 +269,7 @@ function terminalizeExtinctBand(
   };
 }
 
-function deriveBandViabilityState(world: WorldState, band: Band): BandViabilityState {
+function deriveBandViabilityState(world: WorldState, band: Band, currentTargets = false): BandViabilityState {
   if (band.viability?.status === "absorbed" || band.viability?.status === "extinct") {
     return band.viability;
   }
@@ -279,7 +292,8 @@ function deriveBandViabilityState(world: WorldState, band: Band): BandViabilityS
       (band.temporarySeparation?.active === true ? 0.08 : 0),
   );
   const viabilityPressure = clamp01(lowPopulationPressure * 0.52 + stressPressure + band.demography.mortalityPressure * 0.2);
-  const absorptionOpportunity = getAbsorptionOpportunity(world, band);
+  const target = getAbsorptionTarget(world, band, currentTargets);
+  const absorptionOpportunity = getAbsorptionOpportunity(band, target);
   const extinctionRisk = clamp01(
     viabilityPressure * 0.62 +
       lowPopulationPressure * 0.22 -
@@ -290,7 +304,6 @@ function deriveBandViabilityState(world: WorldState, band: Band): BandViabilityS
     population < MINIMUM_VIABLE_POPULATION * 0.72 && viabilityPressure > 0.62 ? "nonviable" :
     population < MINIMUM_VIABLE_POPULATION || viabilityPressure > 0.62 ? "fragile" :
     "viable";
-  const target = getAbsorptionTarget(world, band);
   const routeConfidence = target === undefined ? 0 : getRouteConfidence(world, band, target);
   const weakBandClassification = classifyWeakBand({
     status,
@@ -331,8 +344,7 @@ function deriveBandViabilityState(world: WorldState, band: Band): BandViabilityS
   };
 }
 
-function getAbsorptionOpportunity(world: WorldState, band: Band): number {
-  const target = getAbsorptionTarget(world, band);
+function getAbsorptionOpportunity(band: Band, target: Band | undefined): number {
 
   if (target === undefined) {
     return 0;
@@ -347,7 +359,7 @@ function getAbsorptionOpportunity(world: WorldState, band: Band): number {
   return clamp01(0.22 + kinBonus + contactBonus);
 }
 
-function getAbsorptionTarget(world: WorldState, band: Band): Band | undefined {
+function getAbsorptionTarget(world: WorldState, band: Band, currentTargets = false): Band | undefined {
   const currentTile = getTile(world, band.position);
 
   if (currentTile === undefined) {
@@ -363,7 +375,6 @@ function getAbsorptionTarget(world: WorldState, band: Band): Band | undefined {
       candidate.status !== "dispersed" &&
       candidate.viability?.status !== "absorbed" &&
       candidate.viability?.status !== "extinct" &&
-      (candidate.viability?.extinctionRisk ?? 0) < 0.68 &&
       (candidate.pressureState?.foodStress ?? 0) < 0.72 &&
       (candidate.pressureState?.waterStress ?? 0) < 0.78 &&
       isKin(band, candidate),
@@ -378,6 +389,11 @@ function getAbsorptionTarget(world: WorldState, band: Band): Band | undefined {
       return { candidate, distance };
     })
     .filter(({ distance }) => distance <= 6)
+    // Derive risk only for eligible nearby kin, after cheap exclusions. This is
+    // a bounded current read, not another action sweep or recursive fixed point.
+    .filter(({ candidate }) => (currentTargets
+      ? deriveBandViabilityState(world, candidate).extinctionRisk
+      : candidate.viability?.extinctionRisk ?? 0) < 0.68)
     .sort((left, right) =>
       left.distance === right.distance
         ? String(left.candidate.id).localeCompare(String(right.candidate.id))

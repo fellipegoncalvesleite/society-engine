@@ -1,0 +1,82 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "verdict": "NUMERIC_RESOURCE_CHAIN_RECONCILED",
+  "reconciliation": {
+    "units": "raw physical food",
+    "actualWorkOperations": 3,
+    "workReceipts": [
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:192:88:wetland_plant",
+        "sourceClass": "wetland_plant",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.4176,
+        "harvestedAmount": 0.127,
+        "depletionApplied": 0.127,
+        "transportLoss": 0.003,
+        "processingLoss": 0.0133,
+        "usableSupport": 0.1106,
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:varied-estuary:2552:plant_patch:plant:tile:192:88:wetland_plant"
+        ]
+      },
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:192:88:wetland_plant",
+        "sourceClass": "wetland_plant",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.2906,
+        "harvestedAmount": 0.0883,
+        "depletionApplied": 0.0883,
+        "transportLoss": 0.0021,
+        "processingLoss": 0.0093,
+        "usableSupport": 0.0769,
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:varied-estuary:2553:plant_patch:plant:tile:192:88:wetland_plant"
+        ]
+      },
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:192:88:wetland_plant",
+        "sourceClass": "wetland_plant",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.2023,
+        "harvestedAmount": 0.0661,
+        "depletionApplied": 0.0661,
+        "transportLoss": 0.0016,
+        "processingLoss": 0.0069,
+        "usableSupport": 0.0576,
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:varied-estuary:2554:plant_patch:plant:tile:192:88:wetland_plant"
+        ]
+      }
+    ],
+    "usableFoodTaken": 0.2451,
+    "declaredProvisionCharge": 0.03,
+    "explicitLosses": 0,
+    "independentlyExpectedDelivery": 0.2151,
+    "deliveredHarvestUnits": 0.2151,
+    "returnBatchUsableSupport": 0.2151,
+    "cargoBalance": {
+      "lotCount": 3,
+      "admittedUsableUnits": 0.2451,
+      "remainingUnits": 0,
+      "deliveredUnits": 0.2151,
+      "appliedProvisionUnits": 0.03,
+      "unfulfilledProvisionUnits": 0,
+      "postAdmissionLossUnits": 0,
+      "overflowUnits": 0
+    },
+    "identityHolds": true,
+    "identity": "sum(actual work usable food) - upstream overflow - post-admission loss - applied charge = delivered; unfulfilled charge is not food consumed. Admitted = remaining + delivered + applied charge + post-admission loss."
+  }
+}

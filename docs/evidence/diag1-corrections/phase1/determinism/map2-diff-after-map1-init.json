@@ -1,0 +1,116 @@
+{
+  "deepEqual": false,
+  "serializedEqual": false,
+  "diff": [
+    {
+      "path": "world.bands.band:varied-lake-east.activityShadowSubsistenceSummary.meanFoodTripShadowNet",
+      "a": 0.0064,
+      "b": 0.0062
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.activityShadowSubsistenceSummary.sameDayShadowNet",
+      "a": 0.0382,
+      "b": 0.0375
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.activityShadowSubsistenceSummary.shadowByReturnKind.0.netTotal",
+      "a": 0.0382,
+      "b": 0.0375
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.activityShadowSubsistenceSummary.shadowByTaskType.0.grossTotal",
+      "a": 0.2526,
+      "b": 0.2519
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.activityShadowSubsistenceSummary.shadowByTaskType.0.netTotal",
+      "a": 0.0382,
+      "b": 0.0375
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.activityShadowSubsistenceSummary.totalFoodShadowNet",
+      "a": 0.0382,
+      "b": 0.0375
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.activityShadowSubsistenceSummary.totalShadowGross",
+      "a": 0.2526,
+      "b": 0.2519
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.activityShadowSubsistenceSummary.totalShadowNet",
+      "a": 0.0382,
+      "b": 0.0375
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.activityShadowSubsistenceSummary.travelCostShareOfGross",
+      "a": 0.4751,
+      "b": 0.4764
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.recentIntraSeasonTrips.5.seasonalEcology.availabilityFactor",
+      "a": 0.1947,
+      "b": 0.1804
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.recentIntraSeasonTrips.5.seasonalEcology.driverSummary",
+      "a": "plant_patch spring: env=0.12 sig=0.32 (lean, neutral)",
+      "b": "plant_patch spring: env=0.1 sig=0.32 (lean, neutral)"
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.recentIntraSeasonTrips.5.seasonalEcology.seasonalDelta",
+      "a": -0.256,
+      "b": -0.2703
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.recentIntraSeasonTrips.5.shadowSubsistence.seasonalEcologyModifier",
+      "a": 0.696,
+      "b": 0.6853
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.recentIntraSeasonTrips.5.shadowSubsistence.shadowGrossValue",
+      "a": 0.0431,
+      "b": 0.0424
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.recentIntraSeasonTrips.5.shadowSubsistence.shadowNetValue",
+      "a": 0.0047,
+      "b": 0.004
+    },
+    {
+      "path": "world.bands.band:varied-lake-east.seasonalEcologyMemory.tile:88:81.seasonalReliabilityBySeason.spring",
+      "a": 0.1947,
+      "b": 0.1936
+    },
+    {
+      "path": "world.bands.band:varied-lake-west.seasonalEcologyMemory.tile:69:78.seasonalReliabilityBySeason.spring",
+      "a": 0.5541,
+      "b": 0.564
+    },
+    {
+      "path": "world.bands.band:varied-pass-frontier.seasonalEcologyMemory.tile:134:44.repeatedSeasonalFailureCount",
+      "a": 20,
+      "b": 21
+    },
+    {
+      "path": "world.bands.band:varied-pass-frontier.seasonalEcologyMemory.tile:134:44.repeatedSeasonalSuccessCount",
+      "a": 52,
+      "b": 51
+    },
+    {
+      "path": "world.bands.band:varied-pass-frontier.seasonalEcologyMemory.tile:134:44.seasonalReliabilityBySeason.spring",
+      "a": 0.5791,
+      "b": 0.5782
+    },
+    {
+      "path": "world.bands.band:varied-plains-creek.seasonalEcologyMemory.tile:99:46.seasonalReliabilityBySeason.spring",
+      "a": 0.3941,
+      "b": 0.3905
+    },
+    {
+      "path": "world.bands.band:varied-river-mid.seasonalEcologyMemory.tile:108:55.seasonalReliabilityBySeason.spring",
+      "a": 0.5944,
+      "b": 0.5982
+    }
+  ]
+}

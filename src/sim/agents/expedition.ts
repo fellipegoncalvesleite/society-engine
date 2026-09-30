@@ -3,9 +3,9 @@
 // An expedition is a MORE CAPABLE LIFECYCLE of the same task-group/party system that
 // `intraSeasonTrips.ts` already owns — not a second simulator. It reuses that module's
 // trip record, its passable-route builder, and its physical harvest resolution, and it
-// delivers its result through the SAME `recentIntraSeasonTrips` → `humanFoodSupport`
-// ledger. What it adds is the physics the daily path never had: real outbound days, a
-// physical position while away, provisions that are eaten, a carry ceiling, a return
+// deposits its bounded source batch into `seasonalFoodReceipts` → `humanFoodSupport`.
+// A single nondeposit journey summary remains in `recentIntraSeasonTrips`. What it adds is the physics the daily path never had: real outbound days, a
+// physical position while away, a declared provision charge, a carry ceiling, a return
 // leg, and a receipt that only exists once the party is physically home.
 //
 // THE BOUNDARY (EXPEDITIONARY-2 §1): duration, not distance, decides the path.
@@ -54,6 +54,7 @@ import {
   type ResourcePatchMemory,
   type VerificationObservationKind,
 } from "./resourceKnowledge";
+import { getTripUsableFood, getActivityReturnSemantics } from "./physicalFoodReturn";
 import { depositFoodReceipts } from "./seasonalFoodReceipts";
 import {
   buildFrontierCountryObservation,
@@ -116,6 +117,7 @@ import {
   getRouteTravelTimeDays,
 } from "./traversal";
 import { EXPEDITION_MAX_DURATION_DAYS, EXPEDITION_MAX_WORK_DAYS } from "./expeditionLimits";
+import { admitExpeditionWork, createExpeditionCargo, ensureExpeditionCargo, expeditionCargoBalance, reduceExpeditionCargo, settleExpeditionCargo } from "./expeditionCargo";
 import {
   buildExpeditionPhysicalRouteSurface,
   deriveExpeditionOneWaySearchBudgetDays,
@@ -405,12 +407,7 @@ function applyReducedProductiveLabor(
     ...(expedition.partyComposition === undefined
       ? {}
       : { partyComposition: reduceCompositionNeverFaster(expedition.partyComposition, removed) }),
-    cargo: {
-      ...expedition.cargo,
-      carryCapacityUnits: capacity,
-      harvestUnits: round4(carried - abandoned),
-      lostUnits: round4((expedition.cargo.lostUnits ?? 0) + abandoned),
-    },
+    cargo: reduceExpeditionCargo(expedition.cargo, abandoned, capacity),
   };
 }
 
@@ -533,7 +530,13 @@ export function reconcileExpeditionCommitment(band: Band, currentTick: number): 
     return band;
   }
 
-  return repairInvalidPhysicalCommitment(reconcileExpeditionLabor(band, currentTick));
+  // Validate/migrate every active record before any reconciliation can change it.
+  // A refusal throws without mutating the saved input, including its source bytes.
+  const expeditions = (band.expeditions ?? []).map(expedition =>
+    isTerminalPhase(expedition.phase) ? expedition : ensureExpeditionCargo(expedition));
+  const current = expeditions.every((expedition, i) => expedition === band.expeditions![i])
+    ? band : { ...band, expeditions };
+  return repairInvalidPhysicalCommitment(reconcileExpeditionLabor(current, currentTick));
 }
 
 /**
@@ -747,7 +750,7 @@ const CAMPLESS_BACKTRACK_TRAVEL_DAY_FRACTION = 0.5;
 const CAMPLESS_EXTRA_PROVISION_WORKER_DAYS = 0.5;
 
 /**
- * Provisions the party eats today. Consumed from what it carries — never from a band store.
+ * Declared daily provision charge. Settled against actual lots at return/loss; no band store.
  *
  * CORRECTION-34D — EVERY PHYSICAL PERSON EATS. This is the one place where the split makes a
  * party's life harder rather than easier: a member who has stopped supplying labour has not
@@ -780,51 +783,6 @@ function provisionsExhausted(expedition: ExpeditionRecord): boolean {
   return expedition.cargo.provisionUnitsConsumed > budget;
 }
 
-/**
- * The physical receipt that reaches the residential camp. The party ate part of what it
- * took, and it could only carry so much; both reductions are applied HERE, once, to the
- * receipt resolved at the target. A party that ate more than it took delivers nothing.
- */
-function buildReturnedRecord(expedition: ExpeditionRecord, day: DayNumber): IntraSeasonTripRecord | undefined {
-  const pending = expedition.pendingReturnRecord;
-
-  if (pending?.physicalFoodHarvest === undefined) {
-    return undefined;
-  }
-
-  const time = getWorldTimeForDay(day);
-  const harvest = pending.physicalFoodHarvest;
-  const carried = Math.max(0, Math.min(expedition.cargo.harvestUnits, expedition.cargo.carryCapacityUnits));
-  const afterProvisions = Math.max(0, carried - expedition.cargo.provisionUnitsConsumed);
-  const takenAtTarget = Math.max(0.0001, harvest.usableSupport);
-  const deliveredFraction = Math.max(0, Math.min(1, afterProvisions / takenAtTarget));
-  const usableSupport = round4(harvest.usableSupport * deliveredFraction);
-  const returnedResourceKind = usableSupport > 0 ? pending.resourceReturn.returnedResourceKind : "none";
-
-  return {
-    ...pending,
-    // The receipt is dated to the RETURN — this is what makes it enter the season's
-    // ledger only now, and only once.
-    day,
-    tick: time.tick,
-    endDay: day,
-    physicalFoodHarvest: {
-      ...harvest,
-      usableSupport,
-      reasonIds: [...harvest.reasonIds, `reason:expedition-return:${expedition.id}` as ReasonId],
-    },
-    resourceReturn: {
-      ...pending.resourceReturn,
-      returnedResourceKind,
-      estimatedReturnValue: usableSupport,
-      // The single gate the canonical ledger reads. Nothing the party did before this
-      // moment set it true.
-      consumedByEconomy: usableSupport > 0,
-    },
-    reasonIds: [...pending.reasonIds, `reason:expedition-return:${expedition.id}` as ReasonId],
-  };
-}
-
 function summarizeOutcome(
   world: WorldState,
   expedition: ExpeditionRecord,
@@ -849,6 +807,7 @@ function summarizeOutcome(
     // ("N adults left and were never seen again") must count people, not labour.
     partyPeople: getExpeditionPhysicalPeople(expedition),
     deliveredHarvestUnits: round4(deliveredUnits),
+    ...(expedition.cargo.accountingVersion === 1 ? { cargoBalance: expeditionCargoBalance(expedition.cargo) } : {}),
     provisionUnitsConsumed: expedition.cargo.provisionUnitsConsumed,
     lostUnits: expedition.cargo.lostUnits,
     injuryLoad: expedition.injuryLoad,
@@ -907,12 +866,7 @@ export function createPreparedExpedition(params: {
     workDaysElapsed: 0,
     partyWorkers,
     ...(partyComposition === undefined ? {} : { partyComposition }),
-    cargo: {
-      harvestUnits: 0,
-      lostUnits: 0,
-      provisionUnitsConsumed: 0,
-      carryCapacityUnits: deriveCarryCapacityUnits(band, partyWorkers, 0, Number(time.tick)),
-    },
+    cargo: createExpeditionCargo(deriveCarryCapacityUnits(band, partyWorkers, 0, Number(time.tick))),
     injuryLoad: 0,
     riskEpisodeIds: [],
     carriedObservations: [],
@@ -937,7 +891,8 @@ interface AdvanceResult {
   readonly world: WorldState;
   readonly expedition: ExpeditionRecord;
   /** Set only on the day the party physically reaches home with something to deposit. */
-  readonly depositRecord?: IntraSeasonTripRecord;
+  readonly depositRecords?: readonly IntraSeasonTripRecord[];
+  readonly returnSummary?: IntraSeasonTripRecord;
   /**
    * EXPEDITIONARY-3 — kilometres the party PHYSICALLY covered today, and whether any of
    * it was under load. Realized history is written from this and nothing else, which is
@@ -1194,14 +1149,7 @@ function resolveVerificationOnSite(
           makeVerificationReasonId(String(band.id), time.tick, plan.question, outcome),
         ],
       },
-      ...(harvestUnits > 0
-        ? {
-            cargo: {
-              ...expedition.cargo,
-              harvestUnits: round4(expedition.cargo.harvestUnits + harvestUnits),
-            },
-          }
-        : {}),
+
     },
     };
   };
@@ -1303,6 +1251,43 @@ function resolveVerificationOnSite(
 function advanceExpeditionOneDay(
   world: WorldState,
   band: Band,
+  original: ExpeditionRecord,
+  day: DayNumber,
+): AdvanceResult {
+  if (isTerminalPhase(original.phase)) {
+    // Reconciled cancellations discard real cargo but do not deliver it.
+    return original.cargo.accountingVersion === 1 && !original.cargo.settled
+      ? { world, expedition: { ...original, cargo: settleExpeditionCargo(original.cargo, false, day).cargo } }
+      : { world, expedition: original };
+  }
+  const expedition = ensureExpeditionCargo(original);
+  const result = advanceUnsettledExpeditionOneDay(world, band, expedition, day);
+  if (!isTerminalPhase(result.expedition.phase)) return result;
+  const settlement = settleExpeditionCargo(result.expedition.cargo, result.expedition.phase === "completed", day);
+  const latestWork = result.expedition.pendingReturnRecord ?? settlement.cargo.lots![settlement.cargo.lots!.length - 1]?.workRecord;
+  const time = getWorldTimeForDay(day);
+  const delivered = round4(settlement.receipts.reduce((sum, record) => sum + getTripUsableFood(record), 0));
+  const returnSummary: IntraSeasonTripRecord | undefined = result.expedition.phase === "completed" && latestWork !== undefined
+    ? { ...latestWork, day, tick: time.tick, season: time.season, endDay: day,
+        physicalFoodHarvest: undefined,
+        expeditionReturn: {
+          expeditionId: result.expedition.id,
+          workReceipts: settlement.cargo.lots!.map(lot => lot.workRecord.physicalFoodHarvest!),
+          returnedFoodReceipts: settlement.receipts.map(record => record.physicalFoodHarvest!),
+        },
+        resourceReturn: { ...(settlement.receipts[0]?.resourceReturn ?? latestWork.resourceReturn),
+          estimatedReturnValue: delivered, consumedByEconomy: false,
+          ...(delivered > 0 ? {} : { returnedResourceKind: "none", semantics: getActivityReturnSemantics("none"), noSupportChange: true, noCarryingCapacityCoupling: true }) },
+        noSupportChange: delivered === 0,
+        reasonIds: [...latestWork.reasonIds, `reason:expedition-return:${result.expedition.id}` as ReasonId],
+      }
+    : undefined;
+  return { ...result, expedition: { ...result.expedition, cargo: settlement.cargo }, depositRecords: settlement.receipts, returnSummary };
+}
+
+function advanceUnsettledExpeditionOneDay(
+  world: WorldState,
+  band: Band,
   expedition: ExpeditionRecord,
   day: DayNumber,
 ): AdvanceResult {
@@ -1344,11 +1329,7 @@ function advanceExpeditionOneDay(
         ...withProvisions,
         phase: "returning",
         outcomeReason: "injury_forced_return",
-        cargo: {
-          ...withProvisions.cargo,
-          harvestUnits: carried,
-          lostUnits: round4(withProvisions.cargo.lostUnits + abandoned),
-        },
+        cargo: reduceExpeditionCargo(withProvisions.cargo, abandoned),
       },
     };
   }
@@ -1584,10 +1565,8 @@ function advanceExpeditionOneDay(
     );
     const taken = work.record.physicalFoodHarvest?.usableSupport ?? 0;
     const capacity = withProvisions.cargo.carryCapacityUnits;
-    const totalTaken = round4(withProvisions.cargo.harvestUnits + taken);
-    // The party physically cannot carry more than its ceiling; the excess is left behind.
-    const carried = Math.min(totalTaken, capacity);
-    const lost = round4(Math.max(0, totalTaken - carried));
+    const admittedCargo = admitExpeditionWork(withProvisions, work.record, withProvisions.workDaysElapsed + 1);
+    const carried = admittedCargo.harvestUnits;
     const workDays = withProvisions.workDaysElapsed + 1;
     const doneWorking = workDays >= EXPEDITION_MAX_WORK_DAYS || carried >= capacity || taken <= 0;
     const camp = deriveTaskCampForOperating(world, withProvisions, day);
@@ -1611,12 +1590,8 @@ function advanceExpeditionOneDay(
         pendingReturnRecord: work.record,
         outcomeReason: classifyTargetWorkOutcome(work.record, taken),
         cargo: {
-          ...withProvisions.cargo,
-          harvestUnits: round4(carried),
-          lostUnits: round4(withProvisions.cargo.lostUnits + lost),
-          ...(backtrackProvisions <= 0
-            ? {}
-            : { provisionUnitsConsumed: round4(withProvisions.cargo.provisionUnitsConsumed + backtrackProvisions) }),
+          ...admittedCargo,
+          provisionUnitsConsumed: round4(admittedCargo.provisionUnitsConsumed + backtrackProvisions),
         },
         ...(camp === undefined ? {} : { taskCamp: { ...camp, usedDays: camp.usedDays + 1 } }),
       },
@@ -1665,11 +1640,9 @@ function advanceExpeditionOneDay(
     };
   }
 
-  const depositRecord = buildReturnedRecord(moved, day);
   return {
     world,
     expedition: moved,
-    depositRecord,
     ...(returnKm <= 0 ? {} : { walkedKm: returnKm, walkedLoadedKm: loadedKm, walkSource: "expedition_return" as const }),
   };
 }
@@ -1847,14 +1820,14 @@ const MIN_COMMITTED_LABOUR_VALUE_PER_DAY = 0.025;
 /** The band's own recent same-day food return per day — its opportunity cost baseline. */
 function deriveRecentLocalYieldPerDay(band: Band): number {
   const trips = (band.recentIntraSeasonTrips ?? []).filter(
-    (trip) => trip.inspectionOnly !== true && (trip.physicalFoodHarvest?.usableSupport ?? 0) > 0,
+    (trip) => trip.inspectionOnly !== true && getTripUsableFood(trip) > 0,
   );
 
   if (trips.length === 0) {
     return 0;
   }
 
-  const total = trips.reduce((sum, trip) => sum + (trip.physicalFoodHarvest?.usableSupport ?? 0), 0);
+  const total = trips.reduce((sum, trip) => sum + getTripUsableFood(trip), 0);
   return total / trips.length / LOCAL_TRIP_CADENCE_DAYS;
 }
 
@@ -2658,6 +2631,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
     let mobility = currentBand.mobility;
     const nextExpeditions: ExpeditionRecord[] = [];
     const deposits: IntraSeasonTripRecord[] = [];
+    const returnSummaries: IntraSeasonTripRecord[] = [];
     // §11 — knowledge PHYSICALLY carried home by parties that completed their return
     // today. It is applied below, once, through the canonical writers. Lost parties
     // apply nothing: their observations never came home.
@@ -2738,19 +2712,19 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
         daySource = result.walkSource ?? daySource;
       }
 
-      if (result.depositRecord !== undefined) {
-        deposits.push(result.depositRecord);
-      }
+      deposits.push(...(result.depositRecords ?? []));
+      if (result.returnSummary !== undefined) returnSummaries.push(result.returnSummary);
 
       if (isTerminalPhase(result.expedition.phase)) {
-        const delivered = result.depositRecord?.physicalFoodHarvest?.usableSupport ?? 0;
+        const delivered = round4((result.depositRecords ?? []).reduce((total, record) => total + (record.physicalFoodHarvest?.usableSupport ?? 0), 0));
         const provisionalReason =
           result.expedition.outcomeReason ?? (result.expedition.phase === "lost" ? "party_lost" : "returned_information_only");
         // §5.3 — harvest physically taken at the target but nothing survived the walk
         // home (the party ate it / the carry ceiling lost it): the RETURN failed, not
         // the target. Distinct from every target-stage failure above.
         const terminalReason: ExpeditionOutcomeReason =
-          provisionalReason === "returned_with_cargo" && delivered <= 0 && result.expedition.phase === "completed"
+          delivered > 0 ? "returned_with_cargo" :
+          provisionalReason === "returned_with_cargo" && result.expedition.phase === "completed"
             ? "cargo_return_failed"
             : provisionalReason;
         // Observation only: how far this whole journey actually walked, out and back.
@@ -3054,7 +3028,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       );
     }
 
-    if (deposits.length === 0 && nextExpeditions.length === (currentBand.expeditions ?? []).length) {
+    if (returnSummaries.length === 0 && deposits.length === 0 && nextExpeditions.length === (currentBand.expeditions ?? []).length) {
       bandsById[band.id] = {
         ...currentBand,
         expeditions: nextExpeditions,
@@ -3080,7 +3054,7 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
       receivedSmokeSignals,
       frontierVerificationAttempts: verificationAttempts,
       ...(verificationEvidence === undefined ? {} : { verificationEvidence }),
-      ...(deposits.length === 0
+      ...(returnSummaries.length === 0
         ? {}
         : {
             // The ONE place an expedition's food becomes the band's food: at the return
@@ -3088,10 +3062,10 @@ function applyExpeditionDay(world: WorldState, day: DayNumber): WorldState {
             // the authoritative food credit goes to the bounded per-period accumulator
             // (LOST-LINEAGE RECOVERY-12) so carried-home cargo can never be evicted from the
             // 24-record UI window before the ledger reads it. Each deposit is counted once.
-            recentIntraSeasonTrips: [...deposits, ...(currentBand.recentIntraSeasonTrips ?? [])].slice(0, 24),
-            lastIntraSeasonTrip: deposits[0],
-            seasonalFoodReceipts: depositFoodReceipts(currentBand.seasonalFoodReceipts, deposits),
+            recentIntraSeasonTrips: [...returnSummaries, ...(currentBand.recentIntraSeasonTrips ?? [])].slice(0, 24),
+            lastIntraSeasonTrip: returnSummaries[0],
           }),
+      ...(deposits.length === 0 ? {} : { seasonalFoodReceipts: depositFoodReceipts(currentBand.seasonalFoodReceipts, deposits) }),
     };
     changed = true;
   }

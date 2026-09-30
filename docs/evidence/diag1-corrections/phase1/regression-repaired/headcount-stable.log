@@ -1,0 +1,24 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "summary": {
+    "fixtures": 14,
+    "failing": 0,
+    "vacuous": 0
+  },
+  "verdicts": {
+    "H1_ordinary_valid_party": "ALL_AUTHORITIES_AGREE",
+    "H2_aging_allocated_to_residence": "RESIDENCE_ABSORBS_THE_TRANSITION_PARTY_UNTOUCHED",
+    "H3_forced_away_labor_reduction": "LABOR_REDUCES_THROUGH_ONE_AUTHORITY_NO_BODY_MOVES",
+    "H4_non_working_person_remains_with_party": "PRESENT_AND_CONSUMING_WITHOUT_GRANTING_LABOR",
+    "H5_two_concurrent_parties": "LABOR_ALLOCATED_DETERMINISTICALLY_WITHOUT_MOVING_BODIES",
+    "H6_prepared_party": "RESIDENTIAL_BODY_COMMITTED_LABOR_UNAVAILABLE_FOUNDER",
+    "H7_fission_with_an_away_party": "FOUNDERS_ONLY_FROM_PHYSICALLY_RESIDENTIAL_PEOPLE",
+    "H8_fission_with_a_prepared_party": "PREPARED_WITHHELD_AS_LABOR_COMMITMENT_NOT_CLASSIFIED_AS_ABSENT",
+    "H9_catchment_after_cohort_transition": "NO_AWAY_PERSON_DRAWS_LOCALLY_AND_NO_COHORT_IS_SUBTRACTED_TWICE",
+    "H10_return_after_labor_reduction": "HEADCOUNT_RETURNS_EXACTLY_ONCE_NO_COHORT_CREATED_OR_DELETED",
+    "H11_corrupt_legacy_state": "LABELLED_NON_HISTORICAL_REPAIR_NO_SILENT_DELETION",
+    "H12_active_annual_boundary_equivalence": "IDENTICAL_ACROSS_ALL_FOUR_MODES_WITH_AN_ACTIVE_PARTY",
+    "H13_no_natural_overlap_control": "NATURAL_FREQUENCY_REPORTED_NOT_SUBSTITUTED",
+    "H14_legacy_record_migration": "UPGRADED_DETERMINISTICALLY_AND_CONSERVATIVELY"
+  }
+}

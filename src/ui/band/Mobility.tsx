@@ -138,7 +138,7 @@ export function Mobility({
                 day {expedition.travelDaysElapsed + expedition.workDaysElapsed}, expected back day {Number(expedition.plannedReturnDay)}
               </p>
               <ul className="condition-note">
-                <li>Provisions eaten: {expedition.cargo.provisionUnitsConsumed} · cargo {expedition.cargo.harvestUnits}/{expedition.cargo.carryCapacityUnits} units{expedition.cargo.lostUnits > 0 ? ` · ${expedition.cargo.lostUnits} left behind` : ""}</li>
+                <li>Provision charge: {expedition.cargo.provisionUnitsConsumed} · cargo {expedition.cargo.harvestUnits}/{expedition.cargo.carryCapacityUnits} units{expedition.cargo.lostUnits > 0 ? ` · ${expedition.cargo.lostUnits} left behind` : ""}</li>
                 {expedition.taskCamp !== undefined ? (
                   <li>Task camp at {String(expedition.taskCamp.tileId)} ({expedition.taskCamp.reason.replace(/_/g, " ")}, used {expedition.taskCamp.usedDays}d, expires day {Number(expedition.taskCamp.expiresOnDay)}) — no stores, no claim</li>
                 ) : null}

@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1CrossWorldCacheAudit.mjs",
+    "--out",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/docs/evidence/diag1-corrections/phase1/determinism/cross-world-cache-exact-base.json"
+  ],
+  "cwd": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/baseline-runtime",
+  "source": "73cc38b916e236339897c59686638efafd569b6e git archive src",
+  "exitCode": 1,
+  "elapsedSeconds": 67.21725797653198
+}

@@ -1,4 +1,6 @@
 import type {
+  IntraSeasonTripRecord,
+  PhysicalFoodHarvestRecord,
   IntraSeasonTripActivityResult,
   IntraSeasonTripTaskGroupType,
   ActivityReturnResourceKind,
@@ -147,4 +149,17 @@ const ACTIVITY_RESULT_SEMANTICS = {
 function isFoodResourceClass(classId: ResourceClassId): boolean {
   return classId === "generic_plant_food" || classId === "aquatic_food" ||
     classId === "animal_food" || classId === "fallback_food";
+}
+
+/** Read-only journey projections. Neither helper creates or deposits food. */
+export function getTripUsableFood(trip: IntraSeasonTripRecord): number {
+  return trip.expeditionReturn === undefined
+    ? trip.physicalFoodHarvest?.usableSupport ?? 0
+    : trip.expeditionReturn.returnedFoodReceipts.reduce((sum, receipt) => sum + receipt.usableSupport, 0);
+}
+
+export function getTripWorkReceipts(trip: IntraSeasonTripRecord): readonly PhysicalFoodHarvestRecord[] {
+  return trip.expeditionReturn === undefined
+    ? trip.physicalFoodHarvest === undefined ? [] : [trip.physicalFoodHarvest]
+    : [...trip.expeditionReturn.workReceipts].reverse();
 }

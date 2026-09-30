@@ -1,5 +1,24 @@
 # AGENTS.md — Durable Operational Context
 
+<!-- DIAG1_PHASE1_CURRENT_START -->
+## Current authority — DIAG-1 Correction Phase 1
+
+**IMPLEMENTED / PENDING REVIEW — not accepted or frozen.** User-authorized bounded correction on `fix/diag1-human-support`, exact accepted base `73cc38b916e236339897c59686638efafd569b6e`. Production commit: `Pending first implementation commit`. The later documentation commit records that production identity; final published HEAD/remote status is exported independently.
+
+This block supersedes older current/unstarted/accepted headlines only for this four-finding correction. Frozen Item 4 (`11f085930462f981fcca45faf37b67d961196adb`), Item 5 (`cdfc7c7fe84f16bd79275ccf9b0d0c352a521cef`), SCALE-1 (`30e1440c237c0f09bb1403687b8da9899fbfd41b`) and M0.1 (`43c4c45615d375da6d25cf92ef328458ddcad347`) remain preserved ancestry. No merge to main or frozen branch is authorized.
+
+- B-001: `expeditionCargo.ts` owns at most three actual source/work lots. Capacity before declared FIFO charge; applied versus unfulfilled charge; explicit loss; one positive source batch at physical home return. Optional pending observation and bounded UI history cannot gate food. One nondeposit journey summary feeds behavioral/UI readers.
+- B-002: `viability.ts` re-reads current source per sorted ID and resolves one consistent current target/opportunity decision, transfers current bodies atomically and refreshes affected projections. Arrivals may rescue later sources. Existing cohort policy/thresholds/provisional exclusion remain.
+- B-003/F2: `plantStock.ts` caches only immutable derived descriptions in one WeakMap generation per tile; complete time/tile causal signature, live world depletion, unchanged realization/formulas.
+- B-004/F6: canonical available residential productive workers include prepared/away parties and performed same-day work. Selection and immediate execution refuse zero. Unexecuted investigation proposals reserve none.
+- Migration is explicitly partial: exact provable old cargo only, otherwise preserved-input `ExpeditionCargoProvenanceError`; no invented source or outbound stores. The app has no live-world importer.
+- Evidence, RED/GREEN/mutations, reader map, tested boundaries and residuals: [phase report](docs/evidence/diag1-corrections/phase1/PHASE1_REPORT.md), [execution ledger](docs/evidence/diag1-corrections/phase1/PROGRESS.md), [Future Evolution Contract](docs/evidence/diag1-corrections/phase1/FUTURE_EVOLUTION_CONTRACT.md). Paths are repository-relative; from docs/ use `evidence/diag1-corrections/phase1/`.
+- Focused command: `node scripts/diag1Phase1ConservationAudit.mjs --out artifacts/diag1-phase1/conservation.json`. All historical audit outputs must be redirected; final command manifests record actual statuses/configuration/source hashes. No whole-game PASS or growth guarantee.
+- Root Item-4 checkout and parked Task12 checkout remain read-only; no `src/sim/world/physical/` changes. WORLD-M0 stays shadow-only before M0.7. Phase 2/3 and every other DIAG-1 finding remain unimplemented/open.
+- **Next action:** independent phase review and supervising acceptance of the exact final HEAD, then a documentation-only acceptance update before Phase 2. No worker may self-accept. Commit and push only `fix/diag1-human-support`; preserve the isolated worktree for review.
+
+<!-- DIAG1_PHASE1_CURRENT_END -->
+
 > **Required reading before repository work.**
 >
 > This file is the model-neutral operational entry point for `fellipegoncalvesleite/human-nomad-simulator`.

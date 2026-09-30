@@ -1,0 +1,18 @@
+PASS B-002 current-body conservation abc
+PASS B-002 current-body conservation cba
+PASS B-002 current-body conservation bac
+PASS B-002 current-body conservation bca
+PASS B-002 current-body conservation cab
+PASS B-002 current-body conservation acb
+PASS B-002 current-body conservation abcde
+PASS B-002 arrivals rescue B before its turn
+PASS B-002 single transfer and healthy no-transfer
+PASS B-002 multiple arrivals, terminal/zero and provisional exclusion
+file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:311
+  if(mutant!=='none'&&!mutation.detected) throw Error('Mutant did not execute and trigger its actual causal regression');
+                                                ^
+
+Error: Mutant did not execute and trigger its actual causal regression
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:311:49
+
+Node.js v26.7.0

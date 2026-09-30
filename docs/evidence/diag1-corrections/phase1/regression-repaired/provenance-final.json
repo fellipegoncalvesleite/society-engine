@@ -1,0 +1,83 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/node/26.7.0/bin/node",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs",
+    "--scope",
+    "provenance",
+    "--out",
+    "docs/evidence/diag1-corrections/phase1/regression-repaired/provenance-final.json"
+  ],
+  "auditScriptSha256": "13376dd7a9731f6f09a541635a2286fa519aa495a19e1343b3efe0fcacfb603e",
+  "runtime": "v26.7.0",
+  "sourceHead": "73cc38b916e236339897c59686638efafd569b6e",
+  "sourceBefore": {
+    "src/sim/agents/viability.ts": "5fbf86950be4f90c1841e4aa323e228384e818045ec0cefc27eca3a62d12585f",
+    "src/sim/agents/plantStock.ts": "9317f0bf486223b549a2e61171faba929996b83c1797609a96e175c16503ed6d",
+    "src/sim/agents/plantPatches.ts": "3bd184194ffe9f542696500249f639c166b767bd65309559903a6998c78dfa7f",
+    "src/sim/agents/intraSeasonTrips.ts": "84893cd0f9ffbd2f41c3e880bc6f52d52c3b526ec496241bca66cffc7127a68d",
+    "src/sim/agents/bandMobility.ts": "893eac223f7399fb83987a56317d6b5d72e9f924d34443d1e99fadd1aaa01973",
+    "src/sim/agents/expedition.ts": "e0ebb2c64c69f3a9d3970d0d62c5d46314f9dc47a590fee3252e1d223ed2cb81",
+    "src/sim/agents/expeditionCargo.ts": "0a70fe8471143c2704d877f7509425a2dbf21cdfce236980542bb74dcba6caf5",
+    "src/sim/agents/types.ts": "533b8f0d3b8fa5f93286140da93a570dfa4001a146c337ebae407d72d05580b5"
+  },
+  "sourceAfter": {
+    "src/sim/agents/viability.ts": "5fbf86950be4f90c1841e4aa323e228384e818045ec0cefc27eca3a62d12585f",
+    "src/sim/agents/plantStock.ts": "9317f0bf486223b549a2e61171faba929996b83c1797609a96e175c16503ed6d",
+    "src/sim/agents/plantPatches.ts": "3bd184194ffe9f542696500249f639c166b767bd65309559903a6998c78dfa7f",
+    "src/sim/agents/intraSeasonTrips.ts": "84893cd0f9ffbd2f41c3e880bc6f52d52c3b526ec496241bca66cffc7127a68d",
+    "src/sim/agents/bandMobility.ts": "893eac223f7399fb83987a56317d6b5d72e9f924d34443d1e99fadd1aaa01973",
+    "src/sim/agents/expedition.ts": "e0ebb2c64c69f3a9d3970d0d62c5d46314f9dc47a590fee3252e1d223ed2cb81",
+    "src/sim/agents/expeditionCargo.ts": "0a70fe8471143c2704d877f7509425a2dbf21cdfce236980542bb74dcba6caf5",
+    "src/sim/agents/types.ts": "533b8f0d3b8fa5f93286140da93a570dfa4001a146c337ebae407d72d05580b5"
+  },
+  "mutation": {
+    "mutant": "none",
+    "loaded": 0,
+    "executed": 0,
+    "bytesRestored": true,
+    "detected": false
+  },
+  "rows": [
+    {
+      "name": "B-001 complete raw receipt migrates and two-unit rounding boundary is accepted",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: missing processing loss",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: missing all raw fields",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: positive usable with zero harvest",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: inconsistent depletion",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: negative raw loss",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: nonfinite raw harvest",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: finite raw imbalance beyond two rounding units",
+      "pass": true
+    },
+    {
+      "name": "B-001 zero work requires explicit complete zero retained receipt",
+      "pass": true
+    },
+    {
+      "name": "B-001 information only requires explicit complete zero retained receipt",
+      "pass": true
+    }
+  ],
+  "pass": true
+}

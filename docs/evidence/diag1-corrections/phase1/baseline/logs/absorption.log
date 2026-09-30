@@ -1,0 +1,9 @@
+{
+  "productionForwardLosesEight": true,
+  "zeroDeclaredRemovals": true,
+  "singleAbsorptionConserves": true,
+  "healthyNegativeConserves": true,
+  "counterfactualConserves": true,
+  "reverseIdConserves": true,
+  "oneCounterfactualReplacement": true
+}

@@ -5,7 +5,7 @@
 //  - parties physically occupy route positions while away (no teleport);
 //  - outbound and return both take days;
 //  - away workers are removed from residential labor exactly once;
-//  - a returned party deposits exactly ONE canonical receipt, dated to the return;
+//  - one returned journey carries a bounded source-deposit batch dated to return;
 //  - information-only / lost / aborted parties deposit none;
 //  - state stays bounded; the run is deterministic.
 import { createServer } from "vite";
@@ -34,6 +34,8 @@ try {
   const expeditionMod = await server.ssrLoadModule("/sim/agents/expedition.ts");
   const tripsMod = await server.ssrLoadModule("/sim/agents/intraSeasonTrips.ts");
   const registry = await server.ssrLoadModule("/sim/agents/dailyActionRegistry.ts");
+  const traversal = await server.ssrLoadModule("/sim/agents/traversal.ts");
+  const mobility = await server.ssrLoadModule("/sim/agents/bandMobility.ts");
 
   // Slice A: the registry is a real, ordered, non-cyclic boundary.
   //
@@ -192,6 +194,14 @@ function runLifecycleArm(runner, expeditionMod, sampling, years) {
 }
 
   // CANONICAL arm — daily sampling. The verdict is taken from this one.
+  // SCALE-1 removed the fixed cell constant before this phase. Bound route state
+  // by the existing physical technical ceiling (pace * days / minimum edge cost),
+  // capped by finite world size. This does not change behavioral reach or routes.
+  const boundWorld = runner.initSimWorld({ kind: "map1" }, "expedition-lifecycle");
+  const routeStateCap = traversal.deriveTechnicalRouteSearchHorizonTiles(boundWorld,
+    mobility.MOBILITY_TECHNICAL_MAX_KM_PER_DAY, expeditionMod.EXPEDITION_MAX_DURATION_DAYS) + 1;
+  const routeStateWithinBound = count => Number.isInteger(count) && count >= 0 && count <= routeStateCap;
+  if (!Number.isFinite(routeStateCap) || !routeStateWithinBound(routeStateCap) || routeStateWithinBound(routeStateCap + 1)) throw new Error("route state bound must actually discriminate overflow");
   const daily = runLifecycleArm(runner, expeditionMod, "daily", YEARS);
   // COUNTER-EXAMPLE arm — the boundary-only view this audit used to have, same world and seed.
   const boundary = runLifecycleArm(runner, expeditionMod, "seasonal", YEARS);
@@ -226,7 +236,7 @@ function runLifecycleArm(runner, expeditionMod, sampling, years) {
     terminalOutcomesRecorded: terminalIds.size > 0,
     activeExpeditionsBounded: observed.maxActivePerBand <= expeditionMod.EXPEDITION_ACTIVE_CAP,
     outcomeRecordsBounded: observed.maxOutcomeRecords <= expeditionMod.EXPEDITION_OUTCOME_CAP,
-    routeLengthBounded: observed.maxRouteTiles <= expeditionMod.EXPEDITION_MAX_ROUTE_TILES + 1,
+    routeLengthBounded: routeStateWithinBound(observed.maxRouteTiles),
     deterministicExpeditionIdentities: JSON.stringify(repeatIds) === JSON.stringify(onceIds),
     // CORRECTION-34A §6 — the invariant, asserted on every sampled band-day.
     personConserved: observed.personConservationViolations === 0,
@@ -257,6 +267,8 @@ function runLifecycleArm(runner, expeditionMod, sampling, years) {
   out = {
     check: "EXPEDITION-LIFECYCLE-1",
     verdict: pass ? "PASS" : "FAIL",
+    routeStateCap,
+    routeBoundNegativeControl: { atCapAccepted: routeStateWithinBound(routeStateCap), beyondCapRejected: !routeStateWithinBound(routeStateCap + 1) },
     canonicalSampling: "daily",
     years: YEARS,
     checks,

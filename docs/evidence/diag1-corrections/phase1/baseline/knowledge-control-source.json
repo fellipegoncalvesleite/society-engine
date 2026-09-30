@@ -1,0 +1,7 @@
+{
+  "sourceCommit": "73cc38b916e236339897c59686638efafd569b6e",
+  "source": "git archive src at exact base",
+  "originalAuditSha256": "8ac92c6332a833c608e82693bc391f5b30b3cbaf7b5eb5ffe41ec5a285e9934c",
+  "adaptation": "natural loop omitted only; controlled cases unchanged; natural gates expected false",
+  "adaptedSha256": "fde4aeb05069b2a30188ee5b26ee95448b4a293abe70ff22608cb3708a9abe16"
+}

@@ -1,0 +1,41 @@
+{
+  "audit": "ROADMAP-ITEM-3-TIME-MODE-EQUIVALENCE",
+  "seed": "audit27:natural:map2:s1",
+  "spanDays": 2520,
+  "digests": {
+    "daily": "e5941a2d4f0c9ab6628a2a9e11cf6f697a03c0959a1142e7f5b015c4b578da57",
+    "weekly": "e5941a2d4f0c9ab6628a2a9e11cf6f697a03c0959a1142e7f5b015c4b578da57",
+    "monthly": "e5941a2d4f0c9ab6628a2a9e11cf6f697a03c0959a1142e7f5b015c4b578da57",
+    "seasonal": "e5941a2d4f0c9ab6628a2a9e11cf6f697a03c0959a1142e7f5b015c4b578da57"
+  },
+  "allFourModesIdentical": true,
+  "dailyRepeatIdentical": true,
+  "occurrenceInTheComparedRun": {
+    "exploitationOutcomes": 6,
+    "outcomesDeliveringHarvest": 0,
+    "activePartiesAtEnd": 1,
+    "frictionRecords": 0,
+    "encounterRecords": 0,
+    "contactMemories": 0,
+    "livingBands": 9
+  },
+  "verdict": "ALL_FOUR_MODES_IDENTICAL_WITH_ITEM_3_BEHAVIOUR_PRESENT",
+  "nonVacuousPredicate": true,
+  "nonVacuity": {
+    "predicate": "the compared daily run must actually contain expedition target work and active parties, or a four-way identity is a claim about nothing",
+    "exploitationOutcomes": 6,
+    "outcomesDeliveringHarvest": 0,
+    "activePartiesAtEnd": 1,
+    "frictionRecords": 0,
+    "encounterRecords": 0
+  },
+  "canonicalProjectionIncludes": [
+    "band position, status, viability",
+    "population and every cohort",
+    "every expedition's phase, productive workers, non-working members, position and work days",
+    "the outcome ring including delivered harvest and party people",
+    "the friction ring by event id, interpretation and tension",
+    "encounter record count, contact-memory identities, trip record count"
+  ],
+  "publicTimeControlNote": "the eventual public Day/Season simplification remains DEFERRED and is not implemented; all four internal modes are retained as batch sizes over the same daily kernel."
+}

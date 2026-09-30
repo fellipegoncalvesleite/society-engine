@@ -1,0 +1,29 @@
+{"differing":["currentFoodEstimate","currentWaterStress","currentDroughtStress"],"invariantHolds":false}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: same Map2 physical inputs/time must not depend on a previous Map1 reader
++ actual - expected
+
++ [
++   'currentFoodEstimate',
++   'currentWaterStress',
++   'currentDroughtStress'
++ ]
+- []
+
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1CrossWorldCacheAudit.mjs:25:9 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'currentFoodEstimate',
+    'currentWaterStress',
+    'currentDroughtStress'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.7.0

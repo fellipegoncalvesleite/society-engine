@@ -163,8 +163,13 @@ try {
   // ═══ I2 — physical overlap without social evidence ══════════════════════════════════════════
   {
     const { world: w0, ids } = build([{ tileId: tileAt(0) }, { tileId: tileAt(2) }]);
-    const w = step(w0, 8);
     const [a, b] = ids;
+    // Controlled co-location before any encounter action: a long natural warmup
+    // can move the bands apart and does not establish this fixture's premise.
+    const w = moveBand(w0, b, w0.bands[a].position);
+    const noPriorSocialEvidence = [a, b].every(id =>
+      (w.bands[id].encounterRecords ?? []).length === 0 &&
+      (w.bands[id].recentRangeFrictionEvents ?? []).length === 0);
     const pa = physical(w, a);
     const contribA = frictionContribution(w, a, w.bands[a].position);
     // The hidden-census control: add remote records and re-read the SAME observer.
@@ -189,12 +194,13 @@ try {
     add("I2_overlap_without_social_evidence",
       pa.nearbyBandCount > 0 && contribA.total === 0 && censusInvariant
         ? "PHYSICAL_CROWDING_WITHOUT_INVENTED_SOCIAL_RISK_AND_NO_GLOBAL_CENSUS" : "UNEXPECTED",
-      { crowdingAtA: pa, socialContributionA: contribA,
+      { setup: "two real spawned bands placed together before encounter execution", noPriorSocialEvidence,
+        crowdingAtA: pa, socialContributionA: contribA,
         remoteRecordsAdded: remoteIds.length, crowdingWithRemoteRecords: paRemote,
         socialContributionWithRemoteRecords: contribRemote,
         strangerCaution: { before: round4(accessA?.strangerCaution ?? 0), withRemote: round4(accessRemote?.strangerCaution ?? 0) },
         censusInvariant,
-        nonVacuousPredicate: pa.weightedCrowding > 0 && remoteIds.length >= 6,
+        nonVacuousPredicate: pa.weightedCrowding > 0 && remoteIds.length >= 6 && noPriorSocialEvidence,
         nonVacuous: { predicate: "real physical crowding exists (non-zero) AND six remote records were genuinely added, so both halves are measured",
           weightedCrowding: pa.weightedCrowding, remoteRecords: remoteIds.length } });
   }
@@ -416,7 +422,7 @@ try {
         expWorld, mkExpBand(b, 25, [mkParty("e:probe", 5, 0, t, r0)]), m, t, d, r0, expDay,
         "food_resource_check", { partyWorkers: 5 });
       const h = probe.record.physicalFoodHarvest;
-      if (h?.physicalSourceFound === true && (h.physicalAvailability ?? 0) > 0) {
+      if (h?.physicalSourceFound === true && h.sourceKind === "plant_patch" && h.sourceId !== undefined && (h.physicalAvailability ?? 0) > 0) {
         site = { band: b, memory: m, t, route: r0, d, sourceId: h.sourceId };
         break outer;
       }
@@ -438,7 +444,9 @@ try {
   };
   const patchDepletion = (w) => {
     const e = w.plantPatchState?.[site.sourceId];
-    return e === undefined ? null : round4(e.depletion);
+    // The selected actual plant source is proved above. Sparse absence means
+    // zero human depletion, exactly as plantStock's physical owner specifies.
+    return round4(e?.depletion ?? 0);
   };
 
   // ═══ I7 — task camp inside another band's range ═════════════════════════════════════════════
@@ -559,9 +567,9 @@ try {
         ? "ONE_CHAIN_UNITS_DISTINCT_NO_SUPPORT_BEFORE_RETURN" : "UNEXPECTED",
       { units: {
           harvestedAmount: "physical stock units removed at the target",
-          usableSupport: "human food support units after transport and processing losses",
-          cargoUnits: "expedition cargo units — a DIFFERENT quantity from usableSupport, not equated",
-          provisionUnits: "trip-local provision units; no residential store is decremented",
+          usableSupport: "raw usable food units after transport and processing losses",
+          cargoUnits: "admitted raw usable food units after capacity overflow",
+          provisionUnits: "declared raw-food charge; no residential store is decremented",
           patchDepletion: "normalised patch depletion 0..1" },
         chain: [
           { step: "productive party labour", value: workers },
@@ -580,7 +588,7 @@ try {
           { step: "carry ceiling from productive workers", value: round4(capacity) },
           { step: "carried within ceiling", value: round4(carried) },
           { step: "abandoned above ceiling", value: abandoned },
-          { step: "physical people consuming provisions", value: bodies, perDay: provisionsPerDay },
+          { step: "physical people determining the declared provision charge", value: bodies, perDay: provisionsPerDay },
           { step: "band food receipts on the WORK day", value: receiptsAfterWork, unchangedFrom: receiptsOnBand },
         ],
         noSupportBeforeReturn: receiptsAfterWork === receiptsOnBand,
@@ -588,7 +596,7 @@ try {
         nonVacuous: { predicate: "every link carries a non-zero quantity, the patch genuinely moved, and the party genuinely holds more bodies than workers",
           removal: round4(r.harvestedAmount), support: round4(r.usableSupport),
           patch: `${stockBefore} -> ${stockAfter}`, bodies, workers },
-        statedNonClaim: "abandonment reads 0 here and is NOT demonstrated: one work-day's take is far below the ceiling, and abandonment arises from cargo ACCUMULATED across work-days, measured by CORRECTION-34B (0.648 -> 0.6 carried + 0.048 lost). Nothing was fabricated to make it non-zero. The deposit-exactly-once half is asserted by the CORRECTION-34A closure and numeric-chain audits, rerun unchanged in this freeze." });
+        statedNonClaim: "Abandonment is zero here and is not demonstrated by this case. Phase1 conservation fixtures separately cover capacity admission and real loss; the repaired numeric-chain and conservation audits cover bounded source deposits exactly once. This case proves actual target depletion and no residential support before return." });
   }
 
   // ═══ I12 — remote-record isolation ══════════════════════════════════════════════════════════

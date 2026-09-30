@@ -25,6 +25,7 @@ try {
   const acute = await server.ssrLoadModule("/sim/agents/acuteRisk.ts");
   const expedition = await server.ssrLoadModule("/sim/agents/expedition.ts");
   const mob = await server.ssrLoadModule("/sim/agents/bandMobility.ts");
+  const cargoOwner = await server.ssrLoadModule("/sim/agents/expeditionCargo.ts");
 
   // ── controlled fixture: an away, overdue, heavily loaded, worn-down party ─────────
   let world = runner.initSimWorld({ kind: "map1" }, "expedition-acute-risk");
@@ -33,26 +34,52 @@ try {
   const band = world.bands[bandId];
   const origin = world.tiles[band.position];
   let targetTile;
-  for (const tile of Object.values(world.tiles)) {
+  // DIAG-1: the exposure fixture must carry actual food provenance. Select a real
+  // remembered plant source on a long passable route (>=6 cells), then execute its
+  // three work operations through the physical owner. The old fixture invented
+  // 95%-capacity scalar cargo without a receipt, which no longer proves food.
+  for (const memory of band.resourceKnowledgeState?.patchMemories ?? []) {
+    if (memory.resourceClassId !== "generic_plant_food") continue;
+    const tile = world.tiles[memory.approximateTile];
     const d = Math.abs(tile.coord.x - origin.coord.x) + Math.abs(tile.coord.y - origin.coord.y);
-    if (d < 8 || d > 12 || tile.isAquatic === true) continue;
+    if (d < 6 || d > 12 || tile.isAquatic === true) continue;
     const route = trips.buildExpeditionRouteTiles(world, band.position, tile.id, 24);
     if (route === undefined || route[route.length - 1] !== tile.id) continue;
-    targetTile = { tile, route };
-    break;
+    const probe = trips.resolveExpeditionTargetWork(world, band, memory, tile.id, route.length - 1, route,
+      Number(world.time.day ?? 0), "food_resource_check", { partyWorkers: 4 });
+    if ((probe.record.physicalFoodHarvest?.usableSupport ?? 0) <= 0) continue;
+    targetTile = { tile, route, memory }; break;
   }
+  if (targetTile === undefined) throw new Error("No actual productive remembered long-route source for risk fixture");
 
   const prepared = expedition.createPreparedExpedition({
     world,
     band,
     taskKind: "distant_plant_gathering",
     targetTileId: targetTile.tile.id,
-    targetPatchId: `${targetTile.tile.id}:generic_plant_food`,
+    targetPatchId: targetTile.memory.patchId,
     routeTileIds: targetTile.route,
     partyWorkers: 4,
     day: Number(world.time.day ?? 0),
   });
-  const capacity = prepared.cargo.carryCapacityUnits;
+  const workReceipts = [];
+  for (let operation = 1; operation <= 3; operation++) {
+    const worked = trips.resolveExpeditionTargetWork(world, band, targetTile.memory, targetTile.tile.id,
+      targetTile.route.length - 1, targetTile.route, Number(world.time.day ?? 0) + operation,
+      "food_resource_check", { partyWorkers: 4 });
+    world = worked.world; workReceipts.push(worked.record);
+  }
+  const actualUsable = workReceipts.reduce((sum, record) => sum + record.physicalFoodHarvest.usableSupport, 0);
+  if (actualUsable <= 0) throw new Error("Acute-risk fixture must contain real food to abandon");
+  // Adversarial reduced carrying capability keeps the original 95% heavy-load
+  // condition, with REAL work quantities rather than fabricated food. No model
+  // rate or production capacity rule is changed by this controlled fixture.
+  const capacity = Math.ceil(actualUsable / .95 * 10000) / 10000;
+  let accountedCargo = cargoOwner.createExpeditionCargo(capacity,
+    4 * expedition.EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * 20);
+  for (let i = 0; i < workReceipts.length; i++) accountedCargo = cargoOwner.admitExpeditionWork(
+    { ...prepared, cargo: accountedCargo }, workReceipts[i], i + 1);
+
   const exposedExpedition = {
     ...prepared,
     phase: "returning",
@@ -63,11 +90,8 @@ try {
     // Overdue: planned window already passed.
     plannedReturnDay: Number(prepared.departedDay) + 6,
     hardDeadlineDay: Number(prepared.departedDay) + 40,
-    cargo: {
-      ...prepared.cargo,
-      harvestUnits: Math.round(capacity * 0.95 * 10000) / 10000,
-      provisionUnitsConsumed: 4 * expedition.EXPEDITION_PROVISION_UNITS_PER_WORKER_DAY * 20,
-    },
+    cargo: accountedCargo,
+    pendingReturnRecord: workReceipts[workReceipts.length - 1],
   };
   // Isolate the invariant under test. The warmed band carries unrelated plant/activity
   // traces that can truthfully consume the canonical two-episode seasonal cap before
@@ -201,6 +225,7 @@ try {
     verdict: pass ? "PASS" : "FAIL",
     checks,
     controlled: {
+      physicalWorkReceipts: workReceipts.map(record => record.physicalFoodHarvest), actualUsable, controlledCarryCapacity: capacity,
       episodeId: episode?.id, severity: episode?.severity,
       injuryLoadAfter: stamped?.injuryLoad, riskEpisodeIds: stamped?.riskEpisodeIds,
       healthyKmPerDay: healthyPace.kmPerTravelDay, injuredKmPerDay: injuredPace.kmPerTravelDay,

@@ -64,6 +64,9 @@ try {
           carryCapacityUnits: e.cargo?.carryCapacityUnits ?? 0,
           provisionUnitsConsumed: e.cargo?.provisionUnitsConsumed ?? 0,
           lostUnits: e.cargo?.lostUnits ?? 0,
+          workDaysElapsed: e.workDaysElapsed,
+          actualWorkDay: e.pendingReturnRecord?.day ?? null,
+          actualWorkReceipt: e.pendingReturnRecord?.physicalFoodHarvest ?? null,
           pendingUsableSupportAtTarget: e.pendingReturnRecord?.physicalFoodHarvest?.usableSupport ?? null,
           targetDepletionBefore: prevBand === undefined ? null : (before.depletion?.[targetId] ?? 0),
           targetDepletionAfter: world.depletion?.[targetId] ?? 0,
@@ -78,8 +81,9 @@ try {
         if ((o.deliveredHarvestUnits ?? 0) <= 0) continue;
 
         const rec = tracked.get(key);
-        const receipt = (b.recentIntraSeasonTrips ?? []).find((t) =>
+        const receipts = (b.recentIntraSeasonTrips ?? []).filter((t) =>
           (t.reasonIds ?? []).some((id) => String(id).includes(key)));
+        const receipt = receipts[0];
 
         chosen = {
           expeditionId: key,
@@ -93,10 +97,12 @@ try {
             lostUnits: o.lostUnits ?? 0,
           },
           receipt: receipt === undefined ? null : {
-            usableSupport: receipt.physicalFoodHarvest?.usableSupport ?? receipt.usableSupport ?? null,
+            usableSupport: receipt.expeditionReturn?.returnedFoodReceipts.reduce((sum, r) => sum + r.usableSupport, 0) ?? receipt.physicalFoodHarvest?.usableSupport ?? null,
             tick: Number(receipt.tick),
             reasonIds: (receipt.reasonIds ?? []).map(String),
           },
+          returnReceipts: receipts.flatMap(r => r.expeditionReturn?.returnedFoodReceipts ?? (r.physicalFoodHarvest ? [r.physicalFoodHarvest] : [])),
+          cargoBalance: o.cargoBalance,
           dailyTrace: rec.days,
         };
       }
@@ -106,59 +112,29 @@ try {
   let reconciliation = null;
   if (chosen !== null) {
     const days = chosen.dailyTrace;
-    // SAMPLE POINT: the LAST day the party was still away. Cargo is not monotonic — a party can
-    // abandon load to injury or to a reduced ceiling on the way home — so peak values are the wrong
-    // sample. An earlier version of this probe used peaks and the identity failed twice before this
-    // was understood; both wrong readings are recorded in the evidence rather than dropped.
-    const awayDays = days.filter((r) => r.phase === "outbound" || r.phase === "operating" || r.phase === "returning");
-    const last = awayDays.length === 0 ? null : awayDays[awayDays.length - 1];
-    const peakHarvest = last === null ? 0 : last.harvestUnits;
-    const peakCapacity = last === null ? 0 : last.carryCapacityUnits;
-    const finalProvisions = last === null ? 0 : last.provisionUnitsConsumed;
-    const finalLost = last === null ? 0 : last.lostUnits;
-    const peakCargoEverHeld = days.reduce((m, r) => Math.max(m, r.harvestUnits), 0);
+    // Independent work events, keyed by their actual work day. A retained last
+    // receipt is not another take on each travel day. All values are raw food units.
+    const work = new Map();
+    for (const day of days) if (day.actualWorkReceipt !== null && day.actualWorkDay !== null) {
+      work.set(day.actualWorkDay, day.actualWorkReceipt);
+    }
+    const receipts = [...work.values()];
+    const taken = receipts.reduce((sum, receipt) => sum + receipt.usableSupport, 0);
+    const declaredCharge = chosen.outcome.provisionUnitsConsumed;
+    const losses = chosen.outcome.lostUnits; // overflow + post-admission loss, once
+    const expected = Number(Math.max(0, taken - losses - declaredCharge).toFixed(4));
     const delivered = chosen.outcome.deliveredHarvestUnits;
-    // What the party physically TOOK at the target, in SUPPORT units. This is a DIFFERENT
-    // quantity from cargo.harvestUnits (cargo units) and the two must not be conflated — an
-    // earlier version of this probe used peak cargo as `takenAtTarget` and the identity failed.
-    const takenAtTargetSupport = last !== null && last.pendingUsableSupportAtTarget !== null
-      ? last.pendingUsableSupportAtTarget
-      : days.reduce((m, r) => r.pendingUsableSupportAtTarget === null ? m : Math.max(m, r.pendingUsableSupportAtTarget), 0);
-
-    // The equation production ACTUALLY implements, read from buildReturnedRecord:
-    //   carried        = min(cargo.harvestUnits, cargo.carryCapacityUnits)
-    //   afterProvisions = max(0, carried - provisionUnitsConsumed)
-    //   deliveredFraction = afterProvisions / takenAtTarget
-    //   usableSupport  = harvest.usableSupport * deliveredFraction
-    const carried = Math.min(peakHarvest, peakCapacity);
-    const afterProvisions = Math.max(0, carried - finalProvisions);
-    const capacityExcess = Number(Math.max(0, peakHarvest - peakCapacity).toFixed(6));
-
+    const credited = chosen.returnReceipts.reduce((sum,r) => sum + (r?.usableSupport ?? 0),0);
+    const balance = chosen.cargoBalance;
+    const lotBalanceHolds = balance !== undefined && Math.abs(balance.admittedUsableUnits - balance.remainingUnits - balance.deliveredUnits - balance.appliedProvisionUnits - balance.postAdmissionLossUnits) < .00005;
     reconciliation = {
-      takenAtTarget_usableSupport: Number(takenAtTargetSupport.toFixed(6)),
-      cargoHarvestUnitsAtLastAwayDay: Number(peakHarvest.toFixed(6)),
-      peakCargoEverHeld: Number(peakCargoEverHeld.toFixed(6)),
-      cargoAbandonedDuringJourney: Number(Math.max(0, peakCargoEverHeld - peakHarvest).toFixed(6)),
-      carryCapacityAtLastAwayDay: Number(peakCapacity.toFixed(6)),
-      capacityExcessNotCarried: capacityExcess,
-      carried: Number(carried.toFixed(6)),
-      provisionUnitsConsumed: Number(finalProvisions.toFixed(6)),
-      cargoLostUnits: Number(finalLost.toFixed(6)),
-      afterProvisions: Number(afterProvisions.toFixed(6)),
-      deliveredHarvestUnits: Number(delivered.toFixed(6)),
-      receiptUsableSupport: chosen.receipt?.usableSupport ?? null,
-      deliveredFraction: takenAtTargetSupport <= 0 ? null
-        : Number(Math.max(0, Math.min(1, afterProvisions / Math.max(0.0001, takenAtTargetSupport))).toFixed(6)),
-      identityHolds: Math.abs(
-        takenAtTargetSupport * Math.max(0, Math.min(1, afterProvisions / Math.max(0.0001, takenAtTargetSupport))) - delivered,
-      ) < 1e-3,
-      identity:
-        "delivered = takenAtTarget_usableSupport * clamp01(afterProvisions / takenAtTarget_usableSupport), " +
-        "where carried = min(cargo.harvestUnits, cargo.carryCapacityUnits) and " +
-        "afterProvisions = max(0, carried - provisionUnitsConsumed). Equivalently " +
-        "delivered = min(takenAtTarget_usableSupport, afterProvisions) for positive support. " +
-        "NOTE cargo.harvestUnits (cargo units) and physicalFoodHarvest.usableSupport (support units) " +
-        "are DIFFERENT quantities and are reported separately rather than conflated.",
+      units: "raw physical food", actualWorkOperations: receipts.length,
+      workReceipts: receipts, usableFoodTaken: Number(taken.toFixed(4)),
+      declaredProvisionCharge: declaredCharge, explicitLosses: losses,
+      independentlyExpectedDelivery: expected, deliveredHarvestUnits: delivered,
+      returnBatchUsableSupport: Number(credited.toFixed(4)), cargoBalance: balance,
+      identityHolds: receipts.length > 0 && lotBalanceHolds && Math.abs(expected-delivered) < .00005 && Math.abs(credited-delivered) < .00005,
+      identity: "sum(actual work usable food) - upstream overflow - post-admission loss - applied charge = delivered; unfulfilled charge is not food consumed. Admitted = remaining + delivered + applied charge + post-admission loss.",
     };
   }
 
@@ -168,16 +144,12 @@ try {
       "expedition.ts:139-149 — the constant's own header states 'trip-local provisioning; never a store'",
       "consumeProvisions only INCREMENTS cargo.provisionUnitsConsumed; it reads and writes no band stock",
       "no residential store is decremented at launch — grep for a provisioning withdrawal finds none",
-      "buildReturnedRecord subtracts provisionUnitsConsumed from the CARRIED cargo, so provisions reduce the receipt",
+      "expeditionCargo settles declared charges FIFO against actual carried lots at return/loss and separately records the unfulfilled remainder",
     ],
     isBackedByAConservedStore: false,
     honestStatement:
-      "Provisions are NOT residential stock transferred outward and are NOT modelled as target harvest " +
-      "consumed. They are a trip-local opportunity cost charged against the cargo at return. Full " +
-      "material conservation is therefore NOT claimed for provisions: what the party ate was never " +
-      "removed from a conserved store anywhere. What IS conserved is the cargo chain — harvest taken " +
-      "at the target, minus what exceeded the carry ceiling, minus what was eaten, equals what the " +
-      "receipt credits.",
+      "No physical outbound store exists. The declared body-based charge is a trip-local convention. " +
+      "At settlement, only actually available cargo is charged; any unfulfilled portion is explicit and is not consumed food.",
     futureWork:
       "Backing provisions with a real store belongs to the Adaptation / Material Culture pass alongside " +
       "outbound provisioning capacity and carrying technology; see DEFAULT_EXPEDITION_CARRYING_RULE.md.",
@@ -193,14 +165,14 @@ try {
     verdict,
     expedition: chosen === null ? null : {
       id: chosen.expeditionId, bandId: chosen.bandId, targetTileId: chosen.targetTileId,
-      outcome: chosen.outcome, receipt: chosen.receipt,
+      outcome: chosen.outcome, returnReceipts: chosen.returnReceipts,
       dailyTrace: chosen.dailyTrace,
     },
     reconciliation,
     provisions: provisionsClassification,
     limitations: [
       "the target tile's absolute stock before/after is read through world.depletion, which is a depletion index rather than an absolute stock ledger, so 'physical stock before/after' is reported as the depletion delta and not as an absolute quantity",
-      "one expedition on one map and seed; this proves the equation production implements, not that the equation is calibrated correctly",
+      "one expedition on one map and seed; independent accounting proves no missing/duplicated cargo here, not biological calibration",
     ],
   };
 

@@ -57,12 +57,20 @@ try {
   // The exact old (mainline) ledger read: filter the retained 24-record window to credited
   // food, take the latest retained tick, sum only that tick's receipts. Reproduces the loss.
   function oldWindowCredit(trips) {
-    const credited = (trips ?? []).filter(isCreditedFoodReceipt);
+    const credited = (trips ?? []).flatMap(expandReturnedReceipts).filter(isCreditedFoodReceipt);
     if (credited.length === 0) return 0;
     const latest = credited.reduce((m, t) => Math.max(m, Number(t.tick)), Number(credited[0].tick));
     return credited
       .filter((t) => Number(t.tick) === latest)
       .reduce((s, t) => s + t.physicalFoodHarvest.usableSupport, 0);
+  }
+
+  // Independent retained physical batch, not the accumulator under test.
+  function expandReturnedReceipts(record) {
+    return record.expeditionReturn === undefined ? [record] : record.expeditionReturn.returnedFoodReceipts.map(receipt => ({
+      ...record, expeditionReturn: undefined, physicalFoodHarvest: receipt,
+      resourceReturn: { ...record.resourceReturn, consumedByEconomy: true },
+    }));
   }
 
   function isExpeditionReceipt(record) {
@@ -125,12 +133,14 @@ try {
           // this season's physical returns only (all dated to periodTick).
           if (Number(rec.tick) !== periodTick) continue;
           returnedThis[id].trips += 1;
-          if (isCreditedFoodReceipt(rec)) {
-            const usable = rec.physicalFoodHarvest.usableSupport;
+          for (const physicalRecord of expandReturnedReceipts(rec)) {
+          if (isCreditedFoodReceipt(physicalRecord)) {
+            const usable = physicalRecord.physicalFoodHarvest.usableSupport;
             returnedThis[id].total += usable;
             returnedThis[id].count += 1;
             if (isExpeditionReceipt(rec)) returnedThis[id].expedition += usable;
             else returnedThis[id].sameDay += usable;
+          }
           }
         }
       }
@@ -278,7 +288,10 @@ try {
     conservationHolds: founders.every((f) => f.conservationHolds),
     evictionActuallyStressed: anyEvictionObserved, // >24-trip seasons exist (defect precondition present)
     oldWindowReproducesLoss: anyOldWindowLoss, // mainline algorithm undercounts on the SAME history
-    newAccountingBeatsOldWindow: founders.every((f) => f.captureRatio >= f.oldWindowCaptureRatio - 1e-9),
+    // The old window can also OVER-credit stale seasons. More food is not a
+    // correctness oracle: compare each method to independently observed returns.
+    newAccountingTracksPhysicalReturns: founders.every((f) =>
+      Math.abs(f.creditedTotal - f.returnedTotal) <= Math.abs(f.oldWindowTotal - f.returnedTotal) + 1e-9),
     freshSeasonCredited: freshness.freshSeasonCredited,
     accumulatedOnceInSeason: freshness.accumulatedOnceInSeason,
     zeroHarvestSeasonCreditsZero: freshness.firstZeroHarvestSeasonCreditsZero && freshness.laterZeroHarvestSeasonCreditsZero,

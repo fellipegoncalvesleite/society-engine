@@ -269,22 +269,33 @@ const DYNAMIC_DROP_EPSILON = 0.004; // drop entries within this of baseline (mus
 const PULSE_RETURN_BONUS = 0.4;
 const PLANT_HARVEST_SUPPORT_SCALE = 2.4;
 
-// --- per-tile food-patch geography (memoized by tile reference + season) ---
+// --- derived descriptions only; never cache the world's current depletion ---
 
-const tilePatchMemo = new WeakMap<Tile, Map<Season, readonly PlantFoodPatch[]>>();
+const tilePatchMemo = new WeakMap<Tile, {
+  readonly key: string;
+  readonly patches: readonly PlantFoodPatch[];
+}>();
+
+// Tile and its profiles are readonly; mapEdits replaces edited tiles. The causal
+// revision also protects imported/JS callers that mutate a retained tile in place.
+// This is a superset of every tile input read by plantPatches' candidate/lifecycle
+// materializer, not a revision inferred from identity. Time covers current AND
+// previous lifecycle moments. One entry is replaced, never accumulated by year.
+function plantDescriptionKey(tile: Tile, time: WorldTime): string {
+  return JSON.stringify([
+    time.year, time.season, time.seasonIndex, time.tick,
+    tile.id, tile.terrainKind, tile.movementCost,
+    tile.isAquatic, tile.isRiver, tile.isFloodplain, tile.isRiverbank,
+    tile.isConfluence, tile.isEstuary, tile.isMarshChannel, tile.isCoastal,
+    tile.resourceProfile, tile.riskProfile, tile.seasonalProfile,
+  ]);
+}
 
 function plantFoodPatchesAt(tile: Tile, time: WorldTime): readonly PlantFoodPatch[] {
-  let bySeasonMemo = tilePatchMemo.get(tile);
-
-  if (bySeasonMemo === undefined) {
-    bySeasonMemo = new Map();
-    tilePatchMemo.set(tile, bySeasonMemo);
-  }
-
-  const cached = bySeasonMemo.get(time.season);
-
-  if (cached !== undefined) {
-    return cached;
+  const key = plantDescriptionKey(tile, time);
+  const cached = tilePatchMemo.get(tile);
+  if (cached?.key === key) {
+    return cached.patches;
   }
 
   const patches = derivePlantPatchesForTile(tile, time);
@@ -318,9 +329,9 @@ function plantFoodPatchesAt(tile: Tile, time: WorldTime): readonly PlantFoodPatc
     });
   }
 
-  bySeasonMemo.set(time.season, foodPatches);
-
-  return foodPatches;
+  const immutablePatches = Object.freeze(foodPatches.map((patch) => Object.freeze(patch)));
+  tilePatchMemo.set(tile, { key, patches: immutablePatches });
+  return immutablePatches;
 }
 
 function getPlantPatchState(world: WorldState, patchId: string): PlantPatchState | undefined {

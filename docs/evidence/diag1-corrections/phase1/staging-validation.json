@@ -1,0 +1,13 @@
+{
+  "codeAndCurrentHandoffWhitespaceExitCode": 0,
+  "wholeDiffWhitespaceExitCode": 2,
+  "preservedWhitespaceWarnings": {
+    "docs/SOCIETY_ENGINE_CANONICAL_BUNDLE.md": 3,
+    "docs/SOCIETY_ENGINE_CHECKPOINT_SYSTEM_RECORD.md": 80,
+    "docs/evidence/diag1-corrections/phase1/R9_RECONCILIATION.md": 1,
+    "docs/evidence/diag1-corrections/phase1/final-short/build.log": 1,
+    "docs/evidence/diag1-corrections/phase1/inputs/SYSTEM_RECORD_r9_preserved.md": 80,
+    "docs/evidence/diag1-corrections/phase1/stabilized/build.log": 1
+  },
+  "disposition": "Original canonical/r9/r10 Markdown hard breaks and raw terminal log whitespace retained verbatim; full whitespace check is not claimed to pass. No production or test formatting errors."
+}

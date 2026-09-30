@@ -1,0 +1,13 @@
+/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expeditionCargo.ts:132
+	throw new ExpeditionCargoProvenanceError(expedition.id, "complete per-work receipts and allocation of historical overflow/loss");
+	      ^
+
+ExpeditionCargoProvenanceError: Expedition e:l: cannot resume cargo; missing or inconsistent provenance: complete per-work receipts and allocation of historical overflow/loss. Original saved record must be retained.
+    at ensureExpeditionCargo (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expeditionCargo.ts:132:8)
+    at eval (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expedition.ts:406:164)
+    at Array.map (<anonymous>)
+    at Module.reconcileExpeditionCommitment (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expedition.ts:406:47)
+    at rec (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/awayBodyOwnershipFixturesAudit.mjs:43:33)
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/awayBodyOwnershipFixturesAudit.mjs:78:19
+
+Node.js v26.7.0
