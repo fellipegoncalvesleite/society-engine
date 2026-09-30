@@ -1,77 +1,64 @@
 {
-  "status": "PHASE1 INDEPENDENT DEPENDENCY GATE PASSED",
-  "withinMap": {
-    "rows": [
-      {
-        "kind": "map1",
-        "seed": "diag1-phase1:determinism:map1",
-        "span": 1260,
-        "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
-        "digests": {
-          "daily": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
-          "weekly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
-          "monthly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
-          "seasonal": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
-          "repeat": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
-          "fresh": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3"
-        },
-        "elapsed": {
-          "daily": 313.306626375,
-          "weekly": 337.912254625,
-          "monthly": 351.52336354199997,
-          "seasonal": 329.5386610000001,
-          "repeat": 214.3125297089999
-        },
-        "occurrence": {
-          "bands": 5,
-          "population": 155,
-          "activeParties": 2,
-          "returnOutcomes": 21,
-          "plantDepletionEntries": 1313
-        },
-        "pass": true
-      },
-      {
-        "kind": "map2",
-        "seed": "diag1-phase1:determinism:map2",
-        "span": 1260,
-        "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
-        "digests": {
-          "daily": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
-          "weekly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
-          "monthly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
-          "seasonal": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
-          "repeat": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
-          "fresh": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79"
-        },
-        "elapsed": {
-          "daily": 99.047906334,
-          "weekly": 101.200113416,
-          "monthly": 95.33247712500001,
-          "seasonal": 93.498262375,
-          "repeat": 95.774791042
-        },
-        "occurrence": {
-          "bands": 9,
-          "population": 235,
-          "activeParties": 8,
-          "returnOutcomes": 26,
-          "plantDepletionEntries": 1303
-        },
-        "pass": true
-      }
-    ],
-    "withinMapEquivalent": true,
-    "mixedMapSameProcessEquivalent": true
+  "manifestFilesChecked": 100,
+  "mismatches": [],
+  "commands": {
+    "conservation": {
+      "exitCode": 0,
+      "changed": false,
+      "currentSourceMismatch": [],
+      "hashCount": 244
+    },
+    "determinism-mixed": {
+      "exitCode": 0,
+      "changed": false,
+      "currentSourceMismatch": [],
+      "hashCount": 244
+    },
+    "determinism-map1": {
+      "exitCode": 0,
+      "changed": false,
+      "currentSourceMismatch": [],
+      "hashCount": 244
+    },
+    "determinism-map2": {
+      "exitCode": 0,
+      "changed": false,
+      "currentSourceMismatch": [],
+      "hashCount": 244
+    },
+    "natural-s1": {
+      "exitCode": 0,
+      "changed": false,
+      "currentSourceMismatch": [],
+      "hashCount": 244
+    },
+    "natural-s2": {
+      "exitCode": 0,
+      "changed": false,
+      "currentSourceMismatch": [],
+      "hashCount": 244
+    },
+    "build": {
+      "exitCode": 0,
+      "changed": false,
+      "currentSourceMismatch": [],
+      "hashCount": 244
+    },
+    "recovery-food": {
+      "exitCode": 0,
+      "changed": false,
+      "currentSourceMismatch": [],
+      "hashCount": 244
+    },
+    "numeric-chain": {
+      "exitCode": 0,
+      "changed": false,
+      "currentSourceMismatch": [],
+      "hashCount": 244
+    }
   },
-  "mixedMap": {
-    "command": [
-      "/Users/fellipegoncalvesleite/.local/node/bin/node",
-      "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1DeterminismAudit.mjs",
-      "--out",
-      "docs/evidence/diag1-corrections/phase1/phase1b/determinism-mixed.json"
-    ],
-    "rows": [
+  "matrices": {
+    "determinism-mixed": [
       {
         "kind": "map1",
         "seed": "diag1-phase1:determinism:map1",
@@ -130,22 +117,68 @@
         },
         "pass": true
       }
+    ],
+    "determinism-map1": [
+      {
+        "kind": "map1",
+        "seed": "diag1-phase1:determinism:map1",
+        "span": 1260,
+        "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+        "digests": {
+          "daily": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+          "weekly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+          "monthly": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+          "seasonal": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+          "repeat": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3",
+          "fresh": "aefbd140b31865046eb4733098e1f10b48bf1b881fcaad60cb93a4700a451ab3"
+        },
+        "elapsed": {
+          "daily": 313.306626375,
+          "weekly": 337.912254625,
+          "monthly": 351.52336354199997,
+          "seasonal": 329.5386610000001,
+          "repeat": 214.3125297089999
+        },
+        "occurrence": {
+          "bands": 5,
+          "population": 155,
+          "activeParties": 2,
+          "returnOutcomes": 21,
+          "plantDepletionEntries": 1313
+        },
+        "pass": true
+      }
+    ],
+    "determinism-map2": [
+      {
+        "kind": "map2",
+        "seed": "diag1-phase1:determinism:map2",
+        "span": 1260,
+        "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+        "digests": {
+          "daily": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+          "weekly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+          "monthly": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+          "seasonal": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+          "repeat": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79",
+          "fresh": "77dd1326d901188055a1dc6c34a369084212e9938a43111df514b8c60f469a79"
+        },
+        "elapsed": {
+          "daily": 99.047906334,
+          "weekly": 101.200113416,
+          "monthly": 95.33247712500001,
+          "seasonal": 93.498262375,
+          "repeat": 95.774791042
+        },
+        "occurrence": {
+          "bands": 9,
+          "population": 235,
+          "activeParties": 8,
+          "returnOutcomes": 26,
+          "plantDepletionEntries": 1303
+        },
+        "pass": true
+      }
     ]
-  },
-  "mixedMapStress": "phase1b/determinism-mixed.json",
-  "historicalPrePhase1B": "phase1b/HISTORICAL_DETERMINISM_SCOPE.json",
-  "historicalFailingMatrix": "regression-repaired/determinism-stable.json",
-  "conclusion": "The unchanged original full-state matrix passes both maps in one process. Isolated maps and fresh processes agree across daily, weekly, monthly, seasonal and repeat runs over1260physical days. Historical failing evidence is preserved.",
-  "futureDependencyDisposition": "Executed cross-world cache prerequisite now passes; independent exact-published-HEAD Phase1 review is still required before Phase2. No self-acceptance or freeze.",
-  "independentReview": {
-    "reviewedHead": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
-    "report": "independent-final-review/REVIEW.md",
-    "specCompliance": "PASS",
-    "codeQuality": "PASS",
-    "critical": 0,
-    "important": 0,
-    "minor": 0,
-    "phase2Authorization": "YES",
-    "formalFreeze": false
   }
 }

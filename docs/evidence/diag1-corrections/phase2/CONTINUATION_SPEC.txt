@@ -1,0 +1,1248 @@
+DIFFICULTY: EXTREME
+
+SOCIETY ENGINE — DIAG-1 CORRECTION CONTINUATION
+
+PHASE 1B MUST CLOSE FIRST
+→ INDEPENDENT EXACT-HEAD GATE
+→ THEN PHASE 2 IN THE SAME IMPLEMENTATION CHAT
+
+Repository:
+fellipegoncalvesleite/society-engine
+
+Active correction branch:
+fix/diag1-human-support
+
+Current published HEAD before this continuation:
+d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333
+
+Published Phase-1 production commit:
+9268d211e7d370911d3d8fd875429db4d4d06741
+
+Original accepted executable base:
+73cc38b916e236339897c59686638efafd569b6e
+
+COMMIT REQUIRED
+
+DO NOT START PHASE 3.
+
+WORLD-M0 Task 12 remains paused throughout this entire prompt.
+
+==================================================
+ROLE AND AUTHORITY
+==================================================
+
+Continue the EXISTING Phase-1 implementation chat.
+
+You are the sole primary repository write owner for this correction branch.
+
+The supervising architect has pre-authorized the following bounded sequence:
+
+1. close the remaining Phase-1 cross-world cache defect;
+2. obtain a fresh independent READ-ONLY exact-HEAD Phase-1 review;
+3. if and only if that review returns:
+   - SPEC COMPLIANCE: PASS
+   - CODE QUALITY: PASS
+   - Critical: 0
+   - Important: 0
+   - no unresolved architecture contradiction introduced by Phase 1
+   then continue directly into Phase 2;
+4. implement Phase 2;
+5. stop after a committed/pushed Phase-2 review candidate.
+
+This conditional continuation is already authorized by the supervising architect.
+
+The implementation worker still does NOT self-accept or self-freeze Phase 1.
+
+The independent Phase-1 reviewer must be a fresh read-only worker/subagent, not the implementation owner.
+
+If a fresh independent reviewer cannot be obtained after Phase 1B, STOP after Phase 1B and report that Phase 2 was not started.
+
+==================================================
+READ BEFORE WORK
+==================================================
+
+Read the current branch versions of:
+
+- SOCIETY_ENGINE_CANONICAL_BUNDLE.md
+- SOCIETY_ENGINE_CHECKPOINT_SYSTEM_RECORD.md
+- applicable AGENTS.md / CLAUDE.md
+- docs/HANDOFF.md
+- docs/ARCHITECTURE_OWNERSHIP.md
+- Phase-1 evidence under:
+  docs/evidence/diag1-corrections/phase1/
+
+Especially read:
+
+- PHASE1_REPORT.md
+- VALIDATION_RESULTS.md
+- REVIEW.md
+- MIXED_MAP_RESIDUAL.md
+- REOPENING.md
+- FUTURE_EVOLUTION_CONTRACT.md
+- DETERMINISM_SCOPE.json
+
+Do not rely only on the pasted report.
+
+Verify Git before editing:
+
+git branch --show-current
+git rev-parse HEAD
+git status --short
+git log --oneline --decorate -n 15
+
+Expected initial HEAD:
+
+d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333
+
+If the branch contains newer legitimate continuation work, inspect and preserve it rather than resetting.
+
+No reset.
+No rebase.
+No amend.
+No force push.
+No unrelated cleanup.
+
+==================================================
+PRESERVE EXISTING PHASE-1 FIXES
+==================================================
+
+The four Phase-1 corrections already implemented are NOT being redesigned:
+
+1. expedition cargo/source conservation;
+2. established absorption current-body conservation;
+3. plantStock causal-time cache validity;
+4. zero-residential-worker execution guard.
+
+Preserve their semantics and tests.
+
+Do not tune:
+
+- resource yield;
+- harvest conversion;
+- fertility;
+- mortality;
+- hunger coefficients;
+- movement speed;
+- source density;
+- action scores;
+- population targets;
+- demographic coefficients.
+
+Population growth is NOT an acceptance oracle.
+
+==================================================
+PARKED WORLD-M0 WORK
+==================================================
+
+Do not touch:
+
+/Users/fellipegoncalvesleite/society-engine/artifacts/worktrees/society-engine-world-m0-m02-task12-v2-after-boundary-entry
+
+Recorded branch:
+integration/world-m0-m02-task12-v2-after-boundary-entry
+
+Recorded HEAD:
+809f7ed8f8582f4a6d9b6754bf216f47a6e39fc4
+
+Preserve its three intentionally dirty files exactly.
+
+Do not reset, stash, reconstruct, execute source-mutating audits there, or merge into it.
+
+WORLD-M0 M0.2 remains paused.
+
+==================================================
+==================================================
+PHASE 1B
+CROSS-WORLD SEASONAL CACHE ISOLATION
+==================================================
+==================================================
+
+PHASE 1B IS A HARD PREREQUISITE TO PHASE 2.
+
+The mixed-map determinism residual is now considered blocking because cached physical/seasonal state from one world can affect another world's behavior.
+
+--------------------------------------------------
+P1B-1 — CONFIRMED TILE-SEASON CACHE DEFECT
+--------------------------------------------------
+
+Current:
+
+src/sim/world/seasonal.ts
+
+uses:
+
+WeakMap<WorldTime, Map<TileId, SeasonalTileConditions>>
+
+Different worlds reuse the same INITIAL_TIME object.
+
+Different worlds also reuse TileIds.
+
+Therefore:
+
+World A + shared time + tile:X
+→ cache population
+
+World B + same shared time + tile:X
+→ may read World A's seasonal result.
+
+Existing executed evidence already demonstrated the same Map2 tile changing only because Map1 had been queried first:
+
+food estimate:
+8.71 cold
+→ 7.92 contaminated
+
+water stress:
+0.946624...
+→ 1.0
+
+drought stress:
+0.148503...
+→ 0.203435...
+
+This is a real state-authority violation.
+
+--------------------------------------------------
+P1B-2 — SAME-CLASS RIVER-CROSSING CACHE
+--------------------------------------------------
+
+Supervising review also found:
+
+src/sim/world/hydrography.ts
+
+uses:
+
+WeakMap<WorldTime, Map<string, SeasonalRiverCrossingState>>
+
+inside the seasonal river-crossing path.
+
+That result reads world-specific river/crossing physical state.
+
+The cache key does not contain the world.
+
+This function is consumed by actual decision/movement readers.
+
+Treat it as the same defect class.
+
+Do not blindly edit it merely from static appearance: construct an executable cross-world collision witness first.
+
+If the witness demonstrates contamination, fix it in Phase 1B.
+
+If a deeper identity already prevents contamination, preserve the code and report the negative result.
+
+--------------------------------------------------
+P1B ARCHITECTURE RULING
+--------------------------------------------------
+
+Derived cached state that depends on WorldState must be scoped to the real authoritative world/input identity.
+
+WorldTime identity alone is not sufficient.
+
+Preferred architecture:
+
+WeakMap keyed by a world-owned immutable/authoritative object such as the relevant world container, with time/input identity nested beneath it.
+
+The cache remains an optimization.
+
+Cold computation is semantic authority.
+
+For identical actual inputs:
+
+warm result == cold result
+
+For different worlds:
+
+no cached result may cross the world boundary merely because IDs/time objects collide.
+
+Do NOT solve this by:
+
+- cloning INITIAL_TIME only;
+- clearing global caches during generation;
+- keying on seed strings;
+- keying on map names;
+- introducing a mutable global currentWorld ID;
+- disabling caching globally;
+- serializing cache contents into WorldState.
+
+--------------------------------------------------
+P1B REQUIRED REDS
+--------------------------------------------------
+
+Before production edit:
+
+A. Seasonal tile cross-world RED
+
+Two different worlds:
+- same WorldTime object;
+- same TileId;
+- deliberately different physical seasonal inputs.
+
+Warm A then query B.
+
+Assert:
+
+warm B == cold B
+
+for every SeasonalTileConditions field.
+
+Current code must fail.
+
+Also test reverse order:
+
+B → A.
+
+B. Seasonal river crossing RED
+
+Two different worlds:
+- same WorldTime object;
+- same crossing identity;
+- same capability;
+- different river/crossing physical seasonal inputs.
+
+Warm A then query B.
+
+Compare to independently cold B.
+
+If current code collides, RED must demonstrate it.
+
+C. Same-world cache positive control
+
+Repeated reads in the same identical world/input must:
+- remain deterministic;
+- exercise cached retrieval;
+- equal cold semantics.
+
+D. Mutation
+
+Restore the old world-blind cache identity through an in-memory/source-preserving mutant.
+
+New tests must detect the old mechanism behaviorally.
+
+A load error or skipped mutant is not detection.
+
+--------------------------------------------------
+P1B IMPLEMENTATION
+--------------------------------------------------
+
+Make the smallest correct world-scoping change.
+
+Known likely production files:
+
+src/sim/world/seasonal.ts
+src/sim/world/hydrography.ts
+
+Do not perform a general repository cache rewrite.
+
+Before editing, search for other active:
+
+WeakMap<WorldTime, ...>
+
+or equivalent world-dependent caches missing world/input authority.
+
+If another identical load-bearing defect is found, report it.
+
+Only include another production correction here when:
+- same defect class;
+- same authority mistake;
+- same bounded fix architecture.
+
+Otherwise leave it documented for proper ownership.
+
+--------------------------------------------------
+P1B REGRESSIONS
+--------------------------------------------------
+
+Run:
+
+1. cross-world seasonal tile RED → GREEN;
+2. A→B and B→A;
+3. crossing RED → GREEN if applicable;
+4. same-world warm/cold;
+5. fresh-process parity;
+6. Map1 isolated determinism;
+7. Map2 isolated determinism;
+8. original mixed-map full-state determinism matrix;
+9. daily/weekly/monthly/seasonal equivalence;
+10. TypeScript application project;
+11. TypeScript Node project;
+12. production build;
+13. import boundary;
+14. architecture graph/integrity.
+
+Also rerun the focused Phase-1 safety set:
+
+- core Phase-1 conservation;
+- cargo old-mechanism mutant;
+- absorption old-mechanism mutant;
+- plantStock cache old-mechanism mutant;
+- labor old-mechanism mutant;
+- natural s1/s2 Phase-1 witnesses;
+- recovery food accounting;
+- numeric resource chain.
+
+Do not weaken the mixed-map test.
+
+Its old failing evidence remains preserved.
+
+If it still fails after this correction:
+
+- locate the first causal divergence;
+- preserve the failing result;
+- do not recursively redesign unrelated code;
+- STOP before Phase 2.
+
+--------------------------------------------------
+P1B INHERITED RESIDUALS
+--------------------------------------------------
+
+Do NOT fix merely to obtain green:
+
+1. expeditionKnowledgeLatencyAudit:
+   returnedEvidenceChangesLaterBehavior_11
+
+2. item4WholeIntegrationFreezeAudit:
+   fixed founder/target preparation refusal before its history assertions.
+
+Both reproduced on the exact original base.
+
+They remain separately documented inherited residuals unless Phase 1B itself legitimately changes their causal inputs.
+
+--------------------------------------------------
+P1B COMMIT
+--------------------------------------------------
+
+Commit Phase-1B production/tests/evidence.
+
+Do not amend:
+
+9268d211e7d370911d3d8fd875429db4d4d06741
+
+or:
+
+d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333
+
+Push:
+
+fix/diag1-human-support
+
+Verify remote parity.
+
+Update Phase-1 evidence and cumulative record to:
+
+IMPLEMENTED / PENDING INDEPENDENT FINAL REVIEW
+
+Do NOT call Phase 1 accepted yet.
+
+Canonical r11 remains unchanged unless a genuine permanent-rule change occurs.
+
+==================================================
+PHASE 1 EXACT-HEAD INDEPENDENT GATE
+==================================================
+
+After Phase-1B is committed and pushed:
+
+START A FRESH REVIEW WORKER / SUBAGENT FOR THIS REVIEW.
+
+READ ONLY.
+
+The reviewer must inspect the exact final Phase-1 HEAD.
+
+Review complete range:
+
+73cc38b916e236339897c59686638efafd569b6e
+→ exact current Phase-1 HEAD
+
+with emphasis on production commits rather than documentation noise.
+
+Review:
+
+- B-001 expedition cargo;
+- B-002 absorption;
+- B-003 plant cache;
+- B-004 zero-worker labor;
+- Phase-1B seasonal cross-world cache;
+- Phase-1B hydrography cache if corrected;
+- mutation execution/nonvacuity;
+- conservation;
+- source attribution;
+- save/provenance behavior;
+- determinism;
+- mixed-map behavior;
+- regression scope;
+- preservation of frozen boundaries;
+- whether any supposedly fixed bug merely moved elsewhere;
+- whether a producer and validator are wrong in the same way.
+
+Required verdict:
+
+SPEC COMPLIANCE: PASS/FAIL
+CODE QUALITY: PASS/FAIL
+Critical: N
+Important: N
+Minor: N
+
+PHASE 2 AUTHORIZATION:
+YES/NO
+
+Phase 2 may begin automatically under THIS prompt only if:
+
+SPEC PASS
+CODE QUALITY PASS
+Critical 0
+Important 0
+PHASE 2 AUTHORIZATION YES
+
+Minor findings may be documented and carried only if they do not compromise Phase-2 dependency correctness.
+
+If any Critical or Important finding exists:
+
+return to implementation;
+fix only substantiated Phase-1 finding(s);
+rerun affected regressions;
+obtain another fresh scoped re-review.
+
+Do not enter Phase 2 until the gate is clean.
+
+No implementation worker self-review counts.
+
+==================================================
+==================================================
+PHASE 2
+FOOD UNITS + NUTRITION TIME + FATIGUE RECENCY
+==================================================
+==================================================
+
+Only execute this section after the Phase-1 gate above is clean.
+
+Phase-2 starting base is:
+
+the exact reviewed Phase-1 HEAD produced above.
+
+Do not substitute:
+- main;
+- 73cc38b directly;
+- M0.2 candidate;
+- an unreviewed intermediate Phase-1 commit.
+
+Record the Phase-2 base SHA before any edit.
+
+Assigned findings:
+
+F1 — stale movement-history fatigue;
+F4 — provisional raw-food/support-unit mismatch;
+F5 — variable-duration travel nutrition treated as whole seasons and overlapping support writers.
+
+These findings interact, so Phase 2 is one coherent correction.
+
+Do not split them into unrelated tuning patches.
+
+--------------------------------------------------
+PHASE 2 NON-GOALS
+--------------------------------------------------
+
+Do NOT:
+
+- increase fertility;
+- lower mortality;
+- globally reduce hunger;
+- increase yields;
+- change source caps;
+- create food from habitat;
+- change the same-day trip budget simply to make trips possible;
+- remove all fatigue;
+- implement Item 8 health;
+- implement Item 9 provisioning;
+- implement Item 14 task groups;
+- implement Item 17 life-course demography;
+- fix Phase-3 resource-selection/projection findings;
+- resume Task 12.
+
+==================================================
+P2-1 — ONE RAW FOOD → SUPPORT UNIT BRIDGE
+==================================================
+
+Existing model contract:
+
+1 usable raw harvest unit
+→ 100 adult-equivalent-season support units.
+
+This is inherited model semantics, not newly validated nutritional science.
+
+Current defect:
+
+ordinary returned food passes through the canonical conversion;
+
+provisional travel directly accumulates raw usable harvest into `supportUnits`.
+
+Therefore the same physical food can have different nutritional meaning depending on which lifecycle path consumed it.
+
+Chosen correction:
+
+Create or reuse one pure named conversion authority shared by ordinary and provisional nutrition consumers.
+
+Keep:
+
+- physical requested harvest;
+- physical take;
+- depletion;
+- processing loss;
+- transport loss;
+
+in RAW physical units.
+
+Convert actual usable raw food exactly once at the point it becomes human support.
+
+Do not multiply:
+
+- stock;
+- harvest request;
+- depletion;
+- carrying capacity;
+- display output;
+- fertility;
+- mortality;
+
+by 100.
+
+Audit all Phase-2 readers/writers of:
+
+supportUnits
+usableUnits
+rawSupportRatio
+demandUnits
+perCapitaReturn
+travel subsistence state
+open operation windows
+establishment/return decisions
+stabilization
+annual demography
+
+Do not fix only the final displayed ratio.
+
+--------------------------------------------------
+P2-1 DISCRIMINATOR
+--------------------------------------------------
+
+Real physical source example:
+
+raw take = 0.013
+processing loss = 0.001
+usable raw food = 0.012
+
+matched support demand = 10
+
+Ordinary path:
+
+0.012 × 100 = 1.2 support
+ratio = 0.12
+
+Provisional path must produce the same support semantics.
+
+Old provisional behavior:
+
+ratio = 0.0012
+
+must fail the RED.
+
+Add:
+
+- no-source zero;
+- real depletion;
+- partial interval;
+- 30-day;
+- 90-day;
+- return;
+- establishment;
+- reintegration;
+- old-unit mutant.
+
+==================================================
+P2-2 — ONE BOUNDED TIME-AWARE NUTRITION EXPOSURE AUTHORITY
+==================================================
+
+Current problem:
+
+ordinary nutrition assumes 90-day seasonal samples.
+
+Provisional travel emits:
+- 30-day intervals;
+- partial intervals;
+- phase-end intervals.
+
+Those records enter the same count-based sample ring.
+
+Readers then:
+- treat records as equivalent seasons;
+- use last four records as a year;
+- sometimes allow ordinary residential nutrition to write while the provisional group is travelling.
+
+That means:
+
+30 days
+can count like
+90 days.
+
+And two producers can describe overlapping physical time.
+
+Chosen architecture:
+
+Migrate the existing seasonal support authority into a bounded, duration-aware physical-time exposure history.
+
+Do NOT create a separate permanent travel nutrition authority beside it.
+
+Each exposure record must identify, at minimum:
+
+- covered start day;
+- covered end day;
+- duration;
+- producer/provenance;
+- actual support;
+- actual integrated demand;
+- food-stress exposure;
+- water-stress exposure;
+- recovery-eligible exposure;
+- enough raw/clamped support information for existing consumers.
+
+Use explicit physical days.
+
+Use a consistent interval convention.
+
+Do not modify the physical simulation clock.
+
+--------------------------------------------------
+P2-2 CORE RULES
+--------------------------------------------------
+
+A. Weight by represented days, not number of records.
+
+B. Last-year demography reads the previous 360 completed physical days.
+
+C. Current/recent/chronic nutrition queries use explicit physical horizons.
+
+D. Deficit and recovery streaks become duration-based.
+
+Existing season-valued compatibility fields may derive from physical durations / 90.
+
+E. Short hardship can affect current condition immediately without pretending it lasted a whole season.
+
+F. Later surplus must not erase an earlier hungry day as though food were automatically stored backward in time.
+
+Therefore distinguish:
+
+pooled support/demand
+
+from:
+
+experienced food-stress exposure.
+
+G. Missing history means unknown history.
+
+It is neither:
+- fabricated hunger;
+- fabricated comfort.
+
+H. Same exact interval revision may replace itself.
+
+Distinct nonoverlapping intervals may coexist.
+
+Conflicting overlaps fail closed rather than last-writer-wins.
+
+I. One producer owns any physical band/time interval.
+
+Provisional phases receiving travel subsistence must NOT simultaneously receive ordinary residential seasonal support.
+
+Relevant provisional phases include:
+
+travelling
+establishing
+failed_early
+returning
+unresolved_after_failed_return
+continuing_after_failed_return
+
+J. At phase transition:
+
+close the previous producer exactly once
+→ begin the next producer
+without overlap or hidden gap.
+
+==================================================
+P2-2 BOUNDS
+==================================================
+
+Retain at most the useful equivalent of:
+
+720 completed physical days
++ one open interval
+
+for current nutrition history.
+
+Do NOT maintain an unbounded daily diary.
+
+A compact representation is welcome if it exactly preserves:
+
+- duration weighting;
+- support/demand;
+- stress exposure;
+- recovery exposure;
+- provenance;
+- query semantics.
+
+Prove the bound.
+
+Do not assume “8 records” remains valid when record duration varies.
+
+==================================================
+P2-2 LEGACY MIGRATION
+==================================================
+
+Existing ordinary 90-day records have a known abstraction:
+
+one seasonal measurement representing one 90-day interval.
+
+Preserve that honestly.
+
+Do not claim historical daily detail.
+
+Old provisional variable-duration records can be migrated only when retained chronology is sufficient to reconstruct their actual span.
+
+If a saved history cannot be reconstructed without guessing:
+
+fail with an explicit typed unsupported-migration result
+
+rather than:
+- invent dates;
+- reinterpret every travel record as 90 days;
+- erase hardship;
+- fabricate comfort.
+
+Do not destroy the original save input.
+
+==================================================
+P2-2 REQUIRED CONTROLS
+==================================================
+
+1. Equivalent 360-day history:
+
+180 days deficit
+then
+180 days adequate
+
+represented as:
+- 30-day partitions;
+- 90-day partitions;
+- mixed partial partitions.
+
+Annual answer must agree.
+
+2. Unequal demand/support across intervals.
+
+Do not average ratios when total support/total demand is the intended quantity.
+
+3. Stress exposure test.
+
+Later surplus must not erase earlier hungry-day exposure.
+
+4. Same-tick:
+- same interval revision → replacement;
+- distinct intervals → coexist.
+
+5. Gap detection.
+
+6. Overlap rejection.
+
+7. Real canonical departure near annual boundary.
+
+Use the existing controlled spring-crossing course:
+
+departure around day 2130
+→ still provisional across annual spring read.
+
+Also retain the earlier non-crossing course as negative control.
+
+8. Prevent ordinary residential support sample from writing over an active provisional travel interval.
+
+9. Stabilization transition.
+
+10. Failed-return continuation.
+
+11. Reintegration.
+
+12. All six live provisional phases.
+
+13. Zero physical food.
+
+14. Ordinary-only 90-day behavior remains equivalent unless explicitly changed by the new duration semantics.
+
+==================================================
+P2-3 — TIME-BASED MOVEMENT FATIGUE
+==================================================
+
+Current defect:
+
+`pressure.ts` calls the last four movement events recent.
+
+It does not check their age.
+
+`movementHistory` receives new entries only when movement occurs.
+
+Therefore a band can rest for years and the same four movements still count as recent fatigue.
+
+The movement history itself is valid historical state.
+
+Do NOT delete or truncate it merely to remove fatigue.
+
+Chosen Phase-2 correction:
+
+Fatigue contribution from residential movement uses actual elapsed physical time.
+
+Retain:
+- at most the four latest genuine displacement events;
+- the existing per-event amplitude concept;
+
+but decay the current-fatigue contribution by elapsed days.
+
+Selected v0 function:
+
+eventContribution =
+old amplitude
+× max(0, 1 - elapsedDays / 7)
+
+where elapsedDays is derived from the real movement timestamp and current simulation day.
+
+The 7-day horizon is a provisional model parameter for this current aggregate authority, NOT an empirically validated universal human recovery constant.
+
+Therefore include sensitivity evidence for:
+
+3-day
+7-day
+14-day
+
+horizons.
+
+Do NOT choose the horizon based on which gives the prettiest population curve.
+
+Use the existing 7-day ruling for production Phase 2 unless implementation evidence demonstrates an architectural contradiction.
+
+Future detailed health/fatigue may replace this aggregate approximation through explicit migration.
+
+--------------------------------------------------
+P2-3 RULES
+--------------------------------------------------
+
+- zero-displacement events contribute zero;
+- future-dated/invalid timestamps fail explicit validation;
+- resting does not fabricate movement-history events;
+- old movement remains in history for readers that genuinely need history;
+- only its current fatigue interpretation ages out;
+- acute injury/sickness/current embodied fatigue remains separate;
+- starvation can still reduce mobility through legitimate current-condition channels;
+- need does not manufacture stamina.
+
+Do not remove all fatigue.
+
+--------------------------------------------------
+P2-3 TESTS
+--------------------------------------------------
+
+Same movement history evaluated at:
+
+age 0
+age 3 days
+age 7 days
+age 14 days.
+
+Idle/rest time must reduce old movement fatigue without appending fake movement.
+
+Repeated recent movement remains fatiguing.
+
+Acute injury/current health burden does not vanish merely because old movement ages out.
+
+Step modes must agree.
+
+Save/clone parity.
+
+No food or knowledge creation.
+
+Cross-resolution physical-route semantics preserved.
+
+Re-run the diagnosed good-site scenario traces through years 2–6 and 30 years.
+
+Report:
+
+- pace;
+- candidate availability;
+- food-trip executions;
+- zero-food seasons;
+- support;
+- population;
+
+but do NOT require population growth for PASS.
+
+A legitimately inaccessible/exhausted/unknown location must remain difficult.
+
+==================================================
+PHASE 2 REQUIRED NEW AUDITS
+==================================================
+
+Create focused, source-preserving audits such as:
+
+scripts/diag1Phase2UnitsAndExposureAudit.mjs
+scripts/diag1Phase2FatigueAudit.mjs
+
+Names may differ only when repository convention requires it.
+
+Required mutants:
+
+1. old raw-as-support behavior;
+2. record-count-as-time behavior;
+3. overlapping residential/provisional producer;
+4. stale permanent movement fatigue;
+5. any new cache or migration mechanism whose failure would otherwise make the test vacuous.
+
+Each mutant must prove:
+
+loaded
+executed
+behaviorally detected
+restored
+
+Missing target ≠ killed mutant.
+
+==================================================
+PHASE 2 REGRESSIONS
+==================================================
+
+Run:
+
+- all accepted Phase-1 regressions;
+- Phase-1B cross-world cache audits;
+- affected Item-4 departure tests;
+- provisional subsistence;
+- operation;
+- return;
+- stabilization;
+- failed-return continuation;
+- reintegration;
+- annual boundary behavior;
+- ordinary seasonal nutrition;
+- nutritional surplus regressions;
+- body conservation;
+- food conservation;
+- mobility/SCALE-1 tests;
+- context refresh;
+- deterministic repeat/fresh process;
+- daily/weekly/monthly/seasonal equivalence;
+- both TypeScript projects;
+- production build;
+- import boundary;
+- architecture graph.
+
+Preserve proof that old duplicated hunger penalties remain absent.
+
+Do not rerun every unrelated repository audit after every edit.
+
+Use focused tests during implementation, then the coherent final battery.
+
+==================================================
+PHASE 2 NATURAL EVIDENCE
+==================================================
+
+Compare:
+
+A. exact reviewed Phase-1 baseline;
+
+B. final Phase-2 correction.
+
+Use identical:
+- maps;
+- seeds;
+- starting populations;
+- horizons.
+
+At minimum rerun the existing DIAG-1 good/exceptional controls relevant to F1/F4/F5.
+
+Report first causal divergence.
+
+Do not call a higher final population proof of correctness.
+
+Report separately:
+
+- physical food taken;
+- returned food;
+- support;
+- demand;
+- experienced food-stress exposure;
+- movement pace;
+- candidate availability;
+- births;
+- deaths;
+- population.
+
+Also preserve the previous diagnostic “remove all fatigue” experiment as a HISTORICAL DIAGNOSTIC CONTROL only.
+
+Do not confuse it with the actual time-decay correction.
+
+==================================================
+PHASE 2 BOUNDEDNESS
+==================================================
+
+Measure:
+
+- support-history record count;
+- serialized support-state size;
+- long-horizon boundedness;
+- mobility-history size;
+- cache size where relevant;
+- runtime effect at bounded population.
+
+No unbounded day-by-day nutrition history.
+
+No growing deposit-ID set.
+
+No duplicated physical state.
+
+==================================================
+DOCUMENTATION
+==================================================
+
+Phase 1 documentation:
+
+after successful independent gate, update status to reflect the actual reviewed result.
+
+Do not fabricate a freeze if the supervisor did not authorize a formal frozen checkpoint.
+
+Phase 2 documentation:
+
+update:
+
+docs/evidence/diag1-corrections/phase2/
+
+with:
+
+- REOPENING.md
+- PROGRESS.md
+- evidence manifest
+- RED/GREEN outputs
+- mutant results
+- causal before/after
+- bounds/performance
+- PHASE2_REPORT.md
+- FUTURE_EVOLUTION_CONTRACT.md
+- validation results
+
+Update:
+
+SOCIETY_ENGINE_CHECKPOINT_SYSTEM_RECORD.md
+
+with:
+- Phase-1 final disposition;
+- exact SHAs;
+- Phase-2 implementation status;
+- new owned semantics;
+- remaining DIAG-1 findings;
+- unchanged Task-12 pause.
+
+Canonical bundle r11 remains byte-identical unless an actual permanent roadmap/rule change is required.
+
+Do not bump it merely because implementation changed.
+
+==================================================
+REMAINING FINDINGS AFTER PHASE 2
+==================================================
+
+Do NOT accidentally solve these during Phase 2:
+
+- global fauna realization / physical-area problem;
+- exhausted overlapping fauna source selection;
+- food-family candidate-domain argmax;
+- exact plant observation/physical patch identity mismatch;
+- current-living projection semantics;
+- raster-dependent absorption reach;
+- original unrecovered 2,000-year scenario;
+- empirical demographic calibration;
+- M0.2 basin-retention blocker;
+- M0.2 comprehensive scratch-memory blocker.
+
+These remain for their assigned later correction/design boundary.
+
+==================================================
+GIT POLICY
+==================================================
+
+One write owner.
+
+Create coherent new commits.
+
+Never amend previous Phase-1 commits.
+
+Push only:
+
+fix/diag1-human-support
+
+No main merge.
+
+No WORLD-M0 merge.
+
+At each major gate verify:
+
+git status --short
+git log --oneline --decorate -n 15
+remote tip
+ahead/behind
+
+Final correction worktree must be clean.
+
+Normal human Git identity only.
+
+No AI/model authorship/trailers.
+
+==================================================
+FINAL STOP CONDITION
+==================================================
+
+After Phase 2:
+
+STOP.
+
+Do NOT start Phase 3.
+
+Do NOT resume Task 12.
+
+Do NOT start another roadmap item.
+
+Return one complete report beginning with HUMAN LANGUAGE.
+
+Required report:
+
+1. What changed for simulated humans, in plain language.
+2. Phase-1B starting/final SHAs.
+3. Phase-1 independent reviewer verdict.
+4. Exact Phase-2 base SHA.
+5. Phase-2 final production SHA.
+6. Final documentation HEAD.
+7. Final branch/remote parity.
+8. Files changed by Phase 1B.
+9. Files changed by Phase 2.
+10. Phase-1B RED/GREEN evidence.
+11. Mixed-map final result.
+12. River-crossing cache disposition.
+13. Phase-2 unit RED/GREEN.
+14. Phase-2 duration/exposure RED/GREEN.
+15. Phase-2 fatigue RED/GREEN.
+16. Mutants loaded/executed/detected/restored.
+17. Body/food conservation.
+18. Natural before/after observations.
+19. Bounded-state measurements.
+20. Typecheck/build/architecture/import results.
+21. Daily/weekly/monthly/seasonal parity.
+22. Remaining inherited residuals.
+23. Remaining DIAG-1 findings.
+24. Task-12 preservation result.
+25. Explicit statement:
+
+PHASE 3 NOT STARTED.
+WORLD-M0 TASK 12 NOT RESUMED.
+
+Do not self-accept Phase 2.
+
+The next action after this report is independent Phase-2 review by the supervising architect.

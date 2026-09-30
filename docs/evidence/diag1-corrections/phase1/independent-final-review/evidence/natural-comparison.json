@@ -1,0 +1,32 @@
+[
+  {
+    "seed": "s1",
+    "differingKeys": [],
+    "summary": {
+      "observedParties": 4,
+      "foodWorkingParties": 2,
+      "completedFoodParties": 2,
+      "multiWorkCompleted": 1,
+      "cargoLossParties": 0,
+      "zeroLastTakeLossParties": 0,
+      "positiveLastTakeLossParties": 0,
+      "totalMissingHarvest": 0,
+      "totalDelivered": 0.09670000000000001
+    }
+  },
+  {
+    "seed": "s2",
+    "differingKeys": [],
+    "summary": {
+      "observedParties": 4,
+      "foodWorkingParties": 2,
+      "completedFoodParties": 2,
+      "multiWorkCompleted": 1,
+      "cargoLossParties": 0,
+      "zeroLastTakeLossParties": 0,
+      "positiveLastTakeLossParties": 0,
+      "totalMissingHarvest": 0,
+      "totalDelivered": 0.09670000000000001
+    }
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "check": "architecture graph integrity",
+  "verdict": "pass",
+  "nodes": 222,
+  "links": 766,
+  "duplicateIds": [],
+  "danglingLinks": [],
+  "summary": "graph 222/766, 0 dup, 0 dangling"
+}

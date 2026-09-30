@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/opt/homebrew/bin/node",
+    "scripts/diag1Phase1ConservationAudit.mjs",
+    "--scope",
+    "provenance",
+    "--out",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/files-pasted-by-the-user-difficulty/work/phase1-independent-d8c6233/evidence/provenance.json"
+  ],
+  "cwd": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/files-pasted-by-the-user-difficulty/work/phase1-independent-d8c6233/snapshot",
+  "exitCode": 0,
+  "seconds": 0.8163089752197266,
+  "exactHead": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9"
+}

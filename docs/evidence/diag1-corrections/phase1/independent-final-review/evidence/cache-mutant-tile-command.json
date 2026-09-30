@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/opt/homebrew/bin/node",
+    "scripts/diag1Phase1BCacheAudit.mjs",
+    "--mutant",
+    "tile",
+    "--out",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/files-pasted-by-the-user-difficulty/work/phase1-independent-d8c6233/evidence/cache-mutant-tile.json"
+  ],
+  "cwd": "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/files-pasted-by-the-user-difficulty/work/phase1-independent-d8c6233/snapshot",
+  "exitCode": 1,
+  "seconds": 0.6684319972991943,
+  "exactHead": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9"
+}

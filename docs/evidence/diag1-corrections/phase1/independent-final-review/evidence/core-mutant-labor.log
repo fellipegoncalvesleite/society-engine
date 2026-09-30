@@ -1,0 +1,17 @@
+FAIL B-004 actual daily action adults=0
+PASS B-004 actual daily action adults=1
+PASS B-004 actual daily action adults=20
+PASS B-004 prepared workers committed=5
+FAIL B-004 prepared workers committed=10
+PASS B-004 outbound workers committed=5
+FAIL B-004 outbound workers committed=10
+PASS B-004 operating workers committed=5
+FAIL B-004 operating workers committed=10
+PASS B-004 returning workers committed=5
+FAIL B-004 returning workers committed=10
+FAIL B-004 actual partly/all away and nonfood execution controls
+PASS B-004 performed ordinary trip leaves a real investigation remainder
+PASS B-004 positive workers cannot manufacture absent or depleted food
+FAIL B-004 stale positive selection refuses execution after worker loss
+FAIL B-004 performed investigation and trip reserve only remaining workers
+PASS B-004 refused unperformed investigation does not reserve a worker
