@@ -1,0 +1,30 @@
+{
+  "round": "DIAG-1 Phase 2 correction round 2",
+  "productionCommit": "13c685ac4fb123f69a8693d2e5728260b379cfa8",
+  "startingPublishedCandidate": "369362c5b51757407e34493d9f9dcbeae86abdac",
+  "focused": {
+    "green": { "file": "validation-round2-coverage-green-v13.json", "passed": 30, "total": 30 },
+    "redOriginalBytes": { "file": "../validation-round2-coverage-red-original-v4.json", "expectedPass": false, "auditMode": "exact original production bytes at bf5807e75bb650872d9c81cf95dce5dc1df6a509" },
+    "mutants": [
+      { "name": "unknown_coverage", "file": "../validation-round2-unknown-coverage-mutant-v5.json", "loaded": 1, "behaviorallyDetected": true, "restored": true },
+      { "name": "recovery_duration", "file": "../validation-round2-recovery-duration-mutant-v5.json", "loaded": 1, "behaviorallyDetected": true, "restored": true },
+      { "name": "surplus_coverage", "file": "../validation-round2-surplus-coverage-mutant-v3.json", "loaded": 1, "behaviorallyDetected": true, "restored": true }
+    ],
+    "thresholdInventory": "THRESHOLD_CONVERSION_AUDIT.json"
+  },
+  "focusedRegressionFiles": [
+    "units-v2.json", "fatigue-v2.json", "migration-v2.json", "rounding-v2.json", "demography-v2.json",
+    "annual-boundary-v3.json", "failed-return-v2.json", "phase1-conservation.json",
+    "phase1-conservation-cargo-mutant.json", "phase1-conservation-absorption-mutant.json",
+    "phase1-conservation-cache-mutant.json", "phase1-conservation-labor-mutant-v2.json",
+    "phase1b-cache.json", "phase1b-cache-tile-mutant.json", "phase1b-cache-crossing-mutant.json",
+    "phase1b-cache-movement-mutant.json", "phase1b-cross-world-v2.json", "phase1-determinism-v3.json",
+    "provisional-semantic.json"
+  ],
+  "validationCommands": [
+    "npx tsc -p tsconfig.json --noEmit",
+    "npx tsc -p tsconfig.node.json --noEmit",
+    "npm run build"
+  ],
+  "status": "candidate pending fresh independent Phase 2 review; no acceptance/freeze"
+}

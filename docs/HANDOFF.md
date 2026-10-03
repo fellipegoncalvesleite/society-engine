@@ -21,6 +21,15 @@ This block supersedes older current/unstarted/accepted headlines only for this c
 
 <!-- DIAG1_PHASE1_CURRENT_END -->
 
+<!-- DIAG1_PHASE2_CORRECTION_ROUND2_CURRENT_START -->
+## Current authority — DIAG-1 Phase 2 correction round 2
+
+**REWORK CORRECTION IMPLEMENTED; INDEPENDENT REVIEW PENDING; NOT ACCEPTED OR FROZEN.** Commit `13c685ac4fb123f69a8693d2e5728260b379cfa8` repairs unknown nutrition coverage, annual-horizon alignment, bounded surplus evidence and the 90-qualifying-day recovery maturity threshold. Focused GREEN is 30/30; exact-original RED and three behavioral mutants are retained in `docs/evidence/diag1-corrections/phase2/`.
+
+Coverage-safe fields feed the real annual demography reader. Full-known physical and legacy histories preserve aggregate demand/known-mean semantics. Historical merge controls retain quantities while weighting embodied stress by changed surviving headcounts. Immediate `seasonal_pulse_recovery` remains a valid inner-fission signal. Phase 3 is not started and WORLD-M0 Task12 remains parked.
+
+<!-- DIAG1_PHASE2_CORRECTION_ROUND2_CURRENT_END -->
+
 ## Phase2 F1/F4/F5 — implemented review candidate; STOP
 
 Production/test commit `369362c5b51757407e34493d9f9dcbeae86abdac` starts from exact independently reviewed Phase1 HEAD `d8c6233872b6bcb76da5fe6c3747c889ec402eb9`. Final evidence and later documentation/publication identity are in `docs/evidence/diag1-corrections/phase2/` and the exported `PUBLICATION.json`. Runs identify actual uncommitted source bytes; `FINAL_SOURCE_RECONCILIATION.json` ties all247 production files to the candidate. Do not confuse the later documentation commit with the reviewed Phase1 dependency base.

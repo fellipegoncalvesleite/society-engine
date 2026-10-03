@@ -21,6 +21,17 @@ This block supersedes older current/unstarted/accepted headlines only for this c
 
 <!-- DIAG1_PHASE1_CURRENT_END -->
 
+<!-- DIAG1_PHASE2_CORRECTION_ROUND2_CURRENT_START -->
+## Current authority — DIAG-1 Phase 2 correction round 2
+
+**REWORK CORRECTION IMPLEMENTED; INDEPENDENT REVIEW PENDING; NOT ACCEPTED OR FROZEN.** Production correction commit `13c685ac4fb123f69a8693d2e5728260b379cfa8` follows the previously published Phase 2 candidate `369362c5b51757407e34493d9f9dcbeae86abdac`. Unknown nutrition body-time now has explicit coverage, contributes no unmeasured hunger or comfort, and scales stress, recovery and surplus through the actual annual demography reader. Full-known physical and legacy aggregate semantics remain demand/known-mean weighted. `seasonalRecoveryStreak >= 1` is the exact 90-qualifying-day maturity gate; inner-fission's immediate `seasonal_pulse_recovery` path remains allowed.
+
+- Focused correction audit is GREEN 30/30. Exact-original-byte RED, coverage, duration and positive-surplus mutants are preserved under `docs/evidence/diag1-corrections/phase2/validation-round2-*`; every mutant was loaded, executed, behaviorally detected and byte-restored.
+- The threshold inventory distinguishes physical-time thresholds, the corrected 90-day maturity gate, and intentionally duration-weighted social/read-model signals. Historical merge evidence records different historical body demands and later survivor headcounts: actual support/demand remain invariant while embodied stress follows surviving headcounts. This remains an accepted aggregate simplification, not an individual life-course reconstruction.
+- The correction range is published only on `fix/diag1-human-support`. No merge, amend, rebase, force push, Phase 3, or WORLD-M0 Task 12 resumption is authorized. Protected Task12 WIP and canonical bundle remain byte-preserved.
+
+<!-- DIAG1_PHASE2_CORRECTION_ROUND2_CURRENT_END -->
+
 ## Phase2 F1/F4/F5 — implemented review candidate; STOP
 
 Production/test commit `369362c5b51757407e34493d9f9dcbeae86abdac` starts from exact independently reviewed Phase1 HEAD `d8c6233872b6bcb76da5fe6c3747c889ec402eb9`. Final evidence and later documentation/publication identity are in `docs/evidence/diag1-corrections/phase2/` and the exported `PUBLICATION.json`. Runs identify actual uncommitted source bytes; `FINAL_SOURCE_RECONCILIATION.json` ties all247 production files to the candidate. Do not confuse the later documentation commit with the reviewed Phase1 dependency base.

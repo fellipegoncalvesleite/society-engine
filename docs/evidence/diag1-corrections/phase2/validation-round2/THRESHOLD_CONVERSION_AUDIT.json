@@ -1,0 +1,25 @@
+{
+  "scope": "DIAG-1 Phase 2 correction round 2",
+  "status": "read-only inventory",
+  "physicalTimeRules": [
+    "seasonalHungerStreak uses physical trailing exposure days divided by 90; existing >=2 semantic retained",
+    "chronicDeficitStreak uses physical trailing exposure days divided by 90; existing >=4/6/8 semantics retained",
+    "deficitSeasonsLast4/8 and waterStressSeasonsLast8 retain their existing season-equivalent comparisons"
+  ],
+  "correctedMaturityRules": [
+    "seasonalSurvival.classifyHunger: seasonalRecoveryStreak > 0 -> >=1",
+    "bandChronicle recovery arc: seasonalRecoveryStreak > 0 -> >=1",
+    "1 and 89 qualifying recovery days remain immediate improvement only; 90 days classify recovery_after_crisis"
+  ],
+  "intentionallyDurationWeighted": [
+    "socialContext recovery signal multiplies seasonalRecoveryStreak as a graded duration signal",
+    "protoCamps consumes recovery classifications rather than a raw maturity comparison",
+    "innerFission accepts seasonal_pulse_recovery for immediate recovery and recovery_after_crisis for mature recovery"
+  ],
+  "unrelatedCountChecks": [
+    "protoCamps activity/visit/knowledge counts remain event-existence checks, not physical recovery maturity",
+    "bandHistory recoveryYears > 0 records existence of a historical recovery year, not the seasonal maturity gate"
+  ],
+  "evidence": "validation-round2-coverage-green-v13.json",
+  "productionCommit": "13c685ac4fb123f69a8693d2e5728260b379cfa8"
+}

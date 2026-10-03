@@ -17,3 +17,11 @@ A future producer must close the previous owner once, continue from the same phy
 Deferred findings remain separately owned: fauna physical area and overlapping exhausted sources, food-family argmax, exact plant observation/patch identity, current-living projections, raster-dependent absorption reach, original unrecovered2,000-year scenario, empirical demography calibration, M0.2 basin retention and comprehensive scratch memory. Phase3 and WORLD-M0 Task12 are not authorized by this candidate.
 
 Equivalent physical courses must also remain invariant at numeric thresholds. Preserve compensated quantity/exposure aggregation, stable derived ratios and the declared decimal view. The64 varied decimal partition cases plus the original half-way control and a loaded/executed ratio mutant guard this numerical contract; they do not change physical stock or model coefficients.
+
+## Correction round 2 contract — unknown body-time and recovery maturity
+
+Nutrition queries must expose requested physical days, known body-time and coverage. Readers may use known-subset diagnostics for explanation, but behaviorally unknown body-time contributes neither hunger nor comfort, recovery, surplus, movement pressure nor demographic pressure. The bounded positive-surplus functional is applied to measured evidence first and then scaled by coverage; fully known actual records keep demand-pooled aggregation, and fully known legacy ratio records keep their known-subset aggregate mean. Annual reads must align all stress, pressure and coverage terms to the requested physical horizon, including unmeasured gaps.
+
+`recovery_after_crisis` requires `seasonalRecoveryStreak >= 1`, which is 90 qualifying physical days. One day and 89 days may improve the current mode but cannot mature the classification. Any unknown gap or measured non-recovery interval breaks the contiguous streak. Immediate `seasonal_pulse_recovery` remains a distinct inner-fission pathway and must not be removed by this maturity rule.
+
+Aggregate historical merge may weight embodied stress by current surviving headcounts after a documented headcount change, provided stored support/demand quantities remain invariant and the merge does not invent an individual life course. A future cohort-level model must replace this simplification explicitly rather than silently changing its meaning.

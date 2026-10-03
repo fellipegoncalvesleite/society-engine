@@ -47,6 +47,13 @@ This block supersedes older current/unstarted/accepted headlines only for this c
 
 <!-- DIAG1_PHASE1_CURRENT_END -->
 
+<!-- DIAG1_PHASE2_CORRECTION_ROUND2_CURRENT_START -->
+## Current authority — DIAG-1 Phase 2 correction round 2
+
+The previous Phase 2 rework is corrected in production commit `13c685ac4fb123f69a8693d2e5728260b379cfa8`, still a candidate pending fresh independent review. Unknown nutrition body-time is explicit and coverage-safe through the annual demography reader; full-known aggregate semantics remain unchanged. Recovery maturity is exactly 90 qualifying physical days (`seasonalRecoveryStreak >= 1`), while immediate seasonal pulse recovery remains available. RED/GREEN/mutant evidence and the historical merge adjudication are recorded in `docs/evidence/diag1-corrections/phase2/validation-round2`. Phase 3 is not started and WORLD-M0 Task12 remains paused with its dirty WIP preserved.
+
+<!-- DIAG1_PHASE2_CORRECTION_ROUND2_CURRENT_END -->
+
 ## Phase2 F1/F4/F5 — implemented review candidate; STOP
 
 Production/test commit `369362c5b51757407e34493d9f9dcbeae86abdac` starts from exact independently reviewed Phase1 HEAD `d8c6233872b6bcb76da5fe6c3747c889ec402eb9`. Final evidence and later documentation/publication identity are in `docs/evidence/diag1-corrections/phase2/` and the exported `PUBLICATION.json`. Runs identify actual uncommitted source bytes; `FINAL_SOURCE_RECONCILIATION.json` ties all247 production files to the candidate. Do not confuse the later documentation commit with the reviewed Phase1 dependency base.

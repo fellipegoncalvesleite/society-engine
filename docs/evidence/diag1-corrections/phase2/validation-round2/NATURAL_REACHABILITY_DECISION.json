@@ -1,0 +1,12 @@
+{
+  "decision": "no new six-arm natural rerun in this correction round",
+  "basis": [
+    "The six retained Phase2 final3 natural payloads are resident courses with no fission/provisional transition in their recorded 30-year summaries.",
+    "The six retained payloads contain zero serialized recovery_after_crisis classifications and no knownPopulationFraction/nutritionCoverage partial-body records; the corrected paths are exercised by the dated inherited/merge controls instead.",
+    "The new coverage correction requires an explicit partial/inherited body-time interval, and the mature recovery correction requires a reachable 90-day recovery classification; neither reaches a natural behavioral state in the retained six-arm instrument.",
+    "No natural result is used as acceptance or population-growth evidence."
+  ],
+  "retainedNaturalEvidence": "docs/evidence/diag1-corrections/phase2/natural/phase2-final3-*.json.gz",
+  "controlEvidence": "validation-round2-coverage-green-v13.json",
+  "productionCommit": "13c685ac4fb123f69a8693d2e5728260b379cfa8"
+}

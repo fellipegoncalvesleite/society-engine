@@ -1,0 +1,1270 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/node/26.7.0/bin/node",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs",
+    "--scope",
+    "all",
+    "--mutant",
+    "labor",
+    "--out",
+    "docs/evidence/diag1-corrections/phase2/validation-round2/phase1-conservation-labor-mutant-v2.json"
+  ],
+  "auditScriptSha256": "13376dd7a9731f6f09a541635a2286fa519aa495a19e1343b3efe0fcacfb603e",
+  "runtime": "v26.7.0",
+  "sourceHead": "bf5807e75bb650872d9c81cf95dce5dc1df6a509",
+  "sourceBefore": {
+    "src/sim/agents/viability.ts": "5fbf86950be4f90c1841e4aa323e228384e818045ec0cefc27eca3a62d12585f",
+    "src/sim/agents/plantStock.ts": "9317f0bf486223b549a2e61171faba929996b83c1797609a96e175c16503ed6d",
+    "src/sim/agents/plantPatches.ts": "3bd184194ffe9f542696500249f639c166b767bd65309559903a6998c78dfa7f",
+    "src/sim/agents/intraSeasonTrips.ts": "84893cd0f9ffbd2f41c3e880bc6f52d52c3b526ec496241bca66cffc7127a68d",
+    "src/sim/agents/bandMobility.ts": "893eac223f7399fb83987a56317d6b5d72e9f924d34443d1e99fadd1aaa01973",
+    "src/sim/agents/expedition.ts": "e0ebb2c64c69f3a9d3970d0d62c5d46314f9dc47a590fee3252e1d223ed2cb81",
+    "src/sim/agents/expeditionCargo.ts": "0a70fe8471143c2704d877f7509425a2dbf21cdfce236980542bb74dcba6caf5",
+    "src/sim/agents/types.ts": "c5fbfba24b0b239e05432fff8036eddc71446ec366426975446810fad2ff3620"
+  },
+  "sourceAfter": {
+    "src/sim/agents/viability.ts": "5fbf86950be4f90c1841e4aa323e228384e818045ec0cefc27eca3a62d12585f",
+    "src/sim/agents/plantStock.ts": "9317f0bf486223b549a2e61171faba929996b83c1797609a96e175c16503ed6d",
+    "src/sim/agents/plantPatches.ts": "3bd184194ffe9f542696500249f639c166b767bd65309559903a6998c78dfa7f",
+    "src/sim/agents/intraSeasonTrips.ts": "84893cd0f9ffbd2f41c3e880bc6f52d52c3b526ec496241bca66cffc7127a68d",
+    "src/sim/agents/bandMobility.ts": "893eac223f7399fb83987a56317d6b5d72e9f924d34443d1e99fadd1aaa01973",
+    "src/sim/agents/expedition.ts": "e0ebb2c64c69f3a9d3970d0d62c5d46314f9dc47a590fee3252e1d223ed2cb81",
+    "src/sim/agents/expeditionCargo.ts": "0a70fe8471143c2704d877f7509425a2dbf21cdfce236980542bb74dcba6caf5",
+    "src/sim/agents/types.ts": "c5fbfba24b0b239e05432fff8036eddc71446ec366426975446810fad2ff3620"
+  },
+  "mutation": {
+    "mutant": "labor",
+    "loaded": 1,
+    "executed": 932,
+    "bytesRestored": true,
+    "detected": true
+  },
+  "rows": [
+    {
+      "name": "B-001 complete raw receipt migrates and two-unit rounding boundary is accepted",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: missing processing loss",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: missing all raw fields",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: positive usable with zero harvest",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: inconsistent depletion",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: negative raw loss",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: nonfinite raw harvest",
+      "pass": true
+    },
+    {
+      "name": "B-001 refuses incomplete/inconsistent provenance: finite raw imbalance beyond two rounding units",
+      "pass": true
+    },
+    {
+      "name": "B-001 zero work requires explicit complete zero retained receipt",
+      "pass": true
+    },
+    {
+      "name": "B-001 information only requires explicit complete zero retained receipt",
+      "pass": true
+    },
+    {
+      "name": "B-001 work observations",
+      "pass": true,
+      "evidence": {
+        "source": {
+          "band": "band:varied-dry-corridor-mid",
+          "patch": "patch:tile:74:111:fallback_food",
+          "tile": "tile:74:111"
+        },
+        "sum": 0.0525,
+        "expected": 0.0305,
+        "delivered": 0.0305,
+        "workReceipts": [
+          {
+            "day": 721,
+            "tick": 8,
+            "season": "spring",
+            "sourceBandId": "band:varied-dry-corridor-mid",
+            "originTileId": "tile:74:111",
+            "targetTileId": "tile:74:111",
+            "taskGroupType": "plant_gathering_group",
+            "groupLabel": "Plant gathering group",
+            "estimatedPeopleCount": 5,
+            "objective": "food_patch_check",
+            "objectiveLabel": "Food patch check",
+            "startDay": 721,
+            "endDay": 721,
+            "activityStatus": "completed_observation",
+            "distanceTiles": 0,
+            "distanceKm": 0,
+            "estimatedDurationDays": 1,
+            "cause": "food_resource_check",
+            "movementType": "local_foraging_loop",
+            "outcome": "returns_same_day",
+            "activityResult": "partial_success",
+            "activityOutcome": "partial_success",
+            "activityOutcomeReasonIds": [
+              "reason:activity-outcome:band:varied-dry-corridor-mid:721:partial_success:tile:74:111",
+              "reason:activity-memory:band:varied-dry-corridor-mid:721:low-confidence:tile:74:111"
+            ],
+            "activityOutcomeSummary": "deterministic_partial_success; return=gathered_plant_food; physical_receipt_feeds_support",
+            "resourceReturn": {
+              "returnedResourceKind": "gathered_plant_food",
+              "semantics": {
+                "category": "physical_food",
+                "isPhysical": true,
+                "contributesToNutrition": true,
+                "materialDomain": "plant_food"
+              },
+              "estimatedReturnValue": 0.0377,
+              "returnConfidence": 0.2522,
+              "consumedByEconomy": true,
+              "noYieldCoupling": true,
+              "noCarryingCapacityCoupling": false,
+              "noPopulationChange": true,
+              "noStressChange": true,
+              "noSupportChange": false,
+              "reasonIds": [
+                "reason:activity-return:band:varied-dry-corridor-mid:721:gathered_plant_food:tile:74:111",
+                "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso"
+              ]
+            },
+            "shadowSubsistence": {
+              "shadowReturnKind": "gathered_food_shadow",
+              "shadowSupportDomain": "food",
+              "shadowGrossValue": 0.0836,
+              "shadowTravelCost": 0,
+              "shadowRiskPenalty": 0.0104,
+              "shadowNetValue": 0.0732,
+              "shadowReliability": 0.1658,
+              "contributesAtBaseSameDay": true,
+              "seasonalEcologyModifier": 0.7135,
+              "shadowConsumedByEconomy": false,
+              "noEconomyCoupling": true,
+              "reasonIds": [
+                "reason:activity-shadow:band:varied-dry-corridor-mid:721:gathered_food_shadow:tile:74:111"
+              ]
+            },
+            "seasonalEcology": {
+              "domain": "plant_patch",
+              "season": "spring",
+              "availabilityFactor": 0.218,
+              "baselineFactor": 0.519,
+              "seasonalDelta": -0.301,
+              "wetDryTendency": "neutral",
+              "hiddenTendencyClass": "neutral",
+              "shadowSeasonalResult": "reduced",
+              "taughtSeasonalHint": true,
+              "driverSummary": "plant_patch spring: env=0 sig=0.57 (neutral, neutral)",
+              "reasonIds": [
+                "reason:seasonal-ecology:tile:74:111:spring:plant_patch"
+              ]
+            },
+            "plantPatchTrace": {
+              "patchId": "plant:tile:74:111:roots_tubers_uso",
+              "plantClassId": "roots_tubers_uso",
+              "seasonalAvailability": "active",
+              "abundanceTrend": "rising",
+              "lifecycleState": "active",
+              "expectedReturnFactor": 0.2,
+              "currentDepletion": 0,
+              "pressure": 0.04,
+              "recoveryRate": 0.1,
+              "fallbackRole": "emergency",
+              "fallbackRank": 0.84,
+              "laborCost": 0.72,
+              "safetyRisk": "moderate",
+              "rawSource": "plantStock.derivePlantGatherPatchTrace from band-targeted plant activity tile",
+              "reasonIds": [
+                "reason:plant-gather-trace:tile:74:111:plant:tile:74:111:roots_tubers_uso:8"
+              ],
+              "depletionApplied": true,
+              "knowledgeUpdate": "confirmed_by_gathering",
+              "memoryUpdate": "resource_memory_update",
+              "protoCampInfluence": "fallback_refuge_signal"
+            },
+            "activityMemoryEffect": {
+              "sourceBandId": "band:varied-dry-corridor-mid",
+              "sourceTripDay": 721,
+              "tick": 8,
+              "season": "spring",
+              "targetTileId": "tile:74:111",
+              "activityOutcome": "partial_success",
+              "effectType": "none",
+              "effectSummary": "no activity memory update",
+              "confidenceDelta": 0,
+              "reasonIds": [],
+              "noHiddenTruth": true,
+              "targetKnownMemoryOnly": true,
+              "noNewResourceDiscovery": true,
+              "noFoodCoupling": true,
+              "noYieldCoupling": true,
+              "noCarryingCapacityCoupling": true,
+              "noPopulationChange": true,
+              "noStressChange": true,
+              "noSupportChange": true
+            },
+            "pathTiles": [
+              "tile:74:111"
+            ],
+            "tilesCrossed": 0,
+            "roundTripTiles": 0,
+            "activityDaysRepresented": 3,
+            "resourceClassId": "fallback_food",
+            "resultSummary": "deterministic_partial_success; return=gathered_plant_food; physical_receipt_feeds_support",
+            "reasonIds": [
+              "reason:intra-season-trip:band:varied-dry-corridor-mid:721:food_resource_check:tile:74:111",
+              "reason:activity-outcome:band:varied-dry-corridor-mid:721:partial_success:tile:74:111",
+              "reason:activity-memory:band:varied-dry-corridor-mid:721:low-confidence:tile:74:111",
+              "reason:activity-return:band:varied-dry-corridor-mid:721:gathered_plant_food:tile:74:111",
+              "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso"
+            ],
+            "noResidentialRelocation": true,
+            "noYieldChange": true,
+            "noStressChange": true,
+            "noPopulationChange": true,
+            "noCarryingCapacityChange": true,
+            "noSupportChange": false,
+            "bandKnownTargetOnly": true,
+            "physicalFoodHarvest": {
+              "sourceKind": "plant_patch",
+              "sourceId": "plant:tile:74:111:roots_tubers_uso",
+              "sourceClass": "roots_tubers_uso",
+              "knownness": "stale_or_inferred_target",
+              "attempted": true,
+              "physicalSourceFound": true,
+              "physicalAvailability": 0.0607,
+              "harvestedAmount": 0.0436,
+              "depletionApplied": 0.0436,
+              "transportLoss": 0,
+              "processingLoss": 0.0059,
+              "usableSupport": 0.0377,
+              "worldTruthDebugOnly": true,
+              "reasonIds": [
+                "reason:physical-food-harvest:band:varied-dry-corridor-mid:721:plant_patch:plant:tile:74:111:roots_tubers_uso"
+              ]
+            }
+          },
+          {
+            "day": 722,
+            "tick": 8,
+            "season": "spring",
+            "sourceBandId": "band:varied-dry-corridor-mid",
+            "originTileId": "tile:74:111",
+            "targetTileId": "tile:74:111",
+            "taskGroupType": "plant_gathering_group",
+            "groupLabel": "Plant gathering group",
+            "estimatedPeopleCount": 5,
+            "objective": "food_patch_check",
+            "objectiveLabel": "Food patch check",
+            "startDay": 722,
+            "endDay": 722,
+            "activityStatus": "completed_observation",
+            "distanceTiles": 0,
+            "distanceKm": 0,
+            "estimatedDurationDays": 1,
+            "cause": "food_resource_check",
+            "movementType": "local_foraging_loop",
+            "outcome": "returns_same_day",
+            "activityResult": "partial_success",
+            "activityOutcome": "partial_success",
+            "activityOutcomeReasonIds": [
+              "reason:activity-outcome:band:varied-dry-corridor-mid:722:partial_success:tile:74:111",
+              "reason:activity-memory:band:varied-dry-corridor-mid:722:low-confidence:tile:74:111"
+            ],
+            "activityOutcomeSummary": "deterministic_partial_success; return=gathered_plant_food; physical_receipt_feeds_support",
+            "resourceReturn": {
+              "returnedResourceKind": "gathered_plant_food",
+              "semantics": {
+                "category": "physical_food",
+                "isPhysical": true,
+                "contributesToNutrition": true,
+                "materialDomain": "plant_food"
+              },
+              "estimatedReturnValue": 0.0148,
+              "returnConfidence": 0.2522,
+              "consumedByEconomy": true,
+              "noYieldCoupling": true,
+              "noCarryingCapacityCoupling": false,
+              "noPopulationChange": true,
+              "noStressChange": true,
+              "noSupportChange": false,
+              "reasonIds": [
+                "reason:activity-return:band:varied-dry-corridor-mid:722:gathered_plant_food:tile:74:111",
+                "reason:physical-food-harvest:band:varied-dry-corridor-mid:722:plant_patch:plant:tile:74:111:roots_tubers_uso"
+              ]
+            },
+            "shadowSubsistence": {
+              "shadowReturnKind": "gathered_food_shadow",
+              "shadowSupportDomain": "food",
+              "shadowGrossValue": 0.0836,
+              "shadowTravelCost": 0,
+              "shadowRiskPenalty": 0.0104,
+              "shadowNetValue": 0.0732,
+              "shadowReliability": 0.1658,
+              "contributesAtBaseSameDay": true,
+              "seasonalEcologyModifier": 0.7135,
+              "shadowConsumedByEconomy": false,
+              "noEconomyCoupling": true,
+              "reasonIds": [
+                "reason:activity-shadow:band:varied-dry-corridor-mid:722:gathered_food_shadow:tile:74:111"
+              ]
+            },
+            "seasonalEcology": {
+              "domain": "plant_patch",
+              "season": "spring",
+              "availabilityFactor": 0.218,
+              "baselineFactor": 0.519,
+              "seasonalDelta": -0.301,
+              "wetDryTendency": "neutral",
+              "hiddenTendencyClass": "neutral",
+              "shadowSeasonalResult": "reduced",
+              "taughtSeasonalHint": true,
+              "driverSummary": "plant_patch spring: env=0 sig=0.57 (neutral, neutral)",
+              "reasonIds": [
+                "reason:seasonal-ecology:tile:74:111:spring:plant_patch"
+              ]
+            },
+            "plantPatchTrace": {
+              "patchId": "plant:tile:74:111:roots_tubers_uso",
+              "plantClassId": "roots_tubers_uso",
+              "seasonalAvailability": "active",
+              "abundanceTrend": "rising",
+              "lifecycleState": "active",
+              "expectedReturnFactor": 0.2,
+              "currentDepletion": 0.718,
+              "pressure": 0.363,
+              "recoveryRate": 0.1,
+              "fallbackRole": "emergency",
+              "fallbackRank": 0.84,
+              "laborCost": 0.72,
+              "safetyRisk": "moderate",
+              "rawSource": "plantStock.derivePlantGatherPatchTrace from band-targeted plant activity tile",
+              "reasonIds": [
+                "reason:plant-gather-trace:tile:74:111:plant:tile:74:111:roots_tubers_uso:8"
+              ],
+              "depletionApplied": true,
+              "knowledgeUpdate": "confirmed_by_gathering",
+              "memoryUpdate": "resource_memory_update",
+              "protoCampInfluence": "fallback_refuge_signal"
+            },
+            "activityMemoryEffect": {
+              "sourceBandId": "band:varied-dry-corridor-mid",
+              "sourceTripDay": 722,
+              "tick": 8,
+              "season": "spring",
+              "targetTileId": "tile:74:111",
+              "activityOutcome": "partial_success",
+              "effectType": "none",
+              "effectSummary": "no activity memory update",
+              "confidenceDelta": 0,
+              "reasonIds": [],
+              "noHiddenTruth": true,
+              "targetKnownMemoryOnly": true,
+              "noNewResourceDiscovery": true,
+              "noFoodCoupling": true,
+              "noYieldCoupling": true,
+              "noCarryingCapacityCoupling": true,
+              "noPopulationChange": true,
+              "noStressChange": true,
+              "noSupportChange": true
+            },
+            "pathTiles": [
+              "tile:74:111"
+            ],
+            "tilesCrossed": 0,
+            "roundTripTiles": 0,
+            "activityDaysRepresented": 3,
+            "resourceClassId": "fallback_food",
+            "resultSummary": "deterministic_partial_success; return=gathered_plant_food; physical_receipt_feeds_support",
+            "reasonIds": [
+              "reason:intra-season-trip:band:varied-dry-corridor-mid:722:food_resource_check:tile:74:111",
+              "reason:activity-outcome:band:varied-dry-corridor-mid:722:partial_success:tile:74:111",
+              "reason:activity-memory:band:varied-dry-corridor-mid:722:low-confidence:tile:74:111",
+              "reason:activity-return:band:varied-dry-corridor-mid:722:gathered_plant_food:tile:74:111",
+              "reason:physical-food-harvest:band:varied-dry-corridor-mid:722:plant_patch:plant:tile:74:111:roots_tubers_uso"
+            ],
+            "noResidentialRelocation": true,
+            "noYieldChange": true,
+            "noStressChange": true,
+            "noPopulationChange": true,
+            "noCarryingCapacityChange": true,
+            "noSupportChange": false,
+            "bandKnownTargetOnly": true,
+            "physicalFoodHarvest": {
+              "sourceKind": "plant_patch",
+              "sourceId": "plant:tile:74:111:roots_tubers_uso",
+              "sourceClass": "roots_tubers_uso",
+              "knownness": "stale_or_inferred_target",
+              "attempted": true,
+              "physicalSourceFound": true,
+              "physicalAvailability": 0.0171,
+              "harvestedAmount": 0.0171,
+              "depletionApplied": 0.0171,
+              "transportLoss": 0,
+              "processingLoss": 0.0023,
+              "usableSupport": 0.0148,
+              "worldTruthDebugOnly": true,
+              "reasonIds": [
+                "reason:physical-food-harvest:band:varied-dry-corridor-mid:722:plant_patch:plant:tile:74:111:roots_tubers_uso"
+              ]
+            }
+          },
+          {
+            "day": 723,
+            "tick": 8,
+            "season": "spring",
+            "sourceBandId": "band:varied-dry-corridor-mid",
+            "originTileId": "tile:74:111",
+            "targetTileId": "tile:74:111",
+            "taskGroupType": "plant_gathering_group",
+            "groupLabel": "Plant gathering group",
+            "estimatedPeopleCount": 5,
+            "objective": "food_patch_check",
+            "objectiveLabel": "Food patch check",
+            "startDay": 723,
+            "endDay": 723,
+            "activityStatus": "completed_observation",
+            "distanceTiles": 0,
+            "distanceKm": 0,
+            "estimatedDurationDays": 1,
+            "cause": "food_resource_check",
+            "movementType": "local_foraging_loop",
+            "outcome": "returns_same_day",
+            "activityResult": "target_not_found",
+            "activityOutcome": "target_not_found",
+            "activityOutcomeReasonIds": [
+              "reason:activity-outcome:band:varied-dry-corridor-mid:723:partial_success:tile:74:111",
+              "reason:activity-memory:band:varied-dry-corridor-mid:723:low-confidence:tile:74:111"
+            ],
+            "activityOutcomeSummary": "deterministic_target_not_found; return=none; information_or_zero_return",
+            "resourceReturn": {
+              "returnedResourceKind": "none",
+              "semantics": {
+                "category": "failed_or_none",
+                "isPhysical": false,
+                "contributesToNutrition": false,
+                "materialDomain": "none"
+              },
+              "estimatedReturnValue": 0,
+              "returnConfidence": 0.2522,
+              "consumedByEconomy": false,
+              "noYieldCoupling": true,
+              "noCarryingCapacityCoupling": false,
+              "noPopulationChange": true,
+              "noStressChange": true,
+              "noSupportChange": false,
+              "reasonIds": [
+                "reason:activity-return:band:varied-dry-corridor-mid:723:gathered_plant_food:tile:74:111",
+                "reason:physical-food-harvest:band:varied-dry-corridor-mid:723:plant_patch:plant:tile:74:111:roots_tubers_uso"
+              ]
+            },
+            "shadowSubsistence": {
+              "shadowReturnKind": "gathered_food_shadow",
+              "shadowSupportDomain": "food",
+              "shadowGrossValue": 0.0836,
+              "shadowTravelCost": 0,
+              "shadowRiskPenalty": 0.0104,
+              "shadowNetValue": 0.0732,
+              "shadowReliability": 0.1658,
+              "contributesAtBaseSameDay": true,
+              "seasonalEcologyModifier": 0.7135,
+              "shadowConsumedByEconomy": false,
+              "noEconomyCoupling": true,
+              "reasonIds": [
+                "reason:activity-shadow:band:varied-dry-corridor-mid:723:gathered_food_shadow:tile:74:111"
+              ]
+            },
+            "seasonalEcology": {
+              "domain": "plant_patch",
+              "season": "spring",
+              "availabilityFactor": 0.218,
+              "baselineFactor": 0.519,
+              "seasonalDelta": -0.301,
+              "wetDryTendency": "neutral",
+              "hiddenTendencyClass": "neutral",
+              "shadowSeasonalResult": "reduced",
+              "taughtSeasonalHint": true,
+              "driverSummary": "plant_patch spring: env=0 sig=0.57 (neutral, neutral)",
+              "reasonIds": [
+                "reason:seasonal-ecology:tile:74:111:spring:plant_patch"
+              ]
+            },
+            "plantPatchTrace": {
+              "patchId": "plant:tile:74:111:roots_tubers_uso",
+              "plantClassId": "roots_tubers_uso",
+              "seasonalAvailability": "active",
+              "abundanceTrend": "rising",
+              "lifecycleState": "active",
+              "expectedReturnFactor": 0.2,
+              "currentDepletion": 1,
+              "pressure": 0.49,
+              "recoveryRate": 0.1,
+              "fallbackRole": "emergency",
+              "fallbackRank": 0.84,
+              "laborCost": 0.72,
+              "safetyRisk": "moderate",
+              "rawSource": "plantStock.derivePlantGatherPatchTrace from band-targeted plant activity tile",
+              "reasonIds": [
+                "reason:plant-gather-trace:tile:74:111:plant:tile:74:111:roots_tubers_uso:8"
+              ],
+              "depletionApplied": false,
+              "knowledgeUpdate": "confirmed_by_gathering",
+              "memoryUpdate": "resource_memory_update",
+              "protoCampInfluence": "fallback_refuge_signal"
+            },
+            "activityMemoryEffect": {
+              "sourceBandId": "band:varied-dry-corridor-mid",
+              "sourceTripDay": 723,
+              "tick": 8,
+              "season": "spring",
+              "targetTileId": "tile:74:111",
+              "activityOutcome": "partial_success",
+              "effectType": "none",
+              "effectSummary": "no activity memory update",
+              "confidenceDelta": 0,
+              "reasonIds": [],
+              "noHiddenTruth": true,
+              "targetKnownMemoryOnly": true,
+              "noNewResourceDiscovery": true,
+              "noFoodCoupling": true,
+              "noYieldCoupling": true,
+              "noCarryingCapacityCoupling": true,
+              "noPopulationChange": true,
+              "noStressChange": true,
+              "noSupportChange": true
+            },
+            "pathTiles": [
+              "tile:74:111"
+            ],
+            "tilesCrossed": 0,
+            "roundTripTiles": 0,
+            "activityDaysRepresented": 3,
+            "resourceClassId": "fallback_food",
+            "resultSummary": "deterministic_target_not_found; return=none; information_or_zero_return",
+            "reasonIds": [
+              "reason:intra-season-trip:band:varied-dry-corridor-mid:723:food_resource_check:tile:74:111",
+              "reason:activity-outcome:band:varied-dry-corridor-mid:723:partial_success:tile:74:111",
+              "reason:activity-memory:band:varied-dry-corridor-mid:723:low-confidence:tile:74:111",
+              "reason:activity-return:band:varied-dry-corridor-mid:723:gathered_plant_food:tile:74:111",
+              "reason:physical-food-harvest:band:varied-dry-corridor-mid:723:plant_patch:plant:tile:74:111:roots_tubers_uso"
+            ],
+            "noResidentialRelocation": true,
+            "noYieldChange": true,
+            "noStressChange": true,
+            "noPopulationChange": true,
+            "noCarryingCapacityChange": true,
+            "noSupportChange": false,
+            "bandKnownTargetOnly": true,
+            "physicalFoodHarvest": {
+              "sourceKind": "plant_patch",
+              "sourceId": "plant:tile:74:111:roots_tubers_uso",
+              "sourceClass": "roots_tubers_uso",
+              "knownness": "stale_or_inferred_target",
+              "attempted": true,
+              "physicalSourceFound": true,
+              "physicalAvailability": 0,
+              "harvestedAmount": 0,
+              "depletionApplied": 0,
+              "transportLoss": 0,
+              "processingLoss": 0,
+              "usableSupport": 0,
+              "failureReason": "physically_exhausted",
+              "worldTruthDebugOnly": true,
+              "reasonIds": [
+                "reason:physical-food-harvest:band:varied-dry-corridor-mid:723:plant_patch:plant:tile:74:111:roots_tubers_uso"
+              ]
+            }
+          }
+        ],
+        "trace": [
+          {
+            "day": 721,
+            "phase": "operating",
+            "work": 1,
+            "charge": 0.006,
+            "lost": 0,
+            "delivered": 0,
+            "credited": 0
+          },
+          {
+            "day": 722,
+            "phase": "operating",
+            "work": 2,
+            "charge": 0.012,
+            "lost": 0,
+            "delivered": 0,
+            "credited": 0
+          },
+          {
+            "day": 723,
+            "phase": "returning",
+            "work": 3,
+            "charge": 0.018,
+            "lost": 0,
+            "delivered": 0,
+            "credited": 0
+          },
+          {
+            "day": 724,
+            "charge": 0.022,
+            "lost": 0,
+            "delivered": 0.0305,
+            "credited": 0.0305
+          },
+          {
+            "day": 725,
+            "charge": 0.022,
+            "lost": 0,
+            "delivered": 0.0305,
+            "credited": 0.0305
+          }
+        ]
+      }
+    },
+    {
+      "name": "B-001 actual multi-work delivery equals independent surviving sum",
+      "pass": true,
+      "evidence": {
+        "sum": 0.0525,
+        "expected": 0.0305,
+        "delivered": 0.0305,
+        "workOperations": 3
+      }
+    },
+    {
+      "name": "B-002 current-body conservation abc",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 16,
+          "status": "viable",
+          "traces": 1
+        },
+        {
+          "id": "band:c",
+          "population": 30,
+          "status": "viable",
+          "traces": 0
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation cba",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 38,
+          "status": "viable",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:c",
+          "population": 8,
+          "status": "nonviable",
+          "traces": 0
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation bac",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 16,
+          "status": "viable",
+          "traces": 1
+        },
+        {
+          "id": "band:c",
+          "population": 30,
+          "status": "viable",
+          "traces": 0
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation bca",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 30,
+          "status": "viable",
+          "traces": 0
+        },
+        {
+          "id": "band:b",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:c",
+          "population": 16,
+          "status": "viable",
+          "traces": 1
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation cab",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 38,
+          "status": "viable",
+          "traces": 1
+        },
+        {
+          "id": "band:c",
+          "population": 8,
+          "status": "nonviable",
+          "traces": 0
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation acb",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 30,
+          "status": "viable",
+          "traces": 0
+        },
+        {
+          "id": "band:c",
+          "population": 16,
+          "status": "viable",
+          "traces": 1
+        }
+      ]
+    },
+    {
+      "name": "B-002 current-body conservation abcde",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:b",
+          "population": 24,
+          "status": "viable",
+          "traces": 2
+        },
+        {
+          "id": "band:c",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:d",
+          "population": 0,
+          "status": "absorbed",
+          "traces": 1
+        },
+        {
+          "id": "band:e",
+          "population": 38,
+          "status": "viable",
+          "traces": 1
+        }
+      ]
+    },
+    {
+      "name": "B-002 target loses eligibility when its support departs",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "viability": {
+            "bandId": "band:a",
+            "population": 0,
+            "minimumViablePopulation": 14,
+            "viabilityPressure": 0.66,
+            "extinctionRisk": 0.47,
+            "absorptionOpportunity": 0.52,
+            "status": "absorbed",
+            "weakBandClassification": "absorbed",
+            "weakBandFate": "absorbed",
+            "supportSeekingTargetBandId": "band:d",
+            "supportSeekingGrounding": "parent lineage",
+            "routeConfidenceToSupport": 0.8,
+            "lastStressSummary": "support=unknown food=0.5 water=0",
+            "reasonIds": [
+              "reason:viability:band:a:0:band_became_nonviable",
+              "reason:viability:band:a:0:absorption_preferred_over_extinction"
+            ],
+            "absorbedByBandId": "band:d",
+            "populationTransferred": 8,
+            "populationRemoved": 0,
+            "populationConservationSummary": "transferred 8; removed 0"
+          }
+        },
+        {
+          "id": "band:b",
+          "population": 0,
+          "viability": {
+            "bandId": "band:b",
+            "population": 0,
+            "minimumViablePopulation": 14,
+            "viabilityPressure": 1,
+            "extinctionRisk": 0.84,
+            "absorptionOpportunity": 0,
+            "status": "extinct",
+            "weakBandClassification": "disappeared_collapsed",
+            "weakBandFate": "collapsed",
+            "supportSeekingBlockedReason": "known kin route too distant or low confidence",
+            "routeConfidenceToSupport": 0,
+            "lastSupportState": "crisis_deficit",
+            "lastStressSummary": "support=crisis_deficit food=0.5 water=0",
+            "reasonIds": [
+              "reason:viability:band:b:0:band_became_nonviable",
+              "reason:viability:band:b:0:band_extinct_low_population"
+            ],
+            "populationRemoved": 1,
+            "populationTransferred": 0,
+            "populationConservationSummary": "transferred 0; removed 1",
+            "terminalSnapshot": {
+              "tick": 0,
+              "year": 0,
+              "season": "spring",
+              "cause": "low_population_collapse",
+              "populationBeforeRemoval": 1,
+              "dependentsBeforeRemoval": 6,
+              "workingAdultsBeforeRemoval": 1,
+              "eldersBeforeRemoval": 1
+            }
+          }
+        },
+        {
+          "id": "band:c",
+          "population": 0,
+          "viability": {
+            "bandId": "band:c",
+            "population": 0,
+            "minimumViablePopulation": 14,
+            "viabilityPressure": 1,
+            "extinctionRisk": 0.77,
+            "absorptionOpportunity": 0,
+            "status": "extinct",
+            "weakBandClassification": "disappeared_collapsed",
+            "weakBandFate": "collapsed",
+            "supportSeekingBlockedReason": "known kin too stressed",
+            "routeConfidenceToSupport": 0,
+            "lastSupportState": "crisis_deficit",
+            "lastStressSummary": "support=crisis_deficit food=0.5 water=0",
+            "reasonIds": [
+              "reason:viability:band:c:0:band_became_nonviable",
+              "reason:viability:band:c:0:band_extinct_low_population"
+            ],
+            "populationRemoved": 8,
+            "populationTransferred": 0,
+            "populationConservationSummary": "transferred 0; removed 8",
+            "terminalSnapshot": {
+              "tick": 0,
+              "year": 0,
+              "season": "spring",
+              "cause": "low_population_collapse",
+              "populationBeforeRemoval": 8,
+              "dependentsBeforeRemoval": 6,
+              "workingAdultsBeforeRemoval": 1,
+              "eldersBeforeRemoval": 1
+            }
+          }
+        },
+        {
+          "id": "band:d",
+          "population": 38,
+          "viability": {
+            "bandId": "band:d",
+            "population": 38,
+            "minimumViablePopulation": 14,
+            "viabilityPressure": 0,
+            "extinctionRisk": 0,
+            "absorptionOpportunity": 0,
+            "status": "viable",
+            "weakBandClassification": "stable_small_remnant",
+            "weakBandFate": "viable",
+            "routeConfidenceToSupport": 0,
+            "lastStressSummary": "support=unknown food=0 water=0",
+            "reasonIds": [
+              "reason:viability:band:d:0:band_survived_fragile_period"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "B-002 admission and resolved target share one current decision",
+      "pass": true,
+      "evidence": [
+        {
+          "id": "band:a",
+          "population": 0,
+          "viability": {
+            "bandId": "band:a",
+            "population": 0,
+            "minimumViablePopulation": 14,
+            "viabilityPressure": 0.98,
+            "extinctionRisk": 0.67,
+            "absorptionOpportunity": 0.52,
+            "status": "absorbed",
+            "weakBandClassification": "absorbed",
+            "weakBandFate": "absorbed",
+            "supportSeekingTargetBandId": "band:c",
+            "supportSeekingGrounding": "parent lineage",
+            "routeConfidenceToSupport": 0.72,
+            "lastSupportState": "crisis_deficit",
+            "lastStressSummary": "support=crisis_deficit food=0.5 water=0",
+            "reasonIds": [
+              "reason:viability:band:a:0:band_became_nonviable",
+              "reason:viability:band:a:0:absorption_preferred_over_extinction"
+            ],
+            "absorbedByBandId": "band:c",
+            "populationTransferred": 8,
+            "populationRemoved": 0,
+            "populationConservationSummary": "transferred 8; removed 0"
+          }
+        },
+        {
+          "id": "band:b",
+          "population": 0,
+          "viability": {
+            "bandId": "band:b",
+            "population": 0,
+            "minimumViablePopulation": 14,
+            "viabilityPressure": 1,
+            "extinctionRisk": 0.77,
+            "absorptionOpportunity": 0,
+            "status": "extinct",
+            "weakBandClassification": "disappeared_collapsed",
+            "weakBandFate": "collapsed",
+            "supportSeekingBlockedReason": "known kin route too distant or low confidence",
+            "routeConfidenceToSupport": 0,
+            "lastSupportState": "crisis_deficit",
+            "lastStressSummary": "support=crisis_deficit food=0.5 water=0",
+            "reasonIds": [
+              "reason:viability:band:b:0:band_became_nonviable",
+              "reason:viability:band:b:0:band_extinct_low_population"
+            ],
+            "populationRemoved": 8,
+            "populationTransferred": 0,
+            "populationConservationSummary": "transferred 0; removed 8",
+            "terminalSnapshot": {
+              "tick": 0,
+              "year": 0,
+              "season": "spring",
+              "cause": "low_population_collapse",
+              "populationBeforeRemoval": 8,
+              "dependentsBeforeRemoval": 6,
+              "workingAdultsBeforeRemoval": 1,
+              "eldersBeforeRemoval": 1
+            }
+          }
+        },
+        {
+          "id": "band:c",
+          "population": 22,
+          "viability": {
+            "bandId": "band:c",
+            "population": 22,
+            "minimumViablePopulation": 14,
+            "viabilityPressure": 0,
+            "extinctionRisk": 0,
+            "absorptionOpportunity": 0,
+            "status": "viable",
+            "weakBandClassification": "stable_small_remnant",
+            "weakBandFate": "viable",
+            "routeConfidenceToSupport": 0,
+            "lastStressSummary": "support=unknown food=0 water=0",
+            "reasonIds": [
+              "reason:viability:band:c:0:band_survived_fragile_period"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "B-002 bounded sweep timing for unrelated healthy bands",
+      "pass": true,
+      "evidence": [
+        {
+          "count": 200,
+          "milliseconds": 9.972915999998804
+        },
+        {
+          "count": 400,
+          "milliseconds": 39.83695799999987
+        }
+      ]
+    },
+    {
+      "name": "B-002 arrivals rescue B before its turn",
+      "pass": true
+    },
+    {
+      "name": "B-002 single transfer and healthy no-transfer",
+      "pass": true
+    },
+    {
+      "name": "B-002 multiple arrivals, terminal/zero and provisional exclusion",
+      "pass": true
+    },
+    {
+      "name": "B-003 same-clock actual take 0/tile:0:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.013,
+        "coldTake": 0.013
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 0/tile:6:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.0134,
+        "coldTake": 0.0134
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 0/tile:93:15",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.121,
+        "coldTake": 0.121
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 90/tile:0:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.0583,
+        "coldTake": 0.0583
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 90/tile:6:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.0538,
+        "coldTake": 0.0538
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 90/tile:93:15",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.1411,
+        "coldTake": 0.1411
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 180/tile:0:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.0454,
+        "coldTake": 0.0454
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 180/tile:6:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.0538,
+        "coldTake": 0.0538
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 180/tile:93:15",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0.1003,
+        "coldTake": 0.1003
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 270/tile:0:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0,
+        "coldTake": 0
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 270/tile:6:0",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0,
+        "coldTake": 0
+      }
+    },
+    {
+      "name": "B-003 same-clock actual take 270/tile:93:15",
+      "pass": true,
+      "evidence": {
+        "warmTake": 0,
+        "coldTake": 0
+      }
+    },
+    {
+      "name": "B-003 in-place causal tile revision invalidates",
+      "pass": true
+    },
+    {
+      "name": "B-003 single generation after 1000 years",
+      "pass": true
+    },
+    {
+      "name": "B-003 human/fauna/observer first-reader and JSON reload parity",
+      "pass": true
+    },
+    {
+      "name": "B-004 actual daily action adults=0",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected \"actual\" to be reference-equal to \"expected\":\n+ actual - expected\n... Skipped lines\n\n  {\n    activityDaysRepresented: 3,\n    activityMemoryEffect: {\n      activityOutcome: 'target_found',\n      confidenceAfter: {\n+       accessConfidence: 0.46,\n+       presenceConfidence: 0.56,\n-       accessConfidence: 0.51,\n-       presenceConfidence: 0.71,\n        processingConfidence: 0,\n        recoveryConfidence: 0,\n+       safetyConfidence: 0.24,\n+       seasonConfidence: 0.32,\n+       yieldConfidence: 0.36\n-       safetyConfidence: 0.29,\n-       seasonConfidence: 0.42,\n-       yieldConfidence: 0.41\n      },\n      confidenceBefore: {\n+       accessConfidence: 0.45,\n+       presenceConfidence: 0.53,\n-       accessConfidence: 0.5,\n-       presenceConfidence: 0.68,\n        processingConfidence: 0,\n        recoveryConfidence: 0,\n+       safetyConfidence: 0.23,\n+       seasonConfidence: 0.3,\n+       yieldConfidence: 0.35\n-       safetyConfidence: 0.28,\n-       seasonConfidence: 0.4,\n-       yieldConfidence: 0.4\n      },\n      confidenceDelta: 0.03,\n+     effectSummary: 'confidence_refreshed; patch:tile:111:56:generic_plant_food; presenceConfidence +0.03; state observed->observed; memory_only_no_economy',\n-     effectSummary: 'confidence_refreshed; patch:tile:112:56:generic_plant_food; presenceConfidence +0.03; state observed->observed; memory_only_no_economy',\n      effectType: 'confidence_refreshed',\n      mainConfidenceChannel: 'presenceConfidence',\n      noCarryingCapacityCoupling: true,\n      noFoodCoupling: true,\n      noHiddenTruth: true,\n...\n      noYieldCoupling: true,\n+     patchId: 'patch:tile:111:56:generic_plant_food',\n-     patchId: 'patch:tile:112:56:generic_plant_food',\n      reasonIds: [\n+       'reason:activity-memory:band:custom:0:96:confidence_refreshed:tile:111:56'\n-       'reason:activity-memory:band:custom:0:87:confidence_refreshed:tile:112:56'\n      ],\n      resourceClassId: 'generic_plant_food',\n+     season: 'summer',\n-     season: 'spring',\n      sourceBandId: 'band:custom:0',\n+     sourceTripDay: 96,\n-     sourceTripDay: 87,\n      targetKnownMemoryOnly: true,\n+     targetTileId: 'tile:111:56',\n+     tick: 1\n-     targetTileId: 'tile:112:56',\n-     tick: 0\n    },\n    activityOutcome: 'target_found',\n    activityOutcomeReasonIds: [\n+     'reason:activity-outcome:band:custom:0:96:target_found:tile:111:56'\n-     'reason:activity-outcome:band:custom:0:87:target_found:tile:112:56'\n    ],\n    activityOutcomeSummary: 'deterministic_target_found; return=gathered_plant_food; physical_receipt_feeds_support',\n    activityResult: 'target_found',\n    activityStatus: 'completed_observation',\n    bandKnownTargetOnly: true,\n    cause: 'food_resource_check',\n+   day: 96,\n-   day: 87,\n    distanceKm: 1.5,\n    distanceTiles: 1,\n+   endDay: 96,\n-   endDay: 87,\n    estimatedDurationDays: 1,\n+   estimatedPeopleCount: 1,\n-   estimatedPeopleCount: 4,\n    groupLabel: 'Plant gathering group',\n    movementType: 'local_foraging_loop',\n    noCarryingCapacityChange: true,\n    noPopulationChange: true,\n    noResidentialRelocation: true,\n...\n    objectiveLabel: 'Food patch check',\n+   originTileId: 'tile:111:57',\n-   originTileId: 'tile:111:56',\n    outcome: 'returns_same_day',\n    pathTiles: [\n+     'tile:111:57',\n      'tile:111:56',\n-     'tile:112:56'\n    ],\n    physicalFoodHarvest: {\n      attempted: true,\n+     depletionApplied: 0.017,\n+     harvestedAmount: 0.017,\n-     depletionApplied: 0.0274,\n-     harvestedAmount: 0.0274,\n      knownness: 'known_target',\n+     physicalAvailability: 0.1696,\n-     physicalAvailability: 0.0274,\n      physicalSourceFound: true,\n+     processingLoss: 0.0018,\n-     processingLoss: 0.0029,\n      reasonIds: [\n+       'reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant'\n-       'reason:physical-food-harvest:band:custom:0:87:plant_patch:plant:tile:112:56:wetland_plant'\n      ],\n      sourceClass: 'wetland_plant',\n+     sourceId: 'plant:tile:111:56:wetland_plant',\n-     sourceId: 'plant:tile:112:56:wetland_plant',\n      sourceKind: 'plant_patch',\n+     transportLoss: 0.0004,\n+     usableSupport: 0.0148,\n-     transportLoss: 0.0007,\n-     usableSupport: 0.0239,\n      worldTruthDebugOnly: true\n    },\n    plantPatchTrace: {\n+     abundanceTrend: 'flat',\n+     currentDepletion: 0.116,\n-     abundanceTrend: 'rising',\n-     currentDepletion: 0.811,\n      depletionApplied: true,\n      expectedReturnFactor: 0.2,\n      fallbackRank: 0.58,\n      fallbackRole: 'important',\n      knowledgeUpdate: 'confirmed_by_gathering',\n...\n      memoryUpdate: 'resource_memory_update',\n+     patchId: 'plant:tile:111:56:wetland_plant',\n-     patchId: 'plant:tile:112:56:wetland_plant',\n      plantClassId: 'wetland_plant',\n+     pressure: 0.049,\n-     pressure: 0.34,\n      protoCampInfluence: 'fallback_refuge_signal',\n      rawSource: 'plantStock.derivePlantGatherPatchTrace from band-targeted plant activity tile',\n      reasonIds: [\n+       'reason:plant-gather-trace:tile:111:56:plant:tile:111:56:wetland_plant:1'\n-       'reason:plant-gather-trace:tile:112:56:plant:tile:112:56:wetland_plant:0'\n      ],\n      recoveryRate: 0.18,\n      safetyRisk: 'moderate',\n      seasonalAvailability: 'active'\n    },\n    reasonIds: [\n+     'reason:intra-season-trip:band:custom:0:96:food_resource_check:tile:111:56',\n+     'reason:activity-outcome:band:custom:0:96:target_found:tile:111:56',\n+     'reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56',\n+     'reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant',\n+     'reason:activity-memory:band:custom:0:96:confidence_refreshed:tile:111:56'\n-     'reason:intra-season-trip:band:custom:0:87:food_resource_check:tile:112:56',\n-     'reason:activity-outcome:band:custom:0:87:target_found:tile:112:56',\n-     'reason:activity-return:band:custom:0:87:gathered_plant_food:tile:112:56',\n-     'reason:physical-food-harvest:band:custom:0:87:plant_patch:plant:tile:112:56:wetland_plant',\n-     'reason:activity-memory:band:custom:0:87:confidence_refreshed:tile:112:56'\n    ],\n    resourceClassId: 'generic_plant_food',\n    resourceReturn: {\n      consumedByEconomy: true,\n+     estimatedReturnValue: 0.0148,\n-     estimatedReturnValue: 0.0239,\n      noCarryingCapacityCoupling: false,\n      noPopulationChange: true,\n      noStressChange: true,\n      noSupportChange: false,\n      noYieldCoupling: true,\n      reasonIds: [\n+       'reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56',\n+       'reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant'\n-       'reason:activity-return:band:custom:0:87:gathered_plant_food:tile:112:56',\n-       'reason:physical-food-harvest:band:custom:0:87:plant_patch:plant:tile:112:56:wetland_plant'\n      ],\n+     returnConfidence: 0.4616,\n-     returnConfidence: 0.5736,\n      returnedResourceKind: 'gathered_plant_food',\n      semantics: {\n        category: 'physical_food',\n        contributesToNutrition: true,\n        isPhysical: true,\n...\n    roundTripTiles: 2,\n+   season: 'summer',\n-   season: 'spring',\n    seasonalEcology: {\n+     availabilityFactor: 0.6343,\n+     baselineFactor: 0.712,\n-     availabilityFactor: 0.6267,\n-     baselineFactor: 0.7028,\n      domain: 'plant_patch',\n+     driverSummary: 'plant_patch summer: env=0.65 sig=0.6 (neutral, neutral)',\n-     driverSummary: 'plant_patch spring: env=0.64 sig=0.6 (neutral, neutral)',\n      hiddenTendencyClass: 'neutral',\n      reasonIds: [\n+       'reason:seasonal-ecology:tile:111:56:summer:plant_patch'\n-       'reason:seasonal-ecology:tile:112:56:spring:plant_patch'\n      ],\n+     season: 'summer',\n+     seasonalDelta: -0.0778,\n-     season: 'spring',\n-     seasonalDelta: -0.076,\n      shadowSeasonalResult: 'reduced',\n      taughtSeasonalHint: true,\n      wetDryTendency: 'neutral'\n    },\n    shadowSubsistence: {\n...\n      reasonIds: [\n+       'reason:activity-shadow:band:custom:0:96:gathered_food_shadow:tile:111:56'\n-       'reason:activity-shadow:band:custom:0:87:gathered_food_shadow:tile:112:56'\n      ],\n+     seasonalEcologyModifier: 1.0257,\n-     seasonalEcologyModifier: 1.02,\n      shadowConsumedByEconomy: false,\n+     shadowGrossValue: 0.0219,\n+     shadowNetValue: 0,\n+     shadowReliability: 0.3151,\n-     shadowGrossValue: 0.1123,\n-     shadowNetValue: 0.0811,\n-     shadowReliability: 0.3981,\n      shadowReturnKind: 'gathered_food_shadow',\n      shadowRiskPenalty: 0.0112,\n      shadowSupportDomain: 'food',\n      shadowTravelCost: 0.02\n    },\n    sourceBandId: 'band:custom:0',\n+   startDay: 96,\n+   targetTileId: 'tile:111:56',\n-   startDay: 87,\n-   targetTileId: 'tile:112:56',\n    taskGroupType: 'plant_gathering_group',\n+   tick: 1,\n-   tick: 0,\n    tilesCrossed: 1\n  }\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:383:30\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:381:41"
+    },
+    {
+      "name": "B-004 actual daily action adults=1",
+      "pass": true,
+      "evidence": {
+        "adults": 1,
+        "workers": 1,
+        "take": 0.0148
+      }
+    },
+    {
+      "name": "B-004 actual daily action adults=20",
+      "pass": true,
+      "evidence": {
+        "adults": 20,
+        "workers": 4,
+        "take": 0.0248
+      }
+    },
+    {
+      "name": "B-004 prepared workers committed=5",
+      "pass": true
+    },
+    {
+      "name": "B-004 prepared workers committed=10",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(count<=available)\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:391:56\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:387:105"
+    },
+    {
+      "name": "B-004 outbound workers committed=5",
+      "pass": true
+    },
+    {
+      "name": "B-004 outbound workers committed=10",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(count<=available)\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:391:56\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:387:105"
+    },
+    {
+      "name": "B-004 operating workers committed=5",
+      "pass": true
+    },
+    {
+      "name": "B-004 operating workers committed=10",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(count<=available)\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:391:56\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:387:105"
+    },
+    {
+      "name": "B-004 returning workers committed=5",
+      "pass": true
+    },
+    {
+      "name": "B-004 returning workers committed=10",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(count<=available)\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:391:56\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:387:105"
+    },
+    {
+      "name": "B-004 actual partly/all away and nonfood execution controls",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected \"actual\" to be reference-equal to \"expected\":\n+ actual - expected\n... Skipped lines\n\n  {\n    activityDaysRepresented: 3,\n    activityMemoryEffect: {\n      activityOutcome: 'target_found',\n      confidenceAfter: {\n+       accessConfidence: 0.46,\n+       presenceConfidence: 0.56,\n-       accessConfidence: 0.51,\n-       presenceConfidence: 0.71,\n        processingConfidence: 0,\n        recoveryConfidence: 0,\n+       safetyConfidence: 0.24,\n+       seasonConfidence: 0.32,\n+       yieldConfidence: 0.36\n-       safetyConfidence: 0.29,\n-       seasonConfidence: 0.42,\n-       yieldConfidence: 0.41\n      },\n      confidenceBefore: {\n+       accessConfidence: 0.45,\n+       presenceConfidence: 0.53,\n-       accessConfidence: 0.5,\n-       presenceConfidence: 0.68,\n        processingConfidence: 0,\n        recoveryConfidence: 0,\n+       safetyConfidence: 0.23,\n+       seasonConfidence: 0.3,\n+       yieldConfidence: 0.35\n-       safetyConfidence: 0.28,\n-       seasonConfidence: 0.4,\n-       yieldConfidence: 0.4\n      },\n      confidenceDelta: 0.03,\n+     effectSummary: 'confidence_refreshed; patch:tile:111:56:generic_plant_food; presenceConfidence +0.03; state observed->observed; memory_only_no_economy',\n-     effectSummary: 'confidence_refreshed; patch:tile:112:56:generic_plant_food; presenceConfidence +0.03; state observed->observed; memory_only_no_economy',\n      effectType: 'confidence_refreshed',\n      mainConfidenceChannel: 'presenceConfidence',\n      noCarryingCapacityCoupling: true,\n      noFoodCoupling: true,\n      noHiddenTruth: true,\n...\n      noYieldCoupling: true,\n+     patchId: 'patch:tile:111:56:generic_plant_food',\n-     patchId: 'patch:tile:112:56:generic_plant_food',\n      reasonIds: [\n+       'reason:activity-memory:band:custom:0:96:confidence_refreshed:tile:111:56'\n-       'reason:activity-memory:band:custom:0:87:confidence_refreshed:tile:112:56'\n      ],\n      resourceClassId: 'generic_plant_food',\n+     season: 'summer',\n-     season: 'spring',\n      sourceBandId: 'band:custom:0',\n+     sourceTripDay: 96,\n-     sourceTripDay: 87,\n      targetKnownMemoryOnly: true,\n+     targetTileId: 'tile:111:56',\n+     tick: 1\n-     targetTileId: 'tile:112:56',\n-     tick: 0\n    },\n    activityOutcome: 'target_found',\n    activityOutcomeReasonIds: [\n+     'reason:activity-outcome:band:custom:0:96:target_found:tile:111:56'\n-     'reason:activity-outcome:band:custom:0:87:target_found:tile:112:56'\n    ],\n    activityOutcomeSummary: 'deterministic_target_found; return=gathered_plant_food; physical_receipt_feeds_support',\n    activityResult: 'target_found',\n    activityStatus: 'completed_observation',\n    bandKnownTargetOnly: true,\n    cause: 'food_resource_check',\n+   day: 96,\n-   day: 87,\n    distanceKm: 1.5,\n    distanceTiles: 1,\n+   endDay: 96,\n-   endDay: 87,\n    estimatedDurationDays: 1,\n+   estimatedPeopleCount: 1,\n-   estimatedPeopleCount: 4,\n    groupLabel: 'Plant gathering group',\n    movementType: 'local_foraging_loop',\n    noCarryingCapacityChange: true,\n    noPopulationChange: true,\n    noResidentialRelocation: true,\n...\n    objectiveLabel: 'Food patch check',\n+   originTileId: 'tile:111:57',\n-   originTileId: 'tile:111:56',\n    outcome: 'returns_same_day',\n    pathTiles: [\n+     'tile:111:57',\n      'tile:111:56',\n-     'tile:112:56'\n    ],\n    physicalFoodHarvest: {\n      attempted: true,\n+     depletionApplied: 0.017,\n+     harvestedAmount: 0.017,\n-     depletionApplied: 0.0274,\n-     harvestedAmount: 0.0274,\n      knownness: 'known_target',\n+     physicalAvailability: 0.1696,\n-     physicalAvailability: 0.0274,\n      physicalSourceFound: true,\n+     processingLoss: 0.0018,\n-     processingLoss: 0.0029,\n      reasonIds: [\n+       'reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant'\n-       'reason:physical-food-harvest:band:custom:0:87:plant_patch:plant:tile:112:56:wetland_plant'\n      ],\n      sourceClass: 'wetland_plant',\n+     sourceId: 'plant:tile:111:56:wetland_plant',\n-     sourceId: 'plant:tile:112:56:wetland_plant',\n      sourceKind: 'plant_patch',\n+     transportLoss: 0.0004,\n+     usableSupport: 0.0148,\n-     transportLoss: 0.0007,\n-     usableSupport: 0.0239,\n      worldTruthDebugOnly: true\n    },\n    plantPatchTrace: {\n+     abundanceTrend: 'flat',\n+     currentDepletion: 0.116,\n-     abundanceTrend: 'rising',\n-     currentDepletion: 0.811,\n      depletionApplied: true,\n      expectedReturnFactor: 0.2,\n      fallbackRank: 0.58,\n      fallbackRole: 'important',\n      knowledgeUpdate: 'confirmed_by_gathering',\n...\n      memoryUpdate: 'resource_memory_update',\n+     patchId: 'plant:tile:111:56:wetland_plant',\n-     patchId: 'plant:tile:112:56:wetland_plant',\n      plantClassId: 'wetland_plant',\n+     pressure: 0.049,\n-     pressure: 0.34,\n      protoCampInfluence: 'fallback_refuge_signal',\n      rawSource: 'plantStock.derivePlantGatherPatchTrace from band-targeted plant activity tile',\n      reasonIds: [\n+       'reason:plant-gather-trace:tile:111:56:plant:tile:111:56:wetland_plant:1'\n-       'reason:plant-gather-trace:tile:112:56:plant:tile:112:56:wetland_plant:0'\n      ],\n      recoveryRate: 0.18,\n      safetyRisk: 'moderate',\n      seasonalAvailability: 'active'\n    },\n    reasonIds: [\n+     'reason:intra-season-trip:band:custom:0:96:food_resource_check:tile:111:56',\n+     'reason:activity-outcome:band:custom:0:96:target_found:tile:111:56',\n+     'reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56',\n+     'reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant',\n+     'reason:activity-memory:band:custom:0:96:confidence_refreshed:tile:111:56'\n-     'reason:intra-season-trip:band:custom:0:87:food_resource_check:tile:112:56',\n-     'reason:activity-outcome:band:custom:0:87:target_found:tile:112:56',\n-     'reason:activity-return:band:custom:0:87:gathered_plant_food:tile:112:56',\n-     'reason:physical-food-harvest:band:custom:0:87:plant_patch:plant:tile:112:56:wetland_plant',\n-     'reason:activity-memory:band:custom:0:87:confidence_refreshed:tile:112:56'\n    ],\n    resourceClassId: 'generic_plant_food',\n    resourceReturn: {\n      consumedByEconomy: true,\n+     estimatedReturnValue: 0.0148,\n-     estimatedReturnValue: 0.0239,\n      noCarryingCapacityCoupling: false,\n      noPopulationChange: true,\n      noStressChange: true,\n      noSupportChange: false,\n      noYieldCoupling: true,\n      reasonIds: [\n+       'reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56',\n+       'reason:physical-food-harvest:band:custom:0:96:plant_patch:plant:tile:111:56:wetland_plant'\n-       'reason:activity-return:band:custom:0:87:gathered_plant_food:tile:112:56',\n-       'reason:physical-food-harvest:band:custom:0:87:plant_patch:plant:tile:112:56:wetland_plant'\n      ],\n+     returnConfidence: 0.4616,\n-     returnConfidence: 0.5736,\n      returnedResourceKind: 'gathered_plant_food',\n      semantics: {\n        category: 'physical_food',\n        contributesToNutrition: true,\n        isPhysical: true,\n...\n    roundTripTiles: 2,\n+   season: 'summer',\n-   season: 'spring',\n    seasonalEcology: {\n+     availabilityFactor: 0.6343,\n+     baselineFactor: 0.712,\n-     availabilityFactor: 0.6267,\n-     baselineFactor: 0.7028,\n      domain: 'plant_patch',\n+     driverSummary: 'plant_patch summer: env=0.65 sig=0.6 (neutral, neutral)',\n-     driverSummary: 'plant_patch spring: env=0.64 sig=0.6 (neutral, neutral)',\n      hiddenTendencyClass: 'neutral',\n      reasonIds: [\n+       'reason:seasonal-ecology:tile:111:56:summer:plant_patch'\n-       'reason:seasonal-ecology:tile:112:56:spring:plant_patch'\n      ],\n+     season: 'summer',\n+     seasonalDelta: -0.0778,\n-     season: 'spring',\n-     seasonalDelta: -0.076,\n      shadowSeasonalResult: 'reduced',\n      taughtSeasonalHint: true,\n      wetDryTendency: 'neutral'\n    },\n    shadowSubsistence: {\n...\n      reasonIds: [\n+       'reason:activity-shadow:band:custom:0:96:gathered_food_shadow:tile:111:56'\n-       'reason:activity-shadow:band:custom:0:87:gathered_food_shadow:tile:112:56'\n      ],\n+     seasonalEcologyModifier: 1.0257,\n-     seasonalEcologyModifier: 1.02,\n      shadowConsumedByEconomy: false,\n+     shadowGrossValue: 0.0219,\n+     shadowNetValue: 0,\n+     shadowReliability: 0.3151,\n-     shadowGrossValue: 0.1123,\n-     shadowNetValue: 0.0811,\n-     shadowReliability: 0.3981,\n      shadowReturnKind: 'gathered_food_shadow',\n      shadowRiskPenalty: 0.0112,\n      shadowSupportDomain: 'food',\n      shadowTravelCost: 0.02\n    },\n    sourceBandId: 'band:custom:0',\n+   startDay: 96,\n+   targetTileId: 'tile:111:56',\n-   startDay: 87,\n-   targetTileId: 'tile:112:56',\n    taskGroupType: 'plant_gathering_group',\n+   tick: 1,\n-   tick: 0,\n    tilesCrossed: 1\n  }\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:401:30\n    at async check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:26)\n    at async file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:395:5"
+    },
+    {
+      "name": "B-004 performed ordinary trip leaves a real investigation remainder",
+      "pass": true,
+      "evidence": {
+        "ordinary": 2,
+        "investigation": 1,
+        "available": 8
+      }
+    },
+    {
+      "name": "B-004 positive workers cannot manufacture absent or depleted food",
+      "pass": true
+    },
+    {
+      "name": "B-004 stale positive selection refuses execution after worker loss",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ {\n+   activityDaysRepresented: 3,\n+   activityMemoryEffect: {\n+     activityOutcome: 'target_found',\n+     confidenceAfter: undefined,\n+     confidenceBefore: undefined,\n+     confidenceDelta: 0,\n+     effectSummary: 'no activity memory update',\n+     effectType: 'none',\n+     noCarryingCapacityCoupling: true,\n+     noFoodCoupling: true,\n+     noHiddenTruth: true,\n+     noNewResourceDiscovery: true,\n+     noPopulationChange: true,\n+     noStressChange: true,\n+     noSupportChange: true,\n+     noYieldCoupling: true,\n+     patchId: undefined,\n+     reasonIds: [],\n+     resourceClassId: undefined,\n+     season: 'summer',\n+     sourceBandId: 'band:custom:0',\n+     sourceTripDay: 96,\n+     targetKnownMemoryOnly: true,\n+     targetTileId: 'tile:111:56',\n+     tick: 1\n+   },\n+   activityOutcome: 'target_found',\n+   activityOutcomeReasonIds: [\n+     'reason:activity-outcome:band:custom:0:96:target_found:tile:111:56'\n+   ],\n+   activityOutcomeSummary: 'deterministic_target_found; return=gathered_plant_food; physical_receipt_feeds_support',\n+   activityResult: 'target_found',\n+   activityStatus: 'completed_observation',\n+   bandKnownTargetOnly: true,\n+   cause: 'food_resource_check',\n+   day: 96,\n+   distanceKm: 1.5,\n+   distanceTiles: 1,\n+   endDay: 96,\n+   estimatedDurationDays: 1,\n+   estimatedPeopleCount: 1,\n+   groupLabel: 'Plant gathering group',\n+   movementType: 'local_foraging_loop',\n+   noCarryingCapacityChange: true,\n+   noPopulationChange: true,\n+   noResidentialRelocation: true,\n+   noStressChange: true,\n+   noSupportChange: true,\n+   noYieldChange: true,\n+   objective: 'food_patch_check',\n+   objectiveLabel: 'Food patch check',\n+   originTileId: 'tile:111:57',\n+   outcome: 'returns_same_day',\n+   pathTiles: [\n+     'tile:111:57',\n+     'tile:111:56'\n+   ],\n+   plantPatchTrace: {\n+     abundanceTrend: 'flat',\n+     currentDepletion: 0.116,\n+     depletionApplied: true,\n+     expectedReturnFactor: 0.2,\n+     fallbackRank: 0.58,\n+     fallbackRole: 'important',\n+     knowledgeUpdate: 'confirmed_by_gathering',\n+     laborCost: 0.48,\n+     lifecycleState: 'active',\n+     memoryUpdate: 'resource_memory_update',\n+     patchId: 'plant:tile:111:56:wetland_plant',\n+     plantClassId: 'wetland_plant',\n+     pressure: 0.049,\n+     protoCampInfluence: 'fallback_refuge_signal',\n+     rawSource: 'plantStock.derivePlantGatherPatchTrace from band-targeted plant activity tile',\n+     reasonIds: [\n+       'reason:plant-gather-trace:tile:111:56:plant:tile:111:56:wetland_plant:1'\n+     ],\n+     recoveryRate: 0.18,\n+     safetyRisk: 'moderate',\n+     seasonalAvailability: 'active'\n+   },\n+   reasonIds: [\n+     'reason:intra-season-trip:band:custom:0:96:food_resource_check:tile:111:56',\n+     'reason:activity-outcome:band:custom:0:96:target_found:tile:111:56',\n+     'reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56'\n+   ],\n+   resourceClassId: 'generic_plant_food',\n+   resourceReturn: {\n+     consumedByEconomy: false,\n+     estimatedReturnValue: 0.017,\n+     noCarryingCapacityCoupling: true,\n+     noPopulationChange: true,\n+     noStressChange: true,\n+     noSupportChange: true,\n+     noYieldCoupling: true,\n+     reasonIds: [\n+       'reason:activity-return:band:custom:0:96:gathered_plant_food:tile:111:56'\n+     ],\n+     returnConfidence: 0.4616,\n+     returnedResourceKind: 'gathered_plant_food',\n+     semantics: {\n+       category: 'physical_food',\n+       contributesToNutrition: true,\n+       isPhysical: true,\n+       materialDomain: 'plant_food'\n+     }\n+   },\n+   resultSummary: 'deterministic_target_found; return=gathered_plant_food; physical_receipt_feeds_support',\n+   roundTripTiles: 2,\n+   season: 'summer',\n+   seasonalEcology: {\n+     availabilityFactor: 0.6343,\n+     baselineFactor: 0.712,\n+     domain: 'plant_patch',\n+     driverSummary: 'plant_patch summer: env=0.65 sig=0.6 (neutral, neutral)',\n+     hiddenTendencyClass: 'neutral',\n+     reasonIds: [\n+       'reason:seasonal-ecology:tile:111:56:summer:plant_patch'\n+     ],\n+     season: 'summer',\n+     seasonalDelta: -0.0778,\n+     shadowSeasonalResult: 'reduced',\n+     taughtSeasonalHint: true,\n+     wetDryTendency: 'neutral'\n+   },\n+   shadowSubsistence: {\n+     contributesAtBaseSameDay: true,\n+     noEconomyCoupling: true,\n+     reasonIds: [\n+       'reason:activity-shadow:band:custom:0:96:gathered_food_shadow:tile:111:56'\n+     ],\n+     seasonalEcologyModifier: 1.0257,\n+     shadowConsumedByEconomy: false,\n+     shadowGrossValue: 0.0219,\n+     shadowNetValue: 0,\n+     shadowReliability: 0.3151,\n+     shadowReturnKind: 'gathered_food_shadow',\n+     shadowRiskPenalty: 0.0112,\n+     shadowSupportDomain: 'food',\n+     shadowTravelCost: 0.02\n+   },\n+   sourceBandId: 'band:custom:0',\n+   startDay: 96,\n+   targetTileId: 'tile:111:56',\n+   taskGroupType: 'plant_gathering_group',\n+   tick: 1,\n+   tilesCrossed: 1\n+ }\n- undefined\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:440:14\n    at async check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:26)\n    at async file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:436:5"
+    },
+    {
+      "name": "B-004 performed investigation and trip reserve only remaining workers",
+      "pass": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ {\n+   cause: 'food_resource_check',\n+   distanceTiles: 1,\n+   fallbackExpansionBias: 0,\n+   logisticsSelectionBias: 0,\n+   memory: {\n+     approximateTile: 'tile:111:56',\n+     confidence: {\n+       accessConfidence: 0.45,\n+       presenceConfidence: 0.53,\n+       processingConfidence: 0,\n+       recoveryConfidence: 0,\n+       safetyConfidence: 0.23,\n+       seasonConfidence: 0.3,\n+       yieldConfidence: 0.35\n+     },\n+     firstNotedTick: 1,\n+     lastNotedTick: 1,\n+     linkedAnchorId: undefined,\n+     linkedCorridorId: undefined,\n+     linkedTiles: [],\n+     patchId: 'patch:tile:111:56:generic_plant_food',\n+     plantObservation: undefined,\n+     reasonIds: [\n+       'reason:resource_knowledge:patch:tile:111:56:generic_plant_food:1:observed'\n+     ],\n+     resourceClassId: 'generic_plant_food',\n+     risk: {\n+       badWater: false,\n+       poisoningOrBadReaction: false,\n+       predatorOrAnimalRisk: 0.14,\n+       tabooOrAvoidanceFutureFlag: false\n+     },\n+     seasonality: {\n+       badSeasons: [],\n+       bestSeasons: [\n+         'summer'\n+       ],\n+       failedSeasonCount: 0,\n+       lastConfirmedSeason: 'summer'\n+     },\n+     source: 'direct',\n+     state: 'observed',\n+     transmission: {\n+       detailLoss: 0,\n+       inheritedFromParent: undefined,\n+       practiceReinforced: 1,\n+       sourceBandId: undefined\n+     },\n+     useHistory: {\n+       depletionMemory: 0.01,\n+       failedUses: 0,\n+       lastUsedTick: undefined,\n+       lastYieldEstimate: 0.24,\n+       recoveryExpectation: 0,\n+       successfulUses: 0,\n+       visits: 1,\n+       yieldTrend: 'unknown'\n+     }\n+   },\n+   nearbyProbeBonus: 0,\n+   physicalDistanceKm: 1.5,\n+   riskToleranceModifier: 0,\n+   score: 0.7528,\n+   seededResourceKnowledgeState: undefined,\n+   targetTileId: 'tile:111:56',\n+   timing: {\n+     activityDays: 0.25,\n+     durationDays: 1,\n+     kmPerTravelDay: 6.076,\n+     outboundTravelDays: 0.2493416721527321,\n+     returnTravelDays: 0.2493416721527321,\n+     sameDay: true,\n+     totalDays: 0.7486833443054641\n+   },\n+   travelBurden: 0.33274763891939385,\n+   tripAbandonmentPenalty: 0\n+ }\n- undefined\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:446:14\n    at check (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:48:32)\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1ConservationAudit.mjs:444:11"
+    },
+    {
+      "name": "B-004 refused unperformed investigation does not reserve a worker",
+      "pass": true
+    }
+  ],
+  "pass": false
+}

@@ -1,0 +1,47 @@
+{
+  "scope": "src production and UI/read-model readers; generated from rg inventory on 2026-10-02",
+  "fields": [
+    "seasonalHungerStreak",
+    "chronicDeficitStreak",
+    "seasonalRecoveryStreak",
+    "deficitSeasonsLast4",
+    "deficitSeasonsLast8",
+    "waterStressSeasonsLast4",
+    "waterStressSeasonsLast8"
+  ],
+  "comparisonsAndReaders": [
+    {"file":"src/sim/agents/seasonalSurvival.ts:469-476","function":"recordSupportInterval","fields":["seasonalHungerStreak","chronicDeficitStreak","seasonalRecoveryStreak","deficitSeasonsLast4","deficitSeasonsLast8","waterStressSeasonsLast4","waterStressSeasonsLast8"],"use":"derive streaks from trailing physical exposure days / 90","disposition":"unchanged/equivalent","oldPhysicalMeaning":"season-equivalent duration; no record-count substitution"},
+    {"file":"src/sim/agents/seasonalSurvival.ts:596-618","function":"classifyHunger","fields":["chronicDeficitStreak","seasonalHungerStreak","deficitSeasonsLast8","waterStressSeasonsLast8","seasonalRecoveryStreak"],"use":">=6 crisis, >=4+>=2 chronic-plus-seasonal, >=5 water, >=1 mature recovery","disposition":"recovery threshold corrected only: >0 -> >=1; all deficit/water thresholds unchanged","oldPhysicalMeaning":"streaks are physical days expressed as seasons; one qualifying recovery season is 90 days"},
+    {"file":"src/sim/agents/seasonalSurvival.ts:643-659","function":"classifyChronicDeficit","fields":["chronicDeficitStreak","deficitSeasonsLast8","waterStressSeasonsLast8","seasonalRecoveryStreak"],"use":">=8 crisis, >=4 or >=5 chronic/water, >=2 chronic recovery","disposition":"unchanged/equivalent","oldPhysicalMeaning":"season-equivalent chronic and recovery duration"},
+    {"file":"src/sim/agents/seasonalSurvival.ts:703-709","function":"hasStablePopulationButRecurringHunger","fields":["deficitSeasonsLast8"],"use":">=3 recurring deficit seasons","disposition":"unchanged/equivalent","oldPhysicalMeaning":"three of eight physical seasons"},
+    {"file":"src/sim/agents/demography.ts:308","function":"deriveFoodDemographyRateTerms","fields":["chronicDeficitStreak"],"use":">=4 adds severe repeated seasonal bite","disposition":"unchanged/equivalent","oldPhysicalMeaning":"four season-equivalent chronic deficit"},
+    {"file":"src/sim/agents/demography.ts:2929","function":"deriveDemographicPressure","fields":["seasonalHungerStreak"],"use":"no-death memory >=10 years AND hunger AND >=3 seasonal hunger","disposition":"unchanged/equivalent","oldPhysicalMeaning":"three physical hunger seasons inside the no-death witness"},
+    {"file":"src/sim/agents/bandChronicle.ts:1630-1632","function":"detectRecoveryArc","fields":["seasonalRecoveryStreak"],"use":">=1 recovery arc","disposition":"corrected >0 -> >=1","oldPhysicalMeaning":"one complete 90-day recovery season; one day is not mature"},
+    {"file":"src/sim/agents/bandChronicle.ts:1681-1694","function":"deriveYearFacts","fields":["deficitSeasonsLast8","chronicDeficitStreak","waterStressSeasonsLast8"],"use":">=3 deficit, >=2 chronic, >=2 water narrative facts","disposition":"unchanged/equivalent","oldPhysicalMeaning":"existing recent-season narrative thresholds"},
+    {"file":"src/sim/agents/bandChronicle.ts:2054-2055","function":"deriveMigrationPressure","fields":["chronicDeficitStreak"],"use":">=2 chronic deficit","disposition":"unchanged/equivalent","oldPhysicalMeaning":"two season-equivalent chronic periods"},
+    {"file":"src/sim/agents/bandChronicle.ts:2112","function":"deriveSlowMoveReason","fields":["deficitSeasonsLast8"],"use":">=2 deficit seasons OR pressure >=.3","disposition":"unchanged/equivalent","oldPhysicalMeaning":"two of eight recent physical seasons"},
+    {"file":"src/sim/agents/bandChronicle.ts:4053-4055","function":"renderDemographyFact","fields":["waterStressSeasonsLast8"],"use":"finite value display only","disposition":"read-model display; no threshold conversion"},
+    {"file":"src/sim/agents/bandEvents.ts:808-829","function":"deriveSurvivalEvent","fields":["seasonalHungerStreak","deficitSeasonsLast4"],"use":">=2 hunger OR >=2 deficit4; bucket capped at 3","disposition":"unchanged/equivalent/read-model event grouping","oldPhysicalMeaning":"repeated physical hunger/deficit seasons"},
+    {"file":"src/sim/agents/socialContext.ts:1295","function":"deriveSocialPressure","fields":["seasonalRecoveryStreak"],"use":"multiplies streak by .18 as graded recovery signal","disposition":"intentionally duration-weighted; not a maturity gate","oldPhysicalMeaning":"longer physical recovery contributes proportionally"},
+    {"file":"src/sim/agents/bandHistory.ts:1020-1033","function":"deriveHistoricalEpisodes","fields":["chronicDeficitStreak"],"use":">= LONG_HUNGER_MIN_STREAK_SEASONS; severity divides by 24","disposition":"unchanged/equivalent historical duration and severity weighting","oldPhysicalMeaning":"long chronic physical hardship"},
+    {"file":"src/sim/agents/bandHistory.ts:1042-1051","function":"deriveHistoricalEpisodes","fields":["waterStressSeasonsLast8"],"use":">= WATER_CAUTION_MIN_SEASONS_LAST8; severity / 8","disposition":"unchanged/equivalent historical duration weighting","oldPhysicalMeaning":"recurrent water stress in the last eight seasons"},
+    {"file":"src/sim/agents/bandHistory.ts:1377-1520","function":"openEra/closeEra","fields":["recoveryYears"],"use":">0 records recovery existence; >= span*.3 contributes positive era headline","disposition":"intentionally historical-year duration weighting; not seasonal maturity","oldPhysicalMeaning":"classification-derived recovered years in an era"},
+    {"file":"src/sim/agents/viability.ts:291","function":"deriveBandViability","fields":["chronicDeficitStreak"],"use":"continuous chronic deficit / 8 contribution","disposition":"intentionally duration-weighted pressure; no discrete threshold"},
+    {"file":"src/sim/agents/fissionParentResidualViability.ts:564","function":"deriveResidualViability","fields":["chronicDeficitStreak"],"use":"continuous chronic deficit / 8 contribution","disposition":"intentionally duration-weighted residual pressure; no discrete threshold"},
+    {"file":"src/sim/agents/fissionResidualMeasurement.ts:218","function":"measureResidual","fields":["chronicDeficitStreak"],"use":"copies finite state into measurement","disposition":"telemetry/read model; no threshold"},
+    {"file":"src/sim/agents/materialAffordance.ts:1004-1005","function":"deriveMaterialBelief","fields":["waterStressSeasonsLast8","deficitSeasonsLast8"],"use":"normalizes by 8 for graded belief","disposition":"intentionally duration-weighted belief; no maturity gate"},
+    {"file":"src/sim/agents/problemPractice.ts:839","function":"addSeasonalEvidence","fields":["waterStressSeasonsLast8"],"use":"normalizes by 8 for evidence strength","disposition":"intentionally duration-weighted read-model evidence"},
+    {"file":"src/sim/agents/types.ts:2869-2875","function":"SeasonalSupportState","fields":["seasonalHungerStreak","chronicDeficitStreak","seasonalRecoveryStreak","deficitSeasonsLast4","deficitSeasonsLast8","waterStressSeasonsLast4","waterStressSeasonsLast8"],"use":"typed persisted season-equivalent fields","disposition":"schema/telemetry; source remains physical exposure"},
+    {"file":"src/sim/diagnostics/fissionDiagnostics.ts:36","function":"diagnostic payload","fields":["chronicDeficitStreak"],"use":"typed diagnostic copy","disposition":"telemetry; no threshold"},
+    {"file":"src/sim/agents/fissionDeparturePreparation.ts:158","function":"fingerprint","fields":["chronicDeficitStreak"],"use":"deterministic identity serialization","disposition":"identity; no threshold"},
+    {"file":"src/ui/band/sections.tsx:730-734","function":"support section","fields":["seasonalHungerStreak","deficitSeasonsLast4","deficitSeasonsLast8","waterStressSeasonsLast4","waterStressSeasonsLast8"],"use":"literal display of recent season counts","disposition":"UI/read model; no causal threshold"},
+    {"file":"src/sim/agents/innerFission.ts:284","function":"deriveInnerFissionState","fields":["seasonalRecoveryStreak"],"use":"classification accepts stable, seasonal_pulse_recovery or recovery_after_crisis","disposition":"immediate recovery path intentionally preserved; no raw-duration comparison"},
+    {"file":"src/sim/agents/protoCamps.ts:447","function":"camp support history","fields":["seasonalRecoveryStreak"],"use":"consumes recovery classifications","disposition":"classification reader; no raw-duration threshold"}
+  ],
+  "correctedProductionComparisons": [
+    "seasonalSurvival.classifyHunger recovery_after_crisis: seasonalRecoveryStreak >= 1",
+    "bandChronicle.detectRecoveryArc supportRecovery: seasonalRecoveryStreak >= 1"
+  ],
+  "evidence": "validation-round2-coverage-green-v13.json",
+  "productionCommit": "13c685ac4fb123f69a8693d2e5728260b379cfa8"
+}

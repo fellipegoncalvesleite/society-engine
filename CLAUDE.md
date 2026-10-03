@@ -21,6 +21,13 @@ This block supersedes older current/unstarted/accepted headlines only for this c
 
 <!-- DIAG1_PHASE1_CURRENT_END -->
 
+<!-- DIAG1_PHASE2_CORRECTION_ROUND2_CURRENT_START -->
+## Current authority — DIAG-1 Phase 2 correction round 2
+
+Production correction `13c685ac4fb123f69a8693d2e5728260b379cfa8` is a review candidate after rework. Nutrition queries expose requested physical days and known body-time; behavioral readers use coverage-safe stress/recovery/surplus, with aggregate full-known semantics preserved. Recovery-after-crisis requires `seasonalRecoveryStreak >= 1` (90 qualifying recovery days); immediate seasonal pulse recovery remains separate. GREEN 30/30, exact-original RED and loaded/executed/restored mutants are in the phase2 validation-round2 evidence. Do not self-accept, freeze, start Phase3, or resume Task12 before the fresh independent review.
+
+<!-- DIAG1_PHASE2_CORRECTION_ROUND2_CURRENT_END -->
+
 ## Phase2 F1/F4/F5 — implemented review candidate; STOP
 
 Production/test commit `369362c5b51757407e34493d9f9dcbeae86abdac` starts from exact independently reviewed Phase1 HEAD `d8c6233872b6bcb76da5fe6c3747c889ec402eb9`. Final evidence and later documentation/publication identity are in `docs/evidence/diag1-corrections/phase2/` and the exported `PUBLICATION.json`. Runs identify actual uncommitted source bytes; `FINAL_SOURCE_RECONCILIATION.json` ties all247 production files to the candidate. Do not confuse the later documentation commit with the reviewed Phase1 dependency base.
