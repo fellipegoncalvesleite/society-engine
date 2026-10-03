@@ -311,5 +311,6 @@
     "task12Preservation": "PASS",
     "inheritedTwoDayGate": "founder_cohort_declined; no source change",
     "mergeToMain": "not performed; branch-only push"
-  }
+  },
+  "documentationCommit": "external-publication-metadata"
 }

@@ -10,9 +10,9 @@ A correção muda o que uma banda humana consegue concluir a partir de comida f�
 - **Phase 1B final production commit:** `cf095e9160cf79a0cf9f7767fe76cc68d8d944b2`.
 - **Phase 1 independent exact-head reviewer:** reviewed `73cc38b916e236339897c59686638efafd569b6e..d8c6233872b6bcb76da5fe6c3747c889ec402eb9`; `SPEC COMPLIANCE: PASS`, `CODE QUALITY: PASS`, `Critical: 0`, `Important: 0`, `Minor: 0`, `PHASE 2 AUTHORIZATION: YES`.
 - **Phase 2 exact reviewed base:** `d8c6233872b6bcb76da5fe6c3747c889ec402eb9`.
-- **Original-byte RED baseline:** `bf5807e75bb650872d9c81cf95dce5dc1df6a509`.
+- **This-round original-byte starting HEAD:** `bf5807e75bb650872d9c81cf95dce5dc1df6a509` (the exact old producer bytes used for RED).
 - **Phase 2 final production SHA:** `80bb005f6bf9856720ac07d3acbae9e4a57c677f`.
-- **Final documentation/publication HEAD:** `081fa9f22ef2d88d967169afbdcbe4c4d4ed81e8`.
+- **Historical first documentation package:** `081fa9f22ef2d88d967169afbdcbe4c4d4ed81e8`. The current documentation tip is recorded in the external publication JSON and package so this report does not create a self-referential commit loop.
 - **Branch/remote:** `fix/diag1-human-support` → `origin/fix/diag1-human-support`, parity `0/0`.
 
 The documentation commit is separate from production. `git diff 80bb005..081fa9f -- src` is empty.
