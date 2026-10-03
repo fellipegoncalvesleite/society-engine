@@ -19,9 +19,10 @@ export function migrateBandNutrition(band: Band, currentDay: number): BandNutrit
   // projection. Rebuild that projection through the single writer before any
   // behavioral consumer reads it. Empty histories remain untouched because
   // there is no physical chronology from which to derive a replacement.
-  const needsSupportRefresh = support !== undefined && support.recentSamples.length > 0 &&
+  const needsSupportRefresh = support?.exposureVersion === 1 && support.recentSamples.length > 0 &&
     support.currentSeasonSupport.nutritionCoverage === undefined;
-  if (!needsSupportRefresh &&
+  const unsupportedSupportVersion = support !== undefined && support.exposureVersion !== 1;
+  if (!needsSupportRefresh && !unsupportedSupportVersion &&
     (record === undefined || record.nutritionUnitVersion === 1)) return { ok: true, band };
   try {
     const chronology = migrateNutritionExposureHistory(support?.recentSamples ?? [],
