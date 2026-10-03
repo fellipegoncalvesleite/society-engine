@@ -1,5 +1,18 @@
 # Project Handoff — Emergent Civilization Simulator
 
+<!-- DIAG1_PHASE2_SUPERVISOR_ACCEPTANCE_START -->
+## Current authority — Phase 2 accepted; Phase 3 authorized (2026-10-03)
+
+Last verified against commit: `fd8ef2674ad193e61535688b1edeb20d0841596d` on `fix/diag1-human-support`, matching origin before this documentation-only update. Last updated: 2026-10-03. Current active checkpoint: bounded DIAG-1 Phase 3 implementation, then one independent combined review and STOP.
+
+The supervisor explicitly **ACCEPTED Phase 2**. Accepted production authority: `80bb005f6bf9856720ac07d3acbae9e4a57c677f`; reviewed/evidence publication HEAD: `fd8ef2674ad193e61535688b1edeb20d0841596d`. Independent verdict supplied with that acceptance: SPEC COMPLIANCE PASS; CODE QUALITY PASS; Critical 0, Important 0, Minor 0; PHASE 2 ACCEPTANCE RECOMMENDATION YES. This records the supervisor's decision, not implementer self-acceptance. Exact disposition and limitations: `docs/evidence/diag1-corrections/phase2/SUPERVISING_ACCEPTANCE.md` (repository-relative).
+
+This block supersedes the older Phase-2-pending/Phase-3-unstarted authorization statements below, retained as historical evidence. No whole-game certification, formal checkpoint freeze, main merge or WORLD-M0 Task 12 resumption follows. Phase 3 covers B-005/B-006/B-007 and B-009/I1 only, integrated Phases 1–3 verification, B-010 adjudication and explicit future ownership. Global fauna realization and demographic calibration remain outside production scope. Canonical r11 remains byte-identical; protected Task12 WIP remains untouched. Phase 3 and the combined DIAG-1 program require final supervisory acceptance after independent review; the implementer must not self-accept.
+
+Known stale or unverified sections: historical pending-review/current-status headlines below are superseded only to the extent stated here; prior limited or blocked evidence is not retroactively promoted to PASS.
+<!-- DIAG1_PHASE2_SUPERVISOR_ACCEPTANCE_END -->
+
+
 <!-- DIAG1_PHASE1_CURRENT_START -->
 ## Current authority — DIAG-1 Correction Phase 1 including Phase 1B
 
