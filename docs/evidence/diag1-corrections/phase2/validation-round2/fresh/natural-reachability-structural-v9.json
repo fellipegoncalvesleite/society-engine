@@ -1,0 +1,74 @@
+{
+  "check": "DIAG1-PHASE2-NATURAL-REACHABILITY-STRUCTURAL",
+  "verdict": "PASS",
+  "inferenceBoundary": "Serialized-field absence is not treated as a state-exclusion proof. The retained residential chronology is paired with source-level producer, coverage-branch, annual-reader and executed seasonal-pipeline order invariants; this is a reachability boundary, not a claim that missing serialized keys encode state.",
+  "structural": {
+    "retainedFiles": [
+      "phase2-final3-exceptionally_rich-s1.json.gz",
+      "phase2-final3-exceptionally_rich-s2.json.gz",
+      "phase2-final3-exceptionally_rich-s3.json.gz",
+      "phase2-final3-good-s1.json.gz",
+      "phase2-final3-good-s2.json.gz",
+      "phase2-final3-good-s3.json.gz"
+    ],
+    "courseCount": 6,
+    "dailyRowsEach": [
+      10800,
+      10800,
+      10800,
+      10800,
+      10800,
+      10800
+    ],
+    "seasonRowsEach": [
+      120,
+      120,
+      120,
+      120,
+      120,
+      120
+    ],
+    "residentialRowsEach": [
+      10800,
+      10800,
+      10800,
+      10800,
+      10800,
+      10800
+    ],
+    "nonResidentialDailyRowsEach": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "serializedCoverageFieldCount": 0,
+    "serializedClassificationFieldCount": 0
+  },
+  "invariants": {
+    "sixCourses": true,
+    "10800DailyRowsEach": true,
+    "120SeasonRowsEach": true,
+    "allDailyRowsResidential": true,
+    "classificationsNotClaimedFromMissingKeys": true,
+    "physicalExposureRejectsOverlap": true,
+    "physicalProducerHasChronology": true,
+    "annualUses360DayQuery": true,
+    "annualRunsAfterSeasonSupport": true,
+    "ordinaryResidentialProducerUsesFullBodyTime": true,
+    "changedCoverageBranchesRequirePartialOrShiftedInput": true,
+    "retainedSeasonRowsHaveDatedSupportAndDemand": true,
+    "dailyResidenceProducerRunsBeforeSeasonalAnnualRead": true,
+    "annualReaderIsInsideAnnualDemographyPath": true,
+    "recoveryThresholdIntegral": true,
+    "partialCoverageExcludedFromRecovery": true
+  },
+  "sourceHashes": {
+    "nutritionExposure": "0a1d64e5aab98a7d37cc5612423da06326d93156bdbab1fbf7b92427730e6f35",
+    "seasonalSurvival": "32368983f1d567ff22ea7572324f0c5b1f3ed45baa81abc04137067f69fabaeb",
+    "demography": "a08d299ee6a63109fecc72699b8c02d6267f73fe0c023f8ce6f61ab8cf2a044a",
+    "advance": "009472cd9bba41601b206daf4a815cbe77dc018a750dc398f2e4578b2fceb4d9"
+  }
+}

@@ -87,6 +87,13 @@ export function getCurrentCoverageSafeClampedSupport(support: SeasonalSupportSta
   return querySupportExposure(support, endDay, CURRENT_NUTRITION_DAYS).coverageSafeClampedSupport;
 }
 
+/** Coverage-safe one-day water-stress projection for legacy behavioral readers. */
+export function getCurrentCoverageSafeWaterStress(support: SeasonalSupportState | undefined): number {
+  if (support === undefined || support.recentSamples.length === 0) return 0;
+  const endDay = exposureEndDay(support);
+  return querySupportExposure(support, endDay, CURRENT_NUTRITION_DAYS).coverageSafeWaterStress;
+}
+
 /** Coverage for the rolling recent/annual support reader used by camp evidence. */
 export function getRecentNutritionCoverage(support: SeasonalSupportState | undefined): number {
   if (support === undefined || support.recentSamples.length === 0) return 0;

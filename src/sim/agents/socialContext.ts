@@ -24,7 +24,7 @@ import type {
 import { preserveTerminalBandSnapshots, shareCurrentFissionLineage } from "./bandLifecycle";
 import { getNearbyBandPressure } from "./crowding";
 import { deriveCarryingCapacity } from "./carryingCapacity";
-import { deriveCanonicalNutritionState, getCurrentNutritionCoverage, updateSeasonalSupportState } from "./seasonalSurvival";
+import { deriveCanonicalNutritionState, getCurrentCoverageSafeClampedSupport, getCurrentNutritionCoverage, updateSeasonalSupportState } from "./seasonalSurvival";
 import {
   deriveInnerFissionState,
   deriveSocialTensionReadabilityState,
@@ -1291,10 +1291,19 @@ function deriveBandDispositionState(
   const fissionPressure = band.innerFission?.pressureScore ?? band.demography.splitPressure;
   const weakPressure = band.viability?.viabilityPressure ?? 0;
   const nutritionCoverage = getCurrentNutritionCoverage(band.seasonalSupport);
+  const currentNutrition = deriveCanonicalNutritionState(band.seasonalSupport);
+  const projectionHasCoverage = band.seasonalSupport?.currentSeasonSupport.nutritionCoverage !== undefined;
+  const trustedClassification = projectionHasCoverage ? band.seasonalSupport?.hungerClassification : undefined;
+  const pulseRecovery = band.seasonalSupport?.currentSeasonSupport.mode === "pulse" &&
+    (projectionHasCoverage
+      ? nutritionCoverage > 0
+      : getCurrentCoverageSafeClampedSupport(band.seasonalSupport) >= .98 && currentNutrition.currentFoodStress < .22)
+    ? 0.34 * nutritionCoverage
+    : 0;
   const resourceRecovery = (band.resourceEcology?.support.seasonalResourceModifier ?? 1) > 1.04 ? 0.18 : 0;
   const recoverySignal = clamp01(
     (band.seasonalSupport?.seasonalRecoveryStreak ?? 0) * 0.18 +
-      (band.seasonalSupport?.currentSeasonSupport.mode === "pulse" ? 0.34 * nutritionCoverage : 0) +
+      pulseRecovery +
       resourceRecovery,
   );
   const hardship = band.recentResidentialMoveEvents?.[0]?.hardshipRisk ?? 0;
@@ -1336,7 +1345,7 @@ function deriveBandDispositionState(
     ["fractured", clamp01((band.innerFission?.state === "factional" || band.innerFission?.state === "near_split" ? 0.44 : 0) + socialFracture * 0.18)],
     ["grieving", clamp01(deathSeverity * 0.72)],
     ["desperate", clamp01(weakPressure * 0.36 + hungerStress * 0.24 + waterStress * 0.24)],
-    ["relieved", clamp01(recoverySignal * 0.8 + (band.seasonalSupport?.hungerClassification === "seasonal_pulse_recovery" ? 0.28 : 0))],
+    ["relieved", clamp01(recoverySignal * 0.8 + (trustedClassification === "seasonal_pulse_recovery" ? 0.28 : 0))],
     ["restless", clamp01((band.frontierDispersal?.pressure ?? 0) * 0.28 + (band.pressureState?.mobilityPressure ?? 0) * 0.2)],
     ["pressured", clamp01(band.demography.householdCrowdingPressure * 0.24 + hardship * 0.22 + hungerStress * 0.14 + waterStress * 0.14)],
     ["suspicious", suspicious],

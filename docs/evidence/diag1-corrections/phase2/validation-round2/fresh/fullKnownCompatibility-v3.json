@@ -1,0 +1,2247 @@
+{
+  "check": "DIAG1-PHASE2-FULL-KNOWN-COMPATIBILITY",
+  "verdict": "PASS",
+  "baseCommit": "bf5807e75bb650872d9c81cf95dce5dc1df6a509",
+  "excluded": [
+    "nutritionCoverage telemetry",
+    "knownPopulationFraction telemetry",
+    "explicitly corrected recovery maturity classification"
+  ],
+  "vectorFields": [
+    "currentFoodStress",
+    "recentFoodStress",
+    "chronicFoodStress",
+    "recoveryRelief",
+    "nutritionalSurplus",
+    "foodMovementPressure",
+    "foodDemographicPressure"
+  ],
+  "rows": 48,
+  "actualAndLegacy": true,
+  "varyingDemands": [
+    1,
+    7,
+    120
+  ],
+  "roundingRatios": [
+    0,
+    0.315,
+    0.58,
+    0.92,
+    0.98,
+    1.12,
+    1.72
+  ],
+  "candidate": [
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    }
+  ],
+  "reviewedBase": [
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 1,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 7,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "actual",
+      "demand": 120,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 1,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 7,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 0,
+      "canonical": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      },
+      "annual": {
+        "currentFoodStress": 1,
+        "recentFoodStress": 1,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.8,
+        "foodDemographicPressure": 0.7
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 0.315,
+      "canonical": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      },
+      "annual": {
+        "currentFoodStress": 0.69,
+        "recentFoodStress": 0.69,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.56,
+        "foodDemographicPressure": 0.5
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 0.58,
+      "canonical": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      },
+      "annual": {
+        "currentFoodStress": 0.42,
+        "recentFoodStress": 0.42,
+        "chronicFoodStress": 0.13,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.36,
+        "foodDemographicPressure": 0.33
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 0.92,
+      "canonical": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      },
+      "annual": {
+        "currentFoodStress": 0.08,
+        "recentFoodStress": 0.08,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0.06,
+        "foodDemographicPressure": 0.05
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 0.98,
+      "canonical": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.02,
+        "recentFoodStress": 0.02,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 1.12,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": 1.72,
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 0.25,
+        "nutritionalSurplus": 0.25,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0,
+        "chronicFoodStress": 0,
+        "recoveryRelief": 1,
+        "nutritionalSurplus": 1,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      }
+    },
+    {
+      "quantityBasis": "legacy_ratio_only",
+      "demand": 120,
+      "ratio": "mixed",
+      "canonical": {
+        "currentFoodStress": 0,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0
+      },
+      "annual": {
+        "currentFoodStress": 0.19,
+        "recentFoodStress": 0.19,
+        "chronicFoodStress": 0.05,
+        "recoveryRelief": 0.5,
+        "nutritionalSurplus": 0,
+        "foodMovementPressure": 0,
+        "foodDemographicPressure": 0.08
+      }
+    }
+  ]
+}

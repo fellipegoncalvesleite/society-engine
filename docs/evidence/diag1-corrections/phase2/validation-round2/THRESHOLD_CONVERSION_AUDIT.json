@@ -4,7 +4,8 @@
   "physicalTimeRules": [
     "seasonalHungerStreak uses physical trailing exposure days divided by 90; existing >=2 semantic retained",
     "chronicDeficitStreak uses physical trailing exposure days divided by 90; existing >=4/6/8 semantics retained",
-    "deficitSeasonsLast4/8 and waterStressSeasonsLast8 retain their existing season-equivalent comparisons"
+    "deficitSeasonsLast4 >=1 in classifyHunger is a one-season physical deficit signal; deficitSeasonsLast4/8 and waterStressSeasonsLast8 retain their existing season-equivalent comparisons",
+    "canonical chronicFoodStress/recoveryRelief remain duration-weighted from the physical streaks; they are not record-count gates"
   ],
   "correctedMaturityRules": [
     "seasonalSurvival.classifyHunger: seasonalRecoveryStreak > 0 -> >=1",
@@ -14,12 +15,18 @@
   "intentionallyDurationWeighted": [
     "socialContext recovery signal multiplies seasonalRecoveryStreak as a graded duration signal",
     "protoCamps consumes recovery classifications rather than a raw maturity comparison",
-    "innerFission accepts seasonal_pulse_recovery for immediate recovery and recovery_after_crisis for mature recovery"
+    "innerFission accepts seasonal_pulse_recovery for immediate recovery and recovery_after_crisis for mature recovery only when the current support projection is fully covered"
   ],
   "unrelatedCountChecks": [
     "protoCamps activity/visit/knowledge counts remain event-existence checks, not physical recovery maturity",
     "bandHistory recoveryYears > 0 records existence of a historical recovery year, not the seasonal maturity gate"
   ],
-  "evidence": "validation-round2-coverage-green-v13.json",
-  "productionCommit": "13c685ac4fb123f69a8693d2e5728260b379cfa8"
+  "evidence": "validation-round2-coverage-green-v9.json",
+  "productionCommit": "pending post-review compatibility projection fix",
+  "additionalCoverageReaders": [
+    "seasonalSurvival.ts:138-141 chronicFoodStress/recoveryRelief duration-weighted reader",
+    "seasonalSurvival.ts:628 seasonalRecoveryStreak >= 1 mature recovery comparison",
+    "seasonalSurvival.ts:641 deficitSeasonsLast4 >= 1 seasonal lean signal",
+    "innerFission.ts:280-289 fully-covered guard on unity recovery"
+  ]
 }

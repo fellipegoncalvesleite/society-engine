@@ -6,13 +6,20 @@ import type {
   SocialRelationCategory,
   SocialTensionReadabilityState,
   SocialTensionRelationSummary,
+  SeasonalHungerClassification,
 } from "./types";
 import type { WorldState } from "../world/types";
-import { getCurrentNutritionCoverage } from "./seasonalSurvival";
+import { deriveCanonicalNutritionState, getCurrentCoverageSafeClampedSupport, getCurrentNutritionCoverage } from "./seasonalSurvival";
 
 export function deriveInnerFissionState(world: WorldState, band: Band): InnerFissionState {
   const population = Math.max(1, Math.round(band.demography.population));
   const seasonal = band.seasonalSupport;
+  const canonicalNutrition = deriveCanonicalNutritionState(seasonal);
+  const currentFoodStress = canonicalNutrition.currentFoodStress;
+  const currentClampedSupport = getCurrentCoverageSafeClampedSupport(seasonal);
+  const projectionHasCoverage = seasonal?.currentSeasonSupport.nutritionCoverage !== undefined;
+  const trustedClassification = projectionHasCoverage ? seasonal?.hungerClassification : undefined;
+  const demographyFoodStress = projectionHasCoverage ? band.demography.foodPerPersonStress : currentFoodStress;
   const viability = band.viability;
   const pressure = band.pressureState;
   const recentMove = band.recentResidentialMoveEvents?.[0];
@@ -23,21 +30,21 @@ export function deriveInnerFissionState(world: WorldState, band: Band): InnerFis
     viability?.supportSeekingBlockedReason !== undefined;
   const hungerTension = clamp01(
     Math.max(
-      seasonal?.currentSeasonSupport.foodStress ?? 0,
-      seasonal?.currentSeasonSupport.deficitRatio ?? 0,
-      seasonal?.hungerClassification === "seasonal_lean_stress" ? 0.28 : 0,
-      seasonal?.hungerClassification === "chronic_food_deficit" ? 0.44 : 0,
-      seasonal?.hungerClassification === "chronic_plus_seasonal_stress" ? 0.58 : 0,
-      seasonal?.hungerClassification === "crisis_deficit" ? 0.78 : 0,
-      band.demography.foodPerPersonStress * 0.78,
+      currentFoodStress,
+      currentFoodStress,
+      trustedClassification === "seasonal_lean_stress" ? 0.28 : 0,
+      trustedClassification === "chronic_food_deficit" ? 0.44 : 0,
+      trustedClassification === "chronic_plus_seasonal_stress" ? 0.58 : 0,
+      trustedClassification === "crisis_deficit" ? 0.78 : 0,
+      demographyFoodStress * 0.78,
     ),
   );
   const waterTension = clamp01(
     Math.max(
       pressure?.waterStress ?? 0,
       seasonal?.currentSeasonSupport.waterStress ?? 0,
-      seasonal?.hungerClassification === "seasonal_water_stress" ? 0.34 : 0,
-      seasonal?.hungerClassification === "chronic_water_deficit" ? 0.54 : 0,
+      trustedClassification === "seasonal_water_stress" ? 0.34 : 0,
+      trustedClassification === "chronic_water_deficit" ? 0.54 : 0,
     ),
   );
   const deathTension = clamp01(
@@ -93,7 +100,7 @@ export function deriveInnerFissionState(world: WorldState, band: Band): InnerFis
     recentMoveRisk: recentMove?.hardshipRisk ?? 0,
     viabilityRisk: viability?.extinctionRisk ?? 0,
   });
-  const unityRecoveryReason = getUnityRecoveryReason(band, pressureScore);
+  const unityRecoveryReason = getUnityRecoveryReason(band, pressureScore, currentFoodStress, currentClampedSupport, trustedClassification);
   const state = classifyInnerFissionState(pressureScore, splitPressure, splitDelayedReason, unityRecoveryReason);
 
   return {
@@ -274,7 +281,13 @@ function getSplitDelayedReason(input: {
   return undefined;
 }
 
-function getUnityRecoveryReason(band: Band, pressureScore: number): string | undefined {
+function getUnityRecoveryReason(
+  band: Band,
+  pressureScore: number,
+  currentFoodStress: number,
+  currentClampedSupport: number,
+  trustedClassification: SeasonalHungerClassification | undefined,
+): string | undefined {
   const previous = band.innerFission;
   const support = band.seasonalSupport;
   const fullyCovered = getCurrentNutritionCoverage(support) >= 1;
@@ -284,7 +297,9 @@ function getUnityRecoveryReason(band: Band, pressureScore: number): string | und
     previous.pressureScore >= 0.34 &&
     pressureScore <= 0.22 &&
     fullyCovered &&
-    (support?.hungerClassification === "stable" || support?.hungerClassification === "seasonal_pulse_recovery" || support?.hungerClassification === "recovery_after_crisis")
+    currentFoodStress < 0.34 &&
+    currentClampedSupport >= 0.98 &&
+    (trustedClassification === "stable" || trustedClassification === "seasonal_pulse_recovery" || trustedClassification === "recovery_after_crisis")
   ) {
     return "support recovered and fission pressure eased";
   }

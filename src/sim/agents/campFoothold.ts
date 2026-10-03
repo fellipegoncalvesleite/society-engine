@@ -14,7 +14,7 @@ import {
   type PracticeExperimentCandidate,
   type ProblemFrame,
 } from "./problemPractice";
-import { getRecentNutritionCoverage } from "./seasonalSurvival";
+import { deriveCanonicalNutritionState, getCurrentCoverageSafeWaterStress, getRecentNutritionCoverage } from "./seasonalSurvival";
 import type {
   Band,
   IntraSeasonTripRecord,
@@ -1548,15 +1548,17 @@ function evidenceFromSeasonalSupport(
     return undefined;
   }
 
+  const nutrition = deriveCanonicalNutritionState(support);
+
   return {
     kind: "seasonal",
     sourceSystem: "seasonal_support",
     label,
     sourceId: `seasonal-support:${String(context.band.id)}:${String(context.world.time.tick)}`,
     confidence: round2(clamp01(Math.max(
-      support.currentSeasonSupport.foodStress,
-      support.currentSeasonSupport.waterStress,
-      support.currentSeasonSupport.deficitRatio,
+      nutrition.currentFoodStress,
+      getCurrentCoverageSafeWaterStress(support),
+      nutrition.currentFoodStress,
       (getRecentNutritionCoverage(support) >= 1 && support.rolling4SeasonSupport < 0.55) ? 0.35 : 0,
     ))),
     livedBasis: "lived",

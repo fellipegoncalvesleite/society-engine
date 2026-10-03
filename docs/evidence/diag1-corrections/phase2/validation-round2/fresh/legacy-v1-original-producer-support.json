@@ -1,0 +1,124 @@
+{
+  "sourceCommit": "bf5807e75bb650872d9c81cf95dce5dc1df6a509",
+  "producer": "seasonalSurvival.recordSupportInterval -> mergeSupportHistories",
+  "scenario": "25%-known hungry + 75%-unknown body-time",
+  "support": {
+    "exposureVersion": 1,
+    "exposureAsOfDay": 90,
+    "bandId": "band:varied-dry-corridor-mid",
+    "lastUpdatedTick": 1,
+    "currentSeasonSupport": {
+      "tick": 1,
+      "year": 0,
+      "season": "summer",
+      "exposure": {
+        "version": 1,
+        "startDay": 89,
+        "endDay": 90,
+        "durationDays": 1,
+        "producer": "merged_condition",
+        "provenance": "reintegrated_embodied_history:band:varied-dry-corridor-mid:90",
+        "quantityBasis": "actual",
+        "segments": [
+          {
+            "startDay": 89,
+            "endDay": 90,
+            "knownPopulationFraction": 0.25,
+            "supportUnits": 0,
+            "demandUnits": 1,
+            "foodStress": 1,
+            "waterStress": 0,
+            "perCapitaReturn": 0,
+            "recoveryEligible": false
+          }
+        ],
+        "supportUnits": 0,
+        "demandUnits": 1,
+        "foodStressDays": 0.25,
+        "waterStressDays": 0,
+        "recoveryDays": 0
+      },
+      "rawSupportRatio": 0,
+      "clampedSupportRatio": 0,
+      "perCapitaReturn": 0,
+      "seasonalModifier": 1,
+      "foodStress": 1,
+      "waterStress": 0,
+      "deficitRatio": 1,
+      "mode": "lean"
+    },
+    "rolling4SeasonSupport": 0,
+    "rolling8SeasonSupport": 0,
+    "rolling8SeasonRawSupport": 0,
+    "rolling4SeasonReturn": 0,
+    "rolling8SeasonReturn": 0,
+    "returnTrend4Season": 0,
+    "returnTrend8Season": 0,
+    "recentSamples": [
+      {
+        "tick": 1,
+        "year": 0,
+        "season": "summer",
+        "exposure": {
+          "version": 1,
+          "startDay": 0,
+          "endDay": 90,
+          "durationDays": 90,
+          "producer": "merged_condition",
+          "provenance": "reintegrated_embodied_history:band:varied-dry-corridor-mid:90",
+          "quantityBasis": "actual",
+          "segments": [
+            {
+              "startDay": 0,
+              "endDay": 90,
+              "knownPopulationFraction": 0.25,
+              "supportUnits": 0,
+              "demandUnits": 90,
+              "foodStress": 1,
+              "waterStress": 0,
+              "perCapitaReturn": 0,
+              "recoveryEligible": false
+            }
+          ],
+          "supportUnits": 0,
+          "demandUnits": 90,
+          "foodStressDays": 22.5,
+          "waterStressDays": 0,
+          "recoveryDays": 0
+        },
+        "rawSupportRatio": 0,
+        "clampedSupportRatio": 0,
+        "perCapitaReturn": 0,
+        "seasonalModifier": 1,
+        "foodStress": 1,
+        "waterStress": 0,
+        "deficitRatio": 1,
+        "mode": "lean"
+      }
+    ],
+    "seasonalHungerStreak": 0.25,
+    "chronicDeficitStreak": 0.25,
+    "seasonalRecoveryStreak": 0,
+    "deficitSeasonsLast4": 0.25,
+    "deficitSeasonsLast8": 0.25,
+    "waterStressSeasonsLast4": 0,
+    "waterStressSeasonsLast8": 0,
+    "hungerClassification": "crisis_deficit",
+    "chronicDeficitClassification": "crisis_deficit",
+    "populationStableDespiteRecurringHunger": false,
+    "topSeasonalSupportReasons": [
+      "recomposed lived condition; no additional elapsed day or food transfer"
+    ],
+    "reasonIds": [
+      "reason:seasonal-support:band:varied-dry-corridor-mid:1:crisis_deficit"
+    ],
+    "currentFoodStress": 1,
+    "recentFoodStress": 1,
+    "chronicFoodStress": 0.03,
+    "recoveryRelief": 0,
+    "nutritionalSurplus": 0,
+    "foodMovementPressure": 0.77,
+    "foodDemographicPressure": 0.66,
+    "nutritionStateAvailable": true
+  }
+}
