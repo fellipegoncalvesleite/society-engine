@@ -49,7 +49,7 @@
   },
   "phase2FirstProductionCommit": "369362c5b51757407e34493d9f9dcbeae86abdac",
   "originalByteBaseline": "bf5807e75bb650872d9c81cf95dce5dc1df6a509",
-  "documentationCommit": "pending-doc-publication",
+  "documentationCommit": "ea8812c8d5e40389e15bc7b7d6bd6a12a3eb0e53",
   "finalEvidenceIndex": "docs/evidence/diag1-corrections/phase2/validation-round2/FINAL_EVIDENCE_INDEX.json",
   "intermediateArchive": "DIAG1_PHASE2_INTERMEDIATE_FRESH_ARCHIVE.tar.gz",
   "mergeAdjudication": "no merge to main; branch-only push; supervising independent review is next",
