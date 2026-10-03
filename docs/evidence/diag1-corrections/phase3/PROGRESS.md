@@ -6,3 +6,5 @@ Ruling: User already supplied the chosen architecture and authorized continuous 
 Ruling: Existing fauna seasonal rules have a 0.78 floor, never seasonal absence. Test lean-season reduction and activity refusal; do not invent a new zero-season policy. Cost if wrong: a future separately specified seasonal model is required.
 
 Tasks1–6: bounded implementation, expanded controls,4required plus16retained mutants, integration and affected regressions complete. Final UI literals verified; exact-source read-model rerun is sealing source-preservation metadata. Tasks7–8: prepare coherent commit/push, record SHA later, dispatch one independent read-only reviewer, then record verdict/preservation and STOP.
+
+Production committed and pushed: `cc82307e749666df3d984739b6e642ef0fa5d350`. Clean0/0 verified. Exactly one fresh read-only combined reviewer dispatched. This later documentation commit records production identity; no source changes after publication.

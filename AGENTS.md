@@ -9,7 +9,7 @@ Phase3 candidate implements B005 generic current fauna availability with exact p
 
 F3/B008 remains structurally OPEN, `DEFERRED_EXPLICIT_OWNER`: M0.4 realization, M0.5 physical-area/scaling/bounds certification, M0.7 migration. B010 ruling B: omitted SCALE1 reader, `OPEN_UNRESOLVED`, separate physical-distance authorization needed; no kilometer threshold was guessed. Both M0.2 blockers remain OPEN_UNRESOLVED and Task12 PAUSED. Canonical r11 remains byte-identical; existing roadmap ownership is reinforced, not changed.
 
-Next: coherent production/tests/evidence commit and push, later SHA documentation, ONE fresh read-only combined reviewer from `73cc38b916e236339897c59686638efafd569b6e` through production HEAD, record recommendation and STOP. Exact publication SHAs belong in subsequent `phase3/PUBLICATION.json`. No self-acceptance, main/M0.2 merge, formal freeze, Task12 resumption or portable-pair export before final supervisory acceptance.
+Production candidate `cc82307e749666df3d984739b6e642ef0fa5d350` is committed and pushed, with clean0/0 publication state. This later documentation commit records that production identity in `phase3/PUBLICATION.json`. ONE fresh read-only combined reviewer `/root/diag1_combined_review` is now reviewing `73cc38b916e236339897c59686638efafd569b6e` through `cc82307e749666df3d984739b6e642ef0fa5d350`. Next: record independent recommendation and STOP for supervisory consideration. No self-acceptance, main/M0.2 merge, formal freeze, Task12 resumption or portable-pair export before final supervisory acceptance.
 <!-- DIAG1_PHASE3_CANDIDATE_END -->
 
 

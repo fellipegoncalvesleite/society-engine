@@ -1,0 +1,26 @@
+{
+  "branch": "fix/diag1-human-support",
+  "remote": "https://github.com/fellipegoncalvesleite/society-engine.git",
+  "phase2AcceptedProduction": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+  "phase2ReviewedPublication": "fd8ef2674ad193e61535688b1edeb20d0841596d",
+  "acceptanceRecordCommit": "96126be8484b23725fc9977c0527c9e8178feb3a",
+  "phase3Base": "96126be8484b23725fc9977c0527c9e8178feb3a",
+  "phase3ProductionCommit": "cc82307e749666df3d984739b6e642ef0fa5d350",
+  "productionPushed": true,
+  "productionPublicationAheadBehind": [
+    0,
+    0
+  ],
+  "independentReview": {
+    "base": "73cc38b916e236339897c59686638efafd569b6e",
+    "head": "cc82307e749666df3d984739b6e642ef0fa5d350",
+    "reviewer": "/root/diag1_combined_review",
+    "status": "in_progress",
+    "mode": "fresh_read_only_combined"
+  },
+  "supervisingAcceptance": "PENDING",
+  "task12": "PAUSED",
+  "mainMerged": false,
+  "m02Merged": false,
+  "portablePairExported": false
+}
