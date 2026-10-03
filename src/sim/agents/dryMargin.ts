@@ -19,7 +19,7 @@ import { getSeasonalTileConditions } from "../world/seasonal";
 import { getNeighborTiles, getTile } from "../world/generate";
 import type { Tile, WorldState } from "../world/types";
 import { getCardinalEdgeLengthKm, getManhattanPhysicalDistanceKm } from "../world/spatialGeometry";
-import { getCanonicalFoodStress } from "./seasonalSurvival";
+import { getCanonicalFoodStress, getCurrentCoverageSafeClampedSupport } from "./seasonalSurvival";
 
 const MAX_WATER_CANDIDATES = 8;
 const MAX_PROSPECT_CANDIDATES = 10;
@@ -338,7 +338,7 @@ function deriveSeasonalMobilityMode(
   // known temporary-water opportunity.  Static seasonal habitat potential may
   // still describe the weather, but it is not a current-food authority.
   const harvestOpportunity = clamp01(
-    (band.seasonalSupport?.currentSeasonSupport.clampedSupportRatio ?? 0) * 0.74 +
+    getCurrentCoverageSafeClampedSupport(band.seasonalSupport) * 0.74 +
       temporaryWaterOpportunity * 0.26,
   );
   const mode = getSeasonalMode(world.time.season, droughtSeverity, dryRefugePull, temporaryWaterOpportunity, harvestOpportunity);
@@ -566,7 +566,7 @@ function deriveStayMoveScoutComparison(
     : Math.max(currentUsePressure.foragingPressure, currentUsePressure.waterPressure, currentUsePressure.aquaticPressure);
   const placeAttachment = band.placeMemory[band.position]?.attachment ?? 0;
   const currentFood = clamp01(
-    (band.seasonalSupport?.currentSeasonSupport.clampedSupportRatio ?? 0) * 0.58 +
+    getCurrentCoverageSafeClampedSupport(band.seasonalSupport) * 0.58 +
       (1 - getCanonicalFoodStress(band)) * 0.22 +
       (currentRecord?.confidence ?? 0) * 0.08,
   );

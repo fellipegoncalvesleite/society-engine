@@ -72,6 +72,28 @@ function exposureEndDay(support: SeasonalSupportState): number {
   return support.exposureAsOfDay ?? Math.max(0, ...exposureSamples(support).map(s => s.exposure!.endDay));
 }
 
+/** Read the measured body-time coverage for compatibility consumers, including
+ * migrated histories whose old currentSeasonSupport omitted nutritionCoverage. */
+export function getCurrentNutritionCoverage(support: SeasonalSupportState | undefined): number {
+  if (support === undefined || support.recentSamples.length === 0) return 0;
+  const endDay = exposureEndDay(support);
+  return querySupportExposure(support, endDay, CURRENT_NUTRITION_DAYS).coverage;
+}
+
+/** Coverage-safe one-day support projection for legacy behavioral readers. */
+export function getCurrentCoverageSafeClampedSupport(support: SeasonalSupportState | undefined): number {
+  if (support === undefined || support.recentSamples.length === 0) return 0;
+  const endDay = exposureEndDay(support);
+  return querySupportExposure(support, endDay, CURRENT_NUTRITION_DAYS).coverageSafeClampedSupport;
+}
+
+/** Coverage for the rolling recent/annual support reader used by camp evidence. */
+export function getRecentNutritionCoverage(support: SeasonalSupportState | undefined): number {
+  if (support === undefined || support.recentSamples.length === 0) return 0;
+  const endDay = exposureEndDay(support);
+  return querySupportExposure(support, endDay, ANNUAL_NUTRITION_DAYS).coverage;
+}
+
 /**
  * Bound the positive surplus evidence before unknown body-time is applied.  A
  * known subset with an extreme measured ratio therefore contributes at most its
@@ -188,6 +210,18 @@ export function deriveAnnualNutritionState(
   const currentFoodStress = clamp01(year.coverageSafeFoodStress);
   const recoveryRelief = clamp01(year.coverageSafeRecoveryFraction);
   const chronic = querySupportExposure(support, endDay, NUTRITION_HISTORY_DAYS);
+  // An explicit annual observer may be later than the latest retained sample.
+  // Rebuild chronic severity from that dated 720-day query so cached counters
+  // from the old exposure end cannot cross an unknown gap or shifted horizon.
+  const chronicDeficitStreak = trailingExposureDays(chronic.segments, endDay,
+    s => Math.max(0, 1 - segmentRatio(s)) >= .16 || segmentRatio(s) < .88) / 90;
+  const deficitDays = chronic.segments.reduce((n, s) => n +
+    (Math.max(0, 1 - segmentRatio(s)) >= .12 || segmentRatio(s) < .92
+      ? (s.endDay - s.startDay) * (s.knownPopulationFraction ?? 1) : 0), 0);
+  const chronicFoodStress = clamp01(
+    (chronicDeficitStreak / SEASONAL_MEMORY_WINDOW) * 0.58 +
+      ((deficitDays / 90) / SEASONAL_MEMORY_WINDOW) * 0.42,
+  );
   const surplusSignal = measuredSurplusSignal(chronic);
   const nutritionalSurplus = clamp01(
     surplusSignal * recoveryRelief,
@@ -196,19 +230,16 @@ export function deriveAnnualNutritionState(
   return {
     ...seasonal,
     currentFoodStress: round2(currentFoodStress),
+    // The annual read is also exposed as a horizon-aligned recent term for
+    // diagnostics and demography callers that supply an explicit calendar day.
     recentFoodStress: round2(currentFoodStress),
+    chronicFoodStress: round2(chronicFoodStress),
     recoveryRelief: round2(recoveryRelief),
     nutritionalSurplus: round2(nutritionalSurplus),
-    foodMovementPressure: round2(clamp01(
-      currentFoodStress * 0.42 +
-        currentFoodStress * 0.34 +
-        seasonal.chronicFoodStress * 0.34 -
-        recoveryRelief * 0.16,
-    )),
     foodDemographicPressure: round2(clamp01(
       currentFoodStress * 0.38 +
-        currentFoodStress * 0.26 +
-        seasonal.chronicFoodStress * 0.48 -
+        round2(currentFoodStress) * 0.26 +
+        round2(chronicFoodStress) * 0.48 -
         recoveryRelief * 0.14,
     )),
     currentNutritionCoverage: round2(year.coverage),
@@ -285,6 +316,7 @@ export function updateSeasonalSupportState(
       waterStress,
       deficitRatio: support.deficitRatio,
       previous,
+      nutritionCoverage: 1,
     }),
   };
 
@@ -482,17 +514,25 @@ export function recordSupportInterval(
   // Compatibility readers of currentSeasonSupport receive the current completed day.
   // Full interval totals remain solely in recentSamples, including the open prefix.
   const current = queryNutritionExposure(recentSamples, endDay, CURRENT_NUTRITION_DAYS);
+  // `rawSupportRatio` remains known-subset physical telemetry. The bounded
+  // compatibility clamp is the behavioral projection consumed by dry-margin
+  // and biome-adaptation readers, so only that field is coverage-safe when
+  // unknown body-time exists; raw measured quantities are not fabricated.
   const rawSupportRatio = current.pooledSupportRatio ?? current.rawSupport;
+  const clampedSupportRatio = current.coverage >= 1
+    ? current.clampedSupport
+    : current.coverageSafeClampedSupport;
   const deficitRatio = current.coverage >= 1
     ? clamp01(1 - rawSupportRatio)
     : clamp01(current.coverageSafeFoodStress);
   sample = { ...latest, exposure: clipNutritionExposure(latest.exposure!, endDay - 1, endDay),
-    rawSupportRatio, clampedSupportRatio: current.clampedSupport,
+    rawSupportRatio, clampedSupportRatio,
     perCapitaReturn: current.coverageSafePerCapitaReturn,
     foodStress: current.coverageSafeFoodStress, waterStress: current.coverageSafeWaterStress,
     deficitRatio, nutritionCoverage: current.coverage,
     mode: classifySeasonalMode({ seasonalModifier: latest.seasonalModifier,
-      foodStress: current.coverageSafeFoodStress, waterStress: current.coverageSafeWaterStress, deficitRatio, previous }) };
+      foodStress: current.coverageSafeFoodStress, waterStress: current.coverageSafeWaterStress, deficitRatio, previous,
+      nutritionCoverage: current.coverage }) };
   const hungerClassification = classifyHunger({
     sample,
     deficitSeasonsLast4,
@@ -553,10 +593,12 @@ function classifySeasonalMode(input: {
   readonly waterStress: number;
   readonly deficitRatio: number;
   readonly previous: SeasonalSupportState | undefined;
+  readonly nutritionCoverage?: number;
 }): SeasonalSupportMode {
   if (
     input.previous?.hungerClassification !== undefined &&
     input.previous.hungerClassification !== "stable" &&
+    (input.nutritionCoverage ?? 1) >= 1 &&
     input.deficitRatio < 0.08 &&
     input.foodStress < 0.34
   ) {
@@ -571,7 +613,7 @@ function classifySeasonalMode(input: {
     return "lean";
   }
 
-  if (input.seasonalModifier > 1.06 || input.foodStress < 0.22) {
+  if ((input.nutritionCoverage ?? 1) >= 1 && (input.seasonalModifier > 1.06 || input.foodStress < 0.22)) {
     return "pulse";
   }
 
@@ -617,7 +659,10 @@ function classifyHunger(input: {
     return "recovery_after_crisis";
   }
 
-  if (input.sample.mode === "pulse" || input.sample.mode === "recovery") {
+  // A seasonal pulse/recovery label is a behavioral comfort signal. A partial
+  // known subset may be comfortable, but unknown body-time cannot promote that
+  // subset into an immediate recovery classification or its downstream readers.
+  if (fullyCovered && (input.sample.mode === "pulse" || input.sample.mode === "recovery")) {
     return "seasonal_pulse_recovery";
   }
 

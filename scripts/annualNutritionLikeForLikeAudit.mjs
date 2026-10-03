@@ -52,7 +52,6 @@ const SURPLUS_ONSET = 1.12;
 const SURPLUS_SPAN = 0.6;
 
 const clamp01 = (v) => Math.max(0, Math.min(1, v));
-const round2 = (v) => Math.floor((Math.round(v * 1e12) + 5e9) / 1e10) / 100;
 const mean = (xs) => (xs.length === 0 ? 0 : xs.reduce((s, v) => s + v, 0) / xs.length);
 const r3 = (v) => Math.round(v * 1000) / 1000;
 
@@ -60,10 +59,87 @@ const r3 = (v) => Math.round(v * 1000) / 1000;
 const isRecoverySeason = (e) =>
   e.rawSupportRatio >= 0.98 && e.perCapitaReturn >= 0.48 && e.foodStress < 0.32 && e.waterStress < 0.42;
 
-// Independent decimal oracle: the production stress measurements are bounded decimal
-// values. Sum their represented 12-decimal units as exact safe integers, avoiding a daily
-// accumulation artifact at e.g. .315. This does not call the production aggregation helper.
-const decimalTotal = (values) => values.reduce((n,value)=>n+Math.round(value*1e12),0)/1e12;
+// Independent exact-decimal total: values are expanded from their serialized
+// decimal representations into a common BigInt denominator. This is neither
+// the production Neumaier loop nor its binary half-tie helper, so a wrong but
+// consistently duplicated producer cannot make the oracle green.
+const decimalParts = (value) => {
+  const text = String(value);
+  const [mantissa, exponentText] = text.toLowerCase().split("e");
+  const exponent = Number(exponentText ?? 0);
+  const sign = mantissa.startsWith("-") ? -1n : 1n;
+  const unsigned = mantissa.replace(/^[+-]/, "");
+  const [whole, fraction = ""] = unsigned.split(".");
+  const digits = BigInt(`${whole || "0"}${fraction}` || "0");
+  const scale = fraction.length - exponent;
+  return scale >= 0 ? { numerator: sign * digits, scale } : { numerator: sign * digits * 10n ** BigInt(-scale), scale: 0 };
+};
+// Rational half-up rounding over the decimal expansion, independent of the
+// production binary/ULP tie helper.
+const round2 = (value) => {
+  const part = decimalParts(value);
+  const denominator = 10n ** BigInt(part.scale);
+  const scaledNumerator = part.numerator * 100n;
+  const negative = scaledNumerator < 0n;
+  const magnitude = negative ? -scaledNumerator : scaledNumerator;
+  let quotient = magnitude / denominator;
+  if ((magnitude % denominator) * 2n >= denominator) quotient += 1n;
+  return Number(negative ? -quotient : quotient) / 100;
+};
+const rational = (value) => {
+  const part = decimalParts(value);
+  return { numerator: part.numerator, denominator: 10n ** BigInt(part.scale) };
+};
+const rationalAdd = (a, b) => ({
+  numerator: a.numerator * b.denominator + b.numerator * a.denominator,
+  denominator: a.denominator * b.denominator,
+});
+const rationalMul = (a, b) => ({ numerator: a.numerator * b.numerator, denominator: a.denominator * b.denominator });
+const clampRational01 = (value) => {
+  if (value.numerator <= 0n) return { numerator: 0n, denominator: 1n };
+  if (value.numerator >= value.denominator) return { numerator: 1n, denominator: 1n };
+  return value;
+};
+const round2Rational = ({ numerator, denominator }) => {
+  const scaled = numerator * 100n;
+  const negative = scaled < 0n;
+  const magnitude = negative ? -scaled : scaled;
+  let quotient = magnitude / denominator;
+  if ((magnitude % denominator) * 2n >= denominator) quotient += 1n;
+  return Number(negative ? -quotient : quotient) / 100;
+};
+const decimalTotal = (values) => {
+  const parts = values.map(decimalParts);
+  const scale = Math.max(0, ...parts.map((p) => p.scale));
+  const numerator = parts.reduce((sum, p) => sum + p.numerator * 10n ** BigInt(scale - p.scale), 0n);
+  return Number(numerator) / 10 ** scale;
+};
+// Exact rational weighted mean. The final 15-place decimal is only a transport
+// representation for the independent round2() oracle; the sum and division
+// themselves stay in integer numerator/denominator space, so .335 cannot become
+// .334999999999999 before the half-up decision.
+const decimalWeightedMean = (rows, valueFn) => {
+  const products = rows.map((row) => {
+    const weight = decimalParts(row.fraction);
+    const value = decimalParts(valueFn(row));
+    return { numerator: weight.numerator * value.numerator, scale: weight.scale + value.scale };
+  });
+  const scale = Math.max(0, ...products.map((p) => p.scale));
+  const numerator = products.reduce((sum, p) => sum + p.numerator * 10n ** BigInt(scale - p.scale), 0n);
+  const weights = rows.map((row) => decimalParts(row.fraction));
+  const weightScale = Math.max(0, ...weights.map((p) => p.scale));
+  const weightNumerator = weights.reduce((sum, p) => sum + p.numerator * 10n ** BigInt(weightScale - p.scale), 0n);
+  if (weightNumerator === 0n) return 0;
+  const rationalNumerator = numerator * 10n ** BigInt(weightScale);
+  const rationalDenominator = weightNumerator * 10n ** BigInt(scale);
+  const transportScale = 15n;
+  const scaled = rationalNumerator * 10n ** transportScale;
+  const negative = scaled < 0n;
+  const magnitude = negative ? -scaled : scaled;
+  let quotient = magnitude / rationalDenominator;
+  if ((magnitude % rationalDenominator) * 2n >= rationalDenominator) quotient += 1n;
+  return Number(negative ? -quotient : quotient) / 10 ** Number(transportScale);
+};
 // Independent physical-day expansion: no production exposure query or counters are called.
 function reconstructAnnualNutrition(support) {
   const end = support.exposureAsOfDay;
@@ -82,7 +158,7 @@ function reconstructAnnualNutrition(support) {
   }
   const year=days.filter(d=>d.day>=end-360), weight=xs=>xs.reduce((n,d)=>n+d.fraction,0);
   if(!year.length)return undefined;
-  const weighted=(xs,fn)=>decimalTotal(xs.map(d=>d.fraction*fn(d)))/weight(xs);
+  const weighted=(xs,fn)=>decimalWeightedMean(xs,fn);
   const currentFoodStress=weighted(year,d=>d.stress), recoveryRelief=weighted(year,d=>d.recovery?1:0);
   const allActual=days.every(d=>d.demand!==undefined && d.fraction===1);
   const meanRawSupport=allActual ? days.reduce((n,d)=>n+d.support,0)/days.reduce((n,d)=>n+d.demand,0) : weighted(days,d=>d.ratio);
@@ -97,7 +173,18 @@ function reconstructAnnualNutrition(support) {
   return { currentFoodStress:round2(currentFoodStress), recentFoodStress, chronicFoodStress,
     recoveryRelief:round2(recoveryRelief),
     nutritionalSurplus:round2(clamp01(clamp01((meanRawSupport-SURPLUS_ONSET)/SURPLUS_SPAN)*recoveryRelief)),
-    foodDemographicPressure:round2(clamp01(currentFoodStress*.38+recentFoodStress*.26+chronicFoodStress*.48-recoveryRelief*.14)),
+    // Production preserves the raw annual current term and the rounded recent
+    // annual term (the canonical seasonal reader already uses this 360-day
+    // horizon). The two terms intentionally have different numeric precision.
+    foodDemographicPressure:round2Rational(clampRational01(
+      rationalAdd(
+        rationalAdd(
+          rationalAdd(rationalMul(rational(currentFoodStress), rational(.38)), rationalMul(rational(recentFoodStress), rational(.26))),
+          rationalMul(rational(chronicFoodStress), rational(.48)),
+        ),
+        rationalMul(rational(-recoveryRelief), rational(.14)),
+      ),
+    )),
     _sampleCount:year.length,_annualMeanRawSupport:meanRawSupport,_annualMeanFoodStressRaw:currentFoodStress };
 }
 

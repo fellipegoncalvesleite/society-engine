@@ -1,7 +1,7 @@
 // DIAG-1 Phase2 correction round: unknown body-time coverage and recovery duration.
-// This audit is intentionally written against the current candidate before the fix: the
-// coverage assertions must fail on the known-subset extrapolation and the 1-day recovery
-// assertion must fail on the old `> 0` threshold.
+// The positive path reaches canonical, annual, demography, dry-margin and biome-adaptation
+// readers. RED and mutant overlays deliberately restore the old known-subset, duration and
+// surplus behaviors so the assertions fail for each targeted defect.
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { phase2Harness } from "./lib/diag1Phase2Harness.mjs";
@@ -18,9 +18,10 @@ const h = await phase2Harness(
   "DIAG1 Phase2 unknown coverage and recovery duration",
   originalProductionOverlay ? [originalProductionOverlay] : [],
 );
-const [runner, nutrition, time, fission, demography] = await Promise.all([
+const [runner, nutrition, time, fission, demography, dryMargin, biomeAdaptation, socialContext, contextCache, campFoothold] = await Promise.all([
   h.load("runner/simRunner"), h.load("agents/seasonalSurvival"), h.load("tick/time"), h.load("agents/innerFission"),
-  h.load("agents/demography"),
+  h.load("agents/demography"), h.load("agents/dryMargin"), h.load("agents/biomeAdaptation"), h.load("agents/socialContext"),
+  h.load("agents/contextCache"), h.load("agents/campFoothold"),
 ]);
 const world = runner.initSimWorld({ kind: "map2" }, "diag1:phase2:coverage-recovery");
 const band = Object.values(world.bands)[0];
@@ -119,6 +120,7 @@ h.check("partial annual demography consumes coverage-safe hungry and comfort ter
   assert.equal(comfortTerms.recentFoodStress, 0);
   assert.equal(comfortTerms.foodFertilitySurplusBonus, .0132);
 });
+
 const partialHighSurplus = write(undefined, sample(0, 90, 10, .25, true));
 const highSurplusAnnual = nutrition.deriveAnnualNutritionState(partialHighSurplus, 90);
 h.observations.partialHighSurplus = highSurplusAnnual;
@@ -130,7 +132,127 @@ h.check("partial high surplus remains coverage-bounded", () => {
 // C/D: full coverage retains existing semantics, while no measured body-time is neutral.
 const fullHungry = merge(sample(0, 90, 0), 12, 0);
 const fullComfort = merge(sample(0, 90, 1.72), 12, 0);
+
+// Compatibility projections are also consumed outside canonical demography. Reach
+// the real dry-margin and biome-adaptation readers so partial comfort cannot leak
+// through the legacy clamped-support field as an opportunity or competence gain.
+const partialBehaviorBand = { ...band, seasonalSupport: partialComfort, carryingCapacity: undefined };
+const fullBehaviorBand = { ...band, seasonalSupport: fullComfort, carryingCapacity: undefined };
+const partialBehaviorWorld = { ...world, bands: { ...world.bands, [band.id]: partialBehaviorBand } };
+const fullBehaviorWorld = { ...world, bands: { ...world.bands, [band.id]: fullBehaviorBand } };
+const partialDryMargin = dryMargin.deriveDryMarginMobilityContext(partialBehaviorWorld, partialBehaviorBand);
+const fullDryMargin = dryMargin.deriveDryMarginMobilityContext(fullBehaviorWorld, fullBehaviorBand);
+const partialBiome = biomeAdaptation.updateBiomeAdaptation({ world: partialBehaviorWorld, band: partialBehaviorBand, observedTileIds: [band.position], nextPosition: band.position, moved: false });
+const fullBiome = biomeAdaptation.updateBiomeAdaptation({ world: fullBehaviorWorld, band: fullBehaviorBand, observedTileIds: [band.position], nextPosition: band.position, moved: false });
+const partialFissionBand = { ...partialBehaviorBand, innerFission: { pressureScore: .5 },
+  pressureState: { fatiguePressure: 0, waterStress: 0 }, socialPressure: { fissionPressure: 0 },
+  demography: { ...band.demography, splitPressure: 0 } };
+const partialFission = fission.deriveInnerFissionState(partialBehaviorWorld, partialFissionBand);
+const partialDisposition = socialContext.applyDispositionContext(partialBehaviorWorld, contextCache.buildTickContextCache(partialBehaviorWorld)).bands[band.id].disposition;
+const fullDisposition = socialContext.applyDispositionContext(fullBehaviorWorld, contextCache.buildTickContextCache(fullBehaviorWorld)).bands[band.id].disposition;
+const partialFoothold = campFoothold.deriveCampFootholdProfile(partialBehaviorWorld, partialBehaviorBand);
+const fullFoothold = campFoothold.deriveCampFootholdProfile(fullBehaviorWorld, fullBehaviorBand);
+const partialHungryBehaviorBand = { ...band, seasonalSupport: partialHungry, carryingCapacity: undefined };
+const fullHungryBehaviorBand = { ...band, seasonalSupport: fullHungry, carryingCapacity: undefined };
+const partialHungryBehaviorWorld = { ...world, bands: { ...world.bands, [band.id]: partialHungryBehaviorBand } };
+const fullHungryBehaviorWorld = { ...world, bands: { ...world.bands, [band.id]: fullHungryBehaviorBand } };
+const partialHungryFoothold = campFoothold.deriveCampFootholdProfile(partialHungryBehaviorWorld, partialHungryBehaviorBand);
+const fullHungryFoothold = campFoothold.deriveCampFootholdProfile(fullHungryBehaviorWorld, fullHungryBehaviorBand);
+const mixedTemporal = write(write(undefined, sample(0, 89, 0, .25, false)), sample(89, 90, 1.72, 1, true));
+const mixedTemporalBand = { ...band, seasonalSupport: mixedTemporal, carryingCapacity: undefined };
+const mixedTemporalWorld = { ...world, bands: { ...world.bands, [band.id]: mixedTemporalBand } };
+const mixedTemporalFoothold = campFoothold.deriveCampFootholdProfile(mixedTemporalWorld, mixedTemporalBand);
+const seasonalEvidence = (profile) => profile.factors.flatMap((factor) => factor.evidence).find((evidence) => evidence.sourceSystem === "seasonal_support");
+const partialSeasonalEvidence = seasonalEvidence(partialFoothold);
+const fullSeasonalEvidence = seasonalEvidence(fullFoothold);
+const partialHungrySeasonalEvidence = seasonalEvidence(partialHungryFoothold);
+const fullHungrySeasonalEvidence = seasonalEvidence(fullHungryFoothold);
+const mixedTemporalSeasonalEvidence = seasonalEvidence(mixedTemporalFoothold);
+const moodShare = (disposition, mood) => disposition.moodShares.find((entry) => entry.mood === mood)?.share ?? 0;
+// Migration compatibility control: an older persisted support sample can carry
+// knownPopulationFraction in its dated exposure while omitting the newer optional
+// nutritionCoverage field. Readers must derive coverage from that exposure rather
+// than treating the missing projection key as full body-time.
+const legacyPartialComfort = { ...partialComfort,
+  currentSeasonSupport: { ...partialComfort.currentSeasonSupport,
+    rawSupportRatio: 1.72, clampedSupportRatio: 1, perCapitaReturn: 1,
+    foodStress: 0, deficitRatio: 0, mode: "pulse", nutritionCoverage: undefined } };
+const legacyPartialBand = { ...band, seasonalSupport: legacyPartialComfort, carryingCapacity: undefined };
+const legacyPartialWorld = { ...world, bands: { ...world.bands, [band.id]: legacyPartialBand } };
+const legacyPartialFission = fission.deriveInnerFissionState(legacyPartialWorld, { ...partialFissionBand, seasonalSupport: legacyPartialComfort });
+const legacyPartialDisposition = socialContext.applyDispositionContext(legacyPartialWorld, contextCache.buildTickContextCache(legacyPartialWorld)).bands[band.id].disposition;
+const legacyPartialFoothold = campFoothold.deriveCampFootholdProfile(legacyPartialWorld, legacyPartialBand);
+const legacyPartialSeasonalEvidence = seasonalEvidence(legacyPartialFoothold);
+const legacyPartialDryMargin = dryMargin.deriveDryMarginMobilityContext(legacyPartialWorld, legacyPartialBand);
+const legacyPartialBiome = biomeAdaptation.updateBiomeAdaptation({ world: legacyPartialWorld, band: legacyPartialBand, observedTileIds: [band.position], nextPosition: band.position, moved: false });
+h.observations.compatibilityReaders = {
+  partialClampedSupport: partialComfort.currentSeasonSupport.clampedSupportRatio,
+  fullClampedSupport: fullComfort.currentSeasonSupport.clampedSupportRatio,
+  partialDryMarginHarvestOpportunity: partialDryMargin?.seasonalMode.harvestOpportunity,
+  fullDryMarginHarvestOpportunity: fullDryMargin?.seasonalMode.harvestOpportunity,
+  partialBiome,
+  fullBiome,
+  partialHungerClassification: partialComfort.hungerClassification,
+  partialUnityRecovering: partialFission.unityRecovering,
+  partialDispositionRecoveryShare: moodShare(partialDisposition, "recovering"),
+  fullDispositionRecoveryShare: moodShare(fullDisposition, "recovering"),
+  partialCampSeasonalEvidence: partialSeasonalEvidence,
+  fullCampSeasonalEvidence: fullSeasonalEvidence,
+  partialHungryCampSeasonalEvidence: partialHungrySeasonalEvidence,
+  fullHungryCampSeasonalEvidence: fullHungrySeasonalEvidence,
+  mixedTemporalCampSeasonalEvidence: mixedTemporalSeasonalEvidence,
+  legacyPartialUnityRecovering: legacyPartialFission.unityRecovering,
+  legacyPartialDispositionRecoveryShare: moodShare(legacyPartialDisposition, "recovering"),
+  legacyPartialCampSeasonalEvidence: legacyPartialSeasonalEvidence,
+  legacyPartialDryMarginHarvestOpportunity: legacyPartialDryMargin?.seasonalMode.harvestOpportunity,
+  legacyPartialBiome,
+};
+h.check("partial comfort projection reaches dry-margin reader coverage-safely", () => {
+  assert.ok(partialDryMargin !== undefined && fullDryMargin !== undefined);
+  assert.ok(partialComfort.currentSeasonSupport.clampedSupportRatio < fullComfort.currentSeasonSupport.clampedSupportRatio);
+  assert.ok(partialDryMargin.seasonalMode.harvestOpportunity < fullDryMargin.seasonalMode.harvestOpportunity);
+});
+h.check("partial comfort projection reaches biome-adaptation reader coverage-safely", () => {
+  const kind = partialBiome.currentBiomeKind;
+  assert.ok((partialBiome.records[kind]?.competence ?? 0) < (fullBiome.records[kind]?.competence ?? 0));
+});
+h.check("partial comfort does not promote recovery classification or inner-fission unity", () => {
+  assert.equal(partialComfort.hungerClassification, "stable");
+  assert.equal(partialFission.unityRecovering, false);
+});
+h.check("partial comfort does not fabricate social recovery or camp hardship confidence", () => {
+  assert.ok(moodShare(partialDisposition, "recovering") < moodShare(fullDisposition, "recovering"));
+  assert.ok(partialSeasonalEvidence !== undefined && fullSeasonalEvidence !== undefined);
+  assert.ok(partialSeasonalEvidence.confidence <= fullSeasonalEvidence.confidence);
+  assert.ok(partialHungrySeasonalEvidence !== undefined && fullHungrySeasonalEvidence !== undefined);
+  assert.ok(partialHungrySeasonalEvidence.confidence < fullHungrySeasonalEvidence.confidence);
+  assert.ok(mixedTemporalSeasonalEvidence !== undefined && mixedTemporalSeasonalEvidence.confidence === 0);
+});
+h.check("legacy partial exposure does not default missing coverage telemetry to full comfort", () => {
+  assert.equal(legacyPartialFission.unityRecovering, false);
+  assert.ok(moodShare(legacyPartialDisposition, "recovering") < moodShare(fullDisposition, "recovering"));
+  assert.ok(legacyPartialSeasonalEvidence !== undefined && fullSeasonalEvidence !== undefined);
+  assert.ok(legacyPartialSeasonalEvidence.confidence <= fullSeasonalEvidence.confidence);
+  assert.ok(legacyPartialDryMargin !== undefined && legacyPartialDryMargin.seasonalMode.harvestOpportunity < fullDryMargin.seasonalMode.harvestOpportunity);
+  const legacyKind = legacyPartialBiome.currentBiomeKind;
+  const fullKind = fullBiome.currentBiomeKind;
+  assert.ok((legacyPartialBiome.records[legacyKind]?.competence ?? 0) <= (fullBiome.records[fullKind]?.competence ?? 0));
+});
 const annualGap = nutrition.deriveAnnualNutritionState(fullHungry, 360);
+// Shifted annual read: the retained exposure ends at day720, while the annual
+// observer runs at day900. The physical query therefore sees only [540,720) of
+// the current year and [180,720) of the 720-day history. Cached streak counters
+// from the old exposure end must not be carried into this shifted read; the gap
+// [720,900) must also interrupt the trailing contiguous streak.
+const shiftedHungry = merge(sample(0, 720, 0), 12, 0);
+const shiftedAnnual = nutrition.deriveAnnualNutritionState(shiftedHungry, 900);
+h.observations.shiftedAnnual = shiftedAnnual;
+h.check("shifted annual read uses dated coverage rather than cached counters", () => {
+  assert.equal(shiftedAnnual.currentNutritionCoverage, .5);
+  assert.equal(shiftedAnnual.chronicNutritionCoverage, .75);
+  assert.equal(shiftedAnnual.chronicFoodStress, .32);
+  assert.equal(shiftedAnnual.recentFoodStress, shiftedAnnual.currentFoodStress);
+});
 const fullMixed = write(
   write(
     write(
@@ -150,7 +272,10 @@ h.check("annual horizon aligns recent stress with its physical gap", () => {
   assert.equal(annualGap.recentFoodStress, .25);
   assert.equal(annualGap.currentNutritionCoverage, .25);
   assert.equal(annualGap.recentNutritionCoverage, .25);
-  assert.ok(annualGap.foodMovementPressure < .5);
+  // The annual reader changes the annual demographic horizon; movement keeps
+  // the canonical current/rolling seasonal reader and must not be replaced by
+  // the 360-day demographic mean.
+  assert.equal(annualGap.foodMovementPressure, nutrition.deriveCanonicalNutritionState(fullHungry).foodMovementPressure);
   assert.ok(annualGap.foodDemographicPressure < .5);
 });
 h.check("partial annual nutrition reaches the actual demography reader coverage-safe", () => {

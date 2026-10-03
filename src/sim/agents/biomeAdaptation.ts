@@ -5,6 +5,7 @@ import type {
 } from "./types";
 import type { TileId, WorldTime } from "../core/types";
 import type { BiomeKind, Tile, WorldState } from "../world/types";
+import { getCurrentCoverageSafeClampedSupport } from "./seasonalSurvival";
 
 export interface BiomeAdaptationFit {
   readonly biomeKind: BiomeKind;
@@ -177,11 +178,9 @@ function getObservedBiomeUseValue(band: Band, tile: Tile, isCurrentTile: boolean
     return 0;
   }
 
-  const physicalSupport = clamp01(
-    band.carryingCapacity?.perCapitaReturn.supportDebug.humanFoodLedger?.rawSupportRatio ??
-      band.seasonalSupport?.currentSeasonSupport.clampedSupportRatio ??
-      0,
-  );
+  const physicalSupport = band.seasonalSupport === undefined
+    ? clamp01(band.carryingCapacity?.perCapitaReturn.supportDebug.humanFoodLedger?.rawSupportRatio ?? 0)
+    : getCurrentCoverageSafeClampedSupport(band.seasonalSupport);
   const waterSecurity = clamp01(1 - (band.pressureState?.waterStress ?? 0.5));
   const riskSecurity = clamp01(1 - (band.pressureState?.riskPressure ?? 0.5));
 

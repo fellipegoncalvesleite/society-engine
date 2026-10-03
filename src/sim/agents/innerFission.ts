@@ -8,6 +8,7 @@ import type {
   SocialTensionRelationSummary,
 } from "./types";
 import type { WorldState } from "../world/types";
+import { getCurrentNutritionCoverage } from "./seasonalSurvival";
 
 export function deriveInnerFissionState(world: WorldState, band: Band): InnerFissionState {
   const population = Math.max(1, Math.round(band.demography.population));
@@ -276,11 +277,13 @@ function getSplitDelayedReason(input: {
 function getUnityRecoveryReason(band: Band, pressureScore: number): string | undefined {
   const previous = band.innerFission;
   const support = band.seasonalSupport;
+  const fullyCovered = getCurrentNutritionCoverage(support) >= 1;
 
   if (
     previous !== undefined &&
     previous.pressureScore >= 0.34 &&
     pressureScore <= 0.22 &&
+    fullyCovered &&
     (support?.hungerClassification === "stable" || support?.hungerClassification === "seasonal_pulse_recovery" || support?.hungerClassification === "recovery_after_crisis")
   ) {
     return "support recovered and fission pressure eased";

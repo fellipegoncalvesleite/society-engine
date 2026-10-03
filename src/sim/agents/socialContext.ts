@@ -24,7 +24,7 @@ import type {
 import { preserveTerminalBandSnapshots, shareCurrentFissionLineage } from "./bandLifecycle";
 import { getNearbyBandPressure } from "./crowding";
 import { deriveCarryingCapacity } from "./carryingCapacity";
-import { deriveCanonicalNutritionState, updateSeasonalSupportState } from "./seasonalSurvival";
+import { deriveCanonicalNutritionState, getCurrentNutritionCoverage, updateSeasonalSupportState } from "./seasonalSurvival";
 import {
   deriveInnerFissionState,
   deriveSocialTensionReadabilityState,
@@ -1290,10 +1290,11 @@ function deriveBandDispositionState(
   const socialFracture = band.socialTension?.socialTensionPressure ?? latestTension;
   const fissionPressure = band.innerFission?.pressureScore ?? band.demography.splitPressure;
   const weakPressure = band.viability?.viabilityPressure ?? 0;
+  const nutritionCoverage = getCurrentNutritionCoverage(band.seasonalSupport);
   const resourceRecovery = (band.resourceEcology?.support.seasonalResourceModifier ?? 1) > 1.04 ? 0.18 : 0;
   const recoverySignal = clamp01(
     (band.seasonalSupport?.seasonalRecoveryStreak ?? 0) * 0.18 +
-      (band.seasonalSupport?.currentSeasonSupport.mode === "pulse" ? 0.34 : 0) +
+      (band.seasonalSupport?.currentSeasonSupport.mode === "pulse" ? 0.34 * nutritionCoverage : 0) +
       resourceRecovery,
   );
   const hardship = band.recentResidentialMoveEvents?.[0]?.hardshipRisk ?? 0;

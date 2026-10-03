@@ -14,6 +14,7 @@ import {
   type PracticeExperimentCandidate,
   type ProblemFrame,
 } from "./problemPractice";
+import { getRecentNutritionCoverage } from "./seasonalSurvival";
 import type {
   Band,
   IntraSeasonTripRecord,
@@ -1556,7 +1557,7 @@ function evidenceFromSeasonalSupport(
       support.currentSeasonSupport.foodStress,
       support.currentSeasonSupport.waterStress,
       support.currentSeasonSupport.deficitRatio,
-      support.rolling4SeasonSupport < 0.55 ? 0.35 : 0,
+      (getRecentNutritionCoverage(support) >= 1 && support.rolling4SeasonSupport < 0.55) ? 0.35 : 0,
     ))),
     livedBasis: "lived",
     tileId: context.band.position,
