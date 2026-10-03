@@ -1,0 +1,116 @@
+{
+  "check": "SCALE1-TRAVERSAL-AUTHORITY",
+  "verdict": "PASS",
+  "checks": {
+    "traversalModuleExists": true,
+    "oneKmEdgeLength": true,
+    "onePointFiveKmEdgeLength": true,
+    "routeLengthPhysical": true,
+    "terrainCostAffectsTime": true,
+    "crossingCostAffectsTime": true,
+    "aquaticTargetBlocked": true,
+    "slowTravelRetainsDirectedEdgeTime": true,
+    "retainedEdgeCompletesContiguously": true,
+    "fastTravelCompletesMultipleEdges": true,
+    "mismatchedRemainderIsNotGenericCredit": true,
+    "deterministicRepeat": true,
+    "traversalDoesNotImportGlobalKmPerTile": true
+  },
+  "measurements": {
+    "edge1": {
+      "fromTileId": "a",
+      "toTileId": "b",
+      "physicalLengthKm": 1,
+      "terrainCostMultiplier": 1,
+      "crossingCostMultiplier": 1,
+      "travelTimeDays": 1,
+      "passable": true,
+      "blockedByCrossing": false
+    },
+    "edge15": {
+      "fromTileId": "a",
+      "toTileId": "b",
+      "physicalLengthKm": 1.5,
+      "terrainCostMultiplier": 1,
+      "crossingCostMultiplier": 1,
+      "travelTimeDays": 1.5,
+      "passable": true,
+      "blockedByCrossing": false
+    },
+    "terrainEdge": {
+      "fromTileId": "a",
+      "toTileId": "b",
+      "physicalLengthKm": 1,
+      "terrainCostMultiplier": 1.5,
+      "crossingCostMultiplier": 1,
+      "travelTimeDays": 1.5,
+      "passable": true,
+      "blockedByCrossing": false
+    },
+    "crossingEdge": {
+      "fromTileId": "a",
+      "toTileId": "b",
+      "physicalLengthKm": 1,
+      "terrainCostMultiplier": 1,
+      "crossingCostMultiplier": 1.72,
+      "travelTimeDays": 1.72,
+      "passable": true,
+      "blockedByCrossing": false
+    },
+    "routeLength": 3,
+    "slow1": {
+      "routeIndex": 0,
+      "positionTileId": "a",
+      "edgeRemainder": {
+        "fromTileId": "a",
+        "toTileId": "b",
+        "remainingTravelDays": 1
+      },
+      "completedEdges": 0,
+      "completedPhysicalKm": 0,
+      "travelDaysConsumed": 1,
+      "unusedTravelDays": 0,
+      "blocked": false
+    },
+    "slow2": {
+      "routeIndex": 1,
+      "positionTileId": "b",
+      "completedEdges": 1,
+      "completedPhysicalKm": 1,
+      "travelDaysConsumed": 1,
+      "unusedTravelDays": 0,
+      "blocked": false
+    },
+    "fast": {
+      "routeIndex": 3,
+      "positionTileId": "d",
+      "completedEdges": 3,
+      "completedPhysicalKm": 3,
+      "travelDaysConsumed": 0.75,
+      "unusedTravelDays": 0.25,
+      "blocked": false
+    },
+    "wrongCredit": {
+      "routeIndex": 0,
+      "positionTileId": "a",
+      "edgeRemainder": {
+        "fromTileId": "a",
+        "toTileId": "b",
+        "remainingTravelDays": 1.5
+      },
+      "completedEdges": 0,
+      "completedPhysicalKm": 0,
+      "travelDaysConsumed": 0.5,
+      "unusedTravelDays": 0,
+      "blocked": false
+    }
+  },
+  "_provenance": {
+    "sourceCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+    "executionHead": "953205e23b9758628feba002f8ff49280ab1b480",
+    "script": "scripts/scale1TraversalAudit.mjs",
+    "exitCode": 0,
+    "stderr": "",
+    "stdoutPrefix": ""
+  }
+}

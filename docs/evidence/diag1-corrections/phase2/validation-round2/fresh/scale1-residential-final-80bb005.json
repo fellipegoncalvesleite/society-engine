@@ -1,0 +1,127 @@
+{
+  "check": "SCALE1-RESIDENTIAL-PROVISIONAL-TRAVERSAL",
+  "verdict": "PASS",
+  "checks": {
+    "A_partial_1km_position_unchanged": true,
+    "A_partial_1km_remainder_bound": true,
+    "A_next_execution_completes": true,
+    "B_1_5km_requires_more_time": true,
+    "C_multi_edge_day": true,
+    "D_terrain_geometry_unchanged": true,
+    "D_terrain_time_increased": true,
+    "E_crossing_geometry_unchanged": true,
+    "E_crossing_time_increased": true,
+    "F_column_slower_than_selected_party": true,
+    "G_interrupted_edge_no_generic_credit": true,
+    "H_deterministic": true,
+    "I_contiguous_route_transitions": true,
+    "J_physical_history_1km_scale": true,
+    "J_physical_history_1_5km_scale": true,
+    "provisional_uses_physical_traversal": true,
+    "provisional_has_directed_edge_state": true,
+    "provisional_no_days_per_tile_quantization": true,
+    "residential_event_uses_physical_route": true,
+    "residential_event_exposes_physical_km": true,
+    "residential_execution_uses_traversal_authority": true,
+    "migration_leg_not_converted_to_tile_budget": true,
+    "migration_max_steps_not_behavioral_physical_ceiling": true,
+    "legacy_global_km_per_tile_removed": true,
+    "legacy_tiles_per_day_removed": true
+  },
+  "measurements": {
+    "oneKmDay1": {
+      "routeIndex": 0,
+      "positionTileId": "a",
+      "edgeRemainder": {
+        "fromTileId": "a",
+        "toTileId": "b",
+        "remainingTravelDays": 0.10000000000000009
+      },
+      "completedEdges": 0,
+      "completedPhysicalKm": 0,
+      "travelDaysConsumed": 1,
+      "unusedTravelDays": 0,
+      "blocked": false
+    },
+    "oneKmDay2": {
+      "routeIndex": 1,
+      "positionTileId": "b",
+      "completedEdges": 1,
+      "completedPhysicalKm": 1,
+      "travelDaysConsumed": 0.10000000000000009,
+      "unusedTravelDays": 0.8999999999999999,
+      "blocked": false
+    },
+    "onePointFive": {
+      "routeIndex": 0,
+      "positionTileId": "a",
+      "edgeRemainder": {
+        "fromTileId": "a",
+        "toTileId": "b",
+        "remainingTravelDays": 0.6500000000000001
+      },
+      "completedEdges": 0,
+      "completedPhysicalKm": 0,
+      "travelDaysConsumed": 1,
+      "unusedTravelDays": 0,
+      "blocked": false
+    },
+    "multi": {
+      "routeIndex": 3,
+      "positionTileId": "d",
+      "completedEdges": 3,
+      "completedPhysicalKm": 3,
+      "travelDaysConsumed": 0.75,
+      "unusedTravelDays": 0.25,
+      "blocked": false
+    },
+    "baseEdge": {
+      "fromTileId": "a",
+      "toTileId": "b",
+      "physicalLengthKm": 1,
+      "terrainCostMultiplier": 1,
+      "crossingCostMultiplier": 1,
+      "travelTimeDays": 1,
+      "passable": true,
+      "blockedByCrossing": false
+    },
+    "terrainEdge": {
+      "fromTileId": "a",
+      "toTileId": "b",
+      "physicalLengthKm": 1,
+      "terrainCostMultiplier": 1.5,
+      "crossingCostMultiplier": 1,
+      "travelTimeDays": 1.5,
+      "passable": true,
+      "blockedByCrossing": false
+    },
+    "riverEdge": {
+      "fromTileId": "a",
+      "toTileId": "b",
+      "physicalLengthKm": 1,
+      "terrainCostMultiplier": 1,
+      "crossingCostMultiplier": 1.72,
+      "travelTimeDays": 1.72,
+      "passable": true,
+      "blockedByCrossing": false
+    },
+    "column": {
+      "context": "whole_band_residential_move",
+      "kmPerTravelDay": 2.261
+    },
+    "party": {
+      "context": "resource_expedition",
+      "kmPerTravelDay": 7
+    },
+    "route1Km": 2,
+    "route15Km": 3
+  },
+  "_provenance": {
+    "sourceCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+    "executionHead": "953205e23b9758628feba002f8ff49280ab1b480",
+    "script": "scripts/scale1ResidentialTraversalAudit.mjs",
+    "exitCode": 0,
+    "stderr": "",
+    "stdoutPrefix": ""
+  }
+}

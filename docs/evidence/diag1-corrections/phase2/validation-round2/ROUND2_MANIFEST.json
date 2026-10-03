@@ -282,6 +282,28 @@
       "path": "fresh/determinism-final-80bb005.json",
       "result": "Map1 and Map2 complete JSON state; daily/weekly/monthly/seasonal/repeat/fresh digests equal within each map; 1260 days",
       "sourceCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f"
+    },
+    "scale1": {
+      "tripTiming": {
+        "path": "fresh/scale1-trip-final-80bb005.json",
+        "result": "PASS",
+        "sourceCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f"
+      },
+      "traversal": {
+        "path": "fresh/scale1-traversal-final-80bb005.json",
+        "result": "PASS",
+        "sourceCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f"
+      },
+      "residentialTraversal": {
+        "path": "fresh/scale1-residential-final-80bb005.json",
+        "result": "PASS",
+        "sourceCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f"
+      }
+    },
+    "architectureGraph": {
+      "path": "fresh/architecture-graph-final-80bb005.json",
+      "result": "pass; 224 nodes/769 links, 0 duplicate IDs, 0 dangling links",
+      "sourceCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f"
     }
   },
   "historicalEvidenceNotRelabeled": {
@@ -310,6 +332,9 @@
     "phase2OverlapMutant": {
       "path": "docs/evidence/diag1-corrections/phase2/validation-final3/phase2-overlap.json",
       "status": "historical source-preserving mutant output; original source metadata retained; not attributed to 80bb005"
+    },
+    "scale1HistoricalPreFinal": {
+      "status": "historical artifact retained; exact frozen-source replacements are fresh/scale1-*-final-80bb005.json"
     }
   },
   "thresholdAndMerge": {
