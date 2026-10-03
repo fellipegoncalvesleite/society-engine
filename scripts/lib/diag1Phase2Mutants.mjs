@@ -33,5 +33,17 @@ export function phase2Mutation(mutant) {
    const anchor='      const s = samples[i];';assert.equal(code.split(anchor).length,2,'migration execution anchor');
    return code.replace(anchor,hit('migration_guess')+anchor);
   }
+  if(mutant==='unknown_coverage'&&id.endsWith('/agents/nutritionExposure.ts')){
+   const needle='    coverageSafeFoodStress: coverageSafe(s => s.foodStress),';
+   return replace(code,needle,`    coverageSafeFoodStress: (((globalThis as any).__diag2MutantHits['unknown_coverage']=((globalThis as any).__diag2MutantHits['unknown_coverage']??0)+1), weighted(s => s.foodStress)),`,'unknown_coverage');
+  }
+  if(mutant==='recovery_duration'&&id.endsWith('/agents/seasonalSurvival.ts')){
+   const needle='    input.seasonalRecoveryStreak >= 1 &&';
+   return replace(code,needle,`    (((globalThis as any).__diag2MutantHits['recovery_duration']=((globalThis as any).__diag2MutantHits['recovery_duration']??0)+1), input.seasonalRecoveryStreak > 0) &&`,'recovery_duration');
+  }
+  if(mutant==='surplus_coverage'&&id.endsWith('/agents/seasonalSurvival.ts')){
+   const needle='    return exposure.coverage * clamp01((knownRatio - SURPLUS_ONSET) / SURPLUS_SPAN);';
+   return replace(code,needle,`    return (((globalThis as any).__diag2MutantHits['surplus_coverage']=((globalThis as any).__diag2MutantHits['surplus_coverage']??0)+1), clamp01((knownRatio - SURPLUS_ONSET) / SURPLUS_SPAN));`,'surplus_coverage');
+  }
  }} };
 }

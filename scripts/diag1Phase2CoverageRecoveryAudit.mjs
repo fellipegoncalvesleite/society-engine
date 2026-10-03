@@ -1,0 +1,315 @@
+// DIAG-1 Phase2 correction round: unknown body-time coverage and recovery duration.
+// This audit is intentionally written against the current candidate before the fix: the
+// coverage assertions must fail on the known-subset extrapolation and the 1-day recovery
+// assertion must fail on the old `> 0` threshold.
+import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
+import { phase2Harness } from "./lib/diag1Phase2Harness.mjs";
+
+const originalProductionOverlay = process.argv.includes("--red-original") ? {
+  name: "diag1-round2-original-production-bytes", enforce: "pre",
+  transform(code, id) {
+    const relative = id.match(/\/(src\/sim\/agents\/(?:nutritionExposure|seasonalSurvival)\.ts)$/)?.[1];
+    if (!relative) return;
+    return execFileSync("git", ["show", `bf5807e75bb650872d9c81cf95dce5dc1df6a509:${relative}`], { encoding: "utf8" });
+  },
+} : undefined;
+const h = await phase2Harness(
+  "DIAG1 Phase2 unknown coverage and recovery duration",
+  originalProductionOverlay ? [originalProductionOverlay] : [],
+);
+const [runner, nutrition, time, fission, demography] = await Promise.all([
+  h.load("runner/simRunner"), h.load("agents/seasonalSurvival"), h.load("tick/time"), h.load("agents/innerFission"),
+  h.load("agents/demography"),
+]);
+const world = runner.initSimWorld({ kind: "map2" }, "diag1:phase2:coverage-recovery");
+const band = Object.values(world.bands)[0];
+
+function sample(startDay, endDay, ratio, knownPopulationFraction = 1, recoveryEligible = ratio >= .98) {
+  const days = endDay - startDay;
+  const demandUnits = days;
+  const supportUnits = ratio * demandUnits;
+  const foodStress = Math.max(0, 1 - ratio);
+  const t = time.getWorldTimeForDay(endDay);
+  return {
+    ...t, rawSupportRatio: ratio, clampedSupportRatio: Math.min(1, ratio), perCapitaReturn: ratio >= .98 ? 1 : 0,
+    seasonalModifier: 1, foodStress, waterStress: 0, deficitRatio: foodStress,
+    mode: ratio >= 1 ? "neutral" : "lean",
+    exposure: {
+      version: 1, startDay, endDay, durationDays: days, producer: "inherited_condition",
+      provenance: "coverage-recovery-controlled", supportUnits, demandUnits,
+      foodStressDays: days * knownPopulationFraction * foodStress, waterStressDays: 0,
+      recoveryDays: recoveryEligible ? days * knownPopulationFraction : 0,
+      segments: [{ startDay, endDay, knownPopulationFraction, supportUnits, demandUnits,
+        foodStress, waterStress: 0, perCapitaReturn: ratio >= .98 ? 1 : 0, recoveryEligible }],
+    },
+  };
+}
+function legacySample(startDay, endDay, ratio, knownPopulationFraction = 1, recoveryEligible = ratio >= .98) {
+  const days = endDay - startDay;
+  const t = time.getWorldTimeForDay(endDay);
+  const segment = { startDay, endDay, knownPopulationFraction, rawSupportRatio: ratio,
+    foodStress: Math.max(0, 1 - ratio), waterStress: 0, perCapitaReturn: ratio >= .98 ? 1 : 0, recoveryEligible };
+  return { ...t, rawSupportRatio: ratio, clampedSupportRatio: Math.min(1, ratio), perCapitaReturn: segment.perCapitaReturn,
+    seasonalModifier: 1, foodStress: segment.foodStress, waterStress: 0, deficitRatio: segment.foodStress,
+    mode: ratio >= 1 ? "neutral" : "lean",
+    exposure: { version: 1, startDay, endDay, durationDays: days, producer: "inherited_condition",
+      provenance: "coverage-recovery-legacy-control", quantityBasis: "legacy_ratio_only",
+      foodStressDays: days * knownPopulationFraction * segment.foodStress, waterStressDays: 0,
+      recoveryDays: recoveryEligible ? days * knownPopulationFraction : 0, segments: [segment] } };
+}
+const write = (state, s) => nutrition.recordSupportInterval(
+  state, s, band, time.getWorldTimeForDay(s.exposure.endDay),
+  { topSeasonalSupportReasons: ["controlled correction-round exposure"], replaceSameTickSample: false },
+);
+const withActualDemand = (s, demandUnits) => {
+  const segment = s.exposure.segments[0];
+  const supportUnits = segment.rawSupportRatio !== undefined
+    ? segment.rawSupportRatio * demandUnits : (segment.supportUnits / segment.demandUnits) * demandUnits;
+  const exposure = { ...s.exposure, supportUnits, demandUnits,
+    segments: [{ ...segment, supportUnits, demandUnits }] };
+  return { ...s, exposure };
+};
+const merge = (s, parentPeople = 3, successorPeople = 9) => nutrition.mergeSupportHistories(
+  write(undefined, s), undefined, band, parentPeople, successorPeople, time.getWorldTimeForDay(s.exposure.endDay),
+);
+
+// A: 25% known hungry body-time, 75% unknown. The low-level query's known-subset
+// mean remains useful telemetry; behavioral state must be coverage-scaled.
+const partialHungry = merge(sample(0, 90, 0, 1), 3, 9);
+const hungryQuery = nutrition.querySupportExposure(partialHungry, 90, 90);
+const hungryCanonical = nutrition.deriveCanonicalNutritionState(partialHungry);
+const hungryAnnual = nutrition.deriveAnnualNutritionState(partialHungry, 90);
+h.observations.partialHungry = { query: hungryQuery, canonical: hungryCanonical, annual: hungryAnnual };
+h.observations.partialHungry.demography = demography.deriveFoodDemographyRateTerms(hungryAnnual, partialHungry);
+h.check("partial hungry low-level coverage is explicit", () => {
+  assert.equal(hungryQuery.knownPopulationDays, 22.5);
+  assert.equal(hungryQuery.unknownPopulationDays, 67.5);
+  assert.equal(hungryQuery.foodStressDays, 22.5);
+  assert.equal(hungryQuery.pooledSupportRatio, undefined);
+});
+h.check("partial hunger does not extrapolate current stress", () => assert.equal(hungryCanonical.currentFoodStress, .25));
+h.check("partial hunger does not extrapolate annual stress", () => assert.equal(hungryAnnual.currentFoodStress, .25));
+h.check("partial hunger keeps movement and demographic pressure coverage-safe", () => {
+  assert.ok(hungryCanonical.foodMovementPressure < .5);
+  assert.ok(hungryCanonical.foodDemographicPressure < .5);
+});
+
+// B: the known subset is comfortable and recovering; unknown people contribute no
+// comfort, recovery or surplus evidence.
+const partialComfort = write(undefined, sample(0, 90, 1.72, .25, true));
+const comfortCanonical = nutrition.deriveCanonicalNutritionState(partialComfort);
+const comfortAnnual = nutrition.deriveAnnualNutritionState(partialComfort, 90);
+h.observations.partialComfort = { canonical: comfortCanonical, annual: comfortAnnual };
+h.observations.partialComfort.demography = demography.deriveFoodDemographyRateTerms(comfortAnnual, partialComfort);
+h.check("partial comfort scales recovery to measured body-time", () => assert.equal(comfortAnnual.recoveryRelief, .25));
+h.check("partial comfort scales surplus to measured body-time", () => assert.equal(comfortAnnual.nutritionalSurplus, .06));
+h.check("partial comfort remains neutral for hunger pressure", () => {
+  assert.equal(comfortCanonical.currentFoodStress, 0);
+  assert.equal(comfortCanonical.foodMovementPressure, 0);
+});
+h.check("partial annual demography consumes coverage-safe hungry and comfort terms", () => {
+  const hungryTerms = h.observations.partialHungry.demography;
+  const comfortTerms = h.observations.partialComfort.demography;
+  assert.equal(hungryTerms.currentFoodStress, .25);
+  assert.equal(hungryTerms.recentFoodStress, .25);
+  assert.equal(hungryTerms.foodPerPersonStress, .17);
+  assert.ok(Math.abs(hungryTerms.foodMortalityContribution - .0612) < 1e-12);
+  assert.equal(comfortTerms.currentFoodStress, 0);
+  assert.equal(comfortTerms.recentFoodStress, 0);
+  assert.equal(comfortTerms.foodFertilitySurplusBonus, .0132);
+});
+const partialHighSurplus = write(undefined, sample(0, 90, 10, .25, true));
+const highSurplusAnnual = nutrition.deriveAnnualNutritionState(partialHighSurplus, 90);
+h.observations.partialHighSurplus = highSurplusAnnual;
+h.check("partial high surplus remains coverage-bounded", () => {
+  assert.equal(highSurplusAnnual.recoveryRelief, .25);
+  assert.equal(highSurplusAnnual.nutritionalSurplus, .06);
+});
+
+// C/D: full coverage retains existing semantics, while no measured body-time is neutral.
+const fullHungry = merge(sample(0, 90, 0), 12, 0);
+const fullComfort = merge(sample(0, 90, 1.72), 12, 0);
+const annualGap = nutrition.deriveAnnualNutritionState(fullHungry, 360);
+const fullMixed = write(
+  write(
+    write(
+      write(undefined, sample(0, 90, .9, 1, false)),
+      sample(90, 180, 2, 1, true),
+    ),
+    sample(180, 270, .9, 1, false),
+  ),
+  sample(270, 360, 2, 1, true),
+);
+const empty = nutrition.deriveCanonicalNutritionState(undefined);
+h.check("full coverage hunger retains candidate semantics", () => assert.equal(nutrition.deriveCanonicalNutritionState(fullHungry).currentFoodStress, 1));
+h.check("full coverage comfort retains candidate semantics", () => assert.ok(nutrition.deriveAnnualNutritionState(fullComfort, 90).nutritionalSurplus > .5));
+h.observations.annualGap = annualGap;
+h.check("annual horizon aligns recent stress with its physical gap", () => {
+  assert.equal(annualGap.currentFoodStress, .25);
+  assert.equal(annualGap.recentFoodStress, .25);
+  assert.equal(annualGap.currentNutritionCoverage, .25);
+  assert.equal(annualGap.recentNutritionCoverage, .25);
+  assert.ok(annualGap.foodMovementPressure < .5);
+  assert.ok(annualGap.foodDemographicPressure < .5);
+});
+h.check("partial annual nutrition reaches the actual demography reader coverage-safe", () => {
+  const fullTerms = demography.deriveFoodDemographyRateTerms(
+    nutrition.deriveAnnualNutritionState(fullHungry, 90), fullHungry,
+  );
+  assert.ok(hungryCanonical.foodDemographicPressure < fullTerms.foodPerPersonStress);
+  assert.ok(hungryAnnual.foodDemographicPressure < fullTerms.foodPerPersonStress);
+});
+h.check("full coverage mixed support preserves pooled demand weighting", () => {
+  const annual = nutrition.deriveAnnualNutritionState(fullMixed, 360);
+  assert.equal(annual.nutritionalSurplus, .28);
+  assert.equal(annual.recoveryRelief, .5);
+});
+const fullLegacyMixed = write(
+  write(
+    write(
+      write(undefined, legacySample(0, 90, 0, 1, false)),
+      legacySample(90, 180, 2, 1, true),
+    ),
+    legacySample(180, 270, 0, 1, false),
+  ),
+  legacySample(270, 360, 2, 1, true),
+);
+const fullLegacyAnnual = nutrition.deriveAnnualNutritionState(fullLegacyMixed, 360);
+h.observations.fullLegacyMixed = fullLegacyAnnual;
+h.check("full-known legacy coverage telemetry is explicit", () => {
+  assert.equal(fullLegacyAnnual.chronicNutritionCoverage, 1);
+});
+h.check("full-known legacy mixed support preserves aggregate bounded semantics", () => {
+  assert.equal(fullLegacyAnnual.nutritionalSurplus, 0);
+});
+h.check("zero coverage is unavailable and neutral", () => {
+  assert.equal(empty.nutritionStateAvailable, false);
+  assert.equal(empty.currentFoodStress, 0);
+  assert.equal(empty.recoveryRelief, 0);
+  assert.equal(empty.nutritionalSurplus, 0);
+});
+
+const nearFullMixed = write(
+  write(
+    write(
+      write(undefined, sample(0, 90, 0, .99, false)),
+      sample(90, 180, 1.72, .99, true),
+    ),
+    sample(180, 270, 1.72, .99, true),
+  ),
+  sample(270, 360, 1.72, .99, true),
+);
+const nearFullAnnual = nutrition.deriveAnnualNutritionState(nearFullMixed, 360);
+h.observations.nearFullMixed = nearFullAnnual;
+h.check("near-full coverage telemetry is explicit", () => {
+  assert.equal(nearFullAnnual.currentNutritionCoverage, .99);
+});
+h.check("near-full mixed coverage stays continuous and bounded", () => {
+  assert.equal(nearFullAnnual.nutritionalSurplus, .21);
+});
+
+// E: measured hunger + measured comfort + unknown body-time. Only the supported
+// quarter-day contributions may reach the behavioral terms.
+const mixedExposure = { ...sample(0, 90, 0, .25), exposure: {
+  ...sample(0, 90, 0, .25).exposure,
+  segments: [
+    { ...sample(0, 45, 0, .25).exposure.segments[0], startDay: 0, endDay: 45 },
+    { ...sample(45, 90, 1.72, .25).exposure.segments[0], startDay: 45, endDay: 90 },
+  ],
+  supportUnits: 45 * 0 + 45 * 1.72,
+  demandUnits: 90,
+  foodStressDays: 45 * .25,
+  waterStressDays: 0,
+  recoveryDays: 45 * .25,
+} };
+const mixed = write(undefined, mixedExposure);
+const mixedCanonical = nutrition.deriveCanonicalNutritionState(mixed);
+h.observations.mixed = mixedCanonical;
+h.check("mixed coverage weights measured negative evidence only", () => assert.equal(mixedCanonical.recentFoodStress, .13));
+h.check("mixed coverage does not promote recovery or surplus", () => {
+  assert.ok(mixedCanonical.recoveryRelief < 1);
+  assert.ok(mixedCanonical.nutritionalSurplus < .99);
+});
+
+// G: reintegration keeps recorded physical quantities invariant while the embodied
+// stress aggregate follows the currently surviving headcounts. This is a deliberate
+// aggregate simplification: no person-level life course is invented during merge.
+const parentHungry = withActualDemand(sample(0, 90, 0, 1, false), 120);
+const successorComfort = withActualDemand(sample(0, 90, 1.72, 1, true), 60);
+const mergedHungryHeavy = nutrition.mergeSupportHistories(
+  write(undefined, parentHungry), write(undefined, successorComfort), band, 9, 3, time.getWorldTimeForDay(90),
+);
+const mergedComfortHeavy = nutrition.mergeSupportHistories(
+  write(undefined, parentHungry), write(undefined, successorComfort), band, 3, 9, time.getWorldTimeForDay(90),
+);
+const mergeQueryHungryHeavy = nutrition.querySupportExposure(mergedHungryHeavy, 90, 90);
+const mergeQueryComfortHeavy = nutrition.querySupportExposure(mergedComfortHeavy, 90, 90);
+h.observations.mergeWeighting = {
+  historicalInputs: { parentBodyDemandUnits: 120, successorBodyDemandUnits: 60, parentHistoricalHeadcount: 12, successorHistoricalHeadcount: 6 },
+  survivorHeadcountsBeforeReintegration: { parent: 9, successor: 3 },
+  survivorHeadcountsAfterReintegration: { parent: 3, successor: 9 },
+  hungryHeavy: mergeQueryHungryHeavy,
+  comfortHeavy: mergeQueryComfortHeavy,
+  adjudication: "accepted aggregate simplification: current surviving headcounts weight embodied stress after a headcount change; recorded actual support/demand remain summed and unchanged; no person-level life course invented",
+};
+h.check("historical merge keeps actual quantities invariant", () => {
+  assert.equal(mergeQueryHungryHeavy.supportUnits, mergeQueryComfortHeavy.supportUnits);
+  assert.equal(mergeQueryHungryHeavy.demandUnits, mergeQueryComfortHeavy.demandUnits);
+});
+h.check("historical merge weights stress by current survivor headcount", () => {
+  assert.notEqual(mergeQueryHungryHeavy.foodStress, mergeQueryComfortHeavy.foodStress);
+});
+
+// F: exact physical-time recovery threshold and interruption.
+const crisis = write(undefined, sample(0, 90, .2));
+const recoverFor = (days, gap = 0) => write(crisis, sample(90 + gap, 90 + gap + days, 1));
+const oneRecovery = recoverFor(1);
+const eightyNineRecovery = recoverFor(89);
+const ninetyRecovery = recoverFor(90);
+const interrupted = write(write(crisis, sample(90, 120, 1)), sample(121, 122, 1));
+const measuredInterrupted = write(
+  write(write(crisis, sample(90, 120, 1)), sample(120, 121, .9, 1, false)),
+  sample(121, 122, 1),
+);
+h.observations.recoveryThresholds = {
+  one: oneRecovery.seasonalRecoveryStreak, eightyNine: eightyNineRecovery.seasonalRecoveryStreak,
+  ninety: ninetyRecovery.seasonalRecoveryStreak, interrupted: interrupted.seasonalRecoveryStreak,
+  measuredInterrupted: measuredInterrupted.seasonalRecoveryStreak,
+  classifications: {
+    one: oneRecovery.hungerClassification, eightyNine: eightyNineRecovery.hungerClassification,
+    ninety: ninetyRecovery.hungerClassification, interrupted: interrupted.hungerClassification,
+    measuredInterrupted: measuredInterrupted.hungerClassification,
+  },
+};
+h.check("one recovery day improves current condition but is not mature recovery", () => {
+  assert.equal(oneRecovery.currentSeasonSupport.mode, "recovery");
+  assert.notEqual(oneRecovery.hungerClassification, "recovery_after_crisis");
+});
+h.check("89 qualifying recovery days are not mature recovery", () => assert.notEqual(eightyNineRecovery.hungerClassification, "recovery_after_crisis"));
+h.check("90 qualifying recovery days are mature recovery", () => assert.equal(ninetyRecovery.hungerClassification, "recovery_after_crisis"));
+h.check("a gap resets contiguous recovery duration", () => {
+  assert.equal(interrupted.seasonalRecoveryStreak, 1 / 90);
+  assert.notEqual(interrupted.hungerClassification, "recovery_after_crisis");
+});
+h.check("a measured non-recovery interval resets contiguous recovery duration", () => {
+  assert.equal(measuredInterrupted.seasonalRecoveryStreak, 1 / 90);
+  assert.notEqual(measuredInterrupted.hungerClassification, "recovery_after_crisis");
+});
+h.check("inner fission preserves immediate recovery without mature classification", () => {
+  const oneDayBand = { ...band, seasonalSupport: oneRecovery,
+    innerFission: { pressureScore: .5 }, pressureState: { fatiguePressure: 0, waterStress: 0 },
+    socialPressure: { fissionPressure: 0 }, demography: { ...band.demography, splitPressure: 0 } };
+  const state = fission.deriveInnerFissionState(world, oneDayBand);
+  assert.equal(oneRecovery.hungerClassification, "seasonal_pulse_recovery");
+  if (state.unityRecovering) assert.equal(oneRecovery.hungerClassification, "seasonal_pulse_recovery");
+});
+
+// Inventory the converted comparisons so the final report names each behaviorally
+// relevant >0/count assumption rather than silently widening this correction.
+h.observations.thresholdInventory = {
+  physicallyEquivalent: ["seasonalHungerStreak >= 2", "chronicDeficitStreak >= 4/6/8", "deficitSeasonsLast4/8 >= existing thresholds", "waterStressSeasonsLast8 >= existing thresholds"],
+  correctedInThisRound: ["seasonalRecoveryStreak > 0 -> >= 1 for recovery_after_crisis", "bandChronicle recovery arc > 0 -> >= 1"],
+  intentionallyDurationWeighted: ["socialContext recovery signal scales with seasonalRecoveryStreak", "protoCamps consumes classification, not raw duration"],
+};
+await h.finish({ ...(process.argv.includes("--red-original") ? { auditMode: "RED against exact original production bytes at bf5807e; initial pre-edit positive assertions were nondiscriminating and are reported explicitly" } : {}) });

@@ -1628,7 +1628,7 @@ function detectRecoveryArc(context: ChronicleContext): ArcDraft | undefined {
     event.category === "body_logistics"
   );
   const supportRecovery = band.seasonalSupport?.hungerClassification === "recovery_after_crisis" ||
-    (band.seasonalSupport?.seasonalRecoveryStreak ?? 0) > 0 ||
+    (band.seasonalSupport?.seasonalRecoveryStreak ?? 0) >= 1 ||
     band.bodyCampLogistics?.mode === "recovering";
 
   if (!supportRecovery && recoveryEvents.length < 2) {

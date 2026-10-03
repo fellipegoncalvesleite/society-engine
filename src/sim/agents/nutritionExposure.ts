@@ -192,15 +192,27 @@ export function queryNutritionExposure(samples: readonly SeasonalSupportSample[]
   const coveredDays = segments.reduce((n, s) => n + s.endDay - s.startDay, 0);
   const totals = summarizeSegments(segments);
   const knownPopulationDays = sumMeasures(segments.map(s => (s.endDay - s.startDay) * (s.knownPopulationFraction ?? 1)));
+  const requestedDays = endDay - startDay;
+  const coverage = requestedDays === 0 ? 0 : Math.min(1, Math.max(0, knownPopulationDays / requestedDays));
   const weighted = (fn: (s: NutritionExposureSegment) => number): number => knownPopulationDays === 0 ? 0 :
     sumMeasures(segments.map(s => (s.endDay - s.startDay) * (s.knownPopulationFraction ?? 1) * fn(s))) / knownPopulationDays;
+  // `weighted` is retained as a known-subset diagnostic. Behavioral readers use
+  // coverage-safe values: unknown body-time contributes neither hunger nor comfort.
+  const coverageSafe = (fn: (s: NutritionExposureSegment) => number): number => requestedDays === 0 ? 0 :
+    sumMeasures(segments.map(s => (s.endDay - s.startDay) * (s.knownPopulationFraction ?? 1) * fn(s))) / requestedDays;
   return { startDay, endDay, coveredDays, unknownDays: endDay - startDay - coveredDays, gaps,
-    knownPopulationDays, unknownPopulationDays: endDay - startDay - knownPopulationDays,
+    requestedDays, coverage, knownPopulationDays, unknownPopulationDays: endDay - startDay - knownPopulationDays,
     available: knownPopulationDays > 0, ...totals,
     pooledSupportRatio: knownPopulationDays === coveredDays && totals.demandUnits && totals.demandUnits > 0 ? (totals.supportUnits ?? 0) / totals.demandUnits : undefined,
     foodStress: weighted(s => s.foodStress), waterStress: weighted(s => s.waterStress),
     clampedSupport: weighted(s => Math.min(1, segmentRatio(s))), rawSupport: weighted(segmentRatio),
     perCapitaReturn: weighted(s => s.perCapitaReturn), recoveryFraction: weighted(s => s.recoveryEligible ? 1 : 0),
+    coverageSafeFoodStress: coverageSafe(s => s.foodStress),
+    coverageSafeWaterStress: coverageSafe(s => s.waterStress),
+    coverageSafeClampedSupport: coverageSafe(s => Math.min(1, segmentRatio(s))),
+    coverageSafeRawSupport: coverageSafe(segmentRatio),
+    coverageSafePerCapitaReturn: coverageSafe(s => s.perCapitaReturn),
+    coverageSafeRecoveryFraction: coverageSafe(s => s.recoveryEligible ? 1 : 0),
     segments };
 }
 

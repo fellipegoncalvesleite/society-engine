@@ -2823,6 +2823,8 @@ export interface SeasonalSupportSample {
   readonly foodStress: NormalizedIntensity;
   readonly waterStress: NormalizedIntensity;
   readonly deficitRatio: NormalizedIntensity;
+  /** Fraction of current projection body-time with measured nutrition. */
+  readonly nutritionCoverage?: NormalizedIntensity;
   readonly mode: SeasonalSupportMode;
 }
 
@@ -2881,6 +2883,10 @@ export interface SeasonalSupportState {
   readonly recoveryRelief?: NormalizedIntensity;
   readonly foodMovementPressure?: NormalizedIntensity;
   readonly foodDemographicPressure?: NormalizedIntensity;
+  /** Derived coverage telemetry; unknown body-time contributes no nutrition signal. */
+  readonly currentNutritionCoverage?: NormalizedIntensity;
+  readonly recentNutritionCoverage?: NormalizedIntensity;
+  readonly chronicNutritionCoverage?: NormalizedIntensity;
   readonly populationStableDespiteRecurringHunger: boolean;
   readonly topSeasonalSupportReasons: readonly string[];
   readonly reasonIds: readonly ReasonId[];

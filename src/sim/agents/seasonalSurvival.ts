@@ -47,6 +47,9 @@ export interface CanonicalNutritionState {
   readonly nutritionalSurplus: number;
   readonly foodMovementPressure: number;
   readonly foodDemographicPressure: number;
+  readonly currentNutritionCoverage: number;
+  readonly recentNutritionCoverage: number;
+  readonly chronicNutritionCoverage: number;
   // False ONLY when nutrition has not yet been measured (no physical-food interval
   // has completed for this band): a new/daughter band, an audit fixture with no
   // seasonalSupport, or a migrated legacy snapshot. Distinguishes "unknown / not
@@ -67,6 +70,22 @@ export function querySupportExposure(support: SeasonalSupportState | undefined, 
 
 function exposureEndDay(support: SeasonalSupportState): number {
   return support.exposureAsOfDay ?? Math.max(0, ...exposureSamples(support).map(s => s.exposure!.endDay));
+}
+
+/**
+ * Bound the positive surplus evidence before unknown body-time is applied.  A
+ * known subset with an extreme measured ratio therefore contributes at most its
+ * own body-time fraction.  When physical quantities are present, the known
+ * subset keeps demand-weighted pooled semantics; legacy ratio-only records use
+ * the same bounded function over the known-subset aggregate mean.
+ */
+function measuredSurplusSignal(exposure: ReturnType<typeof queryNutritionExposure>): number {
+  if (exposure.coverage <= 0 || exposure.requestedDays <= 0) return 0;
+  if (exposure.demandUnits !== undefined && exposure.demandUnits > 0) {
+    const knownRatio = (exposure.supportUnits ?? 0) / exposure.demandUnits;
+    return exposure.coverage * clamp01((knownRatio - SURPLUS_ONSET) / SURPLUS_SPAN);
+  }
+  return exposure.coverage * clamp01((exposure.rawSupport - SURPLUS_ONSET) / SURPLUS_SPAN);
 }
 
 // One authoritative translation from physical-support history into nutritional
@@ -91,6 +110,9 @@ export function deriveCanonicalNutritionState(
       nutritionalSurplus: 0,
       foodMovementPressure: 0,
       foodDemographicPressure: 0,
+      currentNutritionCoverage: 0,
+      recentNutritionCoverage: 0,
+      chronicNutritionCoverage: 0,
       nutritionStateAvailable: false,
     };
   }
@@ -98,8 +120,20 @@ export function deriveCanonicalNutritionState(
   const endDay = exposureEndDay(support);
   const current = querySupportExposure(support, endDay, CURRENT_NUTRITION_DAYS);
   const recent = querySupportExposure(support, endDay, ANNUAL_NUTRITION_DAYS);
-  const currentFoodStress = clamp01(current.foodStress);
-  const recentFoodStress = clamp01(recent.foodStress);
+  const chronic = querySupportExposure(support, endDay, NUTRITION_HISTORY_DAYS);
+  if (!recent.available && !chronic.available) {
+    return {
+      currentFoodStress: 0, recentFoodStress: 0, chronicFoodStress: 0,
+      recoveryRelief: 0, nutritionalSurplus: 0, foodMovementPressure: 0,
+      foodDemographicPressure: 0,
+      currentNutritionCoverage: round2(current.coverage),
+      recentNutritionCoverage: round2(recent.coverage),
+      chronicNutritionCoverage: round2(chronic.coverage),
+      nutritionStateAvailable: false,
+    };
+  }
+  const currentFoodStress = clamp01(current.coverageSafeFoodStress);
+  const recentFoodStress = clamp01(recent.coverageSafeFoodStress);
   const chronicFoodStress = clamp01(
     (support.chronicDeficitStreak / SEASONAL_MEMORY_WINDOW) * 0.58 +
       (support.deficitSeasonsLast8 / SEASONAL_MEMORY_WINDOW) * 0.42,
@@ -112,10 +146,9 @@ export function deriveCanonicalNutritionState(
   // far above it reaches full magnitude; the `recoveryRelief` gate requires the surplus to be
   // SUSTAINED (a real recovery streak), so a single good season cannot manufacture growth.
   // Query the bounded physical horizon, preserving unknown absolute legacy quantities.
-  const chronic = querySupportExposure(support, endDay, NUTRITION_HISTORY_DAYS);
-  const meanRawSupport = chronic.pooledSupportRatio ?? chronic.rawSupport;
+  const surplusSignal = measuredSurplusSignal(chronic);
   const nutritionalSurplus = clamp01(
-    clamp01((meanRawSupport - SURPLUS_ONSET) / SURPLUS_SPAN) * recoveryRelief,
+    surplusSignal * recoveryRelief,
   );
 
   return {
@@ -130,6 +163,9 @@ export function deriveCanonicalNutritionState(
     foodDemographicPressure: round2(clamp01(
       currentFoodStress * 0.38 + recentFoodStress * 0.26 + chronicFoodStress * 0.48 - recoveryRelief * 0.14,
     )),
+    currentNutritionCoverage: round2(current.coverage),
+    recentNutritionCoverage: round2(recent.coverage),
+    chronicNutritionCoverage: round2(chronic.coverage),
     nutritionStateAvailable: true,
   };
 }
@@ -149,25 +185,35 @@ export function deriveAnnualNutritionState(
   const endDay = currentDay ?? exposureEndDay(support);
   const year = querySupportExposure(support, endDay, ANNUAL_NUTRITION_DAYS);
   if (!year.available) return { ...deriveCanonicalNutritionState(undefined), nutritionStateAvailable: false };
-  const currentFoodStress = clamp01(year.foodStress);
-  const recoveryRelief = clamp01(year.recoveryFraction);
+  const currentFoodStress = clamp01(year.coverageSafeFoodStress);
+  const recoveryRelief = clamp01(year.coverageSafeRecoveryFraction);
   const chronic = querySupportExposure(support, endDay, NUTRITION_HISTORY_DAYS);
-  const meanRawSupport = chronic.pooledSupportRatio ?? chronic.rawSupport;
+  const surplusSignal = measuredSurplusSignal(chronic);
   const nutritionalSurplus = clamp01(
-    clamp01((meanRawSupport - SURPLUS_ONSET) / SURPLUS_SPAN) * recoveryRelief,
+    surplusSignal * recoveryRelief,
   );
 
   return {
     ...seasonal,
     currentFoodStress: round2(currentFoodStress),
+    recentFoodStress: round2(currentFoodStress),
     recoveryRelief: round2(recoveryRelief),
     nutritionalSurplus: round2(nutritionalSurplus),
+    foodMovementPressure: round2(clamp01(
+      currentFoodStress * 0.42 +
+        currentFoodStress * 0.34 +
+        seasonal.chronicFoodStress * 0.34 -
+        recoveryRelief * 0.16,
+    )),
     foodDemographicPressure: round2(clamp01(
       currentFoodStress * 0.38 +
-        seasonal.recentFoodStress * 0.26 +
+        currentFoodStress * 0.26 +
         seasonal.chronicFoodStress * 0.48 -
         recoveryRelief * 0.14,
     )),
+    currentNutritionCoverage: round2(year.coverage),
+    recentNutritionCoverage: round2(year.coverage),
+    chronicNutritionCoverage: round2(chronic.coverage),
   };
 }
 
@@ -176,6 +222,7 @@ export function deriveAnnualNutritionState(
 // same test per season rather than a second, divergent definition of "recovered".
 function isRecoverySeason(entry: SeasonalSupportSample): boolean {
   return (
+    (entry.nutritionCoverage ?? 1) >= 1 &&
     entry.rawSupportRatio >= 0.98 &&
     entry.perCapitaReturn >= 0.48 &&
     entry.foodStress < 0.32 &&
@@ -436,13 +483,16 @@ export function recordSupportInterval(
   // Full interval totals remain solely in recentSamples, including the open prefix.
   const current = queryNutritionExposure(recentSamples, endDay, CURRENT_NUTRITION_DAYS);
   const rawSupportRatio = current.pooledSupportRatio ?? current.rawSupport;
-  const deficitRatio = clamp01(1 - rawSupportRatio);
+  const deficitRatio = current.coverage >= 1
+    ? clamp01(1 - rawSupportRatio)
+    : clamp01(current.coverageSafeFoodStress);
   sample = { ...latest, exposure: clipNutritionExposure(latest.exposure!, endDay - 1, endDay),
     rawSupportRatio, clampedSupportRatio: current.clampedSupport,
-    perCapitaReturn: current.perCapitaReturn, foodStress: current.foodStress,
-    waterStress: current.waterStress, deficitRatio,
+    perCapitaReturn: current.coverageSafePerCapitaReturn,
+    foodStress: current.coverageSafeFoodStress, waterStress: current.coverageSafeWaterStress,
+    deficitRatio, nutritionCoverage: current.coverage,
     mode: classifySeasonalMode({ seasonalModifier: latest.seasonalModifier,
-      foodStress: current.foodStress, waterStress: current.waterStress, deficitRatio, previous }) };
+      foodStress: current.coverageSafeFoodStress, waterStress: current.coverageSafeWaterStress, deficitRatio, previous }) };
   const hungerClassification = classifyHunger({
     sample,
     deficitSeasonsLast4,
@@ -542,7 +592,8 @@ function classifyHunger(input: {
   readonly seasonalRecoveryStreak: number;
   readonly previous: SeasonalSupportState | undefined;
 }): SeasonalHungerClassification {
-  if (input.sample.rawSupportRatio < 0.58 || (input.chronicDeficitStreak >= 6 && input.sample.deficitRatio > 0.28)) {
+  const fullyCovered = (input.sample.nutritionCoverage ?? 1) >= 1;
+  if ((fullyCovered && input.sample.rawSupportRatio < 0.58) || (input.chronicDeficitStreak >= 6 && input.sample.deficitRatio > 0.28)) {
     return "crisis_deficit";
   }
 
@@ -559,7 +610,7 @@ function classifyHunger(input: {
   }
 
   if (
-    input.seasonalRecoveryStreak > 0 &&
+    input.seasonalRecoveryStreak >= 1 &&
     input.previous !== undefined &&
     input.previous.hungerClassification !== "stable"
   ) {
@@ -588,7 +639,8 @@ function classifyChronicDeficit(input: {
   readonly chronicDeficitStreak: number;
   readonly seasonalRecoveryStreak: number;
 }): SeasonalHungerClassification {
-  if (input.sample.rawSupportRatio < 0.58 || input.chronicDeficitStreak >= 8) {
+  const fullyCovered = (input.sample.nutritionCoverage ?? 1) >= 1;
+  if ((fullyCovered && input.sample.rawSupportRatio < 0.58) || input.chronicDeficitStreak >= 8) {
     return "crisis_deficit";
   }
 
