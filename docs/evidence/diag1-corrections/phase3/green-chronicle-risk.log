@@ -1,0 +1,8 @@
+PASS canonical history producer preserves the supplied 0.6 score
+PASS lived Chronicle episode presents a score with no probability horizon
+PASS inherited Chronicle episode retains both lineage and heuristic qualification
+PASS missing or nonfinite historical scores are not invented
+PASS projection preserves full world and historical evidence
+PASS Chronicle on/off leaves every daily full-world fingerprint identical
+PASS production bytes preserved
+{"audit":"DIAG1 Chronicle heuristic risk presentation","mutant":"none","pass":true,"passed":7,"total":7,"failed":[]}

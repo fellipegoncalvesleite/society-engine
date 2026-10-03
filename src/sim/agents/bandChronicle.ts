@@ -4076,8 +4076,11 @@ function deepEpisodeSummary(episode: BandChronicleDeepHistoryEpisodeRecord): str
       return finiteHistoryNumber(d.years) === undefined
         ? "Fallback foods mattered for enough recorded years to remain in durable memory."
         : `Fallback foods mattered for ${d.years} recorded years.`;
-    case "near_collapse":
-      return `Extinction risk reached ${formatIntensityPercent(d.extinctionRisk)} in the durable record.`;
+    case "near_collapse": {
+      const score = finiteHistoryNumber(d.extinctionRisk);
+      const value = score === undefined ? "was elevated" : `reached ${score.toFixed(2)}`;
+      return `The heuristic viability/risk score ${value} in the durable record; it has no calibrated probability or time horizon.`;
+    }
     case "band_absorbed_end":
       return `The final record keeps ${d.populationAtEnd ?? "the remaining"} people joining another band.`;
     case "band_collapsed_end":
@@ -4087,10 +4090,6 @@ function deepEpisodeSummary(episode: BandChronicleDeepHistoryEpisodeRecord): str
 
 function finiteHistoryNumber(value: number | undefined): number | undefined {
   return value === undefined || !Number.isFinite(value) ? undefined : value;
-}
-
-function formatIntensityPercent(value: number | undefined): string {
-  return value === undefined ? "a high level" : `${Math.round(value * 100)}%`;
 }
 
 function evidenceChips(evidence: readonly HistoryEvidenceRef[]): readonly BandChronicleDeepHistoryEvidenceChip[] {

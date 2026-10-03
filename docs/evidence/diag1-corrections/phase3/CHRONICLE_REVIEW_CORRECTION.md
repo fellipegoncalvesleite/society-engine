@@ -1,0 +1,11 @@
+# Review correction — Chronicle risk presentation
+
+The one combined independent reviewer found an Important/P2 gap at initial production `cc82307e749666df3d984739b6e642ef0fa5d350`: the durable near-collapse episode still rendered an unqualified extinction-risk percentage. Technical-panel wording alone did not satisfy SPEC 4C.
+
+The public history producer records a controlled heuristic score of 0.6; the public Chronicle projection previously displayed “Extinction risk reached 60%”. This is controlled presentation evidence, not natural prevalence. `diag1Phase3ChronicleRiskAudit.mjs` adds lived/inherited, missing/nonfinite, full-state preservation and 14-day observed/unobserved continuation controls. RED: 4/7 pass, three presentation failures; GREEN: 7/7 pass. Existing world and historical numeric values remain unchanged. Only `bandChronicle.ts` display formatting changes; total Phase3 production file count is now 11.
+
+Fresh verification: both TypeScript projects and Vite production build passed (`regressions/build-chronicle.log`); import boundary and architecture graph passed (`import-chronicle.json`, `graph-chronicle.log`). Build retains the existing bundle-size advisory. Earlier causal/natural/determinism evidence applies to byte-identical causal files; the only later source change is the read-only Chronicle formatter, with its own full-state daily parity witness.
+
+Browser: real `History` component, real history producer and Chronicle projection rendered a clearly labeled controlled fixture on localhost. Both lived and inherited episodes show “The heuristic viability/risk score reached 0.60 in the durable record; it has no calibrated probability or time horizon.” Reading view opened and rendered both. The temporary fixture initially used an incorrect optimized React import; after changing the fixture to normal bare imports, reload succeeded and no new console errors/warnings appeared. This was a test-host setup error, not a production error. No production UI or stored world was altered to host this fixture.
+
+Same reviewer remains responsible for the combined final production range. No new reviewer, self-acceptance, main merge, Task12 resumption or portable-pair export.

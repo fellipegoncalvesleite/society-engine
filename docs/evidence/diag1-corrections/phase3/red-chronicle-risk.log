@@ -1,0 +1,8 @@
+PASS canonical history producer preserves the supplied 0.6 score
+FAIL lived Chronicle episode presents a score with no probability horizon
+FAIL inherited Chronicle episode retains both lineage and heuristic qualification
+FAIL missing or nonfinite historical scores are not invented
+PASS projection preserves full world and historical evidence
+PASS Chronicle on/off leaves every daily full-world fingerprint identical
+PASS production bytes preserved
+{"audit":"DIAG1 Chronicle heuristic risk presentation","mutant":"none","pass":false,"passed":4,"total":7,"failed":[{"name":"lived Chronicle episode presents a score with no probability horizon","error":"AssertionError [ERR_ASSERTION]: The input did not match the regular expression /heuristic viability\\/risk score/i. Input:\n\n'Extinction risk reached 60% in the durable record.'\n\n    at honestRisk (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts"},{"name":"inherited Chronicle episode retains both lineage and heuristic qualification","error":"AssertionError [ERR_ASSERTION]: The input did not match the regular expression /heuristic viability\\/risk score/i. Input:\n\n'Lineage memory, not a lived episode: Extinction risk reached 60% in the durable record.'\n\n    at honestRisk (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-"},{"name":"missing or nonfinite historical scores are not invented","error":"AssertionError [ERR_ASSERTION]: The input did not match the regular expression /heuristic viability\\/risk score/i. Input:\n\n'Extinction risk reached a high level in the durable record.'\n\n    at honestRisk (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-suppor"}]}
