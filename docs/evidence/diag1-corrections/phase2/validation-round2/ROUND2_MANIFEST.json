@@ -6,7 +6,7 @@
   "phase2Base": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
   "originalByteBaseline": "bf5807e75bb650872d9c81cf95dce5dc1df6a509",
   "productionCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
-  "documentationCommit": "ea8812c8d5e40389e15bc7b7d6bd6a12a3eb0e53",
+  "documentationCommit": "9a55ec9c77f6691601cb9c2afe4f1de25d4ad4fb",
   "focused": {
     "green": {
       "file": "fresh/coverageRecovery-final.json",
