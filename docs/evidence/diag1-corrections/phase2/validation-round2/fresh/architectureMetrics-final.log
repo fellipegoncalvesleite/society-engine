@@ -1,0 +1,139 @@
+{
+  "check": "ARCHITECTURE-METRICS-1",
+  "verdict": "REPORT",
+  "hypothesisB_decisionOrchestrator": {
+    "lines": 5773,
+    "distinctImportedModules": 60,
+    "internalFunctionCount": 100,
+    "exportedSymbols": 4
+  },
+  "hypothesisC_adaptationSubsystem": {
+    "modules": [
+      {
+        "module": "problemPractice",
+        "lines": 2043,
+        "externalImporters": 2
+      },
+      {
+        "module": "practicalFragments",
+        "lines": 651,
+        "externalImporters": 1
+      },
+      {
+        "module": "materialAffordance",
+        "lines": 1505,
+        "externalImporters": 2
+      },
+      {
+        "module": "adaptiveHuman",
+        "lines": 2203,
+        "externalImporters": 2
+      },
+      {
+        "module": "practicalResponses",
+        "lines": 2427,
+        "externalImporters": 1
+      },
+      {
+        "module": "adaptiveEfficacy",
+        "lines": 1071,
+        "externalImporters": 0
+      },
+      {
+        "module": "inventionChain",
+        "lines": 478,
+        "externalImporters": 0
+      },
+      {
+        "module": "practiceFeedbackReadiness",
+        "lines": 1325,
+        "externalImporters": 2
+      },
+      {
+        "module": "knowledgeEcology",
+        "lines": 1457,
+        "externalImporters": 2
+      },
+      {
+        "module": "knowledgeCarriers",
+        "lines": 1843,
+        "externalImporters": 2
+      },
+      {
+        "module": "patchExploitationKnowledge",
+        "lines": 855,
+        "externalImporters": 1
+      },
+      {
+        "module": "foragingAdaptation",
+        "lines": 1898,
+        "externalImporters": 0
+      }
+    ],
+    "totalModules": 12,
+    "totalLines": 17756,
+    "note": "External importers are mostly UI read models plus a few sim orchestration points; the effect-application boundary is practicalResponses.ts and the state authority is band.practicalAdaptation."
+  },
+  "hypothesisE_contextRebuildsPerSeasonTick": 3,
+  "hypothesisF_hotColdState": {
+    "sampleBand": "band:delta-coastal-foragers",
+    "serializedBandBytes": 2152994,
+    "approxColdBytes": 638276,
+    "approxColdShare": 0.296,
+    "largestFields": [
+      [
+        "knowledge",
+        403643
+      ],
+      [
+        "eventHistory",
+        367568
+      ],
+      [
+        "placeMemory",
+        207173
+      ],
+      [
+        "recentIntraSeasonTrips",
+        136691
+      ],
+      [
+        "protoCampMemory",
+        98107
+      ],
+      [
+        "resourceKnowledgeState",
+        76427
+      ],
+      [
+        "campRumors",
+        72080
+      ],
+      [
+        "usePressure",
+        66209
+      ],
+      [
+        "frontierKnowledge",
+        63540
+      ],
+      [
+        "protoAccessMemory",
+        53021
+      ],
+      [
+        "causalTraces",
+        47851
+      ],
+      [
+        "movementHistory",
+        46055
+      ]
+    ]
+  },
+  "interpretation": {
+    "B": "bandDecision.ts is 5773 lines with 60 imported modules and ~100 internal functions but only 4 exported symbols — a large orchestrator embedding domain logic. Decomposition is real maintainability debt; deferred to DECOMPOSITION-2 (parity-risky, out of scope for a single safe pass).",
+    "E": "3 full context-cache rebuilds per season tick. A measured cache-layering pass belongs to DECOMPOSITION-2.",
+    "F": "~30% of a serialized band is history/record/projection state; a hot/cold split is measured but deferred (state migration is risky and not the smallest correct change here)."
+  }
+}

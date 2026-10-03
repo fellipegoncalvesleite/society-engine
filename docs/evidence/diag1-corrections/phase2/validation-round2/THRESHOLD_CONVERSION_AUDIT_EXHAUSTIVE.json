@@ -364,5 +364,5 @@
     "innerFission.getUnityRecoveryReason: currentSeasonSupport.nutritionCoverage >= 1"
   ],
   "evidence": "validation-round2-coverage-green-v9.json",
-  "productionCommit": "pending post-review compatibility projection fix"
+  "productionCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f"
 }

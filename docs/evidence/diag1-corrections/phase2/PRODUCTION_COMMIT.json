@@ -1,10 +1,10 @@
 {
-  "sha": "13c685ac4fb123f69a8693d2e5728260b379cfa8",
-  "base": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
-  "meaning": "Correction-round production and focused RED/GREEN/mutation evidence. Documentation, publication and fresh independent review follow in separate commits; no acceptance or freeze.",
-  "author": "fellipegoncalvesleite <207756005+fellipegoncalvesleite@users.noreply.github.com>",
-  "committer": "fellipegoncalvesleite <207756005+fellipegoncalvesleite@users.noreply.github.com>",
-  "productionFiles": 4,
-  "auditFiles": 2,
-  "correctionRange": "369362c5b51757407e34493d9f9dcbeae86abdac..13c685ac4fb123f69a8693d2e5728260b379cfa8"
+  "sha": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+  "base": "369362c5b51757407e34493d9f9dcbeae86abdac",
+  "meaning": "Phase 2 production correction HEAD reviewed read-only at exact HEAD; documentation and publication follow in separate commits. Source is frozen after this SHA.",
+  "productionFiles": 9,
+  "auditFiles": 7,
+  "correctionRange": "369362c5b51757407e34493d9f9dcbeae86abdac..80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+  "remote": "origin/fix/diag1-human-support",
+  "remoteParity": "0/0"
 }

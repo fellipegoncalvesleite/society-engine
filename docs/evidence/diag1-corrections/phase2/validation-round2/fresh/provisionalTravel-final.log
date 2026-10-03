@@ -1,0 +1,20 @@
+{"fixtureDeparture":"band:varied-river-mid:provisional:1","attempts":[{"requestedFounders":11,"ok":true}]}
+{"fixtureDeparture":"band:varied-river-mid:provisional:1","attempts":[{"requestedFounders":11,"ok":true}]}
+{
+  "fixtures": 10,
+  "passing": 10,
+  "failing": 0,
+  "vacuous": 0,
+  "journey": 5,
+  "arrivedOnDay": 5
+}
+PASS    V1_outbound_starts_on_the_parents_tile
+PASS    V2_every_step_is_contiguous
+PASS    V3_the_group_never_stands_anywhere_it_could_not_walk
+PASS    V4_arrival_produces_establishing_not_stabilized
+PASS    V5_the_trail_is_ground_actually_walked_and_is_bounded
+PASS    V6_pace_responds_to_real_burden
+PASS    V7_no_ordinary_system_moves_a_provisional_group
+PASS    V8_the_journey_is_deterministic
+PASS    V9_travel_support_is_physically_sourced_or_absent
+PASS    V10_hunger_never_improves_without_physically_extracted_support

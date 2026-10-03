@@ -1,0 +1,2 @@
+{"phase2MeasuredDeparture":{"parent":"band:varied-river-mid","target":"tile:113:57","refusals":[{"parent":"band:varied-estuary","target":"tile:193:87","refusal":"preparation:founder_cohort_declined","detail":"not_willing_on_held_evidence,separation_costs_those_who_stay"}]}}
+{"audit":"DIAG1 Phase2 measured failed-return continuation","mutant":"none","loaded":{},"executed":{},"passed":7,"total":7,"failed":[]}

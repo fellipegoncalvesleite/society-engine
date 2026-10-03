@@ -1,0 +1,126 @@
+{
+  "check": "MOBILITY-CAPACITY-1",
+  "verdict": "PASS",
+  "architecture": "Option B — mobility-role cohorts. NO sex composition exists in canonical population state, so NO male/female average is derived or displayed.",
+  "paceAuthority": "km_per_travel_day",
+  "checks": {
+    "averageLiesBetweenExtremes_19_1": true,
+    "averageIsNotAMaximum_19_1": true,
+    "historyDoesNotGateNextDay_19_1": true,
+    "calendarDayDiffersFromActiveDay_19_2": true,
+    "conditioningDivergesWithHistory_19_3": true,
+    "conditioningBounded_19_3": true,
+    "conditioningReversible_19_3": true,
+    "conditioningIsSlow_19_3": true,
+    "needRaisesAttemptedOutput_19_4": true,
+    "needDoesNotCreateStamina_19_4": true,
+    "nutritionLowersCapacity_19_6": true,
+    "fatigueLowersCapacity_19_6": true,
+    "loadedReturnIsSlower_19_9": true,
+    "conditioningChangesCapacity": true,
+    "walkingHistoryBounded_19_14": true,
+    "realizedWalkingOccursInProduction": true,
+    "deterministic_19_15": true
+  },
+  "controlledHistorySummary": {
+    "calendarDayMeanKm": 8.625,
+    "activeDayMeanKm": 11.5,
+    "activeDayMinKm": 3,
+    "activeDayMaxKm": 24,
+    "loadedMeanKm": 2.667,
+    "activeDays": 3,
+    "restDays": 1,
+    "longestExpeditionKm": 0
+  },
+  "capacitySamples": {
+    "calm": {
+      "routineKmPerActiveDay": 7,
+      "currentKmPerActiveDay": 7,
+      "loadedKmPerActiveDay": 7,
+      "overreachKmPerActiveDay": 7
+    },
+    "hungry": {
+      "routineKmPerActiveDay": 7,
+      "currentKmPerActiveDay": 5.25,
+      "loadedKmPerActiveDay": 5.25,
+      "overreachKmPerActiveDay": 5.25
+    },
+    "tired": {
+      "routineKmPerActiveDay": 7,
+      "currentKmPerActiveDay": 4.9,
+      "loadedKmPerActiveDay": 4.9,
+      "overreachKmPerActiveDay": 4.9
+    },
+    "desperate": {
+      "routineKmPerActiveDay": 7,
+      "currentKmPerActiveDay": 7,
+      "loadedKmPerActiveDay": 7,
+      "overreachKmPerActiveDay": 11.2
+    },
+    "lowCond": {
+      "routineKmPerActiveDay": 6,
+      "currentKmPerActiveDay": 6,
+      "loadedKmPerActiveDay": 6,
+      "overreachKmPerActiveDay": 6
+    },
+    "highCond": {
+      "routineKmPerActiveDay": 11,
+      "currentKmPerActiveDay": 11,
+      "loadedKmPerActiveDay": 11,
+      "overreachKmPerActiveDay": 11
+    },
+    "unloaded": {
+      "routineKmPerActiveDay": 7,
+      "currentKmPerActiveDay": 7,
+      "loadedKmPerActiveDay": 7,
+      "overreachKmPerActiveDay": 7
+    },
+    "fullyLoaded": {
+      "routineKmPerActiveDay": 7,
+      "currentKmPerActiveDay": 7,
+      "loadedKmPerActiveDay": 4.76,
+      "overreachKmPerActiveDay": 7
+    }
+  },
+  "conditioning": {
+    "after60ActiveDays": 0.379,
+    "after60IdleDays": 0.2,
+    "afterReversal": 0.333
+  },
+  "production": {
+    "bandsWithRealizedWalking": 5,
+    "maxHistoryDays": 24,
+    "summaries": [
+      {
+        "calendarDayMeanKm": 2.582,
+        "activeDayMeanKm": 4.131,
+        "activeDayMinKm": 1,
+        "activeDayMaxKm": 8,
+        "loadedMeanKm": 0.133,
+        "activeDays": 15,
+        "restDays": 9,
+        "longestExpeditionKm": 236
+      },
+      {
+        "calendarDayMeanKm": 4.517,
+        "activeDayMeanKm": 6.775,
+        "activeDayMinKm": 3,
+        "activeDayMaxKm": 12,
+        "loadedMeanKm": 0.188,
+        "activeDays": 16,
+        "restDays": 8,
+        "longestExpeditionKm": 264
+      },
+      {
+        "calendarDayMeanKm": 5.958,
+        "activeDayMeanKm": 6.217,
+        "activeDayMinKm": 1,
+        "activeDayMaxKm": 9,
+        "loadedMeanKm": 0,
+        "activeDays": 23,
+        "restDays": 1,
+        "longestExpeditionKm": 258
+      }
+    ]
+  }
+}

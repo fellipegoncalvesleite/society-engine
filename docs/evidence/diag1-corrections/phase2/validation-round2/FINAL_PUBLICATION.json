@@ -1,0 +1,42 @@
+{
+  "branch": "fix/diag1-human-support",
+  "remote": "origin/fix/diag1-human-support",
+  "productionCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+  "productionBase": "369362c5b51757407e34493d9f9dcbeae86abdac",
+  "productionRange": "369362c5b51757407e34493d9f9dcbeae86abdac..80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+  "independentReview": {
+    "specCompliance": "PASS",
+    "codeQuality": "PASS",
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "phase2AcceptanceRecommendation": "YES",
+    "reviewedHead": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+    "remoteParity": "0/0"
+  },
+  "requiredFields": {
+    "oldBf5807eProducerFixture": "PASS/YES",
+    "focusedGreen": "PASS/YES",
+    "originalByteRed": "PASS/YES",
+    "fullKnown48Rows": "PASS/YES",
+    "naturalStructuralBoundary": "PASS/YES",
+    "task12Preservation": "PASS/YES",
+    "noUnresolvedBlockers": "PASS/YES",
+    "noPhase3OrTask12Resume": "PASS/YES"
+  },
+  "freshEvidence": {
+    "annualOracle": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/annualNutritionLikeForLike-final.json",
+    "contextLifecycle": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/contextLifecycle-years12-final.log",
+    "coverageGreen": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/coverageRecovery-final.json",
+    "coverageOriginalRed": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/coverageRecovery-original-final.json",
+    "migration": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/migration-final-v5.json",
+    "fullKnown": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/fullKnownCompatibility-final.json",
+    "naturalReachability": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/natural-reachability-structural-final.json"
+  },
+  "boundaries": {
+    "phase3": "NOT_STARTED",
+    "worldM0Task12": "NOT_RESUMED",
+    "protectedTask12Preservation": "PASS",
+    "inheritedTwoDayIntegrationGate": "founder_cohort_declined; documented, no source change"
+  }
+}

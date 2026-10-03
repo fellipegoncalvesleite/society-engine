@@ -21,8 +21,8 @@
     "protoCamps activity/visit/knowledge counts remain event-existence checks, not physical recovery maturity",
     "bandHistory recoveryYears > 0 records existence of a historical recovery year, not the seasonal maturity gate"
   ],
-  "evidence": "validation-round2-coverage-green-v9.json",
-  "productionCommit": "pending post-review compatibility projection fix",
+  "evidence": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/coverageRecovery-final.json",
+  "productionCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
   "additionalCoverageReaders": [
     "seasonalSurvival.ts:138-141 chronicFoodStress/recoveryRelief duration-weighted reader",
     "seasonalSurvival.ts:628 seasonalRecoveryStreak >= 1 mature recovery comparison",

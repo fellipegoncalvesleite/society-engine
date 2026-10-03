@@ -1,5 +1,5 @@
 {
-  "decision": "no new six-arm natural rerun in this correction round; structural reachability proof retained",
+  "decision": "no new six-arm natural rerun in this correction round; structural reachability proof retained and freshly rerun at the reviewed production HEAD",
   "basis": [
     "The six retained Phase2 final3 natural payloads are six resident courses: each has 10,800 daily rows and 120 seasonal rows, and every serialized daily band row remains phase residential; no fission/provisional transition is present in the retained instrument.",
     "The instrument does not serialize hungerClassification, nutritionCoverage, or knownPopulationFraction in daily/seasonal rows. Their absence is therefore not treated as proof that those states never occurred.",
@@ -8,7 +8,7 @@
     "No natural result is used as acceptance or population-growth evidence."
   ],
   "retainedNaturalEvidence": "docs/evidence/diag1-corrections/phase2/natural/phase2-final3-*.json.gz",
-  "controlEvidence": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/coverageRecovery-v9.json",
-  "productionCommit": "pending post-review compatibility projection fix",
-  "structuralEvidence": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/natural-reachability-structural-v6.json"
+  "controlEvidence": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/coverageRecovery-final.json",
+  "productionCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+  "structuralEvidence": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/natural-reachability-structural-final.json"
 }
