@@ -1,0 +1,33 @@
+{
+  "sourceCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+  "executionHead": "081fa9f22ef2d88d967169afbdcbe4c4d4ed81e8",
+  "spanDays": 1260,
+  "maps": [
+    {
+      "map": "map1",
+      "pass": true,
+      "digestsEqual": true,
+      "digest": "c106cfc50f116c6ceffa0dbba29a428d4d1d8915ee15c5d9b99f45ba179c3928",
+      "occurrence": {
+        "bands": 5,
+        "population": 155,
+        "activeParties": 1,
+        "returnOutcomes": 18,
+        "plantDepletionEntries": 1325
+      }
+    },
+    {
+      "map": "map2",
+      "pass": true,
+      "digestsEqual": true,
+      "digest": "2e4d72ec11a03913d2960a96d5a6b9eefb51af434d5619462a9a671843731ec9",
+      "occurrence": {
+        "bands": 9,
+        "population": 238,
+        "activeParties": 7,
+        "returnOutcomes": 32,
+        "plantDepletionEntries": 1326
+      }
+    }
+  ]
+}

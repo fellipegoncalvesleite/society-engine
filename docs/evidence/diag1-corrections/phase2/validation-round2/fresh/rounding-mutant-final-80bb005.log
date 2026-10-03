@@ -1,0 +1,1 @@
+{"audit": "DIAG1 Phase2 decimal exposure partition boundary", "mutant": "partition_rounding", "head": "081fa9f22ef2d88d967169afbdcbe4c4d4ed81e8", "loaded": {"partition_rounding": 1}, "executed": {"partition_rounding": 1469983}, "behaviorallyDetected": true, "restored": true, "passed": 59, "total": 67, "pass": false}

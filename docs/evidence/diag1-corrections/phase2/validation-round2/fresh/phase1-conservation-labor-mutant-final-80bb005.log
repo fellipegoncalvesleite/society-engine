@@ -1,0 +1,1 @@
+{"sourceHead": "081fa9f22ef2d88d967169afbdcbe4c4d4ed81e8", "mutation": {"mutant": "labor", "loaded": 1, "executed": 932, "bytesRestored": true, "detected": true}, "pass": false, "failed": 8, "total": 57}

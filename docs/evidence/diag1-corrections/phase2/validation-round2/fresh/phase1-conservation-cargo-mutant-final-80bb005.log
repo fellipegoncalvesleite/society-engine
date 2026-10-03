@@ -1,0 +1,1 @@
+{"sourceHead": "081fa9f22ef2d88d967169afbdcbe4c4d4ed81e8", "mutation": {"mutant": "cargo", "loaded": 1, "executed": 136, "bytesRestored": true, "detected": true}, "pass": false, "failed": 1, "total": 57}

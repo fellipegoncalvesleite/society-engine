@@ -2,7 +2,7 @@
   "branch": "fix/diag1-human-support",
   "remote": "origin/fix/diag1-human-support",
   "productionCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
-  "productionBase": "369362c5b51757407e34493d9f9dcbeae86abdac",
+  "productionBase": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
   "productionRange": "369362c5b51757407e34493d9f9dcbeae86abdac..80bb005f6bf9856720ac07d3acbae9e4a57c677f",
   "independentReview": {
     "specCompliance": "PASS",
@@ -12,7 +12,11 @@
     "minor": 0,
     "phase2AcceptanceRecommendation": "YES",
     "reviewedHead": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
-    "remoteParity": "0/0"
+    "remoteParity": "0/0",
+    "phase1BStartingHead": "d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333",
+    "phase1BProductionCommit": "cf095e9160cf79a0cf9f7767fe76cc68d8d944b2",
+    "phase1ReviewedHead": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
+    "phase2Base": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9"
   },
   "requiredFields": {
     "oldBf5807eProducerFixture": "PASS/YES",
@@ -31,12 +35,27 @@
     "coverageOriginalRed": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/coverageRecovery-original-final.json",
     "migration": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/migration-final-v5.json",
     "fullKnown": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/fullKnownCompatibility-final.json",
-    "naturalReachability": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/natural-reachability-structural-final.json"
+    "naturalReachability": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/natural-reachability-structural-final.json",
+    "determinism1260": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/determinism-final-80bb005.json",
+    "phase1ConservationExact": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/conservation-final-80bb005.json",
+    "phase1BCacheExact": "docs/evidence/diag1-corrections/phase2/validation-round2/fresh/phase1b-cache-final-80bb005.json",
+    "finalEvidenceIndex": "docs/evidence/diag1-corrections/phase2/validation-round2/FINAL_EVIDENCE_INDEX.json"
   },
   "boundaries": {
     "phase3": "NOT_STARTED",
     "worldM0Task12": "NOT_RESUMED",
     "protectedTask12Preservation": "PASS",
     "inheritedTwoDayIntegrationGate": "founder_cohort_declined; documented, no source change"
+  },
+  "phase2FirstProductionCommit": "369362c5b51757407e34493d9f9dcbeae86abdac",
+  "originalByteBaseline": "bf5807e75bb650872d9c81cf95dce5dc1df6a509",
+  "documentationCommit": "pending-doc-publication",
+  "finalEvidenceIndex": "docs/evidence/diag1-corrections/phase2/validation-round2/FINAL_EVIDENCE_INDEX.json",
+  "intermediateArchive": "DIAG1_PHASE2_INTERMEDIATE_FRESH_ARCHIVE.tar.gz",
+  "mergeAdjudication": "no merge to main; branch-only push; supervising independent review is next",
+  "thresholdAndMerge": {
+    "thresholdAudit": "docs/evidence/diag1-corrections/phase2/validation-round2/THRESHOLD_CONVERSION_AUDIT.json",
+    "recoveryMaturity": "90 qualifying physical days",
+    "mergeAdjudication": "aggregate headcount-weighted embodied stress; support/demand sums unchanged; no invented person-level history"
   }
 }

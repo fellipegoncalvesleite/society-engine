@@ -1,73 +1,35 @@
 {
-  "round": "DIAG-1 Phase 2 correction round 2",
-  "phase1BStartingHead": "d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333",
-  "phase1BProductionCommit": "cf095e9160cf79a0cf9f7767fe76cc68d8d944b2",
-  "phase1ReviewedHead": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
-  "phase2Base": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
-  "originalByteBaseline": "bf5807e75bb650872d9c81cf95dce5dc1df6a509",
-  "productionCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
-  "documentationCommit": "pending-doc-publication",
-  "focused": {
-    "green": {
-      "file": "fresh/coverageRecovery-final.json",
-      "passed": 37,
-      "total": 37,
-      "sourceCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f"
-    },
-    "redOriginalBytes": {
-      "file": "fresh/coverageRecovery-original-final.json",
-      "expectedPass": false,
-      "auditMode": "exact original production bytes at bf5807e75bb650872d9c81cf95dce5dc1df6a509",
-      "expectedFailures": 23
-    },
-    "mutants": [
-      {
-        "name": "unknown_coverage",
-        "path": "fresh/unknownCoverageMutant-final.json",
-        "loaded": 1,
-        "executed": 415,
-        "detected": true,
-        "restored": true
-      },
-      {
-        "name": "recovery_duration",
-        "path": "fresh/recoveryDurationMutant-final.json",
-        "loaded": 1,
-        "executed": 29,
-        "detected": true,
-        "restored": true
-      },
-      {
-        "name": "surplus_coverage",
-        "path": "fresh/surplusCoverageMutant-final.json",
-        "loaded": 1,
-        "executed": 82,
-        "detected": true,
-        "restored": true
-      },
-      {
-        "name": "raw_as_support",
-        "path": "fresh/units-mutant-final-80bb005.json",
-        "provenance": "fresh exact run; loaded/executed/detected/restored"
-      },
-      {
-        "name": "stale_fatigue",
-        "path": "fresh/fatigue-mutant-final-80bb005.json",
-        "provenance": "fresh exact run; loaded/executed/detected/restored"
-      },
-      {
-        "name": "migration_guess",
-        "path": "fresh/migration-mutant-final-80bb005.json",
-        "provenance": "fresh exact run; loaded/executed/detected/restored"
-      },
-      {
-        "name": "partition_rounding",
-        "path": "fresh/rounding-mutant-final-80bb005.json",
-        "provenance": "fresh exact run; loaded/executed/detected/restored"
-      }
-    ]
+  "scope": "DIAG-1 Phase 2 correction round 2 final evidence index",
+  "production": {
+    "phase1BStartingHead": "d5fc9f5b5c0bad35e4baa7b8fa5d6ab427c87333",
+    "phase1BProductionCommit": "cf095e9160cf79a0cf9f7767fe76cc68d8d944b2",
+    "phase1ReviewedHead": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
+    "phase2Base": "d8c6233872b6bcb76da5fe6c3747c889ec402eb9",
+    "phase2FirstProductionCommit": "369362c5b51757407e34493d9f9dcbeae86abdac",
+    "originalByteBaseline": "bf5807e75bb650872d9c81cf95dce5dc1df6a509",
+    "frozenProductionCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+    "documentationCommit": "pending-doc-publication",
+    "sourceDiffFromProductionToDocumentation": "empty"
   },
-  "requiredMatrix": {
+  "independentReview": {
+    "specCompliance": "PASS",
+    "codeQuality": "PASS",
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "phase2AcceptanceRecommendation": "YES",
+    "reviewedHead": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+    "remoteParity": "0/0",
+    "oldBf5807eProducerFixture": "PASS/YES",
+    "focusedGreen": "PASS/YES",
+    "originalByteRed": "PASS/YES",
+    "fullKnown48Rows": "PASS/YES",
+    "naturalStructuralBoundary": "PASS/YES",
+    "task12Preservation": "PASS/YES",
+    "noUnresolvedBlockers": "PASS/YES",
+    "noPhase3OrTask12Resume": "PASS/YES"
+  },
+  "exactFrozenProductionEvidence": {
     "phase1Conservation": {
       "path": "fresh/conservation-final-80bb005.json",
       "result": "65/65 PASS",
@@ -318,6 +280,11 @@
     "mergeAdjudication": "aggregate headcount-weighted embodied stress; actual support/demand sums unchanged; no person-level life course invented",
     "productionCommit": "80bb005f6bf9856720ac07d3acbae9e4a57c677f"
   },
-  "finalEvidenceIndex": "FINAL_EVIDENCE_INDEX.json",
-  "status": "final frozen production reviewed PASS; documentation/publication separated; source diff from production to docs is empty"
+  "boundaries": {
+    "phase3": "NOT_STARTED",
+    "worldM0Task12": "NOT_RESUMED",
+    "task12Preservation": "PASS",
+    "inheritedTwoDayGate": "founder_cohort_declined; no source change",
+    "mergeToMain": "not performed; branch-only push"
+  }
 }

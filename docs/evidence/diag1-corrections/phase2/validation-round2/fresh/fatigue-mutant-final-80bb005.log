@@ -1,0 +1,1 @@
+{"audit": "DIAG1 Phase2 movement fatigue", "mutant": "stale_fatigue", "head": "081fa9f22ef2d88d967169afbdcbe4c4d4ed81e8", "loaded": {"stale_fatigue": 1}, "executed": {"stale_fatigue": 616}, "behaviorallyDetected": true, "restored": true, "passed": 18, "total": 32, "pass": false}
