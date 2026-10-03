@@ -1,0 +1,35 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "check": "ECO-BIOME-1 plant patch dynamics fixture",
+  "verdict": "pass",
+  "command": "node scripts/simBenchmark.mjs --targeted-plant-stock-audit --json",
+  "scenario": "map2_varied_migration (plant patch unit dynamics)",
+  "notes": [
+    "Directly exercises plantStock.ts pure dynamics (no sim tick loop, no trips run); deterministic, no random.",
+    "Gathering depletion via the LIVING-ECOLOGY-1B physical harvest resolver is bounded; rested recovery rebounds at class regrowth rate; materials contribute 0 calories."
+  ],
+  "checks": {
+    "foundPlantTile": true,
+    "depletionMonotone": true,
+    "depletionBounded": true,
+    "meaningfulDepletion": true,
+    "depletedReturnLower": true,
+    "depletedSupportLower": true,
+    "recovered": true,
+    "deterministic": true,
+    "materialFoodZero": true
+  },
+  "depletion": {
+    "sampledTile": "tile:188:90",
+    "maxDepletionStart": 0,
+    "maxDepletionAfter30Gathers": 1,
+    "returnFactorFull": 0.5168,
+    "returnFactorDepleted": 0.2,
+    "supportMultiplierFull": 1,
+    "supportMultiplierDepleted": 0.9
+  },
+  "recovery": {
+    "maxDepletionBeforeRest": 1,
+    "maxDepletionAfter24Seasons": 0
+  }
+}

@@ -367,20 +367,10 @@ function derivePlantPatchesForScoutKind(
   time: WorldTime,
   scoutKind: PlantScoutObservationHint["scoutKind"],
 ): readonly PlantPatch[] {
-  const candidates = PLANT_CLASS_PROFILES
-    .filter((profile) => profileMatchesScoutKind(profile.id, scoutKind))
-    .map((profile) => derivePlantCandidate(tile, profile))
-    .filter((candidate) => candidate.score >= candidate.threshold)
-    .sort((left, right) => {
-      const scoreDelta = right.score - left.score;
-
-      return scoreDelta === 0
-        ? left.profile.id.localeCompare(right.profile.id)
-        : scoreDelta;
-    })
-    .slice(0, MAX_PLANT_PATCHES_PER_TILE);
-
-  return candidates.map((candidate) => materializePlantPatch(tile, candidate.profile, candidate.score, time));
+  // Realization precedes perception. Fallible visibility/use estimates below may
+  // hide a patch, but an exact observation can only name a canonical physical ID.
+  return derivePlantPatchesForTile(tile, time)
+    .filter((patch) => profileMatchesScoutKind(patch.plantClassId, scoutKind));
 }
 
 function makeProfile(

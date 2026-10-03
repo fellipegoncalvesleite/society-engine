@@ -1,0 +1,1 @@
+{"mutant":"movement","loaded":1,"executed":8,"detected":true,"passed":21,"total":27,"failed":["crossing A-B every field warm equals cold","movement A-B warm equals cold","crossing B-A every field warm equals cold","movement B-A warm equals cold","crossing shared object changed river warm equals cold","crossing object replacement warm equals cold"]}

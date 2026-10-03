@@ -1,0 +1,68 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/node/26.7.0/bin/node",
+    "/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase1DeterminismAudit.mjs",
+    "--out",
+    "docs/evidence/diag1-corrections/phase3/determinism.json"
+  ],
+  "rows": [
+    {
+      "kind": "map1",
+      "seed": "diag1-phase1:determinism:map1",
+      "span": 1260,
+      "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+      "digests": {
+        "daily": "b1d3c529bb2404f6f5631b0359e94274da017af715a377bac883a1f4e886800e",
+        "weekly": "b1d3c529bb2404f6f5631b0359e94274da017af715a377bac883a1f4e886800e",
+        "monthly": "b1d3c529bb2404f6f5631b0359e94274da017af715a377bac883a1f4e886800e",
+        "seasonal": "b1d3c529bb2404f6f5631b0359e94274da017af715a377bac883a1f4e886800e",
+        "repeat": "b1d3c529bb2404f6f5631b0359e94274da017af715a377bac883a1f4e886800e",
+        "fresh": "b1d3c529bb2404f6f5631b0359e94274da017af715a377bac883a1f4e886800e"
+      },
+      "elapsed": {
+        "daily": 144.739042792,
+        "weekly": 216.00992841700003,
+        "monthly": 110.92983045900002,
+        "seasonal": 78.82657645799999,
+        "repeat": 112.75473812500003
+      },
+      "occurrence": {
+        "bands": 5,
+        "population": 155,
+        "activeParties": 2,
+        "returnOutcomes": 18,
+        "plantDepletionEntries": 1332
+      },
+      "pass": true
+    },
+    {
+      "kind": "map2",
+      "seed": "diag1-phase1:determinism:map2",
+      "span": 1260,
+      "projection": "Entire JSON world including time, tiles, all bands, cargo, knowledge, plant/fauna state and bounded receipts",
+      "digests": {
+        "daily": "1dc0bb7f7cbeb81a94b333c801c182b87e282d3043cd009f7a3c91cf50644ada",
+        "weekly": "1dc0bb7f7cbeb81a94b333c801c182b87e282d3043cd009f7a3c91cf50644ada",
+        "monthly": "1dc0bb7f7cbeb81a94b333c801c182b87e282d3043cd009f7a3c91cf50644ada",
+        "seasonal": "1dc0bb7f7cbeb81a94b333c801c182b87e282d3043cd009f7a3c91cf50644ada",
+        "repeat": "1dc0bb7f7cbeb81a94b333c801c182b87e282d3043cd009f7a3c91cf50644ada",
+        "fresh": "1dc0bb7f7cbeb81a94b333c801c182b87e282d3043cd009f7a3c91cf50644ada"
+      },
+      "elapsed": {
+        "daily": 48.14699220899993,
+        "weekly": 52.925134415999985,
+        "monthly": 40.26795562499994,
+        "seasonal": 39.044571208000065,
+        "repeat": 36.91204454199993
+      },
+      "occurrence": {
+        "bands": 9,
+        "population": 238,
+        "activeParties": 7,
+        "returnOutcomes": 32,
+        "plantDepletionEntries": 1326
+      },
+      "pass": true
+    }
+  ]
+}

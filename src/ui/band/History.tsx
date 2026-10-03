@@ -359,6 +359,9 @@ function ChronicleDeepHistoryPanel({ deepHistory }: { readonly deepHistory: Band
         <span>Long memory</span>
       </h4>
       <p className="chronicle-prose">{deepHistory.memoryBoundaryLine}</p>
+      <p className="condition-note">Hunger-years count annual observations classified as chronic food deficit,
+        chronic plus seasonal stress, or crisis deficit. They are not continuous years without food;
+        dated nutrition exposure is a separate measure and does not reconstruct earlier daily history.</p>
 
       <div className="chronicle-found-now" aria-label="founding and current comparison">
         <div>

@@ -1,0 +1,282 @@
+[
+  {
+    "name": "phase1-cargo",
+    "command": [
+      "node",
+      "scripts/diag1Phase1ConservationAudit.mjs",
+      "--mutant",
+      "cargo",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1-cargo.json"
+    ],
+    "exitCode": 1,
+    "seconds": 95.24,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1-cargo.json"
+  },
+  {
+    "name": "phase1-absorption",
+    "command": [
+      "node",
+      "scripts/diag1Phase1ConservationAudit.mjs",
+      "--mutant",
+      "absorption",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1-absorption.json"
+    ],
+    "exitCode": 1,
+    "seconds": 41.48,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1-absorption.json"
+  },
+  {
+    "name": "phase1-cache",
+    "command": [
+      "node",
+      "scripts/diag1Phase1ConservationAudit.mjs",
+      "--mutant",
+      "cache",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1-cache.json"
+    ],
+    "exitCode": 1,
+    "seconds": 36.78,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1-cache.json"
+  },
+  {
+    "name": "phase1-labor",
+    "command": [
+      "node",
+      "scripts/diag1Phase1ConservationAudit.mjs",
+      "--mutant",
+      "labor",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1-labor.json"
+    ],
+    "exitCode": 1,
+    "seconds": 39.66,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1-labor.json"
+  },
+  {
+    "name": "phase1b-tile",
+    "command": [
+      "node",
+      "scripts/diag1Phase1BCacheAudit.mjs",
+      "--mutant",
+      "tile",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1b-tile.json"
+    ],
+    "exitCode": 1,
+    "seconds": 0.66,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1b-tile.json"
+  },
+  {
+    "name": "phase1b-crossing",
+    "command": [
+      "node",
+      "scripts/diag1Phase1BCacheAudit.mjs",
+      "--mutant",
+      "crossing",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1b-crossing.json"
+    ],
+    "exitCode": 1,
+    "seconds": 0.73,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1b-crossing.json"
+  },
+  {
+    "name": "phase1b-movement",
+    "command": [
+      "node",
+      "scripts/diag1Phase1BCacheAudit.mjs",
+      "--mutant",
+      "movement",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1b-movement.json"
+    ],
+    "exitCode": 1,
+    "seconds": 0.62,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase1b-movement.json"
+  },
+  {
+    "name": "phase2-units",
+    "command": [
+      "node",
+      "scripts/diag1Phase2UnitsAndExposureAudit.mjs",
+      "--mutant",
+      "units",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-units.json"
+    ],
+    "exitCode": 1,
+    "seconds": 16.77,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-units.json"
+  },
+  {
+    "name": "phase2-record_count",
+    "command": [
+      "node",
+      "scripts/diag1Phase2UnitsAndExposureAudit.mjs",
+      "--mutant",
+      "record_count",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-record_count.json"
+    ],
+    "exitCode": 1,
+    "seconds": 0.41,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-record_count.json"
+  },
+  {
+    "name": "phase2-overlap",
+    "command": [
+      "node",
+      "scripts/diag1Phase2UnitsAndExposureAudit.mjs",
+      "--mutant",
+      "overlap",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-overlap.json"
+    ],
+    "exitCode": 1,
+    "seconds": 13.95,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-overlap.json"
+  },
+  {
+    "name": "phase2-unknown_coverage",
+    "command": [
+      "node",
+      "scripts/diag1Phase2CoverageRecoveryAudit.mjs",
+      "--mutant",
+      "unknown_coverage",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-unknown_coverage.json"
+    ],
+    "exitCode": 1,
+    "seconds": 3.55,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-unknown_coverage.json"
+  },
+  {
+    "name": "phase2-recovery_duration",
+    "command": [
+      "node",
+      "scripts/diag1Phase2CoverageRecoveryAudit.mjs",
+      "--mutant",
+      "recovery_duration",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-recovery_duration.json"
+    ],
+    "exitCode": 1,
+    "seconds": 3.84,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-recovery_duration.json"
+  },
+  {
+    "name": "phase2-surplus_coverage",
+    "command": [
+      "node",
+      "scripts/diag1Phase2CoverageRecoveryAudit.mjs",
+      "--mutant",
+      "surplus_coverage",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-surplus_coverage.json"
+    ],
+    "exitCode": 1,
+    "seconds": 4.12,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-surplus_coverage.json"
+  },
+  {
+    "name": "phase2-stale_fatigue",
+    "command": [
+      "node",
+      "scripts/diag1Phase2FatigueAudit.mjs",
+      "--mutant",
+      "stale_fatigue",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-stale_fatigue.json"
+    ],
+    "exitCode": 1,
+    "seconds": 4.76,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-stale_fatigue.json"
+  },
+  {
+    "name": "phase2-partition_rounding",
+    "command": [
+      "node",
+      "scripts/diag1Phase2RoundingAudit.mjs",
+      "--mutant",
+      "partition_rounding",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-partition_rounding.json"
+    ],
+    "exitCode": 1,
+    "seconds": 6.65,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-partition_rounding.json"
+  },
+  {
+    "name": "phase2-migration_guess",
+    "command": [
+      "node",
+      "scripts/diag1Phase2MigrationAudit.mjs",
+      "--mutant",
+      "migration_guess",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-migration_guess.json"
+    ],
+    "exitCode": 1,
+    "seconds": 4.85,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase2-migration_guess.json"
+  },
+  {
+    "name": "phase3-final-fauna",
+    "command": [
+      "node",
+      "scripts/diag1Phase3OpportunityAudit.mjs",
+      "--mutant",
+      "fauna",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase3-final-fauna.json"
+    ],
+    "exitCode": 1,
+    "seconds": 8.03,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase3-final-fauna.json"
+  },
+  {
+    "name": "phase3-final-food",
+    "command": [
+      "node",
+      "scripts/diag1Phase3OpportunityAudit.mjs",
+      "--mutant",
+      "food",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase3-final-food.json"
+    ],
+    "exitCode": 1,
+    "seconds": 7.51,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase3-final-food.json"
+  },
+  {
+    "name": "phase3-final-scout",
+    "command": [
+      "node",
+      "scripts/diag1Phase3OpportunityAudit.mjs",
+      "--mutant",
+      "scout",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase3-final-scout.json"
+    ],
+    "exitCode": 1,
+    "seconds": 6.8,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase3-final-scout.json"
+  },
+  {
+    "name": "phase3-final-diagnostic",
+    "command": [
+      "node",
+      "scripts/diag1Phase3DiagnosticsAudit.mjs",
+      "--mutant",
+      "diagnostic",
+      "--out",
+      "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase3-final-diagnostic.json"
+    ],
+    "exitCode": 1,
+    "seconds": 1.83,
+    "output": "docs/evidence/diag1-corrections/phase3/regressions/mutant-phase3-final-diagnostic.json"
+  }
+]

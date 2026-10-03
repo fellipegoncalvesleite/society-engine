@@ -35,7 +35,7 @@ const MAP_VIEW_MODES: readonly {
 }[] = [
   { mode: "terrain", label: "Terrain" },
   { mode: "habitat_potential", label: "Habitat Potential" },
-  { mode: "living_ecology", label: "Living Ecology · Technical" },
+  { mode: "living_ecology", label: "Ecological activity · Technical" },
   { mode: "known_opportunity", label: "Known Opportunity" },
   { mode: "water", label: "Water" },
   { mode: "elevation", label: "Elevation" },
@@ -924,7 +924,7 @@ export function WorldCanvas({
             {mapViewMode === "habitat_potential"
               ? "Potential substrate only — this layer does not show current food."
               : mapViewMode === "living_ecology"
-                ? "Technical world truth — exact physical patches and stocks; projection only."
+                ? "Ecological activity index from physical patches and stocks; not exact extractable food."
                 : mapViewMode === "known_opportunity"
                   ? selectedBandId === null
                     ? "Select a living band to see its knowledge-bounded opportunity map."

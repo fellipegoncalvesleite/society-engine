@@ -1,0 +1,214 @@
+[
+  {
+    "name": "fauna",
+    "file": "mutant-fauna-final.json",
+    "loaded": {
+      "fauna": true
+    },
+    "executed": {
+      "fauna": 18
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "food",
+    "file": "mutant-food-final.json",
+    "loaded": {
+      "food": true
+    },
+    "executed": {
+      "food": 759
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "scout",
+    "file": "mutant-scout-final.json",
+    "loaded": {
+      "scout": true
+    },
+    "executed": {
+      "scout": 154026
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "diagnostic",
+    "file": "mutant-diagnostic-final.json",
+    "loaded": {
+      "diagnostic": true
+    },
+    "executed": {
+      "diagnostic": 5
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase1-absorption",
+    "file": "regressions/mutant-phase1-absorption.json",
+    "loaded": 1,
+    "executed": 27,
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase1-cache",
+    "file": "regressions/mutant-phase1-cache.json",
+    "loaded": 1,
+    "executed": 27376,
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase1-cargo",
+    "file": "regressions/mutant-phase1-cargo.json",
+    "loaded": 1,
+    "executed": 136,
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase1-labor",
+    "file": "regressions/mutant-phase1-labor.json",
+    "loaded": 1,
+    "executed": 932,
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase1b-crossing",
+    "file": "regressions/mutant-phase1b-crossing.json",
+    "loaded": 1,
+    "executed": 14,
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase1b-movement",
+    "file": "regressions/mutant-phase1b-movement.json",
+    "loaded": 1,
+    "executed": 8,
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase1b-tile",
+    "file": "regressions/mutant-phase1b-tile.json",
+    "loaded": 1,
+    "executed": 14,
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase2-migration_guess",
+    "file": "regressions/mutant-phase2-migration_guess.json",
+    "loaded": {
+      "migration_guess": 1
+    },
+    "executed": {
+      "migration_guess": 3
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase2-overlap",
+    "file": "regressions/mutant-phase2-overlap.json",
+    "loaded": {
+      "overlap": 1
+    },
+    "executed": {
+      "overlap": 9
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase2-partition_rounding",
+    "file": "regressions/mutant-phase2-partition_rounding.json",
+    "loaded": {
+      "partition_rounding": 1
+    },
+    "executed": {
+      "partition_rounding": 1469983
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase2-record_count-qualified",
+    "file": "regressions/mutant-phase2-record_count-qualified.json",
+    "loaded": {
+      "record_count": 1
+    },
+    "executed": {
+      "record_count": 7
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase2-recovery_duration",
+    "file": "regressions/mutant-phase2-recovery_duration.json",
+    "loaded": {
+      "recovery_duration": 1
+    },
+    "executed": {
+      "recovery_duration": 29
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase2-stale_fatigue",
+    "file": "regressions/mutant-phase2-stale_fatigue.json",
+    "loaded": {
+      "stale_fatigue": 1
+    },
+    "executed": {
+      "stale_fatigue": 616
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase2-surplus_coverage",
+    "file": "regressions/mutant-phase2-surplus_coverage.json",
+    "loaded": {
+      "surplus_coverage": 1
+    },
+    "executed": {
+      "surplus_coverage": 82
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase2-units",
+    "file": "regressions/mutant-phase2-units.json",
+    "loaded": {
+      "units": 1
+    },
+    "executed": {
+      "units": 2165
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  },
+  {
+    "name": "mutant-phase2-unknown_coverage",
+    "file": "regressions/mutant-phase2-unknown_coverage.json",
+    "loaded": {
+      "unknown_coverage": 1
+    },
+    "executed": {
+      "unknown_coverage": 415
+    },
+    "behaviorallyDetected": true,
+    "restored": true
+  }
+]

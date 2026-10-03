@@ -1,0 +1,340 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "suite": "targeted_plant_patch_check",
+  "checkpoint": "2K.2B",
+  "passed": false,
+  "assertions": [
+    {
+      "name": "wet_season_fruit_beats_winter",
+      "passed": true,
+      "detail": {
+        "summer": 0.16,
+        "winter": 0
+      }
+    },
+    {
+      "name": "roots_lower_visibility_higher_reliability",
+      "passed": true,
+      "detail": {
+        "rootsVisibility": 0.34,
+        "fruitVisibility": 0.72,
+        "rootsReliability": 0.72,
+        "fruitReliability": 0.52
+      }
+    },
+    {
+      "name": "low_aquatic_tile_not_free_rich_food",
+      "passed": true,
+      "detail": {
+        "aquaticPatch": "not_materialized"
+      }
+    },
+    {
+      "name": "fallback_role_exists_without_yield_coupling",
+      "passed": true,
+      "detail": {
+        "rootsPatch": {
+          "patchId": "plant:tile:targeted:dry-fallback:roots_tubers_uso",
+          "tileId": "tile:targeted:dry-fallback",
+          "plantClassId": "roots_tubers_uso",
+          "season": "autumn",
+          "lifecycleState": "active",
+          "condition": "normal",
+          "currentAvailability": "active",
+          "previousAvailability": "active",
+          "baseAbundance": 0.27,
+          "currentAbundance": 0.12,
+          "abundanceTrend": "flat",
+          "seasonalPulseStrength": 0.82,
+          "reliabilityThisSeason": 0.63,
+          "naturalRecoveryProgress": 0.75,
+          "naturalRegrowthModifier": 0.83,
+          "visibility": 0.29,
+          "laborCost": 0.72,
+          "processingNeed": "moderate",
+          "safetyRisk": "moderate",
+          "depletion": 0,
+          "regrowthProfile": "belowground_reserve",
+          "fallbackRank": 0.84,
+          "debugReasons": [
+            "reason:plant_patch:tile:targeted:dry-fallback:roots_tubers_uso:9:sparse_deterministic_truth",
+            "reason:plant_patch:tile:targeted:dry-fallback:roots_tubers_uso:9:desert",
+            "reason:plant_season:tile:targeted:dry-fallback:roots_tubers_uso:autumn:season_active"
+          ],
+          "lifecycleReasonIds": [
+            "reason:plant_lifecycle:tile:targeted:dry-fallback:roots_tubers_uso:9:state_active",
+            "reason:plant_lifecycle:tile:targeted:dry-fallback:roots_tubers_uso:9:condition_normal",
+            "reason:plant_lifecycle:tile:targeted:dry-fallback:roots_tubers_uso:9:reliability_seasonal",
+            "reason:plant_lifecycle:tile:targeted:dry-fallback:roots_tubers_uso:9:trend_flat"
+          ]
+        },
+        "behaviorCoupling": "none: no yield/stress/mortality/relocation fields read plant patches"
+      }
+    },
+    {
+      "name": "fallback_role_hinted_without_food_gain",
+      "passed": true,
+      "detail": {
+        "fallbackHint": {
+          "observedPlantClassId": "roots_tubers_uso",
+          "linkedResourceClassId": "generic_plant_food",
+          "lifecycleState": "active",
+          "conditionHint": "normal",
+          "seasonalState": "active",
+          "availabilityHint": 0.23,
+          "abundanceHint": 0.12,
+          "visibility": 0.29,
+          "processingNeedSuspected": true,
+          "safetyRiskSuspected": true,
+          "storagePotentialSuspected": true,
+          "fallbackRoleHint": "emergency",
+          "fallbackRankHint": 0.84,
+          "confidenceModifier": 0.35,
+          "observationLimitReason": "low_visibility_hint",
+          "trueValueHiddenFromBand": true
+        },
+        "behaviorCoupling": "none: hint only, no harvest or yield integration"
+      }
+    },
+    {
+      "name": "medicinal_toxic_scout_caution_only",
+      "passed": false,
+      "detail": {
+        "medicinalHint": {
+          "lifecycleState": "absent",
+          "conditionHint": "sparse",
+          "seasonalState": "absent",
+          "availabilityHint": 0.08,
+          "abundanceHint": 0.02,
+          "visibility": 0,
+          "processingNeedSuspected": false,
+          "safetyRiskSuspected": false,
+          "storagePotentialSuspected": false,
+          "fallbackRoleHint": "none",
+          "fallbackRankHint": 0,
+          "confidenceModifier": 0.18,
+          "observationLimitReason": "no_relevant_patch_visible",
+          "trueValueHiddenFromBand": true
+        },
+        "noMedicineOrPoisonEvent": true
+      }
+    },
+    {
+      "name": "inferred_plant_belief_refuted",
+      "passed": true,
+      "detail": {
+        "contradictionKind": "inferred_belief_unconfirmed"
+      }
+    },
+    {
+      "name": "wetland_or_aquatic_patch_near_water",
+      "passed": true,
+      "detail": {
+        "wetlandPatches": [
+          {
+            "patchId": "plant:tile:targeted:wetland:fiber_reed",
+            "tileId": "tile:targeted:wetland",
+            "plantClassId": "fiber_reed",
+            "season": "summer",
+            "lifecycleState": "active",
+            "condition": "normal",
+            "currentAvailability": "active",
+            "previousAvailability": "low",
+            "baseAbundance": 0.68,
+            "currentAbundance": 0.31,
+            "abundanceTrend": "rising",
+            "seasonalPulseStrength": 0.84,
+            "reliabilityThisSeason": 0.58,
+            "naturalRecoveryProgress": 0.88,
+            "naturalRegrowthModifier": 0.92,
+            "visibility": 0.61,
+            "laborCost": 0.46,
+            "processingNeed": "low",
+            "safetyRisk": "low",
+            "depletion": 0,
+            "regrowthProfile": "fast_wetland",
+            "fallbackRank": 0,
+            "debugReasons": [
+              "reason:plant_patch:tile:targeted:wetland:fiber_reed:8:sparse_deterministic_truth",
+              "reason:plant_patch:tile:targeted:wetland:fiber_reed:8:wetlands",
+              "reason:plant_season:tile:targeted:wetland:fiber_reed:summer:season_active"
+            ],
+            "lifecycleReasonIds": [
+              "reason:plant_lifecycle:tile:targeted:wetland:fiber_reed:8:state_active",
+              "reason:plant_lifecycle:tile:targeted:wetland:fiber_reed:8:condition_normal",
+              "reason:plant_lifecycle:tile:targeted:wetland:fiber_reed:8:reliability_seasonal",
+              "reason:plant_lifecycle:tile:targeted:wetland:fiber_reed:8:trend_rising"
+            ]
+          },
+          {
+            "patchId": "plant:tile:targeted:wetland:wetland_plant",
+            "tileId": "tile:targeted:wetland",
+            "plantClassId": "wetland_plant",
+            "season": "summer",
+            "lifecycleState": "active",
+            "condition": "normal",
+            "currentAvailability": "active",
+            "previousAvailability": "active",
+            "baseAbundance": 0.64,
+            "currentAbundance": 0.22,
+            "abundanceTrend": "flat",
+            "seasonalPulseStrength": 0.82,
+            "reliabilityThisSeason": 0.46,
+            "naturalRecoveryProgress": 0.88,
+            "naturalRegrowthModifier": 0.92,
+            "visibility": 0.49,
+            "laborCost": 0.48,
+            "processingNeed": "moderate",
+            "safetyRisk": "moderate",
+            "depletion": 0,
+            "regrowthProfile": "fast_wetland",
+            "fallbackRank": 0.58,
+            "debugReasons": [
+              "reason:plant_patch:tile:targeted:wetland:wetland_plant:8:sparse_deterministic_truth",
+              "reason:plant_patch:tile:targeted:wetland:wetland_plant:8:wetlands",
+              "reason:plant_season:tile:targeted:wetland:wetland_plant:summer:season_active"
+            ],
+            "lifecycleReasonIds": [
+              "reason:plant_lifecycle:tile:targeted:wetland:wetland_plant:8:state_active",
+              "reason:plant_lifecycle:tile:targeted:wetland:wetland_plant:8:condition_normal",
+              "reason:plant_lifecycle:tile:targeted:wetland:wetland_plant:8:reliability_water_sensitive",
+              "reason:plant_lifecycle:tile:targeted:wetland:wetland_plant:8:trend_flat"
+            ]
+          },
+          {
+            "patchId": "plant:tile:targeted:wetland:aquatic_plant",
+            "tileId": "tile:targeted:wetland",
+            "plantClassId": "aquatic_plant",
+            "season": "summer",
+            "lifecycleState": "low",
+            "condition": "sparse",
+            "currentAvailability": "low",
+            "previousAvailability": "absent",
+            "baseAbundance": 0.38,
+            "currentAbundance": 0.09,
+            "abundanceTrend": "flat",
+            "seasonalPulseStrength": 0.68,
+            "reliabilityThisSeason": 0.37,
+            "naturalRecoveryProgress": 0.88,
+            "naturalRegrowthModifier": 0.92,
+            "visibility": 0.38,
+            "laborCost": 0.58,
+            "processingNeed": "moderate",
+            "safetyRisk": "moderate",
+            "depletion": 0,
+            "regrowthProfile": "fast_wetland",
+            "fallbackRank": 0.36,
+            "debugReasons": [
+              "reason:plant_patch:tile:targeted:wetland:aquatic_plant:8:sparse_deterministic_truth",
+              "reason:plant_patch:tile:targeted:wetland:aquatic_plant:8:wetlands",
+              "reason:plant_season:tile:targeted:wetland:aquatic_plant:summer:season_active"
+            ],
+            "lifecycleReasonIds": [
+              "reason:plant_lifecycle:tile:targeted:wetland:aquatic_plant:8:state_low",
+              "reason:plant_lifecycle:tile:targeted:wetland:aquatic_plant:8:condition_sparse",
+              "reason:plant_lifecycle:tile:targeted:wetland:aquatic_plant:8:reliability_water_sensitive",
+              "reason:plant_lifecycle:tile:targeted:wetland:aquatic_plant:8:trend_flat"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "classProfiles": [
+    {
+      "id": "fruit_berry",
+      "linkedResourceClassId": "generic_plant_food",
+      "domain": "food",
+      "fallbackRole": "minor",
+      "fallbackRank": 0.28,
+      "processingNeed": "low",
+      "safetyRisk": "low"
+    },
+    {
+      "id": "nuts_mast",
+      "linkedResourceClassId": "generic_plant_food",
+      "domain": "food",
+      "fallbackRole": "important",
+      "fallbackRank": 0.52,
+      "processingNeed": "low",
+      "safetyRisk": "low"
+    },
+    {
+      "id": "roots_tubers_uso",
+      "linkedResourceClassId": "generic_plant_food",
+      "domain": "food",
+      "fallbackRole": "emergency",
+      "fallbackRank": 0.84,
+      "processingNeed": "moderate",
+      "safetyRisk": "moderate"
+    },
+    {
+      "id": "wild_grain_seed",
+      "linkedResourceClassId": "generic_plant_food",
+      "domain": "food",
+      "fallbackRole": "important",
+      "fallbackRank": 0.62,
+      "processingNeed": "moderate",
+      "safetyRisk": "low"
+    },
+    {
+      "id": "leaf_green",
+      "linkedResourceClassId": "generic_plant_food",
+      "domain": "food",
+      "fallbackRole": "minor",
+      "fallbackRank": 0.2,
+      "processingNeed": "none",
+      "safetyRisk": "low"
+    },
+    {
+      "id": "wetland_plant",
+      "linkedResourceClassId": "generic_plant_food",
+      "domain": "food",
+      "fallbackRole": "important",
+      "fallbackRank": 0.58,
+      "processingNeed": "moderate",
+      "safetyRisk": "moderate"
+    },
+    {
+      "id": "aquatic_plant",
+      "linkedResourceClassId": "aquatic_food",
+      "domain": "food",
+      "fallbackRole": "minor",
+      "fallbackRank": 0.36,
+      "processingNeed": "moderate",
+      "safetyRisk": "moderate"
+    },
+    {
+      "id": "fiber_reed",
+      "linkedResourceClassId": "fiber_material",
+      "domain": "material",
+      "fallbackRole": "none",
+      "fallbackRank": 0,
+      "processingNeed": "low",
+      "safetyRisk": "low"
+    },
+    {
+      "id": "fuel_wood",
+      "linkedResourceClassId": "fuel_material",
+      "domain": "material",
+      "fallbackRole": "none",
+      "fallbackRank": 0,
+      "processingNeed": "none",
+      "safetyRisk": "low"
+    },
+    {
+      "id": "medicinal_toxic",
+      "linkedResourceClassId": "medicinal_or_toxic",
+      "domain": "medicinal_toxic",
+      "fallbackRole": "none",
+      "fallbackRank": 0,
+      "processingNeed": "unknown",
+      "safetyRisk": "unknown"
+    }
+  ],
+  "sparseCaps": {
+    "maxPatchesPerTile": 3,
+    "derivationScope": "lazy bounded tile context",
+    "noBehaviorCoupling": true
+  }
+}

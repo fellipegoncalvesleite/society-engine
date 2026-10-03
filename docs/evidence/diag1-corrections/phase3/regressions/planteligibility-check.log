@@ -1,0 +1,828 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "suite": "targeted_plant_eligibility_check",
+  "checkpoint": "2K.2D",
+  "passed": true,
+  "assertions": [
+    {
+      "name": "active_known_fruit_cautious_not_known_safe",
+      "eligibilityState": "eligible_cautious",
+      "score": 0.58,
+      "failedGates": [],
+      "passed": true
+    },
+    {
+      "name": "out_of_season_fruit_not_usable_now",
+      "eligibilityState": "out_of_season",
+      "score": 0.36,
+      "failedGates": [
+        "season",
+        "abundance"
+      ],
+      "passed": true
+    },
+    {
+      "name": "roots_tubers_fallback_labor_heavy_no_food_gain",
+      "eligibilityState": "fallback_only",
+      "score": 0.48,
+      "failedGates": [
+        "processing"
+      ],
+      "passed": true
+    },
+    {
+      "name": "medicinal_toxic_caution_not_food",
+      "eligibilityState": "safety_uncertain",
+      "score": 0.35,
+      "failedGates": [
+        "safety",
+        "processing"
+      ],
+      "passed": true
+    },
+    {
+      "name": "processing_suspected_fails_processing_gate",
+      "eligibilityState": "processing_required_known_missing",
+      "score": 0.53,
+      "failedGates": [
+        "processing"
+      ],
+      "passed": true
+    },
+    {
+      "name": "inferred_only_not_fully_eligible",
+      "eligibilityState": "unknown",
+      "score": 0.29,
+      "failedGates": [
+        "knowledge",
+        "season",
+        "abundance",
+        "safety"
+      ],
+      "passed": true
+    },
+    {
+      "name": "contradicted_stale_memory_lowers_eligibility",
+      "eligibilityState": "out_of_season",
+      "score": 0.37,
+      "failedGates": [
+        "season"
+      ],
+      "passed": true
+    }
+  ],
+  "cases": [
+    {
+      "name": "active_known_fruit_cautious_not_known_safe",
+      "context": {
+        "tick": 20,
+        "season": "summer",
+        "foodStress": 0.64,
+        "perCapitaReturn": 0.38,
+        "laborCapacity": 14,
+        "dependencyLoad": 0.28
+      },
+      "memory": {
+        "source": "direct",
+        "state": "observed",
+        "resourceClassId": "generic_plant_food",
+        "plantObservation": {
+          "plantClassId": "fruit_berry",
+          "lifecycleState": "active",
+          "seasonalState": "active",
+          "processingNeedSuspected": false,
+          "safetyRiskSuspected": false,
+          "fallbackRoleHint": "minor",
+          "fallbackRankHint": 0.28
+        }
+      },
+      "eligibility": {
+        "patchId": "plant:tile:targeted:active_known_fruit_cautious_not_known_safe:fruit_berry",
+        "tileId": "tile:targeted:active_known_fruit_cautious_not_known_safe",
+        "plantClassId": "fruit_berry",
+        "linkedResourceClassId": "generic_plant_food",
+        "eligibilityState": "eligible_cautious",
+        "eligibilityScore": 0.58,
+        "dietBreadthReadiness": "fallback_resource_candidate",
+        "failedGates": [],
+        "gates": {
+          "knowledge": {
+            "status": "pass",
+            "score": 0.62,
+            "reason": "reason:plant_eligibility:knowledge_direct_observed_patch"
+          },
+          "season": {
+            "status": "pass",
+            "score": 0.62,
+            "reason": "reason:plant_eligibility:season_currently_active_hint"
+          },
+          "abundance": {
+            "status": "pass",
+            "score": 0.55,
+            "reason": "reason:plant_eligibility:abundance_visible_enough_hint"
+          },
+          "access": {
+            "status": "pass",
+            "score": 0.66,
+            "reason": "reason:plant_eligibility:access_known_enough"
+          },
+          "safety": {
+            "status": "weak",
+            "score": 0.34,
+            "reason": "reason:plant_eligibility:safety_cautious_only"
+          },
+          "processing": {
+            "status": "pass",
+            "score": 0.58,
+            "reason": "reason:plant_eligibility:processing_no_need_suspected"
+          },
+          "labor": {
+            "status": "pass",
+            "score": 0.8,
+            "reason": "reason:plant_eligibility:labor_plausible_debug_gate"
+          },
+          "fallback": {
+            "status": "weak",
+            "score": 0.64,
+            "reason": "reason:plant_eligibility:fallback_role_known_readiness_only"
+          }
+        },
+        "confidenceUsed": {
+          "source": "direct",
+          "memoryState": "observed",
+          "stalenessTicks": 0,
+          "stalenessLabel": "fresh",
+          "presence": 0.62,
+          "season": 0.58,
+          "yield": 0.42,
+          "safety": 0.34,
+          "processing": 0.18,
+          "access": 0.66,
+          "recovery": 0,
+          "observationCount": 1,
+          "lastObservedTick": 20,
+          "contradictionCount": 0,
+          "falseInferenceCount": 0
+        },
+        "currentSeason": "summer",
+        "lifecycleState": "active",
+        "conditionHint": "normal",
+        "seasonalState": "active",
+        "fallbackRoleHint": "minor",
+        "fallbackRankHint": 0.28,
+        "processingNeedSuspected": false,
+        "safetyRiskSuspected": false,
+        "storagePotentialSuspected": false,
+        "knownVsTruthLabel": "band_known_or_scouted_only",
+        "noYieldStressRelocationCoupling": true,
+        "trueValueHiddenFromBand": true
+      }
+    },
+    {
+      "name": "out_of_season_fruit_not_usable_now",
+      "context": {
+        "tick": 20,
+        "season": "winter",
+        "foodStress": 0.64,
+        "perCapitaReturn": 0.38,
+        "laborCapacity": 14,
+        "dependencyLoad": 0.28
+      },
+      "memory": {
+        "source": "direct",
+        "state": "seasonally_bad",
+        "resourceClassId": "generic_plant_food",
+        "plantObservation": {
+          "plantClassId": "fruit_berry",
+          "lifecycleState": "dormant",
+          "seasonalState": "dormant",
+          "processingNeedSuspected": false,
+          "safetyRiskSuspected": false,
+          "fallbackRoleHint": "minor",
+          "fallbackRankHint": 0.28
+        }
+      },
+      "eligibility": {
+        "patchId": "plant:tile:targeted:out_of_season_fruit_not_usable_now:fruit_berry",
+        "tileId": "tile:targeted:out_of_season_fruit_not_usable_now",
+        "plantClassId": "fruit_berry",
+        "linkedResourceClassId": "generic_plant_food",
+        "eligibilityState": "out_of_season",
+        "eligibilityScore": 0.36,
+        "dietBreadthReadiness": "fallback_resource_candidate",
+        "failedGates": [
+          "season",
+          "abundance"
+        ],
+        "gates": {
+          "knowledge": {
+            "status": "weak",
+            "score": 0.36,
+            "reason": "reason:plant_eligibility:knowledge_recent_contradiction"
+          },
+          "season": {
+            "status": "fail",
+            "score": 0.04,
+            "reason": "reason:plant_eligibility:season_out_of_season_or_dormant"
+          },
+          "abundance": {
+            "status": "fail",
+            "score": 0.08,
+            "reason": "reason:plant_eligibility:abundance_too_low_hint"
+          },
+          "access": {
+            "status": "pass",
+            "score": 0.62,
+            "reason": "reason:plant_eligibility:access_known_enough"
+          },
+          "safety": {
+            "status": "weak",
+            "score": 0.32,
+            "reason": "reason:plant_eligibility:safety_cautious_only"
+          },
+          "processing": {
+            "status": "weak",
+            "score": 0.44,
+            "reason": "reason:plant_eligibility:processing_not_suspected_but_skill_unknown"
+          },
+          "labor": {
+            "status": "pass",
+            "score": 0.73,
+            "reason": "reason:plant_eligibility:labor_plausible_debug_gate"
+          },
+          "fallback": {
+            "status": "weak",
+            "score": 0.64,
+            "reason": "reason:plant_eligibility:fallback_role_known_readiness_only"
+          }
+        },
+        "confidenceUsed": {
+          "source": "direct",
+          "memoryState": "seasonally_bad",
+          "stalenessTicks": 0,
+          "stalenessLabel": "fresh",
+          "presence": 0.58,
+          "season": 0.3,
+          "yield": 0.24,
+          "safety": 0.32,
+          "processing": 0,
+          "access": 0.62,
+          "recovery": 0,
+          "observationCount": 1,
+          "lastObservedTick": 20,
+          "contradictionCount": 0,
+          "falseInferenceCount": 0
+        },
+        "currentSeason": "winter",
+        "lifecycleState": "dormant",
+        "conditionHint": "sparse",
+        "seasonalState": "dormant",
+        "fallbackRoleHint": "minor",
+        "fallbackRankHint": 0.28,
+        "processingNeedSuspected": false,
+        "safetyRiskSuspected": false,
+        "storagePotentialSuspected": false,
+        "knownVsTruthLabel": "band_known_or_scouted_only",
+        "noYieldStressRelocationCoupling": true,
+        "trueValueHiddenFromBand": true
+      }
+    },
+    {
+      "name": "roots_tubers_fallback_labor_heavy_no_food_gain",
+      "context": {
+        "tick": 20,
+        "season": "summer",
+        "foodStress": 0.64,
+        "perCapitaReturn": 0.38,
+        "laborCapacity": 14,
+        "dependencyLoad": 0.28
+      },
+      "memory": {
+        "source": "direct",
+        "state": "observed",
+        "resourceClassId": "fallback_food",
+        "plantObservation": {
+          "plantClassId": "roots_tubers_uso",
+          "lifecycleState": "active",
+          "seasonalState": "active",
+          "processingNeedSuspected": true,
+          "safetyRiskSuspected": false,
+          "fallbackRoleHint": "emergency",
+          "fallbackRankHint": 0.84
+        }
+      },
+      "eligibility": {
+        "patchId": "plant:tile:targeted:roots_tubers_fallback_labor_heavy_no_food_gain:roots_tubers_uso",
+        "tileId": "tile:targeted:roots_tubers_fallback_labor_heavy_no_food_gain",
+        "plantClassId": "roots_tubers_uso",
+        "linkedResourceClassId": "generic_plant_food",
+        "eligibilityState": "fallback_only",
+        "eligibilityScore": 0.48,
+        "dietBreadthReadiness": "famine_only_candidate",
+        "failedGates": [
+          "processing"
+        ],
+        "gates": {
+          "knowledge": {
+            "status": "pass",
+            "score": 0.62,
+            "reason": "reason:plant_eligibility:knowledge_direct_observed_patch"
+          },
+          "season": {
+            "status": "pass",
+            "score": 0.62,
+            "reason": "reason:plant_eligibility:season_currently_active_hint"
+          },
+          "abundance": {
+            "status": "pass",
+            "score": 0.55,
+            "reason": "reason:plant_eligibility:abundance_visible_enough_hint"
+          },
+          "access": {
+            "status": "pass",
+            "score": 0.48,
+            "reason": "reason:plant_eligibility:access_known_enough"
+          },
+          "safety": {
+            "status": "weak",
+            "score": 0.32,
+            "reason": "reason:plant_eligibility:safety_cautious_only"
+          },
+          "processing": {
+            "status": "fail",
+            "score": 0.18,
+            "reason": "reason:plant_eligibility:processing_required_known_missing"
+          },
+          "labor": {
+            "status": "weak",
+            "score": 0.38,
+            "reason": "reason:plant_eligibility:labor_heavy_or_low_visibility"
+          },
+          "fallback": {
+            "status": "weak",
+            "score": 0.64,
+            "reason": "reason:plant_eligibility:fallback_role_known_readiness_only"
+          }
+        },
+        "confidenceUsed": {
+          "source": "direct",
+          "memoryState": "observed",
+          "stalenessTicks": 0,
+          "stalenessLabel": "fresh",
+          "presence": 0.56,
+          "season": 0.52,
+          "yield": 0.32,
+          "safety": 0.28,
+          "processing": 0.18,
+          "access": 0.48,
+          "recovery": 0,
+          "observationCount": 1,
+          "lastObservedTick": 20,
+          "contradictionCount": 0,
+          "falseInferenceCount": 0
+        },
+        "currentSeason": "summer",
+        "lifecycleState": "active",
+        "conditionHint": "normal",
+        "seasonalState": "active",
+        "fallbackRoleHint": "emergency",
+        "fallbackRankHint": 0.84,
+        "processingNeedSuspected": true,
+        "safetyRiskSuspected": false,
+        "storagePotentialSuspected": false,
+        "knownVsTruthLabel": "band_known_or_scouted_only",
+        "noYieldStressRelocationCoupling": true,
+        "trueValueHiddenFromBand": true
+      }
+    },
+    {
+      "name": "medicinal_toxic_caution_not_food",
+      "context": {
+        "tick": 20,
+        "season": "summer",
+        "foodStress": 0.64,
+        "perCapitaReturn": 0.38,
+        "laborCapacity": 14,
+        "dependencyLoad": 0.28
+      },
+      "memory": {
+        "source": "direct",
+        "state": "observed",
+        "resourceClassId": "medicinal_or_toxic",
+        "plantObservation": {
+          "plantClassId": "medicinal_toxic",
+          "lifecycleState": "unreliable",
+          "seasonalState": "unreliable",
+          "processingNeedSuspected": true,
+          "safetyRiskSuspected": true,
+          "fallbackRoleHint": "none",
+          "fallbackRankHint": 0
+        }
+      },
+      "eligibility": {
+        "patchId": "plant:tile:targeted:medicinal_toxic_caution_not_food:medicinal_toxic",
+        "tileId": "tile:targeted:medicinal_toxic_caution_not_food",
+        "plantClassId": "medicinal_toxic",
+        "linkedResourceClassId": "medicinal_or_toxic",
+        "eligibilityState": "safety_uncertain",
+        "eligibilityScore": 0.35,
+        "dietBreadthReadiness": "medicinal_toxic_caution",
+        "failedGates": [
+          "safety",
+          "processing"
+        ],
+        "gates": {
+          "knowledge": {
+            "status": "weak",
+            "score": 0.44,
+            "reason": "reason:plant_eligibility:knowledge_observed_but_low_confidence"
+          },
+          "season": {
+            "status": "weak",
+            "score": 0.38,
+            "reason": "reason:plant_eligibility:season_recovering_or_unreliable_hint"
+          },
+          "abundance": {
+            "status": "weak",
+            "score": 0.28,
+            "reason": "reason:plant_eligibility:abundance_low_or_recovering_hint"
+          },
+          "access": {
+            "status": "pass",
+            "score": 0.52,
+            "reason": "reason:plant_eligibility:access_known_enough"
+          },
+          "safety": {
+            "status": "fail",
+            "score": 0.06,
+            "reason": "reason:plant_eligibility:safety_medicinal_toxic_caution"
+          },
+          "processing": {
+            "status": "unknown",
+            "score": 0.03,
+            "reason": "reason:plant_eligibility:processing_required_unknown"
+          },
+          "labor": {
+            "status": "pass",
+            "score": 0.68,
+            "reason": "reason:plant_eligibility:labor_plausible_debug_gate"
+          },
+          "fallback": {
+            "status": "pass",
+            "score": 1,
+            "reason": "reason:plant_eligibility:fallback_not_required"
+          }
+        },
+        "confidenceUsed": {
+          "source": "direct",
+          "memoryState": "observed",
+          "stalenessTicks": 0,
+          "stalenessLabel": "fresh",
+          "presence": 0.44,
+          "season": 0.32,
+          "yield": 0.04,
+          "safety": 0.08,
+          "processing": 0.03,
+          "access": 0.52,
+          "recovery": 0,
+          "observationCount": 1,
+          "lastObservedTick": 20,
+          "contradictionCount": 0,
+          "falseInferenceCount": 0
+        },
+        "currentSeason": "summer",
+        "lifecycleState": "unreliable",
+        "conditionHint": "sparse",
+        "seasonalState": "unreliable",
+        "fallbackRoleHint": "none",
+        "fallbackRankHint": 0,
+        "processingNeedSuspected": true,
+        "safetyRiskSuspected": true,
+        "storagePotentialSuspected": false,
+        "knownVsTruthLabel": "band_known_or_scouted_only",
+        "noYieldStressRelocationCoupling": true,
+        "trueValueHiddenFromBand": true
+      }
+    },
+    {
+      "name": "processing_suspected_fails_processing_gate",
+      "context": {
+        "tick": 20,
+        "season": "summer",
+        "foodStress": 0.64,
+        "perCapitaReturn": 0.38,
+        "laborCapacity": 14,
+        "dependencyLoad": 0.28
+      },
+      "memory": {
+        "source": "direct",
+        "state": "observed",
+        "resourceClassId": "generic_plant_food",
+        "plantObservation": {
+          "plantClassId": "wetland_plant",
+          "lifecycleState": "active",
+          "seasonalState": "active",
+          "processingNeedSuspected": true,
+          "safetyRiskSuspected": false,
+          "fallbackRoleHint": "none",
+          "fallbackRankHint": 0
+        }
+      },
+      "eligibility": {
+        "patchId": "plant:tile:targeted:processing_suspected_fails_processing_gate:wetland_plant",
+        "tileId": "tile:targeted:processing_suspected_fails_processing_gate",
+        "plantClassId": "wetland_plant",
+        "linkedResourceClassId": "generic_plant_food",
+        "eligibilityState": "processing_required_known_missing",
+        "eligibilityScore": 0.53,
+        "dietBreadthReadiness": "fallback_resource_candidate",
+        "failedGates": [
+          "processing"
+        ],
+        "gates": {
+          "knowledge": {
+            "status": "pass",
+            "score": 0.62,
+            "reason": "reason:plant_eligibility:knowledge_direct_observed_patch"
+          },
+          "season": {
+            "status": "pass",
+            "score": 0.62,
+            "reason": "reason:plant_eligibility:season_currently_active_hint"
+          },
+          "abundance": {
+            "status": "pass",
+            "score": 0.55,
+            "reason": "reason:plant_eligibility:abundance_visible_enough_hint"
+          },
+          "access": {
+            "status": "pass",
+            "score": 0.5,
+            "reason": "reason:plant_eligibility:access_known_enough"
+          },
+          "safety": {
+            "status": "weak",
+            "score": 0.42,
+            "reason": "reason:plant_eligibility:safety_cautious_only"
+          },
+          "processing": {
+            "status": "fail",
+            "score": 0.12,
+            "reason": "reason:plant_eligibility:processing_required_known_missing"
+          },
+          "labor": {
+            "status": "pass",
+            "score": 0.75,
+            "reason": "reason:plant_eligibility:labor_plausible_debug_gate"
+          },
+          "fallback": {
+            "status": "pass",
+            "score": 1,
+            "reason": "reason:plant_eligibility:fallback_not_required"
+          }
+        },
+        "confidenceUsed": {
+          "source": "direct",
+          "memoryState": "observed",
+          "stalenessTicks": 0,
+          "stalenessLabel": "fresh",
+          "presence": 0.6,
+          "season": 0.54,
+          "yield": 0.3,
+          "safety": 0.42,
+          "processing": 0.12,
+          "access": 0.5,
+          "recovery": 0,
+          "observationCount": 1,
+          "lastObservedTick": 20,
+          "contradictionCount": 0,
+          "falseInferenceCount": 0
+        },
+        "currentSeason": "summer",
+        "lifecycleState": "active",
+        "conditionHint": "normal",
+        "seasonalState": "active",
+        "fallbackRoleHint": "none",
+        "fallbackRankHint": 0,
+        "processingNeedSuspected": true,
+        "safetyRiskSuspected": false,
+        "storagePotentialSuspected": false,
+        "knownVsTruthLabel": "band_known_or_scouted_only",
+        "noYieldStressRelocationCoupling": true,
+        "trueValueHiddenFromBand": true
+      }
+    },
+    {
+      "name": "inferred_only_not_fully_eligible",
+      "context": {
+        "tick": 20,
+        "season": "summer",
+        "foodStress": 0.64,
+        "perCapitaReturn": 0.38,
+        "laborCapacity": 14,
+        "dependencyLoad": 0.28
+      },
+      "memory": {
+        "source": "inferred",
+        "state": "suspected",
+        "resourceClassId": "generic_plant_food"
+      },
+      "eligibility": {
+        "patchId": "patch:targeted:inferred_only_not_fully_eligible",
+        "tileId": "tile:targeted:inferred_only_not_fully_eligible",
+        "linkedResourceClassId": "generic_plant_food",
+        "eligibilityState": "unknown",
+        "eligibilityScore": 0.29,
+        "dietBreadthReadiness": "fallback_resource_candidate",
+        "failedGates": [
+          "knowledge",
+          "season",
+          "abundance",
+          "safety"
+        ],
+        "gates": {
+          "knowledge": {
+            "status": "unknown",
+            "score": 0.18,
+            "reason": "reason:plant_eligibility:knowledge_inferred_without_plant_observation"
+          },
+          "season": {
+            "status": "unknown",
+            "score": 0.22,
+            "reason": "reason:plant_eligibility:season_known_presence_not_timing"
+          },
+          "abundance": {
+            "status": "unknown",
+            "score": 0.18,
+            "reason": "reason:plant_eligibility:abundance_not_scouted"
+          },
+          "access": {
+            "status": "weak",
+            "score": 0.28,
+            "reason": "reason:plant_eligibility:access_plausible_but_costly"
+          },
+          "safety": {
+            "status": "unknown",
+            "score": 0.08,
+            "reason": "reason:plant_eligibility:safety_not_known"
+          },
+          "processing": {
+            "status": "weak",
+            "score": 0.44,
+            "reason": "reason:plant_eligibility:processing_not_suspected_but_skill_unknown"
+          },
+          "labor": {
+            "status": "pass",
+            "score": 0.77,
+            "reason": "reason:plant_eligibility:labor_plausible_debug_gate"
+          },
+          "fallback": {
+            "status": "pass",
+            "score": 1,
+            "reason": "reason:plant_eligibility:fallback_not_required"
+          }
+        },
+        "confidenceUsed": {
+          "source": "inferred",
+          "memoryState": "suspected",
+          "stalenessTicks": 0,
+          "stalenessLabel": "fresh",
+          "presence": 0.34,
+          "season": 0.2,
+          "yield": 0.12,
+          "safety": 0.08,
+          "processing": 0,
+          "access": 0.28,
+          "recovery": 0,
+          "observationCount": 0,
+          "contradictionCount": 0,
+          "falseInferenceCount": 0
+        },
+        "currentSeason": "summer",
+        "fallbackRoleHint": "none",
+        "fallbackRankHint": 0,
+        "processingNeedSuspected": false,
+        "safetyRiskSuspected": false,
+        "storagePotentialSuspected": false,
+        "knownVsTruthLabel": "band_known_or_scouted_only",
+        "noYieldStressRelocationCoupling": true,
+        "trueValueHiddenFromBand": true
+      }
+    },
+    {
+      "name": "contradicted_stale_memory_lowers_eligibility",
+      "context": {
+        "tick": 20,
+        "season": "summer",
+        "foodStress": 0.64,
+        "perCapitaReturn": 0.38,
+        "laborCapacity": 14,
+        "dependencyLoad": 0.28
+      },
+      "memory": {
+        "source": "direct",
+        "state": "seasonally_bad",
+        "resourceClassId": "generic_plant_food",
+        "plantObservation": {
+          "plantClassId": "fruit_berry",
+          "lifecycleState": "low",
+          "seasonalState": "low",
+          "processingNeedSuspected": false,
+          "safetyRiskSuspected": false,
+          "fallbackRoleHint": "minor",
+          "fallbackRankHint": 0.28
+        }
+      },
+      "eligibility": {
+        "patchId": "plant:tile:targeted:contradicted_stale_memory_lowers_eligibility:fruit_berry",
+        "tileId": "tile:targeted:contradicted_stale_memory_lowers_eligibility",
+        "plantClassId": "fruit_berry",
+        "linkedResourceClassId": "generic_plant_food",
+        "eligibilityState": "out_of_season",
+        "eligibilityScore": 0.37,
+        "dietBreadthReadiness": "fallback_resource_candidate",
+        "failedGates": [
+          "season"
+        ],
+        "gates": {
+          "knowledge": {
+            "status": "weak",
+            "score": 0.36,
+            "reason": "reason:plant_eligibility:knowledge_recent_contradiction"
+          },
+          "season": {
+            "status": "fail",
+            "score": 0.04,
+            "reason": "reason:plant_eligibility:season_out_of_season_or_dormant"
+          },
+          "abundance": {
+            "status": "weak",
+            "score": 0.28,
+            "reason": "reason:plant_eligibility:abundance_low_or_recovering_hint"
+          },
+          "access": {
+            "status": "pass",
+            "score": 0.55,
+            "reason": "reason:plant_eligibility:access_known_enough"
+          },
+          "safety": {
+            "status": "weak",
+            "score": 0.33,
+            "reason": "reason:plant_eligibility:safety_cautious_only"
+          },
+          "processing": {
+            "status": "weak",
+            "score": 0.44,
+            "reason": "reason:plant_eligibility:processing_not_suspected_but_skill_unknown"
+          },
+          "labor": {
+            "status": "pass",
+            "score": 0.74,
+            "reason": "reason:plant_eligibility:labor_plausible_debug_gate"
+          },
+          "fallback": {
+            "status": "weak",
+            "score": 0.64,
+            "reason": "reason:plant_eligibility:fallback_role_known_readiness_only"
+          }
+        },
+        "confidenceUsed": {
+          "source": "direct",
+          "memoryState": "seasonally_bad",
+          "stalenessTicks": 19,
+          "stalenessLabel": "fresh",
+          "presence": 0.59,
+          "season": 0.37,
+          "yield": 0.29,
+          "safety": 0.33,
+          "processing": 0.07,
+          "access": 0.55,
+          "recovery": 0,
+          "observationCount": 1,
+          "lastObservedTick": 12,
+          "contradictionCount": 3,
+          "falseInferenceCount": 0
+        },
+        "currentSeason": "summer",
+        "lifecycleState": "low",
+        "conditionHint": "sparse",
+        "seasonalState": "low",
+        "fallbackRoleHint": "minor",
+        "fallbackRankHint": 0.28,
+        "processingNeedSuspected": false,
+        "safetyRiskSuspected": false,
+        "storagePotentialSuspected": false,
+        "knownVsTruthLabel": "band_known_or_scouted_only",
+        "noYieldStressRelocationCoupling": true,
+        "trueValueHiddenFromBand": true
+      }
+    }
+  ],
+  "constraints": {
+    "bandKnownOrScoutedOnly": true,
+    "noYieldStressMortalityRelocationCoupling": true,
+    "fallbackCalories": false,
+    "safetyProcessingAreGatesOnly": true,
+    "denseTables": false
+  }
+}

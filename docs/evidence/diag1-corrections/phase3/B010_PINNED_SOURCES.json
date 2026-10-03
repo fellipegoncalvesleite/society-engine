@@ -1,0 +1,32 @@
+[
+  {
+    "commit": "30e1440c237c0f09bb1403687b8da9899fbfd41b",
+    "path": "src/sim/world/spatialTypes.ts",
+    "blob": "de587c09b27d263c558841729246ae1ea2cf3e73",
+    "sha256": "04ad33d2aed762303048b449194c363f977617edeb6eedec52e97c6115ad7ff7"
+  },
+  {
+    "commit": "30e1440c237c0f09bb1403687b8da9899fbfd41b",
+    "path": "src/sim/world/spatialGeometry.ts",
+    "blob": "59c1f4dbfec727ef682c86919d92d52b9e957c52",
+    "sha256": "fa0770e756d2b9ae54897d197db805c85ec3f9c0f688446d755606638e2fba7c"
+  },
+  {
+    "commit": "30e1440c237c0f09bb1403687b8da9899fbfd41b",
+    "path": "src/sim/agents/viability.ts",
+    "blob": "fd08c52967cbd291b399647a340a565b206b09b1",
+    "sha256": "8b456997ec429c0a119b1af7c024a7f27f6b5735606dd13c6f8d7a5ff48d881a"
+  },
+  {
+    "commit": "f2c4252b8fc70e4f79beb9f24b57f48902f76672",
+    "path": "scripts/scale1Task7ResidualBehaviorAudit.mjs",
+    "blob": "df90b315fb967959f46838f340950051272c860f",
+    "sha256": "30a7d322be7913fdcf86733391b4ead8e04795a3fbf1d0875e882c7ff2bb960c"
+  },
+  {
+    "commit": "f2c4252b8fc70e4f79beb9f24b57f48902f76672",
+    "path": "scripts/scale1Task7CrossResolutionAudit.mjs",
+    "blob": "f3e6b1dc91ecd559a28bea0f7375738c8c83a087",
+    "sha256": "134dbb44f48a4dc7a26efd6c450da3403ff12ab8ccdf64515276ae2cfe011e6f"
+  }
+]

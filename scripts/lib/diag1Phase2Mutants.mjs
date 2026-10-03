@@ -10,7 +10,7 @@ export function phase2Mutation(mutant) {
    return replace(code,needle,`function convertUsableRawFoodToSupportUnits(raw: number): number { ${hit('units')} return raw; }`,'units');
   }
   if(mutant==='record_count'&&id.endsWith('/agents/seasonalSurvival.ts')){
-   const needle='const currentFoodStress = clamp01(year.foodStress);';
+   const needle='const currentFoodStress = clamp01(year.coverageSafeFoodStress);';
    return replace(code,needle,`${hit('record_count')} const oldYear=support.recentSamples.slice(-4); const currentFoodStress=clamp01(oldYear.reduce((n,s)=>n+s.foodStress,0)/oldYear.length);`,'record_count');
   }
   if(mutant==='overlap'&&id.endsWith('/agents/seasonalSurvival.ts')){

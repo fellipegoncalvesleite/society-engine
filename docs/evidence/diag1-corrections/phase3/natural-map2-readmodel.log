@@ -1,0 +1,7 @@
+{"kind":"map2_single_origin","seed":"diag1b:controls","day":180,"counts":{"faunaExecutions":0,"overlapFallbackOpportunities":0,"overlapFallbackTakes":0,"retrievalSelections":30,"eligibleFoodSuppression":0,"scoutObservations":0,"exactScoutObservations":0,"falseExactIds":0,"receipts":30}}
+{"kind":"map2_single_origin","seed":"diag1b:controls","day":360,"counts":{"faunaExecutions":0,"overlapFallbackOpportunities":0,"overlapFallbackTakes":0,"retrievalSelections":60,"eligibleFoodSuppression":0,"scoutObservations":0,"exactScoutObservations":0,"falseExactIds":0,"receipts":38}}
+{"kind":"map2_single_origin","seed":"diag1b:controls","day":540,"counts":{"faunaExecutions":0,"overlapFallbackOpportunities":0,"overlapFallbackTakes":0,"retrievalSelections":90,"eligibleFoodSuppression":0,"scoutObservations":0,"exactScoutObservations":0,"falseExactIds":0,"receipts":51}}
+{"kind":"map2_single_origin","seed":"diag1b:controls","day":720,"counts":{"faunaExecutions":0,"overlapFallbackOpportunities":0,"overlapFallbackTakes":0,"retrievalSelections":120,"eligibleFoodSuppression":0,"scoutObservations":0,"exactScoutObservations":0,"falseExactIds":0,"receipts":58}}
+PASS natural source hooks actually loaded/executed
+PASS production bytes preserved
+{"audit":"DIAG1 bounded natural trace","mutant":"none","pass":true,"passed":2,"total":2,"failed":[]}

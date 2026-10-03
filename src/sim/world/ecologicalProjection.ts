@@ -2,7 +2,8 @@
 //
 // These projections explain existing state. They are NEVER an economy input:
 //   * habitat potential reads slow/static terrain substrate;
-//   * current living ecology reads exact physical patch/stock state (Technical);
+//   * current living ecology is an activity index derived from physical state;
+//     it is not exact extractable food (residual harvest can coexist with index zero);
 //   * perceived opportunity reads one band's bounded knowledge and nothing else.
 //
 // A projection cannot create food. In particular, current source channels start
@@ -15,6 +16,9 @@ import type { Band } from "../agents/types";
 import {
   deriveFaunaStockGeography,
   getFaunaStockDynamic,
+  deriveFaunaExtractableAmount,
+  HUMAN_HARVEST_RESERVE,
+  type FaunaClass,
   seasonalAvailabilityFactor,
   type FaunaStockGeo,
   type FaunaStockGeography,
@@ -90,6 +94,8 @@ export interface CurrentLivingEcologyTileProjection extends EcologicalSourceChan
   readonly trophicCondition: number;
   readonly predatorPressure: number;
   readonly sources: readonly EcologicalSourceContribution[];
+  readonly quantity: "ecological_activity_index";
+  readonly exactExtractableFood: false;
   readonly exactWorldTruth: true;
   readonly technicalOnly: true;
   readonly feedsHumanNutrition: false;
@@ -142,6 +148,8 @@ export interface CurrentLivingEcologyProjection {
     readonly aquaticStocks: number;
     readonly predators: number;
   };
+  readonly quantity: "ecological_activity_index";
+  readonly exactExtractableFood: false;
   readonly exactWorldTruth: true;
   readonly technicalOnly: true;
   readonly bounded: true;
@@ -270,6 +278,8 @@ export function deriveCurrentLivingEcologyProjection(world: WorldState): Current
     projectedTileCount: orderedTileIds.length,
     omittedTileCount: Math.max(0, Object.keys(world.tiles).length - orderedTileIds.length),
     sourceTotals: { plantPatches, terrestrialFaunaStocks, aquaticStocks, predators },
+    quantity: "ecological_activity_index",
+    exactExtractableFood: false,
     exactWorldTruth: true,
     technicalOnly: true,
     bounded: true,
@@ -277,6 +287,36 @@ export function deriveCurrentLivingEcologyProjection(world: WorldState): Current
   };
   currentProjectionMemo.set(world as object, projection);
   return projection;
+}
+
+/** Exact raw extraction diagnostic. Never an input to human decisions or food.
+ * Sparse dynamic absence means full default abundance, not absent geography.
+ * One entry per physical ID, even when overlapping geography repeats it.
+ */
+export function inspectFaunaFoodSources(
+  world: WorldState,
+  tileId: TileId,
+  faunaClass: FaunaClass,
+  geography: FaunaStockGeography = deriveFaunaStockGeography(world),
+) {
+  const matching = new Map((geography.byTile.get(tileId) ?? [])
+    .filter((stock) => stock.faunaClass === faunaClass && stock.trophicRole !== "predator")
+    .map((stock) => [stock.id, stock]));
+  const sources = [...matching.values()]
+    .sort((left, right) => String(left.id).localeCompare(String(right.id)))
+    .map((stock) => {
+      const dynamic = getFaunaStockDynamic(world, stock.id);
+      const abundance = dynamic.abundance;
+      return {
+        sourceId: String(stock.id),
+        dynamicState: world.faunaStocks?.[stock.id] === undefined ? "default_full" : "stored",
+        abundance,
+        depletedToHarvestReserve: abundance <= HUMAN_HARVEST_RESERVE,
+        extractableAmount: deriveFaunaExtractableAmount(world, stock, world.time.season),
+      };
+    });
+  return { hasPhysicalGeography: sources.length > 0, sources, activityAssumption: "eligible" as const,
+    quantity: "raw_fauna_take_before_processing_transport" as const, feedsHumanNutrition: false as const };
 }
 
 export function deriveCurrentLivingEcologyTile(
@@ -368,6 +408,8 @@ export function deriveCurrentLivingEcologyTile(
     sources: sourceContributions
       .sort((left, right) => right.availability - left.availability || left.sourceId.localeCompare(right.sourceId))
       .slice(0, MAX_CURRENT_SOURCES_PER_TILE),
+    quantity: "ecological_activity_index",
+    exactExtractableFood: false,
     exactWorldTruth: true,
     technicalOnly: true,
     feedsHumanNutrition: false,

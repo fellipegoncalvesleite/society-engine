@@ -1051,6 +1051,8 @@ function selectTripCandidate(
   // decided only by `derivePhysicalRoundTripTiming`, and expeditions still receive the best
   // multi-day candidate from their own call.
   requireSameDay: boolean = false,
+  // Task-family domain only; ordinary trips retain their existing competition.
+  foodOnly: boolean = false,
 ): TripCandidate | undefined {
   if (requireSameDay && deriveAvailableResidentialWorkers(band, residentialWorkersUsedToday(band, day)) === 0) {
     return undefined;
@@ -1099,6 +1101,7 @@ function selectTripCandidate(
   let best: TripCandidate | undefined;
 
   for (const memory of memories) {
+    if (foodOnly && !isFoodClass(memory.resourceClassId)) continue;
     if (memory.approximateTile === band.position) {
       continue;
     }
@@ -3783,7 +3786,7 @@ export function selectExpeditionTripCandidate(
   day: number,
   maxDistanceTiles: number,
 ): { readonly memory: ResourcePatchMemory; readonly targetTileId: TileId; readonly distanceTiles: number } | undefined {
-  const candidate = selectTripCandidate(world, band, day, maxDistanceTiles, true);
+  const candidate = selectTripCandidate(world, band, day, maxDistanceTiles, true, false, true);
 
   if (candidate === undefined) {
     return undefined;

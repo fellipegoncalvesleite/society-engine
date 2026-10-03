@@ -3308,11 +3308,11 @@ function getLegendItems(mode: MapViewMode): readonly LegendItem[] {
 
   if (mode === "living_ecology") {
     return [
-      { color: "#4d4538", label: "no current support" },
-      { color: "#79623f", label: "low current support" },
-      { color: "#8a864a", label: "moderate current support" },
-      { color: "#4c8b55", label: "high current support" },
-      { color: "#17694b", label: "very high current support · Technical" },
+      { color: "#4d4538", label: "zero ecological activity" },
+      { color: "#79623f", label: "low ecological activity" },
+      { color: "#8a864a", label: "moderate ecological activity" },
+      { color: "#4c8b55", label: "high ecological activity" },
+      { color: "#17694b", label: "very high ecological activity · Technical" },
     ];
   }
 

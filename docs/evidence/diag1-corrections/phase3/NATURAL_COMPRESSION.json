@@ -1,0 +1,82 @@
+[
+  {
+    "original": "natural-map1-base.json",
+    "gzip": "natural-map1-base.json.gz",
+    "uncompressedBytes": 8891935,
+    "sha256": "a9e1fb258246d0b376258223662b53140c8a72ec20193e5a1314f4a176b2b5c7",
+    "gzipSha256": "49fc6d2b913c6dba6c5ee5231954bbf74aa9a9a5dedad80cbacddd0a751f1e11",
+    "roundTripIdentical": true
+  },
+  {
+    "original": "natural-map1-current.json",
+    "gzip": "natural-map1-current.json.gz",
+    "uncompressedBytes": 8887717,
+    "sha256": "687656affc1310809ba46ad203af8285ca3f63b8bbb4332cf37d1ffa667afa4e",
+    "gzipSha256": "6e271f268c370b503ccb721a0ae60a0bf2643f218c2f1d5d54ee05285d7f4e2c",
+    "roundTripIdentical": true
+  },
+  {
+    "original": "natural-map1-readmodel-final.json",
+    "gzip": "natural-map1-readmodel-final.json.gz",
+    "uncompressedBytes": 8889823,
+    "sha256": "798ee3c8379ca1a03fb6ee0518551d1a313659572ea3122ccd8c24b31d23bf64",
+    "gzipSha256": "79d970acb2f56eb5d0b601976384b181cc948fa6caf48e5dce85422046f99296",
+    "roundTripIdentical": true
+  },
+  {
+    "original": "natural-map1-readmodel-stable.json",
+    "gzip": "natural-map1-readmodel-stable.json.gz",
+    "uncompressedBytes": 8887716,
+    "sha256": "b6f9a21d34a09173198c521b522dc5b1d21a3f95b72be3d20c6bea3149b51f3c",
+    "gzipSha256": "a6ac0a751feb75475758775546d614035235b94df0f6f7277ab2dff36c967aac",
+    "roundTripIdentical": true
+  },
+  {
+    "original": "natural-map1-readmodel.json",
+    "gzip": "natural-map1-readmodel.json.gz",
+    "uncompressedBytes": 8889736,
+    "sha256": "70faecff8ac5ff9ed3f389e84d8cfd5817303edfbadb15109b7b0355b48dabc7",
+    "gzipSha256": "df0e150775809ed0e03b9c762400db0f0dcf46a93c27060a50e1d1d84f739cc3",
+    "roundTripIdentical": true
+  },
+  {
+    "original": "natural-map2-base.json",
+    "gzip": "natural-map2-base.json.gz",
+    "uncompressedBytes": 1279138,
+    "sha256": "de896a363dbf0a016f8093026a03c943d37f29c7ac217c6d2e676e89d802a566",
+    "gzipSha256": "b8d9e316274f240dcf4f36dbf3e935a3f9673ccf6adf8119b52a35da93d845d5",
+    "roundTripIdentical": true
+  },
+  {
+    "original": "natural-map2-current.json",
+    "gzip": "natural-map2-current.json.gz",
+    "uncompressedBytes": 1279080,
+    "sha256": "6207fb94e79e32fc9063bd4017e3d02db6ed05be10c4ee8ace7d56b2fafc806f",
+    "gzipSha256": "47d5ff7bcdd00131a95cb98d35d8175e01560ff40b41c40ac766bdd7dc109786",
+    "roundTripIdentical": true
+  },
+  {
+    "original": "natural-map2-readmodel.json",
+    "gzip": "natural-map2-readmodel.json.gz",
+    "uncompressedBytes": 1279079,
+    "sha256": "80ea7f8607b1fe8d8f1f1a74acbcddff67660e8933b1808b31df6949cca691b1",
+    "gzipSha256": "faf4cfa94a693d98d504ea37a49b3f20f4115e2fe1d772c9cdbdaf23034cca5d",
+    "roundTripIdentical": true
+  },
+  {
+    "original": "natural-map2multi-base.json",
+    "gzip": "natural-map2multi-base.json.gz",
+    "uncompressedBytes": 15446789,
+    "sha256": "28c91f7c51771bdc361462fc88855a7ce8c11f5bfc1d4a60f9ac6c7b71d4f9b5",
+    "gzipSha256": "d5b2724724e79c33c20116b3bdf8e389087a31ce3fec024637498616475d4c61",
+    "roundTripIdentical": true
+  },
+  {
+    "original": "natural-map2multi-current.json",
+    "gzip": "natural-map2multi-current.json.gz",
+    "uncompressedBytes": 15472441,
+    "sha256": "48f71300dd6942ecdfb4c5219c7ea464ea44c28152b244882f80022020c9c8ee",
+    "gzipSha256": "91677ebe1669f96ad7012b04840c7be86b8c3041e7223da4bcf851d08bac645c",
+    "roundTripIdentical": true
+  }
+]

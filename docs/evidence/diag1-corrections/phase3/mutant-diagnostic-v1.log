@@ -1,0 +1,7 @@
+FAIL I1 sparse dynamic absence is full abundance, distinct from no geography
+FAIL I1 depleted and currently extractable stock distinguished with exact read-only raw query
+PASS B009 zero current-activity plant index coexists with real residual harvest
+PASS I1 repeated read-model observations leave full world bytes unchanged
+PASS production bytes preserved
+PASS mutant loaded and executed
+{"audit":"DIAG1 noncausal diagnostics","mutant":"diagnostic","pass":false,"passed":4,"total":6,"failed":[{"name":"I1 sparse dynamic absence is full abundance, distinct from no geography","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n0 !== 1\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase3DiagnosticsAudit.mjs:10:199\n    at Object.check (file:///Users/fellipegoncalvesleite/Documents/Co"},{"name":"I1 depleted and currently extractable stock distinguished with exact read-only raw query","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n0 !== 0.08\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase3DiagnosticsAudit.mjs:11:359\n    at Object.check (file:///Users/fellipegoncalvesleite/Documents"}]}

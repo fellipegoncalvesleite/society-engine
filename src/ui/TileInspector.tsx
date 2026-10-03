@@ -121,13 +121,13 @@ function TileDetails({
       <Detail label="meaning" value="what this habitat could support; not food available now" />
       {current === undefined ? null : (
         <>
-          <div className="tile-detail-heading">Living ecology · Technical world truth</div>
-          <Detail label="current physical support" value={formatNumber(current.ecologicalSupportScalar)} />
+          <div className="tile-detail-heading">Living ecology · current activity index</div>
+          <Detail label="ecological activity index" value={formatNumber(current.ecologicalSupportScalar)} />
           <Detail label="plant / fauna / aquatic" value={`${formatNumber(current.plant)} / ${formatNumber(current.terrestrialFauna)} / ${formatNumber(current.aquatic)}`} />
           <Detail label="physical sources" value={`${current.plantPatchCount} plant · ${current.terrestrialFaunaStockCount} fauna · ${current.aquaticStockCount} aquatic`} />
           <Detail label="depletion / recovery" value={`${formatNumber(current.depletion)} / ${formatNumber(current.recoverySignal)}`} />
           <Detail label="trophic condition / predator pressure" value={`${formatNumber(current.trophicCondition)} / ${formatNumber(current.predatorPressure)}`} />
-          <Detail label="authority" value="read-only projection; never feeds nutrition" />
+          <Detail label="authority" value="ecological index, not exact extractable food; residual harvest may remain at zero index" />
         </>
       )}
       <div className="tile-detail-heading">Known opportunity · selected band</div>

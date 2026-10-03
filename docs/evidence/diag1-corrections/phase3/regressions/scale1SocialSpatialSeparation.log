@@ -1,0 +1,128 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "check": "SCALE1-TASK6-SOCIAL-SPATIAL-SEPARATION",
+  "verdict": "PASS",
+  "checks": {
+    "physicalPresenceNotRelationshipMemory": true,
+    "encounterOpportunityNotSocialMemory": true,
+    "resourceOverlapNotDirectEncounter": true,
+    "socialVisitUsesTraversalWithoutMemoryRewrite": true,
+    "processSpecificRangesExposed": true,
+    "noUniversalSocialRadius": true,
+    "rememberedRelationshipSurvivesSeparation": true,
+    "T6_O1_beyond8KmPhysicallyReachable": true,
+    "T6_O1_realBoundedCacheRetainsBeyond8KmCandidate": true,
+    "T6_O2_closeButCostlyRejected": true,
+    "T6_O3_crossResolutionPhysicalAgreement": true,
+    "T6_O4_antiOmniscience": true,
+    "T6_O5_oneBoundedReachSurfaceReused": true
+  },
+  "measurements": {
+    "rangeDensityRadiusKm": 4,
+    "encounterOpportunityRadiusKm": 3,
+    "socialVisitTravelBudgetDays": 0.75,
+    "crowdingRadiusKm": 4,
+    "distantResidenceSeparationKm": 6,
+    "distantCrowding": 0,
+    "distantEncounterKind": null,
+    "closeEncounterKind": "unrelated_overlap",
+    "sharedResourceTileCount": 1,
+    "sharedResourceTiles": [
+      "tile:5,0"
+    ],
+    "openVisit": true,
+    "blockedVisit": false,
+    "contactMemoryBeforeAfterEqual": true,
+    "T6_O1": {
+      "target": "tile:9,0",
+      "gradient": {
+        "bandId": "band:opportunity",
+        "currentTileId": "tile:0,0",
+        "bestKnownOpportunityTileId": "tile:9,0",
+        "knownCandidateCount": 1,
+        "opportunityStrength": 0.11,
+        "opportunityConfidence": 0.8,
+        "passabilityConfidence": 0.82,
+        "riskPenalty": 0.1,
+        "crowdingPenalty": 0,
+        "biomeMismatchPenalty": 0,
+        "learnedSupportGate": 0,
+        "currentLearnedSupport": 0,
+        "bestCandidateLearnedSupport": 0,
+        "candidatesWithLearnedSupport": 0,
+        "reasonIds": [
+          "reason:context:band:opportunity:1:known_better_patch_pull:tile:9,0"
+        ]
+      },
+      "profiler": {
+        "nearbyOpportunityReachSurfacesBuilt": 1,
+        "nearbyOpportunityReachNodes": 12,
+        "nearbyOpportunityReachEdges": 22,
+        "nearbyOpportunityCandidatesConsidered": 1,
+        "nearbyOpportunityCandidatesAccepted": 1
+      },
+      "realOpportunityCandidates": [
+        "tile:9,0",
+        "tile:1,0",
+        "tile:10,0",
+        "tile:11,0",
+        "tile:2,0",
+        "tile:3,0",
+        "tile:4,0",
+        "tile:5,0",
+        "tile:6,0",
+        "tile:7,0",
+        "tile:8,0"
+      ]
+    },
+    "T6_O2": {
+      "target": "tile:4,0",
+      "gradient": {
+        "bandId": "band:costly",
+        "currentTileId": "tile:0,0",
+        "knownCandidateCount": 0,
+        "opportunityStrength": 0,
+        "opportunityConfidence": 0,
+        "passabilityConfidence": 0,
+        "riskPenalty": 0,
+        "crowdingPenalty": 0,
+        "biomeMismatchPenalty": 0,
+        "learnedSupportGate": 0,
+        "currentLearnedSupport": 0,
+        "bestCandidateLearnedSupport": 0,
+        "candidatesWithLearnedSupport": 0,
+        "reasonIds": []
+      }
+    },
+    "T6_O3": {
+      "oneKmTarget": "tile:9,0",
+      "onePointFiveKmTarget": "tile:6,0"
+    },
+    "T6_O4": {
+      "target": "tile:3,0",
+      "known": false,
+      "gradient": {
+        "bandId": "band:unknown",
+        "currentTileId": "tile:0,0",
+        "knownCandidateCount": 0,
+        "opportunityStrength": 0,
+        "opportunityConfidence": 0,
+        "passabilityConfidence": 0,
+        "riskPenalty": 0,
+        "crowdingPenalty": 0,
+        "biomeMismatchPenalty": 0,
+        "learnedSupportGate": 0,
+        "currentLearnedSupport": 0,
+        "bestCandidateLearnedSupport": 0,
+        "candidatesWithLearnedSupport": 0,
+        "reasonIds": []
+      }
+    },
+    "T6_O5": {
+      "candidatesConsidered": 1,
+      "visitedNodes": 12,
+      "expandedEdges": 22,
+      "reachSurfacesBuilt": 1
+    }
+  }
+}

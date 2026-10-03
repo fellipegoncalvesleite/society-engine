@@ -1,0 +1,12 @@
+PASS B005 exhausted static winner yields to healthy represented overlap
+PASS B005 all exhausted / no geography / predator / activity refusal
+PASS B005 explicit exhausted/absent source never redirects
+PASS B005 stable identity tie and repeat/overlapping geography depletion
+PASS B005 seasonal availability retains lean floor; ineligible activity takes nothing
+PASS B006 original food-only state launches valid distant gathering
+PASS B006 higher-scoring nonfood cannot erase food retrieval or launch
+PASS B006 nonfood-only / missing target / tied foods; other task families remain eligible
+FAIL B007 Map2 all exact scout IDs belong to canonical physical top three
+PASS production bytes preserved
+PASS mutant loaded and executed
+{"audit":"DIAG1 Phase3 opportunity","mutant":"scout","pass":false,"passed":10,"total":11,"failed":[{"name":"B007 Map2 all exact scout IDs belong to canonical physical top three","error":"AssertionError [ERR_ASSERTION]: {\"tile\":\"tile:99:18\",\"kind\":\"plant_patch\",\"physical\":[\"fuel_wood\",\"fruit_berry\",\"nuts_mast\"],\"hint\":{\"targetTile\":\"tile:99:18\",\"scoutKind\":\"plant_patch\",\"observedPlantClassId\":\"leaf_green\",\"linkedResourceClassId\":\"generic_plant_food\",\"observedPatchId\":\"plant:tile:99:1"}]}

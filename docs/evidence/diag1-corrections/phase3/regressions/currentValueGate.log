@@ -1,0 +1,8 @@
+PASS real known reachable food has a positive worth control
+PASS zero remembered value and fully remembered depletion refuse
+PASS need changes willingness; stronger local alternatives never improve distant value
+PASS recent empty target refuses and expiry permits the same known opportunity
+PASS route is physical: grid-distance metadata cannot manufacture or erase value
+PASS hidden food abundance is not a worth input
+PASS production bytes preserved
+{"audit":"DIAG1 current physical retrieval value gate","mutant":"none","pass":true,"passed":7,"total":7,"failed":[]}

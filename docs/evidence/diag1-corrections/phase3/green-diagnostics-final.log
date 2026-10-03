@@ -1,0 +1,6 @@
+PASS I1 sparse dynamic absence is full abundance, distinct from no geography
+PASS I1 depleted and currently extractable stock distinguished with exact read-only raw query
+PASS B009 zero current-activity plant index coexists with real residual harvest
+PASS I1 repeated read-model observations leave full world bytes unchanged
+PASS production bytes preserved
+{"audit":"DIAG1 noncausal diagnostics","mutant":"none","pass":true,"passed":5,"total":5,"failed":[]}

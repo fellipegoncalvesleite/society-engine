@@ -1,0 +1,59 @@
+{
+  "check": "LIVING-ECOLOGY-TROPHIC-COUPLING-1B-FOCUSED",
+  "verdict": "PASS",
+  "checks": {
+    "targetFoundBoundedByStock": true,
+    "depletionEqualsRealDraw": true,
+    "absentSourceZeroReceipt": true,
+    "exhaustedSourceZeroReceipt": true,
+    "limitedStockCapsHarvest": true,
+    "plantTargetFoundBounded": true,
+    "learningReadsResolvedActual": true,
+    "capturesActualZeroAndUseful": true,
+    "forageRoleContract": true,
+    "forageCompatibilityActive": true,
+    "predatorNotHuntableGenerically": true,
+    "overhuntingSevereDepletion": true,
+    "huntingHarderWhenDepleted": true,
+    "trophicPressureCanCollapseStock": true,
+    "recoversAfterAbandonment": true,
+    "deterministic": true
+  },
+  "evidence": {
+    "preyId": "fauna:forest_edge_game:tile:100:16",
+    "predatorId": "fauna:small_predator:tile:0:132",
+    "healthyHarvest": 1.6051,
+    "healthyAvailability": 1.6051,
+    "limitedHarvest": 0.1047,
+    "limitedAvailability": 0.1047,
+    "plantHarvest": 0.013,
+    "physTripCount": 117,
+    "zeroActualTrips": 38,
+    "usefulActualTrips": 79,
+    "herbClasses": [
+      "fruit_berry",
+      "nuts_mast",
+      "wild_grain_seed",
+      "leaf_green",
+      "wetland_plant"
+    ],
+    "omniClasses": [
+      "fruit_berry",
+      "nuts_mast",
+      "roots_tubers_uso",
+      "wild_grain_seed",
+      "leaf_green",
+      "wetland_plant"
+    ],
+    "herbAvail": 0.1018,
+    "omniAvail": 0.4361,
+    "predResolvedSourceId": "fauna:small_game:tile:0:132",
+    "predHarvested": 1.2187,
+    "harvestSeriesFirst": 1.6051,
+    "harvestSeriesLast": 0,
+    "abundanceAfterOverhunt": 0.08,
+    "abundanceAfterCollapse": 0.0129,
+    "recoverBefore": 0.05,
+    "recoverAfter": 1
+  }
+}

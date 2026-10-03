@@ -1,0 +1,37 @@
+{
+  "phase": "before",
+  "headline": "ZERO LABOR REJECTED BEFORE WORK",
+  "verificationHeadline": "ZERO LABOR CANNOT INSPECT THE TARGET",
+  "fractionalHeadline": "FRACTIONAL PEOPLE REJECTED",
+  "rejected": [
+    "Z1_zero_exploitation",
+    "Z2_zero_verification",
+    "Z3a_fractional_0_4",
+    "Z3b_fractional_1_6",
+    "Z4a_nan",
+    "Z4b_infinity",
+    "Z4c_negative_infinity",
+    "Z4d_negative_one"
+  ],
+  "removingStockWithoutValidParty": [],
+  "Z1": {
+    "people": null,
+    "outcome": null,
+    "depletion": null,
+    "stockChanged": false
+  },
+  "Z2": {
+    "readTheTarget": false,
+    "depletion": null
+  },
+  "Z6": {
+    "people": 1,
+    "depletion": 0.0086
+  },
+  "Z7": {
+    "people": 2
+  },
+  "Z8": {
+    "people": 5
+  }
+}

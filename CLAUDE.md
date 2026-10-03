@@ -1,5 +1,18 @@
 # CLAUDE.md — Architectural Dossier and Implementation Guide
 
+<!-- DIAG1_PHASE3_CANDIDATE_START -->
+## Current authority — Phase3 implemented; independent review pending (2026-10-03)
+
+Phase2 is supervisor-accepted at production `80bb005f6bf9856720ac07d3acbae9e4a57c677f`, reviewed publication `fd8ef2674ad193e61535688b1edeb20d0841596d`. Acceptance was committed/pushed first as `96126be8484b23725fc9977c0527c9e8178feb3a`, the Phase3 base. This block supersedes older execution-status text below without rewriting historical evidence.
+
+Phase3 candidate implements B005 generic current fauna availability with exact provenance, B006 food-family eligibility before ranking, B007 canonical plant/scout identity, and B009/I1 honest noncausal diagnostics/UI. Evidence: `docs/evidence/diag1-corrections/phase3/PHASE3_REPORT.md`, `VALIDATION_RESULTS.md`, `FINAL_FINDING_MATRIX.md`. Opportunity26/26, diagnostics5/5, integrated7/7;4required plus16retained mutants behaviorally detected/restored; both-map1260-day whole-state daily/weekly/monthly/seasonal/repeat/fresh equivalence, both TypeScript projects, build/import/graph PASS. Natural first divergence is Map1 day519; B006 remains0/2640 new selections per arm (historical0/600 preserved), B007 natural action effect unobserved. Diagnostic on/off worlds agree, including stable1080-day Map1 source-preserving rerun.
+
+F3/B008 remains structurally OPEN, `DEFERRED_EXPLICIT_OWNER`: M0.4 realization, M0.5 physical-area/scaling/bounds certification, M0.7 migration. B010 ruling B: omitted SCALE1 reader, `OPEN_UNRESOLVED`, separate physical-distance authorization needed; no kilometer threshold was guessed. Both M0.2 blockers remain OPEN_UNRESOLVED and Task12 PAUSED. Canonical r11 remains byte-identical; existing roadmap ownership is reinforced, not changed.
+
+Next: coherent production/tests/evidence commit and push, later SHA documentation, ONE fresh read-only combined reviewer from `73cc38b916e236339897c59686638efafd569b6e` through production HEAD, record recommendation and STOP. Exact publication SHAs belong in subsequent `phase3/PUBLICATION.json`. No self-acceptance, main/M0.2 merge, formal freeze, Task12 resumption or portable-pair export before final supervisory acceptance.
+<!-- DIAG1_PHASE3_CANDIDATE_END -->
+
+
 <!-- DIAG1_PHASE2_SUPERVISOR_ACCEPTANCE_START -->
 ## Current authority — Phase 2 accepted; Phase 3 authorized (2026-10-03)
 

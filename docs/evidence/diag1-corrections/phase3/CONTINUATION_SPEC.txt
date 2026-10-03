@@ -1,0 +1,828 @@
+DIFFICULTY: EXTREME
+
+SOCIETY ENGINE — DIAG-1 CONTINUATION
+
+SUPERVISOR HAS ACCEPTED PHASE 2
+→ RECORD ACCEPTANCE
+→ EXECUTE PHASE 3
+→ FINAL COMBINED INDEPENDENT REVIEW
+→ STOP
+
+Repository:
+fellipegoncalvesleite/society-engine
+
+Branch:
+fix/diag1-human-support
+
+Current published HEAD:
+fd8ef2674ad193e61535688b1edeb20d0841596d
+
+Accepted Phase-2 production authority:
+80bb005f6bf9856720ac07d3acbae9e4a57c677f
+
+Accepted Phase-2 reviewed/evidence HEAD:
+fd8ef2674ad193e61535688b1edeb20d0841596d
+
+Phase-2 supervising verdict:
+
+ACCEPTED
+
+Independent review:
+SPEC COMPLIANCE: PASS
+CODE QUALITY: PASS
+Critical: 0
+Important: 0
+Minor: 0
+PHASE 2 ACCEPTANCE RECOMMENDATION: YES
+
+This acceptance applies to the bounded DIAG-1 Phase-2 correction.
+
+It is NOT:
+- a whole-game certification;
+- a main merge;
+- a roadmap freeze;
+- permission to resume WORLD-M0 Task 12.
+
+COMMIT REQUIRED.
+
+==================================================
+0. RECORD PHASE-2 ACCEPTANCE FIRST
+==================================================
+
+Before Phase-3 production work:
+
+1. verify exact branch/HEAD/remote;
+2. record the supervising Phase-2 acceptance in the cumulative system record and Phase-2 disposition/evidence;
+3. name:
+   - accepted production SHA `80bb005f...`;
+   - reviewed publication HEAD `fd8ef267...`;
+   - independent PASS;
+   - supervising acceptance;
+   - remaining limitations;
+4. do not claim whole-game PASS or formal checkpoint freeze;
+5. canonical r11 remains unchanged unless an actual permanent roadmap/rule change is required;
+6. commit and push this documentation-only acceptance update.
+
+Then continue Phase 3 in this same chat.
+
+Do not ask for another approval after the documentation commit.
+
+==================================================
+PHASE 3 — REAL OPPORTUNITIES AND END-TO-END VERIFICATION
+==================================================
+
+Purpose:
+
+Now that food/body accounting, physical-time nutrition and fatigue are trustworthy, repair the remaining bounded defects where REAL EXISTING opportunity is selected, observed or displayed incorrectly.
+
+Assigned production findings:
+
+B-005
+Exhausted fauna source blocks another healthy overlapping source.
+
+B-006
+An ineligible nonfood candidate can win the argmax and erase an eligible food expedition.
+
+B-007
+Plant scouting can claim an exact physical patch identity that does not exist in the canonical physical realization.
+
+B-009 / I1
+Diagnostics/read models can misstate what “current living,” hunger-years and extinction-risk actually mean.
+
+Then run one integrated Phases 1–3 verification and produce the final DIAG-1 disposition matrix.
+
+DO NOT fix the global fauna-realization architecture here.
+
+DO NOT perform demographic calibration here.
+
+==================================================
+1. FAUNA EXTRACTION — USE A REAL AVAILABLE MATCHING SOURCE
+==================================================
+
+Current confirmed defect:
+
+A generic local fauna request can select the matching stock with the highest STATIC carrying capacity, then discover that this stock is exhausted.
+
+A separate overlapping matching source may still be physically healthy, but is never considered.
+
+This turns real physical food into inaccessible food.
+
+Chosen correction:
+
+For GENERIC local tile/class physical extraction:
+
+1. enumerate the bounded physically matching sources already represented at the reached location;
+2. evaluate their CURRENT extractable availability using existing:
+   - seasonal rules;
+   - reserve rules;
+   - activity eligibility;
+   - dynamic abundance;
+3. choose the source with the greatest legitimate currently extractable amount;
+4. use deterministic physical identity as tie-break;
+5. the chosen exact source must own:
+   - take;
+   - depletion;
+   - returned provenance.
+
+Do not test candidates by mutating/depleting them.
+
+Use a pure availability calculation before choosing.
+
+IMPORTANT:
+
+Generic execution may choose among physically present matching sources.
+
+Explicit known-source targeting is different.
+
+If a human action explicitly targets a known identified source:
+- retain that identity;
+- if that exact source is exhausted/absent, do not secretly redirect the humans to an unknown source.
+
+Do not leak hidden abundance into decisions.
+
+Decision:
+human-known evidence.
+
+Execution:
+physical truth at the reached location.
+
+Preserve that separation.
+
+Required RED:
+
+existing overlapping-source witness where:
+- static winner = reserve/exhausted;
+- second matching source = healthy;
+- old generic extraction = 0;
+- corrected generic extraction uses the real second source.
+
+Controls:
+
+- both exhausted;
+- no source;
+- predator/ineligible source;
+- seasonal ineligibility;
+- stable tie;
+- repeat depletion;
+- same physical stock appearing through overlapping geography must not double count;
+- explicit source target does not silently redirect;
+- source provenance of returned food is exact.
+
+Restore the old static-winner mechanism as a mutant and behaviorally detect it.
+
+==================================================
+2. FOOD EXPEDITION — FILTER ELIGIBILITY BEFORE RANKING
+==================================================
+
+Confirmed defect:
+
+The expedition retrieval family can:
+
+rank all remembered resource classes
+→ choose the highest scorer
+→ discover that winner is not food
+→ reject it
+→ return NO food candidate
+
+even though a lower-scoring eligible remembered food target exists and would pass the actual expedition gates.
+
+Chosen correction:
+
+Eligibility for a task family precedes ranking inside that task family.
+
+For the food-retrieval family:
+
+1. begin with BAND-KNOWN memories only;
+2. filter to candidates legitimately eligible for food retrieval;
+3. then rank those candidates using existing scores;
+4. then apply unchanged:
+   - stale/recent-empty rules;
+   - path/travel feasibility;
+   - labor;
+   - carrying;
+   - provisions;
+   - value/worth gate;
+   - physical execution.
+
+Do NOT make food globally outrank water/material/exploration.
+
+This changes only the internal domain of the food-retrieval selector.
+
+RED:
+
+food candidate alone:
+→ launches valid distant gathering.
+
+same exact state + higher-scoring nonfood memory:
+→ old code loses the food candidate.
+
+Corrected:
+→ same eligible food candidate remains available to the food retrieval family.
+
+Controls:
+
+- nonfood only;
+- food only;
+- no candidates;
+- stale food;
+- contradicted food;
+- inaccessible food;
+- recent-empty food;
+- tied foods;
+- food that later fails worth gate;
+- food whose physical stock is absent when execution reaches it;
+- normal global decision still allowed to select other action families.
+
+The diagnostic observed zero occurrences of this bug in 600 earlier natural retrieval selections.
+
+Preserve that fact.
+
+Do not claim this was responsible for those historical deficits unless new natural evidence demonstrates it.
+
+==================================================
+3. ONE PHYSICAL PLANT REALIZATION
+==================================================
+
+Confirmed defect:
+
+Physical plant realization:
+
+rank all plant classes
+→ keep canonical top 3.
+
+Scout observation:
+
+filter classes by scout kind first
+→ independently rank/cap.
+
+Therefore scouting can mint an exact patch ID that the physical world never created.
+
+Example from diagnosis:
+
+physical:
+fuel_wood
+fruit_berry
+nuts_mast
+
+scout exact ID:
+leaf_green
+
+That exact physical identity is false.
+
+Chosen correction:
+
+There is ONE physical realized local patch set.
+
+Scouting observes that physical set.
+
+It may then:
+- filter according to what the scout was looking for;
+- fail to notice things;
+- misestimate amount;
+- have low confidence;
+- be uncertain about use/safety;
+- report nonspecific signs.
+
+But:
+
+an EXACT patch ID may only identify an actually realized canonical patch.
+
+Do not increase the physical patch cap.
+
+Do not create extra food.
+
+Do not reveal every physical patch to humans.
+
+If evidence is too weak to justify exact identity:
+return a nonspecific/uncertain observation,
+not a fabricated exact source ID.
+
+Human uncertainty is allowed.
+
+False engine-level physical identity is not.
+
+Historical memories:
+
+do NOT silently rewrite old memories from hidden truth.
+
+New observation may:
+- confirm;
+- contradict;
+- revise;
+
+through the canonical knowledge writer.
+
+Required coverage:
+
+- existing Map2 witness;
+- material-dominated tile;
+- food class excluded by canonical top-three;
+- actual food patch;
+- no visible relevant patch;
+- low visibility;
+- uncertain class;
+- cautious test;
+- stale memory;
+- exact-source confirmation;
+- contradiction;
+- observation order;
+- physical reader order;
+- no food/skill granted merely by observing.
+
+Mutant:
+restore the private scout materializer;
+corrected provenance tests must fail.
+
+==================================================
+4. DIAGNOSTICS MUST SAY WHAT THEY ACTUALLY MEASURE
+==================================================
+
+Do not change simulation behavior merely to make UI labels look nicer.
+
+4A. Fauna debug/probe
+
+The old diagnostic read a nonexistent dynamic `stock` field.
+
+Dynamic state uses `abundance`.
+
+Missing sparse dynamic state means default/full state; it does NOT mean absent animals.
+
+Fix diagnostic instrumentation so it distinguishes:
+
+- no physical fauna geography;
+- physical stock exists with default dynamic abundance;
+- physically depleted stock;
+- currently extractable stock.
+
+Do not turn a missing sparse overlay into zero.
+
+4B. “Current living” projection
+
+A projection can report zero while a real residual harvest is physically possible.
+
+First establish what the projection is intended to mean.
+
+If it means:
+ecological/current-activity index,
+
+label it that way.
+
+Do not call it exact extractable food.
+
+Only expose an exact extractable diagnostic if it uses the canonical pure physical query and remains read-only/noncausal.
+
+Do NOT alter legitimate physical harvesting merely to match the projection.
+
+4C. Extinction risk
+
+The value remains behaviorally consumed.
+
+Do not remove it.
+
+But presentation must state that it is a:
+
+heuristic viability/risk score
+
+with NO calibrated probability horizon.
+
+Do not display/imply:
+
+“60% chance of extinction”
+
+unless a future calibrated probability model genuinely exists.
+
+4D. Hunger-years
+
+Historical hunger-years count yearly observations falling into specified hunger classifications.
+
+They are NOT:
+
+continuous years without food.
+
+Do not silently reinterpret old history.
+
+Phase-2 dated nutrition exposure may be displayed as its own dated duration measure, but it cannot retroactively manufacture historical daily detail.
+
+==================================================
+5. GLOBAL FAUNA REPRESENTATION — DO NOT PATCH IT HERE
+==================================================
+
+The 260-stock legacy global realization remains a serious OPEN structural defect.
+
+It is:
+- globally capped;
+- sensitive to lexicographic tile ordering;
+- not physically area-normalized;
+- capable of leaving favorable regions with zero represented fauna.
+
+DO NOT:
+
+- simply increase 260;
+- scatter replacement animals randomly;
+- convert habitat potential directly to food;
+- create a second temporary fauna provider;
+- hide the problem with plant yield;
+- claim the terrain complaint fully solved.
+
+Instead preserve and strengthen a mandatory future WORLD-M0 contract.
+
+Assign:
+
+M0.4:
+baseline living-ecology realization model.
+
+M0.5:
+physical-area/scaling/bounds certification.
+
+M0.7:
+production provider cutover/migration.
+
+Required future acceptance witnesses:
+
+- changing tile IDs/order does not relocate ecology;
+- equal physical area has representation-consistent opportunity;
+- changing raster resolution does not arbitrarily alter physical density;
+- extending the map cannot delete an unchanged area's local opportunity;
+- concentrated / diffuse / mobile sources represented deliberately;
+- physical stock and renewal conserved;
+- bounded runtime/state size;
+- human knowledge remains separate from hidden physical source truth.
+
+Legacy expected failure stays visible until migration.
+
+Phase 3 must finish with this defect OPEN and explicitly owned.
+
+==================================================
+6. B-010 ABSORPTION DISTANCE — ADJUDICATE, DO NOT GUESS
+==================================================
+
+Confirmed evidence:
+
+same physical 9 km separation
+can yield different established absorption outcomes at different raster resolutions because the existing reader uses raw cell distance.
+
+Do NOT automatically replace `6 cells` with an invented kilometer number.
+
+Investigate:
+
+- exact frozen SCALE-1 reader contract;
+- accepted exclusions, if any;
+- Item-6 predecessor ownership;
+- current instantaneous absorption abstraction.
+
+Return one of:
+
+A. explicitly accepted legacy exclusion until Item 6;
+
+or
+
+B. omitted SCALE-1 reader that needs a separately authorized physical-distance correction.
+
+If B:
+write the precise correction proposal and regressions,
+but do NOT silently implement it inside the Phase-3 opportunity fixes unless it is clearly an already-mandated SCALE-1 compatibility correction with no architectural choice remaining.
+
+Provisional reintegration remains exact co-location.
+
+==================================================
+7. INTEGRATED PHASES 1–3 VERIFICATION
+==================================================
+
+After the Phase-3 bounded fixes, test the entire corrected causal chain:
+
+physical source
+→ observation
+→ human memory
+→ eligible candidate
+→ decision
+→ actual workers
+→ physical execution
+→ take/depletion
+→ cargo
+→ return
+→ raw food
+→ support conversion
+→ dated nutrition exposure
+→ current/annual stress
+→ movement/fatigue
+→ demography/lifecycle.
+
+Create:
+
+scripts/diag1Phase3OpportunityAudit.mjs
+
+and:
+
+scripts/diag1CorrectionIntegrationAudit.mjs
+
+or repository-conventional equivalents.
+
+The integration audit must separately distinguish:
+
+IMPLEMENTED CORRECTIONS
+
+from:
+
+KNOWN OPEN LEGACY/ARCHITECTURE FINDINGS.
+
+Do not fail the implemented-correction PASS merely because the fauna global provider is deliberately still open.
+
+Likewise, do not hide the open fauna problem inside an overall green boolean.
+
+==================================================
+8. REQUIRED MUTANTS
+==================================================
+
+At minimum restore:
+
+1. static fauna winner despite exhaustion;
+2. rank-all-then-reject-nonfood retrieval;
+3. private scout plant materialization;
+4. old misleading diagnostic interpretation where executable.
+
+Each target must:
+
+loaded
+executed
+behaviorally detected
+restored.
+
+Retain Phase-1/2 discriminating mutants where directly relevant.
+
+Do not count:
+- syntax failure;
+- missing export;
+- loader failure;
+- target never executing.
+
+==================================================
+9. NATURAL EVIDENCE
+==================================================
+
+Use the reviewed Phase-2 authority as baseline.
+
+Do not rerun huge scenario matrices unless needed.
+
+Run bounded natural traces that answer:
+
+- Does overlapping-source fallback occur naturally?
+- Does eligible-food suppression occur naturally?
+- Do corrected exact plant observations materially alter later action?
+- Does corrected presentation leave simulation fingerprints identical?
+
+Report zero prevalence honestly.
+
+Do not inject a special memory and call it natural.
+
+For any behavioral divergence report:
+
+first divergence
+→ changed candidate/observation/source
+→ physical take
+→ receipt/support if any
+→ downstream consequence.
+
+Population is observation, not oracle.
+
+==================================================
+10. READ-MODEL PARITY
+==================================================
+
+Diagnostic/UI fixes must be noncausal.
+
+Prove simulation world/state fingerprints are identical with relevant diagnostic/read-model observation enabled versus disabled where such a switch exists.
+
+If UI is modified and browser tooling is available:
+
+verify:
+- labels actually render;
+- no console errors;
+- no broken selected-band panel.
+
+If browser verification is unavailable, say so explicitly.
+
+==================================================
+11. REGRESSION BATTERY
+==================================================
+
+Preserve accepted Phase-1/1B/2 evidence.
+
+Run affected:
+
+- cargo conservation;
+- body conservation;
+- plant-time cache;
+- cross-world caches;
+- zero-worker labor;
+- units;
+- dated nutrition;
+- coverage safety;
+- recovery duration;
+- fatigue;
+- fission/reintegration;
+- food accounting;
+- living ecology;
+- numeric resource chain;
+- expedition retrieval;
+- scouting/knowledge provenance;
+- fauna take/depletion;
+- SCALE-1 relevant readers;
+- daily/weekly/monthly/seasonal equivalence;
+- fresh process;
+- Map1/Map2 determinism;
+- both TypeScript projects;
+- production build;
+- import boundary;
+- architecture graph.
+
+Do not rerun every expensive historical suite without dependency relevance.
+
+==================================================
+12. FINAL DIAG-1 FINDING MATRIX
+==================================================
+
+Produce one final issue-by-issue matrix covering:
+
+F1
+F2
+F3
+F4
+F5
+F6
+I1
+U1
+
+B-001
+B-002
+B-003
+B-004
+B-005
+B-006
+B-007
+B-008
+B-009
+B-010
+
+M0.2 basin-information blocker
+M0.2 comprehensive scratch-memory blocker
+
+For every item classify as exactly one of:
+
+- FIXED_AND_TESTED
+- DISPROVED
+- INSTRUMENT_ONLY_FIXED
+- ACCEPTED_SIMPLIFICATION
+- DEFERRED_EXPLICIT_OWNER
+- OPEN_UNRESOLVED
+
+Include:
+- exact owning source;
+- exact evidence;
+- natural-prevalence limitation;
+- future owner where deferred.
+
+Do not count the same root cause twice.
+
+==================================================
+13. PROJECT RECORDS
+==================================================
+
+Update:
+
+SOCIETY_ENGINE_CHECKPOINT_SYSTEM_RECORD.md
+
+with:
+- Phase-2 acceptance;
+- Phase-3 implementation candidate;
+- final DIAG-1 matrix;
+- exact production/review SHAs;
+- unresolved provider issue;
+- B-010 adjudication;
+- M0.2 blockers;
+- Task-12 continued pause.
+
+Canonical r11:
+
+leave byte-identical unless a real permanent roadmap/rule change is necessary.
+
+If the final DIAG-1 disposition changes a permanent roadmap ownership statement, then update the complete canonical bundle deliberately and bump its version.
+
+Never create a third portable-memory file.
+
+Both portable files must be exported together after final supervisory acceptance.
+
+==================================================
+14. GIT AND PRESERVATION
+==================================================
+
+One write owner.
+
+Continue:
+fix/diag1-human-support
+
+No main merge.
+No M0.2 merge.
+No reset.
+No rebase.
+No amend.
+No force push.
+
+Protected Task-12 worktree remains untouched:
+
+HEAD:
+809f7ed8f8582f4a6d9b6754bf216f47a6e39fc4
+
+Verify its three intended dirty files and hashes at closure.
+
+Commit coherent Phase-3 production/tests/evidence.
+
+Push the branch.
+
+Record production SHA in a later documentation/evidence commit.
+
+Final worktree clean.
+Remote ahead/behind 0/0.
+
+==================================================
+15. FINAL INDEPENDENT CHALLENGE
+==================================================
+
+After Phase 3 is committed and pushed:
+
+spawn ONE fresh read-only independent reviewer.
+
+This reviewer may challenge the combined Phases 1–3 correction program rather than creating another series of micro-reviews.
+
+Review:
+
+accepted executable base
+73cc38b916e236339897c59686638efafd569b6e
+
+through final DIAG-1 correction production HEAD.
+
+Focus on:
+
+- conservation;
+- anti-omniscience;
+- units;
+- physical time;
+- cache isolation;
+- actual source identity;
+- candidate eligibility;
+- knowledge provenance;
+- body/labor ownership;
+- diagnostics vs causality;
+- wrong-but-consistent tests;
+- unresolved findings being honestly left open.
+
+Required verdict:
+
+SPEC COMPLIANCE: PASS/FAIL
+CODE QUALITY: PASS/FAIL
+Critical: N
+Important: N
+Minor: N
+
+DIAG-1 CORRECTION PROGRAM ACCEPTANCE RECOMMENDATION:
+YES/NO
+
+Do not self-accept Phase 3 or DIAG-1.
+
+==================================================
+FINAL STOP
+==================================================
+
+Return HUMAN LANGUAGE FIRST.
+
+Explain plainly:
+
+- what was actually wrong;
+- what humans now do differently;
+- what remains structurally wrong;
+- whether the original “good terrain acts bad” complaint is now better explained;
+- why remaining fauna architecture prevents declaring the terrain problem completely solved.
+
+Then report:
+
+- acceptance-record commit;
+- Phase-3 base;
+- Phase-3 production SHA;
+- final documentation HEAD;
+- changed production files;
+- each RED/GREEN;
+- mutants;
+- natural evidence;
+- integrated verification;
+- final finding matrix;
+- B-008 disposition;
+- B-010 disposition;
+- M0.2 blocker status;
+- independent reviewer verdict;
+- Git/remote state;
+- Task-12 preservation.
+
+STOP.
+
+PHASE 3 MUST NOT SELF-ACCEPT.
+WORLD-M0 TASK 12 MUST NOT RESUME.
+NO MAIN MERGE.

@@ -1,0 +1,12 @@
+PASS B005 exhausted static winner yields to healthy represented overlap
+PASS B005 all exhausted / no geography / predator / activity refusal
+PASS B005 explicit exhausted/absent source never redirects
+PASS B005 stable identity tie and repeat/overlapping geography depletion
+PASS B005 seasonal availability retains lean floor; ineligible activity takes nothing
+PASS B006 original food-only state launches valid distant gathering
+FAIL B006 higher-scoring nonfood cannot erase food retrieval or launch
+PASS B006 nonfood-only / missing target / tied foods; other task families remain eligible
+PASS B007 Map2 all exact scout IDs belong to canonical physical top three
+PASS production bytes preserved
+PASS mutant loaded and executed
+{"audit":"DIAG1 Phase3 opportunity","mutant":"food","pass":false,"passed":10,"total":11,"failed":[{"name":"B006 higher-scoring nonfood cannot erase food retrieval or launch","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'probe-food'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase3OpportunityAudit.mjs:26:243\n    at Object.check (file:///U"}]}

@@ -1,0 +1,8 @@
+PASS source → actual observation → canonical memory → eligible selection → real party
+FAIL actual work → finite take/depletion → bounded cargo → physical home return
+PASS cargo/return receipts retain actual physical source identity
+FAIL raw receipt → support exactly once → dated demand/exposure
+PASS dated exposure → current/annual stress → real demography reader conserves cohorts
+PASS readers → physical-time fatigue/mobility → lifecycle continuation remains executable
+PASS production bytes preserved
+{"audit":"DIAG1 combined correction integration","mutant":"none","pass":false,"passed":5,"total":7,"failed":[{"name":"actual work → finite take/depletion → bounded cargo → physical home return","error":"AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(trace.some(r=>r.phase==='returning'&&r.position===original.position))\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1CorrectionIntegrationAud"},{"name":"raw receipt → support exactly once → dated demand/exposure","error":"AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(query.coverageFraction>0)\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1CorrectionIntegrationAudit.mjs:27:487\n    at Object.check (file:///U"}]}

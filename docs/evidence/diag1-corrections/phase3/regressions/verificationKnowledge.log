@@ -1,0 +1,50 @@
+WebSocket server error: Port 24678 is already in use
+{
+ "check": "verification-knowledge-semantics",
+ "verdict": "PASS",
+ "checks": {
+  "confirmedRaisesPresence": true,
+  "confirmedLeavesYieldUnchanged": true,
+  "confirmedNeverCertain": true,
+  "confirmedDoesNotLowerBetterBelief": true,
+  "depletedLowersYield": true,
+  "depletedKeepsPresence": true,
+  "absentLowersPresence": true,
+  "depletedDistinctFromAbsent": true,
+  "absentDoesNotInventYieldEvidence": true,
+  "everyReachedOutcomeRefreshesRecency": true,
+  "reasonIdsBounded": true,
+  "noStockFieldLeaked": true
+ },
+ "observed": {
+  "basePresence": 0.4,
+  "baseYield": 0.35,
+  "confirmed": {
+   "presenceConfidence": 0.85,
+   "seasonConfidence": 0.3,
+   "yieldConfidence": 0.35,
+   "safetyConfidence": 0.5,
+   "processingConfidence": 0.5,
+   "accessConfidence": 0.5,
+   "recoveryConfidence": 0.5
+  },
+  "depleted": {
+   "presenceConfidence": 0.85,
+   "seasonConfidence": 0.3,
+   "yieldConfidence": 0.21,
+   "safetyConfidence": 0.5,
+   "processingConfidence": 0.5,
+   "accessConfidence": 0.5,
+   "recoveryConfidence": 0.5
+  },
+  "absent": {
+   "presenceConfidence": 0.2,
+   "seasonConfidence": 0.3,
+   "yieldConfidence": 0.35,
+   "safetyConfidence": 0.5,
+   "processingConfidence": 0.5,
+   "accessConfidence": 0.5,
+   "recoveryConfidence": 0.5
+  }
+ }
+}

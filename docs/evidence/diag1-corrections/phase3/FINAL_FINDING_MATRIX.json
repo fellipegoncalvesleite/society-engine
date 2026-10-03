@@ -1,0 +1,182 @@
+[
+  {
+    "id": "F1",
+    "root": "R05",
+    "status": "FIXED_AND_TESTED",
+    "source": "`movementFatigue.ts`, `pressure.ts`, `bandMobility.ts`",
+    "evidence": "Phase2 `CAUSAL_BEFORE_AFTER.md`; Phase3 regressions `diag1Phase2Fatigue.json`, stale_fatigue mutant",
+    "limit": "Six accepted Phase2 30-year paired courses; provisional seven-day model is not physiological calibration.",
+    "futureOwner": "Items 8/13 for future health/mobility refinement"
+  },
+  {
+    "id": "F2",
+    "root": "R03 (same as B-003)",
+    "status": "FIXED_AND_TESTED",
+    "source": "`plantStock.ts`: physical patch memo validity",
+    "evidence": "Phase1 report; Phase3 `diag1Phase1Conservation.json`, cache mutant, cross-world audit",
+    "limit": "Cache corrections can change food in either direction; no population oracle.",
+    "futureOwner": "Item7 / M0 provider migration"
+  },
+  {
+    "id": "F3",
+    "root": "R12 (same as B-008)",
+    "status": "DEFERRED_EXPLICIT_OWNER",
+    "source": "`faunaStock.ts`: global geography/admission",
+    "evidence": "`FUTURE_FAUNA_CONTRACT.md`; `integration-v4.json` known-open witnesses",
+    "limit": "Serious represented-fauna gaps remain; local fallback does not repair absent geography.",
+    "futureOwner": "M0.4 realization, M0.5 area/scaling/bounds, M0.7 migration"
+  },
+  {
+    "id": "F4",
+    "root": "R06",
+    "status": "FIXED_AND_TESTED",
+    "source": "`humanFoodSupport.ts`, `provisionalTravelSubsistence.ts`, operation consumers",
+    "evidence": "Phase2 accepted units audit; Phase3 `diag1Phase2UnitsAndExposure.json`, units mutant, integration",
+    "limit": "Real controlled travel/harvest proof; natural provisional incidence not estimated here.",
+    "futureOwner": "Item9 provisions and future household accounting"
+  },
+  {
+    "id": "F5",
+    "root": "R07",
+    "status": "FIXED_AND_TESTED",
+    "source": "`nutritionExposure.ts`, `seasonalSurvival.ts`, `demography.ts`",
+    "evidence": "Phase3 units/exposure, coverage, full-known, annual-boundary, demography-boundary, migration/rounding audits and mutants",
+    "limit": "Dated exposure is honest about coverage and 90-day residential abstraction; no invented historical daily observation.",
+    "futureOwner": "Item4 lifecycle / future nutrition and physiology"
+  },
+  {
+    "id": "F6",
+    "root": "R04 (same as B-004)",
+    "status": "FIXED_AND_TESTED",
+    "source": "`bandMobility.ts`, `intraSeasonTrips.ts`: productive worker ownership",
+    "evidence": "Phase3 conservation/labor mutant, zeroLaborTargetWork and bounded contract controls",
+    "limit": "Natural frequency unmeasured; phantom labor had masked hardship, not caused starvation.",
+    "futureOwner": "Item14 reusable work groups"
+  },
+  {
+    "id": "I1",
+    "root": "R11 (same instrument root as B-009)",
+    "status": "INSTRUMENT_ONLY_FIXED",
+    "source": "`ecologicalProjection.ts`; `ui/band/sections.tsx`, `History.tsx`; `agents/types.ts`",
+    "evidence": "`green-diagnostics-v1.json`, diagnostic mutant; browser evidence; natural read-model parity",
+    "limit": "No nutrition/risk behavior retuning; hunger classifications remain annual samples.",
+    "futureOwner": "Read-model owner; future calibrated probabilities require separate evidence"
+  },
+  {
+    "id": "U1",
+    "root": "R16",
+    "status": "OPEN_UNRESOLVED",
+    "source": "Original save/scenario provenance; `demography.ts`, access/food/social seams",
+    "evidence": "Cumulative record \u00a76.5E; Phase1 `R9_RECONCILIATION.md`; accepted Phase2 causal comparison",
+    "limit": "Original 2000-year case remains unrecovered. No whole-game adequacy, empirical fertility/mortality or universal terrain conclusion.",
+    "futureOwner": "Items8/9/10/10.5/13/17 and WORLD-M0 as recorded; scenario recovery needs original evidence"
+  },
+  {
+    "id": "B-001",
+    "root": "R01",
+    "status": "FIXED_AND_TESTED",
+    "source": "`expeditionCargo.ts`, `expedition.ts`: admitted source-attributed cargo/return",
+    "evidence": "Phase3 conservation/cargo mutant; integration actual multi-day work and returned receipt",
+    "limit": "Controlled integrated chain and prior natural return-loss evidence; no isolated population benefit asserted.",
+    "futureOwner": "Item3/4 productive presence and return authority"
+  },
+  {
+    "id": "B-002",
+    "root": "R02",
+    "status": "FIXED_AND_TESTED",
+    "source": "`viability.ts`: current source/target cohort transaction",
+    "evidence": "Phase3 conservation/absorption mutant and fission/reintegration regressions",
+    "limit": "Controlled chains conserve current cohorts; distinct from old duplicated fission diagnostic counts and B-010 range.",
+    "futureOwner": "Item6 predecessor ownership"
+  },
+  {
+    "id": "B-003",
+    "root": "R03 (same as F2)",
+    "status": "FIXED_AND_TESTED",
+    "source": "`plantStock.ts` plus Phase1B world-owned `seasonal.ts`/`hydrography.ts` caches",
+    "evidence": "Phase3 plant-time, cross-world and all three Phase1B mutants; full-world determinism",
+    "limit": "Year cache and later cross-world correction have separate witnesses; effect sign varies.",
+    "futureOwner": "Item7 / M0 provider migration"
+  },
+  {
+    "id": "B-004",
+    "root": "R04 (same as F6)",
+    "status": "FIXED_AND_TESTED",
+    "source": "`intraSeasonTrips.ts`, `bandMobility.ts`",
+    "evidence": "Phase3 conservation/labor mutant, zero-worker audits",
+    "limit": "No invented natural prevalence; all-away and same-day reservations remain actual labor constraints.",
+    "futureOwner": "Item14"
+  },
+  {
+    "id": "B-005",
+    "root": "R08",
+    "status": "FIXED_AND_TESTED",
+    "source": "`faunaStock.ts`: pure availability, generic selection and exact source provenance",
+    "evidence": "Qualified RED, final GREEN 26/26, fauna mutant; Map1 natural paired trace",
+    "limit": "Map1: baseline 3 exhausted-winner misses; current 6 real fallback takes. Trajectories differ after day519, so counts are not a paired treatment rate.",
+    "futureOwner": "Current physical extraction; future M0 migration preserves contract"
+  },
+  {
+    "id": "B-006",
+    "root": "R09",
+    "status": "FIXED_AND_TESTED",
+    "source": "`intraSeasonTrips.ts`: food-family domain before argmax",
+    "evidence": "Qualified RED; final GREEN 26/26; food mutant; actual distant expedition launch",
+    "limit": "Historical 0/600 preserved. New bounded natural traces: 0/2640 selections per arm; no claimed historical deficit attribution.",
+    "futureOwner": "Food-retrieval selector; global action families unchanged"
+  },
+  {
+    "id": "B-007",
+    "root": "R10",
+    "status": "FIXED_AND_TESTED",
+    "source": "`plantPatches.ts`: canonical realization before scout filtering; existing `resourceScoutObservation.ts` writer",
+    "evidence": "Qualified RED; final GREEN 26/26; scout mutant; integration observation\u2192memory\u2192real take",
+    "limit": "New natural traces had no exact scout observations and no measured downstream effect. Controlled positive/negative provenance covers actual patches.",
+    "futureOwner": "Knowledge provenance / M0 plant migration"
+  },
+  {
+    "id": "B-008",
+    "root": "R12 (same as F3)",
+    "status": "DEFERRED_EXPLICIT_OWNER",
+    "source": "`faunaStock.ts`: 260-stock global legacy realization",
+    "evidence": "`FUTURE_FAUNA_CONTRACT.md`; fresh known-open integration witnesses",
+    "limit": "Still OPEN; cap/order/extent are not physical-area laws. No full terrain repair claim.",
+    "futureOwner": "M0.4 / M0.5 / M0.7"
+  },
+  {
+    "id": "B-009",
+    "root": "R11 (same as I1)",
+    "status": "INSTRUMENT_ONLY_FIXED",
+    "source": "`ecologicalProjection.ts`, `TileInspector.tsx`, `WorldCanvas.tsx`",
+    "evidence": "Diagnostics RED 2/5\u2192GREEN5/5; diagnostic mutant; UI and parity evidence",
+    "limit": "Activity index zero can coexist with residual physical take; new exact raw query is read-only and eligible-activity conditioned.",
+    "futureOwner": "Diagnostic/read-model owner"
+  },
+  {
+    "id": "B-010",
+    "root": "R13",
+    "status": "OPEN_UNRESOLVED",
+    "source": "`viability.ts`: `getAbsorptionTarget`, `getRouteConfidence`",
+    "evidence": "`B010_ADJUDICATION.md`, pinned sources, integration same9km witness",
+    "limit": "Controlled resolution discrepancy; no natural prevalence or invented kilometer policy. Provisional reintegration stays co-located.",
+    "futureOwner": "Separately authorized SCALE-1 compatibility; Item6 absorption abstraction"
+  },
+  {
+    "id": "M0.2 basin-information blocker",
+    "root": "R14",
+    "status": "OPEN_UNRESOLVED",
+    "source": "Protected `compileTerrainHydro.ts`, `terrainHydroValidate.ts`: retained basin geometry",
+    "evidence": "Cumulative record \u00a70.3B / \u00a76.5D\u2013E and protected hashes",
+    "limit": "No current human-causal claim: production humans still use legacy providers. No new M0.2 experiment performed.",
+    "futureOwner": "M0.2 before Task12"
+  },
+  {
+    "id": "M0.2 comprehensive scratch-memory blocker",
+    "root": "R15",
+    "status": "OPEN_UNRESOLVED",
+    "source": "Protected M0.2 compiler/audit: unaccounted scalable temporary geometry",
+    "evidence": "Cumulative record \u00a70.3B / \u00a76.5D\u2013E and protected hashes",
+    "limit": "Prior undercount witness retained, not converted into an OOM or completed repair claim.",
+    "futureOwner": "M0.2 before Task12"
+  }
+]

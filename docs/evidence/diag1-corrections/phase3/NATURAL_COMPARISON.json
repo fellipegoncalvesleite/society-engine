@@ -1,0 +1,560 @@
+{
+  "pairs": [
+    {
+      "map": "map1",
+      "seed": "diag3:holdout",
+      "days": 1080,
+      "baseline": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+      "beforeCounts": {
+        "faunaExecutions": 109,
+        "overlapFallbackOpportunities": 3,
+        "overlapFallbackTakes": 0,
+        "retrievalSelections": 900,
+        "eligibleFoodSuppression": 0,
+        "scoutObservations": 0,
+        "exactScoutObservations": 0,
+        "falseExactIds": 0,
+        "receipts": 622
+      },
+      "afterCounts": {
+        "faunaExecutions": 117,
+        "overlapFallbackOpportunities": 6,
+        "overlapFallbackTakes": 6,
+        "retrievalSelections": 900,
+        "eligibleFoodSuppression": 0,
+        "scoutObservations": 0,
+        "exactScoutObservations": 0,
+        "falseExactIds": 0,
+        "receipts": 637
+      },
+      "finalHashEqual": false,
+      "finalHashes": [
+        "84a44c04c48922d1fd94c6c8c3d6fb229cdcdc12b338cd41663ce85f2174ee30",
+        "d8383223ad01f542a4f407b7cd3b92fac686f2df6dd442717703e4bb728f27d5"
+      ],
+      "firstDivergence": {
+        "day": 519,
+        "before": [
+          {
+            "kind": "fauna",
+            "tile": "tile:35:20",
+            "take": 0,
+            "depletion": 0,
+            "fallback": false
+          },
+          {
+            "kind": "fauna",
+            "tile": "tile:128:67",
+            "staticSource": "fauna:delta_wetland_fish:tile:128:68",
+            "source": "fauna:delta_wetland_fish:tile:128:68",
+            "take": 0.0366,
+            "depletion": 0.0366,
+            "fallback": false
+          },
+          {
+            "kind": "receipt",
+            "band": "band:lake-wetland-foragers",
+            "source": "fauna:delta_wetland_fish:tile:128:68",
+            "raw": 0.0317
+          },
+          {
+            "kind": "fauna",
+            "tile": "tile:104:58",
+            "staticSource": "fauna:waterfowl:tile:104:58",
+            "source": "fauna:waterfowl:tile:104:58",
+            "take": 0.0535,
+            "depletion": 0.0535,
+            "fallback": false
+          },
+          {
+            "kind": "receipt",
+            "band": "band:river-valley-foragers",
+            "source": "fauna:waterfowl:tile:104:58",
+            "raw": 0.0442
+          }
+        ],
+        "after": [
+          {
+            "kind": "fauna",
+            "tile": "tile:35:20",
+            "take": 0,
+            "depletion": 0,
+            "fallback": false
+          },
+          {
+            "kind": "fauna",
+            "tile": "tile:128:67",
+            "staticSource": "fauna:delta_wetland_fish:tile:128:68",
+            "source": "fauna:delta_wetland_fish:tile:128:68",
+            "take": 0.0366,
+            "depletion": 0.0366,
+            "fallback": false
+          },
+          {
+            "kind": "receipt",
+            "band": "band:lake-wetland-foragers",
+            "source": "fauna:delta_wetland_fish:tile:128:68",
+            "raw": 0.0317
+          },
+          {
+            "kind": "fauna",
+            "tile": "tile:104:58",
+            "staticSource": "fauna:waterfowl:tile:104:58",
+            "source": "fauna:waterfowl:tile:104:60",
+            "take": 0.0408,
+            "depletion": 0.0408,
+            "fallback": false
+          },
+          {
+            "kind": "receipt",
+            "band": "band:river-valley-foragers",
+            "source": "fauna:waterfowl:tile:104:60",
+            "raw": 0.0337
+          }
+        ]
+      },
+      "firstMetrics": {
+        "support": {
+          "day": 540,
+          "changes": [
+            {
+              "band": "band:river-valley-foragers",
+              "before": {
+                "tick": 6,
+                "year": 1,
+                "season": "autumn",
+                "rawSupportRatio": 2.082727272727271,
+                "clampedSupportRatio": 1,
+                "perCapitaReturn": 1,
+                "seasonalModifier": 2,
+                "foodStress": 0,
+                "waterStress": 0.22,
+                "deficitRatio": 0,
+                "mode": "recovery",
+                "exposure": {
+                  "version": 1,
+                  "startDay": 539,
+                  "endDay": 540,
+                  "durationDays": 1,
+                  "producer": "residential",
+                  "provenance": "physical_receipts_90_day_abstraction",
+                  "quantityBasis": "actual",
+                  "segments": [
+                    {
+                      "startDay": 539,
+                      "endDay": 540,
+                      "supportUnits": 0.7636666666666667,
+                      "demandUnits": 0.366666666666667,
+                      "foodStress": 0,
+                      "waterStress": 0.22,
+                      "perCapitaReturn": 1,
+                      "recoveryEligible": true
+                    }
+                  ],
+                  "supportUnits": 0.7636666666666667,
+                  "demandUnits": 0.366666666666667,
+                  "foodStressDays": 0,
+                  "waterStressDays": 0.22,
+                  "recoveryDays": 1
+                },
+                "nutritionCoverage": 1
+              },
+              "after": {
+                "tick": 6,
+                "year": 1,
+                "season": "autumn",
+                "rawSupportRatio": 2.0454545454545436,
+                "clampedSupportRatio": 1,
+                "perCapitaReturn": 1,
+                "seasonalModifier": 2,
+                "foodStress": 0,
+                "waterStress": 0.22,
+                "deficitRatio": 0,
+                "mode": "recovery",
+                "exposure": {
+                  "version": 1,
+                  "startDay": 539,
+                  "endDay": 540,
+                  "durationDays": 1,
+                  "producer": "residential",
+                  "provenance": "physical_receipts_90_day_abstraction",
+                  "quantityBasis": "actual",
+                  "segments": [
+                    {
+                      "startDay": 539,
+                      "endDay": 540,
+                      "supportUnits": 0.75,
+                      "demandUnits": 0.366666666666667,
+                      "foodStress": 0,
+                      "waterStress": 0.22,
+                      "perCapitaReturn": 1,
+                      "recoveryEligible": true
+                    }
+                  ],
+                  "supportUnits": 0.75,
+                  "demandUnits": 0.366666666666667,
+                  "foodStressDays": 0,
+                  "waterStressDays": 0.22,
+                  "recoveryDays": 1
+                },
+                "nutritionCoverage": 1
+              }
+            }
+          ]
+        },
+        "stress": {
+          "day": 720,
+          "changes": [
+            {
+              "band": "band:river-valley-foragers",
+              "before": 0.14,
+              "after": 0.12
+            }
+          ]
+        },
+        "fatigue": {
+          "day": 1080,
+          "changes": [
+            {
+              "band": "band:river-valley-foragers",
+              "before": 0.42,
+              "after": 0.39
+            }
+          ]
+        }
+      },
+      "fallbackBefore": [
+        {
+          "day": 897,
+          "kind": "fauna",
+          "tile": "tile:104:58",
+          "staticSource": "fauna:waterfowl:tile:104:58",
+          "source": "fauna:waterfowl:tile:104:58",
+          "take": 0,
+          "depletion": 0,
+          "fallback": true
+        },
+        {
+          "day": 1041,
+          "kind": "fauna",
+          "tile": "tile:104:58",
+          "staticSource": "fauna:waterfowl:tile:104:58",
+          "source": "fauna:waterfowl:tile:104:58",
+          "take": 0,
+          "depletion": 0,
+          "fallback": true
+        },
+        {
+          "day": 1068,
+          "kind": "fauna",
+          "tile": "tile:104:58",
+          "staticSource": "fauna:waterfowl:tile:104:58",
+          "source": "fauna:waterfowl:tile:104:58",
+          "take": 0,
+          "depletion": 0,
+          "fallback": true
+        }
+      ],
+      "fallbackAfter": [
+        {
+          "day": 1032,
+          "kind": "fauna",
+          "tile": "tile:104:58",
+          "staticSource": "fauna:waterfowl:tile:104:58",
+          "source": "fauna:waterfowl:tile:104:60",
+          "take": 0.0167,
+          "depletion": 0.0167,
+          "fallback": true
+        },
+        {
+          "day": 1041,
+          "kind": "fauna",
+          "tile": "tile:104:58",
+          "staticSource": "fauna:waterfowl:tile:104:58",
+          "source": "fauna:waterfowl:tile:104:60",
+          "take": 0.0171,
+          "depletion": 0.0171,
+          "fallback": true
+        },
+        {
+          "day": 1050,
+          "kind": "fauna",
+          "tile": "tile:104:58",
+          "staticSource": "fauna:waterfowl:tile:104:58",
+          "source": "fauna:waterfowl:tile:104:60",
+          "take": 0.0175,
+          "depletion": 0.0175,
+          "fallback": true
+        },
+        {
+          "day": 1059,
+          "kind": "fauna",
+          "tile": "tile:104:58",
+          "staticSource": "fauna:waterfowl:tile:104:58",
+          "source": "fauna:waterfowl:tile:104:60",
+          "take": 0.0179,
+          "depletion": 0.0179,
+          "fallback": true
+        },
+        {
+          "day": 1068,
+          "kind": "fauna",
+          "tile": "tile:104:58",
+          "staticSource": "fauna:waterfowl:tile:104:58",
+          "source": "fauna:waterfowl:tile:104:60",
+          "take": 0.0182,
+          "depletion": 0.0182,
+          "fallback": true
+        },
+        {
+          "day": 1077,
+          "kind": "fauna",
+          "tile": "tile:104:58",
+          "staticSource": "fauna:waterfowl:tile:104:58",
+          "source": "fauna:waterfowl:tile:104:60",
+          "take": 0.0104,
+          "depletion": 0.0104,
+          "fallback": true
+        }
+      ],
+      "finalPopulations": [
+        [
+          {
+            "id": "band:delta-coastal-foragers",
+            "population": 34
+          },
+          {
+            "id": "band:dry-margin-foragers",
+            "population": 25
+          },
+          {
+            "id": "band:highland-edge-foragers",
+            "population": 27
+          },
+          {
+            "id": "band:lake-wetland-foragers",
+            "population": 31
+          },
+          {
+            "id": "band:river-valley-foragers",
+            "population": 38
+          }
+        ],
+        [
+          {
+            "id": "band:delta-coastal-foragers",
+            "population": 34
+          },
+          {
+            "id": "band:dry-margin-foragers",
+            "population": 25
+          },
+          {
+            "id": "band:highland-edge-foragers",
+            "population": 27
+          },
+          {
+            "id": "band:lake-wetland-foragers",
+            "population": 31
+          },
+          {
+            "id": "band:river-valley-foragers",
+            "population": 38
+          }
+        ]
+      ]
+    },
+    {
+      "map": "map2_single_origin",
+      "seed": "diag1b:controls",
+      "days": 720,
+      "baseline": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+      "beforeCounts": {
+        "faunaExecutions": 0,
+        "overlapFallbackOpportunities": 0,
+        "overlapFallbackTakes": 0,
+        "retrievalSelections": 120,
+        "eligibleFoodSuppression": 0,
+        "scoutObservations": 0,
+        "exactScoutObservations": 0,
+        "falseExactIds": 0,
+        "receipts": 58
+      },
+      "afterCounts": {
+        "faunaExecutions": 0,
+        "overlapFallbackOpportunities": 0,
+        "overlapFallbackTakes": 0,
+        "retrievalSelections": 120,
+        "eligibleFoodSuppression": 0,
+        "scoutObservations": 0,
+        "exactScoutObservations": 0,
+        "falseExactIds": 0,
+        "receipts": 58
+      },
+      "finalHashEqual": true,
+      "finalHashes": [
+        "3e44c8de198a3416a73683fa34ef532f3a7ba9f6ce09c064fa8deafc0430f567",
+        "3e44c8de198a3416a73683fa34ef532f3a7ba9f6ce09c064fa8deafc0430f567"
+      ],
+      "firstDivergence": null,
+      "firstMetrics": {},
+      "fallbackBefore": [],
+      "fallbackAfter": [],
+      "finalPopulations": [
+        [
+          {
+            "id": "band:single-origin",
+            "population": 32
+          }
+        ],
+        [
+          {
+            "id": "band:single-origin",
+            "population": 32
+          }
+        ]
+      ]
+    },
+    {
+      "map": "map2",
+      "seed": "diag1:s1",
+      "days": 1080,
+      "baseline": "80bb005f6bf9856720ac07d3acbae9e4a57c677f",
+      "beforeCounts": {
+        "faunaExecutions": 126,
+        "overlapFallbackOpportunities": 0,
+        "overlapFallbackTakes": 0,
+        "retrievalSelections": 1620,
+        "eligibleFoodSuppression": 0,
+        "scoutObservations": 2,
+        "exactScoutObservations": 0,
+        "falseExactIds": 0,
+        "receipts": 492
+      },
+      "afterCounts": {
+        "faunaExecutions": 126,
+        "overlapFallbackOpportunities": 0,
+        "overlapFallbackTakes": 0,
+        "retrievalSelections": 1620,
+        "eligibleFoodSuppression": 0,
+        "scoutObservations": 2,
+        "exactScoutObservations": 0,
+        "falseExactIds": 0,
+        "receipts": 492
+      },
+      "finalHashEqual": true,
+      "finalHashes": [
+        "0fcc4312efd6ed5d43519bc78bfa131dcbb1a0fbbc76cbfcd63ee99d880a6516",
+        "0fcc4312efd6ed5d43519bc78bfa131dcbb1a0fbbc76cbfcd63ee99d880a6516"
+      ],
+      "firstDivergence": null,
+      "firstMetrics": {},
+      "fallbackBefore": [],
+      "fallbackAfter": [],
+      "finalPopulations": [
+        [
+          {
+            "id": "band:varied-dry-corridor-mid",
+            "population": 25
+          },
+          {
+            "id": "band:varied-dry-corridor-upper",
+            "population": 22
+          },
+          {
+            "id": "band:varied-estuary",
+            "population": 30
+          },
+          {
+            "id": "band:varied-lake-east",
+            "population": 28
+          },
+          {
+            "id": "band:varied-lake-north",
+            "population": 31
+          },
+          {
+            "id": "band:varied-lake-west",
+            "population": 28
+          },
+          {
+            "id": "band:varied-pass-frontier",
+            "population": 16
+          },
+          {
+            "id": "band:varied-plains-creek",
+            "population": 24
+          },
+          {
+            "id": "band:varied-river-mid",
+            "population": 34
+          }
+        ],
+        [
+          {
+            "id": "band:varied-dry-corridor-mid",
+            "population": 25
+          },
+          {
+            "id": "band:varied-dry-corridor-upper",
+            "population": 22
+          },
+          {
+            "id": "band:varied-estuary",
+            "population": 30
+          },
+          {
+            "id": "band:varied-lake-east",
+            "population": 28
+          },
+          {
+            "id": "band:varied-lake-north",
+            "population": 31
+          },
+          {
+            "id": "band:varied-lake-west",
+            "population": 28
+          },
+          {
+            "id": "band:varied-pass-frontier",
+            "population": 16
+          },
+          {
+            "id": "band:varied-plains-creek",
+            "population": 24
+          },
+          {
+            "id": "band:varied-river-mid",
+            "population": 34
+          }
+        ]
+      ]
+    }
+  ],
+  "parity": [
+    {
+      "map": "map1",
+      "days": 1080,
+      "fullWorldHash": "d8383223ad01f542a4f407b7cd3b92fac686f2df6dd442717703e4bb728f27d5",
+      "allDailyCausalHashesIdentical": true,
+      "substrateIdentical": true,
+      "auditPass": true,
+      "changedSourceDuringAudit": [],
+      "causalSourcesPreserved": true,
+      "qualification": "Complete audit and fingerprint parity PASS."
+    },
+    {
+      "map": "map2_single_origin",
+      "days": 720,
+      "fullWorldHash": "3e44c8de198a3416a73683fa34ef532f3a7ba9f6ce09c064fa8deafc0430f567",
+      "allDailyCausalHashesIdentical": true,
+      "substrateIdentical": true,
+      "auditPass": true,
+      "changedSourceDuringAudit": [],
+      "causalSourcesPreserved": true,
+      "qualification": "Complete audit and fingerprint parity PASS."
+    }
+  ],
+  "natural": true,
+  "injectedMemories": 0
+}

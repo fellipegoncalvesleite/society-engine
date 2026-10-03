@@ -1,0 +1,9 @@
+{"kind":"map1","seed":"diag3:holdout","day":180,"counts":{"faunaExecutions":0,"overlapFallbackOpportunities":0,"overlapFallbackTakes":0,"retrievalSelections":150,"eligibleFoodSuppression":0,"scoutObservations":0,"exactScoutObservations":0,"falseExactIds":0,"receipts":181}}
+{"kind":"map1","seed":"diag3:holdout","day":360,"counts":{"faunaExecutions":15,"overlapFallbackOpportunities":0,"overlapFallbackTakes":0,"retrievalSelections":300,"eligibleFoodSuppression":0,"scoutObservations":0,"exactScoutObservations":0,"falseExactIds":0,"receipts":247}}
+{"kind":"map1","seed":"diag3:holdout","day":540,"counts":{"faunaExecutions":33,"overlapFallbackOpportunities":0,"overlapFallbackTakes":0,"retrievalSelections":450,"eligibleFoodSuppression":0,"scoutObservations":0,"exactScoutObservations":0,"falseExactIds":0,"receipts":360}}
+{"kind":"map1","seed":"diag3:holdout","day":720,"counts":{"faunaExecutions":74,"overlapFallbackOpportunities":0,"overlapFallbackTakes":0,"retrievalSelections":600,"eligibleFoodSuppression":0,"scoutObservations":0,"exactScoutObservations":0,"falseExactIds":0,"receipts":443}}
+{"kind":"map1","seed":"diag3:holdout","day":900,"counts":{"faunaExecutions":91,"overlapFallbackOpportunities":1,"overlapFallbackTakes":0,"retrievalSelections":750,"eligibleFoodSuppression":0,"scoutObservations":0,"exactScoutObservations":0,"falseExactIds":0,"receipts":555}}
+{"kind":"map1","seed":"diag3:holdout","day":1080,"counts":{"faunaExecutions":109,"overlapFallbackOpportunities":3,"overlapFallbackTakes":0,"retrievalSelections":900,"eligibleFoodSuppression":0,"scoutObservations":0,"exactScoutObservations":0,"falseExactIds":0,"receipts":622}}
+PASS natural source hooks actually loaded/executed
+PASS production bytes preserved
+{"audit":"DIAG1 bounded natural trace","mutant":"none","pass":true,"passed":2,"total":2,"failed":[]}

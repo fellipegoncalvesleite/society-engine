@@ -1,0 +1,343 @@
+WebSocket server error: Port 24678 is already in use
+{
+  "check": "SCALE1-TASK7-CROSS-RESOLUTION",
+  "verdict": "PASS",
+  "checks": {
+    "auditSeamsExist": true,
+    "ordinaryTripEquivalentEligibility": true,
+    "ordinaryTripRawCellCountsDiffer": true,
+    "ordinaryTripPhysicalDistanceEquivalent": true,
+    "ordinaryTripScoreCostPhysical": true,
+    "acuteRiskRouteLoadPhysical": true,
+    "physicalHarvestTransportLossPhysical": true,
+    "shadowTravelCostPhysical": true,
+    "physicallyTooLongFailsBoth": true,
+    "highCostCloseTripFailsBoth": true,
+    "localReconPhysicalEnvelopeEquivalent": true,
+    "spawnKnowledgePhysicalEnvelopeEquivalent": true,
+    "spawnSeparationPhysicalEquivalent": true,
+    "frontierProbeEquivalentEligibility": true,
+    "sideProbeEquivalentEligibility": true,
+    "physicallyUnreachableProbeRejected": true,
+    "inferredProbeCarriesNoRichness": true,
+    "verificationPhysicalEquivalent": true,
+    "reliefPhysicalEquivalent": true,
+    "campMovementPhysicalEquivalent": true,
+    "uncertainLongRouteUsesPhysicalDistance": true,
+    "frontierPhysicalClassifiersEquivalent": true,
+    "frontierResidencePhysicalDistanceEquivalent": true,
+    "relocationPhysicalDistanceEquivalent": true,
+    "expeditionTechnicalHorizonPhysical": true,
+    "knownMovePhysicalEquivalent": true,
+    "fissionPhysicalCalibrationEquivalent": true,
+    "accessNormPhysicalProximityEquivalent": true,
+    "protoCampPhysicalProximityEquivalent": true,
+    "storageCrossingPhysicalRankingEquivalent": true
+  },
+  "measurements": {
+    "trip1": {
+      "eligible": true,
+      "sameDay": true,
+      "distanceTiles": 3,
+      "physicalDistanceKm": 3,
+      "distancePenalty": 0.3529411764705882,
+      "travelCost": 0.3529411764705882,
+      "totalDays": 0.7954545454545454,
+      "searchHorizonTiles": 10
+    },
+    "trip15": {
+      "eligible": true,
+      "sameDay": true,
+      "distanceTiles": 2,
+      "physicalDistanceKm": 3,
+      "distancePenalty": 0.3529411764705882,
+      "travelCost": 0.3529411764705882,
+      "totalDays": 0.7954545454545454,
+      "searchHorizonTiles": 7
+    },
+    "tooLong1": {
+      "eligible": false,
+      "sameDay": false,
+      "distanceTiles": 12,
+      "physicalDistanceKm": null,
+      "distancePenalty": 1,
+      "travelCost": 1
+    },
+    "tooLong15": {
+      "eligible": false,
+      "sameDay": false,
+      "distanceTiles": 8,
+      "physicalDistanceKm": null,
+      "distancePenalty": 1,
+      "travelCost": 1
+    },
+    "costly1": {
+      "eligible": false,
+      "sameDay": false,
+      "distanceTiles": 3,
+      "physicalDistanceKm": 3,
+      "distancePenalty": 0.5925925925925926,
+      "travelCost": 0.5925925925925926,
+      "totalDays": 1.7045454545454546,
+      "searchHorizonTiles": 10
+    },
+    "costly15": {
+      "eligible": false,
+      "sameDay": false,
+      "distanceTiles": 2,
+      "physicalDistanceKm": 3,
+      "distancePenalty": 0.5510204081632653,
+      "travelCost": 0.5510204081632653,
+      "totalDays": 1.4772727272727273,
+      "searchHorizonTiles": 7
+    },
+    "localRecon1": [
+      "t1",
+      "t2",
+      "t3"
+    ],
+    "localRecon15": [
+      "t1",
+      "t2"
+    ],
+    "localRecon1MaxKm": 3,
+    "localRecon15MaxKm": 3,
+    "spawn1": [
+      {
+        "tileId": "t0",
+        "distanceKm": 0
+      },
+      {
+        "tileId": "t1",
+        "distanceKm": 1
+      },
+      {
+        "tileId": "t2",
+        "distanceKm": 2
+      },
+      {
+        "tileId": "t3",
+        "distanceKm": 3
+      }
+    ],
+    "spawn15": [
+      {
+        "tileId": "t0",
+        "distanceKm": 0
+      },
+      {
+        "tileId": "t1",
+        "distanceKm": 1.5
+      },
+      {
+        "tileId": "t2",
+        "distanceKm": 3
+      }
+    ],
+    "spawn1MaxKm": 3,
+    "spawn15MaxKm": 3,
+    "spawnSeparation12_1": {
+      "distanceKm": 12,
+      "eligible": false
+    },
+    "spawnSeparation12_15": {
+      "distanceKm": 12,
+      "eligible": false
+    },
+    "spawnSeparation15_1": {
+      "distanceKm": 15,
+      "eligible": true
+    },
+    "spawnSeparation15_15": {
+      "distanceKm": 15,
+      "eligible": true
+    },
+    "frontier1": {
+      "tileId": "t6",
+      "routeDistanceTiles": 6,
+      "physicalDistanceKm": 6,
+      "routeRisk": 0
+    },
+    "frontier15": {
+      "tileId": "t4",
+      "routeDistanceTiles": 4,
+      "physicalDistanceKm": 6,
+      "routeRisk": 0
+    },
+    "side1": {
+      "tileId": "t6",
+      "routeDistanceTiles": 6,
+      "physicalDistanceKm": 6,
+      "routeRisk": 0
+    },
+    "side15": {
+      "tileId": "t4",
+      "routeDistanceTiles": 4,
+      "physicalDistanceKm": 6,
+      "routeRisk": 0
+    },
+    "verification1": {
+      "eligible": true,
+      "insideWorkingRange": false,
+      "distanceTiles": 12,
+      "physicalDistanceKm": 12,
+      "totalDays": 4.181818181818182,
+      "travelBurden": 0.6857142857142857,
+      "searchHorizonTiles": 17,
+      "routeTileIds": [
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "t6",
+        "t7",
+        "t8",
+        "t9",
+        "t10",
+        "t11",
+        "t12"
+      ]
+    },
+    "verification15": {
+      "eligible": true,
+      "insideWorkingRange": false,
+      "distanceTiles": 8,
+      "physicalDistanceKm": 12,
+      "totalDays": 4.181818181818182,
+      "travelBurden": 0.6857142857142857,
+      "searchHorizonTiles": 12,
+      "routeTileIds": [
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "t6",
+        "t7",
+        "t8"
+      ]
+    },
+    "relief1": {
+      "reachable": true,
+      "physicalDistanceKm": 3,
+      "travelTimeDays": 0.2727272727272727
+    },
+    "relief15": {
+      "reachable": true,
+      "physicalDistanceKm": 3,
+      "travelTimeDays": 0.2727272727272727
+    },
+    "campMove1": {
+      "distanceKm": 3,
+      "microShift": false,
+      "localShiftEligible": true
+    },
+    "campMove15": {
+      "distanceKm": 3,
+      "microShift": false,
+      "localShiftEligible": true
+    },
+    "distanceRiskAt12": true,
+    "distanceRiskBelow12": false,
+    "frontierClassifier1": {
+      "insideParentCatchment": true,
+      "anchorFarEnough": true,
+      "physicalDistanceKm": 3
+    },
+    "frontierClassifier15": {
+      "insideParentCatchment": true,
+      "anchorFarEnough": true,
+      "physicalDistanceKm": 3
+    },
+    "residence1": {
+      "physicalDistanceKm": 6
+    },
+    "residence15": {
+      "physicalDistanceKm": 6
+    },
+    "relocation1": {
+      "physicalDistanceKm": 12,
+      "significant": true
+    },
+    "relocation15": {
+      "physicalDistanceKm": 12,
+      "significant": true
+    },
+    "expeditionHorizon1": {
+      "horizonTiles": 17,
+      "horizonKm": 17
+    },
+    "expeditionHorizon15": {
+      "horizonTiles": 12,
+      "horizonKm": 18
+    },
+    "knownMove1": {
+      "eligible": true,
+      "distanceTiles": 3,
+      "physicalDistanceKm": 3,
+      "travelTimeDays": 0.2727272727272727,
+      "travelBurden": 0.5454545454545454
+    },
+    "knownMove15": {
+      "eligible": true,
+      "distanceTiles": 2,
+      "physicalDistanceKm": 3,
+      "travelTimeDays": 0.2727272727272727,
+      "travelBurden": 0.5454545454545454
+    },
+    "fission1": {
+      "physicalDistanceKm": 6,
+      "spacingPressure": 0.62,
+      "distancePenalty": 0,
+      "nearbyRangeValue": 0.16,
+      "localEvidence": false,
+      "inheritedParentCore": false,
+      "inheritanceDistanceValue": 0.5
+    },
+    "fission15": {
+      "physicalDistanceKm": 6,
+      "spacingPressure": 0.62,
+      "distancePenalty": 0,
+      "nearbyRangeValue": 0.16,
+      "localEvidence": false,
+      "inheritedParentCore": false,
+      "inheritanceDistanceValue": 0.5
+    },
+    "accessNorm1": {
+      "physicalDistanceKm": 3,
+      "near": true,
+      "extended": true
+    },
+    "accessNorm15": {
+      "physicalDistanceKm": 3,
+      "near": true,
+      "extended": true
+    },
+    "protoCamp1": {
+      "physicalDistanceKm": 6,
+      "kinNearby": true
+    },
+    "protoCamp15": {
+      "physicalDistanceKm": 6,
+      "kinNearby": true
+    },
+    "storageCrossing1": {
+      "distanceScoreKm": 6
+    },
+    "storageCrossing15": {
+      "distanceScoreKm": 6
+    },
+    "acuteRouteLoad1": 0.6666666666666666,
+    "acuteRouteLoad15": 0.6666666666666666,
+    "acuteRouteLoadMutation": 0.6666666666666666,
+    "transportLoss1": 0.096,
+    "transportLoss15": 0.096,
+    "transportLossMutation": 0.096,
+    "shadowTravelCost1": 0.1,
+    "shadowTravelCost15": 0.1,
+    "shadowTravelCostMutation": 0.1
+  }
+}

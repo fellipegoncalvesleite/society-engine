@@ -1,0 +1,30 @@
+{
+  "summary": {
+    "fixtures": 13,
+    "failing": 0,
+    "vacuous": 0,
+    "vacuousIds": [],
+    "failingIds": []
+  },
+  "contract": {
+    "resolverLowerBound": 1,
+    "resolverRequiresInteger": true,
+    "expeditionMinPartyWorkers": 2,
+    "whereTheMinimumLives": "expedition.ts — the launch gate and reconcileExpeditionLabor. NOT in the resolver, because one person can physically work and because expedition.ts imports intraSeasonTrips.ts and never the reverse."
+  },
+  "verdicts": {
+    "Z1_zero_exploitation": "ZERO_LABOR_REJECTED_BEFORE_WORK",
+    "Z2_zero_verification": "ZERO_LABOR_CANNOT_INSPECT_THE_TARGET",
+    "Z3_negative_labor": "NEGATIVE_LABOR_REJECTED",
+    "Z4_non_finite_labor": "NON_FINITE_LABOR_REJECTED",
+    "Z5_fractional_labor": "FRACTIONAL_PEOPLE_REJECTED_NOT_ROUNDED",
+    "Z6_one_worker": "ONE_WORKER_ACCEPTED_BY_THE_RESOLVER_AND_WORKS_AS_ONE",
+    "Z7_two_worker_expedition": "UNCHANGED_FROM_34E",
+    "Z8_five_worker_expedition": "UNCHANGED_FROM_34E",
+    "Z9_same_day_control": "SAME_DAY_PATH_NEVER_ENTERS_THIS_CONTRACT",
+    "Z10_verify_only_valid_party": "VALID_PARTY_VERIFIES_WITH_ZERO_REMOVAL",
+    "Z0_canonical_call_order": "RECONCILIATION_REMOVES_AN_UNSTAFFABLE_PARTY_FROM_THE_OPERATING_PHASE_BEFORE_WORK",
+    "Z11_natural_call_domain_20y": "EVERY_NATURAL_TARGET_WORK_CALL_CARRIES_A_VALID_PARTY",
+    "Z12_natural_call_domain_50y": "EVERY_NATURAL_TARGET_WORK_CALL_CARRIES_A_VALID_PARTY"
+  }
+}

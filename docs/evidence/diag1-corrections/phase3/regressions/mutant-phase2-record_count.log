@@ -1,0 +1,230 @@
+7:18:29 PM [vite] (ssr) Error when evaluating SSR module /sim/agents/seasonalSurvival.ts: unique mutant target record_count
+
+1 !== 2
+
+  Plugin: diag1-phase2-old-mechanism
+  File: /Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/seasonalSurvival.ts
+      at replace (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/lib/diag1Phase2Mutants.mjs:6:49)
+      at TransformPluginContext.transform (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/lib/diag1Phase2Mutants.mjs:14:11)
+      at EnvironmentPluginContainer.transform (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/node_modules/vite/dist/node/chunks/node.js:30273:51)
+      at loadAndTransform (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/node_modules/vite/dist/node/chunks/node.js:24532:48)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: unique mutant target record_count
+
+1 !== 2
+
+    at replace (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/lib/diag1Phase2Mutants.mjs:6:49)
+    at TransformPluginContext.transform (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/lib/diag1Phase2Mutants.mjs:14:11)
+    at EnvironmentPluginContainer.transform (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/node_modules/vite/dist/node/chunks/node.js:30273:51)
+    at loadAndTransform (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/node_modules/vite/dist/node/chunks/node.js:24532:48) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 2,
+  operator: 'strictEqual',
+  diff: 'simple',
+  plugin: 'diag1-phase2-old-mechanism',
+  id: '/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/seasonalSurvival.ts',
+  pluginCode: 'import { derivePopulationDemand } from "./carryingCapacity";\n' +
+    'import { deriveHumanFoodSupportLedger, HARVEST_TO_SUPPORT_SCALE } from "./humanFoodSupport";\n' +
+    'import { readFreshAccumulator } from "./seasonalFoodReceipts";\n' +
+    'import type { WorldState } from "../world/types";\n' +
+    'import type { DailyAction } from "./dailyActions";\n' +
+    'import type { DayNumber, TickNumber } from "../core/types";\n' +
+    'import { getCalendarDay, getWorldTimeForDay } from "../tick/time";\n' +
+    'import { isLivingBand, isProvisionalSuccessor } from "./bandLifecycle";\n' +
+    'import {\n' +
+    '  ANNUAL_NUTRITION_DAYS, CURRENT_NUTRITION_DAYS, NUTRITION_HISTORY_DAYS,\n' +
+    '  clipNutritionExposure, insertNutritionExposure, makeNutritionExposure, migrateNutritionExposureHistory,\n' +
+    '  NutritionExposureError, queryNutritionExposure, segmentRatio, trailingExposureDays,\n' +
+    '} from "./nutritionExposure";\n' +
+    'import type {\n' +
+    '  Band,\n' +
+    '  NutritionExposureSegment,\n' +
+    '  CarryingCapacityState,\n' +
+    '  SeasonalHungerClassification,\n' +
+    '  SeasonalSupportMode,\n' +
+    '  SeasonalSupportSample,\n' +
+    '  SeasonalSupportState,\n' +
+    '} from "./types";\n' +
+    'import type { ReasonId, WorldTime } from "../core/types";\n' +
+    '\n' +
+    'const SEASONAL_MEMORY_WINDOW = 8;\n' +
+    'const SHORT_WINDOW = 4;\n' +
+    '// DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — nutritional-surplus deadband and span. Surplus is\n' +
+    '// counted only once mean raw support exceeds demand by a margin (a band exactly at demand is\n' +
+    '// stable, not growing), and reaches full magnitude at a generous, sustainable surplus.\n' +
+    'const SURPLUS_ONSET = 1.12;\n' +
+    'const SURPLUS_SPAN = 0.6;\n' +
+    '\n' +
+    'export interface CanonicalNutritionState {\n' +
+    '  readonly currentFoodStress: number;\n' +
+    '  readonly recentFoodStress: number;\n' +
+    '  readonly chronicFoodStress: number;\n' +
+    '  readonly recoveryRelief: number;\n' +
+    '  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — the symmetric positive counterpart to\n' +
+    '  // `foodDemographicPressure`. That pressure is a non-negative deficit signal (clamp01,\n' +
+    '  // floored at 0), so genuine sustained surplus was demographically identical to bare\n' +
+    "  // maintenance — the ledger's `foodStress = clamp01(1 - rawSupportRatio)` is 0 for any\n" +
+    '  // ratio >= 1, giving no path from surplus to recovery-driven growth. `nutritionalSurplus`\n' +
+    '  // is a bounded [0,1] measure of SUSTAINED genuine surplus (mean raw support ratio above a\n' +
+    '  // deadband, gated on the real recovery streak so a single good season cannot spike it). It\n' +
+    '  // is 0 at maintenance and below, and drives a bounded fertility recovery bonus in\n' +
+    '  // demography. It never adds food/support and never reduces mortality directly.\n' +
+    '  readonly nutritionalSurplus: number;\n' +
+    '  readonly foodMovementPressure: number;\n' +
+    '  readonly foodDemographicPressure: number;\n' +
+    '  readonly currentNutritionCoverage: number;\n' +
+    '  readonly recentNutritionCoverage: number;\n' +
+    '  readonly chronicNutritionCoverage: number;\n' +
+    '  // False ONLY when nutrition has not yet been measured (no physical-food interval\n' +
+    '  // has completed for this band): a new/daughter band, an audit fixture with no\n' +
+    '  // seasonalSupport, or a migrated legacy snapshot. Distinguishes "unknown / not\n' +
+    '  // yet measured" (neutral) from a measured deficit (which can be severe).\n' +
+    '  readonly nutritionStateAvailable: boolean;\n' +
+    '}\n' +
+    '\n' +
+    'function exposureSamples(support: SeasonalSupportState): readonly SeasonalSupportSample[] {\n' +
+    '  if (support.recentSamples.every(s => s.exposure !== undefined)) return support.recentSamples;\n' +
+    '  const migrated = migrateNutritionExposureHistory(support.recentSamples, { kind: "ordinary" });\n' +
+    '  if (!migrated.ok) throw new NutritionExposureError(migrated.code, migrated.reason);\n' +
+    '  return migrated.samples;\n' +
+    '}\n' +
+    '\n' +
+    'export function querySupportExposure(support: SeasonalSupportState | undefined, endDay: number, horizonDays: number) {\n' +
+    '  return queryNutritionExposure(support === undefined ? [] : exposureSamples(support), endDay, horizonDays);\n' +
+    '}\n' +
+    '\n' +
+    'function exposureEndDay(support: SeasonalSupportState): number {\n' +
+    '  return support.exposureAsOfDay ?? Math.max(0, ...exposureSamples(support).map(s => s.exposure!.endDay));\n' +
+    '}\n' +
+    '\n' +
+    '/** Read the measured body-time coverage for compatibility consumers, including\n' +
+    ' * migrated histories whose old currentSeasonSupport omitted nutritionCoverage. */\n' +
+    'export function getCurrentNutritionCoverage(support: SeasonalSupportState | undefined): number {\n' +
+    '  if (support === undefined || support.recentSamples.length === 0) return 0;\n' +
+    '  const endDay = exposureEndDay(support);\n' +
+    '  return querySupportExposure(support, endDay, CURRENT_NUTRITION_DAYS).coverage;\n' +
+    '}\n' +
+    '\n' +
+    '/** Coverage-safe one-day support projection for legacy behavioral readers. */\n' +
+    'export function getCurrentCoverageSafeClampedSupport(support: SeasonalSupportState | undefined): number {\n' +
+    '  if (support === undefined || support.recentSamples.length === 0) return 0;\n' +
+    '  const endDay = exposureEndDay(support);\n' +
+    '  return querySupportExposure(support, endDay, CURRENT_NUTRITION_DAYS).coverageSafeClampedSupport;\n' +
+    '}\n' +
+    '\n' +
+    '/** Coverage-safe one-day water-stress projection for legacy behavioral readers. */\n' +
+    'export function getCurrentCoverageSafeWaterStress(support: SeasonalSupportState | undefined): number {\n' +
+    '  if (support === undefined || support.recentSamples.length === 0) return 0;\n' +
+    '  const endDay = exposureEndDay(support);\n' +
+    '  return querySupportExposure(support, endDay, CURRENT_NUTRITION_DAYS).coverageSafeWaterStress;\n' +
+    '}\n' +
+    '\n' +
+    '/** Coverage for the rolling recent/annual support reader used by camp evidence. */\n' +
+    'export function getRecentNutritionCoverage(support: SeasonalSupportState | undefined): number {\n' +
+    '  if (support === undefined || support.recentSamples.length === 0) return 0;\n' +
+    '  const endDay = exposureEndDay(support);\n' +
+    '  return querySupportExposure(support, endDay, ANNUAL_NUTRITION_DAYS).coverage;\n' +
+    '}\n' +
+    '\n' +
+    '/**\n' +
+    ' * Bound the positive surplus evidence before unknown body-time is applied.  A\n' +
+    ' * known subset with an extreme measured ratio therefore contributes at most its\n' +
+    ' * own body-time fraction.  When physical quantities are present, the known\n' +
+    ' * subset keeps demand-weighted pooled semantics; legacy ratio-only records use\n' +
+    ' * the same bounded function over the known-subset aggregate mean.\n' +
+    ' */\n' +
+    'function measuredSurplusSignal(exposure: ReturnType<typeof queryNutritionExposure>): number {\n' +
+    '  if (exposure.coverage <= 0 || exposure.requestedDays <= 0) return 0;\n' +
+    '  if (exposure.demandUnits !== undefined && exposure.demandUnits > 0) {\n' +
+    '    const knownRatio = (exposure.supportUnits ?? 0) / exposure.demandUnits;\n' +
+    '    return exposure.coverage * clamp01((knownRatio - SURPLUS_ONSET) / SURPLUS_SPAN);\n' +
+    '  }\n' +
+    '  return exposure.coverage * clamp01((exposure.rawSupport - SURPLUS_ONSET) / SURPLUS_SPAN);\n' +
+    '}\n' +
+    '\n' +
+    '// One authoritative translation from physical-support history into nutritional\n' +
+    '// consequences. It never adds support and never reads habitat potential,\n' +
+    '// remembered richness, projected trips, or the legacy hungerPressure field.\n' +
+    'export function deriveCanonicalNutritionState(\n' +
+    '  support: SeasonalSupportState | undefined,\n' +
+    '): CanonicalNutritionState {\n' +
+    '  if (support === undefined || support.recentSamples.length === 0) {\n' +
+    '    // UNMEASURED, not starving. `undefined` means the band has not yet completed a\n' +
+    '    // physical-food interval (new/daughter/fixture/legacy) — treating that as\n' +
+    '    // chronic hunger wrongly punished comfortable bands and daughter bands. It is\n' +
+    '    // neutral. A KNOWN zero-food state is a DEFINED support with foodStress≈1 below,\n' +
+    '    // which still yields severe stress, so this is not a free-food loophole:\n' +
+    '    // production active bands receive a defined seasonalSupport once carrying state\n' +
+    '    // exists (their first observed-tile interval), so this branch is transient.\n' +
+    '    return {\n' +
+    '      currentFoodStress: 0,\n' +
+    '      recentFoodStress: 0,\n' +
+    '      chronicFoodStress: 0,\n' +
+    '      recoveryRelief: 0,\n' +
+    '      nutritionalSurplus: 0,\n' +
+    '      foodMovementPressure: 0,\n' +
+    '      foodDemographicPressure: 0,\n' +
+    '      currentNutritionCoverage: 0,\n' +
+    '      recentNutritionCoverage: 0,\n' +
+    '      chronicNutritionCoverage: 0,\n' +
+    '      nutritionStateAvailable: false,\n' +
+    '    };\n' +
+    '  }\n' +
+    '\n' +
+    '  const endDay = exposureEndDay(support);\n' +
+    '  const current = querySupportExposure(support, endDay, CURRENT_NUTRITION_DAYS);\n' +
+    '  const recent = querySupportExposure(support, endDay, ANNUAL_NUTRITION_DAYS);\n' +
+    '  const chronic = querySupportExposure(support, endDay, NUTRITION_HISTORY_DAYS);\n' +
+    '  if (!recent.available && !chronic.available) {\n' +
+    '    return {\n' +
+    '      currentFoodStress: 0, recentFoodStress: 0, chronicFoodStress: 0,\n' +
+    '      recoveryRelief: 0, nutritionalSurplus: 0, foodMovementPressure: 0,\n' +
+    '      foodDemographicPressure: 0,\n' +
+    '      currentNutritionCoverage: round2(current.coverage),\n' +
+    '      recentNutritionCoverage: round2(recent.coverage),\n' +
+    '      chronicNutritionCoverage: round2(chronic.coverage),\n' +
+    '      nutritionStateAvailable: false,\n' +
+    '    };\n' +
+    '  }\n' +
+    '  const currentFoodStress = clamp01(current.coverageSafeFoodStress);\n' +
+    '  const recentFoodStress = clamp01(recent.coverageSafeFoodStress);\n' +
+    '  const chronicFoodStress = clamp01(\n' +
+    '    (support.chronicDeficitStreak / SEASONAL_MEMORY_WINDOW) * 0.58 +\n' +
+    '      (support.deficitSeasonsLast8 / SEASONAL_MEMORY_WINDOW) * 0.42,\n' +
+    '  );\n' +
+    '  const recoveryRelief = clamp01(support.seasonalRecoveryStreak / SHORT_WINDOW);\n' +
+    '  // DEMOGRAPHIC-RESPONSE-COMPRESSION-13 — sustained genuine surplus. The rolling support\n' +
+    '  // fields (`rolling4/8SeasonSupport`) use the CLAMPED ratio (<=1), so surplus was invisible;\n' +
+    '  // the raw ratios in `recentSamples` are the only uncapped record of support above demand.\n' +
+    '  // A deadband (`SURPLUS_ONSET`) keeps maintenance (ratio ~1.0) at 0; `SURPLUS_SPAN` sets how\n' +
+    '  // far above it reaches full magnitude; the `recoveryRelief` gate requires the surplus to be\n' +
+    '  // SUSTAINED (a real recovery streak), so a single good season cannot manufacture growth.\n' +
+    '  // Query the bounded physical horizon, preserving unknown absolute legacy quantities.\n' +
+    '  const surplusSignal = measuredSurplusSignal(chronic);\n' +
+    '  const nutritionalSurplus = clamp01(\n' +
+    '    surplusSignal * recoveryRelief,\n' +
+    '  );\n' +
+    '\n' +
+    '  return {\n' +
+    '    currentFoodStress: round2(currentFoodStress),\n' +
+    '    recentFoodStress: round2(recentFoodStress),\n' +
+    '    chronicFoodStress: round2(chronicFoodStress),\n' +
+    '    recoveryRelief: round2(recoveryRelief),\n' +
+    '    nutritionalSurplus: round2(nutritionalSurplus),\n' +
+    '    foodMovementPressure: r'... 28532 more characters,
+  runnerError: Error: RunnerError
+      at reviveInvokeError (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/node_modules/vite/dist/node/module-runner.js:547:64)
+      at Object.invoke (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/node_modules/vite/dist/node/module-runner.js:620:11)
+      at async SSRCompatModuleRunner.getModuleInformation (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/node_modules/vite/dist/node/module-runner.js:1199:7)
+      at async SSRCompatModuleRunner.import (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/node_modules/vite/dist/node/module-runner.js:1119:23)
+      at async instantiateModule (file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/node_modules/vite/dist/node/chunks/node.js:10819:10)
+      at async Promise.all (index 4)
+      at async file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase2UnitsAndExposureAudit.mjs:6:53
+}
+
+Node.js v26.7.0

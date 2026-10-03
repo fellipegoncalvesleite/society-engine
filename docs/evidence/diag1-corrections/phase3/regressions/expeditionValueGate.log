@@ -1,0 +1,11 @@
+/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/resourceKnowledge.ts:78
+	return Math.max(0, currentTick - Number(memory.lastNotedTick));
+	                                               ^
+
+TypeError: Cannot read properties of undefined (reading 'lastNotedTick')
+    at computeResourceStaleness (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/resourceKnowledge.ts:78:49)
+    at effectiveResourceConfidence (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/resourceKnowledge.ts:87:20)
+    at isDistantRetrievalWorthwhileForAudit (/Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/src/sim/agents/expedition.ts:1483:115)
+    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/expeditionValueGateAudit.mjs:50:27
+
+Node.js v26.7.0

@@ -1,0 +1,28 @@
+PASS B005 exhausted static winner yields to healthy represented overlap
+PASS B005 all exhausted / no geography / predator / activity refusal
+PASS B005 explicit exhausted/absent source never redirects
+PASS B005 stable identity tie and repeat/overlapping geography depletion
+PASS B005 seasonal availability retains lean floor; ineligible activity takes nothing
+PASS B006 original food-only state launches valid distant gathering
+FAIL B006 higher-scoring nonfood cannot erase food retrieval or launch
+PASS B006 nonfood-only / missing target / tied foods; other task families remain eligible
+PASS B007 Map2 all exact scout IDs belong to canonical physical top three
+PASS B005 returned trace identity agrees with actual chosen take/depletion
+PASS B005 preview evaluates availability without mutating any source
+PASS B006 no candidates without observed bootstrap evidence
+FAIL B006 stale food preserves the same selection/worth gates with nonfood added
+FAIL B006 contradicted/recent-empty food retains candidate but fails the unchanged worth gate
+PASS B006 recent local empty visit still suppresses retrieval
+FAIL B006 low remembered value remains selectable but cannot launch food work
+PASS B006 disconnected physical route is refused
+PASS B006 known food selection is independent of hidden stock; absent physical take is zero
+PASS B007 material-dominated original witness cannot mint excluded leaf identity
+PASS B007 physical reader / observation ordering is identical and readonly
+PASS B007 uncertain/no visible relevant patch does not fabricate an exact ID
+PASS B007 low visibility preserves uncertainty; exact IDs only when justified
+PASS B007 historical false identity is not silently rewritten by physical readers
+PASS B007 actual observation writes confirmation through canonical knowledge; no food/body/skill grant
+PASS B007 stale confident memory can be contradicted only by new observation
+PASS production bytes preserved
+PASS mutant loaded and executed
+{"audit":"DIAG1 Phase3 opportunity","mutant":"food","pass":false,"passed":23,"total":27,"failed":[{"name":"B006 higher-scoring nonfood cannot erase food retrieval or launch","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'probe-food'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase3OpportunityAudit.mjs:27:264\n    at Object.check (file:///U"},{"name":"B006 stale food preserves the same selection/worth gates with nonfood added","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ undefined\n- {\n-   distanceTiles: 2,\n-   memory: {\n-     approximateTile: 'tile:108:54',\n-     confidence: {\n-       accessConfidence: 0.25,\n-       presenceConfidence: 0.25,\n-       processingConfidence"},{"name":"B006 contradicted/recent-empty food retains candidate but fails the unchanged worth gate","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'probe-food'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase3OpportunityAudit.mjs:45:364\n    at Object.check (file:///U"},{"name":"B006 low remembered value remains selectable but cannot launch food work","error":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'probe-food'\n\n    at file:///Users/fellipegoncalvesleite/Documents/Codex/2026-09-30/new-chat/work/diag1-human-support/scripts/diag1Phase3OpportunityAudit.mjs:47:236\n    at Object.check (file:///U"}]}

@@ -4140,6 +4140,8 @@ export interface BandEraRecord {
   readonly births: number;
   readonly deaths: number;
   readonly crisisDeaths: number;
+  // Count of annual observations in chronic_food_deficit, chronic_plus_seasonal_stress
+  // or crisis_deficit; not continuous years without food or dated exposure duration.
   readonly hungerYears: number;
   readonly waterStressYears: number;
   readonly recoveryYears: number;
@@ -4166,6 +4168,8 @@ export interface OpenEraAccumulator {
   readonly births: number;
   readonly deaths: number;
   readonly crisisDeaths: number;
+  // Count of annual observations in chronic_food_deficit, chronic_plus_seasonal_stress
+  // or crisis_deficit; not continuous years without food or dated exposure duration.
   readonly hungerYears: number;
   readonly waterStressYears: number;
   readonly recoveryYears: number;

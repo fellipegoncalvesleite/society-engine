@@ -1,5 +1,18 @@
 # Society Engine
 
+<!-- DIAG1_PHASE3_CANDIDATE_START -->
+## Current authority — Phase3 implemented; independent review pending (2026-10-03)
+
+Phase2 is supervisor-accepted at production `80bb005f6bf9856720ac07d3acbae9e4a57c677f`, reviewed publication `fd8ef2674ad193e61535688b1edeb20d0841596d`. Acceptance was committed/pushed first as `96126be8484b23725fc9977c0527c9e8178feb3a`, the Phase3 base. This block supersedes older execution-status text below without rewriting historical evidence.
+
+Phase3 candidate implements B005 generic current fauna availability with exact provenance, B006 food-family eligibility before ranking, B007 canonical plant/scout identity, and B009/I1 honest noncausal diagnostics/UI. Evidence: `docs/evidence/diag1-corrections/phase3/PHASE3_REPORT.md`, `VALIDATION_RESULTS.md`, `FINAL_FINDING_MATRIX.md`. Opportunity26/26, diagnostics5/5, integrated7/7;4required plus16retained mutants behaviorally detected/restored; both-map1260-day whole-state daily/weekly/monthly/seasonal/repeat/fresh equivalence, both TypeScript projects, build/import/graph PASS. Natural first divergence is Map1 day519; B006 remains0/2640 new selections per arm (historical0/600 preserved), B007 natural action effect unobserved. Diagnostic on/off worlds agree, including stable1080-day Map1 source-preserving rerun.
+
+F3/B008 remains structurally OPEN, `DEFERRED_EXPLICIT_OWNER`: M0.4 realization, M0.5 physical-area/scaling/bounds certification, M0.7 migration. B010 ruling B: omitted SCALE1 reader, `OPEN_UNRESOLVED`, separate physical-distance authorization needed; no kilometer threshold was guessed. Both M0.2 blockers remain OPEN_UNRESOLVED and Task12 PAUSED. Canonical r11 remains byte-identical; existing roadmap ownership is reinforced, not changed.
+
+Next: coherent production/tests/evidence commit and push, later SHA documentation, ONE fresh read-only combined reviewer from `73cc38b916e236339897c59686638efafd569b6e` through production HEAD, record recommendation and STOP. Exact publication SHAs belong in subsequent `phase3/PUBLICATION.json`. No self-acceptance, main/M0.2 merge, formal freeze, Task12 resumption or portable-pair export before final supervisory acceptance.
+<!-- DIAG1_PHASE3_CANDIDATE_END -->
+
+
 <!-- DIAG1_PHASE2_SUPERVISOR_ACCEPTANCE_START -->
 ## Current authority — Phase 2 accepted; Phase 3 authorized (2026-10-03)
 
@@ -4872,3 +4885,77 @@ The separate read-only reviewer verified the cache key/shared INITIAL_TIME colli
 B003/F2 was specifically authorized to repair `plantStock.ts`'s year-incomplete memo. That bounded correction passes its warm/cold/year/reload/reader/depletion controls. Repairing the different legacy world-seasonal cache has not been authorized as part of this four-finding implementation, and it was not silently added.
 
 Deferral is justified only as preservation of the bounded implementation boundary while submitting an IMPLEMENTED / PENDING REVIEW result. **It is not yet justified as safe for Phase2/3 dependencies.** Supervising review must decide whether to reopen this defect before accepting Phase1 and must resolve its impact on map initialization/reinitialization and downstream decision/dry-margin/seasonal-memory consumers before authorizing a next phase. No acceptance or next-phase work is performed here.
+
+
+## DIAG-1 Phase3 final implementation-candidate disposition (2026-10-03)
+
+# Final DIAG-1 finding matrix — implementation candidate, not acceptance
+
+Each requested ID has exactly one status. Repeated cross-report IDs explicitly reference one root (R01–R16); do not sum these rows as independent defects. Source paths below are under `src/sim/agents/` unless prefixed otherwise. Evidence is relative to `docs/evidence/diag1-corrections/`; Phase3 regressions are under `phase3/regressions/`. FIXED_AND_TESTED reports bounded implementation evidence, not supervisory acceptance, physiological calibration or whole-game PASS.
+
+| ID | Root | Status | Owning source | Exact evidence | Natural/claim limit | Future owner or boundary |
+|---|---|---|---|---|---|---|
+| F1 | R05 | FIXED_AND_TESTED | `movementFatigue.ts`, `pressure.ts`, `bandMobility.ts` | Phase2 `CAUSAL_BEFORE_AFTER.md`; Phase3 regressions `diag1Phase2Fatigue.json`, stale_fatigue mutant | Six accepted Phase2 30-year paired courses; provisional seven-day model is not physiological calibration. | Items 8/13 for future health/mobility refinement |
+| F2 | R03 (same as B-003) | FIXED_AND_TESTED | `plantStock.ts`: physical patch memo validity | Phase1 report; Phase3 `diag1Phase1Conservation.json`, cache mutant, cross-world audit | Cache corrections can change food in either direction; no population oracle. | Item7 / M0 provider migration |
+| F3 | R12 (same as B-008) | DEFERRED_EXPLICIT_OWNER | `faunaStock.ts`: global geography/admission | `FUTURE_FAUNA_CONTRACT.md`; `integration-v4.json` known-open witnesses | Serious represented-fauna gaps remain; local fallback does not repair absent geography. | M0.4 realization, M0.5 area/scaling/bounds, M0.7 migration |
+| F4 | R06 | FIXED_AND_TESTED | `humanFoodSupport.ts`, `provisionalTravelSubsistence.ts`, operation consumers | Phase2 accepted units audit; Phase3 `diag1Phase2UnitsAndExposure.json`, units mutant, integration | Real controlled travel/harvest proof; natural provisional incidence not estimated here. | Item9 provisions and future household accounting |
+| F5 | R07 | FIXED_AND_TESTED | `nutritionExposure.ts`, `seasonalSurvival.ts`, `demography.ts` | Phase3 units/exposure, coverage, full-known, annual-boundary, demography-boundary, migration/rounding audits and mutants | Dated exposure is honest about coverage and 90-day residential abstraction; no invented historical daily observation. | Item4 lifecycle / future nutrition and physiology |
+| F6 | R04 (same as B-004) | FIXED_AND_TESTED | `bandMobility.ts`, `intraSeasonTrips.ts`: productive worker ownership | Phase3 conservation/labor mutant, zeroLaborTargetWork and bounded contract controls | Natural frequency unmeasured; phantom labor had masked hardship, not caused starvation. | Item14 reusable work groups |
+| I1 | R11 (same instrument root as B-009) | INSTRUMENT_ONLY_FIXED | `ecologicalProjection.ts`; `ui/band/sections.tsx`, `History.tsx`; `agents/types.ts` | `green-diagnostics-v1.json`, diagnostic mutant; browser evidence; natural read-model parity | No nutrition/risk behavior retuning; hunger classifications remain annual samples. | Read-model owner; future calibrated probabilities require separate evidence |
+| U1 | R16 | OPEN_UNRESOLVED | Original save/scenario provenance; `demography.ts`, access/food/social seams | Cumulative record §6.5E; Phase1 `R9_RECONCILIATION.md`; accepted Phase2 causal comparison | Original 2000-year case remains unrecovered. No whole-game adequacy, empirical fertility/mortality or universal terrain conclusion. | Items8/9/10/10.5/13/17 and WORLD-M0 as recorded; scenario recovery needs original evidence |
+| B-001 | R01 | FIXED_AND_TESTED | `expeditionCargo.ts`, `expedition.ts`: admitted source-attributed cargo/return | Phase3 conservation/cargo mutant; integration actual multi-day work and returned receipt | Controlled integrated chain and prior natural return-loss evidence; no isolated population benefit asserted. | Item3/4 productive presence and return authority |
+| B-002 | R02 | FIXED_AND_TESTED | `viability.ts`: current source/target cohort transaction | Phase3 conservation/absorption mutant and fission/reintegration regressions | Controlled chains conserve current cohorts; distinct from old duplicated fission diagnostic counts and B-010 range. | Item6 predecessor ownership |
+| B-003 | R03 (same as F2) | FIXED_AND_TESTED | `plantStock.ts` plus Phase1B world-owned `seasonal.ts`/`hydrography.ts` caches | Phase3 plant-time, cross-world and all three Phase1B mutants; full-world determinism | Year cache and later cross-world correction have separate witnesses; effect sign varies. | Item7 / M0 provider migration |
+| B-004 | R04 (same as F6) | FIXED_AND_TESTED | `intraSeasonTrips.ts`, `bandMobility.ts` | Phase3 conservation/labor mutant, zero-worker audits | No invented natural prevalence; all-away and same-day reservations remain actual labor constraints. | Item14 |
+| B-005 | R08 | FIXED_AND_TESTED | `faunaStock.ts`: pure availability, generic selection and exact source provenance | Qualified RED, final GREEN 26/26, fauna mutant; Map1 natural paired trace | Map1: baseline 3 exhausted-winner misses; current 6 real fallback takes. Trajectories differ after day519, so counts are not a paired treatment rate. | Current physical extraction; future M0 migration preserves contract |
+| B-006 | R09 | FIXED_AND_TESTED | `intraSeasonTrips.ts`: food-family domain before argmax | Qualified RED; final GREEN 26/26; food mutant; actual distant expedition launch | Historical 0/600 preserved. New bounded natural traces: 0/2640 selections per arm; no claimed historical deficit attribution. | Food-retrieval selector; global action families unchanged |
+| B-007 | R10 | FIXED_AND_TESTED | `plantPatches.ts`: canonical realization before scout filtering; existing `resourceScoutObservation.ts` writer | Qualified RED; final GREEN 26/26; scout mutant; integration observation→memory→real take | New natural traces had no exact scout observations and no measured downstream effect. Controlled positive/negative provenance covers actual patches. | Knowledge provenance / M0 plant migration |
+| B-008 | R12 (same as F3) | DEFERRED_EXPLICIT_OWNER | `faunaStock.ts`: 260-stock global legacy realization | `FUTURE_FAUNA_CONTRACT.md`; fresh known-open integration witnesses | Still OPEN; cap/order/extent are not physical-area laws. No full terrain repair claim. | M0.4 / M0.5 / M0.7 |
+| B-009 | R11 (same as I1) | INSTRUMENT_ONLY_FIXED | `ecologicalProjection.ts`, `TileInspector.tsx`, `WorldCanvas.tsx` | Diagnostics RED 2/5→GREEN5/5; diagnostic mutant; UI and parity evidence | Activity index zero can coexist with residual physical take; new exact raw query is read-only and eligible-activity conditioned. | Diagnostic/read-model owner |
+| B-010 | R13 | OPEN_UNRESOLVED | `viability.ts`: `getAbsorptionTarget`, `getRouteConfidence` | `B010_ADJUDICATION.md`, pinned sources, integration same9km witness | Controlled resolution discrepancy; no natural prevalence or invented kilometer policy. Provisional reintegration stays co-located. | Separately authorized SCALE-1 compatibility; Item6 absorption abstraction |
+| M0.2 basin-information blocker | R14 | OPEN_UNRESOLVED | Protected `compileTerrainHydro.ts`, `terrainHydroValidate.ts`: retained basin geometry | Cumulative record §0.3B / §6.5D–E and protected hashes | No current human-causal claim: production humans still use legacy providers. No new M0.2 experiment performed. | M0.2 before Task12 |
+| M0.2 comprehensive scratch-memory blocker | R15 | OPEN_UNRESOLVED | Protected M0.2 compiler/audit: unaccounted scalable temporary geometry | Cumulative record §0.3B / §6.5D–E and protected hashes | Prior undercount witness retained, not converted into an OOM or completed repair claim. | M0.2 before Task12 |
+
+Phase1B cross-world cache isolation is a separately discovered dependency correction carried under B-003 context, not silently attributed to the original plant-year root. The original duplicated fission churn alarm was instrument-only and is not the real B-002 body-loss defect. Remaining accepted abstractions (aggregate cohorts, instantaneous established absorption, provisioning charge, residential 90-day exposure) remain explicit limitations; no unresolved finding is relabeled ACCEPTED_SIMPLIFICATION merely to close the register.
+
+# B-010 adjudication — B: omitted SCALE-1 reader
+
+Disposition: **OPEN_UNRESOLVED**, requiring a separately authorized physical-distance correction. No production change was made to absorption distance. This is an evidence-based adjudication for supervisory consideration, not authorization to choose a threshold.
+
+The frozen SCALE-1 authority is `30e1440c237c0f09bb1403687b8da9899fbfd41b`, Task 7 `f2c4252b8fc70e4f79beb9f24b57f48902f76672`, Task 8 `751fe5328c29dde16fdc76b52278c2f4ab33785e`. `B010_PINNED_SOURCES.json` records exact Git blobs and SHA256 of the inspected sources. The cumulative record §6.5B retains the accepted contract: equal physical circumstances across 1.0/1.5 km raster representations must retain eligibility, reach, travel, transport and interaction meaning. Canonical `spatialGeometry.ts` supplies world-specific physical Manhattan distance, including unequal cell widths/heights.
+
+In the frozen `viability.ts`, `getAbsorptionTarget` computes unnamed raw coordinate Manhattan distance and filters `distance <= 6`. `getRouteConfidence` also uses raw coordinate distance divided by 8. These readers remain in the current production path. Task 7's residual audit enumerates particular source files/patterns; viability is absent from its inspected-file list. Passing that scan was not proof that this unnamed expression was physical. No explicit accepted absorption exclusion was found in the frozen contract/evidence surfaces or cumulative exclusions. The local historical SCALE-1 plan corroborates physical behavior/technical-cell separation, but is not used as a pinned accepted artifact.
+
+The existing comment assigning ordinary absorption/collapse to Item 6 establishes future system ownership, not an exemption from SCALE-1. Established absorption currently transfers cohorts instantaneously once eligibility/risk/kin conditions pass; it does not execute a physical walking route. Provisional successor return/reintegration is a different mechanism and still requires exact co-location.
+
+The integration audit retains the direct same-9-km witness: 1 km × 9 cells and 1.5 km × 6 cells produce different established outcomes. This remains a visible expected legacy failure, independent of the now-correct current-state cohort transfer (B-002).
+
+## Precise separate correction proposal
+
+1. Supervision must choose and document the intended established absorption physical radius `R_km`, and the physical decay length `C_km` for route confidence. Neither 6 km, 9 km, 8 km nor 12 km can be deduced uniquely from the old cells: preserving Map1 and Map2 simultaneously is impossible. No empirical calibration is claimed.
+2. Replace both raw-coordinate readers with the canonical physical Manhattan helper and named approved constants. Preserve kin/contact/risk filters, current-source transaction ordering, deterministic identity ties and bounded iteration. Inspect all consumers of the confidence value before classifying it as mere presentation.
+3. Preserve the current instantaneous established abstraction for this bounded compatibility correction. If supervision instead requires a journey, that is an Item-6 lifecycle design with explicit body/labor/source ownership, interruption, provisions and arrival semantics, not a hidden unit conversion.
+4. Regressions: equal 9 km at 1/1.5 km resolutions; inside/on/outside approved `R_km` and `C_km`; anisotropic cells and both axes; missing target; stressed/provisional/absorbed targets; stable equal-distance ties; many-to-one/chained absorption and all three cohort sums; retained direct B-002 mutant; exact-co-location provisional reintegration; no inferred route completion across inaccessible ground; Map1/Map2 temporal/fresh-process determinism. Restore raw cells as a behavioral mutant.
+
+Until separately authorized, B-010 remains open under SCALE-1 compatibility / Item-6 predecessor ownership. Task 12 remains paused.
+
+# Mandatory future fauna realization contract — F3 / B-008
+
+**DEFERRED_EXPLICIT_OWNER; structurally OPEN.** This is one root cause (R12), not two independently fixed findings. Phase 3 deliberately preserves `GLOBAL_STOCK_CAP = 260`, existing lexicographic admission, density and renewal rules. No habitat potential becomes food, replacement provider is introduced, or plant yield increased.
+
+Owners already assigned in the cumulative record §6.5E and §19: **M0.4** baseline living-ecology realization; **M0.5** physical-area/scaling/bounds certification; **M0.7** production provider cutover and migration. This reinforces existing ownership and does not require changing canonical r11.
+
+Before migration acceptance the implementation must pass all of these witnesses:
+
+- Renaming/reordering tile IDs preserves local physical ecology by coordinate/provenance.
+- Equal physical area has representation-consistent opportunity.
+- Raster resolution does not arbitrarily change physical stock density.
+- Extending a map does not remove opportunity in an unchanged local area.
+- Concentrated, diffuse and mobile sources have deliberate, distinct representation.
+- Physical stock, extraction and renewal conserve declared quantities.
+- Worst-case runtime and state are bounded and measured, including all temporary geometry.
+- Human decisions use acquired knowledge; reached execution uses hidden physical truth without broadcasting it.
+
+`integration-v4.json`, `knownOpenArchitectureFindings`, retains fresh legacy expected failures separately from implemented-correction PASS: homogeneous 64×64 versus reversed-ID geography relocates stock anchors; 128×128 retains the same global cap instead of physical-area density. These are structural controls, not natural-prevalence estimates. Favorable unrepresented regions remain possible. A green local extraction test cannot certify the world provider.
+
+M0.2's basin-information and comprehensive scratch-memory blockers remain OPEN_UNRESOLVED and independent of present legacy human nutrition. No Task-12 resumption or M0.2 merge is authorized.

@@ -4159,7 +4159,8 @@ export function BandViabilityDetails({ band }: { readonly band: Band }) {
           <Detail label="population" value={formatPopulation(viability.population)} />
           <Detail label="minimum viable" value={String(viability.minimumViablePopulation)} />
           <Detail label="viability pressure" value={formatNumber(viability.viabilityPressure)} />
-          <Detail label="extinction risk" value={formatNumber(viability.extinctionRisk)} />
+          <Detail label="heuristic viability/risk score" value={formatNumber(viability.extinctionRisk)} />
+          <Detail label="risk meaning" value="0–1 heuristic; no calibrated probability or time horizon" />
           <Detail label="absorption opportunity" value={formatNumber(viability.absorptionOpportunity)} />
           <Detail label="weak-band classification" value={viability.weakBandClassification ?? "not classified"} />
           <Detail label="weak-band fate" value={viability.weakBandFate ?? "not classified"} />

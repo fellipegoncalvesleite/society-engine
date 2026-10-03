@@ -891,7 +891,7 @@ export function deriveFaunaTripReturnFactor(
   faunaClass: FaunaClass,
   season: Season,
 ): number {
-  const stock = bestStockOfClassAt(geo, tileId, faunaClass);
+  const stock = selectFaunaFoodSource(world, geo, tileId, faunaClass, season);
 
   if (stock === undefined) {
     return 1;
@@ -921,7 +921,7 @@ export function deriveFaunaTripStockTrace(
   season: Season,
   tick: TickNumber,
 ): FaunaTripStockTraceBase | undefined {
-  const stock = bestStockOfClassAt(geo, tileId, faunaClass);
+  const stock = selectFaunaFoodSource(world, geo, tileId, faunaClass, season);
 
   if (stock === undefined) {
     return undefined;
@@ -955,6 +955,46 @@ export function deriveFaunaTripStockTrace(
   };
 }
 
+// Pure physical query, shared by execution and noncausal diagnostics. This is
+// raw take above the existing human reserve, not a band-known decision score.
+export function deriveFaunaExtractableAmount(
+  world: WorldState,
+  stock: FaunaStockGeo,
+  season: Season,
+  activityEligible: boolean = true,
+): number {
+  if (!activityEligible || stock.trophicRole === "predator") return 0;
+  const abundance = getFaunaStockDynamic(world, stock.id).abundance;
+  return Math.max(0, abundance - HUMAN_HARVEST_RESERVE) * stock.carryingCapacity *
+    seasonalAvailabilityFactor(stock, season, false) * FAUNA_HARVEST_SUPPORT_SCALE;
+}
+
+function selectFaunaFoodSource(
+  world: WorldState,
+  geo: FaunaStockGeography,
+  tileId: TileId,
+  faunaClass: FaunaClass,
+  season: Season,
+  targetStockId?: FaunaStockId,
+): FaunaStockGeo | undefined {
+  let best: FaunaStockGeo | undefined;
+  let bestAmount = -1;
+  // Local bounded geography only. A stock listed through overlapping geography
+  // is still one identity; this selects one source, never sums duplicate entries.
+  for (const stock of geo.byTile.get(tileId) ?? []) {
+    if (stock.faunaClass !== faunaClass || stock.trophicRole === "predator") continue;
+    // Explicit known-source actions retain their identity even if it is exhausted.
+    if (targetStockId !== undefined && stock.id !== targetStockId) continue;
+    const amount = deriveFaunaExtractableAmount(world, stock, season);
+    if (best === undefined || amount > bestAmount ||
+      (amount === bestAmount && String(stock.id) < String(best.id))) {
+      best = stock;
+      bestAmount = amount;
+    }
+  }
+  return best;
+}
+
 // Canonical fauna/aquatic harvest owner. Inventions may alter the requested
 // take before this call, but only a real stock can satisfy it. The returned
 // world and receipt describe the same bounded removal.
@@ -967,8 +1007,9 @@ export function resolveFaunaFoodHarvest(
   tick: TickNumber,
   requestedAmount: number,
   activityEligible: boolean,
+  targetStockId?: FaunaStockId,
 ): FaunaFoodHarvestResolution {
-  const stock = bestStockOfClassAt(geo, tileId, faunaClass);
+  const stock = selectFaunaFoodSource(world, geo, tileId, faunaClass, season, targetStockId);
   if (stock === undefined) {
     return {
       world,
@@ -983,8 +1024,7 @@ export function resolveFaunaFoodHarvest(
 
   const dyn = getFaunaStockDynamic(world, stock.id);
   const seasonal = seasonalAvailabilityFactor(stock, season, false);
-  const harvestableAbundance = Math.max(0, dyn.abundance - HUMAN_HARVEST_RESERVE);
-  const physicalAvailability = harvestableAbundance * stock.carryingCapacity * seasonal * FAUNA_HARVEST_SUPPORT_SCALE;
+  const physicalAvailability = deriveFaunaExtractableAmount(world, stock, season);
   const processingLossRate = faunaClass === "aquatic_food" ? 0.12 : 0.16;
 
   if (!activityEligible) {

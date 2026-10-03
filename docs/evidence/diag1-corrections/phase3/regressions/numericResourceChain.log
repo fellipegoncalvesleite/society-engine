@@ -1,0 +1,82 @@
+{
+  "verdict": "NUMERIC_RESOURCE_CHAIN_RECONCILED",
+  "reconciliation": {
+    "units": "raw physical food",
+    "actualWorkOperations": 3,
+    "workReceipts": [
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:135:44:fruit_berry",
+        "sourceClass": "fruit_berry",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0312,
+        "harvestedAmount": 0.0312,
+        "depletionApplied": 0.0312,
+        "transportLoss": 0.0015,
+        "processingLoss": 0.0011,
+        "usableSupport": 0.0286,
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:varied-pass-frontier:2708:plant_patch:plant:tile:135:44:fruit_berry"
+        ]
+      },
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:135:44:nuts_mast",
+        "sourceClass": "nuts_mast",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0.0081,
+        "harvestedAmount": 0.0081,
+        "depletionApplied": 0.0081,
+        "transportLoss": 0.0004,
+        "processingLoss": 0.0004,
+        "usableSupport": 0.0073,
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:varied-pass-frontier:2709:plant_patch:plant:tile:135:44:nuts_mast"
+        ]
+      },
+      {
+        "sourceKind": "plant_patch",
+        "sourceId": "plant:tile:135:44:fruit_berry",
+        "sourceClass": "fruit_berry",
+        "knownness": "known_target",
+        "attempted": true,
+        "physicalSourceFound": true,
+        "physicalAvailability": 0,
+        "harvestedAmount": 0,
+        "depletionApplied": 0,
+        "transportLoss": 0,
+        "processingLoss": 0,
+        "usableSupport": 0,
+        "failureReason": "physically_exhausted",
+        "worldTruthDebugOnly": true,
+        "reasonIds": [
+          "reason:physical-food-harvest:band:varied-pass-frontier:2710:plant_patch:plant:tile:135:44:fruit_berry"
+        ]
+      }
+    ],
+    "usableFoodTaken": 0.0359,
+    "declaredProvisionCharge": 0.018,
+    "explicitLosses": 0,
+    "independentlyExpectedDelivery": 0.0179,
+    "deliveredHarvestUnits": 0.0179,
+    "returnBatchUsableSupport": 0.0179,
+    "cargoBalance": {
+      "lotCount": 3,
+      "admittedUsableUnits": 0.0359,
+      "remainingUnits": 0,
+      "deliveredUnits": 0.0179,
+      "appliedProvisionUnits": 0.018,
+      "unfulfilledProvisionUnits": 0,
+      "postAdmissionLossUnits": 0,
+      "overflowUnits": 0
+    },
+    "identityHolds": true,
+    "identity": "sum(actual work usable food) - upstream overflow - post-admission loss - applied charge = delivered; unfulfilled charge is not food consumed. Admitted = remaining + delivered + applied charge + post-admission loss."
+  }
+}
