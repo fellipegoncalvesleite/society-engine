@@ -81,7 +81,7 @@ export function deriveBodyCampSurvivalLogistics(
   world: WorldState,
   band: Band,
 ): BodyCampSurvivalLogisticsState {
-  const loads = deriveLoadSignals(band);
+  const loads = deriveBodyCampLoadSignals(band);
   const cards = band.resourceEcology?.storageSuitabilityCards ?? [];
   const reasonSeed = makeLogisticsReasonId(band.id, world.time.tick, "current");
   const weatherMemories = deriveWeatherMemories(world, band, loads);
@@ -156,7 +156,7 @@ export function deriveBodyCampSurvivalLogistics(
   };
 }
 
-function deriveLoadSignals(band: Band): LoadSignals {
+export function deriveBodyCampLoadSignals(band: Band): LoadSignals {
   const population = Math.max(1, Math.round(band.demography.population));
   const adults = Math.max(0, band.demography.workingAdults);
   const dependents = Math.max(0, band.demography.dependents);

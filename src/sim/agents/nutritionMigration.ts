@@ -14,7 +14,14 @@ export type WorldNutritionMigration = { readonly ok: true; readonly world: World
 /** Atomic, pure migration. No partially converted Band or World ever escapes a refusal. */
 export function migrateBandNutrition(band: Band, currentDay: number): BandNutritionMigration {
   const support = band.seasonalSupport, record = band.provisionalSuccessor;
-  if ((support === undefined || support.exposureVersion === 1) &&
+  // Version-1 ordinary histories already carry dated exposure in newer saves,
+  // but their persisted currentSeasonSupport can still be the old known-subset
+  // projection. Rebuild that projection through the single writer before any
+  // behavioral consumer reads it. Empty histories remain untouched because
+  // there is no physical chronology from which to derive a replacement.
+  const needsSupportRefresh = support !== undefined && support.recentSamples.length > 0 &&
+    support.currentSeasonSupport.nutritionCoverage === undefined;
+  if (!needsSupportRefresh &&
     (record === undefined || record.nutritionUnitVersion === 1)) return { ok: true, band };
   try {
     const chronology = migrateNutritionExposureHistory(support?.recentSamples ?? [],

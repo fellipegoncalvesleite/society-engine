@@ -26,10 +26,11 @@ const h = await phase2Harness(
   "DIAG1 Phase2 unknown coverage and recovery duration",
   originalProductionOverlay ? [originalProductionOverlay] : [],
 );
-const [runner, nutrition, time, fission, demography, dryMargin, biomeAdaptation, socialContext, contextCache, campFoothold] = await Promise.all([
+const [runner, nutrition, time, fission, demography, dryMargin, biomeAdaptation, socialContext, contextCache, campFoothold, nutritionMigration, bodyCampLogistics, pressure] = await Promise.all([
   h.load("runner/simRunner"), h.load("agents/seasonalSurvival"), h.load("tick/time"), h.load("agents/innerFission"),
   h.load("agents/demography"), h.load("agents/dryMargin"), h.load("agents/biomeAdaptation"), h.load("agents/socialContext"),
-  h.load("agents/contextCache"), h.load("agents/campFoothold"),
+  h.load("agents/contextCache"), h.load("agents/campFoothold"), h.load("agents/nutritionMigration"),
+  h.load("agents/bodyCampLogistics"), h.load("agents/pressure"),
 ]);
 const world = runner.initSimWorld({ kind: "map2" }, "diag1:phase2:coverage-recovery");
 const band = Object.values(world.bands)[0];
@@ -209,6 +210,15 @@ const legacyOriginalDisposition = socialContext.applyDispositionContext(legacyOr
 const legacyOriginalFoothold = campFoothold.deriveCampFootholdProfile(legacyOriginalWorld, legacyOriginalBand);
 const legacyOriginalSeasonalEvidence = seasonalEvidence(legacyOriginalFoothold);
 const legacyOriginalCanonical = nutrition.deriveCanonicalNutritionState(legacyOriginalSupport);
+const migratedLegacyWorldResult = nutritionMigration.migrateWorldNutrition({ ...legacyOriginalWorld, time: time.getWorldTimeForDay(90) });
+assert.equal(migratedLegacyWorldResult.ok, true);
+const migratedLegacyWorld = migratedLegacyWorldResult.world;
+const migratedLegacyBand = migratedLegacyWorld.bands[band.id];
+const migratedLegacyReaderBand = { ...migratedLegacyBand, foragingAdaptation: undefined, pressureState: undefined };
+const migratedLegacyReaderWorld = { ...migratedLegacyWorld, bands: { ...migratedLegacyWorld.bands, [band.id]: migratedLegacyReaderBand } };
+const migratedLegacyLoads = bodyCampLogistics.deriveBodyCampLoadSignals(migratedLegacyReaderBand);
+const migratedLegacyLogistics = bodyCampLogistics.deriveBodyCampSurvivalLogistics(migratedLegacyReaderWorld, migratedLegacyReaderBand);
+const migratedLegacyPressure = pressure.deriveBandPressureState(migratedLegacyReaderWorld, migratedLegacyReaderBand);
 h.observations.legacyOriginalProducer = {
   sourceCommit: legacyOriginalFixture.sourceCommit,
   producer: legacyOriginalFixture.producer,
@@ -218,6 +228,12 @@ h.observations.legacyOriginalProducer = {
   fission: legacyOriginalFission,
   recoveringShare: moodShare(legacyOriginalDisposition, "recovering"),
   seasonalEvidence: legacyOriginalSeasonalEvidence,
+  migration: {
+    currentProjection: migratedLegacyBand.seasonalSupport.currentSeasonSupport,
+    loads: migratedLegacyLoads,
+    logistics: migratedLegacyLogistics,
+    pressure: migratedLegacyPressure,
+  },
 };
 h.check("bf5807e old-producer fixture derives partial hunger from dated exposure", () => {
   assert.equal(legacyOriginalSupport.currentSeasonSupport.foodStress, 1);
@@ -225,6 +241,13 @@ h.check("bf5807e old-producer fixture derives partial hunger from dated exposure
   assert.equal(legacyOriginalCanonical.currentNutritionCoverage, .25);
   assert.ok(legacyOriginalFission.hungerTension < fullHungryFission.hungerTension);
   assert.ok(legacyOriginalSeasonalEvidence !== undefined && legacyOriginalSeasonalEvidence.confidence < fullHungrySeasonalEvidence.confidence);
+  assert.equal(migratedLegacyBand.seasonalSupport.currentSeasonSupport.nutritionCoverage, .25);
+  assert.equal(migratedLegacyBand.seasonalSupport.currentSeasonSupport.clampedSupportRatio, 0);
+  assert.equal(migratedLegacyBand.seasonalSupport.currentSeasonSupport.foodStress, .25);
+  assert.equal(migratedLegacyBand.seasonalSupport.currentSeasonSupport.rawSupportRatio, 0);
+  assert.ok(migratedLegacyLoads.hunger <= .38);
+  assert.ok(migratedLegacyLoads.hunger < 1);
+  assert.ok(migratedLegacyPressure.foodStress < 1);
 });
 h.observations.compatibilityReaders = {
   partialClampedSupport: partialComfort.currentSeasonSupport.clampedSupportRatio,
