@@ -45,7 +45,7 @@ export function Root() {
     <div className="root-shell">
       <nav className="root-nav" aria-label="Primary">
         <span className="root-brand">
-          Emergent Civilization
+          Society Engine
           <span className="root-tagline">A living prehistory</span>
         </span>
         <div className="root-tabs">
